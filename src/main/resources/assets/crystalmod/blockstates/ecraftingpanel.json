@@ -1,0 +1,34 @@
+{
+    "forge_marker":1,
+    "defaults":{
+        "textures":{
+            "particle":"crystalmod:blocks/eStorage/panel_bottom",
+            "down": "crystalmod:blocks/eStorage/panel_top",
+            "up": "crystalmod:blocks/eStorage/panel_top",
+            "north": "crystalmod:blocks/eStorage/panel_bottom",
+            "south": "crystalmod:blocks/eStorage/panel_front_on_crafting",
+            "west": "crystalmod:blocks/eStorage/panel_side",
+            "east": "crystalmod:blocks/eStorage/panel_side",
+            "panelFrontOff": "crystalmod:blocks/eStorage/panel_front",
+            "conduitConnector": "crystalmod:blocks/crystal_blue"
+        }
+    },
+    "variants":{
+        "render":{
+			"defaults":{ "model":"crystalmod:transform/panel_crafting" },
+            "auto":{ "model":"crystalmod:transform/null" },
+            "front":{          "submodel":{ "front":{ "model":"crystalmod:eStorage/panel", "x":270 } } },
+            "front_up":{       "submodel":{ "front":{ "model":"crystalmod:eStorage/panel", "x":90  } } },
+            "front_north":{    "submodel":{ "front":{ "model":"crystalmod:eStorage/panel", "y":180 } } },
+            "front_east":{     "submodel":{ "front":{ "model":"crystalmod:eStorage/panel", "y":270 } } },
+            "front_south":{    "submodel":{ "front":{ "model":"crystalmod:eStorage/panel", "y":0   } } },
+            "front_west":{     "submodel":{ "front":{ "model":"crystalmod:eStorage/panel", "y":90  } } },
+            "front_on":{       "submodel":{ "front":{ "model":"crystalmod:eStorage/panel_on_crafting", "x":270 } } },
+            "front_on_up":{    "submodel":{ "front":{ "model":"crystalmod:eStorage/panel_on_crafting", "x":90  } } },
+            "front_on_north":{ "submodel":{ "front":{ "model":"crystalmod:eStorage/panel_on_crafting", "y":180 } } },
+            "front_on_east":{  "submodel":{ "front":{ "model":"crystalmod:eStorage/panel_on_crafting", "y":270 } } },
+            "front_on_south":{ "submodel":{ "front":{ "model":"crystalmod:eStorage/panel_on_crafting", "y":0   } } },
+            "front_on_west":{  "submodel":{ "front":{ "model":"crystalmod:eStorage/panel_on_crafting", "y":90  } } }
+        }
+    }
+}

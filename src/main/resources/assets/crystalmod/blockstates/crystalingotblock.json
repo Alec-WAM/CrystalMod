@@ -1,0 +1,15 @@
+{
+  "forge_marker": 1,
+  "variants": {
+    "normal": [{}],
+    "inventory": [{}],
+    "type": {
+      "blue": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/crystal_blue_ingot"} },
+	  "red": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/crystal_red_ingot"} },
+	  "green": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/crystal_green_ingot"} },
+	  "dark": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/crystal_dark_ingot"} },
+	  "pure": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/crystal_pure_ingot"} },
+	  "darkiron": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/darkIron_ingot"} }
+    }
+  }
+}

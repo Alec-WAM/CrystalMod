@@ -1,0 +1,15 @@
+{
+  "forge_marker": 1,
+  defaults:{
+	"model": "crystalmod:fixedOneTexture",
+	"textures": { "all": "crystalmod:blocks/eStorage/wireless_sender" }
+  },
+  "variants": {
+    "normal": [{}],
+	"inventory": [{}],
+	"sender" : { 
+		"true": {},
+		"false": {"textures": { "all": "crystalmod:blocks/eStorage/wireless_receiver" }}
+	}
+  }
+}

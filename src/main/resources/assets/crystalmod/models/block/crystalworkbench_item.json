@@ -1,0 +1,12 @@
+{
+  "parent": "block/cube",
+  "textures": {
+	"particle": "crystalmod:blocks/workbench_blue_side",
+    "down": "crystalmod:blocks/workbench_blue_side",
+    "up": "crystalmod:blocks/workbench_blue_side",
+    "north": "crystalmod:blocks/crystal_pure_ingot",
+    "east": "crystalmod:blocks/crystal_pure_ingot",
+    "south": "crystalmod:blocks/crystal_pure_ingot",
+    "west": "crystalmod:blocks/crystal_pure_ingot"
+  }
+}

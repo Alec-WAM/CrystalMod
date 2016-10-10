@@ -1,0 +1,63 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "crystalmod:machine",
+    "textures": {
+	  "particle":"crystalmod:blocks/machine/crafting/bottom",
+	  "up":"crystalmod:blocks/machine/crafting/bottom",
+	  "down":"crystalmod:blocks/machine/crafting/bottom",
+	  "side":"crystalmod:blocks/machine/crafting/side"
+    },
+    "transform": "forge:default-block"
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{}],
+    "facing": {
+      "north": {},
+      "south": {"y": 180},
+      "west": {"y": 270},
+      "east": {"y": 90},
+      "up": {"x": -90},
+      "down": {"x": 90}
+    },
+	"machine=furnace,active=false,facing=north": {
+		"textures": {
+			"front":"crystalmod:blocks/machine/crafting/furnace_front_off"
+		}
+	},
+	"machine=furnace,active=false,facing=south": {
+		"textures": {
+			"front":"crystalmod:blocks/machine/crafting/furnace_front_off"
+		},
+		"y": 180
+	},
+	"machine=furnace,active=false,facing=west": {
+		"textures": {
+			"front":"crystalmod:blocks/machine/crafting/furnace_front_off"
+		},
+		"y": 270
+	},
+	"machine=furnace,active=false,facing=east": {
+		"textures": {
+			"front":"crystalmod:blocks/machine/crafting/furnace_front_off"
+		},
+		"y": 90
+	},
+	"machine=furnace,active=true": {
+		"textures": {
+			"front":"crystalmod:blocks/machine/crafting/furnace_front_on"
+		}
+	},
+	"machine=press,active=false": {
+		"textures": {
+			"front":"crystalmod:blocks/machine/crafting/press_front_off"
+		}
+	},
+	"machine=press,active=true": {
+		"textures": {
+			"front":"crystalmod:blocks/machine/crafting/press_front_on"
+		}
+	}
+  }
+}

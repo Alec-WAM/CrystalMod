@@ -1,0 +1,11 @@
+{
+  "forge_marker": 1,
+  defaults:{
+	"model": "crystalmod:fixedBottomTop",
+	"textures": { "top": "crystalmod:blocks/eStorage/panel_wireless_top", "bottom": "crystalmod:blocks/eStorage/panel_wireless_top", "side": "crystalmod:blocks/eStorage/panel_wireless_sides" }
+  },
+  "variants": {
+    "normal": [{}],
+	"inventory": [{}]
+  }
+}

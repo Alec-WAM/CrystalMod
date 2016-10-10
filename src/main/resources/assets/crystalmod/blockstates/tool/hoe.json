@@ -1,0 +1,18 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "crystalmod:item/3dtool",
+		"textures": {
+			"layer0": "crystalmod:items/toolParts/hoe/hoe_rod"
+		}
+    },
+    "variants": {
+        "color": {
+			"blue": { "textures": { "layer1": "crystalmod:items/toolParts/hoe/hoe_blue"}},
+			"red": { "textures": { "layer1": "crystalmod:items/toolParts/hoe/hoe_red" }},
+			"green": { "textures": { "layer1": "crystalmod:items/toolParts/hoe/hoe_green" }},
+			"dark": { "textures": { "layer1": "crystalmod:items/toolParts/hoe/hoe_dark" }},
+			"pure": { "textures": { "layer1": "crystalmod:items/toolParts/hoe/hoe_pure" }}
+		}
+    }
+}

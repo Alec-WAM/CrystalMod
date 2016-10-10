@@ -1,0 +1,13 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "transform": "forge:default-block",
+        "model": "leaves"
+    },
+    "variants": {
+        "blue": [{ "textures": { "all": "crystalmod:blocks/leaves_blue" }}],
+        "red": [{ "textures": { "all": "crystalmod:blocks/leaves_red" }}],
+        "green": [{ "textures": { "all": "crystalmod:blocks/leaves_green" }}],
+        "dark": [{ "textures": { "all": "crystalmod:blocks/leaves_dark" }}]
+    }
+}

@@ -1,0 +1,12 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "particle": "#front",
+    "down": "crystalmod:blocks/eStorage/hddInterface/sides",
+    "up": "crystalmod:blocks/eStorage/hddInterface/sides",
+    "north": "#front",
+    "east": "crystalmod:blocks/eStorage/hddInterface/sides",
+    "south": "crystalmod:blocks/eStorage/hddInterface/sides",
+    "west": "crystalmod:blocks/eStorage/hddInterface/sides"
+  }
+}

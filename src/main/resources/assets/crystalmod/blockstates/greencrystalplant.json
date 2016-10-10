@@ -1,0 +1,14 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "crystalmod:fixedCrop"
+    },
+    "variants": {
+		"normal": [{}],
+		"inventory": [{}],
+        "age=0": [{ "textures": {"crop": "crystalmod:blocks/plant/green_plant_stage_0"}}],
+        "age=1": [{ "textures": {"crop": "crystalmod:blocks/plant/green_plant_stage_1"}}],
+        "age=2": [{ "textures": {"crop": "crystalmod:blocks/plant/green_plant_stage_1"}}],
+        "age=3": [{ "textures": {"crop": "crystalmod:blocks/plant/green_plant_stage_2"}}]
+    }
+}

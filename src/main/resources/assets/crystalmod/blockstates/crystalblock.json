@@ -1,0 +1,24 @@
+{
+  "forge_marker": 1,
+  "variants": {
+    "normal": [{}],
+    "inventory": [{}],
+    "type": {
+      "blue": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/crystal_blue"} },
+	  "red": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/crystal_red"} },
+	  "green": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/crystal_green"} },
+	  "dark": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/crystal_dark"} },
+	  "pure": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/crystal_pure"} },
+	  "blue_chiseled": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/crystal_blue_chiseled"} },
+	  "red_chiseled": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/crystal_red_chiseled"} },
+	  "green_chiseled": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/crystal_green_chiseled"} },
+	  "dark_chiseled": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/crystal_dark_chiseled"} },
+	  "pure_chiseled": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/crystal_pure_chiseled"} },
+	  "blue_brick": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/crystal_blue_brick"} },
+	  "red_brick": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/crystal_red_brick"} },
+	  "green_brick": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/crystal_green_brick"} },
+	  "dark_brick": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/crystal_dark_brick"} },
+	  "pure_brick": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/crystal_pure_brick"} }
+    }
+  }
+}

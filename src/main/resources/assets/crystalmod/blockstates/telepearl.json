@@ -1,0 +1,12 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "crystalmod:item/fixedOneTexture"
+    },
+    "variants": {
+        "bound": {
+			"true": { "textures": { "icon0": "crystalmod:items/telepearl_bound"}},
+			"false": { "textures": { "icon0": "crystalmod:items/telepearl_unbound" }}
+		}
+    }
+}

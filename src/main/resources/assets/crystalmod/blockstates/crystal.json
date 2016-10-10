@@ -1,0 +1,25 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "transform": "forge:default-item",
+        "model": "forge:item-layer"
+    },
+    "variants": {
+        "blue": [{ "textures": { "layer0": "crystalmod:items/crystal_blue" }}],
+        "red": [{ "textures": { "layer0": "crystalmod:items/crystal_red" }}],
+        "green": [{ "textures": { "layer0": "crystalmod:items/crystal_green" }}],
+        "dark": [{ "textures": { "layer0": "crystalmod:items/crystal_dark" }}],
+		"pure": [{ "textures": { "layer0": "crystalmod:items/crystal_pure" }}],
+		"blue_shard": [{ "textures": { "layer0": "crystalmod:items/crystal_blueShard" }}],
+        "red_shard": [{ "textures": { "layer0": "crystalmod:items/crystal_redShard" }}],
+        "green_shard": [{ "textures": { "layer0": "crystalmod:items/crystal_greenShard" }}],
+        "dark_shard": [{ "textures": { "layer0": "crystalmod:items/crystal_darkShard" }}],
+		"pure_shard": [{ "textures": { "layer0": "crystalmod:items/crystal_pureShard" }}],
+		"blue_nugget": [{ "textures": { "layer0": "crystalmod:items/crystal_blueNugget" }}],
+        "red_nugget": [{ "textures": { "layer0": "crystalmod:items/crystal_redNugget" }}],
+        "green_nugget": [{ "textures": { "layer0": "crystalmod:items/crystal_greenNugget" }}],
+        "dark_nugget": [{ "textures": { "layer0": "crystalmod:items/crystal_darkNugget" }}],
+		"pure_nugget": [{ "textures": { "layer0": "crystalmod:items/crystal_pureNugget" }}],
+		"diron_nugget": [{ "textures": { "layer0": "crystalmod:items/dIron_nugget" }}]
+    }
+}

@@ -1,0 +1,36 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "transform": "forge:default-item",
+        "model": "forge:item-layer"
+    },
+    "variants": {
+        "axe_head_blue": [{ "textures": { "layer0": "crystalmod:items/toolParts/axe/head_blue" }}],
+		"axe_head_red": [{ "textures": { "layer0": "crystalmod:items/toolParts/axe/head_red" }}],
+		"axe_head_green": [{ "textures": { "layer0": "crystalmod:items/toolParts/axe/head_green" }}],
+		"axe_head_dark": [{ "textures": { "layer0": "crystalmod:items/toolParts/axe/head_dark" }}],
+		"axe_head_pure": [{ "textures": { "layer0": "crystalmod:items/toolParts/axe/head_pure" }}],
+		"hoe_head_blue": [{ "textures": { "layer0": "crystalmod:items/toolParts/hoe/head_blue" }}],
+		"hoe_head_red": [{ "textures": { "layer0": "crystalmod:items/toolParts/hoe/head_red" }}],
+		"hoe_head_green": [{ "textures": { "layer0": "crystalmod:items/toolParts/hoe/head_green" }}],
+		"hoe_head_dark": [{ "textures": { "layer0": "crystalmod:items/toolParts/hoe/head_dark" }}],
+		"hoe_head_pure": [{ "textures": { "layer0": "crystalmod:items/toolParts/hoe/head_pure" }}],
+		"pick_head_blue": [{ "textures": { "layer0": "crystalmod:items/toolParts/pick/head_blue" }}],
+		"pick_head_red": [{ "textures": { "layer0": "crystalmod:items/toolParts/pick/head_red" }}],
+		"pick_head_green": [{ "textures": { "layer0": "crystalmod:items/toolParts/pick/head_green" }}],
+		"pick_head_dark": [{ "textures": { "layer0": "crystalmod:items/toolParts/pick/head_dark" }}],
+		"pick_head_pure": [{ "textures": { "layer0": "crystalmod:items/toolParts/pick/head_pure" }}],
+		"shovel_head_blue": [{ "textures": { "layer0": "crystalmod:items/toolParts/shovel/head_blue" }}],
+		"shovel_head_red": [{ "textures": { "layer0": "crystalmod:items/toolParts/shovel/head_red" }}],
+		"shovel_head_green": [{ "textures": { "layer0": "crystalmod:items/toolParts/shovel/head_green" }}],
+		"shovel_head_dark": [{ "textures": { "layer0": "crystalmod:items/toolParts/shovel/head_dark" }}],
+		"shovel_head_pure": [{ "textures": { "layer0": "crystalmod:items/toolParts/shovel/head_pure" }}],
+		"sword_head_blue": [{ "textures": { "layer0": "crystalmod:items/toolParts/sword/head_blue" }}],
+		"sword_head_red": [{ "textures": { "layer0": "crystalmod:items/toolParts/sword/head_red" }}],
+		"sword_head_green": [{ "textures": { "layer0": "crystalmod:items/toolParts/sword/head_green" }}],
+		"sword_head_dark": [{ "textures": { "layer0": "crystalmod:items/toolParts/sword/head_dark" }}],
+		"sword_head_pure": [{ "textures": { "layer0": "crystalmod:items/toolParts/sword/head_pure" }}],
+		"cover": [{ "textures": { "layer0": "crystalmod:items/toolParts/sword/cover" }}],
+		"rod": [{ "textures": { "layer0": "crystalmod:items/toolParts/part_rod" }}]
+    }
+}

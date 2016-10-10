@@ -1,0 +1,12 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "transform": "forge:default-item",
+        "model": "forge:item-layer"
+    },
+    "variants": {
+        "eportal": [{ "textures": { "layer0": "crystalmod:items/card_estorage_portal" }}],
+        "pcube": [{ "textures": { "layer0": "crystalmod:items/card_cube" }}],
+        "elevator": [{ "textures": { "layer0": "crystalmod:items/card_elevator" }}]
+    }
+}

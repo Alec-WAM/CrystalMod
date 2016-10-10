@@ -1,0 +1,23 @@
+{
+    "ambientocclusion": false,
+    "elements": [
+        {   "from": [ 4, 3, 7 ],
+            "to": [ 12, 12, 15 ],
+            "faces": {
+                "down":  { "uv": [ 0, 0,  7,  7 ], "texture": "#plant2" },
+                "up":    { "uv": [ 0, 0,  7,  7 ], "texture": "#plant2" },
+                "north": { "uv": [ 7, 4, 15, 13 ], "texture": "#plant2" },
+                "south": { "uv": [ 7, 4, 15, 13 ], "texture": "#plant2" },
+                "west":  { "uv": [ 7, 4, 15, 13 ], "texture": "#plant2" },
+                "east":  { "uv": [ 7, 4, 15, 13 ], "texture": "#plant2" }
+            }
+        },
+        {   "from": [ 8, 12, 12 ],
+            "to": [ 8, 16, 16 ],
+            "faces": {
+                "west": { "uv": [ 12, 0, 16, 4 ], "texture": "#plant2" },
+                "east": { "uv": [ 16, 0, 12, 4 ], "texture": "#plant2" }
+            }
+        }
+    ]
+}

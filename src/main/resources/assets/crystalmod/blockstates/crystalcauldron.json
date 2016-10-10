@@ -1,0 +1,11 @@
+{
+   "forge_marker": 1,
+  "defaults": {
+    "model": "crystalmod:cauldron_empty",
+    "transform": "forge:default-block"
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{}]
+  }
+}

@@ -1,0 +1,12 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "crystalmod:item/fixedOneTexture"
+    },
+    "variants": {
+        "active": {
+			"true": { "textures": { "icon0": "crystalmod:items/panel_wireless_active"}},
+			"false": { "textures": { "icon0": "crystalmod:items/panel_wireless" }}
+		}
+    }
+}

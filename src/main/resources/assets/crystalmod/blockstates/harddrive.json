@@ -1,0 +1,15 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "crystalmod:item/fixedOneTexture"
+    },
+    "variants": {
+        "color": {
+			"blue": { "textures": { "icon0": "crystalmod:items/hdd_blue"}},
+			"red": { "textures": { "icon0": "crystalmod:items/hdd_red" }},
+			"green": { "textures": { "icon0": "crystalmod:items/hdd_green" }},
+			"dark": { "textures": { "icon0": "crystalmod:items/hdd_dark" }},
+			"pure": { "textures": { "icon0": "crystalmod:items/hdd_pure" }}
+		}
+    }
+}

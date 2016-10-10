@@ -1,0 +1,7 @@
+{
+    "parent": "item/bow",
+    "textures": {
+        "layer0": "crystalmod:items/tool/bow/bow_pulling_0",
+		"layer1": "crystalmod:items/tool/bow/bow_string_pulling_0"
+    }
+}

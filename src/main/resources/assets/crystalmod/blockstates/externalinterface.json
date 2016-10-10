@@ -1,0 +1,23 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "crystalmod:eStorage/hddinterface",
+    "textures": {
+	  "particle":"crystalmod:blocks/eStorage/externalInterface_sides",
+      "front": "crystalmod:blocks/eStorage/externalInterface_front"
+    },
+    "transform": "forge:default-block"
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{}],
+    "facing": {
+      "north": {},
+      "south": {"y": 180},
+      "west": {"y": 270},
+      "east": {"y": 90},
+      "up": {"x": -90},
+      "down": {"x": 90}
+    }
+  }
+}

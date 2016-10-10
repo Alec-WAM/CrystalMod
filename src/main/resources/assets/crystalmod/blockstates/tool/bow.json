@@ -1,0 +1,29 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "crystalmod:item/3dtool"
+    },
+    "variants": {
+        "inventory": { "textures": { "layer0": "crystalmod:items/toolParts/bow/bow_bow_blue", "layer1": "crystalmod:items/toolParts/bow/bow_string_standby"}},
+		"blue.standby": { "textures": { "layer0": "crystalmod:items/toolParts/bow/bow_bow_blue", "layer1": "crystalmod:items/toolParts/bow/bow_string_standby"}},
+		"red.standby": { "textures": { "layer0": "crystalmod:items/toolParts/bow/bow_bow_red", "layer1": "crystalmod:items/toolParts/bow/bow_string_standby"}},
+		"green.standby": { "textures": { "layer0": "crystalmod:items/toolParts/bow/bow_bow_green", "layer1": "crystalmod:items/toolParts/bow/bow_string_standby"}},
+		"dark.standby": { "textures": { "layer0": "crystalmod:items/toolParts/bow/bow_bow_dark", "layer1": "crystalmod:items/toolParts/bow/bow_string_standby"}},
+		"pure.standby": { "textures": { "layer0": "crystalmod:items/toolParts/bow/bow_bow_pure", "layer1": "crystalmod:items/toolParts/bow/bow_string_standby"}},
+		"blue:0": { "textures": { "layer1": "crystalmod:items/toolParts/bow/bow_string_pulling_0"}},
+		"red:0": { "textures": { "layer1": "crystalmod:items/toolParts/bow/bow_string_pulling_0"}},
+		"green:0": { "textures": { "layer0": "crystalmod:items/toolParts/bow/bow_bow_green_pulling_0", "layer1": "crystalmod:items/toolParts/bow/bow_string_pulling_0"}},
+		"dark:0": { "textures": { "layer0": "crystalmod:items/toolParts/bow/bow_bow_dark_pulling_0", "layer1": "crystalmod:items/toolParts/bow/bow_string_pulling_0"}},
+		"pure:0": { "textures": { "layer0": "crystalmod:items/toolParts/bow/bow_bow_pure_pulling_0", "layer1": "crystalmod:items/toolParts/bow/bow_string_pulling_0"}},
+		"blue:1": { "textures": { "layer0": "crystalmod:items/toolParts/bow/bow_bow_blue_pulling_1", "layer1": "crystalmod:items/toolParts/bow/bow_string_pulling_1"}},
+		"red:1": { "textures": { "layer0": "crystalmod:items/toolParts/bow/bow_bow_red_pulling_1", "layer1": "crystalmod:items/toolParts/bow/bow_string_pulling_1"}},
+		"green:1": { "textures": { "layer0": "crystalmod:items/toolParts/bow/bow_bow_green_pulling_1", "layer1": "crystalmod:items/toolParts/bow/bow_string_pulling_1"}},
+		"dark:1": { "textures": { "layer0": "crystalmod:items/toolParts/bow/bow_bow_dark_pulling_1", "layer1": "crystalmod:items/toolParts/bow/bow_string_pulling_1"}},
+		"pure:1": { "textures": { "layer0": "crystalmod:items/toolParts/bow/bow_bow_pure_pulling_1", "layer1": "crystalmod:items/toolParts/bow/bow_string_pulling_1"}},
+		"blue:2": { "textures": { "layer0": "crystalmod:items/toolParts/bow/bow_bow_blue_pulling_2", "layer1": "crystalmod:items/toolParts/bow/bow_string_pulling_2"}},
+		"red:2": { "textures": { "layer0": "crystalmod:items/toolParts/bow/bow_bow_red_pulling_2", "layer1": "crystalmod:items/toolParts/bow/bow_string_pulling_2"}},
+		"green:2": { "textures": { "layer0": "crystalmod:items/toolParts/bow/bow_bow_green_pulling_2", "layer1": "crystalmod:items/toolParts/bow/bow_string_pulling_2"}},
+		"dark:2": { "textures": { "layer0": "crystalmod:items/toolParts/bow/bow_bow_dark_pulling_2", "layer1": "crystalmod:items/toolParts/bow/bow_string_pulling_2"}},
+		"pure:2": { "textures": { "layer0": "crystalmod:items/toolParts/bow/bow_bow_pure_pulling_2", "layer1": "crystalmod:items/toolParts/bow/bow_string_pulling_2"}}
+    }
+}

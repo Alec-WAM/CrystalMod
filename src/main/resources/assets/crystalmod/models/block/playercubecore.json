@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "orientation=nw": { "model": "crystalmod:playerCubeCore_nw" },
+        "orientation=ne": { "model": "crystalmod:playerCubeCore_ne" },
+        "orientation=es": { "model": "crystalmod:playerCubeCore_es" },
+        "orientation=sw": { "model": "crystalmod:playerCubeCore_sw" }
+    }
+}

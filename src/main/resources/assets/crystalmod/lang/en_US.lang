@@ -1,0 +1,494 @@
+#--Items
+item.crystalmod.crystal.blue.name=Blue Crystal
+item.crystalmod.crystal.red.name=Red Crystal
+item.crystalmod.crystal.green.name=Green Crystal
+item.crystalmod.crystal.dark.name=Dark Crystal
+item.crystalmod.crystal.pure.name=Pure Crystal
+item.crystalmod.crystal.blue_shard.name=Blue Crystal Shard
+item.crystalmod.crystal.blue_nugget.name=Blue Crystal Nugget
+item.crystalmod.crystal.red_shard.name=Red Crystal Shard
+item.crystalmod.crystal.red_nugget.name=Red Crystal Nugget
+item.crystalmod.crystal.green_shard.name=Green Crystal Shard
+item.crystalmod.crystal.green_nugget.name=Gren Crystal Nugget
+item.crystalmod.crystal.dark_shard.name=Dark Crystal Shard
+item.crystalmod.crystal.dark_nugget.name=Dark Crystal Nugget
+item.crystalmod.crystal.pure_shard.name=Pure Crystal Shard
+item.crystalmod.crystal.pure_nugget.name=Pure Crystal Nugget
+item.crystalmod.crystal.diron_nugget.name=Dark Iron Nugget
+
+item.crystalmod.crystalIngot.blue.name=Blue Crystal Ingot
+item.crystalmod.crystalIngot.red.name=Red Crystal Ingot
+item.crystalmod.crystalIngot.green.name=Green Crystal Ingot
+item.crystalmod.crystalIngot.dark.name=Dark Crystal Ingot
+item.crystalmod.crystalIngot.pure.name=Pure Crystal Ingot
+item.crystalmod.crystalIngot.darkIron.name=Dark Iron Ingot
+
+item.crystalmod.metalPlate.blue.name=Blue Crystal Plate
+item.crystalmod.metalPlate.red.name=Red Crystal Plate
+item.crystalmod.metalPlate.green.name=Green Crystal Plate
+item.crystalmod.metalPlate.dark.name=Dark Crystal Plate
+item.crystalmod.metalPlate.pure.name=Pure Crystal Plate
+item.crystalmod.metalPlate.darkIron.name=Dark Iron Plate
+
+item.crystalmod.crystalReeds.name=Crystal Reeds
+item.crystalmod.bluecrystalseeds.name=Blue Crystal Seeds
+item.crystalmod.redcrystalseeds.name=Red Crystal Seeds
+item.crystalmod.greencrystalseeds.name=Green Crystal Seeds
+item.crystalmod.darkcrystalseeds.name=Dark Crystal Seeds
+item.crystalmod.bluecrystaltreeseeds.name=Blue Tree-Plant Seed
+item.crystalmod.redcrystaltreeseeds.name=Red Tree-Plant Seed
+item.crystalmod.greencrystaltreeseeds.name=Green Tree-Plant Seed
+item.crystalmod.darkcrystaltreeseeds.name=Dark Tree-Plant Seed
+
+
+item.crystalmod.toolparts.rod.name=Crystal Tool Rod
+item.crystalmod.toolparts.cover.name=Crystal Sword Hilt
+item.crystalmod.toolparts.axe_head.blue.name=Blue Crystal Axe Head
+item.crystalmod.toolparts.axe_head.red.name=Red Crystal Axe Head
+item.crystalmod.toolparts.axe_head.green.name=Green Crystal Axe Head
+item.crystalmod.toolparts.axe_head.dark.name=Dark Crystal Axe Head
+item.crystalmod.toolparts.axe_head.pure.name=Pure Crystal Axe Head
+item.crystalmod.toolparts.hoe_head.blue.name=Blue Crystal Hoe Head
+item.crystalmod.toolparts.hoe_head.red.name=Red Crystal Hoe Head
+item.crystalmod.toolparts.hoe_head.green.name=Green Crystal Hoe Head
+item.crystalmod.toolparts.hoe_head.dark.name=Dark Crystal Hoe Head
+item.crystalmod.toolparts.hoe_head.pure.name=Pure Crystal Hoe Head
+item.crystalmod.toolparts.shovel_head.blue.name=Blue Crystal Shovel Head
+item.crystalmod.toolparts.shovel_head.red.name=Red Crystal Shovel Head
+item.crystalmod.toolparts.shovel_head.green.name=Green Crystal Shovel Head
+item.crystalmod.toolparts.shovel_head.dark.name=Dark Crystal Shovel Head
+item.crystalmod.toolparts.shovel_head.pure.name=Pure Crystal Shovel Head
+item.crystalmod.toolparts.pick_head.blue.name=Blue Crystal Pickaxe Head
+item.crystalmod.toolparts.pick_head.red.name=Red Crystal Pickaxe Head
+item.crystalmod.toolparts.pick_head.green.name=Green Crystal Pickaxe Head
+item.crystalmod.toolparts.pick_head.dark.name=Dark Crystal Pickaxe Head
+item.crystalmod.toolparts.pick_head.pure.name=Pure Crystal Pickaxe Head
+item.crystalmod.toolparts.sword_head.blue.name=Blue Crystal Sword Blade
+item.crystalmod.toolparts.sword_head.red.name=Red Crystal Sword Blade
+item.crystalmod.toolparts.sword_head.green.name=Green Crystal Sword Blade
+item.crystalmod.toolparts.sword_head.dark.name=Dark Crystal Sword Blade
+item.crystalmod.toolparts.sword_head.pure.name=Pure Crystal Sword Blade
+
+item.crystalmod.machineFrame.name=Machine Frame
+
+item.crystalmod.crystalaxe.blue.name=Blue Crystal Axe
+item.crystalmod.crystalaxe.red.name=Red Crystal Axe
+item.crystalmod.crystalaxe.green.name=Green Crystal Axe
+item.crystalmod.crystalaxe.dark.name=Dark Crystal Axe
+item.crystalmod.crystalaxe.pure.name=Pure Crystal Axe
+item.crystalmod.crystalhoe.blue.name=Blue Crystal Hoe
+item.crystalmod.crystalhoe.red.name=Red Crystal Hoe
+item.crystalmod.crystalhoe.green.name=Green Crystal Hoe
+item.crystalmod.crystalhoe.dark.name=Dark Crystal Hoe
+item.crystalmod.crystalhoe.pure.name=Pure Crystal Hoe
+item.crystalmod.crystalshovel.blue.name=Blue Crystal Shovel
+item.crystalmod.crystalshovel.red.name=Red Crystal Shovel
+item.crystalmod.crystalshovel.green.name=Green Crystal Shovel
+item.crystalmod.crystalshovel.dark.name=Dark Crystal Shovel
+item.crystalmod.crystalshovel.pure.name=Pure Crystal Shovel
+item.crystalmod.crystalpick.blue.name=Blue Crystal Pickaxe
+item.crystalmod.crystalpick.red.name=Red Crystal Pickaxe
+item.crystalmod.crystalpick.green.name=Green Crystal Pickaxe
+item.crystalmod.crystalpick.dark.name=Dark Crystal Pickaxe
+item.crystalmod.crystalpick.pure.name=Pure Crystal Pickaxe
+item.crystalmod.crystalsword.blue.name=Blue Crystal Sword
+item.crystalmod.crystalsword.red.name=Red Crystal Sword
+item.crystalmod.crystalsword.green.name=Green Crystal Sword
+item.crystalmod.crystalsword.dark.name=Dark Crystal Sword
+item.crystalmod.crystalsword.pure.name=Pure Crystal Sword
+
+item.crystalmod.crystalshears.blue.name=Blue Crystal Shears
+item.crystalmod.crystalshears.red.name=Red Crystal Shears
+item.crystalmod.crystalshears.green.name=Green Crystal Shears
+item.crystalmod.crystalshears.dark.name=Dark Crystal Shears
+item.crystalmod.crystalshears.pure.name=Pure Crystal Shears
+item.crystalmod.crystalshears.darkIron.name=Dark Iron Shears
+
+
+item.crystalmod.darkIronAxe.name=Dark Iron Axe
+item.crystalmod.darkIronHoe.name=Dark Iron Hoe
+item.crystalmod.darkIronShovel.name=Dark Iron Shovel
+item.crystalmod.darkIronPickaxe.name=Dark Iron Pickaxe
+item.crystalmod.darkIronSword.name=Dark Iron Sword
+item.crystalmod.darkIronBow.name=Dark Iron Bow
+
+item.crystalmod.darkIronHelmet.name=Dark Iron Helmet
+item.crystalmod.darkIronChestplate.name=Dark Iron Chestplate
+item.crystalmod.darkIronLeggings.name=Dark Iron Leggings
+item.crystalmod.darkIronBoots.name=Dark Iron Boots
+
+item.crystalmod.pipecover.name=Crystal Pipe Cover
+
+item.crystalmod.pipefilter.normal.name=Pipe Filter (Normal)
+item.crystalmod.pipefilter.mod.name=Pipe Filter (Mod)
+item.crystalmod.pipefilter.camera.name=Pipe Filter (Camera)
+item.crystalmod.pipefilter.fluid.name=Pipe Filter (Fluid)
+
+item.crystalmod.wrench.name=Crystal Wrench
+item.crystalmod.guide.normal.name=Crystal Guide
+item.crystalmod.guide.estorage.name=Network Storage Guide
+
+item.crystalmod.harddriveblue.name=Item Hard-drive (Blue)
+item.crystalmod.harddrivered.name=Item Hard-drive (Red)
+item.crystalmod.harddrivegreen.name=Item Hard-drive (Green)
+item.crystalmod.harddrivedark.name=Item Hard-drive (Dark)
+item.crystalmod.harddrivepure.name=Item Hard-drive (Pure)
+item.crystalmod.craftingcard.name=Crafting Recipe Card
+item.crystalmod.estorage.wpanelitem.name=Hand-held Network Panel
+
+item.crystalmod.craftingpattern.name=Crafting Recipe Pattern
+
+item.crystalmod.misccard.eportal.name=Network Pipe Portal Binder
+item.crystalmod.misccard.pcube.name=Player Cube Card
+item.crystalmod.misccard.elevator.name=Elevator Binder (WIP)
+
+item.crystalmod.worksiteUpgrade.0.name=Medium Bounds Upgrade
+item.crystalmod.worksiteUpgrade.1.name=Large Bounds Upgrade
+item.crystalmod.worksiteUpgrade..name=Medium Quarry Upgrade
+item.crystalmod.worksiteUpgrade.3.name=Large Quarry Upgrade
+item.crystalmod.worksiteUpgrade.4.name=\u00a7eLightly Enchanted Tools Upgrade
+item.crystalmod.worksiteUpgrade.5.name=\u00a7eHighly Enchanted Tools Upgrade
+item.crystalmod.worksiteUpgrade.6.name=\u00a7eExtremely Enchanted Tools Upgrade
+item.crystalmod.worksiteUpgrade.7.name=Basic Tool Quality Upgrade
+item.crystalmod.worksiteUpgrade.8.name=Intermediate Tool Quality Upgrade
+item.crystalmod.worksiteUpgrade.9.name=Advanced Tool Quality Upgrade
+item.crystalmod.worksiteUpgrade.10.name=Basic Chunk-loader Upgrade
+item.crystalmod.worksiteUpgrade.11.name=\u00a75Quarry Chunk-loader Upgrade
+item.crystalmod.worksiteUpgrade.12.name=\u00a7eQuarry Silk-Touch Upgrade
+item.crystalmod.worksiteUpgrade.13.name=Quarry Only Ore Upgrade
+
+item.crystalmod.telePearl.name=Teleporting Pearl
+item.crystalmod.backpack.name=Backpack
+item.crystalmod.flagItem.name=Flag
+item.crystalmod.dragonWings.name=Dragon Wings
+item.crystalmod.mobEssence.name=Mob Essence
+crystalmod.info.mobEssence1.txt=Can be used on an Advanced Mob Spawner to set the entity
+crystalmod.info.mobEssence2.txt=Or used anywhere when sneaking to spawn the entity in the world
+crystalmod.info.mobEssence3.txt=(Single Use)
+item.crystalmod.minion.basic.name=Minion
+item.crystalmod.minion.worker.name=Worker Minion
+item.crystalmod.minion.warrior.name=Warrior Minion
+item.crystalmod.minionStaff.name=Minion Staff
+
+#--Blocks
+tile.crystalmod.crystalblock.blue.name=Block of Blue Crystal
+tile.crystalmod.crystalblock.red.name=Block of Red Crystal
+tile.crystalmod.crystalblock.green.name=Block of Green Crystal
+tile.crystalmod.crystalblock.dark.name=Block of Dark Crystal
+tile.crystalmod.crystalblock.pure.name=Block of Pure Crystal
+tile.crystalmod.crystalblock.blue_chiseled.name=Blue Crystal Chiseled Block
+tile.crystalmod.crystalblock.red_chiseled.name=Red Crystal Chiseled Block
+tile.crystalmod.crystalblock.green_chiseled.name=Green Crystal Chiseled Block
+tile.crystalmod.crystalblock.dark_chiseled.name=Dark Crystal Chiseled Block
+tile.crystalmod.crystalblock.pure_chiseled.name=Pure Crystal Chiseled Block
+tile.crystalmod.crystalblock.blue_brick.name=Blue Crystal Bricks
+tile.crystalmod.crystalblock.red_brick.name=Red Crystal Bricks
+tile.crystalmod.crystalblock.green_brick.name=Green Crystal Bricks
+tile.crystalmod.crystalblock.dark_brick.name=Dark Crystal Bricks
+tile.crystalmod.crystalblock.pure_brick.name=Pure Crystal Bricks
+
+tile.crystalmod.crystalglass.blue.name=Blue Crystal Glass
+tile.crystalmod.crystalglass.red.name=Red Crystal Glass
+tile.crystalmod.crystalglass.green.name=Green Crystal Glass
+tile.crystalmod.crystalglass.dark.name=Dark Crystal Glass
+tile.crystalmod.crystalglass.pure.name=Pure Crystal Glass
+
+tile.crystalmod.bluecrystalplant.name=Blue Crystal Plant
+tile.crystalmod.redcrystalplant.name=Red Crystal Plant
+tile.crystalmod.greencrystalplant.name=Green Crystal Plant
+tile.crystalmod.darkcrystalplant.name=Dark Crystal Plant
+tile.crystalmod.bluecrystaltreeplant.name=Blue Crystal Tree-Plant
+tile.crystalmod.redcrystaltreeplant.name=Red Crystal Tree-Plant
+tile.crystalmod.greencrystaltreeplant.name=Green Crystal Tree-Plant
+tile.crystalmod.darkcrystaltreeplant.name=Dark Crystal Tree-Plant
+tile.crystalmod.crystalreedblock.name=Crystal Reeds
+
+tile.crystalmod.crystallog.blue.name=Blue Crystal Wood
+tile.crystalmod.crystallog.red.name=Red Crystal Wood
+tile.crystalmod.crystallog.green.name=Green Crystal Wood
+tile.crystalmod.crystallog.dark.name=Dark Crystal Wood
+tile.crystalmod.crystalleaves.blue.name=Blue Crystal Leaves
+tile.crystalmod.crystalleaves.red.name=Red Crystal Leaves
+tile.crystalmod.crystalleaves.green.name=Green Crystal Leaves
+tile.crystalmod.crystalleaves.dark.name=Dark Crystal Leaves
+tile.crystalmod.crystalsapling.blue.name=Blue Crystal Sapling
+tile.crystalmod.crystalsapling.red.name=Red Crystal Sapling
+tile.crystalmod.crystalsapling.green.name=Green Crystal Sapling
+tile.crystalmod.crystalsapling.dark.name=Dark Crystal Sapling
+
+tile.crystalmod.crystalore.blue.name=Blue Crystal Ore
+tile.crystalmod.crystalore.red.name=Red Crystal Ore
+tile.crystalmod.crystalore.green.name=Green Crystal Ore
+tile.crystalmod.crystalore.dark.name=Dark Crystal Ore
+
+tile.crystalmod.crystalingotblock.blue.name=Block of Blue Crystal Ingots
+tile.crystalmod.crystalingotblock.red.name=Block of Red Crystal Ingots
+tile.crystalmod.crystalingotblock.green.name=Block of Green Crystal Ingots
+tile.crystalmod.crystalingotblock.dark.name=Block of Dark Crystal Ingots
+tile.crystalmod.crystalingotblock.pure.name=Block of Pure Crystal Ingots
+tile.crystalmod.crystalingotblock.darkiron.name=Block of Dark Iron
+
+tile.crystalmod.crystalworkbench.blue.name=Blue Crystal Workbench
+tile.crystalmod.crystalworkbench.red.name=Red Crystal Workbench
+tile.crystalmod.crystalworkbench.green.name=Green Crystal Workbench
+tile.crystalmod.crystalworkbench.dark.name=Dark Crystal Workbench
+
+tile.crystalmod.crystalchest.BLUE.name=Blue Crystal Chest
+tile.crystalmod.crystalchest.RED.name=Red Crystal Chest
+tile.crystalmod.crystalchest.GREEN.name=Green Crystal Chest
+tile.crystalmod.crystalchest.DARK.name=Dark Crystal Chest
+tile.crystalmod.crystalchest.PURE.name=Pure Crystal Chest
+tile.crystalmod.crystalchest.DARKIRON.name=Dark Iron Chest
+
+tile.crystalmod.crystalpipe.item.name=Crystal Pipe (Item)
+tile.crystalmod.crystalpipe.fluid.name=Crystal Pipe (Fluid)
+tile.crystalmod.crystalpipe.estorage.name=Crystal Pipe (Storage)
+tile.crystalmod.crystalpipe.powercu.tier0.name=Blue Crystal Pipe (CU)
+tile.crystalmod.crystalpipe.powercu.tier1.name=Red Crystal Pipe (CU)
+tile.crystalmod.crystalpipe.powercu.tier2.name=Green Crystal Pipe (CU)
+tile.crystalmod.crystalpipe.powercu.tier3.name=Dark Crystal Pipe (CU)
+tile.crystalmod.crystalpipe.powercu.tier4.name=Pure Crystal Pipe (CU)
+tile.crystalmod.crystalpipe.powerrf.tier0.name=Blue Crystal Pipe (RF)
+tile.crystalmod.crystalpipe.powerrf.tier1.name=Red Crystal Pipe (RF)
+tile.crystalmod.crystalpipe.powerrf.tier2.name=Green Crystal Pipe (RF)
+tile.crystalmod.crystalpipe.powerrf.tier3.name=Dark Crystal Pipe (RF)
+tile.crystalmod.crystalpipe.powerrf.tier4.name=Pure Crystal Pipe (RF)
+
+tile.crystalmod.crystaltank.blue.name=Blue Crystal Tank
+tile.crystalmod.crystaltank.red.name=Red Crystal Tank
+tile.crystalmod.crystaltank.green.name=Green Crystal Tank
+tile.crystalmod.crystaltank.dark.name=Dark Crystal Tank
+tile.crystalmod.crystaltank.pure.name=Pure Crystal Tank
+tile.crystalmod.crystaltank.creative.name=Creative Crystal Tank
+
+tile.crystalmod.engine.furnace.name=Crystal Engine (Furnace)
+tile.crystalmod.engine.lava.name=Crystal Engine (Lava)
+
+tile.crystalmod.weather.name=Weather Forecaster
+tile.crystalmod.playercubeportal.name=Player Cube Portal
+tile.crystalmod.playercubewall.name=Player Cube Wall
+tile.crystalmod.playercubecore.name=Player Cube Core
+
+tile.crystalmod.hddinterface.name=Hard Drive Dock
+tile.crystalmod.externalinterface.name=External Inventory Interface
+tile.crystalmod.estoragepanel.storage.name=Network Storage Panel
+tile.crystalmod.estoragepanel.crafting.name=Network Crafting Panel
+tile.crystalmod.estoragepanel.display.name=Network Item Panel
+tile.crystalmod.estoragepanel.monitor.name=Network Crafting Monitor Panel
+tile.crystalmod.ewirelesspanel.name=Hand-held Network Panel Router
+tile.crystalmod.pipewrapper.name=Network Pipe Portal
+tile.crystalmod.craftingarray.name=Crafting Recipe Array
+tile.crystalmod.craftingio.name=External Crafting Port 
+tile.crystalmod.encoder.name=Crafting Recipe Encoder
+tile.crystalmod.crafter.blue.name=Blue Crystal Crafting Manager
+tile.crystalmod.crafter.red.name=Red Crystal Crafting Manager
+tile.crystalmod.crafter.green.name=Green Crystal Crafting Manager
+tile.crystalmod.crafter.dark.name=Dark Crystal Crafting Manager
+tile.crystalmod.crafter.pure.name=Pure Crystal Crafting Manager
+
+tile.crystalmod.craftingEncoder.normal.name=Crafting Recipe Encoder
+tile.crystalmod.craftingEncoder.processing.name=External Crafting Recipe Encoder
+tile.crystalmod.autocrafter.name=Crafting Manager
+
+tile.crystalmod.crystalcauldron.name=Crystal Cauldron
+
+tile.crystalmod.customspawner.name=Advanced Mob Spawner
+crystalmod.msg.spawnerInfo1.txt=Mob Type
+crystalmod.msg.spawnerInfo2.txt=Requires Player
+crystalmod.msg.spawnerInfo3.txt=Ignore Spawn Requirements
+crystalmod.msg.spawnerInfo4.txt=Spawner Tier
+crystalmod.msg.spawnerInfo5.txt=§3Hold shift for upgrade info
+crystalmod.msg.spawnerInfo6.txt=Requires players: §3Nether Star
+crystalmod.msg.spawnerInfo7.txt=Ignore Spawn Requirements: §3Notch Apple
+crystalmod.msg.spawnerInfo8.txt=Tier 2: §3Pure Crystal Block
+crystalmod.msg.spawnerInfo9.txt=Tier 3: §3Pure Ingot Block
+
+tile.crystalmod.battery.name=Battery (WIP)
+
+tile.crystalmod.elevator.name=Elevator
+tile.crystalmod.elevatorfloor.name=Elevator Floor Marker
+tile.crystalmod.elevatorcaller.name=Elevator Dialer
+tile.crystalmod.reinforcedRail.name=Reinforced Rail
+
+tile.crystalmod.inventorycharger.cu.name=Inventory Charger (CU)
+tile.crystalmod.inventorycharger.rf.name=Inventory Charger (RF)
+
+tile.crystalmod.crystalmachine.furnace.name=Crystal Furnace
+tile.crystalmod.crystalmachine.press.name=Metal Press
+tile.crystalmod.crystalmachine.liquidizer.name=Liquidizer
+tile.crystalmod.crystalmachine.infuser.name=Liquid Infuser
+
+tile.crystalmod.worksite.tree_farm.name=Minion Tree Farm
+tile.crystalmod.worksite.animal_farm.name=Minion Animal Farm
+tile.crystalmod.worksite.crop_farm.name=Minion Crop Farm
+
+tile.crystalmod.mobgrinder.name=Mob Grinder
+tile.crystalmod.enderbuffer.name=Ender Buffer
+
+tile.crystalmod.powerconverter.rf.name=RF to CU Converter
+tile.crystalmod.powerconverter.cu.name=CU to RF Converter
+
+#--Fluids
+fluid.crystalmod.xpjuice=Liquid XP
+fluid.crystalmod.crystal.blue=Blue Liquid Crystal
+fluid.crystalmod.crystal.red=Red Liquid Crystal
+fluid.crystalmod.crystal.green=Green Liquid Crystal
+fluid.crystalmod.crystal.dark=Dark Liquid Crystal
+fluid.crystalmod.crystal.pure=Pure Liquid Crystal
+fluid.crystalmod.darkiron=Liquid Dark Iron
+
+fluid.moltenCrystalBlue.name=Molten Blue Crystal
+fluid.moltenCrystalRed.name=Molten Red Crystal
+fluid.moltenCrystalGreen.name=Molten Green Crystal
+fluid.moltenCrystalDark.name=Molten Dark Crystal
+fluid.moltenCrystalPure.name=Molten Pure Crystal
+fluid.moltenDarkIron.name=Molten Dark Iron
+
+#--Creative Tab
+itemGroup.crystalmod.items=Crystal Mod Items
+itemGroup.crystalmod.tools=Crystal Mod Tools
+itemGroup.crystalmod.blocks=Crystal Mod Blocks
+itemGroup.crystalmod.covers=Crystal Pipe Covers
+
+
+#--Enchant
+enchantment.mending=Mending
+
+#--JEI
+recipe.type.crystal=Crystal Workbench
+
+#--Gui
+crystalmod.gui.empty=Empty
+crystalmod.gui.label.tab.main=Main Inventory
+crystalmod.gui.label.tab.crafting=Crafting Table
+crystalmod.gui.label.tab.enderchest=Ender Chest
+crystalmod.gui.label.tab.anvil=Anvil
+crystalmod.gui.label.tab.furnace=Furnace
+crystalmod.gui.label.moveallitemsexcepthotbar=Move all items (except hotbar)
+crystalmod.gui.label.moveallitemsexcepthotbar.holdshift=(hold shift to include hotbar)
+crystalmod.gui.label.movematchingitems=Move matching items
+crystalmod.gui.label.leaveonefilledstack=Leave one filled stack of every item type
+crystalmod.gui.label.moveallitems=Move all items
+crystalmod.gui.label.fillstacks=Fill all existing stacks
+crystalmod.gui.crafting_monitor.missing_items=Missing
+crystalmod.gui.crafting_monitor.items_crafting=Crafting
+crystalmod.gui.crafting_monitor.items_processing=Processing
+
+
+crystalmod.guistrings.inventory.player=Player Inventory
+crystalmod.guistrings.inventory.setsides=Sides
+crystalmod.guistrings.inventory.adjust_bounds=Bounds
+crystalmod.guistrings.inventory.side.top=Top
+crystalmod.guistrings.inventory.side.bottom=Bottom
+crystalmod.guistrings.inventory.side.front=Front
+crystalmod.guistrings.inventory.side.rear=Rear
+crystalmod.guistrings.inventory.side.left=Left
+crystalmod.guistrings.inventory.side.right=Right
+crystalmod.guistrings.inventory.side.none=None
+crystalmod.guistrings.inventory.direction.down=Down
+crystalmod.guistrings.inventory.direction.up=Up
+crystalmod.guistrings.inventory.direction.north=North
+crystalmod.guistrings.inventory.direction.south=South
+crystalmod.guistrings.inventory.direction.west=West
+crystalmod.guistrings.inventory.direction.east=East
+crystalmod.guistrings.inventory.direction.unknown=Unknown
+crystalmod.guistrings.inventory.max_pigs=Max Pigs
+crystalmod.guistrings.inventory.max_cows=Max Cows
+crystalmod.guistrings.inventory.max_sheep=Max Sheep
+crystalmod.guistrings.inventory.max_chickens=Max Chickens
+crystalmod.guistrings.inventory.settargets=Set Work Targets
+crystalmod.guistrings.block_side=Block Side
+crystalmod.guistrings.direction=Direction
+crystalmod.guistrings.inventory_accessed=Inventory
+
+#--Entity
+entity.CrystalMod.CrystalPigZombie.name=Crystal Zombie Pigman
+entity.CrystalMod.CrystalCow.name=Crystal Cow
+entity.CrystalMod.CrystalEnderman.name=Crystal Enderman
+entity.CrystalMod.MinionWarrior.name=Warrior Minion
+
+#--Misc
+crystalmod.power.cu=CU
+crystalmod.power.rf=RF
+crystalmod.ai.combat.meleeandranged=Melee and Ranged Attack
+crystalmod.ai.combat.meleeonly=Melee Attack only
+crystalmod.ai.combat.rangedonly=Ranged Attack only
+crystalmod.ai.combat.donotfight=Passive
+crystalmod.ai.combat.trigger.always=Always Attack
+crystalmod.ai.combat.trigger.playertakedamage=Attack only when target attacks owner
+crystalmod.ai.combat.trigger.playerattacks=Attack only when player attacks target
+crystalmod.ai.combat.target.passive=Passive Mobs
+crystalmod.ai.combat.target.hostile=Hostile Mobs
+crystalmod.ai.combat.target.either=Any Mob
+
+#--Guide
+crystalmod.guide.page.crystalOre.title=Crystal Ore
+crystalmod.guide.page.crystalOre.desc=A Rare Ore that when smelted results in a crystal of the same color. Generates from y level %s to %s.
+crystalmod.guide.page.crystalBlock.title=Crystal Block
+crystalmod.guide.page.crystalBlock.desc=A block of crystal used for decoration or large storage of crystals. 
+crystalmod.guide.page.crystalBlockChisled.title=Chiseled Crystal Block
+crystalmod.guide.page.crystalBlockChisled.desc=Used for fancy decoration. 
+crystalmod.guide.page.crystalBlockBrick.title=Crystal Bricks
+crystalmod.guide.page.crystalBlockBrick.desc=Used for fancy decoration.
+crystalmod.guide.page.crystalIngotBlock.title=Block of Crystal Ingots
+crystalmod.guide.page.crystalIngotBlock.desc=Used for large storage of crystal ingots.
+crystalmod.guide.page.crystalGlass.title=Crystal Glass
+crystalmod.guide.page.crystalGlass.desc=Clear glass with a small border. Connects to neighboring glass of the same type.
+crystalmod.guide.page.crystalWorkbench.title=Crystal Workbench
+crystalmod.guide.page.crystalWorkbench.desc=Used to craft crystal tools and normal crafting recipes. Retains inventory when closed.
+crystalmod.guide.page.crystalChest.title=Crystal Chest
+crystalmod.guide.page.crystalChest.desc=Larger Chest capable of holding more items. Similar to Iron Chests.
+crystalmod.guide.page.pipeItem.title=Item Pipe
+crystalmod.guide.page.pipeItem.desc=Pipe capable of transferring items from one inventory to another. Also has the ability to be controlled by Redstone.<br>Use Pipe Filters to filter input or outputs.
+crystalmod.guide.page.pipeFluid.title=Fluid Pipe
+crystalmod.guide.page.pipeFluid.desc=Pipe capable of transferring fluid from one tank to another. Has a built in filter.
+crystalmod.guide.page.pipePowerCU.title=Power Pipe CU
+crystalmod.guide.page.pipePowerCU.desc=Pipe capable of transferring CU.<br>Transfer Amounts:<br>-Blue: %s<br>-Red: %s<br>-Green: %s<br>-Dark: %s
+crystalmod.guide.page.pipePowerRF.title=Power Pipe RF
+crystalmod.guide.page.pipePowerRF.desc=Pipe capable of transferring RF.<br>Transfer Amounts:<br>-Blue: %s<br>-Red: %s<br>-Green: %s<br>-Dark: %s
+crystalmod.guide.page.tank.title=Crystal Tank
+crystalmod.guide.page.tank.desc=The function is in the name.<br>Storage Amounts:<br>-Blue: %s   -Pure: %s<br>-Red: %s<br>-Green: %s<br>-Dark: %s
+crystalmod.guide.page.engineFurnace.title=Engine Furnace
+crystalmod.guide.page.engineFurnace.desc=Generates CU using furnace fuel.
+crystalmod.guide.page.engineLava.title=Engine Lava
+crystalmod.guide.page.engineLava.desc=Generates CU using lava.
+crystalmod.guide.page.weather.title=Weather Forecaster
+crystalmod.guide.page.weather.desc=The machine is capable of telling when the next rain storm and how long it will be. Also it will tell you the current phase of the moon. 
+crystalmod.guide.page.cauldron.title=Crystal Cauldron
+crystalmod.guide.page.cauldron.desc=Just toss crystal shards into the cauldron and then toss ingredients to create a new item. 
+crystalmod.guide.page.spawner.title=Advanced Spawner
+crystalmod.guide.page.spawner.desc=Uses Mob Essence to spawn entities just like a normal spawner. 
+crystalmod.guide.page.reinforcedRail.title=Reinforced Rail
+crystalmod.guide.page.reinforcedRail.desc=These rails are exactly like normal Minecart Rails but they are also able to float in the air without any support.
+crystalmod.guide.page.pipeEStorage.title=Storage Pipe
+crystalmod.guide.page.pipeEStorage.desc=A pipe used to connect network storage machines. 
+crystalmod.guide.page.converter.title=Power Converter
+crystalmod.guide.page.converter.desc=Converts once type of power to another. 
+crystalmod.guide.page.invCharger.title=Inventory Charger
+crystalmod.guide.page.invCharger.desc=If an inventory is placed in front of this machine it will search for any items that it can charge.
+crystalmod.guide.page.enderbuffer.title=Ender Buffer
+crystalmod.guide.page.enderbuffer.desc=This machine is able to wirelessly transfer matter through the ender and to any other Ender Buffer on the same channel.
+crystalmod.guide.page.battery.title=Battery
+crystalmod.guide.page.battery.desc=Used to store CU. Still WIP larger batteries planed. 
+crystalmod.guide.page.elevator.title=Elevator
+crystalmod.guide.page.elevater.desc=This machine will move any entites on it up to the selected floor. Allows a three-by-three floor to be attached to it.
+crystalmod.guide.page.elevatorCaller.title=Elevator Caller
+crystalmod.guide.page.elevatorCaller.desc=Sets the current connected elevators desired floor. Shift RClick to scan for any new floors.
+crystalmod.guide.page.elevaterFloor.title=Elevator Floor
+crystalmod.guide.page.elevaterFloor.desc=Just place next to an elevator to add a floor. Name the floor using a name tag. 
+crystalmod.guide.page.machineFurnace.title=Crystal Furnace
+crystalmod.guide.page.machineFurnace.desc=Smelts items like a furnace using CU instead of fuel. 
+crystalmod.guide.page.machinePress.title=Crystal Press
+crystalmod.guide.page.machinePress.desc=Compacts items using CU for power.
+crystalmod.guide.page.machineLiquidizer.title=Crystal Liquidizer
+crystalmod.guide.page.machineLiquidizer.desc=Liquidizes items using CU for power.
+crystalmod.guide.page.machineInfuser.title=Crystal Infuser
+crystalmod.guide.page.machineInfuser.desc=Acts as an automate-able Crystal Cauldron. Just supply it with liquid crystal instead of shards. 
+crystalmod.guide.page.machineGrinder.title=Mob Grinder
+crystalmod.guide.page.machineGrinder.desc=Kills mobs within a 5x5x5 cube. Sucks up any items or xp inside the kill box. 
+//ITEMS
+crystalmod.guide.page.crystal.title=Crystal
+crystalmod.guide.page.crystal.desc=Created by either smelting Crystal Ore of the same color, or by crafting 9 shards of the same color.
+crystalmod.guide.page.crystalPure.title=Pure Crystal
+crystalmod.guide.page.crystalPure.desc=Pure Crystal is the most powerful of all of the Crystals.<br>%s
+crystalmod.guide.page.crystalPure.desc2=Pure Crystal can also be created by melting down each color of crystal in a Tinkers Smeltery.

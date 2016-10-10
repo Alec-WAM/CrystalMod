@@ -1,0 +1,6 @@
+{
+	"variants": {
+		"inventory": { "model": "crystalmod:crystalpipe" },
+        "normal": { "model": "crystalmod:crystalpipe" }
+    }
+}

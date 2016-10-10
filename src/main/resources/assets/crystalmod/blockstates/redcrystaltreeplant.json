@@ -1,0 +1,25 @@
+{
+	"forge_marker":1,
+    "defaults":{
+        "textures":{
+            "particle":"crystalmod:blocks/plant/red_stage_0",
+            "plant0": "crystalmod:blocks/plant/red_stage_0",
+			"plant1": "crystalmod:blocks/plant/red_stage_1",
+			"plant2": "crystalmod:blocks/plant/red_stage_2"
+        }
+    },
+	"variants": {
+        "age=0,facing=south": [{ "model": "crystalmod:treeplant_0"}],
+        "age=0,facing=west": [{ "model": "crystalmod:treeplant_0", "y": 90 }],
+        "age=0,facing=north": [{ "model": "crystalmod:treeplant_0", "y": 180 }],
+        "age=0,facing=east": [{ "model": "crystalmod:treeplant_0", "y": 270 }],
+        "age=1,facing=south": [{ "model": "crystalmod:treeplant_1"}],
+        "age=1,facing=west": [{ "model": "crystalmod:treeplant_1", "y": 90 }],
+        "age=1,facing=north": [{ "model": "crystalmod:treeplant_1", "y": 180 }],
+        "age=1,facing=east": [{ "model": "crystalmod:treeplant_1", "y": 270 }],
+        "age=2,facing=south": [{ "model": "crystalmod:treeplant_0"}],
+        "age=2,facing=west": [{ "model": "crystalmod:treeplant_2", "y": 90 }],
+        "age=2,facing=north": [{ "model": "crystalmod:treeplant_2", "y": 180 }],
+        "age=2,facing=east": [{ "model": "crystalmod:treeplant_2", "y": 270 }]
+    }
+}

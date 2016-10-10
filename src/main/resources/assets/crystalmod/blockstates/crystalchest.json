@@ -1,0 +1,50 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "crystalmod:chest",
+    "transform": "forge:default-block"
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{}],
+    "variant": {
+      "blue": { 
+		"textures":{
+			"particle": "crystalmod:blocks/crystal_blue_ingot",
+			"texture": "crystalmod:model/chests/bluechest"
+		} 
+	  },
+	  "red": { 
+		"textures":{
+			"particle": "crystalmod:blocks/crystal_red_ingot",
+			"texture": "crystalmod:model/chests/redchest"
+		} 
+	  },
+	  "green": { 
+		"textures":{
+			"particle": "crystalmod:blocks/crystal_green_ingot",
+			"texture": "crystalmod:model/chests/greenchest"
+		} 
+	  },
+	  "dark": { 
+		"textures":{
+			"particle": "crystalmod:blocks/crystal_dark_ingot",
+			"texture": "crystalmod:model/chests/darkchest"
+		} 
+	  },
+	  "pure": { 
+		"textures":{
+			"particle": "crystalmod:blocks/crystal_pure_ingot",
+			"texture": "crystalmod:model/chests/purechest"
+		} 
+	  },
+	  "darkiron": { 
+		"textures":{
+			"particle": "crystalmod:blocks/darkIron_ingot",
+			"texture": "crystalmod:model/chests/dironchest"
+		} 
+	  },
+	  "wood": {}
+    }
+  }
+}

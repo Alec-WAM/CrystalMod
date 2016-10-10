@@ -1,0 +1,6 @@
+Blue = 00fefe
+Red = fe0000
+Green = 00fe00
+Dark = 373737
+Pure = ffffff
+Dark Iron = 616161

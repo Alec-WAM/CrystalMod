@@ -1,0 +1,30 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "crystalmod:fixedOneTexture",
+    "textures": {
+      "all": "crystalmod:blocks/machine/enderbuffer/enderbuffer"
+    },
+    "transform": "forge:default-block"
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{}],
+	"facing": {
+      "north": {},
+      "south": {},
+      "west": {},
+      "east": {},
+	  "up": {},
+	  "down": {}
+    },
+    "active": {
+      "true":{
+		"textures": {
+			"all": "crystalmod:blocks/machine/enderbuffer/enderbuffer_active"
+		}
+	  },
+	  "false":{}
+    }
+  }
+}

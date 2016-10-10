@@ -1,0 +1,15 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "transform": "forge:default-item",
+        "model": "forge:item-layer"
+    },
+    "variants": {
+        "blue": [{ "textures": { "layer0": "crystalmod:items/ingot_blue" }}],
+        "red": [{ "textures": { "layer0": "crystalmod:items/ingot_red" }}],
+        "green": [{ "textures": { "layer0": "crystalmod:items/ingot_green" }}],
+        "dark": [{ "textures": { "layer0": "crystalmod:items/ingot_dark" }}],
+		"pure": [{ "textures": { "layer0": "crystalmod:items/ingot_pure" }}],
+		"darkiron": [{ "textures": { "layer0": "crystalmod:items/ingot_darkIron" }}]
+    }
+}

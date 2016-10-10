@@ -1,0 +1,28 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "crystalmod:directional",
+    "textures": {
+	  "particle": "crystalmod:blocks/machine/invCharger/machine_side",
+      "front": "crystalmod:blocks/machine/invCharger/cu_front",
+	  "sides": "crystalmod:blocks/machine/invCharger/machine_side"
+    },
+    "transform": "forge:default-block"
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{}],
+    "facing": {
+      "north": {},
+      "south": {"y": 180},
+      "west": {"y": 270},
+      "east": {"y": 90},
+      "up": {"x": -90},
+      "down": {"x": 90}
+    },
+	"type": {
+	  "cu": {},
+      "rf": {}
+	}
+  }
+}

@@ -1,0 +1,21 @@
+{
+    "elements":[
+        {
+            "from":[
+                8,
+                8,
+                8
+            ],
+            "to":[
+                8.001,
+                8,
+                8.001
+            ],
+            "faces":{
+                "north":{
+                    "texture":"#particle"
+                }
+            }
+        }
+    ]
+}

@@ -1,0 +1,20 @@
+{
+  "forge_marker": 1,
+  defaults:{
+	"model": "crystalmod:fixedOneTexture"
+  },
+  "variants": {
+    "normal":[],
+	"inventory":[],
+	"type": {
+		"normal": {
+			"model": "crystalmod:fixedOneTexture", 
+			"textures": { "all": "crystalmod:blocks/eStorage/encoder" }
+		},
+		"processing": {
+			"model": "crystalmod:fixedOneTexture", 
+			"textures": { "all": "crystalmod:blocks/eStorage/encoder_external" }
+		}
+	}
+  }
+}

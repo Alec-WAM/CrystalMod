@@ -1,0 +1,28 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "crystalmod:crystalreedblock"
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{}],
+	"age":{
+		"0":{"model": "crystalmod:crystalreedblock"},
+		"1":{"model": "crystalmod:crystalreedblock"},
+		"2":{"model": "crystalmod:crystalreedblock"},
+		"3":{"model": "crystalmod:crystalreedblock"},
+		"4":{"model": "crystalmod:crystalreedblock"},
+		"5":{"model": "crystalmod:crystalreedblock"},
+		"6":{"model": "crystalmod:crystalreedblock"},
+		"7":{"model": "crystalmod:crystalreedblock"},
+		"8":{"model": "crystalmod:crystalreedblock"},
+		"9":{"model": "crystalmod:crystalreedblock"},
+		"10":{"model": "crystalmod:crystalreedblock"},
+		"11":{"model": "crystalmod:crystalreedblock"},
+		"12":{"model": "crystalmod:crystalreedblock"},
+		"13":{"model": "crystalmod:crystalreedblock"},
+		"14":{"model": "crystalmod:crystalreedblock"},
+		"15":{"model": "crystalmod:crystalreedblock"}
+	}
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "particle": "crytalmod:blocks/weather",
+    "down": "crytalmod:blocks/weather",
+    "up": "crytalmod:blocks/weather",
+    "north": "crytalmod:blocks/weather",
+    "east": "crytalmod:blocks/weather",
+    "south": "crytalmod:blocks/weather",
+    "west": "crytalmod:blocks/weather"
+  },
+  "display": {
+    "thirdperson": {
+      "rotation": [ 10, -45, 170 ],
+      "translation": [ 0, 1.5, -2.75 ],
+      "scale": [ 0.375, 0.375, 0.375 ]
+    }
+  }
+}

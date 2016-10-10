@@ -1,0 +1,21 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "crystalmod:fixedOneTexture",
+    "textures": {
+      "all": "crystalmod:blocks/eStorage/crafter/crafter_blue"
+    },
+    "transform": "forge:default-block"
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{}],
+    "tier": {
+      "blue": { "textures":{"all": "crystalmod:blocks/eStorage/crafter/crafter_blue"} },
+	  "red": { "textures":{"all": "crystalmod:blocks/eStorage/crafter/crafter_red"} },
+	  "green": { "textures":{"all": "crystalmod:blocks/eStorage/crafter/crafter_green"} },
+	  "dark": { "textures":{"all": "crystalmod:blocks/eStorage/crafter/crafter_dark"} },
+	  "pure": { "textures":{"all": "crystalmod:blocks/eStorage/crafter/crafter_pure"} }
+    }
+  }
+}
