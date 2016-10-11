@@ -15,6 +15,7 @@ import org.lwjgl.opengl.GL11;
 
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.ModBlocks;
+import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.tiles.pipes.ContainerNormalPipe;
 import alec_wam.CrystalMod.tiles.pipes.item.PacketPipe;
 
@@ -47,7 +48,7 @@ public class GuiEStoragePipe extends GuiContainer {
 	public void actionPerformed(GuiButton button){
 		if(button.id == 0){
 			pipe.setConnectionMode(dir, !Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) ? pipe.getNextConnectionMode(dir) : pipe.getPreviousConnectionMode(dir));
-			CrystalMod.proxy.sendPacketToServerOnly(new PacketPipe(pipe, "CMode", dir, pipe.getConnectionMode(dir).name()));
+			CrystalModNetwork.sendToServer(new PacketPipe(pipe, "CMode", dir, pipe.getConnectionMode(dir).name()));
 			refreshButtons();
 			return;
 		}

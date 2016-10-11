@@ -14,6 +14,7 @@ import java.util.NavigableMap;
 import java.util.Stack;
 import java.util.TreeMap;
 
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
@@ -88,7 +89,15 @@ public class EStorageNetwork extends AbstractPipeNetwork {
 		private String oreDictString;
 		private String modIdString;
 		
-		public ItemStackData() {
+		public ItemStackData(){
+			
+		}
+		
+		public ItemStackData(ItemStack stack) {
+			this.stack = stack;
+			this.index = 0;
+			this.interPos = BlockPos.ORIGIN;
+			this.interDim = 0;
 		}
 
 		public ItemStackData(ItemStack stack, int index, BlockPos interPos, int dim) {

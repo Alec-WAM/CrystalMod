@@ -4,6 +4,7 @@ import java.util.List;
 
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.ICustomModel;
+import alec_wam.CrystalMod.handler.GuiHandler;
 import alec_wam.CrystalMod.items.IEnumMetaItem;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.proxy.CommonProxy;
@@ -65,9 +66,9 @@ public class ItemCrystalGuide extends Item implements ICustomModel {
 				return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStackIn);
 			}
 			if(ItemNBTHelper.verifyExistance(itemStackIn, "LastPage")){
-				playerIn.openGui(CrystalMod.instance, CommonProxy.GUI_ID_ITEM, worldIn, ItemNBTHelper.getInteger(itemStackIn, "LastPage", 0), 0, 0);
+				playerIn.openGui(CrystalMod.instance, GuiHandler.GUI_ID_ITEM, worldIn, ItemNBTHelper.getInteger(itemStackIn, "LastPage", 0), 0, 0);
 			} else { 
-				playerIn.openGui(CrystalMod.instance, CommonProxy.GUI_ID_ITEM, worldIn, 0, 0, 0);
+				playerIn.openGui(CrystalMod.instance, GuiHandler.GUI_ID_ITEM, worldIn, 0, 0, 0);
 			}
 			return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStackIn);
 		}

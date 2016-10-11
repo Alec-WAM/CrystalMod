@@ -14,6 +14,7 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.items.wrapper.PlayerMainInvWrapper;
 import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.handler.GuiHandler;
 import alec_wam.CrystalMod.items.backpack.BackpackUtils;
 import alec_wam.CrystalMod.items.backpack.InventoryBackpackModular;
 import alec_wam.CrystalMod.items.backpack.PacketBackpackGuiAction;
@@ -221,7 +222,7 @@ public class GuiBackpackEnderChest extends GuiBackpackBase
             int value = button.id-(BTN_ID_FIRST_MOVE_ITEMS + 6);
             CrystalModNetwork.sendToServer(new PacketBackpackGuiAction(1, value));
             int slot = BackpackUtils.getSlotOfFirstMatchingItemStack(new PlayerMainInvWrapper(player.inventory), container.getModularItem());
-            player.openGui(CrystalMod.instance, CommonProxy.GUI_ID_ITEM, player.worldObj, value, slot, 0);
+            player.openGui(CrystalMod.instance, GuiHandler.GUI_ID_ITEM, player.worldObj, value, slot, 0);
             if(container.getModularItem() !=null){
             	ItemNBTHelper.setInteger(container.getModularItem(), "LastTab", value);
             }

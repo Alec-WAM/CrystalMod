@@ -1,11 +1,14 @@
 package alec_wam.CrystalMod.tiles.workbench;
 
 import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.packets.InventoryCraftingSyncPacket;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.relauncher.Side;
 
 
 // variant of InventoryCrafting that saves its itemstacks into the given inventory
@@ -81,8 +84,8 @@ public class InventoryCraftingPersistent extends InventoryCrafting {
   public void markDirty() {
     this.parent.markDirty();
     this.eventHandler.onCraftMatrixChanged(this);
-
-    CrystalMod.proxy.sendPacketToServerOnly(new InventoryCraftingSyncPacket());
+    if(FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
+    	CrystalModNetwork.sendToServer(new InventoryCraftingSyncPacket());
   }
 
   public void clear() {

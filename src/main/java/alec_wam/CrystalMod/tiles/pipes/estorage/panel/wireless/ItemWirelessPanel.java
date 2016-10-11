@@ -22,6 +22,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.ICustomModel;
+import alec_wam.CrystalMod.handler.GuiHandler;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.proxy.CommonProxy;
 import alec_wam.CrystalMod.util.ChatUtil;
@@ -119,7 +120,7 @@ public class ItemWirelessPanel extends Item implements ICustomModel {
 							ChatUtil.sendNoSpam(playerIn, "There is no wireless panel at this location");
 							return new ActionResult<ItemStack>(EnumActionResult.PASS, itemStackIn);
 						}
-						playerIn.openGui(CrystalMod.instance, CommonProxy.GUI_ID_ITEM, panelWorld, 0, 0, hand.ordinal());
+						playerIn.openGui(CrystalMod.instance, GuiHandler.GUI_ID_ITEM, panelWorld, 0, 0, hand.ordinal());
 						return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStackIn);
 					}
 				}

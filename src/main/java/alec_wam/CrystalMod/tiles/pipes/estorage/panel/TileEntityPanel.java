@@ -80,7 +80,7 @@ public class TileEntityPanel extends TileEntityMod implements IMessageHandler, I
 		if(this.worldObj !=null && this.worldObj.isRemote){
 			NBTTagCompound nbt = new NBTTagCompound();
 			nbt.setString("SortType", newType.name());
-			CrystalMod.proxy.sendPacketToServerOnly(new PacketTileMessage(getPos(), "Sort", nbt));
+			CrystalModNetwork.sendToServer(new PacketTileMessage(getPos(), "Sort", nbt));
 		}else{
 			markDirty();
 		}
@@ -91,7 +91,7 @@ public class TileEntityPanel extends TileEntityMod implements IMessageHandler, I
 		if(this.worldObj !=null && this.worldObj.isRemote){
 			NBTTagCompound nbt = new NBTTagCompound();
 			nbt.setString("SearchBar", text);
-			CrystalMod.proxy.sendPacketToServerOnly(new PacketTileMessage(getPos(), "Search", nbt));
+			CrystalModNetwork.sendToServer(new PacketTileMessage(getPos(), "Search", nbt));
 		}else{
 			markDirty();
 		}
@@ -102,7 +102,7 @@ public class TileEntityPanel extends TileEntityMod implements IMessageHandler, I
 		if(this.worldObj !=null && this.worldObj.isRemote){
 			NBTTagCompound nbt = new NBTTagCompound();
 			nbt.setBoolean("JEISync", mode);
-			CrystalMod.proxy.sendPacketToServerOnly(new PacketTileMessage(getPos(), "JEISync", nbt));
+			CrystalModNetwork.sendToServer(new PacketTileMessage(getPos(), "JEISync", nbt));
 		}else{
 			markDirty();
 		}

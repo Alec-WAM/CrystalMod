@@ -13,6 +13,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.tiles.pipes.estorage.PacketEStorageAddItem;
 import alec_wam.CrystalMod.tiles.pipes.estorage.client.IGuiScreen;
 import alec_wam.CrystalMod.util.Lang;
@@ -188,17 +189,9 @@ public class GuiPanelMonitor extends GuiContainer implements IGuiScreen {
         super.actionPerformed(button);
 
         if (button == cancelButton && itemSelected != -1) {
-        	try {
-				CrystalMod.proxy.sendPacketToServerOnly(new PacketEStorageAddItem(5, craftingMonitor.getTasks().get(itemSelected).id, 0, new byte[0]));
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+        	CrystalModNetwork.sendToServer(new PacketEStorageAddItem(5, craftingMonitor.getTasks().get(itemSelected).id, 0, new byte[0]));
         } else if (button == cancelAllButton && craftingMonitor.getTasks().size() > 0) {
-        	try {
-				CrystalMod.proxy.sendPacketToServerOnly(new PacketEStorageAddItem(5, -1, 0, new byte[0]));
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+        	CrystalModNetwork.sendToServer(new PacketEStorageAddItem(5, -1, 0, new byte[0]));
         }
     }
 

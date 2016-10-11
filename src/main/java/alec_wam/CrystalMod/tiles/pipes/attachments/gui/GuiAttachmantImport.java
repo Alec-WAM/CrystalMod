@@ -10,6 +10,7 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.tiles.pipes.TileEntityPipe.RedstoneMode;
 import alec_wam.CrystalMod.tiles.pipes.attachments.AttachmentEStorageImport;
 import alec_wam.CrystalMod.tiles.pipes.attachments.AttachmentUtil.AttachmentData;
@@ -41,7 +42,7 @@ public class GuiAttachmantImport extends GuiContainer {
 		if(button.id == BUTTON_RED){
 			final RedstoneMode next = RedstoneMode.getNextRedstoneMode(getImport().rMode);
 			getImport().rMode = next;
-			CrystalMod.proxy.sendPacketToServerOnly(new PacketPipe(pipe, "RMode", dir, next.name()));
+			CrystalModNetwork.sendToServer(new PacketPipe(pipe, "RMode", dir, next.name()));
 			refreshButtons();
 			return;
 		}
@@ -52,28 +53,28 @@ public class GuiAttachmantImport extends GuiContainer {
 				if(button.id == BUTTON_BW){
 					boolean black = !ItemNBTHelper.getBoolean(filterStack, "BlackList", false);
 					ItemNBTHelper.setBoolean(filterStack, "BlackList", black);
-					CrystalMod.proxy.sendPacketToServerOnly(new PacketPipe(pipe, "FilterSetBlack", dir, ""+black));
+					CrystalModNetwork.sendToServer(new PacketPipe(pipe, "FilterSetBlack", dir, ""+black));
 					refreshButtons();
 					return;
 				}
 				if(button.id == BUTTON_META){
 					boolean meta = !ItemNBTHelper.getBoolean(filterStack, "MetaMatch", true);
 					ItemNBTHelper.setBoolean(filterStack, "MetaMatch", meta);
-					CrystalMod.proxy.sendPacketToServerOnly(new PacketPipe(pipe, "FilterSetMeta", dir, ""+meta));
+					CrystalModNetwork.sendToServer(new PacketPipe(pipe, "FilterSetMeta", dir, ""+meta));
 					refreshButtons();
 					return;
 				}
 				if(button.id == BUTTON_NBT){
 					boolean nbtMatch = !ItemNBTHelper.getBoolean(filterStack, "NBTMatch", true);
 					ItemNBTHelper.setBoolean(filterStack, "NBTMatch", nbtMatch);
-					CrystalMod.proxy.sendPacketToServerOnly(new PacketPipe(pipe, "FilterSetNBTMatch", dir, ""+nbtMatch));
+					CrystalModNetwork.sendToServer(new PacketPipe(pipe, "FilterSetNBTMatch", dir, ""+nbtMatch));
 					refreshButtons();
 					return;
 				}
 				if(button.id == BUTTON_ORE){
 					boolean ore = !ItemNBTHelper.getBoolean(filterStack, "OreMatch", false);
 					ItemNBTHelper.setBoolean(filterStack, "OreMatch", ore);
-					CrystalMod.proxy.sendPacketToServerOnly(new PacketPipe(pipe, "FilterSetOre", dir, ""+ore));
+					CrystalModNetwork.sendToServer(new PacketPipe(pipe, "FilterSetOre", dir, ""+ore));
 					refreshButtons();
 					return;
 				}

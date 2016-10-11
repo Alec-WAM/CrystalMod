@@ -7,6 +7,7 @@ import java.util.List;
 import alec_wam.CrystalMod.entities.minions.worker.EntityMinionWorker;
 import alec_wam.CrystalMod.entities.minions.worker.jobs.JobKillEntity;
 import alec_wam.CrystalMod.entities.minions.worker.jobs.JobShearEntity;
+import alec_wam.CrystalMod.handler.GuiHandler;
 import alec_wam.CrystalMod.proxy.CommonProxy;
 import alec_wam.CrystalMod.tiles.machine.worksite.InventorySided;
 import alec_wam.CrystalMod.tiles.machine.worksite.ItemSlotFilter;
@@ -592,7 +593,7 @@ public class WorksiteAnimalFarm extends TileWorksiteBoundedInventory {
 
 	@Override
 	public void openAltGui(EntityPlayer player) {
-		BlockUtil.openWorksiteGui(player, CommonProxy.GUI_ID_WORK_ALT, getPos().getX(), getPos().getY(), getPos().getZ());
+		BlockUtil.openWorksiteGui(player, GuiHandler.GUI_ID_WORK_ALT, getPos().getX(), getPos().getY(), getPos().getZ());
 	}
 
 	@Override

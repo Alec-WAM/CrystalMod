@@ -114,7 +114,7 @@ import net.minecraftforge.fml.common.network.IGuiHandler;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
-public class CommonProxy implements IGuiHandler {
+public class CommonProxy {
 
 	public static File modConfigDir;
 	public Configuration mainConfig;
@@ -203,139 +203,6 @@ public class CommonProxy implements IGuiHandler {
 		GuidePages.createPages();
 		FarmUtil.addDefaultCrops();
 	}
-	
-	
-	public void sendPacketToServerOnly(AbstractPacket packet) {
-
-	}
-	
-	@Override
-    public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z)
-    {
-		/*TileEntity te = world.getTileEntity(new BlockPos(x, y, z));
-        if (te != null)
-        {
-        	if(te instanceof TileEntityPipeItem)return new GuiItemPipe(player.inventory, (TileEntityPipeItem) te, EnumFacing.getFront(ID));
-        }*/
-        return null;
-    }
-
-	public static final int GUI_ID_ITEM = 10;
-	public static final int GUI_ID_TE_FACING = 16;
-	public static final int GUI_ID_WORK_CONFIG = 30;
-	public static final int GUI_ID_WORK_BOUNDS = 31;
-	public static final int GUI_ID_WORK_ALT = 32;
-	public static final int GUI_ID_ENTITY = 5;
-	
-    @Override
-    public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z)
-    {
-    	if(ID == GUI_ID_ENTITY){
-    		Entity entity = world == null ? null : world.getEntityByID(x);
-    		if(entity !=null){
-    			if(entity instanceof EntityMinionWarrior){
-    				EntityMinionWarrior warrior = (EntityMinionWarrior)entity;
-    				if(y == 0){
-    					return new ContainerMinionWarrior(player, warrior);
-    				}
-    			}
-    		}
-    		return null;
-    	}
-    	if(ID == GUI_ID_ITEM){
-    		if(y >=0 && y < player.inventory.getSizeInventory()){
-    			ItemStack held = player.inventory.getStackInSlot(y);
-    			if(held !=null && held.getItem() instanceof ItemBackpack){
-    				if(x == 1 && BackpackUtils.hasCraftingUpgrade(held)){
-    					return new ContainerBackpackCrafting(player, held);
-    				}
-    				if(x == 2 && BackpackUtils.hasEnderChestUpgrade(held)){
-    					return new ContainerBackpackEnderChest(player, held);
-    				}
-    				if(x == 3 && BackpackUtils.hasAnvilUpgrade(held)){
-    					return new ContainerBackpackRepair(player, held);
-    				}
-    				if(x == 4 && BackpackUtils.hasFurnaceUpgrade(held)){
-    					return new ContainerBackpackFurnace(player, held);
-    				}
-    				return new ContainerBackpack(player, held);
-    			}
-    		}
-    		EnumHand hand = z > 0 ? EnumHand.OFF_HAND : EnumHand.MAIN_HAND;
-    		if(player.getHeldItem(hand) !=null){
-    			ItemStack held = player.getHeldItem(hand);
-    			if(held.getItem() instanceof ItemWirelessPanel){
-					BlockPos pos = ItemWirelessPanel.getBlockPos(held);
-
-    				TileEntity te = world.getTileEntity(pos);
-    		        if (te != null)
-    		        {
-    		        	if(te instanceof TileEntityWirelessPanel){
-    		        		return new ContainerPanelWireless(player.inventory, (TileEntityWirelessPanel)te);
-    		        	}
-    		        }
-    			}
-    		}
-    		return null;
-    	}
-    	TileEntity te = world.getTileEntity(new BlockPos(x, y, z));
-        if (te != null)
-        {
-        	
-        	if(ID == GUI_ID_WORK_BOUNDS && te instanceof TileWorksiteBase){return new ContainerWorksiteBoundsAdjust(player, (TileWorksiteBase)te);}
-    		if(ID == GUI_ID_WORK_CONFIG && te instanceof TileWorksiteBoundedInventory){return new ContainerWorksiteInventorySideSelection(player, (TileWorksiteBoundedInventory)te);}
-    		if(ID == GUI_ID_WORK_ALT ){
-    			if(te instanceof WorksiteAnimalFarm)return new ContainerWorksiteAnimalControl(player, (WorksiteAnimalFarm)te);
-			}
-
-        	if(ID >=GUI_ID_TE_FACING && ID <=GUI_ID_TE_FACING+EnumFacing.VALUES.length){
-        		EnumFacing dir = EnumFacing.getFront(ID-GUI_ID_TE_FACING);
-        		if(te instanceof TileEntityPipeEStorage){
-        			TileEntityPipeEStorage pipe = (TileEntityPipeEStorage)te;
-        			if(pipe.getAttachmentData(dir) !=null){
-        				return pipe.getAttachmentData(dir).getContainer(player, pipe, dir);
-        			}
-        		}
-        		if(te instanceof TileEntityPipeItem)return new ContainerItemPipe(player.inventory, (TileEntityPipeItem)te, dir);
-        		
-        	}
-        	
-        	if(te instanceof WorksiteTreeFarm){
-        		return new ContainerWorksiteTreeFarm(player, (WorksiteTreeFarm)te);
-        	}
-        	if(te instanceof WorksiteAnimalFarm){
-        		return new ContainerWorksiteAnimalFarm(player, (WorksiteAnimalFarm)te);
-        	}
-        	if(te instanceof WorksiteCropFarm){
-        		return new ContainerWorksiteCropFarm(player, (WorksiteCropFarm)te);
-        	}
-        	
-        	if(te instanceof TileEntityPipeLiquid)return new ContainerLiquidPipe(player.inventory, (TileEntityPipeLiquid)te);
-        	if(te instanceof TileEntityBlueCrystalChest){
-        		TileEntityBlueCrystalChest icte = (TileEntityBlueCrystalChest) te;
-        		return new ContainerCrystalChest(player.inventory, icte, icte.getType(), 0, 0);
-        	}
-        	if(te instanceof TileEntityCrystalWorkbench){
-        		return new ContainerCrystalWorkbench(player.inventory, world, (TileEntityCrystalWorkbench) te);
-        	}
-        	
-        	//if(te instanceof TileEntityPipe)return ((TileEntityPipe)te).getContainer(ID, player);
-        	
-        	if(te instanceof TileEntityHDDInterface)return new ContainerHDDInterface(player.inventory, (TileEntityHDDInterface)te);
-        	if(te instanceof TileEntityPanelMonitor)return new ContainerPanelMonitor(player, (TileEntityPanelMonitor)te);
-        	if(te instanceof TileEntityPanelCrafting)return new ContainerPanelCrafting(player.inventory, (TileEntityPanelCrafting)te);
-        	if(te instanceof TileEntityPanel)return new ContainerPanel(player.inventory, (TileEntityPanel)te);
-        	if(te instanceof TilePatternEncoder) return new ContainerPatternEncoder(player, (TilePatternEncoder)te);
-        	if(te instanceof TileCrafter) return new ContainerCrafter(player, (TileCrafter)te);
-        	if(te instanceof TileEntityWeather) return new ContainerWeather();
-        	if(te instanceof TileEntityMachine) return ((TileEntityMachine)te).getContainer(player, ID);
-        	if(te instanceof TileEntityEngineFurnace) return new ContainerEngineFurnace(player, (TileEntityEngineFurnace)te);
-        	if(te instanceof TileEntityEngineLava) return new ContainerEngineLava(player, (TileEntityEngineLava)te);
-        	if(te instanceof TileEntityEnderBuffer) return new ContainerEnderBuffer(player, (TileEntityEnderBuffer)te);
-        	if(te instanceof TileEntityMobGrinder) return new ContainerNull();
-        }
-        return null;
-    }
 
     public EntityPlayer getClientPlayer() {
         return null;

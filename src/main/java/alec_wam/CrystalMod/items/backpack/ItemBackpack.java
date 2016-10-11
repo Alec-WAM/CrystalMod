@@ -24,6 +24,7 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.PlayerMainInvWrapper;
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.ICustomModel;
+import alec_wam.CrystalMod.handler.GuiHandler;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.items.backpack.container.ContainerBackpack;
 import alec_wam.CrystalMod.items.backpack.container.ContainerBackpackCrafting;
@@ -63,9 +64,9 @@ public class ItemBackpack extends Item implements ICustomModel {
         if (worldIn.isRemote == false)
         {
             if(!playerIn.isSneaking()){
-            	playerIn.openGui(CrystalMod.instance, CommonProxy.GUI_ID_ITEM, worldIn, ItemNBTHelper.getInteger(itemStackIn, "LastTab", 0), (int)playerIn.inventory.currentItem, hand.ordinal());
+            	playerIn.openGui(CrystalMod.instance, GuiHandler.GUI_ID_ITEM, worldIn, ItemNBTHelper.getInteger(itemStackIn, "LastTab", 0), (int)playerIn.inventory.currentItem, hand.ordinal());
             }
-            else playerIn.openGui(CrystalMod.instance, CommonProxy.GUI_ID_ITEM, worldIn, 0, (int)playerIn.inventory.currentItem, hand.ordinal());
+            else playerIn.openGui(CrystalMod.instance, GuiHandler.GUI_ID_ITEM, worldIn, 0, (int)playerIn.inventory.currentItem, hand.ordinal());
         }
 
         return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStackIn);
@@ -331,7 +332,7 @@ public class ItemBackpack extends Item implements ICustomModel {
             }
             if(action == 1){
             	IItemHandler playerInv = new PlayerMainInvWrapper(player.inventory);
-            	player.openGui(CrystalMod.instance, CommonProxy.GUI_ID_ITEM, player.worldObj, element, BackpackUtils.getSlotOfFirstMatchingItemStack(playerInv, stack), 0);
+            	player.openGui(CrystalMod.instance, GuiHandler.GUI_ID_ITEM, player.worldObj, element, BackpackUtils.getSlotOfFirstMatchingItemStack(playerInv, stack), 0);
             	if(stack !=null){
                 	ItemNBTHelper.setInteger(stack, "LastTab", element);
                 }

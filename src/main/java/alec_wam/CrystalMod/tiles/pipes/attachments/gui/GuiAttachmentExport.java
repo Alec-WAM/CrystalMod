@@ -8,6 +8,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.tiles.pipes.TileEntityPipe.RedstoneMode;
 import alec_wam.CrystalMod.tiles.pipes.attachments.AttachmentEStorageExport;
 import alec_wam.CrystalMod.tiles.pipes.attachments.AttachmentUtil.AttachmentData;
@@ -52,7 +53,7 @@ public class GuiAttachmentExport extends GuiContainer {
 		if(button.id == 0){
 			final RedstoneMode next = RedstoneMode.getNextRedstoneMode(getPart().rMode);
 			getPart().rMode = next;
-			CrystalMod.proxy.sendPacketToServerOnly(new PacketPipe(pipe, "RMode", dir, next.name()));
+			CrystalModNetwork.sendToServer(new PacketPipe(pipe, "RMode", dir, next.name()));
 			refreshButtons();
 			return;
 		}

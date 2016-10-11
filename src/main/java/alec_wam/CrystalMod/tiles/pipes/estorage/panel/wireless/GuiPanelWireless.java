@@ -150,12 +150,8 @@ public class GuiPanelWireless extends GuiContainer implements IGuiScreen {
         	                if(panel !=null && panel.network !=null && slot.getStack() !=null){
         	                	ItemStack copy = slot.getStack().copy();
         	                	copy.stackSize = 1;
-        	                	try {
-        							CrystalMod.proxy.sendPacketToServerOnly(new PacketEStorageAddItem(3, slot.slotNumber, 1, EStorageNetwork.compressItem(new ItemStackData(copy, 0, BlockPos.ORIGIN, 0))));
-        						} catch (Exception e) {
-        							e.printStackTrace();
-        						}
-        	                	return;
+        	                	CrystalModNetwork.sendToServer(new PacketEStorageAddItem(3, slot.slotNumber, 1, EStorageNetwork.compressItem(new ItemStackData(copy, 0, BlockPos.ORIGIN, 0))));
+        						return;
         	        		}
         	            }
         			}
@@ -185,11 +181,7 @@ public class GuiPanelWireless extends GuiContainer implements IGuiScreen {
 								}
 							}
 							if(slot !=-1){
-	    						try {
-	    							CrystalMod.proxy.sendPacketToServerOnly(new PacketEStorageAddItem(1, slot, 1, EStorageNetwork.compressItem(data)));
-	    						} catch (IOException e) {
-	    							e.printStackTrace();
-	    						}
+								CrystalModNetwork.sendToServer(new PacketEStorageAddItem(1, slot, 1, EStorageNetwork.compressItem(data)));
 	    						return;
 							}
     					}
@@ -289,15 +281,11 @@ public class GuiPanelWireless extends GuiContainer implements IGuiScreen {
 				EStorageNetworkClient net = (EStorageNetworkClient) panel.network;
 				
 				if(player !=null & player.inventory.getItemStack() !=null  && (mouseButton == 0 || mouseButton == 1)){
-					try {
-						ItemStack copy = player.inventory.getItemStack().copy();
-						if(mouseButton == 1){
-							copy.stackSize = 1;
-						}
-						CrystalMod.proxy.sendPacketToServerOnly(new PacketEStorageAddItem(0, -1, -1, EStorageNetwork.compressItem(new ItemStackData(copy, 0, BlockPos.ORIGIN, 0))));
-					} catch (Exception e) {
-						e.printStackTrace();
+					ItemStack copy = player.inventory.getItemStack().copy();
+					if(mouseButton == 1){
+						copy.stackSize = 1;
 					}
+					CrystalModNetwork.sendToServer(new PacketEStorageAddItem(0, -1, -1, EStorageNetwork.compressItem(new ItemStackData(copy, 0, BlockPos.ORIGIN, 0))));
 					return;
 				}
 				ItemStackData data = (fixednSlot < 0 || getDisplayItems().size() <= fixednSlot) ? null : getDisplayItems().get(fixednSlot);
@@ -307,12 +295,8 @@ public class GuiPanelWireless extends GuiContainer implements IGuiScreen {
 	                {
 	                    if (player.capabilities.isCreativeMode && mouseButton == this.mc.gameSettings.keyBindPickBlock.getKeyCode() + 100)
 	                    {
-	                    	try {
-	    						CrystalMod.proxy.sendPacketToServerOnly(new PacketEStorageAddItem(2, -1, -1, EStorageNetwork.compressItem(data)));
-	    					} catch (IOException e) {
-	    						e.printStackTrace();
-	    					}
-	                    	return;
+	                    	CrystalModNetwork.sendToServer(new PacketEStorageAddItem(2, -1, -1, EStorageNetwork.compressItem(data)));
+	    					return;
 	                    }
 	                }
 					if(mouseButton == 0 || mouseButton == 1){
@@ -352,11 +336,7 @@ public class GuiPanelWireless extends GuiContainer implements IGuiScreen {
 								}
 							}
 						}
-						try {
-							if(!data.isCrafting)CrystalMod.proxy.sendPacketToServerOnly(new PacketEStorageAddItem(1, slot, amount, EStorageNetwork.compressItem(data)));
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
+						if(!data.isCrafting)CrystalModNetwork.sendToServer(new PacketEStorageAddItem(1, slot, amount, EStorageNetwork.compressItem(data)));
 						return;
 					}
 				}
@@ -633,12 +613,8 @@ public class GuiPanelWireless extends GuiContainer implements IGuiScreen {
 			    {
 					if (mc.thePlayer.capabilities.isCreativeMode && keyCode == this.mc.gameSettings.keyBindPickBlock.getKeyCode())
                     {
-                    	try {
-    						CrystalMod.proxy.sendPacketToServerOnly(new PacketEStorageAddItem(2, -1, -1, EStorageNetwork.compressItem(data)));
-    					} catch (IOException e) {
-    						e.printStackTrace();
-    					}
-                    	return;
+                    	CrystalModNetwork.sendToServer(new PacketEStorageAddItem(2, -1, -1, EStorageNetwork.compressItem(data)));
+    					return;
                     }
 			        for (int i = 0; i < 9; ++i)
 			        {
@@ -647,11 +623,7 @@ public class GuiPanelWireless extends GuiContainer implements IGuiScreen {
 			            	int slot = i;
 						
 			            	if(slot !=-1 && (this.mc.thePlayer.inventory.getStackInSlot(i) == null || ItemUtil.canCombine(this.mc.thePlayer.inventory.getStackInSlot(i), dis))){
-								try {
-									CrystalMod.proxy.sendPacketToServerOnly(new PacketEStorageAddItem(1, slot, dis.getMaxStackSize(), EStorageNetwork.compressItem(data)));
-								} catch (IOException e) {
-									e.printStackTrace();
-								}
+								CrystalModNetwork.sendToServer(new PacketEStorageAddItem(1, slot, dis.getMaxStackSize(), EStorageNetwork.compressItem(data)));
 							}
 							return;
 						}
@@ -674,22 +646,18 @@ public class GuiPanelWireless extends GuiContainer implements IGuiScreen {
 		}else{
 			if(keyCode == Keyboard.KEY_RETURN){
 				if(currentCraft == null || currentCraft.stack == null)return;
-				try {
-					int current = 1;
-					try{
-						current = Integer.parseInt(craftingRequestAmount.getText());
-					}catch(Exception e){
-					}
-					ItemStack copy = currentCraft.stack.copy();
-					copy.stackSize = 1;
-					
-					ItemStackData data = new ItemStackData(copy, currentCraft.index, currentCraft.interPos, currentCraft.interDim);
-					data.isCrafting = currentCraft.isCrafting;
-					
-					CrystalMod.proxy.sendPacketToServerOnly(new PacketEStorageAddItem(4, -1, current, EStorageNetwork.compressItem(data)));
-				} catch (IOException e) {
-					e.printStackTrace();
+				int current = 1;
+				try{
+					current = Integer.parseInt(craftingRequestAmount.getText());
+				}catch(Exception e){
 				}
+				ItemStack copy = currentCraft.stack.copy();
+				copy.stackSize = 1;
+				
+				ItemStackData data = new ItemStackData(copy, currentCraft.index, currentCraft.interPos, currentCraft.interDim);
+				data.isCrafting = currentCraft.isCrafting;
+				
+				CrystalModNetwork.sendToServer(new PacketEStorageAddItem(4, -1, current, EStorageNetwork.compressItem(data)));
 				this.craftingPopup = false;
 				this.craftingRequestAmount.setText("1");
 				this.craftingRequestAmount.setEnabled(false);

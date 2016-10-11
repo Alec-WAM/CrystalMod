@@ -239,8 +239,6 @@ public class FarmUtil {
 
 	public static void addDefaultCrops() {
 		//TODO Add Seperate Colored Reeds
-		//TODO Add Crystal Trees
-		//TODO Add new Cocoa Type Crystal Plant
 		addStandardCrop(new ItemStack(Blocks.WHEAT), 32767);
 	    addStandardCrop(new ItemStack(Blocks.CARROTS), 32767);
 	    addStandardCrop(new ItemStack(Blocks.POTATOES), 32767);

@@ -17,6 +17,7 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Keyboard;
 
 import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.tiles.pipes.ConnectionMode;
 import alec_wam.CrystalMod.tiles.pipes.TileEntityPipe.RedstoneMode;
 import alec_wam.CrystalMod.tiles.pipes.item.filters.CameraFilterInventory;
@@ -59,34 +60,34 @@ public class GuiItemPipe extends GuiContainer {
 	public void actionPerformed(GuiButton button){
 		if(button.id == 0){
 			pipe.setConnectionMode(dir, !Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) ? pipe.getNextConnectionMode(dir) : pipe.getPreviousConnectionMode(dir));
-			CrystalMod.proxy.sendPacketToServerOnly(new PacketPipe(pipe, "CMode", dir, pipe.getConnectionMode(dir).name()));
+			sendPipeMessage("CMode", pipe.getConnectionMode(dir).name());
 			refreshButtons();
 			return;
 		}
 		if(!filter){
 			if(button.id == 1){
 				pipe.setOutputPriority(dir, pipe.getOutputPriority(dir)+1);
-				CrystalMod.proxy.sendPacketToServerOnly(new PacketPipe(pipe, "Pri", dir, "+"));
+				sendPipeMessage("Pri", "+");
 				refreshButtons();
 				return;
 			}
 			if(button.id == 2){
 				pipe.setOutputPriority(dir, pipe.getOutputPriority(dir)-1);
-				CrystalMod.proxy.sendPacketToServerOnly(new PacketPipe(pipe, "Pri", dir, "-"));
+				sendPipeMessage("Pri", "-");
 				refreshButtons();
 				return;
 			}
 			if(button.id == 3){
 				boolean feed = !pipe.isSelfFeedEnabled(dir);
 				pipe.setSelfFeedEnabled(dir, feed);
-				CrystalMod.proxy.sendPacketToServerOnly(new PacketPipe(pipe, "SelfFeed", dir, ""+feed));
+				sendPipeMessage("SelfFeed", ""+feed);
 				refreshButtons();
 				return;
 			}
 			if(button.id == 4){
 				boolean robin = !pipe.isRoundRobinEnabled(dir);
 				pipe.setRoundRobinEnabled(dir, robin);
-				CrystalMod.proxy.sendPacketToServerOnly(new PacketPipe(pipe, "RoundRobin", dir, ""+robin));
+				sendPipeMessage("RoundRobin", ""+robin);
 				refreshButtons();
 				return;
 			}
@@ -95,15 +96,14 @@ public class GuiItemPipe extends GuiContainer {
 					filter = true;
 					this.container.setGhostVisible(filter);
 					refreshButtons();
-					CrystalMod.proxy.sendPacketToServerOnly(new PacketPipe(pipe, "FilterVis", dir, ""+filter));
+					sendPipeMessage("FilterVis", ""+filter);
 				}
 				return;
 			}
 			if(button.id == 6){
 				final RedstoneMode next = pipe.getNextRedstoneMode(dir);
 				pipe.setRedstoneMode(next, dir);
-				ModLogger.info(""+dir);
-				CrystalMod.proxy.sendPacketToServerOnly(new PacketPipe(pipe, "RMode", dir, next.name()));
+				sendPipeMessage("RMode", next.name());
 				refreshButtons();
 				return;
 			}
@@ -112,13 +112,13 @@ public class GuiItemPipe extends GuiContainer {
 			filter = true;
 			this.container.setGhostVisible(filter);
 			refreshButtons();
-			CrystalMod.proxy.sendPacketToServerOnly(new PacketPipe(pipe, "FilterVis", dir, ""+filter));
+			sendPipeMessage("FilterVis", ""+filter);
 			return;
 		}
 		if(button.id == 10){
 			filter = false;
 			this.container.setGhostVisible(filter);
-			CrystalMod.proxy.sendPacketToServerOnly(new PacketPipe(pipe, "FilterVis", dir, ""+false));
+			sendPipeMessage("FilterVis", ""+false);
 			refreshButtons();
 			return;
 		}
@@ -131,28 +131,28 @@ public class GuiItemPipe extends GuiContainer {
 					if(button.id == 6){
 						boolean black = !ItemNBTHelper.getBoolean(filterStack, "BlackList", false);
 						ItemNBTHelper.setBoolean(filterStack, "BlackList", black);
-						CrystalMod.proxy.sendPacketToServerOnly(new PacketPipe(pipe, "FilterSetBlack", dir, ""+black));
+						sendPipeMessage("FilterSetBlack", ""+black);
 						refreshButtons();
 						return;
 					}
 					if(button.id == 7){
 						boolean meta = !ItemNBTHelper.getBoolean(filterStack, "MetaMatch", true);
 						ItemNBTHelper.setBoolean(filterStack, "MetaMatch", meta);
-						CrystalMod.proxy.sendPacketToServerOnly(new PacketPipe(pipe, "FilterSetMeta", dir, ""+meta));
+						sendPipeMessage("FilterSetMeta", ""+meta);
 						refreshButtons();
 						return;
 					}
 					if(button.id == 8){
 						boolean nbtMatch = !ItemNBTHelper.getBoolean(filterStack, "NBTMatch", true);
 						ItemNBTHelper.setBoolean(filterStack, "NBTMatch", nbtMatch);
-						CrystalMod.proxy.sendPacketToServerOnly(new PacketPipe(pipe, "FilterSetNBTMatch", dir, ""+nbtMatch));
+						sendPipeMessage("FilterSetNBTMatch", ""+nbtMatch);
 						refreshButtons();
 						return;
 					}
 					if(button.id == 9){
 						boolean ore = !ItemNBTHelper.getBoolean(filterStack, "OreMatch", false);
 						ItemNBTHelper.setBoolean(filterStack, "OreMatch", ore);
-						CrystalMod.proxy.sendPacketToServerOnly(new PacketPipe(pipe, "FilterSetOre", dir, ""+ore));
+						sendPipeMessage("FilterSetOre", ""+ore);
 						refreshButtons();
 						return;
 					}
@@ -160,14 +160,14 @@ public class GuiItemPipe extends GuiContainer {
 					if(button.id == 6){
 						boolean black = !ItemNBTHelper.getBoolean(filterStack, "BlackList", false);
 						ItemNBTHelper.setBoolean(filterStack, "BlackList", black);
-						CrystalMod.proxy.sendPacketToServerOnly(new PacketPipe(pipe, "FilterSetBlack", dir, ""+black));
+						sendPipeMessage("FilterSetBlack", ""+black);
 						refreshButtons();
 						return;
 					}
 				}else if(filterStack.getMetadata() == FilterType.CAMERA.ordinal()){
 					if(button.id == 6){
 						pipe.scanInventory(dir);
-						CrystalMod.proxy.sendPacketToServerOnly(new PacketPipe(pipe, "FilterScanInv", dir, ""));
+						sendPipeMessage("FilterScanInv", "");
 						refreshButtons();
 						return;
 					}
@@ -194,34 +194,38 @@ public class GuiItemPipe extends GuiContainer {
 					if(button.id == 9){
 						boolean black = !ItemNBTHelper.getBoolean(filterStack, "BlackList", false);
 						ItemNBTHelper.setBoolean(filterStack, "BlackList", black);
-						CrystalMod.proxy.sendPacketToServerOnly(new PacketPipe(pipe, "FilterSetBlack", dir, ""+black));
+						sendPipeMessage("FilterSetBlack", ""+black);
 						refreshButtons();
 						return;
 					}
 					if(button.id == 11){
 						boolean meta = !ItemNBTHelper.getBoolean(filterStack, "MetaMatch", true);
 						ItemNBTHelper.setBoolean(filterStack, "MetaMatch", meta);
-						CrystalMod.proxy.sendPacketToServerOnly(new PacketPipe(pipe, "FilterSetMeta", dir, ""+meta));
+						sendPipeMessage("FilterSetMeta", ""+meta);
 						refreshButtons();
 						return;
 					}
 					if(button.id == 12){
 						boolean nbtMatch = !ItemNBTHelper.getBoolean(filterStack, "NBTMatch", true);
 						ItemNBTHelper.setBoolean(filterStack, "NBTMatch", nbtMatch);
-						CrystalMod.proxy.sendPacketToServerOnly(new PacketPipe(pipe, "FilterSetNBTMatch", dir, ""+nbtMatch));
+						sendPipeMessage("FilterSetNBTMatch", ""+nbtMatch);
 						refreshButtons();
 						return;
 					}
 					if(button.id == 13){
 						boolean ore = !ItemNBTHelper.getBoolean(filterStack, "OreMatch", false);
 						ItemNBTHelper.setBoolean(filterStack, "OreMatch", ore);
-						CrystalMod.proxy.sendPacketToServerOnly(new PacketPipe(pipe, "FilterSetOre", dir, ""+ore));
+						sendPipeMessage("FilterSetOre", ""+ore);
 						refreshButtons();
 						return;
 					}
 				}
 			}
 		}
+	}
+	
+	public void sendPipeMessage(String type, String data){
+		CrystalModNetwork.sendToServer(new PacketPipe(pipe, type, dir, data));
 	}
 	
 	private void refreshButtons() {

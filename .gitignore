@@ -21,5 +21,7 @@ build
 eclipse
 run
 /lib/
-/src/
 /EclipseSettings.epf
+/gradlew.bat
+/gradlew
+/gradle/

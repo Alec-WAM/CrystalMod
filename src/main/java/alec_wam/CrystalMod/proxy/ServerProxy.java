@@ -25,12 +25,6 @@ public class ServerProxy extends CommonProxy {
         super.postInit(e);
     }
     
-    @Override
-    public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z)
-    {
-        return super.getServerGuiElement(ID, player, world, x, y, z);
-    }
-    
     public double getReachDistanceForPlayer(EntityPlayer entityPlayer) {
     	return super.getReachDistanceForPlayer(entityPlayer);
     }

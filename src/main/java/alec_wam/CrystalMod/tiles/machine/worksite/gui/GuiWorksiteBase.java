@@ -1,5 +1,6 @@
 package alec_wam.CrystalMod.tiles.machine.worksite.gui;
 
+import alec_wam.CrystalMod.handler.GuiHandler;
 import alec_wam.CrystalMod.proxy.CommonProxy;
 import alec_wam.CrystalMod.tiles.machine.worksite.TileWorksiteBoundedInventory;
 import alec_wam.CrystalMod.tiles.machine.worksite.gui.elements.Button;
@@ -62,7 +63,7 @@ public abstract class GuiWorksiteBase extends GuiContainerWorksiteBase {
 		Button button = new Button(8, ySize - 8 - 12, 50, 12, Lang.prefix+"guistrings.inventory.setsides") {
 			@Override
 			protected void onPressed() {
-				BlockUtil.openWorksiteGui(player, CommonProxy.GUI_ID_WORK_CONFIG, container.worksite.getPos().getX(), container.worksite.getPos().getY(), container.worksite.getPos().getZ());
+				BlockUtil.openWorksiteGui(player, GuiHandler.GUI_ID_WORK_CONFIG, container.worksite.getPos().getX(), container.worksite.getPos().getY(), container.worksite.getPos().getZ());
 			}
 		};
 		addGuiElement(button);
@@ -73,7 +74,7 @@ public abstract class GuiWorksiteBase extends GuiContainerWorksiteBase {
 				Lang.prefix+"guistrings.inventory.adjust_bounds") {
 			@Override
 			protected void onPressed() {
-				BlockUtil.openWorksiteGui(player, CommonProxy.GUI_ID_WORK_BOUNDS, container.worksite.getPos().getX(), container.worksite.getPos().getY(),
+				BlockUtil.openWorksiteGui(player, GuiHandler.GUI_ID_WORK_BOUNDS, container.worksite.getPos().getX(), container.worksite.getPos().getY(),
 						container.worksite.getPos().getZ());
 			}
 		};

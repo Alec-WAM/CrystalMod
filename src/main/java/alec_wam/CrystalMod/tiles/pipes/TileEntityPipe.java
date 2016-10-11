@@ -10,6 +10,7 @@ import java.util.Set;
 
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.ModBlocks;
+import alec_wam.CrystalMod.handler.GuiHandler;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.network.IMessageHandler;
 import alec_wam.CrystalMod.proxy.CommonProxy;
@@ -592,7 +593,7 @@ public abstract class TileEntityPipe extends TileEntityMod implements ITickable,
 								return true;
 							}
 							if(player.worldObj.isRemote)return true;
-							player.openGui(CrystalMod.instance, CommonProxy.GUI_ID_TE_FACING+dir.getIndex(),
+							player.openGui(CrystalMod.instance, GuiHandler.GUI_ID_TE_FACING+dir.getIndex(),
 									player.worldObj, getPos().getX(), getPos()
 											.getY(), getPos().getZ());
 							return true;
@@ -600,7 +601,7 @@ public abstract class TileEntityPipe extends TileEntityMod implements ITickable,
 						
 						if (part == PipePart.CONNECTOR_LARGE) {
 							if(player.worldObj.isRemote)return true;
-							player.openGui(CrystalMod.instance, CommonProxy.GUI_ID_TE_FACING+dir.getIndex(),
+							player.openGui(CrystalMod.instance, GuiHandler.GUI_ID_TE_FACING+dir.getIndex(),
 									player.worldObj, getPos().getX(), getPos()
 											.getY(), getPos().getZ());
 							return true;
