@@ -190,7 +190,6 @@ public class RenderUtil {
 		List<BakedQuad> list = Lists.newArrayList();
 		if(fluid !=null){
 			Color color = new Color(fluid.getFluid().getColor(fluid));
-			//FIXME WHY IS THE RED AND BLUE FLIPPED!?!?!
 			int fluidColor = DynamicBaseModel.RGBAToInt(color.getBlue(), color.getGreen(), color.getRed(), color.getAlpha());
 			TextureAtlasSprite fluidTexture = getStillTexture(fluid);
 			//DEBUG Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelShapes().getTexture(Blocks.BOOKSHELF.getDefaultState());

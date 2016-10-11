@@ -1,5 +1,10 @@
 package alec_wam.CrystalMod.entities;
 
+import java.util.Iterator;
+import java.util.List;
+
+import com.google.common.collect.Lists;
+
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.entities.animals.EntityCrystalCow;
 import alec_wam.CrystalMod.entities.animals.RenderCrystalCow;
@@ -14,6 +19,14 @@ import alec_wam.CrystalMod.entities.mob.zombiePigmen.RenderCrystalPigZombie;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityList.EntityEggInfo;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EnumCreatureType;
+import net.minecraft.entity.monster.EntityEnderman;
+import net.minecraft.entity.monster.EntityPigZombie;
+import net.minecraft.entity.passive.EntityCow;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.Biome.SpawnListEntry;
+import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.relauncher.Side;
@@ -34,6 +47,12 @@ public class ModEntites {
 		addEntity(EntityMinionWorker.class, "MinionWorker");
 		
 		addEntity(EntityMinionWarrior.class, "MinionWarrior");
+	}
+	
+	public static void postInit(){
+		addToBiomes(EntityCrystalPigZombie.class, 50, 1, 4, EnumCreatureType.MONSTER, getBiomesThatCanSpawn(EntityPigZombie.class, EnumCreatureType.MONSTER));
+		addToBiomes(EntityCrystalCow.class, 4, 1, 4, EnumCreatureType.CREATURE, getBiomesThatCanSpawn(EntityCow.class, EnumCreatureType.CREATURE));
+		addToBiomes(EntityCrystalEnderman.class, 5, 1, 4, EnumCreatureType.MONSTER, getBiomesThatCanSpawn(EntityEnderman.class, EnumCreatureType.MONSTER));
 	}
 	
 	@SideOnly(Side.CLIENT)
@@ -64,6 +83,35 @@ public class ModEntites {
 		EntityEggInfo info = new EntityEggInfo(id, primaryColor, secondaryColor);
 		EntityList.ENTITY_EGGS.put(id, info);
 		return info;
+	}
+	
+	public static boolean canTypeSpawnByDefault(Biome biome, Class <? extends EntityLiving> entityClass, EnumCreatureType type){
+		List<Biome.SpawnListEntry> entryList = biome.getSpawnableList(type);
+		if(entryList == null || entryList.size() < 1) return false;
+		for(SpawnListEntry entry : entryList){
+			if(entityClass.equals(entry.entityClass)){
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public static List<Biome> getBiomesThatCanSpawn(Class <? extends EntityLiving> entityClass, EnumCreatureType type){
+		List<Biome> list = Lists.newArrayList();
+		Iterator<Biome> it = Biome.REGISTRY.iterator();
+		while(it.hasNext()){
+			Biome biome = it.next();
+			if(biome !=null){
+				if(canTypeSpawnByDefault(biome, entityClass, type)){
+					list.add(biome);
+				}
+			}
+		}
+		return list;
+	}
+	
+	public static void addToBiomes(Class <? extends EntityLiving > entityClass, int weightedProb, int min, int max, EnumCreatureType type, List<Biome> biomes){
+		EntityRegistry.addSpawn(entityClass, weightedProb, min, max, type, biomes.toArray(new Biome[biomes.size()]));
 	}
 	
 }

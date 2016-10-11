@@ -5,6 +5,7 @@ import java.io.File;
 import org.apache.logging.log4j.Level;
 
 import alec_wam.CrystalMod.Config;
+import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.capability.ExtendedPlayer;
 import alec_wam.CrystalMod.capability.ExtendedPlayerProvider;
@@ -41,6 +42,7 @@ import alec_wam.CrystalMod.tiles.machine.power.engine.lava.ContainerEngineLava;
 import alec_wam.CrystalMod.tiles.machine.power.engine.lava.TileEntityEngineLava;
 import alec_wam.CrystalMod.tiles.machine.worksite.TileWorksiteBase;
 import alec_wam.CrystalMod.tiles.machine.worksite.TileWorksiteBoundedInventory;
+import alec_wam.CrystalMod.tiles.machine.worksite.WorksiteChunkLoader;
 import alec_wam.CrystalMod.tiles.machine.worksite.gui.ContainerWorksiteAnimalControl;
 import alec_wam.CrystalMod.tiles.machine.worksite.gui.ContainerWorksiteBoundsAdjust;
 import alec_wam.CrystalMod.tiles.machine.worksite.gui.ContainerWorksiteInventorySideSelection;
@@ -76,6 +78,7 @@ import alec_wam.CrystalMod.tiles.pipes.item.ContainerItemPipe;
 import alec_wam.CrystalMod.tiles.pipes.item.TileEntityPipeItem;
 import alec_wam.CrystalMod.tiles.pipes.liquid.ContainerLiquidPipe;
 import alec_wam.CrystalMod.tiles.pipes.liquid.TileEntityPipeLiquid;
+import alec_wam.CrystalMod.tiles.playercube.PlayerCubeChunkLoaderManager;
 import alec_wam.CrystalMod.tiles.spawner.ItemMobEssence;
 import alec_wam.CrystalMod.tiles.weather.ContainerWeather;
 import alec_wam.CrystalMod.tiles.weather.TileEntityWeather;
@@ -101,6 +104,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
+import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.config.Configuration;
@@ -146,7 +150,8 @@ public class CommonProxy {
         
         MinecraftForge.EVENT_BUS.register(DropCapture.instance);
         
-        
+        PlayerCubeChunkLoaderManager.init();
+        ForgeChunkManager.setForcedChunkLoadingCallback((Object)CrystalMod.instance, (ForgeChunkManager.LoadingCallback)new WorksiteChunkLoader());
         
         if(Loader.isModLoaded("tconstruct")){
         	TConstructIntegration.preInit();
@@ -199,6 +204,7 @@ public class CommonProxy {
 	    }
 		
 		ModEnchantments.init();
+		ModEntites.postInit();
 		ModCrafting.addSlabToBlocks();
 		GuidePages.createPages();
 		FarmUtil.addDefaultCrops();

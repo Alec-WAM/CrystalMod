@@ -85,7 +85,6 @@ public class CmdTag extends AbstractCMCommand{
 					return;
 			    }
 				
-				//TODO Remove
 				if(args.length > 1 && args[1].equalsIgnoreCase("jei")){
 					Internal.getHelpers().reload();
 					return;

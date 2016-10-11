@@ -1,6 +1,7 @@
 package alec_wam.CrystalMod.tiles.playercube;
 
 import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.tiles.machine.worksite.WorksiteChunkLoader;
 import alec_wam.CrystalMod.world.ModDimensions;
 
 import com.mojang.authlib.*;
@@ -28,7 +29,7 @@ public class PlayerCubeChunkLoaderManager implements ForgeChunkManager.LoadingCa
     private static HashMap<GameProfile, ForgeChunkManager.Ticket> playerTickets;
     
     public static void init() {
-        ForgeChunkManager.setForcedChunkLoadingCallback((Object)CrystalMod.instance, (ForgeChunkManager.LoadingCallback)PlayerCubeChunkLoaderManager.instance);
+        ForgeChunkManager.setForcedChunkLoadingCallback((Object)CrystalMod.instance, (ForgeChunkManager.LoadingCallback)new WorksiteChunkLoader());
         MinecraftForge.EVENT_BUS.register((Object)PlayerCubeChunkLoaderManager.instance);
     }
     

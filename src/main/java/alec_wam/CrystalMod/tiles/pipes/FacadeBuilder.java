@@ -124,7 +124,6 @@ class FacadeBuilder
 
 		EnumSet<EnumFacing> openFaces = calculateFaceOpenFaces(side);
 		
-		// TODO: Cache this
 		for( EnumFacing facing : openFaces )
 		{
 			List<BakedQuad> quads = blockModel.getQuads( blockState, facing, rand );

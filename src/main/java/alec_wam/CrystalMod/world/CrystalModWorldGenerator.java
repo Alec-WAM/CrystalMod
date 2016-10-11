@@ -4,13 +4,18 @@ import java.util.ArrayDeque;
 import java.util.Random;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.BiomeForest;
 import net.minecraft.world.chunk.IChunkGenerator;
 import net.minecraft.world.chunk.IChunkProvider;
+import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.event.world.ChunkDataEvent;
 import net.minecraftforge.fml.common.IWorldGenerator;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -20,6 +25,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import alec_wam.CrystalMod.Config;
 import alec_wam.CrystalMod.blocks.BlockCrystalOre;
 import alec_wam.CrystalMod.blocks.ModBlocks;
+import alec_wam.CrystalMod.blocks.BlockCrystalLog.WoodType;
 import alec_wam.CrystalMod.blocks.BlockCrystalOre.CrystalOreType;
 
 public class CrystalModWorldGenerator implements IWorldGenerator {
@@ -35,20 +41,15 @@ public class CrystalModWorldGenerator implements IWorldGenerator {
         if (!newGen && !Config.retrogen) {
             return;
         }
-        //TODO otherDIM gen
         //Set<Integer> oregen = Config.oregenDimensions;
 
-        if (/*oregen.contains(world.provider.getDimensionId())*/ world.provider.getDimension() == 0) {
-            IBlockState base;
-            /*if (world.provider.getDimensionId() == 1) {
-               base = Blocks.end_stone.getDefaultState();
-            } else if (world.provider.getDimensionId() == -1) {
-                base = Blocks.netherrack.getDefaultState();
-            } else {*/
-                base = Blocks.STONE.getDefaultState();
-            //}
+        if(random.nextInt(25) == 7)generateCrystalTree(world, random, chunkX, chunkZ);
+        
+        if (world.provider.getDimension() == 0) {
+            IBlockState base = Blocks.STONE.getDefaultState();
             addOreSpawn(base, world, random, chunkX * 16, chunkZ * 16,
-            		Config.oreMinimumVeinSize, Config.oreMaximumVeinSize, Config.oreMaximumVeinCount,
+            		Config.oreMinimumVeinSize, Config.oreMaximumVeinSize, 
+            		Config.oreMaximumVeinCount,
             		Config.oreMinimumHeight, Config.oreMaximumHeight);
         }
 
@@ -77,6 +78,23 @@ public class CrystalModWorldGenerator implements IWorldGenerator {
         }
     }
 
+    public static boolean generateCrystalTree(final World world, final Random random, final int chunkX, final int chunkZ) {
+        final int x = chunkX * 16 + random.nextInt(16);
+        final int z = chunkZ * 16 + random.nextInt(16);
+        final BlockPos bp = world.getHeight(new BlockPos(x, 0, z));
+        Biome biome = world.getBiomeGenForCoords(bp);
+        if (BiomeDictionary.isBiomeOfType(biome, BiomeDictionary.Type.MAGICAL) || biome instanceof BiomeForest) {
+        	WoodType type = WoodType.BLUE;
+        	try{
+        		type = WoodType.byMetadata(MathHelper.getRandomIntegerInRange(random, 0, WoodType.values().length-1));
+        	} catch(Exception e){}
+        	int size = MathHelper.getRandomIntegerInRange(random, 4, 6);
+            final boolean t = new WorldGenCrystalTree(false, size, type, random.nextInt(2) == 0).generate(world, random, bp);
+            return t;
+        }
+        return false;
+    }
+    
     @SubscribeEvent
     public void handleChunkSaveEvent(ChunkDataEvent.Save event) {
         NBTTagCompound genTag = event.getData().getCompoundTag(RETRO_NAME);
