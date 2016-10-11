@@ -42,12 +42,12 @@ plugins {
 }
 */
 version = "${config.version}-${config.build_number}"
-group= "com.alec_wam.CrystalMod" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+group= "alec_wam.CrystalMod" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = config.mod_name
 
 jar {
     manifest {
-        attributes("FMLCorePluginContainsFMLMod": "true", "FMLCorePlugin": "com.alec_wam.CrystalMod.asm.LoadingPlugin")
+        attributes("FMLCorePluginContainsFMLMod": "true", "FMLCorePlugin": "alec_wam.CrystalMod.asm.LoadingPlugin")
     }
 }
 

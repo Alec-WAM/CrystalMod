@@ -1,0 +1,124 @@
+package alec_wam.CrystalMod.world;
+
+import java.util.ArrayDeque;
+import java.util.Random;
+
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraft.world.chunk.IChunkGenerator;
+import net.minecraft.world.chunk.IChunkProvider;
+import net.minecraftforge.event.world.ChunkDataEvent;
+import net.minecraftforge.fml.common.IWorldGenerator;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+
+import org.apache.commons.lang3.tuple.Pair;
+
+import alec_wam.CrystalMod.Config;
+import alec_wam.CrystalMod.blocks.BlockCrystalOre;
+import alec_wam.CrystalMod.blocks.ModBlocks;
+import alec_wam.CrystalMod.blocks.BlockCrystalOre.CrystalOreType;
+
+public class CrystalModWorldGenerator implements IWorldGenerator {
+    public static final String RETRO_NAME = "CrystalModGen";
+    public static CrystalModWorldGenerator instance = new CrystalModWorldGenerator();
+
+    @Override
+    public void generate(Random random, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) {
+        generateWorld(random, chunkX, chunkZ, world, true);
+    }
+
+    public void generateWorld(Random random, int chunkX, int chunkZ, World world, boolean newGen) {
+        if (!newGen && !Config.retrogen) {
+            return;
+        }
+        //TODO otherDIM gen
+        //Set<Integer> oregen = Config.oregenDimensions;
+
+        if (/*oregen.contains(world.provider.getDimensionId())*/ world.provider.getDimension() == 0) {
+            IBlockState base;
+            /*if (world.provider.getDimensionId() == 1) {
+               base = Blocks.end_stone.getDefaultState();
+            } else if (world.provider.getDimensionId() == -1) {
+                base = Blocks.netherrack.getDefaultState();
+            } else {*/
+                base = Blocks.STONE.getDefaultState();
+            //}
+            addOreSpawn(base, world, random, chunkX * 16, chunkZ * 16,
+            		Config.oreMinimumVeinSize, Config.oreMaximumVeinSize, Config.oreMaximumVeinCount,
+            		Config.oreMinimumHeight, Config.oreMaximumHeight);
+        }
+
+        if (!newGen) {
+            world.getChunkFromChunkCoords(chunkX, chunkZ).setChunkModified();
+        }
+    }
+
+
+
+    public void addOreSpawn(IBlockState targetBlock, World world, Random random, int blockXPos, int blockZPos, int minVeinSize, int maxVeinSize, int chancesToSpawn, int minY, int maxY) {
+    	WorldGenMinableRandom minable = new WorldGenMinableRandom(ModBlocks.crystalOre.getDefaultState().withProperty(BlockCrystalOre.TYPE, CrystalOreType.BLUE), (minVeinSize - random.nextInt(maxVeinSize - minVeinSize)), net.minecraft.block.state.pattern.BlockMatcher.forBlock(targetBlock.getBlock()));
+    	WorldGenMinableRandom minableRed = new WorldGenMinableRandom(ModBlocks.crystalOre.getDefaultState().withProperty(BlockCrystalOre.TYPE, CrystalOreType.RED), (minVeinSize - random.nextInt(maxVeinSize - minVeinSize)), net.minecraft.block.state.pattern.BlockMatcher.forBlock(targetBlock.getBlock()));
+    	WorldGenMinableRandom minableGreen = new WorldGenMinableRandom(ModBlocks.crystalOre.getDefaultState().withProperty(BlockCrystalOre.TYPE, CrystalOreType.GREEN), (minVeinSize - random.nextInt(maxVeinSize - minVeinSize)), net.minecraft.block.state.pattern.BlockMatcher.forBlock(targetBlock.getBlock()));
+    	WorldGenMinableRandom minableDark = new WorldGenMinableRandom(ModBlocks.crystalOre.getDefaultState().withProperty(BlockCrystalOre.TYPE, CrystalOreType.DARK), (minVeinSize - random.nextInt(maxVeinSize - minVeinSize)), net.minecraft.block.state.pattern.BlockMatcher.forBlock(targetBlock.getBlock()));
+    	for (int i = 0 ; i < chancesToSpawn ; i++) {
+        	int posX = blockXPos + random.nextInt(16);
+            int posY = minY + random.nextInt(maxY - minY);
+            int posZ = blockZPos + random.nextInt(16);
+            int type = random.nextInt(4);
+            
+            if(type == 0)minable.generate(world, random, new BlockPos(posX, posY, posZ));
+            if(type == 1)minableRed.generate(world, random, new BlockPos(posX, posY, posZ));
+            if(type == 2)minableGreen.generate(world, random, new BlockPos(posX, posY, posZ));
+            if(type == 3)minableDark.generate(world, random, new BlockPos(posX, posY, posZ));
+        }
+    }
+
+    @SubscribeEvent
+    public void handleChunkSaveEvent(ChunkDataEvent.Save event) {
+        NBTTagCompound genTag = event.getData().getCompoundTag(RETRO_NAME);
+        if (!genTag.hasKey("generated")) {
+            // If we did not have this key then this is a new chunk and we will have proper ores generated.
+            // Otherwise we are saving a chunk for which ores are not yet generated.
+            genTag.setBoolean("generated", true);
+        }
+        event.getData().setTag(RETRO_NAME, genTag);
+    }
+
+    @SubscribeEvent
+    public void handleChunkLoadEvent(ChunkDataEvent.Load event) {
+        int dim = event.getWorld().provider.getDimension();
+
+        boolean regen = false;
+        NBTTagCompound tag = (NBTTagCompound) event.getData().getTag(RETRO_NAME);
+        NBTTagList list = null;
+        Pair<Integer,Integer> cCoord = Pair.of(event.getChunk().xPosition, event.getChunk().zPosition);
+
+        if (tag != null) {
+            boolean generated = Config.retrogen && !tag.hasKey("generated");
+            if (generated) {
+                //System.out.println("[CrystalMod] Queuing Retrogen for chunk: " + cCoord.toString() + ".");
+                regen = true;
+            }
+        } else {
+            regen = Config.retrogen;
+        }
+
+        if (regen) {
+            ArrayDeque<WorldTickHandler.RetroChunkCoord> chunks = WorldTickHandler.chunksToGen.get(dim);
+
+            if (chunks == null) {
+                WorldTickHandler.chunksToGen.put(dim, new ArrayDeque<WorldTickHandler.RetroChunkCoord>(128));
+                chunks = WorldTickHandler.chunksToGen.get(dim);
+            }
+            if (chunks != null) {
+                chunks.addLast(new WorldTickHandler.RetroChunkCoord(cCoord, list));
+                WorldTickHandler.chunksToGen.put(dim, chunks);
+            }
+        }
+    }
+
+}
