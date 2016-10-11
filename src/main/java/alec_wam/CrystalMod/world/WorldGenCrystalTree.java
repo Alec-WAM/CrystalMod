@@ -102,6 +102,18 @@ public class WorldGenCrystalTree extends WorldGenAbstractTree
                     int k2 = 3;
                     int l2 = 0;
 
+                    for (int j3 = 0; j3 < i; ++j3)
+                    {
+                        BlockPos upN = position.up(j3);
+                        state = worldIn.getBlockState(upN);
+
+                        if (state.getBlock().isAir(state, worldIn, upN) || state.getBlock().isLeaves(state, worldIn, upN) || state.getMaterial() == Material.VINE)
+                        {
+                        	IBlockState woodState = ModBlocks.crystalLog.getDefaultState().withProperty(BlockCrystalLog.VARIANT, treeType);
+                            this.setBlockAndNotifyAdequately(worldIn, position.up(j3), woodState);
+                        }
+                    }
+
                     for (int i3 = position.getY() - 3 + i; i3 <= position.getY() + i; ++i3)
                     {
                         int i4 = i3 - (position.getY() + i);
@@ -119,29 +131,18 @@ public class WorldGenCrystalTree extends WorldGenAbstractTree
                                 {
                                     BlockPos blockpos = new BlockPos(k1, i3, i2);
                                     state = worldIn.getBlockState(blockpos);
-
-                                    if (state.getBlock().isAir(state, worldIn, blockpos) || state.getBlock().isLeaves(state, worldIn, blockpos) || state.getMaterial() == Material.VINE)
+                                    Block block = state.getBlock();
+                                    IBlockState leaveState = ModBlocks.crystalLeaves.getDefaultState().withProperty(BlockCrystalLeaves.VARIANT, treeType);
+                                    if (block.isAir(state, worldIn, blockpos) || block.canPlaceBlockAt(worldIn, blockpos) || worldIn.getBlockState(blockpos) == leaveState)
                                     {
-                                    	IBlockState leaveState = ModBlocks.crystalLeaves.getDefaultState().withProperty(BlockCrystalLeaves.VARIANT, treeType);
-                                        this.setBlockAndNotifyAdequately(worldIn, blockpos, leaveState);
+                                    	//worldIn.setBlockState(blockpos, leaveState, 3);
+                                    	setBlockAndNotifyAdequately(worldIn, blockpos, leaveState);
                                     }
                                 }
                             }
                         }
                     }
-
-                    for (int j3 = 0; j3 < i; ++j3)
-                    {
-                        BlockPos upN = position.up(j3);
-                        state = worldIn.getBlockState(upN);
-
-                        if (state.getBlock().isAir(state, worldIn, upN) || state.getBlock().isLeaves(state, worldIn, upN) || state.getMaterial() == Material.VINE)
-                        {
-                        	IBlockState woodState = ModBlocks.crystalLog.getDefaultState().withProperty(BlockCrystalLog.VARIANT, treeType);
-                            this.setBlockAndNotifyAdequately(worldIn, position.up(j3), woodState);
-                        }
-                    }
-
+                    
                     if (this.plantsGrow)
                     {
                     	for (int j3 = 1; j3 < i; ++j3)

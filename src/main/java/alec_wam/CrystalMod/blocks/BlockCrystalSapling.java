@@ -145,7 +145,7 @@ public class BlockCrystalSapling extends BlockSapling implements ICustomModel {
       return;
     }
     WoodType type = (WoodType)state.getValue(VARIANT);
-    WorldGenerator gen = (WorldGenerator)(new WorldGenCrystalTree(true, MathHelper.getRandomIntegerInRange(rand, 4, 6), type, true));
+    WorldGenerator gen = (WorldGenerator)(new WorldGenCrystalTree(true, MathHelper.getRandomIntegerInRange(rand, 4, 6), type, false));
 
     // replace sapling with air
     worldIn.setBlockToAir(pos);

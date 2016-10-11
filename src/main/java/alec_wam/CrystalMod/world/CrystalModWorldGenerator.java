@@ -43,7 +43,10 @@ public class CrystalModWorldGenerator implements IWorldGenerator {
         }
         //Set<Integer> oregen = Config.oregenDimensions;
 
-        if(random.nextInt(25) == 7)generateCrystalTree(world, random, chunkX, chunkZ);
+        if(random.nextInt(60) == 3){
+        	//TODO Not allow gen in flat worlds if(!world.getWorldInfo().getTerrainType().getWorldTypeName().startsWith("flat"))
+        	generateCrystalTree(world, random, chunkX, chunkZ);
+        }
         
         if (world.provider.getDimension() == 0) {
             IBlockState base = Blocks.STONE.getDefaultState();
@@ -61,20 +64,14 @@ public class CrystalModWorldGenerator implements IWorldGenerator {
 
 
     public void addOreSpawn(IBlockState targetBlock, World world, Random random, int blockXPos, int blockZPos, int minVeinSize, int maxVeinSize, int chancesToSpawn, int minY, int maxY) {
-    	WorldGenMinableRandom minable = new WorldGenMinableRandom(ModBlocks.crystalOre.getDefaultState().withProperty(BlockCrystalOre.TYPE, CrystalOreType.BLUE), (minVeinSize - random.nextInt(maxVeinSize - minVeinSize)), net.minecraft.block.state.pattern.BlockMatcher.forBlock(targetBlock.getBlock()));
-    	WorldGenMinableRandom minableRed = new WorldGenMinableRandom(ModBlocks.crystalOre.getDefaultState().withProperty(BlockCrystalOre.TYPE, CrystalOreType.RED), (minVeinSize - random.nextInt(maxVeinSize - minVeinSize)), net.minecraft.block.state.pattern.BlockMatcher.forBlock(targetBlock.getBlock()));
-    	WorldGenMinableRandom minableGreen = new WorldGenMinableRandom(ModBlocks.crystalOre.getDefaultState().withProperty(BlockCrystalOre.TYPE, CrystalOreType.GREEN), (minVeinSize - random.nextInt(maxVeinSize - minVeinSize)), net.minecraft.block.state.pattern.BlockMatcher.forBlock(targetBlock.getBlock()));
-    	WorldGenMinableRandom minableDark = new WorldGenMinableRandom(ModBlocks.crystalOre.getDefaultState().withProperty(BlockCrystalOre.TYPE, CrystalOreType.DARK), (minVeinSize - random.nextInt(maxVeinSize - minVeinSize)), net.minecraft.block.state.pattern.BlockMatcher.forBlock(targetBlock.getBlock()));
     	for (int i = 0 ; i < chancesToSpawn ; i++) {
         	int posX = blockXPos + random.nextInt(16);
             int posY = minY + random.nextInt(maxY - minY);
             int posZ = blockZPos + random.nextInt(16);
-            int type = random.nextInt(4);
+            int type = MathHelper.getRandomIntegerInRange(random, 0, CrystalOreType.values().length-1);
             
-            if(type == 0)minable.generate(world, random, new BlockPos(posX, posY, posZ));
-            if(type == 1)minableRed.generate(world, random, new BlockPos(posX, posY, posZ));
-            if(type == 2)minableGreen.generate(world, random, new BlockPos(posX, posY, posZ));
-            if(type == 3)minableDark.generate(world, random, new BlockPos(posX, posY, posZ));
+        	WorldGenMinableRandom minable = new WorldGenMinableRandom(ModBlocks.crystalOre.getDefaultState().withProperty(BlockCrystalOre.TYPE, CrystalOreType.values()[type]), (minVeinSize - random.nextInt(maxVeinSize - minVeinSize)), net.minecraft.block.state.pattern.BlockMatcher.forBlock(targetBlock.getBlock()));
+        	minable.generate(world, random, new BlockPos(posX, posY, posZ));
         }
     }
 

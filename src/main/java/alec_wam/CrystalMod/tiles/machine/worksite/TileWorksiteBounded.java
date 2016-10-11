@@ -8,6 +8,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import alec_wam.CrystalMod.entities.minions.worker.EntityMinionWorker;
+import alec_wam.CrystalMod.util.BlockUtil;
 
 public abstract class TileWorksiteBounded extends TileWorksiteBase {
 
@@ -110,20 +111,14 @@ public abstract class TileWorksiteBounded extends TileWorksiteBase {
 		if(tag.hasKey("bbMin"))
 		{
 			NBTTagCompound min = tag.getCompoundTag("bbMin");
-			int x = min.hasKey("x") ? min.getInteger("x") : getPos().getX();
-			int y = min.hasKey("y") ? min.getInteger("y") : getPos().getY();
-			int z = min.hasKey("z") ? min.getInteger("z") : getPos().getZ();
-			bbMin = new BlockPos(x, y, z);
+			bbMin = BlockUtil.loadBlockPos(min);
 		} else {
 			bbMin = getPos();
 		}
 		if(tag.hasKey("bbMax"))
 		{
 			NBTTagCompound max = tag.getCompoundTag("bbMax");
-			int x = max.hasKey("x") ? max.getInteger("x") : getPos().getX()+1;
-			int y = max.hasKey("y") ? max.getInteger("y") : getPos().getY();
-			int z = max.hasKey("z") ? max.getInteger("z") : getPos().getZ()+1;
-			bbMax = new BlockPos(x, y, z);
+			bbMin = BlockUtil.loadBlockPos(max);
 		} else {
 			bbMax = getPos().add(1, 0, 1);
 		}
@@ -135,19 +130,11 @@ public abstract class TileWorksiteBounded extends TileWorksiteBase {
 		super.writeCustomNBT(tag);
 		if(bbMin!=null)
 		{
-			NBTTagCompound innerTag = new NBTTagCompound();
-			innerTag.setInteger("x", bbMin.getX());
-			innerTag.setInteger("y", bbMin.getY());
-			innerTag.setInteger("z", bbMin.getZ());
-			tag.setTag("bbMin", innerTag);
+			tag.setTag("bbMin", BlockUtil.saveBlockPos(bbMin));
 		}
 		if(bbMax!=null)
 		{
-			NBTTagCompound innerTag = new NBTTagCompound();
-			innerTag.setInteger("x", bbMax.getX());
-			innerTag.setInteger("y", bbMax.getY());
-			innerTag.setInteger("z", bbMax.getZ());
-			tag.setTag("bbMax", innerTag);
+			tag.setTag("bbMax", BlockUtil.saveBlockPos(bbMax));
 		}
 	}
 

@@ -149,6 +149,7 @@ public class WorksiteCropFarm extends TileWorksiteUserBlocks {
 
 	@Override
 	protected void fillBlocksToProcess(Collection<BlockPos> targets) {
+		if(bbMax == null || bbMin == null)return;
 		int w = bbMax.getX() - bbMin.getX() + 1;
 		int h = bbMax.getZ() - bbMin.getZ() + 1;
 		BlockPos p;

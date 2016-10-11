@@ -6,20 +6,20 @@
     },
     "variants": {
 		"type": {
-			"0": [{ "textures": { "layer0": "crystalmod:items/upgrade/upgrade_bounds_medium" }],
-			"1": [{ "textures": { "layer0": "crystalmod:items/upgrade/upgrade_bounds_large" }],
-			"2": [{ "textures": { "layer0": "crystalmod:items/upgrade/upgrade_quarry_medium" }],
-			"3": [{ "textures": { "layer0": "crystalmod:items/upgrade/upgrade_quarry_large" }],
-			"4": [{ "textures": { "layer0": "crystalmod:items/upgrade/upgrade_enchanted_tools_1" }],
-			"5": [{ "textures": { "layer0": "crystalmod:items/upgrade/upgrade_enchanted_tools_2" }],
-			"6": [{ "textures": { "layer0": "crystalmod:items/upgrade/upgrade_enchanted_tools_3" }],
-			"7": [{ "textures": { "layer0": "crystalmod:items/upgrade/upgrade_quality_tools_1" }],
-			"8": [{ "textures": { "layer0": "crystalmod:items/upgrade/upgrade_quality_tools_2" }],
-			"9": [{ "textures": { "layer0": "crystalmod:items/upgrade/upgrade_quality_tools_3" }],
-			"10": [{ "textures": { "layer0": "crystalmod:items/upgrade/upgrade_chunkloader_basic" }],
-			"11": [{ "textures": { "layer0": "crystalmod:items/upgrade/upgrade_chunkloader_quarry" }],
-			"12": [{ "textures": { "layer0": "crystalmod:items/upgrade/upgrade_quarry_silktouch" }],
-			"13": [{ "textures": { "layer0": "crystalmod:items/upgrade/upgrade_quarry_onlyOre" }]
+			"0": [{ "textures": { "layer0": "crystalmod:items/upgrade/upgrade_bounds_medium" }}],
+			"1": [{ "textures": { "layer0": "crystalmod:items/upgrade/upgrade_bounds_large" }}],
+			"2": [{ "textures": { "layer0": "crystalmod:items/upgrade/upgrade_quarry_medium" }}],
+			"3": [{ "textures": { "layer0": "crystalmod:items/upgrade/upgrade_quarry_large" }}],
+			"4": [{ "textures": { "layer0": "crystalmod:items/upgrade/upgrade_enchanted_tools_1" }}],
+			"5": [{ "textures": { "layer0": "crystalmod:items/upgrade/upgrade_enchanted_tools_2" }}],
+			"6": [{ "textures": { "layer0": "crystalmod:items/upgrade/upgrade_enchanted_tools_3" }}],
+			"7": [{ "textures": { "layer0": "crystalmod:items/upgrade/upgrade_quality_tools_1" }}],
+			"8": [{ "textures": { "layer0": "crystalmod:items/upgrade/upgrade_quality_tools_2" }}],
+			"9": [{ "textures": { "layer0": "crystalmod:items/upgrade/upgrade_quality_tools_3" }}],
+			"10": [{ "textures": { "layer0": "crystalmod:items/upgrade/upgrade_chunkloader_basic" }}],
+			"11": [{ "textures": { "layer0": "crystalmod:items/upgrade/upgrade_chunkloader_quarry" }}],
+			"12": [{ "textures": { "layer0": "crystalmod:items/upgrade/upgrade_quarry_silktouch" }}],
+			"13": [{ "textures": { "layer0": "crystalmod:items/upgrade/upgrade_quarry_onlyOre" }}]
 		}
     }
 }

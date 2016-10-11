@@ -21,7 +21,7 @@ public class TileWorksiteRenderer<T extends TileWorksiteBase> extends TileEntity
 		if (worksite.hasWorkBounds() && worksite.renderBounds()) {
 			GlStateManager.pushMatrix();
 			OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit,	0.f, 240.f);
-			GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
+			//GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
 			//GlStateManager.translate(x, y, z);
 			BlockPos min = worksite.getWorkBoundsMin();
 			BlockPos max = worksite.getWorkBoundsMax();
@@ -38,6 +38,17 @@ public class TileWorksiteRenderer<T extends TileWorksiteBase> extends TileEntity
 						max.getY() - pos.getY() + 1 + y,
 						max.getZ() - pos.getZ() + 1 + z
 				);
+				
+				GlStateManager.enableBlend();
+	            GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+	            GlStateManager.glLineWidth(2.0F);
+	            GlStateManager.disableTexture2D();
+	            GlStateManager.depthMask(false);
+	            RenderGlobal.func_189697_a(bb.expandXyz(0.0020000000949949026D), 1.0F, 1.0F, 1.0F, 0.4F);
+	            GlStateManager.depthMask(true);
+	            GlStateManager.enableTexture2D();
+	            GlStateManager.disableBlend();
+				
 				//GlStateManager.disableAlpha();
 				
 				/*GlStateManager.enableBlend();
@@ -51,11 +62,11 @@ public class TileWorksiteRenderer<T extends TileWorksiteBase> extends TileEntity
 	            GlStateManager.depthMask(true);
 	            GlStateManager.enableTexture2D();
 	            GlStateManager.disableBlend();*/
-				RenderUtil.drawOutlinedBoundingBox(bb, (float) 1, (float) 1, (float) 1, /*0.0625f*/2.0f);
+				//RenderUtil.drawOutlinedBoundingBox(bb, (float) 1, (float) 1, (float) 1, /*0.0625f*/2.0f);
 				//GlStateManager.enableAlpha();
 				//renderBoundingBox(worksite.getPos(), min, max, worksite.boundsColor().x, worksite.boundsColor().y, worksite.boundsColor().z, worksite.boundsColor().w, 0.0f);
 			}
-			GL11.glPopAttrib();
+			//GL11.glPopAttrib();
 			GlStateManager.popMatrix();
 		}
 	}

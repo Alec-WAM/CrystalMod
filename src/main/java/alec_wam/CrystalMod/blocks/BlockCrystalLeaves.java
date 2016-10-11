@@ -5,12 +5,14 @@ import java.util.Random;
 
 import javax.annotation.Nullable;
 
+import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.BlockCrystalLog.LogBlockStateMapper;
 import alec_wam.CrystalMod.blocks.BlockCrystalLog.WoodType;
 import alec_wam.CrystalMod.blocks.glass.BlockCrystalGlass.GlassBlockStateMapper;
 import alec_wam.CrystalMod.blocks.glass.BlockCrystalGlass.GlassType;
 import net.minecraft.block.BlockLeaves;
 import net.minecraft.block.BlockPlanks.EnumType;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
@@ -35,7 +37,10 @@ public class BlockCrystalLeaves extends BlockLeaves implements ICustomModel
 
     public BlockCrystalLeaves()
     {
-        this.setDefaultState(this.blockState.getBaseState().withProperty(VARIANT, BlockCrystalLog.WoodType.BLUE).withProperty(CHECK_DECAY, Boolean.valueOf(true)).withProperty(DECAYABLE, Boolean.valueOf(true)));
+    	super();
+    	this.setCreativeTab(CrystalMod.tabBlocks);
+    	this.setHardness(0.3f);
+        this.setDefaultState(this.blockState.getBaseState().withProperty(CHECK_DECAY, false).withProperty(DECAYABLE, true));
     }
     
     @SideOnly(Side.CLIENT)
@@ -110,7 +115,8 @@ public class BlockCrystalLeaves extends BlockLeaves implements ICustomModel
      */
     public IBlockState getStateFromMeta(int meta)
     {
-        return this.getDefaultState().withProperty(VARIANT, BlockCrystalLog.WoodType.byMetadata(meta)).withProperty(DECAYABLE, Boolean.valueOf((meta & 4) == 0)).withProperty(CHECK_DECAY, Boolean.valueOf((meta & 8) > 0));
+    	int type = meta % 4;
+        return this.getDefaultState().withProperty(VARIANT, BlockCrystalLog.WoodType.byMetadata(type)).withProperty(DECAYABLE, Boolean.valueOf((meta & 4) == 0)).withProperty(CHECK_DECAY, Boolean.valueOf((meta & 8) > 0));
     }
 
     /**
