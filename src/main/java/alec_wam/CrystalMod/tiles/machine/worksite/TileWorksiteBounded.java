@@ -9,6 +9,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import alec_wam.CrystalMod.entities.minions.worker.EntityMinionWorker;
 import alec_wam.CrystalMod.util.BlockUtil;
+import alec_wam.CrystalMod.util.ModLogger;
 
 public abstract class TileWorksiteBounded extends TileWorksiteBase {
 
@@ -52,8 +53,8 @@ public abstract class TileWorksiteBounded extends TileWorksiteBase {
 	@Override
 	public final void setBounds(BlockPos min, BlockPos max)
 	{  
-		setWorkBoundsMin(new BlockPos(Math.min(min.getX(), max.getX()), Math.min(min.getY(), max.getY()), Math.min(min.getZ(), max.getZ())));
-		setWorkBoundsMax(new BlockPos(Math.max(min.getX(), max.getX()), Math.max(min.getY(), max.getY()), Math.max(min.getZ(), max.getZ())));
+		setWorkBoundsMin(BlockUtil.getMin(min, max));
+		setWorkBoundsMax(BlockUtil.getMax(min, max));
 		onBoundsSet();
 	}
 	
@@ -118,9 +119,9 @@ public abstract class TileWorksiteBounded extends TileWorksiteBase {
 		if(tag.hasKey("bbMax"))
 		{
 			NBTTagCompound max = tag.getCompoundTag("bbMax");
-			bbMin = BlockUtil.loadBlockPos(max);
+			bbMax = BlockUtil.loadBlockPos(max);
 		} else {
-			bbMax = getPos().add(1, 0, 1);
+			bbMax = getPos();
 		}
 	}
 	
@@ -128,14 +129,8 @@ public abstract class TileWorksiteBounded extends TileWorksiteBase {
 	public void writeCustomNBT(NBTTagCompound tag)
 	{
 		super.writeCustomNBT(tag);
-		if(bbMin!=null)
-		{
-			tag.setTag("bbMin", BlockUtil.saveBlockPos(bbMin));
-		}
-		if(bbMax!=null)
-		{
-			tag.setTag("bbMax", BlockUtil.saveBlockPos(bbMax));
-		}
+		tag.setTag("bbMin", BlockUtil.saveBlockPos(bbMin));
+		tag.setTag("bbMax", BlockUtil.saveBlockPos(bbMax));
 	}
 
 

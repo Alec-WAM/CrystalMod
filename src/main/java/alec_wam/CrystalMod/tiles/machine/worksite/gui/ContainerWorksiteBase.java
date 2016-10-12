@@ -6,6 +6,7 @@ import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.IMessageHandler;
 import alec_wam.CrystalMod.network.packets.PacketGuiMessage;
 import alec_wam.CrystalMod.util.ItemUtil;
+import alec_wam.CrystalMod.util.ModLogger;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.Container;
@@ -76,6 +77,7 @@ public class ContainerWorksiteBase extends Container implements IMessageHandler 
 	 */
 	protected final void sendDataToGui(NBTTagCompound data) {
 		if (!player.worldObj.isRemote) {
+			ModLogger.info("Data to GUI");
 			PacketGuiMessage pkt = new PacketGuiMessage("Data");
 			pkt.data.setTag("gui", data);
 			CrystalModNetwork.sendTo(pkt, (EntityPlayerMP) player);

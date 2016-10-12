@@ -7,6 +7,7 @@ import alec_wam.CrystalMod.tiles.machine.worksite.gui.elements.Listener;
 import alec_wam.CrystalMod.tiles.machine.worksite.gui.elements.Rectangle;
 import alec_wam.CrystalMod.util.BlockUtil;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 
 public class GuiWorksiteBoundsAdjust extends GuiContainerWorksiteBase {
@@ -52,8 +53,7 @@ public class GuiWorksiteBoundsAdjust extends GuiContainerWorksiteBase {
 		b = new Button(48, 12, 40, 12, "NORTH") {
 			@Override
 			protected void onPressed() {
-				if (container.max.getZ() >= container.pos.getZ()
-						&& (container.min.getX() > container.pos.getX() || container.max.getX() < container.pos.getX())) {
+				if (!isInBounds(container.pos, container.min.north(), container.max.north())) {
 					container.min = container.min.north();
 					container.max = container.max.north();
 					boundsAdjusted = true;
@@ -66,8 +66,7 @@ public class GuiWorksiteBoundsAdjust extends GuiContainerWorksiteBase {
 		b = new Button(48 + 40, 12, 40, 12, "SOUTH") {
 			@Override
 			protected void onPressed() {
-				if (container.min.getZ() <= container.pos.getZ()
-						&& (container.min.getX() > container.pos.getX() || container.max.getX() < container.pos.getX())) {
+				if (!isInBounds(container.pos, container.min.south(), container.max.south())) {
 					container.min = container.min.south();
 					container.max = container.max.south();
 					boundsAdjusted = true;
@@ -80,8 +79,7 @@ public class GuiWorksiteBoundsAdjust extends GuiContainerWorksiteBase {
 		b = new Button(48 + 40 + 40, 12, 40, 12, "WEST") {
 			@Override
 			protected void onPressed() {
-				if (container.max.getX() >= container.pos.getX()
-						&& (container.min.getZ() > container.pos.getZ() || container.max.getZ() < container.pos.getZ())) {
+				if (!isInBounds(container.pos, container.min.west(), container.max.west())) {
 					container.min = container.min.west();
 					container.max = container.max.west();
 					boundsAdjusted = true;
@@ -94,13 +92,12 @@ public class GuiWorksiteBoundsAdjust extends GuiContainerWorksiteBase {
 		b = new Button(48 + 40 + 40 + 40, 12, 40, 12, "EAST") {
 			@Override
 			protected void onPressed() {
-				//if (container.min.getX() <= container.pos.getX()
-						//&& (container.min.getZ() > container.pos.getZ() || container.max.getZ() < container.pos.getZ())) {
+				if (!isInBounds(container.pos, container.min.east(), container.max.east())) {
 					container.min = container.min.east();
 					container.max = container.max.east();
 					boundsAdjusted = true;
 					refreshGui();
-				//}
+				}
 			}
 		};
 		addGuiElement(b);
@@ -185,6 +182,11 @@ public class GuiWorksiteBoundsAdjust extends GuiContainerWorksiteBase {
 
 		addLayout();
 	}
+	
+	public boolean isInBounds(BlockPos pos, BlockPos min, BlockPos max)
+	{
+		return pos.getX() >= min.getX() && pos.getX() <= max.getX() && pos.getZ() >= min.getZ() && pos.getZ() <= max.getZ();
+	}
 
 	private void addLayout() {
 		int bits = (container.worksite.getBoundsMaxWidth() + 2);
@@ -242,6 +244,7 @@ public class GuiWorksiteBoundsAdjust extends GuiContainerWorksiteBase {
 		NBTTagCompound tag = new NBTTagCompound();
 		tag.setBoolean("guiClosed", true);
 		if (boundsAdjusted) {
+			container.worksite.setBounds(container.min, container.max);
 			tag.setTag("min", BlockUtil.saveBlockPos(container.min));
 			tag.setTag("max", BlockUtil.saveBlockPos(container.max));
 		}
@@ -252,8 +255,7 @@ public class GuiWorksiteBoundsAdjust extends GuiContainerWorksiteBase {
 			}
 		}
 		sendDataToContainer(tag);
-		BlockUtil.openWorksiteGui(player, 0,
-				container.worksite.getPos().getX(), container.worksite.getPos().getY(), container.worksite.getPos().getZ());
+		
 		return super.onGuiCloseRequested();
 	}
 

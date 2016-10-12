@@ -260,7 +260,7 @@ public abstract class TileWorksiteBase extends TileEntityMod implements IWorkSit
 	public final void setPrimaryFacing(EnumFacing face)
 	{
 	  orientation = face;
-	  BlockUtil.markBlockForUpdate(getWorld(), getPos());
+	  //BlockUtil.markBlockForUpdate(getWorld(), getPos());
     }
 	
 	@Override

@@ -27,6 +27,7 @@ import alec_wam.CrystalMod.util.tool.ToolUtil;
 import alec_wam.CrystalMod.util.tool.TreeHarvestUtil;
 import alec_wam.CrystalMod.util.tool.TreeUtil;
 
+import com.enderio.core.common.util.ChatUtil;
 import com.google.common.collect.Lists;
 
 import net.minecraft.block.Block;
@@ -347,10 +348,7 @@ public class WorksiteTreeFarm extends TileWorksiteUserBlocks {
 			NBTTagList chopList = new NBTTagList();
 			NBTTagCompound posTag;
 			for (BlockPos position : blocksToChop) {
-				posTag = new NBTTagCompound();
-				posTag.setInteger("x", position.getX());
-				posTag.setInteger("y", position.getY());
-				posTag.setInteger("z", position.getZ());
+				posTag = BlockUtil.saveBlockPos(position);
 				chopList.appendTag(posTag);
 			}
 			tag.setTag("targetList", chopList);
@@ -365,7 +363,7 @@ public class WorksiteTreeFarm extends TileWorksiteUserBlocks {
 					Constants.NBT.TAG_COMPOUND);
 			for (int i = 0; i < chopList.tagCount(); i++) {
 				NBTTagCompound posTag = chopList.getCompoundTagAt(i);
-				blocksToChop.add(new BlockPos(posTag.getInteger("x"), posTag.getInteger("y"), posTag.getInteger("z")));
+				blocksToChop.add(BlockUtil.loadBlockPos(posTag));
 			}
 		}
 		this.shouldCountResources = true;
@@ -437,12 +435,12 @@ public class WorksiteTreeFarm extends TileWorksiteUserBlocks {
 
 	@Override
 	public void onPostBoundsAdjusted() {
-
+		super.onPostBoundsAdjusted();
 	}
 
 	@Override
 	public void onBlockBroken() {
-
+		super.onBlockBroken();
 	}
 
 	@Override

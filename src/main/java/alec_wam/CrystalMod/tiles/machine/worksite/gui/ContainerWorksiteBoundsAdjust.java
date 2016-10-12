@@ -32,17 +32,9 @@ public class ContainerWorksiteBoundsAdjust extends ContainerWorksiteBase {
 
 	@Override
 	public void handlePacketData(NBTTagCompound tag) {
+		
 		if (tag.hasKey("guiClosed")) {
-			if (tag.hasKey("min") && tag.hasKey("max")) {
-				BlockPos min = BlockUtil.loadBlockPos(tag
-						.getCompoundTag("min"));
-				BlockPos max = BlockUtil.loadBlockPos(tag
-						.getCompoundTag("max"));
-				worksite.setWorkBoundsMin(min);
-				worksite.setWorkBoundsMax(max);
-				worksite.onBoundsAdjusted();
-				worksite.onPostBoundsAdjusted();
-			}
+			
 			if (tag.hasKey("checkedMap")
 					&& worksite instanceof TileWorksiteUserBlocks) {
 				TileWorksiteUserBlocks twub = (TileWorksiteUserBlocks) worksite;
@@ -50,7 +42,18 @@ public class ContainerWorksiteBoundsAdjust extends ContainerWorksiteBase {
 				twub.setTargetBlocks(map);
 				twub.onTargetsAdjusted();
 			}
+			
+			if (tag.hasKey("min") && tag.hasKey("max")) {
+				BlockPos min = BlockUtil.loadBlockPos(tag.getCompoundTag("min"));
+				BlockPos max = BlockUtil.loadBlockPos(tag.getCompoundTag("max"));
+				worksite.setWorkBoundsMin(min);
+				worksite.setWorkBoundsMax(max);
+				worksite.onBoundsAdjusted();
+				worksite.onPostBoundsAdjusted();
+			}
 			BlockUtil.markBlockForUpdate(worksite.getWorld(), worksite.getPos());
+			
+			//BlockUtil.openWorksiteGui(player, 0, worksite.getPos().getX(), worksite.getPos().getY(), worksite.getPos().getZ());
 		}
 	}
 

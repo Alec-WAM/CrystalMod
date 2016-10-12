@@ -78,10 +78,11 @@ public class BlockUtil {
 	}
 
 	public static NBTTagCompound saveBlockPos(BlockPos pos) {
+		BlockPos realPos = pos == null ? BlockPos.ORIGIN : pos;
 		NBTTagCompound compoundTag = new NBTTagCompound();
-		compoundTag.setInteger("x", pos.getX());
-		compoundTag.setInteger("y", pos.getY());
-		compoundTag.setInteger("z", pos.getZ());
+		compoundTag.setInteger("x", realPos.getX());
+		compoundTag.setInteger("y", realPos.getY());
+		compoundTag.setInteger("z", realPos.getZ());
 		return compoundTag;
 	}
 	

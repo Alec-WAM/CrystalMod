@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import alec_wam.CrystalMod.blocks.BlockCrystalLog.WoodType;
 import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.blocks.BlockCrystal.CrystalBlockType;
 import alec_wam.CrystalMod.blocks.BlockCrystalIngot.CrystalIngotBlockType;
@@ -405,6 +406,12 @@ public class ModCrafting {
 		oredict(new ItemStack(ModBlocks.crystalOre, 1, CrystalOreType.RED.getMeta()),  "oreCrystal");
 		oredict(new ItemStack(ModBlocks.crystalOre, 1, CrystalOreType.GREEN.getMeta()),  "oreCrystal");
 		oredict(new ItemStack(ModBlocks.crystalOre, 1, CrystalOreType.DARK.getMeta()),  "oreCrystal");
+		
+		oredict(new ItemStack(ModBlocks.crystalLog, 1, WoodType.BLUE.getMeta()), "logCrystal", "logWood");
+		oredict(new ItemStack(ModBlocks.crystalLog, 1, WoodType.RED.getMeta()), "logCrystal", "logWood");
+		oredict(new ItemStack(ModBlocks.crystalLog, 1, WoodType.GREEN.getMeta()), "logCrystal", "logWood");
+		oredict(new ItemStack(ModBlocks.crystalLog, 1, WoodType.DARK.getMeta()), "logCrystal", "logWood");
+		
 		oredictCrystal(CrystalType.BLUE_SHARD.getMetadata(), CrystalType.BLUE_NUGGET.getMetadata(), CrystalType.BLUE.getMetadata(), IngotType.BLUE.getMetadata(), CrystalBlockType.BLUE.getMeta(), CrystalIngotBlockType.BLUE.getMeta());
 		oredictCrystal(CrystalType.RED_SHARD.getMetadata(), CrystalType.RED_NUGGET.getMetadata(), CrystalType.RED.getMetadata(), IngotType.RED.getMetadata(), CrystalBlockType.RED.getMeta(), CrystalIngotBlockType.RED.getMeta());
 		oredictCrystal(CrystalType.GREEN_SHARD.getMetadata(), CrystalType.GREEN_NUGGET.getMetadata(), CrystalType.GREEN.getMetadata(), IngotType.GREEN.getMetadata(), CrystalBlockType.GREEN.getMeta(), CrystalIngotBlockType.GREEN.getMeta());

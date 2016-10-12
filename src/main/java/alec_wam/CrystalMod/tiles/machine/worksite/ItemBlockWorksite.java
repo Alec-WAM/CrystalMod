@@ -33,7 +33,7 @@ public class ItemBlockWorksite extends ItemBlock {
     if(!super.placeBlockAt(stack, player, world, pos, side, hitX, hitY, hitZ, newState)) {
       return false;
     }
-    EnumFacing face = player.getHorizontalFacing().getOpposite();
+    EnumFacing face = player.getHorizontalFacing();
     BlockPos pos1 = BlockUtil.moveForward(pos, face, 1);
     BlockPos pos2 = BlockUtil.moveForward(pos, face, 4);
     pos1 = BlockUtil.moveLeft(pos1, face, 2);
@@ -49,7 +49,7 @@ public class ItemBlockWorksite extends ItemBlock {
     {
     	((IRotatableTile) te).setPrimaryFacing(face);
     }
-    BlockUtil.markBlockForUpdate(world, pos);
+    if(world.isRemote)BlockUtil.markBlockForUpdate(world, pos);
     return true;
   }
   

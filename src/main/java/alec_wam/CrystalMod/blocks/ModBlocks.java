@@ -367,8 +367,6 @@ public class ModBlocks {
 	    return block;
 	}
 	
-
-	
 	protected static <T extends Block> T registerBlock(T block, String name) {
 			return registerBlock(block, new ItemBlock(block), name);
 	}
