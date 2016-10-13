@@ -4,7 +4,7 @@ import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayerMP;
 import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetwork;
-import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetwork.ItemStackData;
+import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage.ItemStackData;
 
 public interface INetworkContainer {
 

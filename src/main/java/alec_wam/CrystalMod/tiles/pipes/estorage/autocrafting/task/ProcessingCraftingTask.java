@@ -70,14 +70,14 @@ public class ProcessingCraftingTask implements ICraftingTask {
             for (int i = 0; i < inserted.length; ++i) {
                 if (!inserted[i]) {
                     ItemStack input = pattern.getInputs()[i];
-                    ItemStack took = controller.removeItemFromNetwork(input, true);
+                    ItemStack took = controller.getItemStorage().removeItem(input, true);
                     
                     if (took != null) {
                     	if (handler != null) {
 	                    	ItemStack sim = ItemHandlerHelper.insertItem(handler, took, true);
 	                    	if ( sim == null) {
 	                            ItemHandlerHelper.insertItem(handler, took, false);
-	                            controller.removeItemFromNetwork(input, false);
+	                            controller.getItemStorage().removeItem(input, false);
 	                            inserted[i] = true;
 	                        }
                     	}

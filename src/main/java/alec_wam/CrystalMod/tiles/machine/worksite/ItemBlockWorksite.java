@@ -49,7 +49,7 @@ public class ItemBlockWorksite extends ItemBlock {
     {
     	((IRotatableTile) te).setPrimaryFacing(face);
     }
-    if(world.isRemote)BlockUtil.markBlockForUpdate(world, pos);
+    if(!world.isRemote)BlockUtil.markBlockForUpdate(world, pos);
     return true;
   }
   

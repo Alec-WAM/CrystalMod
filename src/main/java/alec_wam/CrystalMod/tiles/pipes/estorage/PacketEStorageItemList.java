@@ -13,7 +13,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.network.AbstractPacketThreadsafe;
-import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetwork.ItemStackData;
+import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage.ItemStackData;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.INetworkContainer;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.TileEntityPanel;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.wireless.TileEntityWirelessPanel;
@@ -91,28 +91,11 @@ public class PacketEStorageItemList extends AbstractPacketThreadsafe {
 			try {
 				List<ItemStackData> data = EStorageNetwork.decompressItems(compressed);
 				if(type == 0){
-					network.items = data;
+					network.getItemStorage().setItemList(data);
 				}
 				if(type == 1){
 					for(ItemStackData itemData : data){
-						boolean edited = false;
-						ArrayList<ItemStackData> copy = new ArrayList<ItemStackData>();
-						copy.addAll(network.items);
-						for(ItemStackData storedData : copy){
-							  if(storedData.interPos !=null && storedData.interPos.equals(itemData.interPos) && storedData.interDim == itemData.interDim){
-								  if(storedData.index == itemData.index){
-									  storedData.stack = itemData.stack;
-									  edited = true;
-									  if(storedData.stack == null){
-										  network.items.remove(data);
-									  }
-									  continue;
-								  }
-							  }
-						  }
-						  if(itemData !=null && edited == false){
-							  network.items.add(itemData);
-						  }
+						network.getItemStorage().addToList(itemData);
 					}
 				}
 				if(type == 3){

@@ -77,7 +77,6 @@ public class ContainerWorksiteBase extends Container implements IMessageHandler 
 	 */
 	protected final void sendDataToGui(NBTTagCompound data) {
 		if (!player.worldObj.isRemote) {
-			ModLogger.info("Data to GUI");
 			PacketGuiMessage pkt = new PacketGuiMessage("Data");
 			pkt.data.setTag("gui", data);
 			CrystalModNetwork.sendTo(pkt, (EntityPlayerMP) player);

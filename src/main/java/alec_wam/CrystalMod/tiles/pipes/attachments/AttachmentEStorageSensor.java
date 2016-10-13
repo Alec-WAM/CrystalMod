@@ -27,16 +27,14 @@ import org.lwjgl.util.vector.Vector3f;
 import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.packets.PacketTileMessage;
-import alec_wam.CrystalMod.tiles.pipes.ModelPipe;
 import alec_wam.CrystalMod.tiles.pipes.ModelPipeBaked;
 import alec_wam.CrystalMod.tiles.pipes.TileEntityPipe;
 import alec_wam.CrystalMod.tiles.pipes.attachments.AttachmentUtil.AttachmentData;
 import alec_wam.CrystalMod.tiles.pipes.attachments.gui.ContainerAttachmentSensor;
 import alec_wam.CrystalMod.tiles.pipes.attachments.gui.GuiAttachmentSensor;
 import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetwork;
+import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage.ItemStackData;
 import alec_wam.CrystalMod.tiles.pipes.estorage.TileEntityPipeEStorage;
-import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetwork.ItemStackData;
-import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.client.RenderUtil;
 
 import com.google.common.collect.Lists;
@@ -183,15 +181,15 @@ public class AttachmentEStorageSensor extends AttachmentData {
 				if(filterStack !=null){
 					int amount = 0;
 					if(useOre){
-						Iterator<ItemStackData> iData = net.items.iterator();
+						Iterator<ItemStackData> iData = net.getItemStorage().getAllOreItemData(filterStack).iterator();
 						while(iData.hasNext()) {
 							ItemStackData data = iData.next();
-							if (data !=null && data.stack != null && ItemUtil.stackMatchUseOre(filterStack, data.stack)) {
+							if (data !=null) {
 								amount+=data.getAmount();
 							}
 						}
 					} else {
-						ItemStackData data = net.getData(filterStack);
+						ItemStackData data = net.getItemStorage().getItemData(filterStack);
 						if(data !=null){
 							amount = data.getAmount();
 						}

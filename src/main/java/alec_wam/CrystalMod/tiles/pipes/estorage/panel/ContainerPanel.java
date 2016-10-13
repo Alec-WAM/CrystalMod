@@ -14,8 +14,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetwork;
+import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage.ItemStackData;
 import alec_wam.CrystalMod.tiles.pipes.estorage.PacketEStorageItemList;
-import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetwork.ItemStackData;
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.CraftingPattern;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.crafting.ContainerPanelCrafting;
 
@@ -101,7 +101,7 @@ public class ContainerPanel extends Container implements INetworkContainer {
             	}
                 if(panel !=null && panel.network !=null && slot6.getStack() !=null){
                 	final ItemStack copy = slot6.getStack();
-        			int added = panel.network.addItemToNetwork(copy, false);
+        			int added = panel.network.getItemStorage().addItem(copy, false);
         			if(added > 0){
         				slot6.decrStackSize(added);
         				detectAndSendChanges();
@@ -132,15 +132,6 @@ public class ContainerPanel extends Container implements INetworkContainer {
 			}
 			
 			List<ItemStackData> data = Lists.newArrayList();
-			/*for(ItemStack stack : panel.network.craftableItems.keySet()){
-				if(stack !=null){
-					ItemStack copy = stack.copy();
-					copy.stackSize = 0;
-					ItemStackData iData = new ItemStackData(copy, -1, BlockPos.ORIGIN, 0);
-					iData.isCrafting = true;
-					data.add(iData);
-				}
-			}*/
 			for(CraftingPattern pattern : panel.network.getPatterns()){
 				for(ItemStack stack : pattern.getOutputs()){
 					if(stack !=null){
@@ -212,7 +203,7 @@ public class ContainerPanel extends Container implements INetworkContainer {
 
 	public void sendItemStackToNetwork(EntityPlayerMP player, int slot, ItemStackData data) {
 		if(panel.network !=null && data.stack !=null){
-			int added = panel.network.addItemToNetwork(data.stack, false);
+			int added = panel.network.getItemStorage().addItem(data.stack, false);
 			if(added > 0){
 				if(slot < 0){
 					if(player.inventory.getItemStack() !=null){
@@ -243,7 +234,7 @@ public class ContainerPanel extends Container implements INetworkContainer {
 			}
 			ItemStack grabStack = data.stack.copy();
 			grabStack.stackSize = realAmount;
-			ItemStack removed = panel.network.removeItemFromNetwork(grabStack, false);
+			ItemStack removed = panel.network.getItemStorage().removeItem(grabStack, false);
 			if(removed !=null){
 				if(invSlot > -1){
 					if(player.inventory.getStackInSlot(invSlot) == null){

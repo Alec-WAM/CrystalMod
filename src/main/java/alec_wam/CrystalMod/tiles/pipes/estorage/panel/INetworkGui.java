@@ -1,6 +1,6 @@
 package alec_wam.CrystalMod.tiles.pipes.estorage.panel;
 
-import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetwork.ItemStackData;
+import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage.ItemStackData;
 
 public interface INetworkGui {
 

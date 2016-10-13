@@ -60,7 +60,7 @@ public class TileEntityPanelCrafting extends TileEntityPanel {
 			ItemStack stack = matrix.getStackInSlot(i);
 			if(stack !=null){
 				if(this.network !=null && !(network instanceof EStorageNetworkClient)){
-					stack.stackSize-=network.addItemToNetwork(stack, false);
+					stack.stackSize-=network.getItemStorage().addItem(stack, false);
 					if(stack.stackSize <= 0){
 						matrix.setInventorySlotContents(i, null);
 					}
@@ -104,7 +104,7 @@ public class TileEntityPanelCrafting extends TileEntityPanel {
                 if (slot != null) {
                     if (slot.stackSize == 1 && getNetwork() !=null) {
                     	ItemStack copy = ItemUtil.copy(slot, 1);
-                        matrix.setInventorySlotContents(i, getNetwork().removeItemFromNetwork(copy, false));
+                        matrix.setInventorySlotContents(i, getNetwork().getItemStorage().removeItem(copy, false));
                     } else {
                         matrix.decrStackSize(i, 1);
                     }

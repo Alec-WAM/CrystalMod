@@ -1,39 +1,26 @@
 package alec_wam.CrystalMod.integration.jei;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.SortedSet;
-import java.util.TreeSet;
-
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.packets.PacketRecipeTransfer;
 import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetwork;
-import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetwork.ItemStackData;
+import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage.ItemStackData;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.crafting.ContainerPanelCrafting;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.crafting.TileEntityPanelCrafting;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.Lang;
-import alec_wam.CrystalMod.util.ModLogger;
-
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-
-import mezz.jei.Internal;
 import mezz.jei.api.IModRegistry;
 import mezz.jei.api.gui.IGuiItemStackGroup;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.recipe.VanillaRecipeCategoryUid;
 import mezz.jei.api.recipe.transfer.IRecipeTransferError;
 import mezz.jei.api.recipe.transfer.IRecipeTransferHandler;
-import mezz.jei.api.recipe.transfer.IRecipeTransferHandlerHelper;
 import mezz.jei.api.gui.IGuiIngredient;
 import mezz.jei.util.StackHelper;
-import mezz.jei.util.Translator;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -42,7 +29,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 
 public class RecipeTransferHandler implements IRecipeTransferHandler {
 
@@ -126,7 +112,7 @@ public class RecipeTransferHandler implements IRecipeTransferHandler {
 	        	boolean passNetwork = false;  
 	        	
 	        	ingd : for(ItemStack s : allIng){
-	        		ItemStackData stack = network.getData(s);
+	        		ItemStackData stack = network.getItemStorage().getItemData(s);
 	        		
 	        		int added = 0;
 	        		ItemStack id = s;
@@ -179,7 +165,6 @@ public class RecipeTransferHandler implements IRecipeTransferHandler {
 	public static void transferItems(ContainerPanelCrafting con, TileEntityPanelCrafting panel, NBTTagCompound recipeNBT){
 		panel.clearGrid();
 		
-		
 		ItemStack[][] actualRecipe = new ItemStack[9][];
 
         for (int x = 0; x < actualRecipe.length; x++) {
@@ -217,12 +202,12 @@ public class RecipeTransferHandler implements IRecipeTransferHandler {
 		                    	ItemStack copy = poss.copy();
 		                        ItemStack took = ItemUtil.removeFromPlayerInventory(con, copy);
 		                        if(took == null){
-		                        	ItemStack ret = panel.getNetwork().removeItemFromNetwork(copy, false);
+		                        	ItemStack ret = panel.getNetwork().getItemStorage().removeItem(copy, false);
 		                        	if(ret !=null){
 		                        		took = ret;
 		                        	}
 		                        }else if(took.stackSize < poss.stackSize){
-		                        	ItemStack ret = panel.getNetwork().removeItemFromNetwork(ItemUtil.copy(copy, poss.stackSize-took.stackSize), false);
+		                        	ItemStack ret = panel.getNetwork().getItemStorage().removeItem(ItemUtil.copy(copy, poss.stackSize-took.stackSize), false);
 		                        	if(ret !=null){
 		                        		took.stackSize+=ret.stackSize;
 		                        	}
@@ -234,20 +219,14 @@ public class RecipeTransferHandler implements IRecipeTransferHandler {
 		                        	}else{
 		                        		panel.getMatrix().getStackInSlot(i).stackSize+=took.stackSize;
 		                        	}
-		                        	//ModLogger.info("Passed "+i+" on try "+t);
 		                            continue slot;
 		                        }
 	                    	}
 	                    }
 	                    failedSlots.add(i);
-	                    //ModLogger.info("Adding "+i+" to skip list on try "+t);
 	                }
 	            }
-        	
-    			//ModLogger.info(failedSlots.size()+" / "+validRecipeInputs);
-    			//ModLogger.info(t+"/"+tries+" tries");
     			if(failedSlots.size() >= validRecipeInputs){
-    				//ModLogger.info("Out of Items at "+t+"/"+tries+" tries");
     				break trys;
     			}
         	}
@@ -274,7 +253,7 @@ public class RecipeTransferHandler implements IRecipeTransferHandler {
 
 	  private boolean networkContainsIngredient(EStorageNetwork network, List<ItemStack> allIng) {         
 	    for (ItemStack ing : allIng) {
-	      ItemStackData stack = network.getData(ing);
+	      ItemStackData stack = network.getItemStorage().getItemData(ing);
 	      if (stack != null && stack.stack !=null && !stack.isCrafting && stack.getAmount() >=ing.stackSize) {
 	        return true;
 	      }

@@ -7,7 +7,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import alec_wam.CrystalMod.tiles.pipes.estorage.IInsertListener;
-import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetwork.ItemStackData;
+import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage.ItemStackData;
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.CraftingPattern;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.GuiPanel;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.TileEntityPanel;
@@ -33,7 +33,7 @@ public class TileEntityPanelItem extends TileEntityPanel implements IInsertListe
 			if(isLocked){
 				if(displayItem != null && ItemUtil.canCombine(stack, displayItem)){
 					if(network !=null){
-						int inserted = network.addItemToNetwork(stack, false);
+						int inserted = network.getItemStorage().addItem(stack, false);
 						if(inserted > 0){
 							stack.stackSize-=inserted;
 							if(stack.stackSize <=0){
@@ -58,7 +58,7 @@ public class TileEntityPanelItem extends TileEntityPanel implements IInsertListe
 					return true;
 				}
 				if(network !=null){
-					int inserted = network.addItemToNetwork(stack, false);
+					int inserted = network.getItemStorage().addItem(stack, false);
 					if(inserted > 0){
 						stack.stackSize-=inserted;
 						if(stack.stackSize <=0){
@@ -81,7 +81,7 @@ public class TileEntityPanelItem extends TileEntityPanel implements IInsertListe
 				for(int s = 0; s < player.inventory.mainInventory.length; s++){
 					ItemStack invStack = player.inventory.mainInventory[s];
 					if(invStack !=null && ItemUtil.canCombine(invStack, displayItem)){
-						int inserted = network.addItemToNetwork(invStack, false);
+						int inserted = network.getItemStorage().addItem(invStack, false);
 						if(inserted > 0){
 							invStack.stackSize-=inserted;
 							if(invStack.stackSize <=0){
@@ -134,7 +134,7 @@ public class TileEntityPanelItem extends TileEntityPanel implements IInsertListe
 			
 			if(this.displayItem !=null){
 				if(this.network !=null){
-					ItemStackData data = network.getData(displayItem);
+					ItemStackData data = network.getItemStorage().getItemData(displayItem);
 					if(data !=null){
 						if(data.isCrafting){
 							displayText = "0";

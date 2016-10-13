@@ -70,7 +70,7 @@ public class BasicCraftingTask implements ICraftingTask {
             if (!satisfied[i]) {
                 done = false;
 
-                ItemStack took = controller.removeItemFromNetwork(input, false);
+                ItemStack took = controller.getItemStorage().removeItem(input, false);
 
                 if (took != null) {
                     itemsTook.add(took);
@@ -98,12 +98,12 @@ public class BasicCraftingTask implements ICraftingTask {
     @Override
     public void onDone(EStorageNetwork controller) {
         for (ItemStack output : pattern.getOutputs()) {
-            controller.addItemToNetwork(output, false);
+            controller.getItemStorage().addItem(output, false);
         }
 
         if (pattern.getByproducts() != null) {
             for (ItemStack byproduct : pattern.getByproducts()) {
-                controller.addItemToNetwork(byproduct, false);
+                controller.getItemStorage().addItem(byproduct, false);
             }
         }
     }
@@ -111,7 +111,7 @@ public class BasicCraftingTask implements ICraftingTask {
     @Override
     public void onCancelled(EStorageNetwork controller) {
         for (ItemStack took : itemsTook) {
-        	controller.addItemToNetwork(took, false);
+        	controller.getItemStorage().addItem(took, false);
         }
     }
 

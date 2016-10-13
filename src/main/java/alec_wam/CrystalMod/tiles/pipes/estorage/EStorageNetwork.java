@@ -26,6 +26,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.oredict.OreDictionary;
 import alec_wam.CrystalMod.network.CompressedDataInput;
@@ -33,6 +34,8 @@ import alec_wam.CrystalMod.network.CompressedDataOutput;
 import alec_wam.CrystalMod.tiles.pipes.AbstractPipeNetwork;
 import alec_wam.CrystalMod.tiles.pipes.IPipeWrapper;
 import alec_wam.CrystalMod.tiles.pipes.TileEntityPipe;
+import alec_wam.CrystalMod.tiles.pipes.estorage.FluidStorage.FluidStackData;
+import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage.ItemStackData;
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.CraftingPattern;
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.IAutoCrafter;
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.ItemPattern;
@@ -52,6 +55,10 @@ import com.google.common.collect.Lists;
 
 public class EStorageNetwork extends AbstractPipeNetwork {
 	public EStorageNetwork masterNetwork;
+	
+	private final ItemStorage itemStorage = new ItemStorage(this);
+	private final FluidStorage fluidStorage = new FluidStorage(this);
+	
 	public final List<NetworkedHDDInterface> masterInterfaces = Lists.newArrayList();
 	public final NavigableMap<Integer, List<NetworkedHDDInterface>> interfaces = new TreeMap<Integer, List<NetworkedHDDInterface>>(PRIORITY_SORTER);
 
@@ -64,9 +71,8 @@ public class EStorageNetwork extends AbstractPipeNetwork {
 	public final List<INetworkContainer> watchers = new ArrayList<INetworkContainer>();
 	public final List<IInsertListener> listeners = new ArrayList<IInsertListener>();
 
-	public List<ItemStackData> items = new ArrayList<ItemStackData>();
-
 	public boolean updateItems = true;
+	public boolean updateFluids = true;
 
 	//AUTO CRAFTING
 	final List<IAutoCrafter> crafters = new ArrayList<IAutoCrafter>();
@@ -78,316 +84,13 @@ public class EStorageNetwork extends AbstractPipeNetwork {
     private List<ICraftingTask> craftingTasksToAdd = new ArrayList<ICraftingTask>();
     private List<ICraftingTask> craftingTasksToCancel = new ArrayList<ICraftingTask>();
 	
-	
-	public static class ItemStackData {
-		public ItemStack stack;
-		public int index;
-		public BlockPos interPos;
-		public int interDim;
-		public boolean isCrafting;
-
-		private String oreDictString;
-		private String modIdString;
-		
-		public ItemStackData(){
-			
-		}
-		
-		public ItemStackData(ItemStack stack) {
-			this.stack = stack;
-			this.index = 0;
-			this.interPos = BlockPos.ORIGIN;
-			this.interDim = 0;
-		}
-
-		public ItemStackData(ItemStack stack, int index, BlockPos interPos, int dim) {
-			this.stack = stack;
-			this.index = index;
-			this.interPos = interPos;
-			this.interDim = dim;
-		}
-
-		public void toBytes(CompressedDataOutput cdo) throws IOException {
-			if (stack == null) {
-				cdo.writeShort(-1);
-			} else {
-				cdo.writeShort(Item.getIdFromItem(stack.getItem()));
-				cdo.writeVariable(stack.stackSize);
-				cdo.writeShort(stack.getMetadata());
-				NBTTagCompound nbttagcompound = null;
-
-				if (stack.getItem().isDamageable()
-						|| stack.getItem().getShareTag()) {
-					nbttagcompound = stack.getTagCompound();
-				}
-
-				if (nbttagcompound == null) {
-					cdo.writeByte(0);
-				} else {
-					cdo.writeByte(1);
-					try {
-						CompressedStreamTools.write(nbttagcompound, cdo);
-					} catch (IOException ioexception) {
-						throw new EncoderException(ioexception);
-					}
-				}
-			}
-			cdo.writeInt(index);
-			cdo.writeInt(interPos.getX());
-			cdo.writeInt(interPos.getY());
-			cdo.writeInt(interPos.getZ());
-			cdo.writeInt(interDim);
-			cdo.writeBoolean(isCrafting);
-		}
-
-		public static ItemStackData fromBytes(CompressedDataInput cdi)
-				throws IOException {
-			ItemStackData newData = new ItemStackData();
-			ItemStack itemstack = null;
-			int i = cdi.readShort();
-			if (i >= 0) {
-				int j = cdi.readVariable();
-				int k = cdi.readShort();
-				itemstack = new ItemStack(Item.getItemById(i), j, k);
-
-				NBTTagCompound nbt = null;
-				byte b0 = cdi.readByte();
-
-				if (b0 == 0) {
-					nbt = null;
-				} else {
-					try {
-						nbt = CompressedStreamTools.read(cdi,
-								new NBTSizeTracker(2097152L));
-					} catch (Exception e) {
-						System.out.println("Error Loading NBT to "
-								+ itemstack.getDisplayName());
-					}
-				}
-				itemstack.setTagCompound(nbt);
-			}
-			newData.stack = itemstack;
-			newData.index = cdi.readInt();
-			int x = cdi.readInt();
-			int y = cdi.readInt();
-			int z = cdi.readInt();
-			newData.interPos = new BlockPos(x, y, z);
-			newData.interDim = cdi.readInt();
-			newData.isCrafting = cdi.readBoolean();
-			return newData;
-		}
-
-		public String getUnlocName() {
-			return findUnlocName();
-		}
-
-		public String getLowercaseUnlocName(Locale locale) {
-			return Lang.translateToLocal(getUnlocName()).toLowerCase(
-					locale);
-		}
-
-		private String findUnlocName() {
-			if (stack == null)
-				return "null";
-			String name = "";
-			try {
-				name = stack.getDisplayName();
-				if (name == null || name.isEmpty()) {
-					name = stack.getItem().getUnlocalizedName();
-					if (name == null || name.isEmpty()) {
-						name = stack.getItem().getClass().getName();
-					}
-				}
-			} catch (Throwable ex) {
-				name = "Exception: " + ex.getMessage();
-			}
-			return name;
-		}
-
-		public String getModId() {
-			return findModId();
-		}
-
-		private String findModId() {
-			if(!Strings.isNullOrEmpty(modIdString)){
-				return modIdString;
-			}
-			if (stack == null || stack.getItem() == null)
-				return "";
-			ResourceLocation resourceInput = Item.REGISTRY.getNameForObject(stack.getItem());
-			if (resourceInput != null
-					&& resourceInput.getResourceDomain() != null) {
-				return modIdString = resourceInput.getResourceDomain();
-			} else {
-				return "";
-			}
-		}
-		
-		public String getOreDic(){
-			return findOreNames();
-		}
-		
-		private String findOreNames(){
-			if(!Strings.isNullOrEmpty(oreDictString)){
-				return oreDictString;
-			}
-			if (stack == null)
-				return "";
-			StringBuilder oreDictStringBuilder = new StringBuilder();
-			for (int oreId : OreDictionary.getOreIDs(stack)) {
-				String oreName = OreDictionary.getOreName(oreId).toLowerCase(Locale.ENGLISH);
-				oreDictStringBuilder.append(oreName).append(' ');
-			}
-			return oreDictString = oreDictStringBuilder.toString();
-		}
-		
-		public int getAmount(){
-			return stack == null ? 0 : stack.stackSize;
-		}
-	}
-	
-	public int addItemToNetwork(ItemStack stack, boolean sim){
-		return this.addItemToNetwork(stack, sim, true);
-	}
-	
-	public int addItemToNetwork(ItemStack stack, boolean sim, boolean sendUpdate) {
-		if (stack == null)
-			return 0;
-		int inserted = 0;
-		Iterator<List<NetworkedHDDInterface>> i1 = interfaces.values().iterator();
-		while(i1.hasNext()){
-			ItemStack insertCopy = stack.copy();
-			final List<NetworkedHDDInterface> list = i1.next();
-			Iterator<NetworkedHDDInterface> ii = list.iterator();
-			//FIRST PASS
-			while( ii.hasNext())
-			{
-				final NetworkedHDDInterface inter = ii.next();
-				if (inter.getInterface() != null) {
-					if(inter.getInterface().getNetworkInventory() !=null){
-						int amt = inter.getInterface().getNetworkInventory().insertItem(this, insertCopy, true, sim, sendUpdate);
-						insertCopy.stackSize-=amt;
-						inserted+=amt;
-						if(insertCopy.stackSize <= 0){
-							return inserted;
-						}
-					}
-				}
-			}
-			
-			//SECOND PASS
-			ii = list.iterator();
-			while(ii.hasNext()){
-				final NetworkedHDDInterface inter = ii.next();
-				if (inter.getInterface() != null) {
-					if(inter.getInterface().getNetworkInventory() !=null){
-						int amt = inter.getInterface().getNetworkInventory().insertItem(this, insertCopy, false, sim, sendUpdate);
-						insertCopy.stackSize-=amt;
-						inserted+=amt;
-						if(insertCopy.stackSize <= 0){
-							return inserted;
-						}
-					}
-				}
-			}
-		}
-
-		if(this.masterNetwork !=null){
-			return masterNetwork.addItemToNetwork(stack, sim, sendUpdate);
-		}
-		return inserted;
-	}
-
-	public ItemStack removeItemsFromNetwork(ItemStack[] itemStacks){
-		for (ItemStack itemStack : itemStacks) {
-			ItemStackData data = getData(itemStack);
-			if(data == null || data.stack == null || data.isCrafting)continue;
-			int removedFake = removeItemFromNetwork(data, itemStack.stackSize, true);
-			if (removedFake >= itemStack.stackSize) {
-				ItemStack stack = data.stack.copy();
-				stack.stackSize = itemStack.stackSize;
-				removeItemFromNetwork(getData(itemStack), itemStack.stackSize, false);
-				return stack;
-			}
-			return null;
-		}
-		return null;
-	}
-	
-	public ItemStack removeItemFromNetwork(ItemStack stack, boolean sim){
-		return this.removeItemFromNetwork(stack, sim, true);
-	}
-	
-	public ItemStack removeItemFromNetwork(ItemStack stack, boolean sim, boolean sendUpdate){
-		ItemStackData data = getData(stack);
-		if(data == null || data.stack == null || data.isCrafting)return null;
-		ItemStack ret = data.stack.copy();
-		int removedFake = removeItemFromNetwork(data, stack.stackSize, sim, sendUpdate);
-		
-		ret.stackSize = removedFake;
-		if(ret.stackSize <=0){
-			return null;
-		}
-		return ret;
-	}
-	
-	public int removeItemFromNetwork(ItemStackData data, int amount, boolean sim){
-		return this.removeItemFromNetwork(data, amount, sim, true);
-	}
-	
-	public int removeItemFromNetwork(ItemStackData data, int amount, boolean sim, boolean sendUpdate) {
-		if (data == null || data.stack == null)
-			return 0;
-		Iterator<List<NetworkedHDDInterface>> i1 = interfaces.values().iterator();
-		while(i1.hasNext()){
-			Iterator<NetworkedHDDInterface> ii = i1.next().iterator();
-			while( ii.hasNext())
-			{
-				final NetworkedHDDInterface inter = ii.next();
-				if (sameDimAndPos(inter, data.interPos, data.interDim)) {
-					if(inter.getInterface().getNetworkInventory() !=null){
-						int extract = inter.getInterface().getNetworkInventory().extractItem(this, data.stack, amount, true, sendUpdate);
-						if(extract >= 0){
-							return sim ? extract : inter.getInterface().getNetworkInventory().extractItem(this, data.stack, amount, false, sendUpdate);
-						}
-					}
-				}
-			}
-		}
-
-		if(this.masterNetwork !=null){
-			return this.masterNetwork.removeItemFromNetwork(data, amount, sim, sendUpdate);
-		}
-		return 0;
-	}
-
-	public ItemStackData getData(ItemStack stack) {
-		Iterator<ItemStackData> iData = items.iterator();
-		while(iData.hasNext()) {
-			ItemStackData data = iData.next();
-			if (data.stack != null && ItemUtil.canCombine(stack, data.stack)) {
-				return data;
-			}
-		}
-		if(this.masterNetwork !=null){
-			return masterNetwork.getData(stack);
-		}
-		return null;
-	}
-	
-	public ItemStackData getDataOre(ItemStack stack) {
-		Iterator<ItemStackData> iData = items.iterator();
-		while(iData.hasNext()) {
-			ItemStackData data = iData.next();
-			if (data.stack != null && ItemUtil.stackMatchUseOre(stack, data.stack)) {
-				return data;
-			}
-		}
-		if(this.masterNetwork !=null){
-			return masterNetwork.getDataOre(stack);
-		}
-		return null;
-	}
+    public ItemStorage getItemStorage(){
+    	return itemStorage;
+    }
+    
+    public FluidStorage getFluidStorage(){
+    	return fluidStorage;
+    }
 
 	public static byte[] compressItem(ItemStackData data) throws IOException {
 		CompressedDataOutput cdo = new CompressedDataOutput();
@@ -402,9 +105,9 @@ public class EStorageNetwork extends AbstractPipeNetwork {
 	public byte[] compressItems() throws IOException {
 		CompressedDataOutput cdo = new CompressedDataOutput();
 		try {
-			int count = items.size();
+			int count = getItemStorage().getItemList().size();
 			cdo.writeVariable(count);
-			for (ItemStackData entry : items) {
+			for (ItemStackData entry : getItemStorage().getItemList()) {
 				entry.toBytes(cdo);
 			}
 			return cdo.getCompressed();
@@ -412,7 +115,7 @@ public class EStorageNetwork extends AbstractPipeNetwork {
 			cdo.close();
 		}
 	}
-
+	
 	public static byte[] compressItems(List<ItemStackData> data)
 			throws IOException {
 		CompressedDataOutput cdo = new CompressedDataOutput();
@@ -427,7 +130,7 @@ public class EStorageNetwork extends AbstractPipeNetwork {
 			cdo.close();
 		}
 	}
-
+	
 	public static ItemStackData decompressItem(byte[] compressed)
 			throws IOException {
 		CompressedDataInput cdi = new CompressedDataInput(compressed);
@@ -447,6 +150,72 @@ public class EStorageNetwork extends AbstractPipeNetwork {
 			List<ItemStackData> list = Lists.newArrayList();
 			for (int i = 0; i < count; i++) {
 				ItemStackData data = ItemStackData.fromBytes(cdi);
+				list.add(data);
+			}
+			return list;
+		} finally {
+			cdi.close();
+		}
+	}
+	
+	public static byte[] compressFluid(FluidStackData data) throws IOException {
+		CompressedDataOutput cdo = new CompressedDataOutput();
+		try {
+			data.toBytes(cdo);
+			return cdo.getCompressed();
+		} finally {
+			cdo.close();
+		}
+	}
+	
+	public byte[] compressFluids() throws IOException {
+		CompressedDataOutput cdo = new CompressedDataOutput();
+		try {
+			int count = getFluidStorage().getFluidList().size();
+			cdo.writeVariable(count);
+			for (FluidStackData entry : getFluidStorage().getFluidList()) {
+				entry.toBytes(cdo);
+			}
+			return cdo.getCompressed();
+		} finally {
+			cdo.close();
+		}
+	}
+	
+	public static byte[] compressFluids(List<FluidStackData> data)
+			throws IOException {
+		CompressedDataOutput cdo = new CompressedDataOutput();
+		try {
+			int count = data.size();
+			cdo.writeVariable(count);
+			for (FluidStackData entry : data) {
+				entry.toBytes(cdo);
+			}
+			return cdo.getCompressed();
+		} finally {
+			cdo.close();
+		}
+	}
+	
+	public static FluidStackData decompressFluid(byte[] compressed)
+			throws IOException {
+		CompressedDataInput cdi = new CompressedDataInput(compressed);
+		try {
+			FluidStackData data = FluidStackData.fromBytes(cdi);
+			return data;
+		} finally {
+			cdi.close();
+		}
+	}
+	
+	public static List<FluidStackData> decompressFluids(byte[] compressed)
+			throws IOException {
+		CompressedDataInput cdi = new CompressedDataInput(compressed);
+		try {
+			int count = cdi.readVariable();
+			List<FluidStackData> list = Lists.newArrayList();
+			for (int i = 0; i < count; i++) {
+				FluidStackData data = FluidStackData.fromBytes(cdi);
 				list.add(data);
 			}
 			return list;
@@ -709,24 +478,7 @@ public class EStorageNetwork extends AbstractPipeNetwork {
         }
 		
 		if (updateItems) {
-			items.clear();
-			Iterator<List<NetworkedHDDInterface>> i1 = interfaces.values().iterator();
-			while(i1.hasNext()){
-				Iterator<NetworkedHDDInterface> ii = i1.next().iterator();
-				//FIRST PASS
-				while( ii.hasNext())
-				{
-					final NetworkedHDDInterface inter = ii.next();
-					if(inter !=null && inter.getInterface() != null) {
-						if(inter.getInterface().getNetworkInventory() !=null){
-							Iterator<ItemStackData> data = inter.getInterface().getNetworkInventory().getItems(this).iterator();
-							while(data.hasNext()){
-								items.add(data.next());
-							}
-						}
-					}
-				}
-			}
+			
 			for (INetworkContainer panel : watchers) {
 				panel.sendItemsToAll();
 			}
@@ -739,8 +491,6 @@ public class EStorageNetwork extends AbstractPipeNetwork {
 	}
 	
 	public void updateInterfaces() {
-
-		// erase list.
 		this.interfaces.clear();
 		for(NetworkedHDDInterface inter : this.masterInterfaces){
 			getOrCreateInterfaces(inter.getPriority()).add(inter);
@@ -914,9 +664,9 @@ public class EStorageNetwork extends AbstractPipeNetwork {
 
         for (int i = 0; i < patterns.size(); ++i) {
             for (ItemStack input : patterns.get(i).getInputs()) {
-                ItemStackData stored = getData(input);
+                ItemStackData stored = getItemStorage().getItemData(input);
 
-                scores[i] += stored != null && stored.stack !=null ? stored.stack.stackSize : 0;
+                scores[i] += stored != null && stored.stack !=null && !stored.isCrafting ? stored.stack.stackSize : 0;
             }
 
             if (scores[i] > highestScore) {

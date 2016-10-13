@@ -52,8 +52,6 @@ public class ContainerWorksiteBoundsAdjust extends ContainerWorksiteBase {
 				worksite.onPostBoundsAdjusted();
 			}
 			BlockUtil.markBlockForUpdate(worksite.getWorld(), worksite.getPos());
-			
-			//BlockUtil.openWorksiteGui(player, 0, worksite.getPos().getX(), worksite.getPos().getY(), worksite.getPos().getZ());
 		}
 	}
 

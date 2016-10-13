@@ -8,12 +8,9 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.NetHandlerPlayServer;
-import net.minecraft.world.World;
-import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.network.AbstractPacketThreadsafe;
-import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetwork.ItemStackData;
+import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage.ItemStackData;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.INetworkContainer;
-import alec_wam.CrystalMod.util.ModLogger;
 
 public class PacketEStorageAddItem extends AbstractPacketThreadsafe {
 
@@ -116,9 +113,9 @@ public class PacketEStorageAddItem extends AbstractPacketThreadsafe {
 					if(pan.getNetwork() !=null && data.stack !=null){
 						ItemStack copy = data.stack.copy();
 						copy.stackSize = amount;
-						if(pan.getNetwork().addItemToNetwork(copy, true) > 0){
+						if(pan.getNetwork().getItemStorage().addItem(copy, true) > 0){
 							Slot pSlot = con.getSlot(slot);
-							pSlot.decrStackSize(pan.getNetwork().addItemToNetwork(copy, false));
+							pSlot.decrStackSize(pan.getNetwork().getItemStorage().addItem(copy, false));
 							pSlot.onPickupFromSlot(netHandler.playerEntity, data.stack);
 						}
 					}

@@ -23,6 +23,7 @@ import alec_wam.CrystalMod.integration.jei.RecipeTransferHandler;
 import alec_wam.CrystalMod.network.AbstractPacketThreadsafe;
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.ContainerPatternEncoder;
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.TilePatternEncoder;
+import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.TileProcessingPatternEncoder;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.crafting.ContainerPanelCrafting;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.crafting.TileEntityPanelCrafting;
 import alec_wam.CrystalMod.util.ItemUtil;
@@ -76,6 +77,34 @@ public class PacketRecipeTransfer extends AbstractPacketThreadsafe {
 			ContainerPatternEncoder con = (ContainerPatternEncoder)container;
 			//Empty grid into inventory
 			TilePatternEncoder encoder = con.encoder;
+			
+			
+			if(encoder instanceof TileProcessingPatternEncoder){
+				TileProcessingPatternEncoder pEncoder = (TileProcessingPatternEncoder)encoder;
+				ItemStack[] inputs = new ItemStack[9];
+				ItemStack[] outputs = new ItemStack[9];
+				
+				if(recipeNBT.hasKey("Inputs")){
+					NBTTagList list = recipeNBT.getTagList("Inputs", Constants.NBT.TAG_COMPOUND);
+					for(int t = 0; t < list.tagCount(); t++){
+						NBTTagCompound nbt = list.getCompoundTagAt(t);
+						int slot = nbt.getInteger("Slot");
+						inputs[slot] = ItemStack.loadItemStackFromNBT(nbt);
+					}
+				}
+				if(recipeNBT.hasKey("Outputs")){
+					NBTTagList list = recipeNBT.getTagList("Outputs", Constants.NBT.TAG_COMPOUND);
+					for(int t = 0; t < list.tagCount(); t++){
+						NBTTagCompound nbt = list.getCompoundTagAt(t);
+						int slot = nbt.getInteger("Slot");
+						outputs[slot] = ItemStack.loadItemStackFromNBT(nbt);
+					}
+				}
+				pEncoder.fillInputs(inputs);
+				pEncoder.fillOutputs(outputs);
+				return;
+			}
+			
 			try{
 				encoder.clearMatrix();
 				ItemStack[][] actualRecipe = new ItemStack[9][];

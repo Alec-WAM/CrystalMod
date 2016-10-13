@@ -98,8 +98,8 @@ public class AttachmentEStorageImport extends AttachmentData {
 					ItemStack stack = handler.getStackInSlot(slot);
 					if(stack !=null && ItemUtil.passesFilter(stack, getFilter())){
 						ItemStack copy = handler.extractItem(slot, 4, true);
-						if(net.addItemToNetwork(copy, true) > 0){
-							handler.extractItem(slot, net.addItemToNetwork(copy, false), false);
+						if(net.getItemStorage().addItem(copy, true) > 0){
+							handler.extractItem(slot, net.getItemStorage().addItem(copy, false), false);
 						}
 					}
 				}

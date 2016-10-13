@@ -2,7 +2,7 @@ package alec_wam.CrystalMod.integration.jei;
 
 import javax.annotation.Nullable;
 
-import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetwork.ItemStackData;
+import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage.ItemStackData;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.INetworkGui;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;

@@ -1,5 +1,7 @@
 package alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting;
 
+import java.util.List;
+
 import net.minecraft.item.ItemStack;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.tiles.BasicItemHandler;
@@ -47,6 +49,20 @@ public class TileProcessingPatternEncoder extends TilePatternEncoder {
         }
 
         return inputsFilled > 0 && outputsFilled > 0 && patterns.getStackInSlot(0) != null && patterns.getStackInSlot(1) == null;
+    }
+    
+    public void fillInputs(ItemStack[] stacks){
+    	for (int i = 0; i < 9; ++i) {
+    		ItemStack stack = i >= stacks.length ? null : stacks[i];
+    		configuration.setStackInSlot(i, stack);
+        }
+    }
+    
+    public void fillOutputs(ItemStack[] stacks){
+    	for (int i = 0; i < 9; ++i) {
+    		ItemStack stack = i >= stacks.length ? null : stacks[i];
+    		configuration.setStackInSlot(9+i, stack);
+        }
     }
     
     public BasicItemHandler getPatterns() {

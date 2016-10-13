@@ -75,9 +75,7 @@ public class TilePatternEncoder extends TileEntityMod implements IMessageHandler
     }
     
     public void clearMatrix(){
-    	for (int i = 0; i < 9; ++i) {
-    		matrix.clear();
-        }
+    	matrix.clear();
     	markDirty();
     }
     

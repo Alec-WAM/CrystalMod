@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.Locale;
 import java.util.regex.Pattern;
 
-import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetwork.ItemStackData;
+import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage.ItemStackData;
 
 public abstract class ItemFilter {
 

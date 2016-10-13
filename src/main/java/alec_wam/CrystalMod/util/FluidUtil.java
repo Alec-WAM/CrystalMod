@@ -19,6 +19,13 @@ import net.minecraftforge.fluids.capability.wrappers.FluidHandlerWrapper;
 
 public class FluidUtil {
 
+	public static boolean canCombine(FluidStack stack1, FluidStack stack2){
+		if(stack1 == null && stack2 == null)return true;
+		if(stack1 != null && stack2 == null)return false;
+		if(stack1 == null && stack2 != null)return false;
+		return stack1.isFluidEqual(stack2);
+	}
+	
 	public static IFluidHandler getFluidHandlerCapability(@Nullable ICapabilityProvider provider, EnumFacing side) {
 	    if (provider != null && provider.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, side)) {
 	      return provider.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, side);

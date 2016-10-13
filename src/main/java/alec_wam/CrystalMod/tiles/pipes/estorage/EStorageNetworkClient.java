@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
+import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage.ItemStackData;
 import alec_wam.CrystalMod.tiles.pipes.estorage.client.CountComp;
 import alec_wam.CrystalMod.tiles.pipes.estorage.client.ItemFilter;
 import alec_wam.CrystalMod.tiles.pipes.estorage.client.ModComp;
@@ -51,7 +52,7 @@ public class EStorageNetworkClient extends EStorageNetwork {
 	
 	public List<ItemStackData> getItemsSorted(SortType sortType){
 		List<ItemStackData> copy = Lists.newArrayList();
-		for(ItemStackData data : items){
+		for(ItemStackData data : getItemStorage().getItemList()){
 			if(data.stack !=null)
 			copy.add(data);
 		}
@@ -60,7 +61,7 @@ public class EStorageNetworkClient extends EStorageNetwork {
 			if(data.stack !=null){
 				
 				boolean safe = true;
-				search : for(ItemStackData item : items){
+				search : for(ItemStackData item : getItemStorage().getItemList()){
 					if(item.stack !=null && ItemUtil.canCombine(item.stack, data.stack)){
 						safe = false;
 						break search;

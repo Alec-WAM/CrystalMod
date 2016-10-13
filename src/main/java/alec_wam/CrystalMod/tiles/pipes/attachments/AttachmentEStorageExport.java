@@ -111,11 +111,11 @@ public class AttachmentEStorageExport extends AttachmentData {
 	                if (slot != null) {
 	                	ItemStack cop = slot.copy();
 	                	cop.stackSize = 1;
-	                	ItemStack took = net.removeItemFromNetwork(cop, true);
+	                	ItemStack took = net.getItemStorage().removeItem(cop, true);
 	                	if(took !=null){
 	                		if(ItemUtil.doInsertItem(tile, slot, oDir, false) == cop.stackSize){
 	                			ItemUtil.doInsertItem(tile, slot, oDir, true);
-	                			net.removeItemFromNetwork(cop, false);
+	                			net.getItemStorage().removeItem(cop, false);
 	                		}
 	                	}
 	                }

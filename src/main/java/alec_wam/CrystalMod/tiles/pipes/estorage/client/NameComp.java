@@ -3,7 +3,7 @@ package alec_wam.CrystalMod.tiles.pipes.estorage.client;
 import java.text.Collator;
 import java.util.Comparator;
 
-import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetwork.ItemStackData;
+import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage.ItemStackData;
 
 public class NameComp implements Comparator<ItemStackData> {
   protected final Collator collator;

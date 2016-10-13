@@ -2,7 +2,7 @@ package alec_wam.CrystalMod.tiles.pipes.estorage.client;
 
 import java.text.Collator;
 
-import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetwork.ItemStackData;
+import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage.ItemStackData;
 
 public class ModComp extends NameComp {
 

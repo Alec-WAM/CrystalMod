@@ -16,10 +16,12 @@ public class ContainerPatternEncoder extends Container {
 
 	private SlotDisabled patternResultSlot;
 	public TilePatternEncoder encoder;
+	public final boolean isProcessing;
 
 	public ContainerPatternEncoder(EntityPlayer player, TilePatternEncoder encoder){
 		this.encoder = encoder;
 		if(encoder instanceof TileProcessingPatternEncoder){
+			isProcessing = true;
 			TileProcessingPatternEncoder processingPatternEncoder = (TileProcessingPatternEncoder)encoder;
 			int ox = 8;
 	        int x = ox;
@@ -48,6 +50,7 @@ public class ContainerPatternEncoder extends Container {
 	        addPlayerInventory(player, 8, 90);
 			return;
 		}
+		isProcessing = false;
 		addPlayerInventory(player, 8, 90);
 		
 		int x = 8;

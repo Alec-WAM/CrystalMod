@@ -1,14 +1,17 @@
 package alec_wam.CrystalMod.tiles.pipes.estorage.storage.hdd.inventory;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.fluids.FluidStack;
 import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetwork;
+import alec_wam.CrystalMod.tiles.pipes.estorage.FluidStorage;
+import alec_wam.CrystalMod.tiles.pipes.estorage.FluidStorage.FluidStackData;
 import alec_wam.CrystalMod.tiles.pipes.estorage.IInsertListener;
-import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetwork.ItemStackData;
+import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage;
+import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage.ItemStackData;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.INetworkContainer;
 import alec_wam.CrystalMod.tiles.pipes.estorage.storage.hdd.ItemHDD;
 import alec_wam.CrystalMod.tiles.pipes.estorage.storage.hdd.TileEntityHDDInterface;
@@ -24,14 +27,14 @@ public class NetworkInventoryHDDInterface implements INetworkInventory {
 	}
 	
 	@Override
-	public List<ItemStackData> getItems(EStorageNetwork network) {
+	public List<ItemStackData> getItems(ItemStorage storage) {
 		List<ItemStackData> items = Lists.newArrayList();
 		ItemStack hddStack = inter.getStackInSlot(0);
 		if (hddStack != null && hddStack.getItem() instanceof ItemHDD) {
 			for (int i = 0; i < ItemHDD.getItemLimit(hddStack); i++) {
 				ItemStack stack = ItemHDD.getItem(hddStack, i);
 				if (stack != null) {
-					if(network.getData(stack) == null){
+					if(storage.getItemData(stack) == null){
 						ItemStackData data = new ItemStackData(stack, i, inter.getPos(), inter.getWorld().provider.getDimension());
 						items.add(data);
 					}
@@ -43,6 +46,7 @@ public class NetworkInventoryHDDInterface implements INetworkInventory {
 
 	@Override
 	public void updateItems(EStorageNetwork network, int index) {
+		ItemStorage storage = network.getItemStorage();
 		List<ItemStackData> changed = Lists.newArrayList();
 		BlockPos pos = inter.getPos();
 		int dim = inter.getWorld().provider.getDimension();
@@ -52,100 +56,24 @@ public class NetworkInventoryHDDInterface implements INetworkInventory {
 				if(index == -1){
 					for (int i = 0; i < ItemHDD.getItemLimit(hddStack); i++) {
 						ItemStack stack = ItemHDD.getItem(hddStack, i);
-						boolean edited = false;
-						ItemStackData itemData = null;
-						if (stack != null) {
-							itemData = new ItemStackData(stack, i, pos, dim);
+						ItemStackData itemData = new ItemStackData(stack, i, pos, dim);
+						if(storage.addToList(itemData)){
 							changed.add(itemData);
-						}
-						ArrayList<ItemStackData> copy = new ArrayList<ItemStackData>();
-						for (ItemStackData data : network.items) {
-							if (data.stack != null) {
-								copy.add(data);
-							}
-						}
-	
-						for (ItemStackData data : copy) {
-							if (data.interPos != null
-									&& data.interPos.equals(pos) && data.interDim == dim) {
-								if (data.index == i) {
-									data.stack = stack;
-									if (data.stack == null) {
-										network.items.remove(data);
-										changed.add(data);
-									}
-									edited = true;
-									continue;
-								}
-							}
-						}
-						if (itemData != null && edited == false) {
-							if(network.getData(itemData.stack) == null){
-								network.items.add(itemData);
-							}
 						}
 					}
 				}
 				if(index == -2){
-					ArrayList<ItemStackData> copy = new ArrayList<ItemStackData>();
-					for (ItemStackData data : network.items) {
-						if (data.stack != null) {
-							copy.add(data);
-						}
-					}
-					for (ItemStackData data : copy) {
-						if (data.interPos != null && data.interPos.equals(pos) && data.interDim == dim) {
-							network.items.remove(data);
-							changed.add(data);
-						}
-					}
+					changed.addAll(storage.clearListAtPos(pos, dim));
 				}
 			} else {
 				ItemStack stack = ItemHDD.getItem(hddStack, index);
-				ItemStackData itemData = null;
-				if (stack != null) {
-					itemData = new ItemStackData(stack, index, pos, dim);
+				ItemStackData itemData = new ItemStackData(stack, index, pos, dim);
+				if(storage.addToList(itemData)){
 					changed.add(itemData);
-				}
-				boolean edited = false;
-				ArrayList<ItemStackData> copy = new ArrayList<ItemStackData>();
-				for (ItemStackData data : network.items) {
-					if (data.stack != null) {
-						copy.add(data);
-					}
-				}
-				for (ItemStackData data : copy) {
-					if (data.interPos != null && data.interPos.equals(pos) && data.interDim == dim) {
-						if (data.index == index) {
-							data.stack = stack;
-							edited = true;
-							if (data.stack == null) {
-								network.items.remove(data);
-								changed.add(data);
-							}
-							continue;
-						}
-					}
-				}
-				if (itemData != null && edited == false) {
-					if(network.getData(itemData.stack) == null){
-						network.items.add(itemData);
-					}
 				}
 			}
 		} else {
-			ArrayList<ItemStackData> copy = new ArrayList<ItemStackData>();
-			for (ItemStackData data : network.items) {
-				if (data.stack != null) {
-					copy.add(data);
-				}
-			}
-			for (ItemStackData data : copy) {
-				if (data.interPos != null && data.interPos.equals(pos) && data.interDim == dim) {
-					network.items.remove(data);
-					changed.add(data);
-				}
-			}
+			changed.addAll(storage.clearListAtPos(pos, dim));
 		}
 		if (!changed.isEmpty()) {
 			for (INetworkContainer panel : network.watchers) {
@@ -236,5 +164,24 @@ public class NetworkInventoryHDDInterface implements INetworkInventory {
 		}
 		return -1;
 	}
+
+	//TODO Add Fluid HDD
+	@Override
+	public List<FluidStackData> getFluids(FluidStorage storage) {
+		return Lists.newArrayList();
+	}
+
+	@Override
+	public int insertFluid(EStorageNetwork network, FluidStack stack, boolean matching, boolean sim, boolean sendUpdate) {
+		return 0;
+	}
+
+	@Override
+	public int extractFluid(EStorageNetwork network, FluidStack stack, int amount, boolean sim, boolean sendUpdate) {
+		return 0;
+	}
+
+	@Override
+	public void updateFluids(EStorageNetwork network, int index) {}
 
 }
