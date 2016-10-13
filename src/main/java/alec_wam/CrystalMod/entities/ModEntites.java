@@ -51,8 +51,8 @@ public class ModEntites {
 	
 	public static void postInit(){
 		addToBiomes(EntityCrystalPigZombie.class, 50, 1, 4, EnumCreatureType.MONSTER, getBiomesThatCanSpawn(EntityPigZombie.class, EnumCreatureType.MONSTER));
-		addToBiomes(EntityCrystalCow.class, 4, 1, 4, EnumCreatureType.CREATURE, getBiomesThatCanSpawn(EntityCow.class, EnumCreatureType.CREATURE));
-		addToBiomes(EntityCrystalEnderman.class, 5, 1, 4, EnumCreatureType.MONSTER, getBiomesThatCanSpawn(EntityEnderman.class, EnumCreatureType.MONSTER));
+		addToBiomes(EntityCrystalCow.class, 6, 1, 4, EnumCreatureType.CREATURE, getBiomesThatCanSpawn(EntityCow.class, EnumCreatureType.CREATURE));
+		addToBiomes(EntityCrystalEnderman.class, 8, 1, 4, EnumCreatureType.MONSTER, getBiomesThatCanSpawn(EntityEnderman.class, EnumCreatureType.MONSTER));
 	}
 	
 	@SideOnly(Side.CLIENT)
