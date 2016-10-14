@@ -1,10 +1,18 @@
 package alec_wam.CrystalMod.tiles.pipes.estorage.panel.display;
 
+import org.lwjgl.opengl.GL11;
+
+import alec_wam.CrystalMod.util.client.RenderUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.init.Items;
 import net.minecraft.item.EnumRarity;
@@ -21,7 +29,8 @@ public class TileEntityPanelItemRenderer<T extends TileEntityPanelItem> extends 
 
 	@Override
 	public void renderTileEntityAt(TileEntityPanelItem te, double x, double y, double z, float partialTicks, int destroyStage) {
-		if(te.displayItem == null || te.network == null || !te.connected)return;
+		if(te.network == null || !te.connected)return;
+		if(te.displayItem == null && te.displayFluid == null)return;
 		GlStateManager.pushMatrix();
 		GlStateManager.translate(x, y, z);
 		
@@ -53,13 +62,117 @@ public class TileEntityPanelItemRenderer<T extends TileEntityPanelItem> extends 
 			GlStateManager.translate(0, -0.28, -0.3);
 		}
 		
+		boolean itemBlock = false;
+		
+		if(te.displayFluid !=null){
+			//GlStateManager.disableRescaleNormal();
+			//RenderHelper.disableStandardItemLighting();
+			GlStateManager.pushMatrix();
+			GlStateManager.disableLighting();
+			//GlStateManager.disableTexture2D();
+			/*GlStateManager.translate( 0.0f, 0.14f, 0 );*/
+			//GlStateManager.rotate(180, 0, 0, 1);
+        	GlStateManager.rotate(180, 0, 1, 0);
+        	GlStateManager.translate(-0.5, -0.5, 0.01);
+        	GlStateManager.scale(1.0/16f, 1.0/16f, 1.0/16f);
+        	//GlStateManager.scale(0.015625F*2, 0.015625F*2, 0.015625F*2);
+        	
+        	TextureAtlasSprite icon = RenderUtil.getStillTexture(te.displayFluid);
+    	    if (icon != null) {
+    	        int color = te.displayFluid.getFluid().getColor(te.displayFluid);
+	    	    GL11.glColor3ub((byte) (color >> 16 & 0xFF), (byte) (color >> 8 & 0xFF), (byte) (color & 0xFF));
+	    	    
+	        	double drawWidth = 16;//(16*(1.0f/16.0f));
+	        	double drawHeight = 16;//(16*(1.0f/16.0f));
+	
+		        double drawX = 0;
+		        double drawY = 0;
+	
+		        double minU = icon.getMinU();
+		        double maxU = icon.getMaxU();
+		        double minV = icon.getMinV();
+		        double maxV = icon.getMaxV();
+	
+		        Tessellator tessellator = Tessellator.getInstance();
+		        VertexBuffer tes = tessellator.getBuffer();
+		        tes.begin(7, DefaultVertexFormats.POSITION_TEX);
+		        tes.pos(drawX, drawY + drawHeight, 0).tex(minU, maxV).endVertex();
+		        tes.pos(drawX + drawWidth, drawY + drawHeight, 0).tex(maxU, maxV).endVertex();
+		        tes.pos(drawX + drawWidth, drawY, 0).tex(maxU, minV).endVertex();
+		        tes.pos(drawX, drawY, 0).tex(minU, minV).endVertex();
+		        tessellator.draw();
+				
+			}
+    	    GlStateManager.enableLighting();
+    	    //GlStateManager.enableTexture2D();
+    	    GlStateManager.popMatrix();
+			//RenderHelper.enableStandardItemLighting();
+			//GlStateManager.enableRescaleNormal();
+		} else if(te.displayItem !=null){
+			itemBlock = renderItem(te.displayItem); 
+		}
+		
+		GlStateManager.translate( 0.0f, 0.14f, -0.24f );
+		GlStateManager.scale( 1.0f / 62f, 1.0f / 62f, 1.0f );
+
+		final String renderedStackSize = te.displayText;
+
+		final FontRenderer fr = Minecraft.getMinecraft().fontRendererObj;
+		final int width = fr.getStringWidth( renderedStackSize );
+		GlStateManager.rotate(180, 1, 0, 0);
+		GlStateManager.pushMatrix();
+		GlStateManager.disableLighting();
+		GlStateManager.translate( -0.5f * width, 20f, -0.24f );
+		
+		fr.drawString( renderedStackSize, 0, 0, 0 );
+		GlStateManager.enableLighting();
+		GlStateManager.popMatrix();
+		
+		GlStateManager.pushMatrix();
+		GlStateManager.disableLighting();
+        GlStateManager.translate(-0.20, itemBlock ? -15f : -13f, -0.24f );
+        
+        String string = "";
+        FontRenderer font = Minecraft.getMinecraft().fontRendererObj;
+        EnumRarity rarity = EnumRarity.COMMON;
+        
+        
+        if(te.displayItem !=null){
+        	string = te.displayItem.getDisplayName();
+        	font = te.displayItem.getItem().getFontRenderer(te.displayItem);
+        	rarity = te.displayItem.getRarity();
+        } else if(te.displayFluid !=null){
+        	string = te.displayFluid.getLocalizedName();
+        	if(te.displayFluid.getFluid() !=null)rarity = te.displayFluid.getFluid().getRarity(te.displayFluid);
+        }
+        
+        if(font == null){
+        	font = getFontRenderer();
+        }
+        
+        int stringWidth = font.getStringWidth(string);
+        float scale = Math.min(40F / (float) (stringWidth+10), 0.8F);
+        GlStateManager.scale(scale, scale, 1);
+        GlStateManager.translate(0, font.FONT_HEIGHT*(1.0f-scale), 0);
+        String begin = TextFormatting.BLACK+"";
+        if(rarity !=EnumRarity.COMMON){
+        	begin = rarity.rarityColor+"";
+        }
+        font.drawString(begin+string, -stringWidth/2, 0, -1);
+        GlStateManager.enableLighting();
+        GlStateManager.popMatrix();
+		
+		GlStateManager.popMatrix();
+		
+	}
+	
+	public boolean renderItem(ItemStack displayItem){
 		GlStateManager.pushMatrix();
 		boolean itemBlock = false;	
 		try
 		{
-			final ItemStack sis = te.displayItem;
+			final ItemStack sis = displayItem;
 
-			//GlStateManager.disableLighting();
 			GlStateManager.disableRescaleNormal();
 			IBakedModel model = Minecraft.getMinecraft().getRenderItem().getItemModelMesher().getItemModel(sis);
 			
@@ -108,52 +221,11 @@ public class TileEntityPanelItemRenderer<T extends TileEntityPanelItem> extends 
 		}
 		finally
 		{
-			//GlStateManager.enableLighting();
 			GlStateManager.enableRescaleNormal();
 		}
 		GlStateManager.popMatrix();
 		
-		GlStateManager.translate( 0.0f, 0.14f, -0.24f );
-		GlStateManager.scale( 1.0f / 62f, 1.0f / 62f, 1.0f );
-
-		final String renderedStackSize = te.displayText;
-
-		final FontRenderer fr = Minecraft.getMinecraft().fontRendererObj;
-		final int width = fr.getStringWidth( renderedStackSize );
-		GlStateManager.rotate(180, 1, 0, 0);
-		GlStateManager.pushMatrix();
-		GlStateManager.disableLighting();
-		GlStateManager.translate( -0.5f * width, 20f, -0.24f );
-		
-		fr.drawString( renderedStackSize, 0, 0, 0 );
-		GlStateManager.enableLighting();
-		GlStateManager.popMatrix();
-		
-		GlStateManager.pushMatrix();
-		GlStateManager.disableLighting();
-        GlStateManager.translate(-0.20, itemBlock ? -15f : -13f, -0.24f );
-        String string = te.displayItem.getDisplayName();
-        
-        FontRenderer font = te.displayItem.getItem().getFontRenderer(te.displayItem);
-        
-        if(font == null){
-        	font = getFontRenderer();
-        }
-        
-        int stringWidth = font.getStringWidth(string);
-        float scale = Math.min(40F / (float) (stringWidth+10), 0.8F);
-        GlStateManager.scale(scale, scale, 1);
-        GlStateManager.translate(0, font.FONT_HEIGHT*(1.0f-scale), 0);
-        String begin = TextFormatting.BLACK+"";
-        if(te.displayItem.getRarity() !=EnumRarity.COMMON){
-        	begin = te.displayItem.getRarity().rarityColor+"";
-        }
-        font.drawString(begin+string, -stringWidth/2, 0, -1);
-        GlStateManager.enableLighting();
-        GlStateManager.popMatrix();
-		
-		GlStateManager.popMatrix();
-		
+		return itemBlock;
 	}
 
 }

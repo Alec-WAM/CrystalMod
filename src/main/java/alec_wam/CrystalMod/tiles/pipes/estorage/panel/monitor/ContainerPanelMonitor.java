@@ -3,6 +3,7 @@ package alec_wam.CrystalMod.tiles.pipes.estorage.panel.monitor;
 import java.util.List;
 
 import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetwork;
+import alec_wam.CrystalMod.tiles.pipes.estorage.FluidStorage.FluidStackData;
 import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage.ItemStackData;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.INetworkContainer;
 import net.minecraft.entity.player.EntityPlayer;
@@ -68,6 +69,21 @@ public class ContainerPanelMonitor extends Container implements INetworkContaine
 
 	@Override
 	public void sendCraftingItemsToAll(List<ItemStackData> dataList) {
+		// NO-OP
+	}
+
+	@Override
+	public void sendFluidsToAll() {
+		// NO-OP
+	}
+
+	@Override
+	public void sendFluidsToAll(List<FluidStackData> dataList) {
+		// NO-OP
+	}
+
+	@Override
+	public void sendFluidsTo(EntityPlayerMP player) {
 		// NO-OP
 	}
 

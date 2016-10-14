@@ -65,6 +65,7 @@ public class TileEntityExternalInterface extends TileEntityMod implements IMessa
 	public void onNeighborChange() {
 		if(getNetworkInventory() !=null && getNetwork() !=null){
 			getNetworkInventory().updateItems(getNetwork(), -1);
+			getNetworkInventory().updateFluids(getNetwork(), -1);
 		}
 	}
 

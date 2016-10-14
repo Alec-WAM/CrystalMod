@@ -148,6 +148,11 @@ public class ItemStorage {
 		}
 		return 0;
 	}
+	
+	public boolean hasItem(ItemStack stack){
+		ItemStackData data = getItemData(stack);
+		return data !=null && !data.isCrafting && data.getAmount() > 0;
+	}
 
 	public ItemStackData getItemData(ItemStack stack) {
 		Iterator<ItemStackData> iData = items.iterator();
@@ -223,25 +228,21 @@ public class ItemStorage {
 	}
 	
 	public boolean addToList(ItemStackData itemData){
-		List<ItemStackData> copy = Lists.newArrayList(items.iterator());
-		Iterator<ItemStackData> ii = copy.iterator();
-		while(ii.hasNext()){
-			ItemStackData data = ii.next();
-			if (data.sameIgnoreStack(itemData)) {
-				data.stack = itemData.stack;
-				if (data.stack == null) {
-					items.remove(data);
-				}
-				return true;
-			}
-		}
-		if (itemData != null && itemData.stack !=null) {
-			if(getItemData(itemData.stack) == null){
-				items.add(itemData);
-				return true;
-			}
-		}
-		return false;
+		boolean edited = false;
+		for(ItemStackData storedData : getItemList()){
+			  if(storedData.sameIgnoreStack(itemData)){
+				  storedData.stack = itemData.stack;
+				  edited = true;
+				  if(storedData.stack == null){
+					  getItemList().remove(itemData);
+				  }
+				  return true;
+			  }
+		  }
+		  if(itemData !=null && edited == false){
+			  getItemList().add(itemData);
+		  }
+		  return false;
 	}
 	
 	public List<ItemStackData> clearListAtPos(BlockPos pos, int dim){
@@ -425,7 +426,7 @@ public class ItemStorage {
 		}
 		
 		public boolean sameIgnoreStack(ItemStackData data){
-			return (interPos == data.interPos) && (interDim == data.interDim) && (index == data.index);
+			return data.interPos !=null && data.interPos.equals(interPos) && data.interDim == interDim && data.index == index;
 		}
 	}
 	

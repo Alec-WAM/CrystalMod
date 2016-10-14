@@ -6,20 +6,25 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraftforge.fluids.FluidStack;
+import alec_wam.CrystalMod.tiles.pipes.estorage.FluidStorage.FluidStackData;
 import alec_wam.CrystalMod.tiles.pipes.estorage.IInsertListener;
 import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage.ItemStackData;
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.CraftingPattern;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.GuiPanel;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.TileEntityPanel;
 import alec_wam.CrystalMod.util.BlockUtil;
+import alec_wam.CrystalMod.util.FluidUtil;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.tool.ToolUtil;
 
+import com.enderio.core.common.util.ChatUtil;
 import com.google.common.base.Strings;
 
 public class TileEntityPanelItem extends TileEntityPanel implements IInsertListener {
 
 	public ItemStack displayItem;
+	public FluidStack displayFluid;
 	public String displayText = "";
 	public boolean isLocked = false;
 	public boolean update = false;
@@ -50,6 +55,17 @@ public class TileEntityPanelItem extends TileEntityPanel implements IInsertListe
 					update = true;
 					return true;
 				}
+
+				
+				FluidStack itemFluid = FluidUtil.getFluidTypeFromItem(stack);
+				if(itemFluid !=null && (displayFluid == null || displayFluid != null && !FluidUtil.canCombine(itemFluid, displayFluid))){
+					FluidStack copy = itemFluid.copy();
+					itemFluid.amount = 1;
+					displayFluid = copy;
+					update = true;
+					return true;
+				}
+				
 				if(displayItem == null || displayItem != null && !ItemUtil.canCombine(stack, displayItem)){
 					ItemStack copy = stack.copy();
 					copy.stackSize = 1;
@@ -57,6 +73,7 @@ public class TileEntityPanelItem extends TileEntityPanel implements IInsertListe
 					update = true;
 					return true;
 				}
+				
 				if(network !=null){
 					int inserted = network.getItemStorage().addItem(stack, false);
 					if(inserted > 0){
@@ -76,6 +93,12 @@ public class TileEntityPanelItem extends TileEntityPanel implements IInsertListe
 				BlockUtil.markBlockForUpdate(worldObj, pos);
 				return true;
 			}
+			
+			if(displayFluid !=null){
+				ChatUtil.sendNoSpam(player, displayFluid.getLocalizedName());
+				return true;
+			}
+			
 			if(displayItem !=null && network !=null){
 				boolean changed = false;
 				for(int s = 0; s < player.inventory.mainInventory.length; s++){
@@ -105,6 +128,7 @@ public class TileEntityPanelItem extends TileEntityPanel implements IInsertListe
 	public void writeCustomNBT(NBTTagCompound nbt){
 		super.writeCustomNBT(nbt);
 		if(displayItem !=null)nbt.setTag("DisplayStack", displayItem.writeToNBT(new NBTTagCompound()));
+		if(displayFluid !=null)nbt.setTag("DisplayFluid", displayFluid.writeToNBT(new NBTTagCompound()));
 		if(!Strings.isNullOrEmpty(displayText))nbt.setString("DisplayString", displayText);
 		nbt.setBoolean("isLocked", isLocked);
 	}
@@ -115,6 +139,11 @@ public class TileEntityPanelItem extends TileEntityPanel implements IInsertListe
 			this.displayItem = ItemStack.loadItemStackFromNBT(nbt.getCompoundTag("DisplayStack"));
 		}else{
 			this.displayItem = null;
+		}
+		if(nbt.hasKey("DisplayFluid")){
+			this.displayFluid = FluidStack.loadFluidStackFromNBT(nbt.getCompoundTag("DisplayFluid"));
+		}else{
+			this.displayFluid = null;
 		}
 		if(nbt.hasKey("DisplayString")){
 			this.displayText = nbt.getString("DisplayString");
@@ -131,7 +160,6 @@ public class TileEntityPanelItem extends TileEntityPanel implements IInsertListe
 		super.update();
 		
 		if(update){
-			
 			if(this.displayItem !=null){
 				if(this.network !=null){
 					ItemStackData data = network.getItemStorage().getItemData(displayItem);
@@ -163,7 +191,18 @@ public class TileEntityPanelItem extends TileEntityPanel implements IInsertListe
 					BlockUtil.markBlockForUpdate(getWorld(), getPos());
 					this.update = false;
 				}
-			}else{
+			} else if(this.displayFluid !=null){
+				if(this.network !=null){
+					FluidStackData data = network.getFluidStorage().getFluidData(displayFluid);
+					if(data !=null){
+						displayText = data.getAmount() + " mB";
+					}else{
+						displayText = "?";
+					}
+					BlockUtil.markBlockForUpdate(getWorld(), getPos());
+					this.update = false;
+				}
+			} else{
 				if(displayText !=""){
 					displayText = "";
 					BlockUtil.markBlockForUpdate(getWorld(), getPos());
@@ -187,6 +226,26 @@ public class TileEntityPanelItem extends TileEntityPanel implements IInsertListe
 	public void onItemExtracted(ItemStack stack, int amount) {
 		if(stack !=null && this.displayItem !=null && amount > 0){
 			if(ItemUtil.canCombine(stack, displayItem)){
+				if(worldObj !=null && !worldObj.isRemote)
+				update = true;
+			}
+		}
+	}
+	
+	@Override
+	public void onFluidInserted(FluidStack stack) {
+		if(stack !=null && this.displayFluid !=null){
+			if(FluidUtil.canCombine(stack, displayFluid)){
+				if(worldObj !=null && !worldObj.isRemote)
+				update = true;
+			}
+		}
+	}
+
+	@Override
+	public void onFluidExtracted(FluidStack stack, int amount) {
+		if(stack !=null && this.displayFluid !=null && amount > 0){
+			if(FluidUtil.canCombine(stack, displayFluid)){
 				if(worldObj !=null && !worldObj.isRemote)
 				update = true;
 			}

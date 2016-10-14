@@ -3,11 +3,16 @@ package alec_wam.CrystalMod.util;
 import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidBlock;
 import net.minecraftforge.fluids.IFluidContainerItem;
@@ -16,8 +21,14 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.wrappers.FluidContainerItemWrapper;
 import net.minecraftforge.fluids.capability.wrappers.FluidContainerRegistryWrapper;
 import net.minecraftforge.fluids.capability.wrappers.FluidHandlerWrapper;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.wrapper.InvWrapper;
+import net.minecraftforge.items.wrapper.SidedInvWrapper;
 
 public class FluidUtil {
+
+	public static ItemStack EMPTY_BUCKET = new ItemStack(Items.BUCKET);
 
 	public static boolean canCombine(FluidStack stack1, FluidStack stack2){
 		if(stack1 == null && stack2 == null)return true;
@@ -54,6 +65,29 @@ public class FluidUtil {
 	    return getFluidHandlerCapability(stack, null);
 	}
 	
+	public static ItemStack getEmptyContainer(ItemStack stack){
+		if (stack == null) {
+	      return null;
+	    }
+
+	    ItemStack ret = stack.copy();
+	    ret.stackSize = 1;
+	    IFluidHandler handler = getFluidHandlerCapability(ret);
+	    if (handler != null) {
+	    	try{
+	    		handler.drain(Integer.MAX_VALUE, true);
+	    	} catch(Exception e){
+	    		e.printStackTrace();
+	    		FluidStack fluid = getFluidTypeFromItem(stack);
+	    		if(fluid !=null && hasFluidBucket(fluid)){
+	    			return getFluidBucket(fluid);
+	    		}
+	    	}
+	    	return ret;
+	    }
+		return null;
+	}
+	
 	public static FluidStack getFluidTypeFromItem(ItemStack stack) {
 	    if (stack == null) {
 	      return null;
@@ -74,5 +108,46 @@ public class FluidUtil {
 	    return null;
 
 	}
+
+	public static boolean hasFluidBucket(FluidStack stack) {
+        return stack.getFluid() == FluidRegistry.WATER || stack.getFluid() == FluidRegistry.LAVA || FluidRegistry.getBucketFluids().contains(stack.getFluid());
+    }
+	
+	public static ItemStack getFluidBucket(FluidStack stack) {
+		if(stack !=null){
+			ItemStack bucket = EMPTY_BUCKET.copy();
+			IFluidHandler handler = getFluidHandlerCapability(bucket);
+		    if (handler != null) {
+		    	handler.fill(stack, true);
+		    }
+		    return bucket;
+		}
+        return null;
+    }
+
+	public static IFluidHandler getExternalFluidHandler(World world, BlockPos pos, EnumFacing face) {
+		if (world == null || pos == null || face == null) {
+	      return null;
+	    }
+    	TileEntity te = world.getTileEntity(pos);
+    	return getFluidHandler(te, face);
+	}
+	
+	@SuppressWarnings("deprecation")
+	public static IFluidHandler getFluidHandler(TileEntity tile, EnumFacing side) {
+        if (tile == null) {
+            return null;
+        }
+
+        IFluidHandler handler = tile.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, side);
+
+        if (handler == null) {
+            if (side != null && tile instanceof net.minecraftforge.fluids.IFluidHandler) {
+      	      return new FluidHandlerWrapper((net.minecraftforge.fluids.IFluidHandler) tile, side);
+    	    }
+        }
+
+        return handler;
+    }
 	
 }

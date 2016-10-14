@@ -17,6 +17,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fluids.FluidStack;
 import alec_wam.CrystalMod.network.CompressedDataInput;
 import alec_wam.CrystalMod.network.CompressedDataOutput;
+import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage.ItemStackData;
 import alec_wam.CrystalMod.util.FluidUtil;
 import alec_wam.CrystalMod.util.Lang;
 
@@ -192,25 +193,21 @@ public class FluidStorage {
 	}
 	
 	public boolean addToList(FluidStackData fluidData){
-		List<FluidStackData> copy = Lists.newArrayList(fluids.iterator());
-		Iterator<FluidStackData> ii = copy.iterator();
-		while(ii.hasNext()){
-			FluidStackData data = ii.next();
-			if (data.sameIgnoreStack(fluidData)) {
-				data.stack = fluidData.stack;
-				if (data.stack == null) {
-					fluids.remove(data);
-				}
-				return true;
-			}
-		}
-		if (fluidData != null && fluidData.stack !=null) {
-			if(getFluidData(fluidData.stack) == null){
-				fluids.add(fluidData);
-				return true;
-			}
-		}
-		return false;
+		boolean edited = false;
+		for(FluidStackData storedData : getFluidList()){
+			  if(storedData.sameIgnoreStack(fluidData)){
+				  storedData.stack = fluidData.stack;
+				  edited = true;
+				  if(storedData.stack == null){
+					  getFluidList().remove(fluidData);
+				  }
+				  return true;
+			  }
+		  }
+		  if(fluidData !=null && edited == false){
+			  getFluidList().add(fluidData);
+		  }
+		  return false;
 	}
 	
 	public List<FluidStackData> clearListAtPos(BlockPos pos, int dim){
@@ -337,7 +334,7 @@ public class FluidStorage {
 		}
 		
 		public boolean sameIgnoreStack(FluidStackData data){
-			return (interPos == data.interPos) && (interDim == data.interDim) && (index == data.index);
+			return data.interPos !=null && data.interPos.equals(interPos) && data.interDim == interDim && data.index == index;
 		}
 	}
 	

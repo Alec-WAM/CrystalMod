@@ -56,7 +56,7 @@ public class NetworkInventoryHDDInterface implements INetworkInventory {
 				if(index == -1){
 					for (int i = 0; i < ItemHDD.getItemLimit(hddStack); i++) {
 						ItemStack stack = ItemHDD.getItem(hddStack, i);
-						ItemStackData itemData = new ItemStackData(stack, i, pos, dim);
+						ItemStackData itemData = new ItemStackData(stack, index, pos, dim);
 						if(storage.addToList(itemData)){
 							changed.add(itemData);
 						}

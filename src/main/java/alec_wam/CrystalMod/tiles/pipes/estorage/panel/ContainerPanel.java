@@ -14,10 +14,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetwork;
+import alec_wam.CrystalMod.tiles.pipes.estorage.FluidStorage.FluidStackData;
 import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage.ItemStackData;
 import alec_wam.CrystalMod.tiles.pipes.estorage.PacketEStorageItemList;
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.CraftingPattern;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.crafting.ContainerPanelCrafting;
+import alec_wam.CrystalMod.util.ModLogger;
 
 import com.google.common.collect.Lists;
 
@@ -273,6 +275,17 @@ public class ContainerPanel extends Container implements INetworkContainer {
 		}
 	}
 
+
+
+	@Override
+	public void sendFluidsToAll() {}
+
+	@Override
+	public void sendFluidsToAll(List<FluidStackData> dataList) {}
+
+	@Override
+	public void sendFluidsTo(EntityPlayerMP player) {}
+	
 	@Override
 	public EStorageNetwork getNetwork() {
 		if(panel !=null)return panel.network;
