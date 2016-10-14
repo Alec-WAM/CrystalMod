@@ -6,6 +6,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
@@ -45,9 +46,9 @@ public class JobHarvestCrop extends WorkerJob {
 		if(worker.worldObj.isAirBlock(cropPos)){ 
 			return true;
 		}
-		
-		if(!FarmUtil.isGrownCrop(worker.worldObj, cropPos)) return true;
 		IBlockState cropState = worker.worldObj.getBlockState(cropPos);
+		boolean isGoard = (cropState.getBlock() == Blocks.MELON_BLOCK || cropState.getBlock() == Blocks.PUMPKIN);
+		if(!FarmUtil.isGrownCrop(worker.worldObj, cropPos) && !isGoard) return true;
 		worker.getLookHelper().setLookPosition(cropPos.getX() + 0.5, cropPos.getY() + 0.5, cropPos.getZ() + 0.5, 10, 40);
 		double d = worker.getDistance(cropPos.getX() + 0.5, cropPos.down().getY() + 0.5, cropPos.getZ() + 0.5);
 		if(d <= 1.5D){

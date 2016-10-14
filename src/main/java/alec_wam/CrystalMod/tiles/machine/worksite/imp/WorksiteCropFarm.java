@@ -256,9 +256,11 @@ public class WorksiteCropFarm extends TileWorksiteUserBlocks {
 			it = blocksToHarvest.iterator();
 			while (it.hasNext() && (position = it.next()) != null) {
 				it.remove();
-				if (FarmUtil.isCrop(worldObj, position)) {
+				IBlockState cropState = worldObj.getBlockState(position);
+				boolean isGoard = (cropState.getBlock() == Blocks.MELON_BLOCK || cropState.getBlock() == Blocks.PUMPKIN);
+				if (FarmUtil.isCrop(worldObj, position) || isGoard) {
 					boolean grown = FarmUtil.isGrownCrop(worldObj, position);
-					if (grown) {
+					if (grown || isGoard) {
 						EntityMinionWorker worker = getClosestWorker(position, WorkerFilter.idleFilter, WorkerFilter.anyFilter);
 						if (worker != null) {
 							worker.addCommand(new JobHarvestCrop(position));

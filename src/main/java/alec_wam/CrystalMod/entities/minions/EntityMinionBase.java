@@ -68,7 +68,7 @@ public class EntityMinionBase extends EntityOwnable implements IMessageHandler {
     {
 		ItemStack itemstack = held;
 
-        if(this.isTamed() && isOwner(par1EntityPlayer)){
+        if(this.isTamed()/* && isOwner(par1EntityPlayer)*/){
         	if(itemstack !=null){
         		if(itemstack.getItem() == Items.SLIME_BALL){
         			if(this.worldObj.isRemote)swingArm(EnumHand.MAIN_HAND);;

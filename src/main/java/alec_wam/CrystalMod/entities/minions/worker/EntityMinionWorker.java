@@ -19,6 +19,7 @@ import net.minecraft.world.World;
 import alec_wam.CrystalMod.entities.minions.EntityMinionBase;
 import alec_wam.CrystalMod.tiles.machine.worksite.TileWorksiteBase;
 import alec_wam.CrystalMod.util.ItemUtil;
+import alec_wam.CrystalMod.util.UUIDUtils;
 import alec_wam.CrystalMod.util.tool.ToolUtil;
 
 import com.enderio.core.common.util.ChatUtil;
@@ -171,7 +172,7 @@ public class EntityMinionWorker extends EntityMinionBase {
 	public boolean processInteract(EntityPlayer player, EnumHand hand, ItemStack held)
     {
 		ItemStack stack = player.getHeldItem(hand);
-		if(stack !=null){
+		if(stack !=null && isOwner(player)){
 			if(ToolUtil.isAxe(stack)){
 	    		if(getHeldItemMainhand() !=null){
 	    			if(ItemUtil.canCombine(stack, getHeldItemMainhand())){
@@ -214,12 +215,8 @@ public class EntityMinionWorker extends EntityMinionBase {
 	    		return true;
 			}
     	}
-		if(/*held == null/* && isOwner(player)*/player !=null){
-			if(player.isSneaking()){
-				if(!this.worldObj.isRemote)ChatUtil.sendNoSpam(player, "I am working at "+(this.wStation !=null ? wStation.getX()+", "+wStation.getY()+", "+wStation.getZ() : "NULL"));
-	    	    return true;
-			}
-    		if(!this.isWorking()){
+		if(held == null && isOwner(player)){
+			if(!this.isWorking()){
     			BlockPos pos = new BlockPos(this).down();
     			TileEntity tile = worldObj.getTileEntity(pos);
     			if(tile !=null && tile instanceof TileWorksiteBase){
@@ -237,8 +234,6 @@ public class EntityMinionWorker extends EntityMinionBase {
     				if(!this.worldObj.isRemote)ChatUtil.sendNoSpam(player, "I can not work here");
     				return true;
     			}
-    			if(!this.worldObj.isRemote)ChatUtil.sendNoSpam(player, ("That is not a farm "+pos.getX()+", "+pos.getY()+", "+pos.getZ()));
-    			return true;
     		}
     	}  
 		return super.processInteract(player, hand, held);

@@ -105,6 +105,16 @@ public abstract class TileWorksiteBounded extends TileWorksiteBase {
 		bbMax = max;
 	}
 	
+	public void update(){
+		if(this.bbMax == null){
+			this.bbMax = pos.add(1, 0, 1);
+		}
+		if(this.bbMin == null){
+			this.bbMin = pos;
+		}
+		super.update();
+	}
+	
 	@Override
 	public void readCustomNBT(NBTTagCompound tag)
 	{
@@ -113,15 +123,17 @@ public abstract class TileWorksiteBounded extends TileWorksiteBase {
 		{
 			NBTTagCompound min = tag.getCompoundTag("bbMin");
 			bbMin = BlockUtil.loadBlockPos(min);
-		} else {
+		}
+		if(bbMin == null){
 			bbMin = getPos();
 		}
 		if(tag.hasKey("bbMax"))
 		{
 			NBTTagCompound max = tag.getCompoundTag("bbMax");
 			bbMax = BlockUtil.loadBlockPos(max);
-		} else {
-			bbMax = getPos();
+		} 
+		if(bbMax == null){
+			bbMax = getPos().add(1, 0, 1);
 		}
 	}
 	

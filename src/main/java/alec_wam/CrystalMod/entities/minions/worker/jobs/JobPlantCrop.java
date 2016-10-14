@@ -49,7 +49,6 @@ public class JobPlantCrop extends WorkerJob {
 				worker.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, held);
 				worker.swingArm(EnumHand.MAIN_HAND);
 			}
-			dirtPos = BlockPos.ORIGIN;
 			return true;
 		} else {
 			if(worker.getNavigator().noPath()){
