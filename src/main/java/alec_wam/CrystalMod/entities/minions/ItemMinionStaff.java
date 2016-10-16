@@ -4,7 +4,9 @@ import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.entities.minions.warrior.EntityMinionWarrior;
 import alec_wam.CrystalMod.entities.minions.worker.EntityMinionWorker;
 import alec_wam.CrystalMod.items.ModItems;
+import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemUtil;
+import alec_wam.CrystalMod.util.UUIDUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -32,7 +34,8 @@ public class ItemMinionStaff extends Item {
 			}
 			
 			ItemStack drop = ItemMinion.createMinion(type);
-			minion.saveToItem(player, stack);
+			//ItemNBTHelper.setString(drop, "OwnerUUID", UUIDUtils.fromUUID(minion.getOwnerId()));
+			minion.saveToItem(player, drop);
 			minion.dropItem(drop, false, false);
 			minion.setDead();
 			return true;

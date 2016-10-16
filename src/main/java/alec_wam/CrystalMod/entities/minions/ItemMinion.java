@@ -1,12 +1,15 @@
 package alec_wam.CrystalMod.entities.minions;
 
 import java.util.List;
+import java.util.UUID;
 
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.proxy.ClientProxy;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
+import alec_wam.CrystalMod.util.ProfileUtil;
+import alec_wam.CrystalMod.util.UUIDUtils;
 import net.minecraft.block.BlockFence;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
@@ -14,6 +17,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -69,6 +73,24 @@ public class ItemMinion extends Item implements ICustomModel {
 	@SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced)
     {
+		if(!stack.hasTagCompound())return;
+		NBTTagCompound nbt = ItemNBTHelper.getCompound(stack);
+		if(nbt.hasKey("EntityData")){
+			NBTTagCompound entityNBT = nbt.getCompoundTag("EntityData");
+			if(entityNBT.hasKey("Health")){
+				tooltip.add("Health: "+entityNBT.getFloat("Health"));
+			}
+			if(entityNBT.hasKey("OwnerUUID")){
+				String id = entityNBT.getString("OwnerUUID");
+				if(!id.isEmpty() && UUIDUtils.isUUID(id)){
+					tooltip.add("Owner: "+ProfileUtil.getUsername(UUIDUtils.fromString(id)));
+				}
+			}
+			/*UUID uuid = UUIDUtils.fromString(nbt.getString("OwnerUUID"));
+			if(uuid !=null){
+				tooltip.add(""+ProfileUtil.getUsername(uuid));
+			}*/
+		}
     }
 	
 	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)

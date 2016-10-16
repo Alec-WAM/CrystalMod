@@ -3,6 +3,7 @@ package alec_wam.CrystalMod.client.model;
 import java.awt.Color;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentMap;
 
 import javax.vecmath.Matrix4f;
@@ -26,6 +27,8 @@ import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
@@ -46,6 +49,7 @@ import alec_wam.CrystalMod.tiles.spawner.EntityEssenceInstance;
 import alec_wam.CrystalMod.tiles.spawner.ItemMobEssence;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ProfileUtil;
+import alec_wam.CrystalMod.util.UUIDUtils;
 import alec_wam.CrystalMod.util.client.RenderUtil;
 import alec_wam.CrystalMod.world.game.tag.TagManager;
 
@@ -152,16 +156,42 @@ public class BakedCustomItemModel extends DynamicItemAndBlockModel
 					return;
 				}
 				
+				ItemStack handStack = null;
+				
 				if(mType == MinionType.WORKER){
 					ItemStack pick = new ItemStack(Items.IRON_PICKAXE);
-					minion.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, pick);
+					handStack = pick;
 				}
 				
 				if(mType == MinionType.WARRIOR){
 					ItemStack sword = new ItemStack(ModItems.crystalSword);
 					ItemNBTHelper.setString(sword, "Color", "blue");
-					minion.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, sword);
+					handStack = sword;
 				}
+				UUID owner = null;
+				if(stack.hasTagCompound()){
+					NBTTagCompound nbt = ItemNBTHelper.getCompound(stack);
+					if(nbt.hasKey("EntityData")){
+						NBTTagCompound compound = nbt.getCompoundTag("EntityData");
+						if (compound.hasKey("HandItems", 9))
+				        {
+				            NBTTagList nbttaglist1 = compound.getTagList("HandItems", 10);
+	
+				            if (nbttaglist1.tagCount() > 0)
+				            {
+				                handStack = ItemStack.loadItemStackFromNBT(nbttaglist1.getCompoundTagAt(0));
+				            }
+				        }
+						if(compound.hasKey("OwnerUUID")){
+							String id = compound.getString("OwnerUUID");
+							if(!id.isEmpty() && UUIDUtils.isUUID(id)){
+								owner = UUIDUtils.fromString(id);
+							}
+						}
+					}
+				}
+				minion.setOwnerId(owner);
+				minion.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, handStack);
 				
 	    		boolean atrib = true;
 				GlStateManager.pushMatrix();
