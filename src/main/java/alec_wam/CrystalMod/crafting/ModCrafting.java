@@ -18,6 +18,7 @@ import alec_wam.CrystalMod.items.ItemIngot.IngotType;
 import alec_wam.CrystalMod.items.ItemMetalPlate.PlateType;
 import alec_wam.CrystalMod.items.guide.ItemCrystalGuide.GuideType;
 import alec_wam.CrystalMod.items.tools.ItemToolParts.PartType;
+import alec_wam.CrystalMod.tiles.TileEntityIOSides.IOType;
 import alec_wam.CrystalMod.tiles.cauldron.CauldronRecipeManager;
 import alec_wam.CrystalMod.tiles.chest.CrystalChestType;
 import alec_wam.CrystalMod.tiles.machine.crafting.BlockCrystalMachine.MachineType;
@@ -26,6 +27,7 @@ import alec_wam.CrystalMod.tiles.machine.crafting.infuser.CrystalInfusionManager
 import alec_wam.CrystalMod.tiles.machine.crafting.liquidizer.LiquidizerRecipeManager;
 import alec_wam.CrystalMod.tiles.machine.crafting.press.PressRecipeManager;
 import alec_wam.CrystalMod.tiles.machine.elevator.ItemMiscCard;
+import alec_wam.CrystalMod.tiles.machine.power.battery.BlockBattery.BatteryType;
 import alec_wam.CrystalMod.tiles.machine.power.converter.BlockPowerConverter.ConverterType;
 import alec_wam.CrystalMod.tiles.machine.power.engine.BlockEngine.EngineType;
 import alec_wam.CrystalMod.tiles.pipes.BlockPipe.PipeType;
@@ -51,6 +53,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.ShapedRecipes;
+import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
@@ -248,6 +251,18 @@ public class ModCrafting {
 		ModCrafting.addNBTRecipe(new ItemStack(ModBlocks.crystalTank, 1, TankType.DARK.getMeta()), copyListTank, new Object[]{"N#N", "#T#", "N#N", '#', darkPlate, 'N', darkNugget, 'T', new ItemStack(ModBlocks.crystalTank, 1, TankType.GREEN.getMeta())});
 		ModCrafting.addNBTRecipe(new ItemStack(ModBlocks.crystalTank, 1, TankType.PURE.getMeta()), copyListTank, new Object[]{"N#N", "#T#", "N#N", '#', purePlate, 'N', pureNugget, 'T', new ItemStack(ModBlocks.crystalTank, 1, TankType.DARK.getMeta())});
 
+		List<String> copyListBattery = Lists.newArrayList();
+		copyListBattery.add("Energy");
+		for(EnumFacing face : EnumFacing.VALUES){
+			copyListBattery.add("io."+face.name().toLowerCase());
+		}
+		addShapedRecipe(new ItemStack(ModBlocks.battery, 1, BatteryType.BLUE.getMeta()), new Object[]{"#I#", "IFI", "#I#", '#', bluePlate, 'F', machineFrame});
+		ModCrafting.addNBTRecipe(new ItemStack(ModBlocks.battery, 1, BatteryType.RED.getMeta()), copyListBattery, new Object[]{"I#I", "#B#", "I#I", '#', redPlate, 'I', redIngot, 'B', new ItemStack(ModBlocks.battery, 1, BatteryType.BLUE.getMeta())});
+		ModCrafting.addNBTRecipe(new ItemStack(ModBlocks.battery, 1, BatteryType.GREEN.getMeta()), copyListBattery, new Object[]{"I#I", "#B#", "I#I", '#', greenPlate, 'I', greenIngot, 'B', new ItemStack(ModBlocks.battery, 1, BatteryType.RED.getMeta())});
+		ModCrafting.addNBTRecipe(new ItemStack(ModBlocks.battery, 1, BatteryType.DARK.getMeta()), copyListBattery, new Object[]{"I#I", "#B#", "I#I", '#', darkPlate, 'I', darkIngot, 'B', new ItemStack(ModBlocks.battery, 1, BatteryType.GREEN.getMeta())});
+		ModCrafting.addNBTRecipe(new ItemStack(ModBlocks.battery, 1, BatteryType.PURE.getMeta()), copyListBattery, new Object[]{"I#I", "#B#", "I#I", '#', purePlate, 'I', pureIngot, 'B', new ItemStack(ModBlocks.battery, 1, BatteryType.DARK.getMeta())});
+
+		
 		addShapedOreRecipe(ModBlocks.customSpawner, new Object[]{"BBB", "RDR", "BBB", 'B', Blocks.IRON_BARS, 'R', "rodBlaze", 'D', new ItemStack(ModBlocks.crystalIngot, 1, CrystalIngotBlockType.DARKIRON.getMeta())});
 		
 		addShapedOreRecipe(ModBlocks.weather, new Object[]{"#S#", "CFB", "###", '#', dIronPlate, 'B', "bucket", 'S', Blocks.DAYLIGHT_DETECTOR, 'C', Items.CLOCK, 'F', machineFrame});

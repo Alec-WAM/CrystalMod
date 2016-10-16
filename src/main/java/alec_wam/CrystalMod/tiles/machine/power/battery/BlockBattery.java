@@ -1,14 +1,22 @@
 package alec_wam.CrystalMod.tiles.machine.power.battery;
 
+import java.util.List;
+
 import javax.annotation.Nullable;
 
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.statemap.StateMapperBase;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -17,13 +25,18 @@ import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.blocks.ModBlocks;
+import alec_wam.CrystalMod.blocks.EnumBlock.IEnumMeta;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.packets.PacketTileMessage;
 import alec_wam.CrystalMod.tiles.TileEntityIOSides.IOType;
@@ -31,19 +44,38 @@ import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.ChatUtil;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemUtil;
+import alec_wam.CrystalMod.util.Lang;
 import alec_wam.CrystalMod.util.tool.ToolUtil;
 
-public class BlockBattery extends BlockContainer {
+public class BlockBattery extends BlockContainer implements ICustomModel {
 	
-	/*public static final PropertyDirection FACING = PropertyDirection.create("facing");
-	public static final PropertyInteger POWER = PropertyInteger.create("power", 0, 8);
-	public static final PropertyEnum<IOType> UP_IO = PropertyEnum.<IOType>create("up_io", IOType.class);
-	public static final PropertyEnum<IOType> DOWN_IO = PropertyEnum.<IOType>create("down_io", IOType.class);
-	public static final PropertyEnum<IOType> NORTH_IO = PropertyEnum.<IOType>create("north_io", IOType.class);
-	public static final PropertyEnum<IOType> SOUTH_IO = PropertyEnum.<IOType>create("south_io", IOType.class);
-	public static final PropertyEnum<IOType> WEST_IO = PropertyEnum.<IOType>create("west_io", IOType.class);
-	public static final PropertyEnum<IOType> EAST_IO = PropertyEnum.<IOType>create("east_io", IOType.class);*/
+	public static final PropertyEnum<BatteryType> TYPE = PropertyEnum.<BatteryType>create("type", BatteryType.class);
+	public static enum BatteryType implements IStringSerializable, IEnumMeta {
+			BLUE("blue"),
+			RED("red"),
+			GREEN("green"),
+			DARK("dark"),
+			PURE("pure"),
+			CREATIVE("creative");
 
+			private final String unlocalizedName;
+			private final int meta;
+
+			BatteryType(String name) {
+		      meta = ordinal();
+		      unlocalizedName = name;
+		    }
+
+		    @Override
+		    public String getName() {
+		      return unlocalizedName;
+		    }
+
+		    @Override
+		    public int getMeta() {
+		      return meta;
+		    }
+	}
 
 	public BlockBattery() {
 		super(Material.IRON);
@@ -52,29 +84,24 @@ public class BlockBattery extends BlockContainer {
 	    setCreativeTab(CrystalMod.tabBlocks);
 	}
 	
+	@SideOnly(Side.CLIENT)
+	public void initModel(){
+		ModelLoader.setCustomStateMapper(this, new BatteryBlockStateMapper());
+		for(BatteryType type : BatteryType.values())
+	        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), type.getMeta(), new ModelResourceLocation(this.getRegistryName(), "inventory"));
+	}
+	
+	@SideOnly(Side.CLIENT)
+	@Override
+	public void getSubBlocks(Item itemIn, CreativeTabs tab, List<ItemStack> list) {
+		for(BatteryType type : BatteryType.values()) {
+			list.add(new ItemStack(this, 1, type.getMeta()));
+		}
+	}
+	
 	@Override
     public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
-        /*TileEntity te = world.getTileEntity(pos);
-        int power = 0;
-        EnumFacing face = EnumFacing.NORTH;
-        IOType u = IOType.IN;
-        IOType d = IOType.IN;
-        IOType n = IOType.IN;
-        IOType s = IOType.IN;
-        IOType e = IOType.IN;
-        IOType w = IOType.IN;
-        if (te !=null && te instanceof TileEntityBattery) {
-        	TileEntityBattery battery = (TileEntityBattery)te;
-        	face = EnumFacing.getFront(battery.facing);
-        	power = Math.min(8, battery.getScaledEnergyStored(9));
-        	u = battery.getIO(EnumFacing.UP);
-        	d = battery.getIO(EnumFacing.DOWN);
-        	n = battery.getIO(EnumFacing.NORTH);
-        	s = battery.getIO(EnumFacing.SOUTH);
-        	e = battery.getIO(EnumFacing.EAST);
-        	w = battery.getIO(EnumFacing.WEST);
-        }*/
-        return state;//.withProperty(FACING, face).withProperty(POWER, power).withProperty(UP_IO, u).withProperty(DOWN_IO, d).withProperty(NORTH_IO, n).withProperty(SOUTH_IO, s).withProperty(WEST_IO, w).withProperty(EAST_IO, e);
+        return state;
     }
 	
 	public IBlockState getExtendedState(final IBlockState state, final IBlockAccess world, final BlockPos pos) {
@@ -83,20 +110,53 @@ public class BlockBattery extends BlockContainer {
     }
 	
 	@Override
-    public IBlockState getStateFromMeta(int meta) {
-        return getDefaultState();
-    }
-	
+	public IBlockState getStateFromMeta(int meta) {
+		return this.getDefaultState().withProperty(TYPE, fromMeta(meta));
+	}
+
 	@Override
-    public int getMetaFromState(IBlockState state) {
-        return 0;
-    }
+	public int getMetaFromState(IBlockState state) {
+	    return ((BatteryType) state.getValue(TYPE)).getMeta();
+	}
+
+	@Override
+	public int damageDropped(IBlockState state) {
+	    return getMetaFromState(state);
+	}
+
+	protected BatteryType fromMeta(int meta) {
+	    if(meta < 0 || meta >= BatteryType.values().length) {
+	      meta = 0;
+	    }
+
+	    return BatteryType.values()[meta];
+	}
 
     @Override
     protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this);
+        return new BlockStateContainer(this, new IProperty[] { TYPE });
     }
 	
+    public void addInformation(ItemStack stack, EntityPlayer player, List<String> tooltip, boolean advanced)
+    {
+    	BatteryType type = fromMeta(stack.getMetadata());
+    	int energy = 0;
+    	if(stack.hasTagCompound()){
+	    	NBTTagCompound nbt = ItemNBTHelper.getCompound(stack);
+	    	if(nbt.hasKey("Energy")){
+	    		energy = nbt.getInteger("Energy");
+	    	}
+	    	if(nbt.hasKey("BatteryData")){
+	    		NBTTagCompound nbtBat = nbt.getCompoundTag("BatteryData");
+	    		if(nbtBat.hasKey("Energy"))energy = nbtBat.getInteger("Energy");
+	    	}
+    	}
+
+    	tooltip.add("Energy: "+energy+" / "+TileEntityBattery.MAX_ENERGY[type.getMeta()] + " "+Lang.localize("power.cu"));
+    	tooltip.add("Max Input: "+TileEntityBattery.MAX_RECEIVE[type.getMeta()]+" "+Lang.localize("power.cu")+"/t");
+    	tooltip.add("Max Output: "+TileEntityBattery.MAX_SEND[type.getMeta()]+" "+Lang.localize("power.cu")+"/t");
+    }
+    
 	@Override
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
     	TileEntity tile = world.getTileEntity(pos);
@@ -107,7 +167,7 @@ public class BlockBattery extends BlockContainer {
     			
     			if(ToolUtil.isToolEquipped(player, hand)){
     				if(!world.isRemote){
-    					ItemStack stack = new ItemStack(ModBlocks.battery);
+    					ItemStack stack = new ItemStack(ModBlocks.battery, 1, getMetaFromState(state));
     					NBTTagCompound nbt = new NBTTagCompound();
     					battery.writeCustomNBT(nbt);
     					ItemNBTHelper.getCompound(stack).setTag("BatteryData", nbt);
@@ -207,7 +267,7 @@ public class BlockBattery extends BlockContainer {
 
 	@Override
 	public TileEntity createNewTileEntity(World worldIn, int meta) {
-		return new TileEntityBattery();
+		return new TileEntityBattery(meta);
 	}
 	
 	public boolean rotateBlock(World world, BlockPos pos, EnumFacing axis)
@@ -237,4 +297,12 @@ public class BlockBattery extends BlockContainer {
         return EnumFacing.VALUES;
     }
 
+    public static class BatteryBlockStateMapper extends StateMapperBase
+	{
+		@Override
+		protected ModelResourceLocation getModelResourceLocation(IBlockState state)
+		{
+			return new ModelResourceLocation(state.getBlock().getRegistryName(), "normal");
+		}
+	}
 }

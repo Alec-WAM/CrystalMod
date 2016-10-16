@@ -12,10 +12,12 @@ import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.client.model.dynamic.DelegatingDynamicItemAndBlockModel;
 import alec_wam.CrystalMod.tiles.TileEntityIOSides.IOType;
+import alec_wam.CrystalMod.tiles.machine.power.battery.BlockBattery.BatteryType;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.client.RenderUtil;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 import net.minecraft.client.renderer.block.model.*;
 import net.minecraft.block.state.*;
@@ -57,7 +59,15 @@ public class ModelBattery extends DelegatingDynamicItemAndBlockModel
         
         //if(state !=null && state.pos !=BlockPos.ORIGIN)return list;
         
-        String batteryLoc = "crystalmod:blocks/machine/battery/battery";
+        String color = "blue";
+        if(state !=null){
+        	BatteryType type = state.state.getValue(BlockBattery.TYPE);
+        	if(type !=null){
+        		color = type.getName().toLowerCase();
+        	}
+        }
+        
+        String batteryLoc = "crystalmod:blocks/machine/battery/battery_"+color;
         String io_blocked = "crystalmod:blocks/machine/battery/io_blocked";
         String io_in = "crystalmod:blocks/machine/battery/io_in";
         String io_out = "crystalmod:blocks/machine/battery/io_out";
@@ -378,7 +388,7 @@ public class ModelBattery extends DelegatingDynamicItemAndBlockModel
         return ItemCameraTransforms.DEFAULT;
     }
     
-    static ModelBattery models;
+    static Map<BatteryType, ModelBattery> models = Maps.newHashMap();
     
     public static final ModelBattery ITEMMODEL = new ModelBattery();
     
@@ -400,23 +410,22 @@ public class ModelBattery extends DelegatingDynamicItemAndBlockModel
 
 	@Override
 	public IBakedModel handleItemState(ItemStack stack, World world, EntityLivingBase entity) {
-		if(models !=null && models.state !=null && models.state.battery !=null){
+		/*if(models !=null && models.state !=null && models.state.battery !=null){
     		resetBattery(models.state.battery);
         	if(ItemNBTHelper.verifyExistance(stack, "BatteryData")){
         		models.state.battery.readCustomNBT(stack.getTagCompound().getCompoundTag("BatteryData"));
         	}
         	models.state.battery.facing = EnumFacing.NORTH.ordinal();
-    		return models;
-    	}
+    		return models.get(arg0);
+    	}*/
     	resetBattery(BATTERY);
     	if(ItemNBTHelper.verifyExistance(stack, "BatteryData")){
     		BATTERY.readCustomNBT(stack.getTagCompound().getCompoundTag("BatteryData"));
     	}
-    	BATTERY.facing = EnumFacing.NORTH.ordinal();
-    	FakeBatteryState state = new FakeBatteryState(ModBlocks.battery.getDefaultState(), CrystalMod.proxy.getClientWorld(), BlockPos.ORIGIN, BATTERY);
-    	ModelBattery model = new ModelBattery(state, EnumFacing.NORTH, 0L);
-    	models = model;
-		return model;
+    	BATTERY.facing = EnumFacing.EAST.ordinal();
+    	FakeBatteryState state = new FakeBatteryState(ModBlocks.battery.getStateFromMeta(stack.getItemDamage()), CrystalMod.proxy.getClientWorld(), BlockPos.ORIGIN, BATTERY);
+    	ModelBattery model = new ModelBattery(state, EnumFacing.EAST, 0L);
+    	return model;
 	}
 
 	

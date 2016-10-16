@@ -25,8 +25,12 @@ public class TileEntityBattery extends TileEntityIOSides implements IMessageHand
 	public boolean loadedUpdate = false;
 	
 	public TileEntityBattery() {
+		this(0);
+	}
+	
+	public TileEntityBattery(int meta) {
 		super();
-		energyStorage = new CEnergyStorage(MAX_ENERGY[0]);
+		energyStorage = new CEnergyStorage(MAX_ENERGY[meta], MAX_RECEIVE[meta], MAX_SEND[meta]);
 	}
 	
 	public void writeCustomNBT(NBTTagCompound nbt){
@@ -49,7 +53,7 @@ public class TileEntityBattery extends TileEntityIOSides implements IMessageHand
 	
 	@Override
 	public void handleMessage(String messageId, NBTTagCompound messageData,	boolean client) {
-		
+		super.handleMessage(messageId, messageData, client);
 		if(messageId.equalsIgnoreCase("UpdateEnergy")){
 			energyStorage.setEnergyStored(messageData.getInteger("Energy"));
 		}

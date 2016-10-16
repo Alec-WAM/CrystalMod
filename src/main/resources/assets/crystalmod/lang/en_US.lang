@@ -303,7 +303,12 @@ crystalmod.msg.spawnerInfo7.txt=Ignore Spawn Requirements: §3Notch Apple
 crystalmod.msg.spawnerInfo8.txt=Tier 2: §3Pure Crystal Block
 crystalmod.msg.spawnerInfo9.txt=Tier 3: §3Pure Ingot Block
 
-tile.crystalmod.battery.name=Battery (WIP)
+tile.crystalmod.battery.blue.name=Blue Crystal Battery
+tile.crystalmod.battery.red.name=Red Crystal Battery
+tile.crystalmod.battery.green.name=Green Crystal Battery
+tile.crystalmod.battery.dark.name=Dark Crystal Battery
+tile.crystalmod.battery.pure.name=Pure Crystal Battery
+tile.crystalmod.battery.creative.name=Creative Crystal Battery
 
 tile.crystalmod.elevator.name=Elevator
 tile.crystalmod.elevatorfloor.name=Elevator Floor Marker

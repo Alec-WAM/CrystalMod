@@ -284,7 +284,8 @@ public class ModBlocks {
 		regsiterTileEntity(TileEntityMatterCollector.class);
 		
 		battery = new BlockBattery();
-		registerBlock(battery, "battery");
+		registerBlock(battery, new ItemBlockMeta(battery), "battery");
+		ItemBlockMeta.setMappingProperty(battery, BlockBattery.TYPE);
 		regsiterTileEntity(TileEntityBattery.class);
 		
 		elevator = new BlockElevator();

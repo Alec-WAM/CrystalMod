@@ -48,6 +48,7 @@ import alec_wam.CrystalMod.tiles.machine.enderbuffer.TileEntityEnderBuffer;
 import alec_wam.CrystalMod.tiles.machine.enderbuffer.gui.GuiEnderBuffer;
 import alec_wam.CrystalMod.tiles.machine.mobGrinder.GuiMobGrinder;
 import alec_wam.CrystalMod.tiles.machine.mobGrinder.TileEntityMobGrinder;
+import alec_wam.CrystalMod.tiles.machine.power.battery.BlockBattery.BatteryType;
 import alec_wam.CrystalMod.tiles.machine.power.battery.ModelBattery;
 import alec_wam.CrystalMod.tiles.machine.power.engine.furnace.GuiEngineFurnace;
 import alec_wam.CrystalMod.tiles.machine.power.engine.furnace.TileEntityEngineFurnace;
@@ -370,7 +371,10 @@ public class ClientProxy extends CommonProxy {
         event.getMap().registerSprite(new ResourceLocation("crystalmod:blocks/tank/tank_creative"));
         event.getMap().registerSprite(new ResourceLocation("crystalmod:blocks/tank/tank_creative_top"));
         
-        event.getMap().registerSprite(new ResourceLocation("crystalmod:blocks/machine/battery/battery"));
+        for(BatteryType type : BatteryType.values()){
+        	event.getMap().registerSprite(new ResourceLocation("crystalmod:blocks/machine/battery/battery_"+type.getName().toLowerCase()));
+        }
+        
         event.getMap().registerSprite(new ResourceLocation("crystalmod:blocks/machine/battery/io_blocked"));
         event.getMap().registerSprite(new ResourceLocation("crystalmod:blocks/machine/battery/io_in"));
         event.getMap().registerSprite(new ResourceLocation("crystalmod:blocks/machine/battery/io_out"));
