@@ -5,19 +5,40 @@ import java.io.IOException;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.packets.PacketTileMessage;
 import net.minecraft.client.audio.PositionedSoundRecord;
+import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextFormatting;
 
 public class GuiPatternEncoder extends GuiContainer {
 
 	private TilePatternEncoder encoder;
 	
+	private GuiButton oreButton;
+	
 	public GuiPatternEncoder(EntityPlayer player, TilePatternEncoder encoder) {
 		super(new ContainerPatternEncoder(player, encoder));
 		this.encoder = encoder;
 		ySize+=6;
+	}
+	
+	public void initGui(){
+		super.initGui();
+		String ore = encoder.isOreDict ? TextFormatting.GREEN+"O" : TextFormatting.RED+"O";
+		oreButton = new GuiButton(0, 100, 20, ore);
+		this.buttonList.add(oreButton);
+	}
+	
+	public void actionPerformed(GuiButton button){
+		if(button.id == oreButton.id){
+			boolean old = encoder.isOreDict;
+			encoder.isOreDict = !old;
+			String ore = encoder.isOreDict ? TextFormatting.GREEN+"O" : TextFormatting.RED+"O";
+			oreButton.displayString = ore;
+			CrystalModNetwork.sendToServer(new PacketTileMessage(encoder.getPos(), "Ore"));
+		}
 	}
 
 	public boolean inBounds(int x, int y, int w, int h, int ox, int oy) {

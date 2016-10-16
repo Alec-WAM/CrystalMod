@@ -41,14 +41,15 @@ import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.IAutoCrafter;
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.ItemPattern;
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.TileCrafter;
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.task.BasicCraftingTask;
+import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.task.CraftingProcess;
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.task.ICraftingTask;
-import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.task.ProcessingCraftingTask;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.INetworkContainer;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.TileEntityPanel;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.wireless.TileEntityWirelessPanel;
 import alec_wam.CrystalMod.tiles.pipes.estorage.storage.hdd.INetworkItemProvider;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.Lang;
+import alec_wam.CrystalMod.util.ModLogger;
 
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
@@ -480,18 +481,10 @@ public class EStorageNetwork extends AbstractPipeNetwork {
 
 		if (!craftingTasks.empty()) {
 			ICraftingTask top = craftingTasks.peek();
-			World world = DimensionManager.isDimensionRegistered(top
-					.getPattern().crafterDim) ? FMLCommonHandler.instance()
-					.getMinecraftServerInstance()
-					.worldServerForDimension(top.getPattern().crafterDim)
-					: null;
-			if (world != null) {
-				if (ticks % top.getPattern().getCrafter(world).getSpeed() == 0
-						&& top.update(this)) {
-					top.onDone(this);
+			if (ticks % top.getPattern().getCrafter().getSpeed() == 0 && top.update(this)) {
+				top.onDone(this);
 
-					craftingTasks.pop();
-				}
+				craftingTasks.pop();
 			}
 		}
 
@@ -539,8 +532,7 @@ public class EStorageNetwork extends AbstractPipeNetwork {
 				ItemStack patStack = crafter.getPatterns().getStackInSlot(s);
 
 				if (patStack != null && ItemPattern.isValid(patStack)) {
-					CraftingPattern pattern = new CraftingPattern(crafter,
-							patStack);
+					CraftingPattern pattern = new CraftingPattern(crafter.getWorld(), crafter, patStack);
 					patterns.add(pattern);
 					for (ItemStack stack : pattern.getOutputs()) {
 						if (stack != null) {
@@ -580,8 +572,7 @@ public class EStorageNetwork extends AbstractPipeNetwork {
 		addCraftingTask(task);
 	}
 
-	public void scheduleCraftingTaskIfUnscheduled(ItemStack stack,
-			int toSchedule) {
+	public void scheduleCraftingTaskIfUnscheduled(ItemStack stack, int toSchedule) {
 		int alreadyScheduled = 0;
 
 		for (ICraftingTask task : getCraftingTasks()) {
@@ -592,12 +583,10 @@ public class EStorageNetwork extends AbstractPipeNetwork {
 			}
 		}
 
-		for (int i = 0; i < toSchedule - alreadyScheduled; ++i) {
-			CraftingPattern pattern = getPatternWithBestScore(stack);
+		CraftingPattern pattern = getPatternWithBestScore(stack);
 
-			if (pattern != null) {
-				addCraftingTaskAsLast(createCraftingTask(pattern));
-			}
+		if (pattern != null) {
+			addCraftingTaskAsLast(createCraftingTask(stack, pattern, toSchedule - alreadyScheduled));
 		}
 	}
 
@@ -605,12 +594,9 @@ public class EStorageNetwork extends AbstractPipeNetwork {
 		craftingTasksToAddAsLast.add(task);
 	}
 
-	public ICraftingTask createCraftingTask(CraftingPattern pattern) {
-		if (pattern.isProcessing()) {
-			return new ProcessingCraftingTask(pattern);
-		} else {
-			return new BasicCraftingTask(pattern);
-		}
+	public ICraftingTask createCraftingTask(ItemStack request, CraftingPattern pattern, int amt) {
+		if(amt < 0)ModLogger.info("Trying to add "+request+" with quantity 0");
+		return new BasicCraftingTask(request, pattern, amt);
 	}
 
 	public void cancelCraftingTask(ICraftingTask task) {
@@ -696,12 +682,11 @@ public class EStorageNetwork extends AbstractPipeNetwork {
 		if (data != null && quantity > 0 && quantity <= 500) {
 			ItemStack requested = data.stack;
 
-			int quantityPerRequest = 0;
-
 			CraftingPattern pattern = getPatternWithBestScore(requested);
 
 			if (pattern != null) {
-				for (ItemStack output : pattern.getOutputs()) {
+				addCraftingTaskAsLast(createCraftingTask(requested, pattern, quantity));
+				/*for (ItemStack output : pattern.getOutputs()) {
 					if (ItemUtil.canCombine(requested, output)) {
 						quantityPerRequest += output.stackSize;
 						if (!pattern.isProcessing()) {
@@ -714,7 +699,7 @@ public class EStorageNetwork extends AbstractPipeNetwork {
 					addCraftingTaskAsLast(createCraftingTask(pattern));
 
 					quantity -= quantityPerRequest;
-				}
+				}*/
 			}
 		}
 	}
@@ -730,15 +715,22 @@ public class EStorageNetwork extends AbstractPipeNetwork {
 	}
 
 	public void notifyInsert(ItemStack stack) {
+		/*int inserted = stack.stackSize;
 		for (int i = 0; i < stack.stackSize; ++i) {
 			if (!craftingTasks.empty()) {
 				ICraftingTask top = craftingTasks.peek();
 
-				if (top instanceof ProcessingCraftingTask) {
-					((ProcessingCraftingTask) top).onPushed(stack);
-				}
+				for (CraftingProcess processable : top.getToProcess()) {
+                    if (inserted == 0) {
+                        break;
+                    }
+
+                    if (processable.onReceiveOutput(stack)) {
+                        inserted--;
+                    }
+                }
 			}
-		}
+		}*/
 
 		Iterator<IInsertListener> iter = listeners.iterator();
 		while (iter.hasNext()) {

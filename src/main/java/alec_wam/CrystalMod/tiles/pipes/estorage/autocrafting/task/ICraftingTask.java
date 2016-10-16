@@ -1,5 +1,7 @@
 package alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.task;
 
+import java.util.List;
+
 import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetwork;
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.CraftingPattern;
 import net.minecraft.nbt.NBTTagCompound;
@@ -16,4 +18,6 @@ public interface ICraftingTask {
     void writeToNBT(NBTTagCompound tag);
 
     String getInfo();
+
+	List<CraftingProcess> getToProcess();
 }

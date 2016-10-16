@@ -1,147 +1,148 @@
 package alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import alec_wam.CrystalMod.util.ItemUtil;
+
+import com.google.common.collect.Lists;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.InventoryCrafting;
+import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.items.ItemHandlerHelper;
 
 public class CraftingPattern {
-    public static final String NBT = "Pattern";
-    public static final String NBT_CRAFTER_X = "CrafterX";
-    public static final String NBT_CRAFTER_Y = "CrafterY";
-    public static final String NBT_CRAFTER_Z = "CrafterZ";
-    public static final String NBT_CRAFTER_DIM = "CrafterDim";
 
-    private int crafterX;
-    private int crafterY;
-    private int crafterZ;
-    public int crafterDim;
+	private World world;
     private IAutoCrafter crafter;
-    private boolean processing;
-    private ItemStack[] inputs;
-    private ItemStack[] outputs;
-    private ItemStack[] byproducts;
+    private ItemStack pattern;
+    private List<ItemStack> inputs;
+    private List<ItemStack> outputs;
+    private List<ItemStack> byproducts;
 
     
-    public CraftingPattern(IAutoCrafter crafter, ItemStack pattern){
-    	this(crafter.getPos().getX(), crafter.getPos().getY(), crafter.getPos().getZ(), crafter.getDimension(), ItemPattern.isProcessing(pattern), ItemPattern.getInputs(pattern), ItemPattern.getOutputs(pattern), ItemPattern.getByproducts(pattern));
-    }
+    public CraftingPattern(World world, IAutoCrafter crafter, ItemStack pattern){
+    	this.world = world;
+    	this.crafter = crafter;
+    	this.pattern = pattern;
+        this.inputs = Lists.newArrayList();
+        this.outputs = Lists.newArrayList();
+        this.byproducts = Lists.newArrayList();
+        
+        InventoryCrafting inv = new InventoryCrafting(new Container() {
+            @Override
+            public boolean canInteractWith(EntityPlayer player) {
+                return false;
+            }
+        }, 3, 3);
 
-    public CraftingPattern(int crafterX, int crafterY, int crafterZ, int crafterDim, boolean processing, ItemStack[] inputs, ItemStack[] outputs, ItemStack[] byproducts) {
-        this.crafterX = crafterX;
-        this.crafterY = crafterY;
-        this.crafterZ = crafterZ;
-        this.crafterDim = crafterDim;
-        this.processing = processing;
-        this.inputs = inputs;
-        this.outputs = outputs;
-        this.byproducts = byproducts;
-    }
+        for (int i = 0; i < 9; ++i) {
+        	List<ItemStack> list = ItemPattern.getInputs(pattern);
+            ItemStack slot = i >= list.size() ? null : list.get(i);
 
-    public IAutoCrafter getCrafter(World world) {
-        if (crafter == null) {
-            TileEntity tile = world.getTileEntity(new BlockPos(crafterX, crafterY, crafterZ));
-            if(tile instanceof IAutoCrafter){
-            	crafter = (IAutoCrafter)tile;
+            if (slot != null) {
+                for (int j = 0; j < slot.stackSize; ++j) {
+                    inputs.add(ItemHandlerHelper.copyStackWithSize(slot, 1));
+                }
+
+                inv.setInventorySlotContents(i, slot);
             }
         }
 
+        if (!ItemPattern.isProcessing(pattern)) {
+            ItemStack output = CraftingManager.getInstance().findMatchingRecipe(inv, world);
+
+            if (output != null) {
+                outputs.add(output.copy());
+
+                for (ItemStack remaining : CraftingManager.getInstance().getRemainingItems(inv, world)) {
+                    if (remaining != null) {
+                        byproducts.add(remaining.copy());
+                    }
+                }
+            }
+        } else {
+            outputs = ItemPattern.getOutputs(pattern);
+        }
+    }
+
+    public ItemStack getPatternStack(){
+    	return pattern;
+    }
+    
+    public IAutoCrafter getCrafter() {
         return crafter;
     }
 
     public boolean isProcessing() {
-        return processing;
+        return ItemPattern.isProcessing(pattern);
+    }
+    
+    public boolean isOredict() {
+        return ItemPattern.isOredict(pattern);
     }
 
-    public ItemStack[] getInputs() {
+    public List<ItemStack> getInputs() {
         return inputs;
     }
 
-    public ItemStack[] getOutputs() {
+    public List<ItemStack> getOutputs() {
         return outputs;
     }
 
-    public ItemStack[] getByproducts() {
+    public List<ItemStack> getByproducts() {
         return byproducts;
     }
+    
+    public List<ItemStack> getByproducts(ItemStack[] took) {
+        List<ItemStack> byproducts = new ArrayList<ItemStack>();
 
-    public void writeToNBT(NBTTagCompound tag) {
-        tag.setBoolean(ItemPattern.NBT_PROCESSING, processing);
-
-        NBTTagList inputsTag = new NBTTagList();
-        for (ItemStack input : inputs) {
-            inputsTag.appendTag(input.serializeNBT());
-        }
-        tag.setTag(ItemPattern.NBT_INPUTS, inputsTag);
-
-        NBTTagList outputsTag = new NBTTagList();
-        for (ItemStack output : outputs) {
-            outputsTag.appendTag(output.serializeNBT());
-        }
-        tag.setTag(ItemPattern.NBT_OUTPUTS, outputsTag);
-
-        if (byproducts != null) {
-            NBTTagList byproductsTag = new NBTTagList();
-            for (ItemStack byproduct : byproducts) {
-                byproductsTag.appendTag(byproduct.serializeNBT());
+        InventoryCrafting inv = new InventoryCrafting(new Container() {
+            @Override
+            public boolean canInteractWith(EntityPlayer player) {
+                return false;
             }
-            tag.setTag(ItemPattern.NBT_BYPRODUCTS, byproductsTag);
+        }, 3, 3);
+
+        for (int i = 0; i < 9; ++i) {
+            inv.setInventorySlotContents(i, took[i]);
         }
 
-        tag.setInteger(NBT_CRAFTER_X, crafter.getPos().getX());
-        tag.setInteger(NBT_CRAFTER_Y, crafter.getPos().getY());
-        tag.setInteger(NBT_CRAFTER_Z, crafter.getPos().getZ());
-        tag.setInteger(NBT_CRAFTER_DIM, crafter.getDimension());
+        for (ItemStack remaining : CraftingManager.getInstance().getRemainingItems(inv, world)) {
+            if (remaining != null) {
+                byproducts.add(remaining.copy());
+            }
+        }
+
+        return byproducts;
     }
+    
+    public boolean isValid() {
+        return !inputs.isEmpty() && !outputs.isEmpty();
+    }
+    
+    public int getQuantityPerRequest(ItemStack requested) {
+        int quantity = 0;
 
-    public static CraftingPattern readFromNBT(NBTTagCompound tag) {
-        int cx = tag.getInteger(NBT_CRAFTER_X);
-        int cy = tag.getInteger(NBT_CRAFTER_Y);
-        int cz = tag.getInteger(NBT_CRAFTER_Z);
-        int cd = tag.getInteger(NBT_CRAFTER_DIM);
+        for (ItemStack output : outputs) {
+            if (ItemUtil.canCombine(requested, output)) {
+                quantity += output.stackSize;
 
-        boolean processing = tag.getBoolean(ItemPattern.NBT_PROCESSING);
-
-        NBTTagList inputsTag = tag.getTagList(ItemPattern.NBT_INPUTS, Constants.NBT.TAG_COMPOUND);
-        ItemStack inputs[] = new ItemStack[inputsTag.tagCount()];
-
-        for (int i = 0; i < inputsTag.tagCount(); ++i) {
-            inputs[i] = ItemStack.loadItemStackFromNBT(inputsTag.getCompoundTagAt(i));
-
-            if (inputs[i] == null) {
-                return null;
-            }
-        }
-
-        NBTTagList outputsTag = tag.getTagList(ItemPattern.NBT_OUTPUTS, Constants.NBT.TAG_COMPOUND);
-        ItemStack outputs[] = new ItemStack[outputsTag.tagCount()];
-
-        for (int i = 0; i < outputsTag.tagCount(); ++i) {
-            outputs[i] = ItemStack.loadItemStackFromNBT(outputsTag.getCompoundTagAt(i));
-
-            if (outputs[i] == null) {
-                return null;
-            }
-        }
-
-        ItemStack byproducts[] = new ItemStack[0];
-
-        if (tag.hasKey(ItemPattern.NBT_BYPRODUCTS)) {
-            NBTTagList byproductsTag = tag.getTagList(ItemPattern.NBT_BYPRODUCTS, Constants.NBT.TAG_COMPOUND);
-            byproducts = new ItemStack[byproductsTag.tagCount()];
-
-            for (int i = 0; i < byproductsTag.tagCount(); ++i) {
-                byproducts[i] = ItemStack.loadItemStackFromNBT(byproductsTag.getCompoundTagAt(i));
-
-                if (byproducts[i] == null) {
-                    return null;
+                if (!ItemPattern.isProcessing(pattern)) {
+                    break;
                 }
             }
         }
 
-        return new CraftingPattern(cx, cy, cz, cd, processing, inputs, outputs, byproducts);
+        return quantity;
     }
 }

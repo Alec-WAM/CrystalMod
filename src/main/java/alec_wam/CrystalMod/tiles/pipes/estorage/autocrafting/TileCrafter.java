@@ -19,6 +19,7 @@ import alec_wam.CrystalMod.tiles.TileEntityMod;
 import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetwork;
 import alec_wam.CrystalMod.tiles.pipes.estorage.INetworkTile;
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.task.ICraftingTask;
+import alec_wam.CrystalMod.util.ItemUtil;
 
 public class TileCrafter extends TileEntityMod implements INetworkTile, IAutoCrafter {
 
@@ -53,7 +54,7 @@ public class TileCrafter extends TileEntityMod implements INetworkTile, IAutoCra
 	public void onDisconnected() {
 		if(getNetwork() == null)return;
 		for (ICraftingTask task : getNetwork().getCraftingTasks()) {
-            if (task.getPattern().getCrafter(worldObj) == this) {
+            if (task.getPattern().getCrafter() == this) {
             	getNetwork().cancelCraftingTask(task);
             }
         }
@@ -151,6 +152,10 @@ public class TileCrafter extends TileEntityMod implements INetworkTile, IAutoCra
 	@Override
 	public int getDimension() {
 		return worldObj !=null ? worldObj.provider.getDimension() : 0;
+	}
+	
+	public IItemHandler getFacingInventory(){
+		return ItemUtil.getItemHandler(getFacingTile(), getDirection().getOpposite());
 	}
 
 }

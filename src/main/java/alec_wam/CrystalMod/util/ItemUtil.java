@@ -857,18 +857,18 @@ public class ItemUtil {
         return handler;
     }
     
-    public static void combineMultipleItemsInTooltip(List<String> lines, ItemStack... stacks) {
+    public static void combineMultipleItemsInTooltip(List<String> lines, List<ItemStack> stacks) {
         Set<Integer> combinedIndices = new HashSet<Integer>();
 
-        for (int i = 0; i < stacks.length; ++i) {
+        for (int i = 0; i < stacks.size(); ++i) {
             if (!combinedIndices.contains(i)) {
-                String data = stacks[i].getDisplayName();
+                String data = stacks.get(i).getDisplayName();
 
-                int amount = stacks[i].stackSize;
+                int amount = stacks.get(i).stackSize;
 
-                for (int j = i + 1; j < stacks.length; ++j) {
-                    if (canCombine(stacks[i], stacks[j])) {
-                        amount += stacks[j].stackSize;
+                for (int j = i + 1; j < stacks.size(); ++j) {
+                    if (canCombine(stacks.get(i), stacks.get(j))) {
+                        amount += stacks.get(j).stackSize;
 
                         combinedIndices.add(j);
                     }

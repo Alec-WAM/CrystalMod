@@ -85,6 +85,7 @@ public class TileEntityPanelCrafting extends TileEntityPanel {
     }
 	
 	public void onCrafted(EntityPlayer player) {
+		//matrix.clear();
 		ItemStack[] remainder = CraftingManager.getInstance().getRemainingItems(matrix, worldObj);
 
         for (int i = 0; i < matrix.getSizeInventory(); ++i) {

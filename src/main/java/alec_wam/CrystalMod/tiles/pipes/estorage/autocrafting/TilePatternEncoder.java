@@ -38,7 +38,10 @@ public class TilePatternEncoder extends TileEntityMod implements IMessageHandler
     private InventoryCrafting matrix = new InventoryCrafting(craftingContainer, 3, 3);
     private InventoryCraftResult result = new InventoryCraftResult();
 	
+    protected boolean isOreDict;
+    
     public void writeCustomNBT(NBTTagCompound nbt){
+    	nbt.setBoolean("isOreDict", isOreDict);
     	NBTTagList tagList = new NBTTagList();
 
         for (int i = 0; i < patterns.getSlots(); i++) {
@@ -57,6 +60,7 @@ public class TilePatternEncoder extends TileEntityMod implements IMessageHandler
     }
     
     public void readCustomNBT(NBTTagCompound nbt){
+    	this.isOreDict = nbt.getBoolean("isOreDict");
     	NBTTagList tagList = nbt.getTagList("Inventory", Constants.NBT.TAG_COMPOUND);
 
         for (int i = 0; i < tagList.tagCount(); i++) {
@@ -94,7 +98,8 @@ public class TilePatternEncoder extends TileEntityMod implements IMessageHandler
             ItemPattern.addOutput(pattern, result.getStackInSlot(0));
 
             ItemPattern.setProcessing(pattern, false);
-
+            ItemPattern.setOredict(pattern, this.isOreDict);
+            
             for (int i = 0; i < 9; ++i) {
                 ItemStack ingredient = matrix.getStackInSlot(i);
 
@@ -146,6 +151,11 @@ public class TilePatternEncoder extends TileEntityMod implements IMessageHandler
 	public void handleMessage(String messageId, NBTTagCompound messageData,	boolean client) {
 		if(messageId.equalsIgnoreCase("Encode")){
 			onCreatePattern();
+		}
+		
+		if(messageId.equalsIgnoreCase("Ore")){
+			boolean old = this.isOreDict;
+			this.isOreDict = !old;
 		}
 	}
     

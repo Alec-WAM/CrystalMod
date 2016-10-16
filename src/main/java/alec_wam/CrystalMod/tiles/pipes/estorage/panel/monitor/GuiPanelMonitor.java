@@ -140,22 +140,26 @@ public class GuiPanelMonitor extends GuiContainer implements IGuiScreen {
 
                 GlStateManager.popMatrix();
 
-                if (GuiUtil.inBounds(x, y, 16, 16, mouseX-guiLeft, mouseY-guiTop) && !task.info.trim().equals("")) {
-                	String[] preFix = task.info.split("\n");
-                	for (int j = 0; j < preFix.length; ++j) {
-                		 String line = preFix[j];
-                		 if (line.startsWith("T=")) {
-                			 String data = line.substring(2);
-                			 String[] items = data.split("&");
-                			 for(String itemS : items){
-                				 lines.add(itemS.substring(0, 2)+Lang.localize(itemS.substring(2), false));
-                			 }
-                		 } else if (line.startsWith("I=")) {
-                			 line = TextFormatting.YELLOW + Lang.localize(line.substring(2), false);
-                			 lines.add(line);
-                		 }
-                		 
-                    }
+                if (GuiUtil.inBounds(x, y, 16, 16, mouseX-guiLeft, mouseY-guiTop)) {
+                	if(!task.info.trim().equals("")){
+	                	String[] preFix = task.info.split("\n");
+	                	for (int j = 0; j < preFix.length; ++j) {
+	                		 String line = preFix[j];
+	                		 if (line.startsWith("T=")) {
+	                			 String data = line.substring(2);
+	                			 String[] items = data.split("&");
+	                			 for(String itemS : items){
+	                				 lines.add(itemS.substring(0, 2)+Lang.localize(itemS.substring(2), false));
+	                			 }
+	                		 } else if (line.startsWith("I=")) {
+	                			 line = TextFormatting.YELLOW + Lang.localize(line.substring(2), false);
+	                			 lines.add(line);
+	                		 }
+	                		 
+	                    }
+                	}else {
+                		lines.add("Empty Info");
+                	}
                 }
             }
 

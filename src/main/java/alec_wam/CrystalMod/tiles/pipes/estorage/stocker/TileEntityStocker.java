@@ -1,5 +1,6 @@
 package alec_wam.CrystalMod.tiles.pipes.estorage.stocker;
 
+import net.minecraft.world.World;
 import net.minecraftforge.items.IItemHandler;
 import alec_wam.CrystalMod.tiles.TileEntityInventory;
 import alec_wam.CrystalMod.tiles.pipes.TileEntityPipe.RedstoneMode;
@@ -19,8 +20,8 @@ public class TileEntityStocker extends TileEntityInventory implements INetworkTi
 		super.update();
 		if(worldObj.isRemote || network == null || getStackInSlot(0) == null)return;
 		if(RedstoneMode.ON.passes(getWorld(), getPos())){
-			CraftingPattern pattern = new CraftingPattern(this, getStackInSlot(0));
-			network.addCraftingTaskIfNotCrafting(network.createCraftingTask(pattern));
+			CraftingPattern pattern = new CraftingPattern(worldObj, this, getStackInSlot(0));
+			//network.addCraftingTaskIfNotCrafting(network.createCraftingTask(pattern));
 		}
 	}
 
@@ -40,7 +41,7 @@ public class TileEntityStocker extends TileEntityInventory implements INetworkTi
 	public void onDisconnected() {
 		if(getNetwork() == null)return;
 		for (ICraftingTask task : getNetwork().getCraftingTasks()) {
-            if (task.getPattern().getCrafter(worldObj) == this) {
+            if (task.getPattern().getCrafter() == this) {
             	getNetwork().cancelCraftingTask(task);
             }
         }
@@ -60,10 +61,20 @@ public class TileEntityStocker extends TileEntityInventory implements INetworkTi
 	public boolean showPatterns() {
 		return false;
 	}
+	
+	@Override
+	public World getWorld() {
+		return worldObj;
+	}
 
 	@Override
 	public int getDimension() {
 		return worldObj !=null ? worldObj.provider.getDimension() : 0;
+	}
+
+	@Override
+	public IItemHandler getFacingInventory() {
+		return null;
 	}
 
 }

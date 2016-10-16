@@ -17,6 +17,7 @@ public class TileProcessingPatternEncoder extends TilePatternEncoder {
             ItemStack pattern = new ItemStack(ModItems.craftingPattern);
 
             ItemPattern.setProcessing(pattern, true);
+            ItemPattern.setOredict(pattern, this.isOreDict);
 
             for (int i = 0; i < 18; ++i) {
                 if (configuration.getStackInSlot(i) != null) {

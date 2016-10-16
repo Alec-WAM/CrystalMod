@@ -24,7 +24,7 @@ public class TileEntityPanelMonitor extends TileEntityPanel implements ISynchron
             for (ICraftingTask task : getNetwork().getCraftingTasks()) {
                 ByteBufUtils.writeUTF8String(buf, task.getInfo());
 
-                buf.writeInt(task.getPattern().getOutputs().length);
+                buf.writeInt(task.getPattern().getOutputs().size());
 
                 for (ItemStack output : task.getPattern().getOutputs()) {
                     ByteBufUtils.writeItemStack(buf, output);

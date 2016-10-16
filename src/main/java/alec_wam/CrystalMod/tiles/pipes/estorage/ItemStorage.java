@@ -22,6 +22,8 @@ import com.google.common.collect.Lists;
 
 import alec_wam.CrystalMod.network.CompressedDataInput;
 import alec_wam.CrystalMod.network.CompressedDataOutput;
+import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.task.CraftingProcess;
+import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.task.ICraftingTask;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.Lang;
 
@@ -41,10 +43,11 @@ public class ItemStorage {
 	public int addItem(ItemStack stack, boolean sim, boolean sendUpdate) {
 		if (stack == null)
 			return 0;
+		final int ogSize = stack.stackSize;
 		int inserted = 0;
 		Iterator<List<NetworkedHDDInterface>> i1 = network.interfaces.values().iterator();
-		while(i1.hasNext()){
-			ItemStack insertCopy = stack.copy();
+		ItemStack insertCopy = stack.copy();
+		master : while(i1.hasNext()){
 			final List<NetworkedHDDInterface> list = i1.next();
 			Iterator<NetworkedHDDInterface> ii = list.iterator();
 			//FIRST PASS
@@ -53,17 +56,17 @@ public class ItemStorage {
 				final NetworkedHDDInterface inter = ii.next();
 				if (inter.getInterface() != null) {
 					if(inter.getInterface().getNetworkInventory() !=null){
-						int amt = inter.getInterface().getNetworkInventory().insertItem(network, insertCopy, true, sim, sendUpdate);
+						int amt = inter.getInterface().getNetworkInventory().insertItem(network, insertCopy, false, sim, sendUpdate);
 						insertCopy.stackSize-=amt;
 						inserted+=amt;
 						if(insertCopy.stackSize <= 0){
-							return inserted;
+							break master;
 						}
 					}
 				}
 			}
 			
-			//SECOND PASS
+			/*//SECOND PASS
 			ii = list.iterator();
 			while(ii.hasNext()){
 				final NetworkedHDDInterface inter = ii.next();
@@ -77,12 +80,38 @@ public class ItemStorage {
 						}
 					}
 				}
-			}
+			}*/
 		}
+		
+		// If the stack size of the remainder is negative, it means of the original size abs(remainder.stackSize) items have been voided
+        int insert;
 
-		if(network.masterNetwork !=null){
-			return network.masterNetwork.getItemStorage().addItem(stack, sim, sendUpdate);
-		}
+        if (inserted >= ogSize) {
+        	insert = ogSize;
+        } else {
+        	insert = ogSize - inserted;
+        }
+
+        if (!sim && insert > 0) {
+            for (int i = 0; i < insert; ++i) {
+                for (ICraftingTask task : network.getCraftingTasks()) {
+                    if (insert == 0) {
+                        break;
+                    }
+
+                    for (CraftingProcess processable : task.getToProcess()) {
+                        if (insert == 0) {
+                            break;
+                        }
+
+                        if (processable.onReceiveOutput(stack)) {
+                        	insert--;
+                        }
+                    }
+                }
+            }
+        }
+		
 		return inserted;
 	}
 
@@ -111,6 +140,22 @@ public class ItemStorage {
 		if(data == null || data.stack == null || data.isCrafting)return null;
 		ItemStack ret = data.stack.copy();
 		int removedFake = removeItem(data, stack.stackSize, sim, sendUpdate);
+		
+		ret.stackSize = removedFake;
+		if(ret.stackSize <=0){
+			return null;
+		}
+		return ret;
+	}
+	
+	public ItemStack removeItemSpecial(ItemStackData data, int amt, boolean sim){
+		return this.removeItemSpecial(data, amt, sim, true);
+	}
+	
+	public ItemStack removeItemSpecial(ItemStackData data, int amt, boolean sim, boolean sendUpdate){
+		if(data == null || data.stack == null || data.isCrafting)return null;
+		ItemStack ret = data.stack.copy();
+		int removedFake = removeItem(data, amt, sim, sendUpdate);
 		
 		ret.stackSize = removedFake;
 		if(ret.stackSize <=0){

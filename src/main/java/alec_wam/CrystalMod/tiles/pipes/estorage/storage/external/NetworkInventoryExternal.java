@@ -20,6 +20,7 @@ import alec_wam.CrystalMod.tiles.pipes.estorage.panel.INetworkContainer;
 import alec_wam.CrystalMod.tiles.pipes.estorage.storage.hdd.inventory.INetworkInventory;
 import alec_wam.CrystalMod.util.FluidUtil;
 import alec_wam.CrystalMod.util.ItemUtil;
+import alec_wam.CrystalMod.util.ModLogger;
 
 import com.google.common.collect.Lists;
 
@@ -214,12 +215,12 @@ public class NetworkInventoryExternal implements INetworkInventory {
 					FluidStack internalStack = prop.getContents();
 					if(internalStack !=null){
 						if(FluidUtil.canCombine(stack, internalStack)){
-							ret = handler.fill(stack, sim);
+							ret = handler.fill(stack, !sim);
 						}
 					}
 				}
 			} else {
-				ret = handler.fill(stack, sim);
+				ret = handler.fill(stack, !sim);
 			}
 			if(ret > 0 && sendUpdate){
 				FluidStack copy = stack.copy();

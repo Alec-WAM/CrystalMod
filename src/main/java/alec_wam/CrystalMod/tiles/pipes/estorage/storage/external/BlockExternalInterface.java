@@ -19,6 +19,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.MathHelper;
@@ -45,9 +46,10 @@ public class BlockExternalInterface extends BlockContainer implements ICustomMod
         ModelLoader.setCustomStateMapper(this, ignorePower.build());
     }
 	
-	public int getRenderType()
+	@SideOnly(Side.CLIENT)
+	public EnumBlockRenderType getRenderType(IBlockState state)
     {
-        return 3;
+        return EnumBlockRenderType.MODEL;
     }
 
 	@Override

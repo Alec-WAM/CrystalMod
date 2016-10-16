@@ -21,7 +21,7 @@ public class CraftingTaskScheduler {
         if (pattern != null) {
             scheduledItem = item;
 
-            network.addCraftingTaskAsLast(network.createCraftingTask(pattern));
+            network.addCraftingTaskAsLast(network.createCraftingTask(scheduledItem, pattern, scheduledItem.stackSize));
         }
     }
 
