@@ -118,8 +118,7 @@ public class ContainerBackpack extends ContainerBackpackSlotClick implements ICo
     @Override
     public ItemStack slotClick(int slotNum, int key, ClickType type, EntityPlayer player)
     {
-    	ModLogger.info("Slot Click "+slotNum);
-        ItemStack modularStackPre = this.inventoryItemModular.getModularItemStack();
+    	ItemStack modularStackPre = this.inventoryItemModular.getModularItemStack();
 
         ItemStack stack = super.slotClick(slotNum, key, type, player);
 

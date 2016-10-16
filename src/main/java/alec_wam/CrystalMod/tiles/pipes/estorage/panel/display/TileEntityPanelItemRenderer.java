@@ -1,5 +1,7 @@
 package alec_wam.CrystalMod.tiles.pipes.estorage.panel.display;
 
+import java.awt.Color;
+
 import org.lwjgl.opengl.GL11;
 
 import alec_wam.CrystalMod.util.client.RenderUtil;
@@ -65,49 +67,8 @@ public class TileEntityPanelItemRenderer<T extends TileEntityPanelItem> extends 
 		boolean itemBlock = false;
 		
 		if(te.displayFluid !=null){
-			//GlStateManager.disableRescaleNormal();
-			//RenderHelper.disableStandardItemLighting();
-			GlStateManager.pushMatrix();
-			GlStateManager.disableLighting();
-			//GlStateManager.disableTexture2D();
-			/*GlStateManager.translate( 0.0f, 0.14f, 0 );*/
-			//GlStateManager.rotate(180, 0, 0, 1);
-        	GlStateManager.rotate(180, 0, 1, 0);
-        	GlStateManager.translate(-0.5, -0.5, 0.01);
-        	GlStateManager.scale(1.0/16f, 1.0/16f, 1.0/16f);
-        	//GlStateManager.scale(0.015625F*2, 0.015625F*2, 0.015625F*2);
-        	
-        	TextureAtlasSprite icon = RenderUtil.getStillTexture(te.displayFluid);
-    	    if (icon != null) {
-    	        int color = te.displayFluid.getFluid().getColor(te.displayFluid);
-	    	    GL11.glColor3ub((byte) (color >> 16 & 0xFF), (byte) (color >> 8 & 0xFF), (byte) (color & 0xFF));
-	    	    
-	        	double drawWidth = 16;//(16*(1.0f/16.0f));
-	        	double drawHeight = 16;//(16*(1.0f/16.0f));
-	
-		        double drawX = 0;
-		        double drawY = 0;
-	
-		        double minU = icon.getMinU();
-		        double maxU = icon.getMaxU();
-		        double minV = icon.getMinV();
-		        double maxV = icon.getMaxV();
-	
-		        Tessellator tessellator = Tessellator.getInstance();
-		        VertexBuffer tes = tessellator.getBuffer();
-		        tes.begin(7, DefaultVertexFormats.POSITION_TEX);
-		        tes.pos(drawX, drawY + drawHeight, 0).tex(minU, maxV).endVertex();
-		        tes.pos(drawX + drawWidth, drawY + drawHeight, 0).tex(maxU, maxV).endVertex();
-		        tes.pos(drawX + drawWidth, drawY, 0).tex(maxU, minV).endVertex();
-		        tes.pos(drawX, drawY, 0).tex(minU, minV).endVertex();
-		        tessellator.draw();
-				
-			}
-    	    GlStateManager.enableLighting();
-    	    //GlStateManager.enableTexture2D();
-    	    GlStateManager.popMatrix();
-			//RenderHelper.enableStandardItemLighting();
-			//GlStateManager.enableRescaleNormal();
+			float d = 0.005f;
+			RenderUtil.renderFluidCuboid(te.displayFluid, te.getPos(), -0.5, -0.5, -0.01, d+0.1d, d+0.1d, d, 0.9d - d, 0.9d - d, d);
 		} else if(te.displayItem !=null){
 			itemBlock = renderItem(te.displayItem); 
 		}

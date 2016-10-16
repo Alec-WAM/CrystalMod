@@ -715,23 +715,6 @@ public class EStorageNetwork extends AbstractPipeNetwork {
 	}
 
 	public void notifyInsert(ItemStack stack) {
-		/*int inserted = stack.stackSize;
-		for (int i = 0; i < stack.stackSize; ++i) {
-			if (!craftingTasks.empty()) {
-				ICraftingTask top = craftingTasks.peek();
-
-				for (CraftingProcess processable : top.getToProcess()) {
-                    if (inserted == 0) {
-                        break;
-                    }
-
-                    if (processable.onReceiveOutput(stack)) {
-                        inserted--;
-                    }
-                }
-			}
-		}*/
-
 		Iterator<IInsertListener> iter = listeners.iterator();
 		while (iter.hasNext()) {
 			iter.next().onItemInserted(stack);

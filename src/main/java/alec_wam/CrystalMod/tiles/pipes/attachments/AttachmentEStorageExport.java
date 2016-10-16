@@ -41,7 +41,7 @@ import com.google.common.collect.Lists;
 
 public class AttachmentEStorageExport extends AttachmentData {
 
-	public BasicItemHandler filters = new BasicItemHandler(10, (IItemValidator[])null);
+	public BasicItemHandler filters = new BasicItemHandler(10, new IItemValidator[0]);
 	
 	public RedstoneMode rMode = RedstoneMode.ON;
 	
