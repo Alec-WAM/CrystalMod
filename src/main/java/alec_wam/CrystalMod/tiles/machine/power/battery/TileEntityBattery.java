@@ -69,8 +69,8 @@ public class TileEntityBattery extends TileEntityIOSides implements IMessageHand
 					TileEntity tile = this.getWorld().getTileEntity(getPos().offset(face));
 					if(tile !=null && tile instanceof ICEnergyReceiver){
 						ICEnergyReceiver rec = (ICEnergyReceiver)tile;
-						int drain = rec.fillCEnergy(face.getOpposite(), Math.min(MAX_SEND[0], energyStorage.getCEnergyStored()), false);
 						boolean creative = BlockBattery.fromMeta(getBlockMetadata()) == BatteryType.CREATIVE;
+						int drain = rec.fillCEnergy(face.getOpposite(), creative ? energyStorage.getMaxExtract() : Math.min(energyStorage.getMaxExtract(), energyStorage.getCEnergyStored()), false);
 						if(!creative){
 							this.energyStorage.modifyEnergyStored(-drain);
 							if(drain > 0){

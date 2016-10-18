@@ -152,9 +152,14 @@ public class BlockBattery extends BlockContainer implements ICustomModel {
 	    	}
     	}
 
-    	tooltip.add("Energy: "+energy+" / "+TileEntityBattery.MAX_ENERGY[type.getMeta()] + " "+Lang.localize("power.cu"));
-    	tooltip.add("Max Input: "+TileEntityBattery.MAX_RECEIVE[type.getMeta()]+" "+Lang.localize("power.cu")+"/t");
-    	tooltip.add("Max Output: "+TileEntityBattery.MAX_SEND[type.getMeta()]+" "+Lang.localize("power.cu")+"/t");
+    	if(type == BatteryType.CREATIVE){
+    		tooltip.add("Energy: Infinite "+Lang.localize("power.cu"));
+    		tooltip.add("Max Output: "+TileEntityBattery.MAX_SEND[type.getMeta()]+" "+Lang.localize("power.cu")+"/t");
+    	} else {
+	    	tooltip.add("Energy: "+energy+" / "+TileEntityBattery.MAX_ENERGY[type.getMeta()] + " "+Lang.localize("power.cu"));
+	    	tooltip.add("Max Input: "+TileEntityBattery.MAX_RECEIVE[type.getMeta()]+" "+Lang.localize("power.cu")+"/t");
+	    	tooltip.add("Max Output: "+TileEntityBattery.MAX_SEND[type.getMeta()]+" "+Lang.localize("power.cu")+"/t");
+    	}
     }
     
 	@Override
