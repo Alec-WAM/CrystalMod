@@ -124,7 +124,7 @@ public class BlockBattery extends BlockContainer implements ICustomModel {
 	    return getMetaFromState(state);
 	}
 
-	protected BatteryType fromMeta(int meta) {
+	public static BatteryType fromMeta(int meta) {
 	    if(meta < 0 || meta >= BatteryType.values().length) {
 	      meta = 0;
 	    }

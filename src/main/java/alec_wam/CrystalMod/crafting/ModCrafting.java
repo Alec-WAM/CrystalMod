@@ -256,7 +256,7 @@ public class ModCrafting {
 		for(EnumFacing face : EnumFacing.VALUES){
 			copyListBattery.add("io."+face.name().toLowerCase());
 		}
-		addShapedRecipe(new ItemStack(ModBlocks.battery, 1, BatteryType.BLUE.getMeta()), new Object[]{"#I#", "IFI", "#I#", '#', bluePlate, 'F', machineFrame});
+		addShapedRecipe(new ItemStack(ModBlocks.battery, 1, BatteryType.BLUE.getMeta()), new Object[]{"#I#", "IFI", "#I#", '#', bluePlate, 'F', machineFrame, 'I', blueIngot});
 		ModCrafting.addNBTRecipe(new ItemStack(ModBlocks.battery, 1, BatteryType.RED.getMeta()), copyListBattery, new Object[]{"I#I", "#B#", "I#I", '#', redPlate, 'I', redIngot, 'B', new ItemStack(ModBlocks.battery, 1, BatteryType.BLUE.getMeta())});
 		ModCrafting.addNBTRecipe(new ItemStack(ModBlocks.battery, 1, BatteryType.GREEN.getMeta()), copyListBattery, new Object[]{"I#I", "#B#", "I#I", '#', greenPlate, 'I', greenIngot, 'B', new ItemStack(ModBlocks.battery, 1, BatteryType.RED.getMeta())});
 		ModCrafting.addNBTRecipe(new ItemStack(ModBlocks.battery, 1, BatteryType.DARK.getMeta()), copyListBattery, new Object[]{"I#I", "#B#", "I#I", '#', darkPlate, 'I', darkIngot, 'B', new ItemStack(ModBlocks.battery, 1, BatteryType.GREEN.getMeta())});
@@ -272,11 +272,11 @@ public class ModCrafting {
 
 		addShapedOreRecipe(new ItemStack(ModBlocks.storagePanel, 1, PanelType.STORAGE.getMeta()), new Object[]{"###", "IGI", "#P#", '#', dIronPlate, 'G', "blockGlassBlack", 'I', "ingotCrystal", 'P', pipeEStorage});
 		addShapelessOreRecipe(new ItemStack(ModBlocks.storagePanel, 1, PanelType.CRAFTING.getMeta()), new Object[]{new ItemStack(ModBlocks.storagePanel), "workbench"});
-		addShapelessOreRecipe(new ItemStack(ModBlocks.storagePanel, 1, PanelType.DISPLAY.getMeta()), new Object[]{new ItemStack(ModBlocks.storagePanel), Items.COMPARATOR});
+		addShapelessRecipe(new ItemStack(ModBlocks.storagePanel, 1, PanelType.DISPLAY.getMeta()), new Object[]{new ItemStack(ModBlocks.storagePanel), Items.COMPARATOR});
 		addShapelessRecipe(new ItemStack(ModBlocks.storagePanel, 1, PanelType.MONITOR.getMeta()), new Object[]{ModBlocks.storagePanel, ModItems.craftingPattern});
 
-		addShapelessOreRecipe(ModBlocks.wirelessPanel, new Object[]{new ItemStack(ModBlocks.storagePanel), new ItemStack(ModBlocks.wirelessPipe)});
-		addShapedOreRecipe(ModItems.wirelessPanel, new Object[]{"E  ", "SP ", 'E', Items.ENDER_EYE, 'P', new ItemStack(ModBlocks.storagePanel), 'S', crystalRod});
+		addShapelessRecipe(ModBlocks.wirelessPanel, new Object[]{new ItemStack(ModBlocks.storagePanel), new ItemStack(ModBlocks.wirelessPipe)});
+		addShapedOreRecipe(ModItems.wirelessPanel, new Object[]{"E  ", "SP ", 'E', "endereye", 'P', new ItemStack(ModBlocks.storagePanel), 'S', crystalRod});
 
 		addShapedOreRecipe(ModBlocks.wirelessPipe, new Object[]{"#I#", "ICI", "#P#", '#', Items.ENDER_EYE, 'C', new ItemStack(ModBlocks.enderBuffer), 'I', pureIngot, 'P', pipeEStorage});
 		addShapedOreRecipe(ModBlocks.crafter, new Object[]{"#W#", "WCW", "#P#", '#', dIronPlate, 'W', "workbench", 'C', "chest", 'P', pipeEStorage});

@@ -368,11 +368,11 @@ public class ModBlocks {
 	    return block;
 	}
 	
-	protected static <T extends Block> T registerBlock(T block, String name) {
+	public static <T extends Block> T registerBlock(T block, String name) {
 			return registerBlock(block, new ItemBlock(block), name);
 	}
 	
-	protected static <T extends Block> T registerBlock(T block, ItemBlock itemBlock, String name) {
+	public static <T extends Block> T registerBlock(T block, ItemBlock itemBlock, String name) {
 			block.setUnlocalizedName(CrystalMod.prefix(name));
 			block.setRegistryName(name);
 			GameRegistry.register(block);

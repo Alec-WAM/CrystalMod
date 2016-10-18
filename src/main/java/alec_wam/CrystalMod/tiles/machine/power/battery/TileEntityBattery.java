@@ -12,6 +12,7 @@ import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.IMessageHandler;
 import alec_wam.CrystalMod.network.packets.PacketTileMessage;
 import alec_wam.CrystalMod.tiles.TileEntityIOSides;
+import alec_wam.CrystalMod.tiles.machine.power.battery.BlockBattery.BatteryType;
 
 public class TileEntityBattery extends TileEntityIOSides implements IMessageHandler, ITickable, ICEnergyReceiver, ICEnergyProvider {
 	public static final int[] MAX_SEND = { 80, 400, 2000, 10000, 50000, 50000};
@@ -69,12 +70,15 @@ public class TileEntityBattery extends TileEntityIOSides implements IMessageHand
 					if(tile !=null && tile instanceof ICEnergyReceiver){
 						ICEnergyReceiver rec = (ICEnergyReceiver)tile;
 						int drain = rec.fillCEnergy(face.getOpposite(), Math.min(MAX_SEND[0], energyStorage.getCEnergyStored()), false);
-						this.energyStorage.modifyEnergyStored(-drain);
-						if(drain > 0){
-							this.markDirty();
-							NBTTagCompound nbt = new NBTTagCompound();
-							nbt.setInteger("Energy", this.energyStorage.getCEnergyStored());
-							CrystalModNetwork.sendToAllAround(new PacketTileMessage(getPos(), "UpdateEnergy", nbt), this);
+						boolean creative = BlockBattery.fromMeta(getBlockMetadata()) == BatteryType.CREATIVE;
+						if(!creative){
+							this.energyStorage.modifyEnergyStored(-drain);
+							if(drain > 0){
+								this.markDirty();
+								NBTTagCompound nbt = new NBTTagCompound();
+								nbt.setInteger("Energy", this.energyStorage.getCEnergyStored());
+								CrystalModNetwork.sendToAllAround(new PacketTileMessage(getPos(), "UpdateEnergy", nbt), this);
+							}
 						}
 					}
 				}
@@ -126,6 +130,12 @@ public class TileEntityBattery extends TileEntityIOSides implements IMessageHand
 	@Override
 	public int fillCEnergy(EnumFacing from, int maxReceive, boolean simulate) {
 		if(getIO(fixFace(from)) == IOType.BLOCKED || getIO(fixFace(from)) == IOType.OUT)return 0;
+		
+		boolean creative = BlockBattery.fromMeta(getBlockMetadata()) == BatteryType.CREATIVE;
+		if(creative){
+			return 0;
+		}
+		
 		int fill = energyStorage.fillCEnergy(Math.min(MAX_RECEIVE[0], maxReceive), simulate);
 		if(fill > 0 && !simulate){
 			if(!getWorld().isRemote){
