@@ -46,26 +46,32 @@ public class TConstructIntegration {
 		oreDictionary();
 		
 		FluidRegistry.registerFluid(moltenCrystalBlue);
+		Fluids.registerMoltenBlock(moltenCrystalBlue);
 		FluidRegistry.addBucketForFluid(moltenCrystalBlue);
 		addToSmeltery(moltenCrystalBlue, "CrystalBlue", true);
 		
 		FluidRegistry.registerFluid(moltenCrystalRed);
+		Fluids.registerMoltenBlock(moltenCrystalRed);
 		FluidRegistry.addBucketForFluid(moltenCrystalRed);
 		addToSmeltery(moltenCrystalRed, "CrystalRed", true);
 		
 		FluidRegistry.registerFluid(moltenCrystalGreen);
+		Fluids.registerMoltenBlock(moltenCrystalGreen);
 		FluidRegistry.addBucketForFluid(moltenCrystalGreen);
 		addToSmeltery(moltenCrystalGreen, "CrystalGreen", true);
 		
 		FluidRegistry.registerFluid(moltenCrystalDark);
+		Fluids.registerMoltenBlock(moltenCrystalDark);
 		FluidRegistry.addBucketForFluid(moltenCrystalDark);
 		addToSmeltery(moltenCrystalDark, "CrystalDark", true);
 		
 		FluidRegistry.registerFluid(moltenCrystalPure);
+		Fluids.registerMoltenBlock(moltenCrystalPure);
 		FluidRegistry.addBucketForFluid(moltenCrystalPure);
 		addToSmeltery(moltenCrystalPure, "CrystalPure", true);
 		
 		FluidRegistry.registerFluid(moltenDarkIron);
+		Fluids.registerMoltenBlock(moltenDarkIron);
 		FluidRegistry.addBucketForFluid(moltenDarkIron);
 		addToSmeltery(moltenDarkIron, "IronDark", true);
 		

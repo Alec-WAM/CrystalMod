@@ -132,7 +132,6 @@ public class TileEntityTank extends TileEntityMod {
             	
             	public int fill(FluidStack resource, boolean doFill) {
                     if (resource == null) {
-                    	System.out.println("null Resource");
                         return 0;
                     }
                     FluidStack resourceCopy = resource.copy();
@@ -158,7 +157,6 @@ public class TileEntityTank extends TileEntityMod {
 
                     FluidStack liquid = tank.getFluid();
                     if (liquid != null && liquid.amount > 0 && !liquid.isFluidEqual(resourceCopy)) {
-                    	System.out.println("not equal");
                         return 0;
                     }
 

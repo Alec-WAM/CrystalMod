@@ -1,0 +1,47 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "forge:fluid"
+    },
+    "variants": {
+		"xpjuice": [{
+            "custom": { "fluid": "xpjuice" }
+        }],
+        "crystal_blue": [{
+            "custom": { "fluid": "crystal_blue" }
+        }],
+		"moltenCrystalBlue": [{
+            "custom": { "fluid": "moltenCrystalBlue" }
+        }],
+        "crystal_red": [{
+            "custom": { "fluid": "crystal_red" }
+        }],
+		"moltenCrystalRed": [{
+            "custom": { "fluid": "moltenCrystalRed" }
+        }],
+        "crystal_green": [{
+            "custom": { "fluid": "crystal_green" }
+        }],
+		"moltenCrystalGreen": [{
+            "custom": { "fluid": "moltenCrystalGreen" }
+        }],
+        "crystal_dark": [{
+            "custom": { "fluid": "crystal_dark" }
+        }],
+		"moltenCrystalDark": [{
+            "custom": { "fluid": "moltenCrystalDark" }
+        }],
+        "crystal_pure": [{
+            "custom": { "fluid": "crystal_pure" }
+        }],
+		"moltenCrystalPure": [{
+            "custom": { "fluid": "moltenCrystalPure" }
+        }],
+        "darkiron": [{
+            "custom": { "fluid": "darkiron" }
+        }],
+		"moltenDarkIron": [{
+            "custom": { "fluid": "moltenDarkIron" }
+        }]
+    }
+}

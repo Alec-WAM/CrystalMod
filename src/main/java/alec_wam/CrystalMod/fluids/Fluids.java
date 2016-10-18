@@ -4,6 +4,11 @@ import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Nonnull;
+
+import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.blocks.BlockCrystalFluid;
+import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.items.ItemIngot;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.items.ItemCrystal.CrystalType;
@@ -12,14 +17,24 @@ import alec_wam.CrystalMod.util.ModLogger;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.ItemMeshDefinition;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.statemap.StateMapperBase;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.ForgeModContainer;
+import net.minecraftforge.fluids.BlockFluidBase;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.UniversalBucket;
 import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class Fluids {
 
@@ -36,25 +51,46 @@ public class Fluids {
 	      fluidXpJuice = new Fluid(XP_JUICE_NAME, new ResourceLocation("crystalmod:blocks/fluid/"+Fluids.XP_JUICE_NAME+"_still"), new ResourceLocation("crystalmod:blocks/fluid/"+Fluids.XP_JUICE_NAME+"_flowing"))
 	          .setLuminosity(10).setDensity(800).setViscosity(1500).setUnlocalizedName("crystalmod.xpjuice");
 	      FluidRegistry.registerFluid(fluidXpJuice);
+	      registerClassicBlock(fluidXpJuice);
 	    } else {
 	    	ModLogger.info("XP Juice regististration left to EnderIO.");
 	    }
 		
 		fluidBlueCrystal = new FluidColored("crystal_blue", ItemIngot.RGB_BLUE).setLuminosity(10).setDensity(800).setViscosity(1500).setUnlocalizedName("crystalmod.crystal.blue");
 		FluidRegistry.registerFluid(fluidBlueCrystal);
+		registerClassicBlock(fluidBlueCrystal);
+		
 		fluidRedCrystal = new FluidColored("crystal_red", ItemIngot.RGB_RED).setLuminosity(10).setDensity(800).setViscosity(1500).setUnlocalizedName("crystalmod.crystal.red");
 		FluidRegistry.registerFluid(fluidRedCrystal);
+		registerClassicBlock(fluidRedCrystal);
+		
 		fluidGreenCrystal = new FluidColored("crystal_green", ItemIngot.RGB_GREEN).setLuminosity(10).setDensity(800).setViscosity(1500).setUnlocalizedName("crystalmod.crystal.green");
 		FluidRegistry.registerFluid(fluidGreenCrystal);
+		registerClassicBlock(fluidGreenCrystal);
+		
 		fluidDarkCrystal = new FluidColored("crystal_dark", ItemIngot.RGB_DARK).setLuminosity(10).setDensity(800).setViscosity(1500).setUnlocalizedName("crystalmod.crystal.dark");
 		FluidRegistry.registerFluid(fluidDarkCrystal);
+		registerClassicBlock(fluidDarkCrystal);
+		
 		fluidPureCrystal = new FluidColored("crystal_pure", ItemIngot.RGB_PURE).setLuminosity(10).setDensity(800).setViscosity(1500).setUnlocalizedName("crystalmod.crystal.pure");
 		FluidRegistry.registerFluid(fluidPureCrystal);
+		registerClassicBlock(fluidPureCrystal);
 		
 		fluidDarkIron = new FluidColored("darkiron", ItemIngot.RGB_DARK_IRON).setLuminosity(10).setDensity(800).setViscosity(1500).setUnlocalizedName("crystalmod.darkiron");
 		FluidRegistry.registerFluid(fluidDarkIron);
+		registerClassicBlock(fluidDarkIron);
 		
 		createBuckets();
+	}
+	
+	public static BlockFluidBase registerClassicBlock(Fluid fluid) {
+	    BlockFluidBase block = new BlockCrystalFluid(fluid, net.minecraft.block.material.Material.WATER);
+	    return ModBlocks.registerBlock(block, fluid.getName());
+	}
+	
+	public static BlockFluidBase registerMoltenBlock(Fluid fluid) {
+	    BlockFluidBase block = new BlockCrystalFluid(fluid, net.minecraft.block.material.Material.LAVA);
+	    return ModBlocks.registerBlock(block, fluid.getName());
 	}
 	
 	public static void forgeRegisterXPJuice() {
@@ -122,4 +158,49 @@ public class Fluids {
 		}
 		return (shardColor !=null && amt > 0) ? new FluidStack(shardColor, amt) : null;
 	}
+	
+	@SideOnly(Side.CLIENT)
+	public static void registerFluidModels(Fluid fluid) {
+	    if(fluid == null) {
+	      return;
+	    }
+
+	    Block block = fluid.getBlock();
+	    if(block != null) {
+	      Item item = Item.getItemFromBlock(block);
+	      FluidStateMapper mapper = new FluidStateMapper(fluid);
+
+	      // item-model
+	      if(item != null) {
+	        ModelLoader.registerItemVariants(item);
+	        ModelLoader.setCustomMeshDefinition(item, mapper);
+	      }
+	      // block-model
+	      ModelLoader.setCustomStateMapper(block, mapper);
+	    }
+	  }
+
+	@SideOnly(Side.CLIENT)
+	public static class FluidStateMapper extends StateMapperBase implements ItemMeshDefinition {
+
+	    public final Fluid fluid;
+	    public final ModelResourceLocation location;
+
+	    public FluidStateMapper(Fluid fluid) {
+	      this.fluid = fluid;
+	      this.location = new ModelResourceLocation(CrystalMod.resource("fluid_block"), fluid.getName());
+	    }
+
+	    @Nonnull
+	    @Override
+	    protected ModelResourceLocation getModelResourceLocation(@Nonnull IBlockState state) {
+	      return location;
+	    }
+
+	    @Nonnull
+	    @Override
+	    public ModelResourceLocation getModelLocation(@Nonnull ItemStack stack) {
+	      return location;
+	    }
+	  }
 }
