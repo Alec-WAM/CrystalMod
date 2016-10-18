@@ -10,6 +10,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.ModBlocks;
@@ -31,6 +32,7 @@ import mezz.jei.api.IModRegistry;
 import mezz.jei.api.gui.IDrawable;
 import mezz.jei.api.gui.IDrawableAnimated;
 import mezz.jei.api.gui.IDrawableStatic;
+import mezz.jei.api.gui.IGuiFluidStackGroup;
 import mezz.jei.api.gui.IGuiItemStackGroup;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.recipe.BlankRecipeCategory;
@@ -76,14 +78,14 @@ public class LiquidizerRecipeCategory extends BlankRecipeCategory<LiquidizerReci
 		
 		@Override
 		public void drawInfo(@Nonnull Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {
-			FluidStack output = recipe.getOutput();
+			/*FluidStack output = recipe.getOutput();
 		    if(output !=null){
 		    	Rectangle outTankBounds = new Rectangle(112 - xOff, 23 - yOff, 12, 40);
 		    	RenderUtil.renderGuiTank(output, TileEntityLiquidizer.CAPACITY, output.amount, outTankBounds.x, outTankBounds.y, 0, outTankBounds.width, outTankBounds.height);
-		    }
+		    }*/
 		    
 		    String energyString = getEnergyRequired()+" "+Lang.localize("power.cu");
-		    minecraft.fontRendererObj.drawString(energyString, 108 - xOff, 62 - yOff, 0x808080, false);    
+		    minecraft.fontRendererObj.drawString(energyString, 54 - xOff, 62 - yOff, 0x808080, false);    
 		    GlStateManager.color(1,1,1,1);
 		}
 		
@@ -125,7 +127,8 @@ public class LiquidizerRecipeCategory extends BlankRecipeCategory<LiquidizerReci
 	    ResourceLocation backgroundLocation = new ResourceLocation("crystalmod", "textures/gui/machine/liquidizer.png");
 	    background = guiHelper.createDrawable(backgroundLocation, xOff, yOff, 125, 50);
 
-	    IDrawableStatic arrowDrawable = guiHelper.createDrawable(backgroundLocation, 176, 0, 24, 17);
+	    ResourceLocation arrow = new ResourceLocation("crystalmod", "textures/gui/machine/press.png");
+	    IDrawableStatic arrowDrawable = guiHelper.createDrawable(arrow, 176, 0, 24, 17);
 		this.arrow = guiHelper.createAnimatedDrawable(arrowDrawable, 200, IDrawableAnimated.StartDirection.LEFT, false);
   	}
 	
@@ -166,6 +169,10 @@ public class LiquidizerRecipeCategory extends BlankRecipeCategory<LiquidizerReci
 		IGuiItemStackGroup guiItemStacks = recipeLayout.getItemStacks();
 		guiItemStacks.init(0, true, 56 - xOff-1, 35 - yOff-1);
 		guiItemStacks.setFromRecipe(0, recipeWrapper.getInputs());
+		
+		IGuiFluidStackGroup guiFluidStacks = recipeLayout.getFluidStacks();
+		guiFluidStacks.init(0, false, 112 - xOff, 23 - yOff, 12, 40, Fluid.BUCKET_VOLUME * 8, true, null);
+		guiFluidStacks.set(0, recipeWrapper.getFluidOutputs());
 	}
 
 }

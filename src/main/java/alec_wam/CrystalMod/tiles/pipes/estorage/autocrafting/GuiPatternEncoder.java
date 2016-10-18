@@ -27,7 +27,8 @@ public class GuiPatternEncoder extends GuiContainer {
 	public void initGui(){
 		super.initGui();
 		String ore = encoder.isOreDict ? TextFormatting.GREEN+"O" : TextFormatting.RED+"O";
-		oreButton = new GuiButton(0, 100, 20, ore);
+		boolean processing = encoder instanceof TileProcessingPatternEncoder;
+		oreButton = new GuiButton(0, guiLeft+(processing ? 65 : 118), guiTop+(processing ? 18 : 10), 20, 20, ore);
 		this.buttonList.add(oreButton);
 	}
 	

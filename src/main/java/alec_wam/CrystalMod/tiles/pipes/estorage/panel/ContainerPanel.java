@@ -194,11 +194,13 @@ public class ContainerPanel extends Container implements INetworkContainer {
 					}
 				}
 			}
-			try {
-				PacketEStorageItemList pil = new PacketEStorageItemList(panel.getPos(), 3, EStorageNetwork.compressItems(data));
-				CrystalModNetwork.sendTo(pil, player);
-			} catch (IOException e) {
-				e.printStackTrace();
+			if(data.size() > 0){
+				try {
+					PacketEStorageItemList pil = new PacketEStorageItemList(panel.getPos(), 3, EStorageNetwork.compressItems(data));
+					CrystalModNetwork.sendTo(pil, player);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 	}

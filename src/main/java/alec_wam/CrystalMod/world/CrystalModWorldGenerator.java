@@ -112,6 +112,8 @@ public class CrystalModWorldGenerator implements IWorldGenerator {
     
     public static String NBT_RETRO = "CrystalModGen";
     
+    //Credit: https://github.com/BluSunrize/ImmersiveEngineering/blob/master/src/main/java/blusunrize/immersiveengineering/common/world/IEWorldGen.java
+    
     @SubscribeEvent
     public void handleChunkSaveEvent(ChunkDataEvent.Save event) {
     	NBTTagCompound nbt = new NBTTagCompound();

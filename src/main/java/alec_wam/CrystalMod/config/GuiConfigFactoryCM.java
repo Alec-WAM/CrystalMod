@@ -20,7 +20,7 @@ public class GuiConfigFactoryCM extends GuiConfig {
   private static List<IConfigElement> getConfigElements(GuiScreen parent) {
     List<IConfigElement> list = new ArrayList<IConfigElement>();
     String[] names = new String[]{
-    		Config.CATEGORY_GENERAL,
+    		Config.CATEGORY_WORLD,
     		Config.CATEGORY_ENTITY,
     		Config.CATEGORY_MACHINE,
     		Config.CATEGORY_MINIONS

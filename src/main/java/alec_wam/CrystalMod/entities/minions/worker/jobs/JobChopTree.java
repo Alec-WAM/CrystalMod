@@ -92,7 +92,7 @@ public class JobChopTree extends WorkerJob {
 			}
 		} else {
 			if(worker.getNavigator().noPath()){
-				worker.getNavigator().tryMoveToXYZ(logPos.getX() + 0.5, logPos.down().getY() + 0.5, logPos.getZ() + 0.5, MinionConstants.SPEED_WALK);
+				worker.getNavigator().tryMoveToXYZ(logPos.getX() + 0.5, logPos.getY() + 0.5, logPos.getZ() + 0.5, MinionConstants.SPEED_WALK);
 			}
 		}
 		

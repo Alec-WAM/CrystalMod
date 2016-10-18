@@ -17,6 +17,7 @@ import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage.ItemStackData;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.INetworkContainer;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.TileEntityPanel;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.wireless.TileEntityWirelessPanel;
+import alec_wam.CrystalMod.util.ModLogger;
 
 public class PacketEStorageItemList extends AbstractPacketThreadsafe {
 

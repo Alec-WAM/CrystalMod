@@ -1,34 +1,20 @@
 package alec_wam.CrystalMod.tiles.pipes.estorage;
 
-import io.netty.handler.codec.EncoderException;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.NavigableMap;
 import java.util.Stack;
 import java.util.TreeMap;
 
-import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompressedStreamTools;
-import net.minecraft.nbt.NBTSizeTracker;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
-import net.minecraftforge.common.DimensionManager;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.oredict.OreDictionary;
 import alec_wam.CrystalMod.network.CompressedDataInput;
 import alec_wam.CrystalMod.network.CompressedDataOutput;
 import alec_wam.CrystalMod.tiles.pipes.AbstractPipeNetwork;
@@ -39,19 +25,15 @@ import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage.ItemStackData;
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.CraftingPattern;
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.IAutoCrafter;
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.ItemPattern;
-import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.TileCrafter;
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.task.BasicCraftingTask;
-import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.task.CraftingProcess;
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.task.ICraftingTask;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.INetworkContainer;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.TileEntityPanel;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.wireless.TileEntityWirelessPanel;
 import alec_wam.CrystalMod.tiles.pipes.estorage.storage.hdd.INetworkItemProvider;
 import alec_wam.CrystalMod.util.ItemUtil;
-import alec_wam.CrystalMod.util.Lang;
 import alec_wam.CrystalMod.util.ModLogger;
 
-import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 
 public class EStorageNetwork extends AbstractPipeNetwork {
@@ -106,17 +88,7 @@ public class EStorageNetwork extends AbstractPipeNetwork {
 	}
 
 	public byte[] compressItems() throws IOException {
-		CompressedDataOutput cdo = new CompressedDataOutput();
-		try {
-			int count = getItemStorage().getItemList().size();
-			cdo.writeVariable(count);
-			for (ItemStackData entry : getItemStorage().getItemList()) {
-				entry.toBytes(cdo);
-			}
-			return cdo.getCompressed();
-		} finally {
-			cdo.close();
-		}
+		return compressItems(getItemStorage().getItemList());
 	}
 
 	public static byte[] compressItems(List<ItemStackData> data)

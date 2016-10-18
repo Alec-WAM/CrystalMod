@@ -18,7 +18,6 @@ import alec_wam.CrystalMod.items.ItemIngot.IngotType;
 import alec_wam.CrystalMod.items.ItemMetalPlate.PlateType;
 import alec_wam.CrystalMod.items.guide.ItemCrystalGuide.GuideType;
 import alec_wam.CrystalMod.items.tools.ItemToolParts.PartType;
-import alec_wam.CrystalMod.tiles.TileEntityIOSides.IOType;
 import alec_wam.CrystalMod.tiles.cauldron.CauldronRecipeManager;
 import alec_wam.CrystalMod.tiles.chest.CrystalChestType;
 import alec_wam.CrystalMod.tiles.machine.crafting.BlockCrystalMachine.MachineType;

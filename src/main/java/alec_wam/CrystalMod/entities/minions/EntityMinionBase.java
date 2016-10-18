@@ -28,11 +28,7 @@ public class EntityMinionBase extends EntityOwnable implements IMessageHandler {
 	public EntityMinionBase(World worldIn) {
 		super(worldIn);
 		setSize(0.3F, 0.8F);
-		//((PathNavigateGround)this.getNavigator()).setCanSwim(false);
-        this.tasks.addTask(1, new EntityAISwimming(this));
-        this.tasks.addTask(2, this.aiSit);
-        //this.tasks.addTask(9, new EntityAIWatchClosest(this, EntityPlayer.class, 10.0F));
-        //this.tasks.addTask(9, new EntityAILookIdle(this));
+		this.tasks.addTask(1, new EntityAISwimming(this));
         
         aiManager = new AIManager(this);
 	}
@@ -76,10 +72,12 @@ public class EntityMinionBase extends EntityOwnable implements IMessageHandler {
         			return true;
         		}
         	}else{
-        		if(par1EntityPlayer.isSneaking() && !this.worldObj.isRemote){
-        			this.aiSit.setSitting(!this.isSitting());
-        			ChatUtil.sendNoSpam(par1EntityPlayer, "Sitting: "+this.isSitting());
-        		}
+        		/*if(par1EntityPlayer.isSneaking()){
+        			boolean last = isSitting();
+        			setSitting(!last);
+        			this.aiSit.setSitting(isSitting());
+        			if(!worldObj.isRemote)ChatUtil.sendNoSpam(par1EntityPlayer, "Sitting: "+isSitting());
+        		}*/
         	}
         }
         
@@ -193,6 +191,8 @@ public class EntityMinionBase extends EntityOwnable implements IMessageHandler {
 	{
 		super.readEntityFromNBT(nbt);
 		aiManager.readFromNBT(nbt);
+		this.aiSit.setSitting(false);
+		this.setSitting(false);
 	}
 	
 	@Override

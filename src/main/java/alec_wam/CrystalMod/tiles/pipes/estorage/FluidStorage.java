@@ -17,7 +17,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fluids.FluidStack;
 import alec_wam.CrystalMod.network.CompressedDataInput;
 import alec_wam.CrystalMod.network.CompressedDataOutput;
-import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage.ItemStackData;
 import alec_wam.CrystalMod.util.FluidUtil;
 import alec_wam.CrystalMod.util.Lang;
 

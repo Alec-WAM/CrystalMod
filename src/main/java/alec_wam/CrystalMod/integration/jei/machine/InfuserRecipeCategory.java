@@ -139,9 +139,9 @@ public class InfuserRecipeCategory extends BlankRecipeCategory<InfuserRecipeCate
 	    ResourceLocation backgroundLocation = new ResourceLocation("crystalmod", "textures/gui/machine/infuser.png");
 	    background = guiHelper.createDrawable(backgroundLocation, xOff, yOff, 125, 50);
 
-	    IDrawableStatic arrowDrawable = guiHelper.createDrawable(backgroundLocation, 176, 0, 24, 17);
+	    ResourceLocation arrow = new ResourceLocation("crystalmod", "textures/gui/machine/press.png");
+	    IDrawableStatic arrowDrawable = guiHelper.createDrawable(arrow, 176, 0, 24, 17);
 		this.arrow = guiHelper.createAnimatedDrawable(arrowDrawable, 200, IDrawableAnimated.StartDirection.LEFT, false);
-		
 		this.arrow2 = guiHelper.createAnimatedDrawable(arrowDrawable, 200, IDrawableAnimated.StartDirection.RIGHT, false);
   	}
 	
@@ -164,8 +164,8 @@ public class InfuserRecipeCategory extends BlankRecipeCategory<InfuserRecipeCate
 
 	@Override
 	public void drawAnimations(@Nonnull Minecraft minecraft) {
-		arrow.draw(minecraft, 90-xOff, 34-yOff);
-		arrow2.draw(minecraft, 110-xOff, 34-yOff);
+		arrow.draw(minecraft, 49-xOff, 33-yOff);
+		arrow2.draw(minecraft, 103-xOff, 33-yOff);
 	}
 	
 	@Override
