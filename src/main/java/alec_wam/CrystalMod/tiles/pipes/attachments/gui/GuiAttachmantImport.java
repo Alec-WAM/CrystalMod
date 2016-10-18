@@ -13,6 +13,7 @@ import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.tiles.pipes.TileEntityPipe.RedstoneMode;
 import alec_wam.CrystalMod.tiles.pipes.attachments.AttachmentEStorageImport;
+import alec_wam.CrystalMod.tiles.pipes.attachments.AttachmentIOType;
 import alec_wam.CrystalMod.tiles.pipes.attachments.AttachmentUtil.AttachmentData;
 import alec_wam.CrystalMod.tiles.pipes.estorage.TileEntityPipeEStorage;
 import alec_wam.CrystalMod.tiles.pipes.item.PacketPipe;
@@ -80,6 +81,14 @@ public class GuiAttachmantImport extends GuiContainer {
 				}
 			}
 		}
+
+		if(button.id == BUTTON_IO){
+			final AttachmentIOType next = getImport().ioType.getNext();
+			getImport().ioType = next;
+			CrystalModNetwork.sendToServer(new PacketPipe(pipe, "IOType", dir, next.name()));
+			refreshButtons();
+			return;
+		}
 	}
 	
 	@Override
@@ -88,7 +97,7 @@ public class GuiAttachmantImport extends GuiContainer {
 		refreshButtons();
 	}
 	
-	public int BUTTON_RED = 0, BUTTON_BW = 1, BUTTON_META = 2, BUTTON_NBT = 3, BUTTON_ORE = 4;
+	public int BUTTON_RED = 0, BUTTON_BW = 1, BUTTON_META = 2, BUTTON_NBT = 3, BUTTON_ORE = 4, BUTTON_IO = 5;
 	
 	private void refreshButtons() {
 		this.buttonList.clear();
@@ -96,6 +105,7 @@ public class GuiAttachmantImport extends GuiContainer {
 		int sy = (height - ySize) / 2;
 		if(getImport() == null)return;
 		this.buttonList.add(new GuiButton(BUTTON_RED, sx+8+140, sy+10, 20, 20, getImport().rMode.name()));
+		this.buttonList.add(new GuiButton(BUTTON_IO, sx+8+140, sy+40, 20, 20, getImport().ioType.name()));
 		boolean safe = getImport() !=null && getImport().getFilter() !=null;
 		if(safe){
 			ItemStack filterStack = getImport().getFilter();

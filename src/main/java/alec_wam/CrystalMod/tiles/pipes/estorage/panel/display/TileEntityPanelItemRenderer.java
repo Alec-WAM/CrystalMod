@@ -68,7 +68,7 @@ public class TileEntityPanelItemRenderer<T extends TileEntityPanelItem> extends 
 		
 		if(te.displayFluid !=null){
 			float d = 0.005f;
-			RenderUtil.renderFluidCuboid(te.displayFluid, te.getPos(), -0.5, -0.5, -0.01, d+0.1d, d+0.1d, d, 0.9d - d, 0.9d - d, d);
+			RenderUtil.renderFluidCuboid(te.displayFluid, te.getPos(), -0.5, -0.5, -0.01, d+0.1d, d+0.1d, d, 0.9d - d, 0.9d - d, d, false);
 		} else if(te.displayItem !=null){
 			itemBlock = renderItem(te.displayItem); 
 		}

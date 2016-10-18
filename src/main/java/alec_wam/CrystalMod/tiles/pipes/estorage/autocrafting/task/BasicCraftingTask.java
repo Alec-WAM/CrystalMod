@@ -131,86 +131,30 @@ public class BasicCraftingTask implements ICraftingTask {
         }
 
         if (isFinished()) {
-            ItemStack insert = toInsert.peek();
-
-            if (controller.getItemStorage().addItem(insert, true) == insert.stackSize) {
-            	ModLogger.info("Insert toInsert "+insert);
-            	controller.getItemStorage().addItem(insert, false);
-
-                toInsert.pop();
-            }
-
+        	if(!toInsert.isEmpty()){
+	            ItemStack insert = toInsert.peek();
+	
+	            if (controller.getItemStorage().addItem(insert, true) == insert.stackSize) {
+	            	controller.getItemStorage().addItem(insert, false);
+	
+	                toInsert.pop();
+	            }
+        	}
             return toInsert.isEmpty();
         }
     	return false;
-    	/*this.updatedOnce = true;
-
-        boolean done = true;
-
-        for (int i = 0; i < pattern.getInputs().length; ++i) {
-            checked[i] = true;
-
-            ItemStack input = pattern.getInputs()[i];
-            
-            if (!satisfied[i]) {
-                done = false;
-
-                ItemStack took = controller.getItemStorage().removeItem(input, false);
-                
-                if (took != null) {
-                    itemsTook.add(took);
-
-                    satisfied[i] = true;
-                } else if (childTasks[i] == null) {
-                    CraftingPattern pattern = controller.getPatternWithBestScore(input);
-
-                    if (pattern != null) {
-                        controller.addCraftingTask(controller.createCraftingTask(pattern));
-
-                        childTasks[i] = pattern;
-                    } else {
-                    	FluidStack fluid = FluidUtil.getFluidTypeFromItem(input);
-                    	if(fluid !=null){
-                    		ItemStack emptyContainer = FluidUtil.EMPTY_BUCKET;
-                    		FluidStackData storedFluid = controller.getFluidStorage().getFluidData(fluid);
-                    		if(emptyContainer !=null && storedFluid !=null && storedFluid.getAmount() >= fluid.amount){
-                    			boolean hasBucket = controller.getItemStorage().hasItem(emptyContainer);
-                    			if(!hasBucket){
-	                    			CraftingPattern patternBucket = controller.getPatternWithBestScore(emptyContainer);
-	                                if (patternBucket != null) {
-	                                	controller.addCraftingTask(controller.createCraftingTask(patternBucket));
-	                                	childTasks[i] = patternBucket;
-	                                }
-                    			} else {
-                    				ItemStack tookBucket = controller.getItemStorage().removeItem(emptyContainer, false);
-                                    if (tookBucket != null) {
-                                        itemsTook.add(tookBucket);
-                                        FluidStack tookFluid = controller.getFluidStorage().removeFluid(fluid, false);
-                                        fluidsTook.add(tookFluid);
-                                        satisfied[i] = true;
-                                    }
-                    			}
-                    		}
-                    	}
-                    }
-                    //break;
-                } else {
-                    //break;
-                }
-            }
-        }
-
-        return done;*/
     }
     
     public void calculate(EStorageNetwork network) {
     	int newQuantity = quantity;
        	while (newQuantity > 0) {
             calculate(network, pattern, true);
-	
-            for (ItemStack output : pattern.getOutputs()) {
-            	ItemStack add = output.copy();
-                toInsert.add(add);
+            
+            if(!pattern.isProcessing()){
+	            for (ItemStack output : pattern.getOutputs()) {
+	            	ItemStack add = output.copy();
+	                toInsert.add(add);
+	            }
             }
 	
             newQuantity -= requested == null ? newQuantity : pattern.getQuantityPerRequest(requested);
@@ -263,10 +207,6 @@ public class BasicCraftingTask implements ICraftingTask {
                     CraftingPattern inputPattern = network.getPatternWithBestScore(input);
 
                     if (inputPattern != null) {
-                        /*for (ItemStack output : inputPattern.getOutputs()) {
-                            toCraft.add(output);
-                        }*/
-
                         calculate(network, inputPattern, false);
                     } else {
                         FluidStack fluidInItem = FluidUtil.getFluidTypeFromItem(input);
@@ -335,17 +275,6 @@ public class BasicCraftingTask implements ICraftingTask {
 
     @Override
     public void onDone(EStorageNetwork controller) {
-        /*for (ItemStack output : pattern.getOutputs()) {
-        	ModLogger.info("Insert out "+output);
-            controller.getItemStorage().addItem(output, false);
-        }
-
-        if (pattern.getByproducts() != null) {
-            for (ItemStack byproduct : pattern.getByproducts()) {
-            	ModLogger.info("Insert bypro "+byproduct);
-                controller.getItemStorage().addItem(byproduct, false);
-            }
-        }*/
     }
 
     @Override

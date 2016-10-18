@@ -15,6 +15,7 @@ import alec_wam.CrystalMod.tiles.pipes.TileEntityPipe;
 import alec_wam.CrystalMod.tiles.pipes.TileEntityPipe.RedstoneMode;
 import alec_wam.CrystalMod.tiles.pipes.attachments.AttachmentEStorageExport;
 import alec_wam.CrystalMod.tiles.pipes.attachments.AttachmentEStorageImport;
+import alec_wam.CrystalMod.tiles.pipes.attachments.AttachmentIOType;
 import alec_wam.CrystalMod.tiles.pipes.attachments.AttachmentUtil.AttachmentData;
 import alec_wam.CrystalMod.tiles.pipes.estorage.TileEntityPipeEStorage;
 import alec_wam.CrystalMod.tiles.pipes.item.filters.ItemPipeFilter.FilterType;
@@ -130,6 +131,27 @@ public class PacketPipe extends AbstractPacketThreadsafe {
 						}
 						if(data2 !=null && data2 instanceof AttachmentEStorageImport){
 							((AttachmentEStorageImport)data2).rMode = mode; 
+						}
+					}
+				}
+			}
+			if(type.equalsIgnoreCase("IOType")){
+				AttachmentIOType io = null;
+				for(AttachmentIOType md : AttachmentIOType.values()){
+					if(md.name().equalsIgnoreCase(data)){
+						io = md;
+						break;
+					}
+				}
+				if(io !=null && dir !=null){
+					if(pipe instanceof TileEntityPipeEStorage){
+						TileEntityPipeEStorage item = (TileEntityPipeEStorage) pipe;
+						AttachmentData data2 = item.getAttachmentData(dir);
+						if(data2 !=null && data2 instanceof AttachmentEStorageExport){
+							((AttachmentEStorageExport)data2).ioType = io; 
+						}
+						if(data2 !=null && data2 instanceof AttachmentEStorageImport){
+							((AttachmentEStorageImport)data2).ioType = io; 
 						}
 					}
 				}

@@ -26,6 +26,7 @@ import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.task.CraftingProces
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.task.ICraftingTask;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.Lang;
+import alec_wam.CrystalMod.util.ModLogger;
 
 public class ItemStorage {
 
@@ -47,12 +48,28 @@ public class ItemStorage {
 		int inserted = 0;
 		Iterator<List<NetworkedHDDInterface>> i1 = network.interfaces.values().iterator();
 		ItemStack insertCopy = stack.copy();
-		master : while(i1.hasNext()){
+		master : while(i1.hasNext() && insertCopy.stackSize > 0){
 			final List<NetworkedHDDInterface> list = i1.next();
 			Iterator<NetworkedHDDInterface> ii = list.iterator();
 			//FIRST PASS
-			while( ii.hasNext())
+			while( ii.hasNext() && insertCopy.stackSize > 0)
 			{
+				final NetworkedHDDInterface inter = ii.next();
+				if (inter.getInterface() != null) {
+					if(inter.getInterface().getNetworkInventory() !=null){
+						int amt = inter.getInterface().getNetworkInventory().insertItem(network, insertCopy, true, sim, sendUpdate);
+						insertCopy.stackSize-=amt;
+						inserted+=amt;
+						if(insertCopy.stackSize <= 0){
+							break master;
+						}
+					}
+				}
+			}
+			
+			//SECOND PASS
+			ii = list.iterator();
+			while(ii.hasNext() && insertCopy.stackSize > 0){
 				final NetworkedHDDInterface inter = ii.next();
 				if (inter.getInterface() != null) {
 					if(inter.getInterface().getNetworkInventory() !=null){
@@ -65,22 +82,6 @@ public class ItemStorage {
 					}
 				}
 			}
-			
-			/*//SECOND PASS
-			ii = list.iterator();
-			while(ii.hasNext()){
-				final NetworkedHDDInterface inter = ii.next();
-				if (inter.getInterface() != null) {
-					if(inter.getInterface().getNetworkInventory() !=null){
-						int amt = inter.getInterface().getNetworkInventory().insertItem(network, insertCopy, false, sim, sendUpdate);
-						insertCopy.stackSize-=amt;
-						inserted+=amt;
-						if(insertCopy.stackSize <= 0){
-							return inserted;
-						}
-					}
-				}
-			}*/
 		}
 		
 		// If the stack size of the remainder is negative, it means of the original size abs(remainder.stackSize) items have been voided
@@ -91,7 +92,7 @@ public class ItemStorage {
         } else {
         	insert = ogSize - inserted;
         }
-
+        
         if (!sim && insert > 0) {
             for (int i = 0; i < insert; ++i) {
                 for (ICraftingTask task : network.getCraftingTasks()) {

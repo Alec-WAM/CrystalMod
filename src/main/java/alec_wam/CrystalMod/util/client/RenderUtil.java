@@ -386,17 +386,17 @@ public class RenderUtil {
 	   * @param h     Height. 1 = full Y-Height
 	   * @param d     Depth. 1 = full Z-Depth
 	   */
-	public static void renderFluidCuboid(FluidStack fluid, BlockPos pos, double x, double y, double z, double w, double h, double d) {
+	public static void renderFluidCuboid(FluidStack fluid, BlockPos pos, double x, double y, double z, double w, double h, double d, boolean useFlowing) {
 	    double wd = (1d - w) / 2d;
 	    double hd = (1d - h) / 2d;
 	    double dd = (1d - d) / 2d;
 
-	    renderFluidCuboid(fluid, pos, x, y, z, wd, hd, dd, 1d - wd, 1d - hd, 1d - dd);
+	    renderFluidCuboid(fluid, pos, x, y, z, wd, hd, dd, 1d - wd, 1d - hd, 1d - dd, useFlowing);
 	}
 
-	public static void renderFluidCuboid(FluidStack fluid, BlockPos pos, double x, double y, double z, double x1, double y1, double z1, double x2, double y2, double z2) {
+	public static void renderFluidCuboid(FluidStack fluid, BlockPos pos, double x, double y, double z, double x1, double y1, double z1, double x2, double y2, double z2, boolean useFlowing) {
 	    int color = fluid.getFluid().getColor(fluid);
-	    renderFluidCuboid(fluid, pos, x, y, z, x1, y1, z1, x2, y2, z2, color);
+	    renderFluidCuboid(fluid, pos, x, y, z, x1, y1, z1, x2, y2, z2, color, useFlowing);
 	}
 
 	/**
@@ -405,7 +405,7 @@ public class RenderUtil {
 	 */
 	public static void renderFluidCuboid(FluidStack fluid, BlockPos pos,
 			double x, double y, double z, double x1, double y1, double z1,
-			double x2, double y2, double z2, int color) {
+			double x2, double y2, double z2, int color, boolean useFlowing) {
 		Tessellator tessellator = Tessellator.getInstance();
 		VertexBuffer renderer = tessellator.getBuffer();
 		renderer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
@@ -420,9 +420,12 @@ public class RenderUtil {
 		TextureAtlasSprite still = Minecraft.getMinecraft()
 				.getTextureMapBlocks()
 				.getTextureExtry(fluid.getFluid().getStill(fluid).toString());
-		TextureAtlasSprite flowing = Minecraft.getMinecraft()
+		TextureAtlasSprite flowing = null;
+		
+		if(useFlowing)flowing = Minecraft.getMinecraft()
 				.getTextureMapBlocks()
 				.getTextureExtry(fluid.getFluid().getFlowing(fluid).toString());
+		else flowing = still;
 
 		// x/y/z2 - x/y/z1 is because we need the width/height/depth
 		putTexturedQuad(renderer, still, x1, y1, z1, x2 - x1, y2 - y1, z2 - z1,

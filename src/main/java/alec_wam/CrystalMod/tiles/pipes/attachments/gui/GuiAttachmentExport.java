@@ -11,6 +11,7 @@ import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.tiles.pipes.TileEntityPipe.RedstoneMode;
 import alec_wam.CrystalMod.tiles.pipes.attachments.AttachmentEStorageExport;
+import alec_wam.CrystalMod.tiles.pipes.attachments.AttachmentIOType;
 import alec_wam.CrystalMod.tiles.pipes.attachments.AttachmentUtil.AttachmentData;
 import alec_wam.CrystalMod.tiles.pipes.estorage.TileEntityPipeEStorage;
 import alec_wam.CrystalMod.tiles.pipes.item.PacketPipe;
@@ -47,6 +48,8 @@ public class GuiAttachmentExport extends GuiContainer {
 		if(getPart() == null)return;
 		RedstoneMode mode = getPart().rMode;
 		this.buttonList.add(new GuiButton(0, sx+8+140, sy+10, 20, 20, mode.name()));
+		AttachmentIOType ioType = getPart().ioType;
+		this.buttonList.add(new GuiButton(1, sx+8+140, sy+40, 20, 20, ioType.name()));
 	}
 	
 	public void actionPerformed(GuiButton button){
@@ -54,6 +57,16 @@ public class GuiAttachmentExport extends GuiContainer {
 			final RedstoneMode next = RedstoneMode.getNextRedstoneMode(getPart().rMode);
 			getPart().rMode = next;
 			CrystalModNetwork.sendToServer(new PacketPipe(pipe, "RMode", dir, next.name()));
+			refreshButtons();
+			return;
+		}
+		if(button.id == 1){
+			AttachmentIOType next = getPart().ioType.getNext();
+			if(next == AttachmentIOType.BOTH){
+				next = next.getNext();
+			}
+			getPart().ioType = next;
+			CrystalModNetwork.sendToServer(new PacketPipe(pipe, "IOType", dir, next.name()));
 			refreshButtons();
 			return;
 		}

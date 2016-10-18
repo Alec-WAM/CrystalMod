@@ -96,7 +96,7 @@ public class NetworkInventoryExternal implements INetworkInventory {
 	
 	@Override
 	public int insertItem(EStorageNetwork network, ItemStack stack, boolean matching, boolean sim, boolean update) {
-		if(matching){
+		/*if(matching){
 			if (getInventory() !=null) {
 				int amt = ItemUtil.doInsertItemMatching(getInventory(), stack, EnumFacing.getFront(inter.facing));
 				if(amt > 0 && update){
@@ -104,15 +104,15 @@ public class NetworkInventoryExternal implements INetworkInventory {
 				}
 				return amt;
 			}
-		}else{
-			if (getInventory() !=null) {
-				int amt = ItemUtil.doInsertItem(getInventory(), stack, EnumFacing.getFront(inter.facing));
-				if(amt > 0 && update){
-					network.notifyInsert(stack);
-				}
-				return amt;
+		}else{*/
+		if (getInventory() !=null) {
+			int amt = ItemUtil.doInsertItem(getInventory(), stack, EnumFacing.getFront(inter.facing));
+			if(amt > 0 && update){
+				network.notifyInsert(stack);
 			}
+			return amt;
 		}
+		//}
 		return 0;
 	}
 

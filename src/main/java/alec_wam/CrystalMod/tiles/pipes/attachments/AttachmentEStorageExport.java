@@ -16,10 +16,15 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.items.IItemHandler;
 
 import org.lwjgl.util.vector.Vector3f;
 
@@ -34,6 +39,7 @@ import alec_wam.CrystalMod.tiles.pipes.attachments.gui.ContainerAttachmentExport
 import alec_wam.CrystalMod.tiles.pipes.attachments.gui.GuiAttachmentExport;
 import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetwork;
 import alec_wam.CrystalMod.tiles.pipes.estorage.TileEntityPipeEStorage;
+import alec_wam.CrystalMod.util.FluidUtil;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.client.RenderUtil;
 
@@ -44,6 +50,7 @@ public class AttachmentEStorageExport extends AttachmentData {
 	public BasicItemHandler filters = new BasicItemHandler(10, new IItemValidator[0]);
 	
 	public RedstoneMode rMode = RedstoneMode.ON;
+	public AttachmentIOType ioType = AttachmentIOType.ITEM;
 	
 	@Override
 	public String getID() {
@@ -77,6 +84,7 @@ public class AttachmentEStorageExport extends AttachmentData {
 
         nbt.setTag("Inventory", tagList);
         nbt.setInteger("RedstoneMode", rMode.ordinal());
+        nbt.setInteger("IOType", ioType.ordinal());
 	}
 	
 	public void loadFromNBT(NBTTagCompound nbt){
@@ -95,6 +103,11 @@ public class AttachmentEStorageExport extends AttachmentData {
         }else{
         	rMode = RedstoneMode.ON;
         }
+        if(nbt.hasKey("IOType")){
+        	ioType = AttachmentIOType.values()[nbt.getInteger("IOType") % AttachmentIOType.values().length];
+        }else{
+        	ioType = AttachmentIOType.ITEM;
+        }
     }
 	
 	public void update(TileEntityPipe pipe, EnumFacing face){
@@ -103,22 +116,40 @@ public class AttachmentEStorageExport extends AttachmentData {
 		if(!pipe.getWorld().isRemote && epipe.network !=null && epipe.network instanceof EStorageNetwork){
 			EStorageNetwork net = (EStorageNetwork) epipe.network;
 			EnumFacing oDir = face.getOpposite();
-			TileEntity tile = pipe.getWorld().getTileEntity(pipe.getPos().offset(face));
-			if(tile !=null && rMode.passes(epipe.getWorld(), epipe.getPos())){
-				for (int i = 0; i < filters.getSlots(); ++i) {
-	                ItemStack slot = filters.getStackInSlot(i);
-
-	                if (slot != null) {
-	                	ItemStack cop = slot.copy();
-	                	cop.stackSize = 1;
-	                	ItemStack took = net.getItemStorage().removeItem(cop, true);
-	                	if(took !=null){
-	                		if(ItemUtil.doInsertItem(tile, slot, oDir, false) == cop.stackSize){
-	                			ItemUtil.doInsertItem(tile, slot, oDir, true);
-	                			net.getItemStorage().removeItem(cop, false);
-	                		}
-	                	}
-	                }
+			BlockPos pos = epipe.getPos().offset(face);
+			if(rMode.passes(epipe.getWorld(), epipe.getPos())){
+				IItemHandler iHandler = ItemUtil.getExternalItemHandler(epipe.getWorld(), pos, oDir);
+				IFluidHandler fHandler = FluidUtil.getExternalFluidHandler(epipe.getWorld(), pos, oDir);
+				if(iHandler !=null || fHandler !=null){
+					for (int i = 0; i < filters.getSlots(); ++i) {
+		                ItemStack slot = filters.getStackInSlot(i);
+	
+		                if (slot != null) {
+		                	ItemStack cop = slot.copy();
+		                	cop.stackSize = 1;
+		                	if(ioType == AttachmentIOType.ITEM && iHandler !=null){
+			                	ItemStack took = net.getItemStorage().removeItem(cop, true);
+			                	if(took !=null){
+			                		if(ItemUtil.doInsertItem(iHandler, slot, oDir, false) == cop.stackSize){
+			                			ItemUtil.doInsertItem(iHandler, slot, oDir, true);
+			                			net.getItemStorage().removeItem(cop, false);
+			                		}
+			                	}
+		                	}
+		                	if(ioType == AttachmentIOType.FLUID && fHandler !=null){
+		                		FluidStack fluid = FluidUtil.getFluidTypeFromItem(cop);
+		                		if(fluid !=null){
+		                			FluidStack extract = fluid.copy();
+		                			extract.amount = Fluid.BUCKET_VOLUME;
+				                	FluidStack took = net.getFluidStorage().removeFluid(extract, true);
+				                	if(took !=null){
+				                		extract.amount = fHandler.fill(took, false);
+				                		if(extract.amount > 0)fHandler.fill(net.getFluidStorage().removeFluid(extract, false), true);
+				                	}
+		                		}
+		                	}
+		                }
+					}
 				}
 			}
 		}

@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.lwjgl.util.vector.Vector3f;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.BlockFaceUV;
 import net.minecraft.client.renderer.block.model.BlockPartFace;
@@ -19,10 +18,12 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.IItemHandler;
-import alec_wam.CrystalMod.tiles.pipes.ModelPipe;
 import alec_wam.CrystalMod.tiles.pipes.ModelPipeBaked;
 import alec_wam.CrystalMod.tiles.pipes.TileEntityPipe;
 import alec_wam.CrystalMod.tiles.pipes.TileEntityPipe.RedstoneMode;
@@ -31,8 +32,8 @@ import alec_wam.CrystalMod.tiles.pipes.attachments.gui.ContainerAttachmantImport
 import alec_wam.CrystalMod.tiles.pipes.attachments.gui.GuiAttachmantImport;
 import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetwork;
 import alec_wam.CrystalMod.tiles.pipes.estorage.TileEntityPipeEStorage;
+import alec_wam.CrystalMod.util.FluidUtil;
 import alec_wam.CrystalMod.util.ItemUtil;
-import alec_wam.CrystalMod.util.ModLogger;
 import alec_wam.CrystalMod.util.client.RenderUtil;
 
 import com.google.common.collect.Lists;
@@ -46,6 +47,7 @@ public class AttachmentEStorageImport extends AttachmentData {
 	
 	public InventoryBasic filters = new InventoryBasic("filter", false, 1);
 	public RedstoneMode rMode = RedstoneMode.ON;
+	public AttachmentIOType ioType = AttachmentIOType.ITEM;
 	
 	@SideOnly(Side.CLIENT)
 	public Object getGui(EntityPlayer player, TileEntityPipeEStorage pipe, EnumFacing dir){
@@ -64,6 +66,7 @@ public class AttachmentEStorageImport extends AttachmentData {
 			nbt.setTag("Filter", filterNBT);
 		}
 		nbt.setInteger("RedstoneMode", rMode.ordinal());
+		nbt.setInteger("IOType", ioType.ordinal());
 	}
 	
 	public void loadFromNBT(NBTTagCompound nbt){
@@ -80,6 +83,11 @@ public class AttachmentEStorageImport extends AttachmentData {
         }else{
         	rMode = RedstoneMode.ON;
         }
+        if(nbt.hasKey("IOType")){
+        	ioType = AttachmentIOType.values()[nbt.getInteger("IOType") % AttachmentIOType.values().length];
+        }else{
+        	ioType = AttachmentIOType.ITEM;
+        }
 	}
 	
 	
@@ -90,16 +98,25 @@ public class AttachmentEStorageImport extends AttachmentData {
 			EStorageNetwork net = (EStorageNetwork) epipe.network;
 			EnumFacing oDir = face.getOpposite();
 			BlockPos pos = epipe.getPos().offset(face);
-			IItemHandler handler = ItemUtil.getExternalItemHandler(epipe.getWorld(), pos, oDir);
-			if(rMode.passes(epipe.getWorld(), epipe.getPos()) && handler !=null){
-				
-				
-				for(int slot = 0; slot < handler.getSlots(); slot++){
-					ItemStack stack = handler.getStackInSlot(slot);
-					if(stack !=null && ItemUtil.passesFilter(stack, getFilter())){
-						ItemStack copy = handler.extractItem(slot, 4, true);
-						if(net.getItemStorage().addItem(copy, true) > 0){
-							handler.extractItem(slot, net.getItemStorage().addItem(copy, false), false);
+			if(rMode.passes(epipe.getWorld(), epipe.getPos())){
+				IItemHandler handler = ItemUtil.getExternalItemHandler(epipe.getWorld(), pos, oDir);
+				if(handler !=null && (ioType == AttachmentIOType.ITEM || ioType == AttachmentIOType.BOTH)){
+					for(int slot = 0; slot < handler.getSlots(); slot++){
+						ItemStack stack = handler.getStackInSlot(slot);
+						if(stack !=null && ItemUtil.passesFilter(stack, getFilter())){
+							ItemStack copy = handler.extractItem(slot, 4, true);
+							if(net.getItemStorage().addItem(copy, true) > 0){
+								handler.extractItem(slot, net.getItemStorage().addItem(copy, false), false);
+							}
+						}
+					}
+				} 
+				IFluidHandler fHandler = FluidUtil.getExternalFluidHandler(epipe.getWorld(), pos, oDir);
+				if(fHandler !=null && (ioType == AttachmentIOType.FLUID || ioType == AttachmentIOType.BOTH)){
+					FluidStack contained = fHandler.drain(Fluid.BUCKET_VOLUME, false);
+					if(contained !=null && contained.amount > 0 && FluidUtil.passesFilter(contained, getFilter())){
+						if(net.getFluidStorage().addFluid(contained, true) > 0){
+							fHandler.drain(net.getFluidStorage().addFluid(contained, false), true);
 						}
 					}
 				}
