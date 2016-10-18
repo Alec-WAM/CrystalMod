@@ -1,13 +1,12 @@
 package alec_wam.CrystalMod;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import alec_wam.CrystalMod.handler.EventHandler.ItemDropType;
 import alec_wam.CrystalMod.tiles.machine.power.converter.PowerUnits;
 import alec_wam.CrystalMod.util.ModLogger;
+import alec_wam.CrystalMod.world.CrystalModWorldGenerator;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent.OnConfigChangedEvent;
@@ -16,6 +15,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class Config {
 	public static final String CATEGORY_GENERAL = "general";
+	public static final String CATEGORY_WORLD = "world";
 	public static final String CATEGORY_ENTITY = "entities";
 	public static final String CATEGORY_ENCHANTMENT = "enchantments";
 	public static final String CATEGORY_MINIONS = "minions";
@@ -26,12 +26,10 @@ public class Config {
     public static int oreMaximumVeinCount = 3;
     public static int oreMinimumHeight = 2;
     public static int oreMaximumHeight = 30;
-    public static boolean retrogen = true;
-    
-    private static int[] oregen = new int[] { -1, 1 };
-    public static Set<Integer> oregenDimensions = new HashSet<Integer>();
-
-	public static boolean enableAlarmClocks = true;
+    public static boolean retrogenInfo = false;
+    public static String retrogenID = "generated";
+    public static boolean retrogenOres = false;
+    public static boolean retrogenTrees = false;
 	
 	public static ItemDropType mobHeadType = ItemDropType.KILLED;
 	public static int mobHeadDropChance = 200;
@@ -69,10 +67,6 @@ public class Config {
 	public static int powerConduitTierTwoRF = 5120;
 	public static int powerConduitTierThreeRF = 20480;
 	public static int powerConduitTierFourRF = 40960;
-	
-	public static boolean enchantmentMendingEnabled = true;
-	public static int enchantmentMendingId = 196;
-	public static int enchantmentMendingWeight = 2;
     
 	@SubscribeEvent
 	public void onConfigChanged(OnConfigChangedEvent event) {
@@ -83,27 +77,36 @@ public class Config {
 	}
 	
     public static void init(Configuration cfg) {
-       oreMinimumVeinSize = cfg.get(CATEGORY_GENERAL, "oreMinimumVeinSize", oreMinimumVeinSize,
+       oreMinimumVeinSize = cfg.get(CATEGORY_WORLD, "oreMinimumVeinSize", oreMinimumVeinSize,
                                      "Minimum vein size of crystal ores").getInt();
-        oreMaximumVeinSize = cfg.get(CATEGORY_GENERAL, "oreMaximumVeinSize", oreMaximumVeinSize,
+        oreMaximumVeinSize = cfg.get(CATEGORY_WORLD, "oreMaximumVeinSize", oreMaximumVeinSize,
                                      "Maximum vein size of crystal ores").getInt();
-        oreMaximumVeinCount = cfg.get(CATEGORY_GENERAL, "oreMaximumVeinCount", oreMaximumVeinCount,
+        oreMaximumVeinCount = cfg.get(CATEGORY_WORLD, "oreMaximumVeinCount", oreMaximumVeinCount,
                                       "Maximum number of veins for crystal ores").getInt();
-        oreMinimumHeight = cfg.get(CATEGORY_GENERAL, "oreMinimumHeight", oreMinimumHeight,
+        oreMinimumHeight = cfg.get(CATEGORY_WORLD, "oreMinimumHeight", oreMinimumHeight,
                                    "Minimum y level for crystal ores").getInt();
-        oreMaximumHeight = cfg.get(CATEGORY_GENERAL, "oreMaximumHeight", oreMaximumHeight,
+        oreMaximumHeight = cfg.get(CATEGORY_WORLD, "oreMaximumHeight", oreMaximumHeight,
                                    "Maximum y level for crystal ores").getInt();
-        retrogen = cfg.get(CATEGORY_GENERAL, "retrogen", retrogen,
-                                   "Set to true to enable retrogen").getBoolean();
+        retrogenInfo = cfg.get(CATEGORY_WORLD, "retrogenInfo", retrogenInfo,
+                "Set to true if you want retro gen chunks logged.").getBoolean();
+        retrogenID = cfg.get(CATEGORY_WORLD, "retrogenID", retrogenID,
+                "Change this id to regen in a previously retrogened chunk.").getString();
+        retrogenOres = cfg.get(CATEGORY_WORLD, "retrogenOres", retrogenOres,
+                                   "Set to true to enable retrogen of crystal ore").getBoolean();
+        retrogenTrees = cfg.get(CATEGORY_WORLD, "retrogenTrees", retrogenTrees,
+                "Set to true to enable retrogen of crystal trees").getBoolean();
         
-        oregen = cfg.get(CATEGORY_GENERAL, "oregenDimensions", oregen,
-                                                       "Oregen dimensions for crystal ore").getIntList();
-        for (int i : oregen) {
-            oregenDimensions.add(i);
+        int[] oreBlacklist = cfg.get(CATEGORY_WORLD, "oreDimensionBlacklist", new int[] { -1, 1 },
+                                                       "Crystal ore dimension blacklist").getIntList();
+        for (int i : oreBlacklist) {
+            CrystalModWorldGenerator.oreDimBlacklist.add(i);
         }
         
-        enableAlarmClocks = cfg.get(CATEGORY_GENERAL, "alarmClocks", enableAlarmClocks,
-                "Set to true to enable alarm clocks changing time").getBoolean();
+        int[] treeBlacklist = cfg.get(CATEGORY_WORLD, "treeDimensionBlacklist", new int[] { -1, 1 },
+                "Crystal Tree dimension blacklist").getIntList();
+        for (int i : treeBlacklist) {
+        	CrystalModWorldGenerator.treeDimBlacklist.add(i);
+        }
         
         int headtype = cfg.get(CATEGORY_ENTITY, "mobHeadDrop", mobHeadType.ordinal(), "0 = Never Drop; 1 = Drop when killed; 2 = Drop only when killed by player;").getInt(mobHeadType.ordinal());
     	if(headtype < 0)headtype = 0;
@@ -119,10 +122,6 @@ public class Config {
     
     	hoeStrings = cfg.get(CATEGORY_MINIONS, "Hoes", hoeStrings, "Use this to specify items that are hoes. Use the registry name (eg. modid:name).").getStringList();
     	PowerUnits.CU.conversionRation = cfg.get(CATEGORY_MACHINE, "RFtoCU", PowerUnits.CU.conversionRation, "Amount of RF needed to convert to one unit of CU").getInt(PowerUnits.CU.conversionRation);
-
-    	enchantmentMendingEnabled = cfg.get(CATEGORY_ENCHANTMENT, "mendingEnabled", enchantmentMendingEnabled, "Set to false to disable the Mending Enchantment.").getBoolean(enchantmentMendingEnabled);
-    	enchantmentMendingId = cfg.get(CATEGORY_ENCHANTMENT, "mendingId", enchantmentMendingId, "ID of the Mending Enchantment. (Set to -1 to enabled auto id)").getInt(enchantmentMendingId);
-    	enchantmentMendingWeight = cfg.get(CATEGORY_ENCHANTMENT, "mendingWeight", enchantmentMendingWeight, "Weight of the Mending Enchantment.").getInt(enchantmentMendingWeight);
     }
     
     public static void postInit() {
@@ -145,5 +144,4 @@ public class Config {
         stack.setItemDamage(meta);
         return stack;
     }
-
 }
