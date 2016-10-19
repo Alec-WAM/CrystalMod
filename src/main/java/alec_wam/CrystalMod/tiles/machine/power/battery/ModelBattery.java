@@ -99,7 +99,7 @@ public class ModelBattery extends DelegatingDynamicItemAndBlockModel
         		ioRight = RenderUtil.getSprite(ioR == IOType.BLOCKED ? io_blocked : ioR == IOType.OUT ? io_out : io_in);
         	}
         }
-        ModelRotation modelRot = ModelRotation.X0_Y180;
+        ModelRotation modelRot = ModelRotation.X0_Y0;
         if(facing == EnumFacing.SOUTH){
         	modelRot = ModelRotation.X0_Y180;
         }

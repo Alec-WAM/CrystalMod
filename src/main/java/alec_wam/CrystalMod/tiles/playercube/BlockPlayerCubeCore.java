@@ -118,35 +118,19 @@ public class BlockPlayerCubeCore extends Block implements IExplosionImmune
 	@SideOnly(Side.CLIENT)
 	public boolean shouldSideBeRendered(IBlockState state, IBlockAccess worldIn, BlockPos pos, EnumFacing side)
 	{
-		IBlockState iblockstate = worldIn.getBlockState(pos);
-		Block block = iblockstate.getBlock();
-
-		if (block == this || iblockstate.getBlock() == ModBlocks.cubeBlock)
-		{
-			return false;
-		}
-
-		if (worldIn.getBlockState(pos.offset(side.getOpposite())) != iblockstate)
-		{
-			return true;
-		}
-
-		return block == this ? false : super.shouldSideBeRendered(state, worldIn, pos, side);
+		IBlockState other = worldIn.getBlockState(pos.offset(side));
+		if(other.getBlock() == this || other.getBlock() == ModBlocks.cubeBlock)return false;
+		return super.shouldSideBeRendered(state, worldIn, pos, side);
 	}
 
 	@Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack held, EnumFacing side, float hitX, float hitY, float hitZ)
 	{
-		if (worldIn.provider.getDimensionType().getId() == ModDimensions.CUBE_ID)
+		if (worldIn.provider.getDimension() == ModDimensions.CUBE_ID)
 		{
 			if (!worldIn.isRemote)
 			{
-				//PlayerCube cube = CubeManager.getInstance().getPlayerCubeFromPos(worldIn, pos.up());
-
-				/*if (cube != null)
-				{*/
-					CubeManager.getInstance().teleportPlayerBack((EntityPlayerMP) playerIn);
-				//}
+				CubeManager.getInstance().teleportPlayerBack((EntityPlayerMP) playerIn);
 			}
 			return true;
 		}

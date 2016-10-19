@@ -93,18 +93,10 @@ public class CommonProxy {
 	
 	public void readMainConfig() {
         Configuration cfg = mainConfig;
-        try {
-            cfg.load();
-            cfg.addCustomCategoryComment(Config.CATEGORY_GENERAL, "General settings");
-
-            Config.init(cfg);
-            Config.postInit();
-        } catch (Exception e1) {
-            FMLLog.log(Level.ERROR, e1, "Problem loading config file!");
-        } finally {
-            if (mainConfig.hasChanged()) {
-                mainConfig.save();
-            }
+        Config.init(cfg);
+        Config.postInit();
+        if (mainConfig.hasChanged()) {
+            mainConfig.save();
         }
     }
 	
@@ -115,7 +107,6 @@ public class CommonProxy {
 		MinecraftForge.EVENT_BUS.register(PipeNetworkTickHandler.instance);
 		MinecraftForge.EVENT_BUS.register(new EventHandler());
 		MinecraftForge.EVENT_BUS.register(WorldTickHandler.instance);
-		MinecraftForge.EVENT_BUS.register(new EventHandler());
 		new TagManager();
 		
 		ModCrafting.init();

@@ -89,6 +89,6 @@ public class PlayerCubeWorldProvider extends WorldProvider
 
 	@Override
 	public DimensionType getDimensionType() {
-		return DimensionType.OVERWORLD;
+		return DimensionType.getById(ModDimensions.CUBE_ID);
 	}
 }

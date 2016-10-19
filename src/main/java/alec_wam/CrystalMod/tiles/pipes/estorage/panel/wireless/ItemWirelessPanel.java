@@ -15,6 +15,7 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.DimensionManager;
@@ -151,7 +152,25 @@ public class ItemWirelessPanel extends Item implements ICustomModel {
 		if(isValid(stack)){
 			BlockPos pos = getBlockPos(stack);
 			list.add("Panel location {"+pos.getX()+", "+pos.getY()+", "+pos.getZ()+"}");
-			list.add("Panel Dimension Id: "+ItemNBTHelper.getInteger(stack, "PanelDim", 0));
+			
+			int dim = ItemNBTHelper.getInteger(stack, "PanelDim", 0);
+			String name = ""+dim;
+			if (!DimensionManager.isDimensionRegistered(dim)) {
+		      name = Integer.toString(dim);
+		    }else {
+			    DimensionType type = DimensionManager.getProviderType(dim);
+			    if (type == null) {
+			      name = Integer.toString(dim);
+			    }else {
+				    name = type.getName();
+				    int[] dims = DimensionManager.getDimensions(type);
+				    if (dims != null && dims.length > 1) {
+				      name += " " + dim;
+				    }
+			    }
+		    }
+			
+			list.add("Panel Dimension: "+name);
 		}
 	}
 	

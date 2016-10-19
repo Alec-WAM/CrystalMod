@@ -60,20 +60,9 @@ public class BlockPlayerCubeBlock extends Block implements IExplosionImmune {
 	@SideOnly(Side.CLIENT)
 	public boolean shouldSideBeRendered(IBlockState state, IBlockAccess worldIn, BlockPos pos, EnumFacing side)
 	{
-		IBlockState iblockstate = worldIn.getBlockState(pos);
-		Block block = iblockstate.getBlock();
-
-		if (block == this || iblockstate.getBlock() == ModBlocks.cubeCore)
-		{
-			return false;
-		}
-
-		if (worldIn.getBlockState(pos.offset(side.getOpposite())) != iblockstate && iblockstate.getBlock() != ModBlocks.cubeCore)
-		{
-			return true;
-		}
-
-		return block == this ? false : super.shouldSideBeRendered(state, worldIn, pos, side);
+		IBlockState other = worldIn.getBlockState(pos.offset(side));
+		if(other.getBlock() == this || other.getBlock() == ModBlocks.cubeCore)return false;
+		return super.shouldSideBeRendered(state, worldIn, pos, side);
 	}
 
 }
