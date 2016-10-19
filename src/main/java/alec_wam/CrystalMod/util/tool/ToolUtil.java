@@ -12,6 +12,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.items.ModItems;
 import cofh.api.energy.IEnergyContainerItem;
 import cofh.api.energy.IEnergyStorage;
 
@@ -122,6 +123,7 @@ public class ToolUtil {
   
   public static boolean isWrenchItem(Item equipped){
 	  if(equipped == null)return false;
+	  if(equipped == ModItems.wrench) return true;
 	  for (Class<?> c : wrenchClasses) {
           if (c != null && c.isAssignableFrom(equipped.getClass()))
               return true;

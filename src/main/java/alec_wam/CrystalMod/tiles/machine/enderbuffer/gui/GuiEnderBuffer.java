@@ -7,7 +7,9 @@ import java.util.List;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.EnumDyeColor;
 import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.input.Mouse;
@@ -37,6 +39,31 @@ public class GuiEnderBuffer extends GuiContainerTabbed {
 		int cuX = 51;
 		int rfX = 71;
 		int flX = 91;
+		
+		if(buffer !=null){
+			int id = buffer.code;
+			int color1 = id & 15;
+            int color2 = (id >> 4) & 15;
+            int color3 = (id >> 8) & 15;
+            EnumDyeColor c1 = EnumDyeColor.byMetadata(color1);
+            EnumDyeColor c2 = EnumDyeColor.byMetadata(color2);
+            EnumDyeColor c3 = EnumDyeColor.byMetadata(color3);
+            
+            int back = Color.BLACK.getRGB();
+            
+            drawRect(10, 20, 30, 40, back);
+            drawRect(10, 42, 30, 62, back);
+            drawRect(10, 64, 30, 84, back);
+            
+            float[] afloat = EntitySheep.getDyeRgb(c1);
+            float[] afloat1 = EntitySheep.getDyeRgb(c2);
+            float[] afloat2 = EntitySheep.getDyeRgb(c3);
+            
+            drawRect(12, 22, 28, 38, new Color(afloat[0], afloat[1], afloat[2]).getRGB());
+            drawRect(12, 44, 28, 60, new Color(afloat1[0], afloat1[1], afloat1[2]).getRGB());
+            drawRect(12, 66, 28, 82, new Color(afloat2[0], afloat2[1], afloat2[2]).getRGB());
+		}
+		
 		if(buffer !=null && buffer.hasBuffer()){
 			EnderBuffer ebuffer = buffer.getBuffer();
 			int cu = ebuffer.cuStorage.getCEnergyStored(); int maxCU = ebuffer.cuStorage.getMaxCEnergyStored();

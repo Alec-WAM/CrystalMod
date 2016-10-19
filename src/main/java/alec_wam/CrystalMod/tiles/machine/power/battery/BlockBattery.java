@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import com.google.common.collect.Lists;
+
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -210,7 +212,9 @@ public class BlockBattery extends BlockContainer implements ICustomModel {
     		}else{
     			if(!world.isRemote){
     				//String scale = ""+battery.getScaledEnergyStored(8)+" isRemote = "+world.isRemote;
-    				ChatUtil.sendNoSpam(player, "Power: "+battery.getCEnergyStored(side)+" / "+battery.getMaxCEnergyStored(side));
+    				String power = "Power: "+battery.getCEnergyStored(side)+" / "+battery.getMaxCEnergyStored(side);
+    				String facing = ("Facing: "+battery.facing);
+    				ChatUtil.sendNoSpam(player, power, facing);
     			}
     			return true;
     		}
