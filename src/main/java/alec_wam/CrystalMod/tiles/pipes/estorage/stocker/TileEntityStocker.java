@@ -1,5 +1,6 @@
 package alec_wam.CrystalMod.tiles.pipes.estorage.stocker;
 
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.items.IItemHandler;
 import alec_wam.CrystalMod.tiles.TileEntityInventory;
@@ -74,6 +75,11 @@ public class TileEntityStocker extends TileEntityInventory implements INetworkTi
 
 	@Override
 	public IItemHandler getFacingInventory() {
+		return null;
+	}
+
+	@Override
+	public BlockPos getFacingPos() {
 		return null;
 	}
 

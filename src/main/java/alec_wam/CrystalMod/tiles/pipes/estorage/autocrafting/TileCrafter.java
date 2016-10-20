@@ -158,4 +158,9 @@ public class TileCrafter extends TileEntityMod implements INetworkTile, IAutoCra
 		return ItemUtil.getItemHandler(getFacingTile(), getDirection().getOpposite());
 	}
 
+	@Override
+	public BlockPos getFacingPos() {
+		return pos.offset(direction);
+	}
+
 }

@@ -77,44 +77,61 @@ public class BasicCraftingTask implements ICraftingTask {
         return pattern;
     }
 
-    public boolean update(EStorageNetwork controller) {
+    public boolean update(final EStorageNetwork controller) {
         if(updatedOnce == false){
-        	calculate(controller);
+        	Thread calculationThread = new Thread(requested.getUnlocalizedName()+"x"+quantity+" Calculate Thread"){
+        		public void run()
+                {
+        			try{
+        				calculate(controller);
+        			} catch(Exception e){
+        				ModLogger.warning(requested.getUnlocalizedName()+"x"+quantity+" Calculation Thread experienced the following exception");
+        				e.printStackTrace();
+        			}
+                }
+        	};
+        	calculationThread.start();
         }
-    	//if(!updatedOnce){
-    		
-    		updatedOnce = true;
-    	//}
-    	//calculate(controller);
+    	updatedOnce = true;
     	for (CraftingProcess process : toProcess) {
             IItemHandler inventory = process.getPattern().getCrafter().getFacingInventory();
 
-            if (inventory != null && process.getStackToInsert() != null) {
-            	ItemStackData data = process.getPattern().isOredict() ? controller.getItemStorage().getOreItemData(process.getStackToInsert()) : controller.getItemStorage().getItemData(process.getStackToInsert());
-            	ItemStack toInsert = controller.getItemStorage().removeItemSpecial(data, 1, false);
-
-                if (ItemHandlerHelper.insertItem(inventory, toInsert, true) == null) {
-                    ItemHandlerHelper.insertItem(inventory, toInsert, false);
-
-                    process.nextStack();
-                }
+            if (!process.started && inventory !=null && canProcess(controller, process)) {
+            	process.started = true;
+            	for (ItemStack insertStack : process.getToInsert()) {
+	            	ItemStackData data = controller.getItemStorage().getItemData(insertStack);
+	            	if(data == null && pattern.isOredict()){
+	            		data = controller.getItemStorage().getOreItemData(insertStack);
+	            	}
+	            	if(data !=null){
+		            	ItemStack toInsert = controller.getItemStorage().removeItemSpecial(data, 1, false);
+		
+		                if (ItemHandlerHelper.insertItem(inventory, toInsert, true) == null) {
+		                    ItemHandlerHelper.insertItem(inventory, toInsert, false);
+		                }
+	            	}
+            	}
             }
         }
     	
     	for (ItemStack stack : toTake) {
-        	ItemStackData data = getPattern().isOredict() ? controller.getItemStorage().getOreItemData(stack) : controller.getItemStorage().getItemData(stack);
-        	ItemStack stackExtracted = controller.getItemStorage().removeItemSpecial(data, 1, false);
+        	ItemStackData data = controller.getItemStorage().getItemData(stack);
+        	
+        	if(data == null && getPattern().isOredict()){
+        		data = controller.getItemStorage().getOreItemData(stack);
+        	}
+        	
+        	ItemStack stackExtracted = controller.getItemStorage().removeItemSpecial(data, Math.min(stack.stackSize, 64), false);
 
             if (stackExtracted != null) {
-                stack.stackSize--;
+                stack.stackSize-=stackExtracted.stackSize;
                 if(stack.stackSize <=0){
                 	toTake.remove(stack);
                 }
 
                 itemsTook.add(stackExtracted);
+                break;
             }
-
-            break;
         }
     	
     	if (toTake.isEmpty()) {
@@ -124,9 +141,8 @@ public class BasicCraftingTask implements ICraftingTask {
                 if (stackExtracted != null) {
                 	toTakeFluid.remove(stack);
                     fluidsTook.add(stackExtracted);
+                    break;
                 }
-
-                break;
             }
         }
 
@@ -143,6 +159,35 @@ public class BasicCraftingTask implements ICraftingTask {
             return toInsert.isEmpty();
         }
     	return false;
+    }
+    
+    private boolean canProcess(EStorageNetwork network, CraftingProcess process) {
+        for (ICraftingTask otherTask : network.getCraftingTasks()) {
+            for (CraftingProcess otherProcess : otherTask.getToProcess()) {
+                if (otherProcess != process && !otherProcess.hasReceivedOutputs() && otherProcess.started) {
+                    if (!isPatternsEqual(process.getPattern(), otherProcess.getPattern())) {
+                        if (process.getPattern().getCrafter().getFacingPos().equals(otherProcess.getPattern().getCrafter().getFacingPos())) {
+                            return false;
+                        }
+                    }
+                }
+            }
+        }
+
+        return true;
+    }
+    
+    private boolean isPatternsEqual(CraftingPattern left, CraftingPattern right) {
+        for (int i = 0; i < 9; ++i) {
+            ItemStack leftStack = left.getInputs().get(i);
+            ItemStack rightStack = right.getInputs().get(i);
+
+            if (!ItemUtil.canCombine(leftStack, rightStack)) {
+                return false;
+            }
+        }
+
+        return true;
     }
     
     public void calculate(EStorageNetwork network) {
@@ -183,13 +228,17 @@ public class BasicCraftingTask implements ICraftingTask {
         for (int i = 0; i < pattern.getInputs().size(); ++i) {
             ItemStack input = pattern.getInputs().get(i);
 
-            ItemStackData inputInNetwork = pattern.isOredict() ? network.getItemStorage().getOreItemData(input) : network.getItemStorage().getItemData(input);
+            ItemStackData inputInNetwork = network.getItemStorage().getItemData(input);
 
+            if(inputInNetwork == null && pattern.isOredict()){
+            	inputInNetwork = network.getItemStorage().getOreItemData(input);
+            }
+            
             if (inputInNetwork == null || inputInNetwork.getAmount() == 0) {
             	ItemStack extra = null;//extras.get(input, compare);
 
                 search : for(ItemStack ex : extras){
-                	if(pattern.isOredict() ? ItemUtil.isOreMatch(ex, input) : ItemUtil.canCombine(ex, input)){
+                	if(pattern.isOredict() ? ItemUtil.stackMatchUseOre(ex, input) : ItemUtil.canCombine(ex, input)){
                 		extra = ex;
                 		break search;
                 	}

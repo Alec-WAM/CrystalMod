@@ -454,8 +454,6 @@ public class EStorageNetwork extends AbstractPipeNetwork {
 		if (!craftingTasks.empty()) {
 			ICraftingTask top = craftingTasks.peek();
 			if (ticks % top.getPattern().getCrafter().getSpeed() == 0 && top.update(this)) {
-				top.onDone(this);
-
 				craftingTasks.pop();
 			}
 		}
@@ -567,7 +565,6 @@ public class EStorageNetwork extends AbstractPipeNetwork {
 	}
 
 	public ICraftingTask createCraftingTask(ItemStack request, CraftingPattern pattern, int amt) {
-		if(amt < 0)ModLogger.info("Trying to add "+request+" with quantity 0");
 		return new BasicCraftingTask(request, pattern, amt);
 	}
 
