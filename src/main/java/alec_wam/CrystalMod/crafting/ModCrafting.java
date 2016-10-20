@@ -53,6 +53,7 @@ import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.util.EnumFacing;
+import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStack;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
@@ -242,16 +243,17 @@ public class ModCrafting {
 		addShapelessOreRecipe(new ItemStack(ModItems.pipeFilter, 1, FilterType.CAMERA.ordinal()), new Object[]{new ItemStack(ModItems.pipeFilter, 1, FilterType.NORMAL.ordinal()), Blocks.REDSTONE_LAMP, "dustRedstone"});
 		
 		List<String> copyListTank = Lists.newArrayList();
-		copyListTank.add("tankContents");
+		copyListTank.add(FluidHandlerItemStack.FLUID_NBT_KEY);
 		
-		addShapedOreRecipe(new ItemStack(ModBlocks.crystalTank, 1, TankType.BLUE.getMeta()), new Object[]{"###", "G G", "###", '#', bluePlate, 'G', "paneGlass"});
-		ModCrafting.addNBTRecipe(new ItemStack(ModBlocks.crystalTank, 1, TankType.RED.getMeta()), copyListTank, new Object[]{"N#N", "#T#", "N#N", '#', redPlate, 'N', redNugget, 'T', new ItemStack(ModBlocks.crystalTank, 1, TankType.BLUE.getMeta())});
-		ModCrafting.addNBTRecipe(new ItemStack(ModBlocks.crystalTank, 1, TankType.GREEN.getMeta()), copyListTank, new Object[]{"N#N", "#T#", "N#N", '#', greenPlate, 'N', greenNugget, 'T', new ItemStack(ModBlocks.crystalTank, 1, TankType.RED.getMeta())});
-		ModCrafting.addNBTRecipe(new ItemStack(ModBlocks.crystalTank, 1, TankType.DARK.getMeta()), copyListTank, new Object[]{"N#N", "#T#", "N#N", '#', darkPlate, 'N', darkNugget, 'T', new ItemStack(ModBlocks.crystalTank, 1, TankType.GREEN.getMeta())});
-		ModCrafting.addNBTRecipe(new ItemStack(ModBlocks.crystalTank, 1, TankType.PURE.getMeta()), copyListTank, new Object[]{"N#N", "#T#", "N#N", '#', purePlate, 'N', pureNugget, 'T', new ItemStack(ModBlocks.crystalTank, 1, TankType.DARK.getMeta())});
+		addShapedOreRecipe(new ItemStack(ModBlocks.crystalTank, 1, TankType.BLUE.getMeta()), new Object[]{"###", "#G#", "###", '#', bluePlate, 'G', "blockGlass"});
+		ModCrafting.addNBTRecipe(new ItemStack(ModBlocks.crystalTank, 1, TankType.RED.getMeta()), copyListTank, new Object[]{"###", "#T#", "###", '#', redPlate, 'T', new ItemStack(ModBlocks.crystalTank, 1, TankType.BLUE.getMeta())});
+		ModCrafting.addNBTRecipe(new ItemStack(ModBlocks.crystalTank, 1, TankType.GREEN.getMeta()), copyListTank, new Object[]{"###", "#T#", "###", '#', greenPlate, 'T', new ItemStack(ModBlocks.crystalTank, 1, TankType.RED.getMeta())});
+		ModCrafting.addNBTRecipe(new ItemStack(ModBlocks.crystalTank, 1, TankType.DARK.getMeta()), copyListTank, new Object[]{"###", "#T#", "###", '#', darkPlate, 'T', new ItemStack(ModBlocks.crystalTank, 1, TankType.GREEN.getMeta())});
+		ModCrafting.addNBTRecipe(new ItemStack(ModBlocks.crystalTank, 1, TankType.PURE.getMeta()), copyListTank, new Object[]{"###", "#T#", "###", '#', purePlate, 'T', new ItemStack(ModBlocks.crystalTank, 1, TankType.DARK.getMeta())});
 
 		List<String> copyListBattery = Lists.newArrayList();
 		copyListBattery.add("Energy");
+		copyListBattery.add("BatteryData");
 		for(EnumFacing face : EnumFacing.VALUES){
 			copyListBattery.add("io."+face.name().toLowerCase());
 		}

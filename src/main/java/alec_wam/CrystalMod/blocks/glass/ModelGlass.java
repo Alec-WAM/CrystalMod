@@ -345,6 +345,10 @@ public class ModelGlass extends DynamicItemAndBlockModel {
 
 	@Override
 	public TextureAtlasSprite getParticleTexture() {
+		if(state !=null){
+			GlassType type = state.getValue(BlockCrystalGlass.TYPE);
+			if(type !=null)return getTexture(type);
+		}
 		return getClear();
 	}
 

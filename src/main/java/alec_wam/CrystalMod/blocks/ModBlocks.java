@@ -222,6 +222,7 @@ public class ModBlocks {
 		
 		crystalTank = new BlockTank();
 		registerBlock(crystalTank, new ItemBlockTank(crystalTank), "crystaltank");
+		ItemBlockMeta.setMappingProperty(crystalTank, BlockTank.TYPE);
 	    regsiterTileEntity(TileEntityTank.class);
 		
 		engine = new BlockEngine();

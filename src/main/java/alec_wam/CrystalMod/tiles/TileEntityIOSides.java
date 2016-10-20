@@ -7,6 +7,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IStringSerializable;
 import alec_wam.CrystalMod.network.IMessageHandler;
 import alec_wam.CrystalMod.util.BlockUtil;
+import alec_wam.CrystalMod.util.ModLogger;
 
 import com.google.common.collect.Maps;
 
@@ -22,6 +23,16 @@ public class TileEntityIOSides extends TileEntityMod implements IMessageHandler 
 			return name().toLowerCase();
 		}
 		
+		public IOType getNext(){
+			if(this == IOType.BLOCKED){
+				return IOType.IN;
+			}
+			if(this == IOType.IN){
+				return IOType.OUT;
+			}
+			return IOType.BLOCKED;
+		}
+		
 	}
 	
 	//TM (Apple Computers Inc.) ;)
@@ -31,7 +42,7 @@ public class TileEntityIOSides extends TileEntityMod implements IMessageHandler 
 	
 	public void setIO(EnumFacing face, IOType io){
 		this.ios.put(face, io);
-		if(this.getWorld() !=null && this.getBlockType() !=null)this.getWorld().notifyNeighborsOfStateChange(getPos(), getBlockType());
+		if(this.getWorld() !=null && this.getBlockType() !=null)BlockUtil.markBlockForUpdate(getWorld(), getPos());
 	}
 	
 	public IOType getIO(EnumFacing face){
@@ -90,8 +101,7 @@ public class TileEntityIOSides extends TileEntityMod implements IMessageHandler 
 					break;
 				}
 			}
-			this.ios.put(ioFace, type);
-			BlockUtil.markBlockForUpdate(getWorld(), getPos());
+			this.setIO(ioFace, type);
 		}
 	}
 

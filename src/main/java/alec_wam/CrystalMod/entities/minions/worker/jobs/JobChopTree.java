@@ -2,20 +2,15 @@ package alec_wam.CrystalMod.entities.minions.worker.jobs;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.WorldServer;
 import alec_wam.CrystalMod.entities.minions.MinionConstants;
 import alec_wam.CrystalMod.entities.minions.worker.EntityMinionWorker;
 import alec_wam.CrystalMod.entities.minions.worker.WorkerJob;
 import alec_wam.CrystalMod.tiles.machine.worksite.TileWorksiteBase;
 import alec_wam.CrystalMod.tiles.machine.worksite.imp.WorksiteTreeFarm;
-import alec_wam.CrystalMod.util.BlockUtil;
-import alec_wam.CrystalMod.util.ModLogger;
 import alec_wam.CrystalMod.util.fakeplayer.FakePlayerUtil;
 import alec_wam.CrystalMod.util.tool.ToolUtil;
 import alec_wam.CrystalMod.util.tool.TreeUtil;
@@ -92,7 +87,7 @@ public class JobChopTree extends WorkerJob {
 			}
 		} else {
 			if(worker.getNavigator().noPath()){
-				worker.getNavigator().tryMoveToXYZ(logPos.getX() + 0.5, logPos.getY() + 0.5, logPos.getZ() + 0.5, MinionConstants.SPEED_WALK);
+				worker.getNavigator().tryMoveToXYZ(logPos.getX() + 0.5, logPos.down().getY() + 0.5, logPos.getZ() + 0.5, MinionConstants.SPEED_WALK);
 			}
 		}
 		

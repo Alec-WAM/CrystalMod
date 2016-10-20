@@ -187,18 +187,9 @@ public class BlockBattery extends BlockContainer implements ICustomModel {
     			if(!world.isRemote){
     				
     				EnumFacing fixedDir = battery.fixFace(side);
-    				
     				IOType type = battery.getIO(fixedDir);
-    				IOType newType = null;
-    				if(type == IOType.BLOCKED){
-    					newType = IOType.IN;
-    				}
-    				if(type == IOType.IN){
-    					newType = IOType.OUT;
-    				}
-    				if(type == IOType.OUT){
-    					newType = IOType.BLOCKED;
-    				}
+    				IOType newType = type.getNext();
+    				
     				if(newType !=null){
 	    				battery.setIO(fixedDir, newType);
 	    				NBTTagCompound nbt = new NBTTagCompound();
@@ -211,10 +202,11 @@ public class BlockBattery extends BlockContainer implements ICustomModel {
     			
     		}else{
     			if(!world.isRemote){
+    				player.openGui(CrystalMod.instance, 0, world, pos.getX(), pos.getY(), pos.getZ());
     				//String scale = ""+battery.getScaledEnergyStored(8)+" isRemote = "+world.isRemote;
-    				String power = "Power: "+battery.getCEnergyStored(side)+" / "+battery.getMaxCEnergyStored(side);
+    				/*String power = "Power: "+battery.getCEnergyStored(side)+" / "+battery.getMaxCEnergyStored(side);
     				String facing = ("Facing: "+battery.facing);
-    				ChatUtil.sendNoSpam(player, power, facing);
+    				ChatUtil.sendNoSpam(player, power, facing);*/
     			}
     			return true;
     		}

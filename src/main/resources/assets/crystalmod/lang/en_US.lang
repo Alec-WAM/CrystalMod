@@ -125,7 +125,7 @@ item.crystalmod.pipefilter.camera.name=Pipe Filter (Camera)
 item.crystalmod.pipefilter.fluid.name=Pipe Filter (Fluid)
 
 item.crystalmod.wrench.name=Crystal Wrench
-item.crystalmod.guide.normal.name=Crystal Guide
+item.crystalmod.guide.crystal.name=Crystal Guide
 item.crystalmod.guide.estorage.name=Network Storage Guide
 
 item.crystalmod.harddriveblue.name=Item Hard-drive (Blue)

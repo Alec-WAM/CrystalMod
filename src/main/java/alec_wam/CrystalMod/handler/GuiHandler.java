@@ -29,6 +29,9 @@ import alec_wam.CrystalMod.tiles.machine.enderbuffer.gui.ContainerEnderBuffer;
 import alec_wam.CrystalMod.tiles.machine.enderbuffer.gui.GuiEnderBuffer;
 import alec_wam.CrystalMod.tiles.machine.mobGrinder.GuiMobGrinder;
 import alec_wam.CrystalMod.tiles.machine.mobGrinder.TileEntityMobGrinder;
+import alec_wam.CrystalMod.tiles.machine.power.battery.ContainerBattery;
+import alec_wam.CrystalMod.tiles.machine.power.battery.GuiBattery;
+import alec_wam.CrystalMod.tiles.machine.power.battery.TileEntityBattery;
 import alec_wam.CrystalMod.tiles.machine.power.engine.furnace.ContainerEngineFurnace;
 import alec_wam.CrystalMod.tiles.machine.power.engine.furnace.GuiEngineFurnace;
 import alec_wam.CrystalMod.tiles.machine.power.engine.furnace.TileEntityEngineFurnace;
@@ -227,6 +230,7 @@ public class GuiHandler implements IGuiHandler {
         	if(te instanceof TileEntityEngineLava) return new GuiEngineLava(player, (TileEntityEngineLava)te);
         	if(te instanceof TileEntityEnderBuffer) return new GuiEnderBuffer(player, (TileEntityEnderBuffer)te);
         	if(te instanceof TileEntityMobGrinder) return new GuiMobGrinder(player, (TileEntityMobGrinder)te);
+        	if(te instanceof TileEntityBattery) return new GuiBattery(player, (TileEntityBattery)te);
         } 
         return null;
     }
@@ -337,6 +341,7 @@ public class GuiHandler implements IGuiHandler {
         	if(te instanceof TileEntityEngineLava) return new ContainerEngineLava(player, (TileEntityEngineLava)te);
         	if(te instanceof TileEntityEnderBuffer) return new ContainerEnderBuffer(player, (TileEntityEnderBuffer)te);
         	if(te instanceof TileEntityMobGrinder) return new ContainerNull();
+        	if(te instanceof TileEntityBattery) return new ContainerBattery(player, (TileEntityBattery)te);
         }
         return null;
     }
