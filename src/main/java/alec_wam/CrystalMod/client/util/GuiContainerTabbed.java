@@ -1,10 +1,14 @@
 package alec_wam.CrystalMod.client.util;
 
+import java.awt.Rectangle;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.logging.log4j.core.helpers.Strings;
 import org.lwjgl.opengl.GL11;
+
+import com.google.common.collect.Lists;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -64,6 +68,7 @@ public class GuiContainerTabbed extends GuiContainer {
 	public class TabManager {
 
 		protected ArrayList<Tab> tabs = new ArrayList<Tab>();
+		protected List<Rectangle> tabBounds = Lists.newArrayList();
 		private GuiContainerTabbed gui;
 
 		public TabManager(GuiContainerTabbed gui) {
@@ -113,6 +118,7 @@ public class GuiContainerTabbed extends GuiContainer {
 		protected void drawTabs(int mouseX, int mouseY) {
 
 			int xPos = 8;
+			int tabIndex = 0;
 			for (Tab tab : tabs) {
 
 				tab.update();
@@ -121,7 +127,14 @@ public class GuiContainerTabbed extends GuiContainer {
 				}
 
 				tab.draw(xSize, xPos);
+				while (tabBounds.size() <= tabIndex) {
+					tabBounds.add(new Rectangle(0, 0, 0, 0));
+			    }
+				int tabX = guiLeft+xSize;
+				int tabY = guiTop+xPos;
+				tabBounds.set(tabIndex, new Rectangle(tabX, tabY, tab.currentWidth, tab.getHeight()+3));
 				xPos += tab.getHeight();
+				tabIndex++;
 			}
 
 			Tab tab = getAtPosition(mouseX, mouseY);
@@ -278,6 +291,10 @@ public class GuiContainerTabbed extends GuiContainer {
 	        vertexbuffer.pos((double)(x + 0), (double)(y + 0), (double)zLevel).tex((double)((float)(textureX + 0) * 0.00390625F), (double)((float)(textureY + 0) * 0.00390625F)).endVertex();
 	        tessellator.draw();
 	    }
+	}
+
+	public List<Rectangle> getBlockingAreas() {
+		return tabManager.tabBounds;
 	}
 
 		

@@ -75,6 +75,8 @@ public class JEIPlugin  extends BlankModPlugin {
 		jeiHelpers.getItemBlacklist().addItemToBlacklist(new ItemStack(ModBlocks.crystalTreePlantDark));
 		jeiHelpers.getItemBlacklist().addItemToBlacklist(new ItemStack(ModBlocks.cubeBlock));
 		jeiHelpers.getItemBlacklist().addItemToBlacklist(new ItemStack(ModBlocks.cubeCore));
+		
+		registry.addAdvancedGuiHandlers(new AdvancedGuiHandlerCrystalMod());
 	}
 	
 	@Override

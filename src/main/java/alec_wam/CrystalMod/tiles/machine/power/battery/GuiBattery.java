@@ -43,13 +43,30 @@ public class GuiBattery extends GuiContainerTabbed {
 	protected void drawGuiContainerForegroundLayer(int par1, int par2) {
 		super.drawGuiContainerForegroundLayer(par1, par2);
 		int cu = battery.energyStorage.getCEnergyStored(); int maxCU = battery.energyStorage.getMaxCEnergyStored();
+		
+		BatteryType type = BlockBattery.fromMeta(battery.getBlockMetadata());
+		
+		if(type == BatteryType.CREATIVE){
+			cu = maxCU = 1;
+		}
+		
 		RenderUtil.renderPowerBar(80, 20, 0, 16, 45, cu, maxCU, Color.CYAN.getRGB(), Color.CYAN.darker().getRGB());
+		
+		if(type != BatteryType.CREATIVE){
+			String in = "In: "+battery.energyStorage.getMaxReceive();
+			String out = "Out: "+battery.energyStorage.getMaxExtract();
+			drawString(fontRendererObj, in, (xSize/4)-(fontRendererObj.getStringWidth(in)/2), 60, Color.GRAY.getRGB());
+			drawString(fontRendererObj, out, xSize-(xSize/4)-(fontRendererObj.getStringWidth(out)/2), 60, Color.GRAY.getRGB());
+		}
+		
 		int xAxis = (par1 - (width - xSize) / 2);
 		int yAxis = (par2 - (height - ySize) / 2);
 		if(xAxis >= 80 && xAxis < 80+16 && yAxis >= 20 && yAxis < 20+45)
 		{
 			List<String> lines = Lists.newArrayList();
-			lines.add(cu > 0 ? "CU: "+ cu +" / "+ maxCU +Lang.localize("power.cu"): Lang.localize("gui.empty"));
+			if(type == BatteryType.CREATIVE){
+				lines.add("Infinite "+Lang.localize("power.cu"));
+			} else lines.add(cu > 0 ? cu +" / "+ maxCU + " "+Lang.localize("power.cu"): Lang.localize("gui.empty"));
 			drawHoveringText(lines, xAxis, yAxis);
 			RenderHelper.enableGUIStandardItemLighting();
 		}
@@ -148,10 +165,10 @@ public class GuiBattery extends GuiContainerTabbed {
 				int ioX = x+3;
 			    int ioY = y+4;
 			    int back = Color.BLACK.getRGB();
-	            drawRect(ioX, ioY, ioX+20, ioY+20, back);
-	            drawRect(ioX+2, ioY+2, ioX+8, ioY+18, Color.CYAN.darker().getRGB());
-	            drawRect(ioX+8, ioY+2, ioX+12, ioY+18, Color.GRAY.getRGB());
-	            drawRect(ioX+12, ioY+2, ioX+18, ioY+18, Color.RED.getRGB());
+	            drawRect(ioX, ioY, ioX+16, ioY+16, back);
+	            drawRect(ioX+2, ioY+2, ioX+6, ioY+14, Color.CYAN.darker().getRGB());
+	            drawRect(ioX+6, ioY+2, ioX+10, ioY+14, Color.RED.getRGB());
+	            drawRect(ioX+10, ioY+2, ioX+14, ioY+14, Color.GRAY.getRGB());
 	            GlStateManager.popMatrix();
 			}
 			
