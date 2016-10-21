@@ -171,7 +171,6 @@ public class BlockBattery extends BlockContainer implements ICustomModel {
         	TileEntityBattery battery = (TileEntityBattery)tile;
         	
     		if(player.isSneaking()){
-    			
     			if(ToolUtil.isToolEquipped(player, hand)){
     				if(!world.isRemote){
     					ItemStack stack = new ItemStack(ModBlocks.battery, 1, getMetaFromState(state));
@@ -183,30 +182,9 @@ public class BlockBattery extends BlockContainer implements ICustomModel {
     				world.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
 					return true;
 				}
-    			
-    			if(!world.isRemote){
-    				
-    				EnumFacing fixedDir = battery.fixFace(side);
-    				IOType type = battery.getIO(fixedDir);
-    				IOType newType = type.getNext();
-    				
-    				if(newType !=null){
-	    				battery.setIO(fixedDir, newType);
-	    				NBTTagCompound nbt = new NBTTagCompound();
-	    				nbt.setString("IOType", newType.getName());
-	    				CrystalModNetwork.sendToAllAround(new PacketTileMessage(pos, "IO."+fixedDir.name().toUpperCase(), nbt), tile);
-	    				BlockUtil.markBlockForUpdate(world, pos);
-    				}
-    			}
-    			return true;
-    			
     		}else{
     			if(!world.isRemote){
     				player.openGui(CrystalMod.instance, 0, world, pos.getX(), pos.getY(), pos.getZ());
-    				//String scale = ""+battery.getScaledEnergyStored(8)+" isRemote = "+world.isRemote;
-    				/*String power = "Power: "+battery.getCEnergyStored(side)+" / "+battery.getMaxCEnergyStored(side);
-    				String facing = ("Facing: "+battery.facing);
-    				ChatUtil.sendNoSpam(player, power, facing);*/
     			}
     			return true;
     		}

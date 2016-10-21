@@ -102,7 +102,7 @@ public class BlockTank extends EnumBlock<BlockTank.TankType> implements ITileEnt
         		tankSaved = ItemBlockTank.loadTank(nbt);
         	}
         	if(tankSaved !=null){
-        		tank.tank = tankSaved;
+        		tank.tank.setFluid(tankSaved.getFluid());
         		BlockUtil.markBlockForUpdate(world, pos);
         	}
         	if(tank.creative){

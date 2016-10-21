@@ -90,7 +90,8 @@ public class BasicCraftingTask implements ICraftingTask {
         			}
                 }
         	};
-        	calculationThread.start();
+        	calculate(controller);
+        	//calculationThread.start();
         }
     	updatedOnce = true;
     	for (CraftingProcess process : toProcess) {
@@ -179,8 +180,8 @@ public class BasicCraftingTask implements ICraftingTask {
     
     private boolean isPatternsEqual(CraftingPattern left, CraftingPattern right) {
         for (int i = 0; i < 9; ++i) {
-            ItemStack leftStack = left.getInputs().get(i);
-            ItemStack rightStack = right.getInputs().get(i);
+            ItemStack leftStack = i >= left.getInputs().size() ? null : left.getInputs().get(i);
+            ItemStack rightStack = i >= right.getInputs().size() ? null : right.getInputs().get(i);
 
             if (!ItemUtil.canCombine(leftStack, rightStack)) {
                 return false;

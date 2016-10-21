@@ -36,6 +36,7 @@ public class TileEntityBattery extends TileEntityIOSides implements IMessageHand
 	
 	public void writeCustomNBT(NBTTagCompound nbt){
 		super.writeCustomNBT(nbt);
+		nbt.setInteger("Type", getBlockMetadata());
 		nbt.setInteger("Facing", facing);
 		this.energyStorage.writeToNBT(nbt);
 	}
@@ -43,6 +44,8 @@ public class TileEntityBattery extends TileEntityIOSides implements IMessageHand
 	public void readCustomNBT(NBTTagCompound nbt){
 		super.readCustomNBT(nbt);
 		facing = nbt.getInteger("Facing");
+		int meta = nbt.getInteger("Type");
+		energyStorage = new CEnergyStorage(MAX_ENERGY[meta], MAX_RECEIVE[meta], MAX_SEND[meta]);
 		this.energyStorage.readFromNBT(nbt);
 		updateAfterLoad();
 	}
