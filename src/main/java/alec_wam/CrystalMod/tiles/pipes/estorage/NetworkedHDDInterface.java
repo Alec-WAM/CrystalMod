@@ -1,6 +1,6 @@
 package alec_wam.CrystalMod.tiles.pipes.estorage;
 
-import alec_wam.CrystalMod.tiles.pipes.estorage.storage.hdd.INetworkItemProvider;
+import alec_wam.CrystalMod.api.estorage.INetworkItemProvider;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -23,11 +23,5 @@ public class NetworkedHDDInterface {
 
   public INetworkItemProvider getInterface() {
     return inter;
-  }
-  
-  public void updateItems(EStorageNetwork network, int index){
-	if(this.inter.getNetworkInventory() !=null){
-		this.inter.getNetworkInventory().updateItems(network, index);
-	}
   }
 }

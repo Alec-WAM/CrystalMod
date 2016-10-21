@@ -15,6 +15,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import alec_wam.CrystalMod.api.estorage.INetworkItemProvider;
+import alec_wam.CrystalMod.api.estorage.INetworkInventory.EnumUpdateType;
 import alec_wam.CrystalMod.network.CompressedDataInput;
 import alec_wam.CrystalMod.network.CompressedDataOutput;
 import alec_wam.CrystalMod.tiles.pipes.AbstractPipeNetwork;
@@ -30,7 +32,6 @@ import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.task.ICraftingTask;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.INetworkContainer;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.TileEntityPanel;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.wireless.TileEntityWirelessPanel;
-import alec_wam.CrystalMod.tiles.pipes.estorage.storage.hdd.INetworkItemProvider;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.ModLogger;
 
@@ -232,14 +233,9 @@ public class EStorageNetwork extends AbstractPipeNetwork {
 
 		if (externalTile instanceof INetworkItemProvider) {
 			INetworkItemProvider inter = (INetworkItemProvider) externalTile;
-			NetworkedHDDInterface inv = new NetworkedHDDInterface(inter,
-					externalTile.getWorld(), bc);
+			NetworkedHDDInterface inv = new NetworkedHDDInterface(inter, externalTile.getWorld(), bc);
 			this.masterInterfaces.add(inv);
 			this.updateInterfaces();
-			if (inv.getInterface().getNetworkInventory() != null) {
-				inv.getInterface().getNetworkInventory().updateItems(this, -1);
-				inv.getInterface().getNetworkInventory().updateFluids(this, -1);
-			}
 		}
 
 		if (externalTile instanceof TileEntityPanel) {
@@ -340,12 +336,6 @@ public class EStorageNetwork extends AbstractPipeNetwork {
 
 		NetworkedHDDInterface inter = getInterface(bc, dim);
 		if (inter != null) {
-			if (inter.getInterface().getNetworkInventory() != null) {
-				inter.getInterface().getNetworkInventory()
-						.updateItems(this, -2);
-				inter.getInterface().getNetworkInventory()
-						.updateFluids(this, -2);
-			}
 			this.masterInterfaces.remove(inter);
 			inter.getInterface().setNetwork(null);
 			updateInterfaces();
@@ -459,10 +449,7 @@ public class EStorageNetwork extends AbstractPipeNetwork {
 		}
 
 		if (updateItems) {
-			getItemStorage().scanNetworkForItems();
-			for (INetworkContainer panel : watchers) {
-				panel.sendItemsToAll();
-			}
+			getItemStorage().invalidate();
 			updateItems = false;
 		}
 	}
@@ -476,6 +463,8 @@ public class EStorageNetwork extends AbstractPipeNetwork {
 		for (NetworkedHDDInterface inter : this.masterInterfaces) {
 			getOrCreateInterfaces(inter.getPriority()).add(inter);
 		}
+		getItemStorage().invalidate();
+		getFluidStorage().invalidate();
 	}
 
 	static final Comparator<Integer> PRIORITY_SORTER = new Comparator<Integer>() {
@@ -508,8 +497,7 @@ public class EStorageNetwork extends AbstractPipeNetwork {
 						if (stack != null) {
 							ItemStack copy = stack.copy();
 							copy.stackSize = 0;
-							ItemStackData iData = new ItemStackData(copy, -1,
-									BlockPos.ORIGIN, 0);
+							ItemStackData iData = new ItemStackData(copy, BlockPos.ORIGIN, 0);
 							iData.isCrafting = true;
 							data.add(iData);
 						}

@@ -139,7 +139,7 @@ public class ContainerPanel extends Container implements INetworkContainer {
 					if(stack !=null){
 						ItemStack copy = stack.copy();
 						copy.stackSize = 0;
-						ItemStackData iData = new ItemStackData(copy, -1, BlockPos.ORIGIN, 0);
+						ItemStackData iData = new ItemStackData(copy, BlockPos.ORIGIN, 0);
 						iData.isCrafting = true;
 						data.add(iData);
 					}
@@ -188,7 +188,7 @@ public class ContainerPanel extends Container implements INetworkContainer {
 					if(stack !=null){
 						ItemStack copy = stack.copy();
 						copy.stackSize = 0;
-						ItemStackData iData = new ItemStackData(copy, -1, BlockPos.ORIGIN, 0);
+						ItemStackData iData = new ItemStackData(copy, BlockPos.ORIGIN, 0);
 						iData.isCrafting = true;
 						data.add(iData);
 					}

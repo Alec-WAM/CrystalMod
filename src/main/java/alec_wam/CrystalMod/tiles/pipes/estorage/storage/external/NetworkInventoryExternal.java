@@ -10,6 +10,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.items.IItemHandler;
+import alec_wam.CrystalMod.api.estorage.INetworkInventory;
 import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetwork;
 import alec_wam.CrystalMod.tiles.pipes.estorage.FluidStorage;
 import alec_wam.CrystalMod.tiles.pipes.estorage.FluidStorage.FluidStackData;
@@ -17,10 +18,8 @@ import alec_wam.CrystalMod.tiles.pipes.estorage.IInsertListener;
 import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage;
 import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage.ItemStackData;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.INetworkContainer;
-import alec_wam.CrystalMod.tiles.pipes.estorage.storage.hdd.inventory.INetworkInventory;
 import alec_wam.CrystalMod.util.FluidUtil;
 import alec_wam.CrystalMod.util.ItemUtil;
-import alec_wam.CrystalMod.util.ModLogger;
 
 import com.google.common.collect.Lists;
 
@@ -50,48 +49,13 @@ public class NetworkInventoryExternal implements INetworkInventory {
 				ItemStack stack = getInventory().getStackInSlot(i);
 				if (stack != null) {
 					if(storage.getItemData(stack) == null){
-						ItemStackData data = new ItemStackData(stack, i, inter.getPos(), inter.getWorld().provider.getDimension());
+						ItemStackData data = new ItemStackData(stack, inter.getPos(), inter.getWorld().provider.getDimension());
 						items.add(data);
 					}
 				}
 			}
 		}
 		return items;
-	}
-
-	@Override
-	public void updateItems(EStorageNetwork network, int index) {
-		ItemStorage storage = network.getItemStorage();
-		List<ItemStackData> changed = Lists.newArrayList();
-		BlockPos pos = inter.getPos();
-		int dim = inter.getWorld().provider.getDimension();
-		IItemHandler handler = getInventory();
-		if (handler !=null) {
-			if (index < 0) {
-				for (int i = 0; i < handler.getSlots(); i++) {
-					int slot = i;
-					ItemStack stack = getInventory().getStackInSlot(slot);
-					ItemStackData itemData = new ItemStackData(stack, slot, pos, dim);
-					if(storage.addToList(itemData)){
-						changed.add(itemData);
-					}
-				}
-			} else {
-				int slot = index;
-				ItemStack stack = getInventory().getStackInSlot(slot);
-				ItemStackData itemData = new ItemStackData(stack, slot, pos, dim);
-				if(storage.addToList(itemData)){
-					changed.add(itemData);
-				}
-			}
-		}else{
-			changed.addAll(storage.clearListAtPos(pos, dim));
-		}
-		if (!changed.isEmpty()) {
-			for (INetworkContainer panel : network.watchers) {
-				panel.sendItemsToAll(changed);
-			}
-		}
 	}
 	
 	@Override
@@ -251,47 +215,6 @@ public class NetworkInventoryExternal implements INetworkInventory {
 	        return received == null ? 0 : received.amount;
 		}
 		return 0;
-	}
-
-	@Override
-	public void updateFluids(EStorageNetwork network, int index) {
-		FluidStorage storage = network.getFluidStorage();
-		List<FluidStackData> changed = Lists.newArrayList();
-		BlockPos pos = inter.getPos();
-		int dim = inter.getWorld().provider.getDimension();
-		IFluidHandler handler = getTank();
-		if (handler !=null) {
-			if (index < 0) {
-				IFluidTankProperties prop = handler.getTankProperties()[0];
-				if (prop != null) {
-					FluidStack internalStack = prop.getContents();
-					if(internalStack !=null){
-						FluidStackData fluidData = new FluidStackData(internalStack, 0, pos, dim);
-						if(storage.addToList(fluidData)){
-							changed.add(fluidData);
-						}
-					}
-				}
-			} else {
-				IFluidTankProperties prop = handler.getTankProperties()[0];
-				if (prop != null) {
-					FluidStack internalStack = prop.getContents();
-					if(internalStack !=null){
-						FluidStackData fluidData = new FluidStackData(internalStack, 0, pos, dim);
-						if(storage.addToList(fluidData)){
-							changed.add(fluidData);
-						}
-					}
-				}
-			}
-		}else{
-			changed.addAll(storage.clearListAtPos(pos, dim));
-		}
-		if (!changed.isEmpty()) {
-			for (INetworkContainer panel : network.watchers) {
-				panel.sendFluidsToAll(changed);
-			}
-		}
 	}
 
 }

@@ -150,7 +150,7 @@ public class GuiPanelWireless extends GuiContainer implements IGuiScreen {
         	                if(panel !=null && panel.network !=null && slot.getStack() !=null){
         	                	ItemStack copy = slot.getStack().copy();
         	                	copy.stackSize = 1;
-        	                	CrystalModNetwork.sendToServer(new PacketEStorageAddItem(3, slot.slotNumber, 1, EStorageNetwork.compressItem(new ItemStackData(copy, 0, BlockPos.ORIGIN, 0))));
+        	                	CrystalModNetwork.sendToServer(new PacketEStorageAddItem(3, slot.slotNumber, 1, EStorageNetwork.compressItem(new ItemStackData(copy, BlockPos.ORIGIN, 0))));
         						return;
         	        		}
         	            }
@@ -285,7 +285,7 @@ public class GuiPanelWireless extends GuiContainer implements IGuiScreen {
 					if(mouseButton == 1){
 						copy.stackSize = 1;
 					}
-					CrystalModNetwork.sendToServer(new PacketEStorageAddItem(0, -1, -1, EStorageNetwork.compressItem(new ItemStackData(copy, 0, BlockPos.ORIGIN, 0))));
+					CrystalModNetwork.sendToServer(new PacketEStorageAddItem(0, -1, -1, EStorageNetwork.compressItem(new ItemStackData(copy, BlockPos.ORIGIN, 0))));
 					return;
 				}
 				ItemStackData data = (fixednSlot < 0 || getDisplayItems().size() <= fixednSlot) ? null : getDisplayItems().get(fixednSlot);
@@ -654,7 +654,7 @@ public class GuiPanelWireless extends GuiContainer implements IGuiScreen {
 				ItemStack copy = currentCraft.stack.copy();
 				copy.stackSize = 1;
 				
-				ItemStackData data = new ItemStackData(copy, currentCraft.index, currentCraft.interPos, currentCraft.interDim);
+				ItemStackData data = new ItemStackData(copy, currentCraft.interPos, currentCraft.interDim);
 				data.isCrafting = currentCraft.isCrafting;
 				
 				CrystalModNetwork.sendToServer(new PacketEStorageAddItem(4, -1, current, EStorageNetwork.compressItem(data)));

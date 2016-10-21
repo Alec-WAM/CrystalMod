@@ -1,10 +1,11 @@
 package alec_wam.CrystalMod.tiles.pipes.estorage.storage.hdd;
 
+import alec_wam.CrystalMod.api.estorage.INetworkInventory;
+import alec_wam.CrystalMod.api.estorage.INetworkItemProvider;
+import alec_wam.CrystalMod.api.estorage.INetworkInventory.EnumUpdateType;
 import alec_wam.CrystalMod.network.IMessageHandler;
 import alec_wam.CrystalMod.tiles.TileEntityInventory;
 import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetwork;
-import alec_wam.CrystalMod.tiles.pipes.estorage.storage.hdd.inventory.INetworkInventory;
-import alec_wam.CrystalMod.tiles.pipes.estorage.storage.hdd.inventory.NetworkInventoryHDDInterface;
 import alec_wam.CrystalMod.tiles.pipes.item.InventoryWrapper;
 import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.ItemUtil;
@@ -51,8 +52,8 @@ public class TileEntityHDDInterface extends TileEntityInventory implements ITick
 	public void setInventorySlotContents(int slot, ItemStack itemstack) {
 		super.setInventorySlotContents(slot, itemstack);
 		if(slot == 0){
-			if(this.network !=null && getNetworkInventory() !=null){
-				getNetworkInventory().updateItems(getNetwork(), -1);
+			if(this.network !=null){
+				network.getItemStorage().invalidate();
 			}
 			if(this.worldObj !=null && this.getPos() !=null)BlockUtil.markBlockForUpdate(getWorld(), getPos());
 		}
@@ -77,7 +78,7 @@ public class TileEntityHDDInterface extends TileEntityInventory implements ITick
 							stored.stackSize+=input.stackSize;
 							ItemHDD.setItem(hddStack, index, stored);
 							if(this.network !=null && getNetworkInventory() !=null){
-								getNetworkInventory().updateItems(getNetwork(), index);
+								network.getItemStorage().invalidate();
 							}
 							setInventorySlotContents(1, null);
 							this.worldObj.markChunkDirty( this.pos, this );
@@ -87,8 +88,8 @@ public class TileEntityHDDInterface extends TileEntityInventory implements ITick
 					int index = ItemHDD.getEmptyIndex(hddStack);
 					if(index > -1){
 						ItemHDD.setItem(hddStack, index, input);
-						if(this.network !=null && getNetworkInventory() !=null){
-							getNetworkInventory().updateItems(getNetwork(), index);
+						if(this.network !=null){
+							network.getItemStorage().invalidate();
 						}
 						setInventorySlotContents(1, null);
 						this.worldObj.markChunkDirty( this.pos, this );
@@ -121,13 +122,13 @@ public class TileEntityHDDInterface extends TileEntityInventory implements ITick
 				        	  toExtract = null;
 				        	  ItemHDD.setItem(hddStack, dumpIndex, null);
 				        	  if(this.network !=null && getNetworkInventory() !=null){
-			  					getNetworkInventory().updateItems(getNetwork(), dumpIndex);
+		  							network.getItemStorage().invalidate();
 				  			  }
 				        	  dumpIndex=-1;
 				          }else {
 				        	  ItemHDD.setItem(hddStack, dumpIndex, toExtract);
 				        	  if(this.network !=null && getNetworkInventory() !=null){
-				  				getNetworkInventory().updateItems(getNetwork(), dumpIndex);
+				  				network.getItemStorage().invalidate();
 				  			  }
 				          }
 				          this.worldObj.markChunkDirty( this.pos, this );

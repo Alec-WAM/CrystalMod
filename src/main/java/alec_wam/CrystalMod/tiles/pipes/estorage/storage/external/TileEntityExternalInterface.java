@@ -2,11 +2,12 @@ package alec_wam.CrystalMod.tiles.pipes.estorage.storage.external;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+import alec_wam.CrystalMod.api.estorage.INetworkInventory;
+import alec_wam.CrystalMod.api.estorage.INetworkInventory.EnumUpdateType;
+import alec_wam.CrystalMod.api.estorage.INetworkItemProvider;
 import alec_wam.CrystalMod.network.IMessageHandler;
 import alec_wam.CrystalMod.tiles.TileEntityMod;
 import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetwork;
-import alec_wam.CrystalMod.tiles.pipes.estorage.storage.hdd.INetworkItemProvider;
-import alec_wam.CrystalMod.tiles.pipes.estorage.storage.hdd.inventory.INetworkInventory;
 
 public class TileEntityExternalInterface extends TileEntityMod implements IMessageHandler, INetworkItemProvider{
 
@@ -64,8 +65,8 @@ public class TileEntityExternalInterface extends TileEntityMod implements IMessa
 
 	public void onNeighborChange() {
 		if(getNetworkInventory() !=null && getNetwork() !=null){
-			getNetworkInventory().updateItems(getNetwork(), -1);
-			getNetworkInventory().updateFluids(getNetwork(), -1);
+			getNetwork().getItemStorage().invalidate();
+			getNetwork().getFluidStorage().invalidate();
 		}
 	}
 

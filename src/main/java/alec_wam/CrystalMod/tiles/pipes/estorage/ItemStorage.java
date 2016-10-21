@@ -20,21 +20,57 @@ import net.minecraftforge.oredict.OreDictionary;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 
+import alec_wam.CrystalMod.api.estorage.INetworkInventory;
 import alec_wam.CrystalMod.network.CompressedDataInput;
 import alec_wam.CrystalMod.network.CompressedDataOutput;
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.task.CraftingProcess;
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.task.ICraftingTask;
+import alec_wam.CrystalMod.tiles.pipes.estorage.panel.INetworkContainer;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.Lang;
 
 public class ItemStorage {
 
 	private List<ItemStackData> items = new ArrayList<ItemStackData>();
+	private List<NetworkedHDDInterface> inventories = new ArrayList<NetworkedHDDInterface>();
 	private final EStorageNetwork network;
 	
 	public ItemStorage(EStorageNetwork network){
 		this.network = network;
 	}
+	
+	public synchronized void invalidate() {
+		inventories.clear();
+
+		Iterator<List<NetworkedHDDInterface>> i1 = network.interfaces.values().iterator();
+		while(i1.hasNext()){
+			Iterator<NetworkedHDDInterface> ii = i1.next().iterator();
+			while( ii.hasNext())
+			{
+				final NetworkedHDDInterface inter = ii.next();
+				if(inter !=null && inter.getInterface() != null) {
+					if(inter.getInterface().getNetworkInventory() !=null){
+						inventories.add(inter);
+					}
+				}
+			}
+		}
+		
+        items.clear();
+        
+        Iterator<NetworkedHDDInterface> ii = inventories.iterator();
+        
+        while(ii.hasNext()){
+	        Iterator<ItemStackData> data = ii.next().getInterface().getNetworkInventory().getItems(this).iterator();
+			while(data.hasNext()){
+				items.add(data.next());
+			}
+        }
+
+        for (INetworkContainer panel : network.watchers) {
+			panel.sendItemsToAll(items);
+		}
+    }
 	
 	public int addItem(ItemStack stack, boolean sim){
 		return addItem(stack, sim, true);
@@ -45,40 +81,26 @@ public class ItemStorage {
 			return 0;
 		final int ogSize = stack.stackSize;
 		int inserted = 0;
-		Iterator<List<NetworkedHDDInterface>> i1 = network.interfaces.values().iterator();
+		Iterator<NetworkedHDDInterface> i1 = inventories.iterator();
 		ItemStack insertCopy = stack.copy();
 		master : while(i1.hasNext() && insertCopy.stackSize > 0){
-			final List<NetworkedHDDInterface> list = i1.next();
-			Iterator<NetworkedHDDInterface> ii = list.iterator();
+			INetworkInventory inventory = i1.next().getInterface().getNetworkInventory();
 			//FIRST PASS
-			while( ii.hasNext() && insertCopy.stackSize > 0)
-			{
-				final NetworkedHDDInterface inter = ii.next();
-				if (inter.getInterface() != null) {
-					if(inter.getInterface().getNetworkInventory() !=null){
-						int amt = inter.getInterface().getNetworkInventory().insertItem(network, insertCopy, true, sim, sendUpdate);
-						insertCopy.stackSize-=amt;
-						inserted+=amt;
-						if(insertCopy.stackSize <= 0){
-							break master;
-						}
-					}
+			if(inventory !=null && insertCopy.stackSize > 0){
+				int amt = inventory.insertItem(network, insertCopy, true, sim, sendUpdate);
+				insertCopy.stackSize-=amt;
+				inserted+=amt;
+				if(insertCopy.stackSize <= 0){
+					break master;
 				}
 			}
-			
 			//SECOND PASS
-			ii = list.iterator();
-			while(ii.hasNext() && insertCopy.stackSize > 0){
-				final NetworkedHDDInterface inter = ii.next();
-				if (inter.getInterface() != null) {
-					if(inter.getInterface().getNetworkInventory() !=null){
-						int amt = inter.getInterface().getNetworkInventory().insertItem(network, insertCopy, false, sim, sendUpdate);
-						insertCopy.stackSize-=amt;
-						inserted+=amt;
-						if(insertCopy.stackSize <= 0){
-							break master;
-						}
-					}
+			if(inventory !=null && insertCopy.stackSize > 0){
+				int amt = inventory.insertItem(network, insertCopy, false, sim, sendUpdate);
+				insertCopy.stackSize-=amt;
+				inserted+=amt;
+				if(insertCopy.stackSize <= 0){
+					break master;
 				}
 			}
 		}
@@ -171,25 +193,17 @@ public class ItemStorage {
 	public int removeItem(ItemStackData data, int amount, boolean sim, boolean sendUpdate) {
 		if (data == null || data.stack == null || network == null)
 			return 0;
-		Iterator<List<NetworkedHDDInterface>> i1 = network.interfaces.values().iterator();
+		Iterator<NetworkedHDDInterface> i1 = inventories.iterator();
 		while(i1.hasNext()){
-			Iterator<NetworkedHDDInterface> ii = i1.next().iterator();
-			while( ii.hasNext())
-			{
-				final NetworkedHDDInterface inter = ii.next();
-				if (network.sameDimAndPos(inter, data.interPos, data.interDim)) {
-					if(inter.getInterface().getNetworkInventory() !=null){
-						int extract = inter.getInterface().getNetworkInventory().extractItem(network, data.stack, amount, true, sendUpdate);
-						if(extract >= 0){
-							return sim ? extract : inter.getInterface().getNetworkInventory().extractItem(network, data.stack, amount, false, sendUpdate);
-						}
+			NetworkedHDDInterface inter = i1.next();
+			if (network.sameDimAndPos(inter, data.interPos, data.interDim)) {
+				if(inter.getInterface().getNetworkInventory() !=null){
+					int extract = inter.getInterface().getNetworkInventory().extractItem(network, data.stack, amount, true, sendUpdate);
+					if(extract >= 0){
+						return sim ? extract : inter.getInterface().getNetworkInventory().extractItem(network, data.stack, amount, false, sendUpdate);
 					}
 				}
 			}
-		}
-
-		if(network.masterNetwork !=null){
-			return network.masterNetwork.getItemStorage().removeItem(data, amount, sim, sendUpdate);
 		}
 		return 0;
 	}
@@ -306,7 +320,6 @@ public class ItemStorage {
 	
 	public static class ItemStackData {
 		public ItemStack stack;
-		public int index;
 		public BlockPos interPos;
 		public int interDim;
 		public boolean isCrafting;
@@ -320,14 +333,12 @@ public class ItemStorage {
 		
 		public ItemStackData(ItemStack stack) {
 			this.stack = stack;
-			this.index = 0;
 			this.interPos = BlockPos.ORIGIN;
 			this.interDim = 0;
 		}
 
-		public ItemStackData(ItemStack stack, int index, BlockPos interPos, int dim) {
+		public ItemStackData(ItemStack stack, BlockPos interPos, int dim) {
 			this.stack = stack;
-			this.index = index;
 			this.interPos = interPos;
 			this.interDim = dim;
 		}
@@ -357,7 +368,6 @@ public class ItemStorage {
 					}
 				}
 			}
-			cdo.writeInt(index);
 			cdo.writeInt(interPos.getX());
 			cdo.writeInt(interPos.getY());
 			cdo.writeInt(interPos.getZ());
@@ -392,7 +402,6 @@ public class ItemStorage {
 				itemstack.setTagCompound(nbt);
 			}
 			newData.stack = itemstack;
-			newData.index = cdi.readInt();
 			int x = cdi.readInt();
 			int y = cdi.readInt();
 			int z = cdi.readInt();
@@ -470,8 +479,9 @@ public class ItemStorage {
 			return stack == null ? 0 : stack.stackSize;
 		}
 		
+		//TODO Check this
 		public boolean sameIgnoreStack(ItemStackData data){
-			return data.interPos !=null && data.interPos.equals(interPos) && data.interDim == interDim && data.index == index;
+			return data.interPos !=null && data.interPos.equals(interPos) && data.interDim == interDim && ItemUtil.canCombine(stack, data.stack);
 		}
 	}
 	

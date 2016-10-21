@@ -1,4 +1,4 @@
-package alec_wam.CrystalMod.tiles.pipes.estorage.storage.hdd.inventory;
+package alec_wam.CrystalMod.tiles.pipes.estorage.storage.hdd;
 
 import java.util.Iterator;
 import java.util.List;
@@ -6,6 +6,7 @@ import java.util.List;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fluids.FluidStack;
+import alec_wam.CrystalMod.api.estorage.INetworkInventory;
 import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetwork;
 import alec_wam.CrystalMod.tiles.pipes.estorage.FluidStorage;
 import alec_wam.CrystalMod.tiles.pipes.estorage.FluidStorage.FluidStackData;
@@ -13,8 +14,6 @@ import alec_wam.CrystalMod.tiles.pipes.estorage.IInsertListener;
 import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage;
 import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage.ItemStackData;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.INetworkContainer;
-import alec_wam.CrystalMod.tiles.pipes.estorage.storage.hdd.ItemHDD;
-import alec_wam.CrystalMod.tiles.pipes.estorage.storage.hdd.TileEntityHDDInterface;
 import alec_wam.CrystalMod.util.ItemUtil;
 
 import com.google.common.collect.Lists;
@@ -33,53 +32,15 @@ public class NetworkInventoryHDDInterface implements INetworkInventory {
 		if (hddStack != null && hddStack.getItem() instanceof ItemHDD) {
 			for (int i = 0; i < ItemHDD.getItemLimit(hddStack); i++) {
 				ItemStack stack = ItemHDD.getItem(hddStack, i);
-				if (stack != null) {
+				if (stack != null && stack.stackSize > 0) {
 					if(storage.getItemData(stack) == null){
-						ItemStackData data = new ItemStackData(stack, i, inter.getPos(), inter.getWorld().provider.getDimension());
+						ItemStackData data = new ItemStackData(stack, inter.getPos(), inter.getWorld().provider.getDimension());
 						items.add(data);
 					}
 				}
 			}
 		}
 		return items;
-	}
-
-	@Override
-	public void updateItems(EStorageNetwork network, int index) {
-		ItemStorage storage = network.getItemStorage();
-		List<ItemStackData> changed = Lists.newArrayList();
-		BlockPos pos = inter.getPos();
-		int dim = inter.getWorld().provider.getDimension();
-		ItemStack hddStack = inter.getStackInSlot(0);
-		if (hddStack != null && hddStack.getItem() instanceof ItemHDD) {
-			if (index < 0) {
-				if(index == -1){
-					for (int i = 0; i < ItemHDD.getItemLimit(hddStack); i++) {
-						ItemStack stack = ItemHDD.getItem(hddStack, i);
-						ItemStackData itemData = new ItemStackData(stack, i, pos, dim);
-						if(storage.addToList(itemData)){
-							changed.add(itemData);
-						}
-					}
-				}
-				if(index == -2){
-					changed.addAll(storage.clearListAtPos(pos, dim));
-				}
-			} else {
-				ItemStack stack = ItemHDD.getItem(hddStack, index);
-				ItemStackData itemData = new ItemStackData(stack, index, pos, dim);
-				if(storage.addToList(itemData)){
-					changed.add(itemData);
-				}
-			}
-		} else {
-			changed.addAll(storage.clearListAtPos(pos, dim));
-		}
-		if (!changed.isEmpty()) {
-			for (INetworkContainer panel : network.watchers) {
-				panel.sendItemsToAll(changed);
-			}
-		}
 	}
 
 	@Override
@@ -97,17 +58,13 @@ public class NetworkInventoryHDDInterface implements INetworkInventory {
 								return stack.stackSize;
 							}
 							
-							/*Iterator<IInsertListener> iter = network.listeners.iterator();
-							while (iter.hasNext()) {
-								iter.next().onItemInserted(stack);
-							}*/
 							if(update){
 								network.notifyInsert(stack);
 							}
 
 							stored.stackSize += stack.stackSize;
 							ItemHDD.setItem(hdd, index, stored);
-							updateItems(network, index);
+							network.getItemStorage().invalidate();
 							inter.markDirty();
 							return stack.stackSize;
 						}
@@ -123,7 +80,7 @@ public class NetworkInventoryHDDInterface implements INetworkInventory {
 					}
 					network.notifyInsert(stack);
 					ItemHDD.setItem(hdd, index, stack);
-					updateItems(network, index);
+					network.getItemStorage().invalidate();
 					inter.markDirty();
 					return stack.stackSize;
 				}
@@ -150,8 +107,9 @@ public class NetworkInventoryHDDInterface implements INetworkInventory {
 						stored = null;
 					}
 					ItemHDD.setItem(hdd, index,	stored);
-					updateItems(network, index);
 					inter.markDirty();
+					network.getItemStorage().invalidate();
+					
 					if(stack !=null && update){
 						Iterator<IInsertListener> iter = network.listeners.iterator();
 						while (iter.hasNext()) {
@@ -180,8 +138,5 @@ public class NetworkInventoryHDDInterface implements INetworkInventory {
 	public int extractFluid(EStorageNetwork network, FluidStack stack, int amount, boolean sim, boolean sendUpdate) {
 		return 0;
 	}
-
-	@Override
-	public void updateFluids(EStorageNetwork network, int index) {}
 
 }

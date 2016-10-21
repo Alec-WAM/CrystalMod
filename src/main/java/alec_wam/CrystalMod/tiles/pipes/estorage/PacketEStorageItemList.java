@@ -91,13 +91,8 @@ public class PacketEStorageItemList extends AbstractPacketThreadsafe {
 		if(network !=null){
 			try {
 				List<ItemStackData> data = EStorageNetwork.decompressItems(compressed);
-				if(type == 0){
+				if(type == 0 || type == 1){
 					network.getItemStorage().setItemList(data);
-				}
-				if(type == 1){
-					for(ItemStackData itemData : data){
-						network.getItemStorage().addToList(itemData);
-					}
 				}
 				if(type == 3){
 					if(network instanceof EStorageNetworkClient){

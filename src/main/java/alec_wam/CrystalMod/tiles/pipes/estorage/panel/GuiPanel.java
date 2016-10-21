@@ -156,7 +156,7 @@ public class GuiPanel extends GuiContainer implements IGuiScreen, INetworkGui  {
         	                	ItemStack copy = slot.getStack().copy();
         	                	copy.stackSize = 1;
         	                	try {
-        							CrystalModNetwork.sendToServer(new PacketEStorageAddItem(3, slot.slotNumber, 1, EStorageNetwork.compressItem(new ItemStackData(copy, 0, BlockPos.ORIGIN, 0))));
+        							CrystalModNetwork.sendToServer(new PacketEStorageAddItem(3, slot.slotNumber, 1, EStorageNetwork.compressItem(new ItemStackData(copy, BlockPos.ORIGIN, 0))));
         						} catch (Exception e) {
         							e.printStackTrace();
         						}
@@ -721,7 +721,7 @@ public class GuiPanel extends GuiContainer implements IGuiScreen, INetworkGui  {
 					ItemStack copy = currentCraft.stack.copy();
 					copy.stackSize = 1;
 					
-					ItemStackData data = new ItemStackData(copy, currentCraft.index, currentCraft.interPos, currentCraft.interDim);
+					ItemStackData data = new ItemStackData(copy, currentCraft.interPos, currentCraft.interDim);
 					data.isCrafting = currentCraft.isCrafting;
 					
 					sendUpdate(4, -1, current, data);
