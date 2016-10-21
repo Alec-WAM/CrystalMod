@@ -18,6 +18,7 @@ import alec_wam.CrystalMod.tiles.machine.worksite.TileWorksiteBase;
 import alec_wam.CrystalMod.tiles.machine.worksite.WorksiteUpgrade;
 import alec_wam.CrystalMod.tiles.machine.worksite.InventorySided.RelativeSide;
 import alec_wam.CrystalMod.tiles.machine.worksite.imp.WorksiteAnimalFarm;
+import alec_wam.CrystalMod.util.ModLogger;
 
 public class JobShearEntity extends WorkerJob {
 	

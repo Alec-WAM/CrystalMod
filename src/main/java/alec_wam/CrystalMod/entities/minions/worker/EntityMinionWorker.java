@@ -13,12 +13,15 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import alec_wam.CrystalMod.entities.minions.EntityMinionBase;
+import alec_wam.CrystalMod.entities.minions.worker.jobs.JobShearEntity;
 import alec_wam.CrystalMod.tiles.machine.worksite.TileWorksiteBase;
 import alec_wam.CrystalMod.util.ItemUtil;
+import alec_wam.CrystalMod.util.ModLogger;
 import alec_wam.CrystalMod.util.UUIDUtils;
 import alec_wam.CrystalMod.util.tool.ToolUtil;
 
@@ -237,6 +240,13 @@ public class EntityMinionWorker extends EntityMinionBase {
     		}
     	}  
 		return super.processInteract(player, hand, held);
+	}
+	
+	@Override
+	public void onDeath(DamageSource damageSource) 
+	{
+		super.onDeath(damageSource);
+		fireFromWorksite();
 	}
 
 }

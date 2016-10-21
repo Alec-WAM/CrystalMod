@@ -6,6 +6,7 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import alec_wam.CrystalMod.entities.minions.MinionConstants;
 import alec_wam.CrystalMod.entities.minions.worker.EntityMinionWorker;
 import alec_wam.CrystalMod.entities.minions.worker.WorkerJob;
@@ -53,7 +54,12 @@ public class JobChopTree extends WorkerJob {
 		}
 		
 		worker.getLookHelper().setLookPosition(logPos.getX() + 0.5, logPos.getY() + 0.5, logPos.getZ() + 0.5, 10, 40);
-		double d = worker.getDistance(logPos.getX() + 0.5, logPos.down().getY() + 0.5, logPos.getZ() + 0.5);
+		double d = 0.0d;//worker.getDistance(logPos.getX() + 0.5, worker.posY/*logPos.down().getY() + 0.5*/, logPos.getZ() + 0.5);
+		
+		double d0 = worker.posX - (logPos.getX() + 0.5);
+        double d2 = worker.posZ - (logPos.getZ() + 0.5);
+        d =(double)MathHelper.sqrt_double(d0 * d0 + d2 * d2);
+		
 		if(d <= 2.5D){
 			if (delay < 0)
 		    {

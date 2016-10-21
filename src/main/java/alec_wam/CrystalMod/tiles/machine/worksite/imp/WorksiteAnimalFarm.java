@@ -4,10 +4,13 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import com.enderio.core.common.util.ChatUtil;
+
 import alec_wam.CrystalMod.entities.minions.worker.EntityMinionWorker;
 import alec_wam.CrystalMod.entities.minions.worker.jobs.JobKillEntity;
 import alec_wam.CrystalMod.entities.minions.worker.jobs.JobShearEntity;
 import alec_wam.CrystalMod.handler.GuiHandler;
+import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.proxy.CommonProxy;
 import alec_wam.CrystalMod.tiles.machine.worksite.InventorySided;
 import alec_wam.CrystalMod.tiles.machine.worksite.ItemSlotFilter;
@@ -17,8 +20,10 @@ import alec_wam.CrystalMod.tiles.machine.worksite.InventorySided.RelativeSide;
 import alec_wam.CrystalMod.tiles.machine.worksite.InventorySided.RotationType;
 import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.ItemUtil;
+import alec_wam.CrystalMod.util.ModLogger;
 import alec_wam.CrystalMod.util.tool.ToolUtil;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntityChicken;
@@ -36,6 +41,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.common.IShearable;
 
 public class WorksiteAnimalFarm extends TileWorksiteBoundedInventory {
 
@@ -230,7 +236,7 @@ public class WorksiteAnimalFarm extends TileWorksiteBoundedInventory {
 				cows.add(animal);
 			} else if (animal instanceof EntityChicken) {
 				chickens.add(animal);
-			} else if (animal instanceof EntitySheep) {
+			} else if (animal instanceof IShearable) {
 				sheep.add(animal);
 			} else if (animal instanceof EntityPig) {
 				pigs.add(animal);
@@ -316,10 +322,10 @@ public class WorksiteAnimalFarm extends TileWorksiteBoundedInventory {
 	private void scanForSheep(List<EntityAnimal> sheep) {
 		scanForAnimals(sheep, sheepToBreed, maxSheepCount);
 		for (EntityAnimal animal : sheep) {
-			if (animal.getGrowingAge() >= 0) {
-				EntitySheep sheep1 = (EntitySheep) animal;
-				if (!sheep1.getSheared()) {
-					sheepToShear.add(sheep1.getEntityId());
+			if (animal instanceof IShearable) {
+				IShearable sheep1 = (IShearable) animal;
+				if (sheep1.isShearable(null, worldObj, new BlockPos(animal))) {
+					sheepToShear.add(animal.getEntityId());
 				}
 			}
 		}
@@ -354,44 +360,47 @@ public class WorksiteAnimalFarm extends TileWorksiteBoundedInventory {
 		// AWLog.logDebug("processing animal farm work!");
 
 		boolean didWork = false;
-		if (!cowsToBreed.isEmpty() && wheatCount >= 2) {
-			didWork = tryBreeding(cowsToBreed);
-			if (didWork) {
-				wheatCount -= 2;
-				ItemUtil.removeItems(inventory,
-						inventory.getAccessDirectionFor(RelativeSide.FRONT),
-						new ItemStack(Items.WHEAT), 2);
-				return true;
+		boolean canBreed = !workers.isEmpty();
+		if(canBreed){
+			if (!cowsToBreed.isEmpty() && wheatCount >= 2) {
+				didWork = tryBreeding(cowsToBreed);
+				if (didWork) {
+					wheatCount -= 2;
+					ItemUtil.removeItems(inventory,
+							inventory.getAccessDirectionFor(RelativeSide.FRONT),
+							new ItemStack(Items.WHEAT), 2);
+					return true;
+				}
 			}
-		}
-		if (!sheepToBreed.isEmpty() && wheatCount >= 2) {
-			didWork = tryBreeding(sheepToBreed);
-			if (didWork) {
-				wheatCount -= 2;
-				ItemUtil.removeItems(inventory,
-						inventory.getAccessDirectionFor(RelativeSide.FRONT),
-						new ItemStack(Items.WHEAT), 2);
-				return true;
+			if (!sheepToBreed.isEmpty() && wheatCount >= 2) {
+				didWork = tryBreeding(sheepToBreed);
+				if (didWork) {
+					wheatCount -= 2;
+					ItemUtil.removeItems(inventory,
+							inventory.getAccessDirectionFor(RelativeSide.FRONT),
+							new ItemStack(Items.WHEAT), 2);
+					return true;
+				}
 			}
-		}
-		if (!chickensToBreed.isEmpty() && seedCount >= 2) {
-			didWork = tryBreeding(chickensToBreed);
-			if (didWork) {
-				seedCount -= 2;
-				ItemUtil.removeItems(inventory,
-						inventory.getAccessDirectionFor(RelativeSide.FRONT),
-						new ItemStack(Items.WHEAT_SEEDS), 2);
-				return true;
+			if (!chickensToBreed.isEmpty() && seedCount >= 2) {
+				didWork = tryBreeding(chickensToBreed);
+				if (didWork) {
+					seedCount -= 2;
+					ItemUtil.removeItems(inventory,
+							inventory.getAccessDirectionFor(RelativeSide.FRONT),
+							new ItemStack(Items.WHEAT_SEEDS), 2);
+					return true;
+				}
 			}
-		}
-		if (!pigsToBreed.isEmpty() && carrotCount >= 2) {
-			didWork = tryBreeding(pigsToBreed);
-			if (didWork) {
-				carrotCount -= 2;
-				ItemUtil.removeItems(inventory,
-						inventory.getAccessDirectionFor(RelativeSide.FRONT),
-						new ItemStack(Items.CARROT), 2);
-				return true;
+			if (!pigsToBreed.isEmpty() && carrotCount >= 2) {
+				didWork = tryBreeding(pigsToBreed);
+				if (didWork) {
+					carrotCount -= 2;
+					ItemUtil.removeItems(inventory,
+							inventory.getAccessDirectionFor(RelativeSide.FRONT),
+							new ItemStack(Items.CARROT), 2);
+					return true;
+				}
 			}
 		}
 		if (!sheepToShear.isEmpty()) {
@@ -485,11 +494,13 @@ public class WorksiteAnimalFarm extends TileWorksiteBoundedInventory {
 			return false;
 		}
 		
-		EntitySheep sheep = (EntitySheep) worldObj.getEntityByID(targets.remove(0));
-		if (sheep == null) {
+		
+		EntityLivingBase sheep = (EntityLivingBase) worldObj.getEntityByID(targets.remove(0));
+		if (sheep == null || !(sheep instanceof IShearable)) {
 			return false;
 		}
-		if (sheep.getSheared()) {
+		IShearable shear = (IShearable)sheep;
+		if (!shear.isShearable(null, worldObj, new BlockPos(sheep))) {
 			return false;
 		}
 		if(worker.addCommand(new JobShearEntity(sheep))){

@@ -2,9 +2,12 @@ package alec_wam.CrystalMod.tiles.machine.worksite;
 
 import java.util.List;
 
+import com.enderio.core.common.util.ChatUtil;
+
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.blocks.EnumBlock.IEnumMeta;
+import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.tiles.BlockStateFacing;
 import alec_wam.CrystalMod.tiles.machine.BlockStateMachine;
 import alec_wam.CrystalMod.tiles.machine.IActiveTile;
@@ -123,7 +126,17 @@ public class BlockWorksite extends BlockContainer implements ICustomModel {
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, ItemStack held, EnumFacing side, float hitX, float hitY, float hitZ) {
 		TileEntity te = world.getTileEntity(pos);
 		if (te instanceof IWorkSite && te instanceof TileWorksiteBase) {
-			return ((TileWorksiteBase) te).onBlockClicked(player);
+			
+			TileWorksiteBase worksite = (TileWorksiteBase)te;
+			if(!world.isRemote){
+				if(player.getHeldItemMainhand() !=null){
+					if(player.getHeldItemMainhand().getItem() == ModItems.minionStaff){
+						ChatUtil.sendNoSpam(player, "Workers: "+worksite.workers.size());
+						return true;
+					}
+				}
+			}
+			return worksite.onBlockClicked(player);
 		}
 		return true;
 	}

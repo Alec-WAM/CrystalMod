@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -134,7 +135,9 @@ public abstract class TileWorksiteBase extends TileEntityMod implements IWorkSit
 	
 	public EntityMinionWorker getRandomWorker(boolean ignoreWorking, WorkerFilter filter){
 		List<EntityMinionWorker> curWorkers = new ArrayList<EntityMinionWorker>();
-		for(EntityMinionWorker worker : workers){
+		Iterator<EntityMinionWorker> it = workers.iterator();
+		while(it.hasNext()){
+			EntityMinionWorker worker = it.next();
 			if(filter == null || filter.matches(worker)){
 				curWorkers.add(worker);
 			}
@@ -165,7 +168,9 @@ public abstract class TileWorksiteBase extends TileEntityMod implements IWorkSit
 	
 	public EntityMinionWorker getClosestWorker(BlockPos pos, boolean ignoreWorking, WorkerFilter filter){
 		List<EntityMinionWorker> curWorkers = new ArrayList<EntityMinionWorker>();
-		for(EntityMinionWorker worker : workers){
+		Iterator<EntityMinionWorker> it = workers.iterator();
+		while(it.hasNext()){
+			EntityMinionWorker worker = it.next();
 			if(filter == null || filter.matches(worker)){
 				curWorkers.add(worker);
 			}
@@ -203,14 +208,15 @@ public abstract class TileWorksiteBase extends TileEntityMod implements IWorkSit
 	  super.update();
 	  if(worldObj.isRemote){return;}  
 	  worldObj.theProfiler.startSection("CMWorksite");
-	  /*if(workers !=null){
-		  for(EntityMinionWorker worker : workers){
-			  if(!this.isWorkerOkay(worker)){
+	  if(workers !=null){
+		  Iterator<EntityMinionWorker> it = workers.iterator();
+		  while(it.hasNext()){
+			  EntityMinionWorker worker = it.next();
+			  if(worker !=null && (!this.isWorkerOkay(worker) || worker.isDead)){
 				  worker.fireFromWorksite();
-				  workers.remove(worker);
 			  }
 		  }
-	  }*/
+	  }
 	  
 	  if(workRetryDelay>0)
 	  {
