@@ -11,11 +11,15 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.ItemHandlerHelper;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetwork;
 import alec_wam.CrystalMod.tiles.pipes.estorage.FluidStorage.FluidStackData;
 import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage.ItemStackData;
+import alec_wam.CrystalMod.tiles.pipes.estorage.PacketEStorageItemList.EnumListType;
 import alec_wam.CrystalMod.tiles.pipes.estorage.PacketEStorageItemList;
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.CraftingPattern;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.crafting.ContainerPanelCrafting;
@@ -25,8 +29,8 @@ import com.google.common.collect.Lists;
 
 public class ContainerPanel extends Container implements INetworkContainer {
 
-	public TileEntityPanel panel;
-	public ContainerPanel(InventoryPlayer inventoryPlayer, TileEntityPanel inter){
+	public IPanelSource panel;
+	public ContainerPanel(InventoryPlayer inventoryPlayer, IPanelSource inter){
 		this.panel = inter;
 		for (int i = 0; i < 3; i++)
         {
@@ -45,17 +49,17 @@ public class ContainerPanel extends Container implements INetworkContainer {
 	@Override
 	public void removeListener(IContainerListener crafting) {
 	    super.removeListener(crafting);
-	    if(panel.network !=null){
-			panel.network.watchers.remove(this);
+	    if(panel.getNetwork() !=null){
+			panel.getNetwork().watchers.remove(this);
 		}
 	}
 	
 	@Override
 	public void addListener(IContainerListener crafter){
 		super.addListener(crafter);
-		if(panel.network !=null){
-			if(!panel.network.watchers.contains(this))
-			panel.network.watchers.add(this);
+		if(panel.getNetwork() !=null){
+			if(!panel.getNetwork().watchers.contains(this))
+			panel.getNetwork().watchers.add(this);
 		}
 		if(crafter !=null && crafter instanceof EntityPlayerMP){
 			sendItemsTo((EntityPlayerMP)crafter);	
@@ -65,8 +69,8 @@ public class ContainerPanel extends Container implements INetworkContainer {
 	@Override
 	public void onContainerClosed(EntityPlayer player) {
 	    super.onContainerClosed(player);
-	    if(panel.network !=null){
-	    	panel.network.watchers.remove(this);
+	    if(panel.getNetwork() !=null){
+	    	panel.getNetwork().watchers.remove(this);
 	    }
 	}
 	
@@ -101,9 +105,9 @@ public class ContainerPanel extends Container implements INetworkContainer {
             			return null;
             		}
             	}
-                if(panel !=null && panel.network !=null && slot6.getStack() !=null){
+                if(panel !=null && panel.getNetwork() !=null && slot6.getStack() !=null){
                 	final ItemStack copy = slot6.getStack();
-        			int added = panel.network.getItemStorage().addItem(copy, false);
+        			int added = panel.getNetwork().getItemStorage().addItem(copy, false);
         			if(added > 0){
         				slot6.decrStackSize(added);
         				detectAndSendChanges();
@@ -121,9 +125,9 @@ public class ContainerPanel extends Container implements INetworkContainer {
 	}
 	
 	public void sendItemsToAll(){
-		if(panel.network !=null){
+		if(panel.getNetwork() !=null){
 			try {
-				PacketEStorageItemList pil = new PacketEStorageItemList(panel.getPos(), 0, panel.network.compressItems());
+				PacketEStorageItemList pil = new PacketEStorageItemList(panel.getPanelPos(), EnumListType.ITEM_ALL, panel.getNetwork().compressItems());
 				for(Object crafter : listeners){
 					if(crafter !=null && crafter instanceof EntityPlayerMP){
 						CrystalModNetwork.sendTo(pil, (EntityPlayerMP)crafter);	
@@ -134,7 +138,7 @@ public class ContainerPanel extends Container implements INetworkContainer {
 			}
 			
 			List<ItemStackData> data = Lists.newArrayList();
-			for(CraftingPattern pattern : panel.network.getPatterns()){
+			for(CraftingPattern pattern : panel.getNetwork().getPatterns()){
 				for(ItemStack stack : pattern.getOutputs()){
 					if(stack !=null){
 						ItemStack copy = stack.copy();
@@ -150,9 +154,9 @@ public class ContainerPanel extends Container implements INetworkContainer {
 	}
 	
 	public void sendItemsToAll(List<ItemStackData> dataList){
-		if(panel.network !=null){
+		if(panel.getNetwork() !=null){
 			try {
-				PacketEStorageItemList pil = new PacketEStorageItemList(panel.getPos(), 1, EStorageNetwork.compressItems(dataList));
+				PacketEStorageItemList pil = new PacketEStorageItemList(panel.getPanelPos(), EnumListType.ITEM_ALL, EStorageNetwork.compressItems(dataList));
 				for(Object crafter : listeners){
 					if(crafter !=null && crafter instanceof EntityPlayerMP){
 						CrystalModNetwork.sendTo(pil, (EntityPlayerMP)crafter);	
@@ -165,25 +169,16 @@ public class ContainerPanel extends Container implements INetworkContainer {
 	}
 	
 	public void sendItemsTo(EntityPlayerMP player){
-		if(panel.network !=null){
+		if(panel.getNetwork() !=null){
 			try {
-				PacketEStorageItemList pil = new PacketEStorageItemList(panel.getPos(), 0, panel.network.compressItems());
+				PacketEStorageItemList pil = new PacketEStorageItemList(panel.getPanelPos(), EnumListType.ITEM, panel.getNetwork().compressItems());
 				CrystalModNetwork.sendTo(pil, player);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 			
 			List<ItemStackData> data = Lists.newArrayList();
-			/*for(ItemStack stack : panel.network.craftableItems.keySet()){
-				if(stack !=null){
-					ItemStack copy = stack.copy();
-					copy.stackSize = 0;
-					ItemStackData iData = new ItemStackData(copy, -1, BlockPos.ORIGIN, 0);
-					iData.isCrafting = true;
-					data.add(iData);
-				}
-			}*/
-			for(CraftingPattern pattern : panel.network.getPatterns()){
+			for(CraftingPattern pattern : panel.getNetwork().getPatterns()){
 				for(ItemStack stack : pattern.getOutputs()){
 					if(stack !=null){
 						ItemStack copy = stack.copy();
@@ -196,7 +191,7 @@ public class ContainerPanel extends Container implements INetworkContainer {
 			}
 			if(data.size() > 0){
 				try {
-					PacketEStorageItemList pil = new PacketEStorageItemList(panel.getPos(), 3, EStorageNetwork.compressItems(data));
+					PacketEStorageItemList pil = new PacketEStorageItemList(panel.getPanelPos(), EnumListType.CRAFTING, EStorageNetwork.compressItems(data));
 					CrystalModNetwork.sendTo(pil, player);
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -206,8 +201,8 @@ public class ContainerPanel extends Container implements INetworkContainer {
 	}
 
 	public void sendItemStackToNetwork(EntityPlayerMP player, int slot, ItemStackData data) {
-		if(panel.network !=null && data.stack !=null){
-			int added = panel.network.getItemStorage().addItem(data.stack, false);
+		if(panel.getNetwork() !=null && data.stack !=null){
+			int added = panel.getNetwork().getItemStorage().addItem(data.stack, false);
 			if(added > 0){
 				if(slot < 0){
 					if(player.inventory.getItemStack() !=null){
@@ -225,7 +220,7 @@ public class ContainerPanel extends Container implements INetworkContainer {
 	}
 	
 	public void grabItemStackFromNetwork(EntityPlayerMP player, int slot, int amount, ItemStackData data) {
-		if(panel.network !=null && data !=null && data.stack !=null){
+		if(panel.getNetwork() !=null && data !=null && data.stack !=null){
 			int invSlot = -1;
 			int realAmount = amount;
 			if(slot < 0){
@@ -238,16 +233,23 @@ public class ContainerPanel extends Container implements INetworkContainer {
 			}
 			ItemStack grabStack = data.stack.copy();
 			grabStack.stackSize = realAmount;
-			ItemStack removed = panel.network.getItemStorage().removeItem(grabStack, false);
+			ItemStack removed = panel.getNetwork().getItemStorage().removeItem(grabStack, false);
 			if(removed !=null){
 				if(invSlot > -1){
-					if(player.inventory.getStackInSlot(invSlot) == null){
+					/*if(player.inventory.getStackInSlot(invSlot) == null){
 						player.inventory.setInventorySlotContents(invSlot, removed);
 					}else{
 						ItemStack current = player.inventory.getStackInSlot(invSlot);
 						current.stackSize+=removed.stackSize;
 						player.inventory.setInventorySlotContents(invSlot, current);
-					}
+					}*/
+					
+					ItemStack remainder = ItemHandlerHelper.insertItem(player.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.UP), removed, false);
+
+	                if (remainder != null) {
+	                	panel.getNetwork().getItemStorage().addItem(remainder, false);
+	                }
+					
 				}else{
 					if(player.inventory.getItemStack() == null){
 						player.inventory.setItemStack(removed);
@@ -263,9 +265,9 @@ public class ContainerPanel extends Container implements INetworkContainer {
 	}
 
 	public void sendCraftingItemsToAll(List<ItemStackData> dataList){
-		if(panel.network !=null){
+		if(panel.getNetwork() !=null){
 			try {
-				PacketEStorageItemList pil = new PacketEStorageItemList(panel.getPos(), 3, EStorageNetwork.compressItems(dataList));
+				PacketEStorageItemList pil = new PacketEStorageItemList(panel.getPanelPos(), EnumListType.CRAFTING, EStorageNetwork.compressItems(dataList));
 				for(Object crafter : listeners){
 					if(crafter !=null && crafter instanceof EntityPlayerMP){
 						CrystalModNetwork.sendTo(pil, (EntityPlayerMP)crafter);	
@@ -290,7 +292,7 @@ public class ContainerPanel extends Container implements INetworkContainer {
 	
 	@Override
 	public EStorageNetwork getNetwork() {
-		if(panel !=null)return panel.network;
+		if(panel !=null)return panel.getNetwork();
 		return null;
 	}
 

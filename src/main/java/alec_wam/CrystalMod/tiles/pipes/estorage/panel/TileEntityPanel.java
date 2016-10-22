@@ -10,6 +10,7 @@ import alec_wam.CrystalMod.tiles.TileEntityMod;
 import alec_wam.CrystalMod.tiles.pipes.ConnectionMode;
 import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetwork;
 import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetworkClient;
+import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetworkClient.ViewType;
 import alec_wam.CrystalMod.tiles.pipes.estorage.INetworkTile;
 import alec_wam.CrystalMod.tiles.pipes.estorage.TileEntityPipeEStorage;
 import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetworkClient.SortType;
@@ -29,6 +30,7 @@ public class TileEntityPanel extends TileEntityMod implements IMessageHandler, I
 	public EnumFacing connectionDir;
 	public String searchBarText;
 	public SortType sortType = SortType.NAME;
+	public ViewType viewType = ViewType.BOTH;
 	public boolean jeiSync = false;
 	
 	public EnumFacing facing = EnumFacing.NORTH;
@@ -44,6 +46,9 @@ public class TileEntityPanel extends TileEntityMod implements IMessageHandler, I
 		}
 		if(sortType !=null){
 			nbt.setByte("SortType", (byte) sortType.ordinal());
+		}
+		if(viewType !=null){
+			nbt.setByte("ViewType", (byte) viewType.ordinal());
 		}
 		if(facing !=null){
 			nbt.setInteger("Facing", facing.ordinal());
@@ -65,6 +70,10 @@ public class TileEntityPanel extends TileEntityMod implements IMessageHandler, I
 		if(nbt.hasKey("SortType")){
 			sortType = SortType.values()[nbt.getByte("SortType")];
 		}
+		viewType = ViewType.BOTH;
+		if(nbt.hasKey("ViewType")){
+			viewType = ViewType.values()[nbt.getByte("ViewType")];
+		}
 		if(nbt.hasKey("Facing")){
 			facing = EnumFacing.getFront(nbt.getInteger("Facing"));
 		}else{
@@ -81,6 +90,17 @@ public class TileEntityPanel extends TileEntityMod implements IMessageHandler, I
 			NBTTagCompound nbt = new NBTTagCompound();
 			nbt.setString("SortType", newType.name());
 			CrystalModNetwork.sendToServer(new PacketTileMessage(getPos(), "Sort", nbt));
+		}else{
+			markDirty();
+		}
+	}
+	
+	public void setView(ViewType newType){
+		this.viewType = newType;
+		if(this.worldObj !=null && this.worldObj.isRemote){
+			NBTTagCompound nbt = new NBTTagCompound();
+			nbt.setString("ViewType", newType.name());
+			CrystalModNetwork.sendToServer(new PacketTileMessage(getPos(), "View", nbt));
 		}else{
 			markDirty();
 		}
@@ -180,6 +200,14 @@ public class TileEntityPanel extends TileEntityMod implements IMessageHandler, I
 			for(SortType type : SortType.values()){
 				if(type.name().equalsIgnoreCase(messageData.getString("SortType"))){
 					sortType = type;
+					return;
+				}
+			}
+		}
+		if(messageId.equalsIgnoreCase("View")){
+			for(ViewType type : ViewType.values()){
+				if(type.name().equalsIgnoreCase(messageData.getString("ViewType"))){
+					viewType = type;
 					return;
 				}
 			}

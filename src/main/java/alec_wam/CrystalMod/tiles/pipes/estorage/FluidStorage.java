@@ -24,7 +24,7 @@ import alec_wam.CrystalMod.util.Lang;
 public class FluidStorage {
 	
 	private List<FluidStackData> fluids = new ArrayList<FluidStackData>();
-	private List<NetworkedHDDInterface> inventories = new ArrayList<NetworkedHDDInterface>();
+	private List<NetworkedItemProvider> inventories = new ArrayList<NetworkedItemProvider>();
 	private final EStorageNetwork network;
 	
 	public FluidStorage(EStorageNetwork network){
@@ -34,12 +34,12 @@ public class FluidStorage {
 	public synchronized void invalidate() {
 		inventories.clear();
 
-		Iterator<List<NetworkedHDDInterface>> i1 = network.interfaces.values().iterator();
+		Iterator<List<NetworkedItemProvider>> i1 = network.interfaces.values().iterator();
 		while(i1.hasNext()){
-			Iterator<NetworkedHDDInterface> ii = i1.next().iterator();
+			Iterator<NetworkedItemProvider> ii = i1.next().iterator();
 			while( ii.hasNext())
 			{
-				final NetworkedHDDInterface inter = ii.next();
+				final NetworkedItemProvider inter = ii.next();
 				if(inter !=null && inter.getInterface() != null) {
 					if(inter.getInterface().getNetworkInventory() !=null){
 						inventories.add(inter);
@@ -50,7 +50,7 @@ public class FluidStorage {
 		
 		fluids.clear();
         
-        Iterator<NetworkedHDDInterface> ii = inventories.iterator();
+        Iterator<NetworkedItemProvider> ii = inventories.iterator();
         
         while(ii.hasNext()){
 	        Iterator<FluidStackData> data = ii.next().getInterface().getNetworkInventory().getFluids(this).iterator();
@@ -72,11 +72,11 @@ public class FluidStorage {
 		if (stack == null)
 			return 0;
 		int inserted = 0;
-		Iterator<NetworkedHDDInterface> i1 = inventories.iterator();
+		Iterator<NetworkedItemProvider> i1 = inventories.iterator();
 		while(i1.hasNext()){
 			FluidStack insertCopy = stack.copy();
 			//FIRST PASS
-			final NetworkedHDDInterface inter = i1.next();
+			final NetworkedItemProvider inter = i1.next();
 			if (insertCopy.amount > 0) {
 				if(inter.getInterface().getNetworkInventory() !=null){
 					int amt = inter.getInterface().getNetworkInventory().insertFluid(network, insertCopy, true, sim, sendUpdate);
@@ -141,9 +141,9 @@ public class FluidStorage {
 	public int removeFluid(FluidStackData data, int amount, boolean sim, boolean sendUpdate) {
 		if (data == null || data.stack == null || network == null)
 			return 0;
-		Iterator<NetworkedHDDInterface> i1 = inventories.iterator();
+		Iterator<NetworkedItemProvider> i1 = inventories.iterator();
 		while(i1.hasNext()){
-			final NetworkedHDDInterface inter = i1.next();
+			final NetworkedItemProvider inter = i1.next();
 			if (network.sameDimAndPos(inter, data.interPos, data.interDim)) {
 				if(inter.getInterface().getNetworkInventory() !=null){
 					int extract = inter.getInterface().getNetworkInventory().extractFluid(network, data.stack, amount, true, sendUpdate);
@@ -177,38 +177,6 @@ public class FluidStorage {
 	
 	public List<FluidStackData> getFluidList(){
 		return fluids;
-	}
-	
-	public boolean addToList(FluidStackData fluidData){
-		boolean edited = false;
-		for(FluidStackData storedData : getFluidList()){
-			  if(storedData.sameIgnoreStack(fluidData)){
-				  storedData.stack = fluidData.stack;
-				  edited = true;
-				  if(storedData.stack == null){
-					  getFluidList().remove(fluidData);
-				  }
-				  return true;
-			  }
-		  }
-		  if(fluidData !=null && edited == false){
-			  getFluidList().add(fluidData);
-		  }
-		  return false;
-	}
-	
-	public List<FluidStackData> clearListAtPos(BlockPos pos, int dim){
-		List<FluidStackData> changed = Lists.newArrayList();
-		List<FluidStackData> copy = Lists.newArrayList(fluids.iterator());
-		Iterator<FluidStackData> ii = copy.iterator();
-		while(ii.hasNext()){
-			FluidStackData data = ii.next();
-			if (data.interPos != null && data.interPos.equals(pos) && data.interDim == dim) {
-				fluids.remove(data);
-				changed.add(data);
-			}
-		}
-		return changed;
 	}
 	
 	public static class FluidStackData {

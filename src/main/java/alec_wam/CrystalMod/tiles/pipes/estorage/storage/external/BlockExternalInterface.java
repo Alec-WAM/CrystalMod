@@ -107,10 +107,10 @@ public class BlockExternalInterface extends BlockContainer implements ICustomMod
 	        	if(!world.isRemote){
 	        		/*NavigableMap<Integer, List<String>> map = new TreeMap<Integer, List<String>>();
 	        		
-	        		for(Entry<Integer, List<NetworkedHDDInterface>> name : inter.getNetwork().interfaces.entrySet()){
+	        		for(Entry<Integer, List<NetworkedItemProvider>> name : inter.getNetwork().interfaces.entrySet()){
 	        			List<String> l = Lists.newArrayList();
 	        			int i = 0;
-	        			for(NetworkedHDDInterface in : name.getValue()){
+	        			for(NetworkedItemProvider in : name.getValue()){
 	        				l.add("Interface: "+i);
 	        				i++;
 	        			}

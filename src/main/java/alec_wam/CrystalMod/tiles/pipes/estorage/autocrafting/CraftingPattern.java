@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import alec_wam.CrystalMod.util.ItemUtil;
+import alec_wam.CrystalMod.util.ModLogger;
 
 import com.google.common.collect.Lists;
 
@@ -46,16 +47,9 @@ public class CraftingPattern {
         }, 3, 3);
 
         for (int i = 0; i < 9; ++i) {
-        	List<ItemStack> list = ItemPattern.getInputs(pattern);
-            ItemStack slot = i >= list.size() ? null : list.get(i);
-
-            if (slot != null) {
-                for (int j = 0; j < slot.stackSize; ++j) {
-                    inputs.add(ItemHandlerHelper.copyStackWithSize(slot, 1));
-                }
-
-                inv.setInventorySlotContents(i, slot);
-            }
+        	ItemStack slot = ItemPattern.getInput(pattern, i);
+            inputs.add(slot);
+            inv.setInventorySlotContents(i, slot);
         }
 
         if (!ItemPattern.isProcessing(pattern)) {
@@ -69,6 +63,8 @@ public class CraftingPattern {
                         byproducts.add(remaining.copy());
                     }
                 }
+            }else{
+            	ModLogger.info("Null output "+inputs.toString());
             }
         } else {
             outputs = ItemPattern.getOutputs(pattern);

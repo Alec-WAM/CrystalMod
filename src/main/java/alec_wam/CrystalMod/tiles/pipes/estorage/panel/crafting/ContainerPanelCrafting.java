@@ -1,6 +1,7 @@
 package alec_wam.CrystalMod.tiles.pipes.estorage.panel.crafting;
 
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.ContainerPanel;
+import alec_wam.CrystalMod.tiles.pipes.estorage.panel.PanelSourceNormal;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.SlotCraftingPanel;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.SlotCraftingPanelResult;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.TileEntityPanel;
@@ -12,11 +13,13 @@ import net.minecraft.item.ItemStack;
 
 public class ContainerPanelCrafting extends ContainerPanel {
 
+	public TileEntityPanel panelTile;
+	
 	public ContainerPanelCrafting(InventoryPlayer inventoryPlayer, TileEntityPanel inter) {
-		super(inventoryPlayer, inter);
+		super(inventoryPlayer, new PanelSourceNormal(inter));
+		panelTile = inter;
 		this.inventorySlots.clear();
 		inventoryItemStacks.clear();
-		this.panel = inter;
 		
 		TileEntityPanelCrafting craft = (TileEntityPanelCrafting)inter;
 		addSlotToContainer(new SlotCraftingPanelResult(this, inventoryPlayer.player, craft,
@@ -50,8 +53,8 @@ public class ContainerPanelCrafting extends ContainerPanel {
 	public void onCraftMatrixChanged(IInventory inv) {
 	    //InventoryCrafting tmp = new InventoryCrafting(new ContainerNull(), 3, 3);
 
-	    if(panel instanceof TileEntityPanelCrafting){
-		    ((TileEntityPanelCrafting) panel).onCraftingMatrixChanged();
+	    if(panelTile instanceof TileEntityPanelCrafting){
+		    ((TileEntityPanelCrafting) panelTile).onCraftingMatrixChanged();
 	    }
 	}
 	

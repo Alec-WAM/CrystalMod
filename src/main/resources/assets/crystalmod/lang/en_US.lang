@@ -270,6 +270,7 @@ tile.crystalmod.playercubewall.name=Player Cube Wall
 tile.crystalmod.playercubecore.name=Player Cube Core
 
 tile.crystalmod.hddinterface.name=Hard Drive Dock
+tile.crystalmod.hddarray.name=Hard Drive Array
 tile.crystalmod.externalinterface.name=External Inventory Interface
 tile.crystalmod.estoragepanel.storage.name=Network Storage Panel
 tile.crystalmod.estoragepanel.crafting.name=Network Crafting Panel
@@ -375,9 +376,27 @@ crystalmod.gui.label.movematchingitems=Move matching items
 crystalmod.gui.label.leaveonefilledstack=Leave one filled stack of every item type
 crystalmod.gui.label.moveallitems=Move all items
 crystalmod.gui.label.fillstacks=Fill all existing stacks
-crystalmod.gui.crafting_monitor.missing_items=Missing
-crystalmod.gui.crafting_monitor.items_crafting=Crafting
+
+crystalmod.gui.sortType.name=Sort by alphabetical order
+crystalmod.gui.sortType.name_reverse=Sort by reversed alphabetical order
+crystalmod.gui.sortType.mod=Sort by mod alphabetical order
+crystalmod.gui.sortType.mod_reverse=Sort by reversed mod alphabetical order
+crystalmod.gui.sortType.count=Sort by item count
+crystalmod.gui.sortType.count_reverse=Sort by reversed item count
+
+crystalmod.gui.viewType.both=Show items and craftable items
+crystalmod.gui.viewType.items=Show only items
+crystalmod.gui.viewType.patterns=Show only craftable items
+
+crystalmod.gui.jeisync.enabled=Sync with JEI
+crystalmod.gui.jeisync.disabled=Ignore JEI
+
+crystalmod.gui.crafting_monitor.not_started_yet=Not Started
+crystalmod.gui.crafting_monitor.items_missing=Missing
 crystalmod.gui.crafting_monitor.items_processing=Processing
+crystalmod.gui.crafting_monitor.items_takeing=Taking Item
+crystalmod.gui.crafting_monitor.items_inserting=Inserting
+crystalmod.gui.crafting_monitor.fluids_takeing=Taking Fluid
 
 
 crystalmod.guistrings.inventory.player=Player Inventory

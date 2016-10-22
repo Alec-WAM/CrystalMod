@@ -65,6 +65,7 @@ import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.TileCrafter;
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.TilePatternEncoder;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.ContainerPanel;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.GuiPanel;
+import alec_wam.CrystalMod.tiles.pipes.estorage.panel.PanelSourceNormal;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.TileEntityPanel;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.crafting.ContainerPanelCrafting;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.crafting.GuiPanelCrafting;
@@ -72,13 +73,15 @@ import alec_wam.CrystalMod.tiles.pipes.estorage.panel.crafting.TileEntityPanelCr
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.monitor.ContainerPanelMonitor;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.monitor.GuiPanelMonitor;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.monitor.TileEntityPanelMonitor;
-import alec_wam.CrystalMod.tiles.pipes.estorage.panel.wireless.ContainerPanelWireless;
-import alec_wam.CrystalMod.tiles.pipes.estorage.panel.wireless.GuiPanelWireless;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.wireless.ItemWirelessPanel;
+import alec_wam.CrystalMod.tiles.pipes.estorage.panel.wireless.PanelSourceWireless;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.wireless.TileEntityWirelessPanel;
 import alec_wam.CrystalMod.tiles.pipes.estorage.storage.hdd.ContainerHDDInterface;
 import alec_wam.CrystalMod.tiles.pipes.estorage.storage.hdd.GuiHDDInterface;
 import alec_wam.CrystalMod.tiles.pipes.estorage.storage.hdd.TileEntityHDDInterface;
+import alec_wam.CrystalMod.tiles.pipes.estorage.storage.hdd.array.ContainerHDDArray;
+import alec_wam.CrystalMod.tiles.pipes.estorage.storage.hdd.array.GuiHDDArray;
+import alec_wam.CrystalMod.tiles.pipes.estorage.storage.hdd.array.TileHDDArray;
 import alec_wam.CrystalMod.tiles.pipes.item.ContainerItemPipe;
 import alec_wam.CrystalMod.tiles.pipes.item.GuiItemPipe;
 import alec_wam.CrystalMod.tiles.pipes.item.TileEntityPipeItem;
@@ -155,7 +158,7 @@ public class GuiHandler implements IGuiHandler {
     		        if (te != null)
     		        {
     		        	if(te instanceof TileEntityWirelessPanel){
-    		        		return new GuiPanelWireless(player.inventory, (TileEntityWirelessPanel)te, held);
+    		        		return new GuiPanel(player.inventory, new PanelSourceWireless((TileEntityWirelessPanel)te, held));
     		        	}
     		        }
     			}
@@ -219,9 +222,10 @@ public class GuiHandler implements IGuiHandler {
             if(te instanceof TileEntityCrystalWorkbench)return new GuiCrystalWorkbench(player.inventory, world, (TileEntityCrystalWorkbench) te);
             
             if(te instanceof TileEntityHDDInterface)return new GuiHDDInterface(player.inventory, (TileEntityHDDInterface) te);
+            if(te instanceof TileHDDArray)return new GuiHDDArray(player.inventory, (TileHDDArray) te);
             if(te instanceof TileEntityPanelMonitor)return new GuiPanelMonitor(player, (TileEntityPanelMonitor) te);
             if(te instanceof TileEntityPanelCrafting)return new GuiPanelCrafting(player.inventory, (TileEntityPanelCrafting) te);
-            if(te instanceof TileEntityPanel)return new GuiPanel(player.inventory, (TileEntityPanel) te);
+            if(te instanceof TileEntityPanel)return new GuiPanel(player.inventory, new PanelSourceNormal((TileEntityPanel) te));
         	if(te instanceof TilePatternEncoder) return new GuiPatternEncoder(player, (TilePatternEncoder)te);
         	if(te instanceof TileCrafter) return new GuiCrafter(player, (TileCrafter)te);
         	if(te instanceof TileEntityWeather) return new GuiWeather((TileEntityWeather)te);
@@ -279,7 +283,7 @@ public class GuiHandler implements IGuiHandler {
     		        if (te != null)
     		        {
     		        	if(te instanceof TileEntityWirelessPanel){
-    		        		return new ContainerPanelWireless(player.inventory, (TileEntityWirelessPanel)te);
+    		        		return new ContainerPanel(player.inventory, new PanelSourceWireless((TileEntityWirelessPanel)te, held));
     		        	}
     		        }
     			}
@@ -330,9 +334,10 @@ public class GuiHandler implements IGuiHandler {
         	//if(te instanceof TileEntityPipe)return ((TileEntityPipe)te).getContainer(ID, player);
         	
         	if(te instanceof TileEntityHDDInterface)return new ContainerHDDInterface(player.inventory, (TileEntityHDDInterface)te);
+        	if(te instanceof TileHDDArray)return new ContainerHDDArray(player.inventory, (TileHDDArray) te);
         	if(te instanceof TileEntityPanelMonitor)return new ContainerPanelMonitor(player, (TileEntityPanelMonitor)te);
         	if(te instanceof TileEntityPanelCrafting)return new ContainerPanelCrafting(player.inventory, (TileEntityPanelCrafting)te);
-        	if(te instanceof TileEntityPanel)return new ContainerPanel(player.inventory, (TileEntityPanel)te);
+        	if(te instanceof TileEntityPanel)return new ContainerPanel(player.inventory, new PanelSourceNormal((TileEntityPanel)te));
         	if(te instanceof TilePatternEncoder) return new ContainerPatternEncoder(player, (TilePatternEncoder)te);
         	if(te instanceof TileCrafter) return new ContainerCrafter(player, (TileCrafter)te);
         	if(te instanceof TileEntityWeather) return new ContainerWeather();

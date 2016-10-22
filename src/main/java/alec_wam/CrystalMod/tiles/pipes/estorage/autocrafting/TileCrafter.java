@@ -26,7 +26,7 @@ public class TileCrafter extends TileEntityMod implements INetworkTile, IAutoCra
 	private BasicItemHandler patterns = new BasicItemHandler(16, this, new IItemValidator() {
         @Override
         public boolean valid(ItemStack stack) {
-            return stack.getItem() == ModItems.craftingPattern && ItemPattern.isValid(stack);
+            return stack.getItem() == ModItems.craftingPattern;
         }
     }){
 	    @Override

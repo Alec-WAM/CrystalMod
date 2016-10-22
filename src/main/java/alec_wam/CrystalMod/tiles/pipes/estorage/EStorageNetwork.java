@@ -43,9 +43,9 @@ public class EStorageNetwork extends AbstractPipeNetwork {
 	private final ItemStorage itemStorage = new ItemStorage(this);
 	private final FluidStorage fluidStorage = new FluidStorage(this);
 
-	public final List<NetworkedHDDInterface> masterInterfaces = Lists
+	public final List<NetworkedItemProvider> masterInterfaces = Lists
 			.newArrayList();
-	public final NavigableMap<Integer, List<NetworkedHDDInterface>> interfaces = new TreeMap<Integer, List<NetworkedHDDInterface>>(
+	public final NavigableMap<Integer, List<NetworkedItemProvider>> interfaces = new TreeMap<Integer, List<NetworkedItemProvider>>(
 			PRIORITY_SORTER);
 
 	final List<TileEntityPanel> panels = new ArrayList<TileEntityPanel>();
@@ -233,7 +233,7 @@ public class EStorageNetwork extends AbstractPipeNetwork {
 
 		if (externalTile instanceof INetworkItemProvider) {
 			INetworkItemProvider inter = (INetworkItemProvider) externalTile;
-			NetworkedHDDInterface inv = new NetworkedHDDInterface(inter, externalTile.getWorld(), bc);
+			NetworkedItemProvider inv = new NetworkedItemProvider(inter, externalTile.getWorld(), bc);
 			this.masterInterfaces.add(inv);
 			this.updateInterfaces();
 		}
@@ -251,20 +251,20 @@ public class EStorageNetwork extends AbstractPipeNetwork {
 		}
 	}
 
-	public List<NetworkedHDDInterface> getOrCreateInterfaces(int priority) {
-		List<NetworkedHDDInterface> list = interfaces.get(priority);
+	public List<NetworkedItemProvider> getOrCreateInterfaces(int priority) {
+		List<NetworkedItemProvider> list = interfaces.get(priority);
 		if (list == null) {
 			interfaces.put(priority,
-					list = new ArrayList<NetworkedHDDInterface>());
+					list = new ArrayList<NetworkedItemProvider>());
 		}
 		return list;
 	}
 
-	public NetworkedHDDInterface getInterface(BlockPos pos, int dim) {
-		Iterator<NetworkedHDDInterface> ii = masterInterfaces.iterator();
+	public NetworkedItemProvider getInterface(BlockPos pos, int dim) {
+		Iterator<NetworkedItemProvider> ii = masterInterfaces.iterator();
 		// FIRST PASS
 		while (ii.hasNext()) {
-			final NetworkedHDDInterface inter = ii.next();
+			final NetworkedItemProvider inter = ii.next();
 			if (inter != null) {
 				if (sameDimAndPos(inter, pos, dim)) {
 					return inter;
@@ -289,7 +289,7 @@ public class EStorageNetwork extends AbstractPipeNetwork {
 				&& (pos == null ? true : tile.getPos().equals(pos));
 	}
 
-	public boolean sameDimAndPos(NetworkedHDDInterface tile, BlockPos pos,
+	public boolean sameDimAndPos(NetworkedItemProvider tile, BlockPos pos,
 			int dim) {
 		if (tile == null || (tile.location == null && pos != null)
 				|| tile.world == null || tile.world.provider == null)
@@ -334,7 +334,7 @@ public class EStorageNetwork extends AbstractPipeNetwork {
 	public void tileRemoved(TileEntityPipeEStorage itemConduit, BlockPos bc) {
 		int dim = itemConduit.getWorld().provider.getDimension();
 
-		NetworkedHDDInterface inter = getInterface(bc, dim);
+		NetworkedItemProvider inter = getInterface(bc, dim);
 		if (inter != null) {
 			this.masterInterfaces.remove(inter);
 			inter.getInterface().setNetwork(null);
@@ -384,8 +384,8 @@ public class EStorageNetwork extends AbstractPipeNetwork {
 	public void destroyNetwork() {
 		super.destroyNetwork();
 		/*
-		 * Iterator<NetworkedHDDInterface> ii = masterInterfaces.iterator();
-		 * //FIRST PASS while( ii.hasNext()) { final NetworkedHDDInterface inter
+		 * Iterator<NetworkedItemProvider> ii = masterInterfaces.iterator();
+		 * //FIRST PASS while( ii.hasNext()) { final NetworkedItemProvider inter
 		 * = ii.next(); if(inter !=null && inter.getInterface() != null) {
 		 * inter.getInterface().setNetwork(null); } }
 		 */
@@ -460,7 +460,7 @@ public class EStorageNetwork extends AbstractPipeNetwork {
 
 	public void updateInterfaces() {
 		this.interfaces.clear();
-		for (NetworkedHDDInterface inter : this.masterInterfaces) {
+		for (NetworkedItemProvider inter : this.masterInterfaces) {
 			getOrCreateInterfaces(inter.getPriority()).add(inter);
 		}
 		getItemStorage().invalidate();
@@ -490,16 +490,18 @@ public class EStorageNetwork extends AbstractPipeNetwork {
 			for (int s = 0; s < crafter.getPatterns().getSlots(); s++) {
 				ItemStack patStack = crafter.getPatterns().getStackInSlot(s);
 
-				if (patStack != null && ItemPattern.isValid(patStack)) {
+				if (patStack != null) {
 					CraftingPattern pattern = new CraftingPattern(crafter.getWorld(), crafter, patStack);
-					patterns.add(pattern);
-					for (ItemStack stack : pattern.getOutputs()) {
-						if (stack != null) {
-							ItemStack copy = stack.copy();
-							copy.stackSize = 0;
-							ItemStackData iData = new ItemStackData(copy, BlockPos.ORIGIN, 0);
-							iData.isCrafting = true;
-							data.add(iData);
+					if(pattern.isValid()){
+						patterns.add(pattern);
+						for (ItemStack stack : pattern.getOutputs()) {
+							if (stack != null) {
+								ItemStack copy = stack.copy();
+								copy.stackSize = 0;
+								ItemStackData iData = new ItemStackData(copy, BlockPos.ORIGIN, 0);
+								iData.isCrafting = true;
+								data.add(iData);
+							}
 						}
 					}
 				}

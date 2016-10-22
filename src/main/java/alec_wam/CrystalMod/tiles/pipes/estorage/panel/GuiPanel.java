@@ -18,13 +18,13 @@ import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetworkClient;
 import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage.ItemStackData;
 import alec_wam.CrystalMod.tiles.pipes.estorage.PacketEStorageAddItem;
 import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetworkClient.SortType;
+import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetworkClient.ViewType;
 import alec_wam.CrystalMod.tiles.pipes.estorage.client.IGuiScreen;
 import alec_wam.CrystalMod.tiles.pipes.estorage.client.VScrollbar;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.crafting.GuiPanelCrafting;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.Lang;
-import alec_wam.CrystalMod.util.ModLogger;
 
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
@@ -49,7 +49,7 @@ import net.minecraft.util.ResourceLocation;
 public class GuiPanel extends GuiContainer implements IGuiScreen, INetworkGui  {
 
 	final InventoryPlayer playerInv;
-	protected final TileEntityPanel panel;
+	protected IPanelSource panel;
 	
 	private int itemRow;
 	
@@ -63,7 +63,7 @@ public class GuiPanel extends GuiContainer implements IGuiScreen, INetworkGui  {
 	
 	protected VScrollbar draggingScrollbar;
 	
-	public GuiPanel(InventoryPlayer player, TileEntityPanel pipe, ContainerPanel pan) {
+	public GuiPanel(InventoryPlayer player, IPanelSource pipe, ContainerPanel pan) {
 		super(pan);
 		xSize = 232;
 		ySize = 212;
@@ -71,7 +71,7 @@ public class GuiPanel extends GuiContainer implements IGuiScreen, INetworkGui  {
 		this.panel = pipe;
 	}
 	
-	public GuiPanel(InventoryPlayer player, TileEntityPanel pipe) {
+	public GuiPanel(InventoryPlayer player, IPanelSource pipe) {
 		super(new ContainerPanel(player, pipe));
 		xSize = 232;
 		ySize = 212;
@@ -93,7 +93,7 @@ public class GuiPanel extends GuiContainer implements IGuiScreen, INetworkGui  {
 		Keyboard.enableRepeatEvents(true);
         searchBar = new GuiTextField(0, this.fontRendererObj, sx + getSearchBarX(), sy + getSearchBarY(), getSearchBarWidth(), 16);
         searchBar.setEnableBackgroundDrawing(false);
-        searchBar.setText(panel.searchBarText == null ? "" : panel.searchBarText);
+        searchBar.setText(panel.getSearchBar() == null ? "" : panel.getSearchBar());
         
         
         craftingRequestAmount = new GuiTextField(1, this.fontRendererObj, getCraftBoxX()+7, getCraftBoxY()+28, 78, 10);
@@ -120,18 +120,29 @@ public class GuiPanel extends GuiContainer implements IGuiScreen, INetworkGui  {
 	public void actionPerformed(GuiButton button){
 		if(button.id == 0){
 			if(panel !=null){
-				int index = panel.sortType.ordinal();
+				int index = panel.getSortType().ordinal();
 				index++;
 				if(index >=SortType.values().length){
 					index = 0;
 				}
-				panel.setSort(SortType.values()[index]);
+				panel.setSortType(SortType.values()[index]);
 				refreshButtons();
 			}
 		}
 		if(button.id == 1){
 			if(panel !=null){
-				boolean old = panel.jeiSync;
+				int index = panel.getViewType().ordinal();
+				index++;
+				if(index >=ViewType.values().length){
+					index = 0;
+				}
+				panel.setViewType(ViewType.values()[index]);
+				refreshButtons();
+			}
+		}
+		if(button.id == 2){
+			if(panel !=null){
+				boolean old = panel.getJEISync();
 				panel.setJEISync(!old);
 				refreshButtons();
 			}
@@ -152,7 +163,7 @@ public class GuiPanel extends GuiContainer implements IGuiScreen, INetworkGui  {
         			if(slot !=null){
         				if (slot.canTakeStack(mc.thePlayer))
         	            {
-        	                if(panel !=null && panel.network !=null && slot.getStack() !=null){
+        	                if(panel.getNetwork() !=null && slot.getStack() !=null){
         	                	ItemStack copy = slot.getStack().copy();
         	                	copy.stackSize = 1;
         	                	try {
@@ -223,7 +234,7 @@ public class GuiPanel extends GuiContainer implements IGuiScreen, INetworkGui  {
 		searchBar.updateCursorCounter();
 		if(craftingPopup)craftingRequestAmount.updateCursorCounter();
 		else{
-			if(JEIUtil.isInstalled() && panel.jeiSync){
+			if(JEIUtil.isInstalled() && panel.getJEISync()){
     			String text = JEIUtil.getFilterText();
     			if(!Strings.isNullOrEmpty(text))searchBar.setText(text);
     		}
@@ -234,37 +245,50 @@ public class GuiPanel extends GuiContainer implements IGuiScreen, INetworkGui  {
 		this.buttonList.clear();
 		int sx = (width - xSize) / 2;
 		int sy = (height - ySize) / 2;
-		SortType current = panel !=null ? panel.sortType : SortType.NAME;
+		SortType currentSort = panel !=null ? panel.getSortType() : SortType.NAME;
+		ViewType currentView = panel !=null ? panel.getViewType() : ViewType.BOTH;
 		int y = 0;
-		if(current == SortType.NAME_REVERSE){
+		if(currentSort == SortType.NAME_REVERSE){
 			y=14;
 		}
-		if(current == SortType.COUNT_REVERSE){
+		if(currentSort == SortType.COUNT_REVERSE){
 			y=14*2;
 		}
-		if(current == SortType.COUNT){
+		if(currentSort == SortType.COUNT){
 			y=14*3;
 		}
-		if(current == SortType.MOD){
+		if(currentSort == SortType.MOD){
 			y=14*4;
 		}
-		if(current == SortType.MOD_REVERSE){
+		if(currentSort == SortType.MOD_REVERSE){
 			y=14*5;
 		}
-		this.buttonList.add(new GuiButtonIcon(0, sx+9, sy+7, 14, 14, 134, y, GuiBackpack.WIDGETS, 14, 0));
+		this.buttonList.add(new GuiButtonHoverText(0, sx+9, sy+7, 14, 14, 134, y, GuiBackpack.WIDGETS, 14, 0, Lang.prefix+"gui.sortType."+currentSort.name().toLowerCase()));
+		
+		if(currentView == ViewType.BOTH){
+			y=14*8;
+		}
+		if(currentView == ViewType.ITEMS){
+			y=14*9;
+		}
+		if(currentView == ViewType.PATTERNS){
+			y=14*10;
+		}
+		
+		this.buttonList.add(new GuiButtonHoverText(1, sx+9, sy+7+16, 14, 14, 134, y, GuiBackpack.WIDGETS, 14, 0, Lang.prefix+"gui.viewType."+currentView.name().toLowerCase()));
 		
 		if(JEIUtil.isInstalled()){
-			boolean sync = panel !=null ? panel.jeiSync : false;
+			boolean sync = panel !=null ? panel.getJEISync() : false;
 			String mode = sync ? "enabled" : "disabled";
-			this.buttonList.add(new GuiButtonHoverText(1, sx+9, sy+7+16, 14, 14, 134, sync ? 14*6 : 14*7, GuiBackpack.WIDGETS, 14, 0, Lang.prefix+"gui.jeisync."+mode));
+			this.buttonList.add(new GuiButtonHoverText(2, sx+9, sy+7+32, 14, 14, 134, sync ? 14*6 : 14*7, GuiBackpack.WIDGETS, 14, 0, Lang.prefix+"gui.jeisync."+mode));
 		}
 	}
 
 	public List<ItemStackData> getDisplayItems(){
-		boolean safe = panel !=null && panel.network !=null && panel.network instanceof EStorageNetworkClient;
+		boolean safe = panel !=null && panel.getNetwork() !=null && panel.getNetwork() instanceof EStorageNetworkClient;
 		if(safe){
-			EStorageNetworkClient net = (EStorageNetworkClient) panel.network;
-			return net.getDisplayItems(searchBar.getText(), panel.sortType);
+			EStorageNetworkClient net = (EStorageNetworkClient) panel.getNetwork();
+			return net.getDisplayItems(searchBar.getText(), panel.getSortType(), panel.getViewType());
 		}
 		return Lists.newArrayList();
 	}
@@ -302,13 +326,16 @@ public class GuiPanel extends GuiContainer implements IGuiScreen, INetworkGui  {
 		//Inside List
 		if(nslot > -1){
 			
-			boolean safe = panel !=null && panel.network !=null && panel.network instanceof EStorageNetworkClient;
+			boolean safe = panel !=null && panel.getNetwork() !=null && panel.getNetwork() instanceof EStorageNetworkClient;
 			if(safe){
 				EntityPlayer player = CrystalMod.proxy.getClientPlayer();
-				EStorageNetworkClient net = (EStorageNetworkClient) panel.network;
-				if(player !=null & player.inventory.getItemStack() !=null && (mouseButton == 0 || mouseButton == 1)){
+				EStorageNetworkClient net = (EStorageNetworkClient) panel.getNetwork();
+				
+				ItemStack held = player.inventory.getItemStack();
+				
+				if(held !=null && (mouseButton == 0 || mouseButton == 1)){
 					try {
-						ItemStack copy = player.inventory.getItemStack().copy();
+						ItemStack copy = held.copy();
 						if(mouseButton == 1){
 							copy.stackSize = 1;
 						}
@@ -318,19 +345,19 @@ public class GuiPanel extends GuiContainer implements IGuiScreen, INetworkGui  {
 					}
 					return;
 				}
+				
 				ItemStackData data = (fixednSlot < 0 || getDisplayItems().size() <= fixednSlot) ? null : getDisplayItems().get(fixednSlot);
 				if(data !=null && data.stack !=null){
-					
 					ItemStack dis = data.stack;
-					if (player !=null && player.inventory.getItemStack() == null)
+					if (held == null)
 	                {
-	                    if (player.capabilities.isCreativeMode && mouseButton == this.mc.gameSettings.keyBindPickBlock.getKeyCode() + 100)
+	                    if (player.capabilities.isCreativeMode && mouseButton == mc.gameSettings.keyBindPickBlock.getKeyCode() + 100)
 	                    {
 	                    	sendUpdate(2, -1, -1, data);
 	                    	return;
 	                    }
 	                }
-					if(mouseButton == 0 || mouseButton == 1){
+					if(mouseButton == 0 || mouseButton == 1 || mouseButton == 2){
 						boolean craftable = false;
 						search : for(ItemStackData data2 : net.craftingItems){
 							if(data2.stack !=null && ItemUtil.canCombine(dis, data2.stack)){
@@ -338,7 +365,7 @@ public class GuiPanel extends GuiContainer implements IGuiScreen, INetworkGui  {
 								break search;
 							}
 						}
-						if(craftable && (isCtrlKeyDown() || data.isCrafting) && mouseButton == 0){
+						if(craftable && (isCtrlKeyDown() || data.isCrafting)){
 							this.currentCraft = data;
 							this.craftingRequestAmount.setEnabled(true);
 							this.craftingRequestAmount.setFocused(true);
@@ -346,26 +373,20 @@ public class GuiPanel extends GuiContainer implements IGuiScreen, INetworkGui  {
 							return;
 						}
 						
-						int amount = mouseButton == 1 ? dis.getMaxStackSize()/2 : dis.getMaxStackSize();
+						int amount = dis.getMaxStackSize();
+						
+						if(mouseButton == 1){
+							//HALF (Right Click)
+							amount = dis.getMaxStackSize()/2;
+						}
+						
+						if(mouseButton == 2){
+							//Single (Middle Click)
+							amount = 1;
+						}
 						int slot = -1;
 						if(isShiftKeyDown()){
-							boolean found = false;
-							slotSearch : for(int iS = 0; iS < player.inventory.getSizeInventory(); iS++){
-								if(player.inventory.getStackInSlot(iS) !=null && player.inventory.getStackInSlot(iS).stackSize < player.inventory.getStackInSlot(iS).getMaxStackSize() && ItemUtil.canCombine(dis, player.inventory.getStackInSlot(iS))){
-									slot = iS;
-									found = true;
-									break slotSearch;
-								}
-							}
-							if(found == false){
-								slotSearch : for(int iS = 0; iS < player.inventory.getSizeInventory(); iS++){
-									if(player.inventory.getStackInSlot(iS) == null){
-										slot = iS;
-										found = true;
-										break slotSearch;
-									}
-								}
-							}
+							slot = 1;
 						}
 						try {
 							if(!data.isCrafting){
@@ -471,10 +492,6 @@ public class GuiPanel extends GuiContainer implements IGuiScreen, INetworkGui  {
 	            GlStateManager.enableLighting();
 	            GlStateManager.enableDepth();
 	            RenderHelper.enableStandardItemLighting();
-				
-				
-				
-				
 			}
 			stacksRendered++;
 			x+=18;
@@ -501,8 +518,7 @@ public class GuiPanel extends GuiContainer implements IGuiScreen, INetworkGui  {
 		            GlStateManager.disableLighting();
 		            GlStateManager.enableRescaleNormal();
 		            GlStateManager.enableColorMaterial();
-		            this.renderToolTip(dis, mouseX-sx, mouseY-sy);
-
+		            renderToolTip(dis, mouseX-sx, mouseY-sy);
 		            GlStateManager.popMatrix();
 		            GlStateManager.enableLighting();
 		            GlStateManager.enableDepth();
@@ -603,7 +619,6 @@ public class GuiPanel extends GuiContainer implements IGuiScreen, INetworkGui  {
 	    	itemRow = scrollbar.getScrollPos();
 	    }
 	    scrollbar.drawScrollbar(par2, par3);
-	    
 	}
 	
 	public String getTexture() {
@@ -700,7 +715,7 @@ public class GuiPanel extends GuiContainer implements IGuiScreen, INetworkGui  {
             {
         		this.searchBar.textboxKeyTyped(typedChar, keyCode);
         		try{
-            		if(JEIUtil.isInstalled() && panel.jeiSync){
+            		if(JEIUtil.isInstalled() && panel.getJEISync()){
             			JEIUtil.setFilterText(searchBar.getText());
             		}
         		}catch(Exception e){

@@ -5,12 +5,17 @@ import net.minecraft.entity.player.InventoryPlayer;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.packets.PacketTileMessage;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.GuiPanel;
+import alec_wam.CrystalMod.tiles.pipes.estorage.panel.IPanelSource;
+import alec_wam.CrystalMod.tiles.pipes.estorage.panel.PanelSourceNormal;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.TileEntityPanel;
 
 public class GuiPanelCrafting extends GuiPanel {
 
-	public GuiPanelCrafting(InventoryPlayer player, TileEntityPanel pipe) {
-		super(player, pipe, new ContainerPanelCrafting(player, pipe));
+	public TileEntityPanel panelTile;
+	
+	public GuiPanelCrafting(InventoryPlayer player, TileEntityPanel panel) {
+		super(player, new PanelSourceNormal(panel), new ContainerPanelCrafting(player, panel));
+		this.panelTile = panel;
 		xSize = 232;
 		ySize = 256;
 	}
@@ -25,7 +30,7 @@ public class GuiPanelCrafting extends GuiPanel {
 	public void actionPerformed(GuiButton button){
 		super.actionPerformed(button);
 		if(button.id == 3){
-			CrystalModNetwork.sendToServer(new PacketTileMessage(panel.getPos(), "ClearGrid"));
+			CrystalModNetwork.sendToServer(new PacketTileMessage(panelTile.getPos(), "ClearGrid"));
 		}
 	}
 	

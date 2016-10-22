@@ -78,6 +78,9 @@ import alec_wam.CrystalMod.tiles.pipes.estorage.storage.external.TileEntityExter
 import alec_wam.CrystalMod.tiles.pipes.estorage.storage.hdd.BlockHDDInterface;
 import alec_wam.CrystalMod.tiles.pipes.estorage.storage.hdd.TileEntityHDDInterface;
 import alec_wam.CrystalMod.tiles.pipes.estorage.storage.hdd.TileEntityHDDInterfaceRenderer;
+import alec_wam.CrystalMod.tiles.pipes.estorage.storage.hdd.array.BlockHDDArray;
+import alec_wam.CrystalMod.tiles.pipes.estorage.storage.hdd.array.TileHDDArray;
+import alec_wam.CrystalMod.tiles.pipes.estorage.storage.hdd.array.TileHDDArrayRenderer;
 import alec_wam.CrystalMod.tiles.pipes.wireless.BlockWirelessPipeWrapper;
 import alec_wam.CrystalMod.tiles.pipes.wireless.TileEntityPipeWrapper;
 import alec_wam.CrystalMod.tiles.playercube.BlockPlayerCubeBlock;
@@ -123,6 +126,7 @@ public class ModBlocks {
 	public static BlockMobGrinder mobGrinder;
 	
 	public static BlockHDDInterface hddInterface;
+	public static BlockHDDArray hddArray;
 	public static BlockExternalInterface externalInterface;
 	public static BlockPanel storagePanel;
 	public static BlockWirelessPanel wirelessPanel;
@@ -239,6 +243,10 @@ public class ModBlocks {
 		registerBlock(hddInterface, "hddinterface");
 		regsiterTileEntity(TileEntityHDDInterface.class);
 		
+		hddArray = new BlockHDDArray();
+		registerBlock(hddArray, "hddarray");
+		regsiterTileEntity(TileHDDArray.class);
+		
 		externalInterface = new BlockExternalInterface();
 		registerBlock(externalInterface, "externalinterface");
 		regsiterTileEntity(TileEntityExternalInterface.class);
@@ -349,6 +357,7 @@ public class ModBlocks {
 		}
 		
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityHDDInterface.class, new TileEntityHDDInterfaceRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileHDDArray.class, new TileHDDArrayRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPanelItem.class, new TileEntityPanelItemRenderer<TileEntityPanelItem>());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCustomSpawner.class, new RenderTileEntityCustomSpawner<TileEntityCustomSpawner>());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPlayerCubePortal.class, new TileEntityPlayerCubePortalRenderer<TileEntityPlayerCubePortal>());

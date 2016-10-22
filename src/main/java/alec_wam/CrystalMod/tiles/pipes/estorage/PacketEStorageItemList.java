@@ -1,7 +1,6 @@
 package alec_wam.CrystalMod.tiles.pipes.estorage;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import io.netty.buffer.ByteBuf;
@@ -21,15 +20,19 @@ import alec_wam.CrystalMod.util.ModLogger;
 
 public class PacketEStorageItemList extends AbstractPacketThreadsafe {
 
+	public static enum EnumListType {
+		UPDATE, ITEM, ITEM_ALL, CRAFTING;
+	}
+	
 	private int x;
 	private int y;
 	private int z;
-	private int type;
+	private EnumListType type;
 	private byte[] compressed;
 	
 	public PacketEStorageItemList(){}
 	
-    public PacketEStorageItemList(BlockPos pos, int type, byte[] compressed){
+    public PacketEStorageItemList(BlockPos pos, EnumListType type, byte[] compressed){
     	x = pos.getX();
     	y = pos.getY();
     	z = pos.getZ();
@@ -42,7 +45,7 @@ public class PacketEStorageItemList extends AbstractPacketThreadsafe {
 		x = buffer.readInt();
 		y = buffer.readInt();
 		z = buffer.readInt();
-		type = buffer.readInt();
+		type = EnumListType.values()[buffer.readInt()];
 		compressed = readByteArray(buffer);
 	}
 	
@@ -63,7 +66,7 @@ public class PacketEStorageItemList extends AbstractPacketThreadsafe {
 		buffer.writeInt(x);
 		buffer.writeInt(y);
 		buffer.writeInt(z);
-		buffer.writeInt(type);
+		buffer.writeInt(type.ordinal());
 		writeByteArray(buffer, compressed);
 	}
 
@@ -91,10 +94,10 @@ public class PacketEStorageItemList extends AbstractPacketThreadsafe {
 		if(network !=null){
 			try {
 				List<ItemStackData> data = EStorageNetwork.decompressItems(compressed);
-				if(type == 0 || type == 1){
+				if(type == EnumListType.ITEM || type == EnumListType.ITEM_ALL){
 					network.getItemStorage().setItemList(data);
 				}
-				if(type == 3){
+				if(type == EnumListType.CRAFTING){
 					if(network instanceof EStorageNetworkClient){
 						((EStorageNetworkClient)network).craftingItems = data;
 					}
@@ -107,7 +110,8 @@ public class PacketEStorageItemList extends AbstractPacketThreadsafe {
 
 	@Override
 	public void handleServerSafe(NetHandlerPlayServer netHandler) {
-		if(type == 0){
+		ModLogger.info("Packet Type2 = "+type.name());
+		if(type == EnumListType.UPDATE){
 			Container con = netHandler.playerEntity.openContainer;
 			if(con !=null && con instanceof INetworkContainer){
 				INetworkContainer pan = ((INetworkContainer)con);
@@ -116,13 +120,13 @@ public class PacketEStorageItemList extends AbstractPacketThreadsafe {
 				}
 			}
 		}
-		if(type == 1){
+		if(type == EnumListType.ITEM_ALL){
 			Container con = netHandler.playerEntity.openContainer;
 			if(con !=null && con instanceof INetworkContainer){
 				((INetworkContainer)con).sendItemsToAll();
 			}
 		}
-		if(type == 2){
+		if(type == EnumListType.ITEM){
 			Container con = netHandler.playerEntity.openContainer;
 			if(con !=null && con instanceof INetworkContainer){
 				((INetworkContainer)con).sendItemsTo(netHandler.playerEntity);

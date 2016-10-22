@@ -44,31 +44,57 @@ public class EStorageNetworkClient extends EStorageNetwork {
 		NAME, NAME_REVERSE, MOD, MOD_REVERSE, COUNT, COUNT_REVERSE;
 	}
 	
+	public static enum ViewType{
+		BOTH, ITEMS, PATTERNS;
+	}
+	
 	public String lastFilter = null;
 	public SortType lastSortType = SortType.NAME;
 	public List<ItemStackData> sortedItems = Lists.newArrayList();
-	
+	public ViewType lastViewType = ViewType.BOTH;
 	public List<ItemStackData> craftingItems = Lists.newArrayList();
 	
-	public List<ItemStackData> getItemsSorted(SortType sortType){
+	public List<ItemStackData> getItemsSorted(SortType sortType, ViewType viewType){
 		List<ItemStackData> copy = Lists.newArrayList();
-		for(ItemStackData data : getItemStorage().getItemList()){
-			if(data.stack !=null)
-			copy.add(data);
+		
+		if(viewType == ViewType.BOTH || viewType == ViewType.ITEMS){
+			for(ItemStackData data : getItemStorage().getItemList()){
+				if(data.stack !=null){
+					copy.add(data);
+				}
+			}
 		}
 		
-		for(ItemStackData data : craftingItems){
-			if(data.stack !=null){
-				
-				boolean safe = true;
-				search : for(ItemStackData item : getItemStorage().getItemList()){
-					if(item.stack !=null && ItemUtil.canCombine(item.stack, data.stack)){
-						safe = false;
-						break search;
-					}
+		/*List<ItemStackData> copy = Lists.newArrayList();
+		Iterator<ItemStackData> ii = copyPre.iterator();
+		while(ii.hasNext()){
+			ItemStackData data = ii.next();
+			boolean added = false;
+			search : for(ItemStackData cop : copy){
+				if(cop !=null && ItemUtil.canCombine(cop.stack, data.stack)){
+					cop.stack.stackSize=data.stack.stackSize;
+					ii.remove();
+					break search;
 				}
-				
-				if(safe)copy.add(data);
+			}
+			if(!added)
+				copy.add(data);
+		}*/
+		
+		if(viewType == ViewType.BOTH || viewType == ViewType.PATTERNS){
+			for(ItemStackData data : craftingItems){
+				if(data.stack !=null){
+					
+					boolean safe = true;
+					search : for(ItemStackData item : getItemStorage().getItemList()){
+						if(item.stack !=null && ItemUtil.canCombine(item.stack, data.stack)){
+							safe = false;
+							break search;
+						}
+					}
+					
+					if(safe)copy.add(data);
+				}
 			}
 		}
 		if(collator == null){
@@ -91,9 +117,9 @@ public class EStorageNetworkClient extends EStorageNetwork {
 		return copy;
 	}
 	
-	public List<ItemStackData> getDisplayItems(String filterString, SortType type){
+	public List<ItemStackData> getDisplayItems(String filterString, SortType sType, ViewType vType){
+		List<ItemStackData> data = getItemsSorted(sType == null ? SortType.NAME : sType, vType == null ? ViewType.BOTH : vType);
 		if(filterString != null){
-			List<ItemStackData> data = getItemsSorted(type == null ? SortType.NAME : type);
 			ItemFilter filter = Strings.isNullOrEmpty(filterString) ? null : ItemFilter.parse(filterString, LOCALE);
 			if(filter != null) {
 		        Iterator<ItemStackData> iter = data.iterator();
@@ -106,7 +132,7 @@ public class EStorageNetworkClient extends EStorageNetwork {
 			}
 			return data;
 		}
-		return getItemsSorted(type);
+		return data;
 	}
 	
 }

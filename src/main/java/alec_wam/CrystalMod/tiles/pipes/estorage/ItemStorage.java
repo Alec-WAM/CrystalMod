@@ -32,7 +32,7 @@ import alec_wam.CrystalMod.util.Lang;
 public class ItemStorage {
 
 	private List<ItemStackData> items = new ArrayList<ItemStackData>();
-	private List<NetworkedHDDInterface> inventories = new ArrayList<NetworkedHDDInterface>();
+	private List<NetworkedItemProvider> inventories = new ArrayList<NetworkedItemProvider>();
 	private final EStorageNetwork network;
 	
 	public ItemStorage(EStorageNetwork network){
@@ -42,12 +42,12 @@ public class ItemStorage {
 	public synchronized void invalidate() {
 		inventories.clear();
 
-		Iterator<List<NetworkedHDDInterface>> i1 = network.interfaces.values().iterator();
+		Iterator<List<NetworkedItemProvider>> i1 = network.interfaces.values().iterator();
 		while(i1.hasNext()){
-			Iterator<NetworkedHDDInterface> ii = i1.next().iterator();
+			Iterator<NetworkedItemProvider> ii = i1.next().iterator();
 			while( ii.hasNext())
 			{
-				final NetworkedHDDInterface inter = ii.next();
+				final NetworkedItemProvider inter = ii.next();
 				if(inter !=null && inter.getInterface() != null) {
 					if(inter.getInterface().getNetworkInventory() !=null){
 						inventories.add(inter);
@@ -58,7 +58,7 @@ public class ItemStorage {
 		
         items.clear();
         
-        Iterator<NetworkedHDDInterface> ii = inventories.iterator();
+        Iterator<NetworkedItemProvider> ii = inventories.iterator();
         
         while(ii.hasNext()){
 	        Iterator<ItemStackData> data = ii.next().getInterface().getNetworkInventory().getItems(this).iterator();
@@ -81,7 +81,7 @@ public class ItemStorage {
 			return 0;
 		final int ogSize = stack.stackSize;
 		int inserted = 0;
-		Iterator<NetworkedHDDInterface> i1 = inventories.iterator();
+		Iterator<NetworkedItemProvider> i1 = inventories.iterator();
 		ItemStack insertCopy = stack.copy();
 		master : while(i1.hasNext() && insertCopy.stackSize > 0){
 			INetworkInventory inventory = i1.next().getInterface().getNetworkInventory();
@@ -193,9 +193,9 @@ public class ItemStorage {
 	public int removeItem(ItemStackData data, int amount, boolean sim, boolean sendUpdate) {
 		if (data == null || data.stack == null || network == null)
 			return 0;
-		Iterator<NetworkedHDDInterface> i1 = inventories.iterator();
+		Iterator<NetworkedItemProvider> i1 = inventories.iterator();
 		while(i1.hasNext()){
-			NetworkedHDDInterface inter = i1.next();
+			NetworkedItemProvider inter = i1.next();
 			if (network.sameDimAndPos(inter, data.interPos, data.interDim)) {
 				if(inter.getInterface().getNetworkInventory() !=null){
 					int extract = inter.getInterface().getNetworkInventory().extractItem(network, data.stack, amount, true, sendUpdate);
@@ -255,13 +255,13 @@ public class ItemStorage {
 	
 	public void scanNetworkForItems(){
 		items.clear();
-		Iterator<List<NetworkedHDDInterface>> i1 = network.interfaces.values().iterator();
+		Iterator<List<NetworkedItemProvider>> i1 = network.interfaces.values().iterator();
 		while(i1.hasNext()){
-			Iterator<NetworkedHDDInterface> ii = i1.next().iterator();
+			Iterator<NetworkedItemProvider> ii = i1.next().iterator();
 			//FIRST PASS
 			while( ii.hasNext())
 			{
-				final NetworkedHDDInterface inter = ii.next();
+				final NetworkedItemProvider inter = ii.next();
 				if(inter !=null && inter.getInterface() != null) {
 					if(inter.getInterface().getNetworkInventory() !=null){
 						Iterator<ItemStackData> data = inter.getInterface().getNetworkInventory().getItems(this).iterator();
@@ -284,38 +284,6 @@ public class ItemStorage {
 	
 	public List<ItemStackData> getItemList(){
 		return items;
-	}
-	
-	public boolean addToList(ItemStackData itemData){
-		boolean edited = false;
-		for(ItemStackData storedData : getItemList()){
-			  if(storedData.sameIgnoreStack(itemData)){
-				  storedData.stack = itemData.stack;
-				  edited = true;
-				  if(storedData.stack == null){
-					  getItemList().remove(itemData);
-				  }
-				  return true;
-			  }
-		  }
-		  if(itemData !=null && edited == false){
-			  getItemList().add(itemData);
-		  }
-		  return false;
-	}
-	
-	public List<ItemStackData> clearListAtPos(BlockPos pos, int dim){
-		List<ItemStackData> changed = Lists.newArrayList();
-		List<ItemStackData> copy = Lists.newArrayList(items.iterator());
-		Iterator<ItemStackData> ii = copy.iterator();
-		while(ii.hasNext()){
-			ItemStackData data = ii.next();
-			if (data.interPos != null && data.interPos.equals(pos) && data.interDim == dim) {
-				items.remove(data);
-				changed.add(data);
-			}
-		}
-		return changed;
 	}
 	
 	public static class ItemStackData {

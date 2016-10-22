@@ -10,6 +10,7 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,7 +26,7 @@ public class ItemPattern extends Item {
 	
 	private static Map<ItemStack, CraftingPattern> PATTERN_CACHE = new HashMap<ItemStack, CraftingPattern>();
 	
-    public static final String NBT_INPUTS = "Inputs";
+	private static final String NBT_SLOT = "Slot_%d";
     public static final String NBT_OUTPUTS = "Outputs";
     public static final String NBT_BYPRODUCTS = "Byproducts";
     public static final String NBT_PROCESSING = "Processing";
@@ -67,6 +68,8 @@ public class ItemPattern extends Item {
         		list.add(TextFormatting.YELLOW+"Ore");
         	}
         	ItemUtil.combineMultipleItemsInTooltip(list, cpattern.getOutputs());
+        } else {
+        	list.add("Invalid "+cpattern.getInputs().size()+" | "+cpattern.getOutputs().size());
         }
     	/*if (isValid(pattern)) {
             if (GuiScreen.isShiftKeyDown() || isProcessing(pattern)) {
@@ -85,85 +88,59 @@ public class ItemPattern extends Item {
         }*/
     }
 
-    public static void addInput(ItemStack pattern, ItemStack stack) {
-        add(pattern, stack, NBT_INPUTS);
-    }
-
-    public static void addOutput(ItemStack pattern, ItemStack stack) {
-        add(pattern, stack, NBT_OUTPUTS);
-    }
-
-    public static void addByproduct(ItemStack pattern, ItemStack stack) {
-        add(pattern, stack, NBT_BYPRODUCTS);
-    }
-
-    private static void add(ItemStack pattern, ItemStack stack, String type) {
-        if (pattern.getTagCompound() == null) {
+    public static void setInput(ItemStack pattern, int slot, ItemStack stack) {
+        if (!pattern.hasTagCompound()) {
             pattern.setTagCompound(new NBTTagCompound());
         }
 
-        if (!pattern.getTagCompound().hasKey(type)) {
-            pattern.getTagCompound().setTag(type, new NBTTagList());
-        }
-
-        pattern.getTagCompound().getTagList(type, Constants.NBT.TAG_COMPOUND).appendTag(stack.serializeNBT());
+        pattern.getTagCompound().setTag(String.format(NBT_SLOT, slot), stack.serializeNBT());
     }
 
-    public static List<ItemStack> getInputs(ItemStack pattern) {
-        return get(pattern, NBT_INPUTS);
-    }
+    public static ItemStack getInput(ItemStack pattern, int slot) {
+        String id = String.format(NBT_SLOT, slot);
 
-    public static List<ItemStack> getOutputs(ItemStack pattern) {
-        return get(pattern, NBT_OUTPUTS);
-    }
-
-    public static List<ItemStack> getByproducts(ItemStack pattern) {
-        return get(pattern, NBT_BYPRODUCTS);
-    }
-
-    private static List<ItemStack> get(ItemStack pattern, String type) {
-        if (!pattern.hasTagCompound() || !pattern.getTagCompound().hasKey(type)) {
+        if (!pattern.hasTagCompound() || !pattern.getTagCompound().hasKey(id)) {
             return null;
         }
 
-        NBTTagList stacksList = pattern.getTagCompound().getTagList(type, Constants.NBT.TAG_COMPOUND);
-
-        List<ItemStack> stacks = Lists.newArrayList();
-
-        for (int i = 0; i < stacksList.tagCount(); ++i) {
-            stacks.add(ItemStack.loadItemStackFromNBT(stacksList.getCompoundTagAt(i)));
-        }
-
-        return stacks;
+        return ItemStack.loadItemStackFromNBT(pattern.getTagCompound().getCompoundTag(id));
     }
 
-    public static boolean isValid(ItemStack pattern) {
-        if (pattern.getTagCompound() == null || (!pattern.getTagCompound().hasKey(NBT_INPUTS) || !pattern.getTagCompound().hasKey(NBT_OUTPUTS) || !pattern.getTagCompound().hasKey(NBT_PROCESSING))) {
-            return false;
+    public static void addOutput(ItemStack pattern, ItemStack stack) {
+    	if (!pattern.hasTagCompound()) {
+            pattern.setTagCompound(new NBTTagCompound());
         }
 
-        for (ItemStack input : getInputs(pattern)) {
-            if (input == null) {
-                return false;
+        NBTTagList outputs;
+        if (!pattern.getTagCompound().hasKey(NBT_OUTPUTS)) {
+            outputs = new NBTTagList();
+        } else {
+            outputs = pattern.getTagCompound().getTagList(NBT_OUTPUTS, Constants.NBT.TAG_COMPOUND);
+        }
+
+        outputs.appendTag(stack.serializeNBT());
+
+        pattern.getTagCompound().setTag(NBT_OUTPUTS, outputs);
+    }
+
+    public static List<ItemStack> getOutputs(ItemStack pattern) {
+    	if (!isProcessing(pattern)) {
+            return null;
+        }
+
+        List<ItemStack> outputs = new ArrayList<ItemStack>();
+
+        NBTTagList outputsTag = pattern.getTagCompound().getTagList(NBT_OUTPUTS, Constants.NBT.TAG_COMPOUND);
+
+        for (int i = 0; i < outputsTag.tagCount(); ++i) {
+            ItemStack stack = ItemStack.loadItemStackFromNBT(outputsTag.getCompoundTagAt(i));
+
+            if (stack != null) {
+                outputs.add(stack);
             }
         }
 
-        for (ItemStack output : getOutputs(pattern)) {
-            if (output == null) {
-                return false;
-            }
-        }
-        
-        List<ItemStack> byproducts = getByproducts(pattern);
-        if (byproducts !=null && !byproducts.isEmpty()) {
-            for (ItemStack byproduct : byproducts) {
-                if (byproduct == null) {
-                    return false;
-                }
-            }
-        }
-
-        return true;
+        return outputs;
     }
 
     public static void setProcessing(ItemStack pattern, boolean processing) {

@@ -41,6 +41,7 @@ public class TilePatternEncoder extends TileEntityMod implements IMessageHandler
     protected boolean isOreDict;
     
     public void writeCustomNBT(NBTTagCompound nbt){
+    	super.writeCustomNBT(nbt);
     	nbt.setBoolean("isOreDict", isOreDict);
     	NBTTagList tagList = new NBTTagList();
 
@@ -60,6 +61,7 @@ public class TilePatternEncoder extends TileEntityMod implements IMessageHandler
     }
     
     public void readCustomNBT(NBTTagCompound nbt){
+    	super.readCustomNBT(nbt);
     	this.isOreDict = nbt.getBoolean("isOreDict");
     	NBTTagList tagList = nbt.getTagList("Inventory", Constants.NBT.TAG_COMPOUND);
 
@@ -88,24 +90,12 @@ public class TilePatternEncoder extends TileEntityMod implements IMessageHandler
             patterns.extractItem(0, 1, false);
 
             ItemStack pattern = new ItemStack(ModItems.craftingPattern);
-
-            for (ItemStack byproduct : CraftingManager.getInstance().getRemainingItems(matrix, worldObj)) {
-                if (byproduct != null) {
-                    ItemPattern.addByproduct(pattern, byproduct);
-                }
-            }
-
-            ItemPattern.addOutput(pattern, result.getStackInSlot(0));
-
             ItemPattern.setProcessing(pattern, false);
             ItemPattern.setOredict(pattern, this.isOreDict);
             
             for (int i = 0; i < 9; ++i) {
                 ItemStack ingredient = matrix.getStackInSlot(i);
-
-                if (ingredient != null) {
-                    ItemPattern.addInput(pattern, ingredient);
-                }
+                ItemPattern.setInput(pattern, i, ingredient);
             }
 
             patterns.setStackInSlot(1, pattern);

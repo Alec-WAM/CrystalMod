@@ -4,14 +4,13 @@ import alec_wam.CrystalMod.api.estorage.INetworkItemProvider;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class NetworkedHDDInterface {
+public class NetworkedItemProvider {
 
   private INetworkItemProvider inter;
   BlockPos location;
-  
   World world;
 
-  NetworkedHDDInterface(INetworkItemProvider inter, World world, BlockPos location) {
+  NetworkedItemProvider(INetworkItemProvider inter, World world, BlockPos location) {
     this.inter = inter;
     this.location = location;
     this.world = world;
