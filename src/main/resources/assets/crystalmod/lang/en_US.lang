@@ -278,14 +278,10 @@ tile.crystalmod.estoragepanel.display.name=Network Item Panel
 tile.crystalmod.estoragepanel.monitor.name=Network Crafting Monitor Panel
 tile.crystalmod.ewirelesspanel.name=Hand-held Network Panel Router
 tile.crystalmod.pipewrapper.name=Network Pipe Portal
+tile.crystalmod.craftingController.name=Crafting Controller
 tile.crystalmod.craftingarray.name=Crafting Recipe Array
 tile.crystalmod.craftingio.name=External Crafting Port 
 tile.crystalmod.encoder.name=Crafting Recipe Encoder
-tile.crystalmod.crafter.blue.name=Blue Crystal Crafting Manager
-tile.crystalmod.crafter.red.name=Red Crystal Crafting Manager
-tile.crystalmod.crafter.green.name=Green Crystal Crafting Manager
-tile.crystalmod.crafter.dark.name=Dark Crystal Crafting Manager
-tile.crystalmod.crafter.pure.name=Pure Crystal Crafting Manager
 
 tile.crystalmod.craftingEncoder.normal.name=Crafting Recipe Encoder
 tile.crystalmod.craftingEncoder.processing.name=External Crafting Recipe Encoder

@@ -250,15 +250,4 @@ public class RecipeTransferHandler implements IRecipeTransferHandler {
 	    StackHelper sh = (StackHelper)registry.getJeiHelpers().getStackHelper();
 	    return sh.containsAnyStack(available, allIng) != null;
 	}
-
-	  private boolean networkContainsIngredient(EStorageNetwork network, List<ItemStack> allIng) {         
-	    for (ItemStack ing : allIng) {
-	      ItemStackData stack = network.getItemStorage().getItemData(ing);
-	      if (stack != null && stack.stack !=null && !stack.isCrafting && stack.getAmount() >=ing.stackSize) {
-	        return true;
-	      }
-	    }
-	    return false;
-	  }
-	
 }

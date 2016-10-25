@@ -18,10 +18,10 @@ public class CraftingTaskScheduler {
     public void schedule(EStorageNetwork network, ItemStack item) {
         CraftingPattern pattern = network.getPatternWithBestScore(item);
 
-        if (pattern != null) {
+        if (pattern != null && network.craftingController !=null) {
             scheduledItem = item;
 
-            network.addCraftingTaskAsLast(network.createCraftingTask(scheduledItem, pattern, scheduledItem.stackSize));
+            network.craftingController.addCraftingTaskAsLast(network.craftingController.createCraftingTask(scheduledItem, pattern, scheduledItem.stackSize));
         }
     }
 

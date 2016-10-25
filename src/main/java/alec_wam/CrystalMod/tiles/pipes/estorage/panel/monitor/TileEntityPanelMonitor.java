@@ -18,10 +18,10 @@ public class TileEntityPanelMonitor extends TileEntityPanel implements ISynchron
 	@Override
     public void writeContainerData(ByteBuf buf) {
 
-        if (connected && getNetwork() !=null) {
-            buf.writeInt(getNetwork().getCraftingTasks().size());
+        if (connected && getNetwork() !=null && getNetwork().craftingController !=null) {
+            buf.writeInt(getNetwork().craftingController.getCraftingTasks().size());
 
-            for (ICraftingTask task : getNetwork().getCraftingTasks()) {
+            for (ICraftingTask task : getNetwork().craftingController.getCraftingTasks()) {
                 ByteBufUtils.writeUTF8String(buf, task.getInfo());
 
                 buf.writeInt(task.getPattern().getOutputs().size());

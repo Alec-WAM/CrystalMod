@@ -96,10 +96,14 @@ public class PacketEStorageItemList extends AbstractPacketThreadsafe {
 				List<ItemStackData> data = EStorageNetwork.decompressItems(compressed);
 				if(type == EnumListType.ITEM || type == EnumListType.ITEM_ALL){
 					network.getItemStorage().setItemList(data);
+					if(network instanceof EStorageNetworkClient){
+						((EStorageNetworkClient)network).needsListUpdate = true;
+					}
 				}
 				if(type == EnumListType.CRAFTING){
 					if(network instanceof EStorageNetworkClient){
 						((EStorageNetworkClient)network).craftingItems = data;
+						((EStorageNetworkClient)network).needsListUpdate = true;
 					}
 				}
 			} catch (IOException e) {
@@ -110,7 +114,6 @@ public class PacketEStorageItemList extends AbstractPacketThreadsafe {
 
 	@Override
 	public void handleServerSafe(NetHandlerPlayServer netHandler) {
-		ModLogger.info("Packet Type2 = "+type.name());
 		if(type == EnumListType.UPDATE){
 			Container con = netHandler.playerEntity.openContainer;
 			if(con !=null && con instanceof INetworkContainer){

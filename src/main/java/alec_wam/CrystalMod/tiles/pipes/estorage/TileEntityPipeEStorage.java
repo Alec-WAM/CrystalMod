@@ -43,6 +43,11 @@ public class TileEntityPipeEStorage extends TileEntityPipe {
 	    if (tile==null || this.getAttachmentData(direction) !=null) {
 	      return false;
 	    } 
+	    
+	    if(network != null && network instanceof EStorageNetwork) {
+	    	if(!((EStorageNetwork)network).canConnect(tile))return false;
+	    }
+	    
 	    return ignoreDisabled || getConnectionMode(direction) !=ConnectionMode.DISABLED;
 	}
 

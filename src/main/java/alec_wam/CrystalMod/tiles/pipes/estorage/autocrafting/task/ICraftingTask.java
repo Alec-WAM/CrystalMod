@@ -7,17 +7,22 @@ import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.CraftingPattern;
 import net.minecraft.nbt.NBTTagCompound;
 
 public interface ICraftingTask {
+	public static final String NBT_PATTERN = "PatternStack";
+	public static final String NBT_CRAFTER = "CrafterPos";
+	public static final String NBT_REQUESTED = "Quantity";
+	public static final String NBT_QUANTITY = "Quantity";
+	
     CraftingPattern getPattern();
 
+    void calculate(EStorageNetwork network);
+    
     boolean update(EStorageNetwork controller);
-
-    void onDone(EStorageNetwork controller);
 
     void onCancelled(EStorageNetwork controller);
 
-    void writeToNBT(NBTTagCompound tag);
+    NBTTagCompound writeToNBT(NBTTagCompound tag);
 
     String getInfo();
 
-	List<CraftingProcess> getToProcess();
+	List<CraftingProcessBase> getToProcess();
 }

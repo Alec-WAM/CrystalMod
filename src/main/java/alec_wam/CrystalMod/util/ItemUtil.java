@@ -42,6 +42,7 @@ import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.ILockableContainer;
@@ -857,26 +858,24 @@ public class ItemUtil {
         return handler;
     }
     
-    public static void combineMultipleItemsInTooltip(List<String> lines, List<ItemStack> stacks) {
-        Set<Integer> combinedIndices = new HashSet<Integer>();
+    public static void combineMultipleItemsInTooltip(List<String> lines, boolean displayAmount, ItemStack... stacks) {
+    	Set<Integer> combinedIndices = new HashSet<Integer>();
 
-        for (int i = 0; i < stacks.size(); ++i) {
-            if (!combinedIndices.contains(i)) {
-                String data = stacks.get(i).getDisplayName();
+        for (int i = 0; i < stacks.length; ++i) {
+            if (stacks[i] != null && !combinedIndices.contains(i)) {
+                String data = stacks[i].getDisplayName();
 
-                int amount = stacks.get(i).stackSize;
+                int amount = stacks[i].stackSize;
 
-                for (int j = i + 1; j < stacks.size(); ++j) {
-                    if (canCombine(stacks.get(i), stacks.get(j))) {
-                        amount += stacks.get(j).stackSize;
+                for (int j = i + 1; j < stacks.length; ++j) {
+                    if (stacks[j] !=null && canCombine(stacks[i], stacks[j])) {
+                        amount += stacks[j].stackSize;
 
                         combinedIndices.add(j);
                     }
                 }
 
-                if (amount != 1) {
-                    data += " (" + amount + "x)";
-                }
+                data = (displayAmount ? (TextFormatting.WHITE + String.valueOf(amount) + " ") : "") + TextFormatting.GRAY + data;
 
                 lines.add(data);
             }

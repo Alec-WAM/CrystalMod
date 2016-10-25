@@ -1,22 +1,30 @@
 package alec_wam.CrystalMod.tiles.pipes.estorage;
 
 import java.io.IOException;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.NavigableMap;
-import java.util.Stack;
 import java.util.TreeMap;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import alec_wam.CrystalMod.api.estorage.INetworkItemProvider;
-import alec_wam.CrystalMod.api.estorage.INetworkInventory.EnumUpdateType;
 import alec_wam.CrystalMod.network.CompressedDataInput;
 import alec_wam.CrystalMod.network.CompressedDataOutput;
 import alec_wam.CrystalMod.tiles.pipes.AbstractPipeNetwork;
@@ -27,30 +35,28 @@ import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage.ItemStackData;
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.CraftingPattern;
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.IAutoCrafter;
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.ItemPattern;
+import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.TileCraftingController;
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.task.BasicCraftingTask;
+import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.task.CraftingProcessBase;
+import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.task.CraftingProcessExternal;
+import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.task.CraftingProcessNormal;
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.task.ICraftingTask;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.INetworkContainer;
-import alec_wam.CrystalMod.tiles.pipes.estorage.panel.TileEntityPanel;
-import alec_wam.CrystalMod.tiles.pipes.estorage.panel.wireless.TileEntityWirelessPanel;
+import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.ModLogger;
 
 import com.google.common.collect.Lists;
 
 public class EStorageNetwork extends AbstractPipeNetwork {
-	public EStorageNetwork masterNetwork;
-
 	private final ItemStorage itemStorage = new ItemStorage(this);
 	private final FluidStorage fluidStorage = new FluidStorage(this);
 
-	public final List<NetworkedItemProvider> masterInterfaces = Lists
-			.newArrayList();
+	public final Map<BlockPos, TileEntity> networkTiles = new HashMap<BlockPos, TileEntity>();
+	public TileCraftingController craftingController;
+	public final List<NetworkedItemProvider> masterInterfaces = Lists.newArrayList();
 	public final NavigableMap<Integer, List<NetworkedItemProvider>> interfaces = new TreeMap<Integer, List<NetworkedItemProvider>>(
 			PRIORITY_SORTER);
-
-	final List<TileEntityPanel> panels = new ArrayList<TileEntityPanel>();
-
-	final List<TileEntityWirelessPanel> wirelesspanels = new ArrayList<TileEntityWirelessPanel>();
 
 	final Map<BlockPos, TileEntityPipeEStorage> pipMap = new HashMap<BlockPos, TileEntityPipeEStorage>();
 
@@ -62,13 +68,7 @@ public class EStorageNetwork extends AbstractPipeNetwork {
 
 	// AUTO CRAFTING
 	final List<IAutoCrafter> crafters = new ArrayList<IAutoCrafter>();
-
 	private List<CraftingPattern> patterns = new ArrayList<CraftingPattern>();
-
-	private Stack<ICraftingTask> craftingTasks = new Stack<ICraftingTask>();
-	private List<ICraftingTask> craftingTasksToAddAsLast = new ArrayList<ICraftingTask>();
-	private List<ICraftingTask> craftingTasksToAdd = new ArrayList<ICraftingTask>();
-	private List<ICraftingTask> craftingTasksToCancel = new ArrayList<ICraftingTask>();
 
 	public ItemStorage getItemStorage() {
 		return itemStorage;
@@ -220,9 +220,35 @@ public class EStorageNetwork extends AbstractPipeNetwork {
 		}
 	}
 
+	public boolean canConnect(TileEntity tile){
+		if(tile instanceof TileCraftingController){
+			return craftingController == null;
+		}
+		if(tile instanceof INetworkTileConnectable){
+			return ((INetworkTileConnectable)tile).canConnect(this);
+		}
+		return true;
+	}
+	
 	public void tileAdded(TileEntityPipeEStorage itemPipe,
 			EnumFacing direction, BlockPos bc, TileEntity externalTile) {
 
+		if(networkTiles.containsKey(bc)){
+			return;
+		}
+		if(!canConnect(externalTile)){
+			return;
+		}
+		
+		networkTiles.put(bc, externalTile);
+		
+		if(externalTile instanceof TileCraftingController){
+			TileCraftingController crafter = (TileCraftingController)externalTile;
+			if(craftingController !=null)return;
+			craftingController = crafter;
+		}
+		
+		
 		if (externalTile instanceof INetworkTile) {
 			((INetworkTile) externalTile).setNetwork(this);
 		}
@@ -236,13 +262,6 @@ public class EStorageNetwork extends AbstractPipeNetwork {
 			NetworkedItemProvider inv = new NetworkedItemProvider(inter, externalTile.getWorld(), bc);
 			this.masterInterfaces.add(inv);
 			this.updateInterfaces();
-		}
-
-		if (externalTile instanceof TileEntityPanel) {
-			panels.add((TileEntityPanel) externalTile);
-		}
-		if (externalTile instanceof TileEntityWirelessPanel) {
-			wirelesspanels.add((TileEntityWirelessPanel) externalTile);
 		}
 
 		if (externalTile instanceof IAutoCrafter) {
@@ -262,7 +281,6 @@ public class EStorageNetwork extends AbstractPipeNetwork {
 
 	public NetworkedItemProvider getInterface(BlockPos pos, int dim) {
 		Iterator<NetworkedItemProvider> ii = masterInterfaces.iterator();
-		// FIRST PASS
 		while (ii.hasNext()) {
 			final NetworkedItemProvider inter = ii.next();
 			if (inter != null) {
@@ -298,28 +316,6 @@ public class EStorageNetwork extends AbstractPipeNetwork {
 				&& (pos == null ? true : tile.location.equals(pos));
 	}
 
-	public TileEntityPanel getPanel(BlockPos bc, int dim) {
-		Iterator<TileEntityPanel> iPanel = panels.iterator();
-		while (iPanel.hasNext()) {
-			TileEntityPanel pan = iPanel.next();
-			if (sameDimAndPos(pan, bc, dim)) {
-				return pan;
-			}
-		}
-		return null;
-	}
-
-	public TileEntityWirelessPanel getWirelessPanel(BlockPos bc, int dim) {
-		Iterator<TileEntityWirelessPanel> iWPanel = wirelesspanels.iterator();
-		while (iWPanel.hasNext()) {
-			TileEntityWirelessPanel wpan = iWPanel.next();
-			if (sameDimAndPos(wpan, bc, dim)) {
-				return wpan;
-			}
-		}
-		return null;
-	}
-
 	public IAutoCrafter getCrafter(BlockPos bc, int dim) {
 		Iterator<IAutoCrafter> iCrafter = crafters.iterator();
 		while (iCrafter.hasNext()) {
@@ -332,6 +328,7 @@ public class EStorageNetwork extends AbstractPipeNetwork {
 	}
 
 	public void tileRemoved(TileEntityPipeEStorage itemConduit, BlockPos bc) {
+		networkTiles.remove(bc);
 		int dim = itemConduit.getWorld().provider.getDimension();
 
 		NetworkedItemProvider inter = getInterface(bc, dim);
@@ -363,16 +360,6 @@ public class EStorageNetwork extends AbstractPipeNetwork {
 			destroyNetwork();
 		}
 
-		TileEntityPanel panel = getPanel(bc, dim);
-		if (panel != null) {
-			panels.remove(panel);
-		}
-
-		TileEntityWirelessPanel wirelessPanel = getWirelessPanel(bc, dim);
-		if (wirelessPanel != null) {
-			wirelesspanels.remove(wirelessPanel);
-		}
-
 		IAutoCrafter crafter2 = getCrafter(bc, dim);
 		if (crafter2 != null) {
 			crafters.remove(crafter2);
@@ -383,71 +370,16 @@ public class EStorageNetwork extends AbstractPipeNetwork {
 	@Override
 	public void destroyNetwork() {
 		super.destroyNetwork();
-		/*
-		 * Iterator<NetworkedItemProvider> ii = masterInterfaces.iterator();
-		 * //FIRST PASS while( ii.hasNext()) { final NetworkedItemProvider inter
-		 * = ii.next(); if(inter !=null && inter.getInterface() != null) {
-		 * inter.getInterface().setNetwork(null); } }
-		 */
 		masterInterfaces.clear();
 		interfaces.clear();
-
-		/*
-		 * Iterator<TileEntityPanel> iP = panels.iterator(); while
-		 * (iP.hasNext()) { TileEntityPanel pan = iP.next(); pan.network = null;
-		 * CrystalModNetwork.sendToAllAround( new
-		 * PacketTileMessage(pan.getPos(), "ResetNet"), pan); }
-		 */
-		panels.clear();
-
-		/*
-		 * Iterator<TileEntityWirelessPanel> iWP = wirelesspanels.iterator();
-		 * while (iWP.hasNext()) { TileEntityWirelessPanel pan = iWP.next();
-		 * pan.network = null; CrystalModNetwork.sendToAllAround( new
-		 * PacketTileMessage(pan.getPos(), "ResetNet"), pan); }
-		 */
-		wirelesspanels.clear();
-
-		/*
-		 * Iterator<TileCrafter> iCR = crafters2.iterator(); while
-		 * (iCR.hasNext()) { iCR.next().setNetwork(null); }
-		 */
 		crafters.clear();
-
 		listeners.clear();
 
 		super.destroyNetwork();
 	}
-
-	protected int ticks;
-
+	
 	@Override
 	public void doNetworkTick() {
-		ticks++;
-
-		for (ICraftingTask taskToCancel : craftingTasksToCancel) {
-			taskToCancel.onCancelled(this);
-		}
-		craftingTasks.removeAll(craftingTasksToCancel);
-		craftingTasksToCancel.clear();
-
-		for (ICraftingTask task : craftingTasksToAdd) {
-			craftingTasks.push(task);
-		}
-		craftingTasksToAdd.clear();
-
-		for (ICraftingTask task : craftingTasksToAddAsLast) {
-			craftingTasks.add(0, task);
-		}
-		craftingTasksToAddAsLast.clear();
-
-		if (!craftingTasks.empty()) {
-			ICraftingTask top = craftingTasks.peek();
-			if (ticks % top.getPattern().getCrafter().getSpeed() == 0 && top.update(this)) {
-				craftingTasks.pop();
-			}
-		}
-
 		if (updateItems) {
 			getItemStorage().invalidate();
 			updateItems = false;
@@ -489,9 +421,8 @@ public class EStorageNetwork extends AbstractPipeNetwork {
 				continue;
 			for (int s = 0; s < crafter.getPatterns().getSlots(); s++) {
 				ItemStack patStack = crafter.getPatterns().getStackInSlot(s);
-
 				if (patStack != null) {
-					CraftingPattern pattern = new CraftingPattern(crafter.getWorld(), crafter, patStack);
+					CraftingPattern pattern = crafter.createPattern(patStack);
 					if(pattern.isValid()){
 						patterns.add(pattern);
 						for (ItemStack stack : pattern.getOutputs()) {
@@ -515,78 +446,8 @@ public class EStorageNetwork extends AbstractPipeNetwork {
 		}
 	}
 
-	public List<ICraftingTask> getCraftingTasks() {
-		return craftingTasks;
-	}
-
-	public void addCraftingTask(ICraftingTask task) {
-		craftingTasksToAdd.add(task);
-	}
-
-	public void addCraftingTaskIfNotCrafting(ICraftingTask task) {
-		CraftingPattern pattern = task.getPattern();
-		for (ItemStack stack : pattern.getOutputs()) {
-			if (isCrafting(stack))
-				return;
-		}
-		addCraftingTask(task);
-	}
-
-	public void scheduleCraftingTaskIfUnscheduled(ItemStack stack, int toSchedule) {
-		int alreadyScheduled = 0;
-
-		for (ICraftingTask task : getCraftingTasks()) {
-			for (ItemStack output : task.getPattern().getOutputs()) {
-				if (ItemUtil.canCombine(output, stack)) {
-					alreadyScheduled++;
-				}
-			}
-		}
-
-		CraftingPattern pattern = getPatternWithBestScore(stack);
-
-		if (pattern != null) {
-			addCraftingTaskAsLast(createCraftingTask(stack, pattern, toSchedule - alreadyScheduled));
-		}
-	}
-
-	public void addCraftingTaskAsLast(ICraftingTask task) {
-		craftingTasksToAddAsLast.add(task);
-	}
-
-	public ICraftingTask createCraftingTask(ItemStack request, CraftingPattern pattern, int amt) {
-		return new BasicCraftingTask(request, pattern, amt);
-	}
-
-	public void cancelCraftingTask(ICraftingTask task) {
-		craftingTasksToCancel.add(task);
-	}
-
 	public List<CraftingPattern> getPatterns() {
 		return patterns;
-	}
-
-	/*
-	 * public CraftingPattern getPattern(ItemStack pattern) { for
-	 * (CraftingPattern craftingPattern : getPatterns()) { for (ItemStack output
-	 * : craftingPattern.getOutputs()) { if (ItemUtil.canCombine(output,
-	 * pattern)) { return craftingPattern; } } }
-	 * 
-	 * return null; }
-	 */
-
-	public boolean isCrafting(ItemStack stack) {
-		for (ICraftingTask task : getCraftingTasks()) {
-			CraftingPattern pattern = task.getPattern();
-			if (pattern != null && pattern.getOutputs() != null) {
-				for (ItemStack cStack : pattern.getOutputs()) {
-					if (ItemUtil.canCombine(stack, cStack)) {
-						return true;
-					}
-				}
-			}
-		}
-		return false;
 	}
 
 	public boolean canCraft(ItemStack stack) {
@@ -622,10 +483,12 @@ public class EStorageNetwork extends AbstractPipeNetwork {
 
 		for (int i = 0; i < patterns.size(); ++i) {
 			for (ItemStack input : patterns.get(i).getInputs()) {
-				ItemStackData stored = getItemStorage().getItemData(input);
-
-				scores[i] += stored != null && stored.stack != null
-						&& !stored.isCrafting ? stored.stack.stackSize : 0;
+				if(input != null){
+					ItemStackData stored = getItemStorage().getItemData(input);
+	
+					scores[i] += stored != null && stored.stack != null
+							&& !stored.isCrafting ? stored.stack.stackSize : 0;
+				}
 			}
 
 			if (scores[i] > highestScore) {
@@ -635,42 +498,6 @@ public class EStorageNetwork extends AbstractPipeNetwork {
 		}
 
 		return patterns.get(highestPattern);
-	}
-
-	public void handleCraftingRequest(ItemStackData data, int quantity) {
-		if (data != null && quantity > 0 && quantity <= 500) {
-			ItemStack requested = data.stack;
-
-			CraftingPattern pattern = getPatternWithBestScore(requested);
-
-			if (pattern != null) {
-				addCraftingTaskAsLast(createCraftingTask(requested, pattern, quantity));
-				/*for (ItemStack output : pattern.getOutputs()) {
-					if (ItemUtil.canCombine(requested, output)) {
-						quantityPerRequest += output.stackSize;
-						if (!pattern.isProcessing()) {
-							break;
-						}
-					}
-				}
-
-				while (quantity > 0) {
-					addCraftingTaskAsLast(createCraftingTask(pattern));
-
-					quantity -= quantityPerRequest;
-				}*/
-			}
-		}
-	}
-
-	public void handleCraftingCancel(int id) {
-		if (id >= 0 && id < getCraftingTasks().size()) {
-			cancelCraftingTask(getCraftingTasks().get(id));
-		} else if (id == -1) {
-			for (ICraftingTask task : getCraftingTasks()) {
-				cancelCraftingTask(task);
-			}
-		}
 	}
 
 	public void notifyInsert(ItemStack stack) {

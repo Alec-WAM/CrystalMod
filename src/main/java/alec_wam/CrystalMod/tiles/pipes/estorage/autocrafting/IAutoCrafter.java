@@ -1,5 +1,6 @@
 package alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting;
 
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -22,5 +23,7 @@ public interface IAutoCrafter {
 	public IItemHandler getFacingInventory();
 	
 	public BlockPos getFacingPos();
+
+	public CraftingPattern createPattern(ItemStack patternStack);
 	
 }

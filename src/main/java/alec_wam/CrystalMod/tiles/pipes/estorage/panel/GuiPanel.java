@@ -22,6 +22,8 @@ import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetworkClient.ViewType;
 import alec_wam.CrystalMod.tiles.pipes.estorage.client.IGuiScreen;
 import alec_wam.CrystalMod.tiles.pipes.estorage.client.VScrollbar;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.crafting.GuiPanelCrafting;
+import alec_wam.CrystalMod.tiles.pipes.estorage.panel.popup.CraftingAmountPopup;
+import alec_wam.CrystalMod.tiles.pipes.estorage.panel.popup.Popup;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.Lang;
@@ -39,6 +41,7 @@ import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
@@ -54,12 +57,9 @@ public class GuiPanel extends GuiContainer implements IGuiScreen, INetworkGui  {
 	private int itemRow;
 	
 	private GuiTextField searchBar;
-	//private Scrollbar scrollbar = new Scrollbar(this.getScrollBarX(), this.getScrollBarY(), this.getSearchBarWidth(), this.getScrollBarHeight()/*157, 20, 12, 89*/);
 	private VScrollbar scrollbar;
 	
-	private boolean craftingPopup;
-	private ItemStackData currentCraft;
-	private GuiTextField craftingRequestAmount;
+	public Popup currentPopup;
 	
 	protected VScrollbar draggingScrollbar;
 	
@@ -94,11 +94,6 @@ public class GuiPanel extends GuiContainer implements IGuiScreen, INetworkGui  {
         searchBar = new GuiTextField(0, this.fontRendererObj, sx + getSearchBarX(), sy + getSearchBarY(), getSearchBarWidth(), 16);
         searchBar.setEnableBackgroundDrawing(false);
         searchBar.setText(panel.getSearchBar() == null ? "" : panel.getSearchBar());
-        
-        
-        craftingRequestAmount = new GuiTextField(1, this.fontRendererObj, getCraftBoxX()+7, getCraftBoxY()+28, 78, 10);
-        craftingRequestAmount.setEnableBackgroundDrawing(false);
-        craftingRequestAmount.setText("1");
         
         scrollbar = new VScrollbar(this, getScrollBarX(), getScrollBarY(), getScrollBarHeight());
       	scrollbar.adjustPosition();
@@ -155,7 +150,7 @@ public class GuiPanel extends GuiContainer implements IGuiScreen, INetworkGui  {
         int i = Mouse.getEventDWheel();
         int x = Mouse.getEventX() * this.width / this.mc.displayWidth;
         int y = this.height - Mouse.getEventY() * this.height / this.mc.displayHeight - 1;
-        if (i != 0 && !craftingPopup)
+        if (i != 0 && currentPopup == null)
         {
         	if(isShiftKeyDown()){
         		if(i > 0){
@@ -232,7 +227,9 @@ public class GuiPanel extends GuiContainer implements IGuiScreen, INetworkGui  {
 		super.updateScreen();
 		
 		searchBar.updateCursorCounter();
-		if(craftingPopup)craftingRequestAmount.updateCursorCounter();
+		if(currentPopup !=null){
+			currentPopup.update(this);
+		}
 		else{
 			if(JEIUtil.isInstalled() && panel.getJEISync()){
     			String text = JEIUtil.getFilterText();
@@ -295,6 +292,11 @@ public class GuiPanel extends GuiContainer implements IGuiScreen, INetworkGui  {
 	
 	protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException
     {
+		if(currentPopup !=null){
+			if(currentPopup.clicked(this, mouseX, mouseY, mouseButton))
+			return;
+		}
+		
 		super.mouseClicked(mouseX, mouseY, mouseButton);
 		//Inside Search Bar
 		if(isPointInRegion(getSearchBarX(), getSearchBarY(), getSearchBarWidth(), 16, mouseX, mouseY)){
@@ -305,9 +307,6 @@ public class GuiPanel extends GuiContainer implements IGuiScreen, INetworkGui  {
 			this.searchBar.setFocused(false);
 		}
 		
-		if(this.craftingPopup){
-			return;
-		}
 		if (draggingScrollbar != null) {
 			draggingScrollbar.mouseClicked(mouseX, mouseY, mouseButton);
         	return;
@@ -366,10 +365,7 @@ public class GuiPanel extends GuiContainer implements IGuiScreen, INetworkGui  {
 							}
 						}
 						if(craftable && (isCtrlKeyDown() || data.isCrafting)){
-							this.currentCraft = data;
-							this.craftingRequestAmount.setEnabled(true);
-							this.craftingRequestAmount.setFocused(true);
-							this.craftingPopup = true;
+							this.currentPopup = new CraftingAmountPopup(this, data);
 							return;
 						}
 						
@@ -506,7 +502,7 @@ public class GuiPanel extends GuiContainer implements IGuiScreen, INetworkGui  {
 		int fixednSlot = (nslot+getItemRow()*getItemsPerRow());
 		
 		//Inside List
-		if(nslot > -1 && !craftingPopup){
+		if(nslot > -1 && currentPopup == null){
 			ItemStackData data = (fixednSlot < 0 || getDisplayItems().size() <= fixednSlot) ? null : getDisplayItems().get(fixednSlot);
 			if(data !=null && data.stack !=null){
 				ItemStack disOrg = data.stack;
@@ -527,59 +523,7 @@ public class GuiPanel extends GuiContainer implements IGuiScreen, INetworkGui  {
 			}
 		}
 		
-		
-
-	    if(this.craftingPopup){
-	    	GlStateManager.pushMatrix();
-	    	GlStateManager.disableDepth();
-	    	GlStateManager.disableLighting();
-	    	GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-	    	Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation("crystalmod:textures/gui/eStorage_panel_craftbox.png"));
-		    drawTexturedModalRect(getCraftBoxX(), getCraftBoxY(), 0, 0, 90, 59);
-	    	this.craftingRequestAmount.drawTextBox();
-	    	
-	    	ItemStack dis = this.currentCraft !=null ? this.currentCraft.stack : null;
-			
-			if(dis !=null){
-				GlStateManager.pushMatrix();
-	            RenderHelper.enableGUIStandardItemLighting();
-	            GlStateManager.disableLighting();
-	            GlStateManager.enableRescaleNormal();
-	            GlStateManager.enableColorMaterial();
-	            GlStateManager.enableLighting();
-	            
-	            
-	            GlStateManager.pushMatrix();
-	    		this.itemRender.zLevel = 200.0F;
-	            this.itemRender.renderItemAndEffectIntoGUI(dis, getCraftBoxX()+5, getCraftBoxY()+5);
-	            GlStateManager.popMatrix();
-	            this.itemRender.zLevel = 0.0F;
-	            GlStateManager.disableLighting();
-
-	            GlStateManager.popMatrix();
-	            GlStateManager.enableLighting();
-	            GlStateManager.enableDepth();
-	            RenderHelper.enableStandardItemLighting();
-	            
-	            GlStateManager.pushMatrix();
-	            GlStateManager.enableLighting();
-	            GlStateManager.disableDepth();
-	            
-	            GlStateManager.translate(getCraftBoxX()+26, getCraftBoxY()+10, 0);
-	            String string = dis.getDisplayName();
-	            int stringWidth = this.fontRendererObj.getStringWidth(string);
-	            float scale = Math.min(60F / (float) (stringWidth+10), 1F);
-	            GlStateManager.scale(scale, scale, 1);
-	            GlStateManager.translate(0, fontRendererObj.FONT_HEIGHT*(1.0f-scale), 0);
-	            fontRendererObj.drawString(""+string, 0, 0, 0x404040);
-	            GlStateManager.enableDepth();
-	            GlStateManager.disableLighting();
-	            GlStateManager.popMatrix();
-			}
-			GlStateManager.enableLighting();
-			GlStateManager.enableDepth();
-			GlStateManager.popMatrix();
-	    }
+		if(currentPopup !=null)currentPopup.render(this);
     }
 	
 	public static String getStackSize(ItemStack stack){
@@ -627,12 +571,9 @@ public class GuiPanel extends GuiContainer implements IGuiScreen, INetworkGui  {
 
 	protected void keyTyped(char typedChar, int keyCode) throws IOException
     {
-		
 		if (keyCode == 1) {
-			if(this.craftingPopup){
-				this.craftingPopup = false;
-				this.craftingRequestAmount.setEnabled(false);
-				this.craftingRequestAmount.setFocused(false);
+			if(currentPopup !=null){
+				currentPopup = null;
 				this.refreshButtons();
 				return;
 			}
@@ -645,116 +586,92 @@ public class GuiPanel extends GuiContainer implements IGuiScreen, INetworkGui  {
 			}
     	}
 		
-		if(!craftingPopup){
-		if(!this.searchBar.isFocused()){
-			if(keyCode == Keyboard.KEY_S && !craftingPopup){
-				searchBar.setFocused(true);
-				return;
+		if(currentPopup == null){
+			if(!this.searchBar.isFocused()){
+				if(keyCode == Keyboard.KEY_S){
+					searchBar.setFocused(true);
+					return;
+				}
 			}
-		}
-		//Inside List
-		int mouseX = Mouse.getX() * this.width / this.mc.displayWidth;
-        int mouseY = this.height - Mouse.getY() * this.height / this.mc.displayHeight - 1;
-		int s = getNetworkSlot(mouseX, mouseY);
-		int fixednSlot = (s+getItemRow()*getItemsPerRow());
-		if(s > -1){
-			ItemStackData data = (fixednSlot < 0 || getDisplayItems().size() <= fixednSlot) ? null : getDisplayItems().get(fixednSlot);
-			if(data !=null && data.stack !=null){
-				ItemStack dis = data.stack;
-				
-				if(JEIUtil.isInstalled()){
-					try{
-						RecipesGui recipesGui = JEIUtil.getRecipesGui();
-	        			if(recipesGui !=null){
-						//RecipesGui recGui = /*new RecipesGui()*/JEIUtil.getRecipesGui();
-							if (keyCode == KeyBindings.showRecipe.getKeyCode()) {
-								Focus<?> focus = new Focus<ItemStack>(dis);
-								if (focus != null) {
-									if (!GuiScreen.isShiftKeyDown()) {
-										recipesGui.showRecipes(focus);
-									} else {
-										recipesGui.showUses(focus);
+			//Inside List
+			int mouseX = Mouse.getX() * this.width / this.mc.displayWidth;
+	        int mouseY = this.height - Mouse.getY() * this.height / this.mc.displayHeight - 1;
+			int s = getNetworkSlot(mouseX, mouseY);
+			int fixednSlot = (s+getItemRow()*getItemsPerRow());
+			if(s > -1){
+				ItemStackData data = (fixednSlot < 0 || getDisplayItems().size() <= fixednSlot) ? null : getDisplayItems().get(fixednSlot);
+				if(data !=null && data.stack !=null){
+					ItemStack dis = data.stack;
+					
+					if(JEIUtil.isInstalled()){
+						try{
+							RecipesGui recipesGui = JEIUtil.getRecipesGui();
+		        			if(recipesGui !=null){
+							//RecipesGui recGui = /*new RecipesGui()*/JEIUtil.getRecipesGui();
+								if (keyCode == KeyBindings.showRecipe.getKeyCode()) {
+									Focus<?> focus = new Focus<ItemStack>(dis);
+									if (focus != null) {
+										if (!GuiScreen.isShiftKeyDown()) {
+											recipesGui.showRecipes(focus);
+										} else {
+											recipesGui.showUses(focus);
+										}
+										return;
 									}
-									return;
+								} else if (keyCode == KeyBindings.showUses.getKeyCode()) {
+									recipesGui.showUses(dis);
 								}
-							} else if (keyCode == KeyBindings.showUses.getKeyCode()) {
-								recipesGui.showUses(dis);
-							}
-	        			}
-					}catch(Exception e){
-						e.printStackTrace();
-					}
-				}
-				
-				if (this.mc.thePlayer.inventory.getItemStack() == null)
-			    {
-					if (mc.thePlayer.capabilities.isCreativeMode && keyCode == this.mc.gameSettings.keyBindPickBlock.getKeyCode())
-                    {
-                    	sendUpdate(2, -1, -1, data);
-    					return;
-                    }
-			        for (int i = 0; i < 9; ++i)
-			        {
-			            if (keyCode == this.mc.gameSettings.keyBindsHotbar[i].getKeyCode())
-			            {
-			            	int slot = i;
-						
-			            	if(slot !=-1 && (this.mc.thePlayer.inventory.getStackInSlot(i) == null || ItemUtil.canCombine(this.mc.thePlayer.inventory.getStackInSlot(i), dis))){
-								sendUpdate(1, slot, dis.getMaxStackSize(), data);
-							}
-							return;
+		        			}
+						}catch(Exception e){
+							e.printStackTrace();
 						}
-			        }
-			    }
-			}
-		}
-		
-        if (this.searchBar.isFocused())
-        {
-        	if (!this.checkHotbarKeys(keyCode))
-            {
-        		this.searchBar.textboxKeyTyped(typedChar, keyCode);
-        		try{
-            		if(JEIUtil.isInstalled() && panel.getJEISync()){
-            			JEIUtil.setFilterText(searchBar.getText());
-            		}
-        		}catch(Exception e){
-        			e.printStackTrace();
-        		}
-        		return;
-            }
-        }
-		}else{
-			if(keyCode == Keyboard.KEY_RETURN){
-				if(currentCraft == null || currentCraft.stack == null)return;
-				int current = 0;
-				try{
-					current = Integer.parseInt(craftingRequestAmount.getText());
-				}catch(Exception e){
-				}
-				if(current > 0){
-					ItemStack copy = currentCraft.stack.copy();
-					copy.stackSize = 1;
+					}
 					
-					ItemStackData data = new ItemStackData(copy, currentCraft.interPos, currentCraft.interDim);
-					data.isCrafting = currentCraft.isCrafting;
-					
-					sendUpdate(4, -1, current, data);
+					if (this.mc.thePlayer.inventory.getItemStack() == null)
+				    {
+						if (mc.thePlayer.capabilities.isCreativeMode && keyCode == this.mc.gameSettings.keyBindPickBlock.getKeyCode())
+	                    {
+	                    	sendUpdate(2, -1, -1, data);
+	    					return;
+	                    }
+				        for (int i = 0; i < 9; ++i)
+				        {
+				            if (keyCode == this.mc.gameSettings.keyBindsHotbar[i].getKeyCode())
+				            {
+				            	int slot = i;
+							
+				            	if(slot !=-1 && (this.mc.thePlayer.inventory.getStackInSlot(i) == null || ItemUtil.canCombine(this.mc.thePlayer.inventory.getStackInSlot(i), dis))){
+									sendUpdate(1, slot, dis.getMaxStackSize(), data);
+								}
+								return;
+							}
+				        }
+				    }
 				}
-				this.craftingPopup = false;
-				craftingRequestAmount.setText("1");
-				this.craftingRequestAmount.setEnabled(false);
-				this.craftingRequestAmount.setFocused(false);
-				return;
 			}
-			if (this.craftingRequestAmount.isFocused())
+			
+	        if (this.searchBar.isFocused())
 	        {
 	        	if (!this.checkHotbarKeys(keyCode))
 	            {
-	        		this.craftingRequestAmount.textboxKeyTyped(typedChar, keyCode);
+	        		this.searchBar.textboxKeyTyped(typedChar, keyCode);
+	        		if(panel.getNetwork() !=null && panel.getNetwork() instanceof EStorageNetworkClient){
+	        			((EStorageNetworkClient)panel.getNetwork()).needsListUpdate = true;
+	        		}
+	        		try{
+	            		if(JEIUtil.isInstalled() && panel.getJEISync()){
+	            			JEIUtil.setFilterText(searchBar.getText());
+	            		}
+	        		}catch(Exception e){
+	        			e.printStackTrace();
+	        		}
 	        		return;
 	            }
 	        }
+		} else{
+			if(currentPopup.keyTyped(this, typedChar, keyCode)){
+				return;
+			}
 		}
         super.keyTyped(typedChar, keyCode);
     }
@@ -828,5 +745,9 @@ public class GuiPanel extends GuiContainer implements IGuiScreen, INetworkGui  {
 			}
 		}
 		return null;
+	}
+
+	public RenderItem getItemRender() {
+		return itemRender;
 	}
 }

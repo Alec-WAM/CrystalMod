@@ -13,6 +13,7 @@ import alec_wam.CrystalMod.tiles.pipes.estorage.client.ItemFilter;
 import alec_wam.CrystalMod.tiles.pipes.estorage.client.ModComp;
 import alec_wam.CrystalMod.tiles.pipes.estorage.client.NameComp;
 import alec_wam.CrystalMod.util.ItemUtil;
+import alec_wam.CrystalMod.util.ModLogger;
 
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
@@ -64,23 +65,6 @@ public class EStorageNetworkClient extends EStorageNetwork {
 				}
 			}
 		}
-		
-		/*List<ItemStackData> copy = Lists.newArrayList();
-		Iterator<ItemStackData> ii = copyPre.iterator();
-		while(ii.hasNext()){
-			ItemStackData data = ii.next();
-			boolean added = false;
-			search : for(ItemStackData cop : copy){
-				if(cop !=null && ItemUtil.canCombine(cop.stack, data.stack)){
-					cop.stack.stackSize=data.stack.stackSize;
-					ii.remove();
-					break search;
-				}
-			}
-			if(!added)
-				copy.add(data);
-		}*/
-		
 		if(viewType == ViewType.BOTH || viewType == ViewType.PATTERNS){
 			for(ItemStackData data : craftingItems){
 				if(data.stack !=null){
@@ -117,7 +101,10 @@ public class EStorageNetworkClient extends EStorageNetwork {
 		return copy;
 	}
 	
-	public List<ItemStackData> getDisplayItems(String filterString, SortType sType, ViewType vType){
+	public boolean needsListUpdate;
+	private List<ItemStackData> displayItemsCache = Lists.newArrayList();
+	
+	private List<ItemStackData> getSortedItems(String filterString, SortType sType, ViewType vType){
 		List<ItemStackData> data = getItemsSorted(sType == null ? SortType.NAME : sType, vType == null ? ViewType.BOTH : vType);
 		if(filterString != null){
 			ItemFilter filter = Strings.isNullOrEmpty(filterString) ? null : ItemFilter.parse(filterString, LOCALE);
@@ -130,9 +117,16 @@ public class EStorageNetworkClient extends EStorageNetwork {
 		        	}
 		        }
 			}
-			return data;
 		}
 		return data;
+	}
+	
+	public List<ItemStackData> getDisplayItems(String filterString, SortType sType, ViewType vType){
+		if(needsListUpdate){
+			displayItemsCache = getSortedItems(filterString, sType, vType);
+			needsListUpdate = false;
+		}
+		return displayItemsCache;
 	}
 	
 }

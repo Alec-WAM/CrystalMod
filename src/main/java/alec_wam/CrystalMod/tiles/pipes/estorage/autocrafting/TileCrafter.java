@@ -52,12 +52,8 @@ public class TileCrafter extends TileEntityMod implements INetworkTile, IAutoCra
 
 	@Override
 	public void onDisconnected() {
-		if(getNetwork() == null)return;
-		for (ICraftingTask task : getNetwork().getCraftingTasks()) {
-            if (task.getPattern().getCrafter() == this) {
-            	getNetwork().cancelCraftingTask(task);
-            }
-        }
+		if(getNetwork() == null || getNetwork().craftingController == null)return;
+		getNetwork().craftingController.cancelAll(this);
 	}
 
 	public int getSpeed() {
@@ -161,6 +157,11 @@ public class TileCrafter extends TileEntityMod implements INetworkTile, IAutoCra
 	@Override
 	public BlockPos getFacingPos() {
 		return pos.offset(direction);
+	}
+
+	@Override
+	public CraftingPattern createPattern(ItemStack patternStack) {
+		return new CraftingPattern(getWorld(), this, patternStack);
 	}
 
 }

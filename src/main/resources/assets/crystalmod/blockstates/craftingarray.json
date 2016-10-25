@@ -6,6 +6,5 @@
   "variants": {
     "normal": { "model": "crystalmod:fixedOneTexture", "textures": { "all": "crystalmod:blocks/eStorage/craftingArray" } },
 	"inventory": { "model": "crystalmod:fixedOneTexture", "textures": { "all": "crystalmod:blocks/eStorage/craftingArray" } }
-
   }
 }

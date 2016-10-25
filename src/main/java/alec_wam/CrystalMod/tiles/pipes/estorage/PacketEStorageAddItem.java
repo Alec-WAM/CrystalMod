@@ -131,8 +131,8 @@ public class PacketEStorageAddItem extends AbstractPacketThreadsafe {
 				INetworkContainer pan = ((INetworkContainer)con);
 				try{
 					ItemStackData data = EStorageNetwork.decompressItem(compressed);
-					if(pan.getNetwork() !=null && data.stack !=null){
-						pan.getNetwork().handleCraftingRequest(data, Math.max(1, amount));
+					if(pan.getNetwork() !=null && pan.getNetwork().craftingController !=null && data.stack !=null){
+						pan.getNetwork().craftingController.handleCraftingRequest(data, Math.max(1, amount));
 					}
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -144,8 +144,8 @@ public class PacketEStorageAddItem extends AbstractPacketThreadsafe {
 			Container con = netHandler.playerEntity.openContainer;
 			if(con !=null && con instanceof INetworkContainer){
 				INetworkContainer pan = ((INetworkContainer)con);
-				if(pan.getNetwork() !=null){
-					pan.getNetwork().handleCraftingCancel(slot);
+				if(pan.getNetwork() !=null && pan.getNetwork().craftingController !=null){
+					pan.getNetwork().craftingController.handleCraftingCancel(slot);
 				}
 			}
 		}

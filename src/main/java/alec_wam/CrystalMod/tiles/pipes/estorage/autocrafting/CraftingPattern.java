@@ -63,8 +63,6 @@ public class CraftingPattern {
                         byproducts.add(remaining.copy());
                     }
                 }
-            }else{
-            	ModLogger.info("Null output "+inputs.toString());
             }
         } else {
             outputs = ItemPattern.getOutputs(pattern);
@@ -92,6 +90,25 @@ public class CraftingPattern {
     }
 
     public List<ItemStack> getOutputs() {
+        return outputs;
+    }
+    
+    public List<ItemStack> getOutputs(ItemStack[] took) {
+        List<ItemStack> outputs = new ArrayList<ItemStack>();
+
+        InventoryCrafting inv = new InventoryCrafting(new Container() {
+            @Override
+            public boolean canInteractWith(EntityPlayer player) {
+                return false;
+            }
+        }, 3, 3);
+
+        for (int i = 0; i < 9; ++i) {
+            inv.setInventorySlotContents(i, took[i]);
+        }
+
+        outputs.add(CraftingManager.getInstance().findMatchingRecipe(inv, world));
+
         return outputs;
     }
 

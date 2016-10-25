@@ -64,11 +64,7 @@ public class FluidStorage {
 		}
     }
 	
-	public int addFluid(FluidStack stack, boolean sim){
-		return this.addFluid(stack, sim, true);
-	}
-	
-	public int addFluid(FluidStack stack, boolean sim, boolean sendUpdate) {
+	public int addFluid(FluidStack stack, boolean sim) {
 		if (stack == null)
 			return 0;
 		int inserted = 0;
@@ -79,7 +75,7 @@ public class FluidStorage {
 			final NetworkedItemProvider inter = i1.next();
 			if (insertCopy.amount > 0) {
 				if(inter.getInterface().getNetworkInventory() !=null){
-					int amt = inter.getInterface().getNetworkInventory().insertFluid(network, insertCopy, true, sim, sendUpdate);
+					int amt = inter.getInterface().getNetworkInventory().insertFluid(network, insertCopy, true, sim, true);
 					insertCopy.amount-=amt;
 					inserted+=amt;
 					if(insertCopy.amount <= 0){
@@ -89,7 +85,7 @@ public class FluidStorage {
 			}
 			if (insertCopy.amount > 0) {
 				if(inter.getInterface().getNetworkInventory() !=null){
-					int amt = inter.getInterface().getNetworkInventory().insertFluid(network, insertCopy, false, sim, sendUpdate);
+					int amt = inter.getInterface().getNetworkInventory().insertFluid(network, insertCopy, false, sim, true);
 					insertCopy.amount-=amt;
 					inserted+=amt;
 					if(insertCopy.amount <= 0){
@@ -103,29 +99,18 @@ public class FluidStorage {
 	
 	public FluidStack removeFluids(FluidStack[] fluidStacks){
 		for (FluidStack fluidStack : fluidStacks) {
-			FluidStackData data = getFluidData(fluidStack);
-			if(data == null || data.stack == null)continue;
-			int removedFake = removeFluid(data, fluidStack.amount, true);
-			if (removedFake >= fluidStack.amount) {
-				FluidStack stack = data.stack.copy();
-				stack.amount = fluidStack.amount;
-				removeFluid(getFluidData(fluidStack), fluidStack.amount, false);
-				return stack;
-			}
-			return null;
+			FluidStack removed = removeFluid(fluidStack, true);
+			if(removed == null)continue;
+			return removeFluid(fluidStack, false);
 		}
 		return null;
 	}
 	
 	public FluidStack removeFluid(FluidStack stack, boolean sim){
-		return this.removeFluid(stack, sim, true);
-	}
-	
-	public FluidStack removeFluid(FluidStack stack, boolean sim, boolean sendUpdate){
 		FluidStackData data = getFluidData(stack);
 		if(data == null || data.stack == null)return null;
 		FluidStack ret = data.stack.copy();
-		int removedFake = removeFluid(data, stack.amount, sim, sendUpdate);
+		int removedFake = removeFluid(data, stack.amount, sim);
 		
 		ret.amount = removedFake;
 		if(ret.amount <=0){
@@ -134,11 +119,7 @@ public class FluidStorage {
 		return ret;
 	}
 	
-	public int removeFluid(FluidStackData data, int amount, boolean sim){
-		return this.removeFluid(data, amount, sim, true);
-	}
-	
-	public int removeFluid(FluidStackData data, int amount, boolean sim, boolean sendUpdate) {
+	public int removeFluid(FluidStackData data, int amount, boolean sim) {
 		if (data == null || data.stack == null || network == null)
 			return 0;
 		Iterator<NetworkedItemProvider> i1 = inventories.iterator();
@@ -146,9 +127,9 @@ public class FluidStorage {
 			final NetworkedItemProvider inter = i1.next();
 			if (network.sameDimAndPos(inter, data.interPos, data.interDim)) {
 				if(inter.getInterface().getNetworkInventory() !=null){
-					int extract = inter.getInterface().getNetworkInventory().extractFluid(network, data.stack, amount, true, sendUpdate);
+					int extract = inter.getInterface().getNetworkInventory().extractFluid(network, data.stack, amount, true, true);
 					if(extract >= 0){
-						return sim ? extract : inter.getInterface().getNetworkInventory().extractFluid(network, data.stack, amount, false, sendUpdate);
+						return sim ? extract : inter.getInterface().getNetworkInventory().extractFluid(network, data.stack, amount, false, true);
 					}
 				}
 			}

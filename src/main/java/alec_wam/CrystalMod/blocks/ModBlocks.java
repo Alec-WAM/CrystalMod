@@ -62,8 +62,10 @@ import alec_wam.CrystalMod.tiles.pipes.ItemBlockPipe;
 import alec_wam.CrystalMod.tiles.pipes.ModelPipe;
 import alec_wam.CrystalMod.tiles.pipes.BlockPipe.PipeType;
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.BlockCrafter;
+import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.BlockCraftingController;
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.BlockPatternEncoder;
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.TileCrafter;
+import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.TileCraftingController;
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.TilePatternEncoder;
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.TileProcessingPatternEncoder;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.BlockPanel;
@@ -131,6 +133,7 @@ public class ModBlocks {
 	public static BlockPanel storagePanel;
 	public static BlockWirelessPanel wirelessPanel;
 	public static BlockWirelessPipeWrapper wirelessPipe;
+	public static BlockCraftingController craftingController;
 	public static BlockCrafter crafter;
 	public static BlockPatternEncoder encoder;
 	
@@ -168,7 +171,7 @@ public class ModBlocks {
 		
 		crystalWorkbench = new BlockCrystalWorkbench();
 		registerEnumBlock(crystalWorkbench, "crystalworkbench");
-		regsiterTileEntity(TileEntityCrystalWorkbench.class);
+		registerTileEntity(TileEntityCrystalWorkbench.class);
 		
 		crystalChest = new BlockCrystalChest();
 		registerBlock(crystalChest, new ItemBlockCrystalChest(crystalChest), "crystalchest");
@@ -221,62 +224,66 @@ public class ModBlocks {
 		crystalPipe = new BlockPipe();
 		registerBlock(crystalPipe, new ItemBlockPipe(crystalPipe), "crystalpipe");
 		for(PipeType type : PipeType.values()){
-			regsiterTileEntity(type.clazz);
+			registerTileEntity(type.clazz);
 		}
 		
 		crystalTank = new BlockTank();
 		registerBlock(crystalTank, new ItemBlockTank(crystalTank), "crystaltank");
 		ItemBlockMeta.setMappingProperty(crystalTank, BlockTank.TYPE);
-	    regsiterTileEntity(TileEntityTank.class);
+	    registerTileEntity(TileEntityTank.class);
 		
 		engine = new BlockEngine();
 		registerBlock(engine, new ItemBlockEngine(engine), "engine");
 		for(EngineType type : EngineType.values()){
-			regsiterTileEntity(type.clazz);
+			registerTileEntity(type.clazz);
 		}
 		
 		weather = new BlockWeather();
 		registerBlock(weather, "weather");
-		regsiterTileEntity(TileEntityWeather.class);
+		registerTileEntity(TileEntityWeather.class);
 		
 		hddInterface = new BlockHDDInterface();
 		registerBlock(hddInterface, "hddinterface");
-		regsiterTileEntity(TileEntityHDDInterface.class);
+		registerTileEntity(TileEntityHDDInterface.class);
 		
 		hddArray = new BlockHDDArray();
 		registerBlock(hddArray, "hddarray");
-		regsiterTileEntity(TileHDDArray.class);
+		registerTileEntity(TileHDDArray.class);
 		
 		externalInterface = new BlockExternalInterface();
 		registerBlock(externalInterface, "externalinterface");
-		regsiterTileEntity(TileEntityExternalInterface.class);
+		registerTileEntity(TileEntityExternalInterface.class);
 		
 		storagePanel = new BlockPanel();
 		registerBlock(storagePanel, new ItemBlockPanel(storagePanel), "estoragepanel");
 		for(PanelType type : PanelType.values()){
-			regsiterTileEntity(type.clazz);
+			registerTileEntity(type.clazz);
 		}
 		
 		wirelessPanel = new BlockWirelessPanel();
 		registerBlock(wirelessPanel, "ewirelesspanel");
-		regsiterTileEntity(TileEntityWirelessPanel.class);
+		registerTileEntity(TileEntityWirelessPanel.class);
 		
 		wirelessPipe = new BlockWirelessPipeWrapper();
 		registerBlock(wirelessPipe, "pipewrapper");
-		regsiterTileEntity(TileEntityPipeWrapper.class);
+		registerTileEntity(TileEntityPipeWrapper.class);
+		
+		craftingController = new BlockCraftingController();
+		registerBlock(craftingController, "craftingController");
+		registerTileEntity(TileCraftingController.class);
 		
 		crafter = new BlockCrafter();
 		registerBlock(crafter, "autocrafter");
-		regsiterTileEntity(TileCrafter.class);
+		registerTileEntity(TileCrafter.class);
 		
 		encoder = new BlockPatternEncoder();
 		registerEnumBlock(encoder, "craftingEncoder");
-		regsiterTileEntity(TilePatternEncoder.class);
-		regsiterTileEntity(TileProcessingPatternEncoder.class);
+		registerTileEntity(TilePatternEncoder.class);
+		registerTileEntity(TileProcessingPatternEncoder.class);
 		
 		cauldron = new BlockCrystalCauldron();
 		registerBlock(cauldron, "crystalcauldron");
-		regsiterTileEntity(TileEntityCrystalCauldron.class);
+		registerTileEntity(TileEntityCrystalCauldron.class);
 		
 		cubeBlock = new BlockPlayerCubeBlock();
 		registerBlock(cubeBlock, "playercubewall");
@@ -286,61 +293,61 @@ public class ModBlocks {
 		
 		cubePortal = new BlockPlayerCubePortal();
 		registerBlock(cubePortal, "playercubeportal");
-		regsiterTileEntity(TileEntityPlayerCubePortal.class);
+		registerTileEntity(TileEntityPlayerCubePortal.class);
 		
 		matterCollector = new BlockMatterCollector();
 		registerBlock(matterCollector, "mattercollector");
-		regsiterTileEntity(TileEntityMatterCollector.class);
+		registerTileEntity(TileEntityMatterCollector.class);
 		
 		battery = new BlockBattery();
 		registerBlock(battery, new ItemBlockMeta(battery), "battery");
 		ItemBlockMeta.setMappingProperty(battery, BlockBattery.TYPE);
-		regsiterTileEntity(TileEntityBattery.class);
+		registerTileEntity(TileEntityBattery.class);
 		
 		elevator = new BlockElevator();
 		registerBlock(elevator, "elevator");
-		regsiterTileEntity(TileEntityElevator.class);
+		registerTileEntity(TileEntityElevator.class);
 		
 		elevatorFloor = new BlockElevatorFloor();
 		registerBlock(elevatorFloor, "elevatorfloor");
-		regsiterTileEntity(TileEntityElevatorFloor.class);
+		registerTileEntity(TileEntityElevatorFloor.class);
 		
 		elevatorCaller = new BlockElevatorCaller();
 		registerBlock(elevatorCaller, "elevatorcaller");
-		regsiterTileEntity(TileEntityElevatorCaller.class);
+		registerTileEntity(TileEntityElevatorCaller.class);
 		
 		invCharger = new BlockInventoryCharger();
 		registerBlock(invCharger, new ItemBlockMeta(invCharger), "inventorycharger");
 		ItemBlockMeta.setMappingProperty(invCharger, BlockStateInventoryCharger.typeProperty);
-		regsiterTileEntity(TileEntityInventoryChargerCU.class, TileEntityInventoryChargerRF.class);
+		registerTileEntity(TileEntityInventoryChargerCU.class, TileEntityInventoryChargerRF.class);
 		
 		crystalMachine = new BlockCrystalMachine();
 		registerBlock(crystalMachine, new ItemBlockMeta(crystalMachine), "crystalmachine");
 		ItemBlockMeta.setMappingProperty(crystalMachine, BlockCrystalMachine.MACHINE_TYPE);
 		for(MachineType type : MachineType.values()){
-			regsiterTileEntity(type.clazz);
+			registerTileEntity(type.clazz);
 		}
 		
 		enderBuffer = new BlockEnderBuffer();
 		registerBlock(enderBuffer, "enderbuffer");
-		regsiterTileEntity(TileEntityEnderBuffer.class);
+		registerTileEntity(TileEntityEnderBuffer.class);
 		
 		worksite = new BlockWorksite();
 		registerBlock(worksite, new ItemBlockWorksite(worksite), "worksite");
 		for(WorksiteType type : WorksiteType.values()){
-			regsiterTileEntity(type.clazz);
+			registerTileEntity(type.clazz);
 		}
 		
 		converter = new BlockPowerConverter();
 		registerEnumBlock(converter, "powerconverter");
-		regsiterTileEntity(TileEnergyConverterRFtoCU.class, TileEnergyConverterCUtoRF.class);
+		registerTileEntity(TileEnergyConverterRFtoCU.class, TileEnergyConverterCUtoRF.class);
 		
 		customSpawner = new BlockCustomSpawner();
 		registerBlock(customSpawner, "customspawner");
-		regsiterTileEntity(TileEntityCustomSpawner.class);
+		registerTileEntity(TileEntityCustomSpawner.class);
 		
 		mobGrinder = registerBlock(new BlockMobGrinder(), "mobgrinder");
-		regsiterTileEntity(TileEntityMobGrinder.class);
+		registerTileEntity(TileEntityMobGrinder.class);
 		
 		darkIronRail = new BlockReinforcedRail();
 		registerBlock(darkIronRail, "reinforcedRail");
@@ -392,7 +399,7 @@ public class ModBlocks {
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	protected static <T extends TileEntity> void regsiterTileEntity(Class... clazzs){
+	protected static <T extends TileEntity> void registerTileEntity(Class... clazzs){
 		for(Class clazz : clazzs){
 			GameRegistry.registerTileEntity(clazz, CrystalMod.MODID+"." + clazz.getName());
 		}

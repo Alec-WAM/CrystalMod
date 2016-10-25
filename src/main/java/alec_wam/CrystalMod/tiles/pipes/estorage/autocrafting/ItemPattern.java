@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
 import alec_wam.CrystalMod.CrystalMod;
@@ -59,7 +60,7 @@ public class ItemPattern extends Item {
         	if (GuiScreen.isShiftKeyDown() || isProcessing(pattern)) {
                 list.add(TextFormatting.YELLOW + Lang.localize("pattern.inputs") + TextFormatting.RESET);
 
-                ItemUtil.combineMultipleItemsInTooltip(list, cpattern.getInputs());
+                ItemUtil.combineMultipleItemsInTooltip(list, true, Iterables.toArray(cpattern.getInputs(), ItemStack.class));
 
                 list.add(TextFormatting.YELLOW + Lang.localize("pattern.outputs") + TextFormatting.RESET);
             }
@@ -67,25 +68,10 @@ public class ItemPattern extends Item {
         	if(cpattern.isOredict()){
         		list.add(TextFormatting.YELLOW+"Ore");
         	}
-        	ItemUtil.combineMultipleItemsInTooltip(list, cpattern.getOutputs());
+        	ItemUtil.combineMultipleItemsInTooltip(list, true, Iterables.toArray(cpattern.getOutputs(), ItemStack.class));
         } else {
         	list.add("Invalid "+cpattern.getInputs().size()+" | "+cpattern.getOutputs().size());
         }
-    	/*if (isValid(pattern)) {
-            if (GuiScreen.isShiftKeyDown() || isProcessing(pattern)) {
-                list.add(TextFormatting.YELLOW + Lang.localize("pattern.inputs") + TextFormatting.RESET);
-
-                ItemUtil.combineMultipleItemsInTooltip(list, getInputs(pattern));
-
-                list.add(TextFormatting.YELLOW + Lang.localize("pattern.outputs") + TextFormatting.RESET);
-            }
-
-            if(isOredict(pattern)){
-            	list.add(TextFormatting.YELLOW+"Ore");
-            }
-            
-            ItemUtil.combineMultipleItemsInTooltip(list, getOutputs(pattern));
-        }*/
     }
 
     public static void setInput(ItemStack pattern, int slot, ItemStack stack) {
