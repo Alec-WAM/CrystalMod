@@ -8,16 +8,15 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
-import com.google.common.collect.Lists;
-
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTSizeTracker;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fluids.FluidStack;
+import alec_wam.CrystalMod.api.FluidStackList;
+import alec_wam.CrystalMod.api.estorage.INetworkContainer;
+import alec_wam.CrystalMod.api.estorage.INetworkInventory.FluidExtractFilter;
 import alec_wam.CrystalMod.network.CompressedDataInput;
 import alec_wam.CrystalMod.network.CompressedDataOutput;
-import alec_wam.CrystalMod.tiles.pipes.estorage.panel.INetworkContainer;
 import alec_wam.CrystalMod.util.FluidUtil;
 import alec_wam.CrystalMod.util.Lang;
 
@@ -51,12 +50,18 @@ public class FluidStorage {
 		fluids.clear();
         
         Iterator<NetworkedItemProvider> ii = inventories.iterator();
-        
+        FluidStackList masterList = new FluidStackList();
         while(ii.hasNext()){
-	        Iterator<FluidStackData> data = ii.next().getInterface().getNetworkInventory().getFluids(this).iterator();
-			while(data.hasNext()){
-				fluids.add(data.next());
+        	FluidStackList list = ii.next().getInterface().getNetworkInventory().getFluids();
+			if(list !=null){
+				for(FluidStack stack : list.getStacks()){
+					masterList.add(stack);
+				}
 			}
+        }
+        
+        for(FluidStack stack : masterList.getStacks()){
+        	fluids.add(new FluidStackData(stack));
         }
 
         for (INetworkContainer panel : network.watchers) {
@@ -75,7 +80,7 @@ public class FluidStorage {
 			final NetworkedItemProvider inter = i1.next();
 			if (insertCopy.amount > 0) {
 				if(inter.getInterface().getNetworkInventory() !=null){
-					int amt = inter.getInterface().getNetworkInventory().insertFluid(network, insertCopy, true, sim, true);
+					int amt = inter.getInterface().getNetworkInventory().insertFluid(network, insertCopy, true, sim);
 					insertCopy.amount-=amt;
 					inserted+=amt;
 					if(insertCopy.amount <= 0){
@@ -85,7 +90,7 @@ public class FluidStorage {
 			}
 			if (insertCopy.amount > 0) {
 				if(inter.getInterface().getNetworkInventory() !=null){
-					int amt = inter.getInterface().getNetworkInventory().insertFluid(network, insertCopy, false, sim, true);
+					int amt = inter.getInterface().getNetworkInventory().insertFluid(network, insertCopy, false, sim);
 					insertCopy.amount-=amt;
 					inserted+=amt;
 					if(insertCopy.amount <= 0){
@@ -97,30 +102,41 @@ public class FluidStorage {
 		return inserted;
 	}
 	
-	public FluidStack removeFluids(FluidStack[] fluidStacks){
+	public static FluidExtractFilter NORMAL = new FluidExtractFilter(){
+
+		@Override
+		public boolean canExtract(FluidStack stack1, FluidStack stack2) {
+			return FluidUtil.canCombine(stack1, stack2);
+		}
+		
+	};
+	
+	public boolean removeCheck(FluidStack stack, int amt, FluidExtractFilter filter, boolean sim){
+		FluidStack extract = removeFluid(stack, amt, filter, sim);
+		return extract !=null && extract.amount == amt;
+	}
+	
+	public FluidStack removeFluids(FluidStack[] fluidStacks, FluidExtractFilter filter){
 		for (FluidStack fluidStack : fluidStacks) {
-			FluidStack removed = removeFluid(fluidStack, true);
+			FluidStack removed = removeFluid(fluidStack, filter, true);
 			if(removed == null)continue;
-			return removeFluid(fluidStack, false);
+			return removeFluid(fluidStack, filter, false);
 		}
 		return null;
 	}
 	
-	public FluidStack removeFluid(FluidStack stack, boolean sim){
-		FluidStackData data = getFluidData(stack);
-		if(data == null || data.stack == null)return null;
-		FluidStack ret = data.stack.copy();
-		int removedFake = removeFluid(data, stack.amount, sim);
-		
-		ret.amount = removedFake;
-		if(ret.amount <=0){
-			return null;
-		}
-		return ret;
+	public FluidStack removeFluid(FluidStack stack, boolean sim) {
+		if(stack == null)return null;
+		return removeFluid(stack, stack.amount, NORMAL, sim);
 	}
 	
-	public int removeFluid(FluidStackData data, int amount, boolean sim) {
-		if (data == null || data.stack == null || network == null)
+	public FluidStack removeFluid(FluidStack stack, FluidExtractFilter filter, boolean sim) {
+		if(stack == null)return null;
+		return removeFluid(stack, stack.amount, filter, sim);
+	}
+	
+	public FluidStack removeFluid(FluidStack stack, int amount, FluidExtractFilter filter, boolean sim) {
+		/*if (data == null || data.stack == null || network == null)
 			return 0;
 		Iterator<NetworkedItemProvider> i1 = inventories.iterator();
 		while(i1.hasNext()){
@@ -134,7 +150,34 @@ public class FluidStorage {
 				}
 			}
 		}
-		return 0;
+		return 0;*/
+		
+		if(stack == null || stack.getFluid() == null)return null;
+		final int needed = amount;
+		int received = 0;
+		FluidStack ret = null;
+		Iterator<List<NetworkedItemProvider>> ii = network.interfaces.values().iterator();
+		boolean breakLoop = false;
+		master : while(ii.hasNext() && !breakLoop){
+			Iterator<NetworkedItemProvider> i1 = ii.next().iterator();
+			while(i1.hasNext() && !breakLoop){
+				NetworkedItemProvider inter = i1.next();
+				FluidStack took = inter.getInterface().getNetworkInventory().extractFluid(network, stack, amount, filter, sim);
+				if(took !=null){
+					if(ret == null){
+						ret = took;
+					} else {
+						ret.amount+=took.amount;
+					}
+					received+=took.amount;
+				}
+				if (needed == received) {
+					breakLoop = true;
+	                break master;
+	            }
+			}
+		}
+		return ret;
 	}
 	
 	public FluidStackData getFluidData(FluidStack stack) {
@@ -162,8 +205,6 @@ public class FluidStorage {
 	
 	public static class FluidStackData {
 		public FluidStack stack;
-		public BlockPos interPos;
-		public int interDim;
 		
 		public FluidStackData(){
 			
@@ -171,14 +212,6 @@ public class FluidStorage {
 		
 		public FluidStackData(FluidStack stack) {
 			this.stack = stack;
-			this.interPos = BlockPos.ORIGIN;
-			this.interDim = 0;
-		}
-
-		public FluidStackData(FluidStack stack, int index, BlockPos interPos, int dim) {
-			this.stack = stack;
-			this.interPos = interPos;
-			this.interDim = dim;
 		}
 
 		public void toBytes(CompressedDataOutput cdo) throws IOException {
@@ -194,10 +227,6 @@ public class FluidStorage {
 					throw new EncoderException(ioexception);
 				}
 			}
-			cdo.writeInt(interPos.getX());
-			cdo.writeInt(interPos.getY());
-			cdo.writeInt(interPos.getZ());
-			cdo.writeInt(interDim);
 		}
 
 		public static FluidStackData fromBytes(CompressedDataInput cdi) throws IOException {
@@ -224,11 +253,6 @@ public class FluidStorage {
 				if(nbt !=null)fluidstack = FluidStack.loadFluidStackFromNBT(nbt);
 			}
 			newData.stack = fluidstack;
-			int x = cdi.readInt();
-			int y = cdi.readInt();
-			int z = cdi.readInt();
-			newData.interPos = new BlockPos(x, y, z);
-			newData.interDim = cdi.readInt();
 			if(newData.stack == null)return null;
 			return newData;
 		}
@@ -262,10 +286,6 @@ public class FluidStorage {
 		
 		public int getAmount(){
 			return stack == null ? 0 : stack.amount;
-		}
-		
-		public boolean sameIgnoreStack(FluidStackData data){
-			return data.interPos !=null && data.interPos.equals(interPos) && data.interDim == interDim && FluidUtil.canCombine(stack, data.stack);
 		}
 	}
 	

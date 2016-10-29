@@ -2,10 +2,10 @@ package alec_wam.CrystalMod.tiles.pipes.estorage.panel.monitor;
 
 import java.util.List;
 
+import alec_wam.CrystalMod.api.estorage.INetworkContainer;
 import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetwork;
 import alec_wam.CrystalMod.tiles.pipes.estorage.FluidStorage.FluidStackData;
 import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage.ItemStackData;
-import alec_wam.CrystalMod.tiles.pipes.estorage.panel.INetworkContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.Container;

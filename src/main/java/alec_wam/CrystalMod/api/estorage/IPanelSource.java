@@ -1,4 +1,4 @@
-package alec_wam.CrystalMod.tiles.pipes.estorage.panel;
+package alec_wam.CrystalMod.api.estorage;
 
 import net.minecraft.util.math.BlockPos;
 import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetwork;

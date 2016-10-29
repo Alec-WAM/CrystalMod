@@ -1,4 +1,4 @@
-package alec_wam.CrystalMod.tiles.pipes.estorage.panel;
+package alec_wam.CrystalMod.api.estorage;
 
 import java.util.List;
 

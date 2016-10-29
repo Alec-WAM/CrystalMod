@@ -17,12 +17,13 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import alec_wam.CrystalMod.api.FluidStackList;
+import alec_wam.CrystalMod.api.ItemStackList;
+import alec_wam.CrystalMod.api.estorage.ICraftingTask;
 import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetwork;
 import alec_wam.CrystalMod.tiles.pipes.estorage.FluidStorage.FluidStackData;
 import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage.ItemStackData;
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.CraftingPattern;
-import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.FluidStackList;
-import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.ItemStackList;
 import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.FluidUtil;
 import alec_wam.CrystalMod.util.ItemUtil;
@@ -101,9 +102,9 @@ public class BasicCraftingTask implements ICraftingTask {
          for (int i = 0; i < times; i++) {
              ItemStack insert = toInsertItems.poll();
              if (insert != null) {
-                 int amt = controller.getItemStorage().addItem(insert, false);
-                 if (amt < insert.stackSize) {
-                	 toInsertItems.add(ItemUtil.copy(insert, insert.stackSize-amt));
+                 ItemStack remain = controller.getItemStorage().addItem(insert, false);
+                 if (remain !=null) {
+                	 toInsertItems.add(remain.copy());
                  }
              }
          }
@@ -169,7 +170,6 @@ public class BasicCraftingTask implements ICraftingTask {
             calculate(network, networkList, pattern, insertList);
             newQuantity -= pattern.getQuantityPerRequest(requested);
        	}
-       	
        	usedPatterns.clear();
     }
 

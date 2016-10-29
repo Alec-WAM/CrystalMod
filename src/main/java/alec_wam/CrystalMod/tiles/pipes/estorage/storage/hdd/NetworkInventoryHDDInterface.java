@@ -6,14 +6,20 @@ import java.util.List;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.items.ItemHandlerHelper;
+import alec_wam.CrystalMod.api.FluidStackList;
+import alec_wam.CrystalMod.api.ItemStackList;
+import alec_wam.CrystalMod.api.estorage.IInsertListener;
+import alec_wam.CrystalMod.api.estorage.INetworkContainer;
 import alec_wam.CrystalMod.api.estorage.INetworkInventory;
+import alec_wam.CrystalMod.api.estorage.INetworkInventory.ExtractFilter;
+import alec_wam.CrystalMod.api.estorage.INetworkInventory.FluidExtractFilter;
+import alec_wam.CrystalMod.api.estorage.storage.IItemProvider;
 import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetwork;
 import alec_wam.CrystalMod.tiles.pipes.estorage.FluidStorage;
 import alec_wam.CrystalMod.tiles.pipes.estorage.FluidStorage.FluidStackData;
-import alec_wam.CrystalMod.tiles.pipes.estorage.IInsertListener;
 import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage;
 import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage.ItemStackData;
-import alec_wam.CrystalMod.tiles.pipes.estorage.panel.INetworkContainer;
 import alec_wam.CrystalMod.util.ItemUtil;
 
 import com.google.common.collect.Lists;
@@ -26,97 +32,61 @@ public class NetworkInventoryHDDInterface implements INetworkInventory {
 	}
 	
 	@Override
-	public List<ItemStackData> getItems(ItemStorage storage) {
-		List<ItemStackData> items = Lists.newArrayList();
+	public ItemStackList getItems() {
 		ItemStack hddStack = inter.getStackInSlot(0);
+		ItemStackList list = new ItemStackList();
 		if (hddStack != null && hddStack.getItem() instanceof ItemHDD) {
 			for (int i = 0; i < ItemHDD.getItemLimit(hddStack); i++) {
 				ItemStack stack = ItemHDD.getItem(hddStack, i);
 				if (stack != null && stack.stackSize > 0) {
-					if(storage.getItemData(stack) == null){
-						ItemStackData data = new ItemStackData(stack, inter.getPos(), inter.getWorld().provider.getDimension());
-						items.add(data);
-					}
+					list.add(stack);
 				}
 			}
 		}
-		return items;
+		return list;
 	}
 
 	@Override
-	public int insertItem(EStorageNetwork network, ItemStack stack, boolean matching, boolean sim, boolean update) {
+	public ItemStack insertItem(EStorageNetwork network, ItemStack stack, int amount, boolean sim) {
+		ItemStack remaining = ItemHandlerHelper.copyStackWithSize(stack, amount);
 		ItemStack hdd = inter.getStackInSlot(0);
-		if(matching){
-			if (hdd != null	&& hdd.getItem() instanceof ItemHDD) {
-				boolean hasItem = ItemHDD.hasItem(hdd, stack);
-				if (hasItem) {
-					int index = ItemHDD.getItemIndex(hdd, stack);
-					if (index > -1) {
-						ItemStack stored = ItemHDD.getItem(hdd, index);
-						if (ItemUtil.canCombine(stored, stack)) {
-							if (sim){
-								return stack.stackSize;
-							}
-							
-							if(update){
-								network.notifyInsert(stack);
-							}
-
-							stored.stackSize += stack.stackSize;
-							ItemHDD.setItem(hdd, index, stored);
-							network.getItemStorage().invalidate();
-							inter.markDirty();
-							return stack.stackSize;
-						}
-					}
-				}
+		if(hdd !=null && hdd.getItem() instanceof IItemProvider){
+			IItemProvider provider = (IItemProvider)hdd.getItem();
+			final int preSize = remaining.stackSize;
+			remaining = provider.insert(hdd, remaining, remaining.stackSize, sim);
+			
+			if(!sim && (remaining == null || remaining.stackSize !=preSize)){
+				inter.markDirty();
 			}
-		}else{
-			if (hdd != null	&& hdd.getItem() instanceof ItemHDD) {
-				int index = ItemHDD.getEmptyIndex(hdd);
-				if (index > -1) {
-					if (sim){
-						return stack.stackSize;
-					}
-					network.notifyInsert(stack);
-					ItemHDD.setItem(hdd, index, stack);
-					network.getItemStorage().invalidate();
+		}
+		return remaining;
+	}
+
+	@Override
+	public ItemStack extractItem(EStorageNetwork network, ItemStack stack, int amount, ExtractFilter filter, boolean sim) {
+		ItemStack received = null;
+		ItemStack hdd = inter.getStackInSlot(0);
+		if (hdd != null	&& hdd.getItem() instanceof IItemProvider) {
+			IItemProvider provider = ((IItemProvider)hdd.getItem());
+			ItemStack took = provider.extract(hdd, stack, amount, filter, sim);
+			if(took != null){
+				received = took;
+				
+				if(!sim){
 					inter.markDirty();
-					return stack.stackSize;
 				}
 			}
 		}
-		return 0;
+		return received;
 	}
-
-	@Override
-	public int extractItem(EStorageNetwork network, ItemStack stack, int amount, boolean sim, boolean update) {
-		ItemStack hdd = inter.getStackInSlot(0);
-		if (hdd != null	&& hdd.getItem() instanceof ItemHDD) {
-			boolean hasItem = ItemHDD.hasItem(hdd, stack);
-			if (hasItem) {
-				int index = ItemHDD.getItemIndex(hdd, stack);
-				if (index > -1) {
-					ItemStack stored = ItemHDD.getItem(hdd, index);
-					int realCount = Math.min(amount, stored.stackSize);
-					if (sim) {
-						return realCount;
-					}
-					stored.stackSize -= realCount;
-					if (stored.stackSize <= 0) {
-						stored = null;
-					}
-					ItemHDD.setItem(hdd, index,	stored);
-					inter.markDirty();
-					network.getItemStorage().invalidate();
-					
-					if(stack !=null && update){
-						Iterator<IInsertListener> iter = network.listeners.iterator();
-						while (iter.hasNext()) {
-							iter.next().onItemExtracted(stack, realCount);
-						}
-					}
-					return realCount;
+	
+	public static int getIndex(ItemStack hdd, ItemStack stack, ExtractFilter filter){
+		if(hdd !=null){
+			int itemCount = ItemHDD.getItemLimit(hdd);
+			for(int i = 0; i < itemCount; i++){
+				ItemStack foundStack = ItemHDD.getItem(hdd, i);
+				if(foundStack !=null && filter.canExtract(stack, foundStack)){
+					return i;
 				}
 			}
 		}
@@ -125,18 +95,18 @@ public class NetworkInventoryHDDInterface implements INetworkInventory {
 
 	//TODO Add Fluid HDD
 	@Override
-	public List<FluidStackData> getFluids(FluidStorage storage) {
-		return Lists.newArrayList();
+	public FluidStackList getFluids() {
+		return null;
 	}
 
 	@Override
-	public int insertFluid(EStorageNetwork network, FluidStack stack, boolean matching, boolean sim, boolean sendUpdate) {
+	public int insertFluid(EStorageNetwork network, FluidStack stack, boolean matching, boolean sim) {
 		return 0;
 	}
 
 	@Override
-	public int extractFluid(EStorageNetwork network, FluidStack stack, int amount, boolean sim, boolean sendUpdate) {
-		return 0;
+	public FluidStack extractFluid(EStorageNetwork network, FluidStack stack, int amount, FluidExtractFilter filter, boolean sim) {
+		return null;
 	}
 
 }

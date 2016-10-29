@@ -19,17 +19,19 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+import alec_wam.CrystalMod.api.FluidStackList;
+import alec_wam.CrystalMod.api.estorage.IAutoCrafter;
+import alec_wam.CrystalMod.api.estorage.ICraftingTask;
+import alec_wam.CrystalMod.api.estorage.INetworkTile;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.tiles.TileEntityMod;
 import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetwork;
-import alec_wam.CrystalMod.tiles.pipes.estorage.INetworkTile;
 import alec_wam.CrystalMod.tiles.pipes.estorage.PacketCraftingInfo;
 import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage.ItemStackData;
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.task.BasicCraftingTask;
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.task.CraftingProcessBase;
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.task.CraftingProcessExternal;
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.task.CraftingProcessNormal;
-import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.task.ICraftingTask;
 import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.ModLogger;
@@ -208,8 +210,8 @@ public class TileCraftingController extends TileEntityMod implements INetworkTil
 				ICraftingTask task = createCraftingTask(requested, pattern, quantity);
 				if(task !=null){
 					task.calculate(network);
+					addCraftingTaskAsLast(task);
 				}
-				addCraftingTaskAsLast(task);
 			}
 		}
 	}

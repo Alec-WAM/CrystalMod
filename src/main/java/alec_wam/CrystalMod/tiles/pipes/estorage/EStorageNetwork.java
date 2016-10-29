@@ -24,7 +24,13 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+import alec_wam.CrystalMod.api.estorage.IAutoCrafter;
+import alec_wam.CrystalMod.api.estorage.ICraftingTask;
+import alec_wam.CrystalMod.api.estorage.IInsertListener;
+import alec_wam.CrystalMod.api.estorage.INetworkContainer;
 import alec_wam.CrystalMod.api.estorage.INetworkItemProvider;
+import alec_wam.CrystalMod.api.estorage.INetworkTile;
+import alec_wam.CrystalMod.api.estorage.INetworkTileConnectable;
 import alec_wam.CrystalMod.network.CompressedDataInput;
 import alec_wam.CrystalMod.network.CompressedDataOutput;
 import alec_wam.CrystalMod.tiles.pipes.AbstractPipeNetwork;
@@ -33,15 +39,12 @@ import alec_wam.CrystalMod.tiles.pipes.TileEntityPipe;
 import alec_wam.CrystalMod.tiles.pipes.estorage.FluidStorage.FluidStackData;
 import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage.ItemStackData;
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.CraftingPattern;
-import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.IAutoCrafter;
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.ItemPattern;
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.TileCraftingController;
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.task.BasicCraftingTask;
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.task.CraftingProcessBase;
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.task.CraftingProcessExternal;
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.task.CraftingProcessNormal;
-import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.task.ICraftingTask;
-import alec_wam.CrystalMod.tiles.pipes.estorage.panel.INetworkContainer;
 import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.ModLogger;
@@ -429,7 +432,7 @@ public class EStorageNetwork extends AbstractPipeNetwork {
 							if (stack != null) {
 								ItemStack copy = stack.copy();
 								copy.stackSize = 0;
-								ItemStackData iData = new ItemStackData(copy, BlockPos.ORIGIN, 0);
+								ItemStackData iData = new ItemStackData(copy);
 								iData.isCrafting = true;
 								data.add(iData);
 							}

@@ -12,13 +12,14 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
+import alec_wam.CrystalMod.api.estorage.IAutoCrafter;
+import alec_wam.CrystalMod.api.estorage.ICraftingTask;
+import alec_wam.CrystalMod.api.estorage.INetworkTile;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.tiles.BasicItemHandler;
 import alec_wam.CrystalMod.tiles.IItemValidator;
 import alec_wam.CrystalMod.tiles.TileEntityMod;
 import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetwork;
-import alec_wam.CrystalMod.tiles.pipes.estorage.INetworkTile;
-import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.task.ICraftingTask;
 import alec_wam.CrystalMod.util.ItemUtil;
 
 public class TileCrafter extends TileEntityMod implements INetworkTile, IAutoCrafter {

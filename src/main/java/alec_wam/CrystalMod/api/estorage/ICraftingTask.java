@@ -1,9 +1,10 @@
-package alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.task;
+package alec_wam.CrystalMod.api.estorage;
 
 import java.util.List;
 
 import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetwork;
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.CraftingPattern;
+import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.task.CraftingProcessBase;
 import net.minecraft.nbt.NBTTagCompound;
 
 public interface ICraftingTask {

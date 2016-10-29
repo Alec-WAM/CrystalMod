@@ -15,9 +15,12 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
+import alec_wam.CrystalMod.api.estorage.INetworkContainer;
+import alec_wam.CrystalMod.api.estorage.IPanelSource;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetwork;
 import alec_wam.CrystalMod.tiles.pipes.estorage.FluidStorage.FluidStackData;
+import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage;
 import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage.ItemStackData;
 import alec_wam.CrystalMod.tiles.pipes.estorage.PacketEStorageItemList.EnumListType;
 import alec_wam.CrystalMod.tiles.pipes.estorage.PacketEStorageItemList;
@@ -107,7 +110,9 @@ public class ContainerPanel extends Container implements INetworkContainer {
             	}
                 if(panel !=null && panel.getNetwork() !=null && slot6.getStack() !=null){
                 	final ItemStack copy = slot6.getStack();
-        			int added = panel.getNetwork().getItemStorage().addItem(copy, false);
+                	final int old = copy.stackSize;
+        			ItemStack remain = panel.getNetwork().getItemStorage().addItem(copy, false);
+        			int added = remain == null ? old : old - remain.stackSize;
         			if(added > 0){
         				slot6.decrStackSize(added);
         				detectAndSendChanges();
@@ -143,7 +148,7 @@ public class ContainerPanel extends Container implements INetworkContainer {
 					if(stack !=null){
 						ItemStack copy = stack.copy();
 						copy.stackSize = 0;
-						ItemStackData iData = new ItemStackData(copy, BlockPos.ORIGIN, 0);
+						ItemStackData iData = new ItemStackData(copy);
 						iData.isCrafting = true;
 						data.add(iData);
 					}
@@ -183,7 +188,7 @@ public class ContainerPanel extends Container implements INetworkContainer {
 					if(stack !=null){
 						ItemStack copy = stack.copy();
 						copy.stackSize = 0;
-						ItemStackData iData = new ItemStackData(copy, BlockPos.ORIGIN, 0);
+						ItemStackData iData = new ItemStackData(copy);
 						iData.isCrafting = true;
 						data.add(iData);
 					}
@@ -202,7 +207,10 @@ public class ContainerPanel extends Container implements INetworkContainer {
 
 	public void sendItemStackToNetwork(EntityPlayerMP player, int slot, ItemStackData data) {
 		if(panel.getNetwork() !=null && data.stack !=null){
-			int added = panel.getNetwork().getItemStorage().addItem(data.stack, false);
+			ItemStack insertStack = data.stack.copy();
+			final int old = insertStack.stackSize;
+			ItemStack remain = panel.getNetwork().getItemStorage().addItem(data.stack, false);
+			int added = remain == null ? old : old - remain.stackSize;
 			if(added > 0){
 				if(slot < 0){
 					if(player.inventory.getItemStack() !=null){
@@ -231,25 +239,15 @@ public class ContainerPanel extends Container implements INetworkContainer {
 				boolean hasStack = player.inventory.getStackInSlot(invSlot) !=null;
 				realAmount = Math.min(amount, player.inventory.getInventoryStackLimit()-(hasStack ? player.inventory.getStackInSlot(invSlot).stackSize : 0));
 			}
-			ItemStack grabStack = data.stack.copy();
-			grabStack.stackSize = realAmount;
-			ItemStack removed = panel.getNetwork().getItemStorage().removeItem(grabStack, false);
+			ItemStack grabStack = ItemHandlerHelper.copyStackWithSize(data.stack, 1);
+			ItemStack removed = panel.getNetwork().getItemStorage().removeItem(grabStack, realAmount, ItemStorage.NORMAL, false);
 			if(removed !=null){
 				if(invSlot > -1){
-					/*if(player.inventory.getStackInSlot(invSlot) == null){
-						player.inventory.setInventorySlotContents(invSlot, removed);
-					}else{
-						ItemStack current = player.inventory.getStackInSlot(invSlot);
-						current.stackSize+=removed.stackSize;
-						player.inventory.setInventorySlotContents(invSlot, current);
-					}*/
-					
 					ItemStack remainder = ItemHandlerHelper.insertItem(player.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.UP), removed, false);
 
 	                if (remainder != null) {
 	                	panel.getNetwork().getItemStorage().addItem(remainder, false);
 	                }
-					
 				}else{
 					if(player.inventory.getItemStack() == null){
 						player.inventory.setItemStack(removed);

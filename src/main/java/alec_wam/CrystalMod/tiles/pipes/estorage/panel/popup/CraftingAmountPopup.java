@@ -165,7 +165,7 @@ public class CraftingAmountPopup extends Popup {
 				ItemStack copy = currentCraft.stack.copy();
 				copy.stackSize = 1;
 				
-				ItemStackData data = new ItemStackData(copy, currentCraft.interPos, currentCraft.interDim);
+				ItemStackData data = new ItemStackData(copy);
 				data.isCrafting = currentCraft.isCrafting;
 				
 				guiPanel.sendUpdate(4, -1, current, data);

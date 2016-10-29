@@ -3,6 +3,7 @@ package alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting;
 import java.util.ArrayList;
 import java.util.List;
 
+import alec_wam.CrystalMod.api.estorage.IAutoCrafter;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.ModLogger;
 

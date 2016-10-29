@@ -3,13 +3,13 @@ package alec_wam.CrystalMod.tiles.pipes.estorage.stocker;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.items.IItemHandler;
+import alec_wam.CrystalMod.api.estorage.IAutoCrafter;
+import alec_wam.CrystalMod.api.estorage.ICraftingTask;
+import alec_wam.CrystalMod.api.estorage.INetworkTile;
 import alec_wam.CrystalMod.tiles.TileEntityInventory;
 import alec_wam.CrystalMod.tiles.pipes.TileEntityPipe.RedstoneMode;
 import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetwork;
-import alec_wam.CrystalMod.tiles.pipes.estorage.INetworkTile;
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.CraftingPattern;
-import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.IAutoCrafter;
-import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.task.ICraftingTask;
 
 public class TileEntityStocker extends TileEntityInventory implements INetworkTile {
 

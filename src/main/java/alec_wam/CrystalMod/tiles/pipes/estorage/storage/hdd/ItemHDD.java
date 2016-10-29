@@ -1,8 +1,12 @@
 package alec_wam.CrystalMod.tiles.pipes.estorage.storage.hdd;
 
+import java.util.Iterator;
 import java.util.List;
 
 import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.api.estorage.IInsertListener;
+import alec_wam.CrystalMod.api.estorage.INetworkInventory.ExtractFilter;
+import alec_wam.CrystalMod.api.estorage.storage.IItemProvider;
 import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
@@ -18,8 +22,9 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.items.ItemHandlerHelper;
 
-public class ItemHDD extends Item implements ICustomModel {
+public class ItemHDD extends Item implements ICustomModel, IItemProvider {
 
 	public static final String NBT_ITEM_LIMIT = "ItemLimit";
 	public static final String NBT_ITEM_LIST = "ItemList";
@@ -249,5 +254,71 @@ public class ItemHDD extends Item implements ICustomModel {
 			}
 		}
 		return null;
+	}
+
+	public int getIndex(ItemStack hdd, ItemStack stack, ExtractFilter filter){
+		if(hdd !=null){
+			int itemCount = ItemHDD.getItemLimit(hdd);
+			for(int i = 0; i < itemCount; i++){
+				ItemStack foundStack = ItemHDD.getItem(hdd, i);
+				if(foundStack !=null && filter.canExtract(stack, foundStack)){
+					return i;
+				}
+			}
+		}
+		return -1;
+	}
+	
+
+
+	@Override
+	public ItemStack insert(ItemStack container, ItemStack insert, int amount, boolean sim) {
+		for(int i = 0; i < getItemLimit(container); i++){
+			ItemStack stored = getItem(container, i);
+			if(stored != null){
+				if(ItemUtil.canCombine(insert, stored)){
+					if(!sim){
+						stored.stackSize += amount;
+						ItemHDD.setItem(container, i, stored);
+					}
+					return null;
+				}
+			}
+		}
+		
+		int i = getEmptyIndex(container);
+		if(i > -1){
+			if(!sim){
+				ItemHDD.setItem(container, i, ItemHandlerHelper.copyStackWithSize(insert, amount));
+			}
+			return null;
+		}
+		
+		return ItemHandlerHelper.copyStackWithSize(insert, amount);
+	}
+	
+	@Override
+	public ItemStack extract(ItemStack container, ItemStack remove, int amount, ExtractFilter filter, boolean sim) {
+		ItemStack received = null;
+		if (container != null) {
+			int index = getIndex(container, remove, filter);
+			if (index > -1) {
+				ItemStack stored = getItem(container, index);
+				if(stored !=null){
+					int realCount = Math.min(amount, stored.stackSize);
+					if(received == null){
+						received = ItemHandlerHelper.copyStackWithSize(stored, realCount);
+					}
+					if(!sim){
+						stored.stackSize -= realCount;
+						if (stored.stackSize <= 0) {
+							stored = null;
+						}
+						setItem(container, index,	stored);
+					}
+				}
+			}
+		}
+		return received;
 	}
 }

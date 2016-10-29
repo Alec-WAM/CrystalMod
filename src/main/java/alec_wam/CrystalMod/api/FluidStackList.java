@@ -1,4 +1,4 @@
-package alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting;
+package alec_wam.CrystalMod.api;
 
 import alec_wam.CrystalMod.util.FluidUtil;
 import com.google.common.collect.ArrayListMultimap;
@@ -15,6 +15,10 @@ public class FluidStackList{
     private ArrayListMultimap<Fluid, FluidStack> stacks = ArrayListMultimap.create();
 
     public void add(FluidStack stack) {
+    	if(stack == null){
+    		return;
+    	}
+    	
         for (FluidStack otherStack : stacks.get(stack.getFluid())) {
             if (FluidUtil.canCombine(otherStack, stack)) {
                 otherStack.amount += stack.amount;

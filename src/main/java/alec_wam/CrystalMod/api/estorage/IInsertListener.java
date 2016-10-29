@@ -1,4 +1,4 @@
-package alec_wam.CrystalMod.tiles.pipes.estorage;
+package alec_wam.CrystalMod.api.estorage;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;

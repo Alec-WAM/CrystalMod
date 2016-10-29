@@ -1,4 +1,4 @@
-package alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting;
+package alec_wam.CrystalMod.api;
 
 import alec_wam.CrystalMod.util.ItemUtil;
 
@@ -11,6 +11,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,6 +19,10 @@ public class ItemStackList{
     private ArrayListMultimap<Item, ItemStack> stacks = ArrayListMultimap.create();
 
     public void add(ItemStack stack) {
+    	if(stack == null){
+    		return;
+    	}
+    	
         for (ItemStack otherStack : stacks.get(stack.getItem())) {
             if (ItemUtil.canCombine(otherStack, stack)) {
                 otherStack.stackSize += stack.stackSize;
@@ -30,6 +35,7 @@ public class ItemStackList{
     }
 
     public boolean remove(@Nonnull ItemStack stack, boolean removeIfReachedZero) {
+    	if(stack == null)return false;
     	return remove(stack, stack.stackSize, removeIfReachedZero);
     }
     
@@ -66,6 +72,15 @@ public class ItemStackList{
     }
 
     public void clean() {
+    	
+    	Iterator<ItemStack> ii = stacks.values().iterator();
+    	while(ii.hasNext()){
+    		ItemStack stack = ii.next();
+    		if(stack == null || stack.stackSize <=0){
+    			stacks.remove(stack.getItem(), stack);
+    		}
+    	}
+    	
         /*List<ItemStack> toRemove = stacks.values().stream()
             .filter(stack -> stack.stackSize <= 0)
             .collect(Collectors.toList());

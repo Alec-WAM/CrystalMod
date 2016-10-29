@@ -1,8 +1,8 @@
 package alec_wam.CrystalMod.tiles.pipes.estorage.panel.popup;
 
 import net.minecraft.item.ItemStack;
+import alec_wam.CrystalMod.api.estorage.ICraftingTask;
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.task.BasicCraftingTask;
-import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.task.ICraftingTask;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.GuiPanel;
 
 public class CraftingInfoPopup extends Popup {

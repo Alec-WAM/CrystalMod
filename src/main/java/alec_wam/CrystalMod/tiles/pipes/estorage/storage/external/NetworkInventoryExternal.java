@@ -10,16 +10,21 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.ItemHandlerHelper;
+import alec_wam.CrystalMod.api.FluidStackList;
+import alec_wam.CrystalMod.api.ItemStackList;
+import alec_wam.CrystalMod.api.estorage.IInsertListener;
+import alec_wam.CrystalMod.api.estorage.INetworkContainer;
 import alec_wam.CrystalMod.api.estorage.INetworkInventory;
+import alec_wam.CrystalMod.api.estorage.INetworkInventory.FluidExtractFilter;
 import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetwork;
 import alec_wam.CrystalMod.tiles.pipes.estorage.FluidStorage;
 import alec_wam.CrystalMod.tiles.pipes.estorage.FluidStorage.FluidStackData;
-import alec_wam.CrystalMod.tiles.pipes.estorage.IInsertListener;
 import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage;
 import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage.ItemStackData;
-import alec_wam.CrystalMod.tiles.pipes.estorage.panel.INetworkContainer;
 import alec_wam.CrystalMod.util.FluidUtil;
 import alec_wam.CrystalMod.util.ItemUtil;
+import alec_wam.CrystalMod.util.ModLogger;
 
 import com.google.common.collect.Lists;
 
@@ -41,80 +46,33 @@ public class NetworkInventoryExternal implements INetworkInventory {
 	}
 	
 	@Override
-	public List<ItemStackData> getItems(ItemStorage storage) {
-		List<ItemStackData> items = Lists.newArrayList();
+	public ItemStackList getItems() {
+		ItemStackList list = new ItemStackList();
 		IItemHandler handler = getInventory();
 		if (handler !=null) {
 			for (int i = 0; i < handler.getSlots(); i++) {
 				ItemStack stack = getInventory().getStackInSlot(i);
-				if (stack != null) {
-					if(storage.getItemData(stack) == null){
-						ItemStackData data = new ItemStackData(stack, inter.getPos(), inter.getWorld().provider.getDimension());
-						items.add(data);
-					}
+				if (stack != null && stack.stackSize > 0) {
+					list.add(stack);
 				}
 			}
 		}
-		return items;
+		return list;
 	}
 	
 	@Override
-	public int insertItem(EStorageNetwork network, ItemStack stack, boolean matching, boolean sim, boolean update) {
-		/*if(matching){
-			if (getInventory() !=null) {
-				int amt = ItemUtil.doInsertItemMatching(getInventory(), stack, EnumFacing.getFront(inter.facing));
-				if(amt > 0 && update){
-					network.notifyInsert(stack);
-				}
-				return amt;
-			}
-		}else{*/
+	public ItemStack insertItem(EStorageNetwork network, ItemStack stack, int amount, boolean sim) {
 		if (getInventory() !=null) {
-			int amt = ItemUtil.doInsertItem(getInventory(), stack, EnumFacing.getFront(inter.facing));
-			if(amt > 0 && update){
-				network.notifyInsert(stack);
-			}
-			return amt;
+			return ItemHandlerHelper.insertItem(getInventory(), ItemHandlerHelper.copyStackWithSize(stack, amount), sim);
 		}
-		//}
-		return 0;
+		return ItemHandlerHelper.copyStackWithSize(stack, amount);
 	}
 
 	@Override
-	public int extractItem(EStorageNetwork network, ItemStack stack, int amount, boolean sim, boolean update) {
+	public ItemStack extractItem(EStorageNetwork network, ItemStack stack, int amount, ExtractFilter filter, boolean sim) {
 		IItemHandler handler = getInventory();
 		if (handler !=null) {
-			/*for (int i = 0; i < handler.getSlots(); i++) {
-				ItemStack invStack = getInventory().getStackInSlot(i);
-				if(invStack !=null && ItemUtil.areStacksEqual(stack, invStack)){
-					int realCount = Math.min(amount, invStack.stackSize);
-					if (sim) {
-						return realCount;
-					}
-					final int oldSize = invStack.stackSize;
-					ItemStack copy = invStack.copy();
-					copy.stackSize = realCount;
-					invStack.stackSize -= realCount;
-					if (invStack.stackSize <= 0) {
-						invStack = null;
-					}
-					
-					getInventory().setInventorySlotContents(i, invStack);
-					
-					if(invStack == null || oldSize !=invStack.stackSize){
-						getInventory().markDirty();
-					}
-					
-					if(copy !=null && update){
-						Iterator<IInsertListener> iter = network.listeners.iterator();
-						while (iter.hasNext()) {
-							iter.next().onItemExtracted(copy, realCount);
-						}
-					}
-					return realCount;
-				}
-			}*/
-			
+			final int needed = amount;
 			int remaining = amount;
 
 	        ItemStack received = null;
@@ -122,7 +80,7 @@ public class NetworkInventoryExternal implements INetworkInventory {
 	        for (int i = 0; i < handler.getSlots(); ++i) {
 	            ItemStack slot = handler.getStackInSlot(i);
 
-	            if (slot != null && ItemUtil.canCombine(slot, stack)) {
+	            if (slot != null && filter.canExtract(stack, slot)) {
 	                ItemStack got = handler.extractItem(i, remaining, sim);
 
 	                if (got != null) {
@@ -133,35 +91,27 @@ public class NetworkInventoryExternal implements INetworkInventory {
 	                    }
 
 	                    remaining -= got.stackSize;
-
 	                    if (remaining == 0) {
 	                        break;
 	                    }
 	                }
 	            }
 	        }
-	        if(received !=null && update){
-				Iterator<IInsertListener> iter = network.listeners.iterator();
-				while (iter.hasNext()) {
-					iter.next().onItemExtracted(received, received.stackSize);
-				}
-			}
-	        return received == null ? 0 : received.stackSize;
+	        return received;
 		}
-		return 0;
+		return null;
 	}
 
 	@Override
-	public List<FluidStackData> getFluids(FluidStorage storage) {
-		List<FluidStackData> fluids = Lists.newArrayList();
+	public FluidStackList getFluids() {
+		FluidStackList fluids = new FluidStackList();
 		IFluidHandler handler = getTank();
 		if (handler !=null) {
 			IFluidTankProperties prop = handler.getTankProperties()[0];
 			if (prop != null) {
 				FluidStack stack = prop.getContents();
-				if(stack !=null && storage.getFluidData(stack) == null){
-					FluidStackData data = new FluidStackData(stack, 0, inter.getPos(), inter.getWorld().provider.getDimension());
-					fluids.add(data);
+				if(stack !=null && stack.amount > 0){
+					fluids.add(stack);
 				}
 			}
 		}
@@ -169,7 +119,7 @@ public class NetworkInventoryExternal implements INetworkInventory {
 	}
 
 	@Override
-	public int insertFluid(EStorageNetwork network, FluidStack stack, boolean matching, boolean sim, boolean sendUpdate) {
+	public int insertFluid(EStorageNetwork network, FluidStack stack, boolean matching, boolean sim) {
 		IFluidHandler handler = getTank();
 		if (handler !=null) {
 			int ret = 0;
@@ -186,7 +136,7 @@ public class NetworkInventoryExternal implements INetworkInventory {
 			} else {
 				ret = handler.fill(stack, !sim);
 			}
-			if(ret > 0 && sendUpdate){
+			if(ret > 0){
 				FluidStack copy = stack.copy();
 				copy.amount = ret;
 				Iterator<IInsertListener> iter = network.listeners.iterator();
@@ -200,21 +150,21 @@ public class NetworkInventoryExternal implements INetworkInventory {
 	}
 
 	@Override
-	public int extractFluid(EStorageNetwork network, FluidStack stack, int amount, boolean sim, boolean sendUpdate) {
+	public FluidStack extractFluid(EStorageNetwork network, FluidStack stack, int amount, FluidExtractFilter filter, boolean sim) {
 		IFluidHandler handler = getTank();
 		if (handler !=null) {
 			FluidStack copy = stack.copy();
 			copy.amount = amount;
 	        FluidStack received = handler.drain(copy, !sim);
-	        if(received !=null && sendUpdate){
+	        if(received !=null){
 				Iterator<IInsertListener> iter = network.listeners.iterator();
 				while (iter.hasNext()) {
 					iter.next().onFluidExtracted(received, received.amount);
 				}
 			}
-	        return received == null ? 0 : received.amount;
+	        return received;
 		}
-		return 0;
+		return null;
 	}
 
 }

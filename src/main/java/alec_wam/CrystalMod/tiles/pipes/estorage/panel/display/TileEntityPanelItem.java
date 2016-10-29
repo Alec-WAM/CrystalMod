@@ -6,9 +6,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.IFluidHandler;
+import alec_wam.CrystalMod.api.estorage.IInsertListener;
 import alec_wam.CrystalMod.tiles.pipes.estorage.FluidStorage.FluidStackData;
-import alec_wam.CrystalMod.tiles.pipes.estorage.IInsertListener;
 import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage.ItemStackData;
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.CraftingPattern;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.GuiPanel;
@@ -38,47 +40,67 @@ public class TileEntityPanelItem extends TileEntityPanel implements IInsertListe
 			if(isLocked){
 				if(displayItem != null && ItemUtil.canCombine(stack, displayItem)){
 					if(network !=null){
-						int inserted = network.getItemStorage().addItem(stack, false);
-						if(inserted > 0){
-							stack.stackSize-=inserted;
-							if(stack.stackSize <=0){
-								stack = null;
-							}
-							player.inventory.setInventorySlotContents(player.inventory.currentItem, stack);
-							return true;
+						ItemStack insert = network.getItemStorage().addItem(stack, false);
+						stack = insert;
+						if(stack !=null && stack.stackSize <=0){
+							stack = null;
 						}
+						player.inventory.setInventorySlotContents(player.inventory.currentItem, stack);
+						return true;
 					}
 				}
+				
+				FluidStack itemFluid = FluidUtil.getFluidTypeFromItem(stack);
+				if(itemFluid !=null && displayFluid != null && FluidUtil.canCombine(itemFluid, displayFluid)){
+					if(network !=null){
+						IFluidHandler fHandler = FluidUtil.getFluidHandlerCapability(stack);
+						if(fHandler !=null){
+							network.getFluidStorage().addFluid(fHandler.drain(itemFluid, true), false);
+						}
+						return true;
+					}
+				}
+				
 			}else{
 				if(ToolUtil.isToolEquipped(player, hand)){
 					displayItem = null;
+					displayFluid = null;
 					update = true;
 					return true;
 				}
-
 				
 				FluidStack itemFluid = FluidUtil.getFluidTypeFromItem(stack);
-				if(itemFluid !=null && (displayFluid == null || displayFluid != null && !FluidUtil.canCombine(itemFluid, displayFluid))){
-					FluidStack copy = itemFluid.copy();
-					itemFluid.amount = 1;
-					displayFluid = copy;
-					update = true;
-					return true;
-				}
-				
-				if(displayItem == null || displayItem != null && !ItemUtil.canCombine(stack, displayItem)){
-					ItemStack copy = stack.copy();
-					copy.stackSize = 1;
-					displayItem = copy;
-					update = true;
-					return true;
-				}
-				
-				if(network !=null){
-					int inserted = network.getItemStorage().addItem(stack, false);
-					if(inserted > 0){
-						stack.stackSize-=inserted;
-						if(stack.stackSize <=0){
+				if(itemFluid !=null && displayItem == null){
+					if(displayFluid == null || displayFluid != null && !FluidUtil.canCombine(itemFluid, displayFluid)){
+						FluidStack copy = itemFluid.copy();
+						itemFluid.amount = 1;
+						displayFluid = copy;
+						update = true;
+						return true;
+					}
+					
+					if(network !=null){
+						IFluidHandler fHandler = FluidUtil.getFluidHandlerCapability(stack);
+						if(fHandler !=null){
+							if(FluidUtil.canCombine(itemFluid, displayFluid)){
+								return network.getFluidStorage().addFluid(fHandler.drain(itemFluid, !player.capabilities.isCreativeMode), false) > 0;
+							}
+						}
+						return false;
+					}
+				} else {
+					if(displayItem == null || displayItem != null && !ItemUtil.canCombine(stack, displayItem)){
+						ItemStack copy = stack.copy();
+						copy.stackSize = 1;
+						displayItem = copy;
+						update = true;
+						return true;
+					}
+					
+					if(network !=null){
+						ItemStack insert = network.getItemStorage().addItem(stack, false);
+						stack = insert;
+						if(stack !=null && stack.stackSize <=0){
 							stack = null;
 						}
 						player.inventory.setInventorySlotContents(player.inventory.currentItem, stack);
@@ -104,15 +126,13 @@ public class TileEntityPanelItem extends TileEntityPanel implements IInsertListe
 				for(int s = 0; s < player.inventory.mainInventory.length; s++){
 					ItemStack invStack = player.inventory.mainInventory[s];
 					if(invStack !=null && ItemUtil.canCombine(invStack, displayItem)){
-						int inserted = network.getItemStorage().addItem(invStack, false);
-						if(inserted > 0){
-							invStack.stackSize-=inserted;
-							if(invStack.stackSize <=0){
-								invStack = null;
-							}
-							player.inventory.mainInventory[s]=invStack;
-							changed = true;
+						ItemStack insert = network.getItemStorage().addItem(stack, false);
+						stack = insert;
+						if(stack !=null && stack.stackSize <=0){
+							stack = null;
 						}
+						player.inventory.mainInventory[s]=stack;
+						changed = true;
 					}
 				}
 				if (!player.isHandActive() && changed)

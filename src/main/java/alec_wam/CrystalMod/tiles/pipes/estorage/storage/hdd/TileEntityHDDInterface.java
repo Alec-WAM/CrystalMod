@@ -3,6 +3,7 @@ package alec_wam.CrystalMod.tiles.pipes.estorage.storage.hdd;
 import alec_wam.CrystalMod.api.estorage.INetworkInventory;
 import alec_wam.CrystalMod.api.estorage.INetworkItemProvider;
 import alec_wam.CrystalMod.api.estorage.INetworkInventory.EnumUpdateType;
+import alec_wam.CrystalMod.api.estorage.storage.IItemProvider;
 import alec_wam.CrystalMod.network.IMessageHandler;
 import alec_wam.CrystalMod.tiles.TileEntityInventory;
 import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetwork;
@@ -45,7 +46,7 @@ public class TileEntityHDDInterface extends TileEntityInventory implements ITick
 	
 	@Override
 	public boolean isItemValidForSlot(int index, ItemStack stack) {
-		return index == 0 ? stack !=null && stack.getItem() instanceof ItemHDD : true;
+		return index == 0 ? stack !=null && stack.getItem() instanceof IItemProvider : true;
 	}
 	
 	@Override

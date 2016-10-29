@@ -8,9 +8,10 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.NetHandlerPlayServer;
+import alec_wam.CrystalMod.api.estorage.INetworkContainer;
 import alec_wam.CrystalMod.network.AbstractPacketThreadsafe;
 import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage.ItemStackData;
-import alec_wam.CrystalMod.tiles.pipes.estorage.panel.INetworkContainer;
+import alec_wam.CrystalMod.util.ModLogger;
 
 public class PacketEStorageAddItem extends AbstractPacketThreadsafe {
 
@@ -113,9 +114,12 @@ public class PacketEStorageAddItem extends AbstractPacketThreadsafe {
 					if(pan.getNetwork() !=null && data.stack !=null){
 						ItemStack copy = data.stack.copy();
 						copy.stackSize = amount;
-						if(pan.getNetwork().getItemStorage().addItem(copy, true) > 0){
-							Slot pSlot = con.getSlot(slot);
-							pSlot.decrStackSize(pan.getNetwork().getItemStorage().addItem(copy, false));
+						final int old = amount;
+						ItemStack remain = pan.getNetwork().getItemStorage().addItem(copy, false);
+						Slot pSlot = con.getSlot(slot);
+						int decAmt = remain == null ? old : (old-remain.stackSize);
+						pSlot.decrStackSize(decAmt);
+						if(decAmt > 0){
 							pSlot.onPickupFromSlot(netHandler.playerEntity, data.stack);
 						}
 					}
@@ -131,8 +135,13 @@ public class PacketEStorageAddItem extends AbstractPacketThreadsafe {
 				INetworkContainer pan = ((INetworkContainer)con);
 				try{
 					ItemStackData data = EStorageNetwork.decompressItem(compressed);
-					if(pan.getNetwork() !=null && pan.getNetwork().craftingController !=null && data.stack !=null){
-						pan.getNetwork().craftingController.handleCraftingRequest(data, Math.max(1, amount));
+					if(pan.getNetwork() !=null && data.stack !=null){
+						if(pan.getNetwork().craftingController !=null){
+							pan.getNetwork().craftingController.handleCraftingRequest(data, Math.max(1, amount));
+						}else {
+							ModLogger.info("Missing crafting controller");
+						}
+						
 					}
 				} catch (IOException e) {
 					e.printStackTrace();

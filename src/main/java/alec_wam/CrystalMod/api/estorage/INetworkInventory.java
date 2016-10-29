@@ -4,6 +4,8 @@ import java.util.List;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
+import alec_wam.CrystalMod.api.FluidStackList;
+import alec_wam.CrystalMod.api.ItemStackList;
 import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetwork;
 import alec_wam.CrystalMod.tiles.pipes.estorage.FluidStorage;
 import alec_wam.CrystalMod.tiles.pipes.estorage.FluidStorage.FluidStackData;
@@ -16,16 +18,24 @@ public interface INetworkInventory {
 		UPDATE_ALL, REMOVE;
 	}
 	
-	public List<ItemStackData> getItems(ItemStorage storage);
+	public static abstract class ExtractFilter{
+		public abstract boolean canExtract(ItemStack stack1, ItemStack stack2);
+	}
 	
-	public int insertItem(EStorageNetwork network, ItemStack stack, boolean matching, boolean sim, boolean sendUpdate);
+	public static abstract class FluidExtractFilter{
+		public abstract boolean canExtract(FluidStack stack1, FluidStack stack2);
+	}
 	
-	public int extractItem(EStorageNetwork network, ItemStack stack, int amount, boolean sim, boolean sendUpdate);
+	public ItemStackList getItems();
+	
+	public ItemStack insertItem(EStorageNetwork network, ItemStack stack, int amount, boolean sim);
+	
+	public ItemStack extractItem(EStorageNetwork network, ItemStack stack, int amount, ExtractFilter filter, boolean sim);
 
-	public List<FluidStackData> getFluids(FluidStorage storage);
+	public FluidStackList getFluids();
 	
-	public int insertFluid(EStorageNetwork network, FluidStack stack, boolean matching, boolean sim, boolean sendUpdate);
+	public int insertFluid(EStorageNetwork network, FluidStack stack, boolean matching, boolean sim);
 	
-	public int extractFluid(EStorageNetwork network, FluidStack stack, int amount, boolean sim, boolean sendUpdate);
+	public FluidStack extractFluid(EStorageNetwork network, FluidStack stack, int amount, FluidExtractFilter filter, boolean sim);
 	
 }

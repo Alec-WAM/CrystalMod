@@ -1,6 +1,8 @@
 package alec_wam.CrystalMod.tiles.pipes.estorage.panel;
 
 import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.api.estorage.INetworkItemProvider;
+import alec_wam.CrystalMod.api.estorage.INetworkTile;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.IMessageHandler;
 import alec_wam.CrystalMod.network.packets.MessageTileContainerUpdate;
@@ -11,7 +13,6 @@ import alec_wam.CrystalMod.tiles.pipes.ConnectionMode;
 import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetwork;
 import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetworkClient;
 import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetworkClient.ViewType;
-import alec_wam.CrystalMod.tiles.pipes.estorage.INetworkTile;
 import alec_wam.CrystalMod.tiles.pipes.estorage.TileEntityPipeEStorage;
 import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetworkClient.SortType;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.monitor.TileEntityPanelMonitor;
@@ -164,30 +165,43 @@ public class TileEntityPanel extends TileEntityMod implements IMessageHandler, I
 			
 			if(connectionDir !=null){
 				TileEntity tile = getWorld().getTileEntity(getPos().offset(connectionDir));
-				if(tile !=null && tile instanceof TileEntityPipeEStorage){
-					TileEntityPipeEStorage pipe = (TileEntityPipeEStorage)tile;
-					if(pipe.getConnectionMode(connectionDir.getOpposite()) == ConnectionMode.INPUT){
-						if(pipe.network !=null && pipe.network instanceof EStorageNetwork){
-							network = (EStorageNetwork) pipe.network;
+				if(tile !=null){
+					if(tile instanceof TileEntityPipeEStorage){
+						TileEntityPipeEStorage pipe = (TileEntityPipeEStorage)tile;
+						if(pipe.getConnectionMode(connectionDir.getOpposite()) == ConnectionMode.INPUT){
+							if(pipe.network !=null && pipe.network instanceof EStorageNetwork){
+								network = (EStorageNetwork) pipe.network;
+							}
 						}
 					}
-					if(network !=null){
-						return;
-					}
+					/*if(tile instanceof INetworkItemProvider){
+						INetworkItemProvider provider = (INetworkItemProvider)tile;
+						if(provider.getNetwork() !=null){
+							network = provider.getNetwork();
+						}
+					}*/
 				}
 			}
-			for(EnumFacing dir : EnumFacing.VALUES){
-				TileEntity tile = getWorld().getTileEntity(getPos().offset(dir));
-				if(tile !=null && tile instanceof TileEntityPipeEStorage){
-					TileEntityPipeEStorage pipe = (TileEntityPipeEStorage)tile;
-					if(pipe.getConnectionMode(dir.getOpposite()) == ConnectionMode.INPUT){
-						if(pipe.network !=null && pipe.network instanceof EStorageNetwork){
-							network = (EStorageNetwork) pipe.network;
-							connectionDir = dir;
+			if(network == null){
+				for(EnumFacing dir : EnumFacing.VALUES){
+					TileEntity tile = getWorld().getTileEntity(getPos().offset(dir));
+					if(tile !=null){
+						if(tile instanceof TileEntityPipeEStorage){
+							TileEntityPipeEStorage pipe = (TileEntityPipeEStorage)tile;
+							if(pipe.getConnectionMode(dir.getOpposite()) == ConnectionMode.INPUT){
+								if(pipe.network !=null && pipe.network instanceof EStorageNetwork){
+									network = (EStorageNetwork) pipe.network;
+									connectionDir = dir;
+								}
+							}
 						}
-					}
-					if(network !=null){
-						break;
+						/*if(tile instanceof INetworkItemProvider){
+							network = ((INetworkItemProvider)tile).getNetwork();
+							connectionDir = dir;
+						}*/
+						if(network !=null){
+							break;
+						}
 					}
 				}
 			}

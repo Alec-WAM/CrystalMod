@@ -35,14 +35,8 @@ public class CraftingProcessExternal extends CraftingProcessBase {
 	public void update(Deque<ItemStack> toInsertItems, Deque<FluidStack> toInsertFluids) {
 		 IItemHandler inventory = getPattern().getCrafter().getFacingInventory();
 		 for (ItemStack insertStack : getToInsert()) {
-			 ItemStackData data = network.getItemStorage().getItemData(insertStack);
-			 if(data == null && pattern.isOredict()){
-				 data = network.getItemStorage().getOreItemData(insertStack);
-			 }
-			 if(data !=null){
-				 ItemStack tookStack = network.getItemStorage().removeItem(insertStack, false);
-				 ItemHandlerHelper.insertItem(inventory, tookStack, false);
-			 }
+			 ItemStack tookStack = network.getItemStorage().removeItem(insertStack, ItemStorage.getExtractFilter(pattern.isOredict()), false);
+			 if(tookStack !=null)ItemHandlerHelper.insertItem(inventory, tookStack, false);
 		 }
 	}
     

@@ -8,6 +8,8 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
 import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.api.estorage.INetworkGui;
+import alec_wam.CrystalMod.api.estorage.IPanelSource;
 import alec_wam.CrystalMod.integration.jei.JEIUtil;
 import alec_wam.CrystalMod.items.backpack.gui.GuiBackpack;
 import alec_wam.CrystalMod.items.backpack.gui.GuiButtonHoverText;
@@ -162,7 +164,7 @@ public class GuiPanel extends GuiContainer implements IGuiScreen, INetworkGui  {
         	                	ItemStack copy = slot.getStack().copy();
         	                	copy.stackSize = 1;
         	                	try {
-        							CrystalModNetwork.sendToServer(new PacketEStorageAddItem(3, slot.slotNumber, 1, EStorageNetwork.compressItem(new ItemStackData(copy, BlockPos.ORIGIN, 0))));
+        							CrystalModNetwork.sendToServer(new PacketEStorageAddItem(3, slot.slotNumber, 1, EStorageNetwork.compressItem(new ItemStackData(copy))));
         						} catch (Exception e) {
         							e.printStackTrace();
         						}

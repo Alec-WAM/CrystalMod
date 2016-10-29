@@ -3,6 +3,7 @@ package alec_wam.CrystalMod.tiles.pipes.estorage.storage.hdd.array;
 import alec_wam.CrystalMod.api.estorage.INetworkInventory;
 import alec_wam.CrystalMod.api.estorage.INetworkItemProvider;
 import alec_wam.CrystalMod.api.estorage.INetworkInventory.EnumUpdateType;
+import alec_wam.CrystalMod.api.estorage.storage.IItemProvider;
 import alec_wam.CrystalMod.network.IMessageHandler;
 import alec_wam.CrystalMod.tiles.TileEntityInventory;
 import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetwork;
@@ -38,7 +39,7 @@ public class TileHDDArray extends TileEntityInventory implements ITickable, IMes
 	
 	@Override
 	public boolean isItemValidForSlot(int index, ItemStack stack) {
-		return stack !=null && stack.getItem() instanceof ItemHDD;
+		return stack !=null && stack.getItem() instanceof IItemProvider;
 	}
 	
 	@Override

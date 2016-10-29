@@ -9,14 +9,15 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.items.ItemHandlerHelper;
+import alec_wam.CrystalMod.api.FluidStackList;
+import alec_wam.CrystalMod.api.ItemStackList;
+import alec_wam.CrystalMod.api.estorage.INetworkInventory.ExtractFilter;
 import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetwork;
 import alec_wam.CrystalMod.tiles.pipes.estorage.FluidStorage;
 import alec_wam.CrystalMod.tiles.pipes.estorage.FluidStorage.FluidStackData;
 import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage;
 import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage.ItemStackData;
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.CraftingPattern;
-import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.FluidStackList;
-import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.ItemStackList;
 import alec_wam.CrystalMod.util.FluidUtil;
 import alec_wam.CrystalMod.util.ModLogger;
 
@@ -35,16 +36,13 @@ public class CraftingProcessNormal extends CraftingProcessBase {
 	 public boolean canStartProcessing(ItemStorage items, FluidStackList fluids) {
 		List<FluidStack> removed = Lists.newArrayList();
         for (ItemStack stack : getToInsert()) {
-        	ItemStackData data = items.getItemData(stack);
-            if(data == null && pattern.isOredict()){
-            	data = items.getOreItemData(stack);
-            }
-            if (data == null || data.getAmount() <= 0 || items.removeItem(data, stack.stackSize, true) !=stack.stackSize) {
+        	ExtractFilter filter = ItemStorage.getExtractFilter(pattern.isOredict());
+            if (!items.removeCheck(stack, stack.stackSize, filter, true)) {
                 FluidStack fluidInItem = FluidUtil.getFluidTypeFromItem(stack);
                 ItemStack container = FluidUtil.getEmptyContainer(stack);
                 if (fluidInItem != null && container !=null && items.hasItem(container)) {
                     FluidStack fluidData = fluids.get(fluidInItem);
-                    if (fluidData != null && fluids.remove(fluidData, true) && items.removeItem(container, true, pattern.isOredict()) !=null) {
+                    if (fluidData != null && fluids.remove(fluidData, true) && items.removeCheck(container, 1, filter, true)) {
                     	removed.add(fluidData);
                         continue;
                     }
@@ -64,12 +62,11 @@ public class CraftingProcessNormal extends CraftingProcessBase {
             FluidStack fluidInItem = FluidUtil.getFluidTypeFromItem(insertStack);
             if (fluidInItem != null) {
             	ItemStack empty = FluidUtil.getEmptyContainer(insertStack);
-            	if(empty !=null)network.getItemStorage().removeItem(empty, false, pattern.isOredict());
+            	if(empty !=null)network.getItemStorage().removeItem(empty, ItemStorage.getExtractFilter(pattern.isOredict()), false);
                 network.getFluidStorage().removeFluid(fluidInItem, false);
-                ModLogger.info("Normal Extract Fluid "+fluidInItem);
                 actualInputs.add(insertStack.copy());
             } else {
-            	ItemStack extract = network.getItemStorage().removeItem(insertStack, false, pattern.isOredict());
+            	ItemStack extract = network.getItemStorage().removeItem(insertStack, ItemStorage.getExtractFilter(pattern.isOredict()), false);
             	if(extract !=null){
             		actualInputs.add(extract);
             	}
@@ -83,7 +80,7 @@ public class CraftingProcessNormal extends CraftingProcessBase {
                 ItemStack actualInput = actualInputs.get(input, pattern.isOredict());
                 ItemStack taken = ItemHandlerHelper.copyStackWithSize(actualInput, input.stackSize);
                 took[i] = taken;
-                actualInputs.remove(taken, true);
+                if(taken !=null)actualInputs.remove(taken, true);
             }
         }
 

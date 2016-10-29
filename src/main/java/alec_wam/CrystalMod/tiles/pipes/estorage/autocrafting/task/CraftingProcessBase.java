@@ -13,13 +13,13 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+import alec_wam.CrystalMod.api.FluidStackList;
+import alec_wam.CrystalMod.api.estorage.IAutoCrafter;
 import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetwork;
 import alec_wam.CrystalMod.tiles.pipes.estorage.FluidStorage;
 import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage;
 import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage.ItemStackData;
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.CraftingPattern;
-import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.FluidStackList;
-import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.IAutoCrafter;
 import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.ModLogger;
@@ -130,13 +130,9 @@ public abstract class CraftingProcessBase{
     
     public boolean canStartProcessing(ItemStorage iStorage, FluidStackList list){
         for (ItemStack stack : getToInsert()) {
-            ItemStackData data = iStorage.getItemData(stack);
-            if(data == null && pattern.isOredict()){
-            	data = iStorage.getOreItemData(stack);
-            }
-            if (data == null || data.getAmount() == 0 || iStorage.removeItem(data, stack.stackSize, true) !=stack.stackSize) {
-                return false;
-            }
+           if (!iStorage.removeCheck(stack, stack.stackSize, ItemStorage.getExtractFilter(pattern.isOredict()), true)) {
+        	   return false;
+           }
         }
         return true;
     }

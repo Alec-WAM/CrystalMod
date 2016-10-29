@@ -2,10 +2,10 @@ package alec_wam.CrystalMod.tiles.pipes.estorage.panel.crafting;
 
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.InventoryPlayer;
+import alec_wam.CrystalMod.api.estorage.IPanelSource;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.packets.PacketTileMessage;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.GuiPanel;
-import alec_wam.CrystalMod.tiles.pipes.estorage.panel.IPanelSource;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.PanelSourceNormal;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.TileEntityPanel;
 

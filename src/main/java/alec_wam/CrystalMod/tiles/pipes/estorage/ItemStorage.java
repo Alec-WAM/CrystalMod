@@ -15,21 +15,28 @@ import net.minecraft.nbt.NBTSizeTracker;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.oredict.OreDictionary;
 
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 
+import alec_wam.CrystalMod.api.FluidStackList;
+import alec_wam.CrystalMod.api.ItemStackList;
+import alec_wam.CrystalMod.api.estorage.ICraftingTask;
+import alec_wam.CrystalMod.api.estorage.IInsertListener;
+import alec_wam.CrystalMod.api.estorage.INetworkContainer;
 import alec_wam.CrystalMod.api.estorage.INetworkInventory;
+import alec_wam.CrystalMod.api.estorage.INetworkInventory.ExtractFilter;
 import alec_wam.CrystalMod.network.CompressedDataInput;
 import alec_wam.CrystalMod.network.CompressedDataOutput;
+import alec_wam.CrystalMod.tiles.pipes.estorage.FluidStorage.FluidStackData;
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.task.CraftingProcessBase;
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.task.CraftingProcessExternal;
-import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.task.ICraftingTask;
-import alec_wam.CrystalMod.tiles.pipes.estorage.panel.INetworkContainer;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.Lang;
+import alec_wam.CrystalMod.util.ModLogger;
 
 public class ItemStorage {
 
@@ -61,12 +68,18 @@ public class ItemStorage {
         items.clear();
         
         Iterator<NetworkedItemProvider> ii = inventories.iterator();
-        
+        ItemStackList masterList = new ItemStackList();
         while(ii.hasNext()){
-	        Iterator<ItemStackData> data = ii.next().getInterface().getNetworkInventory().getItems(this).iterator();
-			while(data.hasNext()){
-				items.add(data.next());
+        	ItemStackList list = ii.next().getInterface().getNetworkInventory().getItems();
+			if(list !=null){
+				for(ItemStack stack : list.getStacks()){
+					masterList.add(stack);
+				}
 			}
+        }
+        
+        for(ItemStack stack : masterList.getStacks()){
+        	items.add(new ItemStackData(stack));
         }
 
         for (INetworkContainer panel : network.watchers) {
@@ -74,89 +87,140 @@ public class ItemStorage {
 		}
     }
 	
-	public int addItem(ItemStack stack, boolean sim) {
+	public ItemStack addItem(ItemStack stack, boolean sim) {
+		return addItem(stack, stack.stackSize, sim);
+	}
+	
+	public ItemStack addItem(ItemStack stack, int amount, boolean sim) {
 		if (stack == null)
-			return 0;
-		final int ogSize = stack.stackSize;
-		int inserted = 0;
-		Iterator<NetworkedItemProvider> i1 = inventories.iterator();
-		ItemStack insertCopy = stack.copy();
-		master : while(i1.hasNext() && insertCopy.stackSize > 0){
-			INetworkInventory inventory = i1.next().getInterface().getNetworkInventory();
-			//FIRST PASS
-			if(inventory !=null && insertCopy.stackSize > 0){
-				int amt = inventory.insertItem(network, insertCopy, true, sim, true);
-				insertCopy.stackSize-=amt;
-				inserted+=amt;
-				if(insertCopy.stackSize <= 0){
-					break master;
-				}
-			}
-			//SECOND PASS
-			if(inventory !=null && insertCopy.stackSize > 0){
-				int amt = inventory.insertItem(network, insertCopy, false, sim, true);
-				insertCopy.stackSize-=amt;
-				inserted+=amt;
-				if(insertCopy.stackSize <= 0){
-					break master;
+			return ItemHandlerHelper.copyStackWithSize(stack, amount);
+		
+		final int ogSize = amount;
+		
+		ItemStack remainder = ItemHandlerHelper.copyStackWithSize(stack, amount);
+		Iterator<List<NetworkedItemProvider>> ii = network.interfaces.values().iterator();
+		boolean breakLoop = false;
+		master : while(ii.hasNext() && !breakLoop){
+			Iterator<NetworkedItemProvider> i1 = ii.next().iterator();
+			while(i1.hasNext() && !breakLoop){
+				INetworkInventory inventory = i1.next().getInterface().getNetworkInventory();
+				if(inventory !=null){
+					remainder = inventory.insertItem(network, remainder, remainder.stackSize, sim);
+					if(remainder == null || remainder.stackSize <= 0){
+						breakLoop = true;
+						break master;
+					}
 				}
 			}
 		}
 		
 		// If the stack size of the remainder is negative, it means of the original size abs(remainder.stackSize) items have been voided
         int insert;
-
-        if (inserted >= ogSize) {
+        if(remainder == null){
         	insert = ogSize;
+        }
+        else if (remainder.stackSize < 0) {
+        	insert = ogSize + remainder.stackSize;
+            remainder = null;
         } else {
-        	insert = ogSize - inserted;
+        	insert = ogSize - remainder.stackSize;
         }
         
         if (!sim && insert > 0) {
+        	network.notifyInsert(ItemHandlerHelper.copyStackWithSize(stack, insert));
+    		invalidate();
         	if(network.craftingController != null){
 	            for (ICraftingTask task : network.craftingController.getCraftingTasks()) {
 	                for (CraftingProcessBase process : task.getToProcess()) {
 	                    if (process.onReceiveOutput(ItemHandlerHelper.copyStackWithSize(stack, insert))) {
-	                    	return inserted;
+	                    	return remainder;
 	                    }
 	                }
 	            }
         	}
         }
 		
-		return inserted;
+		return remainder;
 	}
 
-	public ItemStack removeItems(ItemStack[] itemStacks, boolean useOre){
+	public static ExtractFilter NORMAL = new ExtractFilter(){
+
+		@Override
+		public boolean canExtract(ItemStack stack1, ItemStack stack2) {
+			return ItemUtil.canCombine(stack1, stack2);
+		}
+		
+	};
+	
+	public static ExtractFilter ORE = new ExtractFilter(){
+
+		@Override
+		public boolean canExtract(ItemStack stack1, ItemStack stack2) {
+			return ItemUtil.stackMatchUseOre(stack1, stack2);
+		}
+		
+	};
+	
+	public boolean removeCheck(ItemStack stack, int amt, ExtractFilter filter, boolean sim){
+		ItemStack extract = removeItem(stack, amt, filter, sim);
+		return extract !=null && extract.stackSize == amt;
+	}
+	
+	public ItemStack removeItems(ItemStack[] itemStacks, ExtractFilter filter){
 		for (ItemStack itemStack : itemStacks) {
-			ItemStack removedFake = removeItem(itemStack, true, useOre);
+			ItemStack removedFake = removeItem(itemStack, filter, true);
 			if(removedFake == null)continue;
-			return removeItem(itemStack, false, useOre);
+			return removeItem(itemStack, filter, false);
 		}
 		return null;
 	}
 	
 	public ItemStack removeItem(ItemStack stack, boolean sim){
-		return this.removeItem(stack, sim, false);
+		return removeItem(stack, NORMAL, sim);
 	}
 	
-	public ItemStack removeItem(ItemStack stack, boolean sim, boolean useOre){
-		ItemStackData data = getItemData(stack);
-		if(data == null && useOre){
-			data = getOreItemData(stack);
+	public ItemStack removeItem(ItemStack stack, ExtractFilter filter, boolean sim){
+		return removeItem(stack, stack.stackSize, filter, sim);
+	}
+	
+	public ItemStack removeItem(ItemStack stack, int amt, ExtractFilter filter, boolean sim){
+		if(stack == null || stack.getItem() == null)return null;
+		final int needed = amt;
+		int received = 0;
+		ItemStack ret = null;
+		Iterator<List<NetworkedItemProvider>> ii = network.interfaces.values().iterator();
+		boolean breakLoop = false;
+		master : while(ii.hasNext() && !breakLoop){
+			Iterator<NetworkedItemProvider> i1 = ii.next().iterator();
+			while(i1.hasNext() && !breakLoop){
+				NetworkedItemProvider inter = i1.next();
+				ItemStack took = inter.getInterface().getNetworkInventory().extractItem(network, stack, amt, filter, sim);
+				if(took !=null){
+					if(ret == null){
+						ret = took;
+					} else {
+						ret.stackSize+=took.stackSize;
+					}
+					received+=took.stackSize;
+				}
+				if (needed == received) {
+					breakLoop = true;
+	                break master;
+	            }
+			}
 		}
-		if(data == null || data.stack == null || data.isCrafting)return null;
-		ItemStack ret = data.stack.copy();
-		int removedFake = removeItem(data, stack.stackSize, sim);
-		
-		ret.stackSize = removedFake;
-		if(ret.stackSize <=0){
-			return null;
+
+        if(!sim && ret !=null){
+        	invalidate();
+			Iterator<IInsertListener> iter = network.listeners.iterator();
+			while (iter.hasNext()) {
+				iter.next().onItemExtracted(ret, ret.stackSize);
+			}
 		}
 		return ret;
 	}
 	
-	public int removeItem(ItemStackData data, int amount, boolean sim) {
+	/*public int removeItem(ItemStackData data, int amount, boolean sim) {
 		if (data == null || data.stack == null || network == null)
 			return 0;
 		Iterator<NetworkedItemProvider> i1 = inventories.iterator();
@@ -172,7 +236,7 @@ public class ItemStorage {
 			}
 		}
 		return 0;
-	}
+	}*/
 	
 	public boolean hasItem(ItemStack stack){
 		return hasItem(stack, false);
@@ -183,6 +247,18 @@ public class ItemStorage {
 		return data !=null && !data.isCrafting && data.getAmount() > 0;
 	}
 
+	public List<ItemStackData> getAllItemData(ItemStack stack) {
+		List<ItemStackData> list = Lists.newArrayList();
+		Iterator<ItemStackData> iData = items.iterator();
+		while(iData.hasNext()) {
+			ItemStackData data = iData.next();
+			if (data.stack != null && ItemUtil.canCombine(stack, data.stack)) {
+				list.add(data);
+			}
+		}
+		return list;
+	}
+	
 	public ItemStackData getItemData(ItemStack stack) {
 		Iterator<ItemStackData> iData = items.iterator();
 		while(iData.hasNext()) {
@@ -217,27 +293,6 @@ public class ItemStorage {
 		return list;
 	}
 	
-	public void scanNetworkForItems(){
-		items.clear();
-		Iterator<List<NetworkedItemProvider>> i1 = network.interfaces.values().iterator();
-		while(i1.hasNext()){
-			Iterator<NetworkedItemProvider> ii = i1.next().iterator();
-			//FIRST PASS
-			while( ii.hasNext())
-			{
-				final NetworkedItemProvider inter = ii.next();
-				if(inter !=null && inter.getInterface() != null) {
-					if(inter.getInterface().getNetworkInventory() !=null){
-						Iterator<ItemStackData> data = inter.getInterface().getNetworkInventory().getItems(this).iterator();
-						while(data.hasNext()){
-							items.add(data.next());
-						}
-					}
-				}
-			}
-		}
-	}
-	
 	public void setItemList(List<ItemStackData> newItems){
 		if(newItems == null){
 			items.clear();
@@ -252,8 +307,6 @@ public class ItemStorage {
 	
 	public static class ItemStackData {
 		public ItemStack stack;
-		public BlockPos interPos;
-		public int interDim;
 		public boolean isCrafting;
 
 		private String oreDictString;
@@ -265,14 +318,6 @@ public class ItemStorage {
 		
 		public ItemStackData(ItemStack stack) {
 			this.stack = stack;
-			this.interPos = BlockPos.ORIGIN;
-			this.interDim = 0;
-		}
-
-		public ItemStackData(ItemStack stack, BlockPos interPos, int dim) {
-			this.stack = stack;
-			this.interPos = interPos;
-			this.interDim = dim;
 		}
 
 		public void toBytes(CompressedDataOutput cdo) throws IOException {
@@ -300,10 +345,6 @@ public class ItemStorage {
 					}
 				}
 			}
-			cdo.writeInt(interPos.getX());
-			cdo.writeInt(interPos.getY());
-			cdo.writeInt(interPos.getZ());
-			cdo.writeInt(interDim);
 			cdo.writeBoolean(isCrafting);
 		}
 
@@ -334,11 +375,6 @@ public class ItemStorage {
 				itemstack.setTagCompound(nbt);
 			}
 			newData.stack = itemstack;
-			int x = cdi.readInt();
-			int y = cdi.readInt();
-			int z = cdi.readInt();
-			newData.interPos = new BlockPos(x, y, z);
-			newData.interDim = cdi.readInt();
 			newData.isCrafting = cdi.readBoolean();
 			return newData;
 		}
@@ -410,11 +446,10 @@ public class ItemStorage {
 		public int getAmount(){
 			return stack == null ? 0 : stack.stackSize;
 		}
-		
-		//TODO Check this
-		public boolean sameIgnoreStack(ItemStackData data){
-			return data.interPos !=null && data.interPos.equals(interPos) && data.interDim == interDim && ItemUtil.canCombine(stack, data.stack);
-		}
+	}
+
+	public static ExtractFilter getExtractFilter(boolean oredict) {
+		return oredict ? ORE : NORMAL;
 	}
 	
 }
