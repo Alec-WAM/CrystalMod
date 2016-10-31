@@ -9,6 +9,7 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.monster.EntityZombie;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
@@ -176,7 +177,10 @@ public class TileEntityMobGrinder extends TileEntityMod implements IMessageHandl
 
 		if (killList.size() > 0) {
 			for(EntityLiving mob : killList){
-				if (!mob.isDead && mob.deathTime <= 0 && !mob.isEntityInvulnerable(DamageSource.generic) && mob.hurtResistantTime == 0) {
+				
+				boolean riddenByPlayer = mob.getRecursivePassengersByType(EntityPlayer.class).size() > 0;
+				
+				if (!mob.isDead && mob.deathTime <= 0 && !mob.isEntityInvulnerable(DamageSource.generic) && mob.hurtResistantTime == 0 && !riddenByPlayer) {
 					if (mob instanceof EntityZombie) {
 			            zBlocker.cache.add((EntityZombie) mob);
 					}   
