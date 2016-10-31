@@ -99,14 +99,6 @@ public abstract class BlockMachine  extends BlockContainer {
 			machine.writeToStack(nbt);
 			ItemNBTHelper.getCompound(stack).setTag(TILE_NBT_STACK, nbt);
 		}
-		if(tileEntity !=null && tileEntity instanceof TileEntityEnderBuffer){
-			TileEntityEnderBuffer buffer = (TileEntityEnderBuffer)tileEntity;
-			NBTTagCompound nbt = new NBTTagCompound();
-			nbt.setInteger("Code", buffer.code);
-			UUID uuid = buffer.getPlayerBound();
-			if(uuid !=null)nbt.setString("Owner", UUIDUtils.fromUUID(uuid));
-			ItemNBTHelper.getCompound(stack).setTag(TILE_NBT_STACK, nbt);
-		}
 		return stack;
 	}
 
@@ -122,15 +114,6 @@ public abstract class BlockMachine  extends BlockContainer {
         	if(tile !=null && tile instanceof TileEntityMachine){
         		TileEntityMachine machine = (TileEntityMachine)tile;
         		machine.readFromStack(ItemNBTHelper.getCompound(stack).getCompoundTag(TILE_NBT_STACK));
-        		update = true;
-        	}
-        	if(tile !=null && tile instanceof TileEntityEnderBuffer){
-        		TileEntityEnderBuffer buffer = (TileEntityEnderBuffer)tile;
-        		NBTTagCompound nbt = ItemNBTHelper.getCompound(stack).getCompoundTag(TILE_NBT_STACK);
-        		buffer.setCode(nbt.getInteger("Code"));
-        		if(nbt.hasKey("Owner")){
-        			buffer.bindToPlayer(UUIDUtils.fromString(nbt.getString("Owner")));
-        		}
         		update = true;
         	}
         }

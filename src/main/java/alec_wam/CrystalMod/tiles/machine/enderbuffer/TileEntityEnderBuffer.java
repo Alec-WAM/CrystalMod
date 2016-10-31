@@ -346,8 +346,7 @@ public class TileEntityEnderBuffer extends TileEntityMod implements IEnderBuffer
 		releasePreviousInventory();
         markDirty();
 
-        IBlockState state = worldObj.getBlockState(pos);
-        worldObj.notifyBlockUpdate(pos, state, state, 3);
+        BlockUtil.markBlockForUpdate(getWorld(), getPos());
 	}
 
 	public UUID getPlayerBound()
@@ -403,6 +402,9 @@ public class TileEntityEnderBuffer extends TileEntityMod implements IEnderBuffer
 			if(messageData.hasKey("Code")){
 				this.code = messageData.getInteger("Code");
 			}
+		}
+		if(messageId.equalsIgnoreCase("MarkDirty")){
+			BlockUtil.markBlockForUpdate(getWorld(), getPos());
 		}
 		if(messageId.equalsIgnoreCase("UpdateMode")){
 			if(messageData.hasKey("CU")){

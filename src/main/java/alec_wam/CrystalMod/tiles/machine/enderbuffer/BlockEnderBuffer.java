@@ -1,28 +1,42 @@
 package alec_wam.CrystalMod.tiles.machine.enderbuffer;
 
+import java.util.UUID;
+
 import com.enderio.core.common.util.ItemUtil;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.network.CrystalModNetwork;
+import alec_wam.CrystalMod.network.packets.PacketTileMessage;
 import alec_wam.CrystalMod.tiles.machine.BlockMachine;
+import alec_wam.CrystalMod.tiles.machine.FakeTileState;
+import alec_wam.CrystalMod.tiles.machine.IFacingTile;
+import alec_wam.CrystalMod.tiles.machine.TileEntityMachine;
 import alec_wam.CrystalMod.tiles.machine.enderbuffer.EnderBufferManager.EnderBuffer;
+import alec_wam.CrystalMod.tiles.tank.FakeTankState;
+import alec_wam.CrystalMod.tiles.tank.TileEntityTank;
 import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.ChatUtil;
+import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ModLogger;
+import alec_wam.CrystalMod.util.UUIDUtils;
 import alec_wam.CrystalMod.util.tool.ToolUtil;
 
 public class BlockEnderBuffer extends BlockMachine
@@ -35,6 +49,43 @@ public class BlockEnderBuffer extends BlockMachine
 		this.setCreativeTab(CrystalMod.tabBlocks);
     }
 
+    protected ItemStack getNBTDrop(IBlockAccess world, BlockPos pos, TileEntity tileEntity) {
+		ItemStack stack = new ItemStack(this, 1, damageDropped(world.getBlockState(pos)));
+		if(tileEntity !=null && tileEntity instanceof TileEntityEnderBuffer){
+			TileEntityEnderBuffer buffer = (TileEntityEnderBuffer)tileEntity;
+			NBTTagCompound nbt = new NBTTagCompound();
+			nbt.setInteger("Code", buffer.code);
+			UUID uuid = buffer.getPlayerBound();
+			if(uuid !=null)nbt.setString("Owner", UUIDUtils.fromUUID(uuid));
+			ItemNBTHelper.getCompound(stack).setTag(TILE_NBT_STACK, nbt);
+		}
+		return stack;
+	}
+    
+    @Override
+    public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+		EnumFacing face = getFacingFromEntity(placer);
+        TileEntity tile = world.getTileEntity(pos);
+        boolean update = false;
+        if(ItemNBTHelper.verifyExistance(stack, TILE_NBT_STACK)){
+        	if(tile !=null && tile instanceof TileEntityEnderBuffer){
+        		TileEntityEnderBuffer buffer = (TileEntityEnderBuffer)tile;
+        		NBTTagCompound nbt = ItemNBTHelper.getCompound(stack).getCompoundTag(TILE_NBT_STACK);
+        		buffer.setCode(nbt.getInteger("Code"));
+        		if(nbt.hasKey("Owner")){
+        			buffer.bindToPlayer(UUIDUtils.fromString(nbt.getString("Owner")));
+        		}
+        		update = true;
+        	}
+        }
+        if(update)BlockUtil.markBlockForUpdate(world, pos);
+    }
+	
+	public IBlockState getExtendedState(final IBlockState state, final IBlockAccess world, final BlockPos pos) {
+		TileEntity tile = world.getTileEntity(pos);
+        return (IBlockState)new FakeTileState<TileEntityEnderBuffer>(state, world, pos, (tile !=null && tile instanceof TileEntityEnderBuffer) ? (TileEntityEnderBuffer)tile : null);
+    }
+    
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack stack, EnumFacing side, float hitX, float hitY, float hitZ)
     {
     	if(worldIn.isRemote){
@@ -65,7 +116,7 @@ public class BlockEnderBuffer extends BlockMachine
             {
                 int meta = net.minecraft.item.EnumDyeColor.byDyeDamage(dyeMeta).getMetadata();
 
-                //  5, 8, 11; +-1.5
+                //  5, 8, 11; +-1.5 
                 // 3.5..6.5, 6.5..9.5,9.5..12.5
 
                 float y = hitY;
@@ -79,17 +130,17 @@ public class BlockEnderBuffer extends BlockMachine
                 int color2 = (id >> 4) & 15;
                 int color3 = (id >> 8) & 15;
 
-                if (y >= 3.5 && y < 6.5)
+                if (y >= 3.7 && y < 6.3)
                 {
                     color3 = meta;
                     hitSuccess = true;
                 }
-                else if (y >= 6.5 && y < 9.5)
+                else if (y >= 6.7 && y < 9.3)
                 {
                     color2 = meta;
                     hitSuccess = true;
                 }
-                else if (y >= 9.5 && y < 12.5)
+                else if (y >= 9.7 && y < 12.3)
                 {
                     color1 = meta;
                     hitSuccess = true;
@@ -99,13 +150,10 @@ public class BlockEnderBuffer extends BlockMachine
 
                 if (oldId != id)
                 {
-                	EnumDyeColor c1 = EnumDyeColor.byMetadata(color1);
-                    EnumDyeColor c2 = EnumDyeColor.byMetadata(color2);
-                    EnumDyeColor c3 = EnumDyeColor.byMetadata(color3);
-                    ChatUtil.sendNoSpam(playerIn, c1.getName()+" "+c2.getName()+" "+c3.getName());
-                    if (!playerIn.capabilities.isCreativeMode)
+                	if (!playerIn.capabilities.isCreativeMode)
                     	stack.stackSize--;
                     buffer.setCode(id);
+                    CrystalModNetwork.sendToAllAround(new PacketTileMessage(pos, "MarkDirty"), tile);
                 }
 
                 if (hitSuccess)
@@ -133,7 +181,7 @@ public class BlockEnderBuffer extends BlockMachine
 	@SideOnly(Side.CLIENT)
     public BlockRenderLayer getBlockLayer()
     {
-        return BlockRenderLayer.TRANSLUCENT;
+        return BlockRenderLayer.SOLID;
     }
 	
 	/**

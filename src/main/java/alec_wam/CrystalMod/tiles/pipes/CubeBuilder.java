@@ -167,6 +167,8 @@ public class CubeBuilder
 
 		UvVector uv = new UvVector();
 
+		if(texture == null)return uv;
+		
 		switch( face )
 		{
 			case DOWN:

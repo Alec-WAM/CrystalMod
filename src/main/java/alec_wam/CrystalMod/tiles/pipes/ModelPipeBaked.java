@@ -10,12 +10,15 @@ import net.minecraft.world.World;
 import java.util.*;
 
 import javax.annotation.Nullable;
+import javax.vecmath.Matrix4f;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.lwjgl.util.vector.Vector3f;
 
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.client.model.dynamic.DelegatingDynamicItemAndBlockModel;
+import alec_wam.CrystalMod.client.model.dynamic.DynamicBaseModel;
 import alec_wam.CrystalMod.tiles.pipes.covers.CoverUtil;
 import alec_wam.CrystalMod.tiles.pipes.covers.CoverUtil.CoverData;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
@@ -27,14 +30,16 @@ import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 
 import net.minecraft.client.renderer.block.model.*;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.*;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.client.model.IPerspectiveAwareModel;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 
-public class ModelPipeBaked implements IBakedModel 
+public class ModelPipeBaked implements IPerspectiveAwareModel 
 {
 	public static final ModelResourceLocation BAKED_MODEL = new ModelResourceLocation("crystalmod:crystalpipe");
 	public static FaceBakery faceBakery;
@@ -611,6 +616,11 @@ public class ModelPipeBaked implements IBakedModel
 			}
 		};
 	}
+
+	@Override
+    public Pair<? extends IBakedModel, Matrix4f> handlePerspective(ItemCameraTransforms.TransformType cameraTransformType) {
+    	return IPerspectiveAwareModel.MapWrapper.handlePerspective(this, DynamicBaseModel.DEFAULT_PERSPECTIVE_TRANSFORMS, cameraTransformType);
+    }
 	
 }
 

@@ -295,7 +295,7 @@ public abstract class DynamicBaseModel implements IPerspectiveAwareModel {
             new Vector3f(0.4F, 0.4F, 0.4F),
             null));
     public static final TRSRTransformation GROUND = TRSRTransformation.blockCenterToCorner(new TRSRTransformation(
-            new Vector3f(0, 1, 0),
+            new Vector3f(0, 0, 0),
             TRSRTransformation.quatFromXYZDegrees(new Vector3f(0, 0, 0)),
             new Vector3f(0.25f, 0.25f, 0.25f),
             null));

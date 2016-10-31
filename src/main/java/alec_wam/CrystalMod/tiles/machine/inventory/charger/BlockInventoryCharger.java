@@ -41,6 +41,7 @@ public class BlockInventoryCharger extends BlockContainer implements ICustomMode
 	
 	@SideOnly(Side.CLIENT)
     public void initModel() {
+		//TODO Investigate Inventory Rendering
 		ModelLoader.setCustomMeshDefinition(Item.getItemFromBlock(this), new ItemMeshDefinition() {
 			@Override
 			public ModelResourceLocation getModelLocation(ItemStack stack)
