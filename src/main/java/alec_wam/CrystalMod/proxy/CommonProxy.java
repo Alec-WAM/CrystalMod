@@ -13,6 +13,7 @@ import alec_wam.CrystalMod.crafting.ModCrafting;
 import alec_wam.CrystalMod.enchantment.ModEnchantments;
 import alec_wam.CrystalMod.entities.ModEntites;
 import alec_wam.CrystalMod.fluids.Fluids;
+import alec_wam.CrystalMod.handler.ClientEventHandler;
 import alec_wam.CrystalMod.handler.EventHandler;
 import alec_wam.CrystalMod.integration.TConstructIntegration;
 import alec_wam.CrystalMod.items.ModItems;
@@ -82,6 +83,7 @@ public class CommonProxy {
         MinecraftForge.EVENT_BUS.register(generator);
         
         MinecraftForge.EVENT_BUS.register(DropCapture.instance);
+        MinecraftForge.EVENT_BUS.register(new ClientEventHandler());
         
         PlayerCubeChunkLoaderManager.init();
         ForgeChunkManager.setForcedChunkLoadingCallback((Object)CrystalMod.instance, (ForgeChunkManager.LoadingCallback)new WorksiteChunkLoader());

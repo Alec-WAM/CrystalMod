@@ -13,15 +13,19 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
+
+import alec_wam.CrystalMod.CrystalMod;
 
 public class Util {
 
@@ -207,6 +211,23 @@ public class Util {
 
 	public static boolean isMultipleOf(int input, int mult) {
 		return input % mult == 0;
+	}
+	
+	public static void setCustomEntityData(Entity entity, NBTTagCompound nbt){
+		if(entity == null)return;
+		NBTTagCompound entityNBT = entity.getEntityData();
+		entityNBT.setTag(CrystalMod.MODID.toLowerCase(), nbt);
+	}
+	
+	public static NBTTagCompound getCustomEntityData(Entity entity, boolean create){
+		if(entity == null)return null;
+		NBTTagCompound nbt = entity.getEntityData();
+		if(!nbt.hasKey(CrystalMod.MODID.toLowerCase(), Constants.NBT.TAG_COMPOUND)){
+			if(!create)return null;
+			NBTTagCompound newNBT = new NBTTagCompound();
+			nbt.setTag(CrystalMod.MODID.toLowerCase(), newNBT);
+		}
+		return nbt.getCompoundTag(CrystalMod.MODID.toLowerCase());
 	}
 	
 	

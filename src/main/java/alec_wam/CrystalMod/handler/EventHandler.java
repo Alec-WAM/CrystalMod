@@ -7,6 +7,7 @@ import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.api.block.IExplosionImmune;
 import alec_wam.CrystalMod.capability.ExtendedPlayer;
 import alec_wam.CrystalMod.capability.ExtendedPlayerProvider;
+import alec_wam.CrystalMod.entities.accessories.HorseAccessories;
 import alec_wam.CrystalMod.entities.minions.warrior.EntityMinionWarrior;
 import alec_wam.CrystalMod.items.ItemDragonWings;
 import alec_wam.CrystalMod.items.ModItems;
@@ -23,16 +24,19 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.monster.SkeletonType;
+import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.inventory.InventoryEnderChest;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -51,6 +55,7 @@ import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.BreakSpeed;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent.EntityInteract;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickBlock;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.ExplosionEvent;
@@ -266,6 +271,22 @@ public class EventHandler {
 		}
     }
     
+    @SubscribeEvent
+    public void onEntityLivingInteract(EntityInteract event)
+    {
+    	if(event.getEntityLiving() == null)return;
+    	
+    	EntityPlayer player = event.getEntityPlayer();
+    	ItemStack held = event.getItemStack();
+    	Entity entity = event.getTarget();
+        if(entity instanceof EntityHorse){
+      	  EntityHorse horse = (EntityHorse)entity;
+      	  if(HorseAccessories.handleHorseInteract(player, held, horse)){
+      		  event.setCanceled(true);
+      	  }
+        }
+    }
+    
 	@SubscribeEvent
     public void onEntityLivingDeath(LivingDeathEvent event)
     {
@@ -273,6 +294,11 @@ public class EventHandler {
         return;
       }
       addPlayerHeads(event);
+      EntityLivingBase entity = event.getEntityLiving();
+      if(entity instanceof EntityHorse){
+    	  EntityHorse horse = (EntityHorse)entity;
+    	  HorseAccessories.onHorseDeath(horse);
+      }
     }
 	
 	@SubscribeEvent

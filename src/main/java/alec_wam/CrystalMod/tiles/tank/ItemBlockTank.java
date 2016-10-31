@@ -45,7 +45,10 @@ public class ItemBlockTank extends ItemBlockMeta {
 	}
 	
 	public static FluidTank loadTank(NBTTagCompound nbtRoot) {
-	    FluidTank ret = new FluidTank(8000);
+		int tankType = nbtRoot.hasKey("tankType") ? nbtRoot.getInteger("tankType") : 0;
+		tankType = MathHelper.clamp_int(tankType, 0, BlockTank.tankCaps.length);
+		int cap = BlockTank.tankCaps[tankType]*Fluid.BUCKET_VOLUME;
+	    FluidTank ret = new FluidTank(cap);
 	    
 	    if(nbtRoot.hasKey(FluidHandlerItemStack.FLUID_NBT_KEY)) {
 	      FluidStack fl = FluidStack.loadFluidStackFromNBT((NBTTagCompound) nbtRoot.getTag(FluidHandlerItemStack.FLUID_NBT_KEY));

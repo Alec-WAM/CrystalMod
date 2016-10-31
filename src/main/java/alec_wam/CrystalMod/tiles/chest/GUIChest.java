@@ -47,9 +47,9 @@ public class GUIChest extends GuiContainer {
             return new ContainerCrystalChest(player, chest, mainType, xSize, ySize);
         }
 
-        public static GUIChest buildGUI(CrystalChestType type, IInventory playerInventory, TileEntityBlueCrystalChest chestInventory)
+        public static GUIChest buildGUI(CrystalChestType type, IInventory playerInventory, IInventory chestInventory)
         {
-            return new GUIChest(values()[chestInventory.getType().ordinal()], playerInventory, chestInventory);
+            return new GUIChest(values()[type.ordinal()], playerInventory, chestInventory);
         }
     }
 

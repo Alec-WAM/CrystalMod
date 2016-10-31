@@ -137,7 +137,7 @@ public class TileEntityTank extends TileEntityMod {
                     FluidStack resourceCopy = resource.copy();
                     boolean infi = false;
                     IBlockState state = getWorld() !=null ? getWorld().getBlockState(getPos()) : null;
-                    if(state !=null && state.getBlock() == ModBlocks.crystalTank){
+                    if(state !=null && state.getBlock() instanceof BlockTank){
                     	infi = state.getValue(BlockTank.TYPE) == TankType.CREATIVE;
                     }
                     if(infi){
@@ -182,7 +182,7 @@ public class TileEntityTank extends TileEntityMod {
                 public FluidStack drain(int maxEmpty, boolean doDrain) {
                 	boolean infi = false;
                     IBlockState state = getWorld() !=null ? getWorld().getBlockState(getPos()) : null;
-                    if(state !=null && state.getBlock() == ModBlocks.crystalTank){
+                    if(state !=null && state.getBlock() instanceof BlockTank){
                     	infi = state.getValue(BlockTank.TYPE) == TankType.CREATIVE;
                     }
                     if(infi){

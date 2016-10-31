@@ -12,6 +12,7 @@ import net.minecraft.world.World;
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.network.AbstractPacketThreadsafe;
 import alec_wam.CrystalMod.network.IMessageHandler;
+import alec_wam.CrystalMod.util.Util;
 
 public class PacketEntityMessage extends AbstractPacketThreadsafe {
 
@@ -53,21 +54,26 @@ public class PacketEntityMessage extends AbstractPacketThreadsafe {
 
 	@Override
 	public void handleClientSafe(NetHandlerPlayClient netHandler) {
-		handle(CrystalMod.proxy.getClientPlayer() == null ? null : CrystalMod.proxy.getClientPlayer().worldObj, id);
+		handle(CrystalMod.proxy.getClientPlayer() == null ? null : CrystalMod.proxy.getClientPlayer().worldObj, id, true);
 	}
 
 	@Override
 	public void handleServerSafe(NetHandlerPlayServer netHandler) {
-		handle(netHandler.playerEntity.worldObj, id);
+		handle(netHandler.playerEntity.worldObj, id, false);
 	}
 	
-	public void handle(World world, int id){
+	public void handle(World world, int id, boolean client){
 		if(world == null){
 			return;
 		}
 		Entity entity = world.getEntityByID(id);
-		if(entity !=null && entity instanceof IMessageHandler){
-			((IMessageHandler)entity).handleMessage(type, data, false);
+		if(entity !=null){
+			if(type.equalsIgnoreCase("CustomDataSync")){
+				Util.setCustomEntityData(entity, data);
+			}
+			if(entity instanceof IMessageHandler){
+				((IMessageHandler)entity).handleMessage(type, data, client);
+			}
 		}
 	}
 

@@ -112,6 +112,13 @@ item.crystalmod.darkIronPickaxe.name=Dark Iron Pickaxe
 item.crystalmod.darkIronSword.name=Dark Iron Sword
 item.crystalmod.darkIronBow.name=Dark Iron Bow
 
+item.crystalmod.minecart_chest.blue.name=Minecart with Blue Crystal Chest
+item.crystalmod.minecart_chest.red.name=Minecart with Red Crystal Chest
+item.crystalmod.minecart_chest.green.name=Minecart with Green Crystal Chest
+item.crystalmod.minecart_chest.dark.name=Minecart with Dark Crystal Chest
+item.crystalmod.minecart_chest.pure.name=Minecart with Pure Crystal Chest
+item.crystalmod.minecart_chest.darkiron.name=Minecart with Dark Iron Chest
+
 item.crystalmod.darkIronHelmet.name=Dark Iron Helmet
 item.crystalmod.darkIronChestplate.name=Dark Iron Chestplate
 item.crystalmod.darkIronLeggings.name=Dark Iron Leggings
@@ -426,6 +433,13 @@ entity.CrystalMod.CrystalPigZombie.name=Crystal Zombie Pigman
 entity.CrystalMod.CrystalCow.name=Crystal Cow
 entity.CrystalMod.CrystalEnderman.name=Crystal Enderman
 entity.CrystalMod.MinionWarrior.name=Warrior Minion
+
+entity.CrystalMod.minecart_blue.name=Minecart with Blue Crystal Chest
+entity.CrystalMod.minecart_red.name=Minecart with Red Crystal Chest
+entity.CrystalMod.minecart_green.name=Minecart with Green Crystal Chest
+entity.CrystalMod.minecart_dark.name=Minecart with Dark Crystal Chest
+entity.CrystalMod.minecart_pure.name=Minecart with Pure Crystal Chest
+entity.CrystalMod.minecart_darkiron.name=Minecart with Dark Iron Chest
 
 #--Misc
 crystalmod.power.cu=CU

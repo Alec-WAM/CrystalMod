@@ -6,6 +6,7 @@ import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.blocks.BlockCrystalPlant.PlantType;
+import alec_wam.CrystalMod.entities.minecarts.chests.ItemCrystalChestMinecart;
 import alec_wam.CrystalMod.entities.minions.ItemMinion;
 import alec_wam.CrystalMod.entities.minions.ItemMinionStaff;
 import alec_wam.CrystalMod.items.ItemMetalPlate.PlateType;
@@ -87,6 +88,8 @@ public class ModItems {
 	public static ItemSword darkIronSword;
 	public static ItemDarkIronBow darkIronBow;
 	
+	public static ItemCrystalChestMinecart chestMinecart;
+	
 	public static ItemCrystalWrench wrench;
 	public static ItemCrystalGuide guide;
 	
@@ -138,6 +141,8 @@ public class ModItems {
 		darkIronPickaxe = registerItem(new ItemCustomPickaxe(ToolMaterialDarkIron), "darkIronPickaxe");
 		darkIronSword = (ItemSword) registerItem(new ItemSword(ToolMaterialDarkIron), "darkIronSword").setCreativeTab(CrystalMod.tabTools);
 		darkIronBow = new ItemDarkIronBow();
+		
+		chestMinecart = new ItemCrystalChestMinecart();
 		
 		crystalSeedsBlue = new ItemCrystalSeeds(PlantType.BLUE);
 		crystalSeedsRed = new ItemCrystalSeeds(PlantType.RED);

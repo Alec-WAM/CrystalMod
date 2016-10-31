@@ -1,6 +1,7 @@
 package alec_wam.CrystalMod.proxy;
 
 import java.util.List;
+
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.util.glu.Project;
 
@@ -12,11 +13,13 @@ import alec_wam.CrystalMod.capability.ExtendedPlayer;
 import alec_wam.CrystalMod.capability.ExtendedPlayerProvider;
 import alec_wam.CrystalMod.client.model.BakedCustomItemModel;
 import alec_wam.CrystalMod.client.model.LayerDragonWings;
+import alec_wam.CrystalMod.client.model.LayerHorseAccessories;
 import alec_wam.CrystalMod.entities.ModEntites;
 import alec_wam.CrystalMod.fluids.FluidColored;
 import alec_wam.CrystalMod.fluids.Fluids;
 import alec_wam.CrystalMod.items.ItemDragonWings;
 import alec_wam.CrystalMod.items.ModItems;
+import alec_wam.CrystalMod.tiles.machine.enderbuffer.ModelEnderBuffer;
 import alec_wam.CrystalMod.tiles.machine.power.battery.BlockBattery.BatteryType;
 import alec_wam.CrystalMod.tiles.machine.power.battery.ModelBattery;
 import alec_wam.CrystalMod.tiles.pipes.attachments.ModelAttachment;
@@ -54,6 +57,7 @@ import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -93,7 +97,12 @@ public class ClientProxy extends CommonProxy {
 		for (RenderPlayer renderer : Minecraft.getMinecraft().getRenderManager().getSkinMap().values()){
 			renderer.addLayer(dragonWingsRenderer);
 		}
-        
+		LayerHorseAccessories horseAccessoryRenderer = new LayerHorseAccessories();
+		Render<?> renderHorse = Minecraft.getMinecraft().getRenderManager().getEntityClassRenderObject(EntityHorse.class);
+		if(renderHorse !=null && renderHorse instanceof RenderLivingBase){
+			RenderLivingBase<?> livingRender = (RenderLivingBase<?>)renderHorse;
+			livingRender.addLayer(horseAccessoryRenderer);
+		}
         MinecraftForge.EVENT_BUS.register(this);
     }
 
@@ -113,7 +122,14 @@ public class ClientProxy extends CommonProxy {
         event.getModelRegistry().putObject(new ModelResourceLocation(ModBlocks.crystalGlass.getRegistryName(), "inventory"), ModelGlass.INSTANCE);
         
         event.getModelRegistry().putObject(new ModelResourceLocation("crystalmod:battery", "normal"), ModelBattery.INSTANCE);
+        
+        
         event.getModelRegistry().putObject(new ModelResourceLocation("crystalmod:battery", "inventory"), ModelBattery.INSTANCE);
+        
+        event.getModelRegistry().putObject(new ModelResourceLocation(ModBlocks.enderBuffer.getRegistryName(), "normal"), ModelEnderBuffer.INSTANCE);
+        event.getModelRegistry().putObject(new ModelResourceLocation(ModBlocks.enderBuffer.getRegistryName(), "active=false,facing=north"), ModelEnderBuffer.INSTANCE);
+        event.getModelRegistry().putObject(new ModelResourceLocation(ModBlocks.enderBuffer.getRegistryName(), "active=true,facing=north"), ModelEnderBuffer.INSTANCE);
+        event.getModelRegistry().putObject(new ModelResourceLocation(ModBlocks.enderBuffer.getRegistryName(), "inventory"), ModelEnderBuffer.INSTANCE);
         
         ModelCover.map.clear();
         event.getModelRegistry().putObject(new ModelResourceLocation("crystalmod:pipecover", "inventory"), ModelCover.INSTANCE);
@@ -154,111 +170,6 @@ public class ClientProxy extends CommonProxy {
 
 		return false;
 	}
-    
-    @SubscribeEvent
-    public void onRender(final RenderPlayerEvent.Pre event){
-    	if(event.getEntityPlayer() ==null)return;
-		try{
-			@SuppressWarnings("unchecked")
-			List<LayerRenderer<EntityLivingBase>> layers = (List<LayerRenderer<EntityLivingBase>>) ReflectionUtils.getPrivateValue(event.getRenderer(), RenderLivingBase.class, ObfuscatedNames.RenderLivingBase_layerRenderers);
-			for(LayerRenderer<EntityLivingBase> layer : layers){
-				if(layer instanceof LayerBipedArmor){
-					LayerBipedArmor armor = (LayerBipedArmor)layer;
-					ItemStack helmet = event.getEntityPlayer().getItemStackFromSlot(EntityEquipmentSlot.HEAD);
-					ModelBiped modelHelmet = armor.getModelFromSlot(EntityEquipmentSlot.HEAD);
-					ItemStack chest = event.getEntityPlayer().getItemStackFromSlot(EntityEquipmentSlot.CHEST);
-					ModelBiped modelChest = armor.getModelFromSlot(EntityEquipmentSlot.CHEST);
-					ItemStack legs = event.getEntityPlayer().getItemStackFromSlot(EntityEquipmentSlot.LEGS);
-					ModelBiped modelLegs = armor.getModelFromSlot(EntityEquipmentSlot.LEGS);
-					ItemStack boots = event.getEntityPlayer().getItemStackFromSlot(EntityEquipmentSlot.FEET);
-					ModelBiped modelBoots = armor.getModelFromSlot(EntityEquipmentSlot.FEET);
-					if(modelHelmet !=null){
-						if(helmet !=null && ItemNBTHelper.verifyExistance(helmet, "CrystalMod.InvisArmor")){
-							modelHelmet.bipedHead.isHidden = true;
-							modelHelmet.bipedHeadwear.isHidden = true;
-						}
-					}
-					if(modelChest !=null){
-						if(chest !=null && ItemNBTHelper.verifyExistance(chest, "CrystalMod.InvisArmor")){
-							modelChest.bipedBody.isHidden = true;
-							modelChest.bipedRightArm.isHidden = true;
-							modelChest.bipedLeftArm.isHidden = true;
-						}
-					}
-					if(modelLegs !=null){
-						if(legs !=null && ItemNBTHelper.verifyExistance(legs, "CrystalMod.InvisArmor")){
-							modelLegs.bipedBody.isHidden = true;
-							modelLegs.bipedLeftLeg.isHidden = true;
-							modelLegs.bipedRightLeg.isHidden = true;
-						}
-					}
-					if(modelBoots !=null){
-						if(boots !=null && ItemNBTHelper.verifyExistance(boots, "CrystalMod.InvisArmor")){
-							modelBoots.bipedLeftLeg.isHidden = true;
-							modelBoots.bipedRightLeg.isHidden = true;
-						}
-					}
-				}
-			}
-		}catch(Exception e){
-			e.printStackTrace();
-		}		
-    }
-    
-    @SubscribeEvent
-    public void renderSpecials(RenderPlayerEvent.Post event){
-
-    	try{
-    		@SuppressWarnings("unchecked")
-			List<LayerRenderer<EntityLivingBase>> layers = (List<LayerRenderer<EntityLivingBase>>) ReflectionUtils.getPrivateValue(event.getRenderer(), RenderLivingBase.class, ObfuscatedNames.RenderLivingBase_layerRenderers);
-			for(LayerRenderer<EntityLivingBase> layer : layers){
-				if(layer instanceof LayerBipedArmor){
-					LayerBipedArmor armor = (LayerBipedArmor)layer;
-					ItemStack helmet = event.getEntityPlayer().getItemStackFromSlot(EntityEquipmentSlot.HEAD);
-					ModelBiped modelHelmet = armor.getModelFromSlot(EntityEquipmentSlot.HEAD);
-					ItemStack chest = event.getEntityPlayer().getItemStackFromSlot(EntityEquipmentSlot.CHEST);
-					ModelBiped modelChest = armor.getModelFromSlot(EntityEquipmentSlot.CHEST);
-					ItemStack legs = event.getEntityPlayer().getItemStackFromSlot(EntityEquipmentSlot.LEGS);
-					ModelBiped modelLegs = armor.getModelFromSlot(EntityEquipmentSlot.LEGS);
-					ItemStack boots = event.getEntityPlayer().getItemStackFromSlot(EntityEquipmentSlot.FEET);
-					ModelBiped modelBoots = armor.getModelFromSlot(EntityEquipmentSlot.FEET);
-					if(modelHelmet !=null){
-						if(helmet !=null && ItemNBTHelper.verifyExistance(helmet, "CrystalMod.InvisArmor")){
-							modelHelmet.bipedHead.isHidden = false;
-							modelHelmet.bipedHeadwear.isHidden = false;
-						}
-					}
-					if(modelChest !=null){
-						if(chest !=null && ItemNBTHelper.verifyExistance(chest, "CrystalMod.InvisArmor")){
-							modelChest.bipedBody.isHidden = false;
-							modelChest.bipedRightArm.isHidden = false;
-							modelChest.bipedLeftArm.isHidden = false;
-						}
-					}
-					if(modelLegs !=null){
-						if(legs !=null && ItemNBTHelper.verifyExistance(legs, "CrystalMod.InvisArmor")){
-							modelLegs.bipedBody.isHidden = false;
-							modelLegs.bipedLeftLeg.isHidden = false;
-							modelLegs.bipedRightLeg.isHidden = false;
-						}
-					}
-					if(modelBoots !=null){
-						if(boots !=null && ItemNBTHelper.verifyExistance(boots, "CrystalMod.InvisArmor")){
-							modelBoots.bipedLeftLeg.isHidden = false;
-							modelBoots.bipedRightLeg.isHidden = false;
-						}
-					}
-				}
-			}
-		}catch(Exception e){
-			e.printStackTrace();
-		}
-    	
-    	//renderDragonWings(event.getEntityPlayer(), event.partialRenderTick);
-    	
-    	
-    	
-    }
     
     @SubscribeEvent
     public void onStitch(final TextureStitchEvent.Pre event) {
@@ -316,131 +227,6 @@ public class ClientProxy extends CommonProxy {
     
     public boolean isOp(GameProfile profile){
     	return getClientWorld().getWorldInfo().areCommandsAllowed();
-    }
-    
-    @SuppressWarnings("deprecation")
-	@SubscribeEvent
-    public void onRenderHand(RenderHandEvent event)
-    {
-    	boolean test = true;
-    	if(!test)return;
-    	
-    	EntityPlayer player = getClientPlayer();
-    	if(player == null)return;
-    	
-    	ExtendedPlayer extPlayer = ExtendedPlayerProvider.getExtendedPlayer(player);
-    	if(extPlayer == null)return;
-    	
-    	if(!extPlayer.hasFlag())return;
-    	
-    	GlStateManager.clear(256);
-    	GlStateManager.pushMatrix();
-    	GlStateManager.matrixMode(5889);
-        GlStateManager.loadIdentity();
-        //float f = 0.07F;
-        
-        
-        Entity entity = Minecraft.getMinecraft().getRenderViewEntity();
-        float fov = 70.0F;
-
-        IBlockState blockState = ActiveRenderInfo.getBlockStateAtEntityViewpoint(Minecraft.getMinecraft().theWorld, entity, event.getPartialTicks());
-
-        if (blockState.getBlock().getMaterial(blockState) == Material.WATER)
-        {
-        	fov = fov * 60.0F / 70.0F;
-        }
-
-        fov = net.minecraftforge.client.ForgeHooksClient.getFOVModifier(Minecraft.getMinecraft().entityRenderer, entity, blockState, event.getPartialTicks(), fov);
-        
-        Project.gluPerspective(fov, (float)Minecraft.getMinecraft().displayWidth / (float)Minecraft.getMinecraft().displayHeight, 0.05F, (float)(Minecraft.getMinecraft().gameSettings.renderDistanceChunks * 16) * 2.0F);
-        GlStateManager.matrixMode(5888);
-        GlStateManager.loadIdentity();
-
-        GlStateManager.pushMatrix();
-        if (Minecraft.getMinecraft().gameSettings.thirdPersonView == 0 && !Minecraft.getMinecraft().gameSettings.hideGUI && !Minecraft.getMinecraft().playerController.isSpectator())
-        {
-        	Minecraft.getMinecraft().entityRenderer.enableLightmap();
-            
-        	if(Minecraft.getMinecraft().gameSettings.viewBobbing){
-	        	if (Minecraft.getMinecraft().getRenderViewEntity() instanceof EntityPlayer)
-	            {
-	                EntityPlayer entityplayer = (EntityPlayer)Minecraft.getMinecraft().getRenderViewEntity();
-	                float f = entityplayer.distanceWalkedModified - entityplayer.prevDistanceWalkedModified;
-	                float f1 = -(entityplayer.distanceWalkedModified + f * event.getPartialTicks());
-	                float f2 = entityplayer.prevCameraYaw + (entityplayer.cameraYaw - entityplayer.prevCameraYaw) * event.getPartialTicks();
-	                float f3 = entityplayer.prevCameraPitch + (entityplayer.cameraPitch - entityplayer.prevCameraPitch) * event.getPartialTicks();
-	                GlStateManager.translate(MathHelper.sin(f1 * (float)Math.PI) * f2 * 0.5F, -Math.abs(MathHelper.cos(f1 * (float)Math.PI) * f2), 0.0F);
-	                GlStateManager.rotate(MathHelper.sin(f1 * (float)Math.PI) * f2 * 3.0F, 0.0F, 0.0F, 1.0F);
-	                GlStateManager.rotate(Math.abs(MathHelper.cos(f1 * (float)Math.PI - 0.2F) * f2) * 5.0F, 1.0F, 0.0F, 0.0F);
-	                GlStateManager.rotate(f3, 1.0F, 0.0F, 0.0F);
-	            }
-        	}
-        	
-        	AbstractClientPlayer abstractclientplayer = Minecraft.getMinecraft().thePlayer;
-            float fPitch = abstractclientplayer.prevRotationPitch + (abstractclientplayer.rotationPitch - abstractclientplayer.prevRotationPitch) * event.getPartialTicks();
-            float fYaw = abstractclientplayer.prevRotationYaw + (abstractclientplayer.rotationYaw - abstractclientplayer.prevRotationYaw) * event.getPartialTicks();
-            GlStateManager.pushMatrix();
-            GlStateManager.rotate(fPitch, 1.0F, 0.0F, 0.0F);
-            GlStateManager.rotate(fYaw, 0.0F, 1.0F, 0.0F);
-            RenderHelper.enableStandardItemLighting();
-            GlStateManager.popMatrix();
-            
-            int i = Minecraft.getMinecraft().theWorld.getCombinedLight(new BlockPos(abstractclientplayer.posX, abstractclientplayer.posY + (double)abstractclientplayer.getEyeHeight(), abstractclientplayer.posZ), 0);
-            float f = (float)(i & 65535);
-            float f1 = (float)(i >> 16);
-            OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, f, f1);
-            
-            EntityPlayerSP entityplayerspIn = (EntityPlayerSP)abstractclientplayer;
-            float f23 = entityplayerspIn.prevRenderArmPitch + (entityplayerspIn.renderArmPitch - entityplayerspIn.prevRenderArmPitch) * event.getPartialTicks();
-            float f24 = entityplayerspIn.prevRenderArmYaw + (entityplayerspIn.renderArmYaw - entityplayerspIn.prevRenderArmYaw) * event.getPartialTicks();
-            GlStateManager.rotate((entityplayerspIn.rotationPitch - f23) * 0.1F, 1.0F, 0.0F, 0.0F);
-            GlStateManager.rotate((entityplayerspIn.rotationYaw - f24) * 0.1F, 0.0F, 1.0F, 0.0F);
-            GlStateManager.enableRescaleNormal();
-            GlStateManager.pushMatrix();
-            GlStateManager.translate(-0.35f, -0.9, -0.5);
-            GlStateManager.rotate(-75.0F, 1.0F, 0.0F, 0.0F);
-            GlStateManager.rotate(-45.0F-85, 0.0F, 1.0F, 0.0F);
-            Minecraft.getMinecraft().getTextureManager().bindTexture(abstractclientplayer.getLocationSkin());
-            Render<AbstractClientPlayer> render = Minecraft.getMinecraft().getRenderManager().<AbstractClientPlayer>getEntityRenderObject(abstractclientplayer);
-            GlStateManager.disableCull();
-            RenderPlayer renderplayer = (RenderPlayer)render;
-            renderplayer.renderLeftArm(abstractclientplayer);
-            
-            
-            //FLAG
-            GlStateManager.pushMatrix();
-            GlStateManager.rotate(45, 0, 1, 1);
-            GlStateManager.translate(0.5, 0.5, 0.5);
-            GlStateManager.rotate(80, 0, 0, 1);
-            GlStateManager.rotate(85, 0, 1, 0);
-            GlStateManager.translate(-0.5, -0.5, -0.5);
-            
-            //FLAG RENDER
-            double height = 1.8;
-            GlStateManager.translate(0.3, -height/2, -0.1);
-            
-            AbstractClientPlayer entitylivingbaseIn = Minecraft.getMinecraft().thePlayer;
-            double d0 = entitylivingbaseIn.prevChasingPosX + (entitylivingbaseIn.chasingPosX - entitylivingbaseIn.prevChasingPosX) * (double)event.getPartialTicks() - (entitylivingbaseIn.prevPosX + (entitylivingbaseIn.posX - entitylivingbaseIn.prevPosX) * (double)event.getPartialTicks());
-            double d2 = entitylivingbaseIn.prevChasingPosZ + (entitylivingbaseIn.chasingPosZ - entitylivingbaseIn.prevChasingPosZ) * (double)event.getPartialTicks() - (entitylivingbaseIn.prevPosZ + (entitylivingbaseIn.posZ - entitylivingbaseIn.prevPosZ) * (double)event.getPartialTicks());
-            float fYaw2 = entitylivingbaseIn.prevRenderYawOffset + (entitylivingbaseIn.renderYawOffset - entitylivingbaseIn.prevRenderYawOffset) * event.getPartialTicks();
-            double d3 = (double)MathHelper.sin(fYaw2 * (float)Math.PI / 180.0F);
-            double d4 = (double)(-MathHelper.cos(fYaw2 * (float)Math.PI / 180.0F));
-            float f3 = (float)(d0 * d4 - d2 * d3) * (120.0F);
-            
-            float angle = -f3 / 2.0F;
-            TagManager.getInstance().renderFlag(extPlayer.getFlagColor(), angle);
-            GlStateManager.popMatrix();
-            //FLAG RENDER END
-            
-            GlStateManager.enableCull();
-        	GlStateManager.popMatrix();
-            GlStateManager.disableRescaleNormal();
-            RenderHelper.disableStandardItemLighting();
-            Minecraft.getMinecraft().entityRenderer.disableLightmap();
-        }
-
-        GlStateManager.popMatrix();
-        GlStateManager.popMatrix();
     }
     
     @SubscribeEvent

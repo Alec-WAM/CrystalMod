@@ -197,14 +197,14 @@ public class TileEntityPipeLiquid extends TileEntityPipe implements IInventoryCh
 	  }
 
 	  public boolean matchedFilter(FluidStack drained, EnumFacing conDir, boolean isInput) {
-		    if(drained == null || conDir == null) {
-		      return false;
-		    }
-		    FluidFilter filter = getFilter(conDir, isInput);
-		    if(filter == null || filter.isEmpty()) {
-		      return true;
-		    }
-		    return filter.matchesFilter(drained);
+	    if(drained == null || conDir == null) {
+	      return false;
+	    }
+	    FluidFilter filter = getFilter(conDir, isInput);
+	    if(filter == null || filter.isEmpty()) {
+	      return true;
+	    }
+	    return filter.matchesFilter(drained);
 	  }
 	  
 	  private void doExtract() {    

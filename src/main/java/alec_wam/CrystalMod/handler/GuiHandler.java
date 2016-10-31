@@ -1,5 +1,10 @@
 package alec_wam.CrystalMod.handler;
 
+import alec_wam.CrystalMod.asm.ObfuscatedNames;
+import alec_wam.CrystalMod.entities.accessories.ContainerHorseEnderChest;
+import alec_wam.CrystalMod.entities.accessories.GuiHorseEnderChest;
+import alec_wam.CrystalMod.entities.accessories.HorseAccessories;
+import alec_wam.CrystalMod.entities.minecarts.chests.EntityCrystalChestMinecartBase;
 import alec_wam.CrystalMod.entities.minions.warrior.ContainerMinionWarrior;
 import alec_wam.CrystalMod.entities.minions.warrior.EntityMinionWarrior;
 import alec_wam.CrystalMod.items.backpack.BackpackUtils;
@@ -94,8 +99,12 @@ import alec_wam.CrystalMod.tiles.weather.TileEntityWeather;
 import alec_wam.CrystalMod.tiles.workbench.ContainerCrystalWorkbench;
 import alec_wam.CrystalMod.tiles.workbench.GuiCrystalWorkbench;
 import alec_wam.CrystalMod.tiles.workbench.TileEntityCrystalWorkbench;
+import alec_wam.CrystalMod.util.ReflectionUtils;
+import net.minecraft.client.gui.inventory.GuiChest;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -124,6 +133,17 @@ public class GuiHandler implements IGuiHandler {
     			if(entity instanceof EntityMinionWarrior){
     				//EntityMinionWarrior warrior = (EntityMinionWarrior)entity;
     				if(y == 0){
+    				}
+    			}
+    			if(entity instanceof EntityCrystalChestMinecartBase){
+    				EntityCrystalChestMinecartBase minecart = (EntityCrystalChestMinecartBase)entity;
+    				return GUIChest.GUI.buildGUI(minecart.getChestType(), player.inventory, minecart);
+    			}
+    			if(entity instanceof EntityHorse){
+    				EntityHorse horse = (EntityHorse)entity;
+    				if(HorseAccessories.hasEnderChest(horse)){
+    					IInventory horseChest = (IInventory) ReflectionUtils.getPrivateValue(horse, EntityHorse.class, ObfuscatedNames.EntityHorse_horseChest);
+    					if(horseChest !=null)return new GuiHorseEnderChest(player.inventory, horseChest, horse);
     				}
     			}
     		}
@@ -249,6 +269,17 @@ public class GuiHandler implements IGuiHandler {
     				EntityMinionWarrior warrior = (EntityMinionWarrior)entity;
     				if(y == 0){
     					return new ContainerMinionWarrior(player, warrior);
+    				}
+    			}
+    			if(entity instanceof EntityCrystalChestMinecartBase){
+    				EntityCrystalChestMinecartBase minecart = (EntityCrystalChestMinecartBase)entity;
+    				return new ContainerCrystalChest(player.inventory, minecart, minecart.getChestType(), 0, 0);
+    			}
+    			if(entity instanceof EntityHorse){
+    				EntityHorse horse = (EntityHorse)entity;
+    				if(HorseAccessories.hasEnderChest(horse)){
+    					IInventory horseChest = (IInventory) ReflectionUtils.getPrivateValue(horse, EntityHorse.class, ObfuscatedNames.EntityHorse_horseChest);
+    					if(horseChest !=null)return new ContainerHorseEnderChest(player.inventory, horseChest, horse, player);
     				}
     			}
     		}
