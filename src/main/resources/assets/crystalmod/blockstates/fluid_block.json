@@ -11,37 +11,37 @@
             "custom": { "fluid": "crystal_blue" }
         }],
 		"moltencrystalblue": [{
-            "custom": { "fluid": "moltenCrystalBlue" }
+            "custom": { "fluid": "moltencrystalblue" }
         }],
         "crystal_red": [{
             "custom": { "fluid": "crystal_red" }
         }],
 		"moltencrystalred": [{
-            "custom": { "fluid": "moltenCrystalRed" }
+            "custom": { "fluid": "moltencrystalred" }
         }],
         "crystal_green": [{
             "custom": { "fluid": "crystal_green" }
         }],
 		"moltencrystalgreen": [{
-            "custom": { "fluid": "moltenCrystalGreen" }
+            "custom": { "fluid": "moltencrystalgreen" }
         }],
         "crystal_dark": [{
             "custom": { "fluid": "crystal_dark" }
         }],
 		"moltencrystaldark": [{
-            "custom": { "fluid": "moltenCrystalDark" }
+            "custom": { "fluid": "moltencrystaldark" }
         }],
         "crystal_pure": [{
             "custom": { "fluid": "crystal_pure" }
         }],
 		"moltencrystalpure": [{
-            "custom": { "fluid": "moltenCrystalPure" }
+            "custom": { "fluid": "moltencrystalpure" }
         }],
         "darkiron": [{
             "custom": { "fluid": "darkiron" }
         }],
 		"moltendarkiron": [{
-            "custom": { "fluid": "moltenDarkIron" }
+            "custom": { "fluid": "moltendarkiron" }
         }]
     }
 }
