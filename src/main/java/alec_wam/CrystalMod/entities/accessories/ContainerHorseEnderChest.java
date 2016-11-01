@@ -2,7 +2,9 @@ package alec_wam.CrystalMod.entities.accessories;
 
 import javax.annotation.Nullable;
 
+import alec_wam.CrystalMod.util.ModLogger;
 import net.minecraft.entity.passive.EntityHorse;
+import net.minecraft.entity.passive.HorseArmorType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.Container;
@@ -10,6 +12,8 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryEnderChest;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ContainerHorseEnderChest extends Container
 {
@@ -22,21 +26,19 @@ public class ContainerHorseEnderChest extends Container
         this.horseInventory = horseInventoryIn;
         this.enderchestInventory = player.getInventoryEnderChest();
         this.theHorse = horse;
+        
         int i = 3;
         horseInventoryIn.openInventory(player);
         int j = -18;
         this.addSlotToContainer(new Slot(horseInventoryIn, 0, 8, 18)
         {
-            /**
-             * Check if the stack is a valid item for this slot. Always true beside for the armor slots.
-             */
             public boolean isItemValid(@Nullable ItemStack stack)
             {
                 return super.isItemValid(stack) && stack.getItem() == Items.SADDLE && !this.getHasStack();
             }
         });
         
-        if (HorseAccessories.hasEnderChest(horse) && enderchestInventory !=null)
+        if (enderchestInventory !=null)
         {
             for (int k = 0; k < 3; ++k)
             {

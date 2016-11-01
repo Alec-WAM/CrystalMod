@@ -25,6 +25,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.AnimalChest;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
@@ -37,7 +38,10 @@ import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.asm.ObfuscatedNames;
 import alec_wam.CrystalMod.capability.ExtendedPlayer;
 import alec_wam.CrystalMod.capability.ExtendedPlayerProvider;
+import alec_wam.CrystalMod.entities.accessories.GuiHorseEnderChest;
 import alec_wam.CrystalMod.entities.accessories.HorseAccessories;
+import alec_wam.CrystalMod.network.CrystalModNetwork;
+import alec_wam.CrystalMod.network.packets.PacketGuiMessage;
 import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ReflectionUtils;
@@ -154,8 +158,12 @@ public class ClientEventHandler {
     		GuiScreenHorseInventory horseGui = (GuiScreenHorseInventory)gui;
     		EntityHorse horse = (EntityHorse)ReflectionUtils.getPrivateValue(horseGui, GuiScreenHorseInventory.class, ObfuscatedNames.GuiScreenHorseInventory_horseEntity);
     		if(horse !=null && HorseAccessories.hasEnderChest(horse)){
-    			BlockUtil.openWorksiteGui(Minecraft.getMinecraft().thePlayer, GuiHandler.GUI_ID_ENTITY, horse.getEntityId(), 0, 0);
-    			event.setCanceled(true);
+    			AnimalChest animalchest = new AnimalChest("HorseChest", 2);
+    			animalchest.setCustomName(horse.getName());
+    			event.setGui(new GuiHorseEnderChest(Minecraft.getMinecraft().thePlayer.inventory, animalchest, horse));
+    			PacketGuiMessage pkt = new PacketGuiMessage("Gui");
+    			pkt.setOpenGui(GuiHandler.GUI_ID_ENTITY, horse.getEntityId(), 0, 0);
+    			CrystalModNetwork.sendToServer(pkt);
     		}
     	}
     }

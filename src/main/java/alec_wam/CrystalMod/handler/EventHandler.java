@@ -11,6 +11,8 @@ import alec_wam.CrystalMod.entities.accessories.HorseAccessories;
 import alec_wam.CrystalMod.entities.minions.warrior.EntityMinionWarrior;
 import alec_wam.CrystalMod.items.ItemDragonWings;
 import alec_wam.CrystalMod.items.ModItems;
+import alec_wam.CrystalMod.network.CrystalModNetwork;
+import alec_wam.CrystalMod.network.packets.PacketEntityMessage;
 import alec_wam.CrystalMod.tiles.playercube.CubeManager;
 import alec_wam.CrystalMod.tiles.playercube.PlayerCube;
 import alec_wam.CrystalMod.tiles.playercube.TileEntityPlayerCubePortal;
@@ -48,6 +50,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
@@ -61,6 +64,7 @@ import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.ExplosionEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 
 public class EventHandler {
 
@@ -272,9 +276,19 @@ public class EventHandler {
     }
     
     @SubscribeEvent
+    public void entityJoin(EntityJoinWorldEvent event){
+    	Entity entity = event.getEntity();
+    	if(entity !=null && entity.worldObj !=null && !entity.worldObj.isRemote){
+	    	if(Util.hasCustomData(entity)){
+	    		CrystalModNetwork.sendToAllAround(new PacketEntityMessage(entity, "CustomDataSync"), entity);
+	    	}
+    	}
+    }
+    
+    @SubscribeEvent
     public void onEntityLivingInteract(EntityInteract event)
     {
-    	if(event.getEntityLiving() == null)return;
+    	if(event.getTarget() == null)return;
     	
     	EntityPlayer player = event.getEntityPlayer();
     	ItemStack held = event.getItemStack();

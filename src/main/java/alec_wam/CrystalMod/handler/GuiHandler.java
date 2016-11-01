@@ -104,6 +104,7 @@ import net.minecraft.client.gui.inventory.GuiChest;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.AnimalChest;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -142,8 +143,9 @@ public class GuiHandler implements IGuiHandler {
     			if(entity instanceof EntityHorse){
     				EntityHorse horse = (EntityHorse)entity;
     				if(HorseAccessories.hasEnderChest(horse)){
-    					IInventory horseChest = (IInventory) ReflectionUtils.getPrivateValue(horse, EntityHorse.class, ObfuscatedNames.EntityHorse_horseChest);
-    					if(horseChest !=null)return new GuiHorseEnderChest(player.inventory, horseChest, horse);
+    					AnimalChest horseChest = new AnimalChest("HorseChest", 2);//(IInventory) ReflectionUtils.getPrivateValue(horse, EntityHorse.class, ObfuscatedNames.EntityHorse_horseChest);
+    					horseChest.setCustomName(horse.getName());
+    					return new GuiHorseEnderChest(player.inventory, horseChest, horse);
     				}
     			}
     		}

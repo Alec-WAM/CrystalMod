@@ -47,8 +47,18 @@ public class GuiHorseEnderChest extends GuiContainer
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY)
     {
         this.fontRendererObj.drawString(this.horseInventory.getDisplayName().getUnformattedText(), 8, 6, 4210752);
-        if(this.enderChestInventory !=null)this.fontRendererObj.drawString(this.enderChestInventory.getDisplayName().getUnformattedText(), 8, 58, 4210752);
-        this.fontRendererObj.drawString(this.playerInventory.getDisplayName().getUnformattedText(), 8, this.ySize - 96 + 2, 4210752);
+        if(this.enderChestInventory !=null){
+        	GlStateManager.pushMatrix();
+        	GlStateManager.translate(8, 60, 0);
+        	GlStateManager.scale(0.7, 0.7, 0);
+        	this.fontRendererObj.drawString(this.enderChestInventory.getDisplayName().getUnformattedText(), 0, 0, 4210752);
+        	GlStateManager.popMatrix();
+        }
+        GlStateManager.pushMatrix();
+    	GlStateManager.translate(8, this.ySize - 96 + 4, 0);
+    	GlStateManager.scale(0.7, 0.7, 0);
+    	this.fontRendererObj.drawString(this.playerInventory.getDisplayName().getUnformattedText(), 0, 0, 4210752);
+    	GlStateManager.popMatrix();
     }
 
     /**

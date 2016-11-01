@@ -219,15 +219,17 @@ public class Util {
 		entityNBT.setTag(CrystalMod.MODID.toLowerCase(), nbt);
 	}
 	
-	public static NBTTagCompound getCustomEntityData(Entity entity, boolean create){
-		if(entity == null)return null;
-		NBTTagCompound nbt = entity.getEntityData();
-		if(!nbt.hasKey(CrystalMod.MODID.toLowerCase(), Constants.NBT.TAG_COMPOUND)){
-			if(!create)return null;
-			NBTTagCompound newNBT = new NBTTagCompound();
-			nbt.setTag(CrystalMod.MODID.toLowerCase(), newNBT);
+	public static boolean hasCustomData(Entity entity){
+		return entity != null && entity.getEntityData().hasKey(CrystalMod.MODID.toLowerCase()) && entity.getEntityData().getTag(CrystalMod.MODID.toLowerCase()) instanceof NBTTagCompound;
+	}
+	
+	public static NBTTagCompound getCustomEntityData(Entity entity){
+		if (hasCustomData(entity))
+		{
+			return entity.getEntityData().getCompoundTag(CrystalMod.MODID.toLowerCase());
 		}
-		return nbt.getCompoundTag(CrystalMod.MODID.toLowerCase());
+		
+		return new NBTTagCompound();
 	}
 	
 	

@@ -1,5 +1,7 @@
 package alec_wam.CrystalMod.entities.accessories;
 
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockChest;
 import net.minecraft.entity.passive.EntityHorse;
@@ -67,25 +69,30 @@ public class HorseAccessories {
     }
     
 	public static void onHorseDeath(EntityHorse horse) {
-		if(hasEnderChest(horse))horse.dropItem(Item.getItemFromBlock(Blocks.ENDER_CHEST), 1);
+		if(hasEnderChest(horse)){
+			horse.dropItem(Item.getItemFromBlock(Blocks.ENDER_CHEST), 1);
+		}
 	}
     
     public static boolean hasEnderChest(EntityHorse horse){
-    	NBTTagCompound nbt = Util.getCustomEntityData(horse, false);
-    	if(nbt == null)return false;
-    	boolean hasEnderChest = nbt.getBoolean(NBT_ACCESSORY_HORSE_ENDERCHEST);
-		return hasEnderChest;
+    	NBTTagCompound nbt = Util.getCustomEntityData(horse);
+    	return nbt.hasKey(NBT_ACCESSORY_HORSE_ENDERCHEST) && nbt.getBoolean(NBT_ACCESSORY_HORSE_ENDERCHEST);
     }
     
     public static void setHasEnderChest(EntityHorse horse, boolean value){
-    	NBTTagCompound nbt = Util.getCustomEntityData(horse, true);
+    	NBTTagCompound nbt = Util.getCustomEntityData(horse);
     	nbt.setBoolean(NBT_ACCESSORY_HORSE_ENDERCHEST, value);
+    	Util.setCustomEntityData(horse, nbt);
     }
     
     public static boolean addEnderChest(EntityHorse horse){
     	if(horse == null 
-		|| !(horse.getType() != null && horse.getType().canBeChested() && !horse.isChested() && horse.isAdultHorse()) 
+		|| !(horse.getType() != null && horse.getType().canBeChested() && horse.isAdultHorse()) 
 		|| hasEnderChest(horse)) return false;
+    	
+    	if(horse.isChested()){
+    		horse.dropChestItems();
+    	}
     	
     	setHasEnderChest(horse, true);
     	return true;
