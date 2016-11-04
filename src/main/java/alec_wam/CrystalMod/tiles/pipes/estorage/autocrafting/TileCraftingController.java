@@ -175,8 +175,6 @@ public class TileCraftingController extends TileEntityMod implements INetworkTil
 	public ICraftingTask createCraftingTask(ItemStack request, CraftingPattern pattern, int amt) {
 		return new BasicCraftingTask(request, pattern, amt);
 	}
-	
-
 
 	public void requestCraftingInfo(final EntityPlayerMP player, ItemStackData data, final int quantity){
 		if(network == null)return;

@@ -45,6 +45,8 @@ import alec_wam.CrystalMod.entities.minions.MinionType;
 import alec_wam.CrystalMod.items.ItemDragonWings;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.items.game.ItemFlag;
+import alec_wam.CrystalMod.items.tools.bat.ItemBat;
+import alec_wam.CrystalMod.items.tools.bat.ItemBatRenderer;
 import alec_wam.CrystalMod.tiles.spawner.EntityEssenceInstance;
 import alec_wam.CrystalMod.tiles.spawner.ItemMobEssence;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
@@ -137,6 +139,7 @@ public class BakedCustomItemModel extends DynamicItemAndBlockModel
     
 	private void doRender(TransformType type)
 	{
+		if(type == null)return;
 		if(stack != null)
 		{
 			Item item = stack.getItem();
@@ -147,6 +150,10 @@ public class BakedCustomItemModel extends DynamicItemAndBlockModel
 			
 			if(item instanceof ItemDragonWings){
 				renderWings(stack);
+			}
+			
+			if(item instanceof ItemBat){
+				ItemBatRenderer.render(stack, type);
 			}
 			
 			if(item instanceof ItemMinion){
@@ -463,17 +470,27 @@ public class BakedCustomItemModel extends DynamicItemAndBlockModel
         
 		Tessellator tessellator = Tessellator.getInstance();
 		VertexFormat prevFormat = null;
+		int prevMode = -1;
 		
 		if(RenderUtil.isDrawing(tessellator))
 		{
 			prevFormat = tessellator.getBuffer().getVertexFormat();
+			prevMode = tessellator.getBuffer().getDrawMode();
 			tessellator.draw();
 		}
 		
 		List<BakedQuad> generalQuads = new LinkedList<BakedQuad>();
 		
 		GlStateManager.pushMatrix();
-		GlStateManager.translate(0.5F, 0.5F, 0.5F);
+		doRender(prevTransform);
+		GlStateManager.enableLighting();
+        GlStateManager.enableLight(0);
+        GlStateManager.enableLight(1);
+        GlStateManager.enableColorMaterial();
+        GlStateManager.colorMaterial(1032, 5634); 
+        GlStateManager.enableCull();
+        Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+		/*GlStateManager.translate(0.5F, 0.5F, 0.5F);
 		GlStateManager.rotate(180, 0.0F, 1.0F, 0.0F);
     	doRender(prevTransform);
         GlStateManager.enableLighting();
@@ -482,13 +499,13 @@ public class BakedCustomItemModel extends DynamicItemAndBlockModel
         GlStateManager.enableColorMaterial();
         GlStateManager.colorMaterial(1032, 5634); 
         GlStateManager.enableCull();
-        Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+        Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);*/
     	GlStateManager.popMatrix();
     	
     	if(prevFormat != null)
     	{
     		net.minecraft.client.renderer.VertexBuffer worldrenderer = tessellator.getBuffer();
-	    	worldrenderer.begin(7, prevFormat);
+	    	worldrenderer.begin(prevMode, prevFormat);
     	}
 		
 		return generalQuads;

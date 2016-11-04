@@ -24,6 +24,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+import alec_wam.CrystalMod.api.ItemStackList;
 import alec_wam.CrystalMod.api.estorage.IAutoCrafter;
 import alec_wam.CrystalMod.api.estorage.ICraftingTask;
 import alec_wam.CrystalMod.api.estorage.IInsertListener;
@@ -453,18 +454,20 @@ public class EStorageNetwork extends AbstractPipeNetwork {
 		return patterns;
 	}
 
-	public boolean canCraft(ItemStack stack) {
-		return !getPattern(stack).isEmpty();
-	}
-
-	public List<CraftingPattern> getPattern(ItemStack pattern) {
+	public List<CraftingPattern> getPattern(ItemStack pattern, boolean ore) {
 		List<CraftingPattern> patterns = new ArrayList<CraftingPattern>();
 
 		for (CraftingPattern craftingPattern : getPatterns()) {
+			ItemStackList outputs = new ItemStackList();
 			for (ItemStack output : craftingPattern.getOutputs()) {
-				if (ItemUtil.canCombine(output, pattern)) {
-					patterns.add(craftingPattern);
+				if (output !=null) {
+					outputs.add(output);
 				}
+			}
+			
+			ItemStack out = outputs.get(pattern, ore);
+			if(out !=null && out.stackSize > 0){
+				patterns.add(craftingPattern);
 			}
 		}
 
@@ -472,7 +475,11 @@ public class EStorageNetwork extends AbstractPipeNetwork {
 	}
 
 	public CraftingPattern getPatternWithBestScore(ItemStack pattern) {
-		List<CraftingPattern> patterns = getPattern(pattern);
+		return getPatternWithBestScore(pattern, false);
+	}
+	
+	public CraftingPattern getPatternWithBestScore(ItemStack pattern, boolean ore) {
+		List<CraftingPattern> patterns = getPattern(pattern, ore);
 
 		if (patterns.isEmpty()) {
 			return null;
@@ -488,6 +495,10 @@ public class EStorageNetwork extends AbstractPipeNetwork {
 			for (ItemStack input : patterns.get(i).getInputs()) {
 				if(input != null){
 					ItemStackData stored = getItemStorage().getItemData(input);
+					
+					if(stored == null && ore){
+						stored = getItemStorage().getOreItemData(input);
+					}
 	
 					scores[i] += stored != null && stored.stack != null
 							&& !stored.isCrafting ? stored.stack.stackSize : 0;

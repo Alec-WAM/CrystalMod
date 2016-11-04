@@ -23,10 +23,14 @@ import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.BlockFaceUV;
 import net.minecraft.client.renderer.block.model.BlockPartFace;
 import net.minecraft.client.renderer.block.model.BlockPartRotation;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.block.model.ModelRotation;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Timer;
@@ -38,6 +42,8 @@ import net.minecraftforge.fluids.FluidTank;
 
 public class RenderUtil {
 
+	public static final ResourceLocation RES_ITEM_GLINT = new ResourceLocation("textures/misc/enchanted_item_glint.png");
+	
 	public static boolean isDrawing(Tessellator tess)
 	{
 		return isDrawing(tess.getBuffer());
@@ -622,6 +628,21 @@ public class RenderUtil {
 					.lightmap(light1, light2).endVertex();
 			break;
 		}
+	}
+
+	public static void renderItem(ItemStack itemStack, TransformType type) {
+		if(itemStack == null)return;
+		GlStateManager.pushMatrix();
+		Minecraft mc = Minecraft.getMinecraft();
+		
+
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+		//GlStateManager.disableLighting();
+		//RenderHelper.enableStandardItemLighting();
+		mc.getRenderItem().renderItem(itemStack, type);	
+		//RenderHelper.disableStandardItemLighting();
+		//GlStateManager.enableLighting();
+		GlStateManager.popMatrix();
 	}
 
 }

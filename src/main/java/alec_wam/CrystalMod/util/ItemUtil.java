@@ -1,6 +1,7 @@
 package alec_wam.CrystalMod.util;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -434,6 +435,24 @@ public class ItemUtil {
 		}
 	  }
 	  return false;
+  }
+  
+  public static List<ItemStack> getMatchingOreStacks(ItemStack stack){
+	  if(stack == null) return Lists.newArrayList();
+	  int[] ids = OreDictionary.getOreIDs(stack);
+	  if(ids == null || ids.length == 0){
+		  return Collections.singletonList(stack);
+	  }
+	  List<ItemStack> stacks = Lists.newArrayList();
+	  for(int id : ids){
+		  for(ItemStack oreStack : OreDictionary.getOres(OreDictionary.getOreName(id))){
+			  if(oreStack !=null && oreStack.stackSize == stack.stackSize){
+				  stacks.add(oreStack);
+			  }
+		  }
+	  }
+	  
+	  return stacks;
   }
   
   public static List<String> getOreNames(ItemStack stack){

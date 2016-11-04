@@ -16,6 +16,7 @@ import alec_wam.CrystalMod.network.packets.PacketEntityMessage;
 import alec_wam.CrystalMod.tiles.playercube.CubeManager;
 import alec_wam.CrystalMod.tiles.playercube.PlayerCube;
 import alec_wam.CrystalMod.tiles.playercube.TileEntityPlayerCubePortal;
+import alec_wam.CrystalMod.util.EntityUtil;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.ModLogger;
@@ -38,7 +39,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.inventory.InventoryEnderChest;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -46,7 +46,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
@@ -64,7 +63,6 @@ import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.ExplosionEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 
 public class EventHandler {
 
@@ -279,7 +277,7 @@ public class EventHandler {
     public void entityJoin(EntityJoinWorldEvent event){
     	Entity entity = event.getEntity();
     	if(entity !=null && entity.worldObj !=null && !entity.worldObj.isRemote){
-	    	if(Util.hasCustomData(entity)){
+	    	if(EntityUtil.hasCustomData(entity)){
 	    		CrystalModNetwork.sendToAllAround(new PacketEntityMessage(entity, "CustomDataSync"), entity);
 	    	}
     	}
@@ -402,7 +400,7 @@ public class EventHandler {
 	@SubscribeEvent(priority = EventPriority.LOW)
  	public void onPlayerInteract(PlayerInteractEvent event) {
  		if(event.getEntityPlayer() !=null && event.getWorld() !=null && event instanceof RightClickBlock){
- 			BlockPos pos = Util.getEntityLookedBlock(event.getEntityPlayer(), (float)CrystalMod.proxy.getReachDistanceForPlayer(event.getEntityPlayer()));
+ 			BlockPos pos = EntityUtil.getEntityLookedBlock(event.getEntityPlayer(), (float)CrystalMod.proxy.getReachDistanceForPlayer(event.getEntityPlayer()));
  			if(pos !=null){
  				if(event.getWorld().isBlockLoaded(pos)){
  					IBlockState state = event.getWorld().getBlockState(pos);
@@ -435,7 +433,6 @@ public class EventHandler {
  	}
 	
 	@SubscribeEvent
-    @SuppressWarnings("unused")
     public void addEntityCapabilities(AttachCapabilitiesEvent.Entity event) {
         if(event.getEntity() instanceof EntityPlayer) {
         	if(!event.getCapabilities().containsKey(ExtendedPlayerProvider.KEY))	{
@@ -447,7 +444,6 @@ public class EventHandler {
     }
 	
 	@SubscribeEvent
-    @SuppressWarnings("unused")
     public void onPlayerClone(PlayerEvent.Clone event) {
         EntityPlayer oldPlayer = event.getOriginal();
         EntityPlayer newPlayer = event.getEntityPlayer();

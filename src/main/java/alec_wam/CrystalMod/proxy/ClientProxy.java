@@ -12,6 +12,7 @@ import alec_wam.CrystalMod.blocks.glass.BlockCrystalGlass.GlassType;
 import alec_wam.CrystalMod.capability.ExtendedPlayer;
 import alec_wam.CrystalMod.capability.ExtendedPlayerProvider;
 import alec_wam.CrystalMod.client.model.BakedCustomItemModel;
+import alec_wam.CrystalMod.client.model.CustomItemModelFactory;
 import alec_wam.CrystalMod.client.model.LayerDragonWings;
 import alec_wam.CrystalMod.client.model.LayerHorseAccessories;
 import alec_wam.CrystalMod.entities.ModEntites;
@@ -149,9 +150,7 @@ public class ClientProxy extends CommonProxy {
 	        
 	        if(obj instanceof IBakedModel)
 	        {
-	        	event.getModelRegistry().putObject(model, new BakedCustomItemModel((IBakedModel)obj));
-	        }else{
-	        	event.getModelRegistry().putObject(model, new BakedCustomItemModel(null));
+	        	event.getModelRegistry().putObject(model, new CustomItemModelFactory((IBakedModel)obj));
 	        }
 		}
     }

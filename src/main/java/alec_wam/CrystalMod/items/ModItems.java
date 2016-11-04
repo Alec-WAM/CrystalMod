@@ -24,6 +24,7 @@ import alec_wam.CrystalMod.items.tools.ItemCustomAxe;
 import alec_wam.CrystalMod.items.tools.ItemCustomPickaxe;
 import alec_wam.CrystalMod.items.tools.ItemDarkIronBow;
 import alec_wam.CrystalMod.items.tools.ItemToolParts;
+import alec_wam.CrystalMod.items.tools.bat.ItemBat;
 import alec_wam.CrystalMod.tiles.machine.elevator.ItemMiscCard;
 import alec_wam.CrystalMod.tiles.machine.worksite.ItemWorksiteUpgrade;
 import alec_wam.CrystalMod.tiles.pipes.attachments.ItemPipeAttachment;
@@ -87,6 +88,7 @@ public class ModItems {
 	public static ItemPickaxe darkIronPickaxe;
 	public static ItemSword darkIronSword;
 	public static ItemDarkIronBow darkIronBow;
+	public static ItemBat bat;
 	
 	public static ItemCrystalChestMinecart chestMinecart;
 	
@@ -141,6 +143,8 @@ public class ModItems {
 		darkIronPickaxe = registerItem(new ItemCustomPickaxe(ToolMaterialDarkIron), "darkIronPickaxe");
 		darkIronSword = (ItemSword) registerItem(new ItemSword(ToolMaterialDarkIron), "darkIronSword").setCreativeTab(CrystalMod.tabTools);
 		darkIronBow = new ItemDarkIronBow();
+		
+		bat = new ItemBat();
 		
 		chestMinecart = new ItemCrystalChestMinecart();
 		

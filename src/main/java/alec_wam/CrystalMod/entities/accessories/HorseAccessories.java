@@ -1,7 +1,5 @@
 package alec_wam.CrystalMod.entities.accessories;
 
-import java.util.List;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockChest;
 import net.minecraft.entity.passive.EntityHorse;
@@ -11,8 +9,7 @@ import net.minecraft.inventory.InventoryEnderChest;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import alec_wam.CrystalMod.util.ModLogger;
-import alec_wam.CrystalMod.util.Util;
+import alec_wam.CrystalMod.util.EntityUtil;
 
 public class HorseAccessories {
     public static String NBT_ACCESSORY_HORSE_ENDERCHEST = "EnderChest";
@@ -75,14 +72,14 @@ public class HorseAccessories {
 	}
     
     public static boolean hasEnderChest(EntityHorse horse){
-    	NBTTagCompound nbt = Util.getCustomEntityData(horse);
+    	NBTTagCompound nbt = EntityUtil.getCustomEntityData(horse);
     	return nbt.hasKey(NBT_ACCESSORY_HORSE_ENDERCHEST) && nbt.getBoolean(NBT_ACCESSORY_HORSE_ENDERCHEST);
     }
     
     public static void setHasEnderChest(EntityHorse horse, boolean value){
-    	NBTTagCompound nbt = Util.getCustomEntityData(horse);
+    	NBTTagCompound nbt = EntityUtil.getCustomEntityData(horse);
     	nbt.setBoolean(NBT_ACCESSORY_HORSE_ENDERCHEST, value);
-    	Util.setCustomEntityData(horse, nbt);
+    	EntityUtil.setCustomEntityData(horse, nbt);
     }
     
     public static boolean addEnderChest(EntityHorse horse){

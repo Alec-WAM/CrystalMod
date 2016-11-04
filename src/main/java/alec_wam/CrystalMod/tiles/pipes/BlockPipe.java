@@ -19,6 +19,7 @@ import alec_wam.CrystalMod.tiles.pipes.liquid.TileEntityPipeLiquid;
 import alec_wam.CrystalMod.tiles.pipes.power.cu.TileEntityPipePowerCU;
 import alec_wam.CrystalMod.tiles.pipes.power.rf.TileEntityPipePowerRF;
 import alec_wam.CrystalMod.util.BlockUtil;
+import alec_wam.CrystalMod.util.EntityUtil;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.ModLogger;
@@ -733,7 +734,7 @@ public class BlockPipe extends EnumBlock<BlockPipe.PipeType> implements ICustomM
           }
         }
 
-        RaytraceResult hit = RaytraceResult.getClosestHit(Util.getEyePosition(player), results);
+        RaytraceResult hit = RaytraceResult.getClosestHit(EntityUtil.getEyePosition(player), results);
           if (hit != null && hit.component != null && hit.component.bound != null) {
             minBB = hit.component.bound;
           }else{
@@ -785,7 +786,7 @@ public class BlockPipe extends EnumBlock<BlockPipe.PipeType> implements ICustomM
         if (allHits == null) {
           return null;
         }
-        Vec3d origin = Util.getEyePosition(entityPlayer);
+        Vec3d origin = EntityUtil.getEyePosition(entityPlayer);
         return RaytraceResult.getClosestHit(origin, allHits);
       }
 
@@ -799,7 +800,7 @@ public class BlockPipe extends EnumBlock<BlockPipe.PipeType> implements ICustomM
 
         double reachDistance = CrystalMod.proxy.getReachDistanceForPlayer(entityPlayer);
 
-        Vec3d origin = Util.getEyePosition(entityPlayer);
+        Vec3d origin = EntityUtil.getEyePosition(entityPlayer);
         Vec3d direction = origin.addVector(dirX * reachDistance, dirY * reachDistance, dirZ * reachDistance);
         return doRayTraceAll(world, x, y, z, origin, direction, entityPlayer);
       }

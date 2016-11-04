@@ -18,6 +18,7 @@ import alec_wam.CrystalMod.handler.EventHandler;
 import alec_wam.CrystalMod.integration.TConstructIntegration;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.items.guide.GuidePages;
+import alec_wam.CrystalMod.items.tools.bat.ModBats;
 import alec_wam.CrystalMod.tiles.machine.worksite.WorksiteChunkLoader;
 import alec_wam.CrystalMod.tiles.matter.MatterRegistry;
 import alec_wam.CrystalMod.tiles.pipes.PipeNetworkTickHandler;
@@ -74,6 +75,9 @@ public class CommonProxy {
         MatterRegistry.init();
         
         ItemMobEssence.initDefaultMobs();
+        
+        ModBats.registerBats();
+        ModBats.registerUpgrades();
         
         
         CapabilityManager.INSTANCE.register(ExtendedPlayer.class, new ExtendedPlayerProvider.Storage(), ExtendedPlayer.class);

@@ -14,6 +14,7 @@ import alec_wam.CrystalMod.tiles.pipes.covers.CoverUtil.CoverData;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
@@ -113,6 +114,10 @@ public class CrystalMod {
 	
 	public static String prefix(String name) {
 		return String.format("%s.%s", CrystalMod.MODID.toLowerCase(Locale.US), name);
+	}
+
+	public static ResourceLocation resourceL(String string) {
+		return new ResourceLocation(resource(string));
 	}
 	
 }

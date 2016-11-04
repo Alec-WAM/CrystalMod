@@ -5,10 +5,14 @@ import java.util.List;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
+import com.google.common.collect.Lists;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -100,6 +104,28 @@ public class EntityUtil {
 		return entitiesAroundMe;
 	}
     
+	public static List<EntityLivingBase> attackEntitiesInArea(World world, List<EntityLivingBase> targets, DamageSource damageSource, float damage, boolean attackMobs){
+		List<EntityLivingBase> attacked = Lists.newArrayList();
+		for(Object obj : targets){
+        	if(obj instanceof EntityLivingBase){
+        		EntityLivingBase atEntity = (EntityLivingBase) obj;
+        		
+        		boolean isMob = attackMobs;
+        		
+        		if(atEntity instanceof IMob){
+        			if(!isMob)continue;
+        		} else if(isMob) {
+        			continue;
+        		}
+        		
+        		if(damageSource == null || atEntity.attackEntityFrom(damageSource, damage)){
+        			attacked.add(atEntity);
+        		}
+        	}
+        }
+		return attacked;
+	}
+	
 	public static void setCustomEntityData(Entity entity, NBTTagCompound nbt){
 		if(entity == null)return;
 		NBTTagCompound entityNBT = entity.getEntityData();

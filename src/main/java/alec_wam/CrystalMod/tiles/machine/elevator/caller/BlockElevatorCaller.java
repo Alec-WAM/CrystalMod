@@ -23,8 +23,8 @@ import alec_wam.CrystalMod.tiles.machine.elevator.TileEntityElevator;
 import alec_wam.CrystalMod.tiles.machine.elevator.caller.TileEntityElevatorCaller.ElevatorButton;
 import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.ChatUtil;
+import alec_wam.CrystalMod.util.EntityUtil;
 import alec_wam.CrystalMod.util.ModLogger;
-import alec_wam.CrystalMod.util.Util;
 
 public class BlockElevatorCaller extends BlockContainer {
 
@@ -131,7 +131,7 @@ public class BlockElevatorCaller extends BlockContainer {
     			BlockUtil.markBlockForUpdate(worldIn, pos);
     			return true;
     		}
-        	RayTraceResult mop = Util.getEntityLookedObject(playerIn);
+        	RayTraceResult mop = EntityUtil.getEntityLookedObject(playerIn);
             if(mop != null && mop.subHit >= 0) {
             	if(!worldIn.isRemote){
                 	ModLogger.info(""+mop.subHit);

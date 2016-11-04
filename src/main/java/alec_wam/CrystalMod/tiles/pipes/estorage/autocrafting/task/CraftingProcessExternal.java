@@ -13,6 +13,7 @@ import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
+import alec_wam.CrystalMod.api.FluidStackList;
 import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetwork;
 import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage;
 import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage.ItemStackData;
@@ -31,6 +32,32 @@ public class CraftingProcessExternal extends CraftingProcessBase {
 		super(network, pattern);
 	}
 
+    @Override
+    public boolean canStartProcessing(ItemStorage items, FluidStackList fluids) {
+    	IItemHandler inventory = getPattern().getCrafter().getFacingInventory();
+        if (inventory != null) {
+            for (ItemStack stack : getToInsert()) {
+                ItemStack actualStack = null;//items.get(stack, pattern.isOredict());
+
+                ItemStackData found = items.getItemData(stack);
+                if(found == null && pattern.isOredict()){
+                	found = items.getOreItemData(stack);
+                }
+                
+                if(found !=null && found.stack !=null){
+                	actualStack = found.stack.copy();
+                }
+                
+                boolean canInsert = ItemHandlerHelper.insertItem(inventory, ItemHandlerHelper.copyStackWithSize(actualStack, stack.stackSize), true) == null;
+                if (actualStack == null || actualStack.stackSize == 0 || !items.removeCheck(actualStack, stack.stackSize, ItemStorage.getExtractFilter(pattern.isOredict()), true) || !canInsert) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+    
 	@Override
 	public void update(Deque<ItemStack> toInsertItems, Deque<FluidStack> toInsertFluids) {
 		 IItemHandler inventory = getPattern().getCrafter().getFacingInventory();

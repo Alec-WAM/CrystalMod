@@ -6,7 +6,7 @@ import alec_wam.CrystalMod.entities.minions.MinionConstants;
 import alec_wam.CrystalMod.entities.minions.ai.MinionAIBase;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.packets.PacketEntityMessage;
-import alec_wam.CrystalMod.util.Util;
+import alec_wam.CrystalMod.util.EntityUtil;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
@@ -122,7 +122,7 @@ public class MinionAICombat extends MinionAIBase<EntityMinionWarrior>
 		//If we have a target, proceed to attack.
 		else if (attackTarget != null)
 		{
-			double distanceToTarget = Util.getDistanceToEntity(minion, attackTarget);
+			double distanceToTarget = EntityUtil.getDistanceToEntity(minion, attackTarget);
 			
 			//Melee attacks
 			if (getMethodBehavior() == EnumCombatBehaviors.METHOD_MELEE_ONLY || 
@@ -354,7 +354,7 @@ public class MinionAICombat extends MinionAIBase<EntityMinionWarrior>
 
 	private void findAttackTarget(EntityMinionWarrior minion)
 	{
-		List<Entity> entitiesAroundMe = Util.getAllEntitiesWithinDistanceOfCoordinates(minion.worldObj, minion.posX, minion.posY, minion.posZ, 10);
+		List<Entity> entitiesAroundMe = EntityUtil.getAllEntitiesWithinDistanceOfCoordinates(minion.worldObj, minion.posX, minion.posY, minion.posZ, 10);
 		double distance = 100.0D;
 		EntityLivingBase target = null;
 
@@ -363,11 +363,11 @@ public class MinionAICombat extends MinionAIBase<EntityMinionWarrior>
 			if (entity instanceof EntityLivingBase)
 			{
 				EntityLivingBase livingBase = (EntityLivingBase)entity;
-				double distanceTo = Util.getDistanceToEntity(minion, livingBase);
+				double distanceTo = EntityUtil.getDistanceToEntity(minion, livingBase);
 
 				if (isEntityValidToAttack(minion, livingBase) && distanceTo < distance && minion.getEntitySenses().canSee(livingBase))
 				{
-					distance = Util.getDistanceToEntity(minion, livingBase);
+					distance = EntityUtil.getDistanceToEntity(minion, livingBase);
 					target = livingBase;
 				}
 			}

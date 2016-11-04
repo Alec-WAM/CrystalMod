@@ -108,6 +108,20 @@ public abstract class CraftingProcessBase{
         return false;
     }
 
+    private Integer getSatisfied(ItemStack stack){
+    	for (int i = 0; i < pattern.getOutputs().size(); ++i) {
+        	Integer rec = satisfied.get(i);
+        	if (rec == null) {
+                 rec = 0;
+            }
+        	ItemStack item = pattern.getOutputs().get(i);
+            if (pattern.isOredict() ? ItemUtil.stackMatchUseOre(stack, item) : ItemUtil.canCombine(stack, item)) {
+            	 return rec;
+            }
+        }
+    	return null;
+    }
+    
     public boolean onReceiveOutput(ItemStack stack) {
     	
         for (int i = 0; i < pattern.getOutputs().size(); ++i) {
@@ -148,4 +162,9 @@ public abstract class CraftingProcessBase{
         tag.setBoolean(NBT_STARTED, started);
         return tag;
     }
+
+	public int getReceivedOutput(ItemStack requested) {
+		Integer rec = getSatisfied(requested);
+		return rec == null ? 0 : rec;
+	}
 }

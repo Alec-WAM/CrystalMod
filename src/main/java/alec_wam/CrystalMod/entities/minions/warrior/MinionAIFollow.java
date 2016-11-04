@@ -11,7 +11,7 @@ import net.minecraft.util.math.BlockPos;
 import alec_wam.CrystalMod.entities.minions.EnumMovementState;
 import alec_wam.CrystalMod.entities.minions.MinionConstants;
 import alec_wam.CrystalMod.entities.minions.ai.MinionAIBase;
-import alec_wam.CrystalMod.util.Util;
+import alec_wam.CrystalMod.util.EntityUtil;
 
 public class MinionAIFollow extends MinionAIBase<EntityMinionWarrior> {
 
@@ -63,7 +63,7 @@ public class MinionAIFollow extends MinionAIBase<EntityMinionWarrior> {
 			{
 				entityPathController.getLookHelper().setLookPositionWithEntity(entityPlayer, 10.0F, minion.getVerticalFaceSpeed());
 				
-				final double distanceToPlayer = Util.getDistanceToEntity(minion, entityPlayer);
+				final double distanceToPlayer = EntityUtil.getDistanceToEntity(minion, entityPlayer);
 
 				//Crash was reported where bounding box ended up being null.
 				if (distanceToPlayer >= 10.0D && entityPlayer.getEntityBoundingBox() != null)

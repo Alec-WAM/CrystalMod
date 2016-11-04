@@ -12,6 +12,7 @@ import net.minecraft.world.World;
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.network.AbstractPacketThreadsafe;
 import alec_wam.CrystalMod.network.IMessageHandler;
+import alec_wam.CrystalMod.util.EntityUtil;
 import alec_wam.CrystalMod.util.Util;
 
 public class PacketEntityMessage extends AbstractPacketThreadsafe {
@@ -69,7 +70,7 @@ public class PacketEntityMessage extends AbstractPacketThreadsafe {
 		Entity entity = world.getEntityByID(id);
 		if(entity !=null){
 			if(type.equalsIgnoreCase("CustomDataSync")){
-				Util.setCustomEntityData(entity, data);
+				EntityUtil.setCustomEntityData(entity, data);
 			}
 			if(entity instanceof IMessageHandler){
 				((IMessageHandler)entity).handleMessage(type, data, client);

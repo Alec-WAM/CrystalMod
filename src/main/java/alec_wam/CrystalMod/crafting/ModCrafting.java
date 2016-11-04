@@ -18,6 +18,8 @@ import alec_wam.CrystalMod.items.ItemIngot.IngotType;
 import alec_wam.CrystalMod.items.ItemMetalPlate.PlateType;
 import alec_wam.CrystalMod.items.guide.ItemCrystalGuide.GuideType;
 import alec_wam.CrystalMod.items.tools.ItemToolParts.PartType;
+import alec_wam.CrystalMod.items.tools.bat.BatHelper;
+import alec_wam.CrystalMod.items.tools.bat.RecipeBatUpgrade;
 import alec_wam.CrystalMod.tiles.cauldron.CauldronRecipeManager;
 import alec_wam.CrystalMod.tiles.chest.CrystalChestType;
 import alec_wam.CrystalMod.tiles.machine.crafting.BlockCrystalMachine.MachineType;
@@ -65,6 +67,8 @@ public class ModCrafting {
 		initOreDic();
 		
 		GameRegistry.addRecipe(new UpgradeItemRecipe());
+		GameRegistry.addRecipe(new RecipeBatUpgrade());
+		BatHelper.addBatCrafting();
 		
 		ItemStack blueCrystal = new ItemStack(ModItems.crystals, 1, CrystalType.BLUE.getMetadata());
 		ItemStack blueIngot = new ItemStack(ModItems.ingots, 1, IngotType.BLUE.getMetadata());

@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -21,6 +22,7 @@ import alec_wam.CrystalMod.api.FluidStackList;
 import alec_wam.CrystalMod.api.ItemStackList;
 import alec_wam.CrystalMod.api.estorage.ICraftingTask;
 import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetwork;
+import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage;
 import alec_wam.CrystalMod.tiles.pipes.estorage.FluidStorage.FluidStackData;
 import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage.ItemStackData;
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.CraftingPattern;
@@ -75,6 +77,16 @@ public class BasicCraftingTask implements ICraftingTask {
     public boolean update(final EStorageNetwork controller) {
         updatedOnce = true;
     	
+        if (!this.missing.isEmpty()) {
+            for (ItemStack missing : this.missing) {
+                if (!controller.getItemStorage().removeCheck(missing, missing.stackSize, ItemStorage.getExtractFilter(pattern.isOredict()), true)) {
+                     return false;
+                }
+            }
+            reschedule(controller);
+            return false;
+        }
+        
     	for (FluidStack stack : toTakeFluid) {
     		if(stack.amount <=0)continue;
             FluidStack stackExtracted = controller.getFluidStorage().removeFluid(stack, false);
@@ -92,7 +104,7 @@ public class BasicCraftingTask implements ICraftingTask {
     	}
     	
     	for (CraftingProcessBase process : toProcess) {
-            if (!process.started && process.canStartProcessing(controller.getItemStorage(), fluidsTook) && canProcess(controller, process)) {
+            if (!process.started && process.canStartProcessing(controller.getItemStorage(), fluidsTook)) {
             	process.started = true;
             	process.update(toInsertItems, toInsertFluids);
             }
@@ -119,45 +131,6 @@ public class BasicCraftingTask implements ICraftingTask {
     	return isFinished();
     }
     
-    private boolean canProcess(EStorageNetwork network, CraftingProcessBase process) {
-    	if(network == null || network.craftingController == null)return false;
-    	if(process.getPattern().isProcessing()){
-	        for (ICraftingTask otherTask : network.craftingController.getCraftingTasks()) {
-	            for (CraftingProcessBase otherProcess : otherTask.getToProcess()) {
-	            	if(otherProcess.getPattern().isProcessing()){
-		                if (otherProcess != process && !otherProcess.hasReceivedOutputs() && otherProcess.started && otherProcess.getPattern().getCrafter().getFacingInventory() !=null) {
-		                    if(otherProcess.getPattern().getCrafter().getPos().equals(process.getPattern().getCrafter().getPos())){
-			                	if (!isPatternsEqual(process.getPattern(), otherProcess.getPattern())) {
-			                        return false;
-			                    }	else {
-			                    	for (ItemStack toInsert : process.getToInsert()) {
-                                        if (ItemHandlerHelper.insertItem(process.getPattern().getCrafter().getFacingInventory(), toInsert, true) != null) {
-                                            return false;
-                                        }
-                                    }
-			                    }
-		                    }
-		                }
-	            	}
-	            }
-	        }
-    	}
-        return true;
-    }
-    
-    private boolean isPatternsEqual(CraftingPattern left, CraftingPattern right) {
-        for (int i = 0; i < 9; ++i) {
-            ItemStack leftStack = left.getInputs().get(i);
-            ItemStack rightStack = right.getInputs().get(i);
-
-            if (!ItemUtil.canCombine(leftStack, rightStack)) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-    
     public void calculate(EStorageNetwork network) {
     	ItemStackList insertList = new ItemStackList();
     	ItemStackList networkList = new ItemStackList();
@@ -165,10 +138,13 @@ public class BasicCraftingTask implements ICraftingTask {
     		if(data.stack !=null && data.getAmount() > 0)
     		networkList.add(data.stack.copy());
     	}
+    	
+    	ItemStack requested = this.requested != null ? this.requested : pattern.getOutputs().get(0);
+    	
     	int newQuantity = quantity;
        	while (newQuantity > 0 && !recursiveFind) {
             calculate(network, networkList, pattern, insertList);
-            newQuantity -= pattern.getQuantityPerRequest(requested);
+            newQuantity -= pattern.getQuantityPerRequest(requested, pattern.isOredict());
        	}
        	usedPatterns.clear();
     }
@@ -178,17 +154,35 @@ public class BasicCraftingTask implements ICraftingTask {
         if (recursiveFind) {
             return;
         }
-    	
-    	ItemStack[] took = new ItemStack[9];
 
         List<ItemStack> inputs = Lists.newArrayList();
         
-        for (ItemStack input : pattern.getInputs()) {
-            if (input != null) {
-                inputs.add(input.copy());
-            }
-        }
+        List<ItemStack> usedStacks = new LinkedList<ItemStack>();
         ItemStackList actualInputs = new ItemStackList();
+        
+        for (List<ItemStack> oreInputs : pattern.getOreInputs()) {
+        	 boolean added = false;
+        	 for (ItemStack input : oreInputs) {
+        		 
+        		 ItemStackData data = network.getItemStorage().getItemData(input);
+        		 
+        		 if(data !=null){
+        			 usedStacks.add(input.copy());
+        			 inputs.add(input.copy());
+        			 added = true;
+        			 break;
+        		 }
+        		 if (!added) {
+        			 ItemStack choice = null;
+        			 if (!oreInputs.isEmpty()) {
+        				 choice = oreInputs.get(0);
+        				 inputs.add(choice);
+        			 }
+        			 usedStacks.add(choice);
+        		 }
+        	 }
+        }
+        
         for (int i = 0; i < inputs.size(); i++) {
         	ItemStack input = inputs.get(i);
             if(input == null)continue;
@@ -213,15 +207,17 @@ public class BasicCraftingTask implements ICraftingTask {
                     input.stackSize -= takeQuantity;
                     networkList.remove(inputStack, true);
                 } else {
-                	CraftingPattern inputPattern = network.getPatternWithBestScore(input);
+                	CraftingPattern inputPattern = network.getPatternWithBestScore(input, pattern.isOredict());
 
                     if (inputPattern != null) {
-                    	int craftQuantity = Math.min(inputPattern.getQuantityPerRequest(input), input.stackSize);
-                        ItemStack inputCrafted = ItemHandlerHelper.copyStackWithSize(input, craftQuantity);
+                    	ItemStack actualCraft = inputPattern.getActualOutput(input, pattern.isOredict());
+                    	int craftQuantity = Math.min(inputPattern.getQuantityPerRequest(input, pattern.isOredict()), input.stackSize);
+                        ItemStack inputCrafted = ItemHandlerHelper.copyStackWithSize(actualCraft, craftQuantity);
                         actualInputs.add(inputCrafted.copy());
                         calculate(network, networkList, inputPattern, insertList);
                         input.stackSize -= craftQuantity;
-                        insertList.remove(inputCrafted, true);
+                        ItemStack inserted = insertList.get(inputCrafted, pattern.isOredict());
+                        insertList.remove(inserted, craftQuantity, true);
                     } else if (doFluidCalculation(network, networkList, input, insertList)) {
                     	actualInputs.add(ItemHandlerHelper.copyStackWithSize(input, 1));
                         input.stackSize -= 1;
@@ -236,29 +232,30 @@ public class BasicCraftingTask implements ICraftingTask {
         if (pattern.isProcessing()) {
             toProcess.add(new CraftingProcessExternal(network, pattern));
         }else {
-        	toProcess.add(new CraftingProcessNormal(network, pattern));
+        	toProcess.add(new CraftingProcessNormal(network, pattern, usedStacks));
         }
         
+        ItemStack[] took = new ItemStack[9];
         if (missing.isEmpty()) {
-            for (int i = 0; i < pattern.getInputs().size(); i++) {
-                ItemStack input = pattern.getInputs().get(i);
-                if (input != null) {
-                    ItemStack actualInput = actualInputs.get(input, pattern.isOredict());
-                    ItemStack taken = ItemHandlerHelper.copyStackWithSize(actualInput, input.stackSize);
-                    took[i] = taken;
-                    actualInputs.remove(taken, true);
-                }
-            }
-        }
+        	if (!pattern.isProcessing()) {
+	            for (int i = 0; i < usedStacks.size(); i++) {
+	                ItemStack input = usedStacks.get(i);
+	                if (input != null) {
+	                    ItemStack actualInput = actualInputs.get(input, pattern.isOredict());
+	                    ItemStack taken = ItemHandlerHelper.copyStackWithSize(actualInput, input.stackSize);
+	                    took[i] = taken;
+	                    actualInputs.remove(taken, true);
+	                }
+	            }
+        	}
+    	}
         
-        if (!pattern.isProcessing()) {
-            for (ItemStack byproduct : (pattern.isOredict() && missing.isEmpty() ? pattern.getByproducts(took) : pattern.getByproducts())) {
-            	if(byproduct !=null)insertList.add(byproduct.copy());
-            }
+        for (ItemStack byproduct : (!pattern.isProcessing() && pattern.isOredict() && missing.isEmpty() ? pattern.getByproducts(took) : pattern.getByproducts())) {
+        	if(byproduct !=null)insertList.add(byproduct.copy());
+        }
 
-            for (ItemStack output : (pattern.isOredict() && missing.isEmpty() ? pattern.getOutputs(took) : pattern.getOutputs())) {
-            	if(output !=null)insertList.add(output.copy());
-            }
+        for (ItemStack output : (!pattern.isProcessing() && pattern.isOredict() && missing.isEmpty() ? pattern.getOutputs(took) : pattern.getOutputs())) {
+        	if(output !=null)insertList.add(output.copy());
         }
         
         usedPatterns.remove(pattern);
@@ -276,7 +273,7 @@ public class BasicCraftingTask implements ICraftingTask {
                 } else {
                 	ItemStack buk = networkList.get(container, false);
                     boolean hasBucket = buk !=null && buk.stackSize > 0;
-                    CraftingPattern bucketPattern = network.getPatternWithBestScore(container);
+                    CraftingPattern bucketPattern = network.getPatternWithBestScore(container, pattern.isOredict());
 
                     if (!hasBucket) {
                         if (bucketPattern == null) {
@@ -298,6 +295,28 @@ public class BasicCraftingTask implements ICraftingTask {
         	}
         } 
         return false;
+    }
+    
+    public void reschedule(EStorageNetwork network) {
+        List<CraftingProcessBase> mainProcesses = Lists.newArrayList();
+        for(CraftingProcessBase process : toProcess){
+        	if(process.pattern == pattern){
+        		mainProcesses.add(process);
+        	}
+        }
+        missing.clear();
+        toProcess.clear();
+        // if the list of main steps is empty there is no point in rescheduling
+        if (!toProcess.isEmpty()) {
+            quantity = 0;
+            int quantityPerRequest = pattern.getQuantityPerRequest(requested, pattern.isOredict());
+            for (CraftingProcessBase step : mainProcesses) {
+                quantity += quantityPerRequest - step.getReceivedOutput(requested);
+            }
+            if (quantity > 0) {
+            	calculate(network);
+            }
+        }
     }
     
     public int getQuantity() {
@@ -396,7 +415,7 @@ public class BasicCraftingTask implements ICraftingTask {
         StringBuilder builder = new StringBuilder();
 
         
-        if (isFinished()) {
+        if (!toInsertItems.isEmpty()) {
         	boolean hasTitle = false;
         	String tString = "";
             Map<ItemStack, Integer> insertCount = Maps.newHashMap();
@@ -430,9 +449,10 @@ public class BasicCraftingTask implements ICraftingTask {
             if(!tString.isEmpty()){
             	builder.append("T="+tString+"\n");
             }
-        } else {
+        } 
+        if(!isFinished()){
         	boolean addMissing = true;
-        	boolean addTaking = true;
+        	boolean addTaking = false;
         	boolean addTakingFluid = true;
         	boolean addProcessing = true;
         	if(addMissing){
