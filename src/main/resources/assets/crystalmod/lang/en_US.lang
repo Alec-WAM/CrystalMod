@@ -119,6 +119,16 @@ batType.minecraft.iron.name=Iron
 batType.minecraft.diamond.name=Diamond
 batType.minecraft.gold.name=Gold
 
+batUpgrade.crystalmod.piston.name=Piston
+batUpgrade.crystalmod.redstone.name=Redstone
+batUpgrade.crystalmod.quartz.name=Quartz
+batUpgrade.crystalmod.cake.name=Cake
+batUpgrade.crystalmod.skull.name=Skull
+batUpgrade.crystalmod.poison.name=Poison
+batUpgrade.crystalmod.firework.name=Firework
+batUpgrade.crystalmod.ender.name=Ender
+batUpgrade.crystalmod.muffler.name=Muffler
+
 item.crystalmod.minecart_chest.blue.name=Minecart with Blue Crystal Chest
 item.crystalmod.minecart_chest.red.name=Minecart with Red Crystal Chest
 item.crystalmod.minecart_chest.green.name=Minecart with Green Crystal Chest
@@ -183,6 +193,7 @@ item.crystalmod.minion.basic.name=Minion
 item.crystalmod.minion.worker.name=Worker Minion
 item.crystalmod.minion.warrior.name=Warrior Minion
 item.crystalmod.minionStaff.name=Minion Staff
+item.crystalmod.bombomb.name=Bombomb
 
 #--Blocks
 tile.crystalmod.crystalblock.blue.name=Block of Blue Crystal
@@ -440,6 +451,7 @@ entity.CrystalMod.CrystalPigZombie.name=Crystal Zombie Pigman
 entity.CrystalMod.CrystalCow.name=Crystal Cow
 entity.CrystalMod.CrystalEnderman.name=Crystal Enderman
 entity.CrystalMod.MinionWarrior.name=Warrior Minion
+entity.CrystalMod.Bombomb.name=Bombomb
 
 entity.CrystalMod.minecart_blue.name=Minecart with Blue Crystal Chest
 entity.CrystalMod.minecart_red.name=Minecart with Red Crystal Chest

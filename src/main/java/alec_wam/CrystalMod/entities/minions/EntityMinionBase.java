@@ -1,7 +1,7 @@
 package alec_wam.CrystalMod.entities.minions;
 
 import alec_wam.CrystalMod.entities.EntityOwnable;
-import alec_wam.CrystalMod.entities.minions.ai.AIManager;
+import alec_wam.CrystalMod.entities.ai.AIManager;
 import alec_wam.CrystalMod.network.IMessageHandler;
 import alec_wam.CrystalMod.util.ChatUtil;
 import alec_wam.CrystalMod.util.ItemNBTHelper;

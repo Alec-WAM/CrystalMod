@@ -2,8 +2,6 @@ package alec_wam.CrystalMod.tiles.machine.enderbuffer;
 
 import java.util.UUID;
 
-import com.enderio.core.common.util.ItemUtil;
-
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
@@ -35,6 +33,7 @@ import alec_wam.CrystalMod.tiles.tank.TileEntityTank;
 import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.ChatUtil;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
+import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.ModLogger;
 import alec_wam.CrystalMod.util.UUIDUtils;
 import alec_wam.CrystalMod.util.tool.ToolUtil;
@@ -101,20 +100,10 @@ public class BlockEnderBuffer extends BlockMachine
         		return ToolUtil.breakBlockWithTool(this, worldIn, pos, playerIn, hand);
         	}
         	
-        	int dyeMeta = -1;
-        	if(stack !=null){
-	        	for(EnumDyeColor color : EnumDyeColor.values()){
-	        		String cap = (color.getUnlocalizedName().substring(0, 1).toUpperCase()+color.getUnlocalizedName().substring(1));
-	        		String oreID = "dye"+cap;
-	        		if(ItemUtil.itemStackMatchesOredict(stack, oreID)){
-	        			dyeMeta = color.getDyeDamage();
-	        			break;
-	        		}
-	        	}
-        	}
-        	if (dyeMeta !=-1 && isOwner)
+        	EnumDyeColor color = ItemUtil.getDyeColor(stack);
+        	if (color !=null && isOwner)
             {
-                int meta = net.minecraft.item.EnumDyeColor.byDyeDamage(dyeMeta).getMetadata();
+                int meta = color.getMetadata();
 
                 //  5, 8, 11; +-1.5 
                 // 3.5..6.5, 6.5..9.5,9.5..12.5

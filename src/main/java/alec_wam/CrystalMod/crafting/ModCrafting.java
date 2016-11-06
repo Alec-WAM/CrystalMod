@@ -361,6 +361,12 @@ public class ModCrafting {
 		addShapedRecipe(new ItemStack(ModBlocks.converter, 1, ConverterType.RF.getMeta()), new Object[]{"III", "CFR", "III", 'I', dIronPlate, 'C', ItemUtil.copy(tier0CU, 1), 'R', ItemUtil.copy(tier0RF, 1), 'F', machineFrame});
 
 		CrystalChestType.registerBlocksAndRecipes(ModBlocks.crystalChest);
+		for(CrystalChestType chestType : CrystalChestType.values()){
+			if(chestType !=CrystalChestType.WOOD){
+				ItemStack chestStack = new ItemStack(ModBlocks.crystalChest, 1, chestType.ordinal());
+				addShapedRecipe(new ItemStack(ModItems.chestMinecart, 1, chestType.ordinal()), new Object[] {"A", "B", 'A', chestStack, 'B', Items.MINECART});
+			}
+		}
 		CauldronRecipeManager.initRecipes();
 		
 		CrystalFurnaceManager.initRecipes();

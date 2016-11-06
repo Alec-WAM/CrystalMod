@@ -2,8 +2,8 @@ package alec_wam.CrystalMod.entities.minions.warrior;
 
 import java.util.List;
 
+import alec_wam.CrystalMod.entities.ai.AIBase;
 import alec_wam.CrystalMod.entities.minions.MinionConstants;
-import alec_wam.CrystalMod.entities.minions.ai.MinionAIBase;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.packets.PacketEntityMessage;
 import alec_wam.CrystalMod.util.EntityUtil;
@@ -27,7 +27,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.MathHelper;
 
-public class MinionAICombat extends MinionAIBase<EntityMinionWarrior>
+public class MinionAICombat extends AIBase<EntityMinionWarrior>
 {
 	private int attackMethodInt;
 	private int attackTriggerInt;

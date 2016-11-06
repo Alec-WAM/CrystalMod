@@ -25,6 +25,8 @@ import alec_wam.CrystalMod.entities.mob.enderman.EntityCrystalEnderman;
 import alec_wam.CrystalMod.entities.mob.enderman.RenderCrystalEnderman;
 import alec_wam.CrystalMod.entities.mob.zombiePigmen.EntityCrystalPigZombie;
 import alec_wam.CrystalMod.entities.mob.zombiePigmen.RenderCrystalPigZombie;
+import alec_wam.CrystalMod.entities.pet.EntityBombomb;
+import alec_wam.CrystalMod.entities.pet.RenderEntityBombomb;
 import alec_wam.CrystalMod.tiles.chest.CrystalChestType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
@@ -67,6 +69,8 @@ public class ModEntites {
 		for(Entry<CrystalChestType, Class<? extends EntityCrystalChestMinecartBase>> entry : EntityCrystalChestMinecartBase.minecarts.entrySet()){
 			addEntity(entry.getValue(), "minecart_chest_"+entry.getKey().name().toLowerCase(), 64, 1, true);
 		}
+		
+		addEntity(EntityBombomb.class, "Bombomb");
 	}
 	
 	public static void postInit(){
@@ -84,6 +88,8 @@ public class ModEntites {
         RenderingRegistry.registerEntityRenderingHandler(EntityMinionBase.class, RenderMinionBase.FACTORY);
         
         RenderingRegistry.registerEntityRenderingHandler(EntityCrystalChestMinecartBase.class, RenderMinecartCrystalChest.FACTORY);
+        
+        RenderingRegistry.registerEntityRenderingHandler(EntityBombomb.class, RenderEntityBombomb.FACTORY);
 	}
 	
 	public static int nextEntityId = 1;

@@ -3,6 +3,7 @@ package alec_wam.CrystalMod.entities.minions;
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.entities.minions.warrior.EntityMinionWarrior;
 import alec_wam.CrystalMod.entities.minions.worker.EntityMinionWorker;
+import alec_wam.CrystalMod.entities.pet.EntityBombomb;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemUtil;
@@ -23,22 +24,35 @@ public class ItemMinionStaff extends Item {
 	
 	public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity entity)
     {
-		if (((entity instanceof EntityMinionBase)) && (!entity.isDead) && entity.worldObj !=null && !entity.worldObj.isRemote && ((EntityMinionBase)entity).isOwner(player))
+		if ((!entity.isDead) && entity.worldObj !=null)
 		{
-			EntityMinionBase minion = (EntityMinionBase)entity;
-			MinionType type = MinionType.BASIC;
-			if(minion instanceof EntityMinionWorker){
-				type = MinionType.WORKER;
-			} else if(minion instanceof EntityMinionWarrior){
-				type = MinionType.WARRIOR;
+			if(((entity instanceof EntityMinionBase)) && ((EntityMinionBase)entity).isOwner(player)){
+				EntityMinionBase minion = (EntityMinionBase)entity;
+				MinionType type = MinionType.BASIC;
+				if(minion instanceof EntityMinionWorker){
+					type = MinionType.WORKER;
+				} else if(minion instanceof EntityMinionWarrior){
+					type = MinionType.WARRIOR;
+				}
+				if(!entity.worldObj.isRemote){
+					ItemStack drop = ItemMinion.createMinion(type);
+					minion.saveToItem(player, drop);
+					minion.dropItem(drop, false, false);
+					minion.setDead();
+				}
+				return true;
 			}
-			
-			ItemStack drop = ItemMinion.createMinion(type);
-			//ItemNBTHelper.setString(drop, "OwnerUUID", UUIDUtils.fromUUID(minion.getOwnerId()));
-			minion.saveToItem(player, drop);
-			minion.dropItem(drop, false, false);
-			minion.setDead();
-			return true;
+			if(((entity instanceof EntityBombomb)) && ((EntityBombomb)entity).isOwner(player)){
+				EntityBombomb bombomb = (EntityBombomb)entity;
+				
+				if(!entity.worldObj.isRemote){
+					ItemStack drop = new ItemStack(ModItems.bombomb);
+					bombomb.saveToItem(player, drop);
+					bombomb.entityDropItem(drop, 0.0f);
+					bombomb.setDead();
+				}
+				return true;
+			}
 		}
         return false;
     }

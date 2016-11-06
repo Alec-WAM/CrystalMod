@@ -1,9 +1,10 @@
-package alec_wam.CrystalMod.entities.minions.ai;
+package alec_wam.CrystalMod.entities.ai;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import alec_wam.CrystalMod.entities.minions.EntityMinionBase;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.nbt.NBTTagCompound;
 
 /**
@@ -12,16 +13,16 @@ import net.minecraft.nbt.NBTTagCompound;
 @SuppressWarnings("rawtypes") 
 public class AIManager 
 {
-	private EntityMinionBase minion;
-	private List<MinionAIBase> AIList;
+	private EntityLivingBase entity;
+	private List<AIBase> AIList;
 
-	public AIManager(EntityMinionBase minion)
+	public AIManager(EntityLivingBase entity)
 	{
-		this.minion = minion;
-		this.AIList = new ArrayList<MinionAIBase>();
+		this.entity = entity;
+		this.AIList = new ArrayList<AIBase>();
 	}
 
-	public void addAI(MinionAIBase AI)
+	public void addAI(AIBase AI)
 	{
 		AIList.add(AI);
 	}
@@ -29,22 +30,22 @@ public class AIManager
 	@SuppressWarnings("unchecked")
 	public void onUpdate()
 	{
-		for (final MinionAIBase AI : AIList)
+		for (final AIBase AI : AIList)
 		{
-			boolean doRun = AI instanceof MinionToggleAIBase ? ((MinionToggleAIBase)AI).getIsActive() : true;
+			boolean doRun = AI instanceof ToggleAIBase ? ((ToggleAIBase)AI).getIsActive() : true;
 
 			if (doRun)
 			{
-				AI.onUpdateCommon(minion);
+				AI.onUpdateCommon(entity);
 
-				if (minion.worldObj.isRemote)
+				if (entity.worldObj.isRemote)
 				{
-					AI.onUpdateClient(minion);
+					AI.onUpdateClient(entity);
 				}
 
 				else
 				{
-					AI.onUpdateServer(minion);
+					AI.onUpdateServer(entity);
 				}
 			}
 		}
@@ -53,25 +54,25 @@ public class AIManager
 	@SuppressWarnings("unchecked")
 	public void writeToNBT(NBTTagCompound nbt)
 	{
-		for (final MinionAIBase AI : AIList)
+		for (final AIBase AI : AIList)
 		{
-			AI.writeToNBT(minion, nbt);
+			AI.writeToNBT(entity, nbt);
 		}
 	}
 
 	@SuppressWarnings("unchecked")
 	public void readFromNBT(NBTTagCompound nbt)
 	{
-		for (final MinionAIBase AI : AIList)
+		for (final AIBase AI : AIList)
 		{
-			AI.readFromNBT(minion, nbt);
+			AI.readFromNBT(entity, nbt);
 		}
 	}
 
 	@SuppressWarnings("unchecked")
-	public <T extends MinionAIBase> T getAI(Class<T> clazz)
+	public <T extends AIBase> T getAI(Class<T> clazz)
 	{
-		for (final MinionAIBase AI : AIList)
+		for (final AIBase AI : AIList)
 		{
 			if (AI.getClass() == clazz)
 			{
@@ -84,11 +85,11 @@ public class AIManager
 	
 	public boolean isToggleAIActive()
 	{
-		for (final MinionAIBase AI : AIList)
+		for (final AIBase AI : AIList)
 		{
-			if (AI instanceof MinionToggleAIBase)
+			if (AI instanceof ToggleAIBase)
 			{
-				MinionToggleAIBase TAI = (MinionToggleAIBase) AI;
+				ToggleAIBase TAI = (ToggleAIBase) AI;
 				
 				if (TAI.getIsActive())
 				{
@@ -102,11 +103,11 @@ public class AIManager
 	
 	public String getNameOfActiveAI()
 	{
-		for (final MinionAIBase AI : AIList)
+		for (final AIBase AI : AIList)
 		{
-			if (AI instanceof MinionToggleAIBase)
+			if (AI instanceof ToggleAIBase)
 			{
-				MinionToggleAIBase TAI = (MinionToggleAIBase) AI;
+				ToggleAIBase TAI = (ToggleAIBase) AI;
 				
 				if (TAI.getIsActive())
 				{
@@ -120,11 +121,11 @@ public class AIManager
 	
 	public void disableAllToggleAIs()
 	{
-		for (final MinionAIBase AI : AIList)
+		for (final AIBase AI : AIList)
 		{
-			if (AI instanceof MinionToggleAIBase)
+			if (AI instanceof ToggleAIBase)
 			{
-				MinionToggleAIBase TAI = (MinionToggleAIBase) AI;
+				ToggleAIBase TAI = (ToggleAIBase) AI;
 				TAI.setIsActive(false);
 			}
 		}

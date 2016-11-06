@@ -1,8 +1,8 @@
-package alec_wam.CrystalMod.entities.minions.ai;
+package alec_wam.CrystalMod.entities.ai;
 
 import alec_wam.CrystalMod.entities.minions.EntityMinionBase;
 
-public abstract class MinionToggleAIBase<T extends EntityMinionBase> extends MinionAIBase<T> {
+public abstract class ToggleAIBase<T extends EntityMinionBase> extends AIBase<T> {
 
 	/** Sets this AI as active and begins calling the update methods. */
 	public abstract void setIsActive(boolean value);

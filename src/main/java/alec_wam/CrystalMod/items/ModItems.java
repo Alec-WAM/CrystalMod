@@ -9,6 +9,7 @@ import alec_wam.CrystalMod.blocks.BlockCrystalPlant.PlantType;
 import alec_wam.CrystalMod.entities.minecarts.chests.ItemCrystalChestMinecart;
 import alec_wam.CrystalMod.entities.minions.ItemMinion;
 import alec_wam.CrystalMod.entities.minions.ItemMinionStaff;
+import alec_wam.CrystalMod.entities.pet.ItemBombomb;
 import alec_wam.CrystalMod.items.ItemMetalPlate.PlateType;
 import alec_wam.CrystalMod.items.armor.ItemCustomArmor;
 import alec_wam.CrystalMod.items.backpack.ItemBackpack;
@@ -115,6 +116,7 @@ public class ModItems {
 	public static ItemMinion minion;
 	public static ItemMinionStaff minionStaff;
 	public static ItemWorksiteUpgrade worksiteUpgrade;
+	public static ItemBombomb bombomb;
 	
 	public static void init() {
 		crystals = new ItemCrystal();
@@ -173,6 +175,7 @@ public class ModItems {
 		minion = new ItemMinion();
 		minionStaff = new ItemMinionStaff();
 		worksiteUpgrade = new ItemWorksiteUpgrade();
+		bombomb = new ItemBombomb();
 	}
 	
 	@SideOnly(Side.CLIENT)

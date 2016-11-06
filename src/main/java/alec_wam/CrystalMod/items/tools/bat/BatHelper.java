@@ -45,7 +45,6 @@ import alec_wam.CrystalMod.api.tools.AttackData;
 import alec_wam.CrystalMod.api.tools.IBatType;
 import alec_wam.CrystalMod.api.tools.IBatUpgrade;
 import alec_wam.CrystalMod.api.tools.UpgradeData;
-import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.util.EntityUtil;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.Lang;

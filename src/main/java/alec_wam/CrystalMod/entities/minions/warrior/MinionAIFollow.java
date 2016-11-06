@@ -8,12 +8,12 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import alec_wam.CrystalMod.entities.ai.AIBase;
 import alec_wam.CrystalMod.entities.minions.EnumMovementState;
 import alec_wam.CrystalMod.entities.minions.MinionConstants;
-import alec_wam.CrystalMod.entities.minions.ai.MinionAIBase;
 import alec_wam.CrystalMod.util.EntityUtil;
 
-public class MinionAIFollow extends MinionAIBase<EntityMinionWarrior> {
+public class MinionAIFollow extends AIBase<EntityMinionWarrior> {
 
 	@Override
 	public void reset(EntityMinionWarrior minion) 

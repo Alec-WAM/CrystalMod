@@ -4,11 +4,11 @@ import java.util.Random;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.Vec3d;
+import alec_wam.CrystalMod.entities.ai.AIBase;
 import alec_wam.CrystalMod.entities.minions.EnumMovementState;
-import alec_wam.CrystalMod.entities.minions.ai.MinionAIBase;
 import alec_wam.CrystalMod.entities.minions.ai.MinionRandomPositionGenerator;
 
-public class MinionAIWander extends MinionAIBase<EntityMinionWarrior>{
+public class MinionAIWander extends AIBase<EntityMinionWarrior>{
 
 	private double xPosition;
     private double yPosition;

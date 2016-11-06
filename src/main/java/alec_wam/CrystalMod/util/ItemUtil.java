@@ -33,6 +33,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.inventory.InventoryLargeChest;
 import net.minecraft.inventory.Slot;
+import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -1354,6 +1355,19 @@ public class ItemUtil {
 			}
 		}
 		return returnStack;
+	}
+
+	public static EnumDyeColor getDyeColor(ItemStack stack) {
+		if(stack !=null){
+        	for(EnumDyeColor color : EnumDyeColor.values()){
+        		String cap = (color.getUnlocalizedName().substring(0, 1).toUpperCase()+color.getUnlocalizedName().substring(1));
+        		String oreID = "dye"+cap;
+        		if(ItemUtil.itemStackMatchesOredict(stack, oreID)){
+        			return color;
+        		}
+        	}
+    	}
+    	return null;
 	}
 
 }

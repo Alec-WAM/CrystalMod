@@ -1,9 +1,10 @@
-package alec_wam.CrystalMod.entities.minions.ai;
+package alec_wam.CrystalMod.entities.ai;
 
 import alec_wam.CrystalMod.entities.minions.EntityMinionBase;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.nbt.NBTTagCompound;
 
-public abstract class MinionAIBase<T extends EntityMinionBase>
+public abstract class AIBase<T extends EntityLivingBase>
 {
 	/** Update code that runs on both the client and the server. */
 	public abstract void onUpdateCommon(T minion);

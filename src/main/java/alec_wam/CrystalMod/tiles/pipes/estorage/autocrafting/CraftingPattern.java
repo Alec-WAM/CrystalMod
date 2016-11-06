@@ -101,14 +101,16 @@ public class CraftingPattern {
                             if (input == null) {
                                 oreInputs.add(new ArrayList<ItemStack>());
                             }
-                            if (input instanceof ItemStack) {
-                                oreInputs.add(Collections.singletonList(fixItemStack((ItemStack) input)));
-                            } else {
-                            	List<ItemStack> cleaned = new LinkedList<ItemStack>();
-                            	for (ItemStack in : (List<ItemStack>) input) {
-                            		cleaned.add(fixItemStack(in));
-                            	}
-                                oreInputs.add(cleaned);
+                            else {
+	                            if (input instanceof ItemStack) {
+	                                oreInputs.add(Collections.singletonList(fixItemStack((ItemStack) input)));
+	                            } else if(input instanceof List){
+	                            	List<ItemStack> cleaned = new LinkedList<ItemStack>();
+	                            	for (ItemStack in : (List<ItemStack>) input) {
+	                            		cleaned.add(fixItemStack(in));
+	                            	}
+	                                oreInputs.add(cleaned);
+	                            }
                             }
                         }
                     }

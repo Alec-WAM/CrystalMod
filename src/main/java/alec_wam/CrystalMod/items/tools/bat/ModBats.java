@@ -52,7 +52,6 @@ public class ModBats {
 		//FLAME = BatHelper.registerBatUpgrade(new FlameBatUpgrade(64, 10));
 		QUARTZ = BatHelper.registerBatUpgrade(new QuartzBatUpgrade(32, 20));
 		//LAPIS = BatHelper.registerBatUpgrade(new LapisBatUpgrade(100, 3));
-		PISTON = BatHelper.registerBatUpgrade(new PistonBatUpgrade(3, 10));
 		CAKE = BatHelper.registerBatUpgrade(new CakeBatUpgrade(10, 10));
 		SKULL = BatHelper.registerBatUpgrade(new SkullBatUpgrade(1, 10));
 		POISON = BatHelper.registerBatUpgrade(new PoisonBatUpgrade(20, 10));

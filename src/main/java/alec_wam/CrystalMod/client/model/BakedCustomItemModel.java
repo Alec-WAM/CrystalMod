@@ -25,6 +25,7 @@ import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -42,6 +43,8 @@ import alec_wam.CrystalMod.client.model.dynamic.DynamicItemAndBlockModel;
 import alec_wam.CrystalMod.entities.minions.EntityMinionBase;
 import alec_wam.CrystalMod.entities.minions.ItemMinion;
 import alec_wam.CrystalMod.entities.minions.MinionType;
+import alec_wam.CrystalMod.entities.pet.EntityBombomb;
+import alec_wam.CrystalMod.entities.pet.ItemBombomb;
 import alec_wam.CrystalMod.items.ItemDragonWings;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.items.game.ItemFlag;
@@ -113,6 +116,15 @@ public class BakedCustomItemModel extends DynamicItemAndBlockModel
     		}
     	}
     	return entity;
+    }
+    
+    private static EntityBombomb renderBombomb;
+    
+    public static EntityBombomb getRenderBombomb(){
+    	if(renderBombomb == null){
+    		renderBombomb = new EntityBombomb(CrystalMod.proxy.getClientWorld());
+    	}
+    	return renderBombomb;
     }
     
     public static EntityMinionBase getRenderMinion(MinionType type){
@@ -277,6 +289,118 @@ public class BakedCustomItemModel extends DynamicItemAndBlockModel
 					GlStateManager.enableBlend();
 					GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 					Minecraft.getMinecraft().getRenderManager().doRenderEntity(minion, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F, true);
+					GlStateManager.disableBlend();
+					GlStateManager.enableLighting();
+                    GlStateManager.enableBlend();
+                    GlStateManager.enableColorMaterial();
+					GlStateManager.popMatrix();
+				}
+
+				if(atrib)GlStateManager.popAttrib();
+				GlStateManager.popMatrix();
+			}
+			
+			if(stack.getItem() instanceof ItemBombomb){
+				EntityBombomb bombomb = getRenderBombomb();
+				if(bombomb == null){
+					return;
+				}
+				EnumDyeColor color = EnumDyeColor.YELLOW;
+				UUID owner = null;
+				if(stack.hasTagCompound()){
+					NBTTagCompound nbt = ItemNBTHelper.getCompound(stack);
+					if(nbt.hasKey("EntityData")){
+						NBTTagCompound compound = nbt.getCompoundTag("EntityData");
+						if(compound.hasKey("OwnerUUID")){
+							String id = compound.getString("OwnerUUID");
+							if(!id.isEmpty() && UUIDUtils.isUUID(id)){
+								owner = UUIDUtils.fromString(id);
+							}
+						}
+						if(compound.hasKey("Color", 99)){
+							color = EnumDyeColor.byDyeDamage(compound.getByte("Color"));
+						}
+					}
+				}
+				bombomb.setColor(color);
+				bombomb.setOwnerId(owner);
+				bombomb.setTamed(owner !=null);
+				
+	    		boolean atrib = true;
+				GlStateManager.pushMatrix();
+				if(atrib)GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
+				GlStateManager.scale(0.5F, 0.5F, 0.5F);
+
+				if (type == TransformType.GUI)
+				{
+					GlStateManager.pushMatrix();
+					float scale = 2.5f;
+					GlStateManager.scale(scale, scale, scale);
+					GlStateManager.translate(0, -0.5, 0);
+					
+					GlStateManager.enableBlend();
+					GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+					Minecraft.getMinecraft().getRenderManager().doRenderEntity(bombomb, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F, true);
+					GlStateManager.disableBlend();
+					
+					GlStateManager.enableLighting();
+                    GlStateManager.enableBlend();
+                    GlStateManager.enableColorMaterial();
+					GlStateManager.popMatrix();
+			        GlStateManager.disableRescaleNormal();
+			        GlStateManager.setActiveTexture(OpenGlHelper.lightmapTexUnit);
+			        GlStateManager.disableTexture2D();
+			        GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);
+				}
+				else if (type == TransformType.FIRST_PERSON_RIGHT_HAND || type == TransformType.FIRST_PERSON_LEFT_HAND)
+				{
+					GlStateManager.pushMatrix();
+					float scale = 1.5f;
+					GlStateManager.scale(0.8F*scale, 0.8F*scale, 0.8F*scale);
+					GlStateManager.translate(2, 0.5, 0);
+					if(type == TransformType.FIRST_PERSON_RIGHT_HAND){
+						GlStateManager.rotate(60F, 0F, 1F, 0F);
+					}
+					if(type == TransformType.FIRST_PERSON_LEFT_HAND){
+						GlStateManager.rotate(120F, 0F, 1F, 0F);
+					}
+					GlStateManager.enableBlend();
+					GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+					Minecraft.getMinecraft().getRenderManager().doRenderEntity(bombomb, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F, true);
+					GlStateManager.disableBlend();
+					
+					GlStateManager.enableLighting();
+                    GlStateManager.enableBlend();
+                    GlStateManager.enableColorMaterial();
+					GlStateManager.popMatrix();
+				}
+				else if (type == TransformType.THIRD_PERSON_RIGHT_HAND || type == TransformType.THIRD_PERSON_LEFT_HAND)
+				{
+					GlStateManager.pushMatrix();
+					float scale = 2.0f;
+					GlStateManager.scale(1.5F*scale, 1.5F*scale, 1.5F*scale);
+					if(type == TransformType.THIRD_PERSON_RIGHT_HAND){
+						GlStateManager.rotate(90, 0, 1, 0);
+						GlStateManager.rotate(90-20, 0, 0, 1);
+						GlStateManager.rotate(-45, 1, 0, 0);
+						GlStateManager.translate(0, -5, 0.5);
+					}else{
+						GlStateManager.rotate(90, 0, 1, 0);
+						GlStateManager.rotate(90-20, 0, 0, 1);
+						GlStateManager.rotate(45, 1, 0, 0);
+						GlStateManager.rotate(180, 0, 1, 0);
+						GlStateManager.translate(0, -5, 0.5);
+					}
+					Minecraft.getMinecraft().getRenderManager().doRenderEntity(bombomb, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F, true);
+					GlStateManager.popMatrix();
+				}
+				else if(type == TransformType.GROUND){
+					GlStateManager.pushMatrix();
+					float scale = 3.0f;
+					GlStateManager.scale(scale, scale, scale);
+					GlStateManager.enableBlend();
+					GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+					Minecraft.getMinecraft().getRenderManager().doRenderEntity(bombomb, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F, true);
 					GlStateManager.disableBlend();
 					GlStateManager.enableLighting();
                     GlStateManager.enableBlend();
@@ -482,6 +606,8 @@ public class BakedCustomItemModel extends DynamicItemAndBlockModel
 		List<BakedQuad> generalQuads = new LinkedList<BakedQuad>();
 		
 		GlStateManager.pushMatrix();
+		GlStateManager.translate(0.5F, 0.5F, 0.5F);
+		GlStateManager.rotate(180, 0.0F, 1.0F, 0.0F);
 		doRender(prevTransform);
 		GlStateManager.enableLighting();
         GlStateManager.enableLight(0);
