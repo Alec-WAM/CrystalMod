@@ -16,6 +16,7 @@ import alec_wam.CrystalMod.fluids.Fluids;
 import alec_wam.CrystalMod.handler.ClientEventHandler;
 import alec_wam.CrystalMod.handler.EventHandler;
 import alec_wam.CrystalMod.integration.TConstructIntegration;
+import alec_wam.CrystalMod.integration.minecraft.ModBanners;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.items.guide.GuidePages;
 import alec_wam.CrystalMod.items.tools.bat.ModBats;
@@ -116,6 +117,7 @@ public class CommonProxy {
 		new TagManager();
 		
 		ModCrafting.init();
+		ModBanners.init();
 		if(Loader.isModLoaded("tconstruct")){
         	TConstructIntegration.init();
         }
