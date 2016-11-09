@@ -214,31 +214,6 @@ public class ItemUtil {
 
     return base;
   }
-
-  /**
-   * Tests if two {@link ItemStack}s are completely equal, forgoing stack size.
-   * This means that for this method to return true, Item type, damage value,
-   * and NBT data of both ItemStacks must be identical.
-   * 
-   * @param s1
-   *          The first ItemStack to compare.
-   * @param s2
-   *          The second ItemStack to compare.
-   * @author powercrystals
-   */
-  public static boolean stacksEqual(ItemStack s1, ItemStack s2) {
-    if (s1 == null && s2 == null)
-      return true;
-    if (s1 == null || s2 == null)
-      return false;
-    if (!s1.isItemEqual(s2))
-      return false;
-    if (s1.getTagCompound() == null && s2.getTagCompound() == null)
-      return true;
-    if (s1.getTagCompound() == null || s2.getTagCompound() == null)
-      return false;
-    return s1.getTagCompound().equals(s2.getTagCompound());
-  }
   
   public static void dropContent(int newSize, IItemHandler chest, World world, BlockPos pos)
   {

@@ -112,6 +112,8 @@ item.crystalmod.darkIronPickaxe.name=Dark Iron Pickaxe
 item.crystalmod.darkIronSword.name=Dark Iron Sword
 item.crystalmod.darkIronBow.name=Dark Iron Bow
 
+item.crystalmod.supertorch.name=Super Torch
+
 item.crystalmod.baseballbat.name=Baseball Bat
 batType.minecraft.wood.name=Wood
 batType.minecraft.stone.name=Stone

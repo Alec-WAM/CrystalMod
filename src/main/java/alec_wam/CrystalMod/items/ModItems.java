@@ -24,6 +24,7 @@ import alec_wam.CrystalMod.items.tools.ItemCrystalSword;
 import alec_wam.CrystalMod.items.tools.ItemCustomAxe;
 import alec_wam.CrystalMod.items.tools.ItemCustomPickaxe;
 import alec_wam.CrystalMod.items.tools.ItemDarkIronBow;
+import alec_wam.CrystalMod.items.tools.ItemSuperTorch;
 import alec_wam.CrystalMod.items.tools.ItemToolParts;
 import alec_wam.CrystalMod.items.tools.bat.ItemBat;
 import alec_wam.CrystalMod.tiles.machine.elevator.ItemMiscCard;
@@ -109,6 +110,7 @@ public class ModItems {
 	public static ItemMiscCard miscCard;
 	public static ItemBackpack backpack;
 	public static ItemTeloportTool telePearl;
+	public static ItemSuperTorch superTorch;
 	
 	public static ItemFlag flag;
 	public static ItemDragonWings wings;
@@ -169,6 +171,7 @@ public class ModItems {
 		miscCard = new ItemMiscCard();
 		backpack = new ItemBackpack();
 		telePearl = new ItemTeloportTool();
+		superTorch = new ItemSuperTorch();
 		flag = new ItemFlag();
 		wings = new ItemDragonWings();
 		mobEssence = new ItemMobEssence();

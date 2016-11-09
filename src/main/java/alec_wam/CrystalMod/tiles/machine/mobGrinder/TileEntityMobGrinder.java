@@ -5,15 +5,20 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.init.Items;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.WorldServer;
@@ -34,12 +39,16 @@ import alec_wam.CrystalMod.api.energy.CEnergyStorage;
 import alec_wam.CrystalMod.api.energy.ICEnergyReceiver;
 import alec_wam.CrystalMod.fluids.XpUtil;
 import alec_wam.CrystalMod.fluids.xp.ExperienceContainer;
+import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.IMessageHandler;
 import alec_wam.CrystalMod.network.packets.PacketTileMessage;
 import alec_wam.CrystalMod.tiles.TileEntityMod;
 import alec_wam.CrystalMod.tiles.machine.IMachineTile;
 import alec_wam.CrystalMod.util.ItemUtil;
+import alec_wam.CrystalMod.util.ModLogger;
+import alec_wam.CrystalMod.world.DropCapture;
+import alec_wam.CrystalMod.world.DropCapture.CaptureContext;
 
 import com.google.common.collect.Sets;
 import com.mojang.authlib.GameProfile;
@@ -78,8 +87,13 @@ public class TileEntityMobGrinder extends TileEntityMod implements IMessageHandl
 	private int lastEnergyCach;
 	public ExperienceContainer xpCon;
 	
-	public static WeakReference<FakePlayer> fakePlayer;
+	public FakePlayer fakePlayer;
 	private static final GameProfile GRINDER = new GameProfile(UUID.nameUUIDFromBytes("[CrystalMod-Grinder]".getBytes()), "[CrystalMod-Grinder]");
+	private static final ItemStack genericSword;
+	private ItemStack attackTool;
+	static {
+		genericSword = new ItemStack(ModItems.crystalSword, 0);
+    }
 	
 	public TileEntityMobGrinder(){
 		xpCon = new ExperienceContainer(XpUtil.getExperienceForLevel(30));
@@ -119,8 +133,6 @@ public class TileEntityMobGrinder extends TileEntityMod implements IMessageHandl
 				energyStorage.modifyEnergyStored(-energyPerKill);
 				pickupItems();
 			}
-			
-			
 		}
 		
 		if (tick % 100 == 0) {
@@ -170,7 +182,7 @@ public class TileEntityMobGrinder extends TileEntityMod implements IMessageHandl
 		if (worldObj.isRemote) return false;
 		
 		if (fakePlayer == null){
-			fakePlayer = new WeakReference<FakePlayer>(FakePlayerFactory.get((WorldServer) worldObj, GRINDER));
+			fakePlayer = FakePlayerFactory.get((WorldServer) worldObj, GRINDER);
 		}
 
 		killList = worldObj.getEntitiesWithinAABB(EntityLiving.class, getKillBox());
@@ -184,7 +196,29 @@ public class TileEntityMobGrinder extends TileEntityMod implements IMessageHandl
 					if (mob instanceof EntityZombie) {
 			            zBlocker.cache.add((EntityZombie) mob);
 					}   
-					mob.attackEntityFrom(DamageSource.causePlayerDamage(fakePlayer.get()), 50000F);
+					
+					//if (this.attackTool == null) {
+			            //this.attackTool = new ItemStack(Items.DIAMOND_SWORD);
+			            /*final ItemStack enchantsStack = this.enchants.getStack();
+			            if (enchantsStack != null) {
+			                EnchantmentHelper.setEnchantments(EnchantmentHelper.getEnchantments(enchantsStack), this.attackTool);
+			            }*/
+			        //}
+					
+					/*ItemStack prev = fakePlayer.getHeldItemMainhand();
+					
+					fakePlayer.setHeldItem(EnumHand.MAIN_HAND, attackTool);
+					if(prev !=null)fakePlayer.getAttributeMap().removeAttributeModifiers(prev.getAttributeModifiers(EntityEquipmentSlot.MAINHAND));
+					if(attackTool !=null)fakePlayer.getAttributeMap().applyAttributeModifiers(attackTool.getAttributeModifiers(EntityEquipmentSlot.MAINHAND));
+			        //fakePlayer.setPosition(mob.posX, mob.posY, mob.posZ);
+			        float oldHealth = mob.getHealth();
+			        this.fakePlayer.attackTargetEntityWithCurrentItem(mob);
+			        fakePlayer.resetCooldown();
+			        ModLogger.info("Attack2: "+(oldHealth-mob.getHealth()) + " "+fakePlayer.getHeldItemMainhand());
+			        this.fakePlayer.setHeldItem(EnumHand.MAIN_HAND, (ItemStack)null);
+			        */
+					
+					mob.attackEntityFrom(DamageSource.causePlayerDamage(fakePlayer), 50000F);
 					
 					readyNext = true;
 					return mob.isDead || mob.getHealth() <= 0;
@@ -203,8 +237,8 @@ public class TileEntityMobGrinder extends TileEntityMod implements IMessageHandl
 	  if(inv == null){
 		  return;	
 	  }
-	  List<EntityItem> items = worldObj.getEntitiesWithinAABB(EntityItem.class, getKillBox());
 	  ItemStack stack;
+	  List<EntityItem> items = this.worldObj.getEntitiesWithinAABB(EntityItem.class, getKillBox());
 	  for(EntityItem item : items)
 	  {
 	    stack = item.getEntityItem();
@@ -215,7 +249,29 @@ public class TileEntityMobGrinder extends TileEntityMod implements IMessageHandl
 	    	item.setDead();
 	    }
 	  }
-	  
+	  final InventoryPlayer inventory = this.fakePlayer.inventory;
+      for (int i = 0; i < inventory.getSizeInventory(); ++i) {
+          final ItemStack stack2 = inventory.getStackInSlot(i);
+          if (stack2 != null && stack2.stackSize > 0) {
+        	  int added = ItemUtil.doInsertItem(inv, stack2, face);
+        	  stack2.stackSize-=added;
+          }
+      }
+      this.fakePlayer.inventory.clear();
+	}
+	
+	private void pickupItem(ItemStack item)
+	{
+	  EnumFacing face = EnumFacing.getHorizontal(facing);
+	  IItemHandler inv = ItemUtil.getExternalItemHandler(getWorld(), getPos().offset(face.getOpposite()), face);
+	  if(inv == null || item == null){
+		  return;	
+	  }
+	  int added = ItemUtil.doInsertItem(inv, item, face);
+	  item.stackSize-=added;
+	  if(item.stackSize <= 0){
+		  item = null;
+	  }
 	}
 	
 	

@@ -16,6 +16,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 public class Config {
 	public static final String CATEGORY_GENERAL = "general";
 	public static final String CATEGORY_WORLD = "world";
+	public static final String CATEGORY_ITEM = "items";
 	public static final String CATEGORY_ENTITY = "entities";
 	public static final String CATEGORY_ENCHANTMENT = "enchantments";
 	public static final String CATEGORY_MINIONS = "minions";
@@ -35,6 +36,8 @@ public class Config {
 	public static int mobHeadDropChance = 200;
 	public static ItemDropType playerHeadType = ItemDropType.ALL;
 	public static int playerHeadDropChance = 50;
+	
+	public static int superTorchMaxCount = 128;
 	
 	public static String[] hoeStrings = new String[] {
 		"minecraft:wooden_hoe", "minecraft:stone_hoe", "minecraft:iron_hoe", "minecraft:diamond_hoe", "minecraft:golden_hoe",
@@ -106,6 +109,12 @@ public class Config {
                 "Crystal Tree dimension blacklist").getIntList();
         for (int i : treeBlacklist) {
         	CrystalModWorldGenerator.treeDimBlacklist.add(i);
+        }
+        
+        superTorchMaxCount = cfg.get(CATEGORY_ITEM, "superTorchCapacity", superTorchMaxCount, "Max amount of torches allowed to be stored in a Super Torch.").getInt();
+        
+        if(superTorchMaxCount < 0){
+        	superTorchMaxCount = 0;
         }
         
         int headtype = cfg.get(CATEGORY_ENTITY, "mobHeadDrop", mobHeadType.ordinal(), "0 = Never Drop; 1 = Drop when killed; 2 = Drop only when killed by player;").getInt(mobHeadType.ordinal());

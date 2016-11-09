@@ -10,7 +10,9 @@ import alec_wam.CrystalMod.blocks.BlockCrystal.CrystalBlockType;
 import alec_wam.CrystalMod.blocks.BlockCrystalIngot.CrystalIngotBlockType;
 import alec_wam.CrystalMod.blocks.BlockCrystalOre.CrystalOreType;
 import alec_wam.CrystalMod.blocks.glass.BlockCrystalGlass.GlassType;
+import alec_wam.CrystalMod.crafting.recipes.RecipeSuperTorchAdd;
 import alec_wam.CrystalMod.crafting.recipes.ShapedNBTCopy;
+import alec_wam.CrystalMod.crafting.recipes.ShapedOreRecipeNBT;
 import alec_wam.CrystalMod.crafting.recipes.UpgradeItemRecipe;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.items.ItemCrystal.CrystalType;
@@ -68,6 +70,7 @@ public class ModCrafting {
 		
 		GameRegistry.addRecipe(new UpgradeItemRecipe());
 		GameRegistry.addRecipe(new RecipeBatUpgrade());
+		GameRegistry.addRecipe(new RecipeSuperTorchAdd());
 		BatHelper.addBatCrafting();
 		
 		ItemStack blueCrystal = new ItemStack(ModItems.crystals, 1, CrystalType.BLUE.getMetadata());
@@ -102,6 +105,11 @@ public class ModCrafting {
 		ItemStack crystalRod = new ItemStack(ModItems.toolParts);
     	ItemNBTHelper.setString(crystalRod, "Type", PartType.ROD.getName());
 		
+    	
+    	//Pipes
+    	ItemStack itemPipe = new ItemStack(ModBlocks.crystalPipe, 1, PipeType.ITEM.getMeta());
+    	ItemStack fluidPipe = new ItemStack(ModBlocks.crystalPipe, 1, PipeType.FLUID.getMeta());
+
 		GameRegistry.addSmelting(new ItemStack(ModBlocks.crystalOre, 1, CrystalOreType.BLUE.getMeta()), blueCrystal, 1.0F);
 		GameRegistry.addSmelting(new ItemStack(ModBlocks.crystalOre, 1, CrystalOreType.RED.getMeta()), redCrystal, 1.0F);
 		GameRegistry.addSmelting(new ItemStack(ModBlocks.crystalOre, 1, CrystalOreType.GREEN.getMeta()), greenCrystal, 1.0F);
@@ -209,6 +217,8 @@ public class ModCrafting {
 		addShapedRecipe(ModItems.darkIronLeggings, new Object[]{"XXX", "X X", "X X", 'X', dIronIngot});
 		addShapedRecipe(ModItems.darkIronBoots, new Object[]{"X X", "X X", 'X', dIronIngot});
 		
+		addShapedRecipe(new ItemStack(ModItems.superTorch), new Object[] {" # ", "NTN", " N ", '#', Blocks.DAYLIGHT_DETECTOR, 'T', Blocks.TORCH, 'N', dIronNugget});
+		
 		addShapedOreRecipe(new ItemStack(ModBlocks.crystalWorkbench, 1, WorkbenchType.BLUE.getMeta()), new Object[]{"###", "#W#", "###", '#', blueIngot, 'W', "workbench"});
 		addShapedOreRecipe(new ItemStack(ModBlocks.crystalWorkbench, 1, WorkbenchType.RED.getMeta()), new Object[]{"###", "#W#", "###", '#', redIngot, 'W', "workbench"});
 		addShapedOreRecipe(new ItemStack(ModBlocks.crystalWorkbench, 1, WorkbenchType.GREEN.getMeta()), new Object[]{"###", "#W#", "###", '#', greenIngot, 'W', "workbench"});
@@ -227,9 +237,9 @@ public class ModCrafting {
 		ItemStack tier2CU = powerPipeCU.copy();ItemNBTHelper.setInteger(tier2CU, "Tier", 2);
 		ItemStack tier3CU = powerPipeCU.copy();ItemNBTHelper.setInteger(tier3CU, "Tier", 3);
 		addShapedOreRecipe(tier0CU, new Object[]{"###", "NIN", "###", '#', dIronPlate, 'I', blueIngot, 'N', blueNugget });
-		addShapedOreRecipe(tier1CU, new Object[]{" # ", "NPN", " # ", '#', redPlate, 'N', redNugget, 'P', ItemUtil.copy(tier0CU, 1)});
-		addShapedOreRecipe(tier2CU, new Object[]{" # ", "NPN", " # ", '#', greenPlate, 'N', greenNugget, 'P', ItemUtil.copy(tier1CU, 1)});
-		addShapedOreRecipe(tier3CU, new Object[]{" # ", "NPN", " # ", '#', darkPlate, 'N', darkNugget, 'P', ItemUtil.copy(tier2CU, 1)});
+		addShapedOreRecipeNBT(tier1CU, new Object[]{" # ", "NPN", " # ", '#', redPlate, 'N', redNugget, 'P', ItemUtil.copy(tier0CU, 1)});
+		addShapedOreRecipeNBT(tier2CU, new Object[]{" # ", "NPN", " # ", '#', greenPlate, 'N', greenNugget, 'P', ItemUtil.copy(tier1CU, 1)});
+		addShapedOreRecipeNBT(tier3CU, new Object[]{" # ", "NPN", " # ", '#', darkPlate, 'N', darkNugget, 'P', ItemUtil.copy(tier2CU, 1)});
 		
 		ItemStack powerPipeRF = new ItemStack(ModBlocks.crystalPipe, 8, PipeType.POWERRF.getMeta());
 		ItemStack tier0RF = powerPipeRF.copy();ItemNBTHelper.setInteger(tier0RF, "Tier", 0);
@@ -237,9 +247,9 @@ public class ModCrafting {
 		ItemStack tier2RF = powerPipeRF.copy();ItemNBTHelper.setInteger(tier2RF, "Tier", 2);
 		ItemStack tier3RF = powerPipeRF.copy();ItemNBTHelper.setInteger(tier3RF, "Tier", 3);
 		addShapedOreRecipe(tier0RF, new Object[]{"###", "NIN", "###", '#', dIronPlate, 'I', blueIngot, 'N', "dustRedstone" });
-		addShapedOreRecipe(tier1RF, new Object[]{" # ", "NPN", " # ", '#', redPlate, 'N', "nuggetGold", 'P', ItemUtil.copy(tier0RF, 1)});
-		addShapedOreRecipe(tier2RF, new Object[]{" # ", "NPN", " # ", '#', greenPlate, 'N', "ingotGold", 'P', ItemUtil.copy(tier1RF, 1)});
-		addShapedOreRecipe(tier3RF, new Object[]{" # ", "NPN", " # ", '#', darkPlate, 'N', Blocks.LIGHT_WEIGHTED_PRESSURE_PLATE, 'P', ItemUtil.copy(tier2RF, 1)});
+		addShapedOreRecipeNBT(tier1RF, new Object[]{" # ", "NPN", " # ", '#', redPlate, 'N', "nuggetGold", 'P', ItemUtil.copy(tier0RF, 1)});
+		addShapedOreRecipeNBT(tier2RF, new Object[]{" # ", "NPN", " # ", '#', greenPlate, 'N', "ingotGold", 'P', ItemUtil.copy(tier1RF, 1)});
+		addShapedOreRecipeNBT(tier3RF, new Object[]{" # ", "NPN", " # ", '#', darkPlate, 'N', Blocks.LIGHT_WEIGHTED_PRESSURE_PLATE, 'P', ItemUtil.copy(tier2RF, 1)});
 
 		
 		addShapedOreRecipe(new ItemStack(ModItems.pipeFilter, 1, FilterType.NORMAL.ordinal()), new Object[]{"#P#", "PHP", "#P#", '#', "nuggetCrystal", 'P', "paper", 'H', Blocks.HOPPER});
@@ -269,6 +279,10 @@ public class ModCrafting {
 
 		
 		addShapedOreRecipe(ModBlocks.customSpawner, new Object[]{"BBB", "RDR", "BBB", 'B', Blocks.IRON_BARS, 'R', "rodBlaze", 'D', new ItemStack(ModBlocks.crystalIngot, 1, CrystalIngotBlockType.DARKIRON.getMeta())});
+		ItemStack pureSword = new ItemStack(ModItems.crystalSword);
+		ItemNBTHelper.getCompound(pureSword).setString("Color", "pure");
+		addShapedOreRecipeNBT(ModBlocks.mobGrinder, new Object[]{"PHP", "ISL", "PFP", 'P', dIronPlate, 'H', "skull", 'S', pureSword, 'I', itemPipe, 'L', fluidPipe, 'F', machineFrame});
+
 		
 		addShapedOreRecipe(ModBlocks.weather, new Object[]{"#S#", "CFB", "###", '#', dIronPlate, 'B', "bucket", 'S', Blocks.DAYLIGHT_DETECTOR, 'C', Items.CLOCK, 'F', machineFrame});
 
@@ -338,7 +352,7 @@ public class ModCrafting {
 		ItemStack engineTier1 = new ItemStack(ModBlocks.engine, 1, EngineType.FURNACE.getMeta()); ItemNBTHelper.setInteger(engineTier1, "Tier", 1);
 		ItemStack engineTier2 = new ItemStack(ModBlocks.engine, 1, EngineType.FURNACE.getMeta()); ItemNBTHelper.setInteger(engineTier2, "Tier", 2);
 
-		addShapedOreRecipe(engineTier0, new Object[]{"CCC", "IFI", "IPI", 'I', dIronPlate, 'F', Blocks.FURNACE, 'P', ItemUtil.copy(tier0CU, 1), 'C', "cobblestone"});
+		addShapedOreRecipeNBT(engineTier0, new Object[]{"CCC", "IFI", "IPI", 'I', dIronPlate, 'F', Blocks.FURNACE, 'P', ItemUtil.copy(tier0CU, 1), 'C', "cobblestone"});
 		addShapedRecipe(engineTier1, new Object[]{"EEE", "EPE", "EEE", 'E', engineTier0, 'P', ItemUtil.copy(tier2CU, 1)});
 		addShapedRecipe(engineTier2, new Object[]{"EEE", "EPE", "EEE", 'E', engineTier1, 'P', ItemUtil.copy(tier3CU, 1)});
 
@@ -397,6 +411,12 @@ public class ModCrafting {
 	public static void addShapelessOreRecipe(Block result, Object... recipe){ addShapelessOreRecipe(new ItemStack(result), recipe); }
 	public static void addShapelessOreRecipe(ItemStack result, Object... recipe){
 		GameRegistry.addRecipe(new ShapelessOreRecipe(result, recipe));
+	}
+	
+	public static void addShapedOreRecipeNBT(Item result, Object... recipe){ addShapedOreRecipeNBT(new ItemStack(result), recipe); }
+	public static void addShapedOreRecipeNBT(Block result, Object... recipe){ addShapedOreRecipeNBT(new ItemStack(result), recipe); }
+	public static void addShapedOreRecipeNBT(ItemStack result, Object... recipe){
+		GameRegistry.addRecipe(new ShapedOreRecipeNBT(result, recipe));
 	}
 	
 	public static void create9x9Recipe(ItemStack output, ItemStack input, int reverseOut){

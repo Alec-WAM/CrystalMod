@@ -1,0 +1,12 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "crystalmod:item/fixedOneTexture"
+    },
+    "variants": {
+        "on": {
+			"true": { "textures": { "icon0": "crystalmod:items/tool/supertorch_on"}},
+			"false": { "textures": { "icon0": "crystalmod:items/tool/supertorch_off" }}
+		}
+    }
+}
