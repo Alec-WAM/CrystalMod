@@ -32,6 +32,7 @@ import alec_wam.CrystalMod.util.client.RenderUtil;
 import com.google.common.collect.Lists;
 
 import mezz.jei.api.IGuiHelper;
+import mezz.jei.api.IJeiHelpers;
 import mezz.jei.api.IModRegistry;
 import mezz.jei.api.gui.IDrawable;
 import mezz.jei.api.gui.IDrawableAnimated;
@@ -39,18 +40,22 @@ import mezz.jei.api.gui.IDrawableStatic;
 import mezz.jei.api.gui.IGuiFluidStackGroup;
 import mezz.jei.api.gui.IGuiItemStackGroup;
 import mezz.jei.api.gui.IRecipeLayout;
+import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.BlankRecipeCategory;
 import mezz.jei.api.recipe.BlankRecipeWrapper;
+import mezz.jei.api.recipe.IStackHelper;
+import mezz.jei.api.recipe.wrapper.IShapedCraftingRecipeWrapper;
 
 public class InfuserRecipeCategory extends BlankRecipeCategory<InfuserRecipeCategory.InfuserJEIRecipe>  {
 
 	public static final @Nonnull String UID = CrystalMod.MODID+".Infuser";
 	
 	public static class InfuserJEIRecipe extends BlankRecipeWrapper {
-
+		private final IJeiHelpers jeiHelpers;
 		public InfusionMachineRecipe recipe;
 		
-		public InfuserJEIRecipe(InfusionMachineRecipe recipe){
+		public InfuserJEIRecipe(IJeiHelpers jeiHelpers, InfusionMachineRecipe recipe){
+			this.jeiHelpers = jeiHelpers;
 			this.recipe = recipe;
 		}
 		
@@ -102,10 +107,23 @@ public class InfuserRecipeCategory extends BlankRecipeCategory<InfuserRecipeCate
 		public int getEnergyRequired(){
 			return recipe.getEnergy();
 		}
+
+		@Override
+		public void getIngredients(IIngredients ingredients) {
+			IStackHelper stackHelper = jeiHelpers.getStackHelper();
+
+			List<List<ItemStack>> inputs = stackHelper.expandRecipeItemStackInputs(getInputs());
+			ingredients.setInputLists(ItemStack.class, inputs);
+
+			ItemStack recipeOutput = recipe.getOutput();
+			if (recipeOutput != null) {
+				ingredients.setOutput(ItemStack.class, recipeOutput);
+			}
+		}
 		
 	}
 
-	public static void register(IModRegistry registry, IGuiHelper guiHelper) {
+	public static void register(IJeiHelpers jeiHelpers, IModRegistry registry, IGuiHelper guiHelper) {
 	    
 	    registry.addRecipeCategories(new InfuserRecipeCategory(guiHelper));
 	    registry.addRecipeHandlers(new RecipeHandler<InfuserJEIRecipe>(InfuserJEIRecipe.class, InfuserRecipeCategory.UID));
@@ -114,7 +132,7 @@ public class InfuserRecipeCategory extends BlankRecipeCategory<InfuserRecipeCate
 
 	    List<InfuserJEIRecipe> result = new ArrayList<InfuserJEIRecipe>();    
 	    for (InfusionMachineRecipe rec : CrystalInfusionManager.getRecipes()) {
-	      result.add(new InfuserJEIRecipe(rec));
+	      result.add(new InfuserJEIRecipe(jeiHelpers, rec));
 	    }    
 	    registry.addRecipes(result);
 
@@ -175,20 +193,19 @@ public class InfuserRecipeCategory extends BlankRecipeCategory<InfuserRecipeCate
 	    }
 	    
   	}
-	
+
 	@Override
-	public void setRecipe(@Nonnull IRecipeLayout recipeLayout, @Nonnull InfuserRecipeCategory.InfuserJEIRecipe recipeWrapper) {
+	public void setRecipe(IRecipeLayout recipeLayout, InfuserJEIRecipe recipeWrapper, IIngredients ingredients) {
 		currentRecipe = recipeWrapper;
-		
 		IGuiItemStackGroup guiItemStacks = recipeLayout.getItemStacks();
+
 		guiItemStacks.init(0, true, 132 - xOff-1, 34 - yOff-1);
 		guiItemStacks.init(1, true, 80 - xOff-1, 34 - yOff-1);
-		guiItemStacks.setFromRecipe(0, recipeWrapper.getInputs());
-		guiItemStacks.setFromRecipe(1, recipeWrapper.recipe.getOutput());
+		guiItemStacks.set(ingredients);
 		
 		IGuiFluidStackGroup guiFluidStacks = recipeLayout.getFluidStacks();
 		guiFluidStacks.init(0, false, 33 - xOff-1, 24 - yOff-1, 12, 40, Fluid.BUCKET_VOLUME * 4, true, null);
-		guiFluidStacks.set(0, recipeWrapper.getFluidInputs());
+		guiFluidStacks.set(ingredients);
 	}
 
 }

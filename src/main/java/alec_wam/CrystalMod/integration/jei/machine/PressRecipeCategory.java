@@ -27,24 +27,28 @@ import alec_wam.CrystalMod.util.client.RenderUtil;
 import com.google.common.collect.Lists;
 
 import mezz.jei.api.IGuiHelper;
+import mezz.jei.api.IJeiHelpers;
 import mezz.jei.api.IModRegistry;
 import mezz.jei.api.gui.IDrawable;
 import mezz.jei.api.gui.IDrawableAnimated;
 import mezz.jei.api.gui.IDrawableStatic;
 import mezz.jei.api.gui.IGuiItemStackGroup;
 import mezz.jei.api.gui.IRecipeLayout;
+import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.BlankRecipeCategory;
 import mezz.jei.api.recipe.BlankRecipeWrapper;
+import mezz.jei.api.recipe.IStackHelper;
 
 public class PressRecipeCategory extends BlankRecipeCategory<PressRecipeCategory.PressRecipe>  {
 
 	public static final @Nonnull String UID = CrystalMod.MODID+".Press";
 	
 	public static class PressRecipe extends BlankRecipeWrapper {
-
+		private final IJeiHelpers jeiHelpers;
 		public BasicMachineRecipe recipe;
 		
-		public PressRecipe(BasicMachineRecipe recipe){
+		public PressRecipe(IJeiHelpers jeiHelpers, BasicMachineRecipe recipe){
+			this.jeiHelpers = jeiHelpers;
 			this.recipe = recipe;
 		}
 		
@@ -69,10 +73,23 @@ public class PressRecipeCategory extends BlankRecipeCategory<PressRecipeCategory
 		public int getEnergyRequired(){
 			return recipe.getEnergy();
 		}
+
+		@Override
+		public void getIngredients(IIngredients ingredients) {
+			IStackHelper stackHelper = jeiHelpers.getStackHelper();
+
+			List<List<ItemStack>> inputs = stackHelper.expandRecipeItemStackInputs(getInputs());
+			ingredients.setInputLists(ItemStack.class, inputs);
+
+			ItemStack recipeOutput = recipe.getOutput();
+			if (recipeOutput != null) {
+				ingredients.setOutput(ItemStack.class, recipeOutput);
+			}
+		}
 		
 	}
 
-	public static void register(IModRegistry registry, IGuiHelper guiHelper) {
+	public static void register(IJeiHelpers jeiHelpers, IModRegistry registry, IGuiHelper guiHelper) {
 	    
 	    registry.addRecipeCategories(new PressRecipeCategory(guiHelper));
 	    registry.addRecipeHandlers(new RecipeHandler<PressRecipe>(PressRecipe.class, PressRecipeCategory.UID));
@@ -81,7 +98,7 @@ public class PressRecipeCategory extends BlankRecipeCategory<PressRecipeCategory
 
 	    List<PressRecipe> result = new ArrayList<PressRecipe>();    
 	    for (BasicMachineRecipe rec : PressRecipeManager.getRecipes()) {
-	      result.add(new PressRecipe(rec));
+	      result.add(new PressRecipe(jeiHelpers, rec));
 	    }    
 	    registry.addRecipes(result);
 
@@ -136,17 +153,15 @@ public class PressRecipeCategory extends BlankRecipeCategory<PressRecipeCategory
 	      return;
 	    }
   	}
-	
+
 	@Override
-	public void setRecipe(@Nonnull IRecipeLayout recipeLayout, @Nonnull PressRecipeCategory.PressRecipe recipeWrapper) {
+	public void setRecipe(IRecipeLayout recipeLayout, PressRecipe recipeWrapper, IIngredients arg2) {
 		currentRecipe = recipeWrapper;
 		
 		IGuiItemStackGroup guiItemStacks = recipeLayout.getItemStacks();
 		guiItemStacks.init(0, true, 56 - xOff-1, 35 - yOff-1);
 		guiItemStacks.init(1, false, 116 - xOff-1, 35 - yOff-1);
-
-		guiItemStacks.setFromRecipe(0, recipeWrapper.getInputs());
-		guiItemStacks.setFromRecipe(1, recipeWrapper.getOutputs());
+		guiItemStacks.set(arg2);
 	}
 
 }

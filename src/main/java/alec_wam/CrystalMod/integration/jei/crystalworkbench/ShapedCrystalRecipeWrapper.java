@@ -7,6 +7,7 @@ import java.util.List;
 import javax.annotation.Nonnull;
 
 import mezz.jei.api.IJeiHelpers;
+import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.BlankRecipeWrapper;
 import mezz.jei.api.recipe.wrapper.ICraftingRecipeWrapper;
 import mezz.jei.api.recipe.wrapper.IShapedCraftingRecipeWrapper;
@@ -54,5 +55,11 @@ public class ShapedCrystalRecipeWrapper extends BlankRecipeWrapper implements IS
 			return false;
 		}
 		return super.equals(obj);
+	}
+
+	@Override
+	public void getIngredients(IIngredients arg0) {
+		// TODO Auto-generated method stub
+		
 	}
 }

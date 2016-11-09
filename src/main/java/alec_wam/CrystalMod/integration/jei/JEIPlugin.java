@@ -13,9 +13,7 @@ import alec_wam.CrystalMod.integration.jei.machine.LiquidizerRecipeCategory;
 import alec_wam.CrystalMod.integration.jei.machine.PressRecipeCategory;
 import alec_wam.CrystalMod.tiles.machine.crafting.BlockCrystalMachine.MachineType;
 import alec_wam.CrystalMod.tiles.machine.crafting.furnace.ContainerCrystalFurnace;
-import alec_wam.CrystalMod.tiles.machine.crafting.press.ContainerPress;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.BlockPanel.PanelType;
-import alec_wam.CrystalMod.tiles.pipes.estorage.panel.crafting.ContainerPanelCrafting;
 import alec_wam.CrystalMod.tiles.workbench.ContainerCrystalWorkbench;
 import mezz.jei.api.BlankModPlugin;
 import mezz.jei.api.IGuiHelper;
@@ -31,9 +29,9 @@ public class JEIPlugin  extends BlankModPlugin {
 	@Override
 	public void register(@Nonnull IModRegistry registry) {
 		RecipeTransferHandler helper = new RecipeTransferHandler(registry);
-		registry.getRecipeTransferRegistry().addRecipeTransferHandler(helper);
+		registry.getRecipeTransferRegistry().addRecipeTransferHandler(helper, "minecraft.crafting");
 		RecipeTransferEncoder helperEncoder = new RecipeTransferEncoder(registry);
-		registry.getRecipeTransferRegistry().addRecipeTransferHandler(helperEncoder);
+		registry.getRecipeTransferRegistry().addUniversalRecipeTransferHandler(helperEncoder);
 		IJeiHelpers jeiHelpers = registry.getJeiHelpers();
 		IGuiHelper guiHelper = jeiHelpers.getGuiHelper();
 
@@ -48,9 +46,9 @@ public class JEIPlugin  extends BlankModPlugin {
 
 		registry.addRecipes(CrystalCraftingManager.getInstance().getRecipeList());
 
-		PressRecipeCategory.register(registry, guiHelper);
-		LiquidizerRecipeCategory.register(registry, guiHelper);
-		InfuserRecipeCategory.register(registry, guiHelper);
+		PressRecipeCategory.register(jeiHelpers, registry, guiHelper);
+		LiquidizerRecipeCategory.register(jeiHelpers, registry, guiHelper);
+		InfuserRecipeCategory.register(jeiHelpers, registry, guiHelper);
 		
 		
 		registry.addRecipeCategoryCraftingItem(new ItemStack(ModBlocks.crystalWorkbench), CrystalModRecipeUids.WORKBENCH);
@@ -77,11 +75,14 @@ public class JEIPlugin  extends BlankModPlugin {
 		jeiHelpers.getItemBlacklist().addItemToBlacklist(new ItemStack(ModBlocks.cubeCore));
 		
 		registry.addAdvancedGuiHandlers(new AdvancedGuiHandlerCrystalMod());
+		registry.addAdvancedGuiHandlers(new AdvancedGuiHandlerPanel());
 	}
+	
+	public static IJeiRuntime runtime;
 	
 	@Override
 	public void onRuntimeAvailable(@Nonnull IJeiRuntime jeiRuntime){
-		
+		runtime = jeiRuntime;
 	}
 	
 }

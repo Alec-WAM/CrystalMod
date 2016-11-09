@@ -35,7 +35,6 @@ import com.google.common.collect.Lists;
 
 import mezz.jei.config.KeyBindings;
 import mezz.jei.gui.Focus;
-import mezz.jei.gui.RecipesGui;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -58,7 +57,7 @@ public class GuiPanel extends GuiContainer implements IGuiScreen, INetworkGui  {
 	
 	private int itemRow;
 	
-	private GuiTextField searchBar;
+	public GuiTextField searchBar;
 	private VScrollbar scrollbar;
 	
 	public Popup currentPopup;
@@ -604,30 +603,6 @@ public class GuiPanel extends GuiContainer implements IGuiScreen, INetworkGui  {
 				ItemStackData data = (fixednSlot < 0 || getDisplayItems().size() <= fixednSlot) ? null : getDisplayItems().get(fixednSlot);
 				if(data !=null && data.stack !=null){
 					ItemStack dis = data.stack;
-					
-					if(JEIUtil.isInstalled()){
-						try{
-							RecipesGui recipesGui = JEIUtil.getRecipesGui();
-		        			if(recipesGui !=null){
-							//RecipesGui recGui = /*new RecipesGui()*/JEIUtil.getRecipesGui();
-								if (keyCode == KeyBindings.showRecipe.getKeyCode()) {
-									Focus<?> focus = new Focus<ItemStack>(dis);
-									if (focus != null) {
-										if (!GuiScreen.isShiftKeyDown()) {
-											recipesGui.showRecipes(focus);
-										} else {
-											recipesGui.showUses(focus);
-										}
-										return;
-									}
-								} else if (keyCode == KeyBindings.showUses.getKeyCode()) {
-									recipesGui.showUses(dis);
-								}
-		        			}
-						}catch(Exception e){
-							e.printStackTrace();
-						}
-					}
 					
 					if (this.mc.thePlayer.inventory.getItemStack() == null)
 				    {

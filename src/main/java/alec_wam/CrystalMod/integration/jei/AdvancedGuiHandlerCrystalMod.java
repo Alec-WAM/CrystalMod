@@ -26,4 +26,9 @@ public class AdvancedGuiHandlerCrystalMod implements IAdvancedGuiHandler<GuiCont
     return guiContainer.getBlockingAreas();
   }
 
+  @Override
+  public Object getIngredientUnderMouse(GuiContainerTabbed arg0, int arg1, int arg2) {
+	  return null;
+  }
+
 }

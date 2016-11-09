@@ -28,6 +28,7 @@ import alec_wam.CrystalMod.util.client.RenderUtil;
 import com.google.common.collect.Lists;
 
 import mezz.jei.api.IGuiHelper;
+import mezz.jei.api.IJeiHelpers;
 import mezz.jei.api.IModRegistry;
 import mezz.jei.api.gui.IDrawable;
 import mezz.jei.api.gui.IDrawableAnimated;
@@ -35,18 +36,21 @@ import mezz.jei.api.gui.IDrawableStatic;
 import mezz.jei.api.gui.IGuiFluidStackGroup;
 import mezz.jei.api.gui.IGuiItemStackGroup;
 import mezz.jei.api.gui.IRecipeLayout;
+import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.BlankRecipeCategory;
 import mezz.jei.api.recipe.BlankRecipeWrapper;
+import mezz.jei.api.recipe.IStackHelper;
 
 public class LiquidizerRecipeCategory extends BlankRecipeCategory<LiquidizerRecipeCategory.LiquidizerJEIRecipe>  {
 
 	public static final @Nonnull String UID = CrystalMod.MODID+".Liquidizer";
 	
 	public static class LiquidizerJEIRecipe extends BlankRecipeWrapper {
-
+		private final IJeiHelpers jeiHelpers;
 		public LiquidizerRecipe recipe;
 		
-		public LiquidizerJEIRecipe(LiquidizerRecipe recipe){
+		public LiquidizerJEIRecipe(IJeiHelpers jeiHelpers, LiquidizerRecipe recipe){
+			this.jeiHelpers = jeiHelpers;
 			this.recipe = recipe;
 		}
 		
@@ -92,10 +96,23 @@ public class LiquidizerRecipeCategory extends BlankRecipeCategory<LiquidizerReci
 		public int getEnergyRequired(){
 			return recipe.getEnergy();
 		}
+
+		@Override
+		public void getIngredients(IIngredients ingredients) {
+			IStackHelper stackHelper = jeiHelpers.getStackHelper();
+
+			List<List<ItemStack>> inputs = stackHelper.expandRecipeItemStackInputs(getInputs());
+			ingredients.setInputLists(ItemStack.class, inputs);
+
+			FluidStack recipeOutput = recipe.getOutput();
+			if (recipeOutput != null) {
+				ingredients.setOutput(FluidStack.class, recipeOutput);
+			}
+		}
 		
 	}
 
-	public static void register(IModRegistry registry, IGuiHelper guiHelper) {
+	public static void register(IJeiHelpers jeiHelpers, IModRegistry registry, IGuiHelper guiHelper) {
 	    
 	    registry.addRecipeCategories(new LiquidizerRecipeCategory(guiHelper));
 	    registry.addRecipeHandlers(new RecipeHandler<LiquidizerJEIRecipe>(LiquidizerJEIRecipe.class, LiquidizerRecipeCategory.UID));
@@ -104,7 +121,7 @@ public class LiquidizerRecipeCategory extends BlankRecipeCategory<LiquidizerReci
 
 	    List<LiquidizerJEIRecipe> result = new ArrayList<LiquidizerJEIRecipe>();    
 	    for (LiquidizerRecipe rec : LiquidizerRecipeManager.getRecipes()) {
-	      result.add(new LiquidizerJEIRecipe(rec));
+	      result.add(new LiquidizerJEIRecipe(jeiHelpers, rec));
 	    }    
 	    registry.addRecipes(result);
 
@@ -161,18 +178,17 @@ public class LiquidizerRecipeCategory extends BlankRecipeCategory<LiquidizerReci
 	    }
 	    
   	}
-	
+
 	@Override
-	public void setRecipe(@Nonnull IRecipeLayout recipeLayout, @Nonnull LiquidizerRecipeCategory.LiquidizerJEIRecipe recipeWrapper) {
+	public void setRecipe(IRecipeLayout recipeLayout, LiquidizerJEIRecipe recipeWrapper, IIngredients ingredients) {
 		currentRecipe = recipeWrapper;
-		
 		IGuiItemStackGroup guiItemStacks = recipeLayout.getItemStacks();
 		guiItemStacks.init(0, true, 56 - xOff-1, 35 - yOff-1);
-		guiItemStacks.setFromRecipe(0, recipeWrapper.getInputs());
+		guiItemStacks.set(ingredients);
 		
 		IGuiFluidStackGroup guiFluidStacks = recipeLayout.getFluidStacks();
 		guiFluidStacks.init(0, false, 112 - xOff, 23 - yOff, 12, 40, Fluid.BUCKET_VOLUME * 8, true, null);
-		guiFluidStacks.set(0, recipeWrapper.getFluidOutputs());
+		guiFluidStacks.set(ingredients);
 	}
 
 }

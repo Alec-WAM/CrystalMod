@@ -1,5 +1,7 @@
 package alec_wam.CrystalMod.integration.jei.crystalworkbench;
 
+import java.util.List;
+
 import javax.annotation.Nonnull;
 
 import mezz.jei.api.IGuiHelper;
@@ -7,10 +9,12 @@ import mezz.jei.api.gui.ICraftingGridHelper;
 import mezz.jei.api.gui.IDrawable;
 import mezz.jei.api.gui.IGuiItemStackGroup;
 import mezz.jei.api.gui.IRecipeLayout;
+import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.BlankRecipeCategory;
 import mezz.jei.api.recipe.wrapper.ICraftingRecipeWrapper;
 import mezz.jei.api.recipe.wrapper.IShapedCraftingRecipeWrapper;
 import net.minecraft.client.Minecraft;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.translation.I18n;
 import alec_wam.CrystalMod.integration.jei.CrystalModRecipeUids;
@@ -81,6 +85,32 @@ public class CrystalWorkbenchCategory extends BlankRecipeCategory<ICraftingRecip
 			craftingGridHelper.setOutput(guiItemStacks, wrapper.getOutputs());
 		} else {
 			System.out.println("Can't handle unknown recipe wrapper: {}"+ recipeWrapper.toString());
+		}
+	}
+
+	@Override
+	public void setRecipe(IRecipeLayout recipeLayout, ICraftingRecipeWrapper recipeWrapper,	IIngredients ingredients) {
+		IGuiItemStackGroup guiItemStacks = recipeLayout.getItemStacks();
+
+		guiItemStacks.init(craftOutputSlot, false, 94, 18);
+
+		for (int y = 0; y < 3; ++y) {
+			for (int x = 0; x < 3; ++x) {
+				int index = craftInputSlot1 + x + (y * 3);
+				guiItemStacks.init(index, true, x * 18, y * 18);
+			}
+		}
+
+		List<List<ItemStack>> inputs = ingredients.getInputs(ItemStack.class);
+		List<ItemStack> outputs = ingredients.getOutputs(ItemStack.class);
+
+		if (recipeWrapper instanceof IShapedCraftingRecipeWrapper) {
+			IShapedCraftingRecipeWrapper wrapper = (IShapedCraftingRecipeWrapper) recipeWrapper;
+			craftingGridHelper.setInputStacks(guiItemStacks, inputs, wrapper.getWidth(), wrapper.getHeight());
+			craftingGridHelper.setOutput(guiItemStacks, outputs);
+		} else {
+			craftingGridHelper.setInputStacks(guiItemStacks, inputs);
+			craftingGridHelper.setOutput(guiItemStacks, outputs);
 		}
 	}
 
