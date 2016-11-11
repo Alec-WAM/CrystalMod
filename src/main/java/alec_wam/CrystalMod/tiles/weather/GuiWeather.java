@@ -13,7 +13,6 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
 public class GuiWeather extends GuiContainer {
 

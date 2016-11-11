@@ -6,13 +6,9 @@ import java.util.Random;
 import javax.annotation.Nullable;
 
 import alec_wam.CrystalMod.CrystalMod;
-import alec_wam.CrystalMod.blocks.BlockCrystalLog.LogBlockStateMapper;
 import alec_wam.CrystalMod.blocks.BlockCrystalLog.WoodType;
-import alec_wam.CrystalMod.blocks.glass.BlockCrystalGlass.GlassBlockStateMapper;
-import alec_wam.CrystalMod.blocks.glass.BlockCrystalGlass.GlassType;
 import net.minecraft.block.BlockLeaves;
 import net.minecraft.block.BlockPlanks.EnumType;
-import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;

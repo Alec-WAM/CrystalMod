@@ -13,7 +13,6 @@ import javax.annotation.Nonnull;
 
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.tiles.machine.worksite.InventorySided;
-import alec_wam.CrystalMod.tiles.pipes.estorage.panel.crafting.ContainerPanelCrafting;
 import alec_wam.CrystalMod.tiles.pipes.item.GhostItemHelper;
 import alec_wam.CrystalMod.tiles.pipes.item.filters.CameraFilterInventory;
 import alec_wam.CrystalMod.tiles.pipes.item.filters.FilterInventory;
@@ -1183,20 +1182,6 @@ public class ItemUtil {
 		}*/
 		int remaining = amount-needed;
 		return remaining <=0 ? null : ItemUtil.copy(removeStack, remaining);
-	}
-	
-	private static Slot getSlotWithStack(@Nonnull Container container, @Nonnull ItemStack stack, @Nonnull List<Integer> craftingSlots, @Nonnull List<Integer> inventorySlots) {
-		try{
-			Slot slot = getSlotWithStack(container, craftingSlots, stack);
-			if (slot == null) {
-				slot = getSlotWithStack(container, inventorySlots, stack);
-			}
-	
-			return slot;
-		} catch(Exception e){
-			e.printStackTrace();
-		}
-		return null;
 	}
 	
 	public static Slot getSlotWithStack(@Nonnull Container container, @Nonnull Iterable<Integer> slotNumbers, @Nonnull ItemStack stack) {
