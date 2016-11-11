@@ -5,6 +5,7 @@ import java.util.Map;
 import alec_wam.CrystalMod.api.tools.IBatType;
 import alec_wam.CrystalMod.api.tools.IBatUpgrade;
 import alec_wam.CrystalMod.api.tools.UpgradeData;
+import alec_wam.CrystalMod.client.model.dynamic.ICustomItemRenderer;
 import alec_wam.CrystalMod.util.ModLogger;
 import alec_wam.CrystalMod.util.client.RenderUtil;
 import net.minecraft.client.Minecraft;
@@ -21,9 +22,9 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
-public class ItemBatRenderer {
+public class ItemBatRenderer implements ICustomItemRenderer {
 
-	public static void render(ItemStack stack, TransformType type) {
+	public void render(ItemStack stack, TransformType type) {
 		GlStateManager.pushMatrix();
 		boolean render = false;
 		

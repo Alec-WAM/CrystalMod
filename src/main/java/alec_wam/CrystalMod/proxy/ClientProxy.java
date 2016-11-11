@@ -1,20 +1,16 @@
 package alec_wam.CrystalMod.proxy;
 
-import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.lwjgl.input.Keyboard;
-import org.lwjgl.util.glu.Project;
-
-import alec_wam.CrystalMod.asm.ObfuscatedNames;
 import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.blocks.glass.ModelGlass;
 import alec_wam.CrystalMod.blocks.glass.BlockCrystalGlass.GlassType;
-import alec_wam.CrystalMod.capability.ExtendedPlayer;
-import alec_wam.CrystalMod.capability.ExtendedPlayerProvider;
-import alec_wam.CrystalMod.client.model.BakedCustomItemModel;
 import alec_wam.CrystalMod.client.model.CustomItemModelFactory;
 import alec_wam.CrystalMod.client.model.LayerDragonWings;
 import alec_wam.CrystalMod.client.model.LayerHorseAccessories;
+import alec_wam.CrystalMod.client.model.dynamic.ICustomItemRenderer;
 import alec_wam.CrystalMod.entities.ModEntites;
 import alec_wam.CrystalMod.fluids.FluidColored;
 import alec_wam.CrystalMod.fluids.Fluids;
@@ -32,45 +28,24 @@ import alec_wam.CrystalMod.tiles.pipes.render.BakedModelLoader;
 import alec_wam.CrystalMod.tiles.tank.ModelTank;
 import alec_wam.CrystalMod.tiles.tank.BlockTank.TankType;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
-import alec_wam.CrystalMod.util.ReflectionUtils;
-import alec_wam.CrystalMod.world.game.tag.TagManager;
-
-import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.mojang.authlib.GameProfile;
 
-import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.AbstractClientPlayer;
-import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.model.ModelBiped;
-import net.minecraft.client.renderer.ActiveRenderInfo;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderLivingBase;
 import net.minecraft.client.renderer.entity.RenderPlayer;
-import net.minecraft.client.renderer.entity.layers.LayerBipedArmor;
-import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.ModelBakeEvent;
-import net.minecraftforge.client.event.RenderHandEvent;
-import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.common.MinecraftForge;
@@ -112,7 +87,11 @@ public class ClientProxy extends CommonProxy {
         super.postInit(e);
     }
     
-    public static final List<String> CUSTOM_RENDERS = Lists.newArrayList();//new String[]{"flagItem", "dragonWings", "mobEssence"};
+    private static final Map<String, ICustomItemRenderer> CUSTOM_RENDERS = Maps.newHashMap();
+    
+    public static void registerItemRender(String id, ICustomItemRenderer render){
+    	CUSTOM_RENDERS.put(id, render);
+    }
     
     @SubscribeEvent
     public void onBakeModel(final ModelBakeEvent event) {
@@ -122,10 +101,8 @@ public class ClientProxy extends CommonProxy {
         }
         event.getModelRegistry().putObject(new ModelResourceLocation(ModBlocks.crystalGlass.getRegistryName(), "inventory"), ModelGlass.INSTANCE);
         
-        event.getModelRegistry().putObject(new ModelResourceLocation("crystalmod:battery", "normal"), ModelBattery.INSTANCE);
-        
-        
-        event.getModelRegistry().putObject(new ModelResourceLocation("crystalmod:battery", "inventory"), ModelBattery.INSTANCE);
+        event.getModelRegistry().putObject(new ModelResourceLocation(ModBlocks.battery.getRegistryName(), "normal"), ModelBattery.INSTANCE);
+        event.getModelRegistry().putObject(new ModelResourceLocation(ModBlocks.battery.getRegistryName(), "inventory"), ModelBattery.INSTANCE);
         
         event.getModelRegistry().putObject(new ModelResourceLocation(ModBlocks.enderBuffer.getRegistryName(), "normal"), ModelEnderBuffer.INSTANCE);
         event.getModelRegistry().putObject(new ModelResourceLocation(ModBlocks.enderBuffer.getRegistryName(), "active=false,facing=north"), ModelEnderBuffer.INSTANCE);
@@ -133,19 +110,19 @@ public class ClientProxy extends CommonProxy {
         event.getModelRegistry().putObject(new ModelResourceLocation(ModBlocks.enderBuffer.getRegistryName(), "inventory"), ModelEnderBuffer.INSTANCE);
         
         ModelCover.map.clear();
-        event.getModelRegistry().putObject(new ModelResourceLocation("crystalmod:pipecover", "inventory"), ModelCover.INSTANCE);
+        event.getModelRegistry().putObject(new ModelResourceLocation(ModItems.pipeCover.getRegistryName(), "inventory"), ModelCover.INSTANCE);
         
         ModelAttachment.map.clear();
         event.getModelRegistry().putObject(new ModelResourceLocation(ModItems.pipeAttachmant.getRegistryName(), "inventory"), ModelAttachment.INSTANCE);
         
         for(TankType type : TankType.values()){
-        	event.getModelRegistry().putObject(new ModelResourceLocation("crystalmod:crystaltank", "type="+type.getName()), ModelTank.INSTANCE);
+        	event.getModelRegistry().putObject(new ModelResourceLocation(ModBlocks.crystalTank.getRegistryName(), "type="+type.getName()), ModelTank.INSTANCE);
         }
-        event.getModelRegistry().putObject(new ModelResourceLocation("crystalmod:crystaltank", "inventory"), ModelTank.INSTANCE);
+        event.getModelRegistry().putObject(new ModelResourceLocation(ModBlocks.crystalTank.getRegistryName(), "inventory"), ModelTank.INSTANCE);
         
-        for(String s : CUSTOM_RENDERS)
+        for(Entry<String, ICustomItemRenderer> entry : CUSTOM_RENDERS.entrySet())
 		{
-			ModelResourceLocation model = new ModelResourceLocation("crystalmod:" + s, "inventory");
+			ModelResourceLocation model = new ModelResourceLocation("crystalmod:" + entry.getKey(), "inventory");
 	        Object obj = event.getModelRegistry().getObject(model);
 	        
 	        if(obj instanceof IBakedModel)

@@ -9,7 +9,7 @@ import alec_wam.CrystalMod.blocks.BlockCrystalPlant.PlantType;
 import alec_wam.CrystalMod.entities.minecarts.chests.ItemCrystalChestMinecart;
 import alec_wam.CrystalMod.entities.minions.ItemMinion;
 import alec_wam.CrystalMod.entities.minions.ItemMinionStaff;
-import alec_wam.CrystalMod.entities.pet.ItemBombomb;
+import alec_wam.CrystalMod.entities.pet.bombomb.ItemBombomb;
 import alec_wam.CrystalMod.items.ItemMetalPlate.PlateType;
 import alec_wam.CrystalMod.items.armor.ItemCustomArmor;
 import alec_wam.CrystalMod.items.backpack.ItemBackpack;

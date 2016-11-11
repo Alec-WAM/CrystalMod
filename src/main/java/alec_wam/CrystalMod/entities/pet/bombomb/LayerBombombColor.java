@@ -1,4 +1,4 @@
-package alec_wam.CrystalMod.entities.pet;
+package alec_wam.CrystalMod.entities.pet.bombomb;
 
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;

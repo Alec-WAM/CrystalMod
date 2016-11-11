@@ -3,6 +3,8 @@ package alec_wam.CrystalMod.client.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import alec_wam.CrystalMod.client.model.dynamic.ICustomItemRenderer;
+
 import com.google.common.collect.Lists;
 
 import net.minecraft.block.state.IBlockState;
@@ -20,6 +22,7 @@ import net.minecraft.world.World;
 public class CustomItemModelFactory implements IBakedModel {
 
 	private IBakedModel model;
+	private ICustomItemRenderer render;
 	
 	public CustomItemModelFactory(IBakedModel model){
 		this.model = model;
@@ -71,7 +74,7 @@ public class CustomItemModelFactory implements IBakedModel {
 		@Override
 		public IBakedModel handleItemState(IBakedModel originalModel, ItemStack stack, World world, EntityLivingBase entity)
 	    {
-			return new BakedCustomItemModel(model, stack);
+			return new BakedCustomItemModel(model, render, stack);
 	    }
 		
 	}

@@ -1,4 +1,4 @@
-package alec_wam.CrystalMod.entities.pet;
+package alec_wam.CrystalMod.entities.pet.bombomb;
 
 import com.google.common.base.Strings;
 

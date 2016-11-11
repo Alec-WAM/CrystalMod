@@ -1,4 +1,4 @@
-package alec_wam.CrystalMod.entities.pet;
+package alec_wam.CrystalMod.entities.pet.bombomb;
 
 import java.util.List;
 import java.util.UUID;
@@ -39,7 +39,7 @@ public class ItemBombomb extends Item implements ICustomModel {
 	@Override
 	public void initModel() {
 		ModItems.initBasicModel(this);
-		ClientProxy.CUSTOM_RENDERS.add(getRegistryName().getResourcePath());
+		ClientProxy.registerItemRender(getRegistryName().getResourcePath(), new ItemRenderBombomb());
 	}
 	
 	@SideOnly(Side.CLIENT)

@@ -3,7 +3,7 @@ package alec_wam.CrystalMod.entities.minions;
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.entities.minions.warrior.EntityMinionWarrior;
 import alec_wam.CrystalMod.entities.minions.worker.EntityMinionWorker;
-import alec_wam.CrystalMod.entities.pet.EntityBombomb;
+import alec_wam.CrystalMod.entities.pet.bombomb.EntityBombomb;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemUtil;

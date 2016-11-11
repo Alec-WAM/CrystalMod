@@ -1,6 +1,5 @@
 package alec_wam.CrystalMod.tiles.spawner;
 
-import alec_wam.CrystalMod.client.model.BakedCustomItemModel;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
@@ -220,7 +219,7 @@ public abstract class CustomSpawnerBaseLogic {
 	@SideOnly(Side.CLIENT)
 	public Entity getEntityForRenderer() {
 		if (this.renderedEntity == null) {
-			this.renderedEntity = BakedCustomItemModel.getRenderEntityNullable(getEntityNameToSpawn());
+			this.renderedEntity = ItemRenderMobEssence.getRenderEntityNullable(getEntityNameToSpawn());
 		}
 
 		return this.renderedEntity;
