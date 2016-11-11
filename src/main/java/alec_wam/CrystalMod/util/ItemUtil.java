@@ -1345,4 +1345,12 @@ public class ItemUtil {
     	return null;
 	}
 
+	public static int compareNames(ItemStack stack1, ItemStack stack2) {
+		int i = new ItemStack(stack1.getItem()).getDisplayName().compareTo(new ItemStack(stack2.getItem()).getDisplayName());
+        if (i != 0) {
+            return i;
+        }
+        return stack1.getDisplayName().compareTo(stack2.getDisplayName());
+	}
+
 }

@@ -187,12 +187,14 @@ public class TileEntityMobGrinder extends TileEntityMod implements IMessageHandl
 
 		killList = worldObj.getEntitiesWithinAABB(EntityLiving.class, getKillBox());
 
+		DamageSource playerSource = DamageSource.causePlayerDamage(fakePlayer);
+		
 		if (killList.size() > 0) {
 			for(EntityLiving mob : killList){
 				
 				boolean riddenByPlayer = mob.getRecursivePassengersByType(EntityPlayer.class).size() > 0;
 				
-				if (!mob.isDead && mob.deathTime <= 0 && !mob.isEntityInvulnerable(DamageSource.generic) && mob.hurtResistantTime == 0 && !riddenByPlayer) {
+				if (!mob.isDead && mob.deathTime <= 0 && !mob.isEntityInvulnerable(playerSource) && mob.hurtResistantTime == 0 && !riddenByPlayer) {
 					if (mob instanceof EntityZombie) {
 			            zBlocker.cache.add((EntityZombie) mob);
 					}   
@@ -218,7 +220,7 @@ public class TileEntityMobGrinder extends TileEntityMod implements IMessageHandl
 			        this.fakePlayer.setHeldItem(EnumHand.MAIN_HAND, (ItemStack)null);
 			        */
 					
-					mob.attackEntityFrom(DamageSource.causePlayerDamage(fakePlayer), 50000F);
+					mob.attackEntityFrom(playerSource, 50000F);
 					
 					readyNext = true;
 					return mob.isDead || mob.getHealth() <= 0;

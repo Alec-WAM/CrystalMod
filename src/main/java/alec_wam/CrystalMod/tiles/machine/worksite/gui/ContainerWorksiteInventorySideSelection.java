@@ -2,20 +2,21 @@ package alec_wam.CrystalMod.tiles.machine.worksite.gui;
 
 import java.util.HashMap;
 
+import alec_wam.CrystalMod.client.container.ContainerMessageBase;
 import alec_wam.CrystalMod.tiles.machine.worksite.InventorySided;
 import alec_wam.CrystalMod.tiles.machine.worksite.TileWorksiteBoundedInventory;
 import alec_wam.CrystalMod.tiles.machine.worksite.InventorySided.RelativeSide;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 
-public class ContainerWorksiteInventorySideSelection extends ContainerWorksiteBase {
+public class ContainerWorksiteInventorySideSelection extends ContainerMessageBase {
 
 	public HashMap<RelativeSide, RelativeSide> sideMap = new HashMap<RelativeSide, RelativeSide>();
 	public TileWorksiteBoundedInventory worksite;
 	public InventorySided inventory;
 
 	public ContainerWorksiteInventorySideSelection(EntityPlayer player, TileWorksiteBoundedInventory worksite) {
-		super(player, worksite.getPos());
+		super(player);
 		this.worksite = worksite;
 		inventory = worksite.inventory;
 

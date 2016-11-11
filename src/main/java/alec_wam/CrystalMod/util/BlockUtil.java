@@ -1,9 +1,9 @@
 package alec_wam.CrystalMod.util;
 
 import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.client.container.ContainerMessageBase;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.packets.PacketGuiMessage;
-import alec_wam.CrystalMod.tiles.machine.worksite.gui.ContainerWorksiteBase;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -70,9 +70,9 @@ public class BlockUtil {
 		else
 	    {
 		    player.openGui(CrystalMod.instance, id, player.worldObj, x, y, z);
-		    if(player.openContainer instanceof ContainerWorksiteBase)
+		    if(player.openContainer instanceof ContainerMessageBase)
 		    {
-		    	((ContainerWorksiteBase)player.openContainer).sendInitData();
+		    	((ContainerMessageBase)player.openContainer).sendInitData();
 		    }
 	    }
 	}

@@ -20,6 +20,8 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
+import alec_wam.CrystalMod.client.container.ContainerMessageBase;
+import alec_wam.CrystalMod.client.container.IContainerGuiCallback;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.packets.PacketGuiMessage;
 import alec_wam.CrystalMod.tiles.machine.worksite.gui.elements.GuiElement;
@@ -55,7 +57,7 @@ public abstract class GuiContainerWorksiteBase extends GuiContainer implements I
 
 	protected EntityPlayer player;
 
-	protected GuiContainerWorksiteBase(ContainerWorksiteBase container, int xSize, int ySize, String backgroundTexture) {
+	protected GuiContainerWorksiteBase(ContainerMessageBase container, int xSize, int ySize, String backgroundTexture) {
 		super(container);
 		container.setGui(this);
 		this.xSize = xSize;
@@ -65,10 +67,10 @@ public abstract class GuiContainerWorksiteBase extends GuiContainer implements I
 			this.backgroundTexture = new ResourceLocation("crystalmod",
 					"textures/gui/machine/worksite/" + backgroundTextureName);
 		}
-		this.player = ((ContainerWorksiteBase) container).player;
+		this.player = ((ContainerMessageBase) container).player;
 	}
 
-	public GuiContainerWorksiteBase(ContainerWorksiteBase container) {
+	public GuiContainerWorksiteBase(ContainerMessageBase container) {
 		this(container, 256, 240, defaultBackground);
 	}
 
@@ -205,7 +207,7 @@ public abstract class GuiContainerWorksiteBase extends GuiContainer implements I
 	@Override
 	public void updateScreen() {
 		if (this.shouldUpdate) {
-			((ContainerWorksiteBase) inventorySlots).setGui(this);
+			((ContainerMessageBase) inventorySlots).setGui(this);
 			this.initGui();
 			this.shouldUpdate = false;
 		}

@@ -13,6 +13,17 @@ public class Lang {
   public static String localize(String s) {
     return localize(s, true);
   }
+  
+  public static String localizeFormat(String key, Object... format) {
+	  String s = localize(key);
+	  try {
+		  return String.format(s, format);
+	  } catch (IllegalFormatException e) {
+		  String errorMessage = "Format error: " + s;
+		  ModLogger.warning(errorMessage, e);
+		  return errorMessage;
+	  }
+  }
 
   public static String localize(String s, boolean appendCM) {
     if(appendCM) {

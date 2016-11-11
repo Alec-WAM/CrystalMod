@@ -45,7 +45,7 @@ public class BlockCrystalReed extends Block implements net.minecraftforge.common
     
     public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand)
     {
-        if (worldIn.getBlockState(pos.down()).getBlock() == ModBlocks.crystalReeds || this.checkForDrop(worldIn, pos, state))
+        if (worldIn.getBlockState(pos.down()).getBlock() == this || this.checkForDrop(worldIn, pos, state))
         {
             if (worldIn.isAirBlock(pos.up()))
             {

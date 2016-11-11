@@ -2,6 +2,7 @@ package alec_wam.CrystalMod.tiles.machine.worksite.gui;
 
 import java.util.EnumSet;
 
+import alec_wam.CrystalMod.client.container.ContainerMessageBase;
 import alec_wam.CrystalMod.tiles.machine.worksite.InventorySided.RelativeSide;
 import alec_wam.CrystalMod.tiles.machine.worksite.InventorySided.RotationType;
 import alec_wam.CrystalMod.tiles.machine.worksite.gui.elements.Button;
@@ -14,7 +15,7 @@ public class GuiWorksiteInventorySideSelection extends GuiContainerWorksiteBase 
 
 	ContainerWorksiteInventorySideSelection container;
 
-	public GuiWorksiteInventorySideSelection(ContainerWorksiteBase par1Container) {
+	public GuiWorksiteInventorySideSelection(ContainerMessageBase par1Container) {
 		super(par1Container, 128 + 55 + 8, 106, defaultBackground);
 		container = (ContainerWorksiteInventorySideSelection) par1Container;
 	}

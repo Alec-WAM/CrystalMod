@@ -9,16 +9,18 @@ import javax.annotation.Nonnull;
 import mezz.jei.api.IJeiHelpers;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.BlankRecipeWrapper;
+import mezz.jei.api.recipe.IStackHelper;
 import mezz.jei.api.recipe.wrapper.ICraftingRecipeWrapper;
 import mezz.jei.api.recipe.wrapper.IShapedCraftingRecipeWrapper;
 import net.minecraft.item.ItemStack;
 import alec_wam.CrystalMod.crafting.ShapedCrystalRecipe;
 
 public class ShapedCrystalRecipeWrapper extends BlankRecipeWrapper implements IShapedCraftingRecipeWrapper, ICraftingRecipeWrapper {
-
+	private final IJeiHelpers jeiHelpers;
 	protected final ShapedCrystalRecipe recipe;
 	
 	public ShapedCrystalRecipeWrapper(@Nonnull IJeiHelpers jeiHelpers, @Nonnull ShapedCrystalRecipe recipe) {
+		this.jeiHelpers = jeiHelpers;
 		this.recipe = recipe;
 		for (ItemStack itemStack : this.recipe.recipeItems) {
 			if (itemStack != null && itemStack.stackSize != 1) {
@@ -58,8 +60,15 @@ public class ShapedCrystalRecipeWrapper extends BlankRecipeWrapper implements IS
 	}
 
 	@Override
-	public void getIngredients(IIngredients arg0) {
-		// TODO Auto-generated method stub
-		
+	public void getIngredients(IIngredients ingredients) {
+		IStackHelper stackHelper = jeiHelpers.getStackHelper();
+
+		List<List<ItemStack>> inputs = stackHelper.expandRecipeItemStackInputs(getInputs());
+		ingredients.setInputLists(ItemStack.class, inputs);
+
+		ItemStack recipeOutput = recipe.getRecipeOutput();
+		if (recipeOutput != null) {
+			ingredients.setOutput(ItemStack.class, recipeOutput);
+		}
 	}
 }

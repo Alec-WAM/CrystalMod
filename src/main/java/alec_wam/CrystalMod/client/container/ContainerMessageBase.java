@@ -1,4 +1,4 @@
-package alec_wam.CrystalMod.tiles.machine.worksite.gui;
+package alec_wam.CrystalMod.client.container;
 
 import java.util.List;
 
@@ -15,12 +15,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 
-public class ContainerWorksiteBase extends Container implements IMessageHandler {
+public class ContainerMessageBase extends Container implements IMessageHandler {
 
 	public EntityPlayer player;
 	IContainerGuiCallback gui;
 
-	public ContainerWorksiteBase(EntityPlayer player, BlockPos pos) {
+	public ContainerMessageBase(EntityPlayer player) {
 		this.player = player;
 	}
 

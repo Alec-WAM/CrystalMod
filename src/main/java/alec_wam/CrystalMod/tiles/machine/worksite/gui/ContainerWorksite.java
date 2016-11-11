@@ -1,5 +1,6 @@
 package alec_wam.CrystalMod.tiles.machine.worksite.gui;
 
+import alec_wam.CrystalMod.client.container.ContainerMessageBase;
 import alec_wam.CrystalMod.tiles.machine.worksite.InventorySided;
 import alec_wam.CrystalMod.tiles.machine.worksite.ItemSlotFilter;
 import alec_wam.CrystalMod.tiles.machine.worksite.TileWorksiteBoundedInventory;
@@ -7,7 +8,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
-public class ContainerWorksite extends ContainerWorksiteBase {
+public class ContainerWorksite extends ContainerMessageBase {
 
 	public final TileWorksiteBoundedInventory worksite;
 	public final InventorySided inventory;
@@ -15,7 +16,7 @@ public class ContainerWorksite extends ContainerWorksiteBase {
 			leftLabel, rightLabel, playerLabel;
 
 	public ContainerWorksite(EntityPlayer player, TileWorksiteBoundedInventory worksite) {
-		super(player, worksite.getPos());
+		super(player);
 		this.worksite = worksite;
 		inventory = worksite.inventory;
 	}

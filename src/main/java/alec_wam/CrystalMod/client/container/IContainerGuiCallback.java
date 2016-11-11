@@ -1,4 +1,4 @@
-package alec_wam.CrystalMod.tiles.machine.worksite.gui;
+package alec_wam.CrystalMod.client.container;
 
 import net.minecraft.nbt.NBTTagCompound;
 

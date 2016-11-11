@@ -1,6 +1,13 @@
 package alec_wam.CrystalMod;
 
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Locale;
+
+import javax.annotation.Nonnull;
+
+import com.google.common.collect.Lists;
 
 import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.fluids.Fluids;
@@ -11,6 +18,7 @@ import alec_wam.CrystalMod.network.commands.CommandCrystalMod;
 import alec_wam.CrystalMod.proxy.CommonProxy;
 import alec_wam.CrystalMod.tiles.pipes.covers.ItemPipeCover;
 import alec_wam.CrystalMod.tiles.pipes.covers.CoverUtil.CoverData;
+import alec_wam.CrystalMod.util.ItemUtil;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -43,30 +51,61 @@ public class CrystalMod {
 	@SidedProxy(clientSide="alec_wam.CrystalMod.proxy.ClientProxy", serverSide="alec_wam.CrystalMod.proxy.CommonProxy")
 	public static CommonProxy proxy;
 	
-	public static CreativeTabs tabItems = new CreativeTabs(MODID.toLowerCase()+".items") {
+	public static abstract class CustomCreativeTab extends CreativeTabs implements Comparator<ItemStack> {
+
+		public CustomCreativeTab(String label) {
+			super(label);
+		}
+		
+		@SideOnly(Side.CLIENT)
+        public void displayAllRelevantItems(@Nonnull final List<ItemStack> list) {
+            final List<ItemStack> newList = Lists.newArrayList();
+            super.displayAllRelevantItems((List<ItemStack>)newList);
+            Collections.sort(newList, this);
+            list.addAll(newList);
+        }
+		
+	}
+	
+	public static CreativeTabs tabItems = new CustomCreativeTab(MODID.toLowerCase()+".items") {
         @Override
         @SideOnly(Side.CLIENT)
         public Item getTabIconItem() {
             return ModItems.crystals;
         }
+
+		@Override
+		public int compare(ItemStack arg0, ItemStack arg1) {
+			return ItemUtil.compareNames(arg0, arg1);
+		}
     };
     
-    public static CreativeTabs tabTools = new CreativeTabs(MODID.toLowerCase()+".tools") {
+    public static CreativeTabs tabTools = new CustomCreativeTab(MODID.toLowerCase()+".tools") {
     	@Override
 		public Item getTabIconItem() {
 			return ModItems.wrench;
 		}
+
+		@Override
+		public int compare(ItemStack arg0, ItemStack arg1) {
+			return ItemUtil.compareNames(arg0, arg1);
+		}
     };
     
-    public static CreativeTabs tabBlocks = new CreativeTabs(MODID.toLowerCase()+".blocks") {
+    public static CreativeTabs tabBlocks = new CustomCreativeTab(MODID.toLowerCase()+".blocks") {
         @Override
         @SideOnly(Side.CLIENT)
         public Item getTabIconItem() {
             return Item.getItemFromBlock(ModBlocks.crystal);
         }
+
+		@Override
+		public int compare(ItemStack arg0, ItemStack arg1) {
+			return ItemUtil.compareNames(arg0, arg1);
+		}
     };
     
-    public static CreativeTabs tabCovers = new CreativeTabs(MODID.toLowerCase()+".covers") {
+    public static CreativeTabs tabCovers = new CustomCreativeTab(MODID.toLowerCase()+".covers") {
         @Override
         @SideOnly(Side.CLIENT)
         public Item getTabIconItem() {
@@ -84,6 +123,11 @@ public class CrystalMod {
         {
             return true;
         }
+
+		@Override
+		public int compare(ItemStack arg0, ItemStack arg1) {
+			return ItemUtil.compareNames(arg0, arg1);
+		}
     };
 	
 	@EventHandler

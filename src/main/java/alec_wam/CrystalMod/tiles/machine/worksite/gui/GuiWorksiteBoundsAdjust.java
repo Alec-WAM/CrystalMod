@@ -1,5 +1,6 @@
 package alec_wam.CrystalMod.tiles.machine.worksite.gui;
 
+import alec_wam.CrystalMod.client.container.ContainerMessageBase;
 import alec_wam.CrystalMod.tiles.machine.worksite.TileWorksiteUserBlocks;
 import alec_wam.CrystalMod.tiles.machine.worksite.gui.elements.Button;
 import alec_wam.CrystalMod.tiles.machine.worksite.gui.elements.GuiElement;
@@ -18,7 +19,7 @@ public class GuiWorksiteBoundsAdjust extends GuiContainerWorksiteBase {
 	boolean boundsAdjusted = false, targetsAdjusted = false;
 	byte[] checkedMap = new byte[16 * 16];
 
-	public GuiWorksiteBoundsAdjust(ContainerWorksiteBase container) {
+	public GuiWorksiteBoundsAdjust(ContainerMessageBase container) {
 		super(container);
 		this.container = (ContainerWorksiteBoundsAdjust) container;
 		this.shouldCloseOnVanillaKeys = true;

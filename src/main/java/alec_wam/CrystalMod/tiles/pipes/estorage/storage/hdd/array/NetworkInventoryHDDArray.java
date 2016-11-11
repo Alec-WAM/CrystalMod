@@ -124,7 +124,6 @@ public class NetworkInventoryHDDArray implements INetworkInventory {
 		return received;
 	}
 
-	//TODO Add Fluid HDD
 	@Override
 	public FluidStackList getFluids() {
 		return null;

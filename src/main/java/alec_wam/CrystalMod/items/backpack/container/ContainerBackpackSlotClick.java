@@ -649,8 +649,7 @@ public class ContainerBackpackSlotClick extends ContainerBackpackBase
         // Middle click on a slot - select the slot for swapping, or swap the contents with the selected slot
         else if (button == 2 && type == ClickType.CLONE)
         {
-        	ModLogger.info("middleClick");
-            this.middleClickSlot(slotNum, player);
+        	this.middleClickSlot(slotNum, player);
         }
         // Pick block on a slot - create new stack
         else if (type == ClickType.CLONE && player.capabilities.isCreativeMode && player.inventory.getItemStack() == null && slotNum >= 0)

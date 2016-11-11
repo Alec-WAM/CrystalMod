@@ -5,6 +5,7 @@ import java.util.UUID;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
+import alec_wam.CrystalMod.util.ModLogger;
 import alec_wam.CrystalMod.util.NBTUtils;
 
 public class InventoryItem extends ItemStackHandlerBasic
@@ -158,7 +159,7 @@ public class InventoryItem extends ItemStackHandlerBasic
         ItemStack stack = this.getContainerItemStack();
         if (stack == null)
         {
-            //System.out.println("isUseableByPlayer(): false - containerStack == null");
+            ModLogger.info("isUseableByPlayer(): false - containerStack == null");
             return false;
         }
 

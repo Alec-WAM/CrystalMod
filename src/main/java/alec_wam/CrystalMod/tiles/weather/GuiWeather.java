@@ -1,5 +1,7 @@
 package alec_wam.CrystalMod.tiles.weather;
 
+import alec_wam.CrystalMod.asm.ObfuscatedNames;
+import alec_wam.CrystalMod.util.ReflectionUtils;
 import alec_wam.CrystalMod.util.client.RenderUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -49,8 +51,7 @@ public class GuiWeather extends GuiContainer {
         	boolean canSnow = (f2 < 0.15F);
 			mc.getTextureManager().bindTexture(canSnow ? locationSnowPng : locationRainPng);
 	        worldrenderer.begin(7, DefaultVertexFormats.POSITION_TEX);
-	        //TODO Fix
-	        int update = ReflectionHelper.getPrivateValue(EntityRenderer.class, mc.entityRenderer, "rendererUpdateCount");
+	        int update = (Integer) ReflectionUtils.getPrivateValue(mc.entityRenderer, EntityRenderer.class, ObfuscatedNames.EntityRenderer_rendererUpdateCount);
 	        float h = (update + partialTicks) / 32f*(canSnow ? 0.5f : 6);
 	        float k2 = h;
 	        float l2 = h+1;

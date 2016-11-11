@@ -122,6 +122,7 @@ public class GuiHandler implements IGuiHandler {
 	public static final int GUI_ID_WORK_BOUNDS = 31;
 	public static final int GUI_ID_WORK_ALT = 32;
 	public static final int GUI_ID_ENTITY = 5;
+	public static final int GUI_ID_BACKPACK = 6;
 	
 
     

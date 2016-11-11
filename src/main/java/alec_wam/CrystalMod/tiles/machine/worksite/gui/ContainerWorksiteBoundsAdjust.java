@@ -1,5 +1,6 @@
 package alec_wam.CrystalMod.tiles.machine.worksite.gui;
 
+import alec_wam.CrystalMod.client.container.ContainerMessageBase;
 import alec_wam.CrystalMod.tiles.machine.worksite.TileWorksiteBase;
 import alec_wam.CrystalMod.tiles.machine.worksite.TileWorksiteUserBlocks;
 import alec_wam.CrystalMod.util.BlockUtil;
@@ -7,13 +8,13 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 
-public class ContainerWorksiteBoundsAdjust extends ContainerWorksiteBase {
+public class ContainerWorksiteBoundsAdjust extends ContainerMessageBase {
 
 	public BlockPos pos, min, max;
 	public TileWorksiteBase worksite;
 
 	public ContainerWorksiteBoundsAdjust(EntityPlayer player, TileWorksiteBase worksite) {
-		super(player, worksite.getPos());
+		super(player);
 		pos = worksite.getPos();
 		this.worksite = worksite;
 		min = new BlockPos(worksite.getWorkBoundsMin());

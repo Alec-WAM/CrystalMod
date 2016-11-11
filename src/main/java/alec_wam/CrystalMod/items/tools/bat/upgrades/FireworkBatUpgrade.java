@@ -114,7 +114,10 @@ public class FireworkBatUpgrade extends BatUpgrade {
 
     public final ItemStack FIREWORK = new ItemStack(Items.FIREWORKS);
     
-    //TODO Remove Creative Upgrade Data
+    @Override
+    public UpgradeData getCreativeListData(){
+    	return null;
+    }
     
 	//Crafting
 	@Override
