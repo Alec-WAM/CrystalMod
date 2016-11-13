@@ -11,7 +11,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -34,9 +33,9 @@ import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.EnumBlock;
 import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.blocks.ModBlocks;
+import alec_wam.CrystalMod.proxy.ClientProxy;
 import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.ChatUtil;
-import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.tool.ToolUtil;
 
 public class BlockTank extends EnumBlock<BlockTank.TankType> implements ITileEntityProvider, ICustomModel {
@@ -54,8 +53,12 @@ public class BlockTank extends EnumBlock<BlockTank.TankType> implements ITileEnt
 	
 	@SideOnly(Side.CLIENT)
     public void initModel() {
-		for(TankType type : TankType.values())
-        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), type.getMeta(), new ModelResourceLocation(this.getRegistryName(), "inventory"));
+		ModelResourceLocation inv = new ModelResourceLocation(getRegistryName(), "inventory");
+		ClientProxy.registerCustomModel(inv, ModelTank.INSTANCE);
+		for(TankType type : TankType.values()){
+			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), type.getMeta(), inv);
+			ClientProxy.registerCustomModel(new ModelResourceLocation(getRegistryName(), "type="+type.getName()), ModelTank.INSTANCE);
+		}
     }
 	
 	public IBlockState getExtendedState(final IBlockState state, final IBlockAccess world, final BlockPos pos) {

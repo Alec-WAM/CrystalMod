@@ -7,6 +7,7 @@ import java.util.Map;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -18,7 +19,10 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.blocks.ICustomModel;
+import alec_wam.CrystalMod.client.model.CustomBakedModel;
 import alec_wam.CrystalMod.items.ModItems;
+import alec_wam.CrystalMod.proxy.ClientProxy;
 import alec_wam.CrystalMod.tiles.pipes.TileEntityPipe;
 import alec_wam.CrystalMod.tiles.pipes.covers.CoverUtil.CoverData;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
@@ -27,7 +31,7 @@ import alec_wam.CrystalMod.util.Util;
 import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
 
-public class ItemPipeCover extends Item {
+public class ItemPipeCover extends Item implements ICustomModel {
 	public static final ArrayList<ItemStack> allCovers = new ArrayList<ItemStack>();
     public static final ArrayList<String> allCoverIDs = new ArrayList<String>();
     public static final ArrayList<String> blacklistedCovers = new ArrayList<String>();
@@ -38,6 +42,16 @@ public class ItemPipeCover extends Item {
     	super();
     	this.setCreativeTab(CrystalMod.tabCovers);
     	ModItems.registerItem(this, "pipecover");
+    }
+    
+    @SideOnly(Side.CLIENT)
+    @Override
+    public void initModel(){
+    	ClientProxy.registerCustomModel(new CustomBakedModel(new ModelResourceLocation(getRegistryName(), "inventory"), ModelCover.INSTANCE){
+    		public void preModelRegister(){
+    			ModelCover.map.clear();
+    		}
+    	});
     }
     
     @Override

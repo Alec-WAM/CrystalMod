@@ -9,7 +9,7 @@ import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.blocks.BlockCrystalIngot.CrystalIngotBlockType;
 import alec_wam.CrystalMod.crafting.ModCrafting;
 import alec_wam.CrystalMod.entities.animals.EntityCrystalCow;
-import alec_wam.CrystalMod.fluids.Fluids;
+import alec_wam.CrystalMod.fluids.ModFluids;
 import alec_wam.CrystalMod.items.ItemIngot;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.items.ItemCrystal.CrystalType;
@@ -46,37 +46,37 @@ public class TConstructIntegration {
 		oreDictionary();
 		
 		FluidRegistry.registerFluid(moltenCrystalBlue);
-		Fluids.registerMoltenBlock(moltenCrystalBlue);
+		ModFluids.registerMoltenBlock(moltenCrystalBlue);
 		FluidRegistry.addBucketForFluid(moltenCrystalBlue);
 		addToSmeltery(moltenCrystalBlue, "CrystalBlue", true);
 		
 		FluidRegistry.registerFluid(moltenCrystalRed);
-		Fluids.registerMoltenBlock(moltenCrystalRed);
+		ModFluids.registerMoltenBlock(moltenCrystalRed);
 		FluidRegistry.addBucketForFluid(moltenCrystalRed);
 		addToSmeltery(moltenCrystalRed, "CrystalRed", true);
 		
 		FluidRegistry.registerFluid(moltenCrystalGreen);
-		Fluids.registerMoltenBlock(moltenCrystalGreen);
+		ModFluids.registerMoltenBlock(moltenCrystalGreen);
 		FluidRegistry.addBucketForFluid(moltenCrystalGreen);
 		addToSmeltery(moltenCrystalGreen, "CrystalGreen", true);
 		
 		FluidRegistry.registerFluid(moltenCrystalDark);
-		Fluids.registerMoltenBlock(moltenCrystalDark);
+		ModFluids.registerMoltenBlock(moltenCrystalDark);
 		FluidRegistry.addBucketForFluid(moltenCrystalDark);
 		addToSmeltery(moltenCrystalDark, "CrystalDark", true);
 		
 		FluidRegistry.registerFluid(moltenCrystalPure);
-		Fluids.registerMoltenBlock(moltenCrystalPure);
+		ModFluids.registerMoltenBlock(moltenCrystalPure);
 		FluidRegistry.addBucketForFluid(moltenCrystalPure);
 		addToSmeltery(moltenCrystalPure, "CrystalPure", true);
 		
 		FluidRegistry.registerFluid(moltenDarkIron);
-		Fluids.registerMoltenBlock(moltenDarkIron);
+		ModFluids.registerMoltenBlock(moltenDarkIron);
 		FluidRegistry.addBucketForFluid(moltenDarkIron);
 		addToSmeltery(moltenDarkIron, "IronDark", true);
 		
 		
-		registerAlloy(new FluidStack(moltenDarkIron, 144), new FluidStack(FluidRegistry.getFluid("iron"), 144), new FluidStack(Fluids.fluidDarkCrystal, 16));
+		registerAlloy(new FluidStack(moltenDarkIron, 144), new FluidStack(FluidRegistry.getFluid("iron"), 144), new FluidStack(ModFluids.fluidDarkCrystal, 16));
 		registerAlloy(new FluidStack(moltenCrystalPure, 144), new FluidStack(moltenCrystalBlue, 144), new FluidStack(moltenCrystalRed, 144), new FluidStack(moltenCrystalGreen, 144), new FluidStack(moltenCrystalDark, 144));
 	}
 	

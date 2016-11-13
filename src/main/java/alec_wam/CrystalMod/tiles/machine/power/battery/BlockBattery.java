@@ -4,8 +4,6 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
-import com.google.common.collect.Lists;
-
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -28,7 +26,6 @@ import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.IStringSerializable;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -39,11 +36,8 @@ import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.blocks.EnumBlock.IEnumMeta;
-import alec_wam.CrystalMod.network.CrystalModNetwork;
-import alec_wam.CrystalMod.network.packets.PacketTileMessage;
-import alec_wam.CrystalMod.tiles.TileEntityIOSides.IOType;
+import alec_wam.CrystalMod.proxy.ClientProxy;
 import alec_wam.CrystalMod.util.BlockUtil;
-import alec_wam.CrystalMod.util.ChatUtil;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.Lang;
@@ -89,8 +83,11 @@ public class BlockBattery extends BlockContainer implements ICustomModel {
 	@SideOnly(Side.CLIENT)
 	public void initModel(){
 		ModelLoader.setCustomStateMapper(this, new BatteryBlockStateMapper());
+		ModelResourceLocation inv = new ModelResourceLocation(this.getRegistryName(), "inventory");
+		ClientProxy.registerCustomModel(inv, ModelBattery.INSTANCE);
+		ClientProxy.registerCustomModel(new ModelResourceLocation(this.getRegistryName(), "normal"), ModelBattery.INSTANCE);
 		for(BatteryType type : BatteryType.values())
-	        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), type.getMeta(), new ModelResourceLocation(this.getRegistryName(), "inventory"));
+	        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), type.getMeta(), inv);
 	}
 	
 	@SideOnly(Side.CLIENT)

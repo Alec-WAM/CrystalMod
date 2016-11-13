@@ -9,7 +9,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
 
-import alec_wam.CrystalMod.fluids.Fluids;
+import alec_wam.CrystalMod.fluids.ModFluids;
 
 public class BlockCrystalFluid extends BlockFluidClassic implements ICustomModel {
 
@@ -32,7 +32,7 @@ public class BlockCrystalFluid extends BlockFluidClassic implements ICustomModel
   public void initModel() {
 	  Fluid fluid = FluidRegistry.getFluid(fluidName);
 	    if(fluid != null) {
-	    	Fluids.registerFluidModels(fluid);
+	    	ModFluids.registerFluidModels(fluid);
 	    }
   }
 }

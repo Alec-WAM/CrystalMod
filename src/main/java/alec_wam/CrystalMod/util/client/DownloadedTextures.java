@@ -259,7 +259,6 @@ public class DownloadedTextures {
 		    cape = getLocationCape(name);
 		    ThreadDownloadImageData data = getDownloadImageCape(cape, name);
 		    uploadedCape = Util.isImageDataUploaded(data);
-		    ProfileUtil.isAccountReal(name);
 		}
 
 		@Override

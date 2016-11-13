@@ -2,8 +2,6 @@ package alec_wam.CrystalMod.proxy;
 
 import java.io.File;
 
-import org.apache.logging.log4j.Level;
-
 import alec_wam.CrystalMod.Config;
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.ModBlocks;
@@ -12,10 +10,10 @@ import alec_wam.CrystalMod.capability.ExtendedPlayerProvider;
 import alec_wam.CrystalMod.crafting.ModCrafting;
 import alec_wam.CrystalMod.enchantment.ModEnchantments;
 import alec_wam.CrystalMod.entities.ModEntites;
-import alec_wam.CrystalMod.fluids.Fluids;
+import alec_wam.CrystalMod.fluids.ModFluids;
 import alec_wam.CrystalMod.handler.ClientEventHandler;
 import alec_wam.CrystalMod.handler.EventHandler;
-import alec_wam.CrystalMod.integration.TConstructIntegration;
+import alec_wam.CrystalMod.integration.ModIntegration;
 import alec_wam.CrystalMod.integration.minecraft.ModBanners;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.items.guide.GuidePages;
@@ -46,8 +44,6 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.FMLLog;
-import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -62,21 +58,16 @@ public class CommonProxy {
 	public void preInit(FMLPreInitializationEvent e) {
 		modConfigDir = e.getModConfigurationDirectory();
         mainConfig = new Configuration(new File(modConfigDir.getPath() + File.separator + "crystalmod", "crystalmod.cfg"));
-        
         readMainConfig();
         
         MinecraftForge.EVENT_BUS.register(new Config());
         
-        Fluids.registerFluids();
-        
+        ModFluids.registerFluids();
 		ModBlocks.init();
 		ModItems.init();
 		ModEntites.init();
-        
         MatterRegistry.init();
-        
         ItemMobEssence.initDefaultMobs();
-        
         ModBats.registerBats();
         ModBats.registerUpgrades();
         
@@ -93,9 +84,7 @@ public class CommonProxy {
         PlayerCubeChunkLoaderManager.init();
         ForgeChunkManager.setForcedChunkLoadingCallback((Object)CrystalMod.instance, (ForgeChunkManager.LoadingCallback)new WorksiteChunkLoader());
         
-        if(Loader.isModLoaded("tconstruct")){
-        	TConstructIntegration.preInit();
-        }
+        ModIntegration.preInit();
 	}
 	
 	public void readMainConfig() {
@@ -118,9 +107,7 @@ public class CommonProxy {
 		
 		ModCrafting.init();
 		ModBanners.init();
-		if(Loader.isModLoaded("tconstruct")){
-        	TConstructIntegration.init();
-        }
+		ModIntegration.init();
 	}
 	
 	public void postInit(FMLPostInitializationEvent event) {
@@ -130,10 +117,10 @@ public class CommonProxy {
 			cover6.stackSize = 6;
 			GameRegistry.addRecipe(new ShapedOreRecipe(cover6, new Object[] { "S ", "CN", 'C', ItemPipeCover.coverRecipes.get(cover), 'S', "slimeball", 'N', "nuggetCrystal" }));
 		}
-		if(Fluids.fluidXpJuice == null) { //should have been registered by enderio
-	      Fluids.forgeRegisterXPJuice();      
+		if(ModFluids.fluidXpJuice == null) { //should have been registered by enderio
+	      ModFluids.forgeRegisterXPJuice();      
 	    }
-		
+		ModIntegration.postInit();
 		ModEnchantments.init();
 		ModEntites.postInit();
 		ModCrafting.addSlabToBlocks();
@@ -151,7 +138,6 @@ public class CommonProxy {
 
 	public World getWorld(int dim) {
 		if(!DimensionManager.isDimensionRegistered(dim)){
-			System.out.println("Tried getting unregister world "+dim);
 			return null;
 		}
 		return FMLCommonHandler.instance().getMinecraftServerInstance().worldServerForDimension(dim);

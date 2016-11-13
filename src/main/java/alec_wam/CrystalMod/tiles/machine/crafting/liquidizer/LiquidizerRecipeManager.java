@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import alec_wam.CrystalMod.fluids.Fluids;
+import alec_wam.CrystalMod.fluids.ModFluids;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.items.ItemCrystal.CrystalType;
 import alec_wam.CrystalMod.items.ItemIngot.IngotType;
@@ -83,31 +83,31 @@ public class LiquidizerRecipeManager {
 	public static void initRecipes(){
 		final int defaultPower = 1600;
 		int shardValue = 100;
-		addRecipe(new ItemStack(ModItems.crystals, 1, CrystalType.BLUE_SHARD.getMetadata()), new FluidStack(Fluids.fluidBlueCrystal, shardValue), defaultPower);
-		addRecipe(new ItemStack(ModItems.crystals, 1, CrystalType.RED_SHARD.getMetadata()), new FluidStack(Fluids.fluidRedCrystal, shardValue), defaultPower);
-		addRecipe(new ItemStack(ModItems.crystals, 1, CrystalType.GREEN_SHARD.getMetadata()), new FluidStack(Fluids.fluidGreenCrystal, shardValue), defaultPower);
-		addRecipe(new ItemStack(ModItems.crystals, 1, CrystalType.DARK_SHARD.getMetadata()), new FluidStack(Fluids.fluidDarkCrystal, shardValue), defaultPower);
-		addRecipe(new ItemStack(ModItems.crystals, 1, CrystalType.PURE_SHARD.getMetadata()), new FluidStack(Fluids.fluidPureCrystal, shardValue), defaultPower);
+		addRecipe(new ItemStack(ModItems.crystals, 1, CrystalType.BLUE_SHARD.getMetadata()), new FluidStack(ModFluids.fluidBlueCrystal, shardValue), defaultPower);
+		addRecipe(new ItemStack(ModItems.crystals, 1, CrystalType.RED_SHARD.getMetadata()), new FluidStack(ModFluids.fluidRedCrystal, shardValue), defaultPower);
+		addRecipe(new ItemStack(ModItems.crystals, 1, CrystalType.GREEN_SHARD.getMetadata()), new FluidStack(ModFluids.fluidGreenCrystal, shardValue), defaultPower);
+		addRecipe(new ItemStack(ModItems.crystals, 1, CrystalType.DARK_SHARD.getMetadata()), new FluidStack(ModFluids.fluidDarkCrystal, shardValue), defaultPower);
+		addRecipe(new ItemStack(ModItems.crystals, 1, CrystalType.PURE_SHARD.getMetadata()), new FluidStack(ModFluids.fluidPureCrystal, shardValue), defaultPower);
 		
-		addRecipe(new ItemStack(ModItems.crystals, 1, CrystalType.BLUE_NUGGET.getMetadata()), new FluidStack(Fluids.fluidBlueCrystal, shardValue), defaultPower);
-		addRecipe(new ItemStack(ModItems.crystals, 1, CrystalType.RED_NUGGET.getMetadata()), new FluidStack(Fluids.fluidRedCrystal, shardValue), defaultPower);
-		addRecipe(new ItemStack(ModItems.crystals, 1, CrystalType.GREEN_NUGGET.getMetadata()), new FluidStack(Fluids.fluidGreenCrystal, shardValue), defaultPower);
-		addRecipe(new ItemStack(ModItems.crystals, 1, CrystalType.DARK_NUGGET.getMetadata()), new FluidStack(Fluids.fluidDarkCrystal, shardValue), defaultPower);
-		addRecipe(new ItemStack(ModItems.crystals, 1, CrystalType.PURE_NUGGET.getMetadata()), new FluidStack(Fluids.fluidPureCrystal, shardValue), defaultPower);
-		addRecipe(new ItemStack(ModItems.crystals, 1, CrystalType.DIRON_NUGGET.getMetadata()), new FluidStack(Fluids.fluidDarkIron, shardValue), defaultPower);
+		addRecipe(new ItemStack(ModItems.crystals, 1, CrystalType.BLUE_NUGGET.getMetadata()), new FluidStack(ModFluids.fluidBlueCrystal, shardValue), defaultPower);
+		addRecipe(new ItemStack(ModItems.crystals, 1, CrystalType.RED_NUGGET.getMetadata()), new FluidStack(ModFluids.fluidRedCrystal, shardValue), defaultPower);
+		addRecipe(new ItemStack(ModItems.crystals, 1, CrystalType.GREEN_NUGGET.getMetadata()), new FluidStack(ModFluids.fluidGreenCrystal, shardValue), defaultPower);
+		addRecipe(new ItemStack(ModItems.crystals, 1, CrystalType.DARK_NUGGET.getMetadata()), new FluidStack(ModFluids.fluidDarkCrystal, shardValue), defaultPower);
+		addRecipe(new ItemStack(ModItems.crystals, 1, CrystalType.PURE_NUGGET.getMetadata()), new FluidStack(ModFluids.fluidPureCrystal, shardValue), defaultPower);
+		addRecipe(new ItemStack(ModItems.crystals, 1, CrystalType.DIRON_NUGGET.getMetadata()), new FluidStack(ModFluids.fluidDarkIron, shardValue), defaultPower);
 
-		addRecipe(new ItemStack(ModItems.crystals, 1, CrystalType.BLUE.getMetadata()), new FluidStack(Fluids.fluidBlueCrystal, shardValue*9), defaultPower);
-		addRecipe(new ItemStack(ModItems.crystals, 1, CrystalType.RED.getMetadata()), new FluidStack(Fluids.fluidRedCrystal, shardValue*9), defaultPower);
-		addRecipe(new ItemStack(ModItems.crystals, 1, CrystalType.GREEN.getMetadata()), new FluidStack(Fluids.fluidGreenCrystal, shardValue*9), defaultPower);
-		addRecipe(new ItemStack(ModItems.crystals, 1, CrystalType.DARK.getMetadata()), new FluidStack(Fluids.fluidDarkCrystal, shardValue*9), defaultPower);
-		addRecipe(new ItemStack(ModItems.crystals, 1, CrystalType.PURE.getMetadata()), new FluidStack(Fluids.fluidPureCrystal, shardValue*9), defaultPower);
+		addRecipe(new ItemStack(ModItems.crystals, 1, CrystalType.BLUE.getMetadata()), new FluidStack(ModFluids.fluidBlueCrystal, shardValue*9), defaultPower);
+		addRecipe(new ItemStack(ModItems.crystals, 1, CrystalType.RED.getMetadata()), new FluidStack(ModFluids.fluidRedCrystal, shardValue*9), defaultPower);
+		addRecipe(new ItemStack(ModItems.crystals, 1, CrystalType.GREEN.getMetadata()), new FluidStack(ModFluids.fluidGreenCrystal, shardValue*9), defaultPower);
+		addRecipe(new ItemStack(ModItems.crystals, 1, CrystalType.DARK.getMetadata()), new FluidStack(ModFluids.fluidDarkCrystal, shardValue*9), defaultPower);
+		addRecipe(new ItemStack(ModItems.crystals, 1, CrystalType.PURE.getMetadata()), new FluidStack(ModFluids.fluidPureCrystal, shardValue*9), defaultPower);
 		
-		addRecipe(new ItemStack(ModItems.ingots, 1, IngotType.BLUE.getMetadata()), new FluidStack(Fluids.fluidBlueCrystal, shardValue*9), defaultPower);
-		addRecipe(new ItemStack(ModItems.ingots, 1, IngotType.RED.getMetadata()), new FluidStack(Fluids.fluidRedCrystal, shardValue*9), defaultPower);
-		addRecipe(new ItemStack(ModItems.ingots, 1, IngotType.GREEN.getMetadata()), new FluidStack(Fluids.fluidGreenCrystal, shardValue*9), defaultPower);
-		addRecipe(new ItemStack(ModItems.ingots, 1, IngotType.DARK.getMetadata()), new FluidStack(Fluids.fluidDarkCrystal, shardValue*9), defaultPower);
-		addRecipe(new ItemStack(ModItems.ingots, 1, IngotType.PURE.getMetadata()), new FluidStack(Fluids.fluidPureCrystal, shardValue*9), defaultPower);
-		addRecipe(new ItemStack(ModItems.ingots, 1, IngotType.DARK_IRON.getMetadata()), new FluidStack(Fluids.fluidDarkIron, shardValue*9), defaultPower);
+		addRecipe(new ItemStack(ModItems.ingots, 1, IngotType.BLUE.getMetadata()), new FluidStack(ModFluids.fluidBlueCrystal, shardValue*9), defaultPower);
+		addRecipe(new ItemStack(ModItems.ingots, 1, IngotType.RED.getMetadata()), new FluidStack(ModFluids.fluidRedCrystal, shardValue*9), defaultPower);
+		addRecipe(new ItemStack(ModItems.ingots, 1, IngotType.GREEN.getMetadata()), new FluidStack(ModFluids.fluidGreenCrystal, shardValue*9), defaultPower);
+		addRecipe(new ItemStack(ModItems.ingots, 1, IngotType.DARK.getMetadata()), new FluidStack(ModFluids.fluidDarkCrystal, shardValue*9), defaultPower);
+		addRecipe(new ItemStack(ModItems.ingots, 1, IngotType.PURE.getMetadata()), new FluidStack(ModFluids.fluidPureCrystal, shardValue*9), defaultPower);
+		addRecipe(new ItemStack(ModItems.ingots, 1, IngotType.DARK_IRON.getMetadata()), new FluidStack(ModFluids.fluidDarkIron, shardValue*9), defaultPower);
 	}
 	
 }

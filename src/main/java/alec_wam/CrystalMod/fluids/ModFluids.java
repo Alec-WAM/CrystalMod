@@ -36,7 +36,7 @@ import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class Fluids {
+public class ModFluids {
 
 	public static final String XP_JUICE_NAME = "xpjuice";
 	
@@ -48,7 +48,7 @@ public class Fluids {
 	public static void registerFluids(){
 		if (!Loader.isModLoaded("EnderIO")) {
 	      ModLogger.info("XP Juice registered by Crystal Mod.");
-	      fluidXpJuice = new Fluid(XP_JUICE_NAME, new ResourceLocation("crystalmod:blocks/fluid/"+Fluids.XP_JUICE_NAME+"_still"), new ResourceLocation("crystalmod:blocks/fluid/"+Fluids.XP_JUICE_NAME+"_flowing"))
+	      fluidXpJuice = new Fluid(XP_JUICE_NAME, new ResourceLocation("crystalmod:blocks/fluid/"+ModFluids.XP_JUICE_NAME+"_still"), new ResourceLocation("crystalmod:blocks/fluid/"+ModFluids.XP_JUICE_NAME+"_flowing"))
 	          .setLuminosity(10).setDensity(800).setViscosity(1500).setUnlocalizedName("crystalmod.xpjuice");
 	      FluidRegistry.registerFluid(fluidXpJuice);
 	      registerClassicBlock(fluidXpJuice);
@@ -146,15 +146,15 @@ public class Fluids {
 		int amt = 0;
 		int shardAmt = 100;
 		if(stack.getMetadata() == CrystalType.BLUE_SHARD.getMetadata()){
-			shardColor = Fluids.fluidBlueCrystal; amt = shardAmt;
+			shardColor = ModFluids.fluidBlueCrystal; amt = shardAmt;
 		}else if(stack.getMetadata() == CrystalType.RED_SHARD.getMetadata()){
-			shardColor = Fluids.fluidRedCrystal; amt = shardAmt;
+			shardColor = ModFluids.fluidRedCrystal; amt = shardAmt;
 		}else if(stack.getMetadata() == CrystalType.GREEN_SHARD.getMetadata()){
-			shardColor = Fluids.fluidGreenCrystal; amt = shardAmt;
+			shardColor = ModFluids.fluidGreenCrystal; amt = shardAmt;
 		}else if(stack.getMetadata() == CrystalType.DARK_SHARD.getMetadata()){
-			shardColor = Fluids.fluidDarkCrystal; amt = shardAmt;
+			shardColor = ModFluids.fluidDarkCrystal; amt = shardAmt;
 		}else if(stack.getMetadata() == CrystalType.PURE_SHARD.getMetadata()){
-			shardColor = Fluids.fluidPureCrystal; amt = shardAmt;
+			shardColor = ModFluids.fluidPureCrystal; amt = shardAmt;
 		}
 		return (shardColor !=null && amt > 0) ? new FluidStack(shardColor, amt) : null;
 	}

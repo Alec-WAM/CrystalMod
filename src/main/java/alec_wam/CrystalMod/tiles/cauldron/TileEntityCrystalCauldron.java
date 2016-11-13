@@ -14,7 +14,7 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.blocks.BlockCrystalIngot.CrystalIngotBlockType;
-import alec_wam.CrystalMod.fluids.Fluids;
+import alec_wam.CrystalMod.fluids.ModFluids;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.items.ItemCrystal.CrystalType;
 import alec_wam.CrystalMod.items.ItemIngot.IngotType;
@@ -87,7 +87,7 @@ public class TileEntityCrystalCauldron extends TileEntityMod {
 				
 				if(stack.getItem() == ModItems.crystals && (this.crystalStack == null || this.crystalStack.amount < Fluid.BUCKET_VOLUME)){
 					
-					FluidStack shardFluid = Fluids.getCrystalFluid(stack);
+					FluidStack shardFluid = ModFluids.getCrystalFluid(stack);
 					
 					if(shardFluid !=null && (this.crystalStack == null || this.crystalStack.isFluidEqual(shardFluid)) && !getWorld().isRemote){
 						boolean pass = false;

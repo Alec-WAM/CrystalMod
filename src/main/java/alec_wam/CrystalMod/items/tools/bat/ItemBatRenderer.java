@@ -34,7 +34,7 @@ public class ItemBatRenderer implements ICustomItemRenderer {
 		
 		if(type == TransformType.GUI){
 			GlStateManager.scale(0.7, 0.7, 0.7);
-			GlStateManager.translate(0.3, -0.7, 0);
+			//GlStateManager.translate(0.3, -0.7, 0);
 		}
 		renderWholeBat(stack, x, y, z);
 		

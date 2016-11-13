@@ -1,33 +1,31 @@
 package alec_wam.CrystalMod.proxy;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import org.lwjgl.input.Keyboard;
+
 import alec_wam.CrystalMod.blocks.ModBlocks;
-import alec_wam.CrystalMod.blocks.glass.ModelGlass;
 import alec_wam.CrystalMod.blocks.glass.BlockCrystalGlass.GlassType;
+import alec_wam.CrystalMod.client.model.CustomBakedModel;
 import alec_wam.CrystalMod.client.model.CustomItemModelFactory;
 import alec_wam.CrystalMod.client.model.LayerDragonWings;
 import alec_wam.CrystalMod.client.model.LayerHorseAccessories;
 import alec_wam.CrystalMod.client.model.dynamic.ICustomItemRenderer;
 import alec_wam.CrystalMod.entities.ModEntites;
 import alec_wam.CrystalMod.fluids.FluidColored;
-import alec_wam.CrystalMod.fluids.Fluids;
+import alec_wam.CrystalMod.fluids.ModFluids;
 import alec_wam.CrystalMod.items.ItemDragonWings;
 import alec_wam.CrystalMod.items.ModItems;
-import alec_wam.CrystalMod.tiles.machine.enderbuffer.ModelEnderBuffer;
 import alec_wam.CrystalMod.tiles.machine.power.battery.BlockBattery.BatteryType;
-import alec_wam.CrystalMod.tiles.machine.power.battery.ModelBattery;
-import alec_wam.CrystalMod.tiles.pipes.attachments.ModelAttachment;
-import alec_wam.CrystalMod.tiles.pipes.covers.ModelCover;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.GuiPanel;
 import alec_wam.CrystalMod.tiles.pipes.estorage.storage.hdd.GuiHDDInterface;
 import alec_wam.CrystalMod.tiles.pipes.item.GhostItemHelper;
 import alec_wam.CrystalMod.tiles.pipes.render.BakedModelLoader;
-import alec_wam.CrystalMod.tiles.tank.ModelTank;
-import alec_wam.CrystalMod.tiles.tank.BlockTank.TankType;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
+
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.mojang.authlib.GameProfile;
 
@@ -88,37 +86,27 @@ public class ClientProxy extends CommonProxy {
     }
     
     private static final Map<String, ICustomItemRenderer> CUSTOM_RENDERS = Maps.newHashMap();
+    private static final List<CustomBakedModel> CUSTOM_MODELS = Lists.newArrayList();
     
     public static void registerItemRender(String id, ICustomItemRenderer render){
     	CUSTOM_RENDERS.put(id, render);
     }
     
+    public static void registerCustomModel(ModelResourceLocation loc, IBakedModel model){
+    	registerCustomModel(new CustomBakedModel(loc, model));
+    }
+    
+    public static void registerCustomModel(CustomBakedModel model){
+    	CUSTOM_MODELS.add(model);
+    }
+    
     @SubscribeEvent
     public void onBakeModel(final ModelBakeEvent event) {
-    	
-        for(GlassType type : GlassType.values()){
-        	event.getModelRegistry().putObject(new ModelResourceLocation(ModBlocks.crystalGlass.getRegistryName(), "type="+type.getName()), ModelGlass.INSTANCE);
-        }
-        event.getModelRegistry().putObject(new ModelResourceLocation(ModBlocks.crystalGlass.getRegistryName(), "inventory"), ModelGlass.INSTANCE);
-        
-        event.getModelRegistry().putObject(new ModelResourceLocation(ModBlocks.battery.getRegistryName(), "normal"), ModelBattery.INSTANCE);
-        event.getModelRegistry().putObject(new ModelResourceLocation(ModBlocks.battery.getRegistryName(), "inventory"), ModelBattery.INSTANCE);
-        
-        event.getModelRegistry().putObject(new ModelResourceLocation(ModBlocks.enderBuffer.getRegistryName(), "normal"), ModelEnderBuffer.INSTANCE);
-        event.getModelRegistry().putObject(new ModelResourceLocation(ModBlocks.enderBuffer.getRegistryName(), "active=false,facing=north"), ModelEnderBuffer.INSTANCE);
-        event.getModelRegistry().putObject(new ModelResourceLocation(ModBlocks.enderBuffer.getRegistryName(), "active=true,facing=north"), ModelEnderBuffer.INSTANCE);
-        event.getModelRegistry().putObject(new ModelResourceLocation(ModBlocks.enderBuffer.getRegistryName(), "inventory"), ModelEnderBuffer.INSTANCE);
-        
-        ModelCover.map.clear();
-        event.getModelRegistry().putObject(new ModelResourceLocation(ModItems.pipeCover.getRegistryName(), "inventory"), ModelCover.INSTANCE);
-        
-        ModelAttachment.map.clear();
-        event.getModelRegistry().putObject(new ModelResourceLocation(ModItems.pipeAttachmant.getRegistryName(), "inventory"), ModelAttachment.INSTANCE);
-        
-        for(TankType type : TankType.values()){
-        	event.getModelRegistry().putObject(new ModelResourceLocation(ModBlocks.crystalTank.getRegistryName(), "type="+type.getName()), ModelTank.INSTANCE);
-        }
-        event.getModelRegistry().putObject(new ModelResourceLocation(ModBlocks.crystalTank.getRegistryName(), "inventory"), ModelTank.INSTANCE);
+    	for(CustomBakedModel model : CUSTOM_MODELS){
+    		model.preModelRegister();
+    		event.getModelRegistry().putObject(model.getModelLoc(), model.getModel());
+    		model.postModelRegister();
+    	}
         
         for(Entry<String, ICustomItemRenderer> entry : CUSTOM_RENDERS.entrySet())
 		{
@@ -127,7 +115,7 @@ public class ClientProxy extends CommonProxy {
 	        
 	        if(obj instanceof IBakedModel)
 	        {
-	        	event.getModelRegistry().putObject(model, new CustomItemModelFactory((IBakedModel)obj));
+	        	event.getModelRegistry().putObject(model, new CustomItemModelFactory((IBakedModel)obj, entry.getValue()));
 	        }
 		}
     }
@@ -188,9 +176,9 @@ public class ClientProxy extends CommonProxy {
         for(int i = 0; i < 9; i++){
             event.getMap().registerSprite(new ResourceLocation("crystalmod:blocks/machine/battery/meter/"+i));
         }
-        if (Fluids.fluidXpJuice != null) {
-            event.getMap().registerSprite(Fluids.fluidXpJuice.getStill());
-            event.getMap().registerSprite(Fluids.fluidXpJuice.getFlowing());
+        if (ModFluids.fluidXpJuice != null) {
+            event.getMap().registerSprite(ModFluids.fluidXpJuice.getStill());
+            event.getMap().registerSprite(ModFluids.fluidXpJuice.getFlowing());
         }
         
         event.getMap().registerSprite(FluidColored.LiquidStill);

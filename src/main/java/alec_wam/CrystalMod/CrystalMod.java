@@ -10,7 +10,7 @@ import javax.annotation.Nonnull;
 import com.google.common.collect.Lists;
 
 import alec_wam.CrystalMod.blocks.ModBlocks;
-import alec_wam.CrystalMod.fluids.Fluids;
+import alec_wam.CrystalMod.fluids.ModFluids;
 import alec_wam.CrystalMod.handler.GuiHandler;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
@@ -42,7 +42,7 @@ public class CrystalMod {
 	public static final String VERSION = "1.0.0dev1";
 	
 	static {
-		Fluids.registerBucket();
+		ModFluids.registerBucket();
 	}
 	
 	@Instance(MODID)
@@ -76,7 +76,7 @@ public class CrystalMod {
 
 		@Override
 		public int compare(ItemStack arg0, ItemStack arg1) {
-			return ItemUtil.compareNames(arg0, arg1);
+			return 0;/*ItemUtil.compareNames(arg0, arg1);*/
 		}
     };
     
@@ -88,7 +88,7 @@ public class CrystalMod {
 
 		@Override
 		public int compare(ItemStack arg0, ItemStack arg1) {
-			return ItemUtil.compareNames(arg0, arg1);
+			return 0/*ItemUtil.compareNames(arg0, arg1)*/;
 		}
     };
     

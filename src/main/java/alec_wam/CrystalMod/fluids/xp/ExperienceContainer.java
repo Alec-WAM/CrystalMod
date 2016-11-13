@@ -4,7 +4,7 @@ import java.security.InvalidParameterException;
 
 import javax.annotation.Nullable;
 
-import alec_wam.CrystalMod.fluids.Fluids;
+import alec_wam.CrystalMod.fluids.ModFluids;
 import alec_wam.CrystalMod.fluids.XpUtil;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
@@ -151,7 +151,7 @@ public class ExperienceContainer extends FluidTank {
 
   
   public FluidStack drain(EnumFacing from, int maxDrain, boolean doDrain) {
-    if(Fluids.fluidXpJuice == null) {
+    if(ModFluids.fluidXpJuice == null) {
       return null;
     }
     int available = getFluidAmount();
@@ -168,11 +168,11 @@ public class ExperienceContainer extends FluidTank {
       experienceTotal = 0;
       addExperience(newXp);
     }
-    return new FluidStack(Fluids.fluidXpJuice, fluidToExtract);
+    return new FluidStack(ModFluids.fluidXpJuice, fluidToExtract);
   }
 
   public boolean canFill(EnumFacing from, Fluid fluidIn) {
-    return fluidIn != null && Fluids.fluidXpJuice != null && areFluidsTheSame(fluidIn, Fluids.fluidXpJuice);
+    return fluidIn != null && ModFluids.fluidXpJuice != null && areFluidsTheSame(fluidIn, ModFluids.fluidXpJuice);
   }
   
   public boolean areFluidsTheSame(Fluid fluid, Fluid fluid2) {
@@ -209,15 +209,15 @@ public class ExperienceContainer extends FluidTank {
   }
   
   public boolean canDrain(EnumFacing from, Fluid fluidIn) {
-    return fluidIn != null && Fluids.fluidXpJuice != null && areFluidsTheSame(fluidIn, Fluids.fluidXpJuice);
+    return fluidIn != null && ModFluids.fluidXpJuice != null && areFluidsTheSame(fluidIn, ModFluids.fluidXpJuice);
   }
   
   public FluidTankInfo[] getTankInfo(EnumFacing from) {
-    if(Fluids.fluidXpJuice == null) {
+    if(ModFluids.fluidXpJuice == null) {
       return new FluidTankInfo[0];
     }
     return new FluidTankInfo[] {
- new FluidTankInfo(new FluidStack(Fluids.fluidXpJuice, getFluidAmount()), getCapacity())
+ new FluidTankInfo(new FluidStack(ModFluids.fluidXpJuice, getFluidAmount()), getCapacity())
     };
   }
 
@@ -266,7 +266,7 @@ public class ExperienceContainer extends FluidTank {
 
   @Override
   public FluidStack getFluid() {
-    return new FluidStack(Fluids.fluidXpJuice, getFluidAmount());
+    return new FluidStack(ModFluids.fluidXpJuice, getFluidAmount());
   }
 
   @Override
@@ -295,7 +295,7 @@ public class ExperienceContainer extends FluidTank {
     experienceLevel = 0;
     experienceTotal = 0;
     if (fluid != null && fluid.getFluid() != null) {
-      if (Fluids.fluidXpJuice == fluid.getFluid()) {
+      if (ModFluids.fluidXpJuice == fluid.getFluid()) {
         addExperience(XpUtil.liquidToExperience(fluid.amount));
       } else {
         throw new InvalidParameterException(fluid.getFluid() + " is no XP juice");

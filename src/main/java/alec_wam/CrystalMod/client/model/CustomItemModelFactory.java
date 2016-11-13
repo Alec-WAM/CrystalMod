@@ -24,8 +24,9 @@ public class CustomItemModelFactory implements IBakedModel {
 	private IBakedModel model;
 	private ICustomItemRenderer render;
 	
-	public CustomItemModelFactory(IBakedModel model){
+	public CustomItemModelFactory(IBakedModel model, ICustomItemRenderer render){
 		this.model = model;
+		this.render = render;
 	}
 	
 	@Override

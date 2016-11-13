@@ -4,6 +4,9 @@ import java.util.UUID;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.statemap.StateMap;
+import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -21,8 +24,11 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.blocks.ICustomModel;
+import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.packets.PacketTileMessage;
+import alec_wam.CrystalMod.proxy.ClientProxy;
 import alec_wam.CrystalMod.tiles.machine.BlockMachine;
 import alec_wam.CrystalMod.tiles.machine.FakeTileState;
 import alec_wam.CrystalMod.tiles.machine.IFacingTile;
@@ -38,7 +44,7 @@ import alec_wam.CrystalMod.util.ModLogger;
 import alec_wam.CrystalMod.util.UUIDUtils;
 import alec_wam.CrystalMod.util.tool.ToolUtil;
 
-public class BlockEnderBuffer extends BlockMachine
+public class BlockEnderBuffer extends BlockMachine implements ICustomModel
 {
     public BlockEnderBuffer()
     {
@@ -46,6 +52,13 @@ public class BlockEnderBuffer extends BlockMachine
         this.setHardness(2f);
         this.setResistance(10F);
 		this.setCreativeTab(CrystalMod.tabBlocks);
+    }
+    
+    @SideOnly(Side.CLIENT)
+    @Override
+    public void initModel(){
+    	for(String id : new String[]{"normal", "active=false,facing=north", "active=true,facing=north", "inventory"})
+    	ClientProxy.registerCustomModel(new ModelResourceLocation(getRegistryName(), id), ModelEnderBuffer.INSTANCE);
     }
 
     protected ItemStack getNBTDrop(IBlockAccess world, BlockPos pos, TileEntity tileEntity) {

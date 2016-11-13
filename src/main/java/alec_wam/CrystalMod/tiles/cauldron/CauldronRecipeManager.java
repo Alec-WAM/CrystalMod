@@ -7,7 +7,7 @@ import java.util.Map;
 
 import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.blocks.BlockCrystalIngot.CrystalIngotBlockType;
-import alec_wam.CrystalMod.fluids.Fluids;
+import alec_wam.CrystalMod.fluids.ModFluids;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.items.ItemCrystal.CrystalType;
 import alec_wam.CrystalMod.items.ItemIngot.IngotType;
@@ -127,24 +127,24 @@ public class CauldronRecipeManager {
 
 	public static void initRecipes() {
 		int bucket = 100;
-		addRecipe("ingotIron", new FluidStack(Fluids.fluidDarkCrystal, 1 * bucket), new ItemStack(ModItems.ingots, 1, IngotType.DARK_IRON.getMetadata()));
-		addRecipe("blockIron", new FluidStack(Fluids.fluidDarkCrystal, 9 * bucket), new ItemStack(ModBlocks.crystalIngot, 1, CrystalIngotBlockType.DARKIRON.getMeta()));
+		addRecipe("ingotIron", new FluidStack(ModFluids.fluidDarkCrystal, 1 * bucket), new ItemStack(ModItems.ingots, 1, IngotType.DARK_IRON.getMetadata()));
+		addRecipe("blockIron", new FluidStack(ModFluids.fluidDarkCrystal, 9 * bucket), new ItemStack(ModBlocks.crystalIngot, 1, CrystalIngotBlockType.DARKIRON.getMeta()));
 
-		addRecipe("gemQuartz", new FluidStack(Fluids.fluidBlueCrystal, 6 * bucket), new ItemStack(ModItems.crystals, 1, CrystalType.BLUE.getMetadata()));
-		addRecipe("gemQuartz", new FluidStack(Fluids.fluidRedCrystal, 6 * bucket), new ItemStack(ModItems.crystals, 1, CrystalType.RED.getMetadata()));
-		addRecipe("gemQuartz", new FluidStack(Fluids.fluidGreenCrystal, 6 * bucket), new ItemStack(ModItems.crystals, 1, CrystalType.GREEN.getMetadata()));
-		addRecipe("gemQuartz", new FluidStack(Fluids.fluidDarkCrystal, 6 * bucket), new ItemStack(ModItems.crystals, 1, CrystalType.DARK.getMetadata()));
+		addRecipe("gemQuartz", new FluidStack(ModFluids.fluidBlueCrystal, 6 * bucket), new ItemStack(ModItems.crystals, 1, CrystalType.BLUE.getMetadata()));
+		addRecipe("gemQuartz", new FluidStack(ModFluids.fluidRedCrystal, 6 * bucket), new ItemStack(ModItems.crystals, 1, CrystalType.RED.getMetadata()));
+		addRecipe("gemQuartz", new FluidStack(ModFluids.fluidGreenCrystal, 6 * bucket), new ItemStack(ModItems.crystals, 1, CrystalType.GREEN.getMetadata()));
+		addRecipe("gemQuartz", new FluidStack(ModFluids.fluidDarkCrystal, 6 * bucket), new ItemStack(ModItems.crystals, 1, CrystalType.DARK.getMetadata()));
 		
-		addRecipe(new ItemStack(Items.REEDS), new FluidStack(Fluids.fluidBlueCrystal, 3 * bucket), new ItemStack(ModItems.crystalReeds));
-		addRecipe(new ItemStack(Items.REEDS), new FluidStack(Fluids.fluidRedCrystal, 3 * bucket), new ItemStack(ModItems.crystalReeds));
-		addRecipe(new ItemStack(Items.REEDS), new FluidStack(Fluids.fluidGreenCrystal, 3 * bucket), new ItemStack(ModItems.crystalReeds));
-		addRecipe(new ItemStack(Items.REEDS), new FluidStack(Fluids.fluidDarkCrystal, 3 * bucket), new ItemStack(ModItems.crystalReeds));
-		addRecipe(new ItemStack(Items.REEDS), new FluidStack(Fluids.fluidPureCrystal, 1 * bucket), new ItemStack(ModItems.crystalReeds));
+		addRecipe(new ItemStack(Items.REEDS), new FluidStack(ModFluids.fluidBlueCrystal, 3 * bucket), new ItemStack(ModItems.crystalReeds));
+		addRecipe(new ItemStack(Items.REEDS), new FluidStack(ModFluids.fluidRedCrystal, 3 * bucket), new ItemStack(ModItems.crystalReeds));
+		addRecipe(new ItemStack(Items.REEDS), new FluidStack(ModFluids.fluidGreenCrystal, 3 * bucket), new ItemStack(ModItems.crystalReeds));
+		addRecipe(new ItemStack(Items.REEDS), new FluidStack(ModFluids.fluidDarkCrystal, 3 * bucket), new ItemStack(ModItems.crystalReeds));
+		addRecipe(new ItemStack(Items.REEDS), new FluidStack(ModFluids.fluidPureCrystal, 1 * bucket), new ItemStack(ModItems.crystalReeds));
 
-		addRecipe(new ItemStack(Items.NETHER_WART), new FluidStack(Fluids.fluidBlueCrystal, 6 * bucket), new ItemStack(ModItems.crystalSeedsBlue));
-		addRecipe(new ItemStack(Items.NETHER_WART), new FluidStack(Fluids.fluidRedCrystal, 6 * bucket), new ItemStack(ModItems.crystalSeedsRed));
-		addRecipe(new ItemStack(Items.NETHER_WART), new FluidStack(Fluids.fluidGreenCrystal, 6 * bucket), new ItemStack(ModItems.crystalSeedsGreen));
-		addRecipe(new ItemStack(Items.NETHER_WART), new FluidStack(Fluids.fluidDarkCrystal, 6 * bucket), new ItemStack(ModItems.crystalSeedsDark));
+		addRecipe(new ItemStack(Items.NETHER_WART), new FluidStack(ModFluids.fluidBlueCrystal, 6 * bucket), new ItemStack(ModItems.crystalSeedsBlue));
+		addRecipe(new ItemStack(Items.NETHER_WART), new FluidStack(ModFluids.fluidRedCrystal, 6 * bucket), new ItemStack(ModItems.crystalSeedsRed));
+		addRecipe(new ItemStack(Items.NETHER_WART), new FluidStack(ModFluids.fluidGreenCrystal, 6 * bucket), new ItemStack(ModItems.crystalSeedsGreen));
+		addRecipe(new ItemStack(Items.NETHER_WART), new FluidStack(ModFluids.fluidDarkCrystal, 6 * bucket), new ItemStack(ModItems.crystalSeedsDark));
 	}
 
 	public static List<InfusionRecipe> getRecipes() {

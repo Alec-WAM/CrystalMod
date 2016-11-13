@@ -5,8 +5,8 @@ import javax.annotation.Nonnull;
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.EnumBlock;
 import alec_wam.CrystalMod.blocks.EnumBlock.IEnumMeta;
-import alec_wam.CrystalMod.tiles.tank.FakeTankState;
-import alec_wam.CrystalMod.tiles.tank.TileEntityTank;
+import alec_wam.CrystalMod.blocks.ICustomModel;
+import alec_wam.CrystalMod.proxy.ClientProxy;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -17,7 +17,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.item.Item;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
@@ -34,7 +33,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
   * <p>
   * Based off a tutorial by Darkhax, used under the Creative Commons Zero 1.0 Universal license
   */
-public class BlockCrystalGlass extends EnumBlock<BlockCrystalGlass.GlassType> {
+public class BlockCrystalGlass extends EnumBlock<BlockCrystalGlass.GlassType> implements ICustomModel {
     
 	public static final PropertyEnum<GlassType> TYPE = PropertyEnum.<GlassType>create("type", GlassType.class);
 	public static enum GlassType implements IStringSerializable, IEnumMeta {
@@ -115,9 +114,13 @@ public class BlockCrystalGlass extends EnumBlock<BlockCrystalGlass.GlassType> {
     @SideOnly(Side.CLIENT)
 	public void initModel() {
     	ModelLoader.setCustomStateMapper(this, new GlassBlockStateMapper());
-		for(GlassType type : GlassType.values())
-	        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), type.getMeta(), new ModelResourceLocation(this.getRegistryName(), "inventory"));
-	}
+    	ModelResourceLocation inv = new ModelResourceLocation(this.getRegistryName(), "inventory");
+    	ClientProxy.registerCustomModel(inv, ModelGlass.INSTANCE);
+		for(GlassType type : GlassType.values()){
+	        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), type.getMeta(), inv);
+	        ClientProxy.registerCustomModel(new ModelResourceLocation(getRegistryName(), "type="+type.getName()), ModelGlass.INSTANCE);
+		}
+    }
     
     @Override
     public IBlockState getExtendedState(final IBlockState state, final IBlockAccess world, final BlockPos pos) {
