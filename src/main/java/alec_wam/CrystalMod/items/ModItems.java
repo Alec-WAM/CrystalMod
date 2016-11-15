@@ -7,6 +7,7 @@ import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.blocks.BlockCrystalPlant.PlantType;
 import alec_wam.CrystalMod.entities.minecarts.chests.ItemCrystalChestMinecart;
+import alec_wam.CrystalMod.entities.minecarts.chests.wireless.ItemWirelessChestMinecart;
 import alec_wam.CrystalMod.entities.minions.ItemMinion;
 import alec_wam.CrystalMod.entities.minions.ItemMinionStaff;
 import alec_wam.CrystalMod.entities.pet.bombomb.ItemBombomb;
@@ -93,6 +94,7 @@ public class ModItems {
 	public static ItemBat bat;
 	
 	public static ItemCrystalChestMinecart chestMinecart;
+	public static ItemWirelessChestMinecart wirelessChestMinecart;
 	
 	public static ItemCrystalWrench wrench;
 	public static ItemCrystalGuide guide;
@@ -151,6 +153,7 @@ public class ModItems {
 		bat = new ItemBat();
 		
 		chestMinecart = new ItemCrystalChestMinecart();
+		wirelessChestMinecart = new ItemWirelessChestMinecart();
 		
 		crystalSeedsBlue = new ItemCrystalSeeds(PlantType.BLUE);
 		crystalSeedsRed = new ItemCrystalSeeds(PlantType.RED);

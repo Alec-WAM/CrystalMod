@@ -11,6 +11,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
@@ -108,5 +109,24 @@ public class PlayerUtil {
 
 		return modTag;
 	}
+
+	
+
+    public static void uuidToNBT(NBTTagCompound tag, UUID uuid)
+    {
+        tag.setLong("PlayerUUID0", uuid.getLeastSignificantBits());
+        tag.setLong("PlayerUUID1", uuid.getMostSignificantBits());
+    }
+
+    public static UUID uuidFromNBT(NBTTagCompound tag)
+    {
+        if (!tag.hasKey("PlayerUUID0", Constants.NBT.TAG_LONG))
+            return null;
+
+        long uuid0 = tag.getLong("PlayerUUID0");
+        long uuid1 = tag.getLong("PlayerUUID1");
+
+        return new UUID(uuid1, uuid0);
+    }
 	
 }

@@ -1,24 +1,25 @@
-package alec_wam.CrystalMod.entities.minecarts.chests;
+package alec_wam.CrystalMod.entities.minecarts.chests.wireless;
 
 import java.util.List;
 
 import alec_wam.CrystalMod.blocks.ICustomModel;
-import alec_wam.CrystalMod.entities.minecarts.chests.wireless.ItemWirelessMinecartRender;
 import alec_wam.CrystalMod.items.ModItems;
-import alec_wam.CrystalMod.items.ItemCrystal.CrystalType;
 import alec_wam.CrystalMod.proxy.ClientProxy;
-import alec_wam.CrystalMod.tiles.chest.CrystalChestType;
+import alec_wam.CrystalMod.tiles.chest.wireless.WirelessChestHelper;
+import alec_wam.CrystalMod.util.ItemNBTHelper;
+import alec_wam.CrystalMod.util.ItemUtil;
+import alec_wam.CrystalMod.util.ProfileUtil;
+import alec_wam.CrystalMod.util.UUIDUtils;
 import net.minecraft.block.BlockDispenser;
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.dispenser.BehaviorDefaultDispenseItem;
 import net.minecraft.dispenser.IBehaviorDispenseItem;
 import net.minecraft.dispenser.IBlockSource;
-import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
@@ -26,11 +27,10 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemCrystalChestMinecart extends Item implements ICustomModel
+public class ItemWirelessChestMinecart extends Item implements ICustomModel
 {
     private static final IBehaviorDispenseItem CRYSTAL_MINECART_DISPENSER_BEHAVIOR = new BehaviorDefaultDispenseItem()
     {
@@ -80,15 +80,12 @@ public class ItemCrystalChestMinecart extends Item implements ICustomModel
                     d3 = -0.9D;
                 }
             }
-
-            CrystalChestType type = CrystalChestType.values()[CrystalChestType.validateMeta(stack.getMetadata())];
             
-            if(type == CrystalChestType.WOOD){
-            	return this.behaviourDefaultDispenseItem.dispense(source, stack);
-            }
+            EntityWirelessChestMinecart entityminecart = new EntityWirelessChestMinecart(world, d0, d1 + d3, d2);
+            entityminecart.setCode(ItemNBTHelper.getInteger(stack, WirelessChestHelper.NBT_CODE, 0));
+            String owner = ItemNBTHelper.getString(stack, WirelessChestHelper.NBT_OWNER, "");
+            if(UUIDUtils.isUUID(owner))entityminecart.setOwner(UUIDUtils.fromString(owner));
             
-            EntityMinecart entityminecart = EntityCrystalChestMinecartBase.makeMinecart(world, d0, d1 + d3, d2, type);
-
             if (stack.hasDisplayName())
             {
                 entityminecart.setCustomNameTag(stack.getDisplayName());
@@ -107,36 +104,45 @@ public class ItemCrystalChestMinecart extends Item implements ICustomModel
         }
     };
 
-    public ItemCrystalChestMinecart()
+    public ItemWirelessChestMinecart()
     {
     	this.setHasSubtypes(true);
 		this.setMaxDamage(0);
         this.maxStackSize = 1;
         this.setCreativeTab(CreativeTabs.TRANSPORTATION);
         BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(this, CRYSTAL_MINECART_DISPENSER_BEHAVIOR);
-        ModItems.registerItem(this, "minecart_chest");
+        ModItems.registerItem(this, "minecart_wirelesschest");
     }
     
     @SideOnly(Side.CLIENT)
     public void initModel() {
     	ModItems.initBasicModel(this);
-    	ClientProxy.registerItemRender(getRegistryName().getResourcePath(), new ItemCrystalChestMinecartRender());
-    }
-    
-    public String getUnlocalizedName(ItemStack stack)
-    {
-        int i = stack.getMetadata();
-        return super.getUnlocalizedName() + "." + CrystalChestType.values()[CrystalChestType.validateMeta(i)].name().toLowerCase();
+    	ClientProxy.registerItemRender(getRegistryName().getResourcePath(), new ItemWirelessMinecartRender());
     }
     
     @SideOnly(Side.CLIENT)
     public void getSubItems(Item itemIn, CreativeTabs tab, List<ItemStack> subItems)
     {
-        for (int i = 0; i < CrystalChestType.values().length; ++i)
-        {
-        	if(i == CrystalChestType.WOOD.ordinal())continue;
-            subItems.add(new ItemStack(itemIn, 1, i));
-        }
+    	for(EnumDyeColor dye : EnumDyeColor.values()){
+    		ItemStack stack = new ItemStack(this, 1, 0);
+    		ItemNBTHelper.setInteger(stack, WirelessChestHelper.NBT_CODE, WirelessChestHelper.getDefaultCode(dye));
+    		subItems.add(stack);
+	    }
+    }
+
+    public void addInformation(ItemStack stack, EntityPlayer player, List<String> tooltip, boolean advanced)
+    {
+    	int code = ItemNBTHelper.getInteger(stack, WirelessChestHelper.NBT_CODE, WirelessChestHelper.getDefaultCode(EnumDyeColor.WHITE));
+    	
+    	String owner = ItemNBTHelper.getString(stack, WirelessChestHelper.NBT_OWNER, "");
+		if(UUIDUtils.isUUID(owner)){
+			String username = ProfileUtil.getUsername(UUIDUtils.fromString(owner));
+			tooltip.add("Owner: " + username);
+		}
+		String color1 = ItemUtil.getDyeName(WirelessChestHelper.getDye1(code));
+		String color2 = ItemUtil.getDyeName(WirelessChestHelper.getDye2(code));
+		String color3 = ItemUtil.getDyeName(WirelessChestHelper.getDye3(code));
+		tooltip.add("Code: " + color1 + " " + color2 + " " + color3);
     }
 
     /**
@@ -161,15 +167,12 @@ public class ItemCrystalChestMinecart extends Item implements ICustomModel
                 {
                     d0 = 0.5D;
                 }
-
-                CrystalChestType type = CrystalChestType.values()[CrystalChestType.validateMeta(stack.getMetadata())];
                 
-                if(type == CrystalChestType.WOOD){
-                	return EnumActionResult.PASS;
-                }
+                EntityWirelessChestMinecart entityminecart = new EntityWirelessChestMinecart(worldIn, (double)pos.getX() + 0.5D, (double)pos.getY() + 0.0625D + d0, (double)pos.getZ() + 0.5D);
+                entityminecart.setCode(ItemNBTHelper.getInteger(stack, WirelessChestHelper.NBT_CODE, 0));
+                String owner = ItemNBTHelper.getString(stack, WirelessChestHelper.NBT_OWNER, "");
+                if(UUIDUtils.isUUID(owner))entityminecart.setOwner(UUIDUtils.fromString(owner));
                 
-                EntityMinecart entityminecart = EntityCrystalChestMinecartBase.makeMinecart(worldIn, (double)pos.getX() + 0.5D, (double)pos.getY() + 0.0625D + d0, (double)pos.getZ() + 0.5D, type);
-
                 if (stack.hasDisplayName())
                 {
                     entityminecart.setCustomNameTag(stack.getDisplayName());

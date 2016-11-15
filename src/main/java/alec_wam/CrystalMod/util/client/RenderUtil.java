@@ -9,6 +9,7 @@ import org.lwjgl.util.vector.Vector3f;
 import alec_wam.CrystalMod.asm.ObfuscatedNames;
 import alec_wam.CrystalMod.client.model.dynamic.DynamicBaseModel;
 import alec_wam.CrystalMod.util.ReflectionUtils;
+import alec_wam.CrystalMod.util.Vector3d;
 
 import com.google.common.collect.Lists;
 
@@ -43,6 +44,22 @@ import net.minecraftforge.fluids.FluidTank;
 public class RenderUtil {
 
 	public static final ResourceLocation RES_ITEM_GLINT = new ResourceLocation("textures/misc/enchanted_item_glint.png");
+	
+	public static void startDrawing(Tessellator tess){
+		startDrawing(tess.getBuffer());
+	}
+	
+	public static void startDrawing(VertexBuffer buffer){
+		buffer.begin(7, DefaultVertexFormats.POSITION_TEX);
+	}
+	
+	public static void addVertexWithUV(VertexBuffer buffer, Vector3d vec, double u, double v){
+		addVertexWithUV(buffer, vec.x, vec.y, vec.z, u, v);
+	}
+	
+	public static void addVertexWithUV(VertexBuffer buffer, double x, double y, double z, double u, double v){
+		buffer.pos(x, y, z).tex(u, v).endVertex();
+	}
 	
 	public static boolean isDrawing(Tessellator tess)
 	{

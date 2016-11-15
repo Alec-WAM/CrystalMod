@@ -8,7 +8,9 @@ import javax.annotation.Nullable;
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.handler.GuiHandler;
+import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.tiles.chest.CrystalChestType;
+import alec_wam.CrystalMod.tiles.chest.wireless.BlockWirelessChest;
 import alec_wam.CrystalMod.util.ItemUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -24,6 +26,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 
 public abstract class EntityCrystalChestMinecartBase extends EntityMinecartChest {
@@ -32,6 +35,15 @@ public abstract class EntityCrystalChestMinecartBase extends EntityMinecartChest
 	
 	public static void register(Class<? extends EntityCrystalChestMinecartBase> clazz, CrystalChestType type){
 		minecarts.put(type, clazz);
+	}
+	
+	public static EntityCrystalChestMinecartBase makeMinecart(World world, CrystalChestType type) {
+		try {
+			Class<? extends EntityCrystalChestMinecartBase> cls = minecarts.get(type);
+			return cls.getConstructor(World.class).newInstance(world);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 	
 	public static EntityCrystalChestMinecartBase makeMinecart(World world, double x, double y, double z, CrystalChestType type) {
@@ -87,6 +99,11 @@ public abstract class EntityCrystalChestMinecartBase extends EntityMinecartChest
             }
             entityDropItem(new ItemStack(ModBlocks.crystalChest, 1, getChestType().ordinal()), 0.0F);
         }
+    }
+	
+	public ItemStack getPickedResult(RayTraceResult target)
+    {
+		return new ItemStack(ModItems.chestMinecart, 1, getChestType().ordinal());
     }
 	
 	public IBlockState getDefaultDisplayTile()

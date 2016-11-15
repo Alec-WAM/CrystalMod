@@ -138,6 +138,8 @@ item.crystalmod.minecart_chest.dark.name=Minecart with Dark Crystal Chest
 item.crystalmod.minecart_chest.pure.name=Minecart with Pure Crystal Chest
 item.crystalmod.minecart_chest.darkiron.name=Minecart with Dark Iron Chest
 
+item.crystalmod.minecart_wirelesschest.name=Minecart with Super Chest
+
 item.crystalmod.darkIronHelmet.name=Dark Iron Helmet
 item.crystalmod.darkIronChestplate.name=Dark Iron Chestplate
 item.crystalmod.darkIronLeggings.name=Dark Iron Leggings
@@ -266,6 +268,8 @@ tile.crystalmod.crystalchest.GREEN.name=Green Crystal Chest
 tile.crystalmod.crystalchest.DARK.name=Dark Crystal Chest
 tile.crystalmod.crystalchest.PURE.name=Pure Crystal Chest
 tile.crystalmod.crystalchest.DARKIRON.name=Dark Iron Chest
+
+tile.crystalmod.wirelesschest.name=Super Chest
 
 tile.crystalmod.crystalpipe.item.name=Crystal Pipe (Item)
 tile.crystalmod.crystalpipe.fluid.name=Crystal Pipe (Fluid)
@@ -461,6 +465,8 @@ entity.CrystalMod.minecart_green.name=Minecart with Green Crystal Chest
 entity.CrystalMod.minecart_dark.name=Minecart with Dark Crystal Chest
 entity.CrystalMod.minecart_pure.name=Minecart with Pure Crystal Chest
 entity.CrystalMod.minecart_darkiron.name=Minecart with Dark Iron Chest
+
+entity.CrystalMod.minecart_wirelesschest.name=Minecart with Super Chest
 
 #--Misc
 crystalmod.power.cu=CU

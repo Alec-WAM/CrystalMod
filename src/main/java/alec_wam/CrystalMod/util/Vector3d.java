@@ -129,4 +129,8 @@ public class Vector3d {
   public Vec3d getVec3() {
     return new Vec3d(x, y, z);
   }
+  
+  public Vector3d copy(){
+	  return new Vector3d(x, y, z);
+  }
 }

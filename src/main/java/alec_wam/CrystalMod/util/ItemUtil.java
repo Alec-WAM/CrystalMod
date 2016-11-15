@@ -1329,6 +1329,11 @@ public class ItemUtil {
     	}
     	return null;
 	}
+	
+	public static String getDyeName(EnumDyeColor dye){
+		if(dye == null) return "null";
+		return Lang.translateToLocal("item.fireworksCharge." + dye.getUnlocalizedName());
+	}
 
 	public static int compareNames(ItemStack stack1, ItemStack stack2) {
 		int i = new ItemStack(stack1.getItem()).getDisplayName().compareTo(new ItemStack(stack2.getItem()).getDisplayName());

@@ -13,7 +13,9 @@ import alec_wam.CrystalMod.blocks.glass.BlockCrystalGlass.GlassType;
 import alec_wam.CrystalMod.crafting.recipes.RecipeSuperTorchAdd;
 import alec_wam.CrystalMod.crafting.recipes.ShapedNBTCopy;
 import alec_wam.CrystalMod.crafting.recipes.ShapedOreRecipeNBT;
+import alec_wam.CrystalMod.crafting.recipes.ShapelessRecipeNBT;
 import alec_wam.CrystalMod.crafting.recipes.UpgradeItemRecipe;
+import alec_wam.CrystalMod.entities.minecarts.chests.wireless.RecipeWirelessChestMinecart;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.items.ItemCrystal.CrystalType;
 import alec_wam.CrystalMod.items.ItemIngot.IngotType;
@@ -24,6 +26,7 @@ import alec_wam.CrystalMod.items.tools.bat.BatHelper;
 import alec_wam.CrystalMod.items.tools.bat.RecipeBatUpgrade;
 import alec_wam.CrystalMod.tiles.cauldron.CauldronRecipeManager;
 import alec_wam.CrystalMod.tiles.chest.CrystalChestType;
+import alec_wam.CrystalMod.tiles.chest.wireless.WirelessChestHelper;
 import alec_wam.CrystalMod.tiles.machine.crafting.BlockCrystalMachine.MachineType;
 import alec_wam.CrystalMod.tiles.machine.crafting.furnace.CrystalFurnaceManager;
 import alec_wam.CrystalMod.tiles.machine.crafting.infuser.CrystalInfusionManager;
@@ -51,11 +54,13 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockSlab;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.ShapedRecipes;
+import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStack;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -71,6 +76,7 @@ public class ModCrafting {
 		GameRegistry.addRecipe(new UpgradeItemRecipe());
 		GameRegistry.addRecipe(new RecipeBatUpgrade());
 		GameRegistry.addRecipe(new RecipeSuperTorchAdd());
+		GameRegistry.addRecipe(new RecipeWirelessChestMinecart());
 		BatHelper.addBatCrafting();
 		
 		ItemStack blueCrystal = new ItemStack(ModItems.crystals, 1, CrystalType.BLUE.getMetadata());
@@ -381,6 +387,17 @@ public class ModCrafting {
 				addShapedRecipe(new ItemStack(ModItems.chestMinecart, 1, chestType.ordinal()), new Object[] {"A", "B", 'A', chestStack, 'B', Items.MINECART});
 			}
 		}
+		for(int i = 0; i < 16; i++){
+			int code = WirelessChestHelper.getDefaultCode(EnumDyeColor.byMetadata(i));
+			ItemStack wChest = new ItemStack(ModBlocks.wirelessChest);
+			ItemNBTHelper.setInteger(wChest, WirelessChestHelper.NBT_CODE, code);
+			ItemStack wMinecart = new ItemStack(ModItems.wirelessChestMinecart);
+			ItemNBTHelper.setInteger(wMinecart, WirelessChestHelper.NBT_CODE, code);
+			ItemStack chestStack = new ItemStack(ModBlocks.crystalChest, 1, CrystalChestType.DARKIRON.ordinal());
+			
+			addShapedOreRecipe(wChest, new Object[] {"W", "C", "E", 'W', "wool"+dyeOreNames[i], 'C', chestStack, 'E', "chestEnder"});
+			addShapelessNBTRecipe(wMinecart, new Object[] {wChest, Items.MINECART});
+		}
 		CauldronRecipeManager.initRecipes();
 		
 		CrystalFurnaceManager.initRecipes();
@@ -399,6 +416,35 @@ public class ModCrafting {
 	public static void addShapelessRecipe(Block result, Object... recipe){ addShapelessRecipe(new ItemStack(result), recipe); }
 	public static void addShapelessRecipe(ItemStack output, Object... params){
 		GameRegistry.addShapelessRecipe(output, params);
+	}
+	
+	public static void addShapelessNBTRecipe(Item result, Object... recipe){ addShapelessNBTRecipe(new ItemStack(result), recipe); }
+	public static void addShapelessNBTRecipe(Block result, Object... recipe){ addShapelessNBTRecipe(new ItemStack(result), recipe); }
+	public static void addShapelessNBTRecipe(ItemStack output, Object... params){
+		List<ItemStack> list = Lists.<ItemStack>newArrayList();
+
+        for (Object object : params)
+        {
+            if (object instanceof ItemStack)
+            {
+                list.add(((ItemStack)object).copy());
+            }
+            else if (object instanceof Item)
+            {
+                list.add(new ItemStack((Item)object));
+            }
+            else
+            {
+                if (!(object instanceof Block))
+                {
+                    throw new IllegalArgumentException("Invalid shapeless recipe: unknown type " + object.getClass().getName() + "!");
+                }
+
+                list.add(new ItemStack((Block)object));
+            }
+        }
+
+        GameRegistry.addRecipe(new ShapelessRecipeNBT(output, list));
 	}
 	
 	public static void addShapedOreRecipe(Item result, Object... recipe){ addShapedOreRecipe(new ItemStack(result), recipe); }
@@ -426,8 +472,35 @@ public class ModCrafting {
 		addShapelessRecipe(copy, new Object[] { output });
 	}
 	
+	public static String[] dyeOreNames = {
+        "Black",
+        "Red",
+        "Green",
+        "Brown",
+        "Blue",
+        "Purple",
+        "Cyan",
+        "LightGray",
+        "Gray",
+        "Pink",
+        "Lime",
+        "Yellow",
+        "LightBlue",
+        "Magenta",
+        "Orange",
+        "White"
+    };
+	
 	public static void initOreDic(){
 		oredict(Blocks.CRAFTING_TABLE, "workbench");
+
+		oredict(new ItemStack(Blocks.WOOL, 1, OreDictionary.WILDCARD_VALUE));
+		
+        for(int i = 0; i < 16; i++)
+        {
+        	ItemStack wool = new ItemStack(Blocks.WOOL, 1, i);
+        	oredict(wool, "wool"+dyeOreNames[i]);
+        }
 		
 		for(CrystalChestType chest : CrystalChestType.values()){
 			if(chest == CrystalChestType.WOOD)continue;

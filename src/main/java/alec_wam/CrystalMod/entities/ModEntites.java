@@ -17,6 +17,8 @@ import alec_wam.CrystalMod.entities.minecarts.chests.EntityCrystalChestMinecartG
 import alec_wam.CrystalMod.entities.minecarts.chests.EntityCrystalChestMinecartPure;
 import alec_wam.CrystalMod.entities.minecarts.chests.EntityCrystalChestMinecartRed;
 import alec_wam.CrystalMod.entities.minecarts.chests.RenderMinecartCrystalChest;
+import alec_wam.CrystalMod.entities.minecarts.chests.wireless.EntityWirelessChestMinecart;
+import alec_wam.CrystalMod.entities.minecarts.chests.wireless.RenderWirelessChestMinecart;
 import alec_wam.CrystalMod.entities.minions.EntityMinionBase;
 import alec_wam.CrystalMod.entities.minions.RenderMinionBase;
 import alec_wam.CrystalMod.entities.minions.warrior.EntityMinionWarrior;
@@ -69,8 +71,9 @@ public class ModEntites {
 		for(Entry<CrystalChestType, Class<? extends EntityCrystalChestMinecartBase>> entry : EntityCrystalChestMinecartBase.minecarts.entrySet()){
 			addEntity(entry.getValue(), "minecart_chest_"+entry.getKey().name().toLowerCase(), 64, 1, true);
 		}
-		
 		addEntity(EntityBombomb.class, "Bombomb");
+		
+		addEntity(EntityWirelessChestMinecart.class, "minecart_wirelesschest", 64, 1, true);
 	}
 	
 	public static void postInit(){
@@ -88,6 +91,7 @@ public class ModEntites {
         RenderingRegistry.registerEntityRenderingHandler(EntityMinionBase.class, RenderMinionBase.FACTORY);
         
         RenderingRegistry.registerEntityRenderingHandler(EntityCrystalChestMinecartBase.class, RenderMinecartCrystalChest.FACTORY);
+        RenderingRegistry.registerEntityRenderingHandler(EntityWirelessChestMinecart.class, RenderWirelessChestMinecart.FACTORY);
         
         RenderingRegistry.registerEntityRenderingHandler(EntityBombomb.class, RenderEntityBombomb.FACTORY);
 	}

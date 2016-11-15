@@ -22,6 +22,8 @@ import alec_wam.CrystalMod.tiles.cauldron.TileEntityCrystalCauldron;
 import alec_wam.CrystalMod.tiles.chest.BlockCrystalChest;
 import alec_wam.CrystalMod.tiles.chest.CrystalChestType;
 import alec_wam.CrystalMod.tiles.chest.ItemBlockCrystalChest;
+import alec_wam.CrystalMod.tiles.chest.wireless.BlockWirelessChest;
+import alec_wam.CrystalMod.tiles.chest.wireless.TileWirelessChest;
 import alec_wam.CrystalMod.tiles.machine.crafting.BlockCrystalMachine;
 import alec_wam.CrystalMod.tiles.machine.crafting.BlockCrystalMachine.MachineType;
 import alec_wam.CrystalMod.tiles.machine.elevator.BlockElevator;
@@ -112,6 +114,7 @@ public class ModBlocks {
 	public static BlockCrystalReed crystalReeds;
 	public static BlockCrystalWorkbench crystalWorkbench;
 	public static BlockCrystalChest crystalChest;
+	public static BlockWirelessChest wirelessChest;
 	public static BlockCrystalPlant crystalPlantBlue, crystalPlantRed, crystalPlantGreen, crystalPlantDark;
 	public static BlockCrystalTreePlant crystalTreePlantBlue, crystalTreePlantRed, crystalTreePlantGreen, crystalTreePlantDark;
 	public static BlockCrystalLog crystalLog;
@@ -178,6 +181,10 @@ public class ModBlocks {
         {
             GameRegistry.registerTileEntityWithAlternatives(typ.clazz, CrystalMod.MODID+"." + typ.name(), typ.name());
         }
+		
+		wirelessChest = new BlockWirelessChest();
+		registerBlock(wirelessChest, "wirelesschest");
+		registerTileEntity(TileWirelessChest.class);
 		
 		crystalPlantBlue = new BlockCrystalPlant(PlantType.BLUE);
 		registerBlock(crystalPlantBlue, "bluecrystalplant");
