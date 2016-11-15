@@ -22,7 +22,6 @@ import alec_wam.CrystalMod.api.tools.AttackData;
 import alec_wam.CrystalMod.api.tools.UpgradeData;
 import alec_wam.CrystalMod.items.tools.bat.BatHelper;
 import alec_wam.CrystalMod.items.tools.bat.BatUpgrade;
-import alec_wam.CrystalMod.items.tools.bat.ItemBatRenderer;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.Lang;
 import alec_wam.CrystalMod.util.client.RenderUtil;
@@ -86,28 +85,28 @@ public class RedstoneBatUpgrade extends BatUpgrade {
 		Tessellator tess = Tessellator.getInstance();
 		VertexBuffer buffer = tess.getBuffer();
 		
-		ItemBatRenderer.startDrawing(buffer);
-		ItemBatRenderer.addVertexWithUV(buffer, min, minY, min, redstone.getMinU(), redstone.getMinV());
-		ItemBatRenderer.addVertexWithUV(buffer, min, maxY, min, redstone.getMinU(), redstone.getMaxV());
-		ItemBatRenderer.addVertexWithUV(buffer, max, maxY, min, redstone.getMaxU(), redstone.getMaxV());
-		ItemBatRenderer.addVertexWithUV(buffer, max, minY, min, redstone.getMaxU(), redstone.getMinV());
+		RenderUtil.startDrawing(buffer);
+		RenderUtil.addVertexWithUV(buffer, min, minY, min, redstone.getMinU(), redstone.getMinV());
+		RenderUtil.addVertexWithUV(buffer, min, maxY, min, redstone.getMinU(), redstone.getMaxV());
+		RenderUtil.addVertexWithUV(buffer, max, maxY, min, redstone.getMaxU(), redstone.getMaxV());
+		RenderUtil.addVertexWithUV(buffer, max, minY, min, redstone.getMaxU(), redstone.getMinV());
 		
-		ItemBatRenderer.addVertexWithUV(buffer, max, minY, max, redstone.getMinU(), redstone.getMinV());
-		ItemBatRenderer.addVertexWithUV(buffer, max, maxY, max, redstone.getMinU(), redstone.getMaxV());
-		ItemBatRenderer.addVertexWithUV(buffer, min, maxY, max, redstone.getMaxU(), redstone.getMaxV());
-		ItemBatRenderer.addVertexWithUV(buffer, min, minY, max, redstone.getMaxU(), redstone.getMinV());
+		RenderUtil.addVertexWithUV(buffer, max, minY, max, redstone.getMinU(), redstone.getMinV());
+		RenderUtil.addVertexWithUV(buffer, max, maxY, max, redstone.getMinU(), redstone.getMaxV());
+		RenderUtil.addVertexWithUV(buffer, min, maxY, max, redstone.getMaxU(), redstone.getMaxV());
+		RenderUtil.addVertexWithUV(buffer, min, minY, max, redstone.getMaxU(), redstone.getMinV());
 		tess.draw();
 		
-		ItemBatRenderer.startDrawing(buffer);
-		ItemBatRenderer.addVertexWithUV(buffer, max, minY, min, redstone.getMinU(), redstone.getMinV());
-		ItemBatRenderer.addVertexWithUV(buffer, max, maxY, min, redstone.getMinU(), redstone.getMaxV());
-		ItemBatRenderer.addVertexWithUV(buffer, max, maxY, max, redstone.getMaxU(), redstone.getMaxV());
-		ItemBatRenderer.addVertexWithUV(buffer, max, minY, max, redstone.getMaxU(), redstone.getMinV());
+		RenderUtil.startDrawing(buffer);
+		RenderUtil.addVertexWithUV(buffer, max, minY, min, redstone.getMinU(), redstone.getMinV());
+		RenderUtil.addVertexWithUV(buffer, max, maxY, min, redstone.getMinU(), redstone.getMaxV());
+		RenderUtil.addVertexWithUV(buffer, max, maxY, max, redstone.getMaxU(), redstone.getMaxV());
+		RenderUtil.addVertexWithUV(buffer, max, minY, max, redstone.getMaxU(), redstone.getMinV());
 		
-		ItemBatRenderer.addVertexWithUV(buffer, min, minY, max, redstone.getMinU(), redstone.getMinV());
-		ItemBatRenderer.addVertexWithUV(buffer, min, maxY, max, redstone.getMinU(), redstone.getMaxV());
-		ItemBatRenderer.addVertexWithUV(buffer, min, maxY, min, redstone.getMaxU(), redstone.getMaxV());
-		ItemBatRenderer.addVertexWithUV(buffer, min, minY, min, redstone.getMaxU(), redstone.getMinV());
+		RenderUtil.addVertexWithUV(buffer, min, minY, max, redstone.getMinU(), redstone.getMinV());
+		RenderUtil.addVertexWithUV(buffer, min, maxY, max, redstone.getMinU(), redstone.getMaxV());
+		RenderUtil.addVertexWithUV(buffer, min, maxY, min, redstone.getMaxU(), redstone.getMaxV());
+		RenderUtil.addVertexWithUV(buffer, min, minY, min, redstone.getMaxU(), redstone.getMinV());
 		tess.draw();
 	}
 

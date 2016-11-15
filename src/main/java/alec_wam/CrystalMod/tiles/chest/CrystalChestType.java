@@ -24,7 +24,7 @@ public enum CrystalChestType implements IStringSerializable
     PURE(108, 12, true, "Pure Crystal Chest", "purechest.png", 4, Arrays.asList("ingotPure"), TileEntityPureCrystalChest.class, "mmmm3mmmm"),
     DARKIRON(45, 9, false, "Dark Iron Chest", "dironchest.png", 5, Arrays.asList("ingotDarkIron"), TileEntityDarkIronChest.class, "mmmmCmmmm"),
     WOOD(0, 0, false, "", "", -1, Arrays.asList("plankWood"), null);
-    int size;
+    public int size;
     private int rowLength;
     public String friendlyName;
     private boolean tieredChest;

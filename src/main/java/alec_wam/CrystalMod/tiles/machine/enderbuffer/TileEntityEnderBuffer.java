@@ -28,6 +28,7 @@ import alec_wam.CrystalMod.tiles.machine.enderbuffer.EnderBufferManager.EnderBuf
 import alec_wam.CrystalMod.tiles.pipes.TileEntityPipe.RedstoneMode;
 import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.ModLogger;
+import alec_wam.CrystalMod.util.PlayerUtil;
 import cofh.api.energy.IEnergyReceiver;
 
 public class TileEntityEnderBuffer extends TileEntityMod implements IEnderBuffer, IMessageHandler, IActiveTile {
@@ -236,7 +237,7 @@ public class TileEntityEnderBuffer extends TileEntityMod implements IEnderBuffer
 	public void writeCustomNBT(NBTTagCompound nbt){
 		super.writeCustomNBT(nbt);
 		nbt.setInteger("Code", code);
-		if(boundToPlayer !=null)EnderBufferManager.uuidToNBT(nbt, boundToPlayer);
+		if(boundToPlayer !=null)PlayerUtil.uuidToNBT(nbt, boundToPlayer);
 		nbt.setByte("Mode.CU", (byte)cuMode.ordinal());
 		nbt.setByte("Mode.RF", (byte)rfMode.ordinal());
 		nbt.setByte("Mode.Fluid", (byte)fluidMode.ordinal());
@@ -252,7 +253,7 @@ public class TileEntityEnderBuffer extends TileEntityMod implements IEnderBuffer
     public void readCustomNBT(NBTTagCompound nbt){
     	super.readCustomNBT(nbt);
     	if(nbt.hasKey("Code"))this.code = nbt.getInteger("Code");
-    	boundToPlayer = EnderBufferManager.uuidFromNBT(nbt);
+    	boundToPlayer = PlayerUtil.uuidFromNBT(nbt);
         releasePreviousInventory();
     	this.cuMode = Mode.values()[nbt.getByte("Mode.CU")];
     	this.rfMode = Mode.values()[nbt.getByte("Mode.RF")];

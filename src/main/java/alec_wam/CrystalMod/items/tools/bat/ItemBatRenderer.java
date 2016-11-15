@@ -146,32 +146,32 @@ public class ItemBatRenderer implements ICustomItemRenderer {
 			TextureAtlasSprite handle = type.getHandleTexture();
 			if(handle == null)handle = RenderUtil.getMissingSprite();
 			
-			startDrawing(buffer);
-			addVertexWithUV(buffer, min, minY, min, handle.getMinU(), handle.getMinV());
-			addVertexWithUV(buffer, min, maxY, min, handle.getMinU(), handle.getMaxV());
-			addVertexWithUV(buffer, max, maxY, min, handle.getMaxU(), handle.getMaxV());
-			addVertexWithUV(buffer, max, minY, min, handle.getMaxU(), handle.getMinV());
+			RenderUtil.startDrawing(buffer);
+			RenderUtil.addVertexWithUV(buffer, min, minY, min, handle.getMinU(), handle.getMinV());
+			RenderUtil.addVertexWithUV(buffer, min, maxY, min, handle.getMinU(), handle.getMaxV());
+			RenderUtil.addVertexWithUV(buffer, max, maxY, min, handle.getMaxU(), handle.getMaxV());
+			RenderUtil.addVertexWithUV(buffer, max, minY, min, handle.getMaxU(), handle.getMinV());
 			tess.draw();
 			
-			startDrawing(buffer);
-			addVertexWithUV(buffer, max, minY, max, handle.getMinU(), handle.getMinV());
-			addVertexWithUV(buffer, max, maxY, max, handle.getMinU(), handle.getMaxV());
-			addVertexWithUV(buffer, min, maxY, max, handle.getMaxU(), handle.getMaxV());
-			addVertexWithUV(buffer, min, minY, max, handle.getMaxU(), handle.getMinV());
+			RenderUtil.startDrawing(buffer);
+			RenderUtil.addVertexWithUV(buffer, max, minY, max, handle.getMinU(), handle.getMinV());
+			RenderUtil.addVertexWithUV(buffer, max, maxY, max, handle.getMinU(), handle.getMaxV());
+			RenderUtil.addVertexWithUV(buffer, min, maxY, max, handle.getMaxU(), handle.getMaxV());
+			RenderUtil.addVertexWithUV(buffer, min, minY, max, handle.getMaxU(), handle.getMinV());
 			tess.draw();
 			
-			startDrawing(buffer);
-			addVertexWithUV(buffer, max, minY, min, handle.getMinU(), handle.getMinV());
-			addVertexWithUV(buffer, max, maxY, min, handle.getMinU(), handle.getMaxV());
-			addVertexWithUV(buffer, max, maxY, max, handle.getMaxU(), handle.getMaxV());
-			addVertexWithUV(buffer, max, minY, max, handle.getMaxU(), handle.getMinV());
+			RenderUtil.startDrawing(buffer);
+			RenderUtil.addVertexWithUV(buffer, max, minY, min, handle.getMinU(), handle.getMinV());
+			RenderUtil.addVertexWithUV(buffer, max, maxY, min, handle.getMinU(), handle.getMaxV());
+			RenderUtil.addVertexWithUV(buffer, max, maxY, max, handle.getMaxU(), handle.getMaxV());
+			RenderUtil.addVertexWithUV(buffer, max, minY, max, handle.getMaxU(), handle.getMinV());
 			tess.draw();
 			
-			startDrawing(buffer);
-			addVertexWithUV(buffer, min, minY, max, handle.getMinU(), handle.getMinV());
-			addVertexWithUV(buffer, min, maxY, max, handle.getMinU(), handle.getMaxV());
-			addVertexWithUV(buffer, min, maxY, min, handle.getMaxU(), handle.getMaxV());
-			addVertexWithUV(buffer, min, minY, min, handle.getMaxU(), handle.getMinV());
+			RenderUtil.startDrawing(buffer);
+			RenderUtil.addVertexWithUV(buffer, min, minY, max, handle.getMinU(), handle.getMinV());
+			RenderUtil.addVertexWithUV(buffer, min, maxY, max, handle.getMinU(), handle.getMaxV());
+			RenderUtil.addVertexWithUV(buffer, min, maxY, min, handle.getMaxU(), handle.getMaxV());
+			RenderUtil.addVertexWithUV(buffer, min, minY, min, handle.getMaxU(), handle.getMinV());
 			tess.draw();
 		}
 		if(drawHandleBase){
@@ -180,42 +180,42 @@ public class ItemBatRenderer implements ICustomItemRenderer {
 			double minY = 0.2;
 			double maxY = 0.35;
 			
-			startDrawing(buffer);
-			addVertexWithUV(buffer, min, minY, min, icon.getMinU(), icon.getMinV());
-			addVertexWithUV(buffer, min, maxY, min, icon.getMinU(), icon.getMaxV());
-			addVertexWithUV(buffer, max, maxY, min, icon.getMaxU(), icon.getMaxV());
-			addVertexWithUV(buffer, max, minY, min, icon.getMaxU(), icon.getMinV());
+			RenderUtil.startDrawing(buffer);
+			RenderUtil.addVertexWithUV(buffer, min, minY, min, icon.getMinU(), icon.getMinV());
+			RenderUtil.addVertexWithUV(buffer, min, maxY, min, icon.getMinU(), icon.getMaxV());
+			RenderUtil.addVertexWithUV(buffer, max, maxY, min, icon.getMaxU(), icon.getMaxV());
+			RenderUtil.addVertexWithUV(buffer, max, minY, min, icon.getMaxU(), icon.getMinV());
 			
-			addVertexWithUV(buffer, max, minY, max, icon.getMinU(), icon.getMinV());
-			addVertexWithUV(buffer, max, maxY, max, icon.getMinU(), icon.getMaxV());
-			addVertexWithUV(buffer, min, maxY, max, icon.getMaxU(), icon.getMaxV());
-			addVertexWithUV(buffer, min, minY, max, icon.getMaxU(), icon.getMinV());
+			RenderUtil.addVertexWithUV(buffer, max, minY, max, icon.getMinU(), icon.getMinV());
+			RenderUtil.addVertexWithUV(buffer, max, maxY, max, icon.getMinU(), icon.getMaxV());
+			RenderUtil.addVertexWithUV(buffer, min, maxY, max, icon.getMaxU(), icon.getMaxV());
+			RenderUtil.addVertexWithUV(buffer, min, minY, max, icon.getMaxU(), icon.getMinV());
 			tess.draw();
 			
-			startDrawing(buffer);
-			addVertexWithUV(buffer, max, minY, min, icon.getMinU(), icon.getMinV());
-			addVertexWithUV(buffer, max, maxY, min, icon.getMinU(), icon.getMaxV());
-			addVertexWithUV(buffer, max, maxY, max, icon.getMaxU(), icon.getMaxV());
-			addVertexWithUV(buffer, max, minY, max, icon.getMaxU(), icon.getMinV());
+			RenderUtil.startDrawing(buffer);
+			RenderUtil.addVertexWithUV(buffer, max, minY, min, icon.getMinU(), icon.getMinV());
+			RenderUtil.addVertexWithUV(buffer, max, maxY, min, icon.getMinU(), icon.getMaxV());
+			RenderUtil.addVertexWithUV(buffer, max, maxY, max, icon.getMaxU(), icon.getMaxV());
+			RenderUtil.addVertexWithUV(buffer, max, minY, max, icon.getMaxU(), icon.getMinV());
 			
-			addVertexWithUV(buffer, min, minY, max, icon.getMinU(), icon.getMinV());
-			addVertexWithUV(buffer, min, maxY, max, icon.getMinU(), icon.getMaxV());
-			addVertexWithUV(buffer, min, maxY, min, icon.getMaxU(), icon.getMaxV());
-			addVertexWithUV(buffer, min, minY, min, icon.getMaxU(), icon.getMinV());
+			RenderUtil.addVertexWithUV(buffer, min, minY, max, icon.getMinU(), icon.getMinV());
+			RenderUtil.addVertexWithUV(buffer, min, maxY, max, icon.getMinU(), icon.getMaxV());
+			RenderUtil.addVertexWithUV(buffer, min, maxY, min, icon.getMaxU(), icon.getMaxV());
+			RenderUtil.addVertexWithUV(buffer, min, minY, min, icon.getMaxU(), icon.getMinV());
 			tess.draw();
 			
-			startDrawing(buffer);
-			addVertexWithUV(buffer, min, maxY, max, icon.getMinU(), icon.getMinV());
-			addVertexWithUV(buffer, max, maxY, max, icon.getMinU(), icon.getMaxV());
-			addVertexWithUV(buffer, max, maxY, min, icon.getMaxU(), icon.getMaxV());
-			addVertexWithUV(buffer, min, maxY, min, icon.getMaxU(), icon.getMinV());
+			RenderUtil.startDrawing(buffer);
+			RenderUtil.addVertexWithUV(buffer, min, maxY, max, icon.getMinU(), icon.getMinV());
+			RenderUtil.addVertexWithUV(buffer, max, maxY, max, icon.getMinU(), icon.getMaxV());
+			RenderUtil.addVertexWithUV(buffer, max, maxY, min, icon.getMaxU(), icon.getMaxV());
+			RenderUtil.addVertexWithUV(buffer, min, maxY, min, icon.getMaxU(), icon.getMinV());
 			tess.draw();
 			
-			startDrawing(buffer);
-			addVertexWithUV(buffer, min, minY, min, icon.getMinU(), icon.getMinV());
-			addVertexWithUV(buffer, max, minY, min, icon.getMinU(), icon.getMaxV());
-			addVertexWithUV(buffer, max, minY, max, icon.getMaxU(), icon.getMaxV());
-			addVertexWithUV(buffer, min, minY, max, icon.getMaxU(), icon.getMinV());
+			RenderUtil.startDrawing(buffer);
+			RenderUtil.addVertexWithUV(buffer, min, minY, min, icon.getMinU(), icon.getMinV());
+			RenderUtil.addVertexWithUV(buffer, max, minY, min, icon.getMinU(), icon.getMaxV());
+			RenderUtil.addVertexWithUV(buffer, max, minY, max, icon.getMaxU(), icon.getMaxV());
+			RenderUtil.addVertexWithUV(buffer, min, minY, max, icon.getMaxU(), icon.getMinV());
 			tess.draw();
 		}
 		
@@ -234,35 +234,35 @@ public class ItemBatRenderer implements ICustomItemRenderer {
 			double minV = 0;//icon.getMinV();
 			double maxV = 1;//icon.getMaxU();
 			
-			startDrawing(buffer);
-			addVertexWithUV(buffer, min, minY, min, icon.getMinU(), icon.getMinV());
-			addVertexWithUV(buffer, minTop, maxY, minTop, icon.getMinU(), icon.getMaxV());
-			addVertexWithUV(buffer, maxTop, maxY, minTop, icon.getMaxU(), icon.getMaxV());
-			addVertexWithUV(buffer, max, minY, min, icon.getMaxU(), icon.getMinV());
+			RenderUtil.startDrawing(buffer);
+			RenderUtil.addVertexWithUV(buffer, min, minY, min, icon.getMinU(), icon.getMinV());
+			RenderUtil.addVertexWithUV(buffer, minTop, maxY, minTop, icon.getMinU(), icon.getMaxV());
+			RenderUtil.addVertexWithUV(buffer, maxTop, maxY, minTop, icon.getMaxU(), icon.getMaxV());
+			RenderUtil.addVertexWithUV(buffer, max, minY, min, icon.getMaxU(), icon.getMinV());
 			
-			addVertexWithUV(buffer, max, minY, max, icon.getMinU(), icon.getMinV());
-			addVertexWithUV(buffer, maxTop, maxY, maxTop, icon.getMinU(), icon.getMaxV());
-			addVertexWithUV(buffer, minTop, maxY, maxTop, icon.getMaxU(), icon.getMaxV());
-			addVertexWithUV(buffer, min, minY, max, icon.getMaxU(), icon.getMinV());
+			RenderUtil.addVertexWithUV(buffer, max, minY, max, icon.getMinU(), icon.getMinV());
+			RenderUtil.addVertexWithUV(buffer, maxTop, maxY, maxTop, icon.getMinU(), icon.getMaxV());
+			RenderUtil.addVertexWithUV(buffer, minTop, maxY, maxTop, icon.getMaxU(), icon.getMaxV());
+			RenderUtil.addVertexWithUV(buffer, min, minY, max, icon.getMaxU(), icon.getMinV());
 			tess.draw();
 			
-			startDrawing(buffer);
-			addVertexWithUV(buffer, max, minY, min, icon.getMinU(), icon.getMinV());
-			addVertexWithUV(buffer, maxTop, maxY, minTop, icon.getMinU(), icon.getMaxV());
-			addVertexWithUV(buffer, maxTop, maxY, maxTop, icon.getMaxU(), icon.getMaxV());
-			addVertexWithUV(buffer, max, minY, max, icon.getMaxU(), icon.getMinV());
+			RenderUtil.startDrawing(buffer);
+			RenderUtil.addVertexWithUV(buffer, max, minY, min, icon.getMinU(), icon.getMinV());
+			RenderUtil.addVertexWithUV(buffer, maxTop, maxY, minTop, icon.getMinU(), icon.getMaxV());
+			RenderUtil.addVertexWithUV(buffer, maxTop, maxY, maxTop, icon.getMaxU(), icon.getMaxV());
+			RenderUtil.addVertexWithUV(buffer, max, minY, max, icon.getMaxU(), icon.getMinV());
 			
-			addVertexWithUV(buffer, min, minY, max, icon.getMinU(), icon.getMinV());
-			addVertexWithUV(buffer, minTop, maxY, maxTop, icon.getMinU(), icon.getMaxV());
-			addVertexWithUV(buffer, minTop, maxY, minTop, icon.getMaxU(), icon.getMaxV());
-			addVertexWithUV(buffer, min, minY, min, icon.getMaxU(), icon.getMinV());
+			RenderUtil.addVertexWithUV(buffer, min, minY, max, icon.getMinU(), icon.getMinV());
+			RenderUtil.addVertexWithUV(buffer, minTop, maxY, maxTop, icon.getMinU(), icon.getMaxV());
+			RenderUtil.addVertexWithUV(buffer, minTop, maxY, minTop, icon.getMaxU(), icon.getMaxV());
+			RenderUtil.addVertexWithUV(buffer, min, minY, min, icon.getMaxU(), icon.getMinV());
 			tess.draw();
 			
-			startDrawing(buffer);
-			addVertexWithUV(buffer, min, minY, min, icon.getMinU(), icon.getMinV());
-			addVertexWithUV(buffer, max, minY, min, icon.getMinU(), icon.getMaxV());
-			addVertexWithUV(buffer, max, minY, max, icon.getMaxU(), icon.getMaxV());
-			addVertexWithUV(buffer, min, minY, max, icon.getMaxU(), icon.getMinV());
+			RenderUtil.startDrawing(buffer);
+			RenderUtil.addVertexWithUV(buffer, min, minY, min, icon.getMinU(), icon.getMinV());
+			RenderUtil.addVertexWithUV(buffer, max, minY, min, icon.getMinU(), icon.getMaxV());
+			RenderUtil.addVertexWithUV(buffer, max, minY, max, icon.getMaxU(), icon.getMaxV());
+			RenderUtil.addVertexWithUV(buffer, min, minY, max, icon.getMaxU(), icon.getMinV());
 			tess.draw();
 			
 			minU = icon.getMinU();
@@ -270,23 +270,15 @@ public class ItemBatRenderer implements ICustomItemRenderer {
 			minV = icon.getMinV();
 			maxV = icon.getMaxU();
 			
-			startDrawing(buffer);
-			addVertexWithUV(buffer, minTop, maxY, maxTop, icon.getMinU(), icon.getMinV());
-			addVertexWithUV(buffer, maxTop, maxY, maxTop, icon.getMinU(), icon.getMaxV());
-			addVertexWithUV(buffer, maxTop, maxY, minTop, icon.getMaxU(), icon.getMaxV());
-			addVertexWithUV(buffer, minTop, maxY, minTop, icon.getMaxU(), icon.getMinV());
+			RenderUtil.startDrawing(buffer);
+			RenderUtil.addVertexWithUV(buffer, minTop, maxY, maxTop, icon.getMinU(), icon.getMinV());
+			RenderUtil.addVertexWithUV(buffer, maxTop, maxY, maxTop, icon.getMinU(), icon.getMaxV());
+			RenderUtil.addVertexWithUV(buffer, maxTop, maxY, minTop, icon.getMaxU(), icon.getMaxV());
+			RenderUtil.addVertexWithUV(buffer, minTop, maxY, minTop, icon.getMaxU(), icon.getMinV());
 			tess.draw();
 		}
 		//GlStateManager.enableLighting();
 		GlStateManager.popMatrix();
-	}
-	
-	public static void startDrawing(VertexBuffer buffer){
-		buffer.begin(7, DefaultVertexFormats.POSITION_TEX);
-	}
-	
-	public static void addVertexWithUV(VertexBuffer buffer, double x, double y, double z, double u, double v){
-		buffer.pos(x, y, z).tex(u, v).endVertex();
 	}
 
 }

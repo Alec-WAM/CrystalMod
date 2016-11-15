@@ -17,6 +17,8 @@ import net.minecraftforge.fluids.FluidStack;
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.api.energy.CEnergyStorage;
 import alec_wam.CrystalMod.tiles.tank.Tank;
+import alec_wam.CrystalMod.util.ModLogger;
+import alec_wam.CrystalMod.util.PlayerUtil;
 import cofh.api.energy.EnergyStorage;
 
 import com.google.common.collect.Maps;
@@ -94,7 +96,7 @@ public class EnderBufferManager extends WorldSavedData implements IEnderBufferLi
             for (int i = 0; i < list.tagCount(); ++i)
             {
                 NBTTagCompound containerTag = list.getCompoundTagAt(i);
-                UUID uuid = uuidFromNBT(containerTag);
+                UUID uuid = PlayerUtil.uuidFromNBT(containerTag);
 
                 Container container = new Container();
                 container.deserializeNBT(containerTag);
@@ -115,7 +117,7 @@ public class EnderBufferManager extends WorldSavedData implements IEnderBufferLi
         for (Map.Entry<UUID, Container> e : perPlayer.entrySet())
         {
             NBTTagCompound tag = e.getValue().serializeNBT();
-            uuidToNBT(tag, e.getKey());
+            PlayerUtil.uuidToNBT(tag, e.getKey());
             list.appendTag(tag);
         }
 
@@ -127,23 +129,6 @@ public class EnderBufferManager extends WorldSavedData implements IEnderBufferLi
     public void importCapabilityData(EntityPlayer player, NBTTagCompound nbt)
     {
         ((Container) getPrivate(player)).importNBT(nbt);
-    }
-
-    public static void uuidToNBT(NBTTagCompound tag, UUID uuid)
-    {
-        tag.setLong("PlayerUUID0", uuid.getLeastSignificantBits());
-        tag.setLong("PlayerUUID1", uuid.getMostSignificantBits());
-    }
-
-    public static UUID uuidFromNBT(NBTTagCompound tag)
-    {
-        if (!tag.hasKey("PlayerUUID0", Constants.NBT.TAG_LONG))
-            return null;
-
-        long uuid0 = tag.getLong("PlayerUUID0");
-        long uuid1 = tag.getLong("PlayerUUID1");
-
-        return new UUID(uuid1, uuid0);
     }
 
     private class Container implements INBTSerializable<NBTTagCompound>, IEnderBufferList
@@ -168,7 +153,6 @@ public class EnderBufferManager extends WorldSavedData implements IEnderBufferLi
         {
             NBTTagCompound tag = new NBTTagCompound();
             NBTTagList inventories = new NBTTagList();
-
             for (Map.Entry<Integer, EnderBuffer> entry : this.inventories.entrySet())
             {
                 EnderBuffer inventory = entry.getValue();
@@ -178,7 +162,6 @@ public class EnderBufferManager extends WorldSavedData implements IEnderBufferLi
                 inventoryTag.setTag("BufferContents", inventory.serializeNBT());
                 inventories.appendTag(inventoryTag);
             }
-
             tag.setTag("Buffers", inventories);
             return tag;
         }
