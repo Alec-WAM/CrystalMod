@@ -7,6 +7,7 @@ import java.util.List;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.items.ItemIngot.IngotType;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.Item;
@@ -22,8 +23,7 @@ public enum CrystalChestType implements IStringSerializable
     GREEN(81, 9, true, "Green Crystal Chest", "greenchest.png", 2, Arrays.asList("ingotGreen"), TileEntityGreenCrystalChest.class, "mmmm1mmmm"),
     DARK(108, 12, true, "Dark Crystal Chest", "darkchest.png", 3, Arrays.asList("ingotDark"), TileEntityDarkCrystalChest.class, "mmmm2mmmm"),
     PURE(108, 12, true, "Pure Crystal Chest", "purechest.png", 4, Arrays.asList("ingotPure"), TileEntityPureCrystalChest.class, "mmmm3mmmm"),
-    DARKIRON(45, 9, false, "Dark Iron Chest", "dironchest.png", 5, Arrays.asList("ingotDarkIron"), TileEntityDarkIronChest.class, "mmmmCmmmm"),
-    WOOD(0, 0, false, "", "", -1, Arrays.asList("plankWood"), null);
+    DARKIRON(45, 9, false, "Dark Iron Chest", "dironchest.png", 5, Arrays.asList("ingotDarkIron"), TileEntityDarkIronChest.class, "mmmmCmmmm");
     public int size;
     private int rowLength;
     public String friendlyName;
@@ -117,7 +117,8 @@ public enum CrystalChestType implements IStringSerializable
             for (String mat : type.matList)
             {
                 mainMaterial = translateOreName(mat);
-                addRecipe(new ItemStack(blockResult, 1, type.ordinal()), recipeSplit,
+                ItemStack chestStack = new ItemStack(blockResult, 1, type.ordinal());
+                addRecipe(chestStack, recipeSplit,
                         'm', mainMaterial, 'P', previousTier, /* previous tier of chest */
                         'G', "blockGlass", 'C', "chestWood",
                         '0', new ItemStack(blockResult, 1, 0), /* Blue Chest */
@@ -126,10 +127,25 @@ public enum CrystalChestType implements IStringSerializable
                         '3', new ItemStack(blockResult, 1, 3), /* Dark Chest */
                         '4', new ItemStack(blockResult, 1, 4)  /* Pure Chest */
                 );
+                addRecipe(new ItemStack(ModItems.chestMinecart, 1, type.ordinal()), 
+                		"C", "M",
+                        'C', chestStack, 'M', Items.MINECART
+                );
+                addRecipe(new ItemStack(ModItems.chestMinecart, 1, type.ordinal()), 
+                		"III", "IMI", "III",
+                        'I', mainMaterial, 'M', getPreviousMinecart(type) /* previous tier of minecart */
+                );
             }
         }
     }
 
+    public static Object getPreviousMinecart(CrystalChestType type){
+    	if(type == CrystalChestType.BLUE || !type.tieredChest){
+    		return Items.CHEST_MINECART;
+    	}
+    	return new ItemStack(ModItems.chestMinecart, 1, type.ordinal()-1);
+    }
+    
     public static Object translateOreName(String mat)
     {
     	if(mat.equalsIgnoreCase("ingotBlue")){

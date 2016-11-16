@@ -20,7 +20,6 @@ public class ItemCrystalChestMinecartRender implements ICustomItemRenderer {
 	private Map<CrystalChestType, EntityCrystalChestMinecartBase> minecarts = Maps.newHashMap();
 	
 	public EntityCrystalChestMinecartBase getMinecart(CrystalChestType type) {
-		if(type == CrystalChestType.WOOD)return null;
 		if(!minecarts.containsKey(type)){
 			minecarts.put(type, EntityCrystalChestMinecartBase.makeMinecart(CrystalMod.proxy.getClientWorld(), type));
 		}

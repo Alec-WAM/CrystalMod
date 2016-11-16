@@ -3,9 +3,7 @@ package alec_wam.CrystalMod.entities.minecarts.chests;
 import java.util.List;
 
 import alec_wam.CrystalMod.blocks.ICustomModel;
-import alec_wam.CrystalMod.entities.minecarts.chests.wireless.ItemWirelessMinecartRender;
 import alec_wam.CrystalMod.items.ModItems;
-import alec_wam.CrystalMod.items.ItemCrystal.CrystalType;
 import alec_wam.CrystalMod.proxy.ClientProxy;
 import alec_wam.CrystalMod.tiles.chest.CrystalChestType;
 import net.minecraft.block.BlockDispenser;
@@ -83,10 +81,6 @@ public class ItemCrystalChestMinecart extends Item implements ICustomModel
 
             CrystalChestType type = CrystalChestType.values()[CrystalChestType.validateMeta(stack.getMetadata())];
             
-            if(type == CrystalChestType.WOOD){
-            	return this.behaviourDefaultDispenseItem.dispense(source, stack);
-            }
-            
             EntityMinecart entityminecart = EntityCrystalChestMinecartBase.makeMinecart(world, d0, d1 + d3, d2, type);
 
             if (stack.hasDisplayName())
@@ -119,7 +113,9 @@ public class ItemCrystalChestMinecart extends Item implements ICustomModel
     
     @SideOnly(Side.CLIENT)
     public void initModel() {
-    	ModItems.initBasicModel(this);
+    	for(int i = 0; i < CrystalChestType.values().length; i++){
+    		ModelLoader.setCustomModelResourceLocation(this, i, new ModelResourceLocation(getRegistryName(), "inventory"));
+    	}
     	ClientProxy.registerItemRender(getRegistryName().getResourcePath(), new ItemCrystalChestMinecartRender());
     }
     
@@ -134,8 +130,7 @@ public class ItemCrystalChestMinecart extends Item implements ICustomModel
     {
         for (int i = 0; i < CrystalChestType.values().length; ++i)
         {
-        	if(i == CrystalChestType.WOOD.ordinal())continue;
-            subItems.add(new ItemStack(itemIn, 1, i));
+        	subItems.add(new ItemStack(itemIn, 1, i));
         }
     }
 
@@ -163,11 +158,6 @@ public class ItemCrystalChestMinecart extends Item implements ICustomModel
                 }
 
                 CrystalChestType type = CrystalChestType.values()[CrystalChestType.validateMeta(stack.getMetadata())];
-                
-                if(type == CrystalChestType.WOOD){
-                	return EnumActionResult.PASS;
-                }
-                
                 EntityMinecart entityminecart = EntityCrystalChestMinecartBase.makeMinecart(worldIn, (double)pos.getX() + 0.5D, (double)pos.getY() + 0.0625D + d0, (double)pos.getZ() + 0.5D, type);
 
                 if (stack.hasDisplayName())

@@ -60,10 +60,8 @@ public class BlockCrystalChest extends BlockContainer implements ICustomModel
     @SideOnly(Side.CLIENT)
     public void initModel(){
     	for(CrystalChestType type : CrystalChestType.values()){
-    		if(type !=CrystalChestType.WOOD){
-    			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), type.ordinal(), new ModelResourceLocation(getRegistryName(), "variant="+type.getName().toLowerCase()));
-    			registerTileEntitySpecialRenderer(type.clazz);
-    		}
+    		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), type.ordinal(), new ModelResourceLocation(getRegistryName(), "variant="+type.getName().toLowerCase()));
+			registerTileEntitySpecialRenderer(type.clazz);
     	}
     }
     
