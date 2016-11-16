@@ -24,6 +24,8 @@ import alec_wam.CrystalMod.tiles.chest.CrystalChestType;
 import alec_wam.CrystalMod.tiles.chest.ItemBlockCrystalChest;
 import alec_wam.CrystalMod.tiles.chest.wireless.BlockWirelessChest;
 import alec_wam.CrystalMod.tiles.chest.wireless.TileWirelessChest;
+import alec_wam.CrystalMod.tiles.entityhopper.BlockEntityHopper;
+import alec_wam.CrystalMod.tiles.entityhopper.TileEntityEntityHopper;
 import alec_wam.CrystalMod.tiles.machine.crafting.BlockCrystalMachine;
 import alec_wam.CrystalMod.tiles.machine.crafting.BlockCrystalMachine.MachineType;
 import alec_wam.CrystalMod.tiles.machine.elevator.BlockElevator;
@@ -127,6 +129,7 @@ public class ModBlocks {
 	public static BlockCrystalCauldron cauldron;
 	public static BlockCustomSpawner customSpawner;
 	public static BlockMobGrinder mobGrinder;
+	public static BlockEntityHopper entityHopper;
 	
 	public static BlockHDDInterface hddInterface;
 	public static BlockHDDArray hddArray;
@@ -353,6 +356,9 @@ public class ModBlocks {
 		
 		mobGrinder = registerBlock(new BlockMobGrinder(), "mobgrinder");
 		registerTileEntity(TileEntityMobGrinder.class);
+		
+		entityHopper = registerBlock(new BlockEntityHopper(), "entityhopper");
+		registerTileEntity(TileEntityEntityHopper.class);
 		
 		darkIronRail = new BlockReinforcedRail();
 		registerBlock(darkIronRail, "reinforcedRail");

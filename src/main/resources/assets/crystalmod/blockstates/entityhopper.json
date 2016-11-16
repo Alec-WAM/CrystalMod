@@ -1,0 +1,18 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "crystalmod:machine",
+    "textures": {
+	  "particle":"crystalmod:blocks/machine/entityhopper/top",
+	  "up":"crystalmod:blocks/machine/entityhopper/top",
+	  "down":"crystalmod:blocks/machine/entityhopper/bottom",
+	  "side":"crystalmod:blocks/machine/entityhopper/side",
+	  "front":"crystalmod:blocks/machine/entityhopper/side"
+    },
+    "transform": "forge:default-block"
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{}]
+  }
+}
