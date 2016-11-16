@@ -56,7 +56,7 @@ public class LiquidizerRecipeCategory extends BlankRecipeCategory<LiquidizerReci
 		
 		@Override
 		public @Nonnull List<?> getInputs() {
-		    List<ItemStack> inputStacks = Lists.newArrayList(recipe.getInput());
+		    List<ItemStack> inputStacks = recipe.getInputs();
 		    return inputStacks != null ? inputStacks : new ArrayList<ItemStack>();
 		}
 		

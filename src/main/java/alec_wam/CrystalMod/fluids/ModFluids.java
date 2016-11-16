@@ -45,40 +45,46 @@ public class ModFluids {
 	
 	public static Fluid fluidBlueCrystal, fluidRedCrystal, fluidGreenCrystal, fluidDarkCrystal, fluidPureCrystal, fluidDarkIron;
 	
+	public static Fluid fluidEnder;
+	
 	public static void registerFluids(){
 		if (!Loader.isModLoaded("EnderIO")) {
 	      ModLogger.info("XP Juice registered by Crystal Mod.");
 	      fluidXpJuice = new Fluid(XP_JUICE_NAME, new ResourceLocation("crystalmod:blocks/fluid/"+ModFluids.XP_JUICE_NAME+"_still"), new ResourceLocation("crystalmod:blocks/fluid/"+ModFluids.XP_JUICE_NAME+"_flowing"))
 	          .setLuminosity(10).setDensity(800).setViscosity(1500).setUnlocalizedName("crystalmod.xpjuice");
-	      FluidRegistry.registerFluid(fluidXpJuice);
+	      registerFluid(fluidXpJuice);
 	      registerClassicBlock(fluidXpJuice);
 	    } else {
 	    	ModLogger.info("XP Juice regististration left to EnderIO.");
 	    }
 		
-		fluidBlueCrystal = new FluidColored("crystal_blue", ItemIngot.RGB_BLUE).setLuminosity(10).setDensity(800).setViscosity(1500).setUnlocalizedName("crystalmod.crystal.blue");
-		FluidRegistry.registerFluid(fluidBlueCrystal);
+		fluidBlueCrystal = new FluidColored("crystal_blue", ItemIngot.RGB_BLUE).setUnlocalizedName("crystalmod.crystal.blue");
+		registerFluid(fluidBlueCrystal);
 		registerClassicBlock(fluidBlueCrystal);
 		
-		fluidRedCrystal = new FluidColored("crystal_red", ItemIngot.RGB_RED).setLuminosity(10).setDensity(800).setViscosity(1500).setUnlocalizedName("crystalmod.crystal.red");
-		FluidRegistry.registerFluid(fluidRedCrystal);
+		fluidRedCrystal = new FluidColored("crystal_red", ItemIngot.RGB_RED).setUnlocalizedName("crystalmod.crystal.red");
+		registerFluid(fluidRedCrystal);
 		registerClassicBlock(fluidRedCrystal);
 		
-		fluidGreenCrystal = new FluidColored("crystal_green", ItemIngot.RGB_GREEN).setLuminosity(10).setDensity(800).setViscosity(1500).setUnlocalizedName("crystalmod.crystal.green");
-		FluidRegistry.registerFluid(fluidGreenCrystal);
+		fluidGreenCrystal = new FluidColored("crystal_green", ItemIngot.RGB_GREEN).setUnlocalizedName("crystalmod.crystal.green");
+		registerFluid(fluidGreenCrystal);
 		registerClassicBlock(fluidGreenCrystal);
 		
-		fluidDarkCrystal = new FluidColored("crystal_dark", ItemIngot.RGB_DARK).setLuminosity(10).setDensity(800).setViscosity(1500).setUnlocalizedName("crystalmod.crystal.dark");
-		FluidRegistry.registerFluid(fluidDarkCrystal);
+		fluidDarkCrystal = new FluidColored("crystal_dark", ItemIngot.RGB_DARK).setUnlocalizedName("crystalmod.crystal.dark");
+		registerFluid(fluidDarkCrystal);
 		registerClassicBlock(fluidDarkCrystal);
 		
-		fluidPureCrystal = new FluidColored("crystal_pure", ItemIngot.RGB_PURE).setLuminosity(10).setDensity(800).setViscosity(1500).setUnlocalizedName("crystalmod.crystal.pure");
-		FluidRegistry.registerFluid(fluidPureCrystal);
+		fluidPureCrystal = new FluidColored("crystal_pure", ItemIngot.RGB_PURE).setLuminosity(10).setUnlocalizedName("crystalmod.crystal.pure");
+		registerFluid(fluidPureCrystal);
 		registerClassicBlock(fluidPureCrystal);
 		
-		fluidDarkIron = new FluidColored("darkiron", ItemIngot.RGB_DARK_IRON).setLuminosity(10).setDensity(800).setViscosity(1500).setUnlocalizedName("crystalmod.darkiron");
-		FluidRegistry.registerFluid(fluidDarkIron);
+		fluidDarkIron = new FluidColored("darkiron", ItemIngot.RGB_DARK_IRON).setUnlocalizedName("crystalmod.darkiron");
+		registerFluid(fluidDarkIron);
 		registerClassicBlock(fluidDarkIron);
+		
+		fluidEnder = new FluidColored("ender", 0x063931).setUnlocalizedName("crystalmod.ender");
+		registerFluid(fluidEnder);
+		ModBlocks.registerBlock(new BlockCrystalFluid(fluidEnder, net.minecraft.block.material.Material.WATER), fluidEnder.getName());
 		
 		createBuckets();
 	}
@@ -91,6 +97,14 @@ public class ModFluids {
 	public static BlockFluidBase registerMoltenBlock(Fluid fluid) {
 	    BlockFluidBase block = new BlockCrystalFluid(fluid, net.minecraft.block.material.Material.LAVA);
 	    return ModBlocks.registerBlock(block, fluid.getName());
+	}
+	
+	public static void registerFluid(Fluid fluid){
+		registerFluid(fluid, true);
+	}
+	public static void registerFluid(Fluid fluid, boolean addBucket){
+		FluidRegistry.registerFluid(fluid);
+		if(addBucket)bucketFluids.add(fluid);
 	}
 	
 	public static void forgeRegisterXPJuice() {
@@ -118,13 +132,10 @@ public class ModFluids {
 	}
 	
 	public static Map<Fluid, ItemStack> bucketList = Maps.newHashMap();
+	private static final List<Fluid> bucketFluids = Lists.newArrayList();
 	
 	public static void createBuckets() {
-		List<Fluid> list = Lists.newArrayList();
-		if(fluidXpJuice !=null)list.add(fluidXpJuice);
-		list.add(fluidBlueCrystal);	list.add(fluidRedCrystal);list.add(fluidGreenCrystal);list.add(fluidDarkCrystal);list.add(fluidPureCrystal);
-		list.add(fluidDarkIron);
-		for(Fluid fluid : list){
+		for(Fluid fluid : bucketFluids){
 		    if (FluidRegistry.isUniversalBucketEnabled()) {
 		    	FluidRegistry.addBucketForFluid(fluid);
 	    		bucketList.put(fluid, UniversalBucket.getFilledBucket(ForgeModContainer.getInstance().universalBucket, fluid));

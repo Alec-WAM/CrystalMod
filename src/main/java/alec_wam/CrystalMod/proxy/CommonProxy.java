@@ -65,6 +65,7 @@ public class CommonProxy {
         ModFluids.registerFluids();
 		ModBlocks.init();
 		ModItems.init();
+		ModCrafting.preInit();
 		ModEntites.init();
         MatterRegistry.init();
         ItemMobEssence.initDefaultMobs();

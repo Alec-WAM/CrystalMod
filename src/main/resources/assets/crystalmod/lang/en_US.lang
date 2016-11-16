@@ -69,7 +69,8 @@ item.crystalmod.toolparts.sword_head.green.name=Green Crystal Sword Blade
 item.crystalmod.toolparts.sword_head.dark.name=Dark Crystal Sword Blade
 item.crystalmod.toolparts.sword_head.pure.name=Pure Crystal Sword Blade
 
-item.crystalmod.machineFrame.name=Machine Frame
+item.crystalmod.machineFrame.basic.name=Machine Frame
+item.crystalmod.machineFrame.ender.name=Endergenic Machine Frame
 
 item.crystalmod.crystalaxe.blue.name=Blue Crystal Axe
 item.crystalmod.crystalaxe.red.name=Red Crystal Axe
@@ -356,6 +357,21 @@ tile.crystalmod.worksite.animal_farm.name=Minion Animal Farm
 tile.crystalmod.worksite.crop_farm.name=Minion Crop Farm
 
 tile.crystalmod.mobgrinder.name=Mob Grinder
+tile.crystalmod.entityhopper.name=Entity Hopper
+crystalmod.entityhopper.filter.none=None
+crystalmod.entityhopper.filter.all=Any
+crystalmod.entityhopper.filter.player=Players
+crystalmod.entityhopper.filter.undead=Undead Mobs
+crystalmod.entityhopper.filter.arthropod=Arthropods
+crystalmod.entityhopper.filter.monster=Hostile Mobs
+crystalmod.entityhopper.filter.animal=Animals
+crystalmod.entityhopper.filter.living=Any Mob
+crystalmod.entityhopper.filter.water=Water Entity
+crystalmod.entityhopper.filter.baby=Babies
+crystalmod.entityhopper.filter.pet=Pets
+crystalmod.entityhopper.filter.slime=Slimes
+crystalmod.entityhopper.filter.villager=Villager
+crystalmod.entityhopper.filter.item=Items
 tile.crystalmod.enderbuffer.name=Ender Buffer
 
 tile.crystalmod.powerconverter.rf.name=RF to CU Converter
@@ -369,6 +385,7 @@ fluid.crystalmod.crystal.green=Green Liquid Crystal
 fluid.crystalmod.crystal.dark=Dark Liquid Crystal
 fluid.crystalmod.crystal.pure=Pure Liquid Crystal
 fluid.crystalmod.darkiron=Liquid Dark Iron
+fluid.crystalmod.ender=Liquid Ender
 
 fluid.moltenCrystalBlue.name=Molten Blue Crystal
 fluid.moltenCrystalRed.name=Molten Red Crystal

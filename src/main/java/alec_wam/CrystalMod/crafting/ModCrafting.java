@@ -13,12 +13,14 @@ import alec_wam.CrystalMod.blocks.glass.BlockCrystalGlass.GlassType;
 import alec_wam.CrystalMod.crafting.recipes.RecipeSuperTorchAdd;
 import alec_wam.CrystalMod.crafting.recipes.ShapedNBTCopy;
 import alec_wam.CrystalMod.crafting.recipes.ShapedOreRecipeNBT;
+import alec_wam.CrystalMod.crafting.recipes.ShapedRecipeNBT;
 import alec_wam.CrystalMod.crafting.recipes.ShapelessRecipeNBT;
 import alec_wam.CrystalMod.crafting.recipes.UpgradeItemRecipe;
 import alec_wam.CrystalMod.entities.minecarts.chests.wireless.RecipeWirelessChestMinecart;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.items.ItemCrystal.CrystalType;
 import alec_wam.CrystalMod.items.ItemIngot.IngotType;
+import alec_wam.CrystalMod.items.ItemMachineFrame.FrameType;
 import alec_wam.CrystalMod.items.ItemMetalPlate.PlateType;
 import alec_wam.CrystalMod.items.guide.ItemCrystalGuide.GuideType;
 import alec_wam.CrystalMod.items.tools.ItemToolParts.PartType;
@@ -60,7 +62,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.ShapedRecipes;
-import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStack;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -70,9 +71,11 @@ import net.minecraftforge.oredict.ShapelessOreRecipe;
 
 public class ModCrafting {
 
-	public static void init() {
+	public static void preInit(){
 		initOreDic();
-		
+	}
+	
+	public static void init() {
 		GameRegistry.addRecipe(new UpgradeItemRecipe());
 		GameRegistry.addRecipe(new RecipeBatUpgrade());
 		GameRegistry.addRecipe(new RecipeSuperTorchAdd());
@@ -159,7 +162,8 @@ public class ModCrafting {
 		addShapedRecipe(new ItemStack(ModItems.wrench), new Object[] { "N N", " I ", " I ", 'N', dIronNugget, 'I', dIronIngot });
 		addShapelessOreRecipe(new ItemStack(ModItems.guide, 1, GuideType.CRYSTAL.getMetadata()), new Object[] {Items.BOOK, "gemCrystal"});
 		addShapelessRecipe(new ItemStack(ModItems.guide, 1, GuideType.ESTORAGE.getMetadata()), new Object[] {new ItemStack(ModItems.guide, 1, GuideType.CRYSTAL.getMetadata()), new ItemStack(ModBlocks.crystalPipe, 1, PipeType.ESTORAGE.getMeta())});
-		final ItemStack machineFrame = new ItemStack(ModItems.machineFrame);
+		final ItemStack machineFrame = new ItemStack(ModItems.machineFrame, 1, FrameType.BASIC.getMetadata());
+		final ItemStack machineFrameEnder = new ItemStack(ModItems.machineFrame, 1, FrameType.ENDER.getMetadata());
 		addShapedRecipe(machineFrame, new Object[] { "NPN", "P P", "NPN", 'P', dIronPlate, 'N', dIronNugget});
 		
 		addShapedRecipe(new ItemStack(ModBlocks.crystal, 8, CrystalBlockType.BLUE_BRICK.getMeta()), new Object[] { "BBB", "BCB", "BBB", 'C', blueCrystal, 'B', Blocks.STONEBRICK });
@@ -316,13 +320,13 @@ public class ModCrafting {
 		ItemStack hddPlate = new ItemStack(Blocks.HEAVY_WEIGHTED_PRESSURE_PLATE);
 		
 		ItemStack redHDD = ItemHDD.getFromMeta(1);
-		ModCrafting.addNBTRecipe(redHDD, copyList, new Object[]{"CCC", "IHI", "CCC", 'I', hddPlate, 'C', redIngot, 'H', ItemHDD.getFromMeta(0)});
+		addNBTRecipe(redHDD, copyList, new Object[]{"CCC", "IHI", "CCC", 'I', hddPlate, 'C', redIngot, 'H', ItemHDD.getFromMeta(0)});
 		ItemStack greenHDD = ItemHDD.getFromMeta(2);
-		ModCrafting.addNBTRecipe(greenHDD, copyList, new Object[]{"CCC", "IHI", "CCC", 'I', hddPlate, 'C', greenIngot, 'H', ItemHDD.getFromMeta(1)});
+		addNBTRecipe(greenHDD, copyList, new Object[]{"CCC", "IHI", "CCC", 'I', hddPlate, 'C', greenIngot, 'H', ItemHDD.getFromMeta(1)});
 		ItemStack darkHDD = ItemHDD.getFromMeta(3);
-		ModCrafting.addNBTRecipe(darkHDD, copyList, new Object[]{"CCC", "IHI", "CCC", 'I', hddPlate, 'C', darkIngot, 'H', ItemHDD.getFromMeta(2)});
+		addNBTRecipe(darkHDD, copyList, new Object[]{"CCC", "IHI", "CCC", 'I', hddPlate, 'C', darkIngot, 'H', ItemHDD.getFromMeta(2)});
 		ItemStack pureHDD = ItemHDD.getFromMeta(4);
-		ModCrafting.addNBTRecipe(pureHDD, copyList, new Object[]{"CCC", "IHI", "CCC", 'I', hddPlate, 'C', pureIngot, 'H', ItemHDD.getFromMeta(3)});
+		addNBTRecipe(pureHDD, copyList, new Object[]{"CCC", "IHI", "CCC", 'I', hddPlate, 'C', pureIngot, 'H', ItemHDD.getFromMeta(3)});
 		addShapedOreRecipe(new ItemStack(ModItems.craftingPattern), new Object[]{" # ", "#P#", " # ", '#', dIronNugget, 'P', "paper"});
 
 		for(ItemStack cover : ItemPipeCover.coverRecipes.keySet()){
@@ -352,7 +356,6 @@ public class ModCrafting {
 
 		addShapedOreRecipe(new ItemStack(ModBlocks.darkIronRail, 16), new Object[] {"X X", "X#X", "X X", 'X', dIronIngot, '#', "stick"});
 		
-		addShapedRecipe(ModBlocks.enderBuffer, new Object[]{"ICI", "RFP", "ITI", 'I', dIronPlate, 'P', ItemUtil.copy(tier2CU, 1), 'R', ItemUtil.copy(tier2RF, 1), 'T', new ItemStack(ModBlocks.crystalTank, 1, TankType.GREEN.getMeta()), 'C', new ItemStack(ModBlocks.crystalChest, 1, CrystalChestType.DARKIRON.ordinal()), 'F', machineFrame});
 
 		ItemStack engineTier0 = new ItemStack(ModBlocks.engine, 1, EngineType.FURNACE.getMeta()); ItemNBTHelper.setInteger(engineTier0, "Tier", 0);
 		ItemStack engineTier1 = new ItemStack(ModBlocks.engine, 1, EngineType.FURNACE.getMeta()); ItemNBTHelper.setInteger(engineTier1, "Tier", 1);
@@ -381,12 +384,6 @@ public class ModCrafting {
 		addShapedRecipe(new ItemStack(ModBlocks.converter, 1, ConverterType.RF.getMeta()), new Object[]{"III", "CFR", "III", 'I', dIronPlate, 'C', ItemUtil.copy(tier0CU, 1), 'R', ItemUtil.copy(tier0RF, 1), 'F', machineFrame});
 
 		CrystalChestType.registerBlocksAndRecipes(ModBlocks.crystalChest);
-		for(CrystalChestType chestType : CrystalChestType.values()){
-			if(chestType !=CrystalChestType.WOOD){
-				ItemStack chestStack = new ItemStack(ModBlocks.crystalChest, 1, chestType.ordinal());
-				addShapedRecipe(new ItemStack(ModItems.chestMinecart, 1, chestType.ordinal()), new Object[] {"A", "B", 'A', chestStack, 'B', Items.MINECART});
-			}
-		}
 		for(int i = 0; i < 16; i++){
 			int code = WirelessChestHelper.getDefaultCode(EnumDyeColor.byMetadata(i));
 			ItemStack wChest = new ItemStack(ModBlocks.wirelessChest);
@@ -396,7 +393,10 @@ public class ModCrafting {
 			ItemStack chestStack = new ItemStack(ModBlocks.crystalChest, 1, CrystalChestType.DARKIRON.ordinal());
 			
 			addShapedOreRecipe(wChest, new Object[] {"W", "C", "E", 'W', "wool"+dyeOreNames[i], 'C', chestStack, 'E', "chestEnder"});
-			addShapelessNBTRecipe(wMinecart, new Object[] {wChest, Items.MINECART});
+			addShapedNBTRecipe(wMinecart, new Object[] {"A", "B", 'A', wChest, 'B', Items.MINECART});
+			//EnderIO befor default enderpearl
+			String ender = getBestOreID("ingotPulsatingIron", "enderpearl");
+			addShapedOreRecipe(ModBlocks.enderBuffer, new Object[]{"ECE", "RFP", "ETE", 'E', ender, 'P', ItemUtil.copy(tier2CU, 1), 'R', ItemUtil.copy(tier2RF, 1), 'T', new ItemStack(ModBlocks.crystalTank, 1, TankType.GREEN.getMeta()), 'C', wChest, 'F', machineFrameEnder});
 		}
 		CauldronRecipeManager.initRecipes();
 		
@@ -410,6 +410,79 @@ public class ModCrafting {
 	public static void addShapedRecipe(Block result, Object... recipe){ addShapedRecipe(new ItemStack(result), recipe); }
 	public static void addShapedRecipe(ItemStack output, Object... params){
 		GameRegistry.addShapedRecipe(output, params);
+	}
+	
+	public static void addShapedNBTRecipe(Item result, Object... recipe){ addShapedNBTRecipe(new ItemStack(result), recipe); }
+	public static void addShapedNBTRecipe(Block result, Object... recipe){ addShapedNBTRecipe(new ItemStack(result), recipe); }
+	public static void addShapedNBTRecipe(ItemStack stack, Object... recipeComponents){
+		String s = "";
+        int i = 0;
+        int j = 0;
+        int k = 0;
+
+        if (recipeComponents[i] instanceof String[])
+        {
+            String[] astring = (String[])((String[])recipeComponents[i++]);
+
+            for (String s2 : astring)
+            {
+                ++k;
+                j = s2.length();
+                s = s + s2;
+            }
+        }
+        else
+        {
+            while (recipeComponents[i] instanceof String)
+            {
+                String s1 = (String)recipeComponents[i++];
+                ++k;
+                j = s1.length();
+                s = s + s1;
+            }
+        }
+
+        Map<Character, ItemStack> map;
+
+        for (map = Maps.<Character, ItemStack>newHashMap(); i < recipeComponents.length; i += 2)
+        {
+            Character character = (Character)recipeComponents[i];
+            ItemStack itemstack = null;
+
+            if (recipeComponents[i + 1] instanceof Item)
+            {
+                itemstack = new ItemStack((Item)recipeComponents[i + 1]);
+            }
+            else if (recipeComponents[i + 1] instanceof Block)
+            {
+                itemstack = new ItemStack((Block)recipeComponents[i + 1], 1, 32767);
+            }
+            else if (recipeComponents[i + 1] instanceof ItemStack)
+            {
+                itemstack = (ItemStack)recipeComponents[i + 1];
+            }
+
+            map.put(character, itemstack);
+        }
+
+        ItemStack[] aitemstack = new ItemStack[j * k];
+
+        for (int l = 0; l < j * k; ++l)
+        {
+            char c0 = s.charAt(l);
+
+            if (map.containsKey(Character.valueOf(c0)))
+            {
+                aitemstack[l] = ((ItemStack)map.get(Character.valueOf(c0))).copy();
+            }
+            else
+            {
+                aitemstack[l] = null;
+            }
+        }
+
+        ShapedRecipeNBT shapedrecipes = new ShapedRecipeNBT(j, k, aitemstack, stack);
+        GameRegistry.addRecipe(shapedrecipes);
 	}
 	
 	public static void addShapelessRecipe(Item result, Object... recipe){ addShapelessRecipe(new ItemStack(result), recipe); }
@@ -503,7 +576,6 @@ public class ModCrafting {
         }
 		
 		for(CrystalChestType chest : CrystalChestType.values()){
-			if(chest == CrystalChestType.WOOD)continue;
 			ItemStack cStack = new ItemStack(ModBlocks.crystalChest, 1, chest.ordinal());
 			oredict(cStack, "chest");
 			oredict(cStack, "chestCrystal");
@@ -560,6 +632,16 @@ public class ModCrafting {
 	
 	/* Helper functions */
 
+	public static String getBestOreID(String...names){
+		for(String ore : names){
+			List<ItemStack> ores = OreDictionary.getOres(ore);
+			if(!ores.isEmpty()){
+				return ore;
+			}
+		}
+		return names[0];
+	}
+	
 	public static void oredict(Item item, String... name) {
 		oredict(item, OreDictionary.WILDCARD_VALUE, name);
 	}

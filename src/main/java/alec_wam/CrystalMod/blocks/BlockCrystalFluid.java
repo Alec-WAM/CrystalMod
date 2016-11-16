@@ -31,8 +31,8 @@ public class BlockCrystalFluid extends BlockFluidClassic implements ICustomModel
   @Override
   public void initModel() {
 	  Fluid fluid = FluidRegistry.getFluid(fluidName);
-	    if(fluid != null) {
-	    	ModFluids.registerFluidModels(fluid);
-	    }
+	  if(fluid != null) {
+		  ModFluids.registerFluidModels(fluid);
+	  }
   }
 }

@@ -73,7 +73,7 @@ public class TileEntityLiquidizer extends TileEntityMachine {
     
     protected boolean hasValidInput() {
     	final LiquidizerRecipe recipe = LiquidizerRecipeManager.getRecipe(this.inventory[0]);
-        return recipe != null && recipe.getInput().stackSize <= this.inventory[0].stackSize;
+        return recipe != null && recipe.getInputSize() <= this.inventory[0].stackSize;
     }
     
     public void processStart() {
@@ -92,7 +92,7 @@ public class TileEntityLiquidizer extends TileEntityMachine {
         	this.tank.getFluid().amount+=output.amount;
         }
         final ItemStack itemStack2 = this.inventory[0];
-        itemStack2.stackSize-=recipe.getInput().stackSize;
+        itemStack2.stackSize-=recipe.getInputSize();
         if (this.inventory[0].stackSize <= 0) {
             this.inventory[0] = null;
         }

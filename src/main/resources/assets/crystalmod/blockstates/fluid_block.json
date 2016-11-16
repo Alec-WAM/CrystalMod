@@ -42,6 +42,9 @@
         }],
 		"moltendarkiron": [{
             "custom": { "fluid": "moltendarkiron" }
+        }],
+		"ender": [{
+            "custom": { "fluid": "ender" }
         }]
     }
 }

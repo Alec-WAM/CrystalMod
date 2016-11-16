@@ -8,6 +8,7 @@ import java.util.Map;
 import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.blocks.BlockCrystalIngot.CrystalIngotBlockType;
 import alec_wam.CrystalMod.fluids.ModFluids;
+import alec_wam.CrystalMod.items.ItemMachineFrame.FrameType;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.items.ItemCrystal.CrystalType;
 import alec_wam.CrystalMod.items.ItemIngot.IngotType;
@@ -135,6 +136,8 @@ public class CauldronRecipeManager {
 		addRecipe("gemQuartz", new FluidStack(ModFluids.fluidGreenCrystal, 6 * bucket), new ItemStack(ModItems.crystals, 1, CrystalType.GREEN.getMetadata()));
 		addRecipe("gemQuartz", new FluidStack(ModFluids.fluidDarkCrystal, 6 * bucket), new ItemStack(ModItems.crystals, 1, CrystalType.DARK.getMetadata()));
 		
+		addRecipe(new ItemStack(ModItems.machineFrame, 1, FrameType.ENDER.getMetadata()), new FluidStack(ModFluids.fluidEnder, 1000), new ItemStack(ModItems.machineFrame, 1, FrameType.BASIC.getMetadata()));
+
 		addRecipe(new ItemStack(Items.REEDS), new FluidStack(ModFluids.fluidBlueCrystal, 3 * bucket), new ItemStack(ModItems.crystalReeds));
 		addRecipe(new ItemStack(Items.REEDS), new FluidStack(ModFluids.fluidRedCrystal, 3 * bucket), new ItemStack(ModItems.crystalReeds));
 		addRecipe(new ItemStack(Items.REEDS), new FluidStack(ModFluids.fluidGreenCrystal, 3 * bucket), new ItemStack(ModItems.crystalReeds));

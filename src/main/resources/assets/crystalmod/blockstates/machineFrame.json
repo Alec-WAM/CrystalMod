@@ -1,0 +1,13 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "block/cube_all",
+    "transform": "forge:default-block"
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{}],
+	"basic": [{"textures": { "all": "crystalmod:blocks/machineFrame" }}],
+    "ender": [{"textures": { "all": "crystalmod:blocks/machineFrame_ender" }}]
+  }
+}

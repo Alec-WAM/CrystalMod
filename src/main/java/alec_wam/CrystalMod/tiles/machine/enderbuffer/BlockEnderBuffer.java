@@ -57,8 +57,10 @@ public class BlockEnderBuffer extends BlockMachine implements ICustomModel
     @SideOnly(Side.CLIENT)
     @Override
     public void initModel(){
-    	for(String id : new String[]{"normal", "active=false,facing=north", "active=true,facing=north", "inventory"})
-    	ClientProxy.registerCustomModel(new ModelResourceLocation(getRegistryName(), id), ModelEnderBuffer.INSTANCE);
+    	ClientProxy.registerCustomModel(new ModelResourceLocation(getRegistryName(), "normal"), ModelEnderBuffer.INSTANCE);
+    	ClientProxy.registerCustomModel(new ModelResourceLocation(getRegistryName(), "active=false,facing=north"), ModelEnderBuffer.INSTANCE);
+    	ClientProxy.registerCustomModel(new ModelResourceLocation(getRegistryName(), "active=true,facing=north"), ModelEnderBuffer.INSTANCE);
+    	ClientProxy.registerCustomModel(new ModelResourceLocation(getRegistryName(), "inventory"), ModelEnderBuffer.INSTANCE);
     }
 
     protected ItemStack getNBTDrop(IBlockAccess world, BlockPos pos, TileEntity tileEntity) {

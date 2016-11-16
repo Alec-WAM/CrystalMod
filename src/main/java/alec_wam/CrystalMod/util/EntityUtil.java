@@ -1,18 +1,23 @@
 package alec_wam.CrystalMod.util;
 
 import java.util.List;
+import java.util.Random;
 
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
 import com.google.common.collect.Lists;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -144,5 +149,110 @@ public class EntityUtil {
 		
 		return new NBTTagCompound();
 	}
+
+	public static final Random rand = new Random();
+	
+	public static boolean randomTeleport(Entity entityIn, double range) {
+		double d0 = entityIn.posX + (rand.nextDouble() - 0.5D) * range;
+        double d1 = entityIn.posY + (double)(rand.nextInt((int)range) - ((int)range)/2);
+        double d2 = entityIn.posZ + (rand.nextDouble() - 0.5D) * range;
+        return teleportTo(entityIn, d0, d1, d2);
+	}
+	
+	public static boolean teleportTo(Entity entity, double x, double y, double z)
+    {
+		double realX = x;
+		double realY = y;
+		double realZ = z;
+        if(entity instanceof EntityLivingBase){
+        	net.minecraftforge.event.entity.living.EnderTeleportEvent event = new net.minecraftforge.event.entity.living.EnderTeleportEvent((EntityLivingBase) entity, x, y, z, 0);
+        	if (net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(event)) return false;
+        	realX = event.getTargetX();
+        	realY = event.getTargetY();
+        	realZ = event.getTargetZ();
+        }
+        boolean flag = attemptTeleport(entity, realX, realY, realZ);
+
+        if (flag)
+        {
+            entity.worldObj.playSound((EntityPlayer)null, entity.prevPosX, entity.prevPosY, entity.prevPosZ, SoundEvents.ENTITY_ENDERMEN_TELEPORT, entity.getSoundCategory(), 1.0F, 1.0F);
+            entity.playSound(SoundEvents.ENTITY_ENDERMEN_TELEPORT, 1.0F, 1.0F);
+        }
+        return flag;
+    }
+	
+	public static boolean attemptTeleport(Entity entity, double x, double y, double z)
+    {
+        double d0 = entity.posX;
+        double d1 = entity.posY;
+        double d2 = entity.posZ;
+        entity.posX = x;
+        entity.posY = y;
+        entity.posZ = z;
+        boolean flag = false;
+        BlockPos blockpos = new BlockPos(entity);
+        World world = entity.worldObj;
+        Random random = entity instanceof EntityLivingBase ? ((EntityLivingBase)entity).getRNG() : rand;
+
+        if (world.isBlockLoaded(blockpos))
+        {
+            boolean flag1 = false;
+
+            while (!flag1 && blockpos.getY() > 0)
+            {
+                BlockPos blockpos1 = blockpos.down();
+                IBlockState iblockstate = world.getBlockState(blockpos1);
+
+                if (iblockstate.getMaterial().blocksMovement())
+                {
+                    flag1 = true;
+                }
+                else
+                {
+                    --entity.posY;
+                    blockpos = blockpos1;
+                }
+            }
+
+            if (flag1)
+            {
+            	entity.setPositionAndUpdate(entity.posX, entity.posY, entity.posZ);
+
+                if (world.getCollisionBoxes(entity, entity.getEntityBoundingBox()).isEmpty() && !world.containsAnyLiquid(entity.getEntityBoundingBox()))
+                {
+                    flag = true;
+                }
+            }
+        }
+
+        if (!flag)
+        {
+        	entity.setPositionAndUpdate(d0, d1, d2);
+            return false;
+        }
+        else
+        {
+            int i = 128;
+
+            for (int j = 0; j < 128; ++j)
+            {
+                double d6 = (double)j / 127.0D;
+                float f = (random.nextFloat() - 0.5F) * 0.2F;
+                float f1 = (random.nextFloat() - 0.5F) * 0.2F;
+                float f2 = (random.nextFloat() - 0.5F) * 0.2F;
+                double d3 = d0 + (entity.posX - d0) * d6 + (random.nextDouble() - 0.5D) * (double)entity.width * 2.0D;
+                double d4 = d1 + (entity.posY - d1) * d6 + random.nextDouble() * (double)entity.height;
+                double d5 = d2 + (entity.posZ - d2) * d6 + (random.nextDouble() - 0.5D) * (double)entity.width * 2.0D;
+                world.spawnParticle(EnumParticleTypes.PORTAL, d3, d4, d5, (double)f, (double)f1, (double)f2, new int[0]);
+            }
+
+            if (entity instanceof EntityCreature)
+            {
+                ((EntityCreature)entity).getNavigator().clearPathEntity();
+            }
+
+            return true;
+        }
+    }
 	
 }
