@@ -1,4 +1,4 @@
-package alec_wam.CrystalMod.blocks;
+package alec_wam.CrystalMod.blocks.crops;
 
 import java.util.Random;
 
@@ -29,7 +29,7 @@ public class BlockCrystalReed extends Block implements net.minecraftforge.common
     public static final PropertyInteger AGE = PropertyInteger.create("age", 0, 15);
     protected static final AxisAlignedBB REED_AABB = new AxisAlignedBB(0.125D, 0.0D, 0.125D, 0.875D, 1.0D, 0.875D);
     
-    protected BlockCrystalReed()
+    public BlockCrystalReed()
     {
         super(Material.PLANTS);
         this.setSoundType(SoundType.PLANT);

@@ -116,7 +116,7 @@ public class ItemCrystalChestMinecart extends Item implements ICustomModel
     	for(int i = 0; i < CrystalChestType.values().length; i++){
     		ModelLoader.setCustomModelResourceLocation(this, i, new ModelResourceLocation(getRegistryName(), "inventory"));
     	}
-    	ClientProxy.registerItemRender(getRegistryName().getResourcePath(), new ItemCrystalChestMinecartRender());
+    	ClientProxy.registerItemRenderCustom(getRegistryName().toString(), new ItemCrystalChestMinecartRender());
     }
     
     public String getUnlocalizedName(ItemStack stack)

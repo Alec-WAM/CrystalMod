@@ -12,7 +12,9 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.Vec3d;
+import net.minecraftforge.common.model.TRSRTransformation;
 import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.client.model.dynamic.DynamicBaseModel;
 import alec_wam.CrystalMod.client.model.dynamic.ICustomItemRenderer;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ProfileUtil;
@@ -55,8 +57,8 @@ public class ItemRenderMobEssence implements ICustomItemRenderer {
     }
     
 	@Override
-	public void render(ItemStack stack, TransformType type) {
-
+	public void render(ItemStack stack) {
+		TransformType type = lastTransform;
 		String name = ItemNBTHelper.getString(stack, ItemMobEssence.NBT_ENTITYNAME, "Pig");
 		EntityLivingBase entity = getRenderEntity(name);
 		if(entity == null){
@@ -67,29 +69,50 @@ public class ItemRenderMobEssence implements ICustomItemRenderer {
 		if(essence == null){
 			essence = ItemMobEssence.DEFAULT_PIG;
 		}
-		boolean atrib = true;
+		boolean atrib = false;
 		GlStateManager.pushMatrix();
 		if(atrib)GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
 		GlStateManager.scale(0.5F, 0.5F, 0.5F);
 
+		if(type == null){
+			GlStateManager.pushMatrix();
+			GlStateManager.disableCull();
+			GlStateManager.enableBlend();
+			GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+			GlStateManager.pushAttrib();
+			Minecraft.getMinecraft().getRenderManager().doRenderEntity(entity, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F, true);
+			GlStateManager.popAttrib();
+			GlStateManager.popMatrix();
+			GlStateManager.enableBlend();
+	        GlStateManager.setActiveTexture(OpenGlHelper.lightmapTexUnit);
+	        GlStateManager.disableTexture2D();
+	        GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);
+	        
+	        GlStateManager.popMatrix();
+	        return;
+		}
+		
 		if (type == TransformType.GUI)
 		{
 			GlStateManager.pushMatrix();
 			float scale = essence.getRenderScale(type);
-			Vec3d offset = essence.getRenderOffset();
+			Vec3d offset = essence.getRenderOffset(type);
 			GlStateManager.scale(scale, scale, scale);
 			GlStateManager.translate(offset.xCoord, offset.yCoord, offset.zCoord);
 			
+			GlStateManager.disableCull();
+			//GlStateManager.depthMask(false);
 			GlStateManager.enableBlend();
 			GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+			GlStateManager.pushAttrib();
 			Minecraft.getMinecraft().getRenderManager().doRenderEntity(entity, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F, true);
-			GlStateManager.disableBlend();
+			GlStateManager.popAttrib();
 			
-			GlStateManager.enableLighting();
-            GlStateManager.enableBlend();
-            GlStateManager.enableColorMaterial();
+			GlStateManager.enableCull();
+			
+			//GlStateManager.enableLighting();
 			GlStateManager.popMatrix();
-	        GlStateManager.disableRescaleNormal();
+			GlStateManager.enableBlend();
 	        GlStateManager.setActiveTexture(OpenGlHelper.lightmapTexUnit);
 	        GlStateManager.disableTexture2D();
 	        GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);
@@ -125,7 +148,7 @@ public class ItemRenderMobEssence implements ICustomItemRenderer {
 				GlStateManager.rotate(90, 0, 1, 0);
 				GlStateManager.rotate(90-20, 0, 0, 1);
 				GlStateManager.rotate(-45, 1, 0, 0);
-				GlStateManager.translate(0, -1, 0.5);
+				GlStateManager.translate(0, -10, 0.5);
 			}else{
 				GlStateManager.rotate(90, 0, 1, 0);
 				GlStateManager.rotate(90-20, 0, 0, 1);
@@ -149,10 +172,32 @@ public class ItemRenderMobEssence implements ICustomItemRenderer {
             GlStateManager.enableBlend();
             GlStateManager.enableColorMaterial();
 			GlStateManager.popMatrix();
+		} else if(type == TransformType.FIXED){
+			GlStateManager.pushMatrix();
+			float scale = essence.getRenderScale(type);
+			Vec3d offset = essence.getRenderOffset(type);
+			GlStateManager.scale(scale, scale, scale);
+			GlStateManager.translate(offset.xCoord, offset.yCoord, offset.zCoord);
+			GlStateManager.enableBlend();
+			GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+			Minecraft.getMinecraft().getRenderManager().doRenderEntity(entity, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F, true);
+			GlStateManager.disableBlend();
+			GlStateManager.enableLighting();
+            GlStateManager.enableBlend();
+            GlStateManager.enableColorMaterial();
+			GlStateManager.popMatrix();
 		}
 
 		if(atrib)GlStateManager.popAttrib();
 		GlStateManager.popMatrix();
+	}
+
+	private TransformType lastTransform;
+	
+	@Override
+	public TRSRTransformation getTransform(TransformType type) {
+		lastTransform = type;
+		return DynamicBaseModel.DEFAULT_PERSPECTIVE_TRANSFORMS.get(type);
 	}
 
 }

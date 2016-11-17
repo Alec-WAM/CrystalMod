@@ -71,7 +71,6 @@ public class TileEntityEntityHopper extends TileEntityMod {
 		
 		//Powered
 		if(worldObj.isBlockIndirectlyGettingPowered(getPos()) > 0)return;
-		
 		BlockPos abovePos = getPos().offset(EnumFacing.UP);
 		AxisAlignedBB above = new AxisAlignedBB(abovePos, abovePos.add(1, 1, 1));
 		BlockPos belowPos = getPos().offset(EnumFacing.DOWN);

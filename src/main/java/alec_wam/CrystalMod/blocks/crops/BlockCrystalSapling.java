@@ -1,4 +1,4 @@
-package alec_wam.CrystalMod.blocks;
+package alec_wam.CrystalMod.blocks.crops;
 
 import net.minecraft.block.BlockSapling;
 import net.minecraft.block.SoundType;
@@ -31,6 +31,8 @@ import java.util.Random;
 import javax.annotation.Nonnull;
 
 import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.blocks.BlockCrystalLog;
+import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.blocks.BlockCrystalLog.WoodType;
 import alec_wam.CrystalMod.world.WorldGenCrystalTree;
 

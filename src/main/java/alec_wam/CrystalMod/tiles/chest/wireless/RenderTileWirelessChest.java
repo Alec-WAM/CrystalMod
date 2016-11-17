@@ -2,6 +2,7 @@ package alec_wam.CrystalMod.tiles.chest.wireless;
 
 import java.util.UUID;
 
+import alec_wam.CrystalMod.client.model.dynamic.DynamicBaseModel;
 import alec_wam.CrystalMod.client.model.dynamic.ICustomItemRenderer;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.UUIDUtils;
@@ -17,6 +18,7 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.model.TRSRTransformation;
 
 public class RenderTileWirelessChest extends TileEntitySpecialRenderer<TileWirelessChest> implements ICustomItemRenderer {
 
@@ -30,7 +32,7 @@ public class RenderTileWirelessChest extends TileEntitySpecialRenderer<TileWirel
     }
 
 	@Override
-	public void render(ItemStack stack, TransformType type) {
+	public void render(ItemStack stack) {
 		GlStateManager.pushMatrix();
 		int code = WirelessChestHelper.getDefaultCode(EnumDyeColor.WHITE);
 		UUID owner = null;
@@ -46,7 +48,7 @@ public class RenderTileWirelessChest extends TileEntitySpecialRenderer<TileWirel
 	    double y = 0;
 	    double z = 0;
 		int facing = 3;
-		if(type == TransformType.GUI){
+		/*if(type == TransformType.GUI){
 			facing = 3;
 			x-=0.5;
 			y-=0.5;
@@ -57,9 +59,14 @@ public class RenderTileWirelessChest extends TileEntitySpecialRenderer<TileWirel
 			x-=0.5;
 			y-=0.5;
 			z-=0.5;
-		}
+		}*/
 		renderChest(x, y, z, code, facing, owner !=null, 0.0f, -1);
 		GlStateManager.popMatrix();
+	}
+	
+	@Override
+	public TRSRTransformation getTransform(TransformType type) {
+		return DynamicBaseModel.DEFAULT_PERSPECTIVE_TRANSFORMS.get(type);
 	}
 	
 	private final static ResourceLocation texture_Chest = new ResourceLocation("crystalmod:textures/model/chests/wireless_public.png");

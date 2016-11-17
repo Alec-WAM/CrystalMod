@@ -15,10 +15,10 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class Config {
 	public static final String CATEGORY_GENERAL = "general";
+	public static final String CATEGORY_CLIENT = "client";
 	public static final String CATEGORY_WORLD = "world";
 	public static final String CATEGORY_ITEM = "items";
 	public static final String CATEGORY_ENTITY = "entities";
-	public static final String CATEGORY_ENCHANTMENT = "enchantments";
 	public static final String CATEGORY_MINIONS = "minions";
 	public static final String CATEGORY_MACHINE = "machines";
 	
@@ -71,6 +71,8 @@ public class Config {
 	public static int powerConduitTierThreeRF = 20480;
 	public static int powerConduitTierFourRF = 40960;
     
+	public static boolean vanillaMinecarts3d = true;
+	
 	@SubscribeEvent
 	public void onConfigChanged(OnConfigChangedEvent event) {
 		if(event.getModID().equals(CrystalMod.MODID)) {
@@ -80,7 +82,7 @@ public class Config {
 	}
 	
     public static void init(Configuration cfg) {
-       oreMinimumVeinSize = cfg.get(CATEGORY_WORLD, "oreMinimumVeinSize", oreMinimumVeinSize,
+    	oreMinimumVeinSize = cfg.get(CATEGORY_WORLD, "oreMinimumVeinSize", oreMinimumVeinSize,
                                      "Minimum vein size of crystal ores").getInt();
         oreMaximumVeinSize = cfg.get(CATEGORY_WORLD, "oreMaximumVeinSize", oreMaximumVeinSize,
                                      "Maximum vein size of crystal ores").getInt();
@@ -131,6 +133,9 @@ public class Config {
     
     	hoeStrings = cfg.get(CATEGORY_MINIONS, "Hoes", hoeStrings, "Use this to specify items that are hoes. Use the registry name (eg. modid:name).").getStringList();
     	PowerUnits.CU.conversionRation = cfg.get(CATEGORY_MACHINE, "RFtoCU", PowerUnits.CU.conversionRation, "Amount of RF needed to convert to one unit of CU").getInt(PowerUnits.CU.conversionRation);
+    
+    	//Client
+    	vanillaMinecarts3d = cfg.get(CATEGORY_CLIENT, "3dMinecartItems", vanillaMinecarts3d, "Override Minecart Item Render to 3d items.").getBoolean();
     }
     
     public static void postInit() {

@@ -1,8 +1,8 @@
 package alec_wam.CrystalMod.entities.animals;
 
-import alec_wam.CrystalMod.blocks.BlockCrystalPlant;
 import alec_wam.CrystalMod.blocks.ModBlocks;
-import alec_wam.CrystalMod.blocks.BlockCrystalPlant.PlantType;
+import alec_wam.CrystalMod.blocks.crops.BlockCrystalPlant;
+import alec_wam.CrystalMod.blocks.crops.BlockCrystalPlant.PlantType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelQuadruped;

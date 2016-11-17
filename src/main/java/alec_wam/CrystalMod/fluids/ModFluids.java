@@ -84,7 +84,7 @@ public class ModFluids {
 		
 		fluidEnder = new FluidColored("ender", 0x063931).setUnlocalizedName("crystalmod.ender");
 		registerFluid(fluidEnder);
-		ModBlocks.registerBlock(new BlockCrystalFluid(fluidEnder, net.minecraft.block.material.Material.WATER), fluidEnder.getName());
+		ModBlocks.registerBlock(new BlockFluidEnder(fluidEnder, net.minecraft.block.material.Material.WATER), fluidEnder.getName());
 		
 		createBuckets();
 	}

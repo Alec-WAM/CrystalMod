@@ -47,7 +47,7 @@ public class ItemFlag extends Item implements ICustomModel {
 	@Override
 	public void initModel() {
 		ModItems.initBasicModel(this);
-		ClientProxy.registerItemRender(getRegistryName().getResourcePath(), new ItemRenderFlag());
+		ClientProxy.registerItemRenderCustom(getRegistryName().toString(), new ItemRenderFlag());
 	}
 	
 }

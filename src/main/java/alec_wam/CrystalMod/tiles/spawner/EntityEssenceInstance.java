@@ -53,10 +53,10 @@ public class EntityEssenceInstance<T extends EntityLivingBase> {
 	}
 	
 	public float getRenderScale(TransformType type){
-		return type == TransformType.GUI ? 1.5F : 1.0F;
+		return type == TransformType.GUI ? 1.5F : type == TransformType.FIXED ? 3.0f : 1.0F;
 	}
 	
-	public Vec3d getRenderOffset(){
+	public Vec3d getRenderOffset(TransformType type){
 		return new Vec3d(0, -0.8, 0);
 	}
 	

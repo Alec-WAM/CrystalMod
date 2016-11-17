@@ -378,7 +378,7 @@ public class BatHelper {
         boolean isCritical = attacker.fallDistance > 0.0F && !attacker.onGround && !attacker.isOnLadder() && !attacker.isInWater() && !attacker.isPotionActive(MobEffects.BLINDNESS) && !attacker.isRiding();
 
         AttackData data = new AttackData(baseDamage);
-        boolean debug = true;
+        boolean debug = false;
         float damage = data.baseDamage;
         
         Map<IBatUpgrade, UpgradeData> upgrades = getBatUpgrades(stack);

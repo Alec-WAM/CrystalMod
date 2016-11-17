@@ -7,13 +7,14 @@ import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformT
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.model.TRSRTransformation;
 
 public class ItemRenderDragonWings implements ICustomItemRenderer {
 	private ModelDragonWings dragonModel = new ModelDragonWings(0.0F);
     private static final ResourceLocation enderDragonTextures = new ResourceLocation("textures/entity/enderdragon/dragon.png");
     
 	@Override
-	public void render(ItemStack stack, TransformType type) {
+	public void render(ItemStack stack) {
 		GlStateManager.pushMatrix();
     	Minecraft.getMinecraft().getTextureManager().bindTexture(enderDragonTextures);
     	GlStateManager.pushMatrix();
@@ -53,6 +54,11 @@ public class ItemRenderDragonWings implements ICustomItemRenderer {
         GlStateManager.disableCull();
         Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
     	GlStateManager.popMatrix();
+	}
+	
+	@Override
+	public TRSRTransformation getTransform(TransformType type) {
+		return DynamicBaseModel.DEFAULT_PERSPECTIVE_TRANSFORMS.get(type);
 	}
 
 }

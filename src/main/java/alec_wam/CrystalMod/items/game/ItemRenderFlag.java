@@ -7,6 +7,8 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.model.TRSRTransformation;
+import alec_wam.CrystalMod.client.model.dynamic.DynamicBaseModel;
 import alec_wam.CrystalMod.client.model.dynamic.ICustomItemRenderer;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.world.game.tag.TagManager;
@@ -14,7 +16,8 @@ import alec_wam.CrystalMod.world.game.tag.TagManager;
 public class ItemRenderFlag implements ICustomItemRenderer {
 
 	@Override
-	public void render(ItemStack stack, TransformType type) {
+	public void render(ItemStack stack) {
+		TransformType type = lastTransform;
 		GlStateManager.pushMatrix();
 		GlStateManager.translate(0.5, 0.5, 0.5);
 		GlStateManager.rotate(180, 1, 0, 0);
@@ -38,4 +41,11 @@ public class ItemRenderFlag implements ICustomItemRenderer {
 		GlStateManager.popMatrix();
 	}
 
+	private TransformType lastTransform;
+	
+	@Override
+	public TRSRTransformation getTransform(TransformType type) {
+		lastTransform = type;
+		return DynamicBaseModel.DEFAULT_PERSPECTIVE_TRANSFORMS.get(type);
+	}
 }

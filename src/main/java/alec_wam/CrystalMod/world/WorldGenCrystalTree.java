@@ -4,9 +4,9 @@ import java.util.Random;
 
 import alec_wam.CrystalMod.blocks.BlockCrystalLeaves;
 import alec_wam.CrystalMod.blocks.BlockCrystalLog;
-import alec_wam.CrystalMod.blocks.BlockCrystalTreePlant;
 import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.blocks.BlockCrystalLog.WoodType;
+import alec_wam.CrystalMod.blocks.crops.BlockCrystalTreePlant;
 import alec_wam.CrystalMod.items.ItemCrystalSeedTree;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCocoa;

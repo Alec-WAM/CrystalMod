@@ -5,12 +5,10 @@ import java.util.UUID;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.client.renderer.block.statemap.StateMap;
-import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
 import net.minecraft.item.EnumDyeColor;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -20,27 +18,19 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.oredict.OreDictionary;
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.ICustomModel;
-import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.packets.PacketTileMessage;
 import alec_wam.CrystalMod.proxy.ClientProxy;
 import alec_wam.CrystalMod.tiles.machine.BlockMachine;
 import alec_wam.CrystalMod.tiles.machine.FakeTileState;
-import alec_wam.CrystalMod.tiles.machine.IFacingTile;
-import alec_wam.CrystalMod.tiles.machine.TileEntityMachine;
-import alec_wam.CrystalMod.tiles.machine.enderbuffer.EnderBufferManager.EnderBuffer;
-import alec_wam.CrystalMod.tiles.tank.FakeTankState;
-import alec_wam.CrystalMod.tiles.tank.TileEntityTank;
 import alec_wam.CrystalMod.util.BlockUtil;
-import alec_wam.CrystalMod.util.ChatUtil;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemUtil;
-import alec_wam.CrystalMod.util.ModLogger;
 import alec_wam.CrystalMod.util.UUIDUtils;
 import alec_wam.CrystalMod.util.tool.ToolUtil;
 
@@ -57,6 +47,8 @@ public class BlockEnderBuffer extends BlockMachine implements ICustomModel
     @SideOnly(Side.CLIENT)
     @Override
     public void initModel(){
+		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(getRegistryName(), "inventory"));
+
     	ClientProxy.registerCustomModel(new ModelResourceLocation(getRegistryName(), "normal"), ModelEnderBuffer.INSTANCE);
     	ClientProxy.registerCustomModel(new ModelResourceLocation(getRegistryName(), "active=false,facing=north"), ModelEnderBuffer.INSTANCE);
     	ClientProxy.registerCustomModel(new ModelResourceLocation(getRegistryName(), "active=true,facing=north"), ModelEnderBuffer.INSTANCE);

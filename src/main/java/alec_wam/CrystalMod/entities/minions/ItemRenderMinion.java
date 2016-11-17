@@ -17,7 +17,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
+import net.minecraftforge.common.model.TRSRTransformation;
 import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.client.model.dynamic.DynamicBaseModel;
 import alec_wam.CrystalMod.client.model.dynamic.ICustomItemRenderer;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
@@ -49,8 +51,8 @@ public class ItemRenderMinion implements ICustomItemRenderer {
     }
 	
 	@Override
-	public void render(ItemStack stack, TransformType type) {
-
+	public void render(ItemStack stack) {
+		TransformType type = lastTransform;
 		MinionType mType = ItemMinion.getType(stack);
 		EntityMinionBase minion = getRenderMinion(mType);
 		if(minion == null){
@@ -163,11 +165,11 @@ public class ItemRenderMinion implements ICustomItemRenderer {
 			Minecraft.getMinecraft().getRenderManager().doRenderEntity(minion, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F, true);
 			GlStateManager.popMatrix();
 		}
-		else if(type == TransformType.GROUND){
+		else if(type == TransformType.GROUND || type == TransformType.FIXED){
 			GlStateManager.pushMatrix();
 			float scale = 3.0f;
 			GlStateManager.scale(scale, scale, scale);
-			GlStateManager.translate(0, -3, 0);
+			if(type == TransformType.FIXED)GlStateManager.translate(0, -0.5, 0);
 			GlStateManager.enableBlend();
 			GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 			Minecraft.getMinecraft().getRenderManager().doRenderEntity(minion, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F, true);
@@ -180,6 +182,14 @@ public class ItemRenderMinion implements ICustomItemRenderer {
 
 		if(atrib)GlStateManager.popAttrib();
 		GlStateManager.popMatrix();
+	}
+	
+	private TransformType lastTransform;
+	
+	@Override
+	public TRSRTransformation getTransform(TransformType type) {
+		lastTransform = type;
+		return DynamicBaseModel.DEFAULT_PERSPECTIVE_TRANSFORMS.get(type);
 	}
 
 }

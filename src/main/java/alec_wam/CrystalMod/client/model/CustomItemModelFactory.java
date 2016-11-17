@@ -41,7 +41,7 @@ public class CustomItemModelFactory implements IBakedModel {
 
 	@Override
 	public boolean isGui3d() {
-		return model.isGui3d();
+		return model == null ? true : model.isGui3d();
 	}
 
 	@Override

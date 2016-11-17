@@ -38,7 +38,7 @@ public class ItemMinion extends Item implements ICustomModel {
 	@Override
 	public void initModel() {
 		ModItems.initBasicModel(this);
-		ClientProxy.registerItemRender(getRegistryName().getResourcePath(), new ItemRenderMinion());
+		ClientProxy.registerItemRenderCustom(getRegistryName().toString(), new ItemRenderMinion());
 	}
 	
 	public static ItemStack createMinion(MinionType type){

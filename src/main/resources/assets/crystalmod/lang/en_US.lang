@@ -139,6 +139,7 @@ item.crystalmod.minecart_chest.dark.name=Minecart with Dark Crystal Chest
 item.crystalmod.minecart_chest.pure.name=Minecart with Pure Crystal Chest
 item.crystalmod.minecart_chest.darkiron.name=Minecart with Dark Iron Chest
 
+item.crystalmod.minecart_enderchest.name=Minecart with Ender Chest
 item.crystalmod.minecart_wirelesschest.name=Minecart with Super Chest
 
 item.crystalmod.darkIronHelmet.name=Dark Iron Helmet
@@ -484,6 +485,7 @@ entity.CrystalMod.minecart_pure.name=Minecart with Pure Crystal Chest
 entity.CrystalMod.minecart_darkiron.name=Minecart with Dark Iron Chest
 
 entity.CrystalMod.minecart_wirelesschest.name=Minecart with Super Chest
+entity.CrystalMod.minecart_enderchest.name=Minecart with Ender Chest
 
 #--Misc
 crystalmod.power.cu=CU

@@ -1,4 +1,4 @@
-package alec_wam.CrystalMod.blocks;
+package alec_wam.CrystalMod.blocks.crops;
 
 import java.util.Locale;
 import java.util.Random;
@@ -27,8 +27,11 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.EnumPlantType;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import alec_wam.CrystalMod.blocks.EnumBlock;
+import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.blocks.BlockCrystal.CrystalBlockType;
 import alec_wam.CrystalMod.blocks.BlockCrystalIngot.CrystalIngotBlockType;
+import alec_wam.CrystalMod.blocks.EnumBlock.IEnumMeta;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.items.ItemCrystal.CrystalType;
 

@@ -1,9 +1,11 @@
-package alec_wam.CrystalMod.blocks;
+package alec_wam.CrystalMod.blocks.crops;
 
 import java.util.Random;
 
+import alec_wam.CrystalMod.blocks.BlockCrystalLog;
+import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.blocks.BlockCrystalLog.WoodType;
-import alec_wam.CrystalMod.blocks.BlockCrystalPlant.PlantType;
+import alec_wam.CrystalMod.blocks.crops.BlockCrystalPlant.PlantType;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.items.ItemCrystal.CrystalType;
 

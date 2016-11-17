@@ -9,6 +9,7 @@
         }
     },
 	"variants": {
+		"inventory": [{"model": "crystalmod:treeplant_0"}],
         "age=0,facing=south": [{ "model": "crystalmod:treeplant_0"}],
         "age=0,facing=west": [{ "model": "crystalmod:treeplant_0", "y": 90 }],
         "age=0,facing=north": [{ "model": "crystalmod:treeplant_0", "y": 180 }],

@@ -114,6 +114,10 @@ public class InfuserRecipeCategory extends BlankRecipeCategory<InfuserRecipeCate
 
 			List<List<ItemStack>> inputs = stackHelper.expandRecipeItemStackInputs(getInputs());
 			ingredients.setInputLists(ItemStack.class, inputs);
+			
+			List<List<FluidStack>> fluids = Lists.newArrayList();
+			fluids.add(getFluidInputs());
+			ingredients.setInputLists(FluidStack.class, fluids);
 
 			ItemStack recipeOutput = recipe.getOutput();
 			if (recipeOutput != null) {
@@ -200,11 +204,11 @@ public class InfuserRecipeCategory extends BlankRecipeCategory<InfuserRecipeCate
 		IGuiItemStackGroup guiItemStacks = recipeLayout.getItemStacks();
 
 		guiItemStacks.init(0, true, 132 - xOff-1, 34 - yOff-1);
-		guiItemStacks.init(1, true, 80 - xOff-1, 34 - yOff-1);
+		guiItemStacks.init(1, false, 80 - xOff-1, 34 - yOff-1);
 		guiItemStacks.set(ingredients);
 		
 		IGuiFluidStackGroup guiFluidStacks = recipeLayout.getFluidStacks();
-		guiFluidStacks.init(0, false, 33 - xOff-1, 24 - yOff-1, 12, 40, Fluid.BUCKET_VOLUME * 4, true, null);
+		guiFluidStacks.init(0, true, 33 - xOff-1, 24 - yOff-1, 12, 40, Fluid.BUCKET_VOLUME * 4, true, null);
 		guiFluidStacks.set(ingredients);
 	}
 

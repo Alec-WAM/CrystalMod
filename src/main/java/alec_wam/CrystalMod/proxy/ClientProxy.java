@@ -6,6 +6,7 @@ import java.util.Map.Entry;
 
 import org.lwjgl.input.Keyboard;
 
+import alec_wam.CrystalMod.Config;
 import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.blocks.glass.BlockCrystalGlass.GlassType;
 import alec_wam.CrystalMod.client.model.CustomBakedModel;
@@ -16,14 +17,17 @@ import alec_wam.CrystalMod.client.model.dynamic.ICustomItemRenderer;
 import alec_wam.CrystalMod.entities.ModEntites;
 import alec_wam.CrystalMod.fluids.FluidColored;
 import alec_wam.CrystalMod.fluids.ModFluids;
+import alec_wam.CrystalMod.integration.minecraft.ItemMinecartRender;
 import alec_wam.CrystalMod.items.ItemDragonWings;
 import alec_wam.CrystalMod.items.ModItems;
+import alec_wam.CrystalMod.tiles.machine.enderbuffer.ModelEnderBuffer;
 import alec_wam.CrystalMod.tiles.machine.power.battery.BlockBattery.BatteryType;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.GuiPanel;
 import alec_wam.CrystalMod.tiles.pipes.estorage.storage.hdd.GuiHDDInterface;
 import alec_wam.CrystalMod.tiles.pipes.item.GhostItemHelper;
 import alec_wam.CrystalMod.tiles.pipes.render.BakedModelLoader;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
+import alec_wam.CrystalMod.util.ModLogger;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -39,6 +43,8 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
@@ -85,11 +91,23 @@ public class ClientProxy extends CommonProxy {
         super.postInit(e);
     }
     
-    private static final Map<String, ICustomItemRenderer> CUSTOM_RENDERS = Maps.newHashMap();
+    private static final Map<ResourceLocation, ICustomItemRenderer> CUSTOM_RENDERS = Maps.newHashMap();
     private static final List<CustomBakedModel> CUSTOM_MODELS = Lists.newArrayList();
     
+    public static void registerItemRenderCustom(String id, ICustomItemRenderer render){
+    	CUSTOM_RENDERS.put(new ResourceLocation(id), render);
+    }
+    
     public static void registerItemRender(String id, ICustomItemRenderer render){
-    	CUSTOM_RENDERS.put(id, render);
+    	CUSTOM_RENDERS.put(new ResourceLocation(id), render);
+    }
+    
+    public static ICustomItemRenderer getRenderer(Item item){
+    	return getRenderer(item.getRegistryName());
+    }
+    
+    public static ICustomItemRenderer getRenderer(ResourceLocation loc){
+    	return CUSTOM_RENDERS.get(loc);
     }
     
     public static void registerCustomModel(ModelResourceLocation loc, IBakedModel model){
@@ -100,6 +118,8 @@ public class ClientProxy extends CommonProxy {
     	CUSTOM_MODELS.add(model);
     }
     
+    public static ItemMinecartRender MinecartRenderer3d = new ItemMinecartRender();
+    
     @SubscribeEvent
     public void onBakeModel(final ModelBakeEvent event) {
     	for(CustomBakedModel model : CUSTOM_MODELS){
@@ -107,10 +127,22 @@ public class ClientProxy extends CommonProxy {
     		event.getModelRegistry().putObject(model.getModelLoc(), model.getModel());
     		model.postModelRegister();
     	}
-        
-        for(Entry<String, ICustomItemRenderer> entry : CUSTOM_RENDERS.entrySet())
+    	
+    	if(Config.vanillaMinecarts3d){
+    		for(Item item : new Item[] {Items.MINECART, Items.CHEST_MINECART, Items.FURNACE_MINECART, Items.TNT_MINECART, Items.HOPPER_MINECART, Items.COMMAND_BLOCK_MINECART}){
+    			ModelResourceLocation model = new ModelResourceLocation(item.getRegistryName(), "inventory");
+    			Object obj = event.getModelRegistry().getObject(model);
+    	        
+    	        if(obj instanceof IBakedModel)
+    	        {
+    	        	event.getModelRegistry().putObject(model, new CustomItemModelFactory((IBakedModel)obj, MinecartRenderer3d));
+    	        }
+    		}
+    	}
+    	
+        for(Entry<ResourceLocation, ICustomItemRenderer> entry : CUSTOM_RENDERS.entrySet())
 		{
-			ModelResourceLocation model = new ModelResourceLocation("crystalmod:" + entry.getKey(), "inventory");
+			ModelResourceLocation model = new ModelResourceLocation(entry.getKey(), "inventory");
 	        Object obj = event.getModelRegistry().getObject(model);
 	        
 	        if(obj instanceof IBakedModel)

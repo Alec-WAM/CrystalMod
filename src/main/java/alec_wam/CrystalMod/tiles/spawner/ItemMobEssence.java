@@ -110,7 +110,7 @@ public class ItemMobEssence extends Item implements ICustomModel{
 	@Override
 	public void initModel() {
 		ModItems.initBasicModel(this);
-		ClientProxy.registerItemRender(getRegistryName().getResourcePath(), new ItemRenderMobEssence());
+		ClientProxy.registerItemRenderCustom(getRegistryName().toString(), new ItemRenderMobEssence());
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -146,10 +146,10 @@ public class ItemMobEssence extends Item implements ICustomModel{
 		addEntity("WitherSkeleton", new EntityEssenceInstance<EntitySkeleton>(EntitySkeleton.class){
 			
 			public float getRenderScale(TransformType type){
-				return 1.4F;
+				return (type == TransformType.GUI || type == TransformType.FIXED) ? 1.4F : super.getRenderScale(type);
 			}
 			
-			public Vec3d getRenderOffset(){
+			public Vec3d getRenderOffset(TransformType type){
 				return new Vec3d(0, -1.2, 0);
 			}
 			
@@ -214,7 +214,7 @@ public class ItemMobEssence extends Item implements ICustomModel{
 			}
 		});
 		addEntity("Witch", new EntityEssenceInstance<EntityWitch>(EntityWitch.class){
-			public Vec3d getRenderOffset(){
+			public Vec3d getRenderOffset(TransformType type){
 				return new Vec3d(0, -1.2, 0);
 			}
 			
@@ -246,7 +246,7 @@ public class ItemMobEssence extends Item implements ICustomModel{
 			}
 		});
 		addEntity("Squid", new EntityEssenceInstance<EntitySquid>(EntitySquid.class){
-			public Vec3d getRenderOffset(){
+			public Vec3d getRenderOffset(TransformType type){
 				return new Vec3d(0, 0, 0);
 			}
 		});
@@ -254,7 +254,7 @@ public class ItemMobEssence extends Item implements ICustomModel{
 		addEntity("Wolf", new EntityEssenceInstance<EntityWolf>(EntityWolf.class));
 		addEntity("Ocelot", new EntityEssenceInstance<EntityOcelot>(EntityOcelot.class));
 		addEntity("Rabbit", new EntityEssenceInstance<EntityRabbit>(EntityRabbit.class){
-			public Vec3d getRenderOffset(){
+			public Vec3d getRenderOffset(TransformType type){
 				return new Vec3d(0, -0.5, 0);
 			}
 			
@@ -281,7 +281,7 @@ public class ItemMobEssence extends Item implements ICustomModel{
 		
 		//NETHER
 		addEntity("Ghast", new EntityEssenceInstance<EntityGhast>(EntityGhast.class){
-			public Vec3d getRenderOffset(){
+			public Vec3d getRenderOffset(TransformType type){
 				return new Vec3d(0, -0.5, 0);
 			}
 			
@@ -323,7 +323,7 @@ public class ItemMobEssence extends Item implements ICustomModel{
 				return 1.2F;
 			}
 			
-			public Vec3d getRenderOffset(){
+			public Vec3d getRenderOffset(TransformType type){
 				return new Vec3d(0, -1.2, 0);
 			}
 		});
@@ -332,7 +332,7 @@ public class ItemMobEssence extends Item implements ICustomModel{
 				return 1.2F;
 			}
 			
-			public Vec3d getRenderOffset(){
+			public Vec3d getRenderOffset(TransformType type){
 				return new Vec3d(0, -1.2, 0);
 			}
 		});

@@ -11,7 +11,9 @@ import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformT
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.model.TRSRTransformation;
 import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.client.model.dynamic.DynamicBaseModel;
 import alec_wam.CrystalMod.client.model.dynamic.ICustomItemRenderer;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.UUIDUtils;
@@ -28,7 +30,8 @@ public class ItemRenderBombomb implements ICustomItemRenderer {
     }
 	
 	@Override
-	public void render(ItemStack stack, TransformType type) {
+	public void render(ItemStack stack) {
+		TransformType type = lastTransform;
 		EntityBombomb bombomb = getRenderBombomb();
 		if(bombomb == null){
 			return;
@@ -122,10 +125,13 @@ public class ItemRenderBombomb implements ICustomItemRenderer {
 			Minecraft.getMinecraft().getRenderManager().doRenderEntity(bombomb, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F, true);
 			GlStateManager.popMatrix();
 		}
-		else if(type == TransformType.GROUND){
+		else if(type == TransformType.GROUND || type == TransformType.FIXED){
 			GlStateManager.pushMatrix();
 			float scale = 3.0f;
 			GlStateManager.scale(scale, scale, scale);
+			if(type == TransformType.FIXED){
+				GlStateManager.translate(0, -0.4, 0);
+			}
 			GlStateManager.enableBlend();
 			GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 			Minecraft.getMinecraft().getRenderManager().doRenderEntity(bombomb, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F, true);
@@ -138,6 +144,16 @@ public class ItemRenderBombomb implements ICustomItemRenderer {
 
 		if(atrib)GlStateManager.popAttrib();
 		GlStateManager.popMatrix();
+	}
+	
+
+
+	private TransformType lastTransform;
+	
+	@Override
+	public TRSRTransformation getTransform(TransformType type) {
+		lastTransform = type;
+		return DynamicBaseModel.DEFAULT_PERSPECTIVE_TRANSFORMS.get(type);
 	}
 
 }

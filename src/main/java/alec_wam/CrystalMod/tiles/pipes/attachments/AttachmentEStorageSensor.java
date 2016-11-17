@@ -215,8 +215,10 @@ public class AttachmentEStorageSensor extends AttachmentData {
 	
 	public void notifyBlocks(World world, BlockPos pos, EnumFacing dir){
 		BlockPos bc2 = pos.offset(dir);
+		world.scheduleUpdate(pos, ModBlocks.crystalPipe, ModBlocks.crystalPipe.tickRate(world));
 		if (world.isBlockLoaded(bc2)) {
 			world.notifyBlockOfStateChange(bc2, ModBlocks.crystalPipe);
+			
 			IBlockState bs = world.getBlockState(bc2);
 			if (bs.isBlockNormalCube()) {
 				for (EnumFacing dir2 : EnumFacing.VALUES) {

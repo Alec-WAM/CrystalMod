@@ -5,8 +5,9 @@ import java.util.Map;
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.blocks.ModBlocks;
-import alec_wam.CrystalMod.blocks.BlockCrystalPlant.PlantType;
+import alec_wam.CrystalMod.blocks.crops.BlockCrystalPlant.PlantType;
 import alec_wam.CrystalMod.entities.minecarts.chests.ItemCrystalChestMinecart;
+import alec_wam.CrystalMod.entities.minecarts.chests.ItemEnderChestMinecart;
 import alec_wam.CrystalMod.entities.minecarts.chests.wireless.ItemWirelessChestMinecart;
 import alec_wam.CrystalMod.entities.minions.ItemMinion;
 import alec_wam.CrystalMod.entities.minions.ItemMinionStaff;
@@ -94,6 +95,7 @@ public class ModItems {
 	public static ItemBat bat;
 	
 	public static ItemCrystalChestMinecart chestMinecart;
+	public static ItemEnderChestMinecart enderChestMinecart;
 	public static ItemWirelessChestMinecart wirelessChestMinecart;
 	
 	public static ItemCrystalWrench wrench;
@@ -153,6 +155,7 @@ public class ModItems {
 		bat = new ItemBat();
 		
 		chestMinecart = new ItemCrystalChestMinecart();
+		enderChestMinecart = new ItemEnderChestMinecart();
 		wirelessChestMinecart = new ItemWirelessChestMinecart();
 		
 		crystalSeedsBlue = new ItemCrystalSeeds(PlantType.BLUE);

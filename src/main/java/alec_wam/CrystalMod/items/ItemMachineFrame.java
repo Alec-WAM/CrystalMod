@@ -27,7 +27,7 @@ public class ItemMachineFrame extends Item implements ICustomModel {
 
 		@Override
 		public String getName() {
-			return name().toLowerCase(Locale.ENGLISH);
+			return name().toLowerCase();
 		}
 
 
@@ -52,9 +52,8 @@ public class ItemMachineFrame extends Item implements ICustomModel {
 	
 	@SideOnly(Side.CLIENT)
     public void initModel() {
-        for(FrameType type : FrameType.values()){
-        	 ModelLoader.setCustomModelResourceLocation(this, type.getMetadata(), new ModelResourceLocation(getRegistryName(), type.getName()));
-        }
+		ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation(getRegistryName(), "basic"));
+		ModelLoader.setCustomModelResourceLocation(this, 1, new ModelResourceLocation(getRegistryName(), "ender"));
     }
 	
 	public String getUnlocalizedName(ItemStack stack)

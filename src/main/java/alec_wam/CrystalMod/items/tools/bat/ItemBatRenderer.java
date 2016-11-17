@@ -5,6 +5,7 @@ import java.util.Map;
 import alec_wam.CrystalMod.api.tools.IBatType;
 import alec_wam.CrystalMod.api.tools.IBatUpgrade;
 import alec_wam.CrystalMod.api.tools.UpgradeData;
+import alec_wam.CrystalMod.client.model.dynamic.DynamicBaseModel;
 import alec_wam.CrystalMod.client.model.dynamic.ICustomItemRenderer;
 import alec_wam.CrystalMod.util.ModLogger;
 import alec_wam.CrystalMod.util.client.RenderUtil;
@@ -21,59 +22,73 @@ import net.minecraft.client.renderer.texture.TextureUtil;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.model.TRSRTransformation;
 
 public class ItemBatRenderer implements ICustomItemRenderer {
 
-	public void render(ItemStack stack, TransformType type) {
+	@Override
+	public void render(ItemStack stack) {
 		GlStateManager.pushMatrix();
-		boolean render = false;
-		
-		double x = 0;
-		double y = 0;
-		double z = 0;
+		TransformType type = lastTransform;
+		double x = -0.5;
+		double y = -1;
+		double z = -0.5;
 		
 		if(type == TransformType.GUI){
+			//RenderHelper.disableStandardItemLighting();
 			GlStateManager.scale(0.7, 0.7, 0.7);
-			//GlStateManager.translate(0.3, -0.7, 0);
+			y = -1.3;
 		}
+		
+		if(type == TransformType.FIXED){
+			x = -0.5;
+			y = -1.3;
+			z = -0.5;
+		}
+		
+		if(type == TransformType.FIRST_PERSON_LEFT_HAND){
+			z += 0.3;
+		}
+		
+		if(type == TransformType.THIRD_PERSON_RIGHT_HAND){
+			GlStateManager.translate(4.1, -1.8, -5.1);
+			GlStateManager.scale(1.5, 1.5, 1.5);
+			GlStateManager.rotate(75, 1, 0, 1);
+			x = 0;
+			y = -0.8;
+			z = 0;
+		}
+		if(type == TransformType.THIRD_PERSON_LEFT_HAND){
+			GlStateManager.translate(-0.65, 0.8, -0.3);
+			GlStateManager.scale(1.5, 1.5, 1.5);
+			GlStateManager.rotate(70, 1, 0, -1);
+			x = 0;
+			y = -0.8;
+			z = 0;
+		}
+		
+		if(type == TransformType.FIRST_PERSON_LEFT_HAND || type == TransformType.FIRST_PERSON_RIGHT_HAND){
+			y = -0.5;
+		}
+		//GlStateManager.disableLighting();
+		GlStateManager.pushAttrib();
+        RenderHelper.enableStandardItemLighting();
 		renderWholeBat(stack, x, y, z);
-		
-		if(render){
-		
-			switch (type) {
-				case GROUND:
-					GlStateManager.scale(0.5f, 0.5F, 0.5F);
-					GlStateManager.translate(-0.5f, 0.0f, -0.5F);
-					GlStateManager.translate(0.5, 0.5, 0.5);
-					GlStateManager.rotate(-135, 0, 1, 0);
-					GlStateManager.translate(-0.5, -0.5, -0.5);
-					renderWholeBat(stack, 0F, 0f, 0F);
-					break;
-				case THIRD_PERSON_RIGHT_HAND:
-					GlStateManager.translate(-0.0f, 0.0F, 0.25F);
-					renderWholeBat(stack, 0.0F, 0F, 0.0f);
-					break;
-				case THIRD_PERSON_LEFT_HAND:
-					GlStateManager.translate(-0.0f, 0.0F, 0.25F);
-					renderWholeBat(stack, 0.0F, 0F, 0.0f);
-					break;
-				case FIRST_PERSON_RIGHT_HAND:
-					renderWholeBat(stack, 0F, 0F, 0f);
-					break;
-				case FIRST_PERSON_LEFT_HAND:
-					renderWholeBat(stack, 0F, 0F, 0f);
-					break;
-				case GUI:
-					/*GlStateManager.scale(0.7, 0.7, 0.7);
-					GlStateManager.translate(0.5, 0.5, 0.5);
-					GlStateManager.rotate(-135, 0, 1, 0);
-					GlStateManager.translate(-0.5, -0.5, -0.5);*/
-					renderWholeBat(stack, 0f, -1.3f, 0.6f);
-					break;
-				default:
-			}
+		RenderHelper.disableStandardItemLighting();
+        GlStateManager.popAttrib();
+        //GlStateManager.enableLighting();
+		if(type == TransformType.GUI){
+			//RenderHelper.enableGUIStandardItemLighting();
 		}
 		GlStateManager.popMatrix();
+	}
+
+	private TransformType lastTransform;
+	
+	@Override
+	public TRSRTransformation getTransform(TransformType type) {
+		lastTransform = type;
+		return DynamicBaseModel.DEFAULT_PERSPECTIVE_TRANSFORMS.get(type);
 	}
 	
 	public static void renderWholeBat(ItemStack bat, double x, double y, double z){

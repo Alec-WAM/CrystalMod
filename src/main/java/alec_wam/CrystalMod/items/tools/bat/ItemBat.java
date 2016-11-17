@@ -35,7 +35,7 @@ public class ItemBat extends ItemSpecialSword implements ICustomModel {
 	@SideOnly(Side.CLIENT)
 	public void initModel(){
 		ModItems.initBasicModel(this);
-		ClientProxy.registerItemRender(getRegistryName().getResourcePath(), new ItemBatRenderer());
+		ClientProxy.registerItemRenderCustom(getRegistryName().toString(), new ItemBatRenderer());
 	}
 	
 	@Override

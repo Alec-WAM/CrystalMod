@@ -39,7 +39,7 @@ public class ItemBombomb extends Item implements ICustomModel {
 	@Override
 	public void initModel() {
 		ModItems.initBasicModel(this);
-		ClientProxy.registerItemRender(getRegistryName().getResourcePath(), new ItemRenderBombomb());
+		ClientProxy.registerItemRenderCustom(getRegistryName().toString(), new ItemRenderBombomb());
 	}
 	
 	@SideOnly(Side.CLIENT)

@@ -23,7 +23,7 @@ public class ItemDragonWings extends Item implements ICustomModel {
 	@Override
 	public void initModel() {
 		ModItems.initBasicModel(this);
-		ClientProxy.registerItemRender(getRegistryName().getResourcePath(), new ItemRenderDragonWings());
+		ClientProxy.registerItemRenderCustom(getRegistryName().toString(), new ItemRenderDragonWings());
 	}
 	
 }
