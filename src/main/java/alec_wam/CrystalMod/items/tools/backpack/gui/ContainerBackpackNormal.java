@@ -1,5 +1,8 @@
 package alec_wam.CrystalMod.items.tools.backpack.gui;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.annotation.Nullable;
 
 import alec_wam.CrystalMod.items.tools.backpack.BackpackUtil;
@@ -108,7 +111,7 @@ public class ContainerBackpackNormal extends Container {
                 }
             });
         }
-        
+        List<ItemStack> list = new ArrayList<>();
         if(openType == OpenType.OFF_HAND){
             this.addSlotToContainer(new Slot(inventory, 40, 8, 147){
             	@Override
