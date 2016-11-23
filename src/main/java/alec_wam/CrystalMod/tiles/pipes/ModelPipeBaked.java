@@ -5,8 +5,12 @@ import net.minecraft.client.*;
 import net.minecraft.util.*;
 import net.minecraft.util.EnumFacing.Axis;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
+import java.awt.Color;
 import java.util.*;
 
 import javax.annotation.Nullable;
@@ -189,7 +193,6 @@ public class ModelPipeBaked implements IPerspectiveAwareModel
                 break;
             }
         }
-        data.getBlockState().getBlock();
         IBlockState coverState = data.getBlockState();
         IBakedModel model = Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelShapes().getModelForState(coverState);
         final boolean scale = false;
@@ -296,59 +299,75 @@ public class ModelPipeBaked implements IPerspectiveAwareModel
         	float UpLeftOffsetHollow = 16f-attchmentSize;
         	float DownRightOffsetHollow = attchmentSize;
         	
+        	
+        	int color =	Color.BLUE.getRGB();
+        	IBlockAccess world = (state !=null) ? state.blockAccess : null;
+        	BlockPos pos = (state !=null) ? state.pos : null;
+            int color2 = Minecraft.getMinecraft().getBlockColors().colorMultiplier(coverState, world, pos, 0);
+            
+            Color test = new Color(color2);
+            Color real = new Color(test.getBlue(), test.getGreen(), test.getRed());
+            color = real.getRGB();
+            if(color == -1){
+            	 
+            	float f = 1.0f;
+                int i = MathHelper.clamp_int((int)(f * 255.0F), 0, 255);
+                color = -16777216 | i << 16 | i << 8 | i;
+            }
+        	
         	//UP
         	boolean uvLocked = false;
 			float upMaxZ = shrinkUp ? 14f : 16f;
 			BlockFaceUV uv = new BlockFaceUV(new float[] { minX, minZ, maxX, 16f }, 0);
 			BlockPartFace face = new BlockPartFace(EnumFacing.UP, 0, "", uv);
-			list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(minX, upMaxZ, minZ), new Vector3f(maxX, upMaxZ, 16f), face, textureUp, EnumFacing.UP, coverModelRot, (BlockPartRotation)null, uvLocked));
+			list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(minX, upMaxZ, minZ), new Vector3f(maxX, upMaxZ, 16f), face, textureUp, EnumFacing.UP, coverModelRot, (BlockPartRotation)null, uvLocked, color));
 				
 			BlockFaceUV uvD = new BlockFaceUV(new float[] { minX, minZ, maxX, 16f }, 180);
 			BlockPartFace faceD = new BlockPartFace(EnumFacing.DOWN, 0, "", uvD);
-			list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(minX, UpLeftOffsetHollow, minZ), new Vector3f(maxX, UpLeftOffsetHollow, 16f), faceD, textureDown, EnumFacing.DOWN, coverModelRot, (BlockPartRotation)null, uvLocked));
+			list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(minX, UpLeftOffsetHollow, minZ), new Vector3f(maxX, UpLeftOffsetHollow, 16f), faceD, textureDown, EnumFacing.DOWN, coverModelRot, (BlockPartRotation)null, uvLocked, color));
     			
 				
 			faceCover.blockFaceUV.uvs = new float[]{16f-maxX, 16f-upMaxZ, 16f-minX, DownRightOffsetHollow};
-			list.add(faceBakery.makeBakedQuad(new Vector3f(minX, UpLeftOffsetHollow, minZ), new Vector3f(maxX, upMaxZ, 16.0f), faceCover, textureNorth, EnumFacing.NORTH, coverModelRot, (BlockPartRotation)null, scale, uvLocked));
+			list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(minX, UpLeftOffsetHollow, minZ), new Vector3f(maxX, upMaxZ, 16.0f), faceCover, textureNorth, EnumFacing.NORTH, coverModelRot, (BlockPartRotation)null, uvLocked, color));
 			faceCover.blockFaceUV.uvs = new float[]{0.0f, 0.0f, 16f, 16F};
     			
 			faceCover.blockFaceUV.uvs = new float[]{0.0f, 0.0f, 16f, DownRightOffsetHollow};
-			list.add(faceBakery.makeBakedQuad(new Vector3f(0.0f, UpLeftOffsetHollow, minZ), new Vector3f(16f, 16f, 16.0f), faceCover, textureSouth, EnumFacing.SOUTH, coverModelRot, (BlockPartRotation)null, scale, uvLocked));
+			list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(0.0f, UpLeftOffsetHollow, minZ), new Vector3f(16f, 16f, 16.0f), faceCover, textureSouth, EnumFacing.SOUTH, coverModelRot, (BlockPartRotation)null, uvLocked, color));
 			faceCover.blockFaceUV.uvs = new float[]{0.0f, 0.0f, 16f, 16F};
 			
 			faceCover.blockFaceUV.uvs = new float[]{minZ, 16-upMaxZ, 16f, DownRightOffsetHollow};
-	        list.add(faceBakery.makeBakedQuad(new Vector3f(minX, UpLeftOffsetHollow, minZ), new Vector3f(minX, upMaxZ, 16.0f), faceCover, textureWest, EnumFacing.WEST, coverModelRot, (BlockPartRotation)null, scale, uvLocked));
+	        list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(minX, UpLeftOffsetHollow, minZ), new Vector3f(minX, upMaxZ, 16.0f), faceCover, textureWest, EnumFacing.WEST, coverModelRot, (BlockPartRotation)null, uvLocked, color));
 	        faceCover.blockFaceUV.uvs = new float[]{0.0f, 0.0f, 16f, 16F};
     	       
 	        faceCover.blockFaceUV.uvs = new float[]{0.0f, 16f-upMaxZ, 16f-minZ, DownRightOffsetHollow};
-	        list.add(faceBakery.makeBakedQuad(new Vector3f(maxX, UpLeftOffsetHollow, minZ), new Vector3f(maxX, upMaxZ, 16.0f), faceCover, textureEast, EnumFacing.EAST, coverModelRot, null, scale, uvLocked));
+	        list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(maxX, UpLeftOffsetHollow, minZ), new Vector3f(maxX, upMaxZ, 16.0f), faceCover, textureEast, EnumFacing.EAST, coverModelRot, null, uvLocked, color));
 	        faceCover.blockFaceUV.uvs = new float[]{0.0f, 0.0f, 16f, 16F};
 	        
         	//DOWN
     		float downMinZ = shrinkDown ? 2.0F : 0.0f;	
 			uv = new BlockFaceUV(new float[] { minX, minZ, maxX, 16.0f }, 0);
 			face = new BlockPartFace(EnumFacing.UP, 0, "", uv);
-			list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(minX, DownRightOffsetHollow, minZ), new Vector3f(maxX, DownRightOffsetHollow, 16f), face, textureUp, EnumFacing.UP, coverModelRot, (BlockPartRotation)null, true));
+			list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(minX, DownRightOffsetHollow, minZ), new Vector3f(maxX, DownRightOffsetHollow, 16f), face, textureUp, EnumFacing.UP, coverModelRot, (BlockPartRotation)null, uvLocked, color));
 				
 			uvD = new BlockFaceUV(new float[] { minX, minZ, maxX, 16f }, 180);
 			faceD = new BlockPartFace(EnumFacing.DOWN, 0, "", uvD);
-			list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(minX, downMinZ, minZ), new Vector3f(maxX, downMinZ, 16f), faceD, textureDown, EnumFacing.DOWN, coverModelRot, (BlockPartRotation)null, true));
+			list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(minX, downMinZ, minZ), new Vector3f(maxX, downMinZ, 16f), faceD, textureDown, EnumFacing.DOWN, coverModelRot, (BlockPartRotation)null, uvLocked, color));
 			
 			
 			faceCover.blockFaceUV.uvs = new float[]{16.0f-maxX, UpLeftOffsetHollow, 16f-minX, 16f-downMinZ};
-			list.add(faceBakery.makeBakedQuad(new Vector3f(minX, downMinZ, minZ), new Vector3f(maxX, DownRightOffsetHollow, 16.0f), faceCover, textureNorth, EnumFacing.NORTH, coverModelRot, (BlockPartRotation)null, scale, true));
+			list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(minX, downMinZ, minZ), new Vector3f(maxX, DownRightOffsetHollow, 16.0f), faceCover, textureNorth, EnumFacing.NORTH, coverModelRot, (BlockPartRotation)null, uvLocked, color));
 			faceCover.blockFaceUV.uvs = new float[]{0.0f, 0.0f, 16f, 16F};
 			
 			faceCover.blockFaceUV.uvs = new float[]{0.0f, UpLeftOffsetHollow, 16f, 16f};
-			list.add(faceBakery.makeBakedQuad(new Vector3f(0.0f, 0.0f, minZ), new Vector3f(16f, DownRightOffsetHollow, 16.0f), faceCover, textureSouth, EnumFacing.SOUTH, coverModelRot, (BlockPartRotation)null, scale, true));
+			list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(0.0f, 0.0f, minZ), new Vector3f(16f, DownRightOffsetHollow, 16.0f), faceCover, textureSouth, EnumFacing.SOUTH, coverModelRot, (BlockPartRotation)null, uvLocked, color));
 			faceCover.blockFaceUV.uvs = new float[]{0.0f, 0.0f, 16f, 16F};
 			
 			faceCover.blockFaceUV.uvs = new float[]{minZ, UpLeftOffsetHollow, 16f, 16f-downMinZ};
-	        list.add(faceBakery.makeBakedQuad(new Vector3f(minX, downMinZ, minZ), new Vector3f(minX, DownRightOffsetHollow, 16.0f), faceCover, textureWest, EnumFacing.WEST, coverModelRot, (BlockPartRotation)null, scale, true));
+	        list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(minX, downMinZ, minZ), new Vector3f(minX, DownRightOffsetHollow, 16.0f), faceCover, textureWest, EnumFacing.WEST, coverModelRot, (BlockPartRotation)null, uvLocked, color));
 	        faceCover.blockFaceUV.uvs = new float[]{0.0f, 0.0f, 16f, 16F};
 	        
 	        faceCover.blockFaceUV.uvs = new float[]{0.0f, UpLeftOffsetHollow, 16f-minZ, 16f-downMinZ};
-	        list.add(faceBakery.makeBakedQuad(new Vector3f(maxX, downMinZ, minZ), new Vector3f(maxX, DownRightOffsetHollow, 16.0f), faceCover, textureEast, EnumFacing.EAST, coverModelRot, (BlockPartRotation)null, scale, true));
+	        list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(maxX, downMinZ, minZ), new Vector3f(maxX, DownRightOffsetHollow, 16.0f), faceCover, textureEast, EnumFacing.EAST, coverModelRot, (BlockPartRotation)null, uvLocked, color));
 	        faceCover.blockFaceUV.uvs = new float[]{0.0f, 0.0f, 16f, 16F};
         	
 	        //if(cut)return;
@@ -524,9 +543,9 @@ public class ModelPipeBaked implements IPerspectiveAwareModel
             if (safe ? state.pipe.containsExternalConnection(dir) : false) {
                 this.renderIronCap(state, n, list);
             }
-            /*if (safe && state.pipe.getCoverData(dir) !=null) {
-                this.addCover(state.pipe.getCoverData(dir), dir, list);
-            }*/
+            if (safe && state.pipe.getCoverData(dir) !=null) {
+                //this.addCover(state, state.pipe.getCoverData(dir), dir, list);
+            }
             if (safe && state.pipe.getAttachmentData(dir) !=null) {
             	state.pipe.getAttachmentData(dir).addQuads(faceBakery, list, dir);
             }

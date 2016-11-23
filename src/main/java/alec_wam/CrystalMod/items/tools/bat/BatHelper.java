@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import joptsimple.internal.Strings;
 import net.minecraft.client.gui.GuiScreen;
@@ -57,23 +59,28 @@ import com.google.common.collect.Maps;
 public class BatHelper {
 	
 	private static final List<IBatUpgrade> UPGRADE_REGISTRY = new ArrayList<IBatUpgrade>();
-	private static final Map<ResourceLocation, IBatType> TYPE_REGISTRY = new HashMap<ResourceLocation, IBatType>();
+	private static final List<IBatType> TYPE_REGISTRY = Lists.newArrayList();
 	
 	private static final List<IBatUpgrade> CREATIVELIST_UPGRADES = new ArrayList<IBatUpgrade>();
 	
 	public static IBatType registerBatType(IBatType type){
-		if(!TYPE_REGISTRY.containsKey(type.getID())){
-			TYPE_REGISTRY.put(type.getID(), type);
-			return type;
-		} else {
-			ModLogger.warning("Bat Type "+ type.getID() +" is already registered!");
+		for(IBatType list : TYPE_REGISTRY){
+			if(list.getID().equals(type.getID())){
+				ModLogger.warning("Bat Type "+ type.getID() +" is already registered!");
+				return null;
+			}
 		}
-		return null;
+		TYPE_REGISTRY.add(type);
+		return type;
 	}
 	
 	public static IBatType getBat(ResourceLocation res){
-		if(!TYPE_REGISTRY.containsKey(res))return errorType;
-		return TYPE_REGISTRY.get(res);
+		for(IBatType type : TYPE_REGISTRY){
+			if(type.getID().equals(res)){
+				return type;
+			}
+		}
+		return errorType;
 	}
 	
 	public static IBatType errorType = new BatType(new ResourceLocation(CrystalMod.resource("error")), 0, 0) {
@@ -111,7 +118,7 @@ public class BatHelper {
 	}
 	
 	public static void addBatCrafting(){
-		for(IBatType type : TYPE_REGISTRY.values()){
+		for(IBatType type : TYPE_REGISTRY){
 			type.addCraftingRecipe();
 		}
 	}
@@ -129,7 +136,7 @@ public class BatHelper {
 	
 	public static List<ItemStack> getCreativeListBats(Item item){
 		List<ItemStack> bats = Lists.newArrayList();
-		for(IBatType type : TYPE_REGISTRY.values()){
+		for(IBatType type : TYPE_REGISTRY){
 			ItemStack bat = getBasicBat(item, type);
 			bats.add(bat);
 			ItemStack allBat = ItemStack.copyItemStack(bat);

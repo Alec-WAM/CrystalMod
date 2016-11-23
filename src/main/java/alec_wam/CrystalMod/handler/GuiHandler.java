@@ -1,6 +1,8 @@
 package alec_wam.CrystalMod.handler;
 
 import alec_wam.CrystalMod.asm.ObfuscatedNames;
+import alec_wam.CrystalMod.capability.ExtendedPlayer;
+import alec_wam.CrystalMod.capability.ExtendedPlayerProvider;
 import alec_wam.CrystalMod.entities.accessories.ContainerHorseEnderChest;
 import alec_wam.CrystalMod.entities.accessories.GuiHorseEnderChest;
 import alec_wam.CrystalMod.entities.accessories.HorseAccessories;
@@ -22,10 +24,16 @@ import alec_wam.CrystalMod.items.backpack.gui.GuiBackpackCrafting;
 import alec_wam.CrystalMod.items.backpack.gui.GuiBackpackEnderChest;
 import alec_wam.CrystalMod.items.backpack.gui.GuiBackpackFurnace;
 import alec_wam.CrystalMod.items.backpack.gui.GuiBackpackRepair;
-import alec_wam.CrystalMod.items.guide.GuiCrystalGuide;
-import alec_wam.CrystalMod.items.guide.GuiEStorageGuide;
+import alec_wam.CrystalMod.items.guide.GuiGuideBase;
+import alec_wam.CrystalMod.items.guide.GuiGuideChapter;
+import alec_wam.CrystalMod.items.guide.GuiGuideMainPage;
 import alec_wam.CrystalMod.items.guide.ItemCrystalGuide;
 import alec_wam.CrystalMod.items.guide.ItemCrystalGuide.GuideType;
+import alec_wam.CrystalMod.items.guide.old.GuiCrystalGuide;
+import alec_wam.CrystalMod.items.guide.old.GuiEStorageGuide;
+import alec_wam.CrystalMod.items.tools.backpack.BackpackUtil;
+import alec_wam.CrystalMod.items.tools.backpack.ItemBackpackBase;
+import alec_wam.CrystalMod.items.tools.backpack.gui.OpenType;
 import alec_wam.CrystalMod.tiles.chest.ContainerCrystalChest;
 import alec_wam.CrystalMod.tiles.chest.CrystalChestType;
 import alec_wam.CrystalMod.tiles.chest.GUIChest;
@@ -128,8 +136,8 @@ public class GuiHandler implements IGuiHandler {
 	public static final int GUI_ID_WORK_BOUNDS = 31;
 	public static final int GUI_ID_WORK_ALT = 32;
 	public static final int GUI_ID_ENTITY = 5;
-	public static final int GUI_ID_BACKPACK = 6;
-	
+	public static final int GUI_ID_GUIDE = 6;
+	public static final int GUI_ID_BACKPACK = 7;
 
     
     @Override
@@ -161,6 +169,28 @@ public class GuiHandler implements IGuiHandler {
     			}
     		}
     		return null;
+    	}
+    	if(ID == GUI_ID_GUIDE){
+    		if(ItemCrystalGuide.forcedChapter !=null){
+    			final GuiGuideBase gui = ItemCrystalGuide.forcedChapter;
+    			ItemCrystalGuide.forcedChapter = null;
+    			return gui;
+    		}
+    		ExtendedPlayer playerData = ExtendedPlayerProvider.getExtendedPlayer(player);
+    		if(playerData !=null){
+    			if(playerData.lastOpenBook !=null){
+    				return playerData.lastOpenBook;
+    			}
+    		}
+    		return new GuiGuideMainPage();
+    	}
+    	if(ID == GUI_ID_BACKPACK){
+    		OpenType type = OpenType.values()[x];
+    		ItemStack backpack = BackpackUtil.getItemStack(player.inventory, type);
+    		if(backpack !=null && backpack.getItem() instanceof ItemBackpackBase){
+    			ItemBackpackBase item = (ItemBackpackBase)backpack.getItem();
+    			return item.getBackpack().getClientGuiElement(player, world, type);
+    		}
     	}
     	if(ID == GUI_ID_ITEM){
     		if(y >=0 && y < player.inventory.getSizeInventory()){
@@ -205,7 +235,6 @@ public class GuiHandler implements IGuiHandler {
     			}
     			if(held.getItem() instanceof ItemCrystalGuide){
     				GuideType type = GuideType.byMetadata(held.getMetadata());
-    				if(type == GuideType.CRYSTAL)return new GuiCrystalGuide(held);
     				if(type == GuideType.ESTORAGE)return new GuiEStorageGuide(held);
     			}
     		}
@@ -302,6 +331,14 @@ public class GuiHandler implements IGuiHandler {
     			}
     		}
     		return null;
+    	}
+    	if(ID == GUI_ID_BACKPACK){
+    		OpenType type = OpenType.values()[x];
+    		ItemStack backpack = BackpackUtil.getItemStack(player.inventory, type);
+    		if(backpack !=null && backpack.getItem() instanceof ItemBackpackBase){
+    			ItemBackpackBase item = (ItemBackpackBase)backpack.getItem();
+    			return item.getBackpack().getServerGuiElement(player, world, type);
+    		}
     	}
     	if(ID == GUI_ID_ITEM){
     		if(y >=0 && y < player.inventory.getSizeInventory()){

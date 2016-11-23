@@ -4,11 +4,11 @@ public class SpriteData {
 
 	private double u;
 	private double v;
-	private int width;
-	private int height;
+	private double width;
+	private double height;
 	
 	
-	public SpriteData(double u, double v, int width, int height){
+	public SpriteData(double u, double v, double width, double height){
 		this.u = u;
 		this.v = v;
 		this.width = width;
@@ -23,11 +23,11 @@ public class SpriteData {
 		return v;
 	}
 	
-	public int getWidth(){
+	public double getWidth(){
 		return width;
 	}
 	
-	public int getHeight(){
+	public double getHeight(){
 		return height;
 	}
 	

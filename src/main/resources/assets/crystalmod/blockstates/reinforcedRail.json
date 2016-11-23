@@ -1,6 +1,5 @@
 {
     "variants": {
-		"inventory": {"model": "crystalmod:reinforced_rail_flat" },
 		"shape=north_south": { "model": "crystalmod:reinforced_rail_flat" },
         "shape=east_west": { "model": "crystalmod:reinforced_rail_flat", "y": 90 },
         "shape=ascending_east": { "model": "crystalmod:reinforced_rail_raised_ne", "y": 90 },

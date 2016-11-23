@@ -1,0 +1,15 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "block/cube_all",
+    "textures": {
+	  "particle":"crystalmod:blocks/machine/matter",
+	  "all":"crystalmod:blocks/machine/matter"
+    },
+    "transform": "forge:default-block"
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{}]
+  }
+}

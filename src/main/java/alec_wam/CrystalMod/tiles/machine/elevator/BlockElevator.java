@@ -14,6 +14,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
@@ -33,8 +34,9 @@ public class BlockElevator extends BlockContainer {
         setCreativeTab(CrystalMod.tabBlocks);
 	}
 
-	public int getRenderType(){
-		return 3;
+	@Override
+	public EnumBlockRenderType getRenderType(IBlockState state){
+		return EnumBlockRenderType.MODEL;
 	}
 	
 	@Override
@@ -42,6 +44,7 @@ public class BlockElevator extends BlockContainer {
 		return new TileEntityElevator();
 	}
 	
+	@Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack stack, EnumFacing side, float hitX, float hitY, float hitZ)
     {
 		TileEntity te = worldIn.getTileEntity(pos);

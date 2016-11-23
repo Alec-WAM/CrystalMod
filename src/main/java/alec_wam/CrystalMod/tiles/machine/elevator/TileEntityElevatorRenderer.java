@@ -20,6 +20,7 @@ import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.ReportedException;
 import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.WorldType;
 
 import org.lwjgl.opengl.GL11;
 
@@ -77,36 +78,44 @@ public class TileEntityElevatorRenderer extends TileEntitySpecialRenderer<TileEn
         profiler.endSection();
     }
 
+	@Override
+	public boolean isGlobalRenderer(TileEntityElevator te) {
+    	return te.isMoving();
+	}
+	
     @SuppressWarnings("deprecation")
 	private static boolean renderBlock(BlockRendererDispatcher dispatcher, IBlockState state, BlockPos pos, IBlockAccess blockAccess, VertexBuffer worldRendererIn) {
-        try {
-            /*if (!state.getBlock().canRenderInLayer(MinecraftForgeClient.getRenderLayer())) {
-                return false;
-            } else {
-                IBakedModel model = dispatcher.getModelFromBlockState(state, blockAccess, pos);
-                state = state.getBlock().getExtendedState(state, blockAccess, pos);
-                return dispatcher.getBlockModelRenderer().renderModel(blockAccess, model, state, pos, worldRendererIn, false);
-            }*/
-        	
-        	for (BlockRenderLayer enumWorldBlockLayer : BlockRenderLayer.values()) {
-	            if (!state.getBlock().canRenderInLayer(enumWorldBlockLayer)) continue;
-	            
-	
-	            if (state.getBlock().getRenderType(state) != EnumBlockRenderType.INVISIBLE) {
-	            	net.minecraftforge.client.ForgeHooksClient.setRenderLayer(enumWorldBlockLayer);
-	            	worldRendererIn.color(1.0F, 1.0F, 1.0F, 1.0F);
-	            	IBakedModel model = dispatcher.getModelForState(state);
-	                BlockRendererDispatcher blockRendererDispatcher = Minecraft.getMinecraft().getBlockRendererDispatcher();
-	                return blockRendererDispatcher.getBlockModelRenderer().renderModel(blockAccess, model, state, pos, worldRendererIn, false);
-	            }
-	        }
-        	return false;
-        } catch (Throwable throwable) {
-            CrashReport crashreport = CrashReport.makeCrashReport(throwable, "Tesselating block in world");
-            CrashReportCategory crashreportcategory = crashreport.makeCategory("Block being tesselated");
-            CrashReportCategory.addBlockInfo(crashreportcategory, pos, state.getBlock(), state.getBlock().getMetaFromState(state));
-            throw new ReportedException(crashreport);
-        }
+    	 try {
+             EnumBlockRenderType enumblockrendertype = state.getRenderType();
+
+             if (enumblockrendertype == EnumBlockRenderType.INVISIBLE) {
+                 return false;
+             } else {
+                 if (blockAccess.getWorldType() != WorldType.DEBUG_WORLD) {
+                     try {
+                         state = state.getActualState(blockAccess, pos);
+                     } catch (Exception var8) {
+                         ;
+                     }
+                 }
+
+                 switch (enumblockrendertype) {
+                     case MODEL:
+                         IBakedModel model = dispatcher.getModelForState(state);
+                         state = state.getBlock().getExtendedState(state, blockAccess, pos);
+                         return dispatcher.getBlockModelRenderer().renderModel(blockAccess, model, state, pos, worldRendererIn, false);
+                     case ENTITYBLOCK_ANIMATED:
+                         return false;
+                     default:
+                         return false;
+                 }
+             }
+         } catch (Throwable throwable) {
+             CrashReport crashreport = CrashReport.makeCrashReport(throwable, "Tesselating block in world");
+             CrashReportCategory crashreportcategory = crashreport.makeCategory("Block being tesselated");
+             CrashReportCategory.addBlockInfo(crashreportcategory, pos, state.getBlock(), state.getBlock().getMetaFromState(state));
+             throw new ReportedException(crashreport);
+         }
     }
 
 

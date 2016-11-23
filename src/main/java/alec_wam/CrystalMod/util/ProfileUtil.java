@@ -143,8 +143,10 @@ public class ProfileUtil {
 	private static String getUnCachedName(UUID uuid){
 		JSONObject jsonResult = getJSONObject(getURL(UUIDUtils.fromUUID(uuid), RequestType.UUIDTONAME));
 	
-		if(jsonResult == null)return ERROR;
+		if(jsonResult == null || !jsonResult.has("name"))return ERROR;
 		
+		Object object = jsonResult.get("name");
+		if(object == null || !(object instanceof String))return ERROR;
 		String name = jsonResult.getString("name");
 		if(!Strings.isNullOrEmpty(name)){
 			return name;

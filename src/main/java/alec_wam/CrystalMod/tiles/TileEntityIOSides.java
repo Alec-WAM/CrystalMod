@@ -1,5 +1,6 @@
 package alec_wam.CrystalMod.tiles;
 
+import java.util.EnumMap;
 import java.util.Map;
 
 import net.minecraft.nbt.NBTTagCompound;
@@ -36,7 +37,7 @@ public class TileEntityIOSides extends TileEntityMod implements IMessageHandler 
 	}
 	
 	//TM (Apple Computers Inc.) ;)
-	private final Map<EnumFacing, IOType> ios = Maps.newHashMap();
+	private final EnumMap<EnumFacing, IOType> ios = Maps.newEnumMap(EnumFacing.class);
 		
 
 	

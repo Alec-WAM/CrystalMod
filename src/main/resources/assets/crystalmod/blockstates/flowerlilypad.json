@@ -1,0 +1,15 @@
+{
+    "forge_marker": 1,
+	"defaults": {
+		"model": "crystalmod:lilypad"
+	},
+	"variants": {
+		"inventory": [{}],
+        "normal": [
+            { "model": "crystalmod:lilypad" },
+            { "model": "crystalmod:lilypad", "y": 90 },
+            { "model": "crystalmod:lilypad", "y": 180 },
+            { "model": "crystalmod:lilypad", "y": 270 }
+        ]
+    }
+}

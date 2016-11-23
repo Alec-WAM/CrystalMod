@@ -54,6 +54,10 @@ public class GuiComponentSprite extends BaseComponent {
 	}
 
 	protected void doRender(Minecraft minecraft, int offsetX, int offsetY, int mouseX, int mouseY) {
+		renderSprite(minecraft, x, y, offsetX, offsetY, mouseX, mouseY, icon, texture, r, g, b);
+	}
+	
+	public static void renderSprite(Minecraft minecraft, double x, double y, double offsetX, double offsetY, int mouseX, int mouseY, SpriteData icon, ResourceLocation texture, float r, float g, float b) {
 		if (icon == null) { return; }
 		if (texture != null) minecraft.renderEngine.bindTexture(texture);
 		GlStateManager.color(r, g, b);
@@ -62,8 +66,12 @@ public class GuiComponentSprite extends BaseComponent {
 		boolean flipedX = icon.getU() < 0;
 		float u = flipedX ? (float) -icon.getU() : (float) icon.getU();
 		float v = (float) icon.getV();
-		int width = icon.getWidth();
-		int height = icon.getHeight();
+		double width = icon.getWidth();
+		double height = icon.getHeight();
+		
+		//GuiComponentSpriteButton.drawModalRectWithCustomSizedTexture(offsetX + x, offsetY + y, (float)u, (float)icon.getV(), icon.getWidth(), icon.getHeight(), 256, 256);
+
+		
 	    float f = flipedX ? -(1.0F / 256) : (1.0F / 256);
         float f1 = 1.0F / 256;
         Tessellator tessellator = Tessellator.getInstance();
@@ -80,13 +88,13 @@ public class GuiComponentSprite extends BaseComponent {
 
 	@Override
 	public int getWidth() {
-		if (icon != null) { return icon.getWidth(); }
+		if (icon != null) { return (int)icon.getWidth(); }
 		return 0;
 	}
 
 	@Override
 	public int getHeight() {
-		if (icon != null) { return icon.getHeight(); }
+		if (icon != null) { return (int)icon.getHeight(); }
 		return 0;
 	}
 

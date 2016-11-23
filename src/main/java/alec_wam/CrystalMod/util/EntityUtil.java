@@ -3,20 +3,29 @@ package alec_wam.CrystalMod.util;
 import java.util.List;
 import java.util.Random;
 
+import javax.annotation.Nullable;
+
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
+import com.google.common.base.Predicate;
+import com.google.common.base.Predicates;
 import com.google.common.collect.Lists;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.item.EntityItemFrame;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EntitySelectors;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -254,5 +263,94 @@ public class EntityUtil {
             return true;
         }
     }
+
+	public static ItemStack getItemFromEntity(Entity entity, RayTraceResult ray) {
+		ItemStack stack = null;
+		if(entity !=null){
+			if(entity instanceof EntityItem){
+				stack = ((EntityItem)entity).getEntityItem();
+			}
+			if(stack == null)stack = entity.getPickedResult(ray);
+		}
+		return ItemStack.copyItemStack(stack);
+	}
+
+	public static RayTraceResult getRayTraceEntity(World world, EntityPlayer living, double maxrange, double range) {
+		double d0 = range;
+        Vec3d vec3d = EntityUtil.getEyePosition(living);
+        boolean flag = false;
+        double d1 = d0;
+        
+        if (d0 > maxrange)
+        {
+            flag = true;
+        }
+        RayTraceResult rayTrace = null;
+		Vec3d vec3d1 = living.getLookVec();
+        Vec3d vec3d2 = vec3d.addVector(vec3d1.xCoord * d0, vec3d1.yCoord * d0, vec3d1.zCoord * d0);
+		Entity pointedEntity = null;
+        Vec3d vec3d3 = null;
+        float f = 1.0F;
+        List<Entity> list = world.getEntitiesInAABBexcluding(living, living.getEntityBoundingBox().addCoord(vec3d1.xCoord * d0, vec3d1.yCoord * d0, vec3d1.zCoord * d0).expand(1.0D, 1.0D, 1.0D), Predicates.and(EntitySelectors.NOT_SPECTATING, new Predicate<Entity>()
+        {
+            public boolean apply(@Nullable Entity p_apply_1_)
+            {
+                return p_apply_1_ != null && p_apply_1_.canBeCollidedWith();
+            }
+        }));
+        double d2 = d1;
+
+        for (int j = 0; j < list.size(); ++j)
+        {
+            Entity entity1 = (Entity)list.get(j);
+            AxisAlignedBB axisalignedbb = entity1.getEntityBoundingBox().expandXyz((double)entity1.getCollisionBorderSize());
+            RayTraceResult raytraceresult = axisalignedbb.calculateIntercept(vec3d, vec3d2);
+
+            if (axisalignedbb.isVecInside(vec3d))
+            {
+                if (d2 >= 0.0D)
+                {
+                    pointedEntity = entity1;
+                    vec3d3 = raytraceresult == null ? vec3d : raytraceresult.hitVec;
+                    d2 = 0.0D;
+                }
+            }
+            else if (raytraceresult != null)
+            {
+                double d3 = vec3d.distanceTo(raytraceresult.hitVec);
+
+                if (d3 < d2 || d2 == 0.0D)
+                {
+                    if (entity1.getLowestRidingEntity() == living.getLowestRidingEntity() && !living.canRiderInteract())
+                    {
+                        if (d2 == 0.0D)
+                        {
+                            pointedEntity = entity1;
+                            vec3d3 = raytraceresult.hitVec;
+                        }
+                    }
+                    else
+                    {
+                        pointedEntity = entity1;
+                        vec3d3 = raytraceresult.hitVec;
+                        d2 = d3;
+                    }
+                }
+            }
+        }
+
+        if (pointedEntity != null && flag && vec3d.distanceTo(vec3d3) > maxrange)
+        {
+            pointedEntity = null;
+            rayTrace = new RayTraceResult(RayTraceResult.Type.MISS, vec3d3, (EnumFacing)null, new BlockPos(vec3d3));
+        }
+
+        if (pointedEntity != null && (d2 < d1 || rayTrace == null))
+        {
+        	rayTrace = new RayTraceResult(pointedEntity, vec3d3);
+        }
+        
+        return rayTrace;
+	}
 	
 }

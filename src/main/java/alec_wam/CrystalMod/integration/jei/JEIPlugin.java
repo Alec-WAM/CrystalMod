@@ -11,10 +11,12 @@ import alec_wam.CrystalMod.integration.jei.crystalworkbench.ShapelessCrystalReci
 import alec_wam.CrystalMod.integration.jei.machine.InfuserRecipeCategory;
 import alec_wam.CrystalMod.integration.jei.machine.LiquidizerRecipeCategory;
 import alec_wam.CrystalMod.integration.jei.machine.PressRecipeCategory;
+import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.tiles.machine.crafting.BlockCrystalMachine.MachineType;
 import alec_wam.CrystalMod.tiles.machine.crafting.furnace.ContainerCrystalFurnace;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.BlockPanel.PanelType;
 import alec_wam.CrystalMod.tiles.workbench.ContainerCrystalWorkbench;
+import alec_wam.CrystalMod.util.Lang;
 import mezz.jei.api.BlankModPlugin;
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.IJeiHelpers;
@@ -34,7 +36,7 @@ public class JEIPlugin  extends BlankModPlugin {
 		registry.getRecipeTransferRegistry().addUniversalRecipeTransferHandler(helperEncoder);
 		IJeiHelpers jeiHelpers = registry.getJeiHelpers();
 		IGuiHelper guiHelper = jeiHelpers.getGuiHelper();
-
+		
 		registry.addRecipeCategories(new CrystalWorkbenchCategory(guiHelper));
 		
 		IRecipeTransferRegistry recipeTransferRegistry = registry.getRecipeTransferRegistry();
@@ -73,6 +75,10 @@ public class JEIPlugin  extends BlankModPlugin {
 		jeiHelpers.getItemBlacklist().addItemToBlacklist(new ItemStack(ModBlocks.crystalTreePlantDark));
 		jeiHelpers.getItemBlacklist().addItemToBlacklist(new ItemStack(ModBlocks.cubeBlock));
 		jeiHelpers.getItemBlacklist().addItemToBlacklist(new ItemStack(ModBlocks.cubeCore));
+
+		String desc = "Dropped upon killing an Ender Dragon.";
+		//Lang.localize("jei.desc.wings");
+		registry.addDescription(new ItemStack(ModItems.wings), desc);
 		
 		registry.addAdvancedGuiHandlers(new AdvancedGuiHandlerCrystalMod());
 		registry.addAdvancedGuiHandlers(new AdvancedGuiHandlerPanel());

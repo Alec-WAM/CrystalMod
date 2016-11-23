@@ -18,7 +18,7 @@ import net.minecraftforge.oredict.ShapelessOreRecipe;
 
 public class GuiComponentStandardRecipePage extends BaseComponent {
 
-	private static final ResourceLocation texture = new ResourceLocation("crystalmod:textures/gui/guide.png");
+	public static final ResourceLocation texture = new ResourceLocation("crystalmod:textures/gui/guide.png");
 
 	public static SpriteData iconCraftingGrid = new SpriteData(0, 180, 56, 56);
 	public static SpriteData iconArrow = new SpriteData(60, 197, 48, 15);

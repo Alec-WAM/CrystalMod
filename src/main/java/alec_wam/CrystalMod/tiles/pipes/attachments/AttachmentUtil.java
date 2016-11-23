@@ -1,10 +1,10 @@
 package alec_wam.CrystalMod.tiles.pipes.attachments;
 
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.FaceBakery;
@@ -20,7 +20,7 @@ import alec_wam.CrystalMod.tiles.pipes.estorage.TileEntityPipeEStorage;
 
 public class AttachmentUtil {
 
-	private static final Map<String, AttachmentData> REGISTRY = new HashMap<String, AttachmentData>();
+	private static final Map<String, AttachmentData> REGISTRY = new TreeMap<String, AttachmentData>();
 	
 	public static AttachmentData registerAttachment(String id, AttachmentData attachment){
 		REGISTRY.put(id, attachment);

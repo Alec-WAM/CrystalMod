@@ -2,9 +2,13 @@ package alec_wam.CrystalMod.capability;
 
 import java.awt.Color;
 
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.items.guide.GuiGuideBase;
 
 public class ExtendedPlayer {
 
@@ -16,6 +20,8 @@ public class ExtendedPlayer {
 	public float wingAnimTime;
 	public float prevWingAnimTime;
 	
+	@SideOnly(Side.CLIENT)
+	public GuiGuideBase lastOpenBook;
 	
 	public ExtendedPlayer() {
 	}

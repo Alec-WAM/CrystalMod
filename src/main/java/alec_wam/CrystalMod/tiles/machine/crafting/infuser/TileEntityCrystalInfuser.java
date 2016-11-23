@@ -18,7 +18,9 @@ import alec_wam.CrystalMod.network.packets.PacketTileMessage;
 import alec_wam.CrystalMod.tiles.machine.TileEntityMachine;
 import alec_wam.CrystalMod.tiles.machine.crafting.infuser.CrystalInfusionManager.InfusionMachineRecipe;
 import alec_wam.CrystalMod.tiles.tank.Tank;
+import alec_wam.CrystalMod.util.FluidUtil;
 import alec_wam.CrystalMod.util.ItemUtil;
+import alec_wam.CrystalMod.util.ModLogger;
 
 public class TileEntityCrystalInfuser extends TileEntityMachine {
 
@@ -44,9 +46,18 @@ public class TileEntityCrystalInfuser extends TileEntityMachine {
 	public void update(){
 		super.update();
 		if(!getWorld().isRemote){
-			boolean update = lastSyncedTankFluid !=tank.getFluid() && shouldDoWorkThisTick(5);
-			if(update){
-				lastSyncedTankFluid = tank.getFluid();
+			boolean update = false;
+			
+			if((lastSyncedTankFluid == null && tank.getFluid() !=null) || !FluidUtil.canCombine(lastSyncedTankFluid, tank.getFluid())){
+				update = true;
+			} else {
+				if(lastSyncedTankFluid !=null && lastSyncedTankFluid.amount !=tank.getFluidAmount()){
+					update = true;
+				}
+			}
+			
+			if(update && shouldDoWorkThisTick(5)){
+				lastSyncedTankFluid = tank.getFluid() == null ? null : tank.getFluid().copy();
 				NBTTagCompound nbt = new NBTTagCompound();
 				if(tank.getFluid() !=null)nbt.setTag("Fluid", tank.getFluid().writeToNBT(new NBTTagCompound()));
 				CrystalModNetwork.sendToAllAround(new PacketTileMessage(getPos(), "UpdateFluid", nbt), this);
@@ -145,7 +156,10 @@ public class TileEntityCrystalInfuser extends TileEntityMachine {
             	}
             	
             	public int fill(FluidStack resource, boolean doFill) {
-            		return tank.fill(resource, doFill);
+            		int ret = tank.fill(resource, doFill);
+            		if(ret > 0 && doFill){
+            		}
+            		return ret;
                 }
 
                 public FluidStack drain(int maxEmpty, boolean doDrain) {

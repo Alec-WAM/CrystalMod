@@ -11,6 +11,8 @@ import alec_wam.CrystalMod.tiles.pipes.item.filters.CameraFilterInventory;
 import alec_wam.CrystalMod.tiles.pipes.item.filters.FilterInventory;
 import alec_wam.CrystalMod.tiles.pipes.item.filters.ItemPipeFilter.FilterType;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockLiquid;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -199,6 +201,17 @@ public class FluidUtil {
 	    	}
 	    }
 	    return true;
+	}
+
+	public static boolean isFluidSource(World world, BlockPos pos, IBlockState iblockstate) {
+		Block block = iblockstate.getBlock();
+		if(block instanceof IFluidBlock){
+			return ((IFluidBlock)block).getFilledPercentage(world, pos) == 1.0f;
+		}
+		if(block instanceof BlockLiquid){
+			return ((Integer)iblockstate.getValue(BlockLiquid.LEVEL)).intValue() == 0;
+		}
+		return false;
 	}
 	
 }

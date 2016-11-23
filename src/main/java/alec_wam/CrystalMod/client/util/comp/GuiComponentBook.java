@@ -33,7 +33,7 @@ public class GuiComponentBook extends BaseComponent implements IComponentListene
 	public static SpriteData iconPrevHover = new SpriteData(80, 226, 18, 10);
 	public static SpriteData iconNextHover = new SpriteData(80, 213, 18, 10);
 
-	private static final ResourceLocation texture = new ResourceLocation("crystalmod:textures/gui/guide.png");
+	public static final ResourceLocation texture = new ResourceLocation("crystalmod:textures/gui/guide.png");
 
 	public List<BaseComponent> pages;
 
@@ -83,12 +83,12 @@ public class GuiComponentBook extends BaseComponent implements IComponentListene
 
 	@Override
 	public int getWidth() {
-		return iconPageRight.getHeight() * 2;
+		return (int)iconPageRight.getHeight() * 2;
 	}
 
 	@Override
 	public int getHeight() {
-		return iconPageRight.getHeight();
+		return (int)iconPageRight.getHeight();
 	}
 
 	public void addPage(BaseComponent page) {
@@ -207,9 +207,9 @@ public class GuiComponentBook extends BaseComponent implements IComponentListene
 
 	@Override
 	public void render(Minecraft minecraft, int offsetX, int offsetY, int mouseX, int mouseY) {
-		imgRightBackground.setX(iconPageRight.getWidth());
+		imgRightBackground.setX((int)iconPageRight.getWidth());
 		if (index + 1 < pages.size()) {
-			pages.get(index + 1).setX(iconPageRight.getWidth());
+			pages.get(index + 1).setX((int)iconPageRight.getWidth());
 		}
 		super.render(minecraft, offsetX, offsetY, mouseX, mouseY);
 	}
@@ -229,7 +229,6 @@ public class GuiComponentBook extends BaseComponent implements IComponentListene
 		}
 		if (oldIndex != index) {
 			Minecraft mc = Minecraft.getMinecraft();
-			//mc.getS.playSoundFX("openmodslib:pageturn", 1.0F, 1.0F);
 		}
 		enablePages();
 	}

@@ -44,9 +44,9 @@ public class RenderTileWirelessChest extends TileEntitySpecialRenderer<TileWirel
 				owner = UUIDUtils.fromString(nbtOwner);
 			}
 		}
-		double x = 0;
-	    double y = 0;
-	    double z = 0;
+		double x = -0.5;
+	    double y = -0.5;
+	    double z = -0.5;
 		int facing = 3;
 		/*if(type == TransformType.GUI){
 			facing = 3;

@@ -1,14 +1,18 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "model": "block/cube_all",
+    "model": "cube_all",
 	"textures": { "all": "crystalmod:blocks/machineFrame" },
     "transform": "forge:default-block"
   },
   "variants": {
     "normal": [{}],
     "inventory": [{}],
-	"basic": [{"textures": { "all": "crystalmod:blocks/machineFrame" }}],
-    "ender": [{"textures": { "all": "crystalmod:blocks/machineFrame_ender" }}]
+	"basic": [{
+		"textures": { "all": "crystalmod:blocks/machineFrame" }
+	}],
+    "ender": [{
+		"textures": { "all": "crystalmod:blocks/machineFrame_ender" }
+	}]
   }
 }

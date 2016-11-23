@@ -23,6 +23,7 @@ import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import alec_wam.CrystalMod.blocks.ItemBlockMeta;
+import alec_wam.CrystalMod.tiles.tank.BlockTank.TankType;
 
 public class ItemBlockTank extends ItemBlockMeta {
 
@@ -114,6 +115,16 @@ public class ItemBlockTank extends ItemBlockMeta {
 	      }
 	      FluidTank tank = loadTank(container);
 	      if(tank == null)return 0;
+	      
+	      boolean infi = container.getMetadata() == TankType.CREATIVE.getMeta();
+	      if(infi){
+	    	  FluidStack resourceCreative = resource.copy();
+	    	  resourceCreative.amount = tank.getCapacity();
+	    	  tank.fill(resourceCreative, doFill);
+		      saveTank(container, tank);
+		      return 1;
+	      }
+	      
 	      int ret = tank.fill(resource, doFill);
 	      saveTank(container, tank);
 	      return ret;
@@ -127,6 +138,11 @@ public class ItemBlockTank extends ItemBlockMeta {
 	      }
 	      FluidTank tank = loadTank(container);
 	      if(tank == null)return null;
+	      
+	      boolean infi = container.getMetadata() == TankType.CREATIVE.getMeta();
+	      if(infi){
+	    	  return resource.copy();
+	      }
 	      FluidStack ret = tank.drain(resource, doDrain);
 	      saveTank(container, tank);
 	      return ret;
@@ -140,6 +156,15 @@ public class ItemBlockTank extends ItemBlockMeta {
 	      }
 	      FluidTank tank = loadTank(container);
 	      if(tank == null)return null;
+	      
+	      boolean infi = container.getMetadata() == TankType.CREATIVE.getMeta();
+	      if(infi){
+	    	  if(tank.getFluid() == null)return null;
+	    	  FluidStack fluid = tank.getFluid().copy();
+	    	  fluid.amount = maxDrain;
+	    	  return fluid;
+	      }
+	      
 	      FluidStack ret = tank.drain(maxDrain, doDrain);
 	      saveTank(container, tank);
 	      return ret;

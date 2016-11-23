@@ -19,6 +19,7 @@ import alec_wam.CrystalMod.blocks.crops.BlockCrystalReed;
 import alec_wam.CrystalMod.blocks.crops.BlockCrystalSapling;
 import alec_wam.CrystalMod.blocks.crops.BlockCrystalTreePlant;
 import alec_wam.CrystalMod.blocks.crops.BlockCrystalPlant.PlantType;
+import alec_wam.CrystalMod.blocks.crops.BlockFlowerLilyPad;
 import alec_wam.CrystalMod.blocks.glass.BlockCrystalGlass;
 import alec_wam.CrystalMod.blocks.rail.BlockReinforcedRail;
 import alec_wam.CrystalMod.tiles.cauldron.BlockCrystalCauldron;
@@ -118,6 +119,7 @@ public class ModBlocks {
 	public static BlockCrystalIngot crystalIngot;
 	public static BlockCrystalGlass crystalGlass;
 	public static BlockCrystalReed crystalReeds;
+	public static BlockFlowerLilyPad flowerLilypad;
 	public static BlockCrystalWorkbench crystalWorkbench;
 	public static BlockCrystalChest crystalChest;
 	public static BlockWirelessChest wirelessChest;
@@ -176,6 +178,9 @@ public class ModBlocks {
 		
 		crystalReeds = new BlockCrystalReed();
 		registerBlock(crystalReeds, "crystalreedblock");
+		
+		flowerLilypad = new BlockFlowerLilyPad();
+		registerBlock(flowerLilypad, "flowerlilypad");
 		
 		crystalWorkbench = new BlockCrystalWorkbench();
 		registerEnumBlock(crystalWorkbench, "crystalworkbench");

@@ -70,10 +70,15 @@ public void drawBackground(int x, int y, float f)
         tessellator.draw();
       }
     }
-    GlStateManager.disableBlend();
+    //GlStateManager.disableBlend();
 }
 
-public void drawForeground(int x, int y) {}
+public void drawForeground(int x, int y) {
+
+    GlStateManager.color(1, 1, 1, 1);
+    Minecraft.getMinecraft().renderEngine.bindTexture(texture);
+    drawTexturedModalRect(posX, posY, 24, 0, sizeX, sizeY);
+}
 }
 
 

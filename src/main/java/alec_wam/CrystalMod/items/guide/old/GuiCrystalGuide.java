@@ -1,4 +1,4 @@
-package alec_wam.CrystalMod.items.guide;
+package alec_wam.CrystalMod.items.guide.old;
 
 import net.minecraft.item.ItemStack;
 import alec_wam.CrystalMod.client.util.comp.BaseComponent;
@@ -8,16 +8,6 @@ import alec_wam.CrystalMod.client.util.comp.book.SectionPage;
 
 
 public class GuiCrystalGuide extends GuiGuideBase {
-	private GuiComponentLabel lblBlocks;
-	private GuiComponentLabel lblItems;
-	private GuiComponentLabel lblEnt;
-	private GuiComponentLabel lblWorkbench;
-	
-	private int itemsIndex = 0;
-	private int blocksIndex = 0;
-	private int entIndex = 0;
-	private int workbenchIndex = 0;
-	
 	public GuiCrystalGuide(){
 		
 	}
@@ -26,13 +16,13 @@ public class GuiCrystalGuide extends GuiGuideBase {
 	}
 	
 	public void addCompsToFront(BlankPage contentsPage){
-		lblBlocks = new GuiComponentLabel(27, 90, "Blocks");
+		GuiComponentLabel lblBlocks = new GuiComponentLabel(27, 90, "Blocks");
 		lblBlocks.addListener(this);
-		lblItems = new GuiComponentLabel(27, 105, "Items");
+		GuiComponentLabel lblItems = new GuiComponentLabel(27, 105, "Items");
 		lblItems.addListener(this);
-		lblEnt = new GuiComponentLabel(27, 120, "Entities");
+		GuiComponentLabel lblEnt = new GuiComponentLabel(27, 120, "Entities");
 		lblEnt.addListener(this);
-		lblWorkbench = new GuiComponentLabel(27, 135, "Workbench");
+		GuiComponentLabel lblWorkbench = new GuiComponentLabel(27, 135, "Workbench");
 		lblWorkbench.addListener(this);
 		
 
@@ -43,7 +33,7 @@ public class GuiCrystalGuide extends GuiGuideBase {
 	}
 	
 	public void addBookPages(){
-		blocksIndex = book.getNumberOfPages();
+		/*blocksIndex = book.getNumberOfPages();
 		
 		book.addPage(new BlankPage());
 		book.addPage(new SectionPage("Blocks"));
@@ -77,12 +67,12 @@ public class GuiCrystalGuide extends GuiGuideBase {
 		
 		book.addPage(new BlankPage());
 		book.addPage(new SectionPage("Workbench"));
-		book.addPages(GuidePages.workbenchData);
+		book.addPages(GuidePages.workbenchData);*/
 	}
 	
 	@Override
 	public void componentMouseDown(BaseComponent component, int offsetX, int offsetY, int button) {
-		if (component.equals(lblBlocks)) {
+		/*if (component.equals(lblBlocks)) {
 			book.gotoIndex(blocksIndex);
 		}else if (component.equals(lblItems)) {
 			book.gotoIndex(itemsIndex);
@@ -90,7 +80,7 @@ public class GuiCrystalGuide extends GuiGuideBase {
 			book.gotoIndex(entIndex);
 		} else if (component.equals(lblWorkbench)) {
 			book.gotoIndex(workbenchIndex);
-		} 
+		} */
 	}
 
 }

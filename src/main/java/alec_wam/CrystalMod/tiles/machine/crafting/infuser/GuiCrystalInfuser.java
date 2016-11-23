@@ -33,14 +33,14 @@ public class GuiCrystalInfuser extends GuiElementContainer{
 		ElementEnergy energyElement = new ElementEnergy(this, 8, 22, this.tileMachine.getEnergyStorage());
 		addElement(energyElement);
 		this.progress = ((ElementDualScaled)addElement(new ElementDualScaled(this, 103, 33).setMode(2).setSize(24, 16).setTexture("crystalmod:textures/gui/elements/Progress_Arrow_Left.png", 48, 16)));
-		this.progress2 = ((ElementFluidScaled)addElement(new ElementFluidScaled(this, 53, 34).setSize(24, 16)));
+		this.progress2 = ((ElementFluidScaled)addElement(new ElementFluidScaled(this, 49, 34).setSize(24, 16).setTexture("crystalmod:textures/gui/elements/Progress_Fluid_Right.png", 48, 16)));
 
 	}
 	
 	public void drawGuiContainerForegroundLayer(int par1, int par2){
 		super.drawGuiContainerForegroundLayer(par1, par2);
-		RenderUtil.renderGuiTank(tileMachine.tank, 31, 22, zLevel, 14, 42);
-		if(this.isPointInRegion(31, 22, 14, 42, par1, par2)){
+		RenderUtil.renderGuiTank(tileMachine.tank, 32, 23, zLevel, 12, 40);
+		if(this.isPointInRegion(32, 23, 12, 40, par1, par2)){
 			List<String> list = Lists.newArrayList();
 			if(tileMachine.tank !=null){
 				if(tileMachine.tank.getFluid() !=null){

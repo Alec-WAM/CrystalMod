@@ -8,6 +8,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
 import alec_wam.CrystalMod.blocks.BlockCrystalFluid;
 import alec_wam.CrystalMod.util.EntityUtil;
+import alec_wam.CrystalMod.util.FluidUtil;
 
 public class BlockFluidEnder extends BlockCrystalFluid {
 
@@ -18,7 +19,7 @@ public class BlockFluidEnder extends BlockCrystalFluid {
 	@Override
 	public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entityIn)
     {
-		if(!worldIn.isRemote){
+		if(!worldIn.isRemote && FluidUtil.isFluidSource(worldIn, pos, state)){
 			EntityUtil.randomTeleport(entityIn, 16);
 		}
     }

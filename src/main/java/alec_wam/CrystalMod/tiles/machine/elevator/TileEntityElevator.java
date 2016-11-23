@@ -95,7 +95,7 @@ public class TileEntityElevator extends TileEntityMod implements ITickable {
     public void update() {
         if (!worldObj.isRemote) {
             if (isMoving()) {
-            	markDirtyClient();
+            	markDirty();
 
                 //TODO Energy
                 /*int rfNeeded = (int) (ElevatorConfiguration.rfPerTickMoving * (3.0f - getInfusedFactor()) / 3.0f);
@@ -143,8 +143,6 @@ public class TileEntityElevator extends TileEntityMod implements ITickable {
 	        boolean on = Minecraft.getMinecraft().thePlayer.getEntityBoundingBox().intersectsWith(aabb);
 	        if (on) {
 	            player.setPosition(player.posX, movingY + 1, player.posZ);
-	            player.onGround = true;
-	            player.fallDistance = 0;
 	        }
         }
     }
@@ -233,7 +231,7 @@ public class TileEntityElevator extends TileEntityMod implements ITickable {
     private void moveEntityOnPlatform(boolean stop, double offset, Entity entity) {
         if (entity instanceof EntityPlayer) {
             double dy = 1;
-            //EntityPlayer player = (EntityPlayer) entity;
+            EntityPlayer player = (EntityPlayer) entity;
             if (stop) {
                 //BuffProperties.disableElevatorMode(player);
                 entity.posY = movingY + dy;
@@ -317,7 +315,7 @@ public class TileEntityElevator extends TileEntityMod implements ITickable {
         }
         // Current level will have to be recalculated
         cachedCurrent = -1;
-        //markDirtyClient();
+        markDirtyClient();
     }
     
     private void clearMovement() {
@@ -388,6 +386,8 @@ public class TileEntityElevator extends TileEntityMod implements ITickable {
         positions.clear();
 
         getBounds(start);
+        
+        markDirtyClient();
     }
 
  	// Always called on controller TE (bottom one)

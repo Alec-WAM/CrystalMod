@@ -18,6 +18,7 @@ import alec_wam.CrystalMod.client.model.dynamic.DynamicBaseModel;
 import alec_wam.CrystalMod.client.model.dynamic.ICustomItemRenderer;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ProfileUtil;
+import alec_wam.CrystalMod.util.client.RenderUtil;
 
 public class ItemRenderMobEssence implements ICustomItemRenderer {
 
@@ -72,15 +73,18 @@ public class ItemRenderMobEssence implements ICustomItemRenderer {
 		boolean atrib = false;
 		GlStateManager.pushMatrix();
 		if(atrib)GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
+		
 		GlStateManager.scale(0.5F, 0.5F, 0.5F);
 
+		float partialTicks = 0.0f;
+		
 		if(type == null){
 			GlStateManager.pushMatrix();
 			GlStateManager.disableCull();
 			GlStateManager.enableBlend();
 			GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 			GlStateManager.pushAttrib();
-			Minecraft.getMinecraft().getRenderManager().doRenderEntity(entity, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F, true);
+			Minecraft.getMinecraft().getRenderManager().doRenderEntity(entity, 0.0D, 0.0D, 0.0D, 0.0F, partialTicks, true);
 			GlStateManager.popAttrib();
 			GlStateManager.popMatrix();
 			GlStateManager.enableBlend();
@@ -105,7 +109,7 @@ public class ItemRenderMobEssence implements ICustomItemRenderer {
 			GlStateManager.enableBlend();
 			GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 			GlStateManager.pushAttrib();
-			Minecraft.getMinecraft().getRenderManager().doRenderEntity(entity, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F, true);
+			Minecraft.getMinecraft().getRenderManager().doRenderEntity(entity, 0.0D, 0.0D, 0.0D, 0.0F, partialTicks, true);
 			GlStateManager.popAttrib();
 			
 			GlStateManager.enableCull();
@@ -131,7 +135,7 @@ public class ItemRenderMobEssence implements ICustomItemRenderer {
 			}
 			GlStateManager.enableBlend();
 			GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-			Minecraft.getMinecraft().getRenderManager().doRenderEntity(entity, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F, true);
+			Minecraft.getMinecraft().getRenderManager().doRenderEntity(entity, 0.0D, 0.0D, 0.0D, 0.0F, partialTicks, true);
 			GlStateManager.disableBlend();
 			
 			GlStateManager.enableLighting();
@@ -156,7 +160,7 @@ public class ItemRenderMobEssence implements ICustomItemRenderer {
 				GlStateManager.rotate(180, 0, 1, 0);
 				GlStateManager.translate(0, -1, 0.5);
 			}
-			Minecraft.getMinecraft().getRenderManager().doRenderEntity(entity, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F, true);
+			Minecraft.getMinecraft().getRenderManager().doRenderEntity(entity, 0.0D, 0.0D, 0.0D, 0.0F, partialTicks, true);
 			GlStateManager.popMatrix();
 		}
 		else if(type == TransformType.GROUND){
@@ -166,7 +170,7 @@ public class ItemRenderMobEssence implements ICustomItemRenderer {
 			GlStateManager.translate(0, -1, 0);
 			GlStateManager.enableBlend();
 			GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-			Minecraft.getMinecraft().getRenderManager().doRenderEntity(entity, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F, true);
+			Minecraft.getMinecraft().getRenderManager().doRenderEntity(entity, 0.0D, 0.0D, 0.0D, 0.0F, partialTicks, true);
 			GlStateManager.disableBlend();
 			GlStateManager.enableLighting();
             GlStateManager.enableBlend();
@@ -180,7 +184,7 @@ public class ItemRenderMobEssence implements ICustomItemRenderer {
 			GlStateManager.translate(offset.xCoord, offset.yCoord, offset.zCoord);
 			GlStateManager.enableBlend();
 			GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-			Minecraft.getMinecraft().getRenderManager().doRenderEntity(entity, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F, true);
+			Minecraft.getMinecraft().getRenderManager().doRenderEntity(entity, 0.0D, 0.0D, 0.0D, 0.0F, partialTicks, true);
 			GlStateManager.disableBlend();
 			GlStateManager.enableLighting();
             GlStateManager.enableBlend();

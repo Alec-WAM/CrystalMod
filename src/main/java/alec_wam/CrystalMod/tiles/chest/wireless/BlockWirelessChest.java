@@ -104,8 +104,7 @@ public class BlockWirelessChest extends BlockContainer implements ICustomModel
 		String color1 = ItemUtil.getDyeName(WirelessChestHelper.getDye1(code));
 		String color2 = ItemUtil.getDyeName(WirelessChestHelper.getDye2(code));
 		String color3 = ItemUtil.getDyeName(WirelessChestHelper.getDye3(code));
-		tooltip.add("Code: " + color1 + " " + color2 + " " + color3);
-		tooltip.add("("+code+")");
+		tooltip.add("Code: " + color1 + " / " + color2 + " / " + color3);
     }
     
     @Override

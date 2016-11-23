@@ -1,90 +1,75 @@
 package alec_wam.CrystalMod.api.guide;
 
+import java.util.List;
+
+import alec_wam.CrystalMod.items.guide.GuiGuideChapter;
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.util.List;
-
 public abstract class GuidePage {
 
-	public String unlocalizedName;
-	public boolean skipRegistry;
+	private String id;
+	private GuideChapter chapter;
 
-	public GuidePage(String unlocalizedName) {
-		this.unlocalizedName = unlocalizedName;
+	public GuidePage(String id) {
+		this.id = id;
 	}
 
-	/**
-	 * Does the rendering for this page.
-	 * @param gui The active GuiScreen
-	 * @param mx The mouse's relative X position.
-	 * @param my The mouse's relative Y position.
-	 */
-	@SideOnly(Side.CLIENT)
-	public abstract void renderScreen(IGuiGuideEntry gui, int mx, int my);
-
-	/**
-	 * Called per update tick. Non gui-sensitive version, kept for backwards compatibility only.
-	 */
-	@SideOnly(Side.CLIENT)
-	public void updateScreen() {}
-
-	/**
-	 * Called per update tick. Feel free to override fully, the
-	 * call to updateScreen() is for backwards compatibility.
-	 */
-	@SideOnly(Side.CLIENT)
-	public void updateScreen(IGuiGuideEntry gui) {
-		updateScreen();
+	public String getId() {
+		return id;
 	}
 
-	/**
-	 * Called when this page is opened, be it via initGui() or when the player changes page.
-	 * You can add buttons and whatever you'd do on initGui() here.
-	 */
-	@SideOnly(Side.CLIENT)
-	public void onOpened(IGuiGuideEntry gui) {}
-
-	/**
-	 * Called when this page is opened, be it via closing the gui or when the player changes page.
-	 * Make sure to dispose of anything you don't use any more, such as buttons in the gui's buttonList.
-	 */
-	@SideOnly(Side.CLIENT)
-	public void onClosed(IGuiGuideEntry gui) {}
-
-	/**
-	 * Called when a button is pressed, equivalent to GuiScreen.actionPerformed.
-	 */
-	@SideOnly(Side.CLIENT)
-	public void onActionPerformed(IGuiGuideEntry gui, GuiButton button) {}
-
-	/**
-	 * Called when a key is pressed.
-	 */
-	@SideOnly(Side.CLIENT)
-	public void onKeyPressed(char c, int key) {}
-
-	/**
-	 * Called when {@link GuideEntry#setGuidePages(GuidePage...)} is called.
-	 */
-	public void onPageAdded(GuideEntry entry, int index) {}
-
-	/**
-	 * Shows the list of recipes present in this page for display in the category
-	 * page. Can return null for an entry with no recipes.
-	 */
-	public List<ItemStack> getDisplayedRecipes() {
-		return null;
+	public GuideChapter getChapter() {
+		return chapter;
 	}
 
-	public String getUnlocalizedName() {
-		return unlocalizedName;
+	public void setChapter(GuideChapter chapter) {
+		this.chapter = chapter;
 	}
+	
+	@SideOnly(Side.CLIENT)
+    public void mouseClicked(GuiGuideChapter gui, int mouseX, int mouseY, int mouseButton){
 
-	public GuidePage setSkipRegistry() {
-		skipRegistry = true;
-		return this;
+    }
+	
+	@SideOnly(Side.CLIENT)
+    public void mouseReleased(GuiGuideChapter gui, int mouseX, int mouseY, int state){
+
+    }
+	
+	@SideOnly(Side.CLIENT)
+    public void mouseClickMove(GuiGuideChapter gui, int mouseX, int mouseY, int clickedMouseButton, long timeSinceLastClick){
+
+    }
+	
+	@SideOnly(Side.CLIENT)
+    public void actionPerformed(GuiGuideChapter gui, GuiButton button){
+
+    }
+	
+	@SideOnly(Side.CLIENT)
+    public void initGui(GuiGuideChapter gui, int startX, int startY){
+
+    }
+	
+	@SideOnly(Side.CLIENT)
+    public void updateScreen(GuiGuideChapter gui, int startX, int startY, int timer){
+
+    }
+	
+	@SideOnly(Side.CLIENT)
+	public void drawBackground(GuiGuideChapter gui, int startX, int startY, int mouseX, int mouseY, float partialTicks){
+
 	}
+	
+	@SideOnly(Side.CLIENT)
+    public void drawForeground(GuiGuideChapter gui, int startX, int startY, int mouseX, int mouseY, float partialTicks){
+
+    }
+	
+	public boolean isOnLeft(){
+        return (this.chapter.getIndex(this)+1)%2 != 0;
+	}
+	
 }

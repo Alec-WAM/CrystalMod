@@ -1109,7 +1109,7 @@ public class ItemUtil {
 
 	    for(int i = 0; i < nbttaglist.tagCount(); ++i) {
 	      NBTTagCompound itemTag = nbttaglist.getCompoundTagAt(i);
-	      int slot = itemTag.getByte("Slot") & 255;
+	      int slot = itemTag.getByte("Slot");
 
 	      if(slot >= 0 && slot < inventory.getSizeInventory()) {
 	        inventory.setInventorySlotContents(slot, ItemStack.loadItemStackFromNBT(itemTag));

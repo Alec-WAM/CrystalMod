@@ -2,14 +2,24 @@ package alec_wam.CrystalMod.items.guide;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import alec_wam.CrystalMod.Config;
+import alec_wam.CrystalMod.api.CrystalModAPI;
+import alec_wam.CrystalMod.api.guide.GuideChapter;
+import alec_wam.CrystalMod.api.guide.GuideIndex;
+import alec_wam.CrystalMod.api.guide.GuidePage;
 import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.blocks.BlockCrystal.CrystalBlockType;
 import alec_wam.CrystalMod.blocks.BlockCrystalIngot.CrystalIngotBlockType;
@@ -25,6 +35,10 @@ import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.items.ItemCrystal.CrystalType;
 import alec_wam.CrystalMod.items.ItemIngot.IngotType;
 import alec_wam.CrystalMod.items.ItemMetalPlate.PlateType;
+import alec_wam.CrystalMod.items.guide.page.PageCrafting;
+import alec_wam.CrystalMod.items.guide.page.PageFurnace;
+import alec_wam.CrystalMod.items.guide.page.PageIcon;
+import alec_wam.CrystalMod.items.guide.page.PageText;
 import alec_wam.CrystalMod.tiles.chest.CrystalChestType;
 import alec_wam.CrystalMod.tiles.machine.crafting.BlockCrystalMachine.MachineType;
 import alec_wam.CrystalMod.tiles.machine.power.engine.BlockEngine.EngineType;
@@ -36,9 +50,11 @@ import alec_wam.CrystalMod.tiles.tank.BlockTank;
 import alec_wam.CrystalMod.tiles.tank.BlockTank.TankType;
 import alec_wam.CrystalMod.tiles.workbench.BlockCrystalWorkbench.WorkbenchType;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
+import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.Lang;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 public class GuidePages {
 
@@ -51,6 +67,49 @@ public class GuidePages {
 	public static final List<BaseComponent> eStorageItemData = new ArrayList<BaseComponent>();
 	
 	public static void createPages(){
+		CrystalModAPI.GUIDE_INDEXES.clear();
+		CrystalModAPI.BLOCKS = CrystalModAPI.regiterGuideIndex(new GuideIndex("blocks"));
+		CrystalModAPI.ITEMS = CrystalModAPI.regiterGuideIndex(new GuideIndex("items"));
+		CrystalModAPI.ENTITES = CrystalModAPI.regiterGuideIndex(new GuideIndex("entites"));
+		CrystalModAPI.WORKBENCH = CrystalModAPI.regiterGuideIndex(new GuideIndex("workbench"));
+		CrystalModAPI.MISC = CrystalModAPI.regiterGuideIndex(new GuideIndex("misc"));
+		
+		CrystalType[] crystalArray = new CrystalType[]{CrystalType.BLUE, CrystalType.RED, CrystalType.GREEN, CrystalType.DARK};
+		List<ItemStack> crystalFullList = getEnumItems(ModItems.crystals, crystalArray);
+		
+		{
+			List<ItemStack> oreList = getEnumBlocks(ModBlocks.crystalOre, CrystalOreType.values());
+			Map<String, List<?>> lookUp = Maps.newHashMap();
+			lookUp.put("0", oreList);
+			CrystalModAPI.BLOCKS.registerChapter(new GuideChapter("crystalore", new PageIcon("0", oreList), new PageFurnace("smelt", crystalFullList)).setDisplayObject(oreList).setLookUpData(lookUp));
+		}
+		
+		CrystalBlockType[] normalArray = new CrystalBlockType[]{CrystalBlockType.BLUE, CrystalBlockType.RED, CrystalBlockType.GREEN, CrystalBlockType.DARK};
+		CrystalBlockType[] chisledArray = new CrystalBlockType[]{CrystalBlockType.BLUE_CHISELED, CrystalBlockType.RED_CHISELED, CrystalBlockType.GREEN_CHISELED, CrystalBlockType.DARK_CHISELED};
+		CrystalBlockType[] brickArray = new CrystalBlockType[]{CrystalBlockType.BLUE_BRICK, CrystalBlockType.RED_BRICK, CrystalBlockType.GREEN_BRICK, CrystalBlockType.DARK_BRICK};
+		List<ItemStack> normalBlocksDisplayList = getEnumBlocks(ModBlocks.crystal, new CrystalBlockType[]{CrystalBlockType.BLUE, CrystalBlockType.BLUE_CHISELED, CrystalBlockType.BLUE_BRICK});
+		GuideChapter chapterCrystalBlock = new GuideChapter("crystalblock", new PageCrafting("normal", getEnumBlocks(ModBlocks.crystal, normalArray)), new PageIcon("chiseled", getEnumBlocks(ModBlocks.crystal, chisledArray)), new PageCrafting("brick", getEnumBlocks(ModBlocks.crystal, brickArray))).setDisplayObject(normalBlocksDisplayList);
+		CrystalModAPI.BLOCKS.registerChapter(chapterCrystalBlock);
+		
+		List<ItemStack> ingotBlockList = getEnumBlocks(ModBlocks.crystalIngot, CrystalIngotBlockType.values());
+		CrystalModAPI.BLOCKS.registerChapter(new GuideChapter("crystalingotblock", new PageCrafting("main", ingotBlockList)).setDisplayObject(ingotBlockList));
+		
+		List<ItemStack> glassList = getEnumBlocks(ModBlocks.crystalGlass, new GlassType[]{GlassType.BLUE, GlassType.RED, GlassType.GREEN, GlassType.DARK});
+		CrystalModAPI.BLOCKS.registerChapter(new GuideChapter("crystalglass", new PageCrafting("main", glassList)).setDisplayObject(glassList));
+		
+		
+		CrystalType[] nuggetArray = new CrystalType[]{CrystalType.BLUE_NUGGET, CrystalType.RED_NUGGET, CrystalType.GREEN_NUGGET, CrystalType.DARK_NUGGET};
+		CrystalType[] shardArray = new CrystalType[]{CrystalType.BLUE_SHARD, CrystalType.RED_SHARD, CrystalType.GREEN_SHARD, CrystalType.DARK_SHARD};
+
+		List<ItemStack> crystalList = getEnumItems(ModItems.crystals, new CrystalType[] {CrystalType.BLUE, CrystalType.BLUE_NUGGET, CrystalType.BLUE_SHARD});
+		List<ItemStack> nuggetList = getEnumItems(ModItems.crystals, nuggetArray);
+		GuideChapter chapterCrystals = new GuideChapter("crystals", new PageIcon("shards", getEnumItems(ModItems.crystals, shardArray)), new PageIcon("nuggets", nuggetList), new PageFurnace("smeltNugget", nuggetList), new PageIcon("crystal", crystalFullList), new PageFurnace("smeltCrystal", crystalFullList)).setDisplayObject(crystalList);
+		CrystalModAPI.ITEMS.registerChapter(chapterCrystals);
+		
+		IngotType[] ingotArray = new IngotType[]{IngotType.BLUE, IngotType.RED, IngotType.GREEN, IngotType.DARK};
+		List<ItemStack> ingotList = getEnumItems(ModItems.ingots, ingotArray);
+		CrystalModAPI.ITEMS.registerChapter(new GuideChapter("crystalingots", new PageIcon("0", ingotList), new PageFurnace("smelt", ingotList)).setDisplayObject(ingotList));
+
 		blockData.clear();
 		itemData.clear();
 		entityData.clear();
@@ -60,13 +119,11 @@ public class GuidePages {
 		pageOre.setDescription(String.format(pageOre.getDescription(), ""+Config.oreMinimumHeight, ""+Config.oreMaximumHeight), true);
 		blockData.add(pageOre);
 		
-		CrystalBlockType[] normalArray = new CrystalBlockType[]{CrystalBlockType.BLUE, CrystalBlockType.RED, CrystalBlockType.GREEN, CrystalBlockType.DARK, CrystalBlockType.PURE};
 		blockData.add(getRecipePage("crystalBlock", getEnumBlocks(ModBlocks.crystal, normalArray))); 
 		
-		CrystalBlockType[] chisledArray = new CrystalBlockType[]{CrystalBlockType.BLUE_CHISELED, CrystalBlockType.RED_CHISELED, CrystalBlockType.GREEN_CHISELED, CrystalBlockType.DARK_CHISELED, CrystalBlockType.PURE_CHISELED};
+		
 		blockData.add(getRecipePage("crystalBlockChisled", getEnumBlocks(ModBlocks.crystal, chisledArray))); 
 		
-		CrystalBlockType[] brickArray = new CrystalBlockType[]{CrystalBlockType.BLUE_BRICK, CrystalBlockType.RED_BRICK, CrystalBlockType.GREEN_BRICK, CrystalBlockType.DARK_BRICK, CrystalBlockType.PURE_BRICK};
 		blockData.add(getRecipePage("crystalBlockBrick", getEnumBlocks(ModBlocks.crystal, brickArray))); 
 		
 		blockData.add(getRecipePage("crystalIngotBlock", getEnumBlocks(ModBlocks.crystalIngot, CrystalIngotBlockType.values()))); 
@@ -126,13 +183,11 @@ public class GuidePages {
 		//ITEMS
 		
 		//TODO Add Furnace Page
-		CrystalType[] crystalArray = new CrystalType[]{CrystalType.BLUE, CrystalType.RED, CrystalType.GREEN, CrystalType.DARK};
 		itemData.add(getBasicPage("crystal", getEnumItems(ModItems.crystals, crystalArray)));
 		GuiComponentStandardRecipePage pagePureCrystal = getRecipePage("crystalPure", new ItemStack(ModItems.crystals, 1, CrystalType.PURE.getMetadata()));
 		if(Loader.isModLoaded("tconstruct"))pagePureCrystal.setDescription(String.format(pagePureCrystal.getDescription(), Lang.localize("guide.page.crystalPure.desc2")), true);
 		itemData.add(pagePureCrystal);
 		
-		IngotType[] ingotArray = new IngotType[]{IngotType.BLUE, IngotType.RED, IngotType.GREEN, IngotType.DARK, IngotType.PURE};
 		itemData.add(getBasicPage("crystalIngot", getEnumItems(ModItems.ingots, ingotArray)));
 		itemData.add(getBasicPage("darkIronIngot", new ItemStack(ModItems.ingots, 1, IngotType.DARK_IRON.getMetadata())));
 		//TODO Add Press Page
@@ -166,6 +221,62 @@ public class GuidePages {
 		itemData.add(getBasicPage("mobEssence", ItemMobEssence.createStack("Pig")));
 		
 		initEStorage();
+	}
+	
+	public static class LookupResult {
+		
+		private final GuideChapter chapter;
+		private final GuidePage page;
+		
+		public LookupResult(GuideChapter chapter, GuidePage page){
+			this.chapter = chapter;
+			this.page = page;
+		}
+
+		public GuideChapter getChapter() {
+			return chapter;
+		}
+
+		public GuidePage getPage() {
+			return page;
+		}
+		
+	}
+	
+	public static LookupResult getGuideData(EntityPlayer player, Object object){
+		GuideChapter finalChapter = null;
+		GuidePage finalPage = null;
+		all : for(GuideChapter chapter : CrystalModAPI.GUIDE_CHAPTERS){
+			Map<String, List<?>> lookUpData = chapter.getLookUpData();
+			for(Entry<String, List<?>> entry : lookUpData.entrySet()){
+				GuidePage page = chapter.getPage(entry.getKey());
+				if(page !=null){
+					List<?> objects = entry.getValue();
+					for(Object obj : objects){
+						if(obj instanceof ItemStack){
+							if(object instanceof ItemStack){
+								if(ItemUtil.canCombine((ItemStack)obj, (ItemStack)object)){
+									finalChapter = chapter;
+									finalPage = page;
+									break all;
+								}
+							}
+						}
+						if(obj instanceof String){
+							if(object instanceof ItemStack){
+								if(ItemUtil.itemStackMatchesOredict((ItemStack)object, (String)obj)){
+									finalChapter = chapter;
+									finalPage = page;
+									break all;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		return new LookupResult(finalChapter, finalPage);
 	}
 	
 	public static void initEStorage(){

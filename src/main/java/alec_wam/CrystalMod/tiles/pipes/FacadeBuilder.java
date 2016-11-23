@@ -76,6 +76,7 @@ class FacadeBuilder
 	{
 
 		CoverData facadeState = facades.get( side );
+		if(facadeState == null)return;
 		IBlockState blockState = facadeState.getBlockState();
 
 		builder.setDrawFaces( EnumSet.allOf( EnumFacing.class ) );
@@ -114,7 +115,7 @@ class FacadeBuilder
 		int color = 0xffffff;
 		try
 		{
-			blockColors.func_189991_a( blockState );
+			color = blockColors.func_189991_a( blockState );
 		}
 		catch( final Throwable ignored )
 		{

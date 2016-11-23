@@ -161,7 +161,7 @@ public class ItemMinecartRender implements ICustomItemRenderer {
             GlStateManager.enableBlend();
             GlStateManager.enableColorMaterial();
 			GlStateManager.popMatrix();
-		} else if(type == TransformType.FIXED){
+		} else if(type == TransformType.FIXED || type == null){
 			GlStateManager.pushMatrix();
 			float scale = 3.0f;
 			GlStateManager.scale(scale, scale, scale);

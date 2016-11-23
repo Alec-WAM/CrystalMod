@@ -3,6 +3,7 @@ package alec_wam.CrystalMod.crafting;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import alec_wam.CrystalMod.blocks.BlockCrystalLog.WoodType;
 import alec_wam.CrystalMod.blocks.ModBlocks;
@@ -17,6 +18,8 @@ import alec_wam.CrystalMod.crafting.recipes.ShapedRecipeNBT;
 import alec_wam.CrystalMod.crafting.recipes.ShapelessRecipeNBT;
 import alec_wam.CrystalMod.crafting.recipes.UpgradeItemRecipe;
 import alec_wam.CrystalMod.entities.minecarts.chests.wireless.RecipeWirelessChestMinecart;
+import alec_wam.CrystalMod.entities.minions.ItemMinion;
+import alec_wam.CrystalMod.entities.minions.MinionType;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.items.ItemCrystal.CrystalType;
 import alec_wam.CrystalMod.items.ItemIngot.IngotType;
@@ -35,6 +38,7 @@ import alec_wam.CrystalMod.tiles.machine.crafting.infuser.CrystalInfusionManager
 import alec_wam.CrystalMod.tiles.machine.crafting.liquidizer.LiquidizerRecipeManager;
 import alec_wam.CrystalMod.tiles.machine.crafting.press.PressRecipeManager;
 import alec_wam.CrystalMod.tiles.machine.elevator.ItemMiscCard;
+import alec_wam.CrystalMod.tiles.machine.enderbuffer.BlockEnderBuffer;
 import alec_wam.CrystalMod.tiles.machine.power.battery.BlockBattery.BatteryType;
 import alec_wam.CrystalMod.tiles.machine.power.converter.BlockPowerConverter.ConverterType;
 import alec_wam.CrystalMod.tiles.machine.power.engine.BlockEngine.EngineType;
@@ -48,12 +52,14 @@ import alec_wam.CrystalMod.tiles.tank.BlockTank.TankType;
 import alec_wam.CrystalMod.tiles.workbench.BlockCrystalWorkbench.WorkbenchType;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemUtil;
+import alec_wam.CrystalMod.util.UUIDUtils;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockSlab;
+import net.minecraft.block.BlockFlower.EnumFlowerType;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.EnumDyeColor;
@@ -62,6 +68,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.ShapedRecipes;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStack;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -195,6 +202,7 @@ public class ModCrafting {
 		addShapedOreRecipe(new ItemStack(ModBlocks.crystalGlass, 8, GlassType.DARK.getMeta()), new Object[]{"GGG", "GCG", "GGG", 'G', "blockGlass", 'C', darkIngot});
 		addShapedOreRecipe(new ItemStack(ModBlocks.crystalGlass, 8, GlassType.PURE.getMeta()), new Object[]{"GGG", "GCG", "GGG", 'G', "blockGlass", 'C', pureIngot});
 
+		addShapelessRecipe(new ItemStack(ModBlocks.flowerLilypad), new Object[]{Blocks.WATERLILY, new ItemStack(Blocks.RED_FLOWER, 1, EnumFlowerType.BLUE_ORCHID.getMeta())});
 		
 		//TOOLS
 		ItemStack cShears = new ItemStack(ModItems.shears);
@@ -228,7 +236,8 @@ public class ModCrafting {
 		addShapedRecipe(ModItems.darkIronBoots, new Object[]{"X X", "X X", 'X', dIronIngot});
 		
 		addShapedRecipe(new ItemStack(ModItems.superTorch), new Object[] {" # ", "NTN", " N ", '#', Blocks.DAYLIGHT_DETECTOR, 'T', Blocks.TORCH, 'N', dIronNugget});
-		
+		addShapedOreRecipe(new ItemStack(ModItems.bombomb), new Object[] {" S ", "ICI", "P P", 'S', "string", 'I', "ingotIron", 'C', new ItemStack(Items.SKULL, 1, 4), 'P', Blocks.LIGHT_WEIGHTED_PRESSURE_PLATE});
+
 		addShapedOreRecipe(new ItemStack(ModBlocks.crystalWorkbench, 1, WorkbenchType.BLUE.getMeta()), new Object[]{"###", "#W#", "###", '#', blueIngot, 'W', "workbench"});
 		addShapedOreRecipe(new ItemStack(ModBlocks.crystalWorkbench, 1, WorkbenchType.RED.getMeta()), new Object[]{"###", "#W#", "###", '#', redIngot, 'W', "workbench"});
 		addShapedOreRecipe(new ItemStack(ModBlocks.crystalWorkbench, 1, WorkbenchType.GREEN.getMeta()), new Object[]{"###", "#W#", "###", '#', greenIngot, 'W', "workbench"});
@@ -287,16 +296,21 @@ public class ModCrafting {
 		ModCrafting.addNBTRecipe(new ItemStack(ModBlocks.battery, 1, BatteryType.DARK.getMeta()), copyListBattery, new Object[]{"I#I", "#B#", "I#I", '#', darkPlate, 'I', darkIngot, 'B', new ItemStack(ModBlocks.battery, 1, BatteryType.GREEN.getMeta())});
 		ModCrafting.addNBTRecipe(new ItemStack(ModBlocks.battery, 1, BatteryType.PURE.getMeta()), copyListBattery, new Object[]{"I#I", "#B#", "I#I", '#', purePlate, 'I', pureIngot, 'B', new ItemStack(ModBlocks.battery, 1, BatteryType.DARK.getMeta())});
 
+		//TODO Add Recipe for Inventory Chargers
 		
 		addShapedOreRecipe(ModBlocks.customSpawner, new Object[]{"BBB", "RDR", "BBB", 'B', Blocks.IRON_BARS, 'R', "rodBlaze", 'D', new ItemStack(ModBlocks.crystalIngot, 1, CrystalIngotBlockType.DARKIRON.getMeta())});
 		ItemStack pureSword = new ItemStack(ModItems.crystalSword);
 		ItemNBTHelper.getCompound(pureSword).setString("Color", "pure");
 		addShapedOreRecipeNBT(ModBlocks.mobGrinder, new Object[]{"PHP", "ISL", "PFP", 'P', dIronPlate, 'H', "skull", 'S', pureSword, 'I', itemPipe, 'L', fluidPipe, 'F', machineFrame});
+		
+		addShapedOreRecipe(new ItemStack(ModBlocks.darkIronRail, 16), new Object[]{"I I", "ISI", "I I", 'I', dIronIngot, 'S', "stickWood"});
 
 		
 		addShapedOreRecipe(ModBlocks.weather, new Object[]{"#S#", "CFB", "###", '#', dIronPlate, 'B', "bucket", 'S', Blocks.DAYLIGHT_DETECTOR, 'C', Items.CLOCK, 'F', machineFrame});
 
 		addShapedOreRecipe(ModBlocks.hddInterface, new Object[]{"###", "#FH", "#P#", '#', dIronPlate, 'H', Blocks.TRIPWIRE_HOOK, 'P', pipeEStorage, 'F', machineFrame});
+		addShapelessRecipe(ModBlocks.hddArray, new Object[]{ModBlocks.hddInterface, new ItemStack(ModBlocks.crystalChest, 1, CrystalChestType.DARKIRON.ordinal())});
+
 		addShapedOreRecipe(ModBlocks.externalInterface, new Object[]{"#S#", "#H#", "#P#", '#', dIronPlate, 'S', Blocks.STICKY_PISTON, 'H', "chest", 'P', pipeEStorage});
 
 		addShapedOreRecipe(new ItemStack(ModBlocks.storagePanel, 1, PanelType.STORAGE.getMeta()), new Object[]{"###", "IGI", "#P#", '#', dIronPlate, 'G', "blockGlassBlack", 'I', "ingotCrystal", 'P', pipeEStorage});
@@ -308,7 +322,8 @@ public class ModCrafting {
 		addShapedOreRecipe(ModItems.wirelessPanel, new Object[]{"E  ", "SP ", 'E', "endereye", 'P', new ItemStack(ModBlocks.storagePanel), 'S', crystalRod});
 
 		addShapedOreRecipe(ModBlocks.wirelessPipe, new Object[]{"#I#", "ICI", "#P#", '#', Items.ENDER_EYE, 'C', new ItemStack(ModBlocks.enderBuffer), 'I', pureIngot, 'P', pipeEStorage});
-		addShapedOreRecipe(ModBlocks.crafter, new Object[]{"#W#", "WCW", "#P#", '#', dIronPlate, 'W', "workbench", 'C', "chest", 'P', pipeEStorage});
+		addShapedOreRecipe(ModBlocks.craftingController, new Object[]{"#W#", "WPW", "#W#", '#', dIronPlate, 'W', "workbench", 'P', pipeEStorage});
+		addShapedOreRecipe(ModBlocks.crafter, new Object[]{"#F#", "SMD", "#W#", '#', dIronPlate, 'W', "workbench", 'M', machineFrame, 'F', Blocks.FURNACE, 'S', pipeEStorage, 'D', Blocks.DROPPER});
 		addShapedOreRecipe(new ItemStack(ModBlocks.encoder, 1, EncoderType.NORMAL.getMeta()), new Object[]{"#P#", "IWI", "#I#", '#', dIronPlate, 'W', "workbench", 'I', dIronPlate, 'P', ModItems.craftingPattern});
 		addShapelessRecipe(new ItemStack(ModBlocks.encoder, 1, EncoderType.PROCESSING.getMeta()), new Object[]{new ItemStack(ModBlocks.encoder, 1, EncoderType.NORMAL.getMeta())});
 
@@ -396,8 +411,24 @@ public class ModCrafting {
 			addShapedNBTRecipe(wMinecart, new Object[] {"A", "B", 'A', wChest, 'B', Items.MINECART});
 			//EnderIO befor default enderpearl
 			String ender = getBestOreID("ingotPulsatingIron", "enderpearl");
-			addShapedOreRecipe(ModBlocks.enderBuffer, new Object[]{"ECE", "RFP", "ETE", 'E', ender, 'P', ItemUtil.copy(tier2CU, 1), 'R', ItemUtil.copy(tier2RF, 1), 'T', new ItemStack(ModBlocks.crystalTank, 1, TankType.GREEN.getMeta()), 'C', wChest, 'F', machineFrameEnder});
+			
+			ItemStack buffer = new ItemStack(ModBlocks.enderBuffer);
+			NBTTagCompound nbt = new NBTTagCompound();
+			nbt.setInteger("Code", code);
+			ItemNBTHelper.getCompound(buffer).setTag(BlockEnderBuffer.TILE_NBT_STACK, nbt);
+			
+			addShapedOreRecipe(buffer, new Object[]{"ECE", "RFP", "ETE", 'E', ender, 'P', ItemUtil.copy(tier2CU, 1), 'R', ItemUtil.copy(tier2RF, 1), 'T', new ItemStack(ModBlocks.crystalTank, 1, TankType.GREEN.getMeta()), 'C', wChest, 'F', machineFrameEnder});
 		}
+		
+		addShapedOreRecipe(ModItems.minionStaff, new Object[]{" NE", " GN", "G  ", 'N', greenNugget, 'E', "gemEmerald", 'G', "ingotGold"});
+		addShapedOreRecipe(ItemMinion.createMinion(MinionType.BASIC), new Object[]{" S ", "LBL", "B B", 'S', new ItemStack(Items.SKULL, 1, 0), 'B', "bone", 'L', "leather"});
+		addShapelessRecipe(ItemMinion.createMinion(MinionType.WORKER), new Object[]{ItemMinion.createMinion(MinionType.BASIC), Items.IRON_PICKAXE});
+		addShapelessRecipe(ItemMinion.createMinion(MinionType.WARRIOR), new Object[]{ItemMinion.createMinion(MinionType.BASIC), Items.IRON_SWORD});
+
+		
+		//TODO Add worksite recipes
+		//TODO Add worksite upgrade recipes
+		
 		CauldronRecipeManager.initRecipes();
 		
 		CrystalFurnaceManager.initRecipes();

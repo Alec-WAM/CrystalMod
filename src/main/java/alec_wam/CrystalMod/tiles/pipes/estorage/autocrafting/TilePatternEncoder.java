@@ -95,7 +95,12 @@ public class TilePatternEncoder extends TileEntityMod implements IMessageHandler
             
             for (int i = 0; i < 9; ++i) {
                 ItemStack ingredient = matrix.getStackInSlot(i);
-                if(ingredient !=null)ItemPattern.setInput(pattern, i, ingredient);
+                if(ingredient !=null){
+                	if(ingredient.stackSize == 0){
+                		ingredient.stackSize = 1;
+                	}
+                	ItemPattern.setInput(pattern, i, ingredient);
+                }
             }
 
             patterns.setStackInSlot(1, pattern);

@@ -76,7 +76,10 @@ public class CrystalMod {
 
 		@Override
 		public int compare(ItemStack arg0, ItemStack arg1) {
-			return 0;/*ItemUtil.compareNames(arg0, arg1);*/
+			if(arg0.getItem() !=arg1.getItem()){
+				return ItemUtil.compareNames(arg0, arg1);
+			}
+			return 0;
 		}
     };
     
@@ -88,7 +91,10 @@ public class CrystalMod {
 
 		@Override
 		public int compare(ItemStack arg0, ItemStack arg1) {
-			return 0/*ItemUtil.compareNames(arg0, arg1)*/;
+			if(arg0.getItem() !=arg1.getItem()){
+				return ItemUtil.compareNames(arg0, arg1);
+			}
+			return 0;
 		}
     };
     
@@ -101,7 +107,10 @@ public class CrystalMod {
 
 		@Override
 		public int compare(ItemStack arg0, ItemStack arg1) {
-			return ItemUtil.compareNames(arg0, arg1);
+			if(arg0.getItem() !=arg1.getItem()){
+				return ItemUtil.compareNames(arg0, arg1);
+			}
+			return 0;
 		}
     };
     

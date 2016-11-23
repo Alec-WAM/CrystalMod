@@ -131,7 +131,9 @@ public class InfuserRecipeCategory extends BlankRecipeCategory<InfuserRecipeCate
 	    
 	    registry.addRecipeCategories(new InfuserRecipeCategory(guiHelper));
 	    registry.addRecipeHandlers(new RecipeHandler<InfuserJEIRecipe>(InfuserJEIRecipe.class, InfuserRecipeCategory.UID));
-	    registry.addRecipeClickArea(GuiCrystalInfuser.class, 79, 34, 24, 17, InfuserRecipeCategory.UID);
+	    registry.addRecipeClickArea(GuiCrystalInfuser.class, 103, 34, 24, 17, InfuserRecipeCategory.UID);
+	    registry.addRecipeClickArea(GuiCrystalInfuser.class, 53, 34, 24, 17, InfuserRecipeCategory.UID);
+
 	    registry.addRecipeCategoryCraftingItem(displayStack, InfuserRecipeCategory.UID);
 
 	    List<InfuserJEIRecipe> result = new ArrayList<InfuserJEIRecipe>();    
@@ -161,10 +163,10 @@ public class InfuserRecipeCategory extends BlankRecipeCategory<InfuserRecipeCate
 	    ResourceLocation backgroundLocation = new ResourceLocation("crystalmod", "textures/gui/machine/infuser.png");
 	    background = guiHelper.createDrawable(backgroundLocation, xOff, yOff, 125, 50);
 
-	    ResourceLocation arrow = new ResourceLocation("crystalmod", "textures/gui/machine/press.png");
-	    IDrawableStatic arrowDrawable = guiHelper.createDrawable(arrow, 176, 0, 24, 17);
+	    IDrawableStatic arrowDrawable = guiHelper.createDrawable(backgroundLocation, 176, 0, 24, 17);
 		this.arrow = guiHelper.createAnimatedDrawable(arrowDrawable, 200, IDrawableAnimated.StartDirection.LEFT, false);
-		this.arrow2 = guiHelper.createAnimatedDrawable(arrowDrawable, 200, IDrawableAnimated.StartDirection.RIGHT, false);
+		IDrawableStatic arrowDrawable2 = guiHelper.createDrawable(backgroundLocation, 176, 17, 24, 34);
+		this.arrow2 = guiHelper.createAnimatedDrawable(arrowDrawable2, 200, IDrawableAnimated.StartDirection.RIGHT, false);
   	}
 	
 	@Override
@@ -195,7 +197,6 @@ public class InfuserRecipeCategory extends BlankRecipeCategory<InfuserRecipeCate
 	    if(currentRecipe == null) {
 	      return;
 	    }
-	    
   	}
 
 	@Override

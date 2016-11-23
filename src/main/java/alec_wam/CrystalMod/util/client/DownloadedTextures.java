@@ -158,7 +158,14 @@ public class DownloadedTextures {
 	
 	public static ThreadDownloadImageData getDownloadImageSkin(ResourceLocation par0ResourceLocation, String par1Str)
     {
-        return getDownloadImage(par0ResourceLocation, getSkinUrl(par1Str), DefaultPlayerSkin.getDefaultSkin(ProfileUtil.getUUID(par1Str)), new ImageBufferDownload());
+		UUID uuid = ProfileUtil.getUUID(par1Str);
+		ResourceLocation skin = null;
+		if(uuid !=null){
+			skin = DefaultPlayerSkin.getDefaultSkin(uuid);
+		} else {
+			skin = DefaultPlayerSkin.getDefaultSkinLegacy();
+		}
+        return getDownloadImage(par0ResourceLocation, getSkinUrl(par1Str), skin, new ImageBufferDownload());
     }
 	
 	public static ThreadDownloadImageData getDownloadImageFace(ResourceLocation par0ResourceLocation, String par1Str, MCAPIType type, int size, boolean helmet)

@@ -72,9 +72,9 @@ public class ItemBatRenderer implements ICustomItemRenderer {
 		}
 		//GlStateManager.disableLighting();
 		GlStateManager.pushAttrib();
-        RenderHelper.enableStandardItemLighting();
+        //RenderHelper.enableStandardItemLighting();
 		renderWholeBat(stack, x, y, z);
-		RenderHelper.disableStandardItemLighting();
+		//RenderHelper.disableStandardItemLighting();
         GlStateManager.popAttrib();
         //GlStateManager.enableLighting();
 		if(type == TransformType.GUI){

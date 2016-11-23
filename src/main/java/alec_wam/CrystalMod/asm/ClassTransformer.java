@@ -18,6 +18,8 @@ import static org.objectweb.asm.Opcodes.IRETURN;
 import static org.objectweb.asm.Opcodes.POP;
 import static org.objectweb.asm.Opcodes.PUTSTATIC;
 import static org.objectweb.asm.Opcodes.RETURN;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 import net.minecraft.launchwrapper.IClassTransformer;
 
 import org.apache.logging.log4j.Level;
@@ -35,10 +37,13 @@ import org.objectweb.asm.tree.InsnNode;
 import org.objectweb.asm.tree.JumpInsnNode;
 import org.objectweb.asm.tree.LabelNode;
 import org.objectweb.asm.tree.LdcInsnNode;
+import org.objectweb.asm.tree.LineNumberNode;
 import org.objectweb.asm.tree.LocalVariableNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 import org.objectweb.asm.tree.VarInsnNode;
+
+import alec_wam.CrystalMod.client.model.dynamic.CustomItemRendererHandler;
 
 import com.google.common.collect.Sets;
 
@@ -72,6 +77,7 @@ public class ClassTransformer implements IClassTransformer
 		logger.log(Level.INFO, "Found RenderItem Class: " + classNode.name);
 
 		MethodNode renderItem = null;
+		MethodNode renderModel = null;
 
 		for (MethodNode mn : classNode.methods)
 		{
@@ -79,16 +85,37 @@ public class ClassTransformer implements IClassTransformer
 			{
 				renderItem = mn;
 			}
+			if ((mn.name.contains("renderModel") || mn.name.contains("func_175035_a") || mn.name.contains("func_175036_a") || mn.name.contains("func_175045_a")) && mn.desc.equals("(Lnet/minecraft/client/renderer/block/model/IBakedModel;ILnet/minecraft/item/ItemStack;)V"))
+			{
+				renderModel = mn;
+			}
 		}
-
+		
 		if (renderItem != null)
 		{
-			logger.log(Level.DEBUG, "- Found renderItem (1/1) (" + renderItem.desc + ")");
+			logger.log(Level.INFO, "- Found renderItem (1/2) (" + renderItem.desc + ")");
+			logger.log(Level.INFO, "- Inserting Custom Item Renderer in renderItem");
 			boolean patched = false;
-			for (int i = 0; i < renderItem.instructions.size(); i++)
+			boolean patched2 = false;
+			
+			LabelNode l = new LabelNode(new Label());
+			InsnList toInsert = new InsnList();
+
+			toInsert.add(new FieldInsnNode(GETSTATIC, "alec_wam/CrystalMod/client/model/dynamic/CustomItemRendererHandler", "instance", "Lalec_wam/CrystalMod/client/model/dynamic/CustomItemRendererHandler;"));
+			toInsert.add(new VarInsnNode(ALOAD, 1));
+			toInsert.add(new MethodInsnNode(INVOKEVIRTUAL, "alec_wam/CrystalMod/client/model/dynamic/CustomItemRendererHandler", "overrideRender", "(Lnet/minecraft/item/ItemStack;)Z", false));
+			toInsert.add(new JumpInsnNode(IFGT, l));
+			toInsert.add(new InsnNode(RETURN));
+			toInsert.add(l);
+			patched = true;
+
+			renderItem.instructions.insert(toInsert);
+			
+
+			
+			/*for (int i = 0; i < renderItem.instructions.size(); i++)
 			{
 				AbstractInsnNode ain = renderItem.instructions.get(i);
-
 				if (ain instanceof MethodInsnNode)
 				{
 					MethodInsnNode min = (MethodInsnNode) ain;
@@ -116,16 +143,42 @@ public class ClassTransformer implements IClassTransformer
 						renderItem.instructions.insert(min, insertAfter);
 
 						i += 8;
-						patched = true;
+						patched2 = true;
 					}
 				}
-			}
+			}*/
 			
 			if(!patched){
 				throw new RuntimeException("Unable to patch Render Item");
 			}
 		} else {
 			throw new RuntimeException("Unable to find Render Item");
+		}
+		
+		if (renderModel != null)
+		{
+			logger.log(Level.INFO, "- Found renderModel (2/2) (" + renderModel.desc + ")");
+			logger.log(Level.INFO, "- Inserting Custom Item Renderer in renderModel");
+			boolean patched = false;
+			
+			LabelNode l = new LabelNode(new Label());
+			InsnList toInsert = new InsnList();
+
+			toInsert.add(new FieldInsnNode(GETSTATIC, "alec_wam/CrystalMod/client/model/dynamic/CustomItemRendererHandler", "instance", "Lalec_wam/CrystalMod/client/model/dynamic/CustomItemRendererHandler;"));
+			toInsert.add(new VarInsnNode(ALOAD, 3));
+			toInsert.add(new MethodInsnNode(INVOKEVIRTUAL, "alec_wam/CrystalMod/client/model/dynamic/CustomItemRendererHandler", "overrideRender", "(Lnet/minecraft/item/ItemStack;)Z", false));
+			toInsert.add(new JumpInsnNode(IFGT, l));
+			toInsert.add(new InsnNode(RETURN));
+			toInsert.add(l);
+			patched = true;
+
+			renderModel.instructions.insert(toInsert);
+			
+			if(!patched){
+				throw new RuntimeException("Unable to patch Render Item Model");
+			}
+		} else {
+			throw new RuntimeException("Unable to find Render Model");
 		}
 
 		ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_MAXS);

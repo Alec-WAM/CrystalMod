@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
 import net.minecraft.block.BlockFence;
 import net.minecraft.block.state.IBlockState;
@@ -76,7 +77,7 @@ public class ItemMobEssence extends Item implements ICustomModel{
 	public static final EntityEssenceInstance<EntityPig> DEFAULT_PIG = new EntityEssenceInstance<EntityPig>(EntityPig.class);
 	
 	@SuppressWarnings("rawtypes")
-	private static Map<String, EntityEssenceInstance> entityRegistry = new HashMap<String, EntityEssenceInstance>();
+	private static Map<String, EntityEssenceInstance> entityRegistry = new TreeMap<String, EntityEssenceInstance>();
 	
 	@SuppressWarnings("rawtypes")
 	private static Map<Class, String> classToID = new HashMap<Class, String>();

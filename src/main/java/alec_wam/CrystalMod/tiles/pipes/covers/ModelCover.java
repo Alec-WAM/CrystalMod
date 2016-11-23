@@ -1,5 +1,6 @@
 package alec_wam.CrystalMod.tiles.pipes.covers;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -20,9 +21,11 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import alec_wam.CrystalMod.client.model.dynamic.DynamicItemAndBlockModel;
 import alec_wam.CrystalMod.tiles.pipes.covers.CoverUtil.CoverData;
+import alec_wam.CrystalMod.util.client.CustomModelUtil;
 import alec_wam.CrystalMod.util.client.RenderUtil;
 
 import com.google.common.collect.Maps;
@@ -124,18 +127,35 @@ public class ModelCover extends DynamicItemAndBlockModel
         	textureWest = blockTextureSouth;
         	textureEast = blockTextureNorth;
         }
-        faceCover.blockFaceUV.uvs = new float[]{0.0F, 0.0F, 16F, 1F};
-        list.add(faceBakery.makeBakedQuad(new org.lwjgl.util.vector.Vector3f(0.0f, 16.0f, 7.0f), new org.lwjgl.util.vector.Vector3f(16.0f, 16.0f, 8.0f), faceCover, textureUp, EnumFacing.UP, coverModelRot, (BlockPartRotation)null, true, true));
+        int color =	Color.BLUE.getRGB();
+        int color2 = Minecraft.getMinecraft().getBlockColors().colorMultiplier(bState, null, null, 0);
         
-        list.add(faceBakery.makeBakedQuad(new org.lwjgl.util.vector.Vector3f(0.0f, 0.0f, 7.0f), new org.lwjgl.util.vector.Vector3f(16.0f, 0.0f, 8.0f), faceCover, textureDown, EnumFacing.DOWN, coverModelRot, (BlockPartRotation)null, true, true));
+        Color test = new Color(color2);
+        Color real = new Color(test.getBlue(), test.getGreen(), test.getRed());
+        color = real.getRGB();
+        if(color == -1){
+        	 
+        	float f = 1.0f;
+            int i = MathHelper.clamp_int((int)(f * 255.0F), 0, 255);
+            color = -16777216 | i << 16 | i << 8 | i;
+        }
+        
+        faceCover.blockFaceUV.uvs = new float[]{0.0F, 0.0F, 16F, 1F};
+        list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new org.lwjgl.util.vector.Vector3f(0.0f, 16.0f, 7.0f), new org.lwjgl.util.vector.Vector3f(16.0f, 16.0f, 8.0f), faceCover, textureUp, EnumFacing.UP, coverModelRot, (BlockPartRotation)null, true, color));
+        
+        list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new org.lwjgl.util.vector.Vector3f(0.0f, 0.0f, 7.0f), new org.lwjgl.util.vector.Vector3f(16.0f, 0.0f, 8.0f), faceCover, textureDown, EnumFacing.DOWN, coverModelRot, (BlockPartRotation)null, true, color));
         
         faceCover.blockFaceUV.uvs = new float[]{0.0F, 0.0F, 1F, 16F};
-        list.add(faceBakery.makeBakedQuad(new org.lwjgl.util.vector.Vector3f(0.0f, 0.0f, 7.0f), new org.lwjgl.util.vector.Vector3f(0.0f, 16.0f, 8.0f), faceCover, textureWest, EnumFacing.WEST, coverModelRot, (BlockPartRotation)null, true, true));
-    	list.add(faceBakery.makeBakedQuad(new org.lwjgl.util.vector.Vector3f(16.0f, 0.0f, 7.0f), new org.lwjgl.util.vector.Vector3f(16.0f, 16.0f, 8.0f), faceCover, textureEast, EnumFacing.EAST, coverModelRot, (BlockPartRotation)null, true, true));
+        list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new org.lwjgl.util.vector.Vector3f(0.0f, 0.0f, 7.0f), new org.lwjgl.util.vector.Vector3f(0.0f, 16.0f, 8.0f), faceCover, textureWest, EnumFacing.WEST, coverModelRot, (BlockPartRotation)null, true, color));
+    	list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new org.lwjgl.util.vector.Vector3f(16.0f, 0.0f, 7.0f), new org.lwjgl.util.vector.Vector3f(16.0f, 16.0f, 8.0f), faceCover, textureEast, EnumFacing.EAST, coverModelRot, (BlockPartRotation)null, true, color));
         
     	faceCover.blockFaceUV.uvs = new float[]{0.0F, 0.0F, 16F, 16F};
-        list.add(faceBakery.makeBakedQuad(new org.lwjgl.util.vector.Vector3f(0.0f, 0.0f, 7.0f), new org.lwjgl.util.vector.Vector3f(16.0f, 16.0f, 8.0f), faceCover, textureNorth, EnumFacing.NORTH, coverModelRot, (BlockPartRotation)null, true, true));
-    	list.add(faceBakery.makeBakedQuad(new org.lwjgl.util.vector.Vector3f(0.0f, 0.0f, 7.0f), new org.lwjgl.util.vector.Vector3f(16.0f, 16.0f, 8.0f), faceCover, textureSouth, EnumFacing.SOUTH, coverModelRot, (BlockPartRotation)null, true, true));
+        list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new org.lwjgl.util.vector.Vector3f(0.0f, 0.0f, 7.0f), new org.lwjgl.util.vector.Vector3f(16.0f, 16.0f, 8.0f), faceCover, textureNorth, EnumFacing.NORTH, coverModelRot, (BlockPartRotation)null, true, color));
+    	list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new org.lwjgl.util.vector.Vector3f(0.0f, 0.0f, 7.0f), new org.lwjgl.util.vector.Vector3f(16.0f, 16.0f, 8.0f), faceCover, textureSouth, EnumFacing.SOUTH, coverModelRot, (BlockPartRotation)null, true, color));
+    	
+    	
+    	
+    	//list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new org.lwjgl.util.vector.Vector3f(0.0f, 0.0f, 7.0f), new org.lwjgl.util.vector.Vector3f(16.0f, 16.0f, 8.0f), faceCover, textureSouth, EnumFacing.SOUTH, coverModelRot, (BlockPartRotation)null, true, color));
     	
     }
     

@@ -13,6 +13,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
@@ -38,6 +39,7 @@ public class BlockElevatorCaller extends BlockContainer {
         setCreativeTab(CrystalMod.tabBlocks);
 	}
 
+	@Override
 	public EnumBlockRenderType getRenderType(IBlockState state){
 		return EnumBlockRenderType.MODEL;
 	}
@@ -118,7 +120,8 @@ public class BlockElevatorCaller extends BlockContainer {
 		return new TileEntityElevatorCaller();
 	}
 	
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumFacing side, float hitX, float hitY, float hitZ)
+	@Override
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack stack, EnumFacing side, float hitX, float hitY, float hitZ)
     {
 		TileEntity te = worldIn.getTileEntity(pos);
         if (te instanceof TileEntityElevatorCaller) {
@@ -214,6 +217,7 @@ public class BlockElevatorCaller extends BlockContainer {
         return EnumFacing.values()[meta+2];
     }
 	
+	@Override
 	public int getMetaFromState(IBlockState state) {
         return state.getValue(FACING_HORIZ).getIndex()-2;
     }

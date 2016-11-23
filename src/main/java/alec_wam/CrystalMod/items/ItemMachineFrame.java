@@ -1,11 +1,8 @@
 package alec_wam.CrystalMod.items;
 
 import java.util.List;
-import java.util.Locale;
-
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.ICustomModel;
-import alec_wam.CrystalMod.items.ItemCrystal.CrystalType;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
@@ -44,16 +41,16 @@ public class ItemMachineFrame extends Item implements ICustomModel {
 	
 	public ItemMachineFrame(){
 		super();
-		this.setMaxDamage(0);
 		this.setHasSubtypes(true);
+		this.setMaxDamage(0);
 		this.setCreativeTab(CrystalMod.tabBlocks);
 		ModItems.registerItem(this, "machineFrame");
 	}
 	
 	@SideOnly(Side.CLIENT)
     public void initModel() {
-		ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation(getRegistryName(), "basic"));
-		ModelLoader.setCustomModelResourceLocation(this, 1, new ModelResourceLocation(getRegistryName(), "ender"));
+		ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation("crystalmod:machineFrame", "inventory"));
+		ModelLoader.setCustomModelResourceLocation(this, 1, new ModelResourceLocation("crystalmod:machineFrame", "ender"));
     }
 	
 	public String getUnlocalizedName(ItemStack stack)

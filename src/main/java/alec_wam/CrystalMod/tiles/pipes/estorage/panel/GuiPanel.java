@@ -448,6 +448,7 @@ public class GuiPanel extends GuiContainer implements IGuiScreen, INetworkGui  {
 	
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY)
     {
+		super.drawGuiContainerForegroundLayer(mouseX, mouseY);
 		int sx = (width - xSize) / 2;
 	    int sy = (height - ySize) / 2;
 		final int xStart = (getListX()+1);

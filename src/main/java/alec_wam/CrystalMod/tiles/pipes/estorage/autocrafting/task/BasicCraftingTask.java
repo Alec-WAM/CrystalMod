@@ -78,7 +78,11 @@ public class BasicCraftingTask implements ICraftingTask {
         updatedOnce = true;
     	
         if (!this.missing.isEmpty()) {
-            for (ItemStack missing : this.missing) {
+        	ItemStackList list = new ItemStackList();
+        	for (ItemStack missing : this.missing) {
+        		list.add(missing);
+        	}
+            for (ItemStack missing : list.getStacks()) {
                 if (!controller.getItemStorage().removeCheck(missing, missing.stackSize, ItemStorage.getExtractFilter(pattern.isOredict()), true)) {
                      return false;
                 }
@@ -121,7 +125,20 @@ public class BasicCraftingTask implements ICraftingTask {
              }
          }
 
+         int startedCount = 0;
          Iterator<CraftingProcessBase> ip = toProcess.iterator();
+         while(ip.hasNext()){
+        	 CraftingProcessBase process = ip.next();
+        	 if(process.started){
+        		 startedCount++;
+        	 }
+         }
+         
+         /*if(startedCount == 0){
+        	 reschedule(controller);
+         }*/
+         
+         ip = toProcess.iterator();
          while(ip.hasNext()){
         	 CraftingProcessBase process = ip.next();
         	 if(process !=null && process.hasReceivedOutputs()){
@@ -140,7 +157,6 @@ public class BasicCraftingTask implements ICraftingTask {
     	}
     	
     	ItemStack requested = this.requested != null ? this.requested : pattern.getOutputs().get(0);
-    	
     	int newQuantity = quantity;
        	while (newQuantity > 0 && !recursiveFind) {
             calculate(network, networkList, pattern, insertList);
@@ -150,6 +166,7 @@ public class BasicCraftingTask implements ICraftingTask {
     }
 
     private void calculate(EStorageNetwork network, ItemStackList networkList, CraftingPattern pattern, ItemStackList insertList) {
+    	
     	recursiveFind = !usedPatterns.add(pattern);
         if (recursiveFind) {
             return;
@@ -167,8 +184,8 @@ public class BasicCraftingTask implements ICraftingTask {
         		 ItemStackData data = network.getItemStorage().getItemData(input);
         		 
         		 if(data !=null){
-        			 usedStacks.add(input.copy());
-        			 inputs.add(input.copy());
+        			 usedStacks.add(ItemStack.copyItemStack(input));
+        			 inputs.add(ItemStack.copyItemStack(input));
         			 added = true;
         			 break;
         		 }
@@ -176,9 +193,9 @@ public class BasicCraftingTask implements ICraftingTask {
         			 ItemStack choice = null;
         			 if (!oreInputs.isEmpty()) {
         				 choice = oreInputs.get(0);
-        				 inputs.add(choice);
+        				 inputs.add(ItemStack.copyItemStack(choice));
         			 }
-        			 usedStacks.add(choice);
+        			 usedStacks.add(ItemStack.copyItemStack(choice));
         		 }
         	 }
         }
@@ -218,12 +235,18 @@ public class BasicCraftingTask implements ICraftingTask {
                         input.stackSize -= craftQuantity;
                         ItemStack inserted = insertList.get(inputCrafted, pattern.isOredict());
                         insertList.remove(inserted, craftQuantity, true);
-                    } else if (doFluidCalculation(network, networkList, input, insertList)) {
-                    	actualInputs.add(ItemHandlerHelper.copyStackWithSize(input, 1));
-                        input.stackSize -= 1;
                     } else {
-                        missing.add(input.copy());
-                        input.stackSize = 0;
+                    	
+                    	ItemStack fluidCheck = ItemHandlerHelper.copyStackWithSize(input, 1);
+                    	while (input.stackSize > 0 && doFluidCalculation(network, networkList, fluidCheck, insertList)) {
+                             actualInputs.add(fluidCheck);
+                             input.stackSize -= 1;
+                    	}
+                    	
+                    	if (input.stackSize > 0) {
+                    		missing.add(ItemStack.copyItemStack(input));
+                    		input.stackSize = 0;
+                    	}
                     }
                 }
             }
@@ -257,7 +280,6 @@ public class BasicCraftingTask implements ICraftingTask {
         for (ItemStack output : (!pattern.isProcessing() && pattern.isOredict() && missing.isEmpty() ? pattern.getOutputs(took) : pattern.getOutputs())) {
         	if(output !=null)insertList.add(output.copy());
         }
-        
         usedPatterns.remove(pattern);
     }
     
@@ -269,7 +291,7 @@ public class BasicCraftingTask implements ICraftingTask {
                 FluidStackData fluidInStorage = network.getFluidStorage().getFluidData(fluidInItem);
                 
                 if (fluidInStorage == null || fluidInStorage.getAmount() < fluidInItem.amount) {
-                    missing.add(input);
+                    missing.add(ItemStack.copyItemStack(input));
                 } else {
                 	ItemStack buk = networkList.get(container, false);
                     boolean hasBucket = buk !=null && buk.stackSize > 0;
@@ -277,7 +299,7 @@ public class BasicCraftingTask implements ICraftingTask {
 
                     if (!hasBucket) {
                         if (bucketPattern == null) {
-                            missing.add(container.copy());
+                            missing.add(ItemStack.copyItemStack(container));
                         } else {
                             calculate(network, networkList, bucketPattern, insertList);
                         }
@@ -304,10 +326,11 @@ public class BasicCraftingTask implements ICraftingTask {
         		mainProcesses.add(process);
         	}
         }
+        ModLogger.info("Missing: "+missing.toString());
         missing.clear();
         toProcess.clear();
         // if the list of main steps is empty there is no point in rescheduling
-        if (!toProcess.isEmpty()) {
+        if (!mainProcesses.isEmpty()) {
             quantity = 0;
             int quantityPerRequest = pattern.getQuantityPerRequest(requested, pattern.isOredict());
             for (CraftingProcessBase step : mainProcesses) {
@@ -324,7 +347,7 @@ public class BasicCraftingTask implements ICraftingTask {
     }
     
     private boolean isFinished() {
-        return missing.isEmpty() && hasProcessedItems();
+        return hasProcessedItems();
     }
     
     private boolean hasProcessedItems() {
@@ -451,7 +474,7 @@ public class BasicCraftingTask implements ICraftingTask {
             }
         } 
         if(!isFinished()){
-        	boolean addMissing = true;
+        	boolean addMissing = !missing.isEmpty();
         	boolean addTaking = false;
         	boolean addTakingFluid = true;
         	boolean addProcessing = true;
