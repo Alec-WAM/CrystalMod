@@ -33,6 +33,7 @@ import alec_wam.CrystalMod.blocks.BlockCrystal.CrystalBlockType;
 import alec_wam.CrystalMod.blocks.BlockCrystalIngot.CrystalIngotBlockType;
 import alec_wam.CrystalMod.blocks.EnumBlock.IEnumMeta;
 import alec_wam.CrystalMod.items.ModItems;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.items.ItemCrystal.CrystalType;
 
 public class BlockCrystalPlant extends BlockBush
@@ -103,7 +104,7 @@ public class BlockCrystalPlant extends BlockBush
 	        	return new ItemStack(ModItems.crystalSeedsDark);
 	        }
     	}
-    	return null;
+    	return ItemStackTools.getEmptyStack();
     }
     
     public ItemStack getItem(World worldIn, BlockPos pos, IBlockState state)
@@ -242,7 +243,7 @@ public class BlockCrystalPlant extends BlockBush
             count = 2 + rand.nextInt(3) + (fortune > 0 ? rand.nextInt(fortune + 1) : 0);
         }
 
-        ItemStack crop = null;
+        ItemStack crop = ItemStackTools.getEmptyStack();
         PlantType type = TYPE;
     	if(type == PlantType.BLUE){
     		crop = new ItemStack(ModItems.crystals, 1, CrystalType.BLUE_SHARD.getMetadata());

@@ -4,6 +4,7 @@ import alec_wam.CrystalMod.client.container.ContainerMessageBase;
 import alec_wam.CrystalMod.tiles.machine.worksite.InventorySided;
 import alec_wam.CrystalMod.tiles.machine.worksite.ItemSlotFilter;
 import alec_wam.CrystalMod.tiles.machine.worksite.TileWorksiteBoundedInventory;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
@@ -46,7 +47,7 @@ public class ContainerWorksite extends ContainerMessageBase {
 		int slots = worksite.inventory.getSizeInventory();
 		Slot slot = (Slot) this.inventorySlots.get(slotClickedIndex);
 		if (slot == null || !slot.getHasStack()) {
-			return null;
+			return ItemStackTools.getEmptyStack();
 		}
 		ItemStack stackFromSlot = slot.getStack();
 		if (slotClickedIndex < slots) {
@@ -54,12 +55,12 @@ public class ContainerWorksite extends ContainerMessageBase {
 		} else {
 			this.mergeItemStack(stackFromSlot, 0, slots, false);
 		}
-		if (stackFromSlot.stackSize == 0) {
-			slot.putStack((ItemStack) null);
+		if (ItemStackTools.isEmpty(stackFromSlot)) {
+			slot.putStack(ItemStackTools.getEmptyStack());
 		} else {
 			slot.onSlotChanged();
 		}
-		return null;
+		return ItemStackTools.getEmptyStack();
 	}
 
 }

@@ -27,6 +27,7 @@ import alec_wam.CrystalMod.tiles.pipes.estorage.panel.crafting.GuiPanelCrafting;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.popup.CraftingAmountPopup;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.popup.Popup;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.Lang;
 
@@ -460,7 +461,7 @@ public class GuiPanel extends GuiContainer implements IGuiScreen, INetworkGui  {
 			ItemStackData data = getDisplayItems().get(s);
 			ItemStack dis = data.stack;
 			
-			if(dis !=null){
+			if(!ItemStackTools.isNullStack(dis)){
 				GlStateManager.pushMatrix();
 	            RenderHelper.enableGUIStandardItemLighting();
 	            GlStateManager.disableLighting();
@@ -506,22 +507,20 @@ public class GuiPanel extends GuiContainer implements IGuiScreen, INetworkGui  {
 		//Inside List
 		if(nslot > -1 && currentPopup == null){
 			ItemStackData data = (fixednSlot < 0 || getDisplayItems().size() <= fixednSlot) ? null : getDisplayItems().get(fixednSlot);
-			if(data !=null && data.stack !=null){
+			if(data !=null && !ItemStackTools.isNullStack(data.stack)){
 				ItemStack disOrg = data.stack;
-				if(disOrg !=null){
-					ItemStack dis = disOrg.copy();
-					ItemNBTHelper.setBoolean(dis, "DummyItem", true);
-					GlStateManager.pushMatrix();
-		            RenderHelper.enableGUIStandardItemLighting();
-		            GlStateManager.disableLighting();
-		            GlStateManager.enableRescaleNormal();
-		            GlStateManager.enableColorMaterial();
-		            renderToolTip(dis, mouseX-sx, mouseY-sy);
-		            GlStateManager.popMatrix();
-		            GlStateManager.enableLighting();
-		            GlStateManager.enableDepth();
-		            RenderHelper.enableStandardItemLighting();
-				}
+				ItemStack dis = disOrg.copy();
+				ItemNBTHelper.setBoolean(dis, "DummyItem", true);
+				GlStateManager.pushMatrix();
+	            RenderHelper.enableGUIStandardItemLighting();
+	            GlStateManager.disableLighting();
+	            GlStateManager.enableRescaleNormal();
+	            GlStateManager.enableColorMaterial();
+	            renderToolTip(dis, mouseX-sx, mouseY-sy);
+	            GlStateManager.popMatrix();
+	            GlStateManager.enableLighting();
+	            GlStateManager.enableDepth();
+	            RenderHelper.enableStandardItemLighting();
 			}
 		}
 		
@@ -530,16 +529,18 @@ public class GuiPanel extends GuiContainer implements IGuiScreen, INetworkGui  {
 	
 	public static String getStackSize(ItemStack stack){
 		String stackSize;
-		if (stack.stackSize == 1) {
+		int size = ItemStackTools.getStackSize(stack);
+		
+		if (size == 1) {
 			stackSize = "";
-		} else if (stack.stackSize < 1000) {
-			stackSize = stack.stackSize + "";
-		} else if (stack.stackSize < 100000) {
-			stackSize = stack.stackSize / 1000 + "K";
-		} else if (stack.stackSize < 1000000) {
-			stackSize = "0." + stack.stackSize / 100000+"M";
+		} else if (size < 1000) {
+			stackSize = size + "";
+		} else if (size < 100000) {
+			stackSize = size / 1000 + "K";
+		} else if (size < 1000000) {
+			stackSize = "0." + size / 100000+"M";
 		} else {
-			stackSize = stack.stackSize / 1000000 + "M";
+			stackSize = size / 1000000 + "M";
 		}
 		return stackSize;
 	}
@@ -602,10 +603,10 @@ public class GuiPanel extends GuiContainer implements IGuiScreen, INetworkGui  {
 			int fixednSlot = (s+getItemRow()*getItemsPerRow());
 			if(s > -1){
 				ItemStackData data = (fixednSlot < 0 || getDisplayItems().size() <= fixednSlot) ? null : getDisplayItems().get(fixednSlot);
-				if(data !=null && data.stack !=null){
+				if(data !=null && !ItemStackTools.isNullStack(data.stack)){
 					ItemStack dis = data.stack;
 					
-					if (this.mc.thePlayer.inventory.getItemStack() == null)
+					if (ItemStackTools.isNullStack(this.mc.thePlayer.inventory.getItemStack()))
 				    {
 						if (mc.thePlayer.capabilities.isCreativeMode && keyCode == this.mc.gameSettings.keyBindPickBlock.getKeyCode())
 	                    {
@@ -618,7 +619,7 @@ public class GuiPanel extends GuiContainer implements IGuiScreen, INetworkGui  {
 				            {
 				            	int slot = i;
 							
-				            	if(slot !=-1 && (this.mc.thePlayer.inventory.getStackInSlot(i) == null || ItemUtil.canCombine(this.mc.thePlayer.inventory.getStackInSlot(i), dis))){
+				            	if(slot !=-1 && (ItemStackTools.isNullStack(this.mc.thePlayer.inventory.getStackInSlot(i)) || ItemUtil.canCombine(this.mc.thePlayer.inventory.getStackInSlot(i), dis))){
 									sendUpdate(1, slot, dis.getMaxStackSize(), data);
 								}
 								return;
@@ -718,7 +719,7 @@ public class GuiPanel extends GuiContainer implements IGuiScreen, INetworkGui  {
 		int fixednSlot = (s+getItemRow()*getItemsPerRow());
 		if(s > -1){
 			ItemStackData data = (fixednSlot < 0 || getDisplayItems().size() <= fixednSlot) ? null : getDisplayItems().get(fixednSlot);
-			if(data !=null && data.stack !=null){
+			if(data !=null && !ItemStackTools.isNullStack(data.stack)){
 				return data;
 			}
 		}

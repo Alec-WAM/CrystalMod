@@ -5,6 +5,7 @@ import java.util.List;
 
 import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.util.BlockUtil;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -109,13 +110,13 @@ public class TileEntityBlueCrystalChest extends TileEntityLockable implements IT
         int compressedIdx = 0;
         mainLoop: for (int i = 0; i < getSizeInventory(); i++)
         {
-            if (chestContents[i] != null)
+            if (!ItemStackTools.isNullStack(chestContents[i]))
             {
                 for (int j = 0; j < compressedIdx; j++)
                 {
                     if (tempCopy[j].isItemEqual(chestContents[i]))
                     {
-                        tempCopy[j].stackSize += chestContents[i].stackSize;
+                    	ItemStackTools.incStackSize(tempCopy[j], ItemStackTools.getStackSize(chestContents[i]));
                         continue mainLoop;
                     }
                 }
@@ -142,22 +143,22 @@ public class TileEntityBlueCrystalChest extends TileEntityLockable implements IT
             @Override
             public int compare(ItemStack o1, ItemStack o2)
             {
-                if (o1 == null)
+                if (ItemStackTools.isNullStack(o1))
                 {
                     return 1;
-                } else if (o2 == null)
+                } else if (ItemStackTools.isNullStack(o2))
                 {
                     return -1;
                 } else
                 {
-                    return o2.stackSize - o1.stackSize;
+                    return ItemStackTools.getStackSize(o2) - ItemStackTools.getStackSize(o1);
                 }
             }
         });
         int p = 0;
         for (int i = 0; i < tempCopy.length; i++)
         {
-            if (tempCopy[i] != null && tempCopy[i].stackSize > 0)
+            if (ItemStackTools.isValid(tempCopy[i]))
             {
                 topStacks[p++] = tempCopy[i];
                 if (p == topStacks.length)
@@ -168,7 +169,7 @@ public class TileEntityBlueCrystalChest extends TileEntityLockable implements IT
         }
         for (int i = p; i < topStacks.length; i++)
         {
-            topStacks[i] = null;
+            topStacks[i] = ItemStackTools.getEmptyStack();
         }
         if (worldObj != null)
         {
@@ -179,25 +180,25 @@ public class TileEntityBlueCrystalChest extends TileEntityLockable implements IT
     @Override
     public ItemStack decrStackSize(int i, int j)
     {
-        if (chestContents[i] != null)
+        if (!ItemStackTools.isNullStack(chestContents[i]))
         {
-            if (chestContents[i].stackSize <= j)
+            if (ItemStackTools.getStackSize(chestContents[i]) <= j)
             {
                 ItemStack itemstack = chestContents[i];
-                chestContents[i] = null;
+                chestContents[i] = ItemStackTools.getEmptyStack();
                 markDirty();
                 return itemstack;
             }
             ItemStack itemstack1 = chestContents[i].splitStack(j);
-            if (chestContents[i].stackSize == 0)
+            if (ItemStackTools.isEmpty(chestContents[i]))
             {
-                chestContents[i] = null;
+                chestContents[i] = ItemStackTools.getEmptyStack();
             }
             markDirty();
             return itemstack1;
         } else
         {
-            return null;
+            return ItemStackTools.getEmptyStack();
         }
     }
 
@@ -205,9 +206,9 @@ public class TileEntityBlueCrystalChest extends TileEntityLockable implements IT
     public void setInventorySlotContents(int i, ItemStack itemstack)
     {
         chestContents[i] = itemstack;
-        if (itemstack != null && itemstack.stackSize > getInventoryStackLimit())
+        if (ItemStackTools.getStackSize(itemstack) > getInventoryStackLimit())
         {
-            itemstack.stackSize = getInventoryStackLimit();
+        	ItemStackTools.setStackSize(itemstack, getInventoryStackLimit());
         }
         markDirty();
     }
@@ -248,7 +249,7 @@ public class TileEntityBlueCrystalChest extends TileEntityLockable implements IT
             int j = nbttagcompound1.getByte("Slot") & 0xff;
             if (j >= 0 && j < chestContents.length)
             {
-                chestContents[j] = ItemStack.loadItemStackFromNBT(nbttagcompound1);
+                chestContents[j] = ItemStackTools.loadFromNBT(nbttagcompound1);
             }
         }
         facing = nbttagcompound.getByte("facing");
@@ -474,7 +475,7 @@ public class TileEntityBlueCrystalChest extends TileEntityLockable implements IT
                 int j = nbt1.getByte("Slot") & 0xff;
                 if (j >= 0 && j < stacks.length)
                 {
-                    stacks[j] = ItemStack.loadItemStackFromNBT(nbt1);
+                    stacks[j] = ItemStackTools.loadFromNBT(nbt1);
                 }
             }
 
@@ -523,18 +524,18 @@ public class TileEntityBlueCrystalChest extends TileEntityLockable implements IT
         if (this.chestContents[par1] != null)
         {
             ItemStack var2 = this.chestContents[par1];
-            this.chestContents[par1] = null;
+            this.chestContents[par1] = ItemStackTools.getEmptyStack();
             return var2;
         } else
         {
-            return null;
+            return ItemStackTools.getEmptyStack();
         }
     }
 
     @Override
     public boolean isItemValidForSlot(int i, ItemStack itemstack)
     {
-        return type.acceptsStack(itemstack);
+        return true;
     }
 
     public void rotateAround()

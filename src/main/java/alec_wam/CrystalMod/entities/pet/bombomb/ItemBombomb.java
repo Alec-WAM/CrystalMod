@@ -8,6 +8,7 @@ import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.proxy.ClientProxy;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ProfileUtil;
 import alec_wam.CrystalMod.util.UUIDUtils;
 import net.minecraft.block.BlockFence;
@@ -96,7 +97,7 @@ public class ItemBombomb extends Item implements ICustomModel {
             	worldIn.spawnEntityInWorld(bombomb);
                 if (!playerIn.capabilities.isCreativeMode)
                 {
-                    --stack.stackSize;
+                	ItemStackTools.incStackSize(stack, -1);
                 }
             }
 

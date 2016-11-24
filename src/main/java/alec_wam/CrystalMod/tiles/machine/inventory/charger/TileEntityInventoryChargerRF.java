@@ -1,5 +1,6 @@
 package alec_wam.CrystalMod.tiles.machine.inventory.charger;
 
+import alec_wam.CrystalMod.util.ItemStackTools;
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyContainerItem;
 import cofh.api.energy.IEnergyReceiver;
@@ -30,7 +31,7 @@ public class TileEntityInventoryChargerRF extends TileEntityInventoryCharger imp
 	
 	@Override
 	public boolean canChargeItem(ItemStack stack) {
-		return stack !=null && stack.getItem() !=null && stack.getItem() instanceof cofh.api.energy.IEnergyContainerItem && stack.stackSize == 1;
+		return ItemStackTools.isValid(stack) && stack.getItem() !=null && stack.getItem() instanceof cofh.api.energy.IEnergyContainerItem && ItemStackTools.getStackSize(stack) == 1;
 	}
 
 	@Override

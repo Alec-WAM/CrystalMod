@@ -26,6 +26,7 @@ import alec_wam.CrystalMod.tiles.pipes.ModelPipeBaked;
 import alec_wam.CrystalMod.tiles.pipes.attachments.AttachmentUtil.AttachmentData;
 import alec_wam.CrystalMod.tiles.pipes.covers.CoverUtil.CoverData;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.client.RenderUtil;
 
 import com.google.common.collect.Maps;
@@ -37,7 +38,7 @@ public class ModelAttachment extends DynamicItemAndBlockModel
 	private ItemStack stack;
 	
 	public ModelAttachment() {
-    	this(null);
+    	this(ItemStackTools.getEmptyStack());
     }
     public ModelAttachment(ItemStack stack) {
     	super(false, true);
@@ -52,7 +53,7 @@ public class ModelAttachment extends DynamicItemAndBlockModel
     
     public List<BakedQuad> getGeneralQuads() {
         final List<BakedQuad> list = new ArrayList<BakedQuad>();
-        if(this.stack !=null){
+        if(!ItemStackTools.isNullStack(stack)){
         	if(ItemNBTHelper.verifyExistance(stack, "ID")){
         		String id = ItemNBTHelper.getString(stack, "ID", "");
         		AttachmentData data = null;

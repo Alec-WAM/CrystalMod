@@ -5,6 +5,7 @@ import alec_wam.CrystalMod.Config;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.proxy.ClientProxy;
 import alec_wam.CrystalMod.tiles.spawner.ItemRenderMobEssence;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ModLogger;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
@@ -27,7 +28,7 @@ public class CustomItemRendererHandler {
 	
 	public boolean overrideRender(ItemStack itemStackIn)
 	{
-		if(itemStackIn !=null){
+		if(!ItemStackTools.isNullStack(itemStackIn)){
 			Item item = itemStackIn.getItem();
 			/*if(item == Items.BEEF){
 				

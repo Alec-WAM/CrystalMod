@@ -15,6 +15,7 @@ import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.blocks.crops.BlockCrystalPlant;
 import alec_wam.CrystalMod.blocks.crops.BlockCrystalPlant.PlantType;
+import alec_wam.CrystalMod.util.ItemStackTools;
 
 public class ItemCrystalSeeds extends Item implements net.minecraftforge.common.IPlantable
 {
@@ -65,7 +66,7 @@ public class ItemCrystalSeeds extends Item implements net.minecraftforge.common.
         else if (BlockCrystalPlant.getTypeFromBlock(worldIn.getBlockState(pos)) == TYPE && worldIn.isAirBlock(pos.up()))
         {
             worldIn.setBlockState(pos.up(), getPlant());
-            --stack.stackSize;
+            ItemStackTools.incStackSize(stack, -1);
             return EnumActionResult.SUCCESS;
         }
         else

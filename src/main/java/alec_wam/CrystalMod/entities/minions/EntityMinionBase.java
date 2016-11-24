@@ -5,6 +5,7 @@ import alec_wam.CrystalMod.entities.ai.AIManager;
 import alec_wam.CrystalMod.network.IMessageHandler;
 import alec_wam.CrystalMod.util.ChatUtil;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.UUIDUtils;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -64,24 +65,8 @@ public class EntityMinionBase extends EntityOwnable implements IMessageHandler {
 	public boolean processInteract(EntityPlayer par1EntityPlayer, EnumHand hand, ItemStack held)
     {
 		ItemStack itemstack = held;
-
-        if(this.isTamed()/* && isOwner(par1EntityPlayer)*/){
-        	if(itemstack !=null){
-        		if(itemstack.getItem() == Items.SLIME_BALL){
-        			if(this.worldObj.isRemote)swingArm(EnumHand.MAIN_HAND);;
-        			return true;
-        		}
-        	}else{
-        		/*if(par1EntityPlayer.isSneaking()){
-        			boolean last = isSitting();
-        			setSitting(!last);
-        			this.aiSit.setSitting(isSitting());
-        			if(!worldObj.isRemote)ChatUtil.sendNoSpam(par1EntityPlayer, "Sitting: "+isSitting());
-        		}*/
-        	}
-        }
         
-        if (itemstack == null && !this.isTamed())
+        if (ItemStackTools.isNullStack(itemstack) && !this.isTamed())
         {
            
            if (!this.worldObj.isRemote)
@@ -120,11 +105,11 @@ public class EntityMinionBase extends EntityOwnable implements IMessageHandler {
     {
         if (!player.capabilities.isCreativeMode)
         {
-            --stack.stackSize;
+        	ItemStackTools.incStackSize(stack, -1);
 
-            if (stack.stackSize <= 0)
+            if (ItemStackTools.isEmpty(stack))
             {
-                player.inventory.setInventorySlotContents(player.inventory.currentItem, (ItemStack)null);
+                player.inventory.setInventorySlotContents(player.inventory.currentItem, ItemStackTools.getEmptyStack());
             }
         }
     }
@@ -132,11 +117,7 @@ public class EntityMinionBase extends EntityOwnable implements IMessageHandler {
 	/** Used to toss item**/
 	public EntityItem dropItem(ItemStack droppedItem, boolean dropAround, boolean traceItem)
     {
-        if (droppedItem == null)
-        {
-            return null;
-        }
-        else if (droppedItem.stackSize == 0)
+        if (!ItemStackTools.isValid(droppedItem))
         {
             return null;
         }

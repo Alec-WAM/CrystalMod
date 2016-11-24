@@ -3,6 +3,7 @@ package alec_wam.CrystalMod.tiles.workbench;
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.packets.InventoryCraftingSyncPacket;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryCrafting;
@@ -34,7 +35,7 @@ public class InventoryCraftingPersistent extends InventoryCrafting {
   }
 
   public ItemStack getStackInSlot(int index) {
-    return index >= this.getSizeInventory() ? null : this.parent.getStackInSlot(index);
+    return index >= this.getSizeInventory() ? ItemStackTools.getEmptyStack() : this.parent.getStackInSlot(index);
   }
 
   public String getCommandSenderName() {
@@ -45,25 +46,21 @@ public class InventoryCraftingPersistent extends InventoryCrafting {
     return false;
   }
 
-  public ItemStack getStackInSlotOnClosing(int index) {
-    return null;
-  }
-
   public ItemStack decrStackSize(int index, int count) {
-    if(this.getStackInSlot(index) != null) {
+    if(!ItemStackTools.isNullStack(this.getStackInSlot(index))) {
       ItemStack itemstack;
 
-      if(this.getStackInSlot(index).stackSize <= count) {
+      if(ItemStackTools.getStackSize(this.getStackInSlot(index)) <= count) {
         itemstack = this.getStackInSlot(index);
-        this.setInventorySlotContents(index, null);
+        this.setInventorySlotContents(index, ItemStackTools.getEmptyStack());
         this.eventHandler.onCraftMatrixChanged(this);
         return itemstack;
       }
       else {
         itemstack = this.getStackInSlot(index).splitStack(count);
 
-        if(this.getStackInSlot(index).stackSize == 0) {
-          this.setInventorySlotContents(index, null);
+        if(ItemStackTools.isEmpty(this.getStackInSlot(index))) {
+          this.setInventorySlotContents(index, ItemStackTools.getEmptyStack());
         }
 
         this.eventHandler.onCraftMatrixChanged(this);
@@ -71,7 +68,7 @@ public class InventoryCraftingPersistent extends InventoryCrafting {
       }
     }
     else {
-      return null;
+      return ItemStackTools.getEmptyStack();
     }
   }
 

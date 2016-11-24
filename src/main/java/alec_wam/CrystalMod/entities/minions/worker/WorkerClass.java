@@ -7,6 +7,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraftforge.common.IPlantable;
 import alec_wam.CrystalMod.Config;
+import alec_wam.CrystalMod.util.ItemStackTools;
 
 import com.google.common.collect.Lists;
 
@@ -82,7 +83,7 @@ public enum WorkerClass{
     }
     
     public boolean itemMatches(ItemStack item) {
-      if (item == null) {
+      if (ItemStackTools.isNullStack(item)) {
         return this == INTERACT ? true : false;
       }
       return match(item) && !isBrokenTinkerTool(item);

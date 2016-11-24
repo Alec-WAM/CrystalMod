@@ -23,6 +23,7 @@ import alec_wam.CrystalMod.client.model.dynamic.DynamicBaseModel;
 import alec_wam.CrystalMod.client.model.dynamic.ICustomItemRenderer;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.UUIDUtils;
 
 public class ItemRenderMinion implements ICustomItemRenderer {
@@ -59,7 +60,7 @@ public class ItemRenderMinion implements ICustomItemRenderer {
 			return;
 		}
 		
-		ItemStack handStack = null;
+		ItemStack handStack = ItemStackTools.getEmptyStack();
 		
 		if(mType == MinionType.WORKER){
 			ItemStack pick = new ItemStack(Items.IRON_PICKAXE);

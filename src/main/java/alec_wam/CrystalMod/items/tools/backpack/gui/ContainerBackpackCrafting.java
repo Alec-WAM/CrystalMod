@@ -6,6 +6,7 @@ import alec_wam.CrystalMod.items.tools.backpack.BackpackUtil;
 import alec_wam.CrystalMod.items.tools.backpack.ItemBackpackBase;
 import alec_wam.CrystalMod.items.tools.backpack.types.InventoryBackpack;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -163,7 +164,7 @@ public class ContainerBackpackCrafting extends Container {
         }
         
         ItemStack stack = BackpackUtil.getItemStack(this.inventory, this.openType);
-        if(stack !=null && stack.getItem() instanceof ItemBackpackBase){
+        if(!ItemStackTools.isNullStack(stack) && stack.getItem() instanceof ItemBackpackBase){
         	ItemUtil.readInventoryFromNBT(backpackInventory, ItemNBTHelper.getCompound(stack));
         }
         for(int i = 0; i < backpackInventory.getSizeInventory(); i++){
@@ -185,7 +186,7 @@ public class ContainerBackpackCrafting extends Container {
 	
 	@Override
 	 public ItemStack transferStackInSlot(EntityPlayer player, int index){
-		ItemStack itemstack = null;
+		ItemStack itemstack = ItemStackTools.getEmptyStack();
         Slot slot = (Slot)this.inventorySlots.get(index);
 
         if (slot != null && slot.getHasStack())
@@ -197,7 +198,7 @@ public class ContainerBackpackCrafting extends Container {
             {
                 if (!this.mergeItemStack(itemstack1, 10, 46, true))
                 {
-                    return null;
+                    return ItemStackTools.getEmptyStack();
                 }
 
                 slot.onSlotChange(itemstack1, itemstack);
@@ -206,24 +207,24 @@ public class ContainerBackpackCrafting extends Container {
             {
                 if (!this.mergeItemStack(itemstack1, 37, 46, false))
                 {
-                    return null;
+                    return ItemStackTools.getEmptyStack();
                 }
             }
             else if (index >= 37 && index < 46)
             {
                 if (!this.mergeItemStack(itemstack1, 10, 37, false))
                 {
-                    return null;
+                    return ItemStackTools.getEmptyStack();
                 }
             }
             else if (!this.mergeItemStack(itemstack1, 10, 46, false))
             {
-                return null;
+                return ItemStackTools.getEmptyStack();
             }
 
             if (itemstack1.stackSize == 0)
             {
-                slot.putStack((ItemStack)null);
+                slot.putStack(ItemStackTools.getEmptyStack());
             }
             else
             {
@@ -232,7 +233,7 @@ public class ContainerBackpackCrafting extends Container {
 
             if (itemstack1.stackSize == itemstack.stackSize)
             {
-                return null;
+                return ItemStackTools.getEmptyStack();
             }
 
             slot.onPickupFromSlot(player, itemstack1);
@@ -254,7 +255,7 @@ public class ContainerBackpackCrafting extends Container {
     @Override
     public void onContainerClosed(EntityPlayer player){
         ItemStack stack = this.inventory.getCurrentItem();
-        if(stack !=null && stack.getItem() instanceof ItemBackpackBase){
+        if(!ItemStackTools.isNullStack(stack) && stack.getItem() instanceof ItemBackpackBase){
         	ItemStack backpack = BackpackUtil.getItemStack(inventory, openType);
             if(backpack !=null){
             	ItemUtil.writeInventoryToNBT(craftMatrix, ItemNBTHelper.getCompound(backpack));

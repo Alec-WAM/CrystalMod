@@ -15,6 +15,7 @@ import com.google.common.collect.Maps;
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.api.tools.IBatUpgrade;
 import alec_wam.CrystalMod.api.tools.UpgradeData;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.init.Blocks;
@@ -42,14 +43,13 @@ public class RecipeBatUpgrade implements IRecipe {
 
     @Override
     public boolean matches(InventoryCrafting inventoryCrafting, World world) {
-        ItemStack tool = null;
+        ItemStack tool = ItemStackTools.getEmptyStack();
         ItemStack[] input = new ItemStack[inventoryCrafting.getSizeInventory()];
-        ItemStack tool2 = null;
         for(int i = 0; i < inventoryCrafting.getSizeInventory(); i++)
         {
             ItemStack slot = inventoryCrafting.getStackInSlot(i);
             // empty slot
-            if(slot == null)
+            if(ItemStackTools.isNullStack(slot))
                 continue;
 
             // is it the tool?
@@ -61,7 +61,7 @@ public class RecipeBatUpgrade implements IRecipe {
                 input[i] = slot;
         }
         // no tool found?
-        if(tool == null)
+        if(ItemStackTools.isNullStack(tool))
             return false;
         
         ItemStack bat = tool.copy();
@@ -96,7 +96,7 @@ public class RecipeBatUpgrade implements IRecipe {
     public boolean whiteList(ItemStack[] items){
     	boolean foundItem = false;
     	for(int s = 0; s < items.length; s++){
-    		if(items[s] == null){
+    		if(ItemStackTools.isNullStack(items[s])){
     			continue;
     		}else{
     			foundItem = true;
@@ -106,7 +106,7 @@ public class RecipeBatUpgrade implements IRecipe {
     	if(!foundItem)return false;
     	
     	for(int i = 0; i < items.length; i++){
-    		if(items[i] == null || items[i] !=null && BatHelper.isIngrediant(items[i]))continue;
+    		if(ItemStackTools.isNullStack(items[i]) || items[i] !=null && BatHelper.isIngrediant(items[i]))continue;
     		return false;
     	}
     	

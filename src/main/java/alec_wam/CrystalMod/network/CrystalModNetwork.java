@@ -9,8 +9,11 @@ import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.capability.PacketExtendedPlayerInvSync;
+import alec_wam.CrystalMod.capability.PacketOpenExtendedInventory;
 import alec_wam.CrystalMod.items.backpack.PacketBackpackGuiAction;
 import alec_wam.CrystalMod.items.backpack.container.PacketBackpackGuiActionRename;
+import alec_wam.CrystalMod.items.tools.backpack.PacketOpenBackpack;
 import alec_wam.CrystalMod.network.packets.InventoryCraftingSyncPacket;
 import alec_wam.CrystalMod.network.packets.MessageSyncSlot;
 import alec_wam.CrystalMod.network.packets.MessageTileContainerUpdate;
@@ -47,6 +50,11 @@ public class CrystalModNetwork extends NetworkWrapper {
 	    registerPacketServer(InventoryCraftingSyncPacket.class);
 	    registerPacket(PacketPlayerMove.class);
 	    registerPacketClient(MessageSyncSlot.class);
+	    
+	    registerPacketClient(PacketExtendedPlayerInvSync.class);
+	    registerPacketServer(PacketOpenExtendedInventory.class);
+	    registerPacketServer(PacketOpenBackpack.class);
+	    
 	    registerPacketServer(PacketBackpackGuiAction.class);
 	    registerPacketServer(PacketBackpackGuiActionRename.class);
 	    registerPacketClient(PacketNoSpamChat.class);

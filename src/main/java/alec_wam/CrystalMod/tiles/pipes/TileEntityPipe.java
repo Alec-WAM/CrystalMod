@@ -26,6 +26,7 @@ import alec_wam.CrystalMod.tiles.pipes.types.IPipeType;
 import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.ChatUtil;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.ModLogger;
 import alec_wam.CrystalMod.util.tool.ToolUtil;
@@ -619,7 +620,7 @@ public abstract class TileEntityPipe extends TileEntityMod implements ITickable,
 								this.setCover(dir, null);
 								if (!player.capabilities.isCreativeMode) {
 									ItemStack cover = ItemPipeCover.getCover(coverData);
-									if (cover != null) {
+									if (ItemStackTools.isValid(cover)) {
 										ItemUtil.spawnItemInWorldWithoutMotion(worldObj, cover, getPos());
 									}
 								}
@@ -644,9 +645,11 @@ public abstract class TileEntityPipe extends TileEntityMod implements ITickable,
     		return ToolUtil.breakBlockWithTool(getBlockType(), getWorld(), getPos(), player, hand);
     	}
 		
-		if (player.getHeldItem(hand) != null
-				&& player.getHeldItem(hand).getItem() instanceof ItemPipeCover) {
-			CoverData data = ItemPipeCover.getCoverData(player.getHeldItem(hand));
+		ItemStack handItem = player.getHeldItem(hand);
+		
+		if (ItemStackTools.isValid(handItem)
+				&& handItem.getItem() instanceof ItemPipeCover) {
+			CoverData data = ItemPipeCover.getCoverData(handItem);
 			EnumFacing coverDir = side;
 			if (closest != null) {
 				if (closest.component != null && closest.component.dir != null) {
@@ -691,12 +694,12 @@ public abstract class TileEntityPipe extends TileEntityMod implements ITickable,
 			return true;
 		}
 		ItemStack held = player.getHeldItem(hand);
-		if(held !=null && held.getItem() == Items.STICK){
+		if(ItemStackTools.isValid(held) && held.getItem() == Items.STICK){
 			BlockUtil.markBlockForUpdate(getWorld(), getPos());
 			return true;
 		}
 		
-		if(held !=null && held.getItem() == ModItems.pipeAttachmant){
+		if(ItemStackTools.isValid(held) && held.getItem() == ModItems.pipeAttachmant){
 			AttachmentData data = AttachmentUtil.getFromID(ItemPipeAttachment.getID(held));
 			if(data !=null && data.isPipeValid(this, side, held)){
 				this.setAttachment(side, data);

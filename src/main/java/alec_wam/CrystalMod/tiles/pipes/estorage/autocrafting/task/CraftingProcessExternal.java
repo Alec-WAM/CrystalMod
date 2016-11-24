@@ -18,6 +18,7 @@ import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetwork;
 import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage;
 import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage.ItemStackData;
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.CraftingPattern;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 
 public class CraftingProcessExternal extends CraftingProcessBase {
@@ -37,19 +38,19 @@ public class CraftingProcessExternal extends CraftingProcessBase {
     	IItemHandler inventory = getPattern().getCrafter().getFacingInventory();
         if (inventory != null) {
             for (ItemStack stack : getToInsert()) {
-                ItemStack actualStack = null;//items.get(stack, pattern.isOredict());
+                ItemStack actualStack = ItemStackTools.getEmptyStack();//items.get(stack, pattern.isOredict());
 
                 ItemStackData found = items.getItemData(stack);
                 if(found == null && pattern.isOredict()){
                 	found = items.getOreItemData(stack);
                 }
                 
-                if(found !=null && found.stack !=null){
+                if(found !=null && !ItemStackTools.isNullStack(found.stack)){
                 	actualStack = found.stack.copy();
                 }
                 
-                boolean canInsert = ItemHandlerHelper.insertItem(inventory, ItemHandlerHelper.copyStackWithSize(actualStack, stack.stackSize), true) == null;
-                if (actualStack == null || actualStack.stackSize == 0 || !items.removeCheck(actualStack, stack.stackSize, ItemStorage.getExtractFilter(pattern.isOredict()), true) || !canInsert) {
+                boolean canInsert = ItemStackTools.isNullStack(ItemHandlerHelper.insertItem(inventory, ItemHandlerHelper.copyStackWithSize(actualStack, ItemStackTools.getStackSize(stack)), true));
+                if (!ItemStackTools.isValid(actualStack) || !items.removeCheck(actualStack, ItemStackTools.getStackSize(stack), ItemStorage.getExtractFilter(pattern.isOredict()), true) || !canInsert) {
                     return false;
                 }
             }
@@ -63,7 +64,7 @@ public class CraftingProcessExternal extends CraftingProcessBase {
 		 IItemHandler inventory = getPattern().getCrafter().getFacingInventory();
 		 for (ItemStack insertStack : getToInsert()) {
 			 ItemStack tookStack = network.getItemStorage().removeItem(insertStack, ItemStorage.getExtractFilter(pattern.isOredict()), false);
-			 if(tookStack !=null)ItemHandlerHelper.insertItem(inventory, tookStack, false);
+			 if(!ItemStackTools.isNullStack(tookStack))ItemHandlerHelper.insertItem(inventory, tookStack, false);
 		 }
 	}
     

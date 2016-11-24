@@ -25,6 +25,7 @@ import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.FakePlayerFactory;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.world.DropCapture;
 import alec_wam.CrystalMod.world.DropCapture.CaptureContext;
 
@@ -136,7 +137,7 @@ public class FakePlayerUtil {
 		fakePlayer.setActiveHand(EnumHand.MAIN_HAND);
 		fakePlayer.inventory.setInventorySlotContents(0, stackToUse);
 		
-		if(fakePlayer.getHeldItem(EnumHand.MAIN_HAND) !=null){
+		if(!ItemStackTools.isNullStack(fakePlayer.getHeldItem(EnumHand.MAIN_HAND))){
 			EnumActionResult result = fakePlayer.getHeldItem(EnumHand.MAIN_HAND).onItemUse(fakePlayer, world, blockPos, EnumHand.MAIN_HAND, face, 0f, 0f, 0f);
 			fakePlayer.setPosition(oldPos.xCoord, oldPos.yCoord, oldPos.zCoord);
 			return result == EnumActionResult.SUCCESS ? true : false;

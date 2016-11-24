@@ -265,7 +265,7 @@ public class EntityUtil {
     }
 
 	public static ItemStack getItemFromEntity(Entity entity, RayTraceResult ray) {
-		ItemStack stack = null;
+		ItemStack stack = ItemStackTools.getEmptyStack();
 		if(entity !=null){
 			if(entity instanceof EntityItem){
 				stack = ((EntityItem)entity).getEntityItem();

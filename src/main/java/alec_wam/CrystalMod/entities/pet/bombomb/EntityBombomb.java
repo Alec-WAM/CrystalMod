@@ -35,6 +35,7 @@ import alec_wam.CrystalMod.network.IMessageHandler;
 import alec_wam.CrystalMod.network.packets.PacketEntityMessage;
 import alec_wam.CrystalMod.util.ChatUtil;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.ModLogger;
 
@@ -131,7 +132,7 @@ public class EntityBombomb extends EntityOwnable implements IMessageHandler {
         	if(getHealth() < getMaxHealth()){
 	        	List<EntityItem> items = this.worldObj.getEntitiesWithinAABB(EntityItem.class, getEntityBoundingBox());
 		        for(EntityItem item : items){
-		        	if(item !=null && item.getEntityItem() !=null){
+		        	if(item !=null && ItemStackTools.isValid(item.getEntityItem())){
 		        		ItemStack stack = item.getEntityItem();
 		        		float value = 0.0f;
 		        		if(stack.getItem() == Item.getItemFromBlock(Blocks.TNT)){
@@ -142,8 +143,8 @@ public class EntityBombomb extends EntityOwnable implements IMessageHandler {
 		        		}
 		        		if(value > 0.0f && getHealth() + value <= getMaxHealth()){
 		        			heal(value);
-		        			stack.stackSize--;
-		        			if(stack.stackSize <=0){
+		        			ItemStackTools.incStackSize(stack, -1);
+		        			if(ItemStackTools.isEmpty(stack)){
 		        				item.setDead();
 		        			}
 		        			if(getHealth() >= getMaxHealth()){
@@ -189,25 +190,19 @@ public class EntityBombomb extends EntityOwnable implements IMessageHandler {
 	protected boolean processInteract(EntityPlayer player, EnumHand hand, @Nullable ItemStack stack)
     {
 		if(isOwner(player)){
-			if(stack !=null){
+			if(ItemStackTools.isValid(stack)){
 				EnumDyeColor color = ItemUtil.getDyeColor(stack);
 				if(color !=null){
 					if(getColor() !=color){
 						setColor(color);
 						if(!player.capabilities.isCreativeMode){
-							stack.stackSize--;
+							ItemStackTools.incStackSize(stack, -1);
 						}
 						return true;
 					}
 				}
 				if(stack.getItem() == ModItems.minionStaff){
-					//if(!worldObj.isRemote){
-						/*if(getRidingEntity() !=null){
-							dismountRidingEntity();
-						} else {*/
-							startRiding(player);
-						//}
-					//}
+					startRiding(player);
 					return true;
 				}
 			} else {

@@ -5,6 +5,7 @@ import java.util.List;
 
 import alec_wam.CrystalMod.tiles.cauldron.CauldronRecipeManager;
 import alec_wam.CrystalMod.tiles.cauldron.CauldronRecipeManager.InfusionRecipe;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 
 import com.google.common.collect.Lists;
@@ -73,7 +74,7 @@ public class CrystalInfusionManager {
 	}
 	
 	public static InfusionMachineRecipe getRecipe(ItemStack input, FluidStack cinput){
-		if (input == null || cinput == null) {
+		if (ItemStackTools.isNullStack(input) || cinput == null) {
 			return null;
 		}
 		for(InfusionMachineRecipe recipe : recipes){

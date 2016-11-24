@@ -18,6 +18,7 @@ import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.tiles.pipes.ContainerNormalPipe;
 import alec_wam.CrystalMod.tiles.pipes.item.PacketPipe;
+import alec_wam.CrystalMod.util.ItemStackTools;
 
 public class GuiEStoragePipe extends GuiContainer {
 
@@ -102,7 +103,7 @@ public class GuiEStoragePipe extends GuiContainer {
 			for(int s = row*6; (s < net.interfaces.size()); s++){
 				ItemStack dis = new ItemStack(ModBlocks.hddInterface);
 				
-				if(dis !=null){
+				if(!ItemStackTools.isNullStack(dis)){
 					GlStateManager.pushMatrix();
 		            RenderHelper.enableGUIStandardItemLighting();
 		            GlStateManager.disableLighting();

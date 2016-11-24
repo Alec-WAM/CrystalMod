@@ -9,6 +9,7 @@ import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetwork;
 import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetworkClient.SortType;
 import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetworkClient.ViewType;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
+import alec_wam.CrystalMod.util.ItemStackTools;
 
 public class PanelSourceWireless implements IPanelSource {
 
@@ -32,7 +33,7 @@ public class PanelSourceWireless implements IPanelSource {
 
 	@Override
 	public SortType getSortType() {
-		return stack !=null ? SortType.values()[ItemNBTHelper.getInteger(stack, "SortType", 0)] : SortType.NAME;
+		return !ItemStackTools.isNullStack(stack) ? SortType.values()[ItemNBTHelper.getInteger(stack, "SortType", 0)] : SortType.NAME;
 	}
 
 	@Override
@@ -43,7 +44,7 @@ public class PanelSourceWireless implements IPanelSource {
 
 	@Override
 	public ViewType getViewType() {
-		return stack !=null ? ViewType.values()[ItemNBTHelper.getInteger(stack, "ViewType", 0)] : ViewType.BOTH;
+		return !ItemStackTools.isNullStack(stack) ? ViewType.values()[ItemNBTHelper.getInteger(stack, "ViewType", 0)] : ViewType.BOTH;
 	}
 
 	@Override
@@ -54,7 +55,7 @@ public class PanelSourceWireless implements IPanelSource {
 
 	@Override
 	public boolean getJEISync() {
-		return stack !=null ? ItemNBTHelper.getBoolean(stack, "JEISync", false) : false;
+		return !ItemStackTools.isNullStack(stack) ? ItemNBTHelper.getBoolean(stack, "JEISync", false) : false;
 	}
 
 	@Override
@@ -65,7 +66,7 @@ public class PanelSourceWireless implements IPanelSource {
 
 	@Override
 	public String getSearchBar() {
-		if(stack !=null){
+		if(!ItemStackTools.isNullStack(stack)){
         	return ItemNBTHelper.getString(stack, "SearchBarText", "");
         }
 		return "";
@@ -73,7 +74,7 @@ public class PanelSourceWireless implements IPanelSource {
 
 	@Override
 	public void setSearchBar(String text) {
-		if(stack !=null){
+		if(!ItemStackTools.isNullStack(stack)){
         	ItemNBTHelper.setString(stack, "SearchBarText", text);
         	CrystalModNetwork.sendToServer(new PacketItemNBT(-1, ItemNBTHelper.getCompound(stack)));
         }

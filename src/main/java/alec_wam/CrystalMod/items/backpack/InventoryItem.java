@@ -6,7 +6,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 import alec_wam.CrystalMod.util.ModLogger;
-import alec_wam.CrystalMod.util.NBTUtils;
+import alec_wam.CrystalMod.util.inventory.NBTUtils;
 
 public class InventoryItem extends ItemStackHandlerBasic
 {

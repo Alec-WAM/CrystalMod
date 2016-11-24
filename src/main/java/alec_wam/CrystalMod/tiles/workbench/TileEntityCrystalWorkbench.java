@@ -3,6 +3,7 @@ package alec_wam.CrystalMod.tiles.workbench;
 import java.util.Arrays;
 
 import alec_wam.CrystalMod.tiles.TileEntityMod;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -61,13 +62,13 @@ public class TileEntityCrystalWorkbench extends TileEntityMod implements ISidedI
 	public ItemStack decrStackSize(int slot, int quantity) {
 		ItemStack itemStack = getStackInSlot(slot);
 
-	    if(itemStack == null) {
-	      return null;
+	    if(ItemStackTools.isNullStack(itemStack)) {
+	      return ItemStackTools.getEmptyStack();
 	    }
 
 	    // whole itemstack taken out
-	    if(itemStack.stackSize <= quantity) {
-	      setInventorySlotContents(slot, null);
+	    if(ItemStackTools.getStackSize(itemStack) <= quantity) {
+	      setInventorySlotContents(slot, ItemStackTools.getEmptyStack());
 	      this.markDirty();
 	      return itemStack;
 	    }
@@ -75,8 +76,8 @@ public class TileEntityCrystalWorkbench extends TileEntityMod implements ISidedI
 	    // split itemstack
 	    itemStack = itemStack.splitStack(quantity);
 	    // slot is empty, set to null
-	    if(getStackInSlot(slot).stackSize == 0) {
-	      setInventorySlotContents(slot, null);
+	    if(ItemStackTools.isEmpty(getStackInSlot(slot))) {
+	      setInventorySlotContents(slot, ItemStackTools.getEmptyStack());
 	    }
 
 	    this.markDirty();
@@ -87,7 +88,7 @@ public class TileEntityCrystalWorkbench extends TileEntityMod implements ISidedI
 	@Override
 	public ItemStack removeStackFromSlot(int slot) {
 		ItemStack itemStack = getStackInSlot(slot);
-	    setInventorySlotContents(slot, null);
+	    setInventorySlotContents(slot, ItemStackTools.getEmptyStack());
 	    return itemStack;
 	}
 
@@ -98,8 +99,8 @@ public class TileEntityCrystalWorkbench extends TileEntityMod implements ISidedI
 	    }
 
 	    inventory[slot] = itemstack;
-	    if(itemstack != null && itemstack.stackSize > getInventoryStackLimit()) {
-	      itemstack.stackSize = getInventoryStackLimit();
+	    if(!ItemStackTools.isNullStack(itemstack) && ItemStackTools.getStackSize(itemstack) > getInventoryStackLimit()) {
+	    	ItemStackTools.setStackSize(itemstack, getInventoryStackLimit());
 	    }
 	}
 
@@ -148,7 +149,7 @@ public class TileEntityCrystalWorkbench extends TileEntityMod implements ISidedI
 	@Override
 	public void clear() {
 		for(int i = 0; i < inventory.length; i++) {
-	      inventory[i] = null;
+	      inventory[i] = ItemStackTools.getEmptyStack();
 	    }
 	}
 

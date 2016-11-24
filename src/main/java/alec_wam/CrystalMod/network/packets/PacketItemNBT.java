@@ -12,6 +12,7 @@ import net.minecraft.network.NetHandlerPlayServer;
 import net.minecraft.network.PacketBuffer;
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.network.AbstractPacketThreadsafe;
+import alec_wam.CrystalMod.util.ItemStackTools;
 
 public class PacketItemNBT extends AbstractPacketThreadsafe {
 
@@ -50,7 +51,7 @@ public class PacketItemNBT extends AbstractPacketThreadsafe {
 			return;
 		}
 		ItemStack stack = player.inventory.getStackInSlot(slot < 0 ? player.inventory.currentItem : slot);
-		if(stack !=null){
+		if(!ItemStackTools.isNullStack(stack)){
 			stack.setTagCompound(data);
 		}
 	}
@@ -62,7 +63,7 @@ public class PacketItemNBT extends AbstractPacketThreadsafe {
 			return;
 		}
 		ItemStack stack = player.inventory.getStackInSlot(slot < 0 ? player.inventory.currentItem : slot);
-		if(stack !=null){
+		if(!ItemStackTools.isNullStack(stack)){
 			stack.setTagCompound(data);
 		}
 	}

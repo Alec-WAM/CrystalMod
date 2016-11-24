@@ -13,6 +13,7 @@ import alec_wam.CrystalMod.network.packets.PacketTileMessage;
 import alec_wam.CrystalMod.tiles.pipes.ConnectionMode;
 import alec_wam.CrystalMod.tiles.pipes.item.PacketPipe;
 import alec_wam.CrystalMod.util.FluidUtil;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.Lang;
 import alec_wam.CrystalMod.util.ModLogger;
 import alec_wam.CrystalMod.util.client.RenderUtil;
@@ -151,7 +152,7 @@ public class GuiLiquidPipe extends GuiContainer {
 	    
 	    ItemStack st = Minecraft.getMinecraft().thePlayer.inventory.getItemStack();
 	    FluidFilter filter = getFilter();
-	    if(filter == null && st == null) {
+	    if(filter == null && ItemStackTools.isNullStack(st)) {
 	      return;
 	    }
 	    if(filter == null) {

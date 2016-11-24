@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
+
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -196,9 +198,8 @@ public class ItemQuantityMap {
 			qty = map.get(wrap1).count;
 			while (qty > 0) {
 				outStack = wrap1.getItemStack().copy();
-				outStack.stackSize = qty > outStack.getMaxStackSize() ? outStack
-						.getMaxStackSize() : qty;
-				qty -= outStack.stackSize;
+				ItemStackTools.setStackSize(outStack, qty > outStack.getMaxStackSize() ? outStack.getMaxStackSize() : qty);
+				qty -= ItemStackTools.getStackSize(outStack);
 				items.add(outStack);
 			}
 		}
@@ -217,7 +218,7 @@ public class ItemQuantityMap {
 		ItemStack outStack;
 		for (ItemHashEntry wrap1 : map.keySet()) {
 			outStack = wrap1.getItemStack().copy();
-			outStack.stackSize = map.get(wrap1).count;
+			ItemStackTools.setStackSize(outStack, map.get(wrap1).count);
 			items.add(outStack);
 		}
 	}
@@ -312,8 +313,8 @@ public class ItemQuantityMap {
 		 * @param item
 		 *            MUST NOT BE NULL
 		 */
-		public ItemHashEntry(ItemStack item) {
-			if (item == null) {
+		public ItemHashEntry(@Nonnull ItemStack item) {
+			if (ItemStackTools.isNullStack(item)) {
 				throw new IllegalArgumentException("Stack may not be null");
 			}
 			this.item = item.getItem();
@@ -401,7 +402,7 @@ public class ItemQuantityMap {
 		}
 
 		public ItemStack getItemStack() {
-			if (cacheStack != null) {
+			if (!ItemStackTools.isNullStack(cacheStack)) {
 				return cacheStack;
 			} else {
 				ItemStack stack = new ItemStack(item, 1, damage);

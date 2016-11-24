@@ -18,6 +18,7 @@ import alec_wam.CrystalMod.network.packets.PacketTileMessage;
 import alec_wam.CrystalMod.tiles.machine.TileEntityMachine;
 import alec_wam.CrystalMod.tiles.machine.crafting.liquidizer.LiquidizerRecipeManager.LiquidizerRecipe;
 import alec_wam.CrystalMod.tiles.tank.Tank;
+import alec_wam.CrystalMod.util.ItemStackTools;
 
 public class TileEntityLiquidizer extends TileEntityMachine {
 
@@ -92,9 +93,9 @@ public class TileEntityLiquidizer extends TileEntityMachine {
         	this.tank.getFluid().amount+=output.amount;
         }
         final ItemStack itemStack2 = this.inventory[0];
-        itemStack2.stackSize-=recipe.getInputSize();
-        if (this.inventory[0].stackSize <= 0) {
-            this.inventory[0] = null;
+        ItemStackTools.incStackSize(itemStack2, -recipe.getInputSize());
+        if (ItemStackTools.isEmpty(this.inventory[0])) {
+            this.inventory[0] = ItemStackTools.getEmptyStack();
         }
     }
 

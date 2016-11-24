@@ -1,5 +1,6 @@
 package alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting;
 
+import alec_wam.CrystalMod.util.ItemStackTools;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
@@ -32,7 +33,7 @@ public class ContainerCrafter extends Container {
 	
 	@Override
     public ItemStack transferStackInSlot(EntityPlayer player, int index) {
-        ItemStack stack = null;
+        ItemStack stack = ItemStackTools.getEmptyStack();
 
         Slot slot = getSlot(index);
 
@@ -41,14 +42,14 @@ public class ContainerCrafter extends Container {
 
             if (index < 16) {
                 if (!mergeItemStack(stack, 16, inventorySlots.size(), true)) {
-                    return null;
+                    return ItemStackTools.getEmptyStack();
                 }
             } else if (!mergeItemStack(stack, 0, 16, false)) {
-                return null;
+                return ItemStackTools.getEmptyStack();
             }
 
-            if (stack.stackSize == 0) {
-                slot.putStack(null);
+            if (ItemStackTools.isEmpty(stack)) {
+                slot.putStack(ItemStackTools.getEmptyStack());
             } else {
                 slot.onSlotChanged();
             }

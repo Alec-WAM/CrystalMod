@@ -8,6 +8,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import alec_wam.CrystalMod.tiles.machine.BasicMachineRecipe;
 import alec_wam.CrystalMod.tiles.machine.TileEntityMachine;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 
 public class TileEntityPress extends TileEntityMachine implements ISidedInventory {
@@ -17,7 +18,7 @@ public class TileEntityPress extends TileEntityMachine implements ISidedInventor
 	}
 	
 	public boolean canStart() {
-        if (inventory[0] == null) {
+        if (ItemStackTools.isNullStack(inventory[0])) {
             return false;
         }
         final BasicMachineRecipe recipe = PressRecipeManager.getRecipe(inventory[0]);
@@ -25,7 +26,7 @@ public class TileEntityPress extends TileEntityMachine implements ISidedInventor
             return false;
         }
         final ItemStack output = recipe.getOutput();
-        return output != null && (inventory[1] == null || (ItemUtil.canCombine(output, inventory[1]) && inventory[1].stackSize + output.stackSize <= output.getMaxStackSize()));
+        return ItemStackTools.isValid(output) && (ItemStackTools.isNullStack(inventory[1]) || (ItemUtil.canCombine(output, inventory[1]) && ItemStackTools.getStackSize(inventory[1]) + ItemStackTools.getStackSize(output) <= output.getMaxStackSize()));
     }
 	
 	public boolean canFinish() {
@@ -34,7 +35,7 @@ public class TileEntityPress extends TileEntityMachine implements ISidedInventor
     
     protected boolean hasValidInput() {
     	final BasicMachineRecipe recipe = PressRecipeManager.getRecipe(this.inventory[0]);
-        return recipe != null && recipe.getInputSize() <= this.inventory[0].stackSize;
+        return recipe != null && recipe.getInputSize() <= ItemStackTools.getStackSize(this.inventory[0]);
     }
     
     public void processStart() {
@@ -46,17 +47,17 @@ public class TileEntityPress extends TileEntityMachine implements ISidedInventor
     public void processFinish() {
     	BasicMachineRecipe recipe = PressRecipeManager.getRecipe(this.inventory[0]);
     	final ItemStack output = recipe.getOutput();
-        if (this.inventory[1] == null) {
+        if (ItemStackTools.isNullStack(this.inventory[1])) {
             this.inventory[1] = output;
         }
         else {
             final ItemStack itemStack = this.inventory[1];
-            itemStack.stackSize += output.stackSize;
+            ItemStackTools.incStackSize(itemStack, ItemStackTools.getStackSize(output));
         }
         final ItemStack itemStack2 = this.inventory[0];
-        itemStack2.stackSize-=recipe.getInputSize();
-        if (this.inventory[0].stackSize <= 0) {
-            this.inventory[0] = null;
+        ItemStackTools.incStackSize(itemStack2, -recipe.getInputSize());
+        if (ItemStackTools.isEmpty(itemStack2)) {
+            this.inventory[0] = ItemStackTools.getEmptyStack();
         }
     }
 

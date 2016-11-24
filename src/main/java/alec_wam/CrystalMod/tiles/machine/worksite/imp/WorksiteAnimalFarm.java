@@ -19,6 +19,7 @@ import alec_wam.CrystalMod.tiles.machine.worksite.WorkerFilter;
 import alec_wam.CrystalMod.tiles.machine.worksite.InventorySided.RelativeSide;
 import alec_wam.CrystalMod.tiles.machine.worksite.InventorySided.RotationType;
 import alec_wam.CrystalMod.util.BlockUtil;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.ModLogger;
 import alec_wam.CrystalMod.util.tool.ToolUtil;
@@ -88,7 +89,7 @@ public class WorksiteAnimalFarm extends TileWorksiteBoundedInventory {
 		ItemSlotFilter filter = new ItemSlotFilter() {
 			@Override
 			public boolean isItemValid(ItemStack stack) {
-				if (stack == null) {
+				if (!ItemStackTools.isValid(stack)) {
 					return true;
 				}
 				Item item = stack.getItem();
@@ -109,7 +110,7 @@ public class WorksiteAnimalFarm extends TileWorksiteBoundedInventory {
 		filter = new ItemSlotFilter() {
 			@Override
 			public boolean isItemValid(ItemStack stack) {
-				if (stack == null) {
+				if (!ItemStackTools.isValid(stack)) {
 					return true;
 				}
 				Item item = stack.getItem();
@@ -138,11 +139,11 @@ public class WorksiteAnimalFarm extends TileWorksiteBoundedInventory {
 	}
 
 	public boolean takeBrokenItems(EntityMinionWorker worker) {
-		if(worker.getHeldItemMainhand() != null){
+		if(!ItemStackTools.isNullStack(worker.getHeldItemMainhand())){
 			ItemStack held = worker.getHeldItemMainhand();
 			if(ToolUtil.isBrokenTinkerTool(held) || ToolUtil.isEmptyRfTool(held)){
 				if(addStackToInventoryNoDrop(held, false, RelativeSide.BOTTOM, RelativeSide.TOP)){
-					worker.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, null);
+					worker.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, ItemStackTools.getEmptyStack());
 					return true;
 				}
 			}
@@ -186,24 +187,24 @@ public class WorksiteAnimalFarm extends TileWorksiteBoundedInventory {
 		ItemStack stack;
 		for (int i = 27; i < 30; i++) {
 			stack = inventory.getStackInSlot(i);
-			if (stack == null) {
+			if (!ItemStackTools.isValid(stack)) {
 				continue;
 			}
 			if (stack.getItem() == Items.CARROT) {
-				carrotCount += stack.stackSize;
+				carrotCount += ItemStackTools.getStackSize(stack);
 			} else if (stack.getItem() == Items.WHEAT_SEEDS) {
-				seedCount += stack.stackSize;
+				seedCount += ItemStackTools.getStackSize(stack);
 			} else if (stack.getItem() == Items.WHEAT) {
-				wheatCount += stack.stackSize;
+				wheatCount += ItemStackTools.getStackSize(stack);
 			}
 		}
 		for (int i = 30; i < 33; i++) {
 			stack = inventory.getStackInSlot(i);
-			if (stack == null) {
+			if (!ItemStackTools.isValid(stack)) {
 				continue;
 			}
 			if (stack.getItem() == Items.BUCKET) {
-				bucketCount += stack.stackSize;
+				bucketCount += ItemStackTools.getStackSize(stack);
 			} 
 		}
 		// AWLog.logDebug("counting animal farm resources.."+wheatCount+","+seedCount+","+carrotCount+","+bucketCount+","+shears);
@@ -262,11 +263,11 @@ public class WorksiteAnimalFarm extends TileWorksiteBoundedInventory {
 
 	public ItemStack getBreedingItem(EntityAnimal animal) {
 		for (int i = 0; i < this.inventory.getSizeInventory(); i++) {
-			if (this.inventory.getStackInSlot(i) != null
+			if (ItemStackTools.isValid(this.inventory.getStackInSlot(i))
 					&& animal.isBreedingItem(this.inventory.getStackInSlot(i)))
 				return this.inventory.getStackInSlot(i).copy();
 		}
-		return null;
+		return ItemStackTools.getEmptyStack();
 	}
 
 	private void scanForAnimals(List<EntityAnimal> animals,
@@ -469,9 +470,9 @@ public class WorksiteAnimalFarm extends TileWorksiteBoundedInventory {
 			for(int i = 0; i < slots.length; i++){
 				int slot = slots[i];
 				ItemStack shears = inventory.getStackInSlot(slot);
-				if(shears !=null && shears.getItem() instanceof ItemShears && !ToolUtil.isEmptyRfTool(shears)){
+				if(ItemStackTools.isValid(shears) && shears.getItem() instanceof ItemShears && !ToolUtil.isEmptyRfTool(shears)){
 					worker.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, shears);
-					this.inventory.setInventorySlotContents(slot, null);
+					this.inventory.setInventorySlotContents(slot, ItemStackTools.getEmptyStack());
 					return true;
 				}
 			}
@@ -487,7 +488,7 @@ public class WorksiteAnimalFarm extends TileWorksiteBoundedInventory {
 		EntityMinionWorker worker = getRandomWorker(new WorkerFilter(){
 			public boolean matches(EntityMinionWorker worker){
 				ItemStack held = worker.getHeldItemMainhand();
-				return held != null && held.getItem() instanceof ItemShears;
+				return !ItemStackTools.isNullStack(held) && held.getItem() instanceof ItemShears;
 			}
 		}, WorkerFilter.idleFilter);
 		if(worker == null){
@@ -515,9 +516,9 @@ public class WorksiteAnimalFarm extends TileWorksiteBoundedInventory {
 			for(int i = 0; i < slots.length; i++){
 				int slot = slots[i];
 				ItemStack sword = inventory.getStackInSlot(slot);
-				if(sword !=null && sword.getItem() instanceof ItemSword && !ToolUtil.isEmptyRfTool(sword)){
+				if(ItemStackTools.isValid(sword) && sword.getItem() instanceof ItemSword && !ToolUtil.isEmptyRfTool(sword)){
 					worker.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, sword);
-					this.inventory.setInventorySlotContents(slot, null);
+					this.inventory.setInventorySlotContents(slot, ItemStackTools.getEmptyStack());
 					return true;
 				}
 			}
@@ -533,7 +534,7 @@ public class WorksiteAnimalFarm extends TileWorksiteBoundedInventory {
 		EntityMinionWorker worker = getRandomWorker(new WorkerFilter(){
 			public boolean matches(EntityMinionWorker worker){
 				ItemStack held = worker.getHeldItemMainhand();
-				return held != null && held.getItem() instanceof ItemSword;
+				return !ItemStackTools.isNullStack(held) && held.getItem() instanceof ItemSword;
 			}
 		}, WorkerFilter.idleFilter);
 		if (worker == null) {
@@ -573,7 +574,7 @@ public class WorksiteAnimalFarm extends TileWorksiteBoundedInventory {
 		ItemStack stack;
 		for (EntityItem item : items) {
 			stack = item.getEntityItem();
-			if (stack == null) {
+			if (!ItemStackTools.isValid(stack)) {
 				continue;
 			}
 			if (stack.getItem() == Items.EGG) {

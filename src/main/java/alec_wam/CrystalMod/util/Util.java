@@ -38,26 +38,26 @@ public class Util {
 	    }
 
 	public static ItemStack getContainerItem(ItemStack stack) {
-		if( stack == null )
+		if( ItemStackTools.isNullStack(stack) )
 		{
-			return null;
+			return ItemStackTools.getEmptyStack();
 		}
 
 		final Item i = stack.getItem();
 		if( i == null || !i.hasContainerItem( stack ) )
 		{
-			if( stack.stackSize > 1 )
+			if( ItemStackTools.getStackSize(stack) > 1 )
 			{
-				stack.stackSize--;
+				ItemStackTools.incStackSize(stack, -1);
 				return stack;
 			}
-			return null;
+			return ItemStackTools.getEmptyStack();
 		}
 
 		ItemStack ci = i.getContainerItem( stack.copy() );
-		if( ci != null && ci.isItemStackDamageable() && ci.getItemDamage() == ci.getMaxDamage() )
+		if( !ItemStackTools.isNullStack(ci) && ci.isItemStackDamageable() && ci.getItemDamage() == ci.getMaxDamage() )
 		{
-			ci = null;
+			ci = ItemStackTools.getEmptyStack();
 		}
 
 		return ci;

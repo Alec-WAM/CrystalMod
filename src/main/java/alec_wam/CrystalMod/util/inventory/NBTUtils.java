@@ -1,4 +1,4 @@
-package alec_wam.CrystalMod.util;
+package alec_wam.CrystalMod.util.inventory;
 
 import java.util.UUID;
 

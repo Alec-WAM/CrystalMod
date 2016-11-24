@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import alec_wam.CrystalMod.tiles.machine.worksite.InventorySided.RelativeSide;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.fakeplayer.FakePlayerUtil;
 import net.minecraft.block.Block;
@@ -32,9 +33,9 @@ public abstract class TileWorksiteBoundedInventory extends TileWorksiteBounded i
 		ItemStack copy = stack.copy();
 		for(RelativeSide side : sides){
 		  int[] slots = inventory.getRawIndicesCombined(side);
-		  copy.stackSize -= ItemUtil.doInsertItemInvArray(inventory, copy, slots, !sim);//InvTools.mergeItemStack(inventory, stack, slots);
-		  if(copy.stackSize <=0){
-			  copy = null;
+		  ItemStackTools.incStackSize(copy, -ItemUtil.doInsertItemInvArray(inventory, copy, slots, !sim));
+		  if(ItemStackTools.isEmpty(copy)){
+			  copy = ItemStackTools.getEmptyStack();
 			  return true;
 		  }
 		}

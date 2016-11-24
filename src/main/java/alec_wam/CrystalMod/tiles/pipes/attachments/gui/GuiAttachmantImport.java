@@ -19,6 +19,7 @@ import alec_wam.CrystalMod.tiles.pipes.estorage.TileEntityPipeEStorage;
 import alec_wam.CrystalMod.tiles.pipes.item.PacketPipe;
 import alec_wam.CrystalMod.tiles.pipes.item.filters.ItemPipeFilter.FilterType;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
+import alec_wam.CrystalMod.util.ItemStackTools;
 
 public class GuiAttachmantImport extends GuiContainer {
 
@@ -47,7 +48,7 @@ public class GuiAttachmantImport extends GuiContainer {
 			refreshButtons();
 			return;
 		}
-		boolean safe = getImport() !=null && getImport().getFilter() !=null;
+		boolean safe = getImport() !=null && !ItemStackTools.isNullStack(getImport().getFilter());
 		if(safe){
 			ItemStack filterStack = getImport().getFilter();
 			if(filterStack.getMetadata() == FilterType.NORMAL.ordinal()){
@@ -106,7 +107,7 @@ public class GuiAttachmantImport extends GuiContainer {
 		if(getImport() == null)return;
 		this.buttonList.add(new GuiButton(BUTTON_RED, sx+8+140, sy+10, 20, 20, getImport().rMode.name()));
 		this.buttonList.add(new GuiButton(BUTTON_IO, sx+8+140, sy+40, 20, 20, getImport().ioType.name()));
-		boolean safe = getImport() !=null && getImport().getFilter() !=null;
+		boolean safe = getImport() !=null && !ItemStackTools.isNullStack(getImport().getFilter());
 		if(safe){
 			ItemStack filterStack = getImport().getFilter();
 			if(filterStack.getMetadata() == FilterType.NORMAL.ordinal()){

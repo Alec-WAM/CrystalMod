@@ -1,5 +1,6 @@
 package alec_wam.CrystalMod.api;
 
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 
 import com.google.common.collect.ArrayListMultimap;
@@ -19,32 +20,31 @@ public class ItemStackList{
     private ArrayListMultimap<Item, ItemStack> stacks = ArrayListMultimap.create();
 
     public void add(ItemStack stack) {
-    	if(stack == null){
+    	if(ItemStackTools.isNullStack(stack)){
     		return;
     	}
     	
         for (ItemStack otherStack : stacks.get(stack.getItem())) {
             if (ItemUtil.canCombine(otherStack, stack)) {
-                otherStack.stackSize += stack.stackSize;
-
+            	ItemStackTools.incStackSize(otherStack, ItemStackTools.getStackSize(stack));
                 return;
             }
         }
 
-        stacks.put(stack.getItem(), stack.copy());
+        stacks.put(stack.getItem(), ItemStackTools.safeCopy(stack));
     }
 
     public boolean remove(@Nonnull ItemStack stack, boolean removeIfReachedZero) {
-    	if(stack == null)return false;
-    	return remove(stack, stack.stackSize, removeIfReachedZero);
+    	if(ItemStackTools.isNullStack(stack))return false;
+    	return remove(stack, ItemStackTools.getStackSize(stack), removeIfReachedZero);
     }
     
     public boolean remove(@Nonnull ItemStack stack, int size, boolean removeIfReachedZero) {
         for (ItemStack otherStack : stacks.get(stack.getItem())) {
             if (ItemUtil.canCombine(otherStack, stack)) {
-                otherStack.stackSize -= size;
+            	ItemStackTools.incStackSize(otherStack, -size);
 
-                if (otherStack.stackSize <= 0 && removeIfReachedZero) {
+                if (ItemStackTools.isEmpty(otherStack) && removeIfReachedZero) {
                     stacks.remove(otherStack.getItem(), otherStack);
                 }
 
@@ -64,7 +64,7 @@ public class ItemStackList{
             }
         }
 
-        return null;
+        return ItemStackTools.getEmptyStack();
     }
 
     public void clear() {
@@ -76,15 +76,10 @@ public class ItemStackList{
     	Iterator<ItemStack> ii = stacks.values().iterator();
     	while(ii.hasNext()){
     		ItemStack stack = ii.next();
-    		if(stack == null || stack.stackSize <=0){
+    		if(!ItemStackTools.isValid(stack)){
     			stacks.remove(stack.getItem(), stack);
     		}
     	}
-    	
-        /*List<ItemStack> toRemove = stacks.values().stream()
-            .filter(stack -> stack.stackSize <= 0)
-            .collect(Collectors.toList());
-        toRemove.forEach(stack -> stacks.remove(stack.getItem(), stack));*/
     }
 
     public boolean isEmpty() {
@@ -101,7 +96,7 @@ public class ItemStackList{
         ItemStackList list = new ItemStackList();
 
         for (ItemStack stack : stacks.values()) {
-            list.add(stack.copy());
+            list.add(ItemStackTools.safeCopy(stack));
         }
 
         return list;

@@ -13,6 +13,8 @@ import net.minecraft.world.World;
 import java.util.Collections;
 import java.util.List;
 
+import alec_wam.CrystalMod.util.ItemStackTools;
+
 /**
  * A dynamic model that can be used for items and blocks.
  * @author rubensworks
@@ -41,7 +43,7 @@ public abstract class DynamicItemAndBlockModel extends DynamicBaseModel {
         if(factory) {
             IBakedModel bakedModel;
             if(isItemStack()) {
-                bakedModel = handleItemState(null, null, null);
+                bakedModel = handleItemState(ItemStackTools.getEmptyStack(), null, null);
             } else {
                 bakedModel = handleBlockState(state, side, rand);
             }

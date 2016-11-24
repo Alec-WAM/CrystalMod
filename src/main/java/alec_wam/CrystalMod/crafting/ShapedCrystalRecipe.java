@@ -5,6 +5,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import alec_wam.CrystalMod.api.crafting.ICrystalRecipe;
+import alec_wam.CrystalMod.util.ItemStackTools;
 
 public class ShapedCrystalRecipe implements ICrystalRecipe {
 
@@ -84,7 +85,7 @@ public class ShapedCrystalRecipe implements ICrystalRecipe {
             {
                 int k = i - p_77573_2_;
                 int l = j - p_77573_3_;
-                ItemStack itemstack = null;
+                ItemStack itemstack = ItemStackTools.getEmptyStack();
 
                 if (k >= 0 && l >= 0 && k < this.recipeWidth && l < this.recipeHeight)
                 {
@@ -100,9 +101,9 @@ public class ShapedCrystalRecipe implements ICrystalRecipe {
 
                 ItemStack itemstack1 = p_77573_1_.getStackInRowAndColumn(i, j);
 
-                if (itemstack1 != null || itemstack != null)
+                if (!ItemStackTools.isNullStack(itemstack1) || !ItemStackTools.isNullStack(itemstack))
                 {
-                    if (itemstack1 == null && itemstack != null || itemstack1 != null && itemstack == null)
+                    if (ItemStackTools.isNullStack(itemstack1) && !ItemStackTools.isNullStack(itemstack) || !ItemStackTools.isNullStack(itemstack1) && ItemStackTools.isNullStack(itemstack))
                     {
                         return false;
                     }

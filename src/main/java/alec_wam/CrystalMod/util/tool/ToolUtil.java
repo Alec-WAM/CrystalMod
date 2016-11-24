@@ -13,6 +13,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.items.ModItems;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import cofh.api.energy.IEnergyContainerItem;
 import cofh.api.energy.IEnergyStorage;
 
@@ -115,7 +116,7 @@ public class ToolUtil {
   }
   
   public static boolean isWrench(ItemStack equipped){
-	  if(equipped == null) {
+	  if(ItemStackTools.isNullStack(equipped)) {
 		  return false;
 	  }
 	  return isWrenchItem(equipped.getItem());
@@ -137,7 +138,7 @@ public class ToolUtil {
       return null;
     }
     ItemStack equipped = player.getHeldItem(hand);
-    if(equipped == null) {
+    if(ItemStackTools.isNullStack(equipped)) {
       return null;
     }
     if(equipped.getItem() instanceof ITool) {
@@ -158,15 +159,15 @@ public class ToolUtil {
   }
   
   public static boolean isAxe(ItemStack stack){
-	  return stack !=null && stack.getItem() !=null && stack.getItem().getHarvestLevel(stack, "axe") >= 0;
+	  return !ItemStackTools.isNullStack(stack) && stack.getItem() !=null && stack.getItem().getHarvestLevel(stack, "axe") >= 0;
   }
   
   public static boolean isBrokenTinkerTool(ItemStack item) {
-      return item != null && item.hasTagCompound() && item.getTagCompound().hasKey("Stats") && item.getTagCompound().getCompoundTag("Stats").getBoolean("Broken");
+      return !ItemStackTools.isNullStack(item) && item.hasTagCompound() && item.getTagCompound().hasKey("Stats") && item.getTagCompound().getCompoundTag("Stats").getBoolean("Broken");
   }
   
   public static boolean isEmptyRfTool(ItemStack stack) {
-	  if(stack == null || stack.getItem() == null || !(stack.getItem() instanceof IEnergyContainerItem)) {
+	  if(ItemStackTools.isNullStack(stack) || stack.getItem() == null || !(stack.getItem() instanceof IEnergyContainerItem)) {
 		  return false;
 	  }
 	  IEnergyContainerItem container = (IEnergyContainerItem)stack.getItem();

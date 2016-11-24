@@ -26,6 +26,7 @@ import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.TilePatternEncoder;
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.TileProcessingPatternEncoder;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.crafting.ContainerPanelCrafting;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.crafting.TileEntityPanelCrafting;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.ModLogger;
 
@@ -89,7 +90,7 @@ public class PacketRecipeTransfer extends AbstractPacketThreadsafe {
 					for(int t = 0; t < list.tagCount(); t++){
 						NBTTagCompound nbt = list.getCompoundTagAt(t);
 						int slot = nbt.getInteger("Slot");
-						inputs[slot] = ItemStack.loadItemStackFromNBT(nbt);
+						inputs[slot] = ItemStackTools.loadFromNBT(nbt);
 					}
 				}
 				if(recipeNBT.hasKey("Outputs")){
@@ -97,7 +98,7 @@ public class PacketRecipeTransfer extends AbstractPacketThreadsafe {
 					for(int t = 0; t < list.tagCount(); t++){
 						NBTTagCompound nbt = list.getCompoundTagAt(t);
 						int slot = nbt.getInteger("Slot");
-						outputs[slot] = ItemStack.loadItemStackFromNBT(nbt);
+						outputs[slot] = ItemStackTools.loadFromNBT(nbt);
 					}
 				}
 				pEncoder.fillInputs(inputs);
@@ -116,7 +117,7 @@ public class PacketRecipeTransfer extends AbstractPacketThreadsafe {
 		                actualRecipe[x] = new ItemStack[list.tagCount()];
 
 		                for (int y = 0; y < list.tagCount(); y++) {
-		                    actualRecipe[x][y] = ItemStack.loadItemStackFromNBT(list.getCompoundTagAt(y));
+		                    actualRecipe[x][y] = ItemStackTools.loadFromNBT(list.getCompoundTagAt(y));
 		                }
 		            }
 		        }

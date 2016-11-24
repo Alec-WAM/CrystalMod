@@ -26,6 +26,7 @@ import alec_wam.CrystalMod.proxy.ClientProxy;
 import alec_wam.CrystalMod.tiles.pipes.TileEntityPipe;
 import alec_wam.CrystalMod.tiles.pipes.covers.CoverUtil.CoverData;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.Util;
 
 import com.google.common.base.Strings;
@@ -155,7 +156,7 @@ public class ItemPipeCover extends Item implements ICustomModel {
     }
 
     public void addCover(ItemStack itemStack) {
-        if (itemStack.stackSize == 0) itemStack.stackSize = 1;
+        if (ItemStackTools.isEmpty(itemStack)) ItemStackTools.setStackSize(itemStack, 1);
 
         Block block = Block.getBlockFromItem(itemStack.getItem());
         if (block == null) return;

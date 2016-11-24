@@ -44,6 +44,7 @@ import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.packets.PacketGuiMessage;
 import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ReflectionUtils;
 import alec_wam.CrystalMod.world.game.tag.TagManager;
 
@@ -68,27 +69,27 @@ public class ClientEventHandler {
 					ItemStack boots = event.getEntityPlayer().getItemStackFromSlot(EntityEquipmentSlot.FEET);
 					ModelBiped modelBoots = armor.getModelFromSlot(EntityEquipmentSlot.FEET);
 					if(modelHelmet !=null){
-						if(helmet !=null && ItemNBTHelper.verifyExistance(helmet, "CrystalMod.InvisArmor")){
+						if(!ItemStackTools.isNullStack(helmet) && ItemNBTHelper.verifyExistance(helmet, "CrystalMod.InvisArmor")){
 							modelHelmet.bipedHead.isHidden = true;
 							modelHelmet.bipedHeadwear.isHidden = true;
 						}
 					}
 					if(modelChest !=null){
-						if(chest !=null && ItemNBTHelper.verifyExistance(chest, "CrystalMod.InvisArmor")){
+						if(!ItemStackTools.isNullStack(chest) && ItemNBTHelper.verifyExistance(chest, "CrystalMod.InvisArmor")){
 							modelChest.bipedBody.isHidden = true;
 							modelChest.bipedRightArm.isHidden = true;
 							modelChest.bipedLeftArm.isHidden = true;
 						}
 					}
 					if(modelLegs !=null){
-						if(legs !=null && ItemNBTHelper.verifyExistance(legs, "CrystalMod.InvisArmor")){
+						if(!ItemStackTools.isNullStack(legs) && ItemNBTHelper.verifyExistance(legs, "CrystalMod.InvisArmor")){
 							modelLegs.bipedBody.isHidden = true;
 							modelLegs.bipedLeftLeg.isHidden = true;
 							modelLegs.bipedRightLeg.isHidden = true;
 						}
 					}
 					if(modelBoots !=null){
-						if(boots !=null && ItemNBTHelper.verifyExistance(boots, "CrystalMod.InvisArmor")){
+						if(!ItemStackTools.isNullStack(boots) && ItemNBTHelper.verifyExistance(boots, "CrystalMod.InvisArmor")){
 							modelBoots.bipedLeftLeg.isHidden = true;
 							modelBoots.bipedRightLeg.isHidden = true;
 						}
@@ -118,27 +119,27 @@ public class ClientEventHandler {
 					ItemStack boots = event.getEntityPlayer().getItemStackFromSlot(EntityEquipmentSlot.FEET);
 					ModelBiped modelBoots = armor.getModelFromSlot(EntityEquipmentSlot.FEET);
 					if(modelHelmet !=null){
-						if(helmet !=null && ItemNBTHelper.verifyExistance(helmet, "CrystalMod.InvisArmor")){
+						if(!ItemStackTools.isNullStack(helmet) && ItemNBTHelper.verifyExistance(helmet, "CrystalMod.InvisArmor")){
 							modelHelmet.bipedHead.isHidden = false;
 							modelHelmet.bipedHeadwear.isHidden = false;
 						}
 					}
 					if(modelChest !=null){
-						if(chest !=null && ItemNBTHelper.verifyExistance(chest, "CrystalMod.InvisArmor")){
+						if(!ItemStackTools.isNullStack(chest) && ItemNBTHelper.verifyExistance(chest, "CrystalMod.InvisArmor")){
 							modelChest.bipedBody.isHidden = false;
 							modelChest.bipedRightArm.isHidden = false;
 							modelChest.bipedLeftArm.isHidden = false;
 						}
 					}
 					if(modelLegs !=null){
-						if(legs !=null && ItemNBTHelper.verifyExistance(legs, "CrystalMod.InvisArmor")){
+						if(!ItemStackTools.isNullStack(legs) && ItemNBTHelper.verifyExistance(legs, "CrystalMod.InvisArmor")){
 							modelLegs.bipedBody.isHidden = false;
 							modelLegs.bipedLeftLeg.isHidden = false;
 							modelLegs.bipedRightLeg.isHidden = false;
 						}
 					}
 					if(modelBoots !=null){
-						if(boots !=null && ItemNBTHelper.verifyExistance(boots, "CrystalMod.InvisArmor")){
+						if(!ItemStackTools.isNullStack(boots) && ItemNBTHelper.verifyExistance(boots, "CrystalMod.InvisArmor")){
 							modelBoots.bipedLeftLeg.isHidden = false;
 							modelBoots.bipedRightLeg.isHidden = false;
 						}

@@ -1,5 +1,6 @@
 package alec_wam.CrystalMod.crafting;
 
+import alec_wam.CrystalMod.util.ItemStackTools;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -43,7 +44,7 @@ public class ShapedNBTRecipe extends ShapedCrystalRecipe {
             {
                 int k = i - p_77573_2_;
                 int l = j - p_77573_3_;
-                ItemStack itemstack = null;
+                ItemStack itemstack = ItemStackTools.getEmptyStack();
 
                 if (k >= 0 && l >= 0 && k < this.recipeWidth && l < this.recipeHeight)
                 {

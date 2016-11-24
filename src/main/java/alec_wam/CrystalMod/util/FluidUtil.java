@@ -79,12 +79,12 @@ public class FluidUtil {
 	}
 	
 	public static ItemStack getEmptyContainer(ItemStack stack){
-		if (stack == null) {
+		if (ItemStackTools.isNullStack(stack)) {
 	      return null;
 	    }
 
 	    ItemStack ret = stack.copy();
-	    ret.stackSize = 1;
+	    ItemStackTools.setStackSize(ret, 1);
 	    IFluidHandler handler = getFluidHandlerCapability(ret);
 	    if (handler != null) {
 	    	try{
@@ -98,16 +98,16 @@ public class FluidUtil {
 	    	}
 	    	return ret;
 	    }
-		return null;
+		return ItemStackTools.getEmptyStack();
 	}
 	
 	public static FluidStack getFluidTypeFromItem(ItemStack stack) {
-	    if (stack == null) {
+	    if (ItemStackTools.isNullStack(stack)) {
 	      return null;
 	    }
 
 	    stack = stack.copy();
-	    stack.stackSize = 1;
+	    ItemStackTools.setStackSize(stack, 1);
 	    IFluidHandler handler = getFluidHandlerCapability(stack);
 	    if (handler != null) {
 	      return handler.drain(Fluid.BUCKET_VOLUME, false);
@@ -135,7 +135,7 @@ public class FluidUtil {
 		    }
 		    return bucket;
 		}
-        return null;
+        return ItemStackTools.getEmptyStack();
     }
 
 	public static IFluidHandler getExternalFluidHandler(World world, BlockPos pos, EnumFacing face) {
@@ -172,7 +172,7 @@ public class FluidUtil {
 		    	for (int i = 0; i < inv.getSizeInventory(); i++)
 		        {
 		            ItemStack stack = inv.getStackInSlot(i);
-		            if (stack == null)
+		            if (ItemStackTools.isNullStack(stack))
 		            {
 		                continue;
 		            }
@@ -187,7 +187,7 @@ public class FluidUtil {
 		    	
 		    	boolean matched = false;
 		    	for(ItemStack filterStack : filteredList){
-		    		if(filterStack != null) {
+		    		if(!ItemStackTools.isNullStack(filterStack)) {
 		    	        FluidStack fluidS = FluidUtil.getFluidTypeFromItem(filterStack);
 		    	        if(fluidS !=null){
 		    	        	matched = FluidUtil.canCombine(fluid, fluidS);

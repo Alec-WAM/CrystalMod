@@ -11,6 +11,7 @@ import alec_wam.CrystalMod.handler.GuiHandler;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.tiles.chest.CrystalChestType;
 import alec_wam.CrystalMod.tiles.chest.wireless.BlockWirelessChest;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -130,15 +131,15 @@ public abstract class EntityCrystalChestMinecartBase extends EntityMinecartChest
 	@Nullable
     public ItemStack removeStackFromSlot(int index)
     {
-        if (this.inventory[index] != null)
+        if (!ItemStackTools.isNullStack(this.inventory[index]))
         {
             ItemStack itemstack = this.inventory[index];
-            this.inventory[index] = null;
+            this.inventory[index] = ItemStackTools.getEmptyStack();
             return itemstack;
         }
         else
         {
-            return null;
+            return ItemStackTools.getEmptyStack();
         }
     }
 	
@@ -146,9 +147,9 @@ public abstract class EntityCrystalChestMinecartBase extends EntityMinecartChest
     {
         this.inventory[index] = stack;
 
-        if (stack != null && stack.stackSize > this.getInventoryStackLimit())
+        if (ItemStackTools.isValid(stack) && ItemStackTools.getStackSize(stack) > this.getInventoryStackLimit())
         {
-            stack.stackSize = this.getInventoryStackLimit();
+        	ItemStackTools.setStackSize(stack, this.getInventoryStackLimit());
         }
     }
 	

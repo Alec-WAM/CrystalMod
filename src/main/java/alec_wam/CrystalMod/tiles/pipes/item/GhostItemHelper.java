@@ -1,6 +1,7 @@
 package alec_wam.CrystalMod.tiles.pipes.item;
 
 import alec_wam.CrystalMod.util.ItemNBTHelper;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -55,7 +56,7 @@ public class GhostItemHelper
         {
             newStack.setTagCompound(null);
         }
-        newStack.stackSize = amount;
+        ItemStackTools.setStackSize(newStack, amount);
 
         return newStack;
     }

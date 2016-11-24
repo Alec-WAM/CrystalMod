@@ -26,6 +26,7 @@ import alec_wam.CrystalMod.client.model.dynamic.DynamicBaseModel;
 import alec_wam.CrystalMod.tiles.pipes.covers.CoverUtil;
 import alec_wam.CrystalMod.tiles.pipes.covers.CoverUtil.CoverData;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ModLogger;
 import alec_wam.CrystalMod.util.client.CustomModelUtil;
 import alec_wam.CrystalMod.util.client.RenderUtil;
@@ -54,7 +55,7 @@ public class ModelPipeBaked implements IPerspectiveAwareModel
     
 	public ModelPipeBaked( FacadeBuilder facadeBuilder )
 	{
-		this.renderStack = null;
+		this.renderStack = ItemStackTools.getEmptyStack();
 		this.facadeBuilder = facadeBuilder;
 	}
 	
@@ -557,7 +558,7 @@ public class ModelPipeBaked implements IPerspectiveAwareModel
     private TextureAtlasSprite getCoreTexture(FakeState state) {
     	TextureAtlasSprite glassSquare = null;        
         String texture = "";
-        if(renderStack !=null){
+        if(!ItemStackTools.isNullStack(renderStack)){
         	int type = renderStack.getMetadata();
 	        if(type == 0){
 	        	texture = ("crystalmod:blocks/pipe/item_square");

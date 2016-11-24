@@ -1,14 +1,23 @@
 package alec_wam.CrystalMod.handler;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import alec_wam.CrystalMod.Config;
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.api.block.IExplosionImmune;
 import alec_wam.CrystalMod.capability.ExtendedPlayer;
+import alec_wam.CrystalMod.capability.ExtendedPlayerInventory;
 import alec_wam.CrystalMod.capability.ExtendedPlayerProvider;
+import alec_wam.CrystalMod.capability.PacketExtendedPlayerInvSync;
 import alec_wam.CrystalMod.entities.accessories.HorseAccessories;
 import alec_wam.CrystalMod.entities.minions.warrior.EntityMinionWarrior;
+import alec_wam.CrystalMod.integration.baubles.BaublesIntegration;
+import alec_wam.CrystalMod.integration.baubles.ItemBaubleWings;
 import alec_wam.CrystalMod.items.ItemDragonWings;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
@@ -16,13 +25,16 @@ import alec_wam.CrystalMod.network.packets.PacketEntityMessage;
 import alec_wam.CrystalMod.tiles.playercube.CubeManager;
 import alec_wam.CrystalMod.tiles.playercube.PlayerCube;
 import alec_wam.CrystalMod.tiles.playercube.TileEntityPlayerCubePortal;
+import alec_wam.CrystalMod.util.ChatUtil;
 import alec_wam.CrystalMod.util.EntityUtil;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.ModLogger;
 import alec_wam.CrystalMod.util.PlayerUtil;
 import alec_wam.CrystalMod.util.Util;
 import alec_wam.CrystalMod.world.ModDimensions;
+import baubles.api.BaubleType;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -36,16 +48,14 @@ import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.monster.SkeletonType;
 import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
@@ -214,10 +224,55 @@ public class EventHandler {
     	}
     }
     
-    public void updateWings(EntityPlayer player){
-    	NBTTagCompound nbt = PlayerUtil.getPersistantNBT(player);
+    public static boolean hasDragonWings(EntityPlayer player){
     	ItemStack chest = player.inventory.armorItemInSlot(2);
-		if(chest != null && ItemNBTHelper.verifyExistance(chest, ItemDragonWings.UPGRADE_NBT)){
+		if(ItemStackTools.isValid(chest) && ItemNBTHelper.verifyExistance(chest, ItemDragonWings.UPGRADE_NBT)){
+			return true;
+		}
+		
+		if(BaublesIntegration.instance().hasBaubles()){
+			ItemStack baubleStack = BaublesIntegration.instance().getBauble(player, BaubleType.BODY);
+			if(ItemStackTools.isValid(baubleStack) && baubleStack.getItem() instanceof ItemBaubleWings){
+				return true;
+			}
+		}
+		
+    	return false;
+    }
+    
+    public static final List<String> WINGED_PLAYERS = new ArrayList<String>();
+    
+    public static boolean isPlayerWinged(EntityPlayer player){
+        return WINGED_PLAYERS.contains(player.getUniqueID()+(player.worldObj.isRemote ? "-Remote" : ""));
+    }
+    
+    public static void removeWingsFromPlayer(EntityPlayer player){
+        removeWingsFromPlayer(player, player.worldObj.isRemote);
+    }
+    
+    public static void removeWingsFromPlayer(EntityPlayer player, boolean worldRemote){
+        WINGED_PLAYERS.remove(player.getUniqueID()+(worldRemote ? "-Remote" : ""));
+    }
+    
+    public static void addWingsToPlayer(EntityPlayer player){
+        WINGED_PLAYERS.add(player.getUniqueID()+(player.worldObj.isRemote ? "-Remote" : ""));
+    }
+    
+    @SubscribeEvent
+    public void onLogOutEvent(net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent event){
+        //Remove Player from Wings' Fly Permission List
+        removeWingsFromPlayer(event.player, true);
+        removeWingsFromPlayer(event.player, false);
+    }
+    
+    public void updateWings(EntityPlayer player){
+    	if(player.getHeldItemMainhand() !=null){
+    		if(player.getHeldItemMainhand().getItem() == Items.STICK){
+    			ChatUtil.sendChat(player, "AllowFlying: "+player.capabilities.allowFlying);
+    		}
+    	}
+    	/*NBTTagCompound nbt = PlayerUtil.getPersistantNBT(player);
+		if(hasDragonWings(player)){
 			nbt.setByte(NBT_WINGS, (byte)2);
 			
 			ExtendedPlayer extPlayer = ExtendedPlayerProvider.getExtendedPlayer(player);
@@ -263,14 +318,61 @@ public class EventHandler {
 						if(!player.capabilities.isCreativeMode){
 							ModLogger.info("Removed Wing Flight From "+player.getName());
 							player.capabilities.allowFlying = false;
-							player.capabilities.isFlying = false;
+	                        player.capabilities.isFlying = false;
+	                        //Enables Fall Damage again (Automatically gets disabled for some reason)
+	                        player.capabilities.disableDamage = false;
 							player.sendPlayerAbilities();
 						}
 					}
 				}
 				nbt.setByte(NBT_WINGS, (byte)1);
 			}
-		}
+		}*/
+    	boolean wingsEquipped = hasDragonWings(player);
+
+         //If Player isn't (really) winged
+         if(!isPlayerWinged(player)){
+             if(wingsEquipped){
+                 //Make the Player actually winged
+                 addWingsToPlayer(player);
+             }
+         }
+         //If Player is (or should be) winged
+         else{
+             if(wingsEquipped){
+                 //Allow the Player to fly when he has Wings equipped
+                 player.capabilities.allowFlying = true;
+                 
+                 ExtendedPlayer extPlayer = ExtendedPlayerProvider.getExtendedPlayer(player);
+                 if(extPlayer !=null){
+					//Copied from Ender Dragon
+ 					extPlayer.prevWingAnimTime = extPlayer.wingAnimTime;
+ 					float f10 = 0.2F * (MathHelper.sqrt_double(player.motionX * player.motionX + player.motionZ * player.motionZ) * 0.5F + 1.0F);
+ 					f10 = f10 * (float)Math.pow(2.0D, player.motionY);
+
+     	            
+ 					if(player.capabilities.isFlying){
+ 						extPlayer.wingAnimTime+= f10*0.3f;
+ 					}else if(!player.onGround){
+ 						extPlayer.wingAnimTime += f10*0.4f;
+ 					}else{
+ 						extPlayer.wingAnimTime=1f;
+ 					}
+ 				}
+                 
+             }
+             else{
+                 //Make the Player not winged
+                 removeWingsFromPlayer(player);
+                 //Reset Player's Values
+                 if(!player.capabilities.isCreativeMode){
+                     player.capabilities.allowFlying = false;
+                     player.capabilities.isFlying = false;
+                     //Enables Fall Damage again (Automatically gets disabled for some reason)
+                     player.capabilities.disableDamage = false;
+                 }
+             }
+         }
     }
     
     @SubscribeEvent
@@ -447,12 +549,10 @@ public class EventHandler {
     public void onPlayerClone(PlayerEvent.Clone event) {
         EntityPlayer oldPlayer = event.getOriginal();
         EntityPlayer newPlayer = event.getEntityPlayer();
-        if(!oldPlayer.getEntityWorld().isRemote) {
-            ExtendedPlayer oldProps = ExtendedPlayerProvider.getExtendedPlayer(oldPlayer);
-            ExtendedPlayer newProps = ExtendedPlayerProvider.getExtendedPlayer(newPlayer);
-            if(oldPlayer != null && newProps != null) {
-                newProps.readFromNBT(oldProps.writeToNBT());
-            }
+        ExtendedPlayer oldProps = ExtendedPlayerProvider.getExtendedPlayer(oldPlayer);
+        ExtendedPlayer newProps = ExtendedPlayerProvider.getExtendedPlayer(newPlayer);
+        if(oldPlayer != null && newProps != null) {
+            newProps.readFromNBT(oldProps.writeToNBT());
         }
     }
 	
@@ -463,6 +563,73 @@ public class EventHandler {
 			if(attacker != null && attacker instanceof EntityMinionWarrior && attacker.getRidingEntity() == event.getEntityLiving())
 				event.setCanceled(true);
 		}
+	}
+	
+	private Map<String, String[]> syncCheck = new HashMap<String, String[]>();
+	
+	@SubscribeEvent
+	public void playerJoin(EntityJoinWorldEvent event) {
+		if (event.getEntity() instanceof EntityPlayer && !event.getWorld().isRemote) {		
+			ExtendedPlayer ePlayer = ExtendedPlayerProvider.getExtendedPlayer((EntityPlayer) event.getEntity());	
+			ExtendedPlayerInventory inventory = ePlayer.getInventory();
+			for (int a=0;a<inventory.getSlots();a++) inventory.setChanged(a,true);
+			
+			for (EntityPlayer p : event.getEntity().getEntityWorld().playerEntities) {
+				if (p.getEntityId() != event.getEntity().getEntityId()) {
+					ExtendedPlayer ePlayer2 = ExtendedPlayerProvider.getExtendedPlayer(p);
+					ExtendedPlayerInventory inventory2 = ePlayer2.getInventory();	
+					for (int a=0;a<inventory2.getSlots();a++) inventory2.setChanged(a,true);
+				}
+			}
+			
+			String[] ia = new String[inventory.getSlots()];
+			Arrays.fill(ia, "");
+			syncCheck.put(event.getEntity().getCachedUniqueIdString(), ia);		
+		}
+	}
+	
+	@SubscribeEvent
+	public void playerTick(PlayerEvent.LivingUpdateEvent event) {
+		// player events
+		if (event.getEntity() instanceof EntityPlayer) {			
+			EntityPlayer player = (EntityPlayer) event.getEntity();
+			ExtendedPlayer ePlayer = ExtendedPlayerProvider.getExtendedPlayer(player);
+			ExtendedPlayerInventory inventory = ePlayer.getInventory();
+			String[] hashOld = syncCheck.get(player.getCachedUniqueIdString());
+			
+			boolean syncTick = player.ticksExisted % 10 == 0;
+			
+			for (int a = 0; a < inventory.getSlots(); a++) {
+				ItemStack stack = inventory.getStackInSlot(a);
+				
+				/*if (bauble != null && bauble.getItem() instanceof IBauble) {
+					//Worn Tick
+					((IBauble) bauble.getItem()).onWornTick(bauble, player);
+					
+					//Sync
+					if (!player.getEntityWorld().isRemote) {
+						if (syncTick && !baubles.isChanged(a) &&
+								((IBauble) bauble.getItem()).willAutoSync(bauble, player)) {							
+							String s = bauble.toString();
+							if (bauble.hasTagCompound()) s += bauble.getTagCompound().toString();
+							if (!s.equals(hashOld[a])) {
+								baubles.setChanged(a,true);
+							}
+							hashOld[a] = s;							
+						}						
+					}
+				}*/
+				
+				if (inventory.isChanged(a)) {
+					try {
+						CrystalModNetwork.sendToDimension(new PacketExtendedPlayerInvSync(player, a),
+								player.getEntityWorld().provider.getDimension());
+					} catch (Exception e) {	}				
+				}
+			}
+				
+		}
+			
 	}
 	
 }

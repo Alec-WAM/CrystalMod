@@ -12,6 +12,8 @@ import alec_wam.CrystalMod.entities.minecarts.chests.wireless.ItemWirelessChestM
 import alec_wam.CrystalMod.entities.minions.ItemMinion;
 import alec_wam.CrystalMod.entities.minions.ItemMinionStaff;
 import alec_wam.CrystalMod.entities.pet.bombomb.ItemBombomb;
+import alec_wam.CrystalMod.integration.baubles.BaublesIntegration;
+import alec_wam.CrystalMod.integration.baubles.ItemBaubleWings;
 import alec_wam.CrystalMod.items.ItemMetalPlate.PlateType;
 import alec_wam.CrystalMod.items.armor.ItemCustomArmor;
 import alec_wam.CrystalMod.items.backpack.ItemBackpack;
@@ -129,6 +131,9 @@ public class ModItems {
 	public static ItemWorksiteUpgrade worksiteUpgrade;
 	public static ItemBombomb bombomb;
 	
+	//Baubles
+	public static ItemBaubleWings dragonWingsBauble;
+	
 	public static void init() {
 		crystals = new ItemCrystal();
 		ingots = new ItemIngot();
@@ -192,6 +197,11 @@ public class ModItems {
 		minionStaff = new ItemMinionStaff();
 		worksiteUpgrade = new ItemWorksiteUpgrade();
 		bombomb = new ItemBombomb();
+		
+		//Baubles
+		if(BaublesIntegration.instance().hasBaubles()){
+			dragonWingsBauble = new ItemBaubleWings();
+		}
 	}
 	
 	@SideOnly(Side.CLIENT)

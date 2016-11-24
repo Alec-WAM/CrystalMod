@@ -28,6 +28,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.items.ModItems;
+import alec_wam.CrystalMod.util.ItemStackTools;
 
 public class ItemDarkIronBow extends ItemBow implements ICustomModel {
 
@@ -197,7 +198,7 @@ public class ItemDarkIronBow extends ItemBow implements ICustomModel {
     @SubscribeEvent
     public void onFovUpdateEvent(FOVUpdateEvent fovEvt) {
       ItemStack currentItem = fovEvt.getEntity().getHeldItemMainhand();
-      if (currentItem == null || currentItem.getItem() != this || fovEvt.getEntity().getItemInUseCount() <= 0) {
+      if (ItemStackTools.isNullStack(currentItem) || currentItem.getItem() != this || fovEvt.getEntity().getItemInUseCount() <= 0) {
         return;
       }
 

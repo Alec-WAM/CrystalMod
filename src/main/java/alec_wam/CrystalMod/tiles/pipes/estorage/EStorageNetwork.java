@@ -47,6 +47,7 @@ import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.task.CraftingProces
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.task.CraftingProcessExternal;
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.task.CraftingProcessNormal;
 import alec_wam.CrystalMod.util.BlockUtil;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.ModLogger;
 
@@ -425,14 +426,14 @@ public class EStorageNetwork extends AbstractPipeNetwork {
 				continue;
 			for (int s = 0; s < crafter.getPatterns().getSlots(); s++) {
 				ItemStack patStack = crafter.getPatterns().getStackInSlot(s);
-				if (patStack != null) {
+				if (!ItemStackTools.isNullStack(patStack)) {
 					CraftingPattern pattern = crafter.createPattern(patStack);
 					if(pattern.isValid()){
 						patterns.add(pattern);
 						for (ItemStack stack : pattern.getOutputs()) {
 							if (stack != null) {
 								ItemStack copy = stack.copy();
-								copy.stackSize = 0;
+								ItemStackTools.setStackSize(copy, 0);
 								ItemStackData iData = new ItemStackData(copy);
 								iData.isCrafting = true;
 								data.add(iData);
@@ -460,13 +461,13 @@ public class EStorageNetwork extends AbstractPipeNetwork {
 		for (CraftingPattern craftingPattern : getPatterns()) {
 			ItemStackList outputs = new ItemStackList();
 			for (ItemStack output : craftingPattern.getOutputs()) {
-				if (output !=null) {
+				if (!ItemStackTools.isNullStack(output)) {
 					outputs.add(output);
 				}
 			}
 			
 			ItemStack out = outputs.get(pattern, ore);
-			if(out !=null && out.stackSize > 0){
+			if(ItemStackTools.isValid(out)){
 				patterns.add(craftingPattern);
 			}
 		}
@@ -493,15 +494,14 @@ public class EStorageNetwork extends AbstractPipeNetwork {
 
 		for (int i = 0; i < patterns.size(); ++i) {
 			for (ItemStack input : patterns.get(i).getInputs()) {
-				if(input != null){
+				if(!ItemStackTools.isNullStack(input)){
 					ItemStackData stored = getItemStorage().getItemData(input);
 					
 					if(stored == null && ore){
 						stored = getItemStorage().getOreItemData(input);
 					}
 	
-					scores[i] += stored != null && stored.stack != null
-							&& !stored.isCrafting ? stored.stack.stackSize : 0;
+					scores[i] += stored != null && !stored.isCrafting ? stored.getAmount() : 0;
 				}
 			}
 

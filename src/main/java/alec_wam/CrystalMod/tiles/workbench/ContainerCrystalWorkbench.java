@@ -12,6 +12,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.crafting.CrystalCraftingManager;
+import alec_wam.CrystalMod.util.ItemStackTools;
 
 public class ContainerCrystalWorkbench extends Container
 {
@@ -46,14 +47,14 @@ public class ContainerCrystalWorkbench extends Container
                     ItemStack itemstack = craftMatrix.getStackInSlot(i);
                     ItemStack itemstack1 = aitemstack[i];
 
-                    if (itemstack != null)
+                    if (!ItemStackTools.isNullStack(itemstack))
                     {
                         craftMatrix.decrStackSize(i, 1);
                     }
 
-                    if (itemstack1 != null)
+                    if (!ItemStackTools.isNullStack(itemstack1))
                     {
-                        if (craftMatrix.getStackInSlot(i) == null)
+                        if (ItemStackTools.isNullStack(craftMatrix.getStackInSlot(i)))
                         {
                             craftMatrix.setInventorySlotContents(i, itemstack1);
                         }
@@ -116,7 +117,7 @@ public class ContainerCrystalWorkbench extends Container
      */
     public ItemStack transferStackInSlot(EntityPlayer playerIn, int index)
     {
-        ItemStack itemstack = null;
+        ItemStack itemstack = ItemStackTools.getEmptyStack();
         Slot slot = (Slot)this.inventorySlots.get(index);
 
         if (slot != null && slot.getHasStack())
@@ -128,7 +129,7 @@ public class ContainerCrystalWorkbench extends Container
             {
                 if (!this.mergeItemStack(itemstack1, 10, 46, true))
                 {
-                    return null;
+                    return ItemStackTools.getEmptyStack();
                 }
 
                 slot.onSlotChange(itemstack1, itemstack);
@@ -137,33 +138,33 @@ public class ContainerCrystalWorkbench extends Container
             {
                 if (!this.mergeItemStack(itemstack1, 37, 46, false))
                 {
-                    return null;
+                    return ItemStackTools.getEmptyStack();
                 }
             }
             else if (index >= 37 && index < 46)
             {
                 if (!this.mergeItemStack(itemstack1, 10, 37, false))
                 {
-                    return null;
+                    return ItemStackTools.getEmptyStack();
                 }
             }
             else if (!this.mergeItemStack(itemstack1, 10, 46, false))
             {
-                return null;
+                return ItemStackTools.getEmptyStack();
             }
 
-            if (itemstack1.stackSize == 0)
+            if (ItemStackTools.isEmpty(itemstack1))
             {
-                slot.putStack((ItemStack)null);
+                slot.putStack(ItemStackTools.getEmptyStack());
             }
             else
             {
                 slot.onSlotChanged();
             }
 
-            if (itemstack1.stackSize == itemstack.stackSize)
+            if (ItemStackTools.getStackSize(itemstack1) == ItemStackTools.getStackSize(itemstack))
             {
-                return null;
+                return ItemStackTools.getEmptyStack();
             }
 
             slot.onPickupFromSlot(playerIn, itemstack1);

@@ -1,6 +1,6 @@
 package alec_wam.CrystalMod.items.backpack;
 
-import alec_wam.CrystalMod.util.NBTUtils;
+import alec_wam.CrystalMod.util.inventory.NBTUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 

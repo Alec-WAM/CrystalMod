@@ -3,6 +3,9 @@ package alec_wam.CrystalMod.tiles.pipes.estorage.storage.hdd;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.api.estorage.IInsertListener;
 import alec_wam.CrystalMod.api.estorage.INetworkInventory.ExtractFilter;
@@ -10,6 +13,7 @@ import alec_wam.CrystalMod.api.estorage.storage.IItemProvider;
 import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -71,7 +75,7 @@ public class ItemHDD extends Item implements ICustomModel, IItemProvider {
 	
 	public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean adv){
 		list.add("Items Stored: "+ItemHDD.getItemCount(stack)+"/"+getItemLimit(stack));
-		if(!GuiScreen.isShiftKeyDown()){
+		/*if(!GuiScreen.isShiftKeyDown()){
 			list.add("Hold <Shift> for item list");
 		}else{
 			list.add("Items: ");
@@ -93,7 +97,7 @@ public class ItemHDD extends Item implements ICustomModel, IItemProvider {
 					list.add(stored.getDisplayName()+" ("+stackSize+")");
 				}
 			}
-		}
+		}*/
 	}
 	
 	public boolean showDurabilityBar(ItemStack stack)
@@ -113,20 +117,20 @@ public class ItemHDD extends Item implements ICustomModel, IItemProvider {
     }
 	
 	public static int getItemLimit(ItemStack hddStack){
-		if(hddStack !=null){
+		if(!ItemStackTools.isNullStack(hddStack)){
 			return ItemNBTHelper.getInteger(hddStack, NBT_ITEM_LIMIT, 0);
 		}
 		return 0;
 	}
 	
 	public static int getItemCount(ItemStack hddStack){
-		if(hddStack !=null){
+		if(!ItemStackTools.isNullStack(hddStack)){
 			if(ItemNBTHelper.verifyExistance(hddStack, NBT_ITEM_LIST)){
 				NBTTagList itemList = ItemNBTHelper.getCompound(hddStack).getTagList(NBT_ITEM_LIST, 10);
 				if(itemList !=null){
 					int count = 0;
 					for(int t = 0; t < itemList.tagCount(); t++){
-						if(getItem(hddStack, t) !=null){
+						if(!ItemStackTools.isNullStack(getItem(hddStack, t))){
 							count++;
 						}
 					}
@@ -138,7 +142,7 @@ public class ItemHDD extends Item implements ICustomModel, IItemProvider {
 	}
 	
 	public static int getEmptyIndex(ItemStack hddStack){
-		if(hddStack !=null){
+		if(!ItemStackTools.isNullStack(hddStack)){
 			int max = getItemLimit(hddStack);
 			for(int i = 0; i < max; i++){
 				if(getItem(hddStack, i) == null){
@@ -150,11 +154,11 @@ public class ItemHDD extends Item implements ICustomModel, IItemProvider {
 	}
 	
 	public static boolean hasItem(ItemStack hddStack, ItemStack filter){
-		if(hddStack !=null){
+		if(!ItemStackTools.isNullStack(hddStack)){
 			int itemCount = getItemLimit(hddStack);
 			for(int i = 0; i < itemCount; i++){
 				ItemStack foundStack = getItem(hddStack, i);
-				if(foundStack !=null && ItemUtil.canCombine(foundStack, filter)){
+				if(!ItemStackTools.isNullStack(foundStack) && ItemUtil.canCombine(foundStack, filter)){
 					return true;
 				}
 			}
@@ -163,7 +167,7 @@ public class ItemHDD extends Item implements ICustomModel, IItemProvider {
 	}
 	
 	public static void setItem(ItemStack hddStack, int index, ItemStack stack){
-		if(hddStack !=null){
+		if(!ItemStackTools.isNullStack(hddStack)){
 			if(ItemNBTHelper.verifyExistance(hddStack, NBT_ITEM_LIST)){
 				NBTTagList itemList = ItemNBTHelper.getCompound(hddStack).getTagList(NBT_ITEM_LIST, 10);
 				int max = getItemLimit(hddStack);
@@ -172,22 +176,22 @@ public class ItemHDD extends Item implements ICustomModel, IItemProvider {
 						NBTTagCompound nbt = itemList.getCompoundTagAt(t);
 						int indexNBT = nbt.getInteger("Index");
 						if(indexNBT == index){
-							if(stack == null){
+							if(ItemStackTools.isNullStack(stack)){
 								itemList.removeTag(t);
 							}else{
 								NBTTagCompound newNBT = new NBTTagCompound();
 								newNBT.setInteger("Index", index);
-								newNBT.setInteger("StackSize", stack.stackSize);
+								newNBT.setInteger("StackSize", ItemStackTools.getStackSize(stack));
 								itemList.set(t, stack.writeToNBT(newNBT));
 							}
 						}
 					}
 				}else{
 					if(index >= 0 && index < max){
-						if(stack !=null){
+						if(!ItemStackTools.isNullStack(stack)){
 							NBTTagCompound nbt = new NBTTagCompound();
 							nbt.setInteger("Index", index);
-							nbt.setInteger("StackSize", stack.stackSize);
+							nbt.setInteger("StackSize", ItemStackTools.getStackSize(stack));
 							itemList.appendTag(stack.writeToNBT(nbt));
 						}
 					}
@@ -197,11 +201,11 @@ public class ItemHDD extends Item implements ICustomModel, IItemProvider {
 				
 				int max = getItemLimit(hddStack);
 				if(index >= 0 && index < max){
-					if(stack !=null){
+					if(!ItemStackTools.isNullStack(stack)){
 						NBTTagList itemList = new NBTTagList();
 						NBTTagCompound nbt = new NBTTagCompound();
 						nbt.setInteger("Index", index);
-						nbt.setInteger("StackSize", stack.stackSize);
+						nbt.setInteger("StackSize", ItemStackTools.getStackSize(stack));
 						itemList.appendTag(stack.writeToNBT(nbt));
 						ItemNBTHelper.getCompound(hddStack).setTag(NBT_ITEM_LIST, itemList);
 					}
@@ -213,7 +217,7 @@ public class ItemHDD extends Item implements ICustomModel, IItemProvider {
 	public static int getItemIndex(ItemStack hddStack, ItemStack filter){
 		for(int i = 0; i < getItemLimit(hddStack); i++){
 			ItemStack stored = getItem(hddStack, i);
-			if(stored !=null){
+			if(!ItemStackTools.isNullStack(stored)){
 				if(ItemUtil.canCombine(stored, filter)){
 					return i;
 				}
@@ -225,17 +229,17 @@ public class ItemHDD extends Item implements ICustomModel, IItemProvider {
 	public static ItemStack getItem(ItemStack hddStack, ItemStack filter){
 		for(int i = 0; i < getItemLimit(hddStack); i++){
 			ItemStack stored = getItem(hddStack, i);
-			if(stored !=null){
+			if(!ItemStackTools.isNullStack(stored)){
 				if(ItemUtil.canCombine(stored, filter)){
 					return stored;
 				}
 			}
 		}
-		return null;
+		return ItemStackTools.getEmptyStack();
 	}
 	
 	public static ItemStack getItem(ItemStack hddStack, int index){
-		if(hddStack !=null){
+		if(!ItemStackTools.isNullStack(hddStack)){
 			if(ItemNBTHelper.verifyExistance(hddStack, NBT_ITEM_LIST)){
 				NBTTagList itemList = ItemNBTHelper.getCompound(hddStack).getTagList(NBT_ITEM_LIST, 10);
 				for(int t = 0; t < itemList.tagCount(); t++){
@@ -243,9 +247,9 @@ public class ItemHDD extends Item implements ICustomModel, IItemProvider {
 					if(stackNBT !=null){
 						int nbtIndex = stackNBT.getInteger("Index");
 						if(index == nbtIndex){
-							ItemStack stack = ItemStack.loadItemStackFromNBT(stackNBT);
+							ItemStack stack = ItemStackTools.loadFromNBT(stackNBT);
 							if(stackNBT.hasKey("StackSize")){
-								stack.stackSize = stackNBT.getInteger("StackSize");
+								ItemStackTools.setStackSize(stack, stackNBT.getInteger("StackSize"));
 							}
 							return stack;
 						}
@@ -253,35 +257,33 @@ public class ItemHDD extends Item implements ICustomModel, IItemProvider {
 				}
 			}
 		}
-		return null;
+		return ItemStackTools.getEmptyStack();
 	}
 
 	public int getIndex(ItemStack hdd, ItemStack stack, ExtractFilter filter){
-		if(hdd !=null){
+		if(!ItemStackTools.isNullStack(hdd)){
 			int itemCount = ItemHDD.getItemLimit(hdd);
 			for(int i = 0; i < itemCount; i++){
 				ItemStack foundStack = ItemHDD.getItem(hdd, i);
-				if(foundStack !=null && filter.canExtract(stack, foundStack)){
+				if(!ItemStackTools.isNullStack(foundStack) && filter.canExtract(stack, foundStack)){
 					return i;
 				}
 			}
 		}
 		return -1;
 	}
-	
-
 
 	@Override
 	public ItemStack insert(ItemStack container, ItemStack insert, int amount, boolean sim) {
 		for(int i = 0; i < getItemLimit(container); i++){
 			ItemStack stored = getItem(container, i);
-			if(stored != null){
+			if(!ItemStackTools.isNullStack(stored)){
 				if(ItemUtil.canCombine(insert, stored)){
 					if(!sim){
-						stored.stackSize += amount;
+						ItemStackTools.incStackSize(stored, amount);
 						ItemHDD.setItem(container, i, stored);
 					}
-					return null;
+					return ItemStackTools.getEmptyStack();
 				}
 			}
 		}
@@ -291,7 +293,7 @@ public class ItemHDD extends Item implements ICustomModel, IItemProvider {
 			if(!sim){
 				ItemHDD.setItem(container, i, ItemHandlerHelper.copyStackWithSize(insert, amount));
 			}
-			return null;
+			return ItemStackTools.getEmptyStack();
 		}
 		
 		return ItemHandlerHelper.copyStackWithSize(insert, amount);
@@ -299,20 +301,20 @@ public class ItemHDD extends Item implements ICustomModel, IItemProvider {
 	
 	@Override
 	public ItemStack extract(ItemStack container, ItemStack remove, int amount, ExtractFilter filter, boolean sim) {
-		ItemStack received = null;
-		if (container != null) {
+		ItemStack received = ItemStackTools.getEmptyStack();
+		if (!ItemStackTools.isNullStack(container)) {
 			int index = getIndex(container, remove, filter);
 			if (index > -1) {
 				ItemStack stored = getItem(container, index);
-				if(stored !=null){
-					int realCount = Math.min(amount, stored.stackSize);
-					if(received == null){
+				if(!ItemStackTools.isNullStack(stored)){
+					int realCount = Math.min(amount, ItemStackTools.getStackSize(stored));
+					if(ItemStackTools.isNullStack(received)){
 						received = ItemHandlerHelper.copyStackWithSize(stored, realCount);
 					}
 					if(!sim){
-						stored.stackSize -= realCount;
-						if (stored.stackSize <= 0) {
-							stored = null;
+						ItemStackTools.incStackSize(stored, -realCount);
+						if (ItemStackTools.isEmpty(stored)) {
+							stored = ItemStackTools.getEmptyStack();
 						}
 						setItem(container, index,	stored);
 					}

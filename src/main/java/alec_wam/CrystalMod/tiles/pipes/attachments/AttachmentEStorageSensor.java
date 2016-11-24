@@ -35,6 +35,7 @@ import alec_wam.CrystalMod.tiles.pipes.attachments.gui.GuiAttachmentSensor;
 import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetwork;
 import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage.ItemStackData;
 import alec_wam.CrystalMod.tiles.pipes.estorage.TileEntityPipeEStorage;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.client.RenderUtil;
 
 import com.google.common.collect.Lists;
@@ -123,7 +124,7 @@ public class AttachmentEStorageSensor extends AttachmentData {
 	public void loadFromNBT(NBTTagCompound nbt){
 		super.loadFromNBT(nbt);
 		if(nbt.hasKey("FilterStack")){
-			filterStack = ItemStack.loadItemStackFromNBT(nbt.getCompoundTag("FilterStack"));
+			filterStack = ItemStackTools.loadFromNBT(nbt.getCompoundTag("FilterStack"));
 		}
 		filterAmount = nbt.getInteger("FilterAmt");
 		compare = CompareType.values()[nbt.getInteger("Compare") % CompareType.values().length];
@@ -135,7 +136,7 @@ public class AttachmentEStorageSensor extends AttachmentData {
 	@Override
 	public void handleMessage(TileEntityPipe pipe, EnumFacing dir, NBTTagCompound nbt){
 		if(nbt.hasKey("FilterStack")){
-			filterStack = ItemStack.loadItemStackFromNBT(nbt.getCompoundTag("FilterStack"));
+			filterStack = ItemStackTools.loadFromNBT(nbt.getCompoundTag("FilterStack"));
 		}
 		if(nbt.hasKey("FilterAmt")){
 			this.filterAmount = nbt.getInteger("FilterAmt");

@@ -69,6 +69,7 @@ import alec_wam.CrystalMod.entities.mob.zombiePigmen.EntityCrystalPigZombie;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.proxy.ClientProxy;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.Lang;
 
 public class ItemMobEssence extends Item implements ICustomModel{
@@ -99,7 +100,6 @@ public class ItemMobEssence extends Item implements ICustomModel{
 	public static String getEssenceID(Class clazz){
 		return classToID.get(clazz);
 	}
-	
 	
 	public ItemMobEssence(){
 		super();
@@ -376,7 +376,7 @@ public class ItemMobEssence extends Item implements ICustomModel{
                 if(entity instanceof EntityLiving)((EntityLiving)entity).playLivingSound();
 				if (!player.capabilities.isCreativeMode)
 				{
-					stack.stackSize--;
+					ItemStackTools.incStackSize(stack, -1);
 				}
 			}
 			return EnumActionResult.SUCCESS;

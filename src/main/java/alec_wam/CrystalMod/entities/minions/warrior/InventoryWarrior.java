@@ -2,6 +2,7 @@ package alec_wam.CrystalMod.entities.minions.warrior;
 
 import java.util.concurrent.Callable;
 
+import alec_wam.CrystalMod.util.ItemStackTools;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
@@ -156,18 +157,18 @@ public class InventoryWarrior implements IInventory
         {
             ItemStack itemstack = this.mainInventory[j];
 
-            if (itemstack != null && (itemIn == null || itemstack.getItem() == itemIn) && (metadataIn <= -1 || itemstack.getMetadata() == metadataIn) && (itemNBT == null || NBTUtil.areNBTEquals(itemNBT, itemstack.getTagCompound(), true)))
+            if (ItemStackTools.isValid(itemstack) && (itemIn == null || itemstack.getItem() == itemIn) && (metadataIn <= -1 || itemstack.getMetadata() == metadataIn) && (itemNBT == null || NBTUtil.areNBTEquals(itemNBT, itemstack.getTagCompound(), true)))
             {
-                int k = removeCount <= 0 ? itemstack.stackSize : Math.min(removeCount - i, itemstack.stackSize);
+                int k = removeCount <= 0 ? ItemStackTools.getStackSize(itemstack) : Math.min(removeCount - i, ItemStackTools.getStackSize(itemstack));
                 i += k;
 
                 if (removeCount != 0)
                 {
-                    this.mainInventory[j].stackSize -= k;
-
-                    if (this.mainInventory[j].stackSize == 0)
+                    ItemStackTools.incStackSize(this.mainInventory[j], k);
+                    
+                    if (ItemStackTools.isEmpty(this.mainInventory[j]))
                     {
-                        this.mainInventory[j] = null;
+                        this.mainInventory[j] = ItemStackTools.getEmptyStack();
                     }
 
                     if (removeCount > 0 && i >= removeCount)
@@ -348,7 +349,7 @@ public class InventoryWarrior implements IInventory
      */
     public boolean addItemStackToInventory(final ItemStack itemStackIn)
     {
-        if (itemStackIn != null && itemStackIn.stackSize != 0 && itemStackIn.getItem() != null)
+        if (ItemStackTools.isValid(itemStackIn) && itemStackIn.getItem() != null)
         {
             try
             {
@@ -360,7 +361,7 @@ public class InventoryWarrior implements IInventory
                     {
                         this.mainInventory[j] = ItemStack.copyItemStack(itemStackIn);
                         this.mainInventory[j].animationsToGo = 5;
-                        itemStackIn.stackSize = 0;
+                        ItemStackTools.makeEmpty(itemStackIn);
                         return true;
                     }
                     else
@@ -374,16 +375,16 @@ public class InventoryWarrior implements IInventory
 
                     while (true)
                     {
-                        i = itemStackIn.stackSize;
-                        itemStackIn.stackSize = this.storePartialItemStack(itemStackIn);
+                        i = ItemStackTools.getStackSize(itemStackIn);
+                        ItemStackTools.setStackSize(itemStackIn, this.storePartialItemStack(itemStackIn));
 
-                        if (itemStackIn.stackSize <= 0 || itemStackIn.stackSize >= i)
+                        if (ItemStackTools.isEmpty(itemStackIn) || ItemStackTools.getStackSize(itemStackIn) >= i)
                         {
                             break;
                         }
                     }
 
-                    return itemStackIn.stackSize < i;
+                    return ItemStackTools.getStackSize(itemStackIn) < i;
                 }
             }
             catch (Throwable throwable)

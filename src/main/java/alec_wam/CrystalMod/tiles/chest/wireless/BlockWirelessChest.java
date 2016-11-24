@@ -50,6 +50,7 @@ import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.ChatUtil;
 import alec_wam.CrystalMod.util.EntityUtil;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.ProfileUtil;
 import alec_wam.CrystalMod.util.UUIDUtils;
@@ -131,10 +132,10 @@ public class BlockWirelessChest extends BlockContainer implements ICustomModel
         
         if(!world.isRemote){
         	
-        	if(stack !=null && ItemUtil.itemStackMatchesOredict(stack, "gemDiamond")){
+        	if(ItemStackTools.isValid(stack) && ItemUtil.itemStackMatchesOredict(stack, "gemDiamond")){
         		if(!chest.isBoundToPlayer()){
 	        		if (!player.capabilities.isCreativeMode)
-	                	stack.stackSize--;
+	        			ItemStackTools.incStackSize(stack, -1);
 	                chest.bindToPlayer(player.getUniqueID());
 	                CrystalModNetwork.sendToAllAround(new PacketTileMessage(pos, "MarkDirty"), chest);
 	        		return true;
@@ -177,7 +178,7 @@ public class BlockWirelessChest extends BlockContainer implements ICustomModel
         	                if (oldId != id)
         	                {
         	                	if (!player.capabilities.isCreativeMode)
-        	                    	stack.stackSize--;
+        	                		ItemStackTools.incStackSize(stack, -1);
         	                    chest.setCode(id);
         	                    CrystalModNetwork.sendToAllAround(new PacketTileMessage(pos, "MarkDirty"), chest);
         	                }

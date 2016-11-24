@@ -17,6 +17,7 @@ import alec_wam.CrystalMod.tiles.pipes.estorage.panel.GuiPanel;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.TileEntityPanel;
 import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.FluidUtil;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.tool.ToolUtil;
 
@@ -35,15 +36,15 @@ public class TileEntityPanelItem extends TileEntityPanel implements IInsertListe
 		if(network == null || !connected) return false;
 		if(worldObj.isRemote) return true;
 		ItemStack stack = held;
-		if(stack !=null){
+		if(!ItemStackTools.isNullStack(stack)){
 			
 			if(isLocked){
-				if(displayItem != null && ItemUtil.canCombine(stack, displayItem)){
+				if(!ItemStackTools.isNullStack(displayItem) && ItemUtil.canCombine(stack, displayItem)){
 					if(network !=null){
 						ItemStack insert = network.getItemStorage().addItem(stack, false);
 						stack = insert;
-						if(stack !=null && stack.stackSize <=0){
-							stack = null;
+						if(ItemStackTools.isEmpty(stack)){
+							stack = ItemStackTools.getEmptyStack();
 						}
 						player.inventory.setInventorySlotContents(player.inventory.currentItem, stack);
 						return true;
@@ -63,14 +64,14 @@ public class TileEntityPanelItem extends TileEntityPanel implements IInsertListe
 				
 			}else{
 				if(ToolUtil.isToolEquipped(player, hand)){
-					displayItem = null;
+					displayItem = ItemStackTools.getEmptyStack();
 					displayFluid = null;
 					update = true;
 					return true;
 				}
 				
 				FluidStack itemFluid = FluidUtil.getFluidTypeFromItem(stack);
-				if(itemFluid !=null && displayItem == null){
+				if(itemFluid !=null && ItemStackTools.isNullStack(displayItem)){
 					if(displayFluid == null || displayFluid != null && !FluidUtil.canCombine(itemFluid, displayFluid)){
 						FluidStack copy = itemFluid.copy();
 						itemFluid.amount = 1;
@@ -89,9 +90,9 @@ public class TileEntityPanelItem extends TileEntityPanel implements IInsertListe
 						return false;
 					}
 				} else {
-					if(displayItem == null || displayItem != null && !ItemUtil.canCombine(stack, displayItem)){
+					if(ItemStackTools.isNullStack(displayItem) || !ItemStackTools.isNullStack(displayItem) && !ItemUtil.canCombine(stack, displayItem)){
 						ItemStack copy = stack.copy();
-						copy.stackSize = 1;
+						ItemStackTools.setStackSize(copy, 1);
 						displayItem = copy;
 						update = true;
 						return true;
@@ -100,8 +101,8 @@ public class TileEntityPanelItem extends TileEntityPanel implements IInsertListe
 					if(network !=null){
 						ItemStack insert = network.getItemStorage().addItem(stack, false);
 						stack = insert;
-						if(stack !=null && stack.stackSize <=0){
-							stack = null;
+						if(ItemStackTools.isEmpty(stack)){
+							stack = ItemStackTools.getEmptyStack();
 						}
 						player.inventory.setInventorySlotContents(player.inventory.currentItem, stack);
 						return true;
@@ -121,15 +122,15 @@ public class TileEntityPanelItem extends TileEntityPanel implements IInsertListe
 				return true;
 			}
 			
-			if(displayItem !=null && network !=null){
+			if(!ItemStackTools.isNullStack(displayItem) && network !=null){
 				boolean changed = false;
 				for(int s = 0; s < player.inventory.mainInventory.length; s++){
 					ItemStack invStack = player.inventory.mainInventory[s];
-					if(invStack !=null && ItemUtil.canCombine(invStack, displayItem)){
+					if(!ItemStackTools.isNullStack(invStack) && ItemUtil.canCombine(invStack, displayItem)){
 						ItemStack insert = network.getItemStorage().addItem(stack, false);
 						stack = insert;
-						if(stack !=null && stack.stackSize <=0){
-							stack = null;
+						if(ItemStackTools.isEmpty(stack)){
+							stack = ItemStackTools.getEmptyStack();
 						}
 						player.inventory.mainInventory[s]=stack;
 						changed = true;
@@ -156,9 +157,9 @@ public class TileEntityPanelItem extends TileEntityPanel implements IInsertListe
 	public void readCustomNBT(NBTTagCompound nbt){
 		super.readCustomNBT(nbt);
 		if(nbt.hasKey("DisplayStack")){
-			this.displayItem = ItemStack.loadItemStackFromNBT(nbt.getCompoundTag("DisplayStack"));
+			this.displayItem = ItemStackTools.loadFromNBT(nbt.getCompoundTag("DisplayStack"));
 		}else{
-			this.displayItem = null;
+			this.displayItem = ItemStackTools.getEmptyStack();
 		}
 		if(nbt.hasKey("DisplayFluid")){
 			this.displayFluid = FluidStack.loadFluidStackFromNBT(nbt.getCompoundTag("DisplayFluid"));
@@ -180,14 +181,14 @@ public class TileEntityPanelItem extends TileEntityPanel implements IInsertListe
 		super.update();
 		
 		if(update){
-			if(this.displayItem !=null){
+			if(!ItemStackTools.isNullStack(displayItem)){
 				if(this.network !=null){
 					ItemStackData data = network.getItemStorage().getItemData(displayItem);
 					if(data !=null){
 						if(data.isCrafting){
 							displayText = "0";
-						} else if(data.stack !=null) {
-							if(data.stack.stackSize == 1){
+						} else if(!ItemStackTools.isNullStack(displayItem)) {
+							if(ItemStackTools.getStackSize(displayItem) == 1){
 								displayText = "1";
 							}
 							else displayText = GuiPanel.getStackSize(data.stack);
@@ -197,7 +198,7 @@ public class TileEntityPanelItem extends TileEntityPanel implements IInsertListe
 						search : for(CraftingPattern data2 : network.getPatterns()){
 							if(data2 !=null){
 								for(ItemStack out : data2.getOutputs()){
-									if(out !=null && ItemUtil.canCombine(out, displayItem)){
+									if(!ItemStackTools.isNullStack(out) && ItemUtil.canCombine(out, displayItem)){
 										found = true;
 										break search;
 									}
@@ -234,7 +235,7 @@ public class TileEntityPanelItem extends TileEntityPanel implements IInsertListe
 
 	@Override
 	public void onItemInserted(ItemStack stack) {
-		if(stack !=null && this.displayItem !=null){
+		if(!ItemStackTools.isNullStack(stack) && !ItemStackTools.isNullStack(displayItem)){
 			if(ItemUtil.canCombine(stack, displayItem)){
 				if(worldObj !=null && !worldObj.isRemote)
 				update = true;
@@ -244,7 +245,7 @@ public class TileEntityPanelItem extends TileEntityPanel implements IInsertListe
 
 	@Override
 	public void onItemExtracted(ItemStack stack, int amount) {
-		if(stack !=null && this.displayItem !=null && amount > 0){
+		if(!ItemStackTools.isNullStack(stack) && !ItemStackTools.isNullStack(displayItem) && amount > 0){
 			if(ItemUtil.canCombine(stack, displayItem)){
 				if(worldObj !=null && !worldObj.isRemote)
 				update = true;

@@ -33,6 +33,7 @@ import alec_wam.CrystalMod.tiles.pipes.attachments.gui.GuiAttachmantImport;
 import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetwork;
 import alec_wam.CrystalMod.tiles.pipes.estorage.TileEntityPipeEStorage;
 import alec_wam.CrystalMod.util.FluidUtil;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.client.RenderUtil;
 
@@ -73,9 +74,9 @@ public class AttachmentEStorageImport extends AttachmentData {
 		super.loadFromNBT(nbt);
 		if(nbt.hasKey("Filter")){
 			NBTTagCompound filterNBT = nbt.getCompoundTag("Filter");
-			filters.setInventorySlotContents(0, ItemStack.loadItemStackFromNBT(filterNBT));
+			filters.setInventorySlotContents(0, ItemStackTools.loadFromNBT(filterNBT));
 		}else{
-			filters.setInventorySlotContents(0, null);
+			filters.setInventorySlotContents(0, ItemStackTools.getEmptyStack());
 		}
 
         if(nbt.hasKey("RedstoneMode")){
@@ -103,10 +104,10 @@ public class AttachmentEStorageImport extends AttachmentData {
 				if(handler !=null && (ioType == AttachmentIOType.ITEM || ioType == AttachmentIOType.BOTH)){
 					for(int slot = 0; slot < handler.getSlots(); slot++){
 						ItemStack stack = handler.getStackInSlot(slot);
-						if(stack !=null && ItemUtil.passesFilter(stack, getFilter())){
+						if(!ItemStackTools.isNullStack(stack) && ItemUtil.passesFilter(stack, getFilter())){
 							int extractAmount = 4;
 							ItemStack extractResult = handler.extractItem(slot, extractAmount, true);
-							if(extractResult !=null && net.getItemStorage().addItem(extractResult, true) == null){
+							if(!ItemStackTools.isNullStack(extractResult) && ItemStackTools.isNullStack(net.getItemStorage().addItem(extractResult, true))){
 								net.getItemStorage().addItem(extractResult, false);
 								handler.extractItem(slot, extractAmount, false);
 							}

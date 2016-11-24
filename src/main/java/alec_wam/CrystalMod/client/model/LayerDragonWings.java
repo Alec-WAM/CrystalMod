@@ -10,6 +10,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import alec_wam.CrystalMod.capability.ExtendedPlayer;
 import alec_wam.CrystalMod.capability.ExtendedPlayerProvider;
+import alec_wam.CrystalMod.handler.EventHandler;
 import alec_wam.CrystalMod.items.ItemDragonWings;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 
@@ -25,8 +26,7 @@ public class LayerDragonWings implements LayerRenderer<AbstractClientPlayer> {
 
 	@Override
 	public void doRenderLayer(AbstractClientPlayer entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
-		ItemStack chest = entity.inventory.armorItemInSlot(2);
-    	if(chest == null || !ItemNBTHelper.verifyExistance(chest, ItemDragonWings.UPGRADE_NBT))return;
+		if(!EventHandler.hasDragonWings(entity))return;
     	
     	ExtendedPlayer extPlayer = ExtendedPlayerProvider.getExtendedPlayer(entity);
     	if(extPlayer == null)return;
@@ -43,8 +43,8 @@ public class LayerDragonWings implements LayerRenderer<AbstractClientPlayer> {
     		GlStateManager.translate(0, 0.0f, 0.3F);
         }
     	
-    	GlStateManager.translate(0, -0.3f, 0.0f);
-    	double scale2 = 0.3;
+    	GlStateManager.translate(0, -0.3f, 0.1f);
+    	double scale2 = 0.2;
     	GlStateManager.scale(scale2, scale2, scale2);
     	
     	float f = extPlayer.prevWingAnimTime + (extPlayer.wingAnimTime - extPlayer.prevWingAnimTime) * partialTicks;

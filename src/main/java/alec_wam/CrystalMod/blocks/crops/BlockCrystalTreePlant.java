@@ -8,6 +8,7 @@ import alec_wam.CrystalMod.blocks.BlockCrystalLog.WoodType;
 import alec_wam.CrystalMod.blocks.crops.BlockCrystalPlant.PlantType;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.items.ItemCrystal.CrystalType;
+import alec_wam.CrystalMod.util.ItemStackTools;
 
 import com.google.common.collect.Lists;
 
@@ -220,7 +221,7 @@ public class BlockCrystalTreePlant extends BlockHorizontal implements IGrowable
         {
             j = MathHelper.getRandomIntegerInRange(RANDOM, 1, 4);
         }
-        ItemStack crop = null;
+        ItemStack crop = ItemStackTools.getEmptyStack();
         PlantType type = TYPE;
     	if(type == PlantType.BLUE){
     		crop = new ItemStack(ModItems.crystals, 1, CrystalType.BLUE_SHARD.getMetadata());

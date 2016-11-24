@@ -5,6 +5,7 @@ import java.util.List;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.IMessageHandler;
 import alec_wam.CrystalMod.network.packets.PacketGuiMessage;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.ModLogger;
 import net.minecraft.entity.player.EntityPlayer;
@@ -183,7 +184,7 @@ public class ContainerMessageBase extends Container implements IMessageHandler {
 
 	@Override
 	public ItemStack transferStackInSlot(EntityPlayer player, int slotClickedIndex) {
-		return null;
+		return ItemStackTools.getEmptyStack();
 	}
 
 	/**
@@ -203,7 +204,7 @@ public class ContainerMessageBase extends Container implements IMessageHandler {
 		start = iterateBackwards ? endBeforeIndex : startIndex;
 		stop = iterateBackwards ? startIndex : endBeforeIndex;
 		if (incomingStack.isStackable()) {
-			for (currentIndex = start; incomingStack.stackSize > 0
+			for (currentIndex = start; !ItemStackTools.isEmpty(incomingStack)
 					&& currentIndex != stop; currentIndex += iterator) {
 				slotFromContainer = (Slot) this.inventorySlots
 						.get(currentIndex);
@@ -211,24 +212,24 @@ public class ContainerMessageBase extends Container implements IMessageHandler {
 					continue;
 				}
 				stackFromSlot = slotFromContainer.getStack();
-				if (stackFromSlot == null
+				if (ItemStackTools.isNullStack(stackFromSlot)
 						|| !ItemUtil.canCombine(incomingStack, stackFromSlot)) {
 					continue;
 				}
 				transferAmount = stackFromSlot.getMaxStackSize()
-						- stackFromSlot.stackSize;
-				if (transferAmount > incomingStack.stackSize) {
-					transferAmount = incomingStack.stackSize;
+						- ItemStackTools.getStackSize(stackFromSlot);
+				if (transferAmount > ItemStackTools.getStackSize(incomingStack)) {
+					transferAmount = ItemStackTools.getStackSize(incomingStack);
 				}
 				if (transferAmount > 0) {
-					incomingStack.stackSize -= transferAmount;
-					stackFromSlot.stackSize += transferAmount;
+					ItemStackTools.incStackSize(incomingStack, -transferAmount);
+					ItemStackTools.incStackSize(stackFromSlot, transferAmount);
 					slotFromContainer.onSlotChanged();
 				}
 			}
 		}
-		if (incomingStack.stackSize > 0) {
-			for (currentIndex = start; incomingStack.stackSize > 0
+		if (!ItemStackTools.isEmpty(incomingStack)) {
+			for (currentIndex = start; !ItemStackTools.isEmpty(incomingStack)
 					&& currentIndex != stop; currentIndex += iterator) {
 				slotFromContainer = (Slot) this.inventorySlots
 						.get(currentIndex);
@@ -239,12 +240,12 @@ public class ContainerMessageBase extends Container implements IMessageHandler {
 				if (stackFromSlot == null) {
 					slotFromContainer.putStack(incomingStack.copy());
 					slotFromContainer.onSlotChanged();
-					incomingStack.stackSize = 0;
+					ItemStackTools.makeEmpty(incomingStack);
 					break;
 				}
 			}
 		}
-		return incomingStack.stackSize == 0;
+		return ItemStackTools.isEmpty(incomingStack);
 	}
 
 	@Override

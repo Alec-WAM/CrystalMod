@@ -13,6 +13,7 @@ import alec_wam.CrystalMod.entities.minions.worker.WorkerJob;
 import alec_wam.CrystalMod.tiles.machine.worksite.TileWorksiteBase;
 import alec_wam.CrystalMod.tiles.machine.worksite.InventorySided.RelativeSide;
 import alec_wam.CrystalMod.tiles.machine.worksite.imp.WorksiteCropFarm;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.fakeplayer.FakePlayerUtil;
 
 public class JobPlantCrop extends WorkerJob {
@@ -35,7 +36,7 @@ public class JobPlantCrop extends WorkerJob {
 			return true;
 		}
 		ItemStack held = worker.getHeldItemMainhand();
-		if(held == null){
+		if(!ItemStackTools.isValid(held)){
 			return false;
 		}
 		
@@ -43,8 +44,8 @@ public class JobPlantCrop extends WorkerJob {
 		double d = worker.getDistance(dirtPos.getX() + 0.5, dirtPos.down().getY() + 0.5, dirtPos.getZ() + 0.5);
 		if(d <= 1.5D){
 			if(FakePlayerUtil.rightClickBlock(worker.worldObj, dirtPos.down(), EnumFacing.UP, held)){
-				if(held !=null && held.stackSize <=0){
-					held = null;
+				if(!ItemStackTools.isValid(held)){
+					held = ItemStackTools.getEmptyStack();
 				}
 				worker.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, held);
 				worker.swingArm(EnumHand.MAIN_HAND);

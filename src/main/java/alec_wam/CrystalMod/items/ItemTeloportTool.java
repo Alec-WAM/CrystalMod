@@ -40,6 +40,7 @@ import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.util.ChatUtil;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ModLogger;
 
 public class ItemTeloportTool extends Item implements ICustomModel {
@@ -59,7 +60,7 @@ public class ItemTeloportTool extends Item implements ICustomModel {
 		ModelLoader.setCustomMeshDefinition(this, new ItemMeshDefinition() {
             @Override
             public ModelResourceLocation getModelLocation(ItemStack stack) {
-            	boolean bound = stack !=null && stack.hasTagCompound() && ItemNBTHelper.verifyExistance(stack, "TeleportLocation");
+            	boolean bound = !ItemStackTools.isNullStack(stack) && stack.hasTagCompound() && ItemNBTHelper.verifyExistance(stack, "TeleportLocation");
             	return bound ? locBound : locUnBound;
             }
         });
@@ -67,7 +68,7 @@ public class ItemTeloportTool extends Item implements ICustomModel {
 	
 	@Override
 	public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean adv){
-		if(stack !=null && stack.hasTagCompound()){
+		if(!ItemStackTools.isNullStack(stack) && stack.hasTagCompound()){
 			TeleportLocation loc = getLocation(stack);
 			if(loc !=null){
 				list.add("Location:");
@@ -211,7 +212,7 @@ public class ItemTeloportTool extends Item implements ICustomModel {
     }
 	
     public TeleportLocation getLocation(ItemStack stack) {
-    	if(stack == null || !stack.hasTagCompound() || !ItemNBTHelper.verifyExistance(stack, "TeleportLocation"))return null;
+    	if(ItemStackTools.isNullStack(stack) || !stack.hasTagCompound() || !ItemNBTHelper.verifyExistance(stack, "TeleportLocation"))return null;
     	NBTTagCompound nbt = ItemNBTHelper.getCompound(stack).getCompoundTag("TeleportLocation");
 		TeleportLocation destination = new TeleportLocation();
 		destination.readFromNBT(nbt);
@@ -219,7 +220,7 @@ public class ItemTeloportTool extends Item implements ICustomModel {
 	}
     
     public void setLocation(ItemStack stack, TeleportLocation loc){
-    	if(stack == null)return;
+    	if(ItemStackTools.isNullStack(stack))return;
     	if(loc == null){
     		removeLocation(stack);
     		return;
@@ -230,7 +231,7 @@ public class ItemTeloportTool extends Item implements ICustomModel {
     }
     
     public void removeLocation(ItemStack stack){
-    	if(stack == null || !stack.hasTagCompound() || !ItemNBTHelper.verifyExistance(stack, "TeleportLocation"))return;
+    	if(ItemStackTools.isNullStack(stack) || !stack.hasTagCompound() || !ItemNBTHelper.verifyExistance(stack, "TeleportLocation"))return;
     	ItemNBTHelper.getCompound(stack).removeTag("TeleportLocation");
     }
     

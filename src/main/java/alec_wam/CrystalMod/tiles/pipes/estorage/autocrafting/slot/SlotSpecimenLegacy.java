@@ -1,5 +1,6 @@
 package alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.slot;
 
+import alec_wam.CrystalMod.util.ItemStackTools;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
@@ -22,8 +23,8 @@ public class SlotSpecimenLegacy extends Slot {
 
     @Override
     public void putStack(ItemStack stack) {
-        if (stack != null) {
-            stack.stackSize = 1;
+        if (!ItemStackTools.isNullStack(stack)) {
+        	ItemStackTools.setStackSize(stack, 1);
         }
 
         super.putStack(stack);

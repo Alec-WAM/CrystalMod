@@ -9,6 +9,7 @@ import com.google.common.collect.Maps;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.packets.PacketRecipeTransfer;
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.ContainerPatternEncoder;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import mezz.jei.api.IModRegistry;
 import mezz.jei.api.gui.IGuiItemStackGroup;
 import mezz.jei.api.gui.IRecipeLayout;
@@ -66,13 +67,13 @@ public class RecipeTransferEncoder implements IRecipeTransferHandler {
 	                    int hash = ingredient.getItem().hashCode() * (ingredient.getItemDamage() + 1) * (ingredient.hasTagCompound() ? ingredient.getTagCompound().hashCode() : 1);
 	                    if (guiIngredient.isInput()) {
 	                        if (inputs.containsKey(hash)) {
-	                            inputs.get(hash).stackSize++;
+	                        	ItemStackTools.incStackSize(inputs.get(hash), 1);
 	                        } else {
 	                            inputs.put(hash, ingredient);
 	                        }
 	                    } else {
 	                        if (outputs.containsKey(hash)) {
-	                            outputs.get(hash).stackSize++;
+	                        	ItemStackTools.incStackSize(outputs.get(hash), 1);
 	                        } else {
 	                            outputs.put(hash, ingredient);
 	                        }

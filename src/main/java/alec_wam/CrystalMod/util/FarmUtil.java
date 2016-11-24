@@ -28,7 +28,7 @@ public class FarmUtil {
 	public static List<String> seeds = new ArrayList<String>();
 	
 	public static void addSeed(ItemStack stack){
-		if(stack == null)return;
+		if(ItemStackTools.isNullStack(stack))return;
 		if (stack.getItemDamage() == OreDictionary.WILDCARD_VALUE) {
 			for (int a = 0; a < 16; a++) {
 				seeds.add(stack.getUnlocalizedName() + a);
@@ -39,7 +39,7 @@ public class FarmUtil {
 	}
 	
 	public static boolean isSeed(ItemStack stack, boolean ignoreCrops){
-		if(stack == null)return false;
+		if(ItemStackTools.isNullStack(stack))return false;
 		  
 		if(!ignoreCrops){
 			  Block bi = Block.getBlockFromItem(stack.getItem());

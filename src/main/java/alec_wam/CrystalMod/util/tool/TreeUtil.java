@@ -2,6 +2,7 @@ package alec_wam.CrystalMod.util.tool;
 
 import java.util.List;
 
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.ModLogger;
 import alec_wam.CrystalMod.util.fakeplayer.FakePlayerUtil;
@@ -27,14 +28,14 @@ public class TreeUtil {
 
 	
 	public static boolean isLog(ItemStack stack) {
-		if(stack == null) return false;
+		if(ItemStackTools.isNullStack(stack)) return false;
 		return ItemUtil.itemStackMatchesOredict(stack, "logWood");
 	}
 	
 	public static boolean isLog(IBlockState state) {
 		if(state.getBlock() == Blocks.LOG || state.getBlock() == Blocks.LOG2)return true;
 		ItemStack stack = ItemUtil.getItemFromBlock(state);
-		if(stack == null) return false;
+		if(ItemStackTools.isNullStack(stack)) return false;
 		return ItemUtil.itemStackMatchesOredict(stack, "logWood");
 	}
 
@@ -65,14 +66,14 @@ public class TreeUtil {
 	        }
 	    }
 	    held = player.getHeldItemMainhand();
-	    player.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, null);
+	    player.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, ItemStackTools.getEmptyStack());
 	    return realDrops;
 	}
 	
 	public static void applyDamage(ItemStack stack, int damage, boolean isMultiharvest) {
 		damage = stack.getItemDamage() + damage;
 		if(damage >= stack.getMaxDamage()) {
-			stack.stackSize = 0;
+			ItemStackTools.makeEmpty(stack);
 		}
 		stack.setItemDamage(damage);
 	}

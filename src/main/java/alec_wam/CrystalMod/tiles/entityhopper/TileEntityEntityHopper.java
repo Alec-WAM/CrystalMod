@@ -26,6 +26,7 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 import alec_wam.CrystalMod.tiles.TileEntityMod;
 import alec_wam.CrystalMod.util.BlockUtil;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.ModLogger;
 import alec_wam.CrystalMod.util.Vector3d;
@@ -86,9 +87,9 @@ public class TileEntityEntityHopper extends TileEntityMod {
 							ItemStack stack = item.getEntityItem();
 							ItemStack insert = ItemHandlerHelper.insertItem(handler, stack, false);
 							
-							if(insert !=null){
+							if(!ItemStackTools.isNullStack(insert)){
 								item.setEntityItemStack(insert);
-								if(item.getEntityItem().stackSize <=0){
+								if(ItemStackTools.isEmpty(item.getEntityItem())){
 									item.setDead();
 								}
 							} else {

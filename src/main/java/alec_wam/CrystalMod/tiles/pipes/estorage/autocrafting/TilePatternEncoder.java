@@ -5,6 +5,7 @@ import alec_wam.CrystalMod.network.IMessageHandler;
 import alec_wam.CrystalMod.tiles.BasicItemHandler;
 import alec_wam.CrystalMod.tiles.BasicItemValidator;
 import alec_wam.CrystalMod.tiles.TileEntityMod;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
@@ -46,7 +47,7 @@ public class TilePatternEncoder extends TileEntityMod implements IMessageHandler
     	NBTTagList tagList = new NBTTagList();
 
         for (int i = 0; i < patterns.getSlots(); i++) {
-            if (patterns.getStackInSlot(i) != null) {
+            if (!ItemStackTools.isNullStack(patterns.getStackInSlot(i))) {
                 NBTTagCompound compoundTag = new NBTTagCompound();
 
                 compoundTag.setInteger("Slot", i);
@@ -68,7 +69,7 @@ public class TilePatternEncoder extends TileEntityMod implements IMessageHandler
         for (int i = 0; i < tagList.tagCount(); i++) {
             int slot = tagList.getCompoundTagAt(i).getInteger("Slot");
 
-            ItemStack stack = ItemStack.loadItemStackFromNBT(tagList.getCompoundTagAt(i));
+            ItemStack stack = ItemStackTools.loadFromNBT(tagList.getCompoundTagAt(i));
 
             patterns.insertItem(slot, stack, false);
         }
@@ -95,9 +96,9 @@ public class TilePatternEncoder extends TileEntityMod implements IMessageHandler
             
             for (int i = 0; i < 9; ++i) {
                 ItemStack ingredient = matrix.getStackInSlot(i);
-                if(ingredient !=null){
-                	if(ingredient.stackSize == 0){
-                		ingredient.stackSize = 1;
+                if(!ItemStackTools.isNullStack(ingredient)){
+                	if(ItemStackTools.isEmpty(ingredient)){
+                		ItemStackTools.setStackSize(ingredient, 1);
                 	}
                 	ItemPattern.setInput(pattern, i, ingredient);
                 }
@@ -108,7 +109,7 @@ public class TilePatternEncoder extends TileEntityMod implements IMessageHandler
     }
 
     public boolean mayCreatePattern() {
-        return result.getStackInSlot(0) != null && patterns.getStackInSlot(1) == null && patterns.getStackInSlot(0) != null;
+        return !ItemStackTools.isNullStack(result.getStackInSlot(0)) && ItemStackTools.isNullStack(patterns.getStackInSlot(1));
     }
     
     public IItemHandler getDroppedItems() {

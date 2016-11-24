@@ -1,5 +1,6 @@
 package alec_wam.CrystalMod.tiles.chest;
 
+import alec_wam.CrystalMod.util.ItemStackTools;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -30,7 +31,7 @@ public class ContainerCrystalChest extends Container {
     @Override
     public ItemStack transferStackInSlot(EntityPlayer p, int i)
     {
-        ItemStack itemstack = null;
+        ItemStack itemstack = ItemStackTools.getEmptyStack();
         Slot slot = (Slot) inventorySlots.get(i);
         if (slot != null && slot.getHasStack())
         {
@@ -43,17 +44,13 @@ public class ContainerCrystalChest extends Container {
                     return null;
                 }
             }
-            else if (!type.acceptsStack(itemstack1))
-            {
-                return null;
-            }
             else if (!mergeItemStack(itemstack1, 0, type.size, false))
             {
                 return null;
             }
-            if (itemstack1.stackSize == 0)
+            if (ItemStackTools.isEmpty(itemstack1))
             {
-                slot.putStack(null);
+                slot.putStack(ItemStackTools.getEmptyStack());
             }
             else
             {

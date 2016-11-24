@@ -7,6 +7,7 @@ import org.lwjgl.opengl.GL11;
 
 import alec_wam.CrystalMod.items.ItemIngot;
 import alec_wam.CrystalMod.tiles.pipes.estorage.storage.hdd.ItemHDD;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.client.RenderUtil;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
@@ -67,7 +68,7 @@ public class TileHDDArrayRenderer extends TileEntitySpecialRenderer<TileHDDArray
 		        boolean hasHDD = false;
 		        
 		        ItemStack hddStack = te.getStackInSlot(h);
-		        if(hddStack !=null && hddStack.getItem() instanceof ItemHDD){
+		        if(!ItemStackTools.isNullStack(hddStack) && hddStack.getItem() instanceof ItemHDD){
 		        	hasHDD = true;
 		        	int[] hddColors = {ItemIngot.RGB_BLUE, ItemIngot.RGB_RED, ItemIngot.RGB_GREEN, ItemIngot.RGB_DARK, ItemIngot.RGB_PURE};
 		        	color = new Color(hddColors[hddStack.getMetadata() % hddColors.length]);

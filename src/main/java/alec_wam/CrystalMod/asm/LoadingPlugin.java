@@ -4,6 +4,7 @@ import java.util.Map;
 
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 
+//-Dfml.coreMods.load=alec_wam.CrystalMod.asm.LoadingPlugin
 @IFMLLoadingPlugin.SortingIndex(1001)
 public class LoadingPlugin implements IFMLLoadingPlugin
 {

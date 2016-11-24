@@ -13,6 +13,7 @@ import alec_wam.CrystalMod.items.ItemCrystal.CrystalType;
 import alec_wam.CrystalMod.items.ItemIngot.IngotType;
 import alec_wam.CrystalMod.items.ItemMetalPlate.PlateType;
 import alec_wam.CrystalMod.tiles.machine.BasicMachineRecipe;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -78,7 +79,7 @@ public class LiquidizerRecipeManager {
 	private static List<LiquidizerRecipe> recipes = new ArrayList<LiquidizerRecipe>();
 	
 	public static LiquidizerRecipe getRecipe(ItemStack input){
-		if (input == null) {
+		if (ItemStackTools.isNullStack(input)) {
 			return null;
 		}
 		
@@ -100,7 +101,7 @@ public class LiquidizerRecipeManager {
 	}
 	
 	public static LiquidizerRecipe addRecipe(ItemStack input, FluidStack output, int energy){
-		LiquidizerRecipe recipe = new LiquidizerRecipe(input, input.stackSize, output, energy);
+		LiquidizerRecipe recipe = new LiquidizerRecipe(input, ItemStackTools.getStackSize(input), output, energy);
 		return addRecipe(recipe);
 	}
 	

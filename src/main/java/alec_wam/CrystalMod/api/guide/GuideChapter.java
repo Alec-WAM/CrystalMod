@@ -10,6 +10,7 @@ import com.google.common.collect.Maps;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 import alec_wam.CrystalMod.api.CrystalModAPI;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.Lang;
 import alec_wam.CrystalMod.util.Util;
 
@@ -60,7 +61,7 @@ public class GuideChapter {
 		
 		if(displayObject instanceof ItemStack){
 			stacks = new ItemStack[1];
-			stacks[0] = ((ItemStack)displayObject).copy();
+			stacks[0] = ItemStackTools.safeCopy(((ItemStack)displayObject));
 			if(stacks[0].getItemDamage() == OreDictionary.WILDCARD_VALUE)stacks[0].setItemDamage(0);
 		}
 		else if(displayObject instanceof String){

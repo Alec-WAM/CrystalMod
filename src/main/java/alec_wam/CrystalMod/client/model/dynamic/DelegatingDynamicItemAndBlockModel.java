@@ -1,5 +1,6 @@
 package alec_wam.CrystalMod.client.model.dynamic;
 
+import alec_wam.CrystalMod.util.ItemStackTools;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
@@ -26,7 +27,7 @@ public abstract class DelegatingDynamicItemAndBlockModel extends DynamicItemAndB
         this.facing = null;
         this.rand = 0;
 
-        this.itemStack = null;
+        this.itemStack = ItemStackTools.getEmptyStack();
         this.world = null;
         this.entity = null;
     }
@@ -37,7 +38,7 @@ public abstract class DelegatingDynamicItemAndBlockModel extends DynamicItemAndB
         this.facing = facing;
         this.rand = rand;
 
-        this.itemStack = null;
+        this.itemStack = ItemStackTools.getEmptyStack();
         this.world = null;
         this.entity = null;
     }

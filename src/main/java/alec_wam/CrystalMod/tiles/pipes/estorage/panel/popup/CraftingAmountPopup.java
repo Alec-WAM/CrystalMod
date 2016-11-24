@@ -4,8 +4,6 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
-import com.sun.prism.paint.Color;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.ScaledResolution;
@@ -15,7 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage.ItemStackData;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.GuiPanel;
-import alec_wam.CrystalMod.util.ModLogger;
+import alec_wam.CrystalMod.util.ItemStackTools;
 
 public class CraftingAmountPopup extends Popup {
 
@@ -66,9 +64,9 @@ public class CraftingAmountPopup extends Popup {
     	guiPanel.drawTexturedModalRect(guiPanel.getCraftBoxX(), guiPanel.getCraftBoxY(), 0, 0, 90, 59);
     	craftingRequestAmount.drawTextBox();
     	
-    	ItemStack dis = this.currentCraft !=null ? this.currentCraft.stack : null;
+    	ItemStack dis = this.currentCraft !=null ? this.currentCraft.stack : ItemStackTools.getEmptyStack();
 		
-		if(dis !=null){
+		if(!ItemStackTools.isNullStack(dis)){
 			GlStateManager.pushMatrix();
             RenderHelper.enableGUIStandardItemLighting();
             GlStateManager.disableLighting();
@@ -129,11 +127,7 @@ public class CraftingAmountPopup extends Popup {
     		}
             int j = 14737632;
 
-            /*if (false)
-            {
-                j = 10526880;
-            }
-            else */if (hovered)
+            if (hovered)
             {
                 j = 16777120;
                 color = java.awt.Color.GRAY.brighter().getRGB();
@@ -155,7 +149,7 @@ public class CraftingAmountPopup extends Popup {
 	public boolean keyTyped(GuiPanel guiPanel, char typedChar, int keyCode) {
 
 		if(keyCode == Keyboard.KEY_RETURN){
-			if(currentCraft == null || currentCraft.stack == null)return true;
+			if(currentCraft == null || ItemStackTools.isNullStack(currentCraft.stack))return true;
 			int current = 0;
 			try{
 				current = Integer.parseInt(craftingRequestAmount.getText());
@@ -163,7 +157,7 @@ public class CraftingAmountPopup extends Popup {
 			}
 			if(current > 0){
 				ItemStack copy = currentCraft.stack.copy();
-				copy.stackSize = 1;
+				ItemStackTools.setStackSize(copy, 1);
 				
 				ItemStackData data = new ItemStackData(copy);
 				data.isCrafting = currentCraft.isCrafting;

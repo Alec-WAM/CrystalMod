@@ -10,6 +10,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import alec_wam.CrystalMod.api.energy.CEnergyStorage;
 import alec_wam.CrystalMod.tiles.machine.power.engine.TileEntityEngineBase;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 
 public class TileEntityEngineFurnace extends TileEntityEngineBase implements ISidedInventory {
@@ -41,7 +42,7 @@ public class TileEntityEngineFurnace extends TileEntityEngineBase implements ISi
 
 	public static int getItemEnergyValue(ItemStack fuel)
 	{
-	    if (fuel == null) {
+	    if (!ItemStackTools.isValid(fuel)) {
 	      return 0;
 	    }
 	    int amt = GameRegistry.getFuelValue(fuel);
@@ -85,12 +86,12 @@ public class TileEntityEngineFurnace extends TileEntityEngineBase implements ISi
 	
 	public static ItemStack consumeItem(ItemStack stack)
 	{
-	    if (stack.stackSize == 1)
+	    if (ItemStackTools.getStackSize(stack) == 1)
 	    {
 	      if (stack.getItem().hasContainerItem(stack)) {
 	        return stack.getItem().getContainerItem(stack);
 	      }
-	      return null;
+	      return ItemStackTools.getEmptyStack();
 	    }
 	    stack.splitStack(1);
 	    return stack;
@@ -114,13 +115,13 @@ public class TileEntityEngineFurnace extends TileEntityEngineBase implements ISi
 	public ItemStack decrStackSize(int slot, int quantity) {
 		ItemStack itemStack = getStackInSlot(slot);
 
-	    if(itemStack == null) {
-	      return null;
+	    if(ItemStackTools.isNullStack(itemStack)) {
+	      return ItemStackTools.getEmptyStack();
 	    }
 
 	    // whole itemstack taken out
-	    if(itemStack.stackSize <= quantity) {
-	      setInventorySlotContents(slot, null);
+	    if(ItemStackTools.getStackSize(itemStack) <= quantity) {
+	      setInventorySlotContents(slot, ItemStackTools.getEmptyStack());
 	      this.markDirty();
 	      return itemStack;
 	    }
@@ -128,8 +129,8 @@ public class TileEntityEngineFurnace extends TileEntityEngineBase implements ISi
 	    // split itemstack
 	    itemStack = itemStack.splitStack(quantity);
 	    // slot is empty, set to null
-	    if(getStackInSlot(slot).stackSize == 0) {
-	      setInventorySlotContents(slot, null);
+	    if(ItemStackTools.isEmpty(getStackInSlot(slot))) {
+	      setInventorySlotContents(slot, ItemStackTools.getEmptyStack());
 	    }
 
 	    this.markDirty();
@@ -140,7 +141,7 @@ public class TileEntityEngineFurnace extends TileEntityEngineBase implements ISi
 	@Override
 	public ItemStack removeStackFromSlot(int slot) {
 		ItemStack itemStack = getStackInSlot(slot);
-	    setInventorySlotContents(slot, null);
+	    setInventorySlotContents(slot, ItemStackTools.getEmptyStack());
 	    return itemStack;
 	}
 
@@ -151,8 +152,8 @@ public class TileEntityEngineFurnace extends TileEntityEngineBase implements ISi
 	    }
 
 	    inventory[slot] = itemstack;
-	    if(itemstack != null && itemstack.stackSize > getInventoryStackLimit()) {
-	      itemstack.stackSize = getInventoryStackLimit();
+	    if(ItemStackTools.getStackSize(itemstack) > getInventoryStackLimit()) {
+	    	ItemStackTools.setStackSize(itemstack, getInventoryStackLimit());
 	    }
 	}
 

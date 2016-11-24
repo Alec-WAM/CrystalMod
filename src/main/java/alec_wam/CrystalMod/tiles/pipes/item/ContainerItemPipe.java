@@ -6,6 +6,7 @@ import alec_wam.CrystalMod.tiles.pipes.item.filters.FilterInventory;
 import alec_wam.CrystalMod.tiles.pipes.item.filters.IItemStackInventory;
 import alec_wam.CrystalMod.tiles.pipes.item.filters.ItemPipeFilter;
 import alec_wam.CrystalMod.tiles.pipes.item.filters.ItemPipeFilter.FilterType;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -88,7 +89,7 @@ public class ContainerItemPipe extends Container {
 		this.pipe = pipe;
 		this.addSlotToContainer(new SlotItemFilter(this, pipe.getFilter(dir), 0, 8, 14));
         ItemStack masterStack = pipe.getFilter(dir).getStackInSlot(0);
-        if(masterStack !=null && masterStack.getMetadata() == FilterType.NORMAL.ordinal()){
+        if(!ItemStackTools.isNullStack(masterStack) && masterStack.getMetadata() == FilterType.NORMAL.ordinal()){
 	        filterInventory = new FilterInventory(masterStack, 10, "");
 	
 	        for (int i = 0; i < 2; i++)
@@ -99,14 +100,14 @@ public class ContainerItemPipe extends Container {
 	            }
 	        }
         }
-        else if(masterStack !=null && masterStack.getMetadata() == FilterType.MOD.ordinal()){
+        else if(!ItemStackTools.isNullStack(masterStack) && masterStack.getMetadata() == FilterType.MOD.ordinal()){
 	        filterInventory = new FilterInventory(masterStack, 3, "");
 	
 	        addSlotToContainer(new SlotGhostItem(filterInventory, 0, 45 + 0 * 18, 14 + 0 * 18));
 	        addSlotToContainer(new SlotGhostItem(filterInventory, 1, 45 + 0 * 18, 14 + 1 * 18));
 	        addSlotToContainer(new SlotGhostItem(filterInventory, 2, 45 + 0 * 18, 14 + 2 * 18));
         }
-        else if(masterStack !=null && masterStack.getMetadata() == FilterType.CAMERA.ordinal()){
+        else if(!ItemStackTools.isNullStack(masterStack) && masterStack.getMetadata() == FilterType.CAMERA.ordinal()){
 	        filterInventory = new CameraFilterInventory(masterStack, "");
         }
         else filterInventory = new FilterInventory(masterStack, 0, "");
@@ -148,9 +149,9 @@ public class ContainerItemPipe extends Container {
 		}
 	}
 	
-	 @Override
-	    public ItemStack slotClick(int slotId, int clickedButton, ClickType mode, EntityPlayer player)
-	    {
+	@Override
+	public ItemStack slotClick(int slotId, int clickedButton, ClickType mode, EntityPlayer player)
+    {
 	        InventoryPlayer inventoryPlayer = player.inventory;
 //	        if (!player.worldObj.isRemote)
 	        {
@@ -169,39 +170,39 @@ public class ContainerItemPipe extends Container {
 	                        {
 	                            if (clickedButton == 0)
 	                            {
-	                                if (heldStack == null && slotStack != null)
+	                                if (ItemStackTools.isNullStack(heldStack) && !ItemStackTools.isNullStack(slotStack))
 	                                {
 	                                    GhostItemHelper.incrementGhostAmout(slotStack, 1);
 	                                    slot.putStack(slotStack);
 	                                    CrystalModNetwork.sendToAllAround(new PacketPipe(pipe, "FilterGhost", dir, slot+";"+GhostItemHelper.getItemGhostAmount(slotStack)), pipe);
-	                                } else if (heldStack != null)
+	                                } else if (!ItemStackTools.isNullStack(heldStack))
 	                                {
 	                                    if (!((SlotGhostItem) slot).canBeAccessed())
 	                                    {
 	                                        return super.slotClick(slotId, clickedButton, mode, player);
 	                                    }
-	                                    if (slotStack != null && ItemUtil.canCombine(slotStack, heldStack))
+	                                    if (!ItemStackTools.isNullStack(slotStack) && ItemUtil.canCombine(slotStack, heldStack))
 	                                    {
-	                                        GhostItemHelper.incrementGhostAmout(slotStack, heldStack.stackSize);
+	                                        GhostItemHelper.incrementGhostAmout(slotStack, ItemStackTools.getStackSize(heldStack));
 	                                        slot.putStack(slotStack);
 	                                        CrystalModNetwork.sendToAllAround(new PacketPipe(pipe, "FilterGhost", dir, slot+";"+GhostItemHelper.getItemGhostAmount(slotStack)), pipe);
 	                                    } else
 	                                    {
 	                                        ItemStack copyStack = heldStack.copy();
-	                                        GhostItemHelper.setItemGhostAmount(copyStack, copyStack.stackSize);
-	                                        copyStack.stackSize = 1;
+	                                        GhostItemHelper.setItemGhostAmount(copyStack, ItemStackTools.getStackSize(copyStack));
+	                                        ItemStackTools.setStackSize(copyStack, 1);
 	                                        slot.putStack(copyStack);
 	                                        CrystalModNetwork.sendToAllAround(new PacketPipe(pipe, "FilterGhost", dir, slot+";"+GhostItemHelper.getItemGhostAmount(copyStack)), pipe);
 	                                    }
 	                                }
 	                            } else
 	                            {
-	                                if (slotStack != null)
+	                                if (!ItemStackTools.isNullStack(slotStack))
 	                                {
 	                                    GhostItemHelper.setItemGhostAmount(slotStack, GhostItemHelper.getItemGhostAmount(slotStack) / 2);
 	                                    if (GhostItemHelper.getItemGhostAmount(slotStack) <= 0)
 	                                    {
-	                                        slot.putStack(null);
+	                                        slot.putStack(ItemStackTools.getEmptyStack());
 	                                        CrystalModNetwork.sendToAllAround(new PacketPipe(pipe, "FilterGhost", dir, slot+";-1"), pipe);
 	                                    } else
 	                                    {
@@ -214,12 +215,12 @@ public class ContainerItemPipe extends Container {
 	                        {
 	                            if (clickedButton == 0)
 	                            {
-	                                if (slotStack != null)
+	                                if (!ItemStackTools.isNullStack(slotStack))
 	                                {
 	                                    GhostItemHelper.decrementGhostAmount(slotStack, 1);
 	                                    if (GhostItemHelper.getItemGhostAmount(slotStack) < 0)
 	                                    {
-	                                        slot.putStack(null);
+	                                        slot.putStack(ItemStackTools.getEmptyStack());
 	                                        CrystalModNetwork.sendToAllAround(new PacketPipe(pipe, "FilterGhost", dir, slot+";-1"), pipe);
 	                                    } else
 	                                    {
@@ -229,7 +230,7 @@ public class ContainerItemPipe extends Container {
 	                                }
 	                            } else
 	                            {
-	                                slot.putStack(null);
+	                                slot.putStack(ItemStackTools.getEmptyStack());
 	                            }
 	                        }
 	                    }

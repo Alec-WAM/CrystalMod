@@ -7,6 +7,7 @@ import net.minecraftforge.items.ItemHandlerHelper;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.tiles.BasicItemHandler;
 import alec_wam.CrystalMod.tiles.BasicItemValidator;
+import alec_wam.CrystalMod.util.ItemStackTools;
 
 public class TileProcessingPatternEncoder extends TilePatternEncoder {
 
@@ -21,9 +22,9 @@ public class TileProcessingPatternEncoder extends TilePatternEncoder {
             ItemPattern.setOredict(pattern, this.isOreDict);
 
             for (int i = 0; i < 18; ++i) {
-                if (configuration.getStackInSlot(i) != null) {
+                if (!ItemStackTools.isNullStack(configuration.getStackInSlot(i))) {
                 	if (i >= 9) {
-                        for (int j = 0; j < configuration.getStackInSlot(i).stackSize; ++j) {
+                        for (int j = 0; j < ItemStackTools.getStackSize(configuration.getStackInSlot(i)); ++j) {
                             ItemPattern.addOutput(pattern, ItemHandlerHelper.copyStackWithSize(configuration.getStackInSlot(i), 1));
                         }
                     } else {
@@ -41,30 +42,30 @@ public class TileProcessingPatternEncoder extends TilePatternEncoder {
         int inputsFilled = 0, outputsFilled = 0;
 
         for (int i = 0; i < 9; ++i) {
-            if (configuration.getStackInSlot(i) != null) {
+            if (!ItemStackTools.isNullStack(configuration.getStackInSlot(i))) {
                 inputsFilled++;
             }
         }
 
         for (int i = 9; i < 18; ++i) {
-            if (configuration.getStackInSlot(i) != null) {
+            if (!ItemStackTools.isNullStack(configuration.getStackInSlot(i))) {
                 outputsFilled++;
             }
         }
 
-        return inputsFilled > 0 && outputsFilled > 0 && patterns.getStackInSlot(0) != null && patterns.getStackInSlot(1) == null;
+        return inputsFilled > 0 && outputsFilled > 0 && !ItemStackTools.isNullStack(patterns.getStackInSlot(0)) && ItemStackTools.isNullStack(patterns.getStackInSlot(1));
     }
     
     public void fillInputs(ItemStack[] stacks){
     	for (int i = 0; i < 9; ++i) {
-    		ItemStack stack = i >= stacks.length ? null : stacks[i];
+    		ItemStack stack = i >= stacks.length ? ItemStackTools.getEmptyStack() : stacks[i];
     		configuration.setStackInSlot(i, stack);
         }
     }
     
     public void fillOutputs(ItemStack[] stacks){
     	for (int i = 0; i < 9; ++i) {
-    		ItemStack stack = i >= stacks.length ? null : stacks[i];
+    		ItemStack stack = i >= stacks.length ? ItemStackTools.getEmptyStack() : stacks[i];
     		configuration.setStackInSlot(9+i, stack);
         }
     }

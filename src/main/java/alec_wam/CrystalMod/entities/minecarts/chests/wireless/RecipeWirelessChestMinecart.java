@@ -7,6 +7,7 @@ import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.items.tools.ItemSuperTorch;
 import alec_wam.CrystalMod.tiles.chest.wireless.WirelessChestHelper;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ModLogger;
 import alec_wam.CrystalMod.util.UUIDUtils;
 import net.minecraft.init.Blocks;
@@ -31,7 +32,7 @@ public class RecipeWirelessChestMinecart implements IRecipe {
 
     @Override
     public boolean matches(InventoryCrafting inventoryCrafting, World world) {
-        ItemStack chest = null;
+        ItemStack chest = ItemStackTools.getEmptyStack();
         int chestSlot = -1;
         int minecartSlot = -1;
         boolean hasMinecart = false;
@@ -39,12 +40,12 @@ public class RecipeWirelessChestMinecart implements IRecipe {
         {
             ItemStack slot = inventoryCrafting.getStackInSlot(i);
             // empty slot
-            if(slot == null)
+            if(ItemStackTools.isNullStack(slot))
                 continue;
 
             // is it the tool?
             if(slot.getItem() == Item.getItemFromBlock(ModBlocks.wirelessChest)){
-            	if(chest !=null)return false;
+            	if(!ItemStackTools.isNullStack(chest))return false;
             	chest = slot;
             	chestSlot = i;
             }
@@ -59,7 +60,7 @@ public class RecipeWirelessChestMinecart implements IRecipe {
             }
         }
         // no super torch found?
-        if(chest == null || hasMinecart == false)
+        if(ItemStackTools.isNullStack(chest) || hasMinecart == false)
             return false;
         
         //Only on top of each other

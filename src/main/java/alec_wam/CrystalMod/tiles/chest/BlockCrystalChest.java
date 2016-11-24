@@ -155,7 +155,6 @@ public class BlockCrystalChest extends BlockContainer implements ICustomModel
     {
         ArrayList<ItemStack> items = Lists.newArrayList();
         ItemStack stack = new ItemStack(this, 1, getMetaFromState(state));
-        CrystalChestType.values()[CrystalChestType.validateMeta(getMetaFromState(state))].adornItemDrop(stack);
         items.add(stack);
         return items;
     }

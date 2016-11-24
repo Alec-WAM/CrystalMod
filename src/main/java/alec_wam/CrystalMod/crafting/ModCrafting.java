@@ -20,6 +20,7 @@ import alec_wam.CrystalMod.crafting.recipes.UpgradeItemRecipe;
 import alec_wam.CrystalMod.entities.minecarts.chests.wireless.RecipeWirelessChestMinecart;
 import alec_wam.CrystalMod.entities.minions.ItemMinion;
 import alec_wam.CrystalMod.entities.minions.MinionType;
+import alec_wam.CrystalMod.integration.baubles.BaublesIntegration;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.items.ItemCrystal.CrystalType;
 import alec_wam.CrystalMod.items.ItemIngot.IngotType;
@@ -51,6 +52,7 @@ import alec_wam.CrystalMod.tiles.pipes.item.filters.ItemPipeFilter.FilterType;
 import alec_wam.CrystalMod.tiles.tank.BlockTank.TankType;
 import alec_wam.CrystalMod.tiles.workbench.BlockCrystalWorkbench.WorkbenchType;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.UUIDUtils;
 
@@ -238,6 +240,12 @@ public class ModCrafting {
 		addShapedRecipe(new ItemStack(ModItems.superTorch), new Object[] {" # ", "NTN", " N ", '#', Blocks.DAYLIGHT_DETECTOR, 'T', Blocks.TORCH, 'N', dIronNugget});
 		addShapedOreRecipe(new ItemStack(ModItems.bombomb), new Object[] {" S ", "ICI", "P P", 'S', "string", 'I', "ingotIron", 'C', new ItemStack(Items.SKULL, 1, 4), 'P', Blocks.LIGHT_WEIGHTED_PRESSURE_PLATE});
 
+		if(BaublesIntegration.instance().hasBaubles()){
+			if(ModItems.dragonWingsBauble !=null){
+				addShapedOreRecipe(new ItemStack(ModItems.dragonWingsBauble), new Object[]{" W ", "I I", " I ", 'W', ModItems.wings, 'I', "ingotGold"});
+			}
+		}
+		
 		addShapedOreRecipe(new ItemStack(ModBlocks.crystalWorkbench, 1, WorkbenchType.BLUE.getMeta()), new Object[]{"###", "#W#", "###", '#', blueIngot, 'W', "workbench"});
 		addShapedOreRecipe(new ItemStack(ModBlocks.crystalWorkbench, 1, WorkbenchType.RED.getMeta()), new Object[]{"###", "#W#", "###", '#', redIngot, 'W', "workbench"});
 		addShapedOreRecipe(new ItemStack(ModBlocks.crystalWorkbench, 1, WorkbenchType.GREEN.getMeta()), new Object[]{"###", "#W#", "###", '#', greenIngot, 'W', "workbench"});
@@ -345,8 +353,8 @@ public class ModCrafting {
 		addShapedOreRecipe(new ItemStack(ModItems.craftingPattern), new Object[]{" # ", "#P#", " # ", '#', dIronNugget, 'P', "paper"});
 
 		for(ItemStack cover : ItemPipeCover.coverRecipes.keySet()){
-			ItemStack cover6 = cover.copy();
-			cover6.stackSize = 6;
+			ItemStack cover6 = ItemStackTools.safeCopy(cover);
+			ItemStackTools.setStackSize(cover6, 6);
 			addShapedOreRecipe(cover6, "s", "cn", 'c', ItemPipeCover.coverRecipes.get(cover), 's', "slimeball", 'n', "nuggetCrystal");
 		}
 		
@@ -571,8 +579,8 @@ public class ModCrafting {
 	
 	public static void create9x9Recipe(ItemStack output, ItemStack input, int reverseOut){
 		addShapedRecipe(output, new Object[]{"###", "###", "###", '#', input});
-		ItemStack copy = input.copy();
-		copy.stackSize = reverseOut;
+		ItemStack copy = ItemStackTools.safeCopy(input);
+		ItemStackTools.setStackSize(copy, reverseOut);
 		addShapelessRecipe(copy, new Object[] { output });
 	}
 	
@@ -782,7 +790,7 @@ public class ModCrafting {
 				else recipeItems = ((ShapedOreRecipe) recipe).getInput();
 
 				ItemStack output = recipe.getRecipeOutput();
-				if(output != null && output.stackSize == 6) {
+				if(output != null && ItemStackTools.getStackSize(output) == 6) {
 					Item outputItem = output.getItem();
 					Block outputBlock = Block.getBlockFromItem(outputItem);
 					if(outputBlock != null && outputBlock instanceof BlockSlab) {

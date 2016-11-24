@@ -3,6 +3,7 @@ package alec_wam.CrystalMod.tiles.machine.worksite;
 import java.util.EnumSet;
 import java.util.HashMap;
 
+import alec_wam.CrystalMod.util.ItemStackTools;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
@@ -195,21 +196,21 @@ public class InventorySided implements IInventory, ISidedInventory
 	public ItemStack decrStackSize(int var1, int var2)
 	{
 		ItemStack stack = inventorySlots[var1];
-		if(stack!=null)
+		if(ItemStackTools.isValid(stack))
 		{
-			int qty = var2 > stack.stackSize? stack.stackSize : var2;
-			stack.stackSize -= qty;    
+			int qty = var2 > ItemStackTools.getStackSize(stack) ? ItemStackTools.getStackSize(stack) : var2;
+			ItemStackTools.incStackSize(stack, -qty);
 			ItemStack returnStack = stack.copy();
-			returnStack.stackSize = qty;
-			if(stack.stackSize<=0)      
+			ItemStackTools.setStackSize(returnStack, qty);
+			if(ItemStackTools.isEmpty(stack))      
 			{
-				inventorySlots[var1]=null;
+				inventorySlots[var1]=ItemStackTools.getEmptyStack();
 			}
-			if(returnStack.stackSize<=0){returnStack=null;}  
+			if(ItemStackTools.isEmpty(returnStack)){returnStack=ItemStackTools.getEmptyStack();}  
 			markDirty();
 			return returnStack;
 		}
-		return null;
+		return ItemStackTools.getEmptyStack();
 	}
 
 	@Override
@@ -315,11 +316,11 @@ public class InventorySided implements IInventory, ISidedInventory
 	{
 		NBTTagList itemList = new NBTTagList();
 		NBTTagCompound itemTag;  
-		ItemStack item;
+		ItemStack item = ItemStackTools.getEmptyStack();
 		for(int i = 0; i < inventory.getSizeInventory(); i++)
 		{
 			item = inventory.getStackInSlot(i);
-			if(item==null){continue;}
+			if(ItemStackTools.isNullStack(item)){continue;}
 			itemTag = item.writeToNBT(new NBTTagCompound());
 			itemTag.setShort("slot", (short)i);
 			itemList.appendTag(itemTag);
@@ -345,7 +346,7 @@ public class InventorySided implements IInventory, ISidedInventory
 		{
 			itemTag = itemList.getCompoundTagAt(i);
 			slot = itemTag.getShort("slot");
-			item = ItemStack.loadItemStackFromNBT(itemTag);
+			item = ItemStackTools.loadFromNBT(itemTag);
 			inventory.setInventorySlotContents(slot, item);
 		}
 	}
@@ -543,8 +544,8 @@ public class InventorySided implements IInventory, ISidedInventory
 
 	@Override
 	public ItemStack removeStackFromSlot(int index) {
-		this.setInventorySlotContents(index, null);
-		return null;
+		this.setInventorySlotContents(index, ItemStackTools.getEmptyStack());
+		return ItemStackTools.getEmptyStack();
 	}
 
 	@Override

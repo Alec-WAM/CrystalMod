@@ -11,6 +11,7 @@ import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.ChatUtil;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.Lang;
 
@@ -54,7 +55,7 @@ public class BlockCustomSpawner extends BlockContainer {
 		TileEntity tile = worldIn.getTileEntity(pos);
 		if(tile !=null && tile instanceof TileEntityCustomSpawner){
 			TileEntityCustomSpawner spawner = (TileEntityCustomSpawner)tile;
-			if(stack !=null){
+			if(!ItemStackTools.isNullStack(stack)){
 				if(stack.getItem() instanceof ItemMobEssence){
 					String name = ItemNBTHelper.getString(stack, ItemMobEssence.NBT_ENTITYNAME, "Pig");
 					if(spawner.getBaseLogic().getEntityNameToSpawn().equals(name))return false;

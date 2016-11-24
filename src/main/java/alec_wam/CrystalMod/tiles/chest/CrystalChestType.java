@@ -33,15 +33,9 @@ public enum CrystalChestType implements IStringSerializable
     public Class<? extends TileEntityBlueCrystalChest> clazz;
     private String[] recipes;
     private ArrayList<String> matList;
-    private Item itemFilter;
 
     CrystalChestType(int size, int rowLength, boolean tieredChest, String friendlyName, String modelTexture, int textureRow, List<String> mats,
             Class<? extends TileEntityBlueCrystalChest> clazz, String... recipes)
-    {
-        this(size, rowLength, tieredChest, friendlyName, modelTexture, textureRow, mats, clazz, (Item)null, recipes);
-    }
-    CrystalChestType(int size, int rowLength, boolean tieredChest, String friendlyName, String modelTexture, int textureRow, List<String> mats,
-            Class<? extends TileEntityBlueCrystalChest> clazz, Item itemFilter, String... recipes)
     {
         this.size = size;
         this.rowLength = rowLength;
@@ -50,7 +44,6 @@ public enum CrystalChestType implements IStringSerializable
         this.modelTexture = modelTexture;
         this.textureRow = textureRow;
         this.clazz = clazz;
-        this.itemFilter = itemFilter;
         this.recipes = recipes;
         this.matList = new ArrayList<String>();
         matList.addAll(mats);
@@ -228,15 +221,5 @@ public enum CrystalChestType implements IStringSerializable
     public Slot makeSlot(IInventory chestInventory, int index, int x, int y)
     {
         return new Slot(chestInventory, index, x, y);
-    }
-
-    public boolean acceptsStack(ItemStack itemstack)
-    {
-        return itemFilter == null || itemstack == null || itemstack.getItem() == itemFilter;
-    }
-    
-    public void adornItemDrop(ItemStack item)
-    {
-        
     }
 }

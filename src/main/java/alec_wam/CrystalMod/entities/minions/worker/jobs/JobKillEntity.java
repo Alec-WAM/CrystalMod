@@ -23,6 +23,7 @@ import alec_wam.CrystalMod.tiles.machine.worksite.InventorySided.RelativeSide;
 import alec_wam.CrystalMod.tiles.machine.worksite.imp.WorksiteAnimalFarm;
 import alec_wam.CrystalMod.tiles.machine.worksite.imp.WorksiteTreeFarm;
 import alec_wam.CrystalMod.util.BlockUtil;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ModLogger;
 import alec_wam.CrystalMod.util.fakeplayer.FakePlayerUtil;
 import alec_wam.CrystalMod.util.tool.ToolUtil;
@@ -99,10 +100,10 @@ public class JobKillEntity extends WorkerJob {
 	
 	public void destroyTool(EntityMinionWorker worker){
 		ItemStack tool = worker.getHeldItemMainhand();
-		if(tool == null) return;
+		if(!ItemStackTools.isValid(tool)) return;
 		boolean canDamage = tool.isItemStackDamageable() && tool.getItem().isDamageable();
-		if(tool.stackSize == 0 || (canDamage && tool.getItemDamage() >= tool.getMaxDamage())) {
-			worker.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, null);
+		if(ItemStackTools.isEmpty(tool) || (canDamage && tool.getItemDamage() >= tool.getMaxDamage())) {
+			worker.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, ItemStackTools.getEmptyStack());
 	    }
 	}
 

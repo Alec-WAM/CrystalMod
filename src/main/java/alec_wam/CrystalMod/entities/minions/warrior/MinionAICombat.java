@@ -7,6 +7,7 @@ import alec_wam.CrystalMod.entities.minions.MinionConstants;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.packets.PacketEntityMessage;
 import alec_wam.CrystalMod.util.EntityUtil;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
@@ -132,7 +133,7 @@ public class MinionAICombat extends AIBase<EntityMinionWarrior>
 				moveToAttackTarget(minion);
 				ItemStack heldItem = minion.getHeldItemMainhand();
 				
-				if((heldItem == null || !(heldItem.getItem() instanceof ItemSword)) && (minion.getBackItem() !=null && minion.getBackItem().getItem() instanceof ItemSword)){
+				if((ItemStackTools.isNullStack(heldItem) || !(heldItem.getItem() instanceof ItemSword)) && (!ItemStackTools.isNullStack(minion.getBackItem()) && minion.getBackItem().getItem() instanceof ItemSword)){
 					minion.switchItems();
 					CrystalModNetwork.sendToAllAround(new PacketEntityMessage(minion, "SWITCHITEMS"), minion);
 				}
@@ -146,7 +147,7 @@ public class MinionAICombat extends AIBase<EntityMinionWarrior>
 					
 					//ItemStack copy = null;
 					
-					if (heldItem != null && heldItem.getItem() instanceof ItemSword)
+					if (!ItemStackTools.isNullStack(heldItem) && heldItem.getItem() instanceof ItemSword)
 					{
 						ItemSword sword = (ItemSword)heldItem.getItem();
 						swordMaterial = Item.ToolMaterial.valueOf(sword.getToolMaterialName());
@@ -177,9 +178,9 @@ public class MinionAICombat extends AIBase<EntityMinionWarrior>
 		                    	EnchantmentHelper.applyThornEnchantments((EntityLivingBase)attackTarget, minion);
 		                    	EnchantmentHelper.applyArthropodEnchantments(minion, attackTarget);
 		                    	
-		                    	if(heldItem !=null){
+		                    	if(ItemStackTools.isValid(heldItem)){
 		                    		heldItem.getItem().hitEntity(heldItem, attackTarget, minion);
-		                    		if (heldItem.stackSize <= 0)
+		                    		if (ItemStackTools.isEmpty(heldItem))
 		                            {
 		                                minion.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, null);
 		                            }
@@ -194,12 +195,6 @@ public class MinionAICombat extends AIBase<EntityMinionWarrior>
 		                    }
 			            }
 			        }
-					
-					
-					/*if(copy !=null){
-						copy.damageItem(1, minion);
-						minion.setCurrentItemOrArmor(0, copy);;
-					}*/
 				}
 			}
 			
@@ -213,12 +208,12 @@ public class MinionAICombat extends AIBase<EntityMinionWarrior>
 				if (rangedAttackTime <= 0)
 				{
 					ItemStack held = minion.getHeldItem(EnumHand.MAIN_HAND);
-					if((held == null || !EntityMinionWarrior.isBow(held)) && (minion.getBackItem() !=null && EntityMinionWarrior.isBow(minion.getBackItem()))){
+					if((ItemStackTools.isNullStack(held) || !EntityMinionWarrior.isBow(held)) && (!ItemStackTools.isNullStack(minion.getBackItem()) && EntityMinionWarrior.isBow(minion.getBackItem()))){
 						minion.switchItems();
 						CrystalModNetwork.sendToAllAround(new PacketEntityMessage(minion, "SWITCHITEMS"), minion);
 					}
 					
-					if(held !=null && EntityMinionWarrior.isBow(held)){
+					if(!ItemStackTools.isNullStack(held) && EntityMinionWarrior.isBow(held)){
 						EntityTippedArrow arrow = new EntityTippedArrow(minion.worldObj, minion);
 				        double dX = attackTarget.posX - minion.posX;
 				        double dY = attackTarget.getEntityBoundingBox().minY + (double)(attackTarget.height / 3.0F) - arrow.posY;

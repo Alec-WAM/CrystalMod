@@ -9,6 +9,7 @@ import alec_wam.CrystalMod.tiles.TileEntityInventory;
 import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetwork;
 import alec_wam.CrystalMod.tiles.pipes.item.InventoryWrapper;
 import alec_wam.CrystalMod.util.BlockUtil;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
@@ -46,7 +47,7 @@ public class TileEntityHDDInterface extends TileEntityInventory implements ITick
 	
 	@Override
 	public boolean isItemValidForSlot(int index, ItemStack stack) {
-		return index == 0 ? stack !=null && stack.getItem() instanceof IItemProvider : true;
+		return index == 0 ? !ItemStackTools.isNullStack(stack) && stack.getItem() instanceof IItemProvider : true;
 	}
 	
 	@Override
@@ -69,19 +70,19 @@ public class TileEntityHDDInterface extends TileEntityInventory implements ITick
 		
 		ItemStack hddStack = getStackInSlot(0);
 		ItemStack input = getStackInSlot(1);
-		if(hddStack !=null && hddStack.getItem() instanceof ItemHDD){
-			if(input !=null){
+		if(!ItemStackTools.isNullStack(hddStack) && hddStack.getItem() instanceof ItemHDD){
+			if(!ItemStackTools.isNullStack(input)){
 				if(ItemHDD.hasItem(hddStack, input)){
 					int index = ItemHDD.getItemIndex(hddStack, input);
 					if(index > -1){
 						ItemStack stored = ItemHDD.getItem(hddStack, index);
 						if(ItemUtil.canCombine(stored, input)){
-							stored.stackSize+=input.stackSize;
+							ItemStackTools.incStackSize(stored, ItemStackTools.getStackSize(input));
 							ItemHDD.setItem(hddStack, index, stored);
 							if(this.network !=null && getNetworkInventory() !=null){
 								network.getItemStorage().invalidate();
 							}
-							setInventorySlotContents(1, null);
+							setInventorySlotContents(1, ItemStackTools.getEmptyStack());
 							this.worldObj.markChunkDirty( this.pos, this );
 						}
 					}
@@ -92,7 +93,7 @@ public class TileEntityHDDInterface extends TileEntityInventory implements ITick
 						if(this.network !=null){
 							network.getItemStorage().invalidate();
 						}
-						setInventorySlotContents(1, null);
+						setInventorySlotContents(1, ItemStackTools.getEmptyStack());
 						this.worldObj.markChunkDirty( this.pos, this );
 					}
 				}
@@ -115,13 +116,13 @@ public class TileEntityHDDInterface extends TileEntityInventory implements ITick
 				}
 				if(inv !=null && face !=null && !(inv instanceof TileEntityHDDInterface)){
 					ItemStack toExtract = ItemHDD.getItem(hddStack, dumpIndex);
-					if(toExtract !=null){
+					if(!ItemStackTools.isNullStack(toExtract)){
 						int inserted = ItemUtil.doInsertItem(inv, toExtract, face.getOpposite());
 				        if(inserted > 0) {
-				          toExtract.stackSize -= inserted;
-				          if(toExtract.stackSize <= 0){
-				        	  toExtract = null;
-				        	  ItemHDD.setItem(hddStack, dumpIndex, null);
+				          ItemStackTools.incStackSize(toExtract, -inserted);
+				          if(ItemStackTools.isEmpty(toExtract)){
+				        	  toExtract = ItemStackTools.getEmptyStack();
+				        	  ItemHDD.setItem(hddStack, dumpIndex, toExtract);
 				        	  if(this.network !=null && getNetworkInventory() !=null){
 		  							network.getItemStorage().invalidate();
 				  			  }

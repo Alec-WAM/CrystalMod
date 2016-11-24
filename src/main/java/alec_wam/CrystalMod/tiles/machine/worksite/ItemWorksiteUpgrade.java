@@ -6,6 +6,7 @@ import java.util.List;
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.items.ModItems;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
@@ -40,7 +41,7 @@ public class ItemWorksiteUpgrade extends Item implements ICustomModel {
     }
 
 	public static WorksiteUpgrade getUpgrade(ItemStack stack) {
-		if (stack == null || stack.getItem() == null || !(stack.getItem() instanceof ItemWorksiteUpgrade)) {
+		if (ItemStackTools.isNullStack(stack) || stack.getItem() == null || !(stack.getItem() instanceof ItemWorksiteUpgrade)) {
 			throw new RuntimeException(
 					"Cannot retrieve worksite upgrade type for: " + stack
 							+ ".  Null stack, or item, or mismatched item!");

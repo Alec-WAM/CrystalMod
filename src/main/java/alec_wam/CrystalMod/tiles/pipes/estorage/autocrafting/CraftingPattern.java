@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import alec_wam.CrystalMod.api.estorage.IAutoCrafter;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.ModLogger;
 
@@ -77,7 +78,7 @@ public class CraftingPattern {
         		recipe = rec;
         		ItemStack output = recipe.getCraftingResult(inv);
 	
-	            if (output != null) {
+	            if (!ItemStackTools.isNullStack(output)) {
 	                boolean shapedOre = recipe instanceof ShapedOreRecipe;
 	                mekanism = recipe.getClass().getName().equals("mekanism.common.recipe.ShapedMekanismRecipe");
 	                outputs.add(fixItemStack(output));
@@ -116,7 +117,7 @@ public class CraftingPattern {
                     }
 	                
 	                for (ItemStack remaining : recipe.getRemainingItems(inv)) {
-	                    if (remaining != null) {
+	                    if (!ItemStackTools.isNullStack(remaining)) {
 	                        byproducts.add(fixItemStack(remaining));
 	                    }
 	                }
@@ -134,7 +135,7 @@ public class CraftingPattern {
     	
         if (oreInputs.isEmpty()) {
             for (ItemStack input : inputs) {
-                if (input == null) {
+                if (ItemStackTools.isNullStack(input)) {
                     oreInputs.add(new ArrayList<ItemStack>());
                 } else {
                     oreInputs.add(Collections.singletonList(input));
@@ -209,7 +210,7 @@ public class CraftingPattern {
         }
 
         for (ItemStack remaining : recipe.getRemainingItems(inv)) {
-            if (remaining != null) {
+            if (!ItemStackTools.isNullStack(remaining)) {
                 byproducts.add(fixItemStack(remaining));
             }
         }
@@ -226,7 +227,7 @@ public class CraftingPattern {
 
         for (ItemStack output : outputs) {
             if (ore ? ItemUtil.stackMatchUseOre(requested, output) : ItemUtil.canCombine(requested, output)) {
-                quantity += output.stackSize;
+                quantity += ItemStackTools.getStackSize(output);
 
                 if (!ItemPattern.isProcessing(pattern)) {
                     break;

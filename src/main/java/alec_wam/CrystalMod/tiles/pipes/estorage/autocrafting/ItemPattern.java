@@ -20,6 +20,7 @@ import com.google.common.collect.Lists;
 
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.items.ModItems;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.Lang;
 
@@ -119,9 +120,9 @@ public class ItemPattern extends Item {
         NBTTagList outputsTag = pattern.getTagCompound().getTagList(NBT_OUTPUTS, Constants.NBT.TAG_COMPOUND);
 
         for (int i = 0; i < outputsTag.tagCount(); ++i) {
-            ItemStack stack = ItemStack.loadItemStackFromNBT(outputsTag.getCompoundTagAt(i));
+            ItemStack stack = ItemStackTools.loadFromNBT(outputsTag.getCompoundTagAt(i));
 
-            if (stack != null) {
+            if (!ItemStackTools.isNullStack(stack)) {
                 outputs.add(stack);
             }
         }

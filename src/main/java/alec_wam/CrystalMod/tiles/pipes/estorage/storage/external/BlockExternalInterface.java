@@ -5,6 +5,7 @@ import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.ChatUtil;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -103,29 +104,8 @@ public class BlockExternalInterface extends BlockContainer implements ICustomMod
     	TileEntity tile = world.getTileEntity(pos);
         if (tile !=null && (tile instanceof TileEntityExternalInterface)) {
         	TileEntityExternalInterface inter = (TileEntityExternalInterface)tile;
-        	if(held == null){
+        	if(ItemStackTools.isNullStack(held)){
 	        	if(!world.isRemote){
-	        		/*NavigableMap<Integer, List<String>> map = new TreeMap<Integer, List<String>>();
-	        		
-	        		for(Entry<Integer, List<NetworkedItemProvider>> name : inter.getNetwork().interfaces.entrySet()){
-	        			List<String> l = Lists.newArrayList();
-	        			int i = 0;
-	        			for(NetworkedItemProvider in : name.getValue()){
-	        				l.add("Interface: "+i);
-	        				i++;
-	        			}
-	        			map.put(name.getKey(), l);
-	        		}
-	        		List<String> lines = Lists.newArrayList();
-	        		for(Entry<Integer, List<String>> name : map.entrySet()){
-	        			lines.add(""+name.getKey());
-	        			for(String n : name.getValue()){
-	        				lines.add(n);
-	        			}
-	        		}
-	        		ChatUtil.sendNoSpam(player, lines.toArray(new String[0]));
-	        		
-	        		*/
 		        	if(player.isSneaking()){
 		        		inter.setPriority(inter.getPriority()-1);
 		        	}else{

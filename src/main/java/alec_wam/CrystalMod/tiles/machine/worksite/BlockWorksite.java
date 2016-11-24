@@ -16,6 +16,7 @@ import alec_wam.CrystalMod.tiles.machine.worksite.InventorySided.IRotatableTile;
 import alec_wam.CrystalMod.tiles.machine.worksite.imp.WorksiteAnimalFarm;
 import alec_wam.CrystalMod.tiles.machine.worksite.imp.WorksiteCropFarm;
 import alec_wam.CrystalMod.tiles.machine.worksite.imp.WorksiteTreeFarm;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -129,7 +130,7 @@ public class BlockWorksite extends BlockContainer implements ICustomModel {
 			
 			TileWorksiteBase worksite = (TileWorksiteBase)te;
 			if(!world.isRemote){
-				if(player.getHeldItemMainhand() !=null){
+				if(ItemStackTools.isValid(player.getHeldItemMainhand())){
 					if(player.getHeldItemMainhand().getItem() == ModItems.minionStaff){
 						ChatUtil.sendNoSpam(player, "Workers: "+worksite.workers.size());
 						return true;

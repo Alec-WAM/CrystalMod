@@ -191,6 +191,7 @@ item.crystalmod.telePearl.name=Teleporting Pearl
 item.crystalmod.backpack.name=Backpack
 item.crystalmod.flagItem.name=Flag
 item.crystalmod.dragonWings.name=Dragon Wings
+
 item.crystalmod.mobEssence.name=Mob Essence
 crystalmod.info.mobEssence1.txt=Can be used on an Advanced Mob Spawner to set the entity
 crystalmod.info.mobEssence2.txt=Or used anywhere when sneaking to spawn the entity in the world
@@ -200,6 +201,9 @@ item.crystalmod.minion.worker.name=Worker Minion
 item.crystalmod.minion.warrior.name=Warrior Minion
 item.crystalmod.minionStaff.name=Minion Staff
 item.crystalmod.bombomb.name=Bombomb
+
+#--Baubles
+item.crystalmod.dragonWingBauble.name=Dragon Wings Bauble
 
 #--Blocks
 tile.crystalmod.crystalblock.blue.name=Block of Blue Crystal

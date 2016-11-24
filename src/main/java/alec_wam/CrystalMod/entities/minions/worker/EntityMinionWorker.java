@@ -20,6 +20,7 @@ import net.minecraft.world.World;
 import alec_wam.CrystalMod.entities.minions.EntityMinionBase;
 import alec_wam.CrystalMod.entities.minions.worker.jobs.JobShearEntity;
 import alec_wam.CrystalMod.tiles.machine.worksite.TileWorksiteBase;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.ModLogger;
 import alec_wam.CrystalMod.util.UUIDUtils;
@@ -175,9 +176,9 @@ public class EntityMinionWorker extends EntityMinionBase {
 	public boolean processInteract(EntityPlayer player, EnumHand hand, ItemStack held)
     {
 		ItemStack stack = player.getHeldItem(hand);
-		if(stack !=null && isOwner(player)){
+		if(!ItemStackTools.isNullStack(stack) && isOwner(player)){
 			if(ToolUtil.isAxe(stack)){
-	    		if(getHeldItemMainhand() !=null){
+	    		if(!ItemStackTools.isNullStack(getHeldItemMainhand())){
 	    			if(ItemUtil.canCombine(stack, getHeldItemMainhand())){
 	    				return false;
 	    			}
@@ -191,7 +192,7 @@ public class EntityMinionWorker extends EntityMinionBase {
 	    		return true;
 			}
 			if(stack.getItem() instanceof ItemSword){
-	    		if(getHeldItemMainhand() !=null){
+	    		if(!ItemStackTools.isNullStack(getHeldItemMainhand())){
 	    			if(ItemUtil.canCombine(stack, getHeldItemMainhand())){
 	    				return false;
 	    			}
@@ -205,7 +206,7 @@ public class EntityMinionWorker extends EntityMinionBase {
 	    		return true;
 			}
 			if(stack.getItem() == Items.STICK){
-				if(getHeldItemMainhand() !=null){
+				if(!ItemStackTools.isNullStack(getHeldItemMainhand())){
 	    			if(ItemUtil.canCombine(stack, getHeldItemMainhand())){
 	    				return false;
 	    			}
@@ -218,7 +219,7 @@ public class EntityMinionWorker extends EntityMinionBase {
 	    		return true;
 			}
     	}
-		if(held == null && isOwner(player)){
+		if(ItemStackTools.isNullStack(held) && isOwner(player)){
 			if(!this.isWorking()){
     			BlockPos pos = new BlockPos(this).down();
     			TileEntity tile = worldObj.getTileEntity(pos);

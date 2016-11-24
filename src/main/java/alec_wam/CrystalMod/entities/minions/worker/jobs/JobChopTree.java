@@ -12,6 +12,7 @@ import alec_wam.CrystalMod.entities.minions.worker.EntityMinionWorker;
 import alec_wam.CrystalMod.entities.minions.worker.WorkerJob;
 import alec_wam.CrystalMod.tiles.machine.worksite.TileWorksiteBase;
 import alec_wam.CrystalMod.tiles.machine.worksite.imp.WorksiteTreeFarm;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.fakeplayer.FakePlayerUtil;
 import alec_wam.CrystalMod.util.tool.ToolUtil;
 import alec_wam.CrystalMod.util.tool.TreeUtil;
@@ -49,7 +50,7 @@ public class JobChopTree extends WorkerJob {
 		destroyTool(worker);
 		tFarm.giveAxe(worker);
 		ItemStack held = worker.getHeldItemMainhand();
-		if(held == null){
+		if(ItemStackTools.isNullStack(held)){
 			return true;
 		}
 		
@@ -102,10 +103,10 @@ public class JobChopTree extends WorkerJob {
 	
 	public void destroyTool(EntityMinionWorker worker){
 		ItemStack tool = worker.getHeldItemMainhand();
-		if(tool == null) return;
+		if(ItemStackTools.isNullStack(tool)) return;
 		boolean canDamage = tool.isItemStackDamageable() && tool.getItem().isDamageable();
-		if(tool.stackSize == 0 || (canDamage && tool.getItemDamage() >= tool.getMaxDamage())) {
-			worker.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, null);
+		if(ItemStackTools.isEmpty(tool) || (canDamage && tool.getItemDamage() >= tool.getMaxDamage())) {
+			worker.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, ItemStackTools.getEmptyStack());
 	    }
 	}
 

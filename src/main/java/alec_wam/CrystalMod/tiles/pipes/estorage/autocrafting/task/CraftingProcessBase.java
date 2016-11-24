@@ -21,6 +21,7 @@ import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage;
 import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage.ItemStackData;
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.CraftingPattern;
 import alec_wam.CrystalMod.util.BlockUtil;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.ModLogger;
 
@@ -80,7 +81,7 @@ public abstract class CraftingProcessBase{
     public List<ItemStack> getToInsert() {
     	List<ItemStack> list = Lists.newArrayList();
     	for(ItemStack stack : pattern.getInputs()){
-    		if(stack !=null){
+    		if(!ItemStackTools.isNullStack(stack)){
     			list.add(stack);
     		}
     	}
@@ -100,7 +101,7 @@ public abstract class CraftingProcessBase{
     	if(i < pattern.getOutputs().size()){
 	    	ItemStack stack = pattern.getOutputs().get(i);
 			Integer rec = satisfied.get(i);
-			if(rec == null || (stack !=null && stack.stackSize > rec)){
+			if(rec == null || (!ItemStackTools.isNullStack(stack) && ItemStackTools.getStackSize(stack) > rec)){
 				return false;
 			}
 			return true;
@@ -144,7 +145,7 @@ public abstract class CraftingProcessBase{
     
     public boolean canStartProcessing(ItemStorage iStorage, FluidStackList list){
         for (ItemStack stack : getToInsert()) {
-           if (!iStorage.removeCheck(stack, stack.stackSize, ItemStorage.getExtractFilter(pattern.isOredict()), true)) {
+           if (!iStorage.removeCheck(stack, ItemStackTools.getStackSize(stack), ItemStorage.getExtractFilter(pattern.isOredict()), true)) {
         	   return false;
            }
         }

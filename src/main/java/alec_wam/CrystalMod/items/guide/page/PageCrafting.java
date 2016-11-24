@@ -15,6 +15,7 @@ import alec_wam.CrystalMod.client.util.comp.GuiComponentSprite;
 import alec_wam.CrystalMod.client.util.comp.GuiComponentStandardRecipePage;
 import alec_wam.CrystalMod.items.guide.GuiGuideChapter;
 import alec_wam.CrystalMod.tiles.machine.ContainerNull;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.Lang;
 import alec_wam.CrystalMod.util.Util;
@@ -63,7 +64,7 @@ public class PageCrafting extends GuidePage {
 			if (recipe == null) continue;
 
 			ItemStack result = recipe.getRecipeOutput();
-			if (result == null || !ItemUtil.canCombine(result, resultingItem)) continue;
+			if (ItemStackTools.isNullStack(result) || !ItemUtil.canCombine(result, resultingItem)) continue;
 
 			return recipe;
 
@@ -146,7 +147,7 @@ public class PageCrafting extends GuidePage {
 					List<ItemStack> stacks = OreDictionary.getOres(id);
 					if(stacks.isEmpty())continue;
 					ItemStack newStack = getRandomIngredient(stacks);
-					if(newStack !=null && newStack.getItemDamage() == OreDictionary.WILDCARD_VALUE){
+					if(!ItemStackTools.isNullStack(newStack) && newStack.getItemDamage() == OreDictionary.WILDCARD_VALUE){
 						items[i] = newStack.copy();
 						items[i].setItemDamage(0);
 					}else items[i] = newStack;
@@ -155,7 +156,7 @@ public class PageCrafting extends GuidePage {
 					@SuppressWarnings("unchecked")
 					List<ItemStack> list = ((List<ItemStack>)obj);
 					ItemStack newStack = getRandomIngredient(list);
-					if(newStack !=null && newStack.getItemDamage() == OreDictionary.WILDCARD_VALUE){
+					if(!ItemStackTools.isNullStack(newStack) && newStack.getItemDamage() == OreDictionary.WILDCARD_VALUE){
 						items[i] = newStack.copy();
 						items[i].setItemDamage(0);
 					}else items[i] = newStack;
@@ -193,7 +194,7 @@ public class PageCrafting extends GuidePage {
 
 		ItemStack outputStack = output;
 		
-		if(outputStack !=null){
+		if(!ItemStackTools.isNullStack(outputStack)){
 			drawItemStack(outputStack, startX + 150, startY+40, ""+(outputStack.stackSize > 1 ? outputStack.stackSize : ""));
 			
 			if (mouseX > startX + 150 - 2 && mouseX < startX + 150 - 2 + itemBoxSize &&
@@ -203,10 +204,10 @@ public class PageCrafting extends GuidePage {
 		}
 		
 		if(items != null){
-			ItemStack tooltip = null;
+			ItemStack tooltip = ItemStackTools.getEmptyStack();
 			int i = 0;
 			for (ItemStack input : items) {
-				if (input != null) {
+				if (!ItemStackTools.isNullStack(input)) {
 					int row = (i % 3);
 					int column = i / 3;
 					int itemX = startX + gridOffsetX + (row * itemBoxSize);
@@ -219,7 +220,7 @@ public class PageCrafting extends GuidePage {
 				}
 				i++;
 			}
-			if (tooltip != null) {
+			if (!ItemStackTools.isNullStack(tooltip)) {
 				drawItemStackTooltip(tooltip, relativeMouseX + x, relativeMouseY + y);
 			}
 		}
@@ -316,7 +317,7 @@ public class PageCrafting extends GuidePage {
 		RenderHelper.enableGUIStandardItemLighting();
 		GL11.glColor3f(1f, 1f, 1f);
 		FontRenderer font = null;
-		if (par1ItemStack != null) font = par1ItemStack.getItem().getFontRenderer(par1ItemStack);
+		if (!ItemStackTools.isNullStack(par1ItemStack)) font = par1ItemStack.getItem().getFontRenderer(par1ItemStack);
 		if (font == null) font = Minecraft.getMinecraft().fontRendererObj;
 		GlStateManager.enableDepth();
 		itemRenderer.renderItemAndEffectIntoGUI(par1ItemStack, par2, par3);

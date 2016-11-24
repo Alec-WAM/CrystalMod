@@ -9,6 +9,7 @@ import alec_wam.CrystalMod.tiles.TileEntityInventory;
 import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetwork;
 import alec_wam.CrystalMod.tiles.pipes.estorage.storage.hdd.ItemHDD;
 import alec_wam.CrystalMod.util.BlockUtil;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -39,7 +40,7 @@ public class TileHDDArray extends TileEntityInventory implements ITickable, IMes
 	
 	@Override
 	public boolean isItemValidForSlot(int index, ItemStack stack) {
-		return stack !=null && stack.getItem() instanceof IItemProvider;
+		return !ItemStackTools.isNullStack(stack) && stack.getItem() instanceof IItemProvider;
 	}
 	
 	@Override

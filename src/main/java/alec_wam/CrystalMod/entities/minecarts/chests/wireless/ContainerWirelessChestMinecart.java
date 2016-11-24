@@ -2,6 +2,7 @@ package alec_wam.CrystalMod.entities.minecarts.chests.wireless;
 
 import alec_wam.CrystalMod.tiles.chest.CrystalChestType;
 import alec_wam.CrystalMod.tiles.chest.wireless.WirelessChestManager.WirelessInventory;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -34,12 +35,12 @@ public class ContainerWirelessChestMinecart extends Container {
     @Override
     public ItemStack transferStackInSlot(EntityPlayer p, int i)
     {
-        ItemStack itemstack = null;
+        ItemStack itemstack = ItemStackTools.getEmptyStack();
         Slot slot = (Slot) inventorySlots.get(i);
         if (slot != null && slot.getHasStack())
         {
             ItemStack itemstack1 = slot.getStack();
-            itemstack = itemstack1.copy();
+            itemstack = ItemStackTools.safeCopy(itemstack1);
             if (i < CrystalChestType.DARKIRON.size)
             {
                 if (!mergeItemStack(itemstack1, CrystalChestType.DARKIRON.size, inventorySlots.size(), true))
@@ -51,9 +52,9 @@ public class ContainerWirelessChestMinecart extends Container {
             {
                 return null;
             }
-            if (itemstack1.stackSize == 0)
+            if (ItemStackTools.isEmpty(itemstack1))
             {
-                slot.putStack(null);
+                slot.putStack(ItemStackTools.getEmptyStack());
             }
             else
             {

@@ -1,5 +1,6 @@
 package alec_wam.CrystalMod.items.tools.backpack.types;
 
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ModLogger;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -92,30 +93,30 @@ public class InventoryBackpack implements IInventory{
 
     @Override
     public ItemStack decrStackSize(int i, int j){
-        if(this.slots[i] !=null){
+        if(!ItemStackTools.isNullStack(slots[i])){
             ItemStack stackAt;
-            if(this.slots[i].stackSize <= j){
+            if(ItemStackTools.getStackSize(slots[i]) <= j){
                 stackAt = this.slots[i];
-                this.slots[i] = null;
+                this.slots[i] = ItemStackTools.getEmptyStack();
                 this.markDirty();
                 return stackAt;
             }
             else{
                 stackAt = this.slots[i].splitStack(j);
-                if(this.slots[i].stackSize <= 0){
-                    this.slots[i] = null;
+                if(ItemStackTools.isEmpty(this.slots[i])){
+                    this.slots[i] = ItemStackTools.getEmptyStack();
                 }
                 this.markDirty();
                 return stackAt;
             }
         }
-        return null;
+        return ItemStackTools.getEmptyStack();
     }
 
     @Override
     public ItemStack removeStackFromSlot(int index){
         ItemStack stack = this.slots[index];
-        this.slots[index] = null;
+        this.slots[index] = ItemStackTools.getEmptyStack();
         return stack;
     }
 

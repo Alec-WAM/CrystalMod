@@ -8,6 +8,7 @@ import org.lwjgl.util.vector.Vector3f;
 
 import alec_wam.CrystalMod.asm.ObfuscatedNames;
 import alec_wam.CrystalMod.client.model.dynamic.DynamicBaseModel;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ReflectionUtils;
 import alec_wam.CrystalMod.util.Vector3d;
 
@@ -648,7 +649,7 @@ public class RenderUtil {
 	}
 
 	public static void renderItem(ItemStack itemStack, TransformType type) {
-		if(itemStack == null)return;
+		if(ItemStackTools.isNullStack(itemStack))return;
 		GlStateManager.pushMatrix();
 		Minecraft mc = Minecraft.getMinecraft();
 		

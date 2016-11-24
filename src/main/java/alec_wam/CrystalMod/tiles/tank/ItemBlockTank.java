@@ -24,6 +24,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import alec_wam.CrystalMod.blocks.ItemBlockMeta;
 import alec_wam.CrystalMod.tiles.tank.BlockTank.TankType;
+import alec_wam.CrystalMod.util.ItemStackTools;
 
 public class ItemBlockTank extends ItemBlockMeta {
 
@@ -110,7 +111,7 @@ public class ItemBlockTank extends ItemBlockMeta {
 
 	    @Override
 	    public int fill(FluidStack resource, boolean doFill) {
-	      if (container.stackSize != 1) {
+	      if (ItemStackTools.getStackSize(container) != 1) {
 	        return 0;
 	      }
 	      FluidTank tank = loadTank(container);
@@ -133,7 +134,7 @@ public class ItemBlockTank extends ItemBlockMeta {
 	    @Override
 	    @Nullable
 	    public FluidStack drain(FluidStack resource, boolean doDrain) {
-	      if (container.stackSize != 1) {
+	      if (ItemStackTools.getStackSize(container) != 1) {
 	        return null;
 	      }
 	      FluidTank tank = loadTank(container);
@@ -151,7 +152,7 @@ public class ItemBlockTank extends ItemBlockMeta {
 	    @Override
 	    @Nullable
 	    public FluidStack drain(int maxDrain, boolean doDrain) {
-	      if (container.stackSize != 1) {
+	      if (ItemStackTools.getStackSize(container) != 1) {
 	        return null;
 	      }
 	      FluidTank tank = loadTank(container);

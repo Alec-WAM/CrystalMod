@@ -19,6 +19,7 @@ import alec_wam.CrystalMod.tiles.machine.worksite.InventorySided.RelativeSide;
 import alec_wam.CrystalMod.tiles.machine.worksite.InventorySided.RotationType;
 import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.HarvestResult;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.ModLogger;
 import alec_wam.CrystalMod.util.fakeplayer.FakePlayerUtil;
@@ -91,7 +92,7 @@ public class WorksiteTreeFarm extends TileWorksiteUserBlocks {
 		ItemSlotFilter filter = new ItemSlotFilter() {
 			@Override
 			public boolean isItemValid(ItemStack stack) {
-				if (stack == null) {
+				if (ItemStackTools.isNullStack(stack)) {
 					return true;
 				}
 				if (stack.getItem() instanceof ItemBlock) {
@@ -105,7 +106,7 @@ public class WorksiteTreeFarm extends TileWorksiteUserBlocks {
 		filter = new ItemSlotFilter() {
 			@Override
 			public boolean isItemValid(ItemStack stack) {
-				if (stack == null) {
+				if (ItemStackTools.isNullStack(stack)) {
 					return true;
 				}
 				
@@ -138,20 +139,20 @@ public class WorksiteTreeFarm extends TileWorksiteUserBlocks {
 		shouldCountResources = false;
 		saplingCount = 0;
 		bonemealCount = 0;
-		ItemStack stack;
+		ItemStack stack = ItemStackTools.getEmptyStack();
 		for (int i = 27; i < 33; i++) {
 			stack = inventory.getStackInSlot(i);
-			if (stack == null) {
+			if (!ItemStackTools.isValid(stack)) {
 				continue;
 			}
 			if (stack.getItem() instanceof ItemBlock) {
 				ItemBlock item = (ItemBlock) stack.getItem();
 				if (item.getBlock() instanceof BlockSapling) {
-					saplingCount += stack.stackSize;
+					saplingCount += ItemStackTools.getStackSize(stack);
 				}
 			} else if (stack.getItem() == Items.DYE
 					&& stack.getItemDamage() == EnumDyeColor.WHITE.getDyeDamage()) {
-				bonemealCount += stack.stackSize;
+				bonemealCount += ItemStackTools.getStackSize(stack);
 			}
 		}
 	}
@@ -162,9 +163,9 @@ public class WorksiteTreeFarm extends TileWorksiteUserBlocks {
 			for(int i = 0; i < slots.length; i++){
 				int slot = slots[i];
 				ItemStack axe = inventory.getStackInSlot(slot);
-				if(axe !=null && ToolUtil.isAxe(axe) && !ToolUtil.isBrokenTinkerTool(axe) && !ToolUtil.isEmptyRfTool(axe)){
+				if(ItemStackTools.isValid(axe) && ToolUtil.isAxe(axe) && !ToolUtil.isBrokenTinkerTool(axe) && !ToolUtil.isEmptyRfTool(axe)){
 					worker.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, axe);
-					this.inventory.setInventorySlotContents(slot, null);
+					this.inventory.setInventorySlotContents(slot, ItemStackTools.getEmptyStack());
 					return true;
 				}
 			}
@@ -177,7 +178,7 @@ public class WorksiteTreeFarm extends TileWorksiteUserBlocks {
 			ItemStack held = worker.getHeldItemMainhand();
 			if(ToolUtil.isBrokenTinkerTool(held) || ToolUtil.isEmptyRfTool(held)){
 				if(addStackToInventoryNoDrop(held, false, RelativeSide.BOTTOM, RelativeSide.TOP)){
-					worker.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, null);
+					worker.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, ItemStackTools.getEmptyStack());
 					return true;
 				}
 			}
@@ -194,7 +195,7 @@ public class WorksiteTreeFarm extends TileWorksiteUserBlocks {
 				EntityMinionWorker worker = getRandomWorker(new WorkerFilter(){
 					public boolean matches(EntityMinionWorker worker) {
 						ItemStack axe = worker.getHeldItemMainhand();
-						return axe !=null && ToolUtil.isAxe(axe) && !ToolUtil.isBrokenTinkerTool(axe) && !ToolUtil.isEmptyRfTool(axe);
+						return ItemStackTools.isValid(axe) && ToolUtil.isAxe(axe) && !ToolUtil.isBrokenTinkerTool(axe) && !ToolUtil.isEmptyRfTool(axe);
 					}
 				}, WorkerFilter.idleFilter);
 				if (worker != null) {
@@ -205,17 +206,17 @@ public class WorksiteTreeFarm extends TileWorksiteUserBlocks {
 				}
 			}
 		} else if (saplingCount > 0 && !blocksToPlant.isEmpty()) {
-			ItemStack stack = null;
+			ItemStack stack = ItemStackTools.getEmptyStack();
 			int slot = 27;
 			for (int i = 27; i < 30; i++) {
 				stack = inventory.getStackInSlot(i);
-				if (stack != null
+				if (ItemStackTools.isValid(stack)
 						&& stack.getItem() instanceof ItemBlock
 						&& ((ItemBlock) stack.getItem()).getBlock() instanceof BlockSapling) {
 					slot = i;
 					break;
 				} else {
-					stack = null;
+					stack = ItemStackTools.getEmptyStack();
 				}
 			}
 			if (stack != null)// e.g. a sapling stack is present
@@ -237,21 +238,17 @@ public class WorksiteTreeFarm extends TileWorksiteUserBlocks {
 			Iterator<BlockPos> it = blocksToFertilize.iterator();
 			while (it.hasNext() && (position = it.next()) != null) {
 				it.remove();
-				/*List<EntityLivingBase> workers2 = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(position, position.add(1, 1, 1)));
-				if (!workers2.isEmpty()) {
-					continue;
-				}*/
 				IBlockState state = worldObj.getBlockState(position);
 				if (state.getBlock() instanceof BlockSapling) {
-					ItemStack stack = null;
+					ItemStack stack = ItemStackTools.getEmptyStack();
 					for (int i = 30; i < 33; i++) {
 						stack = inventory.getStackInSlot(i);
 						if (stack != null && stack.getItem() == Items.DYE
 								&& stack.getItemDamage() == EnumDyeColor.WHITE.getDyeDamage()) {
 							bonemealCount--;
 							ItemDye.applyBonemeal(stack, worldObj, position, FakePlayerUtil.getPlayer((WorldServer)worldObj));
-							if (stack.stackSize <= 0) {
-								inventory.setInventorySlotContents(i, null);
+							if (ItemStackTools.isEmpty(stack)) {
+								inventory.setInventorySlotContents(i, ItemStackTools.getEmptyStack());
 							}
 							state = worldObj.getBlockState(position);
 							if (state.getBlock() instanceof BlockSapling) {
@@ -277,7 +274,7 @@ public class WorksiteTreeFarm extends TileWorksiteUserBlocks {
 		ItemStack stack;
 		for (EntityItem item : items) {
 			stack = item.getEntityItem();
-			if (stack == null) {
+			if (!ItemStackTools.isValid(stack)) {
 				continue;
 			}
 			if (stack.getItem() == Items.APPLE) {
@@ -470,7 +467,7 @@ public class WorksiteTreeFarm extends TileWorksiteUserBlocks {
 		harvestComparator.refPoint = pos;
 		Collections.sort(sortedTargets, harvestComparator);
 	            
-		boolean hasAxe = (stack !=null && stack.stackSize > 0 && !ToolUtil.isBrokenTinkerTool(stack) && !ToolUtil.isEmptyRfTool(stack));
+		boolean hasAxe = (ItemStackTools.isValid(stack) && !ToolUtil.isBrokenTinkerTool(stack) && !ToolUtil.isEmptyRfTool(stack));
 		for(int i=0; hasAxe && i < sortedTargets.size();i++) {
 			BlockPos bc = sortedTargets.get(i);
 			int fourtune = EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, stack);
@@ -480,7 +477,7 @@ public class WorksiteTreeFarm extends TileWorksiteUserBlocks {
 	  		for(ItemStack drop : itemDrops){
 	  			addStackToInventory(drop, RelativeSide.FRONT, RelativeSide.TOP);
 	  		}
-	  		hasAxe = (stack !=null && stack.stackSize > 0 && !ToolUtil.isBrokenTinkerTool(stack) && !ToolUtil.isEmptyRfTool(stack));
+	  		hasAxe = (ItemStackTools.isValid(stack) && !ToolUtil.isBrokenTinkerTool(stack) && !ToolUtil.isEmptyRfTool(stack));
 		}
         return true;
     }

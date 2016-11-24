@@ -5,6 +5,7 @@ import java.util.List;
 
 import alec_wam.CrystalMod.handler.EventHandler.ItemDropType;
 import alec_wam.CrystalMod.tiles.machine.power.converter.PowerUnits;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ModLogger;
 import alec_wam.CrystalMod.world.CrystalModWorldGenerator;
 import net.minecraft.item.ItemStack;
@@ -142,7 +143,7 @@ public class Config {
     	farmHoes.clear();
         for (String s : hoeStrings) {
           ItemStack hoe = getStackForString(s);
-          if(hoe != null) {
+          if(!ItemStackTools.isNullStack(hoe)) {
             farmHoes.add(hoe);
           }
         }
@@ -152,7 +153,7 @@ public class Config {
         String[] nameAndMeta = s.split(";");
         int meta = nameAndMeta.length == 1 ? 0 : Integer.parseInt(nameAndMeta[1]);
         ItemStack stack = GameRegistry.makeItemStack(nameAndMeta[0], meta, 1, "");
-        if(stack == null) {
+        if(ItemStackTools.isNullStack(stack)) {
           return null;
         }
         stack.setItemDamage(meta);

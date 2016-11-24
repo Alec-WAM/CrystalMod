@@ -3,6 +3,7 @@ package alec_wam.CrystalMod.tiles.pipes.item.filters;
 import java.util.List;
 
 import alec_wam.CrystalMod.util.ItemNBTHelper;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 
 import com.google.common.collect.Lists;
@@ -26,7 +27,7 @@ public class CameraFilterInventory implements IItemStackInventory
         this.name = name;
         this.masterStack = masterStack;
 
-        if (masterStack != null)
+        if (!ItemStackTools.isNullStack(masterStack))
             this.readFromStack(masterStack);
     }
 
@@ -49,7 +50,7 @@ public class CameraFilterInventory implements IItemStackInventory
 
             if (j >= 0)
             {
-                inventory.add(j, ItemStack.loadItemStackFromNBT(data));
+                inventory.add(j, ItemStackTools.loadFromNBT(data));
             }
         }
     }
@@ -74,7 +75,7 @@ public class CameraFilterInventory implements IItemStackInventory
 
     public void readFromStack(ItemStack masterStack)
     {
-        if (masterStack != null)
+        if (!ItemStackTools.isNullStack(masterStack))
         {
             NBTTagCompound tag = ItemNBTHelper.getCompound(masterStack);
             readFromNBT(tag.getCompoundTag("filterInventory"));
@@ -83,7 +84,7 @@ public class CameraFilterInventory implements IItemStackInventory
 
     public void writeToStack(ItemStack masterStack)
     {
-        if (masterStack != null)
+        if (!ItemStackTools.isNullStack(masterStack))
         {
             NBTTagCompound tag = ItemNBTHelper.getCompound(masterStack);
             NBTTagCompound invTag = new NBTTagCompound();
@@ -107,12 +108,9 @@ public class CameraFilterInventory implements IItemStackInventory
     @Override
     public ItemStack decrStackSize(int index, int count)
     {
-        if (inventory.get(index) != null)
+        if (!ItemStackTools.isNullStack(inventory.get(index)))
         {
-//            if (!worldObj.isRemote)
-//                worldObj.markBlockForUpdate(this.pos);
-
-            if (inventory.get(index).stackSize <= count)
+        	if (ItemStackTools.getStackSize(inventory.get(index)) <= count)
             {
                 ItemStack itemStack = inventory.get(index);
                 inventory.remove(index);
@@ -121,39 +119,40 @@ public class CameraFilterInventory implements IItemStackInventory
             }
 
             ItemStack itemStack = inventory.get(index).splitStack(count);
-            if (inventory.get(index).stackSize == 0)
+            if (ItemStackTools.isEmpty(inventory.get(index)))
             	inventory.remove(index);
 
             markDirty();
             return itemStack;
         }
 
-        return null;
+        return ItemStackTools.getEmptyStack();
     }
 
     @Override
     public ItemStack removeStackFromSlot(int slot)
     {
-        if (inventory.get(slot) != null)
+        if (!ItemStackTools.isNullStack(inventory.get(slot)))
         {
             ItemStack itemStack = inventory.get(slot);
-            setInventorySlotContents(slot, null);
+            setInventorySlotContents(slot, ItemStackTools.getEmptyStack());
             return itemStack;
         }
-        return null;
+        return ItemStackTools.getEmptyStack();
     }
     
     public void addItem(ItemStack stack){
-    	if(stack !=null){
+    	if(!ItemStackTools.isNullStack(stack)){
     		for(ItemStack stored : inventory){
     			if(ItemUtil.canCombine(stack, stored)){
     				return;
     			}
     		}
     		inventory.add(stack);
-    		 if (stack != null && stack.stackSize > getInventoryStackLimit())
-    	            stack.stackSize = getInventoryStackLimit();
-    	        markDirty();
+    		if (!ItemStackTools.isNullStack(stack) && ItemStackTools.getStackSize(stack) > getInventoryStackLimit()){
+	            ItemStackTools.setStackSize(stack, getInventoryStackLimit());
+    		}
+	        markDirty();
     	}
        
     }
@@ -161,13 +160,11 @@ public class CameraFilterInventory implements IItemStackInventory
     @Override
     public void setInventorySlotContents(int slot, ItemStack stack)
     {
-    	if(stack !=null)inventory.add(slot, stack);
+    	if(!ItemStackTools.isNullStack(stack))inventory.add(slot, stack);
     	else inventory.remove(slot);
-        if (stack != null && stack.stackSize > getInventoryStackLimit())
-            stack.stackSize = getInventoryStackLimit();
+        if (!ItemStackTools.isNullStack(stack) && ItemStackTools.getStackSize(stack) > getInventoryStackLimit())
+        	ItemStackTools.setStackSize(stack, getInventoryStackLimit());
         markDirty();
-//        if (!worldObj.isRemote)
-//            worldObj.markBlockForUpdate(this.pos);
     }
 
     @Override
@@ -245,7 +242,7 @@ public class CameraFilterInventory implements IItemStackInventory
     @Override
     public void markDirty()
     {
-        if (masterStack != null)
+        if (!ItemStackTools.isNullStack(masterStack))
         {
             this.writeToStack(masterStack);
         }
@@ -253,7 +250,7 @@ public class CameraFilterInventory implements IItemStackInventory
 
     public boolean canInventoryBeManipulated()
     {
-        return masterStack != null;
+        return !ItemStackTools.isNullStack(masterStack);
     }
 
 	@Override

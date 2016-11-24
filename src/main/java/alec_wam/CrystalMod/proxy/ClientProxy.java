@@ -17,6 +17,7 @@ import alec_wam.CrystalMod.client.model.dynamic.ICustomItemRenderer;
 import alec_wam.CrystalMod.entities.ModEntites;
 import alec_wam.CrystalMod.fluids.FluidColored;
 import alec_wam.CrystalMod.fluids.ModFluids;
+import alec_wam.CrystalMod.handler.KeyHandler;
 import alec_wam.CrystalMod.integration.minecraft.ItemMinecartRender;
 import alec_wam.CrystalMod.items.ItemDragonWings;
 import alec_wam.CrystalMod.items.ModItems;
@@ -27,6 +28,7 @@ import alec_wam.CrystalMod.tiles.pipes.estorage.storage.hdd.GuiHDDInterface;
 import alec_wam.CrystalMod.tiles.pipes.item.GhostItemHelper;
 import alec_wam.CrystalMod.tiles.pipes.render.BakedModelLoader;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ModLogger;
 
 import com.google.common.collect.Lists;
@@ -55,6 +57,7 @@ import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.fml.client.FMLClientHandler;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -84,6 +87,9 @@ public class ClientProxy extends CommonProxy {
 			livingRender.addLayer(horseAccessoryRenderer);
 		}
         MinecraftForge.EVENT_BUS.register(this);
+        
+        keyHandler = new KeyHandler();
+        MinecraftForge.EVENT_BUS.register(keyHandler);
     }
 
     @Override
@@ -229,11 +235,10 @@ public class ClientProxy extends CommonProxy {
     public void onTooltipEvent(ItemTooltipEvent event)
     {
         ItemStack stack = event.getItemStack();
-        if (stack == null)
+        if (ItemStackTools.isNullStack(stack))
         {
             return;
         }
-
         
         if(Minecraft.getMinecraft().currentScreen !=null && (Minecraft.getMinecraft().currentScreen instanceof GuiHDDInterface || Minecraft.getMinecraft().currentScreen instanceof GuiPanel)){
         	if(ItemNBTHelper.getBoolean(stack, "DummyItem", false)){

@@ -1,5 +1,6 @@
 package alec_wam.CrystalMod.tiles.machine.power.engine.lava;
 
+import alec_wam.CrystalMod.util.ItemStackTools;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -38,7 +39,7 @@ public class ContainerEngineLava extends Container
     @Override
     public ItemStack transferStackInSlot(EntityPlayer player, int i)
     {
-    	ItemStack itemstack = null;
+    	ItemStack itemstack = ItemStackTools.getEmptyStack();
     	int par2 = i;
 		Slot slot = (Slot)this.inventorySlots.get(par2);
 
@@ -47,54 +48,37 @@ public class ContainerEngineLava extends Container
 			ItemStack itemstack1 = slot.getStack();
 			itemstack = itemstack1.copy();
 
-			/*if (par2 == 0)
+			if (par2 != 0)
 			{
-				if (!this.mergeItemStack(itemstack1, 1, 38, true))
-				{
-					return null;
-				}
-
-				slot.onSlotChange(itemstack1, itemstack);
-			}
-			else*/ if (par2 != 0)
-			{
-				/*if (TileEntityEngineFurnace.getItemEnergyValue(itemstack1) > 0)
-				{
-					if (!this.mergeItemStack(itemstack1, 0, 1, false))
-					{
-						
-						return null;
-					}
-				}
-				else*/ if (par2 >= 0 && par2 < 30)
+				if (par2 >= 0 && par2 < 30)
 				{
 					if (!this.mergeItemStack(itemstack1, 30, 38, false))
 					{
-						return null;
+						return ItemStackTools.getEmptyStack();
 					}
 				}
 				else if (par2 >= 30 && par2 < 38 && !this.mergeItemStack(itemstack1, 0, 30, false))
 				{
-					return null;
+					return ItemStackTools.getEmptyStack();
 				}
 			}
 			else if (!this.mergeItemStack(itemstack1, 0, 38, false))
 			{
-				return null;
+				return ItemStackTools.getEmptyStack();
 			}
 
-			if (itemstack1.stackSize == 0)
+			if (ItemStackTools.isEmpty(itemstack1))
 			{
-				slot.putStack((ItemStack)null);
+				slot.putStack(ItemStackTools.getEmptyStack());
 			}
 			else
 			{
 				slot.onSlotChanged();
 			}
 
-			if (itemstack1.stackSize == itemstack.stackSize)
+			if (ItemStackTools.getStackSize(itemstack1) == ItemStackTools.getStackSize(itemstack))
 			{
-				return null;
+				return ItemStackTools.getEmptyStack();
 			}
 
 			slot.onPickupFromSlot(player, itemstack1);

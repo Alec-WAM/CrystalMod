@@ -35,7 +35,7 @@ import alec_wam.CrystalMod.items.backpack.container.SlotRange;
 import alec_wam.CrystalMod.proxy.CommonProxy;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemUtil;
-import alec_wam.CrystalMod.util.NBTUtils;
+import alec_wam.CrystalMod.util.inventory.NBTUtils;
 
 public class ItemBackpack extends Item implements ICustomModel {
 	

@@ -9,6 +9,7 @@ import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.items.ItemIngot.IngotType;
 import alec_wam.CrystalMod.items.ItemMetalPlate.PlateType;
 import alec_wam.CrystalMod.tiles.machine.BasicMachineRecipe;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -18,7 +19,7 @@ public class PressRecipeManager {
 	private static List<BasicMachineRecipe> recipes = new ArrayList<BasicMachineRecipe>();
 	
 	public static BasicMachineRecipe getRecipe(ItemStack input){
-		if (input == null) {
+		if (ItemStackTools.isNullStack(input)) {
 			return null;
 		}
 		

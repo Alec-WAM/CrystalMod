@@ -28,6 +28,7 @@ import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage.ItemStackData;
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.CraftingPattern;
 import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.FluidUtil;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.Lang;
 import alec_wam.CrystalMod.util.ModLogger;
@@ -83,7 +84,7 @@ public class BasicCraftingTask implements ICraftingTask {
         		list.add(missing);
         	}
             for (ItemStack missing : list.getStacks()) {
-                if (!controller.getItemStorage().removeCheck(missing, missing.stackSize, ItemStorage.getExtractFilter(pattern.isOredict()), true)) {
+                if (!controller.getItemStorage().removeCheck(missing, ItemStackTools.getStackSize(missing), ItemStorage.getExtractFilter(pattern.isOredict()), true)) {
                      return false;
                 }
             }
@@ -117,27 +118,27 @@ public class BasicCraftingTask implements ICraftingTask {
     	 int times = toInsertItems.size();
          for (int i = 0; i < times; i++) {
              ItemStack insert = toInsertItems.poll();
-             if (insert != null) {
+             if (!ItemStackTools.isNullStack(insert)) {
                  ItemStack remain = controller.getItemStorage().addItem(insert, false);
-                 if (remain !=null) {
+                 if (!ItemStackTools.isNullStack(remain)) {
                 	 toInsertItems.add(remain.copy());
                  }
              }
          }
 
-         int startedCount = 0;
+         /*int startedCount = 0;
          Iterator<CraftingProcessBase> ip = toProcess.iterator();
          while(ip.hasNext()){
         	 CraftingProcessBase process = ip.next();
         	 if(process.started){
         		 startedCount++;
         	 }
-         }
+         }*/
          
          /*if(startedCount == 0){
         	 reschedule(controller);
          }*/
-         
+         Iterator<CraftingProcessBase> ip = toProcess.iterator();
          ip = toProcess.iterator();
          while(ip.hasNext()){
         	 CraftingProcessBase process = ip.next();
@@ -152,11 +153,11 @@ public class BasicCraftingTask implements ICraftingTask {
     	ItemStackList insertList = new ItemStackList();
     	ItemStackList networkList = new ItemStackList();
     	for(ItemStackData data : network.getItemStorage().getItemList()){
-    		if(data.stack !=null && data.getAmount() > 0)
+    		if(!ItemStackTools.isNullStack(data.stack) && data.getAmount() > 0)
     		networkList.add(data.stack.copy());
     	}
     	
-    	ItemStack requested = this.requested != null ? this.requested : pattern.getOutputs().get(0);
+    	ItemStack requested = !ItemStackTools.isNullStack(this.requested) ? this.requested : pattern.getOutputs().get(0);
     	int newQuantity = quantity;
        	while (newQuantity > 0 && !recursiveFind) {
             calculate(network, networkList, pattern, insertList);
@@ -190,7 +191,7 @@ public class BasicCraftingTask implements ICraftingTask {
         			 break;
         		 }
         		 if (!added) {
-        			 ItemStack choice = null;
+        			 ItemStack choice = ItemStackTools.getEmptyStack();
         			 if (!oreInputs.isEmpty()) {
         				 choice = oreInputs.get(0);
         				 inputs.add(ItemStack.copyItemStack(choice));
@@ -202,50 +203,50 @@ public class BasicCraftingTask implements ICraftingTask {
         
         for (int i = 0; i < inputs.size(); i++) {
         	ItemStack input = inputs.get(i);
-            if(input == null)continue;
+            if(ItemStackTools.isNullStack(input))continue;
 
             ItemStack inputInNetwork = networkList.get(input, pattern.isOredict());
             
-            while(input.stackSize > 0){
+            while(ItemStackTools.isValid(input)){
             	ItemStack extra = insertList.get(input, pattern.isOredict());
-                if (extra != null && extra.stackSize > 0) {
-                	int takeQuantity = Math.min(extra.stackSize, input.stackSize);
+                if (ItemStackTools.isValid(extra)) {
+                	int takeQuantity = Math.min(ItemStackTools.getStackSize(extra), ItemStackTools.getStackSize(input));
                     ItemStack extraToRemove = ItemHandlerHelper.copyStackWithSize(extra, takeQuantity);
                     if (!pattern.isProcessing()) {
                     	actualInputs.add(extraToRemove.copy());
                     }
-                    input.stackSize-=takeQuantity;
+                    ItemStackTools.incStackSize(input, -takeQuantity);
                     insertList.remove(extraToRemove, true);
-                } else if (inputInNetwork != null && inputInNetwork.stackSize > 0) {
-                    int takeQuantity = Math.min(inputInNetwork.stackSize, input.stackSize);
+                } else if (ItemStackTools.isValid(inputInNetwork)) {
+                    int takeQuantity = Math.min(ItemStackTools.getStackSize(inputInNetwork), ItemStackTools.getStackSize(input));
                     ItemStack inputStack = ItemHandlerHelper.copyStackWithSize(inputInNetwork, takeQuantity);
                     actualInputs.add(inputStack.copy());
                     toTake.add(inputStack.copy());
-                    input.stackSize -= takeQuantity;
+                    ItemStackTools.incStackSize(input, -takeQuantity);
                     networkList.remove(inputStack, true);
                 } else {
                 	CraftingPattern inputPattern = network.getPatternWithBestScore(input, pattern.isOredict());
 
                     if (inputPattern != null) {
                     	ItemStack actualCraft = inputPattern.getActualOutput(input, pattern.isOredict());
-                    	int craftQuantity = Math.min(inputPattern.getQuantityPerRequest(input, pattern.isOredict()), input.stackSize);
+                    	int craftQuantity = Math.min(inputPattern.getQuantityPerRequest(input, pattern.isOredict()), ItemStackTools.getStackSize(input));
                         ItemStack inputCrafted = ItemHandlerHelper.copyStackWithSize(actualCraft, craftQuantity);
                         actualInputs.add(inputCrafted.copy());
                         calculate(network, networkList, inputPattern, insertList);
-                        input.stackSize -= craftQuantity;
+                        ItemStackTools.incStackSize(input, -craftQuantity);
                         ItemStack inserted = insertList.get(inputCrafted, pattern.isOredict());
                         insertList.remove(inserted, craftQuantity, true);
                     } else {
                     	
                     	ItemStack fluidCheck = ItemHandlerHelper.copyStackWithSize(input, 1);
-                    	while (input.stackSize > 0 && doFluidCalculation(network, networkList, fluidCheck, insertList)) {
+                    	while (!ItemStackTools.isEmpty(input) && doFluidCalculation(network, networkList, fluidCheck, insertList)) {
                              actualInputs.add(fluidCheck);
-                             input.stackSize -= 1;
+                             ItemStackTools.incStackSize(input, -1);
                     	}
                     	
-                    	if (input.stackSize > 0) {
+                    	if (!ItemStackTools.isEmpty(input)) {
                     		missing.add(ItemStack.copyItemStack(input));
-                    		input.stackSize = 0;
+                    		ItemStackTools.setStackSize(input, 0);
                     	}
                     }
                 }
@@ -265,7 +266,7 @@ public class BasicCraftingTask implements ICraftingTask {
 	                ItemStack input = usedStacks.get(i);
 	                if (input != null) {
 	                    ItemStack actualInput = actualInputs.get(input, pattern.isOredict());
-	                    ItemStack taken = ItemHandlerHelper.copyStackWithSize(actualInput, input.stackSize);
+	                    ItemStack taken = ItemHandlerHelper.copyStackWithSize(actualInput, ItemStackTools.getStackSize(input));
 	                    took[i] = taken;
 	                    actualInputs.remove(taken, true);
 	                }
@@ -274,11 +275,11 @@ public class BasicCraftingTask implements ICraftingTask {
     	}
         
         for (ItemStack byproduct : (!pattern.isProcessing() && pattern.isOredict() && missing.isEmpty() ? pattern.getByproducts(took) : pattern.getByproducts())) {
-        	if(byproduct !=null)insertList.add(byproduct.copy());
+        	if(!ItemStackTools.isNullStack(byproduct))insertList.add(byproduct.copy());
         }
 
         for (ItemStack output : (!pattern.isProcessing() && pattern.isOredict() && missing.isEmpty() ? pattern.getOutputs(took) : pattern.getOutputs())) {
-        	if(output !=null)insertList.add(output.copy());
+        	if(!ItemStackTools.isNullStack(output))insertList.add(output.copy());
         }
         usedPatterns.remove(pattern);
     }
@@ -287,14 +288,14 @@ public class BasicCraftingTask implements ICraftingTask {
     	FluidStack fluidInItem = FluidUtil.getFluidTypeFromItem(input);
         if (fluidInItem != null) {
         	ItemStack container = FluidUtil.getEmptyContainer(input);
-        	if(container !=null){
+        	if(!ItemStackTools.isNullStack(container)){
                 FluidStackData fluidInStorage = network.getFluidStorage().getFluidData(fluidInItem);
                 
                 if (fluidInStorage == null || fluidInStorage.getAmount() < fluidInItem.amount) {
                     missing.add(ItemStack.copyItemStack(input));
                 } else {
                 	ItemStack buk = networkList.get(container, false);
-                    boolean hasBucket = buk !=null && buk.stackSize > 0;
+                    boolean hasBucket = ItemStackTools.isValid(buk);
                     CraftingPattern bucketPattern = network.getPatternWithBestScore(container, pattern.isOredict());
 
                     if (!hasBucket) {
@@ -326,7 +327,6 @@ public class BasicCraftingTask implements ICraftingTask {
         		mainProcesses.add(process);
         	}
         }
-        ModLogger.info("Missing: "+missing.toString());
         missing.clear();
         toProcess.clear();
         // if the list of main steps is empty there is no point in rescheduling
@@ -378,14 +378,14 @@ public class BasicCraftingTask implements ICraftingTask {
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound tag) {
     	if(getPattern() !=null){
-    		if(getPattern().getPatternStack() !=null)tag.setTag(NBT_PATTERN, getPattern().getPatternStack().serializeNBT());
+    		if(!ItemStackTools.isNullStack(getPattern().getPatternStack()))tag.setTag(NBT_PATTERN, getPattern().getPatternStack().serializeNBT());
     		if(getPattern().getCrafter() !=null){
     			NBTTagCompound posTag = BlockUtil.saveBlockPos(getPattern().getCrafter().getPos());
     			posTag.setInteger("Dim", getPattern().getCrafter().getDimension());
     			tag.setTag(NBT_CRAFTER, posTag);
     		}
     	}
-    	if(requested !=null)tag.setTag(NBT_REQUESTED, requested.serializeNBT());
+    	if(!ItemStackTools.isNullStack(requested))tag.setTag(NBT_REQUESTED, requested.serializeNBT());
     	tag.setInteger(NBT_QUANTITY, quantity);
     	NBTTagList stepsList = new NBTTagList();
 
@@ -455,13 +455,13 @@ public class BasicCraftingTask implements ICraftingTask {
                 boolean found = false;
                 search : for(ItemStack st : insertCount.keySet()){
                 	if(ItemUtil.canCombine(st, input)){
-                		insertCount.put(st, insertCount.get(st)+input.stackSize);
+                		insertCount.put(st, insertCount.get(st)+ItemStackTools.getStackSize(input));
                 		found = true;
                 		break search;
                 	}
                 }
                 if(!found){
-                	insertCount.put(input, input.stackSize);
+                	insertCount.put(input, ItemStackTools.getStackSize(input));
                 }
             }
             for(Entry<ItemStack, Integer> entry : insertCount.entrySet()){
@@ -495,13 +495,13 @@ public class BasicCraftingTask implements ICraftingTask {
 	                boolean found = false;
 	                search : for(ItemStack st : insertCount.keySet()){
 	                	if(ItemUtil.canCombine(st, input)){
-	                		insertCount.put(st, insertCount.get(st)+input.stackSize);
+	                		insertCount.put(st, insertCount.get(st)+ItemStackTools.getStackSize(input));
 	                		found = true;
 	                		break search;
 	                	}
 	                }
 	                if(!found){
-	                	insertCount.put(input, input.stackSize);
+	                	insertCount.put(input, ItemStackTools.getStackSize(input));
 	                }
 	            }
 	            for(Entry<ItemStack, Integer> entry : insertCount.entrySet()){
@@ -530,13 +530,13 @@ public class BasicCraftingTask implements ICraftingTask {
 	                boolean found = false;
 	                search : for(ItemStack st : insertCount.keySet()){
 	                	if(ItemUtil.canCombine(st, input)){
-	                		insertCount.put(st, insertCount.get(st)+input.stackSize);
+	                		insertCount.put(st, insertCount.get(st)+ItemStackTools.getStackSize(input));
 	                		found = true;
 	                		break search;
 	                	}
 	                }
 	                if(!found){
-	                	insertCount.put(input, input.stackSize);
+	                	insertCount.put(input, ItemStackTools.getStackSize(input));
 	                }
 	            }
 	            for(Entry<ItemStack, Integer> entry : insertCount.entrySet()){
@@ -601,13 +601,13 @@ public class BasicCraftingTask implements ICraftingTask {
 			                boolean found = false;
 			                search : for(ItemStack st : insertCount.keySet()){
 			                	if(ItemUtil.canCombine(st, input)){
-			                		insertCount.put(st, insertCount.get(st)+input.stackSize);
+			                		insertCount.put(st, insertCount.get(st)+ItemStackTools.getStackSize(input));
 			                		found = true;
 			                		break search;
 			                	}
 			                }
 			                if(!found){
-			                	insertCount.put(input, input.stackSize);
+			                	insertCount.put(input, ItemStackTools.getStackSize(input));
 			                }
 		            	}
 		            }

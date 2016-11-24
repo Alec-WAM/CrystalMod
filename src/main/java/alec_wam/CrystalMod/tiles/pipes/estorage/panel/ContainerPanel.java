@@ -26,6 +26,7 @@ import alec_wam.CrystalMod.tiles.pipes.estorage.PacketEStorageItemList.EnumListT
 import alec_wam.CrystalMod.tiles.pipes.estorage.PacketEStorageItemList;
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.CraftingPattern;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.crafting.ContainerPanelCrafting;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ModLogger;
 
 import com.google.common.collect.Lists;
@@ -228,32 +229,30 @@ public class ContainerPanel extends Container implements INetworkContainer {
 	}
 	
 	public void grabItemStackFromNetwork(EntityPlayerMP player, int slot, int amount, ItemStackData data) {
-		if(panel.getNetwork() !=null && data !=null && data.stack !=null){
+		if(panel.getNetwork() !=null && data !=null && !ItemStackTools.isNullStack(data.stack)){
 			int invSlot = -1;
 			int realAmount = amount;
 			if(slot < 0){
-				boolean hasStack = player.inventory.getItemStack() !=null;
-				realAmount = Math.min(amount, player.inventory.getInventoryStackLimit()-(hasStack ? player.inventory.getItemStack().stackSize : 0));
+				realAmount = Math.min(amount, player.inventory.getInventoryStackLimit()-ItemStackTools.getStackSize(player.inventory.getItemStack()));
 			}else{
 				invSlot = slot;
-				boolean hasStack = player.inventory.getStackInSlot(invSlot) !=null;
-				realAmount = Math.min(amount, player.inventory.getInventoryStackLimit()-(hasStack ? player.inventory.getStackInSlot(invSlot).stackSize : 0));
+				realAmount = Math.min(amount, player.inventory.getInventoryStackLimit()-ItemStackTools.getStackSize(player.inventory.getStackInSlot(invSlot)));
 			}
 			ItemStack grabStack = ItemHandlerHelper.copyStackWithSize(data.stack, 1);
 			ItemStack removed = panel.getNetwork().getItemStorage().removeItem(grabStack, realAmount, ItemStorage.NORMAL, false);
-			if(removed !=null){
+			if(!ItemStackTools.isNullStack(removed)){
 				if(invSlot > -1){
 					ItemStack remainder = ItemHandlerHelper.insertItem(player.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.UP), removed, false);
 
-	                if (remainder != null) {
+	                if (!ItemStackTools.isNullStack(remainder)) {
 	                	panel.getNetwork().getItemStorage().addItem(remainder, false);
 	                }
 				}else{
-					if(player.inventory.getItemStack() == null){
+					if(ItemStackTools.isNullStack(player.inventory.getItemStack())){
 						player.inventory.setItemStack(removed);
 					}else{
 						ItemStack current = player.inventory.getItemStack();
-						current.stackSize+=removed.stackSize;
+						ItemStackTools.incStackSize(current, ItemStackTools.getStackSize(removed));
 						player.inventory.setItemStack(current);
 					}
 					player.updateHeldItem();

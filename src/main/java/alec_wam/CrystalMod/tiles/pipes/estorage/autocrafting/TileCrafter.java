@@ -20,6 +20,7 @@ import alec_wam.CrystalMod.tiles.BasicItemHandler;
 import alec_wam.CrystalMod.tiles.IItemValidator;
 import alec_wam.CrystalMod.tiles.TileEntityMod;
 import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetwork;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 
 public class TileCrafter extends TileEntityMod implements INetworkTile, IAutoCrafter {
@@ -98,7 +99,7 @@ public class TileCrafter extends TileEntityMod implements INetworkTile, IAutoCra
         for (int i = 0; i < tagList.tagCount(); i++) {
             int slot = tagList.getCompoundTagAt(i).getInteger("Slot");
 
-            ItemStack stack = ItemStack.loadItemStackFromNBT(tagList.getCompoundTagAt(i));
+            ItemStack stack = ItemStackTools.loadFromNBT(tagList.getCompoundTagAt(i));
 
             patterns.insertItem(slot, stack, false);
         }

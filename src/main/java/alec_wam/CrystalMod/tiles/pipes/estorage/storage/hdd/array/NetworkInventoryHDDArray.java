@@ -18,6 +18,7 @@ import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage.ItemStackData;
 import alec_wam.CrystalMod.tiles.pipes.estorage.storage.hdd.ItemHDD;
 import alec_wam.CrystalMod.tiles.pipes.estorage.storage.hdd.NetworkInventoryHDDInterface;
 import alec_wam.CrystalMod.util.BlockUtil;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 
 public class NetworkInventoryHDDArray implements INetworkInventory {
@@ -32,10 +33,10 @@ public class NetworkInventoryHDDArray implements INetworkInventory {
 		ItemStackList list = new ItemStackList();
 		for(int s = 0; s < array.getSizeInventory(); s++){
 			ItemStack hddStack = array.getStackInSlot(s);
-			if (hddStack != null && hddStack.getItem() instanceof ItemHDD) {
+			if (!ItemStackTools.isNullStack(hddStack) && hddStack.getItem() instanceof ItemHDD) {
 				for (int i = 0; i < ItemHDD.getItemLimit(hddStack); i++) {
 					ItemStack stack = ItemHDD.getItem(hddStack, i);
-					if (stack != null && stack.stackSize > 0) {
+					if (ItemStackTools.isValid(stack)) {
 						list.add(stack);
 					}
 				}
@@ -44,25 +45,11 @@ public class NetworkInventoryHDDArray implements INetworkInventory {
 		return list;
 	}
 	
-	public void getItems(List<ItemStackData> items, ItemStack hddStack, ItemStorage storage){
-		if (hddStack != null && hddStack.getItem() instanceof ItemHDD) {
-			for (int i = 0; i < ItemHDD.getItemLimit(hddStack); i++) {
-				ItemStack stack = ItemHDD.getItem(hddStack, i);
-				if (stack != null && stack.stackSize > 0) {
-					if(storage.getItemData(stack) == null && !contains(items, stack)){
-						ItemStackData data = new ItemStackData(stack);
-						items.add(data);
-					}
-				}
-			}
-		}
-	}
-	
 	public boolean contains(List<ItemStackData> list, ItemStack stack){
 		Iterator<ItemStackData> ii = list.iterator();
 		while(ii.hasNext()){
 			ItemStackData data = ii.next();
-			if(data.stack !=null){
+			if(!ItemStackTools.isNullStack(data.stack)){
 				if(ItemUtil.canCombine(stack, data.stack)){
 					return true;
 				}
@@ -76,17 +63,17 @@ public class NetworkInventoryHDDArray implements INetworkInventory {
 		ItemStack remaining = ItemHandlerHelper.copyStackWithSize(stack, amount);
 		for(int i = 0; i < array.getSizeInventory(); i++){
 			ItemStack hdd = array.getStackInSlot(i);
-			if(hdd !=null && hdd.getItem() instanceof IItemProvider){
+			if(!ItemStackTools.isNullStack(hdd) && hdd.getItem() instanceof IItemProvider){
 				IItemProvider provider = (IItemProvider)hdd.getItem();
-				final int preSize = remaining.stackSize;
-				remaining = provider.insert(hdd, remaining, remaining.stackSize, sim);
+				final int preSize = ItemStackTools.getStackSize(remaining);
+				remaining = provider.insert(hdd, remaining, ItemStackTools.getStackSize(remaining), sim);
 				
-				if(!sim && (remaining == null || remaining.stackSize !=preSize)){
+				if(!sim && (ItemStackTools.getStackSize(remaining) !=preSize)){
 					array.markDirty();
 					BlockUtil.markBlockForUpdate(array.getWorld(), array.getPos());
 				}
 				
-				if (remaining == null || remaining.stackSize < 0) {
+				if (!ItemStackTools.isValid(remaining)) {
 	                break;
 				}
 			}
@@ -97,24 +84,24 @@ public class NetworkInventoryHDDArray implements INetworkInventory {
 	@Override
 	public ItemStack extractItem(EStorageNetwork network, ItemStack stack, int amount, ExtractFilter filter, boolean sim) {
 		int needed = amount;
-		ItemStack received = null;
+		ItemStack received = ItemStackTools.getEmptyStack();
 		search : for(int i = 0; i < array.getSizeInventory(); i++){
 			ItemStack hdd = array.getStackInSlot(i);
-			if (hdd != null	&& hdd.getItem() instanceof IItemProvider) {
+			if (!ItemStackTools.isNullStack(hdd) && hdd.getItem() instanceof IItemProvider) {
 				IItemProvider provider = ((IItemProvider)hdd.getItem());
 				ItemStack took = provider.extract(hdd, stack, needed, filter, sim);
-				if(took != null){
-					if(received == null){
+				if(!ItemStackTools.isNullStack(took)){
+					if(ItemStackTools.isNullStack(received)){
 						received = took;
 					} else {
-						received.stackSize+=took.stackSize;
+						ItemStackTools.incStackSize(received, ItemStackTools.getStackSize(took));
 					}
 					
 					if(!sim){
 						array.markDirty();
 						BlockUtil.markBlockForUpdate(array.getWorld(), array.getPos());
 					}
-					needed-=took.stackSize;
+					needed-=ItemStackTools.getStackSize(took);
 					if(needed <= 0){
 						break search;
 					}

@@ -2,6 +2,7 @@ package alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.task;
 
 import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetwork;
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.CraftingPattern;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -12,7 +13,7 @@ public class CraftingTaskScheduler {
     private ItemStack scheduledItem;
 
     public boolean canSchedule(ItemStack item) {
-        return scheduledItem == null || !ItemUtil.canCombine(scheduledItem, item);
+        return ItemStackTools.isNullStack(scheduledItem) || !ItemUtil.canCombine(scheduledItem, item);
     }
 
     public void schedule(EStorageNetwork network, ItemStack item) {
@@ -21,16 +22,16 @@ public class CraftingTaskScheduler {
         if (pattern != null && network.craftingController !=null) {
             scheduledItem = item;
 
-            network.craftingController.addCraftingTaskAsLast(network.craftingController.createCraftingTask(scheduledItem, pattern, scheduledItem.stackSize));
+            network.craftingController.addCraftingTaskAsLast(network.craftingController.createCraftingTask(scheduledItem, pattern, ItemStackTools.getStackSize(scheduledItem)));
         }
     }
 
     public void resetSchedule() {
-        scheduledItem = null;
+        scheduledItem = ItemStackTools.getEmptyStack();
     }
 
     public void writeToNBT(NBTTagCompound tag) {
-        if (scheduledItem != null) {
+        if (!ItemStackTools.isNullStack(scheduledItem)) {
             tag.setTag(NBT_SCHEDULED, scheduledItem.serializeNBT());
         } else {
             tag.removeTag(NBT_SCHEDULED);
@@ -39,7 +40,7 @@ public class CraftingTaskScheduler {
 
     public void read(NBTTagCompound tag) {
         if (tag.hasKey(NBT_SCHEDULED)) {
-            scheduledItem = ItemStack.loadItemStackFromNBT(tag.getCompoundTag(NBT_SCHEDULED));
+            scheduledItem = ItemStackTools.loadFromNBT(tag.getCompoundTag(NBT_SCHEDULED));
         }
     }
 }

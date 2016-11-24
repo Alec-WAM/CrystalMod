@@ -21,6 +21,7 @@ import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.blocks.BlockCrystalLog.WoodType;
 import alec_wam.CrystalMod.blocks.crops.BlockCrystalPlant;
 import alec_wam.CrystalMod.blocks.crops.BlockCrystalPlant.PlantType;
+import alec_wam.CrystalMod.util.ItemStackTools;
 
 public class ItemCrystalSeedTree extends Item implements net.minecraftforge.common.IPlantable
 {
@@ -107,7 +108,7 @@ public class ItemCrystalSeedTree extends Item implements net.minecraftforge.comm
 
                 if (!playerIn.capabilities.isCreativeMode)
                 {
-                    --stack.stackSize;
+                	ItemStackTools.incStackSize(stack, -1);
                 }
             }
 

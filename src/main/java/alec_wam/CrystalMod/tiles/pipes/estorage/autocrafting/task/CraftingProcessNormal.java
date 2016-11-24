@@ -23,6 +23,7 @@ import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage;
 import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage.ItemStackData;
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.CraftingPattern;
 import alec_wam.CrystalMod.util.FluidUtil;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ModLogger;
 
 public class CraftingProcessNormal extends CraftingProcessBase {
@@ -36,7 +37,7 @@ public class CraftingProcessNormal extends CraftingProcessBase {
 		super(network, pattern);
 		this.toInsert = new LinkedList<ItemStack>();
 		for(ItemStack stack : toInsert){
-			if(stack !=null){
+			if(!ItemStackTools.isNullStack(stack)){
 				this.toInsert.add(stack.copy());
 			}
 		}
@@ -55,10 +56,10 @@ public class CraftingProcessNormal extends CraftingProcessBase {
 		List<FluidStack> removed = Lists.newArrayList();
         for (ItemStack stack : getToInsert()) {
         	ExtractFilter filter = ItemStorage.getExtractFilter(pattern.isOredict());
-            if (!items.removeCheck(stack, stack.stackSize, filter, true)) {
+            if (!items.removeCheck(stack, ItemStackTools.getStackSize(stack), filter, true)) {
                 FluidStack fluidInItem = FluidUtil.getFluidTypeFromItem(stack);
                 ItemStack container = FluidUtil.getEmptyContainer(stack);
-                if (fluidInItem != null && container !=null && items.hasItem(container)) {
+                if (fluidInItem != null && !ItemStackTools.isNullStack(container) && items.hasItem(container)) {
                     FluidStack fluidData = fluids.get(fluidInItem);
                     if (fluidData != null && fluids.remove(fluidData, true) && items.removeCheck(container, 1, filter, true)) {
                     	removed.add(fluidData);
@@ -80,12 +81,12 @@ public class CraftingProcessNormal extends CraftingProcessBase {
             FluidStack fluidInItem = FluidUtil.getFluidTypeFromItem(insertStack);
             if (fluidInItem != null) {
             	ItemStack empty = FluidUtil.getEmptyContainer(insertStack);
-            	if(empty !=null)network.getItemStorage().removeItem(empty, ItemStorage.getExtractFilter(pattern.isOredict()), false);
+            	if(!ItemStackTools.isNullStack(empty))network.getItemStorage().removeItem(empty, ItemStorage.getExtractFilter(pattern.isOredict()), false);
                 network.getFluidStorage().removeFluid(fluidInItem, false);
                 actualInputs.add(insertStack.copy());
             } else {
             	ItemStack extract = network.getItemStorage().removeItem(insertStack, ItemStorage.getExtractFilter(pattern.isOredict()), false);
-            	if(extract !=null){
+            	if(!ItemStackTools.isNullStack(extract)){
             		actualInputs.add(extract);
             	} else {
             		toInsertItems.addAll(actualInputs.getStacks());
@@ -98,22 +99,22 @@ public class CraftingProcessNormal extends CraftingProcessBase {
 		ItemStack[] took = new ItemStack[9];
         for (int i = 0; i < getToInsert().size(); i++) {
             ItemStack input = getToInsert().get(i);
-            if (input != null) {
+            if (!ItemStackTools.isNullStack(input)) {
                 ItemStack actualInput = actualInputs.get(input, pattern.isOredict());
-                ItemStack taken = ItemHandlerHelper.copyStackWithSize(actualInput, input.stackSize);
+                ItemStack taken = ItemHandlerHelper.copyStackWithSize(actualInput, ItemStackTools.getStackSize(input));
                 took[i] = taken;
-                if(taken !=null)actualInputs.remove(taken, true);
+                if(!ItemStackTools.isNullStack(taken))actualInputs.remove(taken, true);
             }
         }
 
         for (ItemStack byproduct : (pattern.isOredict()? pattern.getByproducts(took) : pattern.getByproducts())) {
-            if(byproduct !=null){
+            if(!ItemStackTools.isNullStack(byproduct)){
             	toInsertItems.add(byproduct.copy());
             }
         }
 
         for (ItemStack output : (pattern.isOredict() ? pattern.getOutputs(took) : pattern.getOutputs())) {
-            if(output !=null){
+            if(!ItemStackTools.isNullStack(output)){
             	toInsertItems.add(output.copy());
             }
         }
@@ -137,7 +138,7 @@ public class CraftingProcessNormal extends CraftingProcessBase {
 				 toInsert = new ArrayList<ItemStack>(toInsertList.tagCount());
 				 for (int i = 0; i < toInsertList.tagCount(); ++i) {
 					 ItemStack insertStack = ItemStack.loadItemStackFromNBT(toInsertList.getCompoundTagAt(i));
-					 if (insertStack != null) {
+					 if (!ItemStackTools.isNullStack(insertStack)) {
 						 toInsert.add(insertStack);
 					 }
 				 }

@@ -19,6 +19,7 @@ import alec_wam.CrystalMod.client.util.comp.GuiComponentBook;
 import alec_wam.CrystalMod.client.util.comp.GuiComponentSprite;
 import alec_wam.CrystalMod.tiles.pipes.estorage.client.IGuiScreen;
 import alec_wam.CrystalMod.tiles.pipes.estorage.client.VScrollbar;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.Lang;
 
 public class GuiGuideIndex extends GuiGuideBase implements IGuiScreen {
@@ -259,7 +260,7 @@ public class GuiGuideIndex extends GuiGuideBase implements IGuiScreen {
 					GuideChapter chapter = chapters.get(s);
 					chapter.update(pageTimer);
 					ItemStack dis = chapter.getDisplayStack();
-					if(dis !=null){
+					if(!ItemStackTools.isNullStack(dis)){
 						GlStateManager.pushMatrix();
 			            RenderHelper.enableGUIStandardItemLighting();
 			            GlStateManager.disableLighting();

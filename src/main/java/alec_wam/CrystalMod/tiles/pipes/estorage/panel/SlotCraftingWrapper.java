@@ -2,6 +2,7 @@ package alec_wam.CrystalMod.tiles.pipes.estorage.panel;
 
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.crafting.ContainerPanelCrafting;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.crafting.TileEntityPanelCrafting;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryCrafting;
@@ -37,7 +38,7 @@ public class SlotCraftingWrapper extends SlotCrafting {
   public ItemStack decrStackSize(int p_75209_1_) {
     if (this.getHasStack()) {
       // on a right click we are asked to craft half a result. Ignore that.
-      return super.decrStackSize(this.getStack().stackSize);
+      return super.decrStackSize(ItemStackTools.getStackSize(this.getStack()));
     }
     return super.decrStackSize(p_75209_1_);
   }

@@ -2,6 +2,7 @@ package alec_wam.CrystalMod.util.tool;
 
 import java.lang.reflect.Method;
 
+import alec_wam.CrystalMod.util.ItemStackTools;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
@@ -33,7 +34,7 @@ public class MpsUtil {
   }
 
   public boolean isPowerFistEquiped(ItemStack equipped) {
-    if(!isMpsInstalled || equipped == null || equipped.getItem() == null) {
+    if(!isMpsInstalled || ItemStackTools.isNullStack(equipped) || equipped.getItem() == null) {
       return false;
     }
     Item item = equipped.getItem();
@@ -44,7 +45,7 @@ public class MpsUtil {
   }
 
   public boolean isOmniToolActive(ItemStack equipped) {
-    if(!isMpsInstalled || equipped == null || itemActiveMethod == null) {
+    if(!isMpsInstalled || ItemStackTools.isNullStack(equipped) || itemActiveMethod == null) {
       return false;
     }
     try {

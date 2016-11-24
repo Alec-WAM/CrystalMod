@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import alec_wam.CrystalMod.tiles.machine.BasicMachineRecipe;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
@@ -15,7 +16,7 @@ public class CrystalFurnaceManager {
 	
 	
 	public static BasicMachineRecipe getRecipe(ItemStack input){
-		if (input == null) {
+		if (ItemStackTools.isNullStack(input)) {
 			return null;
 		}
 		for(ItemStack stack : recipeMap.keySet()){

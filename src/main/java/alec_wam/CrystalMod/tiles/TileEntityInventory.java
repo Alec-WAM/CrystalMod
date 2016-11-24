@@ -5,6 +5,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 
 public class TileEntityInventory extends TileEntityMod implements IInventory {
@@ -47,13 +48,13 @@ public class TileEntityInventory extends TileEntityMod implements IInventory {
 	public ItemStack decrStackSize(int slot, int quantity) {
 		ItemStack itemStack = getStackInSlot(slot);
 
-	    if(itemStack == null) {
-	      return null;
+	    if(ItemStackTools.isNullStack(itemStack)) {
+	      return ItemStackTools.getEmptyStack();
 	    }
 
 	    // whole itemstack taken out
-	    if(itemStack.stackSize <= quantity) {
-	      setInventorySlotContents(slot, null);
+	    if(ItemStackTools.getStackSize(itemStack) <= quantity) {
+	      setInventorySlotContents(slot, ItemStackTools.getEmptyStack());
 	      onItemChanged(slot);
 	      markDirty();
 	      return itemStack;
@@ -62,8 +63,8 @@ public class TileEntityInventory extends TileEntityMod implements IInventory {
 	    // split itemstack
 	    itemStack = itemStack.splitStack(quantity);
 	    // slot is empty, set to null
-	    if(getStackInSlot(slot).stackSize == 0) {
-	      setInventorySlotContents(slot, null);
+	    if(ItemStackTools.isEmpty(getStackInSlot(slot))) {
+	      setInventorySlotContents(slot, ItemStackTools.getEmptyStack());
 	    }
 	    onItemChanged(slot);
 	    markDirty();
@@ -74,7 +75,7 @@ public class TileEntityInventory extends TileEntityMod implements IInventory {
 	@Override
 	public ItemStack removeStackFromSlot(int slot) {
 		ItemStack itemStack = getStackInSlot(slot);
-	    setInventorySlotContents(slot, null);
+	    setInventorySlotContents(slot, ItemStackTools.getEmptyStack());
 	    return itemStack;
 	}
 
@@ -85,8 +86,8 @@ public class TileEntityInventory extends TileEntityMod implements IInventory {
 	    }
 
 	    inventory[slot] = itemstack;
-	    if(itemstack != null && itemstack.stackSize > getInventoryStackLimit()) {
-	      itemstack.stackSize = getInventoryStackLimit();
+	    if(ItemStackTools.getStackSize(itemstack) > getInventoryStackLimit()) {
+	    	ItemStackTools.setStackSize(itemstack, getInventoryStackLimit());
 	    }
 	    onItemChanged(slot);
 	    markDirty();
@@ -141,7 +142,7 @@ public class TileEntityInventory extends TileEntityMod implements IInventory {
 	@Override
 	public void clear() {
 		for(int i = 0; i < inventory.length; i++) {
-		      inventory[i] = null;
+		      inventory[i] = ItemStackTools.getEmptyStack();
 	    }
 	}
 

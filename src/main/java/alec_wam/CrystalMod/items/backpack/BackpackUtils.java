@@ -27,7 +27,7 @@ import alec_wam.CrystalMod.items.backpack.gui.GuiBackpackFurnace;
 import alec_wam.CrystalMod.items.backpack.gui.GuiBackpackRepair;
 import alec_wam.CrystalMod.items.backpack.gui.GuiButtonHoverText;
 import alec_wam.CrystalMod.util.Lang;
-import alec_wam.CrystalMod.util.NBTUtils;
+import alec_wam.CrystalMod.util.inventory.NBTUtils;
 
 public class BackpackUtils
 {

@@ -10,6 +10,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import alec_wam.CrystalMod.util.EntityUtil;
+import alec_wam.CrystalMod.util.ItemStackTools;
 
 public class HorseAccessories {
     public static String NBT_ACCESSORY_HORSE_ENDERCHEST = "EnderChest";
@@ -21,7 +22,7 @@ public class HorseAccessories {
 
     private static boolean handleEnderChestInteract(EntityHorse horse, ItemStack held, EntityPlayer player){
     	if(hasEnderChest(horse)){
-    		if(held == null){
+    		if(ItemStackTools.isNullStack(held)){
     			if(!player.isSneaking())return false;
 	  			InventoryEnderChest inventoryenderchest = player.getInventoryEnderChest();
 	  			if(inventoryenderchest !=null){
@@ -46,7 +47,7 @@ public class HorseAccessories {
   		  		}
   		  	}
     	} else {
-    		if(held !=null){
+    		if(!ItemStackTools.isNullStack(held)){
 	    		Block block = Block.getBlockFromItem(held.getItem());
 	    		if(block !=null && block == Blocks.ENDER_CHEST){
 	    			boolean success = addEnderChest(horse);
@@ -55,7 +56,7 @@ public class HorseAccessories {
 		  					return true;
 		  				}
 		  				if(!player.capabilities.isCreativeMode){
-		  					held.stackSize--;
+		  					ItemStackTools.incStackSize(held, -1);
 		  				}
 		  				return true;
 		  			}

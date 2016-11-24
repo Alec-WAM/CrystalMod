@@ -4,6 +4,7 @@ package alec_wam.CrystalMod.tiles.pipes.estorage.storage.hdd;
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.util.BlockUtil;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.tool.ToolUtil;
 import net.minecraft.block.BlockContainer;
@@ -104,18 +105,18 @@ public class BlockHDDInterface extends BlockContainer implements ICustomModel {
         	
     		if(ToolUtil.isToolEquipped(player, hand)){
     			if(player.isSneaking()){
-    				if(inter.getStackInSlot(0) !=null){
+    				if(!ItemStackTools.isNullStack(inter.getStackInSlot(0))){
     					EnumFacing face = EnumFacing.getFront(inter.facing);
         				ItemUtil.spawnItemInWorldWithoutMotion(world, inter.getStackInSlot(0), pos.offset(face));
-        				inter.setInventorySlotContents(0, null);
+        				inter.setInventorySlotContents(0, ItemStackTools.getEmptyStack());
         				return true;
     				}
     			}
     			return true;
     		}
-        	if(stack !=null && stack.getItem() instanceof ItemHDD && inter.getStackInSlot(0) == null){
+        	if(!ItemStackTools.isNullStack(stack) && stack.getItem() instanceof ItemHDD && ItemStackTools.isNullStack(inter.getStackInSlot(0))){
     			inter.setInventorySlotContents(0, stack);
-    			player.setHeldItem(hand, null);
+    			player.setHeldItem(hand, ItemStackTools.getEmptyStack());
 				return true;
     		}
         	

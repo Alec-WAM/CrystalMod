@@ -1,6 +1,7 @@
 package alec_wam.CrystalMod.entities.minions;
 
 import alec_wam.CrystalMod.entities.minions.warrior.EntityMinionWarrior;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.GlStateManager;
@@ -27,7 +28,7 @@ public class LayerBackItem implements LayerRenderer<EntityMinionBase>
     	EntityMinionWarrior entitylivingbaseIn = ((EntityMinionWarrior)entitylivingbaseIn1);
         ItemStack itemstack = entitylivingbaseIn.getBackItem();
 
-        if (itemstack != null)
+        if (!ItemStackTools.isNullStack(itemstack))
         {
             GlStateManager.pushMatrix();
 

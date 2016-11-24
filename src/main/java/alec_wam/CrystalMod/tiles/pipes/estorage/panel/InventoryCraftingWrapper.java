@@ -1,5 +1,6 @@
 package alec_wam.CrystalMod.tiles.pipes.estorage.panel;
 
+import alec_wam.CrystalMod.util.ItemStackTools;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryCrafting;
@@ -18,7 +19,7 @@ public class InventoryCraftingWrapper extends InventoryCrafting {
 
   @Override
   public ItemStack getStackInSlot(int index) {
-    return index >= this.getSizeInventory() ? null : backing.getStackInSlot(index);
+    return index >= this.getSizeInventory() ? ItemStackTools.getEmptyStack() : backing.getStackInSlot(index);
   }
 
   @Override
@@ -29,7 +30,7 @@ public class InventoryCraftingWrapper extends InventoryCrafting {
   @Override
   public ItemStack decrStackSize(int index, int count) {
     final ItemStack result = backing.decrStackSize(index, count);
-    if (result != null) {
+    if (!ItemStackTools.isNullStack(result)) {
       this.eventHandler.onCraftMatrixChanged(this);
     }
     return result;

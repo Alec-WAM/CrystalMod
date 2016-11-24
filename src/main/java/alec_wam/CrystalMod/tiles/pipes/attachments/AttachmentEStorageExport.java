@@ -40,6 +40,7 @@ import alec_wam.CrystalMod.tiles.pipes.attachments.gui.GuiAttachmentExport;
 import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetwork;
 import alec_wam.CrystalMod.tiles.pipes.estorage.TileEntityPipeEStorage;
 import alec_wam.CrystalMod.util.FluidUtil;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.client.RenderUtil;
 
@@ -94,7 +95,7 @@ public class AttachmentEStorageExport extends AttachmentData {
         for (int i = 0; i < tagList.tagCount(); i++) {
             int slot = tagList.getCompoundTagAt(i).getInteger("Slot");
 
-            ItemStack stack = ItemStack.loadItemStackFromNBT(tagList.getCompoundTagAt(i));
+            ItemStack stack = ItemStackTools.loadFromNBT(tagList.getCompoundTagAt(i));
 
             filters.insertItem(slot, stack, false);
         }
@@ -124,12 +125,12 @@ public class AttachmentEStorageExport extends AttachmentData {
 					for (int i = 0; i < filters.getSlots(); ++i) {
 		                ItemStack slot = filters.getStackInSlot(i);
 	
-		                if (slot != null) {
+		                if (!ItemStackTools.isNullStack(slot)) {
 		                	ItemStack cop = slot.copy();
-		                	cop.stackSize = 1;
+		                	ItemStackTools.setStackSize(cop, 1);
 		                	if(ioType == AttachmentIOType.ITEM && iHandler !=null){
 			                	ItemStack took = net.getItemStorage().removeItem(cop, true);
-			                	if(took !=null){
+			                	if(!ItemStackTools.isNullStack(took)){
 			                		if(ItemUtil.doInsertItem(iHandler, slot, oDir, false) == cop.stackSize){
 			                			ItemUtil.doInsertItem(iHandler, slot, oDir, true);
 			                			net.getItemStorage().removeItem(cop, false);

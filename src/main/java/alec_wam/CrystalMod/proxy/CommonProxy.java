@@ -13,6 +13,7 @@ import alec_wam.CrystalMod.entities.ModEntites;
 import alec_wam.CrystalMod.fluids.ModFluids;
 import alec_wam.CrystalMod.handler.ClientEventHandler;
 import alec_wam.CrystalMod.handler.EventHandler;
+import alec_wam.CrystalMod.handler.KeyHandler;
 import alec_wam.CrystalMod.integration.ModIntegration;
 import alec_wam.CrystalMod.integration.minecraft.ModBanners;
 import alec_wam.CrystalMod.items.ModItems;
@@ -52,6 +53,7 @@ import net.minecraftforge.oredict.ShapedOreRecipe;
 
 public class CommonProxy {
 
+	public KeyHandler keyHandler;
 	public static File modConfigDir;
 	public Configuration mainConfig;
 	

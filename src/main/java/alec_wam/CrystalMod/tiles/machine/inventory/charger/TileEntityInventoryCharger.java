@@ -12,6 +12,7 @@ import alec_wam.CrystalMod.network.IMessageHandler;
 import alec_wam.CrystalMod.network.packets.PacketTileMessage;
 import alec_wam.CrystalMod.tiles.TileEntityMod;
 import alec_wam.CrystalMod.tiles.pipes.item.InventoryWrapper;
+import alec_wam.CrystalMod.util.ItemStackTools;
 
 public abstract class TileEntityInventoryCharger extends TileEntityMod implements ITickable, IMessageHandler {
 
@@ -50,7 +51,7 @@ public abstract class TileEntityInventoryCharger extends TileEntityMod implement
 				for(int i = 0; i < slots.length; i++){
 					int s = slots[i];
 					ItemStack stack = inv.getStackInSlot(s);
-					if(stack !=null){
+					if(ItemStackTools.isValid(stack)){
 						if(canChargeItem(stack)){
 							chargeItem(stack);
 						}

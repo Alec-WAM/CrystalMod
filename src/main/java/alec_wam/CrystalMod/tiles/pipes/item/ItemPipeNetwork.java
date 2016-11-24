@@ -13,6 +13,7 @@ import net.minecraftforge.items.IItemHandler;
 import alec_wam.CrystalMod.tiles.pipes.AbstractPipeNetwork;
 import alec_wam.CrystalMod.tiles.pipes.TileEntityPipe;
 import alec_wam.CrystalMod.tiles.pipes.item.NetworkedInventory.Target;
+import alec_wam.CrystalMod.util.ItemStackTools;
 
 public class ItemPipeNetwork extends AbstractPipeNetwork {
 	final List<NetworkedInventory> inventories = new ArrayList<NetworkedInventory>();
@@ -111,7 +112,7 @@ public class ItemPipeNetwork extends AbstractPipeNetwork {
 	      return item;
 	    }
 
-	    if(item == null) {
+	    if(ItemStackTools.isNullStack(item)) {
 	      return item;
 	    }
 
@@ -125,10 +126,10 @@ public class ItemPipeNetwork extends AbstractPipeNetwork {
 
 	        if(inv.pip.getPos().equals(itemConduit.getPos())) {
 	          int numInserted = inv.insertIntoTargets(item.copy());
-	          if(numInserted >= item.stackSize) {
+	          if(numInserted >= ItemStackTools.getStackSize(item)) {
 	            return null;
 	          }
-	          result.stackSize -= numInserted;
+	          ItemStackTools.incStackSize(result, -numInserted);
 	        }
 	      }
 	      return result;
@@ -146,7 +147,7 @@ public class ItemPipeNetwork extends AbstractPipeNetwork {
 	      if(source.pip.getPos().equals(con.getPos())) {
 	        if(source.sendPriority != null) {
 	          for (Target t : source.sendPriority) {
-	            if(input == null) {
+	            if(ItemStackTools.isNullStack(input)) {
 	              String s = t.inv.getLocalizedInventoryName() + " " + t.inv.location.toString() + " Distance [" + t.distance + "] ";
 	              result.add(s);
 	            }
@@ -162,7 +163,7 @@ public class ItemPipeNetwork extends AbstractPipeNetwork {
 	    List<String> result = new ArrayList<String>();
 	    for (NetworkedInventory inv : inventories) {
 	      if(inv.hasTarget(con, dir)) {
-	        if(input == null) {
+	        if(ItemStackTools.isNullStack(input)) {
 	          result.add(inv.getLocalizedInventoryName() + " " + inv.location.toString());
 	        }
 	      }

@@ -16,6 +16,7 @@ import alec_wam.CrystalMod.tiles.chest.wireless.WirelessChestManager;
 import alec_wam.CrystalMod.tiles.chest.wireless.WirelessChestManager.WirelessInventory;
 import alec_wam.CrystalMod.util.ChatUtil;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.PlayerUtil;
 import alec_wam.CrystalMod.util.ProfileUtil;
@@ -228,14 +229,14 @@ public class EntityWirelessChestMinecart extends EntityMinecartChest implements 
 	@Nullable
     public ItemStack getStackInSlot(int index)
     {
-		if(getInventory() == null)return null;
+		if(getInventory() == null)return ItemStackTools.getEmptyStack();
         return getInventory().getStackInSlot(index);
     }
 	
 	@Nullable
     public ItemStack decrStackSize(int index, int count)
     {
-		if(getInventory() == null)return null;
+		if(getInventory() == null)return ItemStackTools.getEmptyStack();
         return getInventory().extractItem(index, count, false);
     }
 	
@@ -245,12 +246,12 @@ public class EntityWirelessChestMinecart extends EntityMinecartChest implements 
         if (getInventory() != null)
         {
             ItemStack itemstack = getInventory().getStackInSlot(index);
-            getInventory().setStackInSlot(index, null);
+            getInventory().setStackInSlot(index, ItemStackTools.getEmptyStack());
             return itemstack;
         }
         else
         {
-            return null;
+            return ItemStackTools.getEmptyStack();
         }
     }
 	
@@ -284,10 +285,10 @@ public class EntityWirelessChestMinecart extends EntityMinecartChest implements 
         if(net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.event.entity.minecart.MinecartInteractEvent(this, player, stack, hand))) return true;
         
         if(isOwner(player.getUniqueID())){
-        	if(stack !=null && ItemUtil.itemStackMatchesOredict(stack, "gemDiamond")){
+        	if(ItemStackTools.isValid(stack) && ItemUtil.itemStackMatchesOredict(stack, "gemDiamond")){
         		if(!isBoundToPlayer()){
 	        		if (!player.capabilities.isCreativeMode)
-	                	stack.stackSize--;
+	        			ItemStackTools.incStackSize(stack, -1);
 	                setOwner(player.getUniqueID());
 	        		return true;
         		}

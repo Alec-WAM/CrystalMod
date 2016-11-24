@@ -5,6 +5,7 @@ import java.util.List;
 import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.proxy.ClientProxy;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import net.minecraft.block.BlockDispenser;
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.block.material.Material;
@@ -150,7 +151,7 @@ public class ItemEnderChestMinecart extends Item implements ICustomModel
                 worldIn.spawnEntityInWorld(entityminecart);
             }
 
-            --stack.stackSize;
+            ItemStackTools.incStackSize(stack, -1);
             return EnumActionResult.SUCCESS;
         }
     }

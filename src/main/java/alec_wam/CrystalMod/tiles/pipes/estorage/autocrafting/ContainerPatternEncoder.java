@@ -4,6 +4,7 @@ import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.slot.SlotDisabled;
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.slot.SlotOutput;
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.slot.SlotSpecimen;
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.slot.SlotSpecimenLegacy;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ClickType;
@@ -105,11 +106,11 @@ public class ContainerPatternEncoder extends Container {
 
         if (slot instanceof SlotSpecimen) {
             if (((SlotSpecimen) slot).isWithSize()) {
-                if (slot.getStack() != null) {
+                if (!ItemStackTools.isNullStack(slot.getStack())) {
                     if (GuiScreen.isShiftKeyDown()) {
-                        slot.putStack(null);
+                        slot.putStack(ItemStackTools.getEmptyStack());
                     } else {
-                        int amount = slot.getStack().stackSize;
+                        int amount = ItemStackTools.getStackSize(slot.getStack());
 
                         if (clickedButton == 0) {
                             amount--;
@@ -125,37 +126,37 @@ public class ContainerPatternEncoder extends Container {
                             }
                         }
 
-                        slot.getStack().stackSize = amount;
+                        ItemStackTools.setStackSize(slot.getStack(), amount);
                     }
-                } else if (player.inventory.getItemStack() != null) {
-                    int amount = player.inventory.getItemStack().stackSize;
+                } else if (!ItemStackTools.isNullStack(player.inventory.getItemStack())) {
+                    int amount = ItemStackTools.getStackSize(player.inventory.getItemStack());
 
                     if (clickedButton == 1) {
                         amount = 1;
                     }
 
                     ItemStack toPut = player.inventory.getItemStack().copy();
-                    toPut.stackSize = amount;
+                    ItemStackTools.setStackSize(toPut, amount);
 
                     slot.putStack(toPut);
                 }
-            } else if (player.inventory.getItemStack() == null) {
-                slot.putStack(null);
+            } else if (ItemStackTools.isNullStack(player.inventory.getItemStack())) {
+                slot.putStack(ItemStackTools.getEmptyStack());
             } else if (slot.isItemValid(player.inventory.getItemStack())) {
                 slot.putStack(player.inventory.getItemStack().copy());
             }
 
             return player.inventory.getItemStack();
         } else if (slot instanceof SlotSpecimenLegacy) {
-            if (player.inventory.getItemStack() == null) {
-                slot.putStack(null);
+            if (ItemStackTools.isNullStack(player.inventory.getItemStack())) {
+                slot.putStack(ItemStackTools.getEmptyStack());
             } else if (slot.isItemValid(player.inventory.getItemStack())) {
                 slot.putStack(player.inventory.getItemStack().copy());
             }
 
             return player.inventory.getItemStack();
         } else if (slot instanceof SlotDisabled) {
-            return null;
+            return ItemStackTools.getEmptyStack();
         }
 
         return super.slotClick(id, clickedButton, clickType, player);
@@ -176,6 +177,6 @@ public class ContainerPatternEncoder extends Container {
     }
 	
 	public ItemStack transferStackInSlot(EntityPlayer player, int slot){
-		return null;
+		return ItemStackTools.getEmptyStack();
 	}
 }

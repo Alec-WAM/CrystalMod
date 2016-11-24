@@ -23,15 +23,19 @@ public class ExtendedPlayer {
 	@SideOnly(Side.CLIENT)
 	public GuiGuideBase lastOpenBook;
 	
+	private ExtendedPlayerInventory inventory = new ExtendedPlayerInventory();;
+	
 	public ExtendedPlayer() {
 	}
     
 	public NBTTagCompound writeToNBT() {
 		NBTTagCompound properties = new NBTTagCompound();
+		properties.setTag("Inventory", inventory.serializeNBT());
 		return properties;
 	}
 
 	public void readFromNBT(NBTTagCompound properties) {
+		inventory.deserializeNBT(properties.getCompoundTag("Inventory"));
 	}
 
 	/**
@@ -74,4 +78,8 @@ public class ExtendedPlayer {
     public EntityPlayer getPlayer(){
     	return player;
     }
+
+	public ExtendedPlayerInventory getInventory() {
+		return inventory;
+	}
 }

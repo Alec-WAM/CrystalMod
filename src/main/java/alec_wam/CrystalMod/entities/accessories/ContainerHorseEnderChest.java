@@ -2,6 +2,7 @@ package alec_wam.CrystalMod.entities.accessories;
 
 import javax.annotation.Nullable;
 
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ModLogger;
 import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.entity.passive.HorseArmorType;
@@ -74,36 +75,36 @@ public class ContainerHorseEnderChest extends Container
     @Nullable
     public ItemStack transferStackInSlot(EntityPlayer playerIn, int index)
     {
-        ItemStack itemstack = null;
+        ItemStack itemstack = ItemStackTools.getEmptyStack();
         Slot slot = (Slot)this.inventorySlots.get(index);
 
         if (slot != null && slot.getHasStack())
         {
             ItemStack itemstack1 = slot.getStack();
-            itemstack = itemstack1.copy();
+            itemstack = ItemStackTools.safeCopy(itemstack1);
 
             if (index < this.enderchestInventory.getSizeInventory()+1)
             {
                 if (!this.mergeItemStack(itemstack1, enderchestInventory.getSizeInventory()+1, this.inventorySlots.size(), true))
                 {
-                    return null;
+                    return ItemStackTools.getEmptyStack();
                 }
             }
             else if (this.getSlot(0).isItemValid(itemstack1))
             {
                 if (!this.mergeItemStack(itemstack1, 0, 1, false))
                 {
-                    return null;
+                    return ItemStackTools.getEmptyStack();
                 }
             }
             else if (this.enderchestInventory.getSizeInventory() <= 1 || !this.mergeItemStack(itemstack1, 1, this.enderchestInventory.getSizeInventory(), false))
             {
-                return null;
+                return ItemStackTools.getEmptyStack();
             }
 
-            if (itemstack1.stackSize == 0)
+            if (ItemStackTools.isEmpty(itemstack1))
             {
-                slot.putStack((ItemStack)null);
+                slot.putStack(ItemStackTools.getEmptyStack());
             }
             else
             {

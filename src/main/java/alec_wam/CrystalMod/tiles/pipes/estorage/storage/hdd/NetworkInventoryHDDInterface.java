@@ -20,6 +20,7 @@ import alec_wam.CrystalMod.tiles.pipes.estorage.FluidStorage;
 import alec_wam.CrystalMod.tiles.pipes.estorage.FluidStorage.FluidStackData;
 import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage;
 import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage.ItemStackData;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 
 import com.google.common.collect.Lists;
@@ -35,10 +36,10 @@ public class NetworkInventoryHDDInterface implements INetworkInventory {
 	public ItemStackList getItems() {
 		ItemStack hddStack = inter.getStackInSlot(0);
 		ItemStackList list = new ItemStackList();
-		if (hddStack != null && hddStack.getItem() instanceof ItemHDD) {
+		if (!ItemStackTools.isNullStack(hddStack) && hddStack.getItem() instanceof ItemHDD) {
 			for (int i = 0; i < ItemHDD.getItemLimit(hddStack); i++) {
 				ItemStack stack = ItemHDD.getItem(hddStack, i);
-				if (stack != null && stack.stackSize > 0) {
+				if (ItemStackTools.isValid(stack)) {
 					list.add(stack);
 				}
 			}
@@ -50,12 +51,12 @@ public class NetworkInventoryHDDInterface implements INetworkInventory {
 	public ItemStack insertItem(EStorageNetwork network, ItemStack stack, int amount, boolean sim) {
 		ItemStack remaining = ItemHandlerHelper.copyStackWithSize(stack, amount);
 		ItemStack hdd = inter.getStackInSlot(0);
-		if(hdd !=null && hdd.getItem() instanceof IItemProvider){
+		if(!ItemStackTools.isNullStack(hdd) && hdd.getItem() instanceof IItemProvider){
 			IItemProvider provider = (IItemProvider)hdd.getItem();
-			final int preSize = remaining.stackSize;
-			remaining = provider.insert(hdd, remaining, remaining.stackSize, sim);
+			final int preSize = ItemStackTools.getStackSize(remaining);
+			remaining = provider.insert(hdd, remaining, ItemStackTools.getStackSize(remaining), sim);
 			
-			if(!sim && (remaining == null || remaining.stackSize !=preSize)){
+			if(!sim && (ItemStackTools.getStackSize(remaining) !=preSize)){
 				inter.markDirty();
 			}
 		}
@@ -64,12 +65,12 @@ public class NetworkInventoryHDDInterface implements INetworkInventory {
 
 	@Override
 	public ItemStack extractItem(EStorageNetwork network, ItemStack stack, int amount, ExtractFilter filter, boolean sim) {
-		ItemStack received = null;
+		ItemStack received = ItemStackTools.getEmptyStack();
 		ItemStack hdd = inter.getStackInSlot(0);
-		if (hdd != null	&& hdd.getItem() instanceof IItemProvider) {
+		if (!ItemStackTools.isNullStack(hdd) && hdd.getItem() instanceof IItemProvider) {
 			IItemProvider provider = ((IItemProvider)hdd.getItem());
 			ItemStack took = provider.extract(hdd, stack, amount, filter, sim);
-			if(took != null){
+			if(!ItemStackTools.isNullStack(took)){
 				received = took;
 				
 				if(!sim){
@@ -81,11 +82,11 @@ public class NetworkInventoryHDDInterface implements INetworkInventory {
 	}
 	
 	public static int getIndex(ItemStack hdd, ItemStack stack, ExtractFilter filter){
-		if(hdd !=null){
+		if(!ItemStackTools.isNullStack(hdd)){
 			int itemCount = ItemHDD.getItemLimit(hdd);
 			for(int i = 0; i < itemCount; i++){
 				ItemStack foundStack = ItemHDD.getItem(hdd, i);
-				if(foundStack !=null && filter.canExtract(stack, foundStack)){
+				if(!ItemStackTools.isNullStack(foundStack) && filter.canExtract(stack, foundStack)){
 					return i;
 				}
 			}

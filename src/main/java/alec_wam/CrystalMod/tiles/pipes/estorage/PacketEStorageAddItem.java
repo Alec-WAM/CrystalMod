@@ -11,6 +11,7 @@ import net.minecraft.network.NetHandlerPlayServer;
 import alec_wam.CrystalMod.api.estorage.INetworkContainer;
 import alec_wam.CrystalMod.network.AbstractPacketThreadsafe;
 import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage.ItemStackData;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ModLogger;
 
 public class PacketEStorageAddItem extends AbstractPacketThreadsafe {
@@ -96,7 +97,7 @@ public class PacketEStorageAddItem extends AbstractPacketThreadsafe {
 					ItemStackData data = EStorageNetwork.decompressItem(compressed);
 					if(data !=null && data.stack !=null){
 						ItemStack full = data.stack.copy();
-						full.stackSize = full.getMaxStackSize();
+						ItemStackTools.setStackSize(full, full.getMaxStackSize());
 						netHandler.playerEntity.inventory.setItemStack(full);
 						netHandler.playerEntity.updateHeldItem();
 					}
@@ -111,13 +112,13 @@ public class PacketEStorageAddItem extends AbstractPacketThreadsafe {
 				INetworkContainer pan = ((INetworkContainer)con);
 				try{
 					ItemStackData data = EStorageNetwork.decompressItem(compressed);
-					if(pan.getNetwork() !=null && data.stack !=null){
+					if(pan.getNetwork() !=null && !ItemStackTools.isNullStack(data.stack)){
 						ItemStack copy = data.stack.copy();
-						copy.stackSize = amount;
+						ItemStackTools.setStackSize(copy, amount);
 						final int old = amount;
 						ItemStack remain = pan.getNetwork().getItemStorage().addItem(copy, false);
 						Slot pSlot = con.getSlot(slot);
-						int decAmt = remain == null ? old : (old-remain.stackSize);
+						int decAmt = ItemStackTools.isNullStack(remain) ? old : (old-ItemStackTools.getStackSize(remain));
 						pSlot.decrStackSize(decAmt);
 						if(decAmt > 0){
 							pSlot.onPickupFromSlot(netHandler.playerEntity, data.stack);
@@ -135,7 +136,7 @@ public class PacketEStorageAddItem extends AbstractPacketThreadsafe {
 				INetworkContainer pan = ((INetworkContainer)con);
 				try{
 					ItemStackData data = EStorageNetwork.decompressItem(compressed);
-					if(pan.getNetwork() !=null && data.stack !=null){
+					if(pan.getNetwork() !=null && !ItemStackTools.isNullStack(data.stack)){
 						if(pan.getNetwork().craftingController !=null){
 							pan.getNetwork().craftingController.handleCraftingRequest(data, Math.max(1, amount));
 						}else {

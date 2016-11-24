@@ -23,6 +23,7 @@ import alec_wam.CrystalMod.tiles.pipes.estorage.FluidStorage.FluidStackData;
 import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage;
 import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage.ItemStackData;
 import alec_wam.CrystalMod.util.FluidUtil;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.ModLogger;
 
@@ -52,7 +53,7 @@ public class NetworkInventoryExternal implements INetworkInventory {
 		if (handler !=null) {
 			for (int i = 0; i < handler.getSlots(); i++) {
 				ItemStack stack = getInventory().getStackInSlot(i);
-				if (stack != null && stack.stackSize > 0) {
+				if (ItemStackTools.isValid(stack)) {
 					list.add(stack);
 				}
 			}
@@ -75,22 +76,22 @@ public class NetworkInventoryExternal implements INetworkInventory {
 			final int needed = amount;
 			int remaining = amount;
 
-	        ItemStack received = null;
+	        ItemStack received = ItemStackTools.getEmptyStack();
 
 	        for (int i = 0; i < handler.getSlots(); ++i) {
 	            ItemStack slot = handler.getStackInSlot(i);
 
-	            if (slot != null && filter.canExtract(stack, slot)) {
+	            if (!ItemStackTools.isNullStack(slot) && filter.canExtract(stack, slot)) {
 	                ItemStack got = handler.extractItem(i, remaining, sim);
 
-	                if (got != null) {
-	                    if (received == null) {
+	                if (!ItemStackTools.isNullStack(got)) {
+	                    if (ItemStackTools.isNullStack(received)) {
 	                        received = got;
 	                    } else {
-	                        received.stackSize += got.stackSize;
+	                    	ItemStackTools.incStackSize(received, ItemStackTools.getStackSize(got));
 	                    }
 
-	                    remaining -= got.stackSize;
+	                    remaining -= ItemStackTools.getStackSize(got);
 	                    if (remaining == 0) {
 	                        break;
 	                    }
@@ -99,7 +100,7 @@ public class NetworkInventoryExternal implements INetworkInventory {
 	        }
 	        return received;
 		}
-		return null;
+		return ItemStackTools.getEmptyStack();
 	}
 
 	@Override

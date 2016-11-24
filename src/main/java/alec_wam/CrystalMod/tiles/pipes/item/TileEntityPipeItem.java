@@ -26,6 +26,7 @@ import alec_wam.CrystalMod.tiles.pipes.TileEntityPipe;
 import alec_wam.CrystalMod.tiles.pipes.item.filters.CameraFilterInventory;
 import alec_wam.CrystalMod.tiles.pipes.item.filters.ItemPipeFilter.FilterType;
 import alec_wam.CrystalMod.tiles.pipes.types.IPipeType;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 
 public class TileEntityPipeItem extends TileEntityPipe implements IInventoryChangedListener {
@@ -118,7 +119,7 @@ public class TileEntityPipeItem extends TileEntityPipe implements IInventoryChan
 	public void scanInventory(EnumFacing dir){
 		if(dir == null)return;
 		ItemStack filter = this.getFilter(dir).getStackInSlot(0);
-		if(filter !=null){
+		if(!ItemStackTools.isNullStack(filter)){
 			if(filter.getMetadata() == FilterType.CAMERA.ordinal()){
 				if(this.network instanceof ItemPipeNetwork){
 					ItemPipeNetwork net = (ItemPipeNetwork)network;
@@ -131,7 +132,7 @@ public class TileEntityPipeItem extends TileEntityPipe implements IInventoryChan
 						if(slots > 0){
 							for(int slot = 0; slot < slots; slot++){
 								ItemStack stack = sInv.getStackInSlot(slot);
-								if(stack !=null){
+								if(!ItemStackTools.isNullStack(stack)){
 									filterInv.addItem(stack);
 								}
 							}
@@ -145,7 +146,7 @@ public class TileEntityPipeItem extends TileEntityPipe implements IInventoryChan
 	public boolean passesFilter(ItemStack item, EnumFacing dir){
 		if(dir == null)return false;
 		ItemStack filter = getFilter(dir).getStackInSlot(0);
-	    if(filter !=null){
+	    if(!ItemStackTools.isNullStack(filter)){
 	    	return ItemUtil.passesFilter(item, filter);
 	    }
 	    return true;
@@ -319,7 +320,7 @@ public class TileEntityPipeItem extends TileEntityPipe implements IInventoryChan
 			IInventory inv = getFilter(dir);
 			for(int s = 0 ; s < inv.getSizeInventory(); s++){
 				ItemStack stack = inv.getStackInSlot(s);
-				if(stack !=null){
+				if(!ItemStackTools.isNullStack(stack)){
 					list.add(stack);
 				}
 			}

@@ -80,7 +80,7 @@ public final class ItemNBTHelper {
 	// GETTERS ///////////////////////////////////////////////////////////////////
 
 	public static boolean verifyExistance(ItemStack stack, String tag) {
-		if(stack == null)return false;
+		if(ItemStackTools.isNullStack(stack))return false;
 		NBTTagCompound compound = stack.getTagCompound();
 		if (compound == null)
 			return false;

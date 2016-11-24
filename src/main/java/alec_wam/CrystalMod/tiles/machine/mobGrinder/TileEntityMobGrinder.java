@@ -45,6 +45,7 @@ import alec_wam.CrystalMod.network.IMessageHandler;
 import alec_wam.CrystalMod.network.packets.PacketTileMessage;
 import alec_wam.CrystalMod.tiles.TileEntityMod;
 import alec_wam.CrystalMod.tiles.machine.IMachineTile;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.ModLogger;
 import alec_wam.CrystalMod.world.DropCapture;
@@ -246,17 +247,17 @@ public class TileEntityMobGrinder extends TileEntityMod implements IMessageHandl
 	    stack = item.getEntityItem();
 	    if(stack==null){continue;}
 	    int added = ItemUtil.doInsertItem(inv, stack, face);
-	    item.getEntityItem().stackSize-=added;
-	    if(item.getEntityItem().stackSize <= 0){
+	    ItemStackTools.incStackSize(stack, -added);
+	    if(ItemStackTools.isEmpty(stack)){
 	    	item.setDead();
 	    }
 	  }
 	  final InventoryPlayer inventory = this.fakePlayer.inventory;
       for (int i = 0; i < inventory.getSizeInventory(); ++i) {
           final ItemStack stack2 = inventory.getStackInSlot(i);
-          if (stack2 != null && stack2.stackSize > 0) {
+          if (ItemStackTools.isValid(stack2)) {
         	  int added = ItemUtil.doInsertItem(inv, stack2, face);
-        	  stack2.stackSize-=added;
+        	  ItemStackTools.incStackSize(stack2, -added);
           }
       }
       this.fakePlayer.inventory.clear();

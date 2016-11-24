@@ -1,5 +1,6 @@
 package alec_wam.CrystalMod.tiles.machine.crafting.furnace;
 
+import alec_wam.CrystalMod.util.ItemStackTools;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -43,7 +44,7 @@ public class ContainerCrystalFurnace extends Container
     @Override
     public ItemStack transferStackInSlot(EntityPlayer player, int i)
     {
-    	ItemStack itemstack = null;
+    	ItemStack itemstack = ItemStackTools.getEmptyStack();
     	int par2 = i;
 		Slot slot = (Slot)this.inventorySlots.get(par2);
 
@@ -57,7 +58,7 @@ public class ContainerCrystalFurnace extends Container
 			{
 				if (!this.mergeItemStack(itemstack1, 0, 35, false))
 				{
-					return null;
+					return ItemStackTools.getEmptyStack();
 				}
 
 				slot.onSlotChange(itemstack1, itemstack);
@@ -68,39 +69,39 @@ public class ContainerCrystalFurnace extends Container
 				{
 					if (!this.mergeItemStack(itemstack1, 36, 37, false))
 					{
-						return null;
+						return ItemStackTools.getEmptyStack();
 					}
 				}
 				else if (par2 >= 0 && par2 < 27)
 				{
 					if (!this.mergeItemStack(itemstack1, 27, 36, false))
 					{
-						return null;
+						return ItemStackTools.getEmptyStack();
 					}
 				}
 				else if (par2 >= 27 && par2 < 36 && !this.mergeItemStack(itemstack1, 0, 27, false))
 				{
-					return null;
+					return ItemStackTools.getEmptyStack();
 				}
 			}
 			/*input*/
 			else if (!this.mergeItemStack(itemstack1, 0, 36, false))
 			{
-				return null;
+				return ItemStackTools.getEmptyStack();
 			}
 
-			if (itemstack1.stackSize == 0)
+			if (ItemStackTools.isEmpty(itemstack1))
 			{
-				slot.putStack((ItemStack)null);
+				slot.putStack(ItemStackTools.getEmptyStack());
 			}
 			else
 			{
 				slot.onSlotChanged();
 			}
 
-			if (itemstack1.stackSize == itemstack.stackSize)
+			if (ItemStackTools.getStackSize(itemstack1) == ItemStackTools.getStackSize(itemstack))
 			{
-				return null;
+				return ItemStackTools.getEmptyStack();
 			}
 
 			slot.onPickupFromSlot(player, itemstack1);

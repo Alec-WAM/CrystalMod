@@ -3,6 +3,7 @@ package alec_wam.CrystalMod.tiles.machine.enderbuffer.gui;
 import alec_wam.CrystalMod.tiles.machine.enderbuffer.EnderBufferManager;
 import alec_wam.CrystalMod.tiles.machine.enderbuffer.IEnderBufferList;
 import alec_wam.CrystalMod.tiles.machine.enderbuffer.TileEntityEnderBuffer;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
@@ -89,17 +90,17 @@ public class ContainerEnderBuffer extends Container {
         {
             if (!this.mergeItemStack(stack, 2 * 5, this.inventorySlots.size(), true))
             {
-                return null;
+                return ItemStackTools.getEmptyStack();
             }
         }
         else if (!this.mergeItemStack(stack, 0, 2 * 5, false))
         {
-            return null;
+            return ItemStackTools.getEmptyStack();
         }
 
-        if (stack.stackSize == 0)
+        if (ItemStackTools.isEmpty(stack))
         {
-            slot.putStack(null);
+            slot.putStack(ItemStackTools.getEmptyStack());
         }
         else
         {

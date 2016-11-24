@@ -4,6 +4,7 @@ import java.awt.Color;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
@@ -24,6 +25,7 @@ import alec_wam.CrystalMod.tiles.pipes.item.filters.CameraFilterInventory;
 import alec_wam.CrystalMod.tiles.pipes.item.filters.FilterInventory;
 import alec_wam.CrystalMod.tiles.pipes.item.filters.ItemPipeFilter.FilterType;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ModLogger;
 
 public class GuiItemPipe extends GuiContainer {
@@ -59,7 +61,7 @@ public class GuiItemPipe extends GuiContainer {
 	
 	public void actionPerformed(GuiButton button){
 		if(button.id == 0){
-			pipe.setConnectionMode(dir, !Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) ? pipe.getNextConnectionMode(dir) : pipe.getPreviousConnectionMode(dir));
+			pipe.setConnectionMode(dir, !GuiScreen.isShiftKeyDown() ? pipe.getNextConnectionMode(dir) : pipe.getPreviousConnectionMode(dir));
 			sendPipeMessage("CMode", pipe.getConnectionMode(dir).name());
 			refreshButtons();
 			return;
@@ -92,7 +94,7 @@ public class GuiItemPipe extends GuiContainer {
 				return;
 			}
 			if(button.id == 5){
-				if(this.pipe.getFilter(dir).getStackInSlot(0) !=null){
+				if(!ItemStackTools.isNullStack(this.pipe.getFilter(dir).getStackInSlot(0))){
 					filter = true;
 					this.container.setGhostVisible(filter);
 					refreshButtons();
@@ -124,7 +126,7 @@ public class GuiItemPipe extends GuiContainer {
 		}
 		if(filter){
 			
-			boolean safe = pipe.getFilter(dir).getStackInSlot(0) !=null;
+			boolean safe = !ItemStackTools.isNullStack(pipe.getFilter(dir).getStackInSlot(0));
 			if(safe){
 				ItemStack filterStack = pipe.getFilter(dir).getStackInSlot(0);
 				if(filterStack.getMetadata() == FilterType.NORMAL.ordinal()){
@@ -253,7 +255,7 @@ public class GuiItemPipe extends GuiContainer {
 			if(!filter)this.buttonList.add(new GuiButton(5, sx+8, sy+35, 12, 12, "F"));
 			if(filter)this.buttonList.add(new GuiButton(10, sx+8+130, sy+5, 12, 12, "X"));
 			if(filter == true){
-				boolean safe = pipe.getFilter(dir).getStackInSlot(0) !=null;
+				boolean safe = !ItemStackTools.isNullStack(pipe.getFilter(dir).getStackInSlot(0));
 				if(safe){
 					ItemStack filterStack = pipe.getFilter(dir).getStackInSlot(0);
 					if(filterStack.getMetadata() == FilterType.NORMAL.ordinal()){
@@ -299,22 +301,22 @@ public class GuiItemPipe extends GuiContainer {
 				this.fontRendererObj.drawString("Round Robin", (29), y, Color.CYAN.getRGB());
 			}
 	    }else{
-	    	boolean safe = pipe.getFilter(dir).getStackInSlot(0) !=null;
+	    	boolean safe = !ItemStackTools.isNullStack(pipe.getFilter(dir).getStackInSlot(0));
 			if(safe){
 				ItemStack filterStack = pipe.getFilter(dir).getStackInSlot(0);
 				if(filterStack.getMetadata() == FilterType.MOD.ordinal()){
 					FilterInventory inv = new FilterInventory(filterStack, 3, "");
-					if(inv.getStackInSlot(0) !=null){
+					if(!ItemStackTools.isNullStack(inv.getStackInSlot(0))){
 						ResourceLocation resourceInput = Item.REGISTRY.getNameForObject(inv.getStackInSlot(0).getItem());
 		    	        String modIDInput = resourceInput.getResourceDomain();
 						this.fontRendererObj.drawString("Mod: "+modIDInput, (45+18+5), 14+5, 0);
 					}
-					if(inv.getStackInSlot(1) !=null){
+					if(!ItemStackTools.isNullStack(inv.getStackInSlot(1))){
 						ResourceLocation resourceInput = Item.REGISTRY.getNameForObject(inv.getStackInSlot(1).getItem());
 		    	        String modIDInput = resourceInput.getResourceDomain();
 						this.fontRendererObj.drawString("Mod: "+modIDInput, (45+18+5), 14+5+18, 0);
 					}
-					if(inv.getStackInSlot(2) !=null){
+					if(!ItemStackTools.isNullStack(inv.getStackInSlot(2))){
 						ResourceLocation resourceInput = Item.REGISTRY.getNameForObject(inv.getStackInSlot(2).getItem());
 		    	        String modIDInput = resourceInput.getResourceDomain();
 						this.fontRendererObj.drawString("Mod: "+modIDInput, (45+18+5), 14+5+36, 0);
@@ -329,7 +331,7 @@ public class GuiItemPipe extends GuiContainer {
 					
 					for(int s = row*6; (s < inv.getSizeInventory()); s++){
 						ItemStack dis = inv.getStackInSlot(s);
-						if(dis !=null){
+						if(!ItemStackTools.isNullStack(dis)){
 							
 							GlStateManager.pushMatrix();
 				            RenderHelper.enableGUIStandardItemLighting();
@@ -365,7 +367,7 @@ public class GuiItemPipe extends GuiContainer {
 					stacksRendered = 0;
 					for(int s = row*6; (s < inv.getSizeInventory()); s++){
 						ItemStack dis = inv.getStackInSlot(s);
-						if(dis !=null){
+						if(!ItemStackTools.isNullStack(dis)){
 							
 							GlStateManager.pushMatrix();
 				            RenderHelper.enableGUIStandardItemLighting();
@@ -408,7 +410,7 @@ public class GuiItemPipe extends GuiContainer {
 	    int sy = (height - ySize) / 2;
 
 	    String type = "";
-	    if(filter && pipe.getFilter(dir).getStackInSlot(0) !=null){
+	    if(filter && !ItemStackTools.isNullStack(pipe.getFilter(dir).getStackInSlot(0))){
 	    	ItemStack filterStack = pipe.getFilter(dir).getStackInSlot(0);
 	    	if(filterStack.getMetadata() == FilterType.NORMAL.ordinal()){
 	    		type = "_filter";

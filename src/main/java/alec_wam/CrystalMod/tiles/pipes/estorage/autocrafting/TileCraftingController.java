@@ -33,6 +33,7 @@ import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.task.CraftingProces
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.task.CraftingProcessExternal;
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.task.CraftingProcessNormal;
 import alec_wam.CrystalMod.util.BlockUtil;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.ModLogger;
 
@@ -263,7 +264,7 @@ public class TileCraftingController extends TileEntityMod implements INetworkTil
 	public static ICraftingTask readCraftingTask(EStorageNetwork network, NBTTagCompound tag) {
         ItemStack stack = ItemStack.loadItemStackFromNBT(tag.getCompoundTag(BasicCraftingTask.NBT_PATTERN));
 
-        if (stack != null && stack.getItem() instanceof ItemPattern) {
+        if (!ItemStackTools.isNullStack(stack) && stack.getItem() instanceof ItemPattern) {
         	NBTTagCompound posTag = tag.getCompoundTag(BasicCraftingTask.NBT_CRAFTER);
         	World world = FMLCommonHandler.instance().getMinecraftServerInstance().worldServerForDimension(posTag.getInteger("Dim"));
             TileEntity container = world.getTileEntity(BlockUtil.loadBlockPos(posTag));
@@ -308,9 +309,9 @@ public class TileCraftingController extends TileEntityMod implements INetworkTil
             Deque<ItemStack> toInsert = new ArrayDeque<ItemStack>();
 
             for (int i = 0; i < toInsertList.tagCount(); ++i) {
-                ItemStack insertStack = ItemStack.loadItemStackFromNBT(toInsertList.getCompoundTagAt(i));
+                ItemStack insertStack = ItemStackTools.loadFromNBT(toInsertList.getCompoundTagAt(i));
 
-                if (insertStack != null) {
+                if (!ItemStackTools.isNullStack(insertStack)) {
                     toInsert.add(insertStack);
                 }
             }

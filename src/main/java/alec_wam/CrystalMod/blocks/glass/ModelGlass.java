@@ -9,6 +9,7 @@ import org.lwjgl.util.vector.Vector3f;
 
 import alec_wam.CrystalMod.blocks.glass.BlockCrystalGlass.GlassType;
 import alec_wam.CrystalMod.client.model.dynamic.DynamicItemAndBlockModel;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.client.CustomModelUtil;
 import alec_wam.CrystalMod.util.client.RenderUtil;
 
@@ -48,7 +49,7 @@ public class ModelGlass extends DynamicItemAndBlockModel {
 	public ModelGlass(GlassBlockState state){
 		super(false, false);
 		this.state = state;
-		this.stack = null;
+		this.stack = ItemStackTools.getEmptyStack();
 	}
 
 	public List<BakedQuad> getQuads(@Nullable IBlockState state, @Nullable EnumFacing side, long rand){
@@ -62,7 +63,7 @@ public class ModelGlass extends DynamicItemAndBlockModel {
 		boolean renderUp = true, renderD = true, renderN = true, renderS = true, renderW = true, renderE = true;
 		ModelRotation rot = ModelRotation.X0_Y0;
 		GlassType type = GlassType.BLUE;
-		if(stack !=null){
+		if(!ItemStackTools.isNullStack(stack)){
 			type = GlassType.values()[stack.getMetadata() % (GlassType.values().length)];
 		}else if(state !=null){
 			type = state.getValue(BlockCrystalGlass.TYPE);

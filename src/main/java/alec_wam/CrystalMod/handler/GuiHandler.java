@@ -1,8 +1,10 @@
 package alec_wam.CrystalMod.handler;
 
 import alec_wam.CrystalMod.asm.ObfuscatedNames;
+import alec_wam.CrystalMod.capability.ContainerExtendedInventory;
 import alec_wam.CrystalMod.capability.ExtendedPlayer;
 import alec_wam.CrystalMod.capability.ExtendedPlayerProvider;
+import alec_wam.CrystalMod.capability.GuiExtendedInventory;
 import alec_wam.CrystalMod.entities.accessories.ContainerHorseEnderChest;
 import alec_wam.CrystalMod.entities.accessories.GuiHorseEnderChest;
 import alec_wam.CrystalMod.entities.accessories.HorseAccessories;
@@ -113,6 +115,7 @@ import alec_wam.CrystalMod.tiles.weather.TileEntityWeather;
 import alec_wam.CrystalMod.tiles.workbench.ContainerCrystalWorkbench;
 import alec_wam.CrystalMod.tiles.workbench.GuiCrystalWorkbench;
 import alec_wam.CrystalMod.tiles.workbench.TileEntityCrystalWorkbench;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ReflectionUtils;
 import net.minecraft.client.gui.inventory.GuiChest;
 import net.minecraft.entity.Entity;
@@ -138,11 +141,15 @@ public class GuiHandler implements IGuiHandler {
 	public static final int GUI_ID_ENTITY = 5;
 	public static final int GUI_ID_GUIDE = 6;
 	public static final int GUI_ID_BACKPACK = 7;
+	public static final int GUI_ID_EXTENDED = 8;
 
     
     @Override
     public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z)
     {
+    	if(ID == GUI_ID_EXTENDED){
+    		return new GuiExtendedInventory(player);
+    	}
     	if(ID == GUI_ID_ENTITY){
     		Entity entity = world == null ? null : world.getEntityByID(x);
     		if(entity !=null){
@@ -187,7 +194,7 @@ public class GuiHandler implements IGuiHandler {
     	if(ID == GUI_ID_BACKPACK){
     		OpenType type = OpenType.values()[x];
     		ItemStack backpack = BackpackUtil.getItemStack(player.inventory, type);
-    		if(backpack !=null && backpack.getItem() instanceof ItemBackpackBase){
+    		if(ItemStackTools.isValid(backpack) && backpack.getItem() instanceof ItemBackpackBase){
     			ItemBackpackBase item = (ItemBackpackBase)backpack.getItem();
     			return item.getBackpack().getClientGuiElement(player, world, type);
     		}
@@ -305,6 +312,9 @@ public class GuiHandler implements IGuiHandler {
     @Override
     public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z)
     {
+    	if(ID == GUI_ID_EXTENDED){
+    		return new ContainerExtendedInventory(player.inventory, !world.isRemote, player);
+    	}
     	if(ID == GUI_ID_ENTITY){
     		Entity entity = world == null ? null : world.getEntityByID(x);
     		if(entity !=null){
@@ -335,7 +345,7 @@ public class GuiHandler implements IGuiHandler {
     	if(ID == GUI_ID_BACKPACK){
     		OpenType type = OpenType.values()[x];
     		ItemStack backpack = BackpackUtil.getItemStack(player.inventory, type);
-    		if(backpack !=null && backpack.getItem() instanceof ItemBackpackBase){
+    		if(ItemStackTools.isValid(backpack) && backpack.getItem() instanceof ItemBackpackBase){
     			ItemBackpackBase item = (ItemBackpackBase)backpack.getItem();
     			return item.getBackpack().getServerGuiElement(player, world, type);
     		}
@@ -343,7 +353,7 @@ public class GuiHandler implements IGuiHandler {
     	if(ID == GUI_ID_ITEM){
     		if(y >=0 && y < player.inventory.getSizeInventory()){
     			ItemStack held = player.inventory.getStackInSlot(y);
-    			if(held !=null && held.getItem() instanceof ItemBackpack){
+    			if(ItemStackTools.isValid(held) && held.getItem() instanceof ItemBackpack){
     				if(x == 1 && BackpackUtils.hasCraftingUpgrade(held)){
     					return new ContainerBackpackCrafting(player, held);
     				}

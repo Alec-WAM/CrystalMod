@@ -9,6 +9,7 @@ import java.util.Map;
 import javax.annotation.Nullable;
 
 import alec_wam.CrystalMod.tiles.pipes.ConnectionMode;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.Lang;
 import alec_wam.CrystalMod.util.ModLogger;
@@ -110,14 +111,8 @@ public class NetworkedInventory {
 	  if(numSlots < 1) {
 		  return false;
 	  }
-    
-	  /*if(inventory instanceof InvWrapper){
-		  InvWrapper wrapper = (InvWrapper)inventory;
-		  ModLogger.info("INV2 "+ location + " " + wrapper.getInv());
-	  }*/
-	  //ModLogger.info("INV2 "+ location + " " + inventory);
 	  
-	  ItemStack extractItem = null;
+	  ItemStack extractItem = ItemStackTools.getEmptyStack();
 	  int maxExtracted = pip.getMaximumExtracted(pipDir);
 
 	  int slot = -1;
@@ -127,7 +122,7 @@ public class NetworkedInventory {
 		  ItemStack item = inventory.getStackInSlot(slot);
 		  if(canExtractItem(item)) {
 			  extractItem = item.copy();        
-			  if (inventory.extractItem(slot, extractItem.stackSize, true) != null) {
+			  if (!ItemStackTools.isNullStack(inventory.extractItem(slot, extractItem.stackSize, true))) {
 				  if(doTransfer(extractItem, slot, maxExtracted)) {
 					  setNextStartingSlot(slot);
 					  return true;
@@ -139,18 +134,18 @@ public class NetworkedInventory {
   }
 
   private boolean canExtractItem(ItemStack itemStack) {
-    if(itemStack == null) {
+    if(ItemStackTools.isNullStack(itemStack)) {
       return false;
     }
     return pip.passesFilter(itemStack, pipDir);
   }
 
   private boolean doTransfer(ItemStack extractedItem, int slot, int maxExtract) {
-	  if(extractedItem == null || extractedItem.getItem() == null) {
+	  if(ItemStackTools.isNullStack(extractedItem) || extractedItem.getItem() == null) {
 		  return false;
 	  }
 	  ItemStack toExtract = extractedItem.copy();
-	  toExtract.stackSize = Math.min(maxExtract, toExtract.stackSize);
+	  ItemStackTools.setStackSize(toExtract, Math.min(maxExtract, ItemStackTools.getStackSize(toExtract)));
 	  int numInserted = insertIntoTargets(toExtract);
 	  
 	  if(numInserted <= 0) {
@@ -164,11 +159,11 @@ public class NetworkedInventory {
 	  IItemHandler inventory = getInventory();
 	  if (inventory != null) {
 		  ItemStack curStack = inventory.getStackInSlot(slot);
-		  if (curStack != null) {
+		  if (!ItemStackTools.isNullStack(curStack)) {
 			  ItemStack extracted = inventory.extractItem(slot, numInserted, false);
-			  if (extracted == null || extracted.stackSize != numInserted) {
+			  if (ItemStackTools.getStackSize(extracted) != numInserted) {
 				  ModLogger.warning("NetworkedInventory.itemExtracted: Inserted " + numInserted + " " + curStack.getDisplayName() + " but only removed "
-						  + (extracted == null ? "null" : extracted.stackSize));
+						  + (ItemStackTools.isNullStack(extracted) ? "null" : ItemStackTools.getStackSize(extracted)));
 			  }
 		  }
 	  }
@@ -177,11 +172,11 @@ public class NetworkedInventory {
   }
 
   int insertIntoTargets(ItemStack toExtract) {
-    if(toExtract == null) {
+    if(ItemStackTools.isNullStack(toExtract)) {
       return 0;
     }
 
-    int totalToInsert = toExtract.stackSize;
+    int totalToInsert = ItemStackTools.getStackSize(toExtract);
     int leftToInsert = totalToInsert;
     boolean matchedStickyInput = false;
 
@@ -196,8 +191,8 @@ public class NetworkedInventory {
         int inserted = target.inv.insertItem(toExtract);
         //ModLogger.info("INV8 "+ location + " "+target.inv.location+ " "+inserted);
         if(inserted > 0) {
-          toExtract.stackSize -= inserted;
-          leftToInsert -= inserted;
+        	ItemStackTools.incStackSize(toExtract, -inserted);
+        	leftToInsert -= inserted;
         }
         if(leftToInsert <= 0) {
           return totalToInsert;
@@ -215,7 +210,7 @@ public class NetworkedInventory {
   }
 
   private int insertItem(ItemStack item) {
-    if(!canInsert() || item == null) {
+    if(!canInsert() || ItemStackTools.isNullStack(item)) {
       return 0;
     }
     

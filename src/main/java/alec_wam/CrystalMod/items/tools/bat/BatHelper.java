@@ -49,6 +49,7 @@ import alec_wam.CrystalMod.api.tools.UpgradeData;
 import alec_wam.CrystalMod.util.ChatUtil;
 import alec_wam.CrystalMod.util.EntityUtil;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.Lang;
 import alec_wam.CrystalMod.util.ModLogger;
 import alec_wam.CrystalMod.util.client.RenderUtil;
@@ -213,7 +214,7 @@ public class BatHelper {
 	}
 	
 	public static NBTTagCompound getBatData(ItemStack stack){
-		if(stack == null || !stack.hasTagCompound())return new NBTTagCompound();
+		if(ItemStackTools.isNullStack(stack) || !stack.hasTagCompound())return new NBTTagCompound();
     	NBTTagCompound batTags = stack.getTagCompound().getCompoundTag("BatData");
         return batTags;
 	}
@@ -673,7 +674,7 @@ public class BatHelper {
 		List<IBatUpgrade> upgrades = Lists.newArrayList();
 		ItemStackList list = new ItemStackList();
 		for(ItemStack stack : items){
-			if(stack == null)continue;
+			if(ItemStackTools.isNullStack(stack))continue;
 			list.add(stack);
 		}
 		for(ItemStack stack : list.getStacks()){

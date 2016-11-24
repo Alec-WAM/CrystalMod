@@ -7,6 +7,7 @@ import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.proxy.ClientProxy;
 import alec_wam.CrystalMod.tiles.chest.wireless.WirelessChestHelper;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.ProfileUtil;
 import alec_wam.CrystalMod.util.UUIDUtils;
@@ -181,7 +182,7 @@ public class ItemWirelessChestMinecart extends Item implements ICustomModel
                 worldIn.spawnEntityInWorld(entityminecart);
             }
 
-            --stack.stackSize;
+            ItemStackTools.incStackSize(stack, -1);
             return EnumActionResult.SUCCESS;
         }
     }

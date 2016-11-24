@@ -1,6 +1,7 @@
 package alec_wam.CrystalMod.tiles.pipes.estorage.storage.hdd.array;
 
 import alec_wam.CrystalMod.tiles.pipes.estorage.storage.hdd.ItemHDD;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -17,7 +18,7 @@ public class ContainerHDDArray extends Container {
 				this.addSlotToContainer(new Slot(array, j+(i*2), 71+(j*18), 7+(i*18)){
 					public boolean isItemValid(ItemStack stack)
 				    {
-				        return stack !=null && stack.getItem() instanceof ItemHDD;
+				        return !ItemStackTools.isNullStack(stack) && stack.getItem() instanceof ItemHDD;
 				    }
 				});
             }
@@ -44,7 +45,7 @@ public class ContainerHDDArray extends Container {
 	
 	public ItemStack transferStackInSlot(EntityPlayer playerIn, int index)
     {
-        ItemStack itemstack = null;
+        ItemStack itemstack = ItemStackTools.getEmptyStack();
         Slot slot = (Slot)this.inventorySlots.get(index);
 
         if (slot != null && slot.getHasStack())
@@ -56,29 +57,29 @@ public class ContainerHDDArray extends Container {
             {
                 if (!this.mergeItemStack(itemstack1, 8, inventorySlots.size(), true))
                 {
-                    return null;
+                    return ItemStackTools.getEmptyStack();
                 }
             }
             else if (itemstack1 !=null && itemstack1.getItem() instanceof ItemHDD)
             {
             	if(!this.mergeItemStack(itemstack1, 0, 8, false))
-                return null;
+                return ItemStackTools.getEmptyStack();
             	
             	slot.onSlotChange(itemstack1, itemstack);
             }
 
-            if (itemstack1.stackSize == 0)
+            if (ItemStackTools.isEmpty(itemstack1))
             {
-                slot.putStack((ItemStack)null);
+                slot.putStack(ItemStackTools.getEmptyStack());
             }
             else
             {
                 slot.onSlotChanged();
             }
 
-            if (itemstack1.stackSize == itemstack.stackSize)
+            if (ItemStackTools.getStackSize(itemstack1) == ItemStackTools.getStackSize(itemstack))
             {
-                return null;
+                return ItemStackTools.getEmptyStack();
             }
 
             slot.onPickupFromSlot(playerIn, itemstack1);

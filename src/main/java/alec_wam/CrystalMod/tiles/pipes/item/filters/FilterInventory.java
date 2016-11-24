@@ -7,6 +7,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
+import alec_wam.CrystalMod.util.ItemStackTools;
 
 public class FilterInventory implements IItemStackInventory
 {
@@ -23,7 +24,7 @@ public class FilterInventory implements IItemStackInventory
         this.name = name;
         this.masterStack = masterStack;
 
-        if (masterStack != null)
+        if (!ItemStackTools.isNullStack(masterStack))
             this.readFromStack(masterStack);
     }
 
@@ -60,7 +61,7 @@ public class FilterInventory implements IItemStackInventory
 
                 if (j >= 0 && j < inventory.length)
                 {
-                    inventory[j] = ItemStack.loadItemStackFromNBT(data);
+                    inventory[j] = ItemStackTools.loadFromNBT(data);
                 }
             }
         }
@@ -86,7 +87,7 @@ public class FilterInventory implements IItemStackInventory
 
     public void readFromStack(ItemStack masterStack)
     {
-        if (masterStack != null)
+        if (!ItemStackTools.isNullStack(masterStack))
         {
             NBTTagCompound tag = ItemNBTHelper.getCompound(masterStack);
             readFromNBT(tag.getCompoundTag("filterInventory"));
@@ -95,7 +96,7 @@ public class FilterInventory implements IItemStackInventory
 
     public void writeToStack(ItemStack masterStack)
     {
-        if (masterStack != null)
+        if (!ItemStackTools.isNullStack(masterStack))
         {
             NBTTagCompound tag = ItemNBTHelper.getCompound(masterStack);
             NBTTagCompound invTag = new NBTTagCompound();
@@ -119,51 +120,46 @@ public class FilterInventory implements IItemStackInventory
     @Override
     public ItemStack decrStackSize(int index, int count)
     {
-        if (inventory[index] != null)
+        if (!ItemStackTools.isNullStack(inventory[index]))
         {
-//            if (!worldObj.isRemote)
-//                worldObj.markBlockForUpdate(this.pos);
-
-            if (inventory[index].stackSize <= count)
+            if (ItemStackTools.getStackSize(inventory[index]) <= count)
             {
                 ItemStack itemStack = inventory[index];
-                inventory[index] = null;
+                inventory[index] = ItemStackTools.getEmptyStack();
                 markDirty();
                 return itemStack;
             }
 
             ItemStack itemStack = inventory[index].splitStack(count);
-            if (inventory[index].stackSize == 0)
-                inventory[index] = null;
+            if (ItemStackTools.isEmpty(inventory[index]))
+                inventory[index] = ItemStackTools.getEmptyStack();
 
             markDirty();
             return itemStack;
         }
 
-        return null;
+        return ItemStackTools.getEmptyStack();
     }
 
     @Override
     public ItemStack removeStackFromSlot(int slot)
     {
-        if (inventory[slot] != null)
+        if (!ItemStackTools.isNullStack(inventory[slot]))
         {
             ItemStack itemStack = inventory[slot];
-            setInventorySlotContents(slot, null);
+            setInventorySlotContents(slot, ItemStackTools.getEmptyStack());
             return itemStack;
         }
-        return null;
+        return ItemStackTools.getEmptyStack();
     }
 
     @Override
     public void setInventorySlotContents(int slot, ItemStack stack)
     {
         inventory[slot] = stack;
-        if (stack != null && stack.stackSize > getInventoryStackLimit())
-            stack.stackSize = getInventoryStackLimit();
+        if (!ItemStackTools.isNullStack(stack) && ItemStackTools.getStackSize(stack) > getInventoryStackLimit())
+        	ItemStackTools.setStackSize(stack, getInventoryStackLimit());
         markDirty();
-//        if (!worldObj.isRemote)
-//            worldObj.markBlockForUpdate(this.pos);
     }
 
     @Override
@@ -241,7 +237,7 @@ public class FilterInventory implements IItemStackInventory
     @Override
     public void markDirty()
     {
-        if (masterStack != null)
+        if (!ItemStackTools.isNullStack(masterStack))
         {
             this.writeToStack(masterStack);
         }
@@ -249,7 +245,7 @@ public class FilterInventory implements IItemStackInventory
 
     public boolean canInventoryBeManipulated()
     {
-        return masterStack != null;
+        return !ItemStackTools.isNullStack(masterStack);
     }
 
 	@Override

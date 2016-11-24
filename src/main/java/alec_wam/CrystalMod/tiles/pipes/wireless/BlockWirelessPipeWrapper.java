@@ -27,6 +27,7 @@ import alec_wam.CrystalMod.tiles.machine.elevator.ItemMiscCard.CardType;
 import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.ChatUtil;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
+import alec_wam.CrystalMod.util.ItemStackTools;
 
 public class BlockWirelessPipeWrapper extends BlockContainer implements ICustomModel {
 
@@ -60,29 +61,7 @@ public class BlockWirelessPipeWrapper extends BlockContainer implements ICustomM
         	TileEntityPipeWrapper wrapper = (TileEntityPipeWrapper) tile;
         	ItemStack held = player.getHeldItem(hand);
         	
-        	/*if(!world.isRemote){
-        		ModLogger.info(""+held);
-        		if(stack == null){
-        			if(!wrapper.isSender()){
-        				if(player.isSneaking()){
-        					wrapper.connectionPos = null;
-        					wrapper.markDirty();
-        					return true;
-        				}
-	        			int dim = wrapper.connectionDim;
-	        			String name = DimensionManager.isDimensionRegistered(dim) ? DimensionManager.getProvider(dim).getDimensionType().getName() : "Null Dim";
-	        			String connection = wrapper.connectionPos !=null ? ("Connection: "+wrapper.connectionPos.getX()+", "+wrapper.connectionPos.getY()+", "+wrapper.connectionPos.getZ()+" in "+name) : "Null connection";
-	        			String valid = "Valid: "+(wrapper.getPipe() !=null);
-	        			ChatUtil.sendChat(player, name, connection, valid);
-        			}else{
-        				ChatUtil.sendChat(player, "Sender");
-        			}
-        			return true;
-        		}
-        		
-        	}*/
-        	
-        	if(held !=null && held.getItem() == ModItems.miscCard && CardType.byMetadata(held.getMetadata()) == CardType.EPORTAL){
+        	if(!ItemStackTools.isNullStack(held) && held.getItem() == ModItems.miscCard && CardType.byMetadata(held.getMetadata()) == CardType.EPORTAL){
         		if(ItemNBTHelper.verifyExistance(held, NBT_CON_X)){
         			if(!world.isRemote){
         				int x = ItemNBTHelper.getInteger(held, NBT_CON_X, pos.getX());
