@@ -10,6 +10,7 @@ import alec_wam.CrystalMod.items.tools.bat.types.WoodBatType;
 import alec_wam.CrystalMod.items.tools.bat.upgrades.CakeBatUpgrade;
 import alec_wam.CrystalMod.items.tools.bat.upgrades.EnderBatUpgrade;
 import alec_wam.CrystalMod.items.tools.bat.upgrades.FireworkBatUpgrade;
+import alec_wam.CrystalMod.items.tools.bat.upgrades.LapisBatUpgrade;
 import alec_wam.CrystalMod.items.tools.bat.upgrades.MuffleBatUpgrade;
 import alec_wam.CrystalMod.items.tools.bat.upgrades.PistonBatUpgrade;
 import alec_wam.CrystalMod.items.tools.bat.upgrades.PoisonBatUpgrade;
@@ -51,7 +52,7 @@ public class ModBats {
 		REDSTONE = BatHelper.registerBatUpgrade(new RedstoneBatUpgrade(64, 10));
 		//FLAME = BatHelper.registerBatUpgrade(new FlameBatUpgrade(64, 10));
 		QUARTZ = BatHelper.registerBatUpgrade(new QuartzBatUpgrade(32, 20));
-		//LAPIS = BatHelper.registerBatUpgrade(new LapisBatUpgrade(100, 3));
+		LAPIS = BatHelper.registerBatUpgrade(new LapisBatUpgrade(100, 3));
 		CAKE = BatHelper.registerBatUpgrade(new CakeBatUpgrade(10, 10));
 		SKULL = BatHelper.registerBatUpgrade(new SkullBatUpgrade(1, 10));
 		POISON = BatHelper.registerBatUpgrade(new PoisonBatUpgrade(20, 10));

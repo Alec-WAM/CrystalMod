@@ -255,12 +255,6 @@ public class TileEntityPipeItem extends TileEntityPipe implements IInventoryChan
 	public boolean canConnectToExternal(EnumFacing direction, boolean ignoreDisabled) {
 		return getExternalInventory(direction) != null;
 	}
-
-	public boolean onActivated(EntityPlayer player, EnumFacing side, EnumHand hand) {
-		 if(super.onActivated(player, side, hand))return true;
-	    return false;
-	  }
-	
 	
 	@Override
 	  public void externalConnectionAdded(EnumFacing direction) {

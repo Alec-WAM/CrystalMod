@@ -1,6 +1,7 @@
 package alec_wam.CrystalMod.tiles.pipes;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.EnumMap;
 import java.util.EnumSet;
 import java.util.Iterator;
@@ -48,6 +49,8 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -443,6 +446,10 @@ public abstract class TileEntityPipe extends TileEntityMod implements ITickable,
 		return dir == null ? null : covers.get(dir);
 	}
 	
+	public Collection<CoverData> getCovers(){
+		return covers.values();
+	}
+	
 	public boolean setAttachment(EnumFacing dir, AttachmentData data) {
 		this.attachments.put(dir, data);
 		clientStateDirty = true;
@@ -562,7 +569,7 @@ public abstract class TileEntityPipe extends TileEntityMod implements ITickable,
 
 	}
 
-	public boolean onActivated(EntityPlayer player, EnumFacing side, EnumHand hand) {
+	public boolean onActivated(World world, EntityPlayer player, EnumHand hand, ItemStack stack, EnumFacing side, Vec3d hitVec) {
 
 		RaytraceResult closest = getClosest(player);
 
@@ -625,6 +632,12 @@ public abstract class TileEntityPipe extends TileEntityMod implements ITickable,
 									}
 								}
 								return true;
+							} else {
+								CoverData coverData = this.getCoverData(dir);
+								World worldWrapped = new PipeWorldWrapper(world, getPos(), dir);
+								if(coverData.getBlockState().getBlock().onBlockActivated(worldWrapped, getPos(), coverData.getBlockState(), player, hand, stack, dir, (float)hitVec.xCoord, (float)hitVec.yCoord, (float)hitVec.zCoord)){
+									return true;
+								}
 							}
 						}
 					}

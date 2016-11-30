@@ -192,11 +192,10 @@ public class GuiHandler implements IGuiHandler {
     		return new GuiGuideMainPage();
     	}
     	if(ID == GUI_ID_BACKPACK){
-    		OpenType type = OpenType.values()[x];
-    		ItemStack backpack = BackpackUtil.getItemStack(player.inventory, type);
+    		ItemStack backpack = BackpackUtil.getPlayerBackpack(player);
     		if(ItemStackTools.isValid(backpack) && backpack.getItem() instanceof ItemBackpackBase){
     			ItemBackpackBase item = (ItemBackpackBase)backpack.getItem();
-    			return item.getBackpack().getClientGuiElement(player, world, type);
+    			return item.getBackpack().getClientGuiElement(player, world);
     		}
     	}
     	if(ID == GUI_ID_ITEM){
@@ -287,7 +286,10 @@ public class GuiHandler implements IGuiHandler {
         		return new GuiWorksiteCropFarm(new ContainerWorksiteCropFarm(player, (WorksiteCropFarm)te));
         	}
         	
-            if(te instanceof TileEntityBlueCrystalChest)return GUIChest.GUI.buildGUI(CrystalChestType.values()[ID], player.inventory, (TileEntityBlueCrystalChest) te);
+            if(te instanceof TileEntityBlueCrystalChest){
+        		TileEntityBlueCrystalChest icte = (TileEntityBlueCrystalChest) te;
+            	return GUIChest.GUI.buildGUI(icte.getType(), player.inventory, icte);
+            }
             if(te instanceof TileWirelessChest) return new GuiWirelessChest(player.inventory, (TileWirelessChest)te);
             if(te instanceof TileEntityCrystalWorkbench)return new GuiCrystalWorkbench(player.inventory, world, (TileEntityCrystalWorkbench) te);
             
@@ -343,11 +345,10 @@ public class GuiHandler implements IGuiHandler {
     		return null;
     	}
     	if(ID == GUI_ID_BACKPACK){
-    		OpenType type = OpenType.values()[x];
-    		ItemStack backpack = BackpackUtil.getItemStack(player.inventory, type);
+    		ItemStack backpack = BackpackUtil.getPlayerBackpack(player);
     		if(ItemStackTools.isValid(backpack) && backpack.getItem() instanceof ItemBackpackBase){
     			ItemBackpackBase item = (ItemBackpackBase)backpack.getItem();
-    			return item.getBackpack().getServerGuiElement(player, world, type);
+    			return item.getBackpack().getServerGuiElement(player, world);
     		}
     	}
     	if(ID == GUI_ID_ITEM){

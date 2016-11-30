@@ -20,8 +20,10 @@ import alec_wam.CrystalMod.api.tools.AttackData;
 import alec_wam.CrystalMod.api.tools.UpgradeData;
 import alec_wam.CrystalMod.items.tools.bat.BatHelper;
 import alec_wam.CrystalMod.items.tools.bat.BatUpgrade;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.Lang;
+import alec_wam.CrystalMod.util.ModLogger;
 import alec_wam.CrystalMod.util.client.RenderUtil;
 
 public class SkullBatUpgrade extends BatUpgrade {
@@ -41,8 +43,8 @@ public class SkullBatUpgrade extends BatUpgrade {
 		EntityLivingBase entity = entities.get(0);
 		if (entity !=null && (entity instanceof IMob))
         {
-			//HALF Value
-			float drain = getValue(upgradeData) * 0.5f;
+			float drain = getValue(upgradeData);
+			
             if (drain > 0 && damage > 0.0f){
             	float heal = Math.min(drain, damage);
             	attacker.heal(heal);
@@ -85,7 +87,7 @@ public class SkullBatUpgrade extends BatUpgrade {
 	//Crafting
 	@Override
 	public int getUpgradeValue(ItemStack stack) {
-		if(stack !=null && ItemUtil.canCombine(stack, SKULL)){
+		if(!ItemStackTools.isNullStack(stack) && ItemUtil.canCombine(stack, SKULL)){
 			return 1;
 		}
 		return 0;

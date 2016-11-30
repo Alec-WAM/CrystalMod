@@ -212,7 +212,7 @@ public class ItemPipeCover extends Item implements ICustomModel {
         try {
         	IBlockState state = block.getDefaultState();
         	if((!block.isFullCube(state) && block.getMaterial(state) == Material.GLASS))return true;
-            if (!block.isFullBlock(state) || (!block.isFullCube(state)) || block.hasTileEntity(block.getDefaultState())) return false;
+            if (/*!block.isFullBlock(state) ||*/ (!block.isFullCube(state)) || block.hasTileEntity(block.getDefaultState())) return false;
             return true;
         } catch (Throwable ignored) {
             return false;

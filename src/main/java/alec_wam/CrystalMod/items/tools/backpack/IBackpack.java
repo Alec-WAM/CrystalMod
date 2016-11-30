@@ -1,6 +1,5 @@
 package alec_wam.CrystalMod.items.tools.backpack;
 
-import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.items.tools.backpack.gui.OpenType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -19,6 +18,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public interface IBackpack {
 
 	public ResourceLocation getID();
+
+	//0 = item, 1 = back
+	public ResourceLocation getTexture(int renderType);
 	
 	@SideOnly(Side.CLIENT)
 	public void initModel(Item item);
@@ -30,8 +32,8 @@ public interface IBackpack {
 	public ActionResult<ItemStack> rightClick(ItemStack itemStack, World world, EntityPlayer player, EnumHand hand);
 	
 	@SideOnly(Side.CLIENT)
-	public Object getClientGuiElement(EntityPlayer player, World world, OpenType type);
+	public Object getClientGuiElement(EntityPlayer player, World world);
 	
-	public Object getServerGuiElement(EntityPlayer player, World world, OpenType type);
+	public Object getServerGuiElement(EntityPlayer player, World world);
 
 }

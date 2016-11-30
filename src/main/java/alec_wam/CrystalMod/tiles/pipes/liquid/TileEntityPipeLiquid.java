@@ -111,11 +111,6 @@ public class TileEntityPipeLiquid extends TileEntityPipe implements IInventoryCh
 		return getExternalHandler(direction) !=null;
 	  }
 
-	public boolean onActivated(EntityPlayer player, EnumFacing side, EnumHand hand) {
-		 if(super.onActivated(player, side, hand))return true;
-	    return false;
-	  }
-
 	  public TileEntity getExternalHandler(EnumFacing direction) {
 	    World world = getWorld();
 	    if(world == null) {

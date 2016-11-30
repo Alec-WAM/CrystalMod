@@ -36,7 +36,9 @@ public class CubeBuilder
 
 	private byte[] uvRotations = new byte[EnumFacing.values().length];
 
-	private int color = 0xFFFFFFFF;
+	//private int color = 0xFFFFFFFF;
+	
+	private final EnumMap<EnumFacing, Integer> colors = new EnumMap<EnumFacing, Integer>( EnumFacing.class );
 
 	private boolean renderFullBright;
 
@@ -85,7 +87,7 @@ public class CubeBuilder
 		}
 	}
 
-	private static final class UvVector
+	public static final class UvVector
 	{
 		float u1;
 		float u2;
@@ -95,7 +97,6 @@ public class CubeBuilder
 
 	private void putFace( EnumFacing face, float x1, float y1, float z1, float x2, float y2, float z2 )
 	{
-
 		TextureAtlasSprite texture = textures.get( face );
 
 		UnpackedBakedQuad.Builder builder = new UnpackedBakedQuad.Builder( format );
@@ -173,9 +174,9 @@ public class CubeBuilder
 		{
 			case DOWN:
 				uv.u1 = texture.getInterpolatedU( x1 * 16 );
-				uv.v1 = texture.getInterpolatedV( z1 * 16 );
+				uv.v1 = texture.getInterpolatedV( 16 - z1 * 16 );
 				uv.u2 = texture.getInterpolatedU( x2 * 16 );
-				uv.v2 = texture.getInterpolatedV( z2 * 16 );
+				uv.v2 = texture.getInterpolatedV( 16 - z2 * 16 );
 				break;
 			case UP:
 				uv.u1 = texture.getInterpolatedU( x1 * 16 );
@@ -184,9 +185,9 @@ public class CubeBuilder
 				uv.v2 = texture.getInterpolatedV( z2 * 16 );
 				break;
 			case NORTH:
-				uv.u1 = texture.getInterpolatedU( x1 * 16 );
+				uv.u1 = texture.getInterpolatedU( 16 - x1 * 16 );
 				uv.v1 = texture.getInterpolatedV( 16 - y1 * 16 );
-				uv.u2 = texture.getInterpolatedU( x2 * 16 );
+				uv.u2 = texture.getInterpolatedU( 16 - x2 * 16 );
 				uv.v2 = texture.getInterpolatedV( 16 - y2 * 16 );
 				break;
 			case SOUTH:
@@ -202,9 +203,9 @@ public class CubeBuilder
 				uv.v2 = texture.getInterpolatedV( 16 - y2 * 16 );
 				break;
 			case EAST:
-				uv.u1 = texture.getInterpolatedU( z2 * 16 );
+				uv.u1 = texture.getInterpolatedU( 16 - z2 * 16 );
 				uv.v1 = texture.getInterpolatedV( 16 - y1 * 16 );
-				uv.u2 = texture.getInterpolatedU( z1 * 16 );
+				uv.u2 = texture.getInterpolatedU( 16 - z1 * 16 );
 				uv.v2 = texture.getInterpolatedV( 16 - y2 * 16 );
 				break;
 		}
@@ -332,7 +333,7 @@ public class CubeBuilder
 		putVertex( builder, face, x, y, z, u, v );
 	}
 
-	private void putVertex( UnpackedBakedQuad.Builder builder, EnumFacing face, float x, float y, float z, float u, float v )
+	public void putVertex( UnpackedBakedQuad.Builder builder, EnumFacing face, float x, float y, float z, float u, float v )
 	{
 		VertexFormat format = builder.getVertexFormat();
 
@@ -349,6 +350,12 @@ public class CubeBuilder
 					break;
 				case COLOR:
 					// Color format is RGBA
+					
+					int color = 0xFFFFFFFF;
+					
+					if(colors.containsKey(face)){
+						color = colors.get(face);
+					}
 					float r = ( color >> 16 & 0xFF ) / 255f;
 					float g = ( color >> 8 & 0xFF ) / 255f;
 					float b = ( color & 0xFF ) / 255f;
@@ -404,17 +411,21 @@ public class CubeBuilder
 		this.drawFaces = drawFaces;
 	}
 
-	public void setColor( int color )
+	public void setColor(EnumFacing face, int color)
 	{
-		this.color = color;
+		this.colors.put(face, color);
 	}
 
 	/**
 	 * Sets the vertex color for future vertices to the given RGB value, and forces the alpha component to 255.
 	 */
-	public void setColorRGB( int color )
+	public void setColorRGB(EnumFacing face, int color)
 	{
-		setColor( color | 0xFF000000 );
+		setColor(face, color | 0xFF000000);
+	}
+	
+	public void resetColors(){
+		this.colors.clear();
 	}
 
 	public void setRenderFullBright( boolean renderFullBright )

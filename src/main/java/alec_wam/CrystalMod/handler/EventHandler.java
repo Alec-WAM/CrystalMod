@@ -7,9 +7,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.lwjgl.input.Keyboard;
+
 import alec_wam.CrystalMod.Config;
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.api.block.IExplosionImmune;
+import alec_wam.CrystalMod.api.tools.UpgradeData;
 import alec_wam.CrystalMod.capability.ExtendedPlayer;
 import alec_wam.CrystalMod.capability.ExtendedPlayerInventory;
 import alec_wam.CrystalMod.capability.ExtendedPlayerProvider;
@@ -20,6 +23,12 @@ import alec_wam.CrystalMod.integration.baubles.BaublesIntegration;
 import alec_wam.CrystalMod.integration.baubles.ItemBaubleWings;
 import alec_wam.CrystalMod.items.ItemDragonWings;
 import alec_wam.CrystalMod.items.ModItems;
+import alec_wam.CrystalMod.items.tools.backpack.IBackpack;
+import alec_wam.CrystalMod.items.tools.backpack.ItemBackpackBase;
+import alec_wam.CrystalMod.items.tools.backpack.types.BackpackNormal;
+import alec_wam.CrystalMod.items.tools.backpack.types.InventoryBackpack;
+import alec_wam.CrystalMod.items.tools.bat.BatHelper;
+import alec_wam.CrystalMod.items.tools.bat.ModBats;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.packets.PacketEntityMessage;
 import alec_wam.CrystalMod.tiles.playercube.CubeManager;
@@ -38,6 +47,7 @@ import baubles.api.BaubleType;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.boss.EntityDragon;
@@ -53,10 +63,12 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
@@ -64,6 +76,8 @@ import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
+import net.minecraftforge.event.entity.living.LootingLevelEvent;
+import net.minecraftforge.event.entity.player.PlayerDropsEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.BreakSpeed;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -266,68 +280,6 @@ public class EventHandler {
     }
     
     public void updateWings(EntityPlayer player){
-    	if(player.getHeldItemMainhand() !=null){
-    		if(player.getHeldItemMainhand().getItem() == Items.STICK){
-    			ChatUtil.sendChat(player, "AllowFlying: "+player.capabilities.allowFlying);
-    		}
-    	}
-    	/*NBTTagCompound nbt = PlayerUtil.getPersistantNBT(player);
-		if(hasDragonWings(player)){
-			nbt.setByte(NBT_WINGS, (byte)2);
-			
-			ExtendedPlayer extPlayer = ExtendedPlayerProvider.getExtendedPlayer(player);
-			if(extPlayer !=null){
-				//Copied from Ender Dragon
-				extPlayer.prevWingAnimTime = extPlayer.wingAnimTime;
-				float f10 = 0.2F / (MathHelper.sqrt_double(player.motionX * player.motionX + player.motionZ * player.motionZ) * 10.0F + 1.0F);
-	            f10 = f10 * (float)Math.pow(2.0D, player.motionY);
-
-	            
-	            if(player.capabilities.isFlying){
-	            	extPlayer.wingAnimTime+= f10*0.3f;
-	            }else if(!player.onGround){
-	               extPlayer.wingAnimTime += f10*0.4f;
-	            }else{
-	            	extPlayer.wingAnimTime=1f;
-	            }
-			}
-		} else {
-			if(nbt.hasKey(NBT_WINGS)){
-				if(nbt.getByte(NBT_WINGS) !=(byte)1){
-					nbt.setByte(NBT_WINGS, (byte)0);
-				}
-			} else nbt.setByte(NBT_WINGS, (byte)0);
-		}
-		
-		if(nbt.hasKey(NBT_WINGS)){
-			//MODE 2 = ON 1 = NORMAL 0 = NEEDS REMOVE
-			byte mode = nbt.getByte(NBT_WINGS);
-			if(mode == 2){
-				if(!player.worldObj.isRemote){
-					if(player instanceof EntityPlayerMP){
-						if(!player.capabilities.allowFlying){
-							player.capabilities.allowFlying = true;
-							player.sendPlayerAbilities();
-						}
-					}
-				}
-			}
-			if(mode == 0){
-				if(!player.worldObj.isRemote){
-					if(player instanceof EntityPlayerMP){
-						if(!player.capabilities.isCreativeMode){
-							ModLogger.info("Removed Wing Flight From "+player.getName());
-							player.capabilities.allowFlying = false;
-	                        player.capabilities.isFlying = false;
-	                        //Enables Fall Damage again (Automatically gets disabled for some reason)
-	                        player.capabilities.disableDamage = false;
-							player.sendPlayerAbilities();
-						}
-					}
-				}
-				nbt.setByte(NBT_WINGS, (byte)1);
-			}
-		}*/
     	boolean wingsEquipped = hasDragonWings(player);
 
          //If Player isn't (really) winged
@@ -407,7 +359,6 @@ public class EventHandler {
       if (event.getEntityLiving().worldObj.isRemote) {
         return;
       }
-      addPlayerHeads(event);
       EntityLivingBase entity = event.getEntityLiving();
       if(entity instanceof EntityHorse){
     	  EntityHorse horse = (EntityHorse)entity;
@@ -430,37 +381,79 @@ public class EventHandler {
         addMobHeads(event);
     }
 	
-	public void addPlayerHeads(LivingDeathEvent event){
- 	   if(Config.playerHeadType == ItemDropType.NONE)return;
- 	   Entity mob = event.getEntity();
- 	   if(mob == null || mob.worldObj == null)return;
- 	   if(!(mob instanceof EntityPlayer))return;
+	@SubscribeEvent
+	public void playerDeath(PlayerDropsEvent event) {
+		if (event.getEntity() instanceof EntityPlayer && !event.getEntity().worldObj.isRemote) {
+			boolean keepInv = event.getEntity().worldObj.getGameRules().getBoolean("keepInventory");
+			addPlayerHeads(event);
+			if(!keepInv){
+				ExtendedPlayer exPlayer = ExtendedPlayerProvider.getExtendedPlayer(event.getEntityPlayer()); 
+				if(exPlayer !=null){
+					ExtendedPlayerInventory inv = exPlayer.getInventory();
+					
+					ItemStack backpack = inv.getStackInSlot(ExtendedPlayerInventory.BACKPACK_SLOT_ID);
+					
+					boolean keepBackpack = false;
+					if(ItemStackTools.isValid(backpack)){
+						if(backpack.getItem() instanceof ItemBackpackBase){
+							IBackpack type = ((ItemBackpackBase)backpack.getItem()).getBackpack();
+							if(type instanceof BackpackNormal){
+								BackpackNormal normal = (BackpackNormal)type;
+								InventoryBackpack bpInv = normal.getInventory(event.getEntityPlayer());
+								ItemStack ret = ItemUtil.removeItems(bpInv, null, new ItemStack(Items.SKULL, 1, 1), 1);
+								if(ItemStackTools.isValid(ret) && ItemStackTools.getStackSize(ret) == 1){
+									keepBackpack = true;
+									if(!event.getEntityPlayer().getEntityWorld().isRemote) {
+										bpInv.save();
+							    	}
+								}
+							}
+						}
+					}
+					
+					for (int i = 0; i < inv.getSlots(); ++i) {
+						if (inv.getStackInSlot(i) != null) {
+							if(i == ExtendedPlayerInventory.BACKPACK_SLOT_ID){
+								if(keepBackpack){
+									continue;
+								}
+							}
+							event.getDrops().add(ItemUtil.dropFromPlayer(event.getEntityPlayer(), inv.getStackInSlot(i).copy(), true));
+							inv.setStackInSlot(i, ItemStackTools.getEmptyStack());
+						}
+					}
+				}			
+			}
+		}
+	}
+	
+	public void addPlayerHeads(PlayerDropsEvent event){
+		EntityPlayer player = event.getEntityPlayer();
+		DamageSource source = event.getSource();
+		Entity attacker = source.getSourceOfDamage();
+ 	   	if(Config.playerHeadType == ItemDropType.NONE)return;
+ 	   	if(player == null || player.worldObj == null)return;
  	   
- 	   Entity entity = event.getSource().getEntity();
+ 	   	int rand = player.worldObj.rand.nextInt(Math.max(Config.playerHeadDropChance / fixLooting(event.getLootingLevel()), 1));
  	   
- 	   int rand = event.getEntityLiving().getRNG().nextInt(Math.max(Config.playerHeadDropChance, 1));
- 	   
- 	   if(Config.playerHeadDropChance < 0 || rand !=0)
-            return;
- 	   if(Config.playerHeadType == ItemDropType.KILLED){
-     	   if(entity == null || !(entity instanceof EntityPlayer) || entity instanceof FakePlayer)
-                return;
- 	   }
-		   // how much beheading chance do we have?
-        EntityPlayer player = (EntityPlayer) mob;
-        ItemStack skull = PlayerUtil.createPlayerHead(player);
-        event.getEntityLiving().entityDropItem(skull, 1);
-        
+ 	   	if(Config.playerHeadDropChance < 0 || rand !=0)
+ 	   		return;
+ 	   	if(Config.playerHeadType == ItemDropType.KILLED){
+ 	   		if(attacker == null || !(attacker instanceof EntityPlayer) || attacker instanceof FakePlayer)
+ 	   			return;
+ 	   	}
+ 	   	ItemStack skull = PlayerUtil.createPlayerHead(player);
+ 	   	event.getDrops().add(ItemUtil.dropFromPlayer(player, skull, true));
     }
 	
 	public void addMobHeads(LivingDropsEvent event){
     	if(Config.mobHeadType == ItemDropType.NONE)return;
     	if(Config.mobHeadType == ItemDropType.KILLED){
-        Entity entity = event.getSource().getEntity();
-        if(entity == null)
-            return;
-        if(!(entity instanceof EntityPlayer))
-            return;
+	        Entity entity = event.getSource().getEntity();
+	        if(entity == null)
+	            return;
+	        if(!(entity instanceof EntityPlayer))
+	            return;
         }
 
         Entity mob = event.getEntityLiving();
@@ -601,19 +594,13 @@ public class EventHandler {
 			
 			for (int a = 0; a < inventory.getSlots(); a++) {
 				ItemStack stack = inventory.getStackInSlot(a);
-				
-				/*if (bauble != null && bauble.getItem() instanceof IBauble) {
-					//Worn Tick
-					((IBauble) bauble.getItem()).onWornTick(bauble, player);
-					
-					//Sync
+				/*if(!ItemStackTools.isNullStack(stack)){
 					if (!player.getEntityWorld().isRemote) {
-						if (syncTick && !baubles.isChanged(a) &&
-								((IBauble) bauble.getItem()).willAutoSync(bauble, player)) {							
-							String s = bauble.toString();
-							if (bauble.hasTagCompound()) s += bauble.getTagCompound().toString();
+						if (syncTick && !inventory.isChanged(a)) {							
+							String s = stack.toString();
+							if (stack.hasTagCompound()) s += stack.getTagCompound().toString();
 							if (!s.equals(hashOld[a])) {
-								baubles.setChanged(a,true);
+								inventory.setChanged(a,true);
 							}
 							hashOld[a] = s;							
 						}						
@@ -630,6 +617,27 @@ public class EventHandler {
 				
 		}
 			
+	}
+	
+	@SubscribeEvent
+	public void addLooting(LootingLevelEvent event){
+		DamageSource source = event.getDamageSource();
+		Entity attacker = source.getSourceOfDamage();
+		final int prevLooting = event.getLootingLevel();
+		int looting = 0;
+		if(attacker !=null){
+			if(attacker instanceof EntityPlayer){
+				EntityPlayer player = (EntityPlayer)attacker;
+				ItemStack hand = player.getHeldItemMainhand();
+				if(ItemStackTools.isValid(hand)){
+					UpgradeData lapis = BatHelper.getBatUpgradeData(hand, ModBats.LAPIS);
+					if(lapis !=null){
+						looting+=(int) ModBats.LAPIS.getValue(lapis);
+					}
+				}
+			}
+		}
+		event.setLootingLevel(prevLooting+looting);
 	}
 	
 }

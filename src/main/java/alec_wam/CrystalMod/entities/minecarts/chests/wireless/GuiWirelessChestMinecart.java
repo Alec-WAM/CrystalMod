@@ -35,8 +35,8 @@ public class GuiWirelessChestMinecart extends GuiContainer {
 				inventoryName = ProfileUtil.getUsername(minecart.getOwner());
 			}
 		}
-		drawString(fontRendererObj, inventoryName, 12, 6, 4210752);
-		drawString(fontRendererObj, playerInventory.getDisplayName().getUnformattedText(), 12, 110, 4210752);
+		fontRendererObj.drawString(inventoryName, 12, 6, 4210752);
+		fontRendererObj.drawString(playerInventory.getDisplayName().getUnformattedText(), 12, 110, 4210752);
 		super.drawGuiContainerForegroundLayer(par1, par2);
     }
     

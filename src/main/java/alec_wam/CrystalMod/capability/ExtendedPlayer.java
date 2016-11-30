@@ -4,11 +4,14 @@ import java.awt.Color;
 
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.items.guide.GuiGuideBase;
+import alec_wam.CrystalMod.util.ItemStackTools;
+import alec_wam.CrystalMod.util.ModLogger;
 
 public class ExtendedPlayer {
 
@@ -23,7 +26,8 @@ public class ExtendedPlayer {
 	@SideOnly(Side.CLIENT)
 	public GuiGuideBase lastOpenBook;
 	
-	private ExtendedPlayerInventory inventory = new ExtendedPlayerInventory();;
+	private ExtendedPlayerInventory inventory = new ExtendedPlayerInventory();
+	private ItemStack openBackpack;
 	
 	public ExtendedPlayer() {
 	}
@@ -31,11 +35,25 @@ public class ExtendedPlayer {
 	public NBTTagCompound writeToNBT() {
 		NBTTagCompound properties = new NBTTagCompound();
 		properties.setTag("Inventory", inventory.serializeNBT());
+		
+		if(ItemStackTools.isValid(openBackpack)){
+			properties.setTag("OpenBackpack", openBackpack.serializeNBT());
+		}
+		
 		return properties;
 	}
 
 	public void readFromNBT(NBTTagCompound properties) {
 		inventory.deserializeNBT(properties.getCompoundTag("Inventory"));
+		if(properties.hasKey("OpenBackpack")){
+			try{
+				setOpenBackpack(ItemStackTools.loadFromNBT(properties.getCompoundTag("OpenBackpack")));
+			}catch(Exception e){
+				setOpenBackpack(ItemStackTools.getEmptyStack());
+			}
+		} else {
+			setOpenBackpack(ItemStackTools.getEmptyStack());
+		}
 	}
 
 	/**
@@ -81,5 +99,13 @@ public class ExtendedPlayer {
 
 	public ExtendedPlayerInventory getInventory() {
 		return inventory;
+	}
+	
+	public ItemStack getOpenBackpack(){
+		return openBackpack;
+	}
+	
+	public void setOpenBackpack(ItemStack stack){
+		openBackpack = stack;
 	}
 }

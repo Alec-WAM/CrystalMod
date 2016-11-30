@@ -1,11 +1,14 @@
 package alec_wam.CrystalMod.util;
 
+import java.util.UUID;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
 
 public final class ItemNBTHelper {
-
+	public static final String MOST_SIG_UUID = "MostSigUUID";
+    public static final String LEAST_SIG_UUID = "LeastSigUUID";
 
 
 	// SETTERS ///////////////////////////////////////////////////////////////////
@@ -76,6 +79,15 @@ public final class ItemNBTHelper {
 		stack.setTagCompound(compound);
 		return stack;
 	}
+	
+	public static void updateUUID(ItemStack itemStack){
+        if (!hasUUID(itemStack)){
+            UUID itemUUID = UUID.randomUUID();
+
+            setLong(itemStack, MOST_SIG_UUID, itemUUID.getMostSignificantBits());
+            setLong(itemStack, LEAST_SIG_UUID, itemUUID.getLeastSignificantBits());
+        }
+    }
 
 	// GETTERS ///////////////////////////////////////////////////////////////////
 
@@ -87,6 +99,10 @@ public final class ItemNBTHelper {
 		else
 			return stack.getTagCompound().hasKey(tag);
 	}
+	
+	public static boolean hasUUID(ItemStack itemStack){
+        return verifyExistance(itemStack, MOST_SIG_UUID) && verifyExistance(itemStack, LEAST_SIG_UUID);
+    }
 
 	public static byte getByte(ItemStack stack, String tag, byte defaultExpected) {
 		return verifyExistance(stack, tag) ? stack.getTagCompound().getByte(tag) : defaultExpected;
@@ -119,4 +135,11 @@ public final class ItemNBTHelper {
 	public static String getString(ItemStack stack, String tag, String defaultExpected) {
 		return verifyExistance(stack, tag) ? stack.getTagCompound().getString(tag) : defaultExpected;
 	}
+	
+	public static UUID getUUID(ItemStack itemStack){
+        if (hasUUID(itemStack)){
+            return new UUID(itemStack.getTagCompound().getLong(MOST_SIG_UUID), itemStack.getTagCompound().getLong(LEAST_SIG_UUID));
+        }
+        return null;
+    }
 }

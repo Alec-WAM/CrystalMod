@@ -7,6 +7,8 @@ import alec_wam.CrystalMod.items.tools.backpack.PacketOpenBackpack;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.util.Lang;
 import net.minecraft.client.settings.KeyBinding;
+import net.minecraftforge.client.settings.KeyConflictContext;
+import net.minecraftforge.client.settings.KeyModifier;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -17,13 +19,14 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class KeyHandler {
 
-	public KeyBinding key = new KeyBinding(Lang.translateToLocal("keybind.crystalmodinventory"), 
+	public KeyBinding key = new KeyBinding(Lang.translateToLocal("keybind.crystalmodinventory"), KeyConflictContext.IN_GAME, KeyModifier.NONE, 
 			Keyboard.KEY_C, "key.categories.crystalmod");
-	public KeyBinding keyBack = new KeyBinding(Lang.translateToLocal("keybind.crystalmodbackpack"), 
+	public KeyBinding keyBack = new KeyBinding(Lang.translateToLocal("keybind.crystalmodbackpack"), KeyConflictContext.IN_GAME, KeyModifier.NONE,
 			Keyboard.KEY_G, "key.categories.crystalmod");
 	
 	public KeyHandler() {
 		 ClientRegistry.registerKeyBinding(key);
+		 ClientRegistry.registerKeyBinding(keyBack);
 	}
 	
 	@SideOnly(Side.CLIENT)

@@ -353,6 +353,17 @@ public class BatHelper {
 		return upgrades;
 	}
 	
+	public static UpgradeData getBatUpgradeData(ItemStack bat, IBatUpgrade upgrade){
+		if(ItemStackTools.isNullStack(bat) || upgrade == null) return null;
+		List<UpgradeData> upgrades = getBatUpgradeData(bat);
+		for(UpgradeData up : upgrades){
+			if(up.isValid() && up.getUpgradeID().equals(upgrade.getID())){
+				return up;
+			}
+		}
+		return null;
+	}
+	
 	public static void onBatUpdate (ItemStack stack, World world, Entity entity, int slot, boolean equipped)
     {
     	if(stack == null)return;
@@ -395,10 +406,6 @@ public class BatHelper {
 		}
 		
 		boolean doDamage = data.cancelDamage == false;
-		
-		/*if(data.cancelDamage){
-			return handleAttackWithoutDamage(stack, attacker, target, data);
-		}*/
 		
         float earlyUpgradeDamage = data.earlyAttackDamage;
         damage += earlyUpgradeDamage;

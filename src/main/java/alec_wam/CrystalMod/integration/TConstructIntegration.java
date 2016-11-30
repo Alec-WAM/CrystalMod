@@ -10,6 +10,7 @@ import alec_wam.CrystalMod.blocks.BlockCrystalIngot.CrystalIngotBlockType;
 import alec_wam.CrystalMod.crafting.ModCrafting;
 import alec_wam.CrystalMod.entities.animals.EntityCrystalCow;
 import alec_wam.CrystalMod.fluids.ModFluids;
+import alec_wam.CrystalMod.integration.ModIntegration.IModIntegration;
 import alec_wam.CrystalMod.items.ItemIngot;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.items.ItemCrystal.CrystalType;
@@ -27,7 +28,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.event.FMLInterModComms;
 
-public class TConstructIntegration {
+public class TConstructIntegration implements IModIntegration {
 
 	private static ResourceLocation moltenMetal = new ResourceLocation("tconstruct:blocks/fluids/molten_metal");
 	private static ResourceLocation moltenMetalFlowing = new ResourceLocation(
@@ -41,7 +42,11 @@ public class TConstructIntegration {
 
 	public static FluidMolten moltenDarkIron = new FluidMolten("moltenDarkIron", ItemIngot.RGB_DARK_IRON, moltenMetal, moltenMetalFlowing);
 	
-	public static void preInit(){
+	public String getModID(){
+		return "tconstruct";
+	}
+	
+	public void preInit(){
 		
 		oreDictionary();
 		
@@ -80,7 +85,7 @@ public class TConstructIntegration {
 		registerAlloy(new FluidStack(moltenCrystalPure, 144), new FluidStack(moltenCrystalBlue, 144), new FluidStack(moltenCrystalRed, 144), new FluidStack(moltenCrystalGreen, 144), new FluidStack(moltenCrystalDark, 144));
 	}
 	
-	public static void init(){
+	public void init(){
 		TinkerRegistry.registerMelting(new ItemStack(ModItems.crystals, 1, CrystalType.BLUE.getMetadata()), moltenCrystalBlue, 144);
 		TinkerRegistry.registerMelting(new ItemStack(ModItems.crystals, 1, CrystalType.RED.getMetadata()), moltenCrystalRed, 144);
 		TinkerRegistry.registerMelting(new ItemStack(ModItems.crystals, 1, CrystalType.GREEN.getMetadata()), moltenCrystalGreen, 144);

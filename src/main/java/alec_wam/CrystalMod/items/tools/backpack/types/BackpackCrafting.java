@@ -16,6 +16,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.handler.GuiHandler;
 import alec_wam.CrystalMod.items.ModItems;
+import alec_wam.CrystalMod.items.tools.backpack.BackpackUtil;
 import alec_wam.CrystalMod.items.tools.backpack.IBackpack;
 import alec_wam.CrystalMod.items.tools.backpack.gui.ContainerBackpackCrafting;
 import alec_wam.CrystalMod.items.tools.backpack.gui.ContainerBackpackNormal;
@@ -25,9 +26,17 @@ import alec_wam.CrystalMod.items.tools.backpack.gui.OpenType;
 
 public class BackpackCrafting implements IBackpack {
 
+	public final ResourceLocation ID = CrystalMod.resourceL("crafting");
+	public final ResourceLocation TEXTURE = CrystalMod.resourceL("textures/model/backpack/crafting.png");
+	
 	@Override
 	public ResourceLocation getID() {
-		return CrystalMod.resourceL("crafting");
+		return ID;
+	}
+	
+	@Override
+	public ResourceLocation getTexture(int type) {
+		return TEXTURE;
 	}
 	
 	@SideOnly(Side.CLIENT)
@@ -45,20 +54,22 @@ public class BackpackCrafting implements IBackpack {
 
 	@Override
 	public ActionResult<ItemStack> rightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
-		OpenType type = hand == EnumHand.MAIN_HAND ? OpenType.MAIN_HAND : OpenType.OFF_HAND;
-		player.openGui(CrystalMod.instance, GuiHandler.GUI_ID_BACKPACK, world, type.ordinal(), 0, 0);
-		return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
+		return BackpackUtil.handleBackpackOpening(stack, world, player, hand, false);
 	}
 
+	public InventoryBackpack getInventory(EntityPlayer player){
+		return new InventoryBackpack(player, BackpackUtil.getPlayerBackpack(player), 9);
+	}
+	
 	@SideOnly(Side.CLIENT)
 	@Override
-	public Object getClientGuiElement(EntityPlayer player, World world, OpenType type) {
-		return new GuiBackpackCrafting(player.inventory, type);
+	public Object getClientGuiElement(EntityPlayer player, World world) {
+		return new GuiBackpackCrafting(getInventory(player));
 	}
 
 	@Override
-	public Object getServerGuiElement(EntityPlayer player, World world, OpenType type) {
-		return new ContainerBackpackCrafting(player.inventory, type);
+	public Object getServerGuiElement(EntityPlayer player, World world) {
+		return new ContainerBackpackCrafting(getInventory(player));
 	}
 
 }

@@ -122,11 +122,12 @@ batType.minecraft.iron.name=Iron
 batType.minecraft.diamond.name=Diamond
 batType.minecraft.gold.name=Gold
 
-batUpgrade.crystalmod.piston.name=Piston
-batUpgrade.crystalmod.redstone.name=Redstone
-batUpgrade.crystalmod.quartz.name=Quartz
-batUpgrade.crystalmod.cake.name=Cake
-batUpgrade.crystalmod.skull.name=Skull
+batUpgrade.crystalmod.piston.name=Knockback
+batUpgrade.crystalmod.redstone.name=Speed
+batUpgrade.crystalmod.lapis.name=Looting
+batUpgrade.crystalmod.quartz.name=Sharpness
+batUpgrade.crystalmod.cake.name=Range+
+batUpgrade.crystalmod.skull.name=Vampiric
 batUpgrade.crystalmod.poison.name=Poison
 batUpgrade.crystalmod.firework.name=Firework
 batUpgrade.crystalmod.ender.name=Ender
@@ -189,6 +190,8 @@ item.crystalmod.worksiteUpgrade.13.name=Quarry Only Ore Upgrade
 
 item.crystalmod.telePearl.name=Teleporting Pearl
 item.crystalmod.backpack.name=Backpack
+item.crystalmod.backpack_normal.name=Backpack
+item.crystalmod.backpack_crafting.name=Crafting Backpack
 item.crystalmod.flagItem.name=Flag
 item.crystalmod.dragonWings.name=Dragon Wings
 

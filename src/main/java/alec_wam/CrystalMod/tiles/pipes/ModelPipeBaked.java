@@ -1,27 +1,21 @@
 package alec_wam.CrystalMod.tiles.pipes;
 
-import net.minecraft.client.renderer.texture.*;
-import net.minecraft.client.*;
-import net.minecraft.util.*;
-import net.minecraft.util.EnumFacing.Axis;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
-
 import java.awt.Color;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.vecmath.Matrix4f;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.lwjgl.util.vector.Vector3f;
 
-import alec_wam.CrystalMod.CrystalMod;
+import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
+
 import alec_wam.CrystalMod.blocks.ModBlocks;
-import alec_wam.CrystalMod.client.model.dynamic.DelegatingDynamicItemAndBlockModel;
 import alec_wam.CrystalMod.client.model.dynamic.DynamicBaseModel;
 import alec_wam.CrystalMod.tiles.pipes.covers.CoverUtil;
 import alec_wam.CrystalMod.tiles.pipes.covers.CoverUtil.CoverData;
@@ -30,17 +24,32 @@ import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ModLogger;
 import alec_wam.CrystalMod.util.client.CustomModelUtil;
 import alec_wam.CrystalMod.util.client.RenderUtil;
-
-import com.google.common.base.Strings;
-import com.google.common.collect.Lists;
-
-import net.minecraft.client.renderer.block.model.*;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.*;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.renderer.block.model.BlockFaceUV;
+import net.minecraft.client.renderer.block.model.BlockPartFace;
+import net.minecraft.client.renderer.block.model.BlockPartRotation;
+import net.minecraft.client.renderer.block.model.FaceBakery;
+import net.minecraft.client.renderer.block.model.IBakedModel;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
+import net.minecraft.client.renderer.block.model.ItemOverride;
+import net.minecraft.client.renderer.block.model.ItemOverrideList;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.model.ModelRotation;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
+import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.client.model.IPerspectiveAwareModel;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 
@@ -421,46 +430,63 @@ public class ModelPipeBaked implements IPerspectiveAwareModel
 		{
 			return Collections.emptyList();
 		}
-
+		BlockRenderLayer layer = MinecraftForgeClient.getRenderLayer();
 		List<BakedQuad> quads = new ArrayList<BakedQuad>();
-		addPipeQuads( renderState, quads );
-
-		/*for( EnumFacing facing : EnumFacing.values() )
-		{
-			List<ResourceLocation> models = renderState.pipe.getAttachmentData(facing);
-			if( models == null )
-			{
-				continue;
-			}
-
-			for( ResourceLocation model : models )
-			{
-				IBakedModel bakedModel = partModels.get( model );
-
-				if( bakedModel == null )
-				{
-					throw new IllegalStateException( "Trying to use an unregistered part model: " + model );
-				}
-
-				List<BakedQuad> partQuads = bakedModel.getQuads( state, null, rand );
-
-				// Rotate quads accordingly
-				QuadRotator rotator = new QuadRotator();
-				partQuads = rotator.rotateQuads( partQuads, facing, EnumFacing.UP );
-
-				quads.addAll( partQuads );
-			}
-		}*/
+		
+		if(layer == BlockRenderLayer.CUTOUT || layer == BlockRenderLayer.TRANSLUCENT || renderStack !=null)addPipeQuads( renderState, quads );
 		
 		if(facadeBuilder !=null && renderState !=null){
+			List<BakedQuad> facadeQuads = Lists.newArrayList();
 			List<AxisAlignedBB> bbs = Lists.newArrayList();
-			ObfuscationReflectionHelper.setPrivateValue(FacadeBuilder.class, facadeBuilder, renderState, 0);
-			facadeBuilder.addFacades(
-					renderState.pipe.covers,
-					bbs,
-					rand,
-					quads
-			);
+			boolean addFacade = true;
+			if(addFacade){
+				facadeBuilder.addFacades(renderState, layer, 
+						renderState.pipe.covers,
+						bbs,
+						rand,
+						facadeQuads
+				);
+			
+				quads.addAll(facadeQuads);
+			}
+		}
+		
+		if(renderState !=null){
+			/*@Nonnull
+		    QuadCollector paintQuads = new QuadCollector();
+		    boolean hasPaintRendered = false;
+		    String cacheResult;
+
+		    EnumFacing face = EnumFacing.SOUTH;
+		    CoverData data = renderState.pipe.getCoverData(face);
+		    if(data !=null){
+		    	ModelWrangler.wrangleBakedModel(renderState.blockAccess, renderState.pos, data.getBlockState(), face, paintQuads);
+		    }
+		    quads.addAll(paintQuads.getQuads(side, layer));*/
+			/*for(EnumFacing facing : EnumFacing.VALUES){
+				CoverData facadeState = renderState.pipe.covers.get( facing );
+				if(facadeState != null){
+					IBlockState blockState = facadeState.getBlockState();
+					
+					if(renderState !=null && renderState.blockAccess !=null && renderState.pos !=null){
+						IBlockAccess world = new PipeBlockAccessWrapper(renderState.blockAccess, renderState.pos, facing);
+						blockState = facadeState.getBlockState().getBlock().getActualState(blockState, world, renderState.pos);
+					}
+					if(blockState.getBlock().canRenderInLayer(blockState, layer)){
+						IBakedModel blockModel = Minecraft.getMinecraft().getBlockRendererDispatcher().getModelForState( blockState );
+						if(renderState !=null && renderState.blockAccess !=null && renderState.pos !=null){
+							IBlockAccess world = new PipeBlockAccessWrapper(renderState.blockAccess, renderState.pos, facing);
+							blockState = blockState.getBlock().getExtendedState(blockState, world, renderState.pos);
+						}
+						List<BakedQuad> modelQuads = blockModel.getQuads(blockState, facing, rand);
+						for(BakedQuad quad : modelQuads){
+							if(quad.getFace() == facing){
+								quads.add(quad);
+							}
+						}
+					}
+				}
+			}*/
 		}
 
 		return quads;
@@ -541,8 +567,8 @@ public class ModelPipeBaked implements IPerspectiveAwareModel
         for (int n = 0; n < 6; ++n) {
         	boolean safe = (state !=null && state.pipe !=null);
         	EnumFacing dir = EnumFacing.getFront(n);
-            if (safe ? state.pipe.containsExternalConnection(dir) : false) {
-                this.renderIronCap(state, n, list);
+        	if (safe ? state.pipe.containsExternalConnection(dir) : false) {
+            	this.renderIronCap(state, n, list);
             }
             if (safe && state.pipe.getCoverData(dir) !=null) {
                 //this.addCover(state, state.pipe.getCoverData(dir), dir, list);

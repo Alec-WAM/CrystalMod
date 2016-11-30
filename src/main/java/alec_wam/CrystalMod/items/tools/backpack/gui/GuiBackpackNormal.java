@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.items.tools.backpack.BackpackUtil;
+import alec_wam.CrystalMod.items.tools.backpack.types.InventoryBackpack;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
@@ -18,19 +19,18 @@ import net.minecraftforge.fml.relauncher.Side;
 public class GuiBackpackNormal extends GuiContainer {
 
     private static final ResourceLocation RES_LOC = new ResourceLocation("crystalmod:textures/gui/backpack/normal.png");
-    public OpenType openType;
     
-    public GuiBackpackNormal(InventoryPlayer inventory, OpenType type){
-        super(new ContainerBackpackNormal(inventory, type));
-        openType = type;
+    private ItemStack backpack;
+    
+    public GuiBackpackNormal(InventoryBackpack backpackInventory){
+        super(new ContainerBackpackNormal(backpackInventory));
+        this.backpack = backpackInventory.getBackpack();
         this.xSize = 176+34+34;
         this.ySize = 171;
     }
 
     @Override
     public void drawGuiContainerForegroundLayer(int x, int y){
-    	
-    	ItemStack backpack = BackpackUtil.getItemStack(mc.thePlayer.inventory, openType);
     	
     	if(!ItemStackTools.isNullStack(backpack))this.fontRendererObj.drawString(backpack.getDisplayName(), 8+34, 6, 4210752);
     	this.fontRendererObj.drawString(I18n.format("container.inventory", new Object[0]), 8+34, 76, 4210752);
@@ -49,8 +49,6 @@ public class GuiBackpackNormal extends GuiContainer {
         this.drawTexturedModalRect(this.guiLeft, this.guiTop, 208, 85, 32, 86);
         
         //Baubles
-        
-        
         ContainerBackpackNormal container = (ContainerBackpackNormal)this.inventorySlots;
         if (container.hasBaublesSlots()) {
         	this.drawTexturedModalRect(this.guiLeft+(xSize-32), this.guiTop, 208, 85, 32, 79);
@@ -70,10 +68,10 @@ public class GuiBackpackNormal extends GuiContainer {
     
     @Override
 	protected void keyTyped(char par1, int par2) throws IOException {
-		if (par2 == CrystalMod.proxy.keyHandler.keyBack.getKeyCode())
+		/*if (par2 == CrystalMod.proxy.keyHandler.keyBack.getKeyCode())
         {
             this.mc.thePlayer.closeScreen();
-        } else
+        } else*/
 		super.keyTyped(par1, par2);
 	}
 }

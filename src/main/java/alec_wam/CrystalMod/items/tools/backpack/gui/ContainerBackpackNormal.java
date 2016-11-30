@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import alec_wam.CrystalMod.capability.ExtendedPlayerProvider;
 import alec_wam.CrystalMod.integration.baubles.BaublesIntegration;
 import alec_wam.CrystalMod.items.tools.backpack.BackpackUtil;
 import alec_wam.CrystalMod.items.tools.backpack.ItemBackpackBase;
@@ -31,24 +32,25 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumHand;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ContainerBackpackNormal extends Container {
 
+	private final EntityEquipmentSlot[] entityequipmentslots = new EntityEquipmentSlot[] {EntityEquipmentSlot.HEAD, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS, EntityEquipmentSlot.FEET};
+	
 	private final InventoryBackpack backpackInventory;
-    private final InventoryPlayer inventory;
-    private final OpenType openType;
+	private final EntityPlayer player;
 	
     protected IBaublesItemHandler baubles;
     
-	public ContainerBackpackNormal(InventoryPlayer playerInv, OpenType type){
-		this.inventory = playerInv;
-        this.backpackInventory = new InventoryBackpack(27);
-        baubles = BaublesIntegration.instance().getBaubles(playerInv.player);
-        openType = type;
+	public ContainerBackpackNormal(InventoryBackpack backpackInventory){
+		this.player = backpackInventory.getPlayer();
+        this.backpackInventory = backpackInventory;
+        baubles = BaublesIntegration.instance().getBaubles(player);
         
-        if (baubles != null && BaublesIntegration.WhoAmI.whoAmI(playerInv.player.worldObj) == BaublesIntegration.WhoAmI.SPCLIENT) {
+        if (baubles != null && BaublesIntegration.WhoAmI.whoAmI(player.getEntityWorld()) == BaublesIntegration.WhoAmI.SPCLIENT) {
             baubles = new WrapperBaubleInventory(baubles);
         }
         
@@ -56,28 +58,24 @@ public class ContainerBackpackNormal extends Container {
         
         for(int i = 0; i < 3; i++){
             for(int j = 0; j < 9; j++){
-                this.addSlotToContainer(new Slot(backpackInventory, j+i*9, (8+offset)+j*18, 17+i*18));
+                this.addSlotToContainer(new SlotBackpack(backpackInventory, j+i*9, (8+offset)+j*18, 17+i*18));
             }
         }
         
         for(int i = 0; i < 3; i++){
             for(int j = 0; j < 9; j++){
-                this.addSlotToContainer(new Slot(inventory, j+i*9+9, (8+offset)+j*18, 89+i*18));
+                this.addSlotToContainer(new Slot(player.inventory, j+i*9+9, (8+offset)+j*18, 89+i*18));
             }
         }
+        
         for(int i = 0; i < 9; i++){
-            if(type == OpenType.MAIN_HAND && i == inventory.currentItem){
-                this.addSlotToContainer(new SlotLocked(inventory, i, (8+offset)+i*18, 147));
-            }
-            else{
-                this.addSlotToContainer(new Slot(inventory, i, (8+offset)+i*18, 147));
-            }
+            this.addSlotToContainer(new Slot(player.inventory, i, (8+offset)+i*18, 147));
         }
-        final EntityPlayer player = playerInv.player;
+        
         for (int k = 0; k < 4; ++k)
         {
-            final EntityEquipmentSlot entityequipmentslot = new EntityEquipmentSlot[] {EntityEquipmentSlot.HEAD, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS, EntityEquipmentSlot.FEET}[k];
-            this.addSlotToContainer(new Slot(inventory, 36 + (3 - k), 8, 8 + k * 18)
+        	final EntityEquipmentSlot entityequipmentslot = entityequipmentslots[k];
+            this.addSlotToContainer(new Slot(player.inventory, 36 + (3 - k), 8, 8 + k * 18)
             {
                 /**
                  * Returns the maximum stack size for a given slot (usually the same as getInventoryStackLimit(), but 1
@@ -109,21 +107,13 @@ public class ContainerBackpackNormal extends Container {
                 }
             });
         }
-        if(openType == OpenType.OFF_HAND){
-            this.addSlotToContainer(new SlotLocked(inventory, 40, 8, 147));
-        } else {
-	        this.addSlotToContainer(new SlotOffhand(inventory, 40, 8, 147));
-        }
+        
+        this.addSlotToContainer(new SlotOffhand(player.inventory, 40, 8, 147));
         
         if (hasBaublesSlots()) {
             for (int i = 0; i < baubles.getSlots(); i++) {
-              addSlotToContainer(new SlotBauble(playerInv.player, baubles, i, (176+34+10), 8 + i*18));
+              addSlotToContainer(new SlotBauble(player, baubles, i, (176+34+10), 8 + i*18));
             }
-        }
-        
-        ItemStack stack = BackpackUtil.getItemStack(this.inventory, this.openType);
-        if(!ItemStackTools.isNullStack(stack) && stack.getItem() instanceof ItemBackpackBase){
-        	ItemUtil.readInventoryFromNBT(backpackInventory, ItemNBTHelper.getCompound(stack));
         }
 	}
 	
@@ -250,35 +240,54 @@ public class ContainerBackpackNormal extends Container {
             	theSlot.onSlotChanged();
             }
             if(ItemStackTools.getStackSize(newStack) == ItemStackTools.getStackSize(currentStack)){
-                return null;
+                return ItemStackTools.getEmptyStack();
             }
             theSlot.onPickupFromSlot(player, newStack);
 
             return currentStack;
         }
-        return null;
+        return ItemStackTools.getEmptyStack();
     }
 
     @Override
     public ItemStack slotClick(int slotId, int dragType, ClickType clickTypeIn, EntityPlayer player){
-        if(clickTypeIn == ClickType.SWAP && dragType == this.inventory.currentItem && openType == OpenType.MAIN_HAND){
-            return null;
-        }
-        else{
-            return super.slotClick(slotId, dragType, clickTypeIn, player);
-        }
+    	ItemStack openBackpack = ExtendedPlayerProvider.getExtendedPlayer(player).getOpenBackpack();
+    	
+    	if(slotId >=0){
+    		Slot slot = getSlot(slotId);
+    		if(slot !=null){
+    			if(slot.getHasStack()){
+    				ItemStack slotStack = slot.getStack();
+    				if(ItemUtil.canCombine(openBackpack, slotStack)){
+    					return ItemStackTools.getEmptyStack();
+    				}
+    				
+    				//Right-Click
+    				if(dragType == 1){
+    					if(slotStack.getItem() instanceof ItemBackpackBase){
+    						if(ItemStackTools.isValid(slotStack)){
+    							EnumHand openhand = EnumHand.MAIN_HAND;
+    							
+    							if(ItemUtil.canCombine(openBackpack, player.getHeldItemMainhand())){
+    								openhand = EnumHand.OFF_HAND;
+    							}
+    							
+    							slotStack.useItemRightClick(player.getEntityWorld(), player, openhand);
+    							return ItemStackTools.getEmptyStack();
+    						}
+    					}
+    				}    				
+    			}
+    		}
+    	}
+    	
+        return super.slotClick(slotId, dragType, clickTypeIn, player);
     }
 
     @Override
     public void onContainerClosed(EntityPlayer player){
-        ItemStack stack = this.inventory.getCurrentItem();
-        if(!ItemStackTools.isNullStack(stack) && stack.getItem() instanceof ItemBackpackBase){
-        	ItemStack backpack = BackpackUtil.getItemStack(this.inventory, this.openType);
-            if(backpack !=null){
-            	ItemUtil.writeInventoryToNBT(backpackInventory, ItemNBTHelper.getCompound(backpack));
-            }
-        }
         super.onContainerClosed(player);
+        this.backpackInventory.guiSaveSafe(player);
     }
 
     @Override

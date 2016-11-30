@@ -1,5 +1,8 @@
 package alec_wam.CrystalMod.tiles.pipes;
 
+import java.awt.Color;
+import java.util.ArrayList;
+import java.util.BitSet;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.EnumSet;
@@ -8,28 +11,44 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.Nullable;
+import javax.vecmath.Vector2f;
 import javax.vecmath.Vector3f;
 
+import alec_wam.CrystalMod.client.util.ModelUVAverager;
+import alec_wam.CrystalMod.tiles.pipes.CubeBuilder.UvVector;
+import alec_wam.CrystalMod.tiles.pipes.covers.CoverUtil;
 import alec_wam.CrystalMod.tiles.pipes.covers.CoverUtil.CoverData;
 import alec_wam.CrystalMod.util.ModLogger;
+import alec_wam.CrystalMod.util.client.RenderUtil;
 
 import com.google.common.base.Function;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockRendererDispatcher;
 import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.renderer.block.model.FaceBakery;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.color.BlockColors;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.VertexFormat;
+import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec2f;
 import net.minecraft.world.IBlockAccess;
+import net.minecraftforge.client.MinecraftForgeClient;
+import net.minecraftforge.client.model.pipeline.LightUtil;
+import net.minecraftforge.client.model.pipeline.UnpackedBakedQuad;
 
 
 /**
@@ -38,20 +57,18 @@ import net.minecraft.world.IBlockAccess;
 class FacadeBuilder
 {
 
-	private FakeState state;
-	
 	private final BlockColors blockColors = Minecraft.getMinecraft().getBlockColors();
 
 	private final VertexFormat format;
 	
 	private final BlockRendererDispatcher blockRendererDispatcher = Minecraft.getMinecraft().getBlockRendererDispatcher();
 
-	FacadeBuilder( VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter )
+	FacadeBuilder(VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter )
 	{
 		this.format = format;
 	}
 
-	void addFacades( Map<EnumFacing, CoverData> facadesState, List<AxisAlignedBB> partBoxes, long rand, List<BakedQuad> quads )
+	void addFacades(FakeState state, BlockRenderLayer layer, Map<EnumFacing, CoverData> facadesState, List<AxisAlignedBB> partBoxes, long rand, List<BakedQuad> quads )
 	{
 		boolean thinFacades = isUseThinFacades( partBoxes );
 
@@ -62,7 +79,7 @@ class FacadeBuilder
 			
 			try
 			{
-				addFacade( facadesState, side, cutOutBox, thinFacades, false, rand, builder );
+				addFacade(state, layer, facadesState, side, cutOutBox, thinFacades, false, rand, builder);
 			}
 			catch( Throwable t )
 			{
@@ -72,182 +89,371 @@ class FacadeBuilder
 		}
 	}
 
-	private void addFacade( Map<EnumFacing, CoverData> facades, EnumFacing side, AxisAlignedBB busBounds, boolean thinFacades, boolean renderStilt, long rand, CubeBuilder builder )
+	private void addFacade(FakeState state, BlockRenderLayer layer, Map<EnumFacing, CoverData> facades, EnumFacing side, AxisAlignedBB busBounds, boolean thinFacades, boolean renderStilt, long rand, CubeBuilder builder )
 	{
 
 		CoverData facadeState = facades.get( side );
 		if(facadeState == null)return;
 		IBlockState blockState = facadeState.getBlockState();
-
+		
+		if(state !=null && state.blockAccess !=null && state.pos !=null){
+			IBlockAccess world = new PipeBlockAccessWrapper(state.blockAccess, state.pos, side);
+			blockState = facadeState.getBlockState().getBlock().getActualState(blockState, world, state.pos);
+		}
+		if(!blockState.getBlock().canRenderInLayer(blockState, layer))return;
+		
 		builder.setDrawFaces( EnumSet.allOf( EnumFacing.class ) );
-
-		// We only render the stilt if we don't intersect with any part directly, and if there's no part on our side
-		/*if( renderStilt && busBounds == null )
-		{
-			builder.setTexture( facadeTexture );
-			switch( side )
-			{
-				case DOWN:
-					builder.addCube( 7, 1, 7, 9, 6, 9 );
-					break;
-				case UP:
-					builder.addCube( 7, 10, 7, 9, 15, 9 );
-					break;
-				case NORTH:
-					builder.addCube( 7, 7, 1, 9, 9, 6 );
-					break;
-				case SOUTH:
-					builder.addCube( 7, 7, 10, 9, 9, 15 );
-					break;
-				case WEST:
-					builder.addCube( 1, 7, 7, 6, 9, 9 );
-					break;
-				case EAST:
-					builder.addCube( 10, 7, 7, 15, 9, 9 );
-					break;
-			}
-		}*/
 
 		final float thickness = thinFacades ? 1 : 2;
 
 		IBakedModel blockModel = blockRendererDispatcher.getModelForState( blockState );
-
-		int color = 0xffffff;
-		try
-		{
-			color = blockColors.func_189991_a( blockState );
+		if(state !=null && state.blockAccess !=null && state.pos !=null){
+			IBlockAccess world = new PipeBlockAccessWrapper(state.blockAccess, state.pos, side);
+			blockState = blockState.getBlock().getExtendedState(blockState, world, state.pos);
 		}
-		catch( final Throwable ignored )
-		{
-		}
-
-		builder.setColorRGB( color );
-
-		EnumSet<EnumFacing> openFaces = calculateFaceOpenFaces(side);
 		
+		
+		EnumSet<EnumFacing> openFaces = EnumSet.allOf(EnumFacing.class);//calculateFaceOpenFaces(state, side);
+		Map<Integer, Map<EnumFacing, TextureAtlasSprite>> textures = Maps.newHashMap();
+		Map<Integer, Map<EnumFacing, Integer>> tints = Maps.newHashMap();
+		Map<Integer, Map<EnumFacing, int[]>> customQuads = Maps.newHashMap();
 		for( EnumFacing facing : openFaces )
 		{
-			List<BakedQuad> quads = blockModel.getQuads( blockState, facing, rand );
-			for( BakedQuad quad : quads )
-			{
-				builder.setTexture( quad.getSprite() );
+			List<BakedQuad> quads = blockModel.getQuads(blockState, facing, 0);
+			int index = 0;
+			for(BakedQuad quad : quads){
+				Map<EnumFacing, TextureAtlasSprite> map = textures.getOrDefault(index, Maps.newHashMap());
+				map.put(facing, quad.getSprite());
+				textures.put(index, map);
+				Map<EnumFacing, int[]> mapQuads = customQuads.getOrDefault(index, Maps.newHashMap());
+				if(quad.hasTintIndex() && quad.getFace() !=null){
+					Map<EnumFacing, Integer> listTint = tints.getOrDefault(index, Maps.newHashMap());
+					listTint.put(quad.getFace(), quad.getTintIndex());
+					tints.put(index, listTint);
+				}
+				mapQuads.put(facing, quad.getVertexData());
+				customQuads.put(index, mapQuads);
+				index++;
 			}
 		}
-
-		builder.setDrawFaces( openFaces );
-
-		AxisAlignedBB primaryBox = getFacadeBox( side, thinFacades );
-
-		Vector3f min = new Vector3f(
-				(float) primaryBox.minX * 16,
-				(float) primaryBox.minY * 16,
-				(float) primaryBox.minZ * 16
-		);
-		Vector3f max = new Vector3f(
-				(float) primaryBox.maxX * 16,
-				(float) primaryBox.maxY * 16,
-				(float) primaryBox.maxZ * 16
-		);
-
-		if( busBounds == null )
-		{
-			// Adjust the facade for neighboring facades so that facade cubes dont overlap with each other
-			if( side == EnumFacing.NORTH || side == EnumFacing.SOUTH )
-			{
-				if( facades.containsKey( EnumFacing.UP ) )
-				{
-					max.y -= thickness;
-				}
-
-				if( facades.containsKey( EnumFacing.DOWN ) )
-				{
-					min.y += thickness;
+		/*for(EnumFacing face : customQuads.keySet()){
+			ModLogger.info(face.getName()+" "+customQuads.get(face).toString());
+		}*/
+		//ModLogger.info(customQuads.toString());
+		//ModLogger.info(tints.toString());
+		//ModLogger.info(textures.toString());
+		
+		boolean test = true;
+		
+		if(test){
+			AxisAlignedBB box = getFacadeBox( side, thinFacades );
+			for(EnumFacing dir : EnumFacing.VALUES){
+				for(int index : customQuads.keySet()){
+					Map<EnumFacing, int[]> quadmap = customQuads.get(index);
+					Map<EnumFacing, TextureAtlasSprite> textureMap = textures.get(index);
+					if(quadmap.containsKey(dir)){
+						int[] vecData = quadmap.get(dir);
+						EnumFacing face = FaceBakery.getFacingFromVertexData(vecData);
+						
+						TextureAtlasSprite texture = RenderUtil.getMissingSprite();
+						if(textureMap !=null){
+							texture = textureMap.getOrDefault(face, RenderUtil.getMissingSprite());
+						}
+						
+						UnpackedBakedQuad.Builder quadBuilder = new UnpackedBakedQuad.Builder( format );
+						quadBuilder.setTexture( texture );
+						quadBuilder.setQuadOrientation( face );
+						
+						//ModLogger.info("("+index+") "+face);
+						for(int i = 0; i < 4; i++){
+							int storeIndex = i * 7;
+							float x = Float.intBitsToFloat(vecData[storeIndex]);
+							float y = Float.intBitsToFloat(vecData[storeIndex + 1]);
+							float z = Float.intBitsToFloat(vecData[storeIndex + 2]);
+							
+							float offset = thickness/16f;
+							
+							if(side == EnumFacing.UP){
+								if(y < box.maxY-offset && face !=side){
+									y = (float)(box.maxY-offset);
+								}
+							}
+							if(side == EnumFacing.DOWN){
+								if(y > box.minY+offset && face !=side){
+									y = (float)(box.minY+offset);
+								}
+							}
+							
+							if(side == EnumFacing.NORTH){
+								if(z > box.minZ+offset && face != side){
+									z = (float)(box.minZ+offset);
+								}
+								if( facades.containsKey( EnumFacing.UP ) )
+								{
+									if(y == box.maxY)y -= offset;
+								}
+				
+								if( facades.containsKey( EnumFacing.DOWN ) )
+								{
+									if(y == box.minY)y += offset;
+								}
+							}
+							if(side == EnumFacing.SOUTH){
+								if(z < box.maxZ-offset && face != side){
+									z = (float)(box.maxZ-offset);
+								}
+							}
+							if(side == EnumFacing.EAST){
+								if(x < box.maxX-offset && face != side){
+									x = (float)(box.maxX-offset);
+								}
+								if( facades.containsKey( EnumFacing.SOUTH ) )
+								{
+									if(z == box.maxZ)z -= offset;
+								}
+				
+								if( facades.containsKey( EnumFacing.NORTH ) )
+								{
+									if(z == box.minZ)z += offset;
+								}
+							}
+							if(side == EnumFacing.WEST){
+								if(x > box.minX+offset && face != side){
+									x = (float)(box.minX+offset);
+								}
+								if( facades.containsKey( EnumFacing.SOUTH ) )
+								{
+									if(z == box.maxZ)z -= offset;
+								}
+				
+								if( facades.containsKey( EnumFacing.NORTH ) )
+								{
+									if(z == box.minZ)z += offset;
+								}
+							}
+							
+							float u = Float.intBitsToFloat(vecData[storeIndex + 4]);
+							float v = Float.intBitsToFloat(vecData[storeIndex + 5]);
+							builder.resetColors();
+							if(tints.containsKey(index)){
+								Map<EnumFacing, Integer> tintMap = tints.get(index);
+								for(EnumFacing face2 : tintMap.keySet()){
+									IBlockAccess world = state !=null ? state.blockAccess : null;
+									BlockPos pos = state !=null ? state.pos : null;
+									int color = getBlockColor(blockState, world, pos, tintMap.get(face2));
+									if(color !=-1)builder.setColorRGB(face2, color);
+								}
+							} 
+							
+							builder.putVertex(quadBuilder, face, x, y, z, u, v);
+							//ModLogger.info("("+i+") "+x+" "+y+" "+z+" U:"+u+" V: "+v);
+						}
+						
+						
+						int[] buildData = quadBuilder.build().getVertexData();
+						builder.getOutput().add( new BakedQuad( buildData, -1, face, texture, true, format ) );
+					}
 				}
 			}
-			else if( side == EnumFacing.EAST || side == EnumFacing.WEST )
-			{
-				if( facades.containsKey( EnumFacing.UP ) )
-				{
-					max.y -= thickness;
-				}
-
-				if( facades.containsKey( EnumFacing.DOWN ) )
-				{
-					min.y += thickness;
-				}
-
-				if( facades.containsKey( EnumFacing.SOUTH ) )
-				{
-					max.z -= thickness;
-				}
-
-				if( facades.containsKey( EnumFacing.NORTH ) )
-				{
-					min.z += thickness;
-				}
-			}
-
-			builder.addCube( min.x, min.y, min.z, max.x, max.y, max.z );
+			
+			
+			//builder.addCube(0f, 1f, 0f, 0f, 1f, 0.0625f);
+			return;
 		}
-		else
-		{
-			Vector3f busMin = new Vector3f( (float) busBounds.minX * 16, (float) busBounds.minY	* 16, (float) busBounds.minZ * 16 );
-			Vector3f busMax = new Vector3f( (float) busBounds.maxX * 16, (float) busBounds.maxY	* 16, (float) busBounds.maxZ * 16 );
+		
+		for(int p : textures.keySet()){
+			builder.resetColors();
+			if(tints.containsKey(p)){
+				Map<EnumFacing, Integer> tintMap = tints.get(p);
+				for(EnumFacing face2 : tintMap.keySet()){
+					IBlockAccess world = state !=null ? state.blockAccess : null;
+					BlockPos pos = state !=null ? state.pos : null;
+					int color = getBlockColor(blockState, world, pos, tintMap.get(face2));
+					if(color !=-1)builder.setColorRGB(face2, color);
+				}
+			} 
 
-			if( side == EnumFacing.UP || side == EnumFacing.DOWN )
-			{
-				this.renderSegmentBlockCurrentBounds( builder, min, max, 0.0f, 0.0f, busMax.z, 16.0f, 16.0f, 16.0f );
-				this.renderSegmentBlockCurrentBounds( builder, min, max, 0.0f, 0.0f, 0.0f, 16.0f, 16.0f, busMin.z );
-				this.renderSegmentBlockCurrentBounds( builder, min, max, 0.0f, 0.0f, busMin.z, busMin.x, 16.0f, busMax.z );
-				this.renderSegmentBlockCurrentBounds( builder, min, max, busMax.x, 0.0f, busMin.z, 16.0f, 16.0f, busMax.z );
+			Map<EnumFacing, TextureAtlasSprite> map = textures.get(p);
+			TextureAtlasSprite up = map.get(EnumFacing.UP);
+			TextureAtlasSprite down = map.get(EnumFacing.DOWN);
+			TextureAtlasSprite n = map.get(EnumFacing.NORTH);
+			TextureAtlasSprite s = map.get(EnumFacing.SOUTH);
+			TextureAtlasSprite e = map.get(EnumFacing.EAST);
+			TextureAtlasSprite w = map.get(EnumFacing.WEST);
+			builder.setTextures(up, down, n, s, e, w);
+			
+			List<EnumFacing> list = new ArrayList<EnumFacing>();
+			list.add(side);
+			list.add(side.getOpposite());
+			list.add(EnumFacing.UP);
+			builder.setDrawFaces( EnumSet.copyOf(list));
+	
+			AxisAlignedBB box = getFacadeBox( side, thinFacades );
+			double minX = box.minX;
+			double maxX = box.maxX;
+			double minY = box.minY;
+			double maxY = box.maxY;
+			/*if(customQuads.containsKey(p)){
+				Map<EnumFacing, List<Vector3f>> quadmap = customQuads.get(p);
+				if(quadmap.containsKey(side)){
+					List<Vector3f> vecs = quadmap.get(side);
+					float mX = 1.0F;
+					float MX = 0.0F;
+					float mY = 1.0F;
+					float MY = 0.0F;
+					for(int v = 0; v < vecs.size(); v++){
+						Vector3f vec = vecs.get(v);
+						//ModLogger.info(v+" "+vec.field_189982_i+" "+vec.field_189983_j);
+						if(vec.x < mX){
+							mX = vec.x;
+						} 
+						if(vec.x > MX){
+							MX = vec.x;
+						} 
+						if(vec.y < mY){
+							mY = vec.y;
+						} 
+						if(vec.y > MY){
+							MY = vec.y;
+						} 
+					}
+					//ModLogger.info("MIN X: "+mX+" MAX X: "+MX);
+					//ModLogger.info("MIN Y: "+mY+" MAX Y: "+MY);
+					minX = mX;
+					minY = mY;
+					maxX = MX;
+					maxY = MY;
+				}
+			}*/
+			AxisAlignedBB primaryBox = null;
+			if(side == EnumFacing.SOUTH || side == EnumFacing.NORTH){
+				primaryBox = new AxisAlignedBB(minX, minY, box.minZ, maxX, maxY, box.maxZ);
+			} else {
+				primaryBox = new AxisAlignedBB(box.minX, minY, minX, box.maxX, maxY, maxX);
 			}
-			else if( side == EnumFacing.NORTH || side == EnumFacing.SOUTH )
+			Vector3f min = new Vector3f(
+					(float) primaryBox.minX * 16,
+					(float) primaryBox.minY * 16,
+					(float) primaryBox.minZ * 16
+			);
+			Vector3f max = new Vector3f(
+					(float) primaryBox.maxX * 16,
+					(float) primaryBox.maxY * 16,
+					(float) primaryBox.maxZ * 16
+			);
+	
+			if( busBounds == null )
 			{
-				if( facades.get( EnumFacing.UP ) != null )
+				// Adjust the facade for neighboring facades so that facade cubes dont overlap with each other
+				/*if( side == EnumFacing.NORTH || side == EnumFacing.SOUTH )
 				{
-					max.y -= thickness;
+					if( facades.containsKey( EnumFacing.UP ) )
+					{
+						max.y -= thickness;
+					}
+	
+					if( facades.containsKey( EnumFacing.DOWN ) )
+					{
+						min.y += thickness;
+					}
 				}
-
-				if( facades.get( EnumFacing.DOWN ) != null )
+				else if( side == EnumFacing.EAST || side == EnumFacing.WEST )
 				{
-					min.y += thickness;
-				}
-
-				this.renderSegmentBlockCurrentBounds( builder, min, max, busMax.x, 0.0f, 0.0f, 16.0f, 16.0f, 16.0f );
-				this.renderSegmentBlockCurrentBounds( builder, min, max, 0.0f, 0.0f, 0.0f, busMin.x, 16.0f, 16.0f );
-				this.renderSegmentBlockCurrentBounds( builder, min, max, busMin.x, 0.0f, 0.0f, busMax.x, busMin.y, 16.0f );
-				this.renderSegmentBlockCurrentBounds( builder, min, max, busMin.x, busMax.y, 0.0f, busMax.x, 16.0f, 16.0f );
+					if( facades.containsKey( EnumFacing.UP ) )
+					{
+						max.y -= thickness;
+					}
+	
+					if( facades.containsKey( EnumFacing.DOWN ) )
+					{
+						min.y += thickness;
+					}
+	
+					if( facades.containsKey( EnumFacing.SOUTH ) )
+					{
+						max.z -= thickness;
+					}
+	
+					if( facades.containsKey( EnumFacing.NORTH ) )
+					{
+						min.z += thickness;
+					}
+				}*/
+	
+				builder.addCube( min.x, min.y, min.z, max.x, max.y, max.z );
 			}
 			else
 			{
-				if( facades.get( EnumFacing.UP ) != null )
+				Vector3f busMin = new Vector3f( (float) busBounds.minX * 16, (float) busBounds.minY	* 16, (float) busBounds.minZ * 16 );
+				Vector3f busMax = new Vector3f( (float) busBounds.maxX * 16, (float) busBounds.maxY	* 16, (float) busBounds.maxZ * 16 );
+	
+				if( side == EnumFacing.UP || side == EnumFacing.DOWN )
 				{
-					max.y -= thickness;
+					this.renderSegmentBlockCurrentBounds( builder, min, max, 0.0f, 0.0f, busMax.z, 16.0f, 16.0f, 16.0f );
+					this.renderSegmentBlockCurrentBounds( builder, min, max, 0.0f, 0.0f, 0.0f, 16.0f, 16.0f, busMin.z );
+					this.renderSegmentBlockCurrentBounds( builder, min, max, 0.0f, 0.0f, busMin.z, busMin.x, 16.0f, busMax.z );
+					this.renderSegmentBlockCurrentBounds( builder, min, max, busMax.x, 0.0f, busMin.z, 16.0f, 16.0f, busMax.z );
 				}
-
-				if( facades.get( EnumFacing.DOWN ) != null )
+				else if( side == EnumFacing.NORTH || side == EnumFacing.SOUTH )
 				{
-					min.y += thickness;
+					if( facades.get( EnumFacing.UP ) != null )
+					{
+						max.y -= thickness;
+					}
+	
+					if( facades.get( EnumFacing.DOWN ) != null )
+					{
+						min.y += thickness;
+					}
+	
+					this.renderSegmentBlockCurrentBounds( builder, min, max, busMax.x, 0.0f, 0.0f, 16.0f, 16.0f, 16.0f );
+					this.renderSegmentBlockCurrentBounds( builder, min, max, 0.0f, 0.0f, 0.0f, busMin.x, 16.0f, 16.0f );
+					this.renderSegmentBlockCurrentBounds( builder, min, max, busMin.x, 0.0f, 0.0f, busMax.x, busMin.y, 16.0f );
+					this.renderSegmentBlockCurrentBounds( builder, min, max, busMin.x, busMax.y, 0.0f, busMax.x, 16.0f, 16.0f );
 				}
-
-				if( facades.get( EnumFacing.SOUTH ) != null )
+				else
 				{
-					max.z -= thickness;
+					if( facades.get( EnumFacing.UP ) != null )
+					{
+						max.y -= thickness;
+					}
+	
+					if( facades.get( EnumFacing.DOWN ) != null )
+					{
+						min.y += thickness;
+					}
+	
+					if( facades.get( EnumFacing.SOUTH ) != null )
+					{
+						max.z -= thickness;
+					}
+	
+					if( facades.get( EnumFacing.NORTH ) != null )
+					{
+						min.z += thickness;
+					}
+	
+					this.renderSegmentBlockCurrentBounds( builder, min, max, 0.0f, 0.0f, busMax.z, 16.0f, 16.0f, 16.0f );
+					this.renderSegmentBlockCurrentBounds( builder, min, max, 0.0f, 0.0f, 0.0f, 16.0f, 16.0f, busMin.z );
+					this.renderSegmentBlockCurrentBounds( builder, min, max, 0.0f, 0.0f, busMin.z, 16.0f, busMin.y, busMax.z );
+					this.renderSegmentBlockCurrentBounds( builder, min, max, 0.0f, busMax.y, busMin.z, 16.0f, 16.0f, busMax.z );
 				}
-
-				if( facades.get( EnumFacing.NORTH ) != null )
-				{
-					min.z += thickness;
-				}
-
-				this.renderSegmentBlockCurrentBounds( builder, min, max, 0.0f, 0.0f, busMax.z, 16.0f, 16.0f, 16.0f );
-				this.renderSegmentBlockCurrentBounds( builder, min, max, 0.0f, 0.0f, 0.0f, 16.0f, 16.0f, busMin.z );
-				this.renderSegmentBlockCurrentBounds( builder, min, max, 0.0f, 0.0f, busMin.z, 16.0f, busMin.y, busMax.z );
-				this.renderSegmentBlockCurrentBounds( builder, min, max, 0.0f, busMax.y, busMin.z, 16.0f, 16.0f, busMax.z );
 			}
 		}
 	}
 
+	public static int getBlockColor(IBlockState state, IBlockAccess world, BlockPos pos, int pass){
+		try
+		{
+			int color2 = Minecraft.getMinecraft().getBlockColors().colorMultiplier(state, world, pos, pass);
+			if(color2 !=-1){
+				return color2;
+			}
+		}
+		catch( final Throwable ignored ){}
+		return -1;
+	}
+	
 	private void renderSegmentBlockCurrentBounds( CubeBuilder builder, Vector3f min, Vector3f max,
 			float minX, float minY, float minZ, float maxX, float maxY, float maxZ ) 
 	{
@@ -347,20 +553,20 @@ class FacadeBuilder
 		}
 	}
 	
-	private EnumSet<EnumFacing> calculateFaceOpenFaces( EnumFacing side )
+	private EnumSet<EnumFacing> calculateFaceOpenFaces(FakeState state,  EnumFacing side )
 	{
 		
 		
 		final EnumSet<EnumFacing> out = EnumSet.of( side, side.getOpposite() );
-		if(/*state == null || state.pipe == null*/true){
+		if(state == null || state.pipe == null){
 			final EnumSet<EnumFacing> out2 = EnumSet.allOf(EnumFacing.class);
-			/*for( final EnumFacing it : EnumFacing.values() )
+			for( final EnumFacing it : EnumFacing.values() )
 			{
 				if( !out2.contains( it ) )
 				{
 					out2.add( it );
 				}
-			}*/
+			}
 			return out;
 		}
 		TileEntityPipe pipe = state.pipe;
@@ -379,7 +585,7 @@ class FacadeBuilder
 		if( out.contains( EnumFacing.UP ) && ( side.getFrontOffsetX() != 0 || side.getFrontOffsetZ() != 0 ) )
 		{
 			final CoverData fp = pipe.getCoverData( EnumFacing.UP );
-			if( fp != null && ( fp.isTransparent() == facade.isTransparent() ) )
+			if( fp != null && ( fp.isTransparent() == facade.isTransparent() ))
 			{
 				out.remove( EnumFacing.UP );
 			}

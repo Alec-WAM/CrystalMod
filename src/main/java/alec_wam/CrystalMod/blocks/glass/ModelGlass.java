@@ -10,6 +10,7 @@ import org.lwjgl.util.vector.Vector3f;
 import alec_wam.CrystalMod.blocks.glass.BlockCrystalGlass.GlassType;
 import alec_wam.CrystalMod.client.model.dynamic.DynamicItemAndBlockModel;
 import alec_wam.CrystalMod.util.ItemStackTools;
+import alec_wam.CrystalMod.util.ModLogger;
 import alec_wam.CrystalMod.util.client.CustomModelUtil;
 import alec_wam.CrystalMod.util.client.RenderUtil;
 
@@ -66,6 +67,7 @@ public class ModelGlass extends DynamicItemAndBlockModel {
 		if(!ItemStackTools.isNullStack(stack)){
 			type = GlassType.values()[stack.getMetadata() % (GlassType.values().length)];
 		}else if(state !=null){
+			
 			type = state.getValue(BlockCrystalGlass.TYPE);
 			renderUp = !state.getValue(BlockCrystalGlass.CONNECTED_UP);
 			renderD = !state.getValue(BlockCrystalGlass.CONNECTED_DOWN);
@@ -73,6 +75,7 @@ public class ModelGlass extends DynamicItemAndBlockModel {
 			renderS = !state.getValue(BlockCrystalGlass.CONNECTED_SOUTH);
 			renderW = !state.getValue(BlockCrystalGlass.CONNECTED_WEST);
 			renderE = !state.getValue(BlockCrystalGlass.CONNECTED_EAST);
+			//ModLogger.info("MODELGLASS: U "+renderUp);
 		}
 		TextureAtlasSprite sprite = getTexture(type);
 		float[] top = new float[] { 0.0f, 0.0f, 16.0f, 1.0f };

@@ -10,6 +10,8 @@ public class ExtendedPlayerInventory extends ItemStackHandler implements IItemHa
 	public static final int INV_SIZE = 1;
 	private boolean[] changed;
 	
+	public static final int BACKPACK_SLOT_ID = 0;
+	
 	public ExtendedPlayerInventory(){
 		super(INV_SIZE);
 	}

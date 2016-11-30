@@ -2,6 +2,7 @@ package alec_wam.CrystalMod.capability;
 
 import alec_wam.CrystalMod.items.tools.backpack.ItemBackpackBase;
 import alec_wam.CrystalMod.util.ItemStackTools;
+import alec_wam.CrystalMod.util.inventory.SlotOffhand;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -81,10 +82,13 @@ public class ContainerExtendedInventory extends Container
                 }
             });
 		}
-		
-		
         
-        this.addSlotToContainer(new SlotItemHandler(inventory, 0, 77, 8 + 3 * 18));   
+        this.addSlotToContainer(new SlotItemHandler(inventory, ExtendedPlayerInventory.BACKPACK_SLOT_ID, 77, 8 + 2 * 18){
+        	@Override
+        	public boolean isItemValid(ItemStack stack){
+        		return !ItemStackTools.isNullStack(stack) && stack.getItem() instanceof ItemBackpackBase;
+        	}
+        });   
 
         for (int i = 0; i < 3; ++i)
         {
@@ -99,20 +103,7 @@ public class ContainerExtendedInventory extends Container
             this.addSlotToContainer(new Slot(playerInv, i, 8 + i * 18, 142));
         }
         
-        this.addSlotToContainer(new Slot(playerInv, 40, 96, 62)
-        {
-        	@Override
-            public boolean isItemValid(ItemStack stack)
-            {
-                return super.isItemValid(stack);
-            }
-        	@Override
-            @SideOnly(Side.CLIENT)
-            public String getSlotTexture()
-            {
-                return "minecraft:items/empty_armor_slot_shield";
-            }
-        });
+        this.addSlotToContainer(new SlotOffhand(playerInv, 40, 77, 62));
 
         this.onCraftMatrixChanged(this.craftMatrix);
         
@@ -227,7 +218,7 @@ public class ContainerExtendedInventory extends Container
             // inv -> extendedInv
             else if (itemstack.getItem() instanceof ItemBackpackBase)
             {
-            	int slotNum = 0;
+            	int slotNum = ExtendedPlayerInventory.BACKPACK_SLOT_ID;
             	if (!((Slot)this.inventorySlots.get(slotNum+9)).getHasStack() &&	                		
 	                		!this.mergeItemStack(itemstack1, slotNum+9, slotNum + 10, false))
                 {

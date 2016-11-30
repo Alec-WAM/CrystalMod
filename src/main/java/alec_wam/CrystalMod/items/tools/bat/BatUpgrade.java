@@ -1,7 +1,6 @@
 package alec_wam.CrystalMod.items.tools.bat;
 
 import java.util.List;
-import java.util.Set;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;

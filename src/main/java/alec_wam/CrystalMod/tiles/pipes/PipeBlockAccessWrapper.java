@@ -1,6 +1,7 @@
 package alec_wam.CrystalMod.tiles.pipes;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
@@ -37,7 +38,15 @@ public class PipeBlockAccessWrapper implements IBlockAccess {
 				}
 			}
 		}
-		return world.getBlockState(pos);
+		TileEntity tile = world.getTileEntity(pos);
+		if(tile !=null && tile instanceof TileEntityPipe){
+			TileEntityPipe pipe = (TileEntityPipe) tile;
+			CoverData data = pipe.getCoverData(face);
+			if(data !=null && data.getBlockState() !=null){
+				return data.getBlockState();
+			}
+		}
+		return Blocks.AIR.getDefaultState();
 	}
 
 	@Override

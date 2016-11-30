@@ -126,7 +126,7 @@ public class EntityWirelessChestMinecart extends EntityMinecartChest implements 
     	if (inventory == null)
         {
             if (isBoundToPlayer())
-            	inventory = WirelessChestManager.get(worldObj).getPrivate(boundToPlayer).getInventory(getCode());
+            	inventory = WirelessChestManager.get(worldObj).getPrivate(getOwner()).getInventory(getCode());
             else
             	inventory = WirelessChestManager.get(worldObj).getInventory(getCode());
         }
@@ -272,12 +272,12 @@ public class EntityWirelessChestMinecart extends EntityMinecartChest implements 
 
 	@Override
 	public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction) {
-		return boundToPlayer == null;
+		return getOwner()  == null;
 	}
 
 	@Override
 	public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
-		return boundToPlayer == null;
+		return getOwner() == null;
 	}
 	
 	public boolean processInitialInteract(EntityPlayer player, @Nullable ItemStack stack, EnumHand hand)
@@ -320,7 +320,7 @@ public class EntityWirelessChestMinecart extends EntityMinecartChest implements 
             compound.setInteger("DisplayOffset", this.getDisplayTileOffset());
         }
 		compound.setInteger("Code", getCode());
-		if(boundToPlayer !=null)PlayerUtil.uuidToNBT(compound, boundToPlayer);
+		if(getOwner()  !=null)PlayerUtil.uuidToNBT(compound, getOwner());
     }
 
     /**
@@ -355,7 +355,7 @@ public class EntityWirelessChestMinecart extends EntityMinecartChest implements 
     {
         if (capability == net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
         {
-        	if(getInventory() == null)return super.getCapability(capability, facing);
+        	if(getOwner() != null || getInventory() == null)return super.getCapability(capability, facing);
             return (T) getInventory();
         }
         return super.getCapability(capability, facing);
@@ -364,7 +364,10 @@ public class EntityWirelessChestMinecart extends EntityMinecartChest implements 
     @Override
     public boolean hasCapability(net.minecraftforge.common.capabilities.Capability<?> capability, net.minecraft.util.EnumFacing facing)
     {
-        return capability == net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
+    	if(capability == net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY){
+    		return getOwner() == null;
+    	}
+        return super.hasCapability(capability, facing);
     }
 
 }

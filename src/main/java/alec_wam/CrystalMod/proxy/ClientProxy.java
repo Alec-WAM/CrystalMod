@@ -9,6 +9,7 @@ import org.lwjgl.input.Keyboard;
 import alec_wam.CrystalMod.Config;
 import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.blocks.glass.BlockCrystalGlass.GlassType;
+import alec_wam.CrystalMod.capability.LayerExtendedPlayerInventory;
 import alec_wam.CrystalMod.client.model.CustomBakedModel;
 import alec_wam.CrystalMod.client.model.CustomItemModelFactory;
 import alec_wam.CrystalMod.client.model.LayerDragonWings;
@@ -79,7 +80,9 @@ public class ClientProxy extends CommonProxy {
         LayerDragonWings dragonWingsRenderer = new LayerDragonWings();
 		for (RenderPlayer renderer : Minecraft.getMinecraft().getRenderManager().getSkinMap().values()){
 			renderer.addLayer(dragonWingsRenderer);
+			renderer.addLayer(new LayerExtendedPlayerInventory(renderer));
 		}
+		
 		LayerHorseAccessories horseAccessoryRenderer = new LayerHorseAccessories();
 		Render<?> renderHorse = Minecraft.getMinecraft().getRenderManager().getEntityClassRenderObject(EntityHorse.class);
 		if(renderHorse !=null && renderHorse instanceof RenderLivingBase){

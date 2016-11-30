@@ -51,31 +51,6 @@ public class TileEntityPipeEStorage extends TileEntityPipe {
 	    
 	    return ignoreDisabled || getConnectionMode(direction) !=ConnectionMode.DISABLED;
 	}
-
-	public boolean onActivated(EntityPlayer player, EnumFacing side, EnumHand hand) {
-		 
-		 
-		 /*if (closest != null) {
-				if (closest.component != null) {
-					if (closest.component.dir != null) {
-						EnumFacing dir = closest.component.dir;
-						if (closest.component.data instanceof PipePart) {
-							PipePart part = (PipePart) closest.component.data;
-
-							if (part == PipePart.ATTACHMENT) {
-								if(hasWrench){
-									this.setAttachment(dir, null);
-									return true;
-								}
-							}
-						}
-					}
-				}
-			}*/
-			if(super.onActivated(player, side, hand))return true;
-			
-	    return false;
-	}
 	
 	protected ConnectionMode getDefaultConnectionMode() {
 		return ConnectionMode.INPUT;

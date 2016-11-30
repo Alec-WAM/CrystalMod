@@ -26,6 +26,7 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
@@ -42,6 +43,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.ResourceLocation;
@@ -861,7 +863,8 @@ public class ItemUtil {
     
     public static boolean passesFilter(ItemStack item, ItemStack filter){
 		if(ItemStackTools.isNullStack(item) || item.getItem() == null || (!ItemStackTools.isNullStack(filter) && filter.getItem() !=ModItems.pipeFilter))return false;
-	    	List<ItemStack> filteredList = new ArrayList<ItemStack>();
+	    if(ItemStackTools.isNullStack(filter))return true;	
+		List<ItemStack> filteredList = new ArrayList<ItemStack>();
 	    	if(filter.getMetadata() == FilterType.NORMAL.ordinal()){
 		    	FilterInventory inv = new FilterInventory(filter, 10, "");
 		    	for (int i = 0; i < inv.getSizeInventory(); i++)
@@ -1295,6 +1298,23 @@ public class ItemUtil {
             return i;
         }
         return stack1.getDisplayName().compareTo(stack2.getDisplayName());
+	}
+
+	public static boolean isSame(ItemStack stack, EntityPlayer player, EnumHand hand){
+		return ItemStack.areItemStacksEqual(stack, player.getHeldItem(hand));
+	}
+	
+	public static EntityItem dropFromPlayer(EntityPlayer player, ItemStack stack, boolean motion) {
+		EntityItem ei = new EntityItem(player.worldObj,	player.posX, player.posY + player.getEyeHeight(), player.posZ, stack);
+		ei.setDefaultPickupDelay();
+		if(motion){
+			float f1 = player.worldObj.rand.nextFloat() * 0.5F;
+			float f2 = player.worldObj.rand.nextFloat() * (float) Math.PI * 2.0F;
+			ei.motionX = (double) (-MathHelper.sin(f2) * f1);
+			ei.motionZ = (double) (MathHelper.cos(f2) * f1);
+			ei.motionY = 0.20000000298023224D;
+		}
+		return ei;
 	}
 
 }

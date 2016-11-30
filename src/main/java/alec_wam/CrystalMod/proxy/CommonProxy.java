@@ -87,6 +87,7 @@ public class CommonProxy {
         PlayerCubeChunkLoaderManager.init();
         ForgeChunkManager.setForcedChunkLoadingCallback((Object)CrystalMod.instance, (ForgeChunkManager.LoadingCallback)new WorksiteChunkLoader());
         
+        ModIntegration.register();
         ModIntegration.preInit();
 	}
 	

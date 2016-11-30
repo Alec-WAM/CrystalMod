@@ -10,8 +10,11 @@ import java.util.Random;
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.EnumBlock;
 import alec_wam.CrystalMod.blocks.ICustomModel;
+import alec_wam.CrystalMod.handler.GuiHandler;
+import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.tiles.pipes.TileEntityPipe.PipePart;
 import alec_wam.CrystalMod.tiles.pipes.attachments.AttachmentUtil.AttachmentData;
+import alec_wam.CrystalMod.tiles.pipes.covers.ItemPipeCover;
 import alec_wam.CrystalMod.tiles.pipes.covers.CoverUtil.CoverData;
 import alec_wam.CrystalMod.tiles.pipes.estorage.TileEntityPipeEStorage;
 import alec_wam.CrystalMod.tiles.pipes.item.TileEntityPipeItem;
@@ -21,6 +24,7 @@ import alec_wam.CrystalMod.tiles.pipes.power.rf.TileEntityPipePowerRF;
 import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.EntityUtil;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.ModLogger;
 import alec_wam.CrystalMod.util.Util;
@@ -29,6 +33,7 @@ import alec_wam.CrystalMod.util.client.RenderUtil;
 import com.google.common.collect.Lists;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockFence;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.IBlockState;
@@ -57,6 +62,7 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -239,6 +245,20 @@ public class BlockPipe extends EnumBlock<BlockPipe.PipeType> implements ICustomM
     @Override
     public boolean addLandingEffects(IBlockState iblockstate, net.minecraft.world.WorldServer worldObj, BlockPos blockPosition, IBlockState iblockstate2, EntityLivingBase entity, int numberOfParticles )
     {
+    	IBlockState coverState = null;
+    	TileEntity tile = worldObj.getTileEntity(blockPosition);
+    	if(Util.notNullAndInstanceOf(tile, TileEntityPipe.class)){
+    		TileEntityPipe pipe = ((TileEntityPipe)tile);
+    		CoverData data = pipe.getCoverData(EnumFacing.UP);
+    		if(data !=null && data.getBlockState() !=null){
+    			coverState = data.getBlockState();
+    		}
+    		if(coverState == null){
+    			return false;
+    		}
+    	}
+    	
+    	((WorldServer)worldObj).spawnParticle(EnumParticleTypes.BLOCK_DUST, entity.posX, entity.posY, entity.posZ, numberOfParticles, 0.0D, 0.0D, 0.0D, 0.15000000596046448D, new int[] {Block.getStateId(coverState)});
     	return true;
     }
     
@@ -258,10 +278,12 @@ public class BlockPipe extends EnumBlock<BlockPipe.PipeType> implements ICustomM
     		TileEntityPipe pipe = ((TileEntityPipe)tile);
     		sprite = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(pipe.getPipeType().getCoreTexture(pipe));
     		
-    		CoverData data = ((TileEntityPipe)tile).getCoverData(side);
+    		CoverData data = pipe.getCoverData(side);
     		if(data !=null && data.getBlockState() !=null){
-    			iblockstate = data.getBlockState();
-    			sprite = RenderUtil.getTexture(iblockstate);
+    			if(data.getBlockState().getBlock().addHitEffects(data.getBlockState(), new PipeWorldWrapper(worldObj, pos, side), target, effectRenderer)){
+    				return true;
+    			}
+    			sprite = RenderUtil.getTexture(data.getBlockState());
     		}
     		if(sprite == null){
     			return false;
@@ -322,10 +344,9 @@ public class BlockPipe extends EnumBlock<BlockPipe.PipeType> implements ICustomM
     	return super.addHitEffects(state, worldObj, target, effectRenderer);
     }
     
-    @SuppressWarnings("deprecation")
-	@Override
+    @Override
     public boolean canRenderInLayer(final BlockRenderLayer layer) {
-        return super.canRenderInLayer(layer) || layer == BlockRenderLayer.TRANSLUCENT;
+        return true;
     }
     
     @Override
@@ -362,20 +383,68 @@ public class BlockPipe extends EnumBlock<BlockPipe.PipeType> implements ICustomM
     
     @Override
     public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
-    	if (willHarvest) {
-			return true;
-	    }
     	TileEntityPipe te = (TileEntityPipe) world.getTileEntity(pos);
     	if (te == null) {
     		return true;
     	}
 
     	boolean breakBlock = true;
-
+    	List<ItemStack> drop = new ArrayList<ItemStack>();
+    	BlockPos dropPos = pos;
+    	
+    	List<RaytraceResult> results = doRayTraceAll(world, pos.getX(), pos.getY(), pos.getZ(), player);
+        RaytraceResult.sort(EntityUtil.getEyePosition(player), results);
+    	search : for(RaytraceResult closest : results){
+	        if (closest != null) {
+	    		if (closest.component != null) {
+	    			if (closest.component.dir != null) {
+	    				EnumFacing dir = closest.component.dir;
+	    				if (closest.component.data instanceof PipePart) {
+	    					PipePart part = (PipePart) closest.component.data;
+	    					if (part == PipePart.ATTACHMENT) {
+	    						final AttachmentData data = te.getAttachmentData(dir);
+	    						ItemStack attach = new ItemStack(ModItems.pipeAttachmant);
+								ItemNBTHelper.setString(attach, "ID", data.getID());
+								drop.add(attach);
+								te.setAttachment(dir, null);
+								breakBlock = false;
+								dropPos = pos.offset(dir);
+								break search;
+	    					}
+	    					if(part == PipePart.COVER){
+	    						breakBlock = false;
+	    						final CoverData coverData = te.getCoverData(dir);
+								te.setCover(dir, null);
+								ItemStack cover = ItemPipeCover.getCover(coverData);
+								if (ItemStackTools.isValid(cover)) {
+									drop.add(cover);
+								}
+								dropPos = pos.offset(dir);
+								break search;
+	    					}
+	    				}
+	    			} 
+	    		}
+	    	}
+    	}
+    	
     	if (breakBlock) {
     		breakConduit(te, player);
+    		drop.addAll(te.getDrops());
     	}
 
+    	//breakBlock = te.getCovers().isEmpty();
+    	
+    	if (!breakBlock) {
+    		world.notifyBlockUpdate(pos, state, state, 3);
+    	}
+    	
+    	if (!world.isRemote && !player.capabilities.isCreativeMode) {
+    		for (ItemStack st : drop) {
+    			ItemUtil.spawnItemInWorldWithoutMotion(world, st, dropPos);
+    		}
+	    }
+    	
     	if (breakBlock) {
     		world.setBlockToAir(pos);
     		return true;
@@ -400,9 +469,9 @@ public class BlockPipe extends EnumBlock<BlockPipe.PipeType> implements ICustomM
       }
       TileEntityPipe te = (TileEntityPipe) tile;
       
-      for(ItemStack stack : te.getDrops()){
+      /*for(ItemStack stack : te.getDrops()){
     	  ItemUtil.spawnItemInWorldWithRandomMotion(world, stack, pos);
-      }
+      }*/
       
       te.onRemoved();
       te.markDirty();
@@ -434,12 +503,12 @@ public class BlockPipe extends EnumBlock<BlockPipe.PipeType> implements ICustomM
 	@Override
 	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune)
     {
-        List<ItemStack> ret = Lists.newArrayList();
+        /*List<ItemStack> ret = Lists.newArrayList();
         TileEntity tile = world.getTileEntity(pos);
         if (tile !=null && (tile instanceof TileEntityPipe)) {
         	ret.add(((TileEntityPipe)tile).getPipeDropped());
         	return ret;
-        }
+        }*/
         return super.getDrops(world, pos, state, fortune);
     }
     
@@ -458,6 +527,16 @@ public class BlockPipe extends EnumBlock<BlockPipe.PipeType> implements ICustomM
 	@Override
     public boolean isBlockSolid(IBlockAccess worldIn, BlockPos pos, EnumFacing side)
     {
+		TileEntity tile = worldIn.getTileEntity(pos);
+        if (tile !=null && (tile instanceof TileEntityPipe)) {
+        	TileEntityPipe pipe = ((TileEntityPipe) tile);
+        	CoverData data = pipe.getCoverData(side);
+        	if(data !=null){
+        		if(data.getBlockState() !=null){
+        			return data.getBlockState().getBlock().isBlockSolid(new PipeBlockAccessWrapper(worldIn, pos, side), pos, side);
+        		}
+        	}
+        }
     	return super.isBlockSolid(worldIn, pos, side);
     }
     
@@ -488,8 +567,7 @@ public class BlockPipe extends EnumBlock<BlockPipe.PipeType> implements ICustomM
         	TileEntityPipe pipe = (TileEntityPipe) tile;
         	if(side !=null && pipe.getCoverData(side) !=null && pipe.getCoverData(side).getBlockState() !=null && pipe.getCoverData(side).getBlockState().getBlock() !=null){
         		IBlockState cState = pipe.getCoverData(side).getBlockState();
-        		Block block = cState.getBlock();
-        		return block.isSideSolid(cState, new PipeBlockAccessWrapper(world, pos, side), pos, side);
+        		return cState.isSideSolid(new PipeBlockAccessWrapper(world, pos, side), pos, side);
         	}
         }
         return super.isSideSolid(state, world, pos, side);
@@ -515,13 +593,74 @@ public class BlockPipe extends EnumBlock<BlockPipe.PipeType> implements ICustomM
     	TileEntity tile = worldIn.getTileEntity(pos);
         if (tile !=null && (tile instanceof TileEntityPipe)) {
         	TileEntityPipe pipe = (TileEntityPipe) tile;
-        	if(pipe.getCoverData(EnumFacing.UP) !=null && pipe.getCoverData(EnumFacing.UP).getBlockState() !=null && pipe.getCoverData(EnumFacing.UP).getBlockState().getBlock() !=null){
-        		Block block = pipe.getCoverData(EnumFacing.UP).getBlockState().getBlock();
+        	CoverData up = pipe.getCoverData(EnumFacing.UP);
+        	if(up !=null && up.getBlockState() !=null && up.getBlockState().getBlock() !=null){
+        		Block block = up.getBlockState().getBlock();
         		block.onFallenUpon(new PipeWorldWrapper(worldIn, pos, EnumFacing.UP), pos, entityIn, fallDistance);
         	}
         }
     }
+	
+	@Override
+	public void onLanded(World worldIn, Entity entityIn)
+    {
+		BlockPos pos = new BlockPos(entityIn).down();
+		TileEntity tile = worldIn.getTileEntity(pos);
+        if (tile !=null && (tile instanceof TileEntityPipe)) {
+        	TileEntityPipe pipe = (TileEntityPipe) tile;
+        	CoverData up = pipe.getCoverData(EnumFacing.UP);
+        	if(up !=null && up.getBlockState() !=null && up.getBlockState().getBlock() !=null){
+        		Block block = up.getBlockState().getBlock();
+        		block.onLanded(new PipeWorldWrapper(worldIn, pos, EnumFacing.UP), entityIn);
+        	}
+        }
+    }
+	
+	@Override
+	public void onEntityWalk(World worldIn, BlockPos pos, Entity entityIn)
+    {
+		TileEntity tile = worldIn.getTileEntity(pos);
+        if (tile !=null && (tile instanceof TileEntityPipe)) {
+        	TileEntityPipe pipe = (TileEntityPipe) tile;
+        	CoverData up = pipe.getCoverData(EnumFacing.UP);
+        	if(up !=null && up.getBlockState() !=null && up.getBlockState().getBlock() !=null){
+        		Block block = up.getBlockState().getBlock();
+        		block.onEntityWalk(new PipeWorldWrapper(worldIn, pos, EnumFacing.UP), pos, entityIn);
+        	}
+        }
+        super.onEntityWalk(worldIn, pos, entityIn);
+    }
     
+	@Override
+	public boolean canPlaceTorchOnTop(IBlockState state, IBlockAccess world, BlockPos pos)
+    {
+		TileEntity tile = world.getTileEntity(pos);
+        if (tile !=null && (tile instanceof TileEntityPipe)) {
+        	TileEntityPipe pipe = (TileEntityPipe) tile;
+        	CoverData up = pipe.getCoverData(EnumFacing.UP);
+        	if(up !=null && up.getBlockState() !=null && up.getBlockState().getBlock() !=null){
+        		Block block = up.getBlockState().getBlock();
+        		return block.canPlaceTorchOnTop(up.getBlockState(), new PipeBlockAccessWrapper(world, pos, EnumFacing.UP), pos);
+        	}
+        }
+        return super.canPlaceTorchOnTop(state, world, pos);
+    }
+	
+	@Override
+	public boolean canCreatureSpawn(IBlockState state, IBlockAccess world, BlockPos pos, net.minecraft.entity.EntityLiving.SpawnPlacementType type)
+    {
+		TileEntity tile = world.getTileEntity(pos);
+        if (tile !=null && (tile instanceof TileEntityPipe)) {
+        	TileEntityPipe pipe = (TileEntityPipe) tile;
+        	CoverData up = pipe.getCoverData(EnumFacing.UP);
+        	if(up !=null && up.getBlockState() !=null && up.getBlockState().getBlock() !=null){
+        		Block block = up.getBlockState().getBlock();
+        		return block.canCreatureSpawn(up.getBlockState(), new PipeBlockAccessWrapper(world, pos, EnumFacing.UP), pos, type);
+        	}
+        }
+        return super.canCreatureSpawn(state, world, pos, type);
+    }
+	
 	@Override
     public boolean canConnectRedstone(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side)
     {
@@ -555,8 +694,7 @@ public class BlockPipe extends EnumBlock<BlockPipe.PipeType> implements ICustomM
         	for(EnumFacing side : EnumFacing.VALUES){
 	        	if(pipe.getCoverData(side) !=null && pipe.getCoverData(side).getBlockState() !=null && pipe.getCoverData(side).getBlockState().getBlock() !=null){
 	        		IBlockState cState = pipe.getCoverData(side).getBlockState();
-	        		Block block = cState.getBlock();
-	        		ret+=block.getLightValue(cState, new PipeBlockAccessWrapper(world, pos, side), pos);
+	        		ret+=cState.getLightValue(new PipeBlockAccessWrapper(world, pos, side), pos);
 	        	}
         	}
         }
@@ -608,8 +746,7 @@ public class BlockPipe extends EnumBlock<BlockPipe.PipeType> implements ICustomM
         		}
 	        	if(pipe.getCoverData(side.getOpposite()) !=null && pipe.getCoverData(side.getOpposite()).getBlockState() !=null && pipe.getCoverData(side.getOpposite()).getBlockState().getBlock() !=null){
 	        		IBlockState cState = pipe.getCoverData(side.getOpposite()).getBlockState();
-	        		Block block = cState.getBlock();
-	        		return block.getStrongPower(cState, new PipeBlockAccessWrapper(world, pos, side.getOpposite()), pos, side);
+	        		return cState.getStrongPower(new PipeBlockAccessWrapper(world, pos, side.getOpposite()), pos, side);
 	        	}
         	}
         }
@@ -632,8 +769,7 @@ public class BlockPipe extends EnumBlock<BlockPipe.PipeType> implements ICustomM
         		}
 	        	if(pipe.getCoverData(side.getOpposite()) !=null && pipe.getCoverData(side.getOpposite()).getBlockState() !=null && pipe.getCoverData(side.getOpposite()).getBlockState().getBlock() !=null){
 	        		IBlockState cState = pipe.getCoverData(side.getOpposite()).getBlockState();
-	        		Block block = cState.getBlock();
-	        		return block.getWeakPower(cState, new PipeBlockAccessWrapper(world, pos, side.getOpposite()), pos, side);
+	        		return cState.getWeakPower(new PipeBlockAccessWrapper(world, pos, side.getOpposite()), pos, side);
 	        	}
         	}
         }
@@ -645,6 +781,22 @@ public class BlockPipe extends EnumBlock<BlockPipe.PipeType> implements ICustomM
       return true;
     }
     
+    @Override
+    public boolean doesSideBlockRendering(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing face)
+    {
+    	TileEntity tile = world.getTileEntity(pos);
+        if (tile !=null && (tile instanceof TileEntityPipe)) {
+        	TileEntityPipe pipe = (TileEntityPipe) tile;
+        	if(face !=null && pipe.getCoverData(face) !=null){
+        		CoverData data = pipe.getCoverData(face);
+        		if(data.getBlockState() == null || data.getBlockState().getBlock() == null)return super.doesSideBlockRendering(state, world, pos, face);
+        		return data.getBlockState().doesSideBlockRendering(new PipeBlockAccessWrapper(world, pos, face), pos, face);
+        	}
+        }
+        return super.doesSideBlockRendering(state, world, pos, face);
+    }
+    
+    @Override
     public boolean isFireSource(World world, BlockPos pos, EnumFacing side)
     {
     	TileEntity tile = world.getTileEntity(pos);
@@ -659,7 +811,52 @@ public class BlockPipe extends EnumBlock<BlockPipe.PipeType> implements ICustomM
         return super.isFireSource(world, pos, side);
     }
     
+    @Override
+    public int getFlammability(IBlockAccess world, BlockPos pos, EnumFacing face)
+    {
+    	TileEntity tile = world.getTileEntity(pos);
+        if (tile !=null && (tile instanceof TileEntityPipe)) {
+        	TileEntityPipe pipe = (TileEntityPipe) tile;
+        	if(face !=null && pipe.getCoverData(face) !=null){
+        		CoverData data = pipe.getCoverData(face);
+        		if(data.getBlockState() == null || data.getBlockState().getBlock() == null)return super.getFlammability(world, pos, face);
+        		return data.getBlockState().getBlock().getFlammability(new PipeBlockAccessWrapper(world, pos, face), pos, face);
+        	}
+        }
+        return super.getFlammability(world, pos, face);
+    }
     
+    @Override
+    public boolean isFlammable(IBlockAccess world, BlockPos pos, EnumFacing face)
+    {
+    	TileEntity tile = world.getTileEntity(pos);
+        if (tile !=null && (tile instanceof TileEntityPipe)) {
+        	TileEntityPipe pipe = (TileEntityPipe) tile;
+        	if(face !=null && pipe.getCoverData(face) !=null){
+        		CoverData data = pipe.getCoverData(face);
+        		if(data.getBlockState() == null || data.getBlockState().getBlock() == null)return super.isFlammable(world, pos, face);
+        		return data.getBlockState().getBlock().isFlammable(new PipeBlockAccessWrapper(world, pos, face), pos, face);
+        	}
+        }
+        return super.isFlammable(world, pos, face);
+    }
+    
+    @Override
+    public int getFireSpreadSpeed(IBlockAccess world, BlockPos pos, EnumFacing face)
+    {
+    	TileEntity tile = world.getTileEntity(pos);
+        if (tile !=null && (tile instanceof TileEntityPipe)) {
+        	TileEntityPipe pipe = (TileEntityPipe) tile;
+        	if(face !=null && pipe.getCoverData(face) !=null){
+        		CoverData data = pipe.getCoverData(face);
+        		if(data.getBlockState() == null || data.getBlockState().getBlock() == null)return super.getFireSpreadSpeed(world, pos, face);
+        		return data.getBlockState().getBlock().getFireSpreadSpeed(new PipeBlockAccessWrapper(world, pos, face), pos, face);
+        	}
+        }
+        return super.getFireSpreadSpeed(world, pos, face);
+    }
+    
+    @Override
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack)
     {
     	super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
@@ -691,9 +888,11 @@ public class BlockPipe extends EnumBlock<BlockPipe.PipeType> implements ICustomM
         	for(EnumFacing dir : EnumFacing.VALUES){
         		final CoverData coverData = pipe.getCoverData(dir);
 				if(coverData !=null){
-					Block block = coverData.getBlockState().getBlock();
+					IBlockState cState = coverData.getBlockState();
+					Block block = cState.getBlock();
 					if(block !=null){
-						block.neighborChanged(block.getActualState(coverData.getBlockState(), new PipeBlockAccessWrapper(world, pos, dir), pos), new PipeWorldWrapper(world, pos, dir), pos, neighborBlock);
+						IBlockState realState = cState.getActualState(new PipeBlockAccessWrapper(world, pos, dir), pos);
+						realState.neighborChanged(new PipeWorldWrapper(world, pos, dir), pos, neighborBlock);
 					}
 				}
         	}
@@ -704,7 +903,7 @@ public class BlockPipe extends EnumBlock<BlockPipe.PipeType> implements ICustomM
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, ItemStack stack, EnumFacing side, float hitX, float hitY, float hitZ) {
     	TileEntity tile = world.getTileEntity(pos);
         if ((tile instanceof TileEntityPipe)) {
-        	if(((TileEntityPipe)tile).onActivated(player, side, hand)){
+        	if(((TileEntityPipe)tile).onActivated(world, player, hand, stack, side, new Vec3d(hitX, hitY, hitZ))){
         		tile.markDirty();
         		return true;
         	}
@@ -770,15 +969,37 @@ public class BlockPipe extends EnumBlock<BlockPipe.PipeType> implements ICustomM
 				if(result.component.data !=null && result.component.data instanceof PipePart){
 					PipePart part = (PipePart) result.component.data;
 					if(part == PipePart.COVER){
-						CoverData data = te.getCoverData(result.component.dir);
+						EnumFacing dir = result.component.dir;
+						CoverData data = te.getCoverData(dir);
 						if(data !=null && data.getBlockState() !=null && data.getBlockState().getBlock() !=null){
-							return data.getBlockState().getBlock().getPlayerRelativeBlockHardness(data.getBlockState(), playerIn, worldIn, pos);
+							return data.getBlockState().getPlayerRelativeBlockHardness(playerIn, new PipeWorldWrapper(worldIn, pos, dir), pos);
 						}
 					}
 				}
 			}
 		}
     	return super.getPlayerRelativeBlockHardness(state, playerIn, worldIn, pos);
+    }
+    
+    @Override
+    public void onBlockClicked(World worldIn, BlockPos pos, EntityPlayer playerIn){
+    	super.onBlockClicked(worldIn, pos, playerIn);
+    	TileEntityPipe te = (TileEntityPipe) worldIn.getTileEntity(pos);
+		if (te != null) {
+			RaytraceResult result = te.getClosest(playerIn);
+			if(result !=null && result.component !=null){
+				if(result.component.data !=null && result.component.data instanceof PipePart){
+					PipePart part = (PipePart) result.component.data;
+					if(part == PipePart.COVER){
+						EnumFacing dir = result.component.dir;
+						CoverData data = te.getCoverData(dir);
+						if(data !=null && data.getBlockState() !=null && data.getBlockState().getBlock() !=null){
+							data.getBlockState().getBlock().onBlockClicked(new PipeWorldWrapper(worldIn, pos, dir), pos, playerIn);
+						}
+					}
+				}
+			}
+		}
     }
     
     public RaytraceResult doRayTrace(World world, int x, int y, int z, EntityPlayer entityPlayer) {

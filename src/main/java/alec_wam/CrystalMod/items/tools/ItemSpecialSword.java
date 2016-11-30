@@ -81,13 +81,7 @@ public class ItemSpecialSword extends ItemSword  {
     
     public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand)
     {
-    	//Stop Bobbing
-		if(worldIn.isRemote)
-		{
-			for(int i = 0; i < 3; i++)
-				Minecraft.getMinecraft().entityRenderer.itemRenderer.updateEquippedItem();
-		}
-        return new ActionResult<ItemStack>(EnumActionResult.PASS, itemStackIn);
+    	return super.onItemRightClick(itemStackIn, worldIn, playerIn, hand);
     }
     
     @Override
