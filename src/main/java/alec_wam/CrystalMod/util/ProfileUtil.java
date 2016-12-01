@@ -23,7 +23,6 @@ public class ProfileUtil {
 	
 	public static final ConcurrentMap<String, UUID> uuidCache = buildCache(3 * 60 * 60, 1024 * 5);
 	public static final ConcurrentMap<UUID, String> nameCache = buildCache(3 * 60 * 60, 1024 * 5);
-	public static final ConcurrentMap<String, Boolean> paidCache = buildCache(3 * 60 * 60, 1024 * 5);
 	
 	public static <K, V> ConcurrentMap<K, V> buildCache(int seconds, int maxSize) {
         CacheBuilder<Object, Object> builder = CacheBuilder.newBuilder();
@@ -119,21 +118,14 @@ public class ProfileUtil {
 		return nameCache.get(uuid);
 	}
 	
-	public static boolean isAccountReal(String username){
-		if(!paidCache.containsKey(username)){
-			boolean paid = getUnCachedPaid(username);
-			paidCache.put(username, paid);
-			return paid;
-		}
-		return paidCache.get(username);
-	}
-	
 	private static UUID getUnCachedUUID(String username){
 		JSONObject jsonResult = getJSONObject(getURL(username, RequestType.NAMETOUUID));
 	
-		if(jsonResult == null)return null;
+		if(jsonResult == null || !jsonResult.has("id"))return null;
 		
-		String uuid = jsonResult.getString("uuid");
+		Object object = jsonResult.get("id");
+		if(object == null || !(object instanceof String))return null;
+		String uuid = jsonResult.getString("id");
 		if(!Strings.isNullOrEmpty(uuid)){
 			return UUIDUtils.fromString(uuid);
 		}
@@ -154,25 +146,19 @@ public class ProfileUtil {
 		return ERROR;
 	}
 	
-	private static boolean getUnCachedPaid(String username){
-		JSONObject jsonResult = getJSONObject(getURL(username, RequestType.ISREALACCOUNT));
-		return jsonResult == null ? false : jsonResult.has("paid") ? jsonResult.getBoolean("paid") : false;
-	}
-	
 	public static final String ERROR = "<ERROR>";
 	
 	protected final static int timeout = 5000;
 	
 	public static String getURL(String value, RequestType type){
-		return type == RequestType.UUIDTONAME ? String.format("https://mcapi.ca/name/uuid/%s", value) : type == RequestType.NAMETOUUID ? String.format("https://mcapi.ca/uuid/player/%s", value) : String.format("https://mcapi.ca/other/haspaid/%s", value);
-		
-		//return type == RequestType.UUIDTONAME ? String.format("https://us.mc-api.net/v3/name/%s/csv", value) : type == RequestType.NAMETOUUID ? String.format("https://us.mc-api.net/v3/uuid/%s/csv", value) : value;
-
-        //return type == BackupRequestType.UUIDTONAME ? String.format("http://api.mcusername.net/uuidtoplayer/%s", value) : type == BackupRequestType.NAMETOUUID ? String.format("http://api.mcusername.net/playertouuid/%s", value) : value;
+		if(type == RequestType.NAMETOUUID){
+			return String.format("https://api.mojang.com/users/profiles/minecraft/%s", value);
+		}
+		return String.format("https://sessionserver.mojang.com/session/minecraft/profile/%s", value);
 	}
 	
 	public static enum RequestType{
-		UUIDTONAME, NAMETOUUID, ISREALACCOUNT;
+		UUIDTONAME, NAMETOUUID;
 	}
 	
 }
