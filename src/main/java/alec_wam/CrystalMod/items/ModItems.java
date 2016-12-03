@@ -31,6 +31,7 @@ import alec_wam.CrystalMod.items.tools.ItemDarkIronBow;
 import alec_wam.CrystalMod.items.tools.ItemSuperTorch;
 import alec_wam.CrystalMod.items.tools.ItemToolParts;
 import alec_wam.CrystalMod.items.tools.backpack.ItemBackpackBase;
+import alec_wam.CrystalMod.items.tools.backpack.ItemBackpackNormal;
 import alec_wam.CrystalMod.items.tools.backpack.types.BackpackCrafting;
 import alec_wam.CrystalMod.items.tools.backpack.types.BackpackNormal;
 import alec_wam.CrystalMod.items.tools.bat.ItemBat;
@@ -118,7 +119,7 @@ public class ModItems {
 	
 	public static ItemMiscCard miscCard;
 	public static ItemBackpack backpack;
-	public static ItemBackpackBase normalBackpack;
+	public static ItemBackpackNormal normalBackpack;
 	public static ItemBackpackBase craftingBackpack;
 	public static ItemTeloportTool telePearl;
 	public static ItemSuperTorch superTorch;
@@ -186,7 +187,7 @@ public class ModItems {
 		pipeAttachmant = new ItemPipeAttachment();
 		miscCard = new ItemMiscCard();
 		backpack = new ItemBackpack();
-		normalBackpack = new ItemBackpackBase(new BackpackNormal());
+		normalBackpack = new ItemBackpackNormal(new BackpackNormal());
 		craftingBackpack = new ItemBackpackBase(new BackpackCrafting());
 		telePearl = new ItemTeloportTool();
 		superTorch = new ItemSuperTorch();

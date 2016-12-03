@@ -33,10 +33,14 @@ public class KeyHandler {
 	@SubscribeEvent
 	public void playerTick(PlayerTickEvent event) {
 		if (event.side == Side.SERVER) return;
-		if (event.phase == Phase.START ) {
+		if (event.phase == Phase.START) {
 			if (FMLClientHandler.instance().getClient().inGameHasFocus) {
-				if(key.isPressed())CrystalModNetwork.sendToServer(new PacketOpenExtendedInventory());
-				if(keyBack.isPressed())CrystalModNetwork.sendToServer(new PacketOpenBackpack());
+				if(key.isPressed()){
+					CrystalModNetwork.sendToServer(new PacketOpenExtendedInventory());
+				}
+				if(keyBack.isPressed()){
+					CrystalModNetwork.sendToServer(new PacketOpenBackpack());
+				}
 			}
 		}
 	}

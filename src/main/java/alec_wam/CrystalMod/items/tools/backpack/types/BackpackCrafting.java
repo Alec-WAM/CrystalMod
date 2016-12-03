@@ -35,7 +35,7 @@ public class BackpackCrafting implements IBackpack {
 	}
 	
 	@Override
-	public ResourceLocation getTexture(int type) {
+	public ResourceLocation getTexture(ItemStack backpack, int type) {
 		return TEXTURE;
 	}
 	

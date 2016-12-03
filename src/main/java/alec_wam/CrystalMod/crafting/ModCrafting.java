@@ -1,6 +1,7 @@
 package alec_wam.CrystalMod.crafting;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -28,6 +29,7 @@ import alec_wam.CrystalMod.items.ItemMachineFrame.FrameType;
 import alec_wam.CrystalMod.items.ItemMetalPlate.PlateType;
 import alec_wam.CrystalMod.items.guide.ItemCrystalGuide.GuideType;
 import alec_wam.CrystalMod.items.tools.ItemToolParts.PartType;
+import alec_wam.CrystalMod.items.tools.backpack.ItemBackpackNormal.CrystalBackpackType;
 import alec_wam.CrystalMod.items.tools.bat.BatHelper;
 import alec_wam.CrystalMod.items.tools.bat.RecipeBatUpgrade;
 import alec_wam.CrystalMod.tiles.cauldron.CauldronRecipeManager;
@@ -358,6 +360,8 @@ public class ModCrafting {
 			addShapedOreRecipe(cover6, "s", "cn", 'c', ItemPipeCover.coverRecipes.get(cover), 's', "slimeball", 'n', "nuggetCrystal");
 		}
 		
+		//TODO Add Attachment Recipes
+		
 		addShapedOreRecipe(ModBlocks.cubePortal, new Object[]{"#P#", "PEP", "#P#", '#', dIronPlate, 'E', "endereye", 'P', "enderpearl"});
 
 		addShapedOreRecipe(new ItemStack(ModBlocks.elevator, 4), new Object[]{"#C#", "SGP", "#C#", '#', dIronPlate, 'G', "ingotGold", 'P', "piston", 'S', "pistonSticky", 'C', "ingotCrystal"});
@@ -373,7 +377,19 @@ public class ModCrafting {
 		addShapelessRecipe(Items.SLIME_BALL, new Object[]{Items.WATER_BUCKET, Items.MILK_BUCKET});
 		addShapedOreRecipe(Items.NAME_TAG, new Object[]{" PP", "SBI", " PP", 'S', "string", 'I', "ingotIron", 'P', "paper", 'B', "slimeball"});
 		
-		addShapedOreRecipe(ModItems.backpack, new Object[]{"LTL", "SCS", "L#L", 'S', Items.LEAD, 'T', Blocks.TRIPWIRE_HOOK, 'C', "chestWood", 'L', "leather", '#', "ingotCrystal"});
+		addShapedOreRecipe(new ItemStack(ModItems.normalBackpack, 1, CrystalBackpackType.NORMAL.ordinal()), new Object[]{"LTL", "SCS", "L#L", 'S', Items.LEAD, 'T', Blocks.TRIPWIRE_HOOK, 'C', "chestWood", 'L', "leather", '#', "ingotCrystal"});
+		addShapedOreRecipe(new ItemStack(ModItems.normalBackpack, 1, CrystalBackpackType.DARK_IRON.ordinal()), new Object[]{"LTL", "SCS", "L#L", 'S', Items.LEAD, 'T', Blocks.TRIPWIRE_HOOK, 'C', new ItemStack(ModBlocks.crystalChest, 1, CrystalChestType.DARKIRON.ordinal()), 'L', "leather", '#', "ingotCrystal"});
+		addShapedOreRecipe(new ItemStack(ModItems.normalBackpack, 1, CrystalBackpackType.BLUE.ordinal()), new Object[]{"LTL", "SCS", "L#L", 'S', Items.LEAD, 'T', Blocks.TRIPWIRE_HOOK, 'C', new ItemStack(ModBlocks.crystalChest, 1, CrystalChestType.BLUE.ordinal()), 'L', "leather", '#', "ingotCrystal"});
+		addShapedOreRecipe(new ItemStack(ModItems.normalBackpack, 1, CrystalBackpackType.RED.ordinal()), new Object[]{"LTL", "SCS", "L#L", 'S', Items.LEAD, 'T', Blocks.TRIPWIRE_HOOK, 'C', new ItemStack(ModBlocks.crystalChest, 1, CrystalChestType.RED.ordinal()), 'L', "leather", '#', "ingotCrystal"});
+		addShapedOreRecipe(new ItemStack(ModItems.normalBackpack, 1, CrystalBackpackType.GREEN.ordinal()), new Object[]{"LTL", "SCS", "L#L", 'S', Items.LEAD, 'T', Blocks.TRIPWIRE_HOOK, 'C', new ItemStack(ModBlocks.crystalChest, 1, CrystalChestType.GREEN.ordinal()), 'L', "leather", '#', "ingotCrystal"});
+		addShapedOreRecipe(new ItemStack(ModItems.normalBackpack, 1, CrystalBackpackType.DARK.ordinal()), new Object[]{"LTL", "SCS", "L#L", 'S', Items.LEAD, 'T', Blocks.TRIPWIRE_HOOK, 'C', new ItemStack(ModBlocks.crystalChest, 1, CrystalChestType.DARK.ordinal()), 'L', "leather", '#', "ingotCrystal"});
+		addShapedOreRecipe(new ItemStack(ModItems.normalBackpack, 1, CrystalBackpackType.PURE.ordinal()), new Object[]{"LTL", "SCS", "L#L", 'S', Items.LEAD, 'T', Blocks.TRIPWIRE_HOOK, 'C', new ItemStack(ModBlocks.crystalChest, 1, CrystalChestType.PURE.ordinal()), 'L', "leather", '#', "ingotCrystal"});
+		addNBTRecipe(new ItemStack(ModItems.normalBackpack, 1, CrystalBackpackType.DARK_IRON.ordinal()), Collections.emptyList(), new Object[]{"III", "IBI", "III", 'I', dIronIngot, 'B', new ItemStack(ModItems.normalBackpack, 1, CrystalBackpackType.NORMAL.ordinal())});
+		addNBTRecipe(new ItemStack(ModItems.normalBackpack, 1, CrystalBackpackType.BLUE.ordinal()), Collections.emptyList(), new Object[]{"III", "IBI", "III", 'I', blueIngot, 'B', new ItemStack(ModItems.normalBackpack, 1, CrystalBackpackType.DARK_IRON.ordinal())});
+		addNBTRecipe(new ItemStack(ModItems.normalBackpack, 1, CrystalBackpackType.RED.ordinal()), Collections.emptyList(), new Object[]{"III", "IBI", "III", 'I', redIngot, 'B', new ItemStack(ModItems.normalBackpack, 1, CrystalBackpackType.BLUE.ordinal())});
+		addNBTRecipe(new ItemStack(ModItems.normalBackpack, 1, CrystalBackpackType.GREEN.ordinal()), Collections.emptyList(), new Object[]{"III", "IBI", "III", 'I', greenIngot, 'B', new ItemStack(ModItems.normalBackpack, 1, CrystalBackpackType.RED.ordinal())});
+		addNBTRecipe(new ItemStack(ModItems.normalBackpack, 1, CrystalBackpackType.DARK.ordinal()), Collections.emptyList(), new Object[]{"III", "IBI", "III", 'I', darkIngot, 'B', new ItemStack(ModItems.normalBackpack, 1, CrystalBackpackType.GREEN.ordinal())});
+		addNBTRecipe(new ItemStack(ModItems.normalBackpack, 1, CrystalBackpackType.PURE.ordinal()), Collections.emptyList(), new Object[]{"III", "IBI", "III", 'I', pureIngot, 'B', new ItemStack(ModItems.normalBackpack, 1, CrystalBackpackType.DARK.ordinal())});
 
 		addShapedOreRecipe(ModItems.telePearl, new Object[]{"#P#", "PEP", "#P#", '#', pureIngot, 'P', "nuggetCrystal", 'E', "endereye"});
 
@@ -384,7 +400,7 @@ public class ModCrafting {
 		ItemStack engineTier1 = new ItemStack(ModBlocks.engine, 1, EngineType.FURNACE.getMeta()); ItemNBTHelper.setInteger(engineTier1, "Tier", 1);
 		ItemStack engineTier2 = new ItemStack(ModBlocks.engine, 1, EngineType.FURNACE.getMeta()); ItemNBTHelper.setInteger(engineTier2, "Tier", 2);
 
-		addShapedOreRecipeNBT(engineTier0, new Object[]{"CCC", "IFI", "IPI", 'I', dIronPlate, 'F', Blocks.FURNACE, 'P', ItemUtil.copy(tier0CU, 1), 'C', "cobblestone"});
+		addShapedOreRecipeNBT(engineTier0, new Object[]{"CCC", "IFI", "IPI", 'I', dIronIngot, 'F', Blocks.FURNACE, 'P', ItemUtil.copy(tier0CU, 1), 'C', "cobblestone"});
 		addShapedRecipe(engineTier1, new Object[]{"EEE", "EPE", "EEE", 'E', engineTier0, 'P', ItemUtil.copy(tier2CU, 1)});
 		addShapedRecipe(engineTier2, new Object[]{"EEE", "EPE", "EEE", 'E', engineTier1, 'P', ItemUtil.copy(tier3CU, 1)});
 

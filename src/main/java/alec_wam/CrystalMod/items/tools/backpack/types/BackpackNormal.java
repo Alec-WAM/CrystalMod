@@ -13,19 +13,31 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.Map;
+
+import com.google.common.collect.Maps;
+
 import alec_wam.CrystalMod.CrystalMod;
-import alec_wam.CrystalMod.handler.GuiHandler;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.items.tools.backpack.BackpackUtil;
-import alec_wam.CrystalMod.items.tools.backpack.IBackpack;
+import alec_wam.CrystalMod.items.tools.backpack.IBackpackInventory;
+import alec_wam.CrystalMod.items.tools.backpack.ItemBackpackNormal.CrystalBackpackType;
 import alec_wam.CrystalMod.items.tools.backpack.gui.ContainerBackpackNormal;
 import alec_wam.CrystalMod.items.tools.backpack.gui.GuiBackpackNormal;
-import alec_wam.CrystalMod.items.tools.backpack.gui.OpenType;
 
-public class BackpackNormal implements IBackpack {
+public class BackpackNormal implements IBackpackInventory {
 
 	public final ResourceLocation ID = CrystalMod.resourceL("normal");
 	public final ResourceLocation TEXTURE = CrystalMod.resourceL("textures/model/backpack/normal.png");
+	public final Map<CrystalBackpackType, ResourceLocation> TEXTURES = Maps.newHashMap();
+	
+	public BackpackNormal(){
+		for(CrystalBackpackType type : CrystalBackpackType.values()){
+			TEXTURES.put(type, CrystalMod.resourceL("textures/model/backpack/normal_"+type.getUnlocalizedName()+".png"));
+		}
+		TEXTURES.put(CrystalBackpackType.NORMAL, TEXTURE);
+	}
 	
 	@Override
 	public ResourceLocation getID() {
@@ -33,8 +45,8 @@ public class BackpackNormal implements IBackpack {
 	}
 	
 	@Override
-	public ResourceLocation getTexture(int type) {
-		return TEXTURE;
+	public ResourceLocation getTexture(ItemStack stack, int type) {
+		return TEXTURES.get(CrystalBackpackType.byMetadata(stack.getMetadata()));
 	}
 	
 	@SideOnly(Side.CLIENT)
@@ -55,20 +67,21 @@ public class BackpackNormal implements IBackpack {
 		return BackpackUtil.handleBackpackOpening(stack, world, player, hand, false);
 	}
 
-	public InventoryBackpack getInventory(EntityPlayer player){
-		//TODO Use NBT for tiers
-		return new InventoryBackpack(player, BackpackUtil.getPlayerBackpack(player), 27);
+	public InventoryBackpack getInventory(EntityPlayer player, ItemStack backpack){
+		
+		int size = 27+(9*backpack.getItemDamage());
+		return new InventoryBackpack(player, backpack, Math.min(size, 72));
 	}
 	
 	@SideOnly(Side.CLIENT)
 	@Override
 	public Object getClientGuiElement(EntityPlayer player, World world) {
-		return new GuiBackpackNormal(getInventory(player));
+		return new GuiBackpackNormal(getInventory(player, BackpackUtil.getPlayerBackpack(player)));
 	}
 
 	@Override
 	public Object getServerGuiElement(EntityPlayer player, World world) {
-		return new ContainerBackpackNormal(getInventory(player));
+		return new ContainerBackpackNormal(getInventory(player, BackpackUtil.getPlayerBackpack(player)));
 	}
 	
 	

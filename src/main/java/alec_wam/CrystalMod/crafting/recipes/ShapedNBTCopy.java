@@ -33,6 +33,10 @@ public class ShapedNBTCopy extends ShapedRecipes {
 
             if (itemstack1 != null && itemstack1.hasTagCompound())
             {
+            	if(this.tags.isEmpty()){
+            		itemstack.setTagCompound(itemstack1.getTagCompound().copy());
+            		return itemstack;
+            	}
             	NBTTagCompound nbt = (NBTTagCompound)itemstack1.getTagCompound().copy();
                 for(String tag : this.tags){
                 	if(nbt.hasKey(tag))

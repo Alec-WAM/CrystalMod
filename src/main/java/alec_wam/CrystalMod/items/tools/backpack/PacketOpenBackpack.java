@@ -1,11 +1,15 @@
 package alec_wam.CrystalMod.items.tools.backpack;
 
 import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.capability.ExtendedPlayerProvider;
 import alec_wam.CrystalMod.handler.GuiHandler;
 import alec_wam.CrystalMod.items.tools.backpack.gui.OpenType;
 import alec_wam.CrystalMod.network.AbstractPacketThreadsafe;
+import alec_wam.CrystalMod.util.ItemNBTHelper;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.network.NetHandlerPlayClient;
+import net.minecraft.item.ItemStack;
 import net.minecraft.network.NetHandlerPlayServer;
 
 public class PacketOpenBackpack extends AbstractPacketThreadsafe {
@@ -23,7 +27,13 @@ public class PacketOpenBackpack extends AbstractPacketThreadsafe {
 
 	@Override
 	public void handleServerSafe(NetHandlerPlayServer netHandler) {
-		netHandler.playerEntity.openGui(CrystalMod.instance, GuiHandler.GUI_ID_BACKPACK, netHandler.playerEntity.getEntityWorld(), OpenType.BACK.ordinal(), 0, 0);
+		//Only open backpack on player's back.
+		ItemStack back = BackpackUtil.getBackpack(netHandler.playerEntity, OpenType.BACK);
+		if(ItemStackTools.isValid(back)){
+			ItemNBTHelper.updateUUID(back);
+	    	ExtendedPlayerProvider.getExtendedPlayer(netHandler.playerEntity).setOpenBackpack(back);
+			netHandler.playerEntity.openGui(CrystalMod.instance, GuiHandler.GUI_ID_BACKPACK, netHandler.playerEntity.getEntityWorld(), 0, 0, 0);
+		}
 	}
 
 }

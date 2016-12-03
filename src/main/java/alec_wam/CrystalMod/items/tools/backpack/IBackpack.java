@@ -20,7 +20,7 @@ public interface IBackpack {
 	public ResourceLocation getID();
 
 	//0 = item, 1 = back
-	public ResourceLocation getTexture(int renderType);
+	public ResourceLocation getTexture(ItemStack backpack, int renderType);
 	
 	@SideOnly(Side.CLIENT)
 	public void initModel(Item item);

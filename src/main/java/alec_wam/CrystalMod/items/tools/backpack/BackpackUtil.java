@@ -33,17 +33,16 @@ public class BackpackUtil {
         	ItemNBTHelper.updateUUID(itemStack);
         	ExtendedPlayerProvider.getExtendedPlayer(player).setOpenBackpack(itemStack);
             boolean sneaking = shift ? true : player.isSneaking();
-            player.openGui(CrystalMod.instance, GuiHandler.GUI_ID_BACKPACK, world, 0, 0, 0);
+            player.openGui(CrystalMod.instance, GuiHandler.GUI_ID_BACKPACK, world, OpenType.ANY.ordinal(), 0, 0);
             return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStack);
         }
     }
 	
-	public static ItemStack getItemStack(InventoryPlayer player, OpenType type){
+	public static ItemStack getBackpack(EntityPlayer player, OpenType type){
 		if(type == OpenType.BACK){
-			ExtendedPlayer ePlayer = ExtendedPlayerProvider.getExtendedPlayer(player.player);
-			return ePlayer.getInventory().getStackInSlot(ExtendedPlayerInventory.BACKPACK_SLOT_ID);
+			return getBackpackOnBack(player);
 		}		
-		return type == OpenType.MAIN_HAND ? player.getCurrentItem() : player.offHandInventory[0];
+		return getPlayerBackpack(player);
 	}
 	
 	public static ItemStack getPlayerBackpack(EntityPlayer player){

@@ -1,0 +1,16 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "transform": "forge:default-item",
+        "model": "forge:item-layer"
+    },
+    "variants": {
+		"normal": [{ "textures": { "layer0": "crystalmod:items/backpack/normal_closed" }}],
+		"darkiron": [{ "textures": { "layer0": "crystalmod:items/backpack/normal_darkiron" }}],
+		"blue": [{ "textures": { "layer0": "crystalmod:items/backpack/normal_blue" }}],
+		"red": [{ "textures": { "layer0": "crystalmod:items/backpack/normal_red" }}],
+		"green": [{ "textures": { "layer0": "crystalmod:items/backpack/normal_green" }}],
+		"dark": [{ "textures": { "layer0": "crystalmod:items/backpack/normal_dark" }}],
+		"pure": [{ "textures": { "layer0": "crystalmod:items/backpack/normal_pure" }}]
+    }
+}

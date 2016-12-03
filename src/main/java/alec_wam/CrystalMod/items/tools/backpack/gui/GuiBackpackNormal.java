@@ -21,19 +21,24 @@ public class GuiBackpackNormal extends GuiContainer {
     private static final ResourceLocation RES_LOC = new ResourceLocation("crystalmod:textures/gui/backpack/normal.png");
     
     private ItemStack backpack;
-    
+    private int slotRows;
     public GuiBackpackNormal(InventoryBackpack backpackInventory){
         super(new ContainerBackpackNormal(backpackInventory));
         this.backpack = backpackInventory.getBackpack();
         this.xSize = 176+34+34;
-        this.ySize = 171;
+        slotRows = backpackInventory.getSizeInventory()/9;
+        int topSpace = 16;
+        int bottomSize = 101;
+        this.ySize = topSpace+(18*slotRows)+bottomSize;
     }
 
     @Override
     public void drawGuiContainerForegroundLayer(int x, int y){
     	
-    	if(!ItemStackTools.isNullStack(backpack))this.fontRendererObj.drawString(backpack.getDisplayName(), 8+34, 6, 4210752);
-    	this.fontRendererObj.drawString(I18n.format("container.inventory", new Object[0]), 8+34, 76, 4210752);
+    	if(!ItemStackTools.isNullStack(backpack)){
+    		this.fontRendererObj.drawString(backpack.getDisplayName(), 8+34, 6, 4210752);
+    	}
+    	this.fontRendererObj.drawString(I18n.format("container.inventory", new Object[0]), 8+34, 16+(18*slotRows)+5, 4210752);
     }
 
     public static final ResourceLocation baublesBackground = new ResourceLocation("baubles", "textures/gui/expanded_inventory.png");
@@ -43,11 +48,22 @@ public class GuiBackpackNormal extends GuiContainer {
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 
         this.mc.getTextureManager().bindTexture(RES_LOC);
-        this.drawTexturedModalRect(this.guiLeft+34, this.guiTop, 0, 0, 176, 171);
         
-        this.drawTexturedModalRect(this.guiLeft, this.guiTop+(171-32), 176, 139, 32, 32);
+        int topSpace = 16;
+        int gap = 18*3;
+        int bottomSize = 101;
+        int slotBlock = 18*slotRows;
+        //this.drawTexturedModalRect(this.guiLeft+34, this.guiTop, 0, 0, xSize, ySize);
+        this.drawTexturedModalRect(this.guiLeft+34, this.guiTop, 0, 0, 176, topSpace);
+        for(int i = 0; i < slotRows; i++){
+        	int slotY = topSpace+(18*i);
+        	this.drawTexturedModalRect(this.guiLeft+34, guiTop+slotY, 0, topSpace, 176, 18);
+        }
+        this.drawTexturedModalRect(this.guiLeft+34, guiTop+topSpace+slotBlock, 0, topSpace+gap, 176, bottomSize);
+        
+        this.drawTexturedModalRect(this.guiLeft, this.guiTop+(ySize-32), 176, 139, 32, 36);
         this.drawTexturedModalRect(this.guiLeft, this.guiTop, 208, 85, 32, 86);
-        
+       
         //Baubles
         ContainerBackpackNormal container = (ContainerBackpackNormal)this.inventorySlots;
         if (container.hasBaublesSlots()) {
@@ -65,6 +81,7 @@ public class GuiBackpackNormal extends GuiContainer {
 	        this.mc.getTextureManager().bindTexture(RES_LOC);
         }
     }
+    
     
     @Override
 	protected void keyTyped(char par1, int par2) throws IOException {

@@ -9,6 +9,7 @@ import alec_wam.CrystalMod.capability.ExtendedPlayerProvider;
 import alec_wam.CrystalMod.integration.baubles.BaublesIntegration;
 import alec_wam.CrystalMod.items.tools.backpack.BackpackUtil;
 import alec_wam.CrystalMod.items.tools.backpack.ItemBackpackBase;
+import alec_wam.CrystalMod.items.tools.backpack.ItemBackpackNormal.CrystalBackpackType;
 import alec_wam.CrystalMod.items.tools.backpack.types.InventoryBackpack;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemStackTools;
@@ -55,21 +56,23 @@ public class ContainerBackpackNormal extends Container {
         }
         
         int offset = 34;
-        
-        for(int i = 0; i < 3; i++){
+        CrystalBackpackType type = CrystalBackpackType.byMetadata(backpackInventory.getBackpack().getMetadata());
+        int rows = backpackInventory.getSizeInventory()/9;
+        int offsetY = 18*(rows-3);
+        for(int i = 0; i < rows; i++){
             for(int j = 0; j < 9; j++){
-                this.addSlotToContainer(new SlotBackpack(backpackInventory, j+i*9, (8+offset)+j*18, 17+i*18));
+            	this.addSlotToContainer(new SlotBackpack(backpackInventory, j+i*9, (8+offset)+j*18, 17+i*18));
             }
         }
         
         for(int i = 0; i < 3; i++){
             for(int j = 0; j < 9; j++){
-                this.addSlotToContainer(new Slot(player.inventory, j+i*9+9, (8+offset)+j*18, 89+i*18));
+                this.addSlotToContainer(new Slot(player.inventory, j+i*9+9, (8+offset)+j*18, (89+offsetY)+i*18));
             }
         }
         
         for(int i = 0; i < 9; i++){
-            this.addSlotToContainer(new Slot(player.inventory, i, (8+offset)+i*18, 147));
+            this.addSlotToContainer(new Slot(player.inventory, i, (8+offset)+i*18, 147+offsetY));
         }
         
         for (int k = 0; k < 4; ++k)
@@ -108,7 +111,7 @@ public class ContainerBackpackNormal extends Container {
             });
         }
         
-        this.addSlotToContainer(new SlotOffhand(player.inventory, 40, 8, 147));
+        this.addSlotToContainer(new SlotOffhand(player.inventory, 40, 8, 147+offsetY));
         
         if (hasBaublesSlots()) {
             for (int i = 0; i < baubles.getSlots(); i++) {
