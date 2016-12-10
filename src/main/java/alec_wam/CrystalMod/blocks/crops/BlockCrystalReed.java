@@ -22,16 +22,18 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import alec_wam.CrystalMod.blocks.crops.BlockCrystalPlant.PlantType;
 import alec_wam.CrystalMod.items.ModItems;
 
 public class BlockCrystalReed extends Block implements net.minecraftforge.common.IPlantable
 {
     public static final PropertyInteger AGE = PropertyInteger.create("age", 0, 15);
     protected static final AxisAlignedBB REED_AABB = new AxisAlignedBB(0.125D, 0.0D, 0.125D, 0.875D, 1.0D, 0.875D);
-    
-    public BlockCrystalReed()
+    private final PlantType TYPE;
+    public BlockCrystalReed(PlantType type)
     {
         super(Material.PLANTS);
+        TYPE = type;
         this.setSoundType(SoundType.PLANT);
         this.setDefaultState(this.blockState.getBaseState().withProperty(AGE, Integer.valueOf(0)));
         this.setTickRandomly(true);
@@ -138,7 +140,7 @@ public class BlockCrystalReed extends Block implements net.minecraftforge.common
      */
     public Item getItemDropped(IBlockState state, Random rand, int fortune)
     {
-        return ModItems.crystalReeds;
+        return getReedItem();
     }
 
     /**
@@ -157,9 +159,18 @@ public class BlockCrystalReed extends Block implements net.minecraftforge.common
     @SideOnly(Side.CLIENT)
     public ItemStack getItem(World worldIn, BlockPos pos, IBlockState state)
     {
-    	return new ItemStack(ModItems.crystalReeds);
+    	return new ItemStack(getReedItem());
     }
 
+    public Item getReedItem(){
+    	switch(TYPE) {
+    		default : case BLUE : return ModItems.crystalReedsBlue;
+    		case RED : return ModItems.crystalReedsRed;
+    		case GREEN : return ModItems.crystalReedsGreen;
+    		case DARK : return ModItems.crystalReedsDark;
+    	}
+    }
+    
     /**
      * Convert the given metadata into a BlockState for this Block
      */

@@ -3,6 +3,9 @@ package alec_wam.CrystalMod.tiles.machine.crafting.infuser;
 import java.util.ArrayList;
 import java.util.List;
 
+import alec_wam.CrystalMod.blocks.BlockCrystal.CrystalBlockType;
+import alec_wam.CrystalMod.blocks.ModBlocks;
+import alec_wam.CrystalMod.fluids.ModFluids;
 import alec_wam.CrystalMod.tiles.cauldron.CauldronRecipeManager;
 import alec_wam.CrystalMod.tiles.cauldron.CauldronRecipeManager.InfusionRecipe;
 import alec_wam.CrystalMod.util.ItemStackTools;
@@ -10,6 +13,7 @@ import alec_wam.CrystalMod.util.ItemUtil;
 
 import com.google.common.collect.Lists;
 
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;

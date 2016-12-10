@@ -64,7 +64,10 @@ public class JEIPlugin  extends BlankModPlugin {
 		//recipeTransferRegistry.addRecipeTransferHandler(ContainerPanelCrafting.class, VanillaRecipeCategoryUid.CRAFTING, 37, 9, 0, 35);
 		//recipeTransferRegistry.addRecipeTransferHandler(ContainerBackpackCrafting.class, VanillaRecipeCategoryUid.CRAFTING, BackpackUtils.MAIN_SIZE, BackpackUtils.MAIN_SIZE+BackpackUtils.CRAFTING_SIZE-1, BackpackUtils.MAIN_SIZE+BackpackUtils.CRAFTING_SIZE, BackpackUtils.MAIN_SIZE+BackpackUtils.CRAFTING_SIZE+26);
 		
-		jeiHelpers.getItemBlacklist().addItemToBlacklist(new ItemStack(ModBlocks.crystalReeds));
+		jeiHelpers.getItemBlacklist().addItemToBlacklist(new ItemStack(ModBlocks.crystalReedsBlue));
+		jeiHelpers.getItemBlacklist().addItemToBlacklist(new ItemStack(ModBlocks.crystalReedsRed));
+		jeiHelpers.getItemBlacklist().addItemToBlacklist(new ItemStack(ModBlocks.crystalReedsGreen));
+		jeiHelpers.getItemBlacklist().addItemToBlacklist(new ItemStack(ModBlocks.crystalReedsDark));
 		jeiHelpers.getItemBlacklist().addItemToBlacklist(new ItemStack(ModBlocks.crystalPlantBlue));
 		jeiHelpers.getItemBlacklist().addItemToBlacklist(new ItemStack(ModBlocks.crystalPlantRed));
 		jeiHelpers.getItemBlacklist().addItemToBlacklist(new ItemStack(ModBlocks.crystalPlantGreen));

@@ -46,10 +46,14 @@ public class ItemPipeAttachment extends Item implements ICustomModel {
 	
 	public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> list){
 		for(String id : AttachmentUtil.getIds()){
-			ItemStack stack = new ItemStack(item);
-			ItemNBTHelper.setString(stack, "ID", id);
-			list.add(stack);
+			list.add(getAttachmentStack(id));
 		}
+	}
+	
+	public static ItemStack getAttachmentStack(String id){
+		ItemStack stack = new ItemStack(ModItems.pipeAttachmant);
+		ItemNBTHelper.setString(stack, "ID", id);
+		return stack;
 	}
 	
 	public String getUnlocalizedName(ItemStack stack){

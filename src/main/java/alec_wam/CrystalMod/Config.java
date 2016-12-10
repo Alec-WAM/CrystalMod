@@ -25,9 +25,9 @@ public class Config {
 	
 	public static int oreMinimumVeinSize = 5;
     public static int oreMaximumVeinSize = 8;
-    public static int oreMaximumVeinCount = 3;
-    public static int oreMinimumHeight = 2;
-    public static int oreMaximumHeight = 30;
+    public static int oreMaximumVeinCount = 2;
+    public static int oreMinimumHeight = 0;
+    public static int oreMaximumHeight = 20;
     public static boolean retrogenInfo = false;
     public static String retrogenID = "generated";
     public static boolean retrogenOres = false;

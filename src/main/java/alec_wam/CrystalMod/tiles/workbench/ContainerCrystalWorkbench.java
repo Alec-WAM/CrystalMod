@@ -127,7 +127,7 @@ public class ContainerCrystalWorkbench extends Container
 
             if (index == 0)
             {
-                if (!this.mergeItemStack(itemstack1, 10, 46, true))
+                if (!this.mergeItemStack(itemstack1, 10, 46, false))
                 {
                     return ItemStackTools.getEmptyStack();
                 }

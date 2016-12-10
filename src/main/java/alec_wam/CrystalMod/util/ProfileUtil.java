@@ -18,9 +18,16 @@ import org.json.JSONObject;
 import com.google.common.base.Strings;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
+import com.mojang.authlib.GameProfile;
+
+import net.minecraft.client.Minecraft;
+import net.minecraftforge.fml.client.FMLClientHandler;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.server.FMLServerHandler;
 
 public class ProfileUtil {
-	
+	public static final ConcurrentMap<UUID, GameProfile> profileCache = buildCache(3 * 60 * 60, 1024 * 5);
 	public static final ConcurrentMap<String, UUID> uuidCache = buildCache(3 * 60 * 60, 1024 * 5);
 	public static final ConcurrentMap<UUID, String> nameCache = buildCache(3 * 60 * 60, 1024 * 5);
 	
@@ -118,6 +125,15 @@ public class ProfileUtil {
 		return nameCache.get(uuid);
 	}
 	
+	public static GameProfile getProfile(UUID uuid){
+		if(!profileCache.containsKey(uuid)){
+			GameProfile profile = getUnCachedProfile(uuid);
+			profileCache.put(uuid, profile);
+			return profile;
+		}
+		return profileCache.get(uuid);
+	}
+	
 	private static UUID getUnCachedUUID(String username){
 		JSONObject jsonResult = getJSONObject(getURL(username, RequestType.NAMETOUUID));
 	
@@ -144,6 +160,16 @@ public class ProfileUtil {
 			return name;
 		}
 		return ERROR;
+	}
+	
+	private static GameProfile getUnCachedProfile(UUID uuid){
+		GameProfile profile = new GameProfile(uuid, ProfileUtil.getUnCachedName(uuid));
+		if(FMLCommonHandler.instance().getSide() == Side.CLIENT){
+			FMLClientHandler.instance().getClient().getSessionService().fillProfileProperties(profile, true);
+		} else {
+			FMLServerHandler.instance().getServer().getMinecraftSessionService().fillProfileProperties(profile, true);
+		}
+		return profile;
 	}
 	
 	public static final String ERROR = "<ERROR>";

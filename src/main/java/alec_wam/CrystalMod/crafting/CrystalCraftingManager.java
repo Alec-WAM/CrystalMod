@@ -116,6 +116,11 @@ public class CrystalCraftingManager
         	ItemNBTHelper.setString(sword, "Color", color);
         	
         	this.addRecipeNBT(sword, new Object[]{"  #", " C ", "R  ", '#', swordHead, 'C', cover, 'R', toolRod});
+        	
+        	ItemStack cShears = new ItemStack(ModItems.shears);
+    		ItemNBTHelper.setString(cShears, "Color", color);
+    		ItemStack ingot = new ItemStack(ModItems.ingots, 1, color == "blue" ? IngotType.BLUE.getMetadata() : color == "red" ? IngotType.RED.getMetadata() : color == "green" ? IngotType.GREEN.getMetadata() : color == "dark" ? IngotType.DARK.getMetadata() : IngotType.PURE.getMetadata());
+    		addRecipe(cShears, new Object[] {" #", "# ", '#', ingot});
     	}
     	
     	this.addRecipe(new ShapedOreCrystalRecipe(new ItemStack(ModItems.wrench), new Object[] {"# #"," R "," R ", '#', "ingotCrystal", 'R', "gemCrystal"}));

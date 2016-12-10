@@ -238,7 +238,6 @@ public class FarmUtil {
 	}
 
 	public static void addDefaultCrops() {
-		//TODO Add Seperate Colored Reeds
 		addStandardCrop(new ItemStack(Blocks.WHEAT), 32767);
 	    addStandardCrop(new ItemStack(Blocks.CARROTS), 32767);
 	    addStandardCrop(new ItemStack(Blocks.POTATOES), 32767);
@@ -252,7 +251,10 @@ public class FarmUtil {
 	    addStandardCrop(new ItemStack(ModBlocks.crystalPlantDark), 3);
 	    addStackedCrop(Blocks.REEDS, 32767);
 	    addStackedCrop(Blocks.CACTUS, 32767);
-	    addStackedCrop(ModBlocks.crystalReeds, 32767);
+	    addStackedCrop(ModBlocks.crystalReedsBlue, 32767);
+	    addStackedCrop(ModBlocks.crystalReedsRed, 32767);
+	    addStackedCrop(ModBlocks.crystalReedsGreen, 32767);
+	    addStackedCrop(ModBlocks.crystalReedsDark, 32767);
 	}
 	
 }

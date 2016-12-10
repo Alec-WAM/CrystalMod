@@ -6,6 +6,7 @@ import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.blocks.crops.BlockCrystalPlant.PlantType;
+import alec_wam.CrystalMod.blocks.crops.ItemBlockReeds;
 import alec_wam.CrystalMod.entities.minecarts.chests.ItemCrystalChestMinecart;
 import alec_wam.CrystalMod.entities.minecarts.chests.ItemEnderChestMinecart;
 import alec_wam.CrystalMod.entities.minecarts.chests.wireless.ItemWirelessChestMinecart;
@@ -31,6 +32,7 @@ import alec_wam.CrystalMod.items.tools.ItemDarkIronBow;
 import alec_wam.CrystalMod.items.tools.ItemSuperTorch;
 import alec_wam.CrystalMod.items.tools.ItemToolParts;
 import alec_wam.CrystalMod.items.tools.backpack.ItemBackpackBase;
+import alec_wam.CrystalMod.items.tools.backpack.ItemBackpackLock;
 import alec_wam.CrystalMod.items.tools.backpack.ItemBackpackNormal;
 import alec_wam.CrystalMod.items.tools.backpack.types.BackpackCrafting;
 import alec_wam.CrystalMod.items.tools.backpack.types.BackpackNormal;
@@ -44,6 +46,7 @@ import alec_wam.CrystalMod.tiles.pipes.estorage.panel.wireless.ItemWirelessPanel
 import alec_wam.CrystalMod.tiles.pipes.estorage.storage.hdd.ItemHDD;
 import alec_wam.CrystalMod.tiles.pipes.item.filters.ItemPipeFilter;
 import alec_wam.CrystalMod.tiles.spawner.ItemMobEssence;
+import alec_wam.CrystalMod.util.ModLogger;
 
 import com.google.common.collect.Maps;
 
@@ -74,7 +77,6 @@ public class ModItems {
 	public static ItemCrystal crystals;
 	public static ItemIngot ingots;
 	public static ItemMetalPlate plates;
-	public static Item crystalReeds;
 	public static ItemToolParts toolParts;
 	public static ItemMachineFrame machineFrame;
 	
@@ -109,6 +111,8 @@ public class ModItems {
 	
 	public static ItemCrystalSeeds crystalSeedsBlue, crystalSeedsRed, crystalSeedsGreen, crystalSeedsDark;
 	public static ItemCrystalSeedTree crystalTreeSeedsBlue, crystalTreeSeedsRed, crystalTreeSeedsGreen, crystalTreeSeedsDark;
+	public static Item crystalReedsBlue, crystalReedsRed, crystalReedsGreen, crystalReedsDark;
+	
 	public static ItemPipeCover pipeCover;
 	public static ItemPipeFilter pipeFilter;
 	
@@ -117,10 +121,12 @@ public class ModItems {
 	public static ItemWirelessPanel wirelessPanel; 
 	public static ItemPipeAttachment pipeAttachmant;
 	
-	public static ItemMiscCard miscCard;
 	public static ItemBackpack backpack;
 	public static ItemBackpackNormal normalBackpack;
 	public static ItemBackpackBase craftingBackpack;
+	public static ItemBackpackLock backpackLock;
+	
+	public static ItemMiscCard miscCard;
 	public static ItemTeloportTool telePearl;
 	public static ItemSuperTorch superTorch;
 	
@@ -139,7 +145,10 @@ public class ModItems {
 		crystals = new ItemCrystal();
 		ingots = new ItemIngot();
 		plates = new ItemMetalPlate();
-		crystalReeds = registerItem(new ItemBlockSpecial(ModBlocks.crystalReeds).setCreativeTab(CrystalMod.tabItems), "crystalReeds");
+		crystalReedsBlue = registerItem(new ItemBlockSpecial(ModBlocks.crystalReedsBlue).setCreativeTab(CrystalMod.tabItems), "crystalreedsblue");
+		crystalReedsRed = registerItem(new ItemBlockSpecial(ModBlocks.crystalReedsRed).setCreativeTab(CrystalMod.tabItems), "crystalreedsred");
+		crystalReedsGreen = registerItem(new ItemBlockSpecial(ModBlocks.crystalReedsGreen).setCreativeTab(CrystalMod.tabItems), "crystalreedsgreen");
+		crystalReedsDark = registerItem(new ItemBlockSpecial(ModBlocks.crystalReedsDark).setCreativeTab(CrystalMod.tabItems), "crystalreedsdark");
 		toolParts = new ItemToolParts();
 		machineFrame = new ItemMachineFrame();
 		
@@ -189,6 +198,7 @@ public class ModItems {
 		backpack = new ItemBackpack();
 		normalBackpack = new ItemBackpackNormal(new BackpackNormal());
 		craftingBackpack = new ItemBackpackBase(new BackpackCrafting());
+		backpackLock = new ItemBackpackLock();
 		telePearl = new ItemTeloportTool();
 		superTorch = new ItemSuperTorch();
 		flag = new ItemFlag();
@@ -216,8 +226,14 @@ public class ModItems {
 		}
 	}
 	
+	//TODO Add Forced Lowercase Registry name
 	public static <T extends Item> T registerItem(T item, String name){
 		item.setUnlocalizedName(CrystalMod.prefix(name));
+		
+		String lowerCase = name.toLowerCase();
+		if(name !=lowerCase){
+			ModLogger.warning("Registering an Item that has a non-lowercase registry name! ("+name+" vs. "+lowerCase+")");
+		}
 		item.setRegistryName(name);
 		GameRegistry.register(item);
 		REGISTRY.put(name, item);

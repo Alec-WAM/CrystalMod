@@ -30,7 +30,10 @@ item.crystalmod.metalPlate.dark.name=Dark Crystal Plate
 item.crystalmod.metalPlate.pure.name=Pure Crystal Plate
 item.crystalmod.metalPlate.darkIron.name=Dark Iron Plate
 
-item.crystalmod.crystalReeds.name=Crystal Reeds
+item.crystalmod.bluecrystalreeds.name=Blue Crystal Reeds
+item.crystalmod.redcrystalreeds.name=Red Crystal Reeds
+item.crystalmod.greencrystalreeds.name=Green Crystal Reeds
+item.crystalmod.darkcrystalreeds.name=Dark Crystal Reeds
 item.crystalmod.bluecrystalseeds.name=Blue Crystal Seeds
 item.crystalmod.redcrystalseeds.name=Red Crystal Seeds
 item.crystalmod.greencrystalseeds.name=Green Crystal Seeds
@@ -190,8 +193,15 @@ item.crystalmod.worksiteUpgrade.13.name=Quarry Only Ore Upgrade
 
 item.crystalmod.telePearl.name=Teleporting Pearl
 item.crystalmod.backpack.name=Backpack
-item.crystalmod.backpack_normal.name=Backpack
+item.crystalmod.backpack_normal.normal.name=Backpack
+item.crystalmod.backpack_normal.darkiron.name=Dark Iron Backpack
+item.crystalmod.backpack_normal.blue.name=Blue Crystal Backpack
+item.crystalmod.backpack_normal.red.name=Red Crystal Backpack
+item.crystalmod.backpack_normal.green.name=Green Crystal Backpack
+item.crystalmod.backpack_normal.dark.name=Dark Crystal Backpack
+item.crystalmod.backpack_normal.pure.name=Pure Crystal Backpack
 item.crystalmod.backpack_crafting.name=Crafting Backpack
+item.crystalmod.backpacklock.name=Backpack Lock
 item.crystalmod.flagItem.name=Flag
 item.crystalmod.dragonWings.name=Dragon Wings
 
@@ -239,7 +249,10 @@ tile.crystalmod.bluecrystaltreeplant.name=Blue Crystal Tree-Plant
 tile.crystalmod.redcrystaltreeplant.name=Red Crystal Tree-Plant
 tile.crystalmod.greencrystaltreeplant.name=Green Crystal Tree-Plant
 tile.crystalmod.darkcrystaltreeplant.name=Dark Crystal Tree-Plant
-tile.crystalmod.crystalreedblock.name=Crystal Reeds
+tile.crystalmod.bluecrystalreedblock.name=Blue Crystal Reeds
+tile.crystalmod.redcrystalreedblock.name=Red Crystal Reeds
+tile.crystalmod.greencrystalreedblock.name=Green Crystal Reeds
+tile.crystalmod.darkcrystalreedblock.name=Dark Crystal Reeds
 tile.crystalmod.flowerlilypad.name=Flower Lily-pad
 
 tile.crystalmod.crystallog.blue.name=Blue Crystal Wood
@@ -366,6 +379,7 @@ tile.crystalmod.worksite.animal_farm.name=Minion Animal Farm
 tile.crystalmod.worksite.crop_farm.name=Minion Crop Farm
 
 tile.crystalmod.mobgrinder.name=Mob Grinder
+tile.crystalmod.endertorch.name=Ender Torch
 tile.crystalmod.entityhopper.name=Entity Hopper
 crystalmod.entityhopper.filter.none=None
 crystalmod.entityhopper.filter.all=Any
@@ -387,14 +401,14 @@ tile.crystalmod.powerconverter.rf.name=RF to CU Converter
 tile.crystalmod.powerconverter.cu.name=CU to RF Converter
 
 #--Fluids
-fluid.crystalmod.xpjuice=Liquid XP
-fluid.crystalmod.crystal.blue=Blue Liquid Crystal
-fluid.crystalmod.crystal.red=Red Liquid Crystal
-fluid.crystalmod.crystal.green=Green Liquid Crystal
-fluid.crystalmod.crystal.dark=Dark Liquid Crystal
-fluid.crystalmod.crystal.pure=Pure Liquid Crystal
-fluid.crystalmod.darkiron=Liquid Dark Iron
-fluid.crystalmod.ender=Liquid Ender
+fluid.crystalmod.xpjuice.name=Liquid XP
+fluid.crystalmod.crystal.blue.name=Blue Liquid Crystal
+fluid.crystalmod.crystal.red.name=Red Liquid Crystal
+fluid.crystalmod.crystal.green.name=Green Liquid Crystal
+fluid.crystalmod.crystal.dark.name=Dark Liquid Crystal
+fluid.crystalmod.crystal.pure.name=Pure Liquid Crystal
+fluid.crystalmod.darkiron.name=Liquid Dark Iron
+fluid.crystalmod.ender.name=Liquid Ender
 
 fluid.moltenCrystalBlue.name=Molten Blue Crystal
 fluid.moltenCrystalRed.name=Molten Red Crystal

@@ -51,12 +51,20 @@ public class CrystalModWorldGenerator implements IWorldGenerator {
     public void generateOres(Random random, int chunkX, int chunkZ, World world, boolean newGen){
     	if(!oreDimBlacklist.contains(world.provider.getDimension())){
 			if(newGen || Config.retrogenOres){
-				IBlockState base = Blocks.STONE.getDefaultState();
-	            addOreSpawn(base, world, random, chunkX * 16, chunkZ * 16,
-	            		Config.oreMinimumVeinSize, Config.oreMaximumVeinSize, 
-	            		Config.oreMaximumVeinCount,
-	            		Config.oreMinimumHeight, Config.oreMaximumHeight);
-
+				boolean debug = false;
+				if(debug){
+					IBlockState base = Blocks.AIR.getDefaultState();
+		            addOreSpawn(base, world, random, chunkX * 16, chunkZ * 16,
+		            		Config.oreMinimumVeinSize, Config.oreMaximumVeinSize, 
+		            		2,
+		            		0, 20);
+				} else {
+					IBlockState base = Blocks.STONE.getDefaultState();
+		            addOreSpawn(base, world, random, chunkX * 16, chunkZ * 16,
+		            		Config.oreMinimumVeinSize, Config.oreMaximumVeinSize, 
+		            		Config.oreMaximumVeinCount,
+		            		Config.oreMinimumHeight, Config.oreMaximumHeight);
+				}
 
 	            if (!newGen) {
 	                world.getChunkFromChunkCoords(chunkX, chunkZ).setChunkModified();
@@ -71,9 +79,10 @@ public class CrystalModWorldGenerator implements IWorldGenerator {
         	int posX = blockXPos + random.nextInt(16);
             int posY = minY + random.nextInt(maxY - minY);
             int posZ = blockZPos + random.nextInt(16);
-            int type = MathHelper.getRandomIntegerInRange(random, 0, CrystalOreType.values().length-1);
             
-        	WorldGenMinableRandom minable = new WorldGenMinableRandom(ModBlocks.crystalOre.getDefaultState().withProperty(BlockCrystalOre.TYPE, CrystalOreType.values()[type]), (minVeinSize - random.nextInt(maxVeinSize - minVeinSize)), net.minecraft.block.state.pattern.BlockMatcher.forBlock(targetBlock.getBlock()));
+            IBlockState[] ores = {ModBlocks.crystalOre.getStateFromMeta(CrystalOreType.BLUE.getMeta()), ModBlocks.crystalOre.getStateFromMeta(CrystalOreType.RED.getMeta()), ModBlocks.crystalOre.getStateFromMeta(CrystalOreType.GREEN.getMeta()), ModBlocks.crystalOre.getStateFromMeta(CrystalOreType.DARK.getMeta())};
+            
+        	WorldGenMinableRandom minable = new WorldGenMinableRandom(ores, (minVeinSize - random.nextInt(maxVeinSize - minVeinSize)), net.minecraft.block.state.pattern.BlockMatcher.forBlock(targetBlock.getBlock()));
         	minable.generate(world, random, new BlockPos(posX, posY, posZ));
         }
     }

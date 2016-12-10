@@ -3,6 +3,7 @@ package alec_wam.CrystalMod.items.tools.backpack.gui;
 import java.io.IOException;
 
 import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.items.tools.backpack.BackpackUtil;
 import alec_wam.CrystalMod.items.tools.backpack.types.InventoryBackpack;
 import alec_wam.CrystalMod.util.ItemStackTools;
@@ -32,11 +33,21 @@ public class GuiBackpackNormal extends GuiContainer {
         this.ySize = topSpace+(18*slotRows)+bottomSize;
     }
 
+    private final ItemStack lockIconStack = new ItemStack(ModItems.backpackLock);
+    
     @Override
     public void drawGuiContainerForegroundLayer(int x, int y){
     	
     	if(!ItemStackTools.isNullStack(backpack)){
-    		this.fontRendererObj.drawString(backpack.getDisplayName(), 8+34, 6, 4210752);
+    		String name = backpack.getDisplayName();
+    		this.fontRendererObj.drawString(name, 8+34, 6, 4210752);
+    		if(BackpackUtil.getOwner(backpack) !=null){
+    			GlStateManager.pushMatrix();
+    			GlStateManager.translate(8+34+(this.fontRendererObj.getStringWidth(name)), 4.5, 0);
+    			GlStateManager.scale(0.55, 0.55, 1);
+    			this.itemRender.renderItemAndEffectIntoGUI(lockIconStack, 0, 0);
+    			GlStateManager.popMatrix();
+    		}
     	}
     	this.fontRendererObj.drawString(I18n.format("container.inventory", new Object[0]), 8+34, 16+(18*slotRows)+5, 4210752);
     }

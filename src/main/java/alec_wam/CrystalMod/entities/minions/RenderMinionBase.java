@@ -17,6 +17,7 @@ import net.minecraft.util.EnumHandSide;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
 import alec_wam.CrystalMod.util.ProfileUtil;
+import alec_wam.CrystalMod.util.UUIDUtils;
 import alec_wam.CrystalMod.util.client.DownloadedTextures;
 
 public class RenderMinionBase extends RenderBiped<EntityMinionBase> {
@@ -132,8 +133,7 @@ public class RenderMinionBase extends RenderBiped<EntityMinionBase> {
 		try{
 			UUID owner = entity.getOwnerId();
 			if(owner !=null){
-				String name = ProfileUtil.getUsername(owner);
-				ResourceLocation skin = DownloadedTextures.getSkin(name);
+				ResourceLocation skin = DownloadedTextures.getSkin(owner);
 				if(skin !=null){
 					return skin;
 				}

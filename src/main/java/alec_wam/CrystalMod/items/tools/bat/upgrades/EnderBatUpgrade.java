@@ -27,8 +27,10 @@ import alec_wam.CrystalMod.api.tools.IBatUpgrade;
 import alec_wam.CrystalMod.api.tools.UpgradeData;
 import alec_wam.CrystalMod.items.tools.bat.BatHelper;
 import alec_wam.CrystalMod.items.tools.bat.BatUpgrade;
+import alec_wam.CrystalMod.util.ChatUtil;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.Lang;
+import alec_wam.CrystalMod.util.ModLogger;
 import alec_wam.CrystalMod.util.client.RenderUtil;
 
 public class EnderBatUpgrade extends BatUpgrade {
@@ -48,7 +50,7 @@ public class EnderBatUpgrade extends BatUpgrade {
 		float val = getValue(value);
 		if(val > 0){
 			//Only Teleport Main Target
-			teleportRandomly(entities.get(0));
+			ModLogger.info("Worked: "+teleportRandomly(entities.get(0)));
 		}
 	}
 	

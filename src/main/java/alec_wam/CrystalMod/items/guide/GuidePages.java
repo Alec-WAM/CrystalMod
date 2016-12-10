@@ -193,7 +193,7 @@ public class GuidePages {
 		//TODO Add Press Page
 		itemData.add(getBasicPage("metalPlate", getEnumItems(ModItems.plates, PlateType.values())));
 
-		itemData.add(getBasicPage("crystalReeds", ModItems.crystalReeds));
+		itemData.add(getBasicPage("crystalReeds", ModItems.crystalReedsBlue));
 		List<ItemStack> seeds = Lists.newArrayList();
 		seeds.add(new ItemStack(ModItems.crystalSeedsBlue));
 		seeds.add(new ItemStack(ModItems.crystalSeedsRed));

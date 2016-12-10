@@ -14,19 +14,19 @@ import net.minecraft.world.gen.feature.WorldGenerator;
 
 public class WorldGenMinableRandom extends WorldGenerator
 {
-    public IBlockState oreBlock;
+    public IBlockState[] oreBlocks;
     /** The number of blocks to generate. */
     private final int numberOfBlocks;
     private final Predicate<IBlockState> predicate;
 
-    public WorldGenMinableRandom(IBlockState state, int blockCount)
+    public WorldGenMinableRandom(IBlockState[] states, int blockCount)
     {
-        this(state, blockCount, BlockMatcher.forBlock(Blocks.STONE));
+        this(states, blockCount, BlockMatcher.forBlock(Blocks.STONE));
     }
 
-    public WorldGenMinableRandom(IBlockState state, int blockCount, Predicate<IBlockState> p_i45631_3_)
+    public WorldGenMinableRandom(IBlockState[] states, int blockCount, Predicate<IBlockState> p_i45631_3_)
     {
-        this.oreBlock = state;
+        this.oreBlocks = states;
         this.numberOfBlocks = blockCount;
         this.predicate = p_i45631_3_;
     }
@@ -80,7 +80,8 @@ public class WorldGenMinableRandom extends WorldGenerator
                                     
                                     if (state.getBlock().isReplaceableOreGen(state, worldIn, blockpos, this.predicate))
                                     {
-                                        worldIn.setBlockState(blockpos, this.oreBlock, 2);
+                                    	int type = MathHelper.getRandomIntegerInRange(rand, 0, oreBlocks.length-1);
+                                		worldIn.setBlockState(blockpos, oreBlocks[type], 2);
                                     }
                                 }
                             }

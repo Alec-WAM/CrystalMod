@@ -29,6 +29,8 @@ import alec_wam.CrystalMod.tiles.chest.CrystalChestType;
 import alec_wam.CrystalMod.tiles.chest.ItemBlockCrystalChest;
 import alec_wam.CrystalMod.tiles.chest.wireless.BlockWirelessChest;
 import alec_wam.CrystalMod.tiles.chest.wireless.TileWirelessChest;
+import alec_wam.CrystalMod.tiles.endertorch.BlockEnderTorch;
+import alec_wam.CrystalMod.tiles.endertorch.TileEnderTorch;
 import alec_wam.CrystalMod.tiles.entityhopper.BlockEntityHopper;
 import alec_wam.CrystalMod.tiles.entityhopper.TileEntityEntityHopper;
 import alec_wam.CrystalMod.tiles.machine.crafting.BlockCrystalMachine;
@@ -118,7 +120,7 @@ public class ModBlocks {
 	public static BlockCrystalOre crystalOre;
 	public static BlockCrystalIngot crystalIngot;
 	public static BlockCrystalGlass crystalGlass;
-	public static BlockCrystalReed crystalReeds;
+	public static BlockCrystalReed crystalReedsBlue, crystalReedsRed, crystalReedsGreen, crystalReedsDark;
 	public static BlockFlowerLilyPad flowerLilypad;
 	public static BlockCrystalWorkbench crystalWorkbench;
 	public static BlockCrystalChest crystalChest;
@@ -134,6 +136,7 @@ public class ModBlocks {
 	public static BlockWeather weather;
 	public static BlockCrystalCauldron cauldron;
 	public static BlockCustomSpawner customSpawner;
+	public static BlockEnderTorch enderTorch;
 	public static BlockMobGrinder mobGrinder;
 	public static BlockEntityHopper entityHopper;
 	
@@ -176,8 +179,11 @@ public class ModBlocks {
 		
 		crystalGlass = registerEnumBlock(new BlockCrystalGlass(), "crystalglass");
 		
-		crystalReeds = new BlockCrystalReed();
-		registerBlock(crystalReeds, "crystalreedblock");
+		crystalReedsBlue = registerBlock(new BlockCrystalReed(PlantType.BLUE), "bluecrystalreedblock");
+		crystalReedsRed = registerBlock(new BlockCrystalReed(PlantType.RED), "redcrystalreedblock");
+		crystalReedsGreen = registerBlock(new BlockCrystalReed(PlantType.GREEN), "greencrystalreedblock");
+		crystalReedsDark = registerBlock(new BlockCrystalReed(PlantType.DARK), "darkcrystalreedblock");
+
 		
 		flowerLilypad = new BlockFlowerLilyPad();
 		registerBlock(flowerLilypad, "flowerlilypad");
@@ -362,6 +368,9 @@ public class ModBlocks {
 		customSpawner = new BlockCustomSpawner();
 		registerBlock(customSpawner, "customspawner");
 		registerTileEntity(TileEntityCustomSpawner.class);
+		
+		enderTorch = registerBlock(new BlockEnderTorch(), "endertorch");
+		registerTileEntity(TileEnderTorch.class);
 		
 		mobGrinder = registerBlock(new BlockMobGrinder(), "mobgrinder");
 		registerTileEntity(TileEntityMobGrinder.class);
