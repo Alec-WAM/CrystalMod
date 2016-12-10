@@ -8,6 +8,7 @@ import alec_wam.CrystalMod.util.ItemStackTools;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.items.CapabilityItemHandler;
 
 public class SlotBackpack extends Slot {
 
@@ -18,7 +19,8 @@ public class SlotBackpack extends Slot {
 	public boolean isItemValid(ItemStack stack){
 		if(!ItemStackTools.isValid(stack))return false;
 		boolean isBackpack = (stack.getItem() instanceof ItemBackpackBase);
-		if(isBackpack && this.inventory !=null){
+		boolean isInv = (stack.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null));
+		if(this.inventory !=null){
 			if(this.inventory instanceof InventoryBackpack){
 				InventoryBackpack inv = (InventoryBackpack)inventory;
 				ItemStack masterBackpack = inv.getBackpack();
@@ -31,11 +33,13 @@ public class SlotBackpack extends Slot {
 						}
 						return true;
 					}
+					return !isBackpack && !isInv;
 				}
+				return !isBackpack;
 			}
 		}
 		
-		return !isBackpack;
+		return super.isItemValid(stack);
 	}
 
 }

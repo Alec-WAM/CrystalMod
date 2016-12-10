@@ -108,7 +108,6 @@ public class InventoryBackpack implements IInventory {
 
     @Override
     public int getSizeInventory(){
-    	//TODO Use NBT to load size
         return size;
     }
 

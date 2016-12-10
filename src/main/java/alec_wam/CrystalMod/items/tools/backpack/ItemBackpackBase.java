@@ -1,11 +1,18 @@
 package alec_wam.CrystalMod.items.tools.backpack;
 
+import java.util.List;
+import java.util.UUID;
+
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.items.ModItems;
+import alec_wam.CrystalMod.util.Lang;
+import alec_wam.CrystalMod.util.ProfileUtil;
+import alec_wam.CrystalMod.util.UUIDUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBucket;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
@@ -52,5 +59,23 @@ public class ItemBackpackBase extends Item implements ICustomModel {
 	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand)
     {
 		return backpack.rightClick(itemStackIn, worldIn, playerIn, hand);
+    }
+	
+	@SideOnly(Side.CLIENT)
+    public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced)
+    {
+		UUID ownerUUID = BackpackUtil.getOwner(stack);
+		if(ownerUUID !=null){
+			String owner = UUIDUtils.fromUUID(ownerUUID);
+			if(ProfileUtil.getUsername(ownerUUID) !=ProfileUtil.ERROR){
+				owner = ProfileUtil.getUsername(ownerUUID);
+			}
+			tooltip.add("Owner: "+owner);
+		}
+    }
+	
+	@Override
+    public net.minecraftforge.common.capabilities.ICapabilityProvider initCapabilities(ItemStack stack, net.minecraft.nbt.NBTTagCompound nbt) {
+		return backpack.initCapabilities(stack, nbt);
     }
 }

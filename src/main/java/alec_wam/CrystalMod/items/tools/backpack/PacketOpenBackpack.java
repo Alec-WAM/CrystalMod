@@ -1,5 +1,7 @@
 package alec_wam.CrystalMod.items.tools.backpack;
 
+import com.enderio.core.common.util.ChatUtil;
+
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.capability.ExtendedPlayerProvider;
 import alec_wam.CrystalMod.handler.GuiHandler;
@@ -30,6 +32,10 @@ public class PacketOpenBackpack extends AbstractPacketThreadsafe {
 		//Only open backpack on player's back.
 		ItemStack back = BackpackUtil.getBackpack(netHandler.playerEntity, OpenType.BACK);
 		if(ItemStackTools.isValid(back)){
+			if(!BackpackUtil.canOpen(back, netHandler.playerEntity.getUniqueID())){
+				ChatUtil.sendNoSpam(netHandler.playerEntity, "You do not own this backpack.");
+				return;
+			}
 			ItemNBTHelper.updateUUID(back);
 	    	ExtendedPlayerProvider.getExtendedPlayer(netHandler.playerEntity).setOpenBackpack(back);
 			netHandler.playerEntity.openGui(CrystalMod.instance, GuiHandler.GUI_ID_BACKPACK, netHandler.playerEntity.getEntityWorld(), 0, 0, 0);

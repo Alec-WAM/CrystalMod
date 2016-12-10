@@ -52,7 +52,7 @@ public class LayerDragonWings implements LayerRenderer<AbstractClientPlayer> {
         {
     		GlStateManager.enableCull();
             float f11 = f * (float)Math.PI * 2.0F;
-            dragonModel.wing.rotateAngleX = 0.125F - (float)Math.cos((double)f11) * 0.2F;
+            dragonModel.wing.rotateAngleX = 0.125F - (float)Math.cos((double)f11) * 0.2f;
             dragonModel.wing.rotateAngleY = 0.25F;
             if(!entity.onGround)dragonModel.wing.rotateAngleZ = 0.45f+(float)(Math.sin((double)f11) + 0.125D) * 0.8F;
             else dragonModel.wing.rotateAngleZ = 0.25f+(float)(Math.sin((double)f11) + 0.125D) * 0.4F;

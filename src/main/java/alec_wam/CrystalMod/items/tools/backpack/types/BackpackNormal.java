@@ -67,10 +67,18 @@ public class BackpackNormal implements IBackpackInventory {
 		return BackpackUtil.handleBackpackOpening(stack, world, player, hand, false);
 	}
 
+	@Override
 	public InventoryBackpack getInventory(EntityPlayer player, ItemStack backpack){
 		
 		int size = 27+(9*backpack.getItemDamage());
 		return new InventoryBackpack(player, backpack, Math.min(size, 72));
+	}
+	
+	@Override
+	public InventoryBackpack getInventory(ItemStack backpack){
+		
+		int size = 27+(9*backpack.getItemDamage());
+		return new InventoryBackpack(backpack, Math.min(size, 72));
 	}
 	
 	@SideOnly(Side.CLIENT)
@@ -83,7 +91,5 @@ public class BackpackNormal implements IBackpackInventory {
 	public Object getServerGuiElement(EntityPlayer player, World world) {
 		return new ContainerBackpackNormal(getInventory(player, BackpackUtil.getPlayerBackpack(player)));
 	}
-	
-	
 
 }
