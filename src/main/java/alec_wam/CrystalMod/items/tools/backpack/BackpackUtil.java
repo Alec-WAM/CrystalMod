@@ -178,7 +178,6 @@ public class BackpackUtil {
 		ModCrafting.addNBTRecipe(new ItemStack(ModItems.normalBackpack, 1, CrystalBackpackType.DARK.ordinal()), Collections.emptyList(), new Object[]{"III", "IBI", "III", 'I', darkIngot, 'B', new ItemStack(ModItems.normalBackpack, 1, CrystalBackpackType.GREEN.ordinal())});
 		ModCrafting.addNBTRecipe(new ItemStack(ModItems.normalBackpack, 1, CrystalBackpackType.PURE.ordinal()), Collections.emptyList(), new Object[]{"III", "IBI", "III", 'I', pureIngot, 'B', new ItemStack(ModItems.normalBackpack, 1, CrystalBackpackType.DARK.ordinal())});
 		
-		ModCrafting.addShapedRecipe(ModItems.backpackLock, new Object[]{" N ", "NPN", "NNN", 'N', dIronNugget, 'P', dIronPlate});
 
 	}
 }

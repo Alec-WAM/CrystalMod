@@ -33,7 +33,7 @@ public class GuiBackpackNormal extends GuiContainer {
         this.ySize = topSpace+(18*slotRows)+bottomSize;
     }
 
-    private final ItemStack lockIconStack = new ItemStack(ModItems.backpackLock);
+    private final ItemStack lockIconStack = new ItemStack(ModItems.lock);
     
     @Override
     public void drawGuiContainerForegroundLayer(int x, int y){

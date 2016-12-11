@@ -15,6 +15,7 @@ import alec_wam.CrystalMod.fluids.ModFluids;
 import alec_wam.CrystalMod.handler.ClientEventHandler;
 import alec_wam.CrystalMod.handler.EventHandler;
 import alec_wam.CrystalMod.handler.KeyHandler;
+import alec_wam.CrystalMod.handler.MissingItemHandler;
 import alec_wam.CrystalMod.integration.ModIntegration;
 import alec_wam.CrystalMod.integration.minecraft.ModBanners;
 import alec_wam.CrystalMod.items.ModItems;
@@ -64,6 +65,8 @@ public class CommonProxy {
         readMainConfig();
         
         MinecraftForge.EVENT_BUS.register(new Config());
+        MinecraftForge.EVENT_BUS.register(new MissingItemHandler());
+        
         
         ModFluids.registerFluids();
 		ModBlocks.init();

@@ -123,9 +123,9 @@ public class ItemMobEssence extends Item implements ICustomModel{
 		if(essence !=null){
 			essence.addInfo(list);
 		}
-		list.add(Lang.localize("info.mobEssence1.txt"));
-		list.add(Lang.localize("info.mobEssence2.txt"));
-		list.add(Lang.localize("info.mobEssence3.txt"));
+		list.add(Lang.localize("info.mobessence1.txt"));
+		list.add(Lang.localize("info.mobessence2.txt"));
+		list.add(Lang.localize("info.mobessence3.txt"));
 	}
 	
 	public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> list){
@@ -179,7 +179,7 @@ public class ItemMobEssence extends Item implements ICustomModel{
 			}
 			
 			public void addInfo(List<String> list){
-				list.add(Lang.localize("entity." + "WitherSkeleton" + ".name"));
+				list.add(Lang.translateToLocal("entity." + "WitherSkeleton" + ".name"));
 			}
 		});
 		addEntity("Stray", new EntityEssenceInstance<EntitySkeleton>(EntitySkeleton.class){

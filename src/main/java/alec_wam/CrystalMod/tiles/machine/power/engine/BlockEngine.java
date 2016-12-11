@@ -32,8 +32,11 @@ import alec_wam.CrystalMod.tiles.machine.BlockMachine;
 import alec_wam.CrystalMod.tiles.machine.BlockStateMachine;
 import alec_wam.CrystalMod.tiles.machine.power.engine.furnace.TileEntityEngineFurnace;
 import alec_wam.CrystalMod.tiles.machine.power.engine.lava.TileEntityEngineLava;
+import alec_wam.CrystalMod.tiles.machine.power.engine.vampire.TileEntityEngineVampire;
+import alec_wam.CrystalMod.util.ChatUtil;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemUtil;
+import alec_wam.CrystalMod.util.ModLogger;
 
 public class BlockEngine extends BlockMachine implements ICustomModel {
 	
@@ -100,8 +103,15 @@ public class BlockEngine extends BlockMachine implements ICustomModel {
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, ItemStack stack, EnumFacing side, float hitX, float hitY, float hitZ) {
     	TileEntity tile = world.getTileEntity(pos);
         if ((tile instanceof TileEntityEngineBase)) {
-        	if(!world.isRemote){
-        		player.openGui(CrystalMod.instance, 0, world, pos.getX(), pos.getY(), pos.getZ());
+        	TileEntityEngineBase engine = (TileEntityEngineBase)tile;
+        	if(player.isSneaking()){
+        		String powerinfo = engine.getCEnergyStored(side)+" / "+engine.getMaxCEnergyStored(side)+" CU";
+        		String fuelInfo = engine.fuel.getValue()+" / "+engine.maxFuel.getValue();
+        		ChatUtil.sendNoSpam(player, powerinfo, fuelInfo);
+        	} else {
+	        	if(!world.isRemote){
+	        		player.openGui(CrystalMod.instance, 0, world, pos.getX(), pos.getY(), pos.getZ());
+	        	}
         	}
         	return true;
         }
@@ -143,8 +153,12 @@ public class BlockEngine extends BlockMachine implements ICustomModel {
 
     public int getLightValue(IBlockState state, IBlockAccess world, BlockPos pos)
     {
-		boolean bool = state.getValue(BlockStateMachine.activeProperty);
-        return bool ? 14 : super.getLightValue(state, world, pos);
+    	TileEntity tile = world.getTileEntity(pos);
+        if ((tile instanceof TileEntityEngineBase)) {
+        	TileEntityEngineBase engine = (TileEntityEngineBase)tile;
+        	if(engine.isActive())return 14;
+        }
+        return 0;
     }
     
 	@Override
@@ -162,7 +176,8 @@ public class BlockEngine extends BlockMachine implements ICustomModel {
 	
 	public static enum EngineType implements IStringSerializable, IEnumMeta {
 		FURNACE("furnace", TileEntityEngineFurnace.class),
-		LAVA("lava", TileEntityEngineLava.class);
+		LAVA("lava", TileEntityEngineLava.class),
+		VAMPIRE("vampire", TileEntityEngineVampire.class);
 
 		private final String unlocalizedName;
 		public final Class<? extends TileEntityEngineBase> clazz;

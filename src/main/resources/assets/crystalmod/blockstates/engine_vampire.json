@@ -1,0 +1,28 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "crystalmod:engine",
+    "textures": {
+	  "particle":"crystalmod:blocks/engine/engine_metal",
+	  "top": "crystalmod:blocks/engine/engine_vampire_top",
+	  "top_side": "crystalmod:blocks/engine/engine_vampire_top_side"
+    },
+    "transform": "forge:default-block"
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{}],
+    "facing": {
+      "north": {},
+      "south": {"y": 180},
+      "west": {"y": 270},
+      "east": {"y": 90},
+	  "up": {},
+	  "down": {}
+    },
+	"active": {
+		"true": { "textures": { "top": "crystalmod:blocks/engine/engine_vampire_top_active" } },
+		"false": {}
+	}
+  }
+}

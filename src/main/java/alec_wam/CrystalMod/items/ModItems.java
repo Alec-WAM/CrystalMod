@@ -1,5 +1,6 @@
 package alec_wam.CrystalMod.items;
 
+import java.util.List;
 import java.util.Map;
 
 import alec_wam.CrystalMod.CrystalMod;
@@ -13,6 +14,7 @@ import alec_wam.CrystalMod.entities.minecarts.chests.wireless.ItemWirelessChestM
 import alec_wam.CrystalMod.entities.minions.ItemMinion;
 import alec_wam.CrystalMod.entities.minions.ItemMinionStaff;
 import alec_wam.CrystalMod.entities.pet.bombomb.ItemBombomb;
+import alec_wam.CrystalMod.handler.MissingItemHandler;
 import alec_wam.CrystalMod.integration.baubles.BaublesIntegration;
 import alec_wam.CrystalMod.integration.baubles.ItemBaubleWings;
 import alec_wam.CrystalMod.items.ItemMetalPlate.PlateType;
@@ -29,10 +31,10 @@ import alec_wam.CrystalMod.items.tools.ItemCrystalSword;
 import alec_wam.CrystalMod.items.tools.ItemCustomAxe;
 import alec_wam.CrystalMod.items.tools.ItemCustomPickaxe;
 import alec_wam.CrystalMod.items.tools.ItemDarkIronBow;
+import alec_wam.CrystalMod.items.tools.ItemLock;
 import alec_wam.CrystalMod.items.tools.ItemSuperTorch;
 import alec_wam.CrystalMod.items.tools.ItemToolParts;
 import alec_wam.CrystalMod.items.tools.backpack.ItemBackpackBase;
-import alec_wam.CrystalMod.items.tools.backpack.ItemBackpackLock;
 import alec_wam.CrystalMod.items.tools.backpack.ItemBackpackNormal;
 import alec_wam.CrystalMod.items.tools.backpack.types.BackpackCrafting;
 import alec_wam.CrystalMod.items.tools.backpack.types.BackpackNormal;
@@ -50,6 +52,7 @@ import alec_wam.CrystalMod.util.ModLogger;
 
 import com.google.common.collect.Maps;
 
+import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -64,8 +67,18 @@ import net.minecraft.item.ItemPickaxe;
 import net.minecraft.item.ItemSpade;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.EnumHelper;
+import net.minecraftforge.fml.common.FMLContainer;
+import net.minecraftforge.fml.common.FMLLog;
+import net.minecraftforge.fml.common.InjectedModContainer;
+import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.ModContainer;
+import net.minecraftforge.fml.common.event.FMLMissingMappingsEvent;
+import net.minecraftforge.fml.common.event.FMLMissingMappingsEvent.MissingMapping;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -124,7 +137,7 @@ public class ModItems {
 	public static ItemBackpack backpack;
 	public static ItemBackpackNormal normalBackpack;
 	public static ItemBackpackBase craftingBackpack;
-	public static ItemBackpackLock backpackLock;
+	public static ItemLock lock;
 	
 	public static ItemMiscCard miscCard;
 	public static ItemTeloportTool telePearl;
@@ -198,7 +211,7 @@ public class ModItems {
 		backpack = new ItemBackpack();
 		normalBackpack = new ItemBackpackNormal(new BackpackNormal());
 		craftingBackpack = new ItemBackpackBase(new BackpackCrafting());
-		backpackLock = new ItemBackpackLock();
+		lock = new ItemLock();
 		telePearl = new ItemTeloportTool();
 		superTorch = new ItemSuperTorch();
 		flag = new ItemFlag();
@@ -228,15 +241,21 @@ public class ModItems {
 	
 	//TODO Add Forced Lowercase Registry name
 	public static <T extends Item> T registerItem(T item, String name){
-		item.setUnlocalizedName(CrystalMod.prefix(name));
-		
+		String finalName = name;
 		String lowerCase = name.toLowerCase();
 		if(name !=lowerCase){
-			ModLogger.warning("Registering an Item that has a non-lowercase registry name! ("+name+" vs. "+lowerCase+")");
+			ModLogger.warning("Registering an Item that has a non-lowercase registry name! ("+name+" vs. "+lowerCase+") setting it to "+lowerCase);
+			finalName = lowerCase;
+			
+			ModContainer mc = Loader.instance().activeModContainer();
+            String prefix = mc == null || (mc instanceof InjectedModContainer && ((InjectedModContainer)mc).wrappedContainer instanceof FMLContainer) ? "minecraft" : mc.getModId().toLowerCase();
+            MissingItemHandler.remapItems.put(new ResourceLocation(prefix, name), item);
 		}
-		item.setRegistryName(name);
+		
+		item.setUnlocalizedName(CrystalMod.prefix(finalName));
+		item.setRegistryName(finalName);
 		GameRegistry.register(item);
-		REGISTRY.put(name, item);
+		REGISTRY.put(finalName, item);
 		return item;
 	}
 	

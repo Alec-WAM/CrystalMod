@@ -121,6 +121,14 @@ public class CEnergyStorage implements ICEnergyStorage {
 			this.energy = 0;
 		}
 	}
+	
+	/**
+	 * Used to test if storage has enough room for i
+	 * @param i
+	 */
+	public boolean hasRoom(int i){
+		return energy + i <= capacity;
+	}
 
 	/* IEnergyStorage */
 	@Override

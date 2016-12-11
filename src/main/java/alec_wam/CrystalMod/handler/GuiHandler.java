@@ -59,6 +59,9 @@ import alec_wam.CrystalMod.tiles.machine.power.engine.furnace.TileEntityEngineFu
 import alec_wam.CrystalMod.tiles.machine.power.engine.lava.ContainerEngineLava;
 import alec_wam.CrystalMod.tiles.machine.power.engine.lava.GuiEngineLava;
 import alec_wam.CrystalMod.tiles.machine.power.engine.lava.TileEntityEngineLava;
+import alec_wam.CrystalMod.tiles.machine.power.engine.vampire.ContainerEngineVampire;
+import alec_wam.CrystalMod.tiles.machine.power.engine.vampire.GuiEngineVampire;
+import alec_wam.CrystalMod.tiles.machine.power.engine.vampire.TileEntityEngineVampire;
 import alec_wam.CrystalMod.tiles.machine.worksite.TileWorksiteBase;
 import alec_wam.CrystalMod.tiles.machine.worksite.TileWorksiteBoundedInventory;
 import alec_wam.CrystalMod.tiles.machine.worksite.gui.ContainerWorksiteAnimalControl;
@@ -303,6 +306,7 @@ public class GuiHandler implements IGuiHandler {
         	if(te instanceof TileEntityMachine) return ((TileEntityMachine)te).getGui(player, ID);
         	if(te instanceof TileEntityEngineFurnace) return new GuiEngineFurnace(player, (TileEntityEngineFurnace)te);
         	if(te instanceof TileEntityEngineLava) return new GuiEngineLava(player, (TileEntityEngineLava)te);
+        	if(te instanceof TileEntityEngineVampire) return new GuiEngineVampire(player, (TileEntityEngineVampire)te);
         	if(te instanceof TileEntityEnderBuffer) return new GuiEnderBuffer(player, (TileEntityEnderBuffer)te);
         	if(te instanceof TileEntityMobGrinder) return new GuiMobGrinder(player, (TileEntityMobGrinder)te);
         	if(te instanceof TileEntityBattery) return new GuiBattery(player, (TileEntityBattery)te);
@@ -441,6 +445,7 @@ public class GuiHandler implements IGuiHandler {
         	if(te instanceof TileEntityMachine) return ((TileEntityMachine)te).getContainer(player, ID);
         	if(te instanceof TileEntityEngineFurnace) return new ContainerEngineFurnace(player, (TileEntityEngineFurnace)te);
         	if(te instanceof TileEntityEngineLava) return new ContainerEngineLava(player, (TileEntityEngineLava)te);
+        	if(te instanceof TileEntityEngineVampire) return new ContainerEngineVampire(player, (TileEntityEngineVampire)te);
         	if(te instanceof TileEntityEnderBuffer) return new ContainerEnderBuffer(player, (TileEntityEnderBuffer)te);
         	if(te instanceof TileEntityMobGrinder) return new ContainerNull();
         	if(te instanceof TileEntityBattery) return new ContainerBattery(player, (TileEntityBattery)te);

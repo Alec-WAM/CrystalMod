@@ -213,6 +213,8 @@ public class ModCrafting {
 		addShapelessRecipe(new ItemStack(ModBlocks.flowerLilypad), new Object[]{Blocks.WATERLILY, new ItemStack(Blocks.RED_FLOWER, 1, EnumFlowerType.BLUE_ORCHID.getMeta())});
 		
 		//TOOLS
+		addShapedRecipe(ModItems.lock, new Object[]{" N ", "NPN", "NNN", 'N', dIronNugget, 'P', dIronPlate});
+
 		ItemStack cShears = new ItemStack(ModItems.shears);
 		ItemNBTHelper.setString(cShears, "Color", "darkIron");
 		addShapedRecipe(cShears, new Object[] {" #", "# ", '#', dIronIngot});
@@ -390,6 +392,13 @@ public class ModCrafting {
 		addShapedRecipe(lavaEngineTier1, new Object[]{"EEE", "EPE", "EEE", 'E', lavaEngineTier0, 'P', ItemUtil.copy(tier2CU, 1)});
 		addShapedRecipe(lavaEngineTier2, new Object[]{"EEE", "EPE", "EEE", 'E', lavaEngineTier1, 'P', ItemUtil.copy(tier3CU, 1)});
 		
+		ItemStack vampireEngineTier0 = new ItemStack(ModBlocks.engine, 1, EngineType.VAMPIRE.getMeta()); ItemNBTHelper.setInteger(vampireEngineTier0, "Tier", 0);
+		ItemStack vampireEngineTier1 = new ItemStack(ModBlocks.engine, 1, EngineType.VAMPIRE.getMeta()); ItemNBTHelper.setInteger(vampireEngineTier1, "Tier", 1);
+		ItemStack vampireEngineTier2 = new ItemStack(ModBlocks.engine, 1, EngineType.VAMPIRE.getMeta()); ItemNBTHelper.setInteger(vampireEngineTier2, "Tier", 2);
+
+		addShapedRecipe(vampireEngineTier0, new Object[]{"CCC", "LFL", "IPI", 'I', dIronPlate, 'L', new ItemStack(Items.SKULL, 1, 1), 'P', ItemUtil.copy(tier0CU, 1), 'C', Blocks.NETHER_BRICK, 'F', machineFrame});
+		addShapedRecipe(vampireEngineTier1, new Object[]{"EEE", "EPE", "EEE", 'E', vampireEngineTier0, 'P', ItemUtil.copy(tier2CU, 1)});
+		addShapedRecipe(vampireEngineTier2, new Object[]{"EEE", "EPE", "EEE", 'E', vampireEngineTier1, 'P', ItemUtil.copy(tier3CU, 1)});
 		
 		addShapedRecipe(new ItemStack(ModBlocks.crystalMachine, 1, MachineType.FURNACE.getMeta()), new Object[]{"III", "IFI", "IPI", 'I', dIronPlate, 'F', Blocks.FURNACE, 'P', ItemUtil.copy(tier0CU, 1)});
 		addShapedRecipe(new ItemStack(ModBlocks.crystalMachine, 1, MachineType.PRESS.getMeta()), new Object[]{"IPI", "I I", "ICI", 'I', dIronIngot, 'P', Blocks.PISTON, 'C', ItemUtil.copy(tier0CU, 1)});

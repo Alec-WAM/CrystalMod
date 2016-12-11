@@ -16,19 +16,19 @@ item.crystalmod.crystal.pure_shard.name=Pure Crystal Shard
 item.crystalmod.crystal.pure_nugget.name=Pure Crystal Nugget
 item.crystalmod.crystal.diron_nugget.name=Dark Iron Nugget
 
-item.crystalmod.crystalIngot.blue.name=Blue Crystal Ingot
-item.crystalmod.crystalIngot.red.name=Red Crystal Ingot
-item.crystalmod.crystalIngot.green.name=Green Crystal Ingot
-item.crystalmod.crystalIngot.dark.name=Dark Crystal Ingot
-item.crystalmod.crystalIngot.pure.name=Pure Crystal Ingot
-item.crystalmod.crystalIngot.darkIron.name=Dark Iron Ingot
+item.crystalmod.crystalingot.blue.name=Blue Crystal Ingot
+item.crystalmod.crystalingot.red.name=Red Crystal Ingot
+item.crystalmod.crystalingot.green.name=Green Crystal Ingot
+item.crystalmod.crystalingot.dark.name=Dark Crystal Ingot
+item.crystalmod.crystalingot.pure.name=Pure Crystal Ingot
+item.crystalmod.crystalingot.darkIron.name=Dark Iron Ingot
 
-item.crystalmod.metalPlate.blue.name=Blue Crystal Plate
-item.crystalmod.metalPlate.red.name=Red Crystal Plate
-item.crystalmod.metalPlate.green.name=Green Crystal Plate
-item.crystalmod.metalPlate.dark.name=Dark Crystal Plate
-item.crystalmod.metalPlate.pure.name=Pure Crystal Plate
-item.crystalmod.metalPlate.darkIron.name=Dark Iron Plate
+item.crystalmod.metalplate.blue.name=Blue Crystal Plate
+item.crystalmod.metalplate.red.name=Red Crystal Plate
+item.crystalmod.metalplate.green.name=Green Crystal Plate
+item.crystalmod.metalplate.dark.name=Dark Crystal Plate
+item.crystalmod.metalplate.pure.name=Pure Crystal Plate
+item.crystalmod.metalplate.darkIron.name=Dark Iron Plate
 
 item.crystalmod.bluecrystalreeds.name=Blue Crystal Reeds
 item.crystalmod.redcrystalreeds.name=Red Crystal Reeds
@@ -72,8 +72,8 @@ item.crystalmod.toolparts.sword_head.green.name=Green Crystal Sword Blade
 item.crystalmod.toolparts.sword_head.dark.name=Dark Crystal Sword Blade
 item.crystalmod.toolparts.sword_head.pure.name=Pure Crystal Sword Blade
 
-item.crystalmod.machineFrame.basic.name=Machine Frame
-item.crystalmod.machineFrame.ender.name=Endergenic Machine Frame
+item.crystalmod.machineframe.basic.name=Machine Frame
+item.crystalmod.machineframe.ender.name=Endergenic Machine Frame
 
 item.crystalmod.crystalaxe.blue.name=Blue Crystal Axe
 item.crystalmod.crystalaxe.red.name=Red Crystal Axe
@@ -109,12 +109,12 @@ item.crystalmod.crystalshears.pure.name=Pure Crystal Shears
 item.crystalmod.crystalshears.darkIron.name=Dark Iron Shears
 
 
-item.crystalmod.darkIronAxe.name=Dark Iron Axe
-item.crystalmod.darkIronHoe.name=Dark Iron Hoe
-item.crystalmod.darkIronShovel.name=Dark Iron Shovel
-item.crystalmod.darkIronPickaxe.name=Dark Iron Pickaxe
-item.crystalmod.darkIronSword.name=Dark Iron Sword
-item.crystalmod.darkIronBow.name=Dark Iron Bow
+item.crystalmod.darkironaxe.name=Dark Iron Axe
+item.crystalmod.darkironhoe.name=Dark Iron Hoe
+item.crystalmod.darkironshovel.name=Dark Iron Shovel
+item.crystalmod.darkironpickaxe.name=Dark Iron Pickaxe
+item.crystalmod.darkironsword.name=Dark Iron Sword
+item.crystalmod.darkironbow.name=Dark Iron Bow
 
 item.crystalmod.supertorch.name=Super Torch
 
@@ -146,10 +146,10 @@ item.crystalmod.minecart_chest.darkiron.name=Minecart with Dark Iron Chest
 item.crystalmod.minecart_enderchest.name=Minecart with Ender Chest
 item.crystalmod.minecart_wirelesschest.name=Minecart with Super Chest
 
-item.crystalmod.darkIronHelmet.name=Dark Iron Helmet
-item.crystalmod.darkIronChestplate.name=Dark Iron Chestplate
-item.crystalmod.darkIronLeggings.name=Dark Iron Leggings
-item.crystalmod.darkIronBoots.name=Dark Iron Boots
+item.crystalmod.darkironhelmet.name=Dark Iron Helmet
+item.crystalmod.darkironchestplate.name=Dark Iron Chestplate
+item.crystalmod.darkironleggings.name=Dark Iron Leggings
+item.crystalmod.darkironboots.name=Dark Iron Boots
 
 item.crystalmod.pipecover.name=Crystal Pipe Cover
 
@@ -176,22 +176,22 @@ item.crystalmod.misccard.eportal.name=Network Pipe Portal Binder
 item.crystalmod.misccard.pcube.name=Player Cube Card
 item.crystalmod.misccard.elevator.name=Elevator Binder (WIP)
 
-item.crystalmod.worksiteUpgrade.0.name=Medium Bounds Upgrade
-item.crystalmod.worksiteUpgrade.1.name=Large Bounds Upgrade
-item.crystalmod.worksiteUpgrade..name=Medium Quarry Upgrade
-item.crystalmod.worksiteUpgrade.3.name=Large Quarry Upgrade
-item.crystalmod.worksiteUpgrade.4.name=\u00a7eLightly Enchanted Tools Upgrade
-item.crystalmod.worksiteUpgrade.5.name=\u00a7eHighly Enchanted Tools Upgrade
-item.crystalmod.worksiteUpgrade.6.name=\u00a7eExtremely Enchanted Tools Upgrade
-item.crystalmod.worksiteUpgrade.7.name=Basic Tool Quality Upgrade
-item.crystalmod.worksiteUpgrade.8.name=Intermediate Tool Quality Upgrade
-item.crystalmod.worksiteUpgrade.9.name=Advanced Tool Quality Upgrade
-item.crystalmod.worksiteUpgrade.10.name=Basic Chunk-loader Upgrade
-item.crystalmod.worksiteUpgrade.11.name=\u00a75Quarry Chunk-loader Upgrade
-item.crystalmod.worksiteUpgrade.12.name=\u00a7eQuarry Silk-Touch Upgrade
-item.crystalmod.worksiteUpgrade.13.name=Quarry Only Ore Upgrade
+item.crystalmod.worksiteupgrade.0.name=Medium Bounds Upgrade
+item.crystalmod.worksiteupgrade.1.name=Large Bounds Upgrade
+item.crystalmod.worksiteupgrade..name=Medium Quarry Upgrade
+item.crystalmod.worksiteupgrade.3.name=Large Quarry Upgrade
+item.crystalmod.worksiteupgrade.4.name=\u00a7eLightly Enchanted Tools Upgrade
+item.crystalmod.worksiteupgrade.5.name=\u00a7eHighly Enchanted Tools Upgrade
+item.crystalmod.worksiteupgrade.6.name=\u00a7eExtremely Enchanted Tools Upgrade
+item.crystalmod.worksiteupgrade.7.name=Basic Tool Quality Upgrade
+item.crystalmod.worksiteupgrade.8.name=Intermediate Tool Quality Upgrade
+item.crystalmod.worksiteupgrade.9.name=Advanced Tool Quality Upgrade
+item.crystalmod.worksiteupgrade.10.name=Basic Chunk-loader Upgrade
+item.crystalmod.worksiteupgrade.11.name=\u00a75Quarry Chunk-loader Upgrade
+item.crystalmod.worksiteupgrade.12.name=\u00a7eQuarry Silk-Touch Upgrade
+item.crystalmod.worksiteupgrade.13.name=Quarry Only Ore Upgrade
 
-item.crystalmod.telePearl.name=Teleporting Pearl
+item.crystalmod.telepearl.name=Teleporting Pearl
 item.crystalmod.backpack.name=Backpack
 item.crystalmod.backpack_normal.normal.name=Backpack
 item.crystalmod.backpack_normal.darkiron.name=Dark Iron Backpack
@@ -201,22 +201,22 @@ item.crystalmod.backpack_normal.green.name=Green Crystal Backpack
 item.crystalmod.backpack_normal.dark.name=Dark Crystal Backpack
 item.crystalmod.backpack_normal.pure.name=Pure Crystal Backpack
 item.crystalmod.backpack_crafting.name=Crafting Backpack
-item.crystalmod.backpacklock.name=Backpack Lock
-item.crystalmod.flagItem.name=Flag
-item.crystalmod.dragonWings.name=Dragon Wings
+item.crystalmod.lock.name=Lock
+item.crystalmod.flagitem.name=Flag
+item.crystalmod.dragonwings.name=Dragon Wings
 
-item.crystalmod.mobEssence.name=Mob Essence
-crystalmod.info.mobEssence1.txt=Can be used on an Advanced Mob Spawner to set the entity
-crystalmod.info.mobEssence2.txt=Or used anywhere when sneaking to spawn the entity in the world
-crystalmod.info.mobEssence3.txt=(Single Use)
+item.crystalmod.mobessence.name=Mob Essence
+crystalmod.info.mobessence1.txt=Can be used on an Advanced Mob Spawner to set the entity
+crystalmod.info.mobessence2.txt=Or used anywhere when sneaking to spawn the entity in the world
+crystalmod.info.mobessence3.txt=(Single Use)
 item.crystalmod.minion.basic.name=Minion
 item.crystalmod.minion.worker.name=Worker Minion
 item.crystalmod.minion.warrior.name=Warrior Minion
-item.crystalmod.minionStaff.name=Minion Staff
+item.crystalmod.minionstaff.name=Minion Staff
 item.crystalmod.bombomb.name=Bombomb
 
 #--Baubles
-item.crystalmod.dragonWingBauble.name=Dragon Wings Bauble
+item.crystalmod.dragonwingbauble.name=Dragon Wings Bauble
 
 #--Blocks
 tile.crystalmod.crystalblock.blue.name=Block of Blue Crystal
@@ -315,8 +315,9 @@ tile.crystalmod.crystaltank.dark.name=Dark Crystal Tank
 tile.crystalmod.crystaltank.pure.name=Pure Crystal Tank
 tile.crystalmod.crystaltank.creative.name=Creative Crystal Tank
 
-tile.crystalmod.engine.furnace.name=Crystal Engine (Furnace)
-tile.crystalmod.engine.lava.name=Crystal Engine (Lava)
+tile.crystalmod.engine.furnace.name=Furnace Engine
+tile.crystalmod.engine.lava.name=Lava Engine
+tile.crystalmod.engine.vampire.name=Vampiric Crystal Engine
 
 tile.crystalmod.weather.name=Weather Forecaster
 tile.crystalmod.playercubeportal.name=Player Cube Portal

@@ -132,7 +132,7 @@ public class BlockWirelessChest extends BlockContainer implements ICustomModel
         
         if(!world.isRemote){
         	
-        	if(ItemStackTools.isValid(stack) && ItemUtil.itemStackMatchesOredict(stack, "gemDiamond")){
+        	if(ItemStackTools.isValid(stack) && stack.getItem() == ModItems.lock){
         		if(!chest.isBoundToPlayer()){
 	        		if (!player.capabilities.isCreativeMode)
 	        			ItemStackTools.incStackSize(stack, -1);

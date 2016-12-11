@@ -74,6 +74,8 @@ public class Config {
     
 	public static boolean vanillaMinecarts3d = true;
 	
+	public static int engine_vampire_maxattack = 16;
+	
 	@SubscribeEvent
 	public void onConfigChanged(OnConfigChangedEvent event) {
 		if(event.getModID().equals(CrystalMod.MODID)) {
@@ -133,8 +135,10 @@ public class Config {
     	playerHeadDropChance = cfg.get(CATEGORY_ENTITY, "playerHeadDropChance", playerHeadDropChance, "1 in this chance of dropping  (-1 = no heads)").getInt(playerHeadDropChance);
     
     	hoeStrings = cfg.get(CATEGORY_MINIONS, "Hoes", hoeStrings, "Use this to specify items that are hoes. Use the registry name (eg. modid:name).").getStringList();
-    	PowerUnits.CU.conversionRation = cfg.get(CATEGORY_MACHINE, "RFtoCU", PowerUnits.CU.conversionRation, "Amount of RF needed to convert to one unit of CU").getInt(PowerUnits.CU.conversionRation);
     
+    	//Machines
+    	PowerUnits.CU.conversionRation = cfg.get(CATEGORY_MACHINE, "RFtoCU", PowerUnits.CU.conversionRation, "Amount of RF needed to convert to one unit of CU").getInt(PowerUnits.CU.conversionRation);
+    	engine_vampire_maxattack = cfg.get(CATEGORY_MACHINE, "Engine_Vampire_AttackAmt", 16, "Amount of entites the vampire engine can attack at once").getInt();
     	//Client
     	vanillaMinecarts3d = cfg.get(CATEGORY_CLIENT, "3dMinecartItems", vanillaMinecarts3d, "Override Minecart Item Render to 3d items.").getBoolean();
     }

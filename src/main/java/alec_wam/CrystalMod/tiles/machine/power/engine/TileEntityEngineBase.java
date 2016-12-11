@@ -11,6 +11,9 @@ import alec_wam.CrystalMod.network.IMessageHandler;
 import alec_wam.CrystalMod.network.packets.PacketTileMessage;
 import alec_wam.CrystalMod.tiles.TileEntityMod;
 import alec_wam.CrystalMod.tiles.machine.IMachineTile;
+import alec_wam.CrystalMod.util.BlockUtil;
+import alec_wam.CrystalMod.util.ModLogger;
+import alec_wam.CrystalMod.util.data.watchable.WatchableBoolean;
 import alec_wam.CrystalMod.util.data.watchable.WatchableInteger;
 
 public abstract class TileEntityEngineBase extends TileEntityMod implements ICEnergyProvider, IMessageHandler, IMachineTile {
@@ -18,6 +21,7 @@ public abstract class TileEntityEngineBase extends TileEntityMod implements ICEn
 	public CEnergyStorage energyStorage;
 	public WatchableInteger fuel = new WatchableInteger();
 	public WatchableInteger maxFuel = new WatchableInteger();
+	public WatchableBoolean active = new WatchableBoolean();
 	public int multi;
 	public int facing;
 	
@@ -64,17 +68,18 @@ public abstract class TileEntityEngineBase extends TileEntityMod implements ICEn
 	public void update(){
 		super.update();
 		if(!getWorld().isRemote){
-			if(this.energyStorage.getCEnergyStored() < this.energyStorage.getMaxCEnergyStored()){
+			boolean powered = getWorld().isBlockIndirectlyGettingPowered(getPos()) > 0;
+			if(!powered && this.energyStorage.getCEnergyStored() < this.energyStorage.getMaxCEnergyStored()){
 				if(canRefuel()){
 					refuel();
 				}else{
-					for(int m = 0; (m < this.multi && fuel.getValue() > 0 && this.energyStorage.getCEnergyStored() < this.energyStorage.getMaxCEnergyStored()); m++){
+					
+					//Energy added is value x fuel (ticks) speed is multiplier.
+					
+					for(int m = 0; (m < multi && fuel.getValue() > 0 && energyStorage.hasRoom(getFuelValue())); m++){
 				  		final int calc = getFuelValue();
 				    	this.energyStorage.modifyEnergyStored(calc);
-				    	fuel.setValue(fuel.getValue()-1);
-				    	if(this.fuel.getValue() < 0){
-				    		fuel.setValue(0);
-				    	}
+				    	fuel.subSafe(1);
 					}
 				}
 			}
@@ -102,9 +107,19 @@ public abstract class TileEntityEngineBase extends TileEntityMod implements ICEn
 		      nbt.setInteger("Max", maxFuel.getValue());
 		      CrystalModNetwork.sendToAllAround(new PacketTileMessage(getPos(), "UpdateFuel", nbt), this);
 		    }
+		    
+		    active.setValue(fuel.getValue() > 0 && !powered);
+		    
+		    boolean activeChanged = (active.getLastValue() != active.getValue() && shouldDoWorkThisTick(5));
+		    if(activeChanged) {
+		      active.setLastValue(active.getValue());
+		      NBTTagCompound nbt = new NBTTagCompound();
+		      nbt.setBoolean("Active", active.getValue());
+		      CrystalModNetwork.sendToAllAround(new PacketTileMessage(getPos(), "UpdateActive", nbt), this);
+		    }
 			
-			for(EnumFacing face : EnumFacing.VALUES){
-				//if(face !=EnumFacing.getFront(facing)){
+		    if(!powered){
+				for(EnumFacing face : EnumFacing.VALUES){
 					TileEntity tile = this.getWorld().getTileEntity(getPos().offset(face));
 					if(tile !=null && tile instanceof ICEnergyReceiver){
 						ICEnergyReceiver rec = (ICEnergyReceiver)tile;
@@ -114,8 +129,8 @@ public abstract class TileEntityEngineBase extends TileEntityMod implements ICEn
 							this.energyStorage.modifyEnergyStored(-fill);
 						}
 					}
-				//}
-			}
+				}
+		    }
 		}
 		
 	}
@@ -143,8 +158,6 @@ public abstract class TileEntityEngineBase extends TileEntityMod implements ICEn
 		return energyStorage.getMaxCEnergyStored();
 	}
 
-
-
 	public int getScaledFuel(int scale) {
 		if ((this.maxFuel.getValue() <= 0) || (this.fuel.getValue() <= 0)) {
 	        return 0;
@@ -161,7 +174,7 @@ public abstract class TileEntityEngineBase extends TileEntityMod implements ICEn
 	}
 	
 	public boolean isActive(){
-		return fuel.getValue() > 0;
+		return active.getValue();
 	}
 	
 	@Override
@@ -169,6 +182,10 @@ public abstract class TileEntityEngineBase extends TileEntityMod implements ICEn
 		if(messageId.equalsIgnoreCase("UpdatePower")){
 			int newPower = messageData.getInteger("Power");
 			this.energyStorage.setEnergyStored(newPower);
+		}
+		
+		if(messageId.equalsIgnoreCase("UpdateActive")){
+			active.setValue(messageData.getBoolean("Active"));
 		}
 		
 		if(messageId.equalsIgnoreCase("UpdateFuel")){

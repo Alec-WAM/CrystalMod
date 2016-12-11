@@ -12,6 +12,7 @@ import com.google.common.collect.Lists;
 import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.fluids.ModFluids;
 import alec_wam.CrystalMod.handler.GuiHandler;
+import alec_wam.CrystalMod.handler.MissingItemHandler;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.commands.CommandCrystalMod;
@@ -28,6 +29,7 @@ import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLMissingMappingsEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
@@ -154,6 +156,11 @@ public class CrystalMod {
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
 		proxy.postInit(event);
+	}
+	
+	@EventHandler
+	public void missingItems(FMLMissingMappingsEvent event){
+		MissingItemHandler.missingFix(event);
 	}
 	
 	@EventHandler

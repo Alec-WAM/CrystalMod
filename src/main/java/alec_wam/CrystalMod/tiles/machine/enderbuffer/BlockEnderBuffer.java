@@ -23,6 +23,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.ICustomModel;
+import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.packets.PacketTileMessage;
 import alec_wam.CrystalMod.proxy.ClientProxy;
@@ -30,6 +31,7 @@ import alec_wam.CrystalMod.tiles.machine.BlockMachine;
 import alec_wam.CrystalMod.tiles.machine.FakeTileState;
 import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.UUIDUtils;
 import alec_wam.CrystalMod.util.tool.ToolUtil;
@@ -101,7 +103,21 @@ public class BlockEnderBuffer extends BlockMachine implements ICustomModel
         if(tile !=null && tile instanceof TileEntityEnderBuffer){
         	TileEntityEnderBuffer buffer = (TileEntityEnderBuffer)tile;
         	
+        	if(buffer.getPlayerBound() == null){
+        		if(ItemStackTools.isValid(stack) && stack.getItem() == ModItems.lock){
+        			if(!playerIn.capabilities.isCreativeMode){
+        				ItemStackTools.incStackSize(stack, -1);
+        			}
+        			buffer.bindToPlayer(playerIn.getUniqueID());
+        			CrystalModNetwork.sendToAllAround(new PacketTileMessage(pos, "MarkDirty"), tile);
+        			return true;
+        		}
+        	}
+        	
+        	
         	boolean isOwner = (buffer.getPlayerBound() == null || buffer.getPlayerBound().equals(playerIn.getUniqueID()));
+        	
+        	
         	
         	if(isOwner && playerIn.isSneaking() && ToolUtil.isToolEquipped(playerIn, hand)){
         		return ToolUtil.breakBlockWithTool(this, worldIn, pos, playerIn, hand);
@@ -147,7 +163,7 @@ public class BlockEnderBuffer extends BlockMachine implements ICustomModel
                 if (oldId != id)
                 {
                 	if (!playerIn.capabilities.isCreativeMode)
-                    	stack.stackSize--;
+                    	ItemStackTools.incStackSize(stack, -1);
                     buffer.setCode(id);
                     CrystalModNetwork.sendToAllAround(new PacketTileMessage(pos, "MarkDirty"), tile);
                 }
