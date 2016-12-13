@@ -202,12 +202,7 @@ public class RenderUtil {
 	
 	public static float getPartialTick()
     {
-    	try {
-    		Timer t = (Timer)ReflectionUtils.getPrivateValue(Minecraft.getMinecraft(), Minecraft.class, ObfuscatedNames.Minecraft_timer);
-    		return t.renderPartialTicks;
-    	} catch(Exception e) {}
-    	
-    	return 0;
+    	return Minecraft.getMinecraft().getRenderPartialTicks();
     }
 	
 	public static float PIXEL = 1.0F/16F;
