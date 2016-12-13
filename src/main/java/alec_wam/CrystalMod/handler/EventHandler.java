@@ -9,6 +9,9 @@ import java.util.Map;
 
 import org.lwjgl.input.Keyboard;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+
 import alec_wam.CrystalMod.Config;
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.api.block.IExplosionImmune;
@@ -31,6 +34,7 @@ import alec_wam.CrystalMod.items.tools.bat.BatHelper;
 import alec_wam.CrystalMod.items.tools.bat.ModBats;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.packets.PacketEntityMessage;
+import alec_wam.CrystalMod.tiles.endertorch.TileEnderTorch;
 import alec_wam.CrystalMod.tiles.playercube.CubeManager;
 import alec_wam.CrystalMod.tiles.playercube.PlayerCube;
 import alec_wam.CrystalMod.tiles.playercube.TileEntityPlayerCubePortal;
@@ -66,12 +70,16 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.living.EnderTeleportEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
@@ -308,7 +316,7 @@ public class EventHandler {
  					}else if(!player.onGround){
  						extPlayer.wingAnimTime += f10*0.4f;
  					}else{
- 						extPlayer.wingAnimTime=1f;
+ 						extPlayer.wingAnimTime+=0.002f;
  					}
  				}
                  
@@ -399,8 +407,10 @@ public class EventHandler {
 							IBackpack type = ((ItemBackpackBase)backpack.getItem()).getBackpack();
 							if(type instanceof BackpackNormal){
 								BackpackNormal normal = (BackpackNormal)type;
-								InventoryBackpack bpInv = normal.getInventory(event.getEntityPlayer());
+								InventoryBackpack bpInv = normal.getInventory(event.getEntityPlayer(), backpack);
 								ItemStack ret = ItemUtil.removeItems(bpInv, null, new ItemStack(Items.SKULL, 1, 1), 1);
+								//If player has wither skulls remove one and allow them to keep the backpack
+								//on death
 								if(ItemStackTools.isValid(ret) && ItemStackTools.getStackSize(ret) == 1){
 									keepBackpack = true;
 									if(!event.getEntityPlayer().getEntityWorld().isRemote) {
@@ -640,4 +650,43 @@ public class EventHandler {
 		event.setLootingLevel(prevLooting+looting);
 	}
 	
+	public static final Map<Integer, List<BlockPos>> enderTorchBounds = Maps.newHashMap();
+	
+	@SubscribeEvent
+	public void onEnderTeleport(EnderTeleportEvent event) {
+		if (isTeleportPrevented(event.getEntity().worldObj, event.getEntity().posX, event.getEntity().posY, event.getEntity().posZ, false)) {
+			event.setCanceled(true);
+		}
+		if (isTeleportPrevented(event.getEntity().worldObj, event.getTargetX(), event.getTargetY(), event.getTargetZ(), true)) {
+			event.setCanceled(true);
+		}
+	}
+	
+	public static void addEnderTorch(int dim, BlockPos pos){
+		List<BlockPos> list = enderTorchBounds.getOrDefault(dim, Lists.newArrayList());
+		if(!list.contains(pos))list.add(pos);
+		enderTorchBounds.put(dim, list);
+	}
+	
+	public static void removeEnderTorch(int dim, BlockPos pos){
+		List<BlockPos> list = enderTorchBounds.get(dim);
+		if(list !=null){
+			list.remove(pos);
+			enderTorchBounds.put(dim, list);
+		}
+	}
+
+	public boolean isTeleportPrevented(World worldObj, double posX, double posY, double posZ, boolean isTeleportTo) {
+		if (!enderTorchBounds.isEmpty()) {
+			for (BlockPos pos : enderTorchBounds.get(worldObj.provider.getDimension())) {
+				if (worldObj.isBlockLoaded(pos)) {
+					TileEntity te = worldObj.getTileEntity(pos);
+					if (te !=null && te instanceof TileEnderTorch && ((TileEnderTorch) te).isActive() && ((TileEnderTorch) te).inRange(new Vec3d(posX, posY, posZ), isTeleportTo)) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
 }

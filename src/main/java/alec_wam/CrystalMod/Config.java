@@ -39,6 +39,7 @@ public class Config {
 	public static int playerHeadDropChance = 50;
 	
 	public static int superTorchMaxCount = 128;
+	public static int tool_pureDamageAddition = 1000;
 	
 	public static String[] hoeStrings = new String[] {
 		"minecraft:wooden_hoe", "minecraft:stone_hoe", "minecraft:iron_hoe", "minecraft:diamond_hoe", "minecraft:golden_hoe",
@@ -122,6 +123,8 @@ public class Config {
         	superTorchMaxCount = 0;
         }
         
+        tool_pureDamageAddition = cfg.get(CATEGORY_ITEM, "pureToolDurabilityAdditon", tool_pureDamageAddition, "Durability bonus for pure tools").getInt();
+
         int headtype = cfg.get(CATEGORY_ENTITY, "mobHeadDrop", mobHeadType.ordinal(), "0 = Never Drop; 1 = Drop when killed; 2 = Drop only when killed by player;").getInt(mobHeadType.ordinal());
     	if(headtype < 0)headtype = 0;
     	if(headtype > 2)headtype = 2;

@@ -8,6 +8,7 @@ import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.blocks.crops.BlockCrystalPlant.PlantType;
 import alec_wam.CrystalMod.blocks.crops.ItemBlockReeds;
+import alec_wam.CrystalMod.entities.disguise.ItemDisguise;
 import alec_wam.CrystalMod.entities.minecarts.chests.ItemCrystalChestMinecart;
 import alec_wam.CrystalMod.entities.minecarts.chests.ItemEnderChestMinecart;
 import alec_wam.CrystalMod.entities.minecarts.chests.wireless.ItemWirelessChestMinecart;
@@ -142,6 +143,7 @@ public class ModItems {
 	public static ItemMiscCard miscCard;
 	public static ItemTeloportTool telePearl;
 	public static ItemSuperTorch superTorch;
+	public static ItemDisguise disguise;
 	
 	public static ItemFlag flag;
 	public static ItemDragonWings wings;
@@ -214,6 +216,7 @@ public class ModItems {
 		lock = new ItemLock();
 		telePearl = new ItemTeloportTool();
 		superTorch = new ItemSuperTorch();
+		disguise = new ItemDisguise();
 		flag = new ItemFlag();
 		wings = new ItemDragonWings();
 		mobEssence = new ItemMobEssence();

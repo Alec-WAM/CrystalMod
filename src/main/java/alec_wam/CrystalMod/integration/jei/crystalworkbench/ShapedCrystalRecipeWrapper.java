@@ -15,7 +15,7 @@ import mezz.jei.api.recipe.wrapper.IShapedCraftingRecipeWrapper;
 import net.minecraft.item.ItemStack;
 import alec_wam.CrystalMod.crafting.ShapedCrystalRecipe;
 
-public class ShapedCrystalRecipeWrapper extends BlankRecipeWrapper implements IShapedCraftingRecipeWrapper, ICraftingRecipeWrapper {
+public class ShapedCrystalRecipeWrapper extends BlankRecipeWrapper implements IShapedCraftingRecipeWrapper {
 	private final IJeiHelpers jeiHelpers;
 	protected final ShapedCrystalRecipe recipe;
 	
@@ -61,10 +61,8 @@ public class ShapedCrystalRecipeWrapper extends BlankRecipeWrapper implements IS
 
 	@Override
 	public void getIngredients(IIngredients ingredients) {
-		IStackHelper stackHelper = jeiHelpers.getStackHelper();
-
-		List<List<ItemStack>> inputs = stackHelper.expandRecipeItemStackInputs(getInputs());
-		ingredients.setInputLists(ItemStack.class, inputs);
+		List<ItemStack> recipeItems = Arrays.asList(recipe.recipeItems);
+		ingredients.setInputs(ItemStack.class, recipeItems);
 
 		ItemStack recipeOutput = recipe.getRecipeOutput();
 		if (recipeOutput != null) {

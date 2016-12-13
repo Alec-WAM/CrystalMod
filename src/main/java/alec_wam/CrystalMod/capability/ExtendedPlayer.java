@@ -1,6 +1,7 @@
 package alec_wam.CrystalMod.capability;
 
 import java.awt.Color;
+import java.util.UUID;
 
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
@@ -9,6 +10,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.entities.disguise.DisguiseType;
 import alec_wam.CrystalMod.items.guide.GuiGuideBase;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ModLogger;
@@ -28,6 +30,11 @@ public class ExtendedPlayer {
 	
 	private ExtendedPlayerInventory inventory = new ExtendedPlayerInventory();
 	private ItemStack openBackpack;
+	
+	private DisguiseType lastDiguise;
+	private DisguiseType currentDiguise = DisguiseType.NONE;
+	private UUID lastPlayerDisguiseUUID;
+	private UUID playerDisguiseUUID;
 	
 	public ExtendedPlayer() {
 	}
@@ -107,5 +114,35 @@ public class ExtendedPlayer {
 	
 	public void setOpenBackpack(ItemStack stack){
 		openBackpack = stack;
+	}
+
+	public DisguiseType getLastDiguise() {
+		return lastDiguise;
+	}
+
+	public void setLastDiguise(DisguiseType lastDiguise) {
+		this.lastDiguise = lastDiguise;
+	}
+
+	public DisguiseType getCurrentDiguise() {
+		return currentDiguise;
+	}
+
+	public void setCurrentDiguise(DisguiseType currentDiguise) {
+		this.lastDiguise = this.currentDiguise;
+		this.currentDiguise = currentDiguise;
+	}
+
+	public UUID getLastPlayerDisguiseUUID() {
+		return lastPlayerDisguiseUUID;
+	}
+	
+	public UUID getPlayerDisguiseUUID() {
+		return playerDisguiseUUID;
+	}
+	
+	public void setPlayerDisguiseUUID(UUID uuid) {
+		lastPlayerDisguiseUUID = playerDisguiseUUID;
+		playerDisguiseUUID = uuid;
 	}
 }

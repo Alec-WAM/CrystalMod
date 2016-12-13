@@ -203,6 +203,9 @@ item.crystalmod.backpack_normal.pure.name=Pure Crystal Backpack
 item.crystalmod.backpack_crafting.name=Crafting Backpack
 item.crystalmod.lock.name=Lock
 item.crystalmod.flagitem.name=Flag
+item.crystalmod.disguise.empty.name=Empty Disguise
+item.crystalmod.disguise.player.name=Player Disguise
+item.crystalmod.disguise.mini.name=Mini Disguise
 item.crystalmod.dragonwings.name=Dragon Wings
 
 item.crystalmod.mobessence.name=Mob Essence

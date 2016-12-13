@@ -14,8 +14,10 @@ import alec_wam.CrystalMod.integration.jei.machine.PressRecipeCategory;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.tiles.machine.crafting.BlockCrystalMachine.MachineType;
 import alec_wam.CrystalMod.tiles.machine.crafting.furnace.ContainerCrystalFurnace;
+import alec_wam.CrystalMod.tiles.machine.crafting.press.GuiPress;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.BlockPanel.PanelType;
 import alec_wam.CrystalMod.tiles.workbench.ContainerCrystalWorkbench;
+import alec_wam.CrystalMod.tiles.workbench.GuiCrystalWorkbench;
 import alec_wam.CrystalMod.util.Lang;
 import mezz.jei.api.BlankModPlugin;
 import mezz.jei.api.IGuiHelper;
@@ -31,7 +33,7 @@ public class JEIPlugin  extends BlankModPlugin {
 	@Override
 	public void register(@Nonnull IModRegistry registry) {
 		RecipeTransferHandler helper = new RecipeTransferHandler(registry);
-		registry.getRecipeTransferRegistry().addRecipeTransferHandler(helper, "minecraft.crafting");
+		registry.getRecipeTransferRegistry().addRecipeTransferHandler(helper, VanillaRecipeCategoryUid.CRAFTING);
 		RecipeTransferEncoder helperEncoder = new RecipeTransferEncoder(registry);
 		registry.getRecipeTransferRegistry().addUniversalRecipeTransferHandler(helperEncoder);
 		IJeiHelpers jeiHelpers = registry.getJeiHelpers();
@@ -58,11 +60,10 @@ public class JEIPlugin  extends BlankModPlugin {
 		registry.addRecipeCategoryCraftingItem(new ItemStack(ModBlocks.storagePanel, 1, PanelType.CRAFTING.getMeta()), VanillaRecipeCategoryUid.CRAFTING);
 		registry.addRecipeCategoryCraftingItem(new ItemStack(ModBlocks.crystalMachine, 1, MachineType.FURNACE.getMeta()), VanillaRecipeCategoryUid.SMELTING);
 		
+		registry.addRecipeClickArea(GuiCrystalWorkbench.class, 88, 32, 28, 23, CrystalModRecipeUids.WORKBENCH);
 		recipeTransferRegistry.addRecipeTransferHandler(ContainerCrystalWorkbench.class, CrystalModRecipeUids.WORKBENCH, 1, 9, 10, 36);
 		recipeTransferRegistry.addRecipeTransferHandler(ContainerCrystalWorkbench.class, VanillaRecipeCategoryUid.CRAFTING, 1, 9, 10, 36);
 		recipeTransferRegistry.addRecipeTransferHandler(ContainerCrystalFurnace.class, VanillaRecipeCategoryUid.SMELTING, 36, 1, 0, 35);
-		//recipeTransferRegistry.addRecipeTransferHandler(ContainerPanelCrafting.class, VanillaRecipeCategoryUid.CRAFTING, 37, 9, 0, 35);
-		//recipeTransferRegistry.addRecipeTransferHandler(ContainerBackpackCrafting.class, VanillaRecipeCategoryUid.CRAFTING, BackpackUtils.MAIN_SIZE, BackpackUtils.MAIN_SIZE+BackpackUtils.CRAFTING_SIZE-1, BackpackUtils.MAIN_SIZE+BackpackUtils.CRAFTING_SIZE, BackpackUtils.MAIN_SIZE+BackpackUtils.CRAFTING_SIZE+26);
 		
 		jeiHelpers.getItemBlacklist().addItemToBlacklist(new ItemStack(ModBlocks.crystalReedsBlue));
 		jeiHelpers.getItemBlacklist().addItemToBlacklist(new ItemStack(ModBlocks.crystalReedsRed));

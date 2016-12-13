@@ -3,8 +3,10 @@ package alec_wam.CrystalMod.items.tools;
 import javax.annotation.Nullable;
 
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.Enchantments;
 import net.minecraft.init.Items;
@@ -15,6 +17,8 @@ import net.minecraft.item.ItemArrow;
 import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
@@ -28,7 +32,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.items.ModItems;
+import alec_wam.CrystalMod.items.tools.grapple.EntityGrapplingHook;
+import alec_wam.CrystalMod.items.tools.grapple.GrappleHandler;
+import alec_wam.CrystalMod.network.CrystalModNetwork;
+import alec_wam.CrystalMod.network.packets.PacketEntityMessage;
 import alec_wam.CrystalMod.util.ItemStackTools;
+import alec_wam.CrystalMod.util.ModLogger;
 
 public class ItemDarkIronBow extends ItemBow implements ICustomModel {
 
@@ -94,18 +103,28 @@ public class ItemDarkIronBow extends ItemBow implements ICustomModel {
     private float fovMultiplier = 0.35f;
     
     @Override
+    public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand)
+    {
+    	return super.onItemRightClick(itemStackIn, worldIn, playerIn, hand);
+    }
+    
+    @Override
     public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityLivingBase entityLiving, int timeLeft) {
 
       if (!(entityLiving instanceof EntityPlayer)) {
         return;
       }
+      
+      boolean grapple = true;
+      
       EntityPlayer entityplayer = (EntityPlayer) entityLiving;
       boolean hasInfinateArrows = entityplayer.capabilities.isCreativeMode || EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, stack) > 0;
       ItemStack itemstack = getArrowsToShoot(entityplayer);
       int draw = getMaxItemUseDuration(stack) - timeLeft;
       draw = ForgeEventFactory.onArrowLoose(stack, worldIn, (EntityPlayer) entityLiving, draw, itemstack != null || hasInfinateArrows);
+      
       if (draw < 0) {
-        return;
+    	 return;
       }
 
       if (itemstack == null && hasInfinateArrows) {
@@ -117,37 +136,112 @@ public class ItemDarkIronBow extends ItemBow implements ICustomModel {
       }
 
       float drawRatio = getCustumArrowVelocity(stack, draw);
+      if(drawRatio < 0.1){
+    	  if (!worldIn.isRemote) {
+    		  EntityGrapplingHook entityhook = GrappleHandler.getHook(entityplayer, worldIn);
+    		  if (entityhook != null) {
+            		int id = entityhook.shootingEntityID;
+            		if (!GrappleHandler.attached.contains(id)) {
+            			GrappleHandler.setHook(entityplayer, null);
+            			
+            			if (!entityhook.isDead) {
+            				entityhook.removeServer();
+            				return;
+            			}
+            			
+            			entityhook = null;
+            		}
+            		if (entityhook != null) {
+	            		Entity shooter = worldIn.getEntityByID(entityhook.shootingEntityID);
+	      				if(shooter !=null && shooter instanceof EntityPlayerMP){
+	      					CrystalModNetwork.sendTo(new PacketEntityMessage(shooter, "GrappleUnattach"), (EntityPlayerMP)shooter);
+	      				}
+	      				GrappleHandler.attached.remove(new Integer(entityhook.shootingEntityID));
+	      				GrappleHandler.setHook(entityplayer, null);
+	      				entityhook = null;
+	      				return;
+            		}
+            	}
+    	  }
+      }
       if (drawRatio >= 0.1) {
         boolean arrowIsInfinite = hasInfinateArrows && itemstack.getItem() instanceof ItemArrow;
         if (!worldIn.isRemote) {
           ItemArrow itemarrow = ((ItemArrow) (itemstack.getItem() instanceof ItemArrow ? itemstack.getItem() : Items.ARROW));
-          EntityArrow entityarrow = itemarrow.createArrow(worldIn, itemstack, entityplayer);
-          entityarrow.setAim(entityplayer, entityplayer.rotationPitch, entityplayer.rotationYaw, 0.0F, drawRatio * (3.0F + forceMultiplier), 0.25F);
-
-          if (drawRatio == 1.0F) {
-            entityarrow.setIsCritical(true);
+          
+          if(grapple){
+    	    EntityGrapplingHook entityhook = GrappleHandler.getHook(entityplayer, worldIn);
+          	
+          	if (entityhook != null) {
+          		int id = entityhook.shootingEntityID;
+          		if (!GrappleHandler.attached.contains(id)) {
+          			GrappleHandler.setHook(entityplayer, null);
+          			
+          			if (!entityhook.isDead) {
+          				entityhook.removeServer();
+          				return;
+          			}
+          			
+          			entityhook = null;
+          		}
+          	}
+          	
+  			float f = 2.0F;
+  			
+  			if(entityhook !=null){
+  				Entity shooter = worldIn.getEntityByID(entityhook.shootingEntityID);
+  				if(shooter !=null && shooter instanceof EntityPlayerMP){
+  					CrystalModNetwork.sendTo(new PacketEntityMessage(shooter, "GrappleUnattach"), (EntityPlayerMP)shooter);
+  				}
+  				GrappleHandler.attached.remove(new Integer(entityhook.shootingEntityID));
+  				GrappleHandler.setHook(entityplayer, null);
+  				entityhook = null;
+  			}
+  			
+  			if (entityhook == null) {
+  				entityhook = new EntityGrapplingHook(worldIn, entityplayer, entityplayer.getActiveHand());
+  				entityhook.setHeadingFromThrower(entityplayer, entityplayer.rotationPitch, entityplayer.rotationYaw, 0.0F, drawRatio * entityhook.getVelocity(), 0.0F);
+  				GrappleHandler.setHook(entityplayer, entityhook);
+  				worldIn.playSound((EntityPlayer)null, entityplayer.posX, entityplayer.posY, entityplayer.posZ, SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.NEUTRAL, 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + f * 0.5F);
+  				
+  				worldIn.spawnEntityInWorld(entityhook);
+  			} else {
+  				Entity shooter = worldIn.getEntityByID(entityhook.shootingEntityID);
+  				if(shooter !=null && shooter instanceof EntityPlayerMP){
+  					CrystalModNetwork.sendTo(new PacketEntityMessage(shooter, "GrappleUnattach"), (EntityPlayerMP)shooter);
+  				}
+  				GrappleHandler.attached.remove(new Integer(entityhook.shootingEntityID));
+  				GrappleHandler.setHook(entityplayer, null);
+  			}
+          } else {
+	          EntityArrow entityarrow = itemarrow.createArrow(worldIn, itemstack, entityplayer);
+	          entityarrow.setAim(entityplayer, entityplayer.rotationPitch, entityplayer.rotationYaw, 0.0F, drawRatio * (3.0F + forceMultiplier), 0.25F);
+	
+	          if (drawRatio == 1.0F) {
+	            entityarrow.setIsCritical(true);
+	          }
+	          int powerLevel = EnchantmentHelper.getEnchantmentLevel(Enchantments.POWER, stack);
+	          if (powerLevel > 0) {
+	            entityarrow.setDamage(entityarrow.getDamage() + powerLevel * 0.5D + 0.5D);
+	          }
+	          int knockBack = EnchantmentHelper.getEnchantmentLevel(Enchantments.PUNCH, stack);
+	          if (knockBack > 0) {
+	            entityarrow.setKnockbackStrength(knockBack);
+	          }
+	          if (EnchantmentHelper.getEnchantmentLevel(Enchantments.FLAME, stack) > 0) {
+	            entityarrow.setFire(100);
+	          }
+	
+	          stack.damageItem(1, entityplayer);
+	
+	          if (arrowIsInfinite) {
+	            entityarrow.pickupStatus = EntityArrow.PickupStatus.CREATIVE_ONLY;
+	          }
+	
+	          entityarrow.setDamage(entityarrow.getDamage() + damageBonus);
+	
+	          worldIn.spawnEntityInWorld(entityarrow);
           }
-          int powerLevel = EnchantmentHelper.getEnchantmentLevel(Enchantments.POWER, stack);
-          if (powerLevel > 0) {
-            entityarrow.setDamage(entityarrow.getDamage() + powerLevel * 0.5D + 0.5D);
-          }
-          int knockBack = EnchantmentHelper.getEnchantmentLevel(Enchantments.PUNCH, stack);
-          if (knockBack > 0) {
-            entityarrow.setKnockbackStrength(knockBack);
-          }
-          if (EnchantmentHelper.getEnchantmentLevel(Enchantments.FLAME, stack) > 0) {
-            entityarrow.setFire(100);
-          }
-
-          stack.damageItem(1, entityplayer);
-
-          if (arrowIsInfinite) {
-            entityarrow.pickupStatus = EntityArrow.PickupStatus.CREATIVE_ONLY;
-          }
-
-          entityarrow.setDamage(entityarrow.getDamage() + damageBonus);
-
-          worldIn.spawnEntityInWorld(entityarrow);
         }
 
         worldIn.playSound((EntityPlayer) null, entityplayer.posX, entityplayer.posY, entityplayer.posZ, SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.NEUTRAL,

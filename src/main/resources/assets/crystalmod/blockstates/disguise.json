@@ -1,0 +1,12 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "transform": "forge:default-item",
+        "model": "forge:item-layer"
+    },
+    "variants": {
+		"empty": [{ "textures": { "layer0": "crystalmod:items/disguise_empty" }}],
+		"player": [{ "textures": { "layer0": "crystalmod:items/disguise_player" }}],
+		"mini": [{ "textures": { "layer0": "crystalmod:items/disguise_mini" }}]
+    }
+}

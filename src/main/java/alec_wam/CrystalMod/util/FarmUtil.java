@@ -2,9 +2,12 @@ package alec_wam.CrystalMod.util;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 import alec_wam.CrystalMod.blocks.ModBlocks;
-import alec_wam.CrystalMod.items.ModItems;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCocoa;
 import net.minecraft.block.BlockCrops;
@@ -22,9 +25,7 @@ import net.minecraftforge.oredict.OreDictionary;
 
 public class FarmUtil {
 
-	public static List<String> clickableCrops = new ArrayList<String>();
-	public static List<String> standardCrops = new ArrayList<String>();
-	public static List<String> stackedCrops = new ArrayList<String>();
+	public static Map<CropType, List<String>> crops = Maps.newHashMap();
 	public static List<String> seeds = new ArrayList<String>();
 	
 	public static void addSeed(ItemStack stack){
@@ -44,7 +45,7 @@ public class FarmUtil {
 		if(!ignoreCrops){
 			  Block bi = Block.getBlockFromItem(stack.getItem());
 			  if(bi !=null){
-				  if ((standardCrops.contains(bi.getUnlocalizedName() + stack.getItemDamage())) || (clickableCrops.contains(bi.getUnlocalizedName() + stack.getItemDamage())) || (stackedCrops.contains(bi.getUnlocalizedName() + stack.getItemDamage())))
+				  if ((getCrops(CropType.NORMAL).contains(bi.getUnlocalizedName() + stack.getItemDamage())) || (getCrops(CropType.CLICKABLE).contains(bi.getUnlocalizedName() + stack.getItemDamage())) || (getCrops(CropType.STACKED).contains(bi.getUnlocalizedName() + stack.getItemDamage())))
 				  {
 				    return true;
 				  }
@@ -65,20 +66,31 @@ public class FarmUtil {
 		  return false;
 	}
 	
+	public static enum CropType {
+		NORMAL, STACKED, CLICKABLE;
+	}
+	
+	public static List<String> getCrops(CropType type){
+		if(!crops.containsKey(type)){
+			crops.put(type, Lists.newArrayList());
+		}
+		return crops.get(type);
+	}
+	
 	public static void addStandardCrop(ItemStack stack, int grownMeta)
 	{
 	    if (Block.getBlockFromItem(stack.getItem()) == null) {
 	      return;
 	    }
-	    if (grownMeta == 32767) {
+	    if (grownMeta == OreDictionary.WILDCARD_VALUE) {
 	      for (int a = 0; a < 16; a++) {
-	        standardCrops.add(Block.getBlockFromItem(stack.getItem()).getUnlocalizedName() + a);
+	    	 getCrops(CropType.NORMAL).add(Block.getBlockFromItem(stack.getItem()).getUnlocalizedName() + a);
 	      }
 	    } else {
-	      standardCrops.add(Block.getBlockFromItem(stack.getItem()).getUnlocalizedName() + grownMeta);
+	    	getCrops(CropType.NORMAL).add(Block.getBlockFromItem(stack.getItem()).getUnlocalizedName() + grownMeta);
 	    }
 	    if (((Block.getBlockFromItem(stack.getItem()) instanceof BlockCrops)) && (grownMeta != 7)) {
-	      standardCrops.add(Block.getBlockFromItem(stack.getItem()).getUnlocalizedName() + "7");
+	    	getCrops(CropType.NORMAL).add(Block.getBlockFromItem(stack.getItem()).getUnlocalizedName() + "7");
 	    }
 	}
 	  
@@ -87,15 +99,15 @@ public class FarmUtil {
 	    if (Block.getBlockFromItem(stack.getItem()) == null) {
 	      return;
 	    }
-	    if (grownMeta == 32767) {
+	    if (grownMeta == OreDictionary.WILDCARD_VALUE) {
 	      for (int a = 0; a < 16; a++) {
-	        clickableCrops.add(Block.getBlockFromItem(stack.getItem()).getUnlocalizedName() + a);
+	    	  getCrops(CropType.CLICKABLE).add(Block.getBlockFromItem(stack.getItem()).getUnlocalizedName() + a);
 	      }
 	    } else {
-	      clickableCrops.add(Block.getBlockFromItem(stack.getItem()).getUnlocalizedName() + grownMeta);
+	    	getCrops(CropType.CLICKABLE).add(Block.getBlockFromItem(stack.getItem()).getUnlocalizedName() + grownMeta);
 	    }
 	    if (((Block.getBlockFromItem(stack.getItem()) instanceof BlockCrops)) && (grownMeta != 7)) {
-	      clickableCrops.add(Block.getBlockFromItem(stack.getItem()).getUnlocalizedName() + "7");
+	    	getCrops(CropType.CLICKABLE).add(Block.getBlockFromItem(stack.getItem()).getUnlocalizedName() + "7");
 	    }
 	}
 	  
@@ -109,15 +121,15 @@ public class FarmUtil {
 	  
 	public static void addStackedCrop(Block block, int grownMeta)
 	{
-		if (grownMeta == 32767) {
+		if (grownMeta == OreDictionary.WILDCARD_VALUE) {
 			for (int a = 0; a < 16; a++) {
-				stackedCrops.add(block.getUnlocalizedName() + a);
+				getCrops(CropType.STACKED).add(block.getUnlocalizedName() + a);
 			}
 		} else {
-			stackedCrops.add(block.getUnlocalizedName() + grownMeta);
+			getCrops(CropType.STACKED).add(block.getUnlocalizedName() + grownMeta);
 		}
 		if (((block instanceof BlockCrops)) && (grownMeta != 7)) {
-			stackedCrops.add(block.getUnlocalizedName() + "7");
+			getCrops(CropType.STACKED).add(block.getUnlocalizedName() + "7");
 	    }
 	}
 	  
@@ -130,7 +142,7 @@ public class FarmUtil {
 	    IBlockState state = world.getBlockState(pos);
 	    Block bi = state.getBlock();
 	    for (int a = 0; a < 16; a++) {
-	      if ((standardCrops.contains(bi.getUnlocalizedName() + a)) || (clickableCrops.contains(bi.getUnlocalizedName() + a)) || (stackedCrops.contains(bi.getUnlocalizedName() + a)))
+	      if ((getCrops(CropType.NORMAL).contains(bi.getUnlocalizedName() + a)) || (getCrops(CropType.STACKED).contains(bi.getUnlocalizedName() + a)) || (getCrops(CropType.CLICKABLE).contains(bi.getUnlocalizedName() + a)))
 	      {
 	        found = true;
 	        break;
@@ -142,7 +154,7 @@ public class FarmUtil {
 	    		|| (((bi instanceof BlockCrops)) && ((BlockCrops)bi).isMaxAge(state) && (!found)) 
 	    		|| ((bi == Blocks.NETHER_WART) && (((Integer)state.getValue(BlockNetherWart.AGE)).intValue() >= 3)) 
 	    		|| ((bi == Blocks.COCOA) && (((Integer)state.getValue(BlockCocoa.AGE)).intValue() >= 2)) 
-	    		|| (standardCrops.contains(bi.getUnlocalizedName() + md)) || (clickableCrops.contains(bi.getUnlocalizedName() + md)) || ((stackedCrops.contains(bi.getUnlocalizedName() + md)) && (biB == bi))) {
+	    		|| (getCrops(CropType.NORMAL).contains(bi.getUnlocalizedName() + md)) || (getCrops(CropType.STACKED).contains(bi.getUnlocalizedName() + md)) || ((getCrops(CropType.CLICKABLE).contains(bi.getUnlocalizedName() + md)) && (biB == bi))) {
 	      return true;
 	    }
 	    return false;
@@ -157,7 +169,7 @@ public class FarmUtil {
 	    IBlockState state = world.getBlockState(pos);
 	    Block bi = state.getBlock();
 	    for (int a = 0; a < 16; a++) {
-	      if ((stackedCrops.contains(bi.getUnlocalizedName() + a)))
+	      if ((getCrops(CropType.STACKED).contains(bi.getUnlocalizedName() + a)))
 	      {
 	        found = true;
 	        break;
@@ -165,7 +177,7 @@ public class FarmUtil {
 	    }
 	    Block biB = world.getBlockState(pos.down()).getBlock();
 	    int md = bi.getMetaFromState(state);
-	    if (found || (stackedCrops.contains(bi.getUnlocalizedName() + md)) && (biB == bi)) {
+	    if (found || (getCrops(CropType.STACKED).contains(bi.getUnlocalizedName() + md)) && (biB == bi)) {
 	      return true;
 	    }
 	    return false;
@@ -179,14 +191,14 @@ public class FarmUtil {
 	    IBlockState state = world.getBlockState(pos);
 	    Block bi = state.getBlock();
 	    for (int a = 0; a < 16; a++) {
-	      if ((clickableCrops.contains(bi.getUnlocalizedName() + a)))
+	      if ((getCrops(CropType.CLICKABLE).contains(bi.getUnlocalizedName() + a)))
 	      {
 	        found = true;
 	        break;
 	      }
 	    }
 	    int md = bi.getMetaFromState(state);
-	    if (found || (clickableCrops.contains(bi.getUnlocalizedName() + md))) {
+	    if (found || (getCrops(CropType.CLICKABLE).contains(bi.getUnlocalizedName() + md))) {
 	      return true;
 	    }
 		return false;
@@ -201,14 +213,14 @@ public class FarmUtil {
 	    IBlockState state = world.getBlockState(pos);
 	    Block bi = state.getBlock();
 	    for (int a = 0; a < 16; a++) {
-	      if ((standardCrops.contains(bi.getUnlocalizedName() + a)))
+	      if ((getCrops(CropType.NORMAL).contains(bi.getUnlocalizedName() + a)))
 	      {
 	        found = true;
 	        break;
 	      }
 	    }
 	    int md = bi.getMetaFromState(state);
-	    if ((((bi instanceof IGrowable)) && (!(bi instanceof BlockStem))) || (((bi instanceof BlockCrops)) && (!found)) || ((bi == Blocks.NETHER_WART)) || ((bi == Blocks.COCOA)) || (standardCrops.contains(bi.getUnlocalizedName() + md))) {
+	    if ((((bi instanceof IGrowable)) && (!(bi instanceof BlockStem))) || (((bi instanceof BlockCrops)) && (!found)) || ((bi == Blocks.NETHER_WART)) || ((bi == Blocks.COCOA)) || (getCrops(CropType.NORMAL).contains(bi.getUnlocalizedName() + md))) {
 	      return true;
 	    }
 	    return false;
@@ -238,23 +250,16 @@ public class FarmUtil {
 	}
 
 	public static void addDefaultCrops() {
-		addStandardCrop(new ItemStack(Blocks.WHEAT), 32767);
-	    addStandardCrop(new ItemStack(Blocks.CARROTS), 32767);
-	    addStandardCrop(new ItemStack(Blocks.POTATOES), 32767);
-	    addSeed(new ItemStack(ModItems.crystalSeedsBlue));
-	    addSeed(new ItemStack(ModItems.crystalSeedsRed));
-	    addSeed(new ItemStack(ModItems.crystalSeedsGreen));
-	    addSeed(new ItemStack(ModItems.crystalSeedsDark));
-	    addStandardCrop(new ItemStack(ModBlocks.crystalPlantBlue), 3);
-	    addStandardCrop(new ItemStack(ModBlocks.crystalPlantRed), 3);
-	    addStandardCrop(new ItemStack(ModBlocks.crystalPlantGreen), 3);
-	    addStandardCrop(new ItemStack(ModBlocks.crystalPlantDark), 3);
-	    addStackedCrop(Blocks.REEDS, 32767);
-	    addStackedCrop(Blocks.CACTUS, 32767);
-	    addStackedCrop(ModBlocks.crystalReedsBlue, 32767);
-	    addStackedCrop(ModBlocks.crystalReedsRed, 32767);
-	    addStackedCrop(ModBlocks.crystalReedsGreen, 32767);
-	    addStackedCrop(ModBlocks.crystalReedsDark, 32767);
+		addClickableCrop(new ItemStack(ModBlocks.crystalPlantBlue), 3);
+	    addClickableCrop(new ItemStack(ModBlocks.crystalPlantRed), 3);
+	    addClickableCrop(new ItemStack(ModBlocks.crystalPlantGreen), 3);
+	    addClickableCrop(new ItemStack(ModBlocks.crystalPlantDark), 3);
+	    addStackedCrop(Blocks.REEDS, OreDictionary.WILDCARD_VALUE);
+	    addStackedCrop(Blocks.CACTUS, OreDictionary.WILDCARD_VALUE);
+	    addStackedCrop(ModBlocks.crystalReedsBlue, OreDictionary.WILDCARD_VALUE);
+	    addStackedCrop(ModBlocks.crystalReedsRed, OreDictionary.WILDCARD_VALUE);
+	    addStackedCrop(ModBlocks.crystalReedsGreen, OreDictionary.WILDCARD_VALUE);
+	    addStackedCrop(ModBlocks.crystalReedsDark, OreDictionary.WILDCARD_VALUE);
 	}
 	
 }

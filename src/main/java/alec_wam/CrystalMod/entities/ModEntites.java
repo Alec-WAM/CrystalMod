@@ -31,7 +31,12 @@ import alec_wam.CrystalMod.entities.mob.zombiePigmen.EntityCrystalPigZombie;
 import alec_wam.CrystalMod.entities.mob.zombiePigmen.RenderCrystalPigZombie;
 import alec_wam.CrystalMod.entities.pet.bombomb.EntityBombomb;
 import alec_wam.CrystalMod.entities.pet.bombomb.RenderEntityBombomb;
+import alec_wam.CrystalMod.items.tools.grapple.EntityGrapplingHook;
+import alec_wam.CrystalMod.items.tools.grapple.RenderEntityGrapplingHook;
 import alec_wam.CrystalMod.tiles.chest.CrystalChestType;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityList.EntityEggInfo;
@@ -44,6 +49,7 @@ import net.minecraft.entity.passive.EntityCow;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biome.SpawnListEntry;
 import net.minecraftforge.common.util.EnumHelper;
+import net.minecraftforge.fml.client.registry.IRenderFactory;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.relauncher.Side;
@@ -79,7 +85,7 @@ public class ModEntites {
 		
 		addEntity(EntityWirelessChestMinecart.class, "minecart_wirelesschest", 64, 1, true);
 		addEntity(EntityEnderChestMinecart.class, "minecart_enderchest", 64, 1, true);
-
+		addEntity(EntityGrapplingHook.class, "grapplinghook", 900, 1, true);
 	}
 	
 	public static void postInit(){
@@ -101,6 +107,13 @@ public class ModEntites {
         RenderingRegistry.registerEntityRenderingHandler(EntityEnderChestMinecart.class, RenderEnderChestMinecart.FACTORY);
         
         RenderingRegistry.registerEntityRenderingHandler(EntityBombomb.class, RenderEntityBombomb.FACTORY);
+        
+        RenderingRegistry.registerEntityRenderingHandler(EntityGrapplingHook.class, new IRenderFactory<EntityGrapplingHook>() {
+			@Override
+			public Render<EntityGrapplingHook> createRenderFor(RenderManager manager) {
+				return new RenderEntityGrapplingHook<EntityGrapplingHook>(manager, Minecraft.getMinecraft().getRenderItem());
+			}
+		});
 	}
 	
 	public static int nextEntityId = 1;

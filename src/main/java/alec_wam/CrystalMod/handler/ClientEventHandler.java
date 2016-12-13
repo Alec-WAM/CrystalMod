@@ -1,5 +1,7 @@
 package alec_wam.CrystalMod.handler;
 
+import java.util.Collection;
+import java.util.ConcurrentModificationException;
 import java.util.List;
 
 import org.lwjgl.util.glu.Project;
@@ -34,17 +36,21 @@ import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.client.event.RenderHandEvent;
 import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.asm.ObfuscatedNames;
 import alec_wam.CrystalMod.capability.ExtendedPlayer;
 import alec_wam.CrystalMod.capability.ExtendedPlayerProvider;
 import alec_wam.CrystalMod.entities.accessories.GuiHorseEnderChest;
 import alec_wam.CrystalMod.entities.accessories.HorseAccessories;
+import alec_wam.CrystalMod.items.tools.grapple.GrappleControllerBase;
+import alec_wam.CrystalMod.items.tools.grapple.GrappleHandler;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.packets.PacketGuiMessage;
 import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemStackTools;
+import alec_wam.CrystalMod.util.ModLogger;
 import alec_wam.CrystalMod.util.ReflectionUtils;
 import alec_wam.CrystalMod.world.game.tag.TagManager;
 
@@ -294,5 +300,50 @@ public class ClientEventHandler {
         GlStateManager.popMatrix();
         GlStateManager.popMatrix();
     }
+    
+    @SubscribeEvent
+	public void onClientTick(TickEvent.ClientTickEvent event) {
+		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+		if (player != null) {
+			if (!Minecraft.getMinecraft().isGamePaused() || !Minecraft.getMinecraft().isSingleplayer()) {
+				try {
+					Collection<GrappleControllerBase> controllers = GrappleHandler.controllers.values();
+					for (GrappleControllerBase controller : controllers) {
+						controller.clientTick();
+					}
+				} catch (ConcurrentModificationException e) {
+					ModLogger.warning("ConcurrentModificationException caught during grapple update");
+				}
+				
+				/*leftclick = (GameSettings.isKeyDown(Minecraft.getMinecraft().gameSettings.keyBindAttack) && Minecraft.getMinecraft().currentScreen == null);
+				if (prevleftclick != leftclick) {
+					if (player != null) {
+						ItemStack stack = player.getHeldItemMainhand();
+						if (stack != null) {
+							Item item = stack.getItem();
+							if (item instanceof clickitem) {
+								if (leftclick) {
+									((clickitem)item).onLeftClick(stack, player);
+								} else {
+									((clickitem)item).onLeftClickRelease(stack, player);
+								}
+							}
+						}
+					}
+				}
+				
+				prevleftclick = leftclick;
+				
+				if (player.onGround) {
+					if (enderlaunchtimer.containsKey(player.getEntityId())) {
+						long timer = player.worldObj.getTotalWorldTime() - enderlaunchtimer.get(player.getEntityId());
+						if (timer > 10) {
+							this.resetlaunchertime(player.getEntityId());
+						}
+					}
+				}*/
+			}
+		}
+	}
 	
 }

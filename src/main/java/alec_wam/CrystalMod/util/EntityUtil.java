@@ -1,5 +1,7 @@
 package alec_wam.CrystalMod.util;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Random;
 
@@ -20,6 +22,7 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityItemFrame;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -32,7 +35,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.network.CrystalModNetwork;
+import alec_wam.CrystalMod.network.packets.PacketEntityMessage;
 
 public class EntityUtil {
 
@@ -351,6 +357,36 @@ public class EntityUtil {
         }
         
         return rayTrace;
+	}
+
+	public static void setSize(EntityPlayer player, float width, float height, float stepSize, float eyeHeight, boolean sendPacket) {
+		setEntitySize(player, width, height);
+		player.stepHeight = stepSize;
+		player.eyeHeight = eyeHeight;
+
+		if(sendPacket){
+			NBTTagCompound nbt = new NBTTagCompound();
+			nbt.setFloat("Width", width);
+			nbt.setFloat("Height", height);
+			nbt.setFloat("StepSize", stepSize);
+			nbt.setFloat("EyeHeight", eyeHeight);
+			PacketEntityMessage message = new PacketEntityMessage(player, "SetSize", nbt);
+			CrystalModNetwork.sendTo(message, (EntityPlayerMP)player);
+			CrystalModNetwork.sendToAll(message);
+		}
+	}
+	
+	private static Method methodEntitySetSize;
+	public static void setEntitySize(Entity entity, float width, float height)
+	{
+		try
+		{
+			if (methodEntitySetSize == null) {
+				methodEntitySetSize = ReflectionHelper.findMethod(Entity.class, entity, new String[] { "setSize", "func_177725_a"}, new Class[] { Float.TYPE, Float.TYPE });
+			}
+			methodEntitySetSize.invoke(entity, new Object[] { Float.valueOf(width), Float.valueOf(height) });
+		}
+		catch (IllegalAccessException ex) {ex.printStackTrace();}catch (IllegalArgumentException ex) {ex.printStackTrace();}catch (InvocationTargetException ex) {ex.printStackTrace();}
 	}
 	
 }
