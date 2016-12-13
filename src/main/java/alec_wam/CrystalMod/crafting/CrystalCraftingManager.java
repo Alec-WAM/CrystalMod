@@ -69,6 +69,8 @@ public class CrystalCraftingManager
         }
     	
     	for(String color : new String[]{"blue", "red", "green", "dark", "pure"}){
+			ItemStack ingot = new ItemStack(ModItems.ingots, 1, color == "blue" ? IngotType.BLUE.getMetadata() : color == "red" ? IngotType.RED.getMetadata() : color == "green" ? IngotType.GREEN.getMetadata() : color == "dark" ? IngotType.DARK.getMetadata() : IngotType.PURE.getMetadata());
+
     		ItemStack axeHead = new ItemStack(ModItems.toolParts);
         	ItemNBTHelper.setString(axeHead, "Type", PartType.AXE.getName()+("_head"));
         	ItemNBTHelper.setString(axeHead, "Color", color);
@@ -94,7 +96,7 @@ public class CrystalCraftingManager
         	ItemStack shovel = new ItemStack(ModItems.crystalShovel);
         	ItemNBTHelper.setString(shovel, "Color", color);
         	
-        	this.addRecipeNBT(shovel, new Object[]{"  #", " R ", "R  ", '#', shovelHead, 'R', toolRod});
+        	this.addRecipeNBT(shovel, new Object[]{"  #", " R ", "I  ", '#', shovelHead, 'R', toolRod, 'I', ingot});
         	
         	ItemStack pickHead = new ItemStack(ModItems.toolParts);
         	ItemNBTHelper.setString(pickHead, "Type", PartType.PICK.getName()+("_head"));
@@ -119,10 +121,10 @@ public class CrystalCraftingManager
         	
         	ItemStack cShears = new ItemStack(ModItems.shears);
     		ItemNBTHelper.setString(cShears, "Color", color);
-    		ItemStack ingot = new ItemStack(ModItems.ingots, 1, color == "blue" ? IngotType.BLUE.getMetadata() : color == "red" ? IngotType.RED.getMetadata() : color == "green" ? IngotType.GREEN.getMetadata() : color == "dark" ? IngotType.DARK.getMetadata() : IngotType.PURE.getMetadata());
     		addRecipe(cShears, new Object[] {" #", "# ", '#', ingot});
     	}
     	
+    	this.addRecipe(new ShapedOreCrystalRecipe(toolRod, new Object[] {"#","I","#", 'I', "ingotCrystal", '#', "gemCrystal"}));
     	this.addRecipe(new ShapedOreCrystalRecipe(new ItemStack(ModItems.wrench), new Object[] {"# #"," R "," R ", '#', "ingotCrystal", 'R', "gemCrystal"}));
     	
         Collections.sort(this.recipes, new Comparator<ICrystalRecipe>()

@@ -13,6 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import alec_wam.CrystalMod.Config;
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.items.ModItems;
@@ -59,6 +60,18 @@ public class ItemCrystalPickaxe extends ItemPickaxe implements ICustomModel {
         	ItemNBTHelper.setString(stack, "Color", color);
 			subItems.add(stack);
 		}
+    }
+	
+
+	
+	@Override
+	public int getMaxDamage(ItemStack stack)
+    {
+		String color = ItemNBTHelper.getString(stack, "Color", "");
+		if(color.equals("pure")){
+			return toolMaterial.getMaxUses() + Config.tool_pureDamageAddition;
+		}
+		return super.getMaxDamage(stack);
     }
 
 }
