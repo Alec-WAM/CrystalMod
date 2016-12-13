@@ -39,16 +39,15 @@ public class TileEntityEngineVampire extends TileEntityEngineBase {
 						
 						//One pig is worth 1/4 of a piece of coal in a furnace generator. At 40 ticks * 30 CU per tick
 						
-						//2 seconds.
-						fuelAmt+=20*2;
-						
 						int value = 1;
 						
 						if(entity.getCreatureAttribute() == EnumCreatureAttribute.UNDEAD){
 							value = 2;
 						}
 						
-						mobsAttacked+=value;
+						fuelAmt+=80*value;
+						
+						mobsAttacked++;
 						if(mobsAttacked >= Config.engine_vampire_maxattack){
 							break;
 						}
@@ -64,7 +63,7 @@ public class TileEntityEngineVampire extends TileEntityEngineBase {
 
 	@Override
 	public int getFuelValue() {
-		return 30;
+		return 15;
 	}
 
 }

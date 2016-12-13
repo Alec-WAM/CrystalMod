@@ -77,12 +77,11 @@ public class GuidePages {
 		CrystalType[] crystalArray = new CrystalType[]{CrystalType.BLUE, CrystalType.RED, CrystalType.GREEN, CrystalType.DARK};
 		List<ItemStack> crystalFullList = getEnumItems(ModItems.crystals, crystalArray);
 		
-		{
-			List<ItemStack> oreList = getEnumBlocks(ModBlocks.crystalOre, CrystalOreType.values());
-			Map<String, List<?>> lookUp = Maps.newHashMap();
-			lookUp.put("0", oreList);
-			CrystalModAPI.BLOCKS.registerChapter(new GuideChapter("crystalore", new PageIcon("0", oreList), new PageFurnace("smelt", crystalFullList)).setDisplayObject(oreList).setLookUpData(lookUp));
-		}
+		List<ItemStack> oreList = getEnumBlocks(ModBlocks.crystalOre, CrystalOreType.values());
+		Map<String, List<?>> lookUp = Maps.newHashMap();
+		lookUp.put("0", oreList);
+		CrystalModAPI.BLOCKS.registerChapter(new GuideChapter("crystalore", new PageIcon("0", oreList), new PageFurnace("smelt", crystalFullList)).setDisplayObject(oreList).setLookUpData(lookUp));
+
 		
 		CrystalBlockType[] normalArray = new CrystalBlockType[]{CrystalBlockType.BLUE, CrystalBlockType.RED, CrystalBlockType.GREEN, CrystalBlockType.DARK};
 		CrystalBlockType[] chisledArray = new CrystalBlockType[]{CrystalBlockType.BLUE_CHISELED, CrystalBlockType.RED_CHISELED, CrystalBlockType.GREEN_CHISELED, CrystalBlockType.DARK_CHISELED};
@@ -97,7 +96,12 @@ public class GuidePages {
 		List<ItemStack> glassList = getEnumBlocks(ModBlocks.crystalGlass, new GlassType[]{GlassType.BLUE, GlassType.RED, GlassType.GREEN, GlassType.DARK});
 		CrystalModAPI.BLOCKS.registerChapter(new GuideChapter("crystalglass", new PageCrafting("main", glassList)).setDisplayObject(glassList));
 		
+		List<ItemStack> workbenchList = getEnumBlocks(ModBlocks.crystalWorkbench, WorkbenchType.values());
+		CrystalModAPI.BLOCKS.registerChapter(new GuideChapter("crystalworkbench", new PageCrafting("main", workbenchList)).setDisplayObject(workbenchList));
 		
+		List<ItemStack> chestList = getEnumSpecial(ModBlocks.crystalChest, new CrystalChestType[]{CrystalChestType.DARKIRON, CrystalChestType.BLUE, CrystalChestType.RED, CrystalChestType.GREEN, CrystalChestType.DARK, CrystalChestType.PURE});
+		CrystalModAPI.BLOCKS.registerChapter(new GuideChapter("crystalchest", new PageCrafting("main", chestList)).setDisplayObject(chestList));
+
 		CrystalType[] nuggetArray = new CrystalType[]{CrystalType.BLUE_NUGGET, CrystalType.RED_NUGGET, CrystalType.GREEN_NUGGET, CrystalType.DARK_NUGGET};
 		CrystalType[] shardArray = new CrystalType[]{CrystalType.BLUE_SHARD, CrystalType.RED_SHARD, CrystalType.GREEN_SHARD, CrystalType.DARK_SHARD};
 
@@ -110,28 +114,11 @@ public class GuidePages {
 		List<ItemStack> ingotList = getEnumItems(ModItems.ingots, ingotArray);
 		CrystalModAPI.ITEMS.registerChapter(new GuideChapter("crystalingots", new PageIcon("0", ingotList), new PageFurnace("smelt", ingotList)).setDisplayObject(ingotList));
 
+		
 		blockData.clear();
 		itemData.clear();
 		entityData.clear();
 		workbenchData.clear();
-		
-		GuiComponentBasicItemPage pageOre = getBasicPage("crystalOre", getEnumBlocks(ModBlocks.crystalOre, CrystalOreType.values()));
-		pageOre.setDescription(String.format(pageOre.getDescription(), ""+Config.oreMinimumHeight, ""+Config.oreMaximumHeight), true);
-		blockData.add(pageOre);
-		
-		blockData.add(getRecipePage("crystalBlock", getEnumBlocks(ModBlocks.crystal, normalArray))); 
-		
-		
-		blockData.add(getRecipePage("crystalBlockChisled", getEnumBlocks(ModBlocks.crystal, chisledArray))); 
-		
-		blockData.add(getRecipePage("crystalBlockBrick", getEnumBlocks(ModBlocks.crystal, brickArray))); 
-		
-		blockData.add(getRecipePage("crystalIngotBlock", getEnumBlocks(ModBlocks.crystalIngot, CrystalIngotBlockType.values()))); 
-		blockData.add(getRecipePage("crystalGlass", getEnumBlocks(ModBlocks.crystalGlass, GlassType.values()))); 
-
-		blockData.add(getRecipePage("crystalWorkbench", getEnumBlocks(ModBlocks.crystalWorkbench, WorkbenchType.values()))); 
-		CrystalChestType[] chestArray = new CrystalChestType[]{CrystalChestType.DARKIRON, CrystalChestType.BLUE, CrystalChestType.RED, CrystalChestType.GREEN, CrystalChestType.DARK, CrystalChestType.PURE};
-		blockData.add(getRecipePage("crystalChest", getEnumSpecial(ModBlocks.crystalChest, chestArray))); 
 
 		blockData.add(getRecipePage("pipeItem", new ItemStack(ModBlocks.crystalPipe, 1, PipeType.ITEM.getMeta()))); 
 		blockData.add(getRecipePage("pipeFluid", new ItemStack(ModBlocks.crystalPipe, 1, PipeType.FLUID.getMeta()))); 
