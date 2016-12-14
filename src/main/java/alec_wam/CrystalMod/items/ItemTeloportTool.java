@@ -86,50 +86,6 @@ public class ItemTeloportTool extends Item implements ICustomModel {
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand)
     {
-		boolean grapple = true;
-    	if(grapple){
-    		if(!worldIn.isRemote){
-    			EntityGrapplingHook entityhook = GrappleHandler.getHook(playerIn, worldIn);
-            	
-            	if (entityhook != null) {
-            		int id = entityhook.shootingEntityID;
-            		if (!GrappleHandler.attached.contains(id)) {
-            			GrappleHandler.setHook(playerIn, null);
-            			
-            			if (!entityhook.isDead) {
-            				entityhook.removeServer();
-            				return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStackIn);
-            			}
-            			
-            			entityhook = null;
-            		}
-            	}
-            	
-    			float f = 2.0F;
-    			if (entityhook == null) {
-    				entityhook = new EntityGrapplingHook(worldIn, playerIn, hand);
-    				entityhook.setHeadingFromThrower(playerIn, playerIn.rotationPitch, playerIn.rotationYaw, 0.0F, entityhook.getVelocity(), 0.0F);
-    				GrappleHandler.setHook(playerIn, entityhook);
-    	
-    				//stack.damageItem(1, entityLiving);
-                    worldIn.playSound((EntityPlayer)null, playerIn.posX, playerIn.posY, playerIn.posZ, SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.NEUTRAL, 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + f * 0.5F);
-    				
-    				worldIn.spawnEntityInWorld(entityhook);
-    			} else {
-    				
-    				Entity shooter = worldIn.getEntityByID(entityhook.shootingEntityID);
-    				if(shooter !=null && shooter instanceof EntityPlayerMP){
-    					CrystalModNetwork.sendTo(new PacketEntityMessage(shooter, "GrappleUnattach"), (EntityPlayerMP)shooter);
-    				}
-    				GrappleHandler.attached.remove(new Integer(entityhook.shootingEntityID));
-    				GrappleHandler.setHook(playerIn, null);
-    			}
-    			return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStackIn);
-        	}
-    		return new ActionResult<ItemStack>(EnumActionResult.PASS, itemStackIn);
-    	}
-    	//TODO Remove Grapple
-		
 		if(getLocation(itemStackIn) !=null){
 			if(playerIn.isSneaking()){
 				this.removeLocation(itemStackIn);

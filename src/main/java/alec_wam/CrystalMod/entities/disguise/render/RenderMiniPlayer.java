@@ -1,5 +1,9 @@
 package alec_wam.CrystalMod.entities.disguise.render;
 
+import java.util.List;
+
+import com.google.common.collect.Lists;
+
 import alec_wam.CrystalMod.capability.ExtendedPlayer;
 import alec_wam.CrystalMod.capability.ExtendedPlayerProvider;
 import alec_wam.CrystalMod.entities.disguise.DisguiseType;
@@ -19,6 +23,7 @@ import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderLivingBase;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.entity.RenderPlayer;
+import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EnumPlayerModelParts;
@@ -32,14 +37,50 @@ import net.minecraft.scoreboard.Team;
 import net.minecraft.util.EnumHandSide;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
 public class RenderMiniPlayer extends RenderPlayer
 {
-	public RenderMiniPlayer(RenderManager rm) {
-		super(rm);
+	
+	public final List<LayerRenderer<AbstractClientPlayer>> grabbedLayers = Lists.newArrayList();
+	
+	public boolean slim;
+	
+	public RenderMiniPlayer(RenderManager rm, boolean slim) {
+		super(rm, slim);
+		this.slim = slim;
 		this.addLayer(new LayerDisguiseCape(this));
+		grabLayers();
 	}
 
+	public void grabLayers(){
+		if(Minecraft.getMinecraft() == null || Minecraft.getMinecraft().getRenderManager() == null || Minecraft.getMinecraft().getRenderManager().getSkinMap() == null)return;
+		grabbedLayers.clear();
+        RenderPlayer renderer = Minecraft.getMinecraft().getRenderManager().getSkinMap().get(slim ? "slim" : "default");
+        if(renderer !=null){
+        	try{
+        		List<LayerRenderer<AbstractClientPlayer>> grabbedLayers = ReflectionHelper.getPrivateValue(RenderLivingBase.class, renderer, 4);
+        		if(grabbedLayers !=null){
+        			for(LayerRenderer<AbstractClientPlayer> layer : grabbedLayers){
+        				boolean found = false;
+        				search : for(LayerRenderer<AbstractClientPlayer> layer2 : this.layerRenderers){
+        					if(layer2.getClass() == layer.getClass()){
+        						found = true;
+        						break search;
+        					}
+        				}
+        				if(!found){
+        					this.grabbedLayers.add(layer);
+        				}
+        			}
+        		}
+        	}
+        	catch(Exception e){
+        		e.printStackTrace();
+        	}
+        }
+	}
+	
 	@Override
 	protected ResourceLocation getEntityTexture(AbstractClientPlayer entity)
 	{
@@ -48,9 +89,6 @@ public class RenderMiniPlayer extends RenderPlayer
 		if(ePlayer.getPlayerDisguiseUUID() !=null){
 			return DownloadedTextures.getSkin(ePlayer.getPlayerDisguiseUUID());
 		}
-		/*if(ePlayer.getLastPlayerDisguiseUUID() !=null){
-			return DownloadedTextures.getSkin(ePlayer.getLastPlayerDisguiseUUID());
-		}*/
 		return super.getEntityTexture(entity);
 	}
 
@@ -68,7 +106,7 @@ public class RenderMiniPlayer extends RenderPlayer
 	public void setModelVisibilities(AbstractClientPlayer clientPlayer)
 	{
 		ModelPlayer modelplayer = this.getMainModel();
-
+		
 		if (clientPlayer.isSpectator())
 		{
 			modelplayer.setInvisible(false);
@@ -292,6 +330,30 @@ public class RenderMiniPlayer extends RenderPlayer
         net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.RenderLivingEvent.Post<AbstractClientPlayer>(entity, this, x, y, z));
     }
 	
+	protected void renderLayers(AbstractClientPlayer entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scaleIn)
+    {
+        for (LayerRenderer<AbstractClientPlayer> layerrenderer : this.layerRenderers)
+        {
+            boolean flag = this.setBrightness(entitylivingbaseIn, partialTicks, layerrenderer.shouldCombineTextures());
+            layerrenderer.doRenderLayer(entitylivingbaseIn, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch, scaleIn);
+
+            if (flag)
+            {
+                this.unsetBrightness();
+            }
+        }
+        for (LayerRenderer<AbstractClientPlayer> layerrenderer : this.grabbedLayers)
+        {
+            boolean flag = this.setBrightness(entitylivingbaseIn, partialTicks, layerrenderer.shouldCombineTextures());
+            layerrenderer.doRenderLayer(entitylivingbaseIn, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch, scaleIn);
+
+            if (flag)
+            {
+                this.unsetBrightness();
+            }
+        }
+    }
+	
 	public void renderName(AbstractClientPlayer entity, double x, double y, double z)
     {
         if (net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.RenderLivingEvent.Specials.Pre<AbstractClientPlayer>(entity, this, x, y, z))) return;
@@ -302,6 +364,7 @@ public class RenderMiniPlayer extends RenderPlayer
 
             if (d0 < (double)(f * f))
             {
+            	//TODO Use Events to Fix Display Name
                 String s = ScorePlayerTeam.formatPlayerName(getFakeTeam(entity), entity.getDisplayNameString());
                 GlStateManager.alphaFunc(516, 0.1F);
                 this.renderEntityName(entity, x, y, z, s, d0);
@@ -358,7 +421,7 @@ public class RenderMiniPlayer extends RenderPlayer
             }
         }
 
-        return Minecraft.isGuiEnabled() && entity != Minecraft.getMinecraft().getRenderManager().renderViewEntity && flag && !entity.isBeingRidden();
+        return Minecraft.isGuiEnabled() /*&& entity != Minecraft.getMinecraft().getRenderManager().renderViewEntity*/ && flag && !entity.isBeingRidden();
     }
     
     public String getFakeUsername(AbstractClientPlayer entityIn){
@@ -366,9 +429,7 @@ public class RenderMiniPlayer extends RenderPlayer
     	String username = entityIn.getName();
     	if(ePlayer.getCurrentDiguise() == DisguiseType.PLAYER && ePlayer.getPlayerDisguiseUUID() !=null){
     		username = ProfileUtil.getUsername(ePlayer.getPlayerDisguiseUUID());
-    	} else if(ePlayer.getLastDiguise() == DisguiseType.PLAYER && ePlayer.getLastPlayerDisguiseUUID() !=null){
-    		username = ProfileUtil.getUsername(ePlayer.getLastPlayerDisguiseUUID());
-    	}
+    	} 
     	return username;
     }
     

@@ -6,6 +6,9 @@ import java.util.UUID;
 
 import javax.annotation.Nullable;
 
+import org.apache.commons.codec.Charsets;
+import org.apache.commons.codec.binary.Base64;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.client.renderer.IImageBuffer;
@@ -27,12 +30,19 @@ import alec_wam.CrystalMod.util.UUIDUtils;
 import alec_wam.CrystalMod.util.Util;
 
 import com.google.common.base.Objects;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonParseException;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture.Type;
 import com.mojang.authlib.properties.Property;
 import com.mojang.authlib.properties.PropertyMap;
+import com.mojang.authlib.yggdrasil.response.MinecraftProfilePropertiesResponse;
+import com.mojang.authlib.yggdrasil.response.MinecraftTexturesPayload;
+import com.mojang.util.UUIDTypeAdapter;
 
 public class DownloadedTextures {
 
@@ -136,10 +146,10 @@ public class DownloadedTextures {
 	
 	public static PlayerSkin getPlayerSkin(UUID uuid){
 		if(uuid == null)return null;
-		//if(!skins.containsKey(uuid)){
-			//skins.put(uuid, new PlayerSkin(uuid));
-		//}
-		return new PlayerSkin(uuid);//skins.get(uuid);
+		if(!skins.containsKey(uuid)){
+			skins.put(uuid, new PlayerSkin(uuid));
+		}
+		return skins.get(uuid);
 	}
 	
 	public static MCAPIResource getSpecialResource(UUID uuid){
@@ -162,9 +172,12 @@ public class DownloadedTextures {
 		return getPlayerSkin(uuid).getLocationSkin() !=null;
 	}
 	
+	private static final Gson gson = new GsonBuilder().registerTypeAdapter(UUID.class, new UUIDTypeAdapter()).create();
+	
 	public static Map<Type, ResourceLocation> downloadPlayerTextures(GameProfile profile){
 		Map<Type, ResourceLocation> textures = Maps.newHashMap();
-		String username = profile.getName();
+		
+		/*String username = profile.getName();
 		ResourceLocation skin = new ResourceLocation("skins/"+username);
 		getDownloadImage(skin, "http://skins.minecraft.net/MinecraftSkins/"+username+".png", DefaultPlayerSkin.getDefaultSkin(profile.getId()), new ImageBufferDownload());
 		textures.put(Type.SKIN, skin);
@@ -172,7 +185,7 @@ public class DownloadedTextures {
 		ResourceLocation cloak = new ResourceLocation("cloaks/"+username);
 		if(Util.isImageDataUploaded(getDownloadImage(cloak, "http://skins.minecraft.net/MinecraftCloaks/"+username+".png", null, null))){
 			textures.put(Type.CAPE, cloak);
-		}
+		}*/
 		return textures;
 	}
 	
@@ -241,7 +254,25 @@ public class DownloadedTextures {
 		
 		public PlayerSkin(UUID uuid){
 			profile = new GameProfile(uuid, ProfileUtil.getUsername(uuid));
-			playerTextures = downloadPlayerTextures(profile);
+			PropertyMap properties = ProfileUtil.getProperties(uuid);
+			if(properties !=null){
+				Property textureProperty = Iterables.getFirst(properties.get("textures"), null);
+				Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> map = null;
+				MinecraftTexturesPayload result;
+		        try {
+		            String json = new String(Base64.decodeBase64(textureProperty.getValue()), Charsets.UTF_8);
+		            result = gson.fromJson(json, MinecraftTexturesPayload.class);
+		            map = result.getTextures();
+		        } catch (JsonParseException e) {
+		            ModLogger.error("Could not decode textures payload", e);
+		            map = new HashMap<MinecraftProfileTexture.Type, MinecraftProfileTexture>();
+		        }
+		        for(Type type : map.keySet()){
+		        	Minecraft.getMinecraft().getSkinManager().loadSkin(map.get(type), type, this);
+		        }
+			}
+			
+			//playerTextures = downloadPlayerTextures(profile);
 		}
 
 		public String getSkinType()

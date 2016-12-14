@@ -1,50 +1,31 @@
 package alec_wam.CrystalMod.entities.disguise;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-
-import org.lwjgl.opengl.GL11;
-
-import com.google.common.base.Objects;
+import java.util.UUID;
 
 import alec_wam.CrystalMod.capability.ExtendedPlayer;
 import alec_wam.CrystalMod.capability.ExtendedPlayerProvider;
 import alec_wam.CrystalMod.entities.disguise.render.RenderMiniPlayer;
 import alec_wam.CrystalMod.entities.disguise.render.RenderPlayerHand;
-import alec_wam.CrystalMod.network.CrystalModNetwork;
-import alec_wam.CrystalMod.network.packets.PacketEntityMessage;
 import alec_wam.CrystalMod.util.EntityUtil;
 import alec_wam.CrystalMod.util.ItemStackTools;
-import alec_wam.CrystalMod.util.ModLogger;
-import alec_wam.CrystalMod.util.PlayerUtil;
 import alec_wam.CrystalMod.util.ProfileUtil;
+import alec_wam.CrystalMod.util.client.DownloadedTextures;
+import alec_wam.CrystalMod.util.client.DownloadedTextures.PlayerSkin;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
-import net.minecraft.client.gui.inventory.GuiContainerCreative;
-import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.InventoryEffectRenderer;
-import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderPlayer;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumHandSide;
 import net.minecraft.util.math.MathHelper;
-import net.minecraftforge.client.event.RenderHandEvent;
 import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.client.event.RenderSpecificHandEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -108,26 +89,39 @@ public class DisguiseHandler {
 		if(ePlayer !=null && ePlayer.getCurrentDiguise() !=DisguiseType.NONE)
         {
             
-            Minecraft mc = Minecraft.getMinecraft();
-            boolean inGui = ((mc.currentScreen instanceof InventoryEffectRenderer) && mc.getRenderManager().playerViewY == 180.0F);
-            
-            
-            //if(ePlayer.getCurrentDiguise() == DisguiseType.MINI){
-            	event.setCanceled(true);
-            	float f1 = event.getEntityPlayer().prevRotationYaw + (event.getEntityPlayer().rotationYaw - event.getEntityPlayer().prevRotationYaw) * event.getPartialRenderTick();
-            	if(Minecraft.getMinecraft().getRenderManager().renderEngine != null && Minecraft.getMinecraft().getRenderManager().renderViewEntity != null && Minecraft.getMinecraft().getRenderManager() !=null)
-                {
-            		if(event.getEntityPlayer() instanceof AbstractClientPlayer){
-            			if(miniPlayer.proxyRenderer.getRenderManager() == null){
-            				miniPlayer.proxyRenderer = new RenderMiniPlayer(Minecraft.getMinecraft().getRenderManager());
-            			}
-            			miniPlayer.proxyRenderer.doRender((AbstractClientPlayer) event.getEntityPlayer(), event.getX(), event.getY(), event.getZ(), f1, event.getPartialRenderTick());
+            event.setCanceled(true);
+            float f1 = event.getEntityPlayer().prevRotationYaw + (event.getEntityPlayer().rotationYaw - event.getEntityPlayer().prevRotationYaw) * event.getPartialRenderTick();
+            if(Minecraft.getMinecraft().getRenderManager().renderEngine != null && Minecraft.getMinecraft().getRenderManager().renderViewEntity != null && Minecraft.getMinecraft().getRenderManager() !=null)
+            {
+            	if(event.getEntityPlayer() instanceof AbstractClientPlayer){
+            		if(miniPlayer.renderNormal.getRenderManager() == null){
+            			miniPlayer.renderNormal = new RenderMiniPlayer(Minecraft.getMinecraft().getRenderManager(), false);
             		}
-                }
-            	//miniPlayer.render(event.getEntityPlayer(), event.getX(), event.getY(), event.getZ(), event.getPartialRenderTick(), inGui);
-            //}
+            		if(miniPlayer.renderSlim.getRenderManager() == null){
+            			miniPlayer.renderSlim = new RenderMiniPlayer(Minecraft.getMinecraft().getRenderManager(), true);
+            		}
+
+            		UUID renderUUID = event.getEntityPlayer().getUniqueID();
+            		PlayerSkin skin = DownloadedTextures.getPlayerSkin(renderUUID);
+            		String type = skin.getSkinType();
+            		if(type == "slim")miniPlayer.renderSlim.doRender((AbstractClientPlayer) event.getEntityPlayer(), event.getX(), event.getY(), event.getZ(), f1, event.getPartialRenderTick());
+            		else miniPlayer.renderNormal.doRender((AbstractClientPlayer) event.getEntityPlayer(), event.getX(), event.getY(), event.getZ(), f1, event.getPartialRenderTick());
+            	}
+            }
         }
     }
+	
+	
+	//TODO Edit Name in Chat for maximum disguise
+	@SubscribeEvent
+	public void overrideDisplayName(PlayerEvent.NameFormat event){
+		EntityPlayer player = event.getEntityPlayer();
+		ExtendedPlayer ePlayer = ExtendedPlayerProvider.getExtendedPlayer(player);
+		if(ePlayer !=null && ePlayer.getCurrentDiguise() !=DisguiseType.NONE)
+        {
+			if(ePlayer.getPlayerDisguiseUUID() !=null)event.setDisplayname(ProfileUtil.getUsername(ePlayer.getPlayerDisguiseUUID()));
+        }
+	}
 	
 	private final static RenderPlayerHand renderHandOverride = new RenderPlayerHand();
 	
@@ -140,12 +134,6 @@ public class DisguiseHandler {
 		ExtendedPlayer ePlayer = ExtendedPlayerProvider.getExtendedPlayer(abstractclientplayer);
 		if(ePlayer !=null && ePlayer.getCurrentDiguise() !=DisguiseType.NONE)
         {
-			
-			/*if(ePlayer.getCurrentDiguise() == DisguiseType.PLAYER){
-				ePlayer.setCurrentDiguise(DisguiseType.NONE);
-				ePlayer.setPlayerDisguiseUUID(null);
-			}*/
-			
 			boolean flag = event.getHand() == EnumHand.MAIN_HAND;
 	        EnumHandSide enumhandside = flag ? abstractclientplayer.getPrimaryHand() : abstractclientplayer.getPrimaryHand().opposite();
 	       
@@ -199,21 +187,6 @@ public class DisguiseHandler {
         }
 
         GlStateManager.enableCull();
-    }
-	
-	public void forceRender(Render entRenderer, Entity ent, double d, double d1, double d2, float f, float f1)
-    {
-		if(Minecraft.getMinecraft().getRenderManager().renderEngine != null && Minecraft.getMinecraft().getRenderManager().renderViewEntity != null)
-        {
-            try
-            {
-                entRenderer.doRender(ent, d, d1, d2, f, f1);
-            }
-            catch(Exception e)
-            {
-            	e.printStackTrace();
-            }
-        }
     }
 
 	

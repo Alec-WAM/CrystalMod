@@ -8,6 +8,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
+//Credit https://github.com/yyon/grapplemod/
 public class GrappleControllerBase {
 
 	public GrappleType type;

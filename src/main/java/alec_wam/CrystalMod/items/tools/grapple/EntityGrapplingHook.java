@@ -1,8 +1,14 @@
 package alec_wam.CrystalMod.items.tools.grapple;
 
 import io.netty.buffer.ByteBuf;
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.monster.IMob;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -26,6 +32,11 @@ public class EntityGrapplingHook extends EntityThrowable implements IEntityAddit
 	public boolean attached = false;
 	public EnumHand hand = EnumHand.MAIN_HAND;
 	public double taut;
+	
+	//Traits
+	public boolean canGrabEntities = false;
+	public boolean canGrabMobs = false;
+	public boolean canGrabPlayers = false;
 	
 	public EntityGrapplingHook(World worldIn) {
 		super(worldIn);
@@ -95,6 +106,7 @@ public class EntityGrapplingHook extends EntityThrowable implements IEntityAddit
 	public void writeSpawnData(ByteBuf buffer) {
 		buffer.writeInt(this.shootingEntity != null ? this.shootingEntity.getEntityId() : 0);
 		buffer.writeBoolean((hand == null || hand == EnumHand.MAIN_HAND) ? false : true);
+		buffer.writeBoolean(canGrabEntities);buffer.writeBoolean(canGrabMobs);buffer.writeBoolean(canGrabPlayers);
 	}
 
 	@Override
@@ -102,6 +114,9 @@ public class EntityGrapplingHook extends EntityThrowable implements IEntityAddit
 		this.shootingEntityID = additionalData.readInt();
 	    this.shootingEntity = this.worldObj.getEntityByID(this.shootingEntityID);
 	    this.hand = additionalData.readBoolean() ? EnumHand.OFF_HAND : EnumHand.MAIN_HAND;
+	    this.canGrabEntities = additionalData.readBoolean();
+	    this.canGrabMobs = additionalData.readBoolean();
+	    this.canGrabPlayers = additionalData.readBoolean();
 	}
 
 	public void remove() {
@@ -119,6 +134,10 @@ public class EntityGrapplingHook extends EntityThrowable implements IEntityAddit
 						return;
 					}
 					
+					if(!canGrabMobs && entityhit instanceof IMob)return;
+					if(!canGrabPlayers && entityhit instanceof EntityPlayer)return;
+					if(!canGrabEntities && !(entityhit instanceof EntityItem))return; //Always allow item grabbing
+
 					Vec3d playerpos = this.shootingEntity.getPositionVector();
 					Vec3d entitypos = entityhit.getPositionVector();
 					Vec3d yank = GrappleControllerBase.multiply(playerpos.subtract(entitypos), 0.4);
@@ -130,8 +149,22 @@ public class EntityGrapplingHook extends EntityThrowable implements IEntityAddit
 				
 				BlockPos blockpos = null;
 				
+				boolean blockPass = false;
+				
 				if (movingobjectposition.typeOfHit == RayTraceResult.Type.BLOCK) {
 					blockpos = movingobjectposition.getBlockPos();
+					
+					IBlockState iblockstate = this.worldObj.getBlockState(blockpos);
+
+			        if (iblockstate.getMaterial() != Material.AIR)
+			        {
+			            AxisAlignedBB axisalignedbb = iblockstate.getCollisionBoundingBox(this.worldObj, blockpos);
+
+			            if (axisalignedbb != Block.NULL_AABB && axisalignedbb.offset(blockpos).isVecInside(new Vec3d(this.posX, this.posY, this.posZ)))
+			            {
+			            	blockPass = true;
+			            }
+			        }
 				}
 				Vec3d vec3 = null;
 		        
@@ -140,7 +173,7 @@ public class EntityGrapplingHook extends EntityThrowable implements IEntityAddit
 		            vec3 = movingobjectposition.hitVec;
 		        }
 		        
-		        this.serverAttach(blockpos, vec3, movingobjectposition.sideHit);
+		        if(blockpos == null || blockPass)this.serverAttach(blockpos, vec3, movingobjectposition.sideHit);
 			}
 		}
 	}

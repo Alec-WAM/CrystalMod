@@ -89,6 +89,7 @@ public class ItemDisguise extends Item implements ICustomModel {
         defaultUUIDs.add(PlayerUtil.AH9902);
         defaultUUIDs.add(PlayerUtil.Kilowag1453);
         defaultUUIDs.add(PlayerUtil.long_shot99);
+        defaultUUIDs.add(ProfileUtil.getUUID("Etho"));
         for(UUID uuid : defaultUUIDs){
         	ItemStack stack = new ItemStack(itemIn, 1, 1);
         	setBoundUUID(stack, uuid);

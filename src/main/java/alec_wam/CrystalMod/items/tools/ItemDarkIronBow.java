@@ -115,9 +115,18 @@ public class ItemDarkIronBow extends ItemBow implements ICustomModel {
         return;
       }
       
-      boolean grapple = true;
+      
       
       EntityPlayer entityplayer = (EntityPlayer) entityLiving;
+      
+      boolean grapple = false;
+      
+      if(ItemStackTools.isValid(entityplayer.getHeldItemOffhand())){
+    	  ItemStack off = entityplayer.getHeldItemOffhand();
+    	  if(off.getItem() == Items.LEAD){
+    		  grapple = true;
+    	  }
+      }
       boolean hasInfinateArrows = entityplayer.capabilities.isCreativeMode || EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, stack) > 0;
       ItemStack itemstack = getArrowsToShoot(entityplayer);
       int draw = getMaxItemUseDuration(stack) - timeLeft;

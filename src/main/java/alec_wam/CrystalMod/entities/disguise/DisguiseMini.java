@@ -13,17 +13,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class DisguiseMini {
 
-	public RenderMiniPlayer proxyRenderer = new RenderMiniPlayer(Minecraft.getMinecraft().getRenderManager());
-	
-	public void render(EntityPlayer player, double x, double y, double z, float partialTicks, boolean frontface)
-	{
-	    float f1 = player.prevRotationYaw + (player.rotationYaw - player.prevRotationYaw) * partialTicks;
-	    
-
-	    double d3 = player.getYOffset();
-	    
-	    if(player instanceof AbstractClientPlayer){
-	    	this.proxyRenderer.doRender((AbstractClientPlayer) player, x, y + d3, z, f1, partialTicks);
-	    }
-	}
+	public RenderMiniPlayer renderNormal = new RenderMiniPlayer(Minecraft.getMinecraft().getRenderManager(), false);
+	public RenderMiniPlayer renderSlim = new RenderMiniPlayer(Minecraft.getMinecraft().getRenderManager(), true);
 }

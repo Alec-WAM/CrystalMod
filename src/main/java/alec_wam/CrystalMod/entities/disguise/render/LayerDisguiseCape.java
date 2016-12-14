@@ -39,10 +39,8 @@ public class LayerDisguiseCape implements LayerRenderer<AbstractClientPlayer>
                 ResourceLocation cape = null;
 				ExtendedPlayer ePlayer = ExtendedPlayerProvider.getExtendedPlayer(entitylivingbaseIn);
         		if(ePlayer.getCurrentDiguise() == DisguiseType.PLAYER && ePlayer.getPlayerDisguiseUUID() !=null){
-        			cape =  DownloadedTextures.getSkin(ePlayer.getPlayerDisguiseUUID());
-        		} else if(ePlayer.getLastDiguise() == DisguiseType.PLAYER && ePlayer.getLastPlayerDisguiseUUID() !=null){
-        			cape = DownloadedTextures.getSkin(ePlayer.getLastPlayerDisguiseUUID());
-        		}
+        			cape =  DownloadedTextures.getCape(ePlayer.getPlayerDisguiseUUID());
+        		} 
         		if(cape == null)return;
                 
                 this.playerRenderer.bindTexture(cape);
