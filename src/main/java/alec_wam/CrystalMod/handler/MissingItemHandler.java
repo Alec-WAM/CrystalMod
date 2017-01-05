@@ -6,6 +6,7 @@ import java.util.Map;
 import com.google.common.collect.Maps;
 
 import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.util.ModLogger;
 import net.minecraft.block.Block;
@@ -36,7 +37,14 @@ public class MissingItemHandler {
 					ModLogger.info("Fixed "+rl+". Remapped it to "+ModItems.lock.getRegistryName());
 					fixed = true;
 				} 
-				if(mapping.type == GameRegistry.Type.ITEM){
+				if(mapping.resourceLocation.getResourcePath().equalsIgnoreCase("materialCrop")){
+					ModLogger.info("Remapping materialCrop");
+					if(mapping.type == GameRegistry.Type.BLOCK)mapping.remap(ModBlocks.materialCrop);
+					if(mapping.type == GameRegistry.Type.ITEM)mapping.remap(Item.getItemFromBlock(ModBlocks.materialCrop));
+					ModLogger.info("Fixed "+rl+". Remapped it to "+ModBlocks.materialCrop.getRegistryName());
+					fixed = true;
+				} 
+				if(mapping.type == GameRegistry.Type.ITEM && !fixed){
 					ModLogger.info(remapItems.toString());
 					if(remapItems.containsKey(rl)){
 						Item item = remapItems.get(rl);
@@ -45,7 +53,7 @@ public class MissingItemHandler {
 						fixed = true;
 					}
 				} 
-				if(mapping.type == GameRegistry.Type.BLOCK){
+				if(mapping.type == GameRegistry.Type.BLOCK && !fixed){
 					if(remapBlocks.containsKey(rl)){
 						Block block = remapBlocks.get(rl);
 						mapping.remap(block);

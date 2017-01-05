@@ -2,6 +2,12 @@ package alec_wam.CrystalMod.network.packets;
 
 import java.io.IOException;
 
+import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.api.pedistals.IPedistal;
+import alec_wam.CrystalMod.network.AbstractPacketThreadsafe;
+import alec_wam.CrystalMod.network.IMessageHandler;
+import alec_wam.CrystalMod.util.ItemStackTools;
+import alec_wam.CrystalMod.util.ModLogger;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.nbt.NBTTagCompound;
@@ -10,9 +16,6 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import alec_wam.CrystalMod.CrystalMod;
-import alec_wam.CrystalMod.network.AbstractPacketThreadsafe;
-import alec_wam.CrystalMod.network.IMessageHandler;
 
 public class PacketTileMessage extends AbstractPacketThreadsafe {
 
@@ -67,8 +70,18 @@ public class PacketTileMessage extends AbstractPacketThreadsafe {
 			return;
 		}
 		TileEntity tile = world.getTileEntity(new BlockPos(x, y, z));
-		if(tile !=null && tile instanceof IMessageHandler){
-			((IMessageHandler)tile).handleMessage(type, data, true);
+		if(tile !=null){
+			if(tile instanceof IMessageHandler)((IMessageHandler)tile).handleMessage(type, data, true);
+			if(tile instanceof IPedistal){
+				if(type.equalsIgnoreCase("StackSync")){
+					IPedistal pedistal = (IPedistal)tile;
+					if(data.hasNoTags()){
+						pedistal.setStack(ItemStackTools.getEmptyStack());
+					} else {
+						pedistal.setStack(ItemStackTools.loadFromNBT(data));
+					}
+				}
+			}
 		}
 	}
 

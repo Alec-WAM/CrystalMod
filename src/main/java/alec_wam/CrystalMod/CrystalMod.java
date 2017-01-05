@@ -9,7 +9,11 @@ import javax.annotation.Nonnull;
 
 import com.google.common.collect.Lists;
 
+import alec_wam.CrystalMod.api.CrystalModAPI;
 import alec_wam.CrystalMod.blocks.ModBlocks;
+import alec_wam.CrystalMod.blocks.crops.material.IMaterialCrop;
+import alec_wam.CrystalMod.blocks.crops.material.ItemMaterialSeed;
+import alec_wam.CrystalMod.blocks.crops.material.ModCrops;
 import alec_wam.CrystalMod.fluids.ModFluids;
 import alec_wam.CrystalMod.handler.GuiHandler;
 import alec_wam.CrystalMod.handler.MissingItemHandler;
@@ -137,6 +141,62 @@ public class CrystalMod {
 
 		@Override
 		public int compare(ItemStack arg0, ItemStack arg1) {
+			return ItemUtil.compareNames(arg0, arg1);
+		}
+    };
+    
+    public static CreativeTabs tabCrops = new CustomCreativeTab(MODID.toLowerCase()+".crops") {
+        @Override
+        @SideOnly(Side.CLIENT)
+        public Item getTabIconItem() {
+            return ModItems.materialSeed;
+        }
+        
+        @SideOnly(Side.CLIENT)
+        public ItemStack getIconItemStack()
+        {
+            return ItemMaterialSeed.getSeed(ModCrops.DIRT);
+        }
+        
+        @Override
+        public boolean hasSearchBar()
+        {
+            return true;
+        }
+
+		@Override
+		public int compare(ItemStack arg0, ItemStack arg1) {
+			if(arg0.getItem() instanceof ItemMaterialSeed){
+				if(arg1.getItem() instanceof ItemMaterialSeed){
+					IMaterialCrop crop0 = ItemMaterialSeed.getCrop(arg0);
+					IMaterialCrop crop1 = ItemMaterialSeed.getCrop(arg1);
+					if((crop0 !=null && crop0.getSeedInfo() !=null) && (crop1 !=null && crop1.getSeedInfo() !=null)){
+						int tier0 = crop0.getSeedInfo().getTier();
+						int tier1 = crop1.getSeedInfo().getTier();
+						
+						if(tier0 == tier1){
+							int index0 = -1;
+							int index1 = -1;
+							int i = 0;
+							for(String key : CrystalModAPI.getCropMap().keySet()){
+								if(key.equals(crop0.getUnlocalizedName())){
+									index0 = i;
+								}
+								if(key.equals(crop1.getUnlocalizedName())){
+									index1 = i;
+								}
+								if(index0 !=-1 && index1 !=-1){
+									break;
+								}
+								i++;
+							}
+							return Integer.compare(index0, index1);
+						}
+						
+						return Integer.compare(tier0, tier1);
+					}
+				}
+			}
 			return ItemUtil.compareNames(arg0, arg1);
 		}
     };

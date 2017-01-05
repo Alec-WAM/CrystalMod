@@ -28,6 +28,9 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
@@ -39,6 +42,8 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.stats.AchievementList;
+import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.math.BlockPos;
@@ -47,6 +52,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.ILockableContainer;
 import net.minecraft.world.World;
@@ -210,7 +216,7 @@ public class ItemUtil {
     }
 
     if (size) {
-      base += "#" + stack.stackSize;
+      base += "#" + ItemStackTools.getStackSize(stack);
     }
 
     return base;
@@ -335,6 +341,12 @@ public class ItemUtil {
     entity.worldObj.spawnEntityInWorld(entity);
   }
   
+  public static void spawnItemsInWorldWithoutMotion(World world, List<ItemStack> items, BlockPos pos) {
+	  for(ItemStack item : items){
+		  spawnItemInWorldWithoutMotion(world, item, pos.getX(), pos.getY(), pos.getZ());
+	  }
+  }
+  
   public static void spawnItemInWorldWithoutMotion(World world, ItemStack item, BlockPos pos) {
 	  spawnItemInWorldWithoutMotion(world, item, pos.getX(), pos.getY(), pos.getZ());
   }
@@ -379,6 +391,27 @@ public class ItemUtil {
   public static boolean stackMatchUseOre(ItemStack stack, ItemStack stack2){
 	  if(canCombine(stack, stack2))return true;
 	  if(isOreMatch(stack, stack2))return true;
+	  return false;
+  }
+  
+  public static boolean matches(Object object, ItemStack stack2)
+  {
+	  if(object instanceof ItemStack){
+		  return canCombine((ItemStack)object, stack2);
+	  }
+	  if(object instanceof String){
+		  return itemStackMatchesOredict(stack2, (String)object);
+	  }
+	  if(object instanceof List){
+		  for(Object obj : (List<?>)object){
+			  if(obj instanceof ItemStack){
+				  if(canCombine((ItemStack)obj, stack2))return true;
+			  }
+			  if(obj instanceof String){
+				  if(itemStackMatchesOredict(stack2, (String)obj))return true;
+			  }
+		  }
+	  }
 	  return false;
   }
   
@@ -451,6 +484,7 @@ public class ItemUtil {
    * @return True if the ItemStack matches the name passed.
    */
   public static boolean itemStackMatchesOredict(ItemStack stack, String oredict) {
+	if(ItemStackTools.isEmpty(stack))return false;
     int[] ids = OreDictionary.getOreIDs(stack);
     for (int i : ids) {
       String name = OreDictionary.getOreName(i);
@@ -558,15 +592,13 @@ public class ItemUtil {
       final int slot = slots.nextSlot();
       if (sidedInv == null || sidedInv.canInsertItem(slot, item, inventorySide)) {
         final ItemStack contents = inv.getStackInSlot(slot);
-        if (!ItemStackTools.isNullStack(contents)) {
+        if (ItemStackTools.isValid(contents)) {
           if (areStackMergable(contents, item)) {
             final int freeSpace = Math.min(inv.getInventoryStackLimit(), contents.getMaxStackSize()) - ItemStackTools.getStackSize(contents); // some inventories like using itemstacks with invalid stack sizes
             if (freeSpace > 0) {
               final int noToInsert = Math.min(numToInsert, freeSpace);
               final ItemStack toInsert = item.copy();
               ItemStackTools.setStackSize(toInsert, ItemStackTools.getStackSize(contents) + noToInsert);
-              // isItemValidForSlot() may check the stacksize, so give it the number the stack would have in the end.
-              // If it does something funny, like "only even numbers", we are screwed.
               if (sidedInv != null || inv.isItemValidForSlot(slot, toInsert)) {
                 numInserted += noToInsert;
                 numToInsert -= noToInsert;
@@ -768,22 +800,23 @@ public class ItemUtil {
   }
 
   public static ItemStack consumeItem(ItemStack stack) {
-		if (ItemStackTools.getStackSize(stack) == 1) {
-			if (stack.getItem().hasContainerItem(stack)) {
-				return stack.getItem().getContainerItem(stack);
-			} else {
-				return ItemStackTools.getEmptyStack();
-			}
-		} else {
-			stack.splitStack(1);
+	  if(ItemStackTools.isEmpty(stack))return ItemStackTools.getEmptyStack();
+	  if (ItemStackTools.getStackSize(stack) == 1) {
+		  if (stack.getItem().hasContainerItem(stack)) {
+			  return stack.getItem().getContainerItem(stack);
+		  } else {
+			  return ItemStackTools.getEmptyStack();
+		  }
+	  } else {
+		  stack.splitStack(1);
 
-			return stack;
-		}
-	}
+		  return stack;
+	  }
+  }
 
   public static ItemStack copy(ItemStack stack, int size) {
 	  ItemStack copy = stack.copy();
-	  ItemStackTools.setStackSize(stack, size);
+	  ItemStackTools.setStackSize(copy, size);
 	  return copy;
   }
 
@@ -1085,6 +1118,21 @@ public class ItemUtil {
 
 	    tag.setTag("Items", nbttaglist);
 	}
+	
+	public static void writeInventoryToNBT(ItemStack[] stacks, NBTTagCompound tag, String list) {
+		NBTTagList nbttaglist = new NBTTagList();
+
+	    for(int i = 0; i < stacks.length; i++) {
+	      if(!ItemStackTools.isNullStack(stacks[i])) {
+	        NBTTagCompound itemTag = new NBTTagCompound();
+	        itemTag.setByte("Slot", (byte) i);
+	        stacks[i].writeToNBT(itemTag);
+	        nbttaglist.appendTag(itemTag);
+	      }
+	    }
+
+	    tag.setTag(list, nbttaglist);
+	}
 
 	/** Reads a an inventory from the tag. Overwrites current content */
 	public static void readInventoryFromNBT(IInventory inventory, NBTTagCompound tag) {
@@ -1096,6 +1144,19 @@ public class ItemUtil {
 
 	      if(slot >= 0 && slot < inventory.getSizeInventory()) {
 	        inventory.setInventorySlotContents(slot, ItemStackTools.loadFromNBT(itemTag));
+	      }
+	    }
+	}
+	
+	public static void readInventoryFromNBT(ItemStack[] stacks, NBTTagCompound tag, String list) {
+	    NBTTagList nbttaglist = tag.getTagList(list, 10);
+
+	    for(int i = 0; i < nbttaglist.tagCount(); ++i) {
+	      NBTTagCompound itemTag = nbttaglist.getCompoundTagAt(i);
+	      int slot = itemTag.getByte("Slot");
+
+	      if(slot >= 0 && slot < stacks.length) {
+	    	  stacks[slot] = ItemStackTools.loadFromNBT(itemTag);
 	      }
 	    }
 	}
@@ -1287,6 +1348,12 @@ public class ItemUtil {
     	return null;
 	}
 	
+	public static String getOreName(int damage){
+		EnumDyeColor color = EnumDyeColor.byDyeDamage(damage);
+		String cap = (color.getUnlocalizedName().substring(0, 1).toUpperCase()+color.getUnlocalizedName().substring(1));
+		return "dye"+cap;
+	}
+	
 	public static String getDyeName(EnumDyeColor dye){
 		if(dye == null) return "null";
 		return Lang.translateToLocal("item.fireworksCharge." + dye.getUnlocalizedName());
@@ -1315,6 +1382,62 @@ public class ItemUtil {
 			ei.motionY = 0.20000000298023224D;
 		}
 		return ei;
+	}
+	
+	public static void itemPickupEffects(EntityItem item, EntityPlayer entityIn, int i){
+		if (!item.cannotPickup() && (item.getOwner() == null || item.lifespan - item.getAge() <= 200 || item.getOwner().equals(entityIn.getName())))
+        {
+			ItemStack itemstack = item.getEntityItem();
+            if (itemstack.getItem() == Item.getItemFromBlock(Blocks.LOG))
+            {
+                entityIn.addStat(AchievementList.MINE_WOOD);
+            }
+
+            if (itemstack.getItem() == Item.getItemFromBlock(Blocks.LOG2))
+            {
+                entityIn.addStat(AchievementList.MINE_WOOD);
+            }
+
+            if (itemstack.getItem() == Items.LEATHER)
+            {
+                entityIn.addStat(AchievementList.KILL_COW);
+            }
+
+            if (itemstack.getItem() == Items.DIAMOND)
+            {
+                entityIn.addStat(AchievementList.DIAMONDS);
+            }
+
+            if (itemstack.getItem() == Items.BLAZE_ROD)
+            {
+                entityIn.addStat(AchievementList.BLAZE_ROD);
+            }
+
+            if (itemstack.getItem() == Items.DIAMOND && item.getThrower() != null)
+            {
+                EntityPlayer entityplayer = item.getEntityWorld().getPlayerEntityByName(item.getThrower());
+
+                if (entityplayer != null && entityplayer != entityIn)
+                {
+                    entityplayer.addStat(AchievementList.DIAMONDS_TO_YOU);
+                }
+            }
+
+            net.minecraftforge.fml.common.FMLCommonHandler.instance().firePlayerItemPickupEvent(entityIn, item);
+            if (!item.isSilent())
+            {
+            	item.getEntityWorld().playSound((EntityPlayer)null, entityIn.posX, entityIn.posY, entityIn.posZ, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 0.2F, ((Util.rand.nextFloat() - Util.rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
+            }
+
+            entityIn.onItemPickup(item, i);
+
+            if (ItemStackTools.isEmpty(itemstack))
+            {
+            	item.setDead();
+            }
+
+            entityIn.addStat(StatList.getObjectsPickedUpStats(itemstack.getItem()), i);
+        }
 	}
 
 }

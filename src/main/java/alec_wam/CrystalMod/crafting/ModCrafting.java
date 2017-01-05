@@ -8,6 +8,7 @@ import java.util.UUID;
 
 import alec_wam.CrystalMod.blocks.BlockCrystalLog.WoodType;
 import alec_wam.CrystalMod.blocks.ModBlocks;
+import alec_wam.CrystalMod.blocks.crops.material.ModCrops;
 import alec_wam.CrystalMod.blocks.BlockCrystal.CrystalBlockType;
 import alec_wam.CrystalMod.blocks.BlockCrystalIngot.CrystalIngotBlockType;
 import alec_wam.CrystalMod.blocks.BlockCrystalOre.CrystalOreType;
@@ -36,8 +37,10 @@ import alec_wam.CrystalMod.items.tools.bat.RecipeBatUpgrade;
 import alec_wam.CrystalMod.tiles.cauldron.CauldronRecipeManager;
 import alec_wam.CrystalMod.tiles.chest.CrystalChestType;
 import alec_wam.CrystalMod.tiles.chest.wireless.WirelessChestHelper;
+import alec_wam.CrystalMod.tiles.fusion.ModFusionRecipes;
 import alec_wam.CrystalMod.tiles.machine.crafting.BlockCrystalMachine.MachineType;
 import alec_wam.CrystalMod.tiles.machine.crafting.furnace.CrystalFurnaceManager;
+import alec_wam.CrystalMod.tiles.machine.crafting.grinder.GrinderManager;
 import alec_wam.CrystalMod.tiles.machine.crafting.infuser.CrystalInfusionManager;
 import alec_wam.CrystalMod.tiles.machine.crafting.liquidizer.LiquidizerRecipeManager;
 import alec_wam.CrystalMod.tiles.machine.crafting.press.PressRecipeManager;
@@ -196,13 +199,14 @@ public class ModCrafting {
 		create9x9Recipe(new ItemStack(ModBlocks.crystalIngot, 1, CrystalIngotBlockType.DARK.getMeta()), darkIngot, 9);
 		create9x9Recipe(new ItemStack(ModBlocks.crystalIngot, 1, CrystalIngotBlockType.PURE.getMeta()), pureIngot, 9);
 		create9x9Recipe(new ItemStack(ModBlocks.crystalIngot, 1, CrystalIngotBlockType.DARKIRON.getMeta()), dIronIngot, 9);
-
-		addShapedOreRecipe(new ItemStack(ModItems.crystals, 1, CrystalType.PURE_SHARD.getMetadata()), new Object[]{" B ", "RQG", " D ", 'Q', "gemQuartz", 
+		
+		//Removed in favor of Fusion
+		/*addShapedOreRecipe(new ItemStack(ModItems.crystals, 1, CrystalType.PURE_SHARD.getMetadata()), new Object[]{" B ", "RQG", " D ", 'Q', "gemQuartz", 
 			'B', new ItemStack(ModItems.crystals, 1, CrystalType.BLUE_SHARD.getMetadata()), 
 			'R', new ItemStack(ModItems.crystals, 1, CrystalType.RED_SHARD.getMetadata()), 
 			'G', new ItemStack(ModItems.crystals, 1, CrystalType.GREEN_SHARD.getMetadata()), 
 			'D', new ItemStack(ModItems.crystals, 1, CrystalType.DARK_SHARD.getMetadata())});
-		addShapedOreRecipe(pureCrystal, new Object[]{" B ", "RQG", " D ", 'Q', "blockQuartz", 'B', blueCrystal, 'R', redCrystal, 'G', greenCrystal, 'D', darkCrystal});
+		addShapedOreRecipe(pureCrystal, new Object[]{" B ", "RQG", " D ", 'Q', "blockQuartz", 'B', blueCrystal, 'R', redCrystal, 'G', greenCrystal, 'D', darkCrystal});*/
 
 		addShapedOreRecipe(new ItemStack(ModBlocks.crystalGlass, 8, GlassType.BLUE.getMeta()), new Object[]{"GGG", "GCG", "GGG", 'G', "blockGlass", 'C', blueIngot});
 		addShapedOreRecipe(new ItemStack(ModBlocks.crystalGlass, 8, GlassType.RED.getMeta()), new Object[]{"GGG", "GCG", "GGG", 'G', "blockGlass", 'C', redIngot});
@@ -371,10 +375,12 @@ public class ModCrafting {
 		addShapedOreRecipe(Items.NAME_TAG, new Object[]{" PP", "SBI", " PP", 'S', "string", 'I', "ingotIron", 'P', "paper", 'B', "slimeball"});
 		
 		BackpackUtil.addRecipes();
-		addShapedOreRecipe(ModItems.telePearl, new Object[]{"#P#", "PEP", "#P#", '#', pureIngot, 'P', "nuggetCrystal", 'E', "endereye"});
+		//addShapedOreRecipe(ModItems.telePearl, new Object[]{"#P#", "PEP", "#P#", '#', pureIngot, 'P', "nuggetCrystal", 'E', "endereye"});
 
 		addShapedOreRecipe(new ItemStack(ModBlocks.darkIronRail, 16), new Object[] {"X X", "X#X", "X X", 'X', dIronIngot, '#', "stick"});
 		
+		addShapedOreRecipe(new ItemStack(ModBlocks.pedistal, 4), new Object[]{"XXX", " S ", "XXX", 'X', new ItemStack(Blocks.STONE_SLAB, 1, 0), 'S', "stone"});
+		addShapedOreRecipe(new ItemStack(ModBlocks.fusionPedistal, 1), new Object[]{"XXX", " S ", "XXX", 'X', blueIngot, 'S', new ItemStack(ModBlocks.crystalIngot, 1, CrystalIngotBlockType.BLUE.getMeta())});
 
 		ItemStack engineTier0 = new ItemStack(ModBlocks.engine, 1, EngineType.FURNACE.getMeta()); ItemNBTHelper.setInteger(engineTier0, "Tier", 0);
 		ItemStack engineTier1 = new ItemStack(ModBlocks.engine, 1, EngineType.FURNACE.getMeta()); ItemNBTHelper.setInteger(engineTier1, "Tier", 1);
@@ -388,7 +394,7 @@ public class ModCrafting {
 		ItemStack lavaEngineTier1 = new ItemStack(ModBlocks.engine, 1, EngineType.LAVA.getMeta()); ItemNBTHelper.setInteger(lavaEngineTier1, "Tier", 1);
 		ItemStack lavaEngineTier2 = new ItemStack(ModBlocks.engine, 1, EngineType.LAVA.getMeta()); ItemNBTHelper.setInteger(lavaEngineTier2, "Tier", 2);
 
-		addShapedRecipe(lavaEngineTier0, new Object[]{"CCC", "LFL", "IPI", 'I', dIronPlate, 'L', Items.LAVA_BUCKET, 'P', ItemUtil.copy(tier0CU, 1), 'C', Blocks.NETHER_BRICK, 'F', machineFrame});
+		addShapedRecipe(lavaEngineTier0, new Object[]{"MCM", "LFL", "IPI", 'I', dIronPlate, 'L', Items.LAVA_BUCKET, 'P', ItemUtil.copy(tier0CU, 1), 'C', Blocks.NETHER_BRICK, 'F', machineFrame, 'M', Blocks.field_189877_df/*Magma*/});
 		addShapedRecipe(lavaEngineTier1, new Object[]{"EEE", "EPE", "EEE", 'E', lavaEngineTier0, 'P', ItemUtil.copy(tier2CU, 1)});
 		addShapedRecipe(lavaEngineTier2, new Object[]{"EEE", "EPE", "EEE", 'E', lavaEngineTier1, 'P', ItemUtil.copy(tier3CU, 1)});
 		
@@ -458,8 +464,16 @@ public class ModCrafting {
 		
 		CrystalFurnaceManager.initRecipes();
 		PressRecipeManager.initRecipes();
+		GrinderManager.initRecipes();
 		LiquidizerRecipeManager.initRecipes();
 		CrystalInfusionManager.initRecipes();
+		ModFusionRecipes.initRecipes();
+		ModCrops.recipes();
+	}
+	
+	public static void postInit(){
+		addSlabToBlocks();
+		GrinderManager.oreSearch();
 	}
 	
 	public static void addShapedRecipe(Item result, Object... recipe){ addShapedRecipe(new ItemStack(result), recipe); }
@@ -627,8 +641,9 @@ public class ModCrafting {
 		
         for(int i = 0; i < 16; i++)
         {
-        	ItemStack wool = new ItemStack(Blocks.WOOL, 1, i);
-        	oredict(wool, "wool"+dyeOreNames[i]);
+        	EnumDyeColor color = EnumDyeColor.byMetadata(i);
+        	ItemStack wool = new ItemStack(Blocks.WOOL, 1, color.getMetadata());
+        	oredict(wool, "wool"+dyeOreNames[color.getDyeDamage()]);
         }
 		
 		for(CrystalChestType chest : CrystalChestType.values()){

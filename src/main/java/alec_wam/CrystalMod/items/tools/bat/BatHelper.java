@@ -377,7 +377,6 @@ public class BatHelper {
     		}
     	}
     }
-	public static Random random = new Random();
 	public static boolean onLeftClickEntity(ItemStack stack, EntityLivingBase attacker, Entity entity) {
 		if(entity == null || !entity.canBeAttackedWithItem() || entity.hitByEntity(attacker) || !stack.hasTagCompound())return false;
 		if(isBroken(stack)) return false;

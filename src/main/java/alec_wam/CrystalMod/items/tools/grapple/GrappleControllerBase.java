@@ -68,75 +68,73 @@ public class GrappleControllerBase {
 		
 		if (this.attached) {
 			if(entity != null) {
-				if (true) {
-					this.normalGround();
-					this.normalCollisions();
-					
-					Vec3d arrowpos = this.pos;
-					Vec3d playerpos = new Vec3d(entity.posX, entity.posY, entity.posZ);
-					
-					Vec3d oldspherevec = playerpos.subtract(arrowpos);
-					Vec3d spherevec = changelen(oldspherevec, r);
-					Vec3d spherechange = spherevec.subtract(oldspherevec);
-					
-					Vec3d additionalmotion;
-					if (arrowpos.subtract(playerpos).lengthVector() < this.r) {
-						additionalmotion = new Vec3d(0,0,0);
-					} else {
-						additionalmotion = spherechange;
-					}
-					
-					double dist = oldspherevec.lengthVector();
-					this.calctaut(dist);
-					
-					if (entity instanceof EntityPlayer) {
-						EntityPlayer player = (EntityPlayer) entity;
-						if (this.isJumping()) {
-							this.doJump(player, spherevec);
-							return;
-						} else if (GrappleHandler.isSneaking(entity)) {
-							if (arrowpos.yCoord > playerpos.yCoord) {
-								Vec3d motiontorwards = changelen(spherevec, -0.1);
-								motiontorwards = new Vec3d(motiontorwards.xCoord, 0, motiontorwards.zCoord);
-								if (motion.dotProduct(motiontorwards) < 0) {
-									motion = motion.add(motiontorwards);
-								}
-								
-								Vec3d newmotion = dampenmotion(motion, motiontorwards);
-								motion = new Vec3d(newmotion.xCoord, motion.yCoord, newmotion.zCoord);
-								
-								if (this.playerForward != 0) {
-										if (dist < maxlen || this.playerForward > 0 || maxlen == 0) {
-											additionalmotion = new Vec3d(0, this.playerForward, 0);
-											this.r = dist;
-											this.r -= this.playerForward*0.3;
-											if (this.r < 0) {
-												this.r = dist;
-											}
-										}
+				this.normalGround();
+				this.normalCollisions();
+
+				Vec3d arrowpos = this.pos;
+				Vec3d playerpos = new Vec3d(entity.posX, entity.posY, entity.posZ);
+
+				Vec3d oldspherevec = playerpos.subtract(arrowpos);
+				Vec3d spherevec = changelen(oldspherevec, r);
+				Vec3d spherechange = spherevec.subtract(oldspherevec);
+
+				Vec3d additionalmotion;
+				if (arrowpos.subtract(playerpos).lengthVector() < this.r) {
+					additionalmotion = new Vec3d(0,0,0);
+				} else {
+					additionalmotion = spherechange;
+				}
+
+				double dist = oldspherevec.lengthVector();
+				this.calctaut(dist);
+
+				if (entity instanceof EntityPlayer) {
+					EntityPlayer player = (EntityPlayer) entity;
+					if (this.isJumping()) {
+						this.doJump(player, spherevec);
+						return;
+					} else if (GrappleHandler.isSneaking(entity)) {
+						if (arrowpos.yCoord > playerpos.yCoord) {
+							Vec3d motiontorwards = changelen(spherevec, -0.1);
+							motiontorwards = new Vec3d(motiontorwards.xCoord, 0, motiontorwards.zCoord);
+							if (motion.dotProduct(motiontorwards) < 0) {
+								motion = motion.add(motiontorwards);
+							}
+
+							Vec3d newmotion = dampenmotion(motion, motiontorwards);
+							motion = new Vec3d(newmotion.xCoord, motion.yCoord, newmotion.zCoord);
+
+							if (this.playerForward != 0) {
+								if (dist < maxlen || this.playerForward > 0 || maxlen == 0) {
+									additionalmotion = new Vec3d(0, this.playerForward, 0);
+									this.r = dist;
+									this.r -= this.playerForward*0.3;
+									if (this.r < 0) {
+										this.r = dist;
+									}
 								}
 							}
-						} else {
-							motion = motion.add(changelen(this.playerMovement, 0.01));
 						}
+					} else {
+						motion = motion.add(changelen(this.playerMovement, 0.01));
 					}
-						
-					if (!(this.onGroundTimer > 0)) {
-						motion = motion.addVector(0, -0.05, 0);
-					}
-					
-					Vec3d newmotion = motion.add(additionalmotion);
-					
-					if (arrowpos.subtract(playerpos.add(motion)).lengthVector() > r) { // moving away
-						motion = removealong(motion, spherevec);
-					}
-					
-					entity.motionX = newmotion.xCoord;
-					entity.motionY = newmotion.yCoord;
-					entity.motionZ = newmotion.zCoord;
-					
-					updateServerPos();
 				}
+
+				if (!(this.onGroundTimer > 0)) {
+					motion = motion.addVector(0, -0.05, 0);
+				}
+
+				Vec3d newmotion = motion.add(additionalmotion);
+
+				if (arrowpos.subtract(playerpos.add(motion)).lengthVector() > r) { // moving away
+					motion = removealong(motion, spherevec);
+				}
+
+				entity.motionX = newmotion.xCoord;
+				entity.motionY = newmotion.yCoord;
+				entity.motionZ = newmotion.zCoord;
+
+				updateServerPos();
 			}
 		}
 	}
@@ -314,7 +312,5 @@ public class GrappleControllerBase {
 		playerMovement_unrotated = new Vec3d(strafe, 0, forward);
 		playerMovement = playerMovement_unrotated.rotateYaw((float) (this.entity.rotationYaw * (Math.PI / 180.0)));
 	}
-	
-	
 	
 }

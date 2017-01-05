@@ -10,19 +10,29 @@ import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.capability.ExtendedPlayer;
 import alec_wam.CrystalMod.capability.ExtendedPlayerInventory;
 import alec_wam.CrystalMod.capability.ExtendedPlayerProvider;
+import alec_wam.CrystalMod.capability.PacketExtendedPlayerInvSync;
 import alec_wam.CrystalMod.crafting.ModCrafting;
 import alec_wam.CrystalMod.handler.GuiHandler;
-import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.items.ItemCrystal.CrystalType;
 import alec_wam.CrystalMod.items.ItemIngot.IngotType;
 import alec_wam.CrystalMod.items.ItemMetalPlate.PlateType;
+import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.items.tools.backpack.ItemBackpackNormal.CrystalBackpackType;
 import alec_wam.CrystalMod.items.tools.backpack.gui.OpenType;
+import alec_wam.CrystalMod.items.tools.backpack.network.PacketToolSwap;
+import alec_wam.CrystalMod.items.tools.backpack.types.InventoryBackpack;
+import alec_wam.CrystalMod.items.tools.backpack.types.NormalInventoryBackpack;
+import alec_wam.CrystalMod.items.tools.backpack.upgrade.InventoryBackpackUpgrades;
+import alec_wam.CrystalMod.items.tools.backpack.upgrade.ItemBackpackUpgrade.BackpackUpgrade;
+import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.tiles.chest.CrystalChestType;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemStackTools;
+import alec_wam.CrystalMod.util.ItemUtil;
+import alec_wam.CrystalMod.util.ModLogger;
 import alec_wam.CrystalMod.util.UUIDUtils;
 import alec_wam.CrystalMod.util.inventory.NBTUtils;
+import alec_wam.CrystalMod.util.tool.ToolUtil;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -31,6 +41,7 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.client.FMLClientHandler;
 
 public class BackpackUtil {
 
@@ -136,7 +147,7 @@ public class BackpackUtil {
 
             if (ItemStackTools.isValid(stack) && stack.getItem() instanceof ItemBackpackBase && ItemNBTHelper.hasUUID(stack)) {
             	UUID stackUUID = ItemNBTHelper.getUUID(stack);
-            	if(stackUUID.getLeastSignificantBits() == uuid.getLeastSignificantBits() && stackUUID.getMostSignificantBits() == uuid.getMostSignificantBits()){
+            	if(UUIDUtils.areEqual(stackUUID, uuid)){
             		return player.inventory.getStackInSlot(i);
             	} 
             }
@@ -144,7 +155,7 @@ public class BackpackUtil {
         
         ItemStack backBackpack = BackpackUtil.getBackpackOnBack(player);
         if (ItemStackTools.isValid(backBackpack) && backBackpack.getItem() instanceof ItemBackpackBase && ItemNBTHelper.hasUUID(backBackpack)) {
-        	if(ItemNBTHelper.getUUID(backBackpack) == uuid){
+        	if(UUIDUtils.areEqual(ItemNBTHelper.getUUID(backBackpack), uuid)){
         		return backBackpack;
         	}
         }
@@ -177,7 +188,182 @@ public class BackpackUtil {
 		ModCrafting.addNBTRecipe(new ItemStack(ModItems.normalBackpack, 1, CrystalBackpackType.GREEN.ordinal()), Collections.emptyList(), new Object[]{"III", "IBI", "III", 'I', greenIngot, 'B', new ItemStack(ModItems.normalBackpack, 1, CrystalBackpackType.RED.ordinal())});
 		ModCrafting.addNBTRecipe(new ItemStack(ModItems.normalBackpack, 1, CrystalBackpackType.DARK.ordinal()), Collections.emptyList(), new Object[]{"III", "IBI", "III", 'I', darkIngot, 'B', new ItemStack(ModItems.normalBackpack, 1, CrystalBackpackType.GREEN.ordinal())});
 		ModCrafting.addNBTRecipe(new ItemStack(ModItems.normalBackpack, 1, CrystalBackpackType.PURE.ordinal()), Collections.emptyList(), new Object[]{"III", "IBI", "III", 'I', pureIngot, 'B', new ItemStack(ModItems.normalBackpack, 1, CrystalBackpackType.DARK.ordinal())});
-		
+	}
 
+	public static boolean canSwapWeapons(EntityPlayer player){
+		if(player !=null){
+			ItemStack backpack = BackpackUtil.getBackpackOnBack(player);
+			if(ItemStackTools.isValid(backpack)){
+				if(backpack.getItem() instanceof ItemBackpackBase){
+					IBackpack type = ((ItemBackpackBase)backpack.getItem()).getBackpack();
+					if(type !=null){
+						if(type instanceof IBackpackInventory){
+							InventoryBackpack inventory = ((IBackpackInventory)type).getInventory(player, backpack);
+							InventoryBackpackUpgrades upgradeInv = ((IBackpack)type).getUpgradeInventory(backpack);
+							if(inventory !=null && upgradeInv !=null){
+								if(upgradeInv.hasUpgrade(BackpackUpgrade.POCKETS)){
+									if(inventory instanceof NormalInventoryBackpack){
+										NormalInventoryBackpack normalInv = (NormalInventoryBackpack)inventory;
+										int currentSlot = player.inventory.currentItem;
+										final ItemStack current = player.inventory.getStackInSlot(currentSlot);
+										if(ItemStackTools.isValid(current) && !ToolUtil.isWeapon(current))return false;
+										return true;
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		return false;
+	}
+	
+	public static void swapWeapons(EntityPlayer player) {
+		if(player !=null){
+			ItemStack backpack = BackpackUtil.getBackpackOnBack(player);
+			if(ItemStackTools.isValid(backpack)){
+				if(backpack.getItem() instanceof ItemBackpackBase){
+					IBackpack type = ((ItemBackpackBase)backpack.getItem()).getBackpack();
+					if(type !=null){
+						if(type instanceof IBackpackInventory){
+							InventoryBackpack inventory = ((IBackpackInventory)type).getInventory(player, backpack);
+							InventoryBackpackUpgrades upgradeInv = ((IBackpack)type).getUpgradeInventory(player, backpack);
+							if(inventory !=null && upgradeInv !=null){
+								if(!upgradeInv.hasUpgrade(BackpackUpgrade.POCKETS))return;
+								if(inventory instanceof NormalInventoryBackpack){
+									NormalInventoryBackpack normalInv = (NormalInventoryBackpack)inventory;
+									int currentSlot = player.inventory.currentItem;
+									final ItemStack current = player.inventory.getStackInSlot(currentSlot);
+									if(ItemStackTools.isValid(current) && !ToolUtil.isWeapon(current))return;
+									final ItemStack stored = normalInv.getToolStack(0); //Weapon Slot
+									normalInv.setToolStack(0, current);
+									player.inventory.setInventorySlotContents(currentSlot, stored);
+									normalInv.markDirty();
+									normalInv.guiSave(player);
+									ExtendedPlayer exPlayer = ExtendedPlayerProvider.getExtendedPlayer(player);
+									if(exPlayer !=null && exPlayer.getInventory() !=null){
+										exPlayer.getInventory().setChanged(ExtendedPlayerInventory.BACKPACK_SLOT_ID, true);
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	public static boolean canSwapTools(EntityPlayer player){
+		if(player !=null){
+			ItemStack backpack = BackpackUtil.getBackpackOnBack(player);
+			if(ItemStackTools.isValid(backpack)){
+				if(backpack.getItem() instanceof ItemBackpackBase){
+					IBackpack type = ((ItemBackpackBase)backpack.getItem()).getBackpack();
+					if(type !=null){
+						if(type instanceof IBackpackInventory){
+							InventoryBackpack inventory = ((IBackpackInventory)type).getInventory(player, backpack);
+							InventoryBackpackUpgrades upgradeInv = ((IBackpack)type).getUpgradeInventory(backpack);
+							if(inventory !=null && upgradeInv !=null){
+								if(!upgradeInv.hasUpgrade(BackpackUpgrade.POCKETS))return false;
+								if(inventory instanceof NormalInventoryBackpack){
+									NormalInventoryBackpack normalInv = (NormalInventoryBackpack)inventory;
+									int currentSlot = player.inventory.currentItem;
+									final ItemStack current = player.inventory.getStackInSlot(currentSlot);
+									if(ItemStackTools.isValid(current) && !ToolUtil.isTool(current))return false;
+									return true;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		return false;
+	}
+	
+	public static void swapTools(EntityPlayer player) {
+		if(player !=null){
+			ItemStack backpack = BackpackUtil.getBackpackOnBack(player);
+			if(ItemStackTools.isValid(backpack)){
+				if(backpack.getItem() instanceof ItemBackpackBase){
+					IBackpack type = ((ItemBackpackBase)backpack.getItem()).getBackpack();
+					if(type !=null){
+						if(type instanceof IBackpackInventory){
+							InventoryBackpack inventory = ((IBackpackInventory)type).getInventory(player, backpack);
+							InventoryBackpackUpgrades upgradeInv = ((IBackpack)type).getUpgradeInventory(player, backpack);
+							if(inventory !=null && upgradeInv !=null){
+								if(!upgradeInv.hasUpgrade(BackpackUpgrade.POCKETS))return;
+								if(inventory instanceof NormalInventoryBackpack){
+									NormalInventoryBackpack normalInv = (NormalInventoryBackpack)inventory;
+									int currentSlot = player.inventory.currentItem;
+									final ItemStack current = player.inventory.getStackInSlot(currentSlot);
+									if(ItemStackTools.isValid(current) && !ToolUtil.isTool(current))return;
+									final ItemStack stored = normalInv.getToolStack(1); //Tool Slot
+									normalInv.setToolStack(1, current);
+									player.inventory.setInventorySlotContents(currentSlot, stored);
+									normalInv.markDirty();
+									normalInv.guiSave(player);
+									ExtendedPlayer exPlayer = ExtendedPlayerProvider.getExtendedPlayer(player);
+									if(exPlayer !=null && exPlayer.getInventory() !=null){
+										exPlayer.getInventory().setChanged(ExtendedPlayerInventory.BACKPACK_SLOT_ID, true);
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	public static void updateBackpack(EntityPlayer player){
+		ExtendedPlayer ePlayer = ExtendedPlayerProvider.getExtendedPlayer(player);
+		ExtendedPlayerInventory inventory = ePlayer.getInventory();
+		boolean syncTick = player.ticksExisted % 10 == 0;
+		
+		if(syncTick){
+			ItemStack backpack = BackpackUtil.getBackpackOnBack(player);
+			if(ItemStackTools.isValid(backpack)){
+				if(backpack.getItem() instanceof ItemBackpackBase){
+					IBackpack type = ((ItemBackpackBase)backpack.getItem()).getBackpack();
+					InventoryBackpackUpgrades upgradeInv = type.getUpgradeInventory(player, backpack);
+					if(type !=null && type instanceof IBackpackInventory){
+						InventoryBackpack inv = ((IBackpackInventory)type).getInventory(player, backpack);
+						if(inv !=null){
+							if(upgradeInv.hasUpgrade(BackpackUpgrade.RESTOCKING)){
+								boolean changed = false;
+								for(int i = 0; i < 9; i++){
+									ItemStack invStack = player.inventory.getStackInSlot(i);
+									if(ItemStackTools.isValid(invStack)){
+										int needed = invStack.getMaxStackSize() - ItemStackTools.getStackSize(invStack);
+										if(needed > 0){
+											search: for(int s = 0; s < inv.getSize(); s++){
+												ItemStack bpStack = inv.getStackInSlot(s);
+												if(ItemStackTools.isValid(bpStack) && ItemUtil.canCombine(invStack, bpStack)){
+													int add = Math.min(needed, ItemStackTools.getStackSize(bpStack));
+													ItemStackTools.incStackSize(bpStack, -add);
+													ItemStackTools.incStackSize(invStack, add);
+													needed-=add;
+													changed = true;
+												}
+												if(needed <= 0){
+													break search;
+												}
+											}
+										}
+									}
+								}
+								if(changed){
+									inv.markDirty();
+									inv.guiSave(player);
+									inventory.setChanged(ExtendedPlayerInventory.BACKPACK_SLOT_ID, true);
+								}
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 }

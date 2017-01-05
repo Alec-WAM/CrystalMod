@@ -123,7 +123,7 @@ public abstract class TileEntityEngineBase extends TileEntityMod implements ICEn
 					TileEntity tile = this.getWorld().getTileEntity(getPos().offset(face));
 					if(tile !=null && tile instanceof ICEnergyReceiver){
 						ICEnergyReceiver rec = (ICEnergyReceiver)tile;
-						if(!rec.canConnectCEnergy(face))continue;
+						if(!rec.canConnectCEnergy(face.getOpposite()))continue;
 						int fill = rec.fillCEnergy(face.getOpposite(), Math.min(energyStorage.getMaxExtract(), energyStorage.getCEnergyStored()), false);
 						if(fill > 0){
 							this.energyStorage.modifyEnergyStored(-fill);

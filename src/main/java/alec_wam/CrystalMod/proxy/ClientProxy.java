@@ -6,8 +6,14 @@ import java.util.Map.Entry;
 
 import org.lwjgl.input.Keyboard;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.mojang.authlib.GameProfile;
+
 import alec_wam.CrystalMod.Config;
 import alec_wam.CrystalMod.blocks.ModBlocks;
+import alec_wam.CrystalMod.blocks.crops.material.CropOverlays;
+import alec_wam.CrystalMod.blocks.crops.material.ModelSeed;
 import alec_wam.CrystalMod.blocks.glass.BlockCrystalGlass.GlassType;
 import alec_wam.CrystalMod.capability.LayerExtendedPlayerInventory;
 import alec_wam.CrystalMod.client.model.CustomBakedModel;
@@ -22,7 +28,6 @@ import alec_wam.CrystalMod.handler.KeyHandler;
 import alec_wam.CrystalMod.integration.minecraft.ItemMinecartRender;
 import alec_wam.CrystalMod.items.ItemDragonWings;
 import alec_wam.CrystalMod.items.ModItems;
-import alec_wam.CrystalMod.tiles.machine.enderbuffer.ModelEnderBuffer;
 import alec_wam.CrystalMod.tiles.machine.power.battery.BlockBattery.BatteryType;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.GuiPanel;
 import alec_wam.CrystalMod.tiles.pipes.estorage.storage.hdd.GuiHDDInterface;
@@ -30,19 +35,13 @@ import alec_wam.CrystalMod.tiles.pipes.item.GhostItemHelper;
 import alec_wam.CrystalMod.tiles.pipes.render.BakedModelLoader;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemStackTools;
-import alec_wam.CrystalMod.util.ModLogger;
-
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.mojang.authlib.GameProfile;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.renderer.block.model.IBakedModel;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderLivingBase;
 import net.minecraft.client.renderer.entity.RenderPlayer;
-import net.minecraft.client.renderer.block.model.IBakedModel;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -58,7 +57,6 @@ import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.fml.client.FMLClientHandler;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -70,6 +68,7 @@ public class ClientProxy extends CommonProxy {
         super.preInit(e);
         ModItems.initClient();
         ModelLoaderRegistry.registerLoader(new BakedModelLoader());
+        ModelLoaderRegistry.registerLoader(ModelSeed.LoaderSeeds.INSTANCE);
         ModBlocks.initClient();
         ModEntites.initClient();
     }
@@ -224,6 +223,11 @@ public class ClientProxy extends CommonProxy {
         
         event.getMap().registerSprite(FluidColored.LiquidStill);
         event.getMap().registerSprite(FluidColored.LiquidFlowing);
+        CropOverlays.registerIcons(event.getMap());
+        event.getMap().registerSprite(new ResourceLocation("crystalmod:items/crop/seed_background"));
+        event.getMap().registerSprite(new ResourceLocation("crystalmod:items/crop/seed_overlay"));
+        event.getMap().registerSprite(new ResourceLocation("crystalmod:items/icon_sword"));
+        event.getMap().registerSprite(new ResourceLocation("crystalmod:items/icon_pickaxe"));
     }
     
     public EntityPlayer getPlayerForUsername(String playerName) {

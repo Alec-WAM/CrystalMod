@@ -29,7 +29,7 @@ public class ItemStackTools {
     @Nullable
     public static ItemStack safeCopy(@Nullable ItemStack stack) {
         if (stack == null) {
-            return null;
+            return getEmptyStack();
         }
         stack = stack.copy();
         // Safety
@@ -44,7 +44,7 @@ public class ItemStackTools {
      * Get the stacksize from a stack
      */
     public static int getStackSize(@Nullable ItemStack stack) {
-        if (stack == null) {
+        if (isEmpty(stack)) {
             return 0;
         }
         return stack.stackSize;
@@ -57,7 +57,7 @@ public class ItemStackTools {
     @Nullable
     public static ItemStack setStackSize(@Nonnull ItemStack stack, int amount) {
         if (amount <= 0) {
-            return null;
+            return getEmptyStack();
         }
         stack.stackSize = amount;
         return stack;

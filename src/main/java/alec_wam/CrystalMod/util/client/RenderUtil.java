@@ -16,7 +16,10 @@ import com.google.common.collect.Lists;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.GlStateManager.DestFactor;
+import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
@@ -27,6 +30,7 @@ import net.minecraft.client.renderer.block.model.BlockPartFace;
 import net.minecraft.client.renderer.block.model.BlockPartRotation;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.block.model.ModelRotation;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.texture.TextureMap;
@@ -137,6 +141,14 @@ public class RenderUtil {
 
 	public static TextureAtlasSprite getTexture(IBlockState state){
 		TextureAtlasSprite sprite = Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelShapes().getTexture(state);
+	    if (sprite == null) {
+	      return getMissingSprite();
+	    }
+	    return sprite;
+	}
+	
+	public static TextureAtlasSprite getSprite(ResourceLocation res){
+		TextureAtlasSprite sprite = Minecraft.getMinecraft().getTextureMapBlocks().getTextureExtry(res.toString());
 	    if (sprite == null) {
 	      return getMissingSprite();
 	    }
@@ -650,12 +662,91 @@ public class RenderUtil {
 		
 
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-		//GlStateManager.disableLighting();
-		//RenderHelper.enableStandardItemLighting();
+		GlStateManager.disableLighting();
+		RenderHelper.enableStandardItemLighting();
 		mc.getRenderItem().renderItem(itemStack, type);	
-		//RenderHelper.disableStandardItemLighting();
-		//GlStateManager.enableLighting();
+		RenderHelper.disableStandardItemLighting();
+		GlStateManager.enableLighting();
 		GlStateManager.popMatrix();
 	}
+	
+	/**
+	 * Renders floating lines of text in the 3D world at a specific position.
+	 * @param list The string list of text to render
+	 * @param x X coordinate in the game world
+	 * @param y Y coordinate in the game world
+	 * @param z Z coordinate in the game world
+	 * @param color
+	 * @param renderBlackBox render a pretty black border behind the text?
+	 * @param partialTickTime
+	 */
+    public static void renderFloatingText(List<String> list, double x, double y, double z, int color, boolean renderBlackBox, float partialTickTime, boolean ignorePitch)
+    {
+    	Minecraft mc = Minecraft.getMinecraft();
+    	
+    	RenderManager renderManager = mc.getRenderManager();
+        FontRenderer fontRenderer = mc.fontRendererObj;
+        
+        float playerX = (float) (mc.thePlayer.lastTickPosX + (mc.thePlayer.posX - mc.thePlayer.lastTickPosX) * partialTickTime);
+        float playerY = (float) (mc.thePlayer.lastTickPosY + (mc.thePlayer.posY - mc.thePlayer.lastTickPosY) * partialTickTime);
+        float playerZ = (float) (mc.thePlayer.lastTickPosZ + (mc.thePlayer.posZ - mc.thePlayer.lastTickPosZ) * partialTickTime);
+
+        double dx = x-playerX;
+        double dy = y-playerY;
+        double dz = z-playerZ;
+        float distance = (float) Math.sqrt(dx*dx + dy*dy + dz*dz);
+        float multiplier = distance / 120f;
+        float scale = 0.45f * multiplier;
+        
+        GlStateManager.color(1f, 1f, 1f, 0.5f);
+        GlStateManager.pushMatrix();
+        GlStateManager.translate(dx, dy, dz);
+        GlStateManager.rotate(-renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
+        if(!ignorePitch)GlStateManager.rotate(renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
+        GlStateManager.scale(-scale, -scale, scale);
+        GlStateManager.disableLighting();
+        GlStateManager.depthMask(false);
+        GlStateManager.disableDepth();
+        GlStateManager.enableBlend();
+        GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
+        
+        int textWidth = 0;
+        for (String thisMessage : list)
+        {
+            int thisMessageWidth = fontRenderer.getStringWidth(thisMessage);
+
+            if (thisMessageWidth > textWidth)
+            	textWidth = thisMessageWidth;
+        }
+        
+        int lineHeight = 10;
+        
+        if(renderBlackBox)
+        {
+        	Tessellator tessellator = Tessellator.getInstance();
+        	VertexBuffer buffer = tessellator.getBuffer();
+        	GlStateManager.disableTexture2D();
+        	buffer.begin(7, DefaultVertexFormats.POSITION_COLOR);
+            int stringMiddle = textWidth / 2;
+            buffer.pos(-stringMiddle - 1, -1 + 0, 0.0D).color(0.0F, 0.0F, 0.0F, 0.5F).endVertex();
+            buffer.pos(-stringMiddle - 1, 8 + lineHeight*list.size()-lineHeight, 0.0D).color(0.0F, 0.0F, 0.0F, 0.5F).endVertex();
+            buffer.pos(stringMiddle + 1, 8 + lineHeight*list.size()-lineHeight, 0.0D).color(0.0F, 0.0F, 0.0F, 0.5F).endVertex();
+            buffer.pos(stringMiddle + 1, -1 + 0, 0.0D).color(0.0F, 0.0F, 0.0F, 0.5F).endVertex();
+            tessellator.draw();
+            GlStateManager.enableTexture2D();
+        }
+        
+        int i = 0;
+        for(String message : list)
+        {
+            fontRenderer.drawString(message, -textWidth / 2, i*lineHeight, color);
+        	i++;
+        }
+        
+        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+        GlStateManager.depthMask(true);
+        GlStateManager.enableDepth();
+        GlStateManager.popMatrix();
+    }
 
 }

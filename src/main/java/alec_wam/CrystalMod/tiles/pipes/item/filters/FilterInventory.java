@@ -252,4 +252,8 @@ public class FilterInventory implements IItemStackInventory
 	public boolean hasGhostSlots() {
 		return true;
 	}
+	
+	public ItemStack getMasterStack(){
+		return masterStack;
+	}
 }

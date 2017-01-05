@@ -38,7 +38,7 @@ public class PacketOpenBackpack extends AbstractPacketThreadsafe {
 			}
 			ItemNBTHelper.updateUUID(back);
 	    	ExtendedPlayerProvider.getExtendedPlayer(netHandler.playerEntity).setOpenBackpack(back);
-			netHandler.playerEntity.openGui(CrystalMod.instance, GuiHandler.GUI_ID_BACKPACK, netHandler.playerEntity.getEntityWorld(), 0, 0, 0);
+			netHandler.playerEntity.openGui(CrystalMod.instance, GuiHandler.GUI_ID_BACKPACK, netHandler.playerEntity.getEntityWorld(), OpenType.BACK.ordinal(), 0, 0);
 		}
 	}
 

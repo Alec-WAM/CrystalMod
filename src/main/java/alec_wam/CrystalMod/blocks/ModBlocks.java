@@ -2,24 +2,18 @@ package alec_wam.CrystalMod.blocks;
 
 import java.util.Map;
 
-import net.minecraft.block.Block;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.common.EnumPlantType;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import com.google.common.collect.Maps;
+
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.crops.BlockCrystalPlant;
+import alec_wam.CrystalMod.blocks.crops.BlockCrystalPlant.PlantType;
 import alec_wam.CrystalMod.blocks.crops.BlockCrystalReed;
 import alec_wam.CrystalMod.blocks.crops.BlockCrystalSapling;
 import alec_wam.CrystalMod.blocks.crops.BlockCrystalTreePlant;
-import alec_wam.CrystalMod.blocks.crops.BlockCrystalPlant.PlantType;
 import alec_wam.CrystalMod.blocks.crops.BlockFlowerLilyPad;
+import alec_wam.CrystalMod.blocks.crops.material.BlockMaterialCrop;
+import alec_wam.CrystalMod.blocks.crops.material.RenderTileMaterialCrop;
+import alec_wam.CrystalMod.blocks.crops.material.TileMaterialCrop;
 import alec_wam.CrystalMod.blocks.glass.BlockCrystalGlass;
 import alec_wam.CrystalMod.blocks.rail.BlockReinforcedRail;
 import alec_wam.CrystalMod.tiles.cauldron.BlockCrystalCauldron;
@@ -33,6 +27,15 @@ import alec_wam.CrystalMod.tiles.endertorch.BlockEnderTorch;
 import alec_wam.CrystalMod.tiles.endertorch.TileEnderTorch;
 import alec_wam.CrystalMod.tiles.entityhopper.BlockEntityHopper;
 import alec_wam.CrystalMod.tiles.entityhopper.TileEntityEntityHopper;
+import alec_wam.CrystalMod.tiles.fusion.BlockFusionPedistal;
+import alec_wam.CrystalMod.tiles.fusion.BlockPedistal;
+import alec_wam.CrystalMod.tiles.fusion.ItemBlockPedistal;
+import alec_wam.CrystalMod.tiles.fusion.RenderTileFusionPedistal;
+import alec_wam.CrystalMod.tiles.fusion.RenderTilePedistal;
+import alec_wam.CrystalMod.tiles.fusion.TileFusionPedistal;
+import alec_wam.CrystalMod.tiles.fusion.TilePedistal;
+import alec_wam.CrystalMod.tiles.machine.advDispenser.BlockAdvDispenser;
+import alec_wam.CrystalMod.tiles.machine.advDispenser.TileAdvDispenser;
 import alec_wam.CrystalMod.tiles.machine.crafting.BlockCrystalMachine;
 import alec_wam.CrystalMod.tiles.machine.crafting.BlockCrystalMachine.MachineType;
 import alec_wam.CrystalMod.tiles.machine.elevator.BlockElevator;
@@ -58,18 +61,18 @@ import alec_wam.CrystalMod.tiles.machine.power.converter.BlockPowerConverter;
 import alec_wam.CrystalMod.tiles.machine.power.converter.TileEnergyConverterCUtoRF;
 import alec_wam.CrystalMod.tiles.machine.power.converter.TileEnergyConverterRFtoCU;
 import alec_wam.CrystalMod.tiles.machine.power.engine.BlockEngine;
-import alec_wam.CrystalMod.tiles.machine.power.engine.ItemBlockEngine;
 import alec_wam.CrystalMod.tiles.machine.power.engine.BlockEngine.EngineType;
+import alec_wam.CrystalMod.tiles.machine.power.engine.ItemBlockEngine;
 import alec_wam.CrystalMod.tiles.machine.worksite.BlockWorksite;
+import alec_wam.CrystalMod.tiles.machine.worksite.BlockWorksite.WorksiteType;
 import alec_wam.CrystalMod.tiles.machine.worksite.ItemBlockWorksite;
 import alec_wam.CrystalMod.tiles.machine.worksite.TileWorksiteBase;
 import alec_wam.CrystalMod.tiles.machine.worksite.TileWorksiteRenderer;
-import alec_wam.CrystalMod.tiles.machine.worksite.BlockWorksite.WorksiteType;
 import alec_wam.CrystalMod.tiles.matter.BlockMatterCollector;
 import alec_wam.CrystalMod.tiles.matter.TileEntityMatterCollector;
 import alec_wam.CrystalMod.tiles.pipes.BlockPipe;
-import alec_wam.CrystalMod.tiles.pipes.ItemBlockPipe;
 import alec_wam.CrystalMod.tiles.pipes.BlockPipe.PipeType;
+import alec_wam.CrystalMod.tiles.pipes.ItemBlockPipe;
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.BlockCrafter;
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.BlockCraftingController;
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.BlockPatternEncoder;
@@ -78,8 +81,8 @@ import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.TileCraftingControl
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.TilePatternEncoder;
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.TileProcessingPatternEncoder;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.BlockPanel;
-import alec_wam.CrystalMod.tiles.pipes.estorage.panel.ItemBlockPanel;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.BlockPanel.PanelType;
+import alec_wam.CrystalMod.tiles.pipes.estorage.panel.ItemBlockPanel;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.display.TileEntityPanelItem;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.display.TileEntityPanelItemRenderer;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.wireless.BlockWirelessPanel;
@@ -109,8 +112,17 @@ import alec_wam.CrystalMod.tiles.weather.BlockWeather;
 import alec_wam.CrystalMod.tiles.weather.TileEntityWeather;
 import alec_wam.CrystalMod.tiles.workbench.BlockCrystalWorkbench;
 import alec_wam.CrystalMod.tiles.workbench.TileEntityCrystalWorkbench;
-
-import com.google.common.collect.Maps;
+import net.minecraft.block.Block;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.common.EnumPlantType;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ModBlocks {
 
@@ -130,6 +142,7 @@ public class ModBlocks {
 	public static BlockCrystalLog crystalLog;
 	public static BlockCrystalLeaves crystalLeaves;
 	public static BlockCrystalSapling crystalSapling;
+	public static BlockMaterialCrop materialCrop;
 	public static BlockPipe crystalPipe;
 	public static BlockTank crystalTank;
 	public static BlockEngine engine;
@@ -165,8 +178,12 @@ public class ModBlocks {
 	public static BlockWorksite worksite;
 	
 	public static BlockPowerConverter converter;
+	public static BlockAdvDispenser advDispenser;
 	
 	public static BlockReinforcedRail darkIronRail;
+	
+	public static BlockPedistal pedistal;
+	public static BlockFusionPedistal fusionPedistal;
 
 	public static final EnumPlantType crystalPlantType = EnumPlantType.getPlantType("crystal");
 	
@@ -243,6 +260,10 @@ public class ModBlocks {
 		crystalSapling = new BlockCrystalSapling();
 		registerBlock(crystalSapling, new ItemBlockMeta(crystalSapling), "crystalsapling");
 		ItemBlockMeta.setMappingProperty(crystalSapling, BlockCrystalSapling.VARIANT);
+		
+		materialCrop = new BlockMaterialCrop();
+		registerBlock(materialCrop, "materialcrop");
+		registerTileEntity(TileMaterialCrop.class);
 		
 		crystalPipe = new BlockPipe();
 		registerBlock(crystalPipe, new ItemBlockPipe(crystalPipe), "crystalpipe");
@@ -365,6 +386,10 @@ public class ModBlocks {
 		registerEnumBlock(converter, "powerconverter");
 		registerTileEntity(TileEnergyConverterRFtoCU.class, TileEnergyConverterCUtoRF.class);
 		
+		advDispenser = new BlockAdvDispenser();
+		registerBlock(advDispenser, "advdispenser");
+		registerTileEntity(TileAdvDispenser.class);
+		
 		customSpawner = new BlockCustomSpawner();
 		registerBlock(customSpawner, "customspawner");
 		registerTileEntity(TileEntityCustomSpawner.class);
@@ -380,6 +405,14 @@ public class ModBlocks {
 		
 		darkIronRail = new BlockReinforcedRail();
 		registerBlock(darkIronRail, "reinforcedRail");
+		
+		pedistal = new BlockPedistal();
+		registerBlock(pedistal, new ItemBlockPedistal(pedistal), "pedistal");
+		registerTileEntity(TilePedistal.class);
+		
+		fusionPedistal = new BlockFusionPedistal();
+		registerBlock(fusionPedistal, new ItemBlockPedistal(fusionPedistal), "fusionpedistal");
+		registerTileEntity(TileFusionPedistal.class);
 	}
 	
 	@SideOnly(Side.CLIENT)
@@ -401,6 +434,9 @@ public class ModBlocks {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityElevator.class, new TileEntityElevatorRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityElevatorCaller.class, new TileEntityElevatorCallerRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileWorksiteBase.class, new TileWorksiteRenderer<TileWorksiteBase>());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileMaterialCrop.class, new RenderTileMaterialCrop<TileMaterialCrop>());
+		ClientRegistry.bindTileEntitySpecialRenderer(TilePedistal.class, new RenderTilePedistal<TilePedistal>());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileFusionPedistal.class, new RenderTileFusionPedistal<TileFusionPedistal>());
 	}
 	
 	@SideOnly(Side.CLIENT)

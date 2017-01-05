@@ -7,13 +7,23 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.items.IItemHandler;
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.ICustomModel;
+import alec_wam.CrystalMod.handler.GuiHandler;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
+import alec_wam.CrystalMod.util.ItemStackTools;
+import alec_wam.CrystalMod.util.ItemUtil;
 
 public class ItemPipeFilter extends Item implements ICustomModel {
 	
@@ -36,16 +46,19 @@ public class ItemPipeFilter extends Item implements ICustomModel {
         }
     }
 	
+	@Override
 	public String getUnlocalizedName(ItemStack stack){
 		return super.getUnlocalizedName(stack)+"."+FilterType.values()[stack.getMetadata() % FilterType.values().length].name().toLowerCase();
 	}
 	
+	@Override
 	public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> list){
 		for(int m = 0; m < FilterType.values().length; m++){
 			list.add(new ItemStack(this, 1, m));
 		}
 	}
 	
+	@Override
 	public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean adv){
 		if(stack.getMetadata() == FilterType.NORMAL.ordinal()){
 			boolean black = ItemNBTHelper.getBoolean(stack, "BlackList", false);
@@ -58,5 +71,39 @@ public class ItemPipeFilter extends Item implements ICustomModel {
 			list.add("Use Ore Dictionary: "+(oreMatch?"Enabled":"Disabled"));
 		}
 	}
-    
+	
+	@Override
+	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
+    {
+		if(stack.getMetadata() == FilterType.CAMERA.ordinal()){
+			IItemHandler inv = ItemUtil.getExternalItemHandler(worldIn, pos, facing);
+			if(inv !=null){
+				if(worldIn.isRemote){
+					return EnumActionResult.SUCCESS;
+				}
+				CameraFilterInventory filterInv = new CameraFilterInventory(stack, "");
+				filterInv.clear();
+				int slots = inv.getSlots();
+				if(slots > 0){
+					for(int slot = 0; slot < slots; slot++){
+						ItemStack invStack = inv.getStackInSlot(slot);
+						if(ItemStackTools.isValid(invStack)){
+							filterInv.addItem(invStack);
+						}
+					}
+				}
+			}
+		}
+        return EnumActionResult.PASS;
+    }
+	
+	@Override
+	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand)
+    {
+		if(itemStackIn.getMetadata() == FilterType.NORMAL.ordinal() || itemStackIn.getMetadata() == FilterType.MOD.ordinal()){
+			playerIn.openGui(CrystalMod.instance, GuiHandler.GUI_ID_ITEM, worldIn, 0, -1, hand.ordinal());
+			return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStackIn); 
+		}
+        return new ActionResult<ItemStack>(EnumActionResult.PASS, itemStackIn);
+    }
 }

@@ -72,4 +72,9 @@ public class BackpackCrafting implements IBackpack {
 		return new ContainerBackpackCrafting(getInventory(player));
 	}
 
+	@Override
+	public int getUpgradeAmount(ItemStack stack) {
+		return 0;
+	}
+
 }

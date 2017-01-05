@@ -32,6 +32,9 @@ public class Config {
     public static String retrogenID = "generated";
     public static boolean retrogenOres = false;
     public static boolean retrogenTrees = false;
+    public static boolean retrogenReeds = false;
+    public static int maximumReedsPerChunk = 5;
+    public static int reedPlacementTrys = 10;
 	
 	public static ItemDropType mobHeadType = ItemDropType.KILLED;
 	public static int mobHeadDropChance = 200;
@@ -76,6 +79,7 @@ public class Config {
 	public static boolean vanillaMinecarts3d = true;
 	
 	public static int engine_vampire_maxattack = 16;
+	public static int advDispenser_cooldown = 40; //2 seconds
 	
 	@SubscribeEvent
 	public void onConfigChanged(OnConfigChangedEvent event) {
@@ -104,6 +108,12 @@ public class Config {
                                    "Set to true to enable retrogen of crystal ore").getBoolean();
         retrogenTrees = cfg.get(CATEGORY_WORLD, "retrogenTrees", retrogenTrees,
                 "Set to true to enable retrogen of crystal trees").getBoolean();
+        retrogenReeds = cfg.get(CATEGORY_WORLD, "retrogenReeds", retrogenReeds,
+                "Set to true to enable retrogen of crystal reeds").getBoolean();
+        maximumReedsPerChunk = cfg.get(CATEGORY_WORLD, "maximumReedsPerChunk", maximumReedsPerChunk,
+                "Maximum number of reeds per chunk").getInt();
+        reedPlacementTrys = cfg.get(CATEGORY_WORLD, "reedPlacementTrys", reedPlacementTrys,
+                "Amount of reed stacks allowed to gen if able to be placed").getInt();
         
         int[] oreBlacklist = cfg.get(CATEGORY_WORLD, "oreDimensionBlacklist", new int[] { -1, 1 },
                                                        "Crystal ore dimension blacklist").getIntList();
@@ -141,7 +151,9 @@ public class Config {
     
     	//Machines
     	PowerUnits.CU.conversionRation = cfg.get(CATEGORY_MACHINE, "RFtoCU", PowerUnits.CU.conversionRation, "Amount of RF needed to convert to one unit of CU").getInt(PowerUnits.CU.conversionRation);
-    	engine_vampire_maxattack = cfg.get(CATEGORY_MACHINE, "Engine_Vampire_AttackAmt", 16, "Amount of entites the vampire engine can attack at once").getInt();
+    	engine_vampire_maxattack = cfg.get(CATEGORY_MACHINE, "Engine_Vampire_AttackAmt", engine_vampire_maxattack, "Amount of entites the vampire engine can attack at once").getInt();
+    	advDispenser_cooldown = cfg.get(CATEGORY_MACHINE, "advDispenser_cooldown", advDispenser_cooldown, "Amount of ticks inbetween each click on the Advanced Dispenser").getInt();
+
     	//Client
     	vanillaMinecarts3d = cfg.get(CATEGORY_CLIENT, "3dMinecartItems", vanillaMinecarts3d, "Override Minecart Item Render to 3d items.").getBoolean();
     }

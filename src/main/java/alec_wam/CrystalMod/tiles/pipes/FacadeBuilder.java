@@ -2,40 +2,44 @@ package alec_wam.CrystalMod.tiles.pipes;
 
 import java.awt.Color;
 import java.util.ArrayList;
-import java.util.BitSet;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.annotation.Nullable;
-import javax.vecmath.Vector2f;
-import javax.vecmath.Vector3f;
 
-import alec_wam.CrystalMod.client.util.ModelUVAverager;
-import alec_wam.CrystalMod.tiles.pipes.CubeBuilder.UvVector;
-import alec_wam.CrystalMod.tiles.pipes.covers.CoverUtil;
-import alec_wam.CrystalMod.tiles.pipes.covers.CoverUtil.CoverData;
-import alec_wam.CrystalMod.util.ModLogger;
-import alec_wam.CrystalMod.util.client.RenderUtil;
+import org.lwjgl.util.vector.Vector3f;
 
 import com.google.common.base.Function;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
 
+import alec_wam.CrystalMod.tiles.pipes.covers.CoverUtil.CoverData;
+import alec_wam.CrystalMod.tiles.pipes.covers.IFaceBuilder;
+import alec_wam.CrystalMod.tiles.pipes.covers.ModelQuadLayer;
+import alec_wam.CrystalMod.tiles.pipes.covers.ModelQuadLayer.ModelQuadLayerBuilder;
+import alec_wam.CrystalMod.tiles.pipes.covers.ModelUVReader;
+import alec_wam.CrystalMod.tiles.pipes.covers.ModelVertexRange;
+import alec_wam.CrystalMod.tiles.pipes.covers.UnpackedQuadBuilderWrapper;
+import alec_wam.CrystalMod.util.ModLogger;
+import alec_wam.CrystalMod.util.client.RenderUtil;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockLeaves;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockRendererDispatcher;
 import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.renderer.block.model.BlockFaceUV;
+import net.minecraft.client.renderer.block.model.BlockPartFace;
+import net.minecraft.client.renderer.block.model.BlockPartRotation;
 import net.minecraft.client.renderer.block.model.FaceBakery;
 import net.minecraft.client.renderer.block.model.IBakedModel;
+import net.minecraft.client.renderer.block.model.ModelRotation;
 import net.minecraft.client.renderer.color.BlockColors;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.VertexFormat;
+import net.minecraft.client.renderer.vertex.VertexFormatElement;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
@@ -43,11 +47,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec2f;
 import net.minecraft.world.IBlockAccess;
-import net.minecraftforge.client.MinecraftForgeClient;
-import net.minecraftforge.client.model.pipeline.LightUtil;
 import net.minecraftforge.client.model.pipeline.UnpackedBakedQuad;
 
 
@@ -143,9 +143,9 @@ class FacadeBuilder
 		//ModLogger.info(tints.toString());
 		//ModLogger.info(textures.toString());
 		
-		boolean test = true;
-		
-		if(test){
+		boolean test1 = false;
+		boolean test2 = true;
+		if(test1){
 			AxisAlignedBB box = getFacadeBox( side, thinFacades );
 			for(EnumFacing dir : EnumFacing.VALUES){
 				for(int index : customQuads.keySet()){
@@ -258,6 +258,87 @@ class FacadeBuilder
 			
 			
 			//builder.addCube(0f, 1f, 0f, 0f, 1f, 0.0625f);
+			return;
+		}
+		
+		if(test2){
+			
+			final int[] to = new int[3];
+			final int[] from = new int[3];
+			final float[] uvs = new float[8];
+			final float[] pos = new float[3];
+			IFaceBuilder faceBuilder = new UnpackedQuadBuilderWrapper();
+			EnumFacing[] faceArray = {EnumFacing.NORTH};
+			for(EnumFacing facing : faceArray){
+				
+				AxisAlignedBB box = getFacadeBox( side, thinFacades );
+				
+				putPosition( to, (int)(32.0F), (int)(32.0F), (int)(32.0F), facing, 1 );
+				putPosition( from, (int)(0), (int)(0), (int)(0), facing, -1 );
+				IBlockAccess world = state !=null ? state.blockAccess : null;
+				BlockPos blockpos = state !=null ? state.pos : null;
+				final ModelQuadLayer[] mpc = getCachedFace( world, blockpos, Block.getStateId(facadeState.getBlockState()), 0L, facing, layer );
+				
+				for ( final ModelQuadLayer pc : mpc )
+				{
+					faceBuilder.begin( format );
+					faceBuilder.setFace( facing, pc.tint );
+
+					final float maxLightmap = 32.0f / 0xffff;
+					getFaceUvs( uvs, facing, from, to, pc.uvs );
+
+					// build it.
+					for ( int vertNum = 0; vertNum < 4; vertNum++ )
+					{
+						for ( int elementIndex = 0; elementIndex < format.getElementCount(); elementIndex++ )
+						{
+							final VertexFormatElement element = format.getElement( elementIndex );
+							switch ( element.getUsage() )
+							{
+								case POSITION:
+									getVertexPos( pos, facing, vertNum, to, from );
+									faceBuilder.put( elementIndex, pos[0], pos[1], pos[2] );
+									break;
+
+								case COLOR:
+									final int cb = pc.color;
+									faceBuilder.put( elementIndex, byteToFloat( cb >> 16 ), byteToFloat( cb >> 8 ), byteToFloat( cb ), byteToFloat( cb >> 24 ) );
+									break;
+
+								case NORMAL:
+									// this fixes a bug with Forge AO?? and
+									// solid blocks.. I have no idea why...
+									final float normalShift = 0.999f;
+									faceBuilder.put( elementIndex, normalShift * facing.getFrontOffsetX(), normalShift * facing.getFrontOffsetY(), normalShift * facing.getFrontOffsetZ() );
+									break;
+
+								case UV:
+									if ( element.getIndex() == 1 )
+									{
+										final float v = maxLightmap * Math.max( 0, Math.min( 15, pc.light ) );
+										faceBuilder.put( elementIndex, v, v );
+									}
+									else
+									{
+										//final float u = uvs[/*faceVertMap[facing.getIndex()][vertNum] * 2*/vertNum + 0];
+										//final float v = uvs[/*faceVertMap[facing.getIndex()][vertNum] * 2*/vertNum + 1];
+										final float u = uvs[faceVertMap[facing.getIndex()][vertNum] * 2 + 0];
+										final float v = uvs[faceVertMap[facing.getIndex()][vertNum] * 2 + 1];
+										faceBuilder.put( elementIndex, pc.sprite.getInterpolatedU( u ), pc.sprite.getInterpolatedV( v ) );
+									}
+									break;
+
+								default:
+									faceBuilder.put( elementIndex );
+									break;
+							}
+						}
+					}
+
+					builder.getOutput().add( faceBuilder.create( pc.sprite ) );
+				}
+			}
+			
 			return;
 		}
 		
@@ -633,4 +714,475 @@ class FacadeBuilder
 
 		return true;
 	}
+	
+	//Test Functions
+	private void putPosition(final int[] result, final int toX, final int toY, final int toZ, final EnumFacing f, final int d)
+	{
+
+		int leftX = 0;
+		final int leftY = 0;
+		int leftZ = 0;
+
+		final int upX = 0;
+		int upY = 0;
+		int upZ = 0;
+
+		switch ( f )
+		{
+			case DOWN:
+				leftX = 1;
+				upZ = 1;
+				break;
+			case EAST:
+				leftZ = 1;
+				upY = 1;
+				break;
+			case NORTH:
+				leftX = 1;
+				upY = 1;
+				break;
+			case SOUTH:
+				leftX = 1;
+				upY = 1;
+				break;
+			case UP:
+				leftX = 1;
+				upZ = 1;
+				break;
+			case WEST:
+				leftZ = 1;
+				upY = 1;
+				break;
+			default:
+				break;
+		}
+
+		result[0] = ( toX + leftX * d + upX * d ) / 2;
+		result[1] = ( toY + leftY * d + upY * d ) / 2;
+		result[2] = ( toZ + leftZ * d + upZ * d ) / 2;
+	}
+	
+	private HashMap<Integer, ModelQuadLayer[]> cache = new HashMap<Integer, ModelQuadLayer[]>();
+	public ModelQuadLayer[] getCachedFace(@Nullable final IBlockAccess world, @Nullable final BlockPos pos, final int stateID, final long weight,	final EnumFacing face, final BlockRenderLayer layer )
+	{
+		final int cacheVal = stateID << 4 | face.ordinal();
+
+		final ModelQuadLayer[] mpc = cache.get( cacheVal );
+		/*if ( mpc != null )
+		{
+			return mpc;
+		}*/
+		
+		IBlockState state = Block.getStateById( stateID );
+		
+		if(world !=null && pos !=null){
+			IBlockAccess worldWrapper = new PipeBlockAccessWrapper(world, pos, face);
+			state = state.getBlock().getActualState(state, worldWrapper, pos);
+			ModLogger.info("Actual State = "+state.toString());
+		}
+
+		IBakedModel model = Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelShapes().getModelForState( state );
+		if(world !=null && pos !=null){
+			IBlockAccess worldWrapper = new PipeBlockAccessWrapper(world, pos, face);
+			state = state.getBlock().getExtendedState(state, worldWrapper, pos);
+			ModLogger.info("Extended State = "+state.toString());
+		}
+
+		//IBlockState state = Block.getStateById( stateID );
+		//IBakedModel model = solveModel( state, weight, Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelShapes().getModelForState( state ) );
+
+		final HashMap<EnumFacing, ArrayList<ModelQuadLayerBuilder>> tmp = new HashMap<EnumFacing, ArrayList<ModelQuadLayerBuilder>>();
+		final int color = getBlockColor(state, world, pos, 0);
+
+		for ( final EnumFacing f : EnumFacing.VALUES )
+		{
+			tmp.put( f, new ArrayList<ModelQuadLayer.ModelQuadLayerBuilder>() );
+		}
+
+		if ( model != null )
+		{
+			for ( final EnumFacing f : EnumFacing.VALUES )
+			{
+				final List<BakedQuad> quads = getModelQuads( model, state, f, 0 );
+				processFaces( tmp, quads );
+			}
+
+			processFaces( tmp, getModelQuads( model, state, null, 0 ) );
+		}
+
+		for ( final EnumFacing f : EnumFacing.VALUES )
+		{
+			final int cacheV = stateID << 4 | f.ordinal();
+			final ArrayList<ModelQuadLayerBuilder> x = tmp.get( f );
+			final ModelQuadLayer[] mp = new ModelQuadLayer[x.size()];
+
+			for ( int z = 0; z < x.size(); z++ )
+			{
+				mp[z] = x.get( z ).build( Block.getStateId(state), color, state.getBlock().getLightValue( state ), state.getBlock() == Blocks.GRASS || state.getBlock() instanceof BlockLeaves );
+			}
+
+			cache.put( cacheV, mp );
+		}
+
+		return cache.get( cacheVal );
+	}
+	
+	private void processFaces(
+			final HashMap<EnumFacing, ArrayList<ModelQuadLayerBuilder>> tmp,
+			final List<BakedQuad> quads )
+	{
+		//ModLogger.info("Processing "+quads.size());
+		for ( final BakedQuad q : quads )
+		{
+			final EnumFacing face = q.getFace();
+
+			if ( face == null )
+			{
+				continue;
+			}
+
+			try
+			{
+				final TextureAtlasSprite sprite = findQuadTexture( q );
+				final ArrayList<ModelQuadLayerBuilder> l = tmp.get( face );
+
+				ModelQuadLayerBuilder b = null;
+				search : for ( final ModelQuadLayerBuilder lx : l )
+				{
+					if ( lx.cache.sprite == sprite )
+					{
+						b = lx;
+						break search;
+					}
+				}
+
+				if ( b == null )
+				{
+					// top/bottom
+					int uCoord = 0;
+					int vCoord = 2;
+
+					switch ( face )
+					{
+						case NORTH:
+						case SOUTH:
+							uCoord = 0;
+							vCoord = 1;
+							break;
+						case EAST:
+						case WEST:
+							uCoord = 1;
+							vCoord = 2;
+							break;
+						default:
+					}
+
+					b = new ModelQuadLayerBuilder( sprite, uCoord, vCoord );
+					b.cache.tint = q.getTintIndex();
+					l.add( b );
+				}
+
+				q.pipe( b.uvr );
+				q.pipe( b.lv );
+			}
+			catch ( final Exception e )
+			{
+
+			}
+		}
+	}
+	
+	public static TextureAtlasSprite findQuadTexture(
+			final BakedQuad q ) throws IllegalArgumentException, IllegalAccessException, NullPointerException
+	{
+		/*final TextureMap map = Minecraft.getMinecraft().getTextureMapBlocks();
+		final Map<String, TextureAtlasSprite> mapRegisteredSprites = ReflectionWrapper.instance.getRegSprite( map );
+
+		if ( mapRegisteredSprites == null )
+		{
+			throw new RuntimeException( "Unable to lookup textures." );
+		}
+
+		final ModelUVAverager av = new ModelUVAverager();
+		q.pipe( av );
+
+		final float U = av.getU();
+		final float V = av.getV();
+
+		final Iterator<?> iterator1 = mapRegisteredSprites.values().iterator();
+		while ( iterator1.hasNext() )
+		{
+			final TextureAtlasSprite sprite = (TextureAtlasSprite) iterator1.next();
+			if ( sprite.getMinU() <= U && U <= sprite.getMaxU() && sprite.getMinV() <= V && V <= sprite.getMaxV() )
+			{
+				return sprite;
+			}
+		}
+
+		return Minecraft.getMinecraft().getTextureMapBlocks().getMissingSprite();*/
+		TextureAtlasSprite sprite = q.getSprite();
+		return sprite == null ? Minecraft.getMinecraft().getTextureMapBlocks().getMissingSprite() : sprite;
+	}
+
+	public IBakedModel solveModel(
+			final IBlockState state,
+			final long weight,
+			final IBakedModel originalModel )
+	{
+		boolean hasFaces = false;
+
+		try
+		{
+			hasFaces = hasFaces( originalModel, state, null, weight );
+
+			for ( final EnumFacing f : EnumFacing.VALUES )
+			{
+				hasFaces = hasFaces || hasFaces( originalModel, state, f, weight );
+			}
+		}
+		catch ( final Exception e )
+		{
+			// an exception was thrown.. use the item model and hope...
+			hasFaces = false;
+		}
+
+		return originalModel;
+	}
+
+	private boolean hasFaces(
+			final IBakedModel model,
+			final IBlockState state,
+			final EnumFacing f,
+			final long weight )
+	{
+		final List<BakedQuad> l = getModelQuads( model, state, f, weight );
+		if ( l == null || l.isEmpty() )
+		{
+			return false;
+		}
+
+		final ModelVertexRange mvr = new ModelVertexRange();
+
+		for ( final BakedQuad q : l )
+		{
+			q.pipe( mvr );
+		}
+
+		return mvr.getLargestRange() > 0;
+	}
+	
+	private List<BakedQuad> getModelQuads(
+			final IBakedModel model,
+			final IBlockState state,
+			final EnumFacing f,
+			final long rand )
+	{
+		try
+		{
+			// try to get block model...
+			return model.getQuads( state, f, rand );
+		}
+		catch ( final Throwable t )
+		{
+
+		}
+
+		try
+		{
+			// try to get item model?
+			return model.getQuads( null, f, rand );
+		}
+		catch ( final Throwable t )
+		{
+
+		}
+
+		// try to not crash...
+		return Collections.emptyList();
+	}
+	
+	private float byteToFloat(
+			final int i )
+	{
+		return ( i & 0xff ) / 255.0f;
+	}
+	
+	private void getFaceUvs(
+			final float[] uvs,
+			final EnumFacing face,
+			final int[] from,
+			final int[] to,
+			final float[] quadsUV )
+	{
+		float to_u = 0;
+		float to_v = 0;
+		float from_u = 0;
+		float from_v = 0;
+
+		switch ( face )
+		{
+			case UP:
+				to_u = to[0] / 16.0f;
+				to_v = to[2] / 16.0f;
+				from_u = from[0] / 16.0f;
+				from_v = from[2] / 16.0f;
+				break;
+			case DOWN:
+				to_u = to[0] / 16.0f;
+				to_v = to[2] / 16.0f;
+				from_u = from[0] / 16.0f;
+				from_v = from[2] / 16.0f;
+				break;
+			case SOUTH:
+				to_u = to[0] / 16.0f;
+				to_v = to[1] / 16.0f;
+				from_u = from[0] / 16.0f;
+				from_v = from[1] / 16.0f;
+				break;
+			case NORTH:
+				to_u = to[0] / 16.0f;
+				to_v = to[1] / 16.0f;
+				from_u = from[0] / 16.0f;
+				from_v = from[1] / 16.0f;
+				break;
+			case EAST:
+				to_u = to[1] / 16.0f;
+				to_v = to[2] / 16.0f;
+				from_u = from[1] / 16.0f;
+				from_v = from[2] / 16.0f;
+				break;
+			case WEST:
+				to_u = to[1] / 16.0f;
+				to_v = to[2] / 16.0f;
+				from_u = from[1] / 16.0f;
+				from_v = from[2] / 16.0f;
+				break;
+			default:
+		}
+
+		uvs[0] = 16.0f * u( quadsUV, to_u, to_v ); // 0
+		uvs[1] = 16.0f * v( quadsUV, to_u, to_v ); // 1
+
+		uvs[2] = 16.0f * u( quadsUV, from_u, to_v ); // 2
+		uvs[3] = 16.0f * v( quadsUV, from_u, to_v ); // 3
+
+		uvs[4] = 16.0f * u( quadsUV, from_u, from_v ); // 2
+		uvs[5] = 16.0f * v( quadsUV, from_u, from_v ); // 3
+
+		uvs[6] = 16.0f * u( quadsUV, to_u, from_v ); // 0
+		uvs[7] = 16.0f * v( quadsUV, to_u, from_v ); // 1
+	}
+
+	float u(
+			final float[] src,
+			final float inU,
+			final float inV )
+	{
+		final float inv = 1.0f - inU;
+		final float u1 = src[0] * inU + inv * src[2];
+		final float u2 = src[4] * inU + inv * src[6];
+		return u1 * inV + ( 1.0f - inV ) * u2;
+	}
+
+	float v(
+			final float[] src,
+			final float inU,
+			final float inV )
+	{
+		final float inv = 1.0f - inU;
+		final float v1 = src[1] * inU + inv * src[3];
+		final float v2 = src[5] * inU + inv * src[7];
+		return v1 * inV + ( 1.0f - inV ) * v2;
+	}
+	
+	private void getVertexPos(
+			final float[] pos,
+			final EnumFacing side,
+			final int vertNum,
+			final int[] to,
+			final int[] from )
+	{
+		final float[] interpos = quadMapping[side.ordinal()][vertNum];
+
+		pos[0] = to[0] * interpos[0] + from[0] * interpos[1];
+		pos[1] = to[1] * interpos[2] + from[1] * interpos[3];
+		pos[2] = to[2] * interpos[4] + from[2] * interpos[5];
+	}
+	
+	private final static int[][] faceVertMap = new int[6][4];
+	private final static float[][][] quadMapping = new float[6][4][6];
+	
+	// Analyze FaceBakery / makeBakedQuad and prepare static data for face gen.
+		static
+		{
+			final Vector3f to = new Vector3f( 0, 0, 0 );
+			final Vector3f from = new Vector3f( 16, 16, 16 );
+
+			for ( final EnumFacing myFace : EnumFacing.VALUES )
+			{
+				final FaceBakery faceBakery = new FaceBakery();
+
+				final BlockPartRotation bpr = null;
+				final ModelRotation mr = ModelRotation.X0_Y0;
+
+				final float[] defUVs = new float[] { 0, 0, 1, 1 };
+				final BlockFaceUV uv = new BlockFaceUV( defUVs, 0 );
+				final BlockPartFace bpf = new BlockPartFace( myFace, 0, "", uv );
+
+				final TextureAtlasSprite texture = Minecraft.getMinecraft().getTextureMapBlocks().getMissingSprite();
+				final BakedQuad q = faceBakery.makeBakedQuad( to, from, bpf, texture, myFace, mr, bpr, true, true );
+
+				final int[] vertData = q.getVertexData();
+
+				int a = 0;
+				int b = 2;
+
+				switch ( myFace )
+				{
+					case NORTH:
+					case SOUTH:
+						a = 0;
+						b = 1;
+						break;
+					case EAST:
+					case WEST:
+						a = 1;
+						b = 2;
+						break;
+					default:
+				}
+
+				final int p = vertData.length / 4;
+				for ( int vertNum = 0; vertNum < 4; vertNum++ )
+				{
+					final float A = Float.intBitsToFloat( vertData[vertNum * p + a] );
+					final float B = Float.intBitsToFloat( vertData[vertNum * p + b] );
+
+					for ( int o = 0; o < 3; o++ )
+					{
+						final float v = Float.intBitsToFloat( vertData[vertNum * p + o] );
+						final float scaler = 1.0f / 16.0f; // pos start in the 0-16
+						quadMapping[myFace.ordinal()][vertNum][o * 2] = v * scaler;
+						quadMapping[myFace.ordinal()][vertNum][o * 2 + 1] = ( 1.0f - v ) * scaler;
+					}
+
+					if ( ModelUVReader.isZero( A ) && ModelUVReader.isZero( B ) )
+					{
+						faceVertMap[myFace.getIndex()][vertNum] = 0;
+					}
+					else if ( ModelUVReader.isZero( A ) && ModelUVReader.isOne( B ) )
+					{
+						faceVertMap[myFace.getIndex()][vertNum] = 3;
+					}
+					else if ( ModelUVReader.isOne( A ) && ModelUVReader.isZero( B ) )
+					{
+						faceVertMap[myFace.getIndex()][vertNum] = 1;
+					}
+					else
+					{
+						faceVertMap[myFace.getIndex()][vertNum] = 2;
+					}
+				}
+			}
+		}
 }

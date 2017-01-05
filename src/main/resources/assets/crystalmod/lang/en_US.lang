@@ -201,6 +201,11 @@ item.crystalmod.backpack_normal.green.name=Green Crystal Backpack
 item.crystalmod.backpack_normal.dark.name=Dark Crystal Backpack
 item.crystalmod.backpack_normal.pure.name=Pure Crystal Backpack
 item.crystalmod.backpack_crafting.name=Crafting Backpack
+item.crystalmod.backpackupgrade.hopper.name=Hopper Upgrade
+item.crystalmod.backpackupgrade.ender.name=Ender Chest Upgrade
+item.crystalmod.backpackupgrade.restocking.name=Restocking Upgrade
+item.crystalmod.backpackupgrade.void.name=Void Upgrade
+item.crystalmod.backpackupgrade.pockets.name=Pocket Upgrade
 item.crystalmod.lock.name=Lock
 item.crystalmod.flagitem.name=Flag
 item.crystalmod.disguise.empty.name=Empty Disguise
@@ -296,6 +301,7 @@ tile.crystalmod.crystalchest.PURE.name=Pure Crystal Chest
 tile.crystalmod.crystalchest.DARKIRON.name=Dark Iron Chest
 
 tile.crystalmod.wirelesschest.name=Super Chest
+tile.crystalmod.advdispenser.name=Advanced Dispenser
 
 tile.crystalmod.crystalpipe.item.name=Crystal Pipe (Item)
 tile.crystalmod.crystalpipe.fluid.name=Crystal Pipe (Fluid)
@@ -376,6 +382,7 @@ tile.crystalmod.inventorycharger.rf.name=Inventory Charger (RF)
 tile.crystalmod.crystalmachine.furnace.name=Crystal Furnace
 tile.crystalmod.crystalmachine.press.name=Metal Press
 tile.crystalmod.crystalmachine.liquidizer.name=Liquidizer
+tile.crystalmod.crystalmachine.grinder.name=Grinder
 tile.crystalmod.crystalmachine.infuser.name=Liquid Infuser
 
 tile.crystalmod.worksite.tree_farm.name=Minion Tree Farm
@@ -403,6 +410,9 @@ tile.crystalmod.enderbuffer.name=Ender Buffer
 
 tile.crystalmod.powerconverter.rf.name=RF to CU Converter
 tile.crystalmod.powerconverter.cu.name=CU to RF Converter
+
+tile.crystalmod.pedistal.name=Pedistal
+tile.crystalmod.fusionpedistal.name=Crystal Fusion Pedistal
 
 #--Fluids
 fluid.crystalmod.xpjuice.name=Liquid XP
@@ -527,6 +537,55 @@ crystalmod.ai.combat.target.passive=Passive Mobs
 crystalmod.ai.combat.target.hostile=Hostile Mobs
 crystalmod.ai.combat.target.either=Any Mob
 
+#--Crops
+item.crystalmod.materialseed.name=Material Seed
+
+materialcrop.dirt.name=Dirt
+materialcrop.cobblestone.name=Cobblestone
+materialcrop.sand.name=Sand
+materialcrop.gravel.name=Gravel
+materialcrop.log_oak.name=Oak Wood
+
+materialcrop.stone.name=Stone
+materialcrop.flint.name=Flint
+materialcrop.clay.name=Clay
+materialcrop.redstone.name=Redstone
+materialcrop.netherrack.name=Netherrack
+materialcrop.grass.name=Grass
+materialcrop.glass.name=Glass
+materialcrop.log_spruce.name=Spruce Wood
+materialcrop.log_birch.name=Birch Wood
+materialcrop.log_jungle.name=Jungle Wood
+materialcrop.log_acacia.name=Acacia Wood
+materialcrop.log_big_oak.name=Big Oak Wood
+materialcrop.cactus.name=Cactus
+materialcrop.leather.name=Leather
+materialcrop.feather.name=Feather
+materialcrop.paper.name=Paper
+
+materialcrop.gunpowder.name=Gunpowder
+materialcrop.quartz.name=Nether Quartz
+materialcrop.coal.name=Coal
+materialcrop.hardened_clay.name=Hardened Clay
+materialcrop.brick.name=Brick
+materialcrop.wheat.name=Wheat
+materialcrop.slime.name=Slime
+materialcrop.snow.name=Snow
+materialcrop.egg.name=Egg
+materialcrop.netherwart.name=Netherwart
+materialcrop.book.name=Book
+
+materialcrop.iron.name=Iron
+materialcrop.glowstone.name=Glowstone
+materialcrop.netherbrick.name=Nether Brick
+
+materialcrop.gold.name=Gold
+
+materialcrop.diamond.name=Diamond
+materialcrop.blazerod.name=Blaze Rod
+
+materialcrop.emerald.name=Emerald
+
 #--Guide
 crystalmod.guide.page.crystalOre.title=Crystal Ore
 crystalmod.guide.page.crystalOre.desc=A Rare Ore that when smelted results in a crystal of the same color. Generates from y level %s to %s.
@@ -598,3 +657,16 @@ crystalmod.guide.page.crystal.desc=Created by either smelting Crystal Ore of the
 crystalmod.guide.page.crystalPure.title=Pure Crystal
 crystalmod.guide.page.crystalPure.desc=Pure Crystal is the most powerful of all of the Crystals.<br>%s
 crystalmod.guide.page.crystalPure.desc2=Pure Crystal can also be created by melting down each color of crystal in a Tinkers Smeltery.
+#--Fusion
+crystalmod.fusion.message.emptyinput=Missing Input!
+crystalmod.fusion.message.tobiginput=Input Stack is to large.
+crystalmod.fusion.message.missing=You are missing the following items: %s
+crystalmod.fusion.message.extra=The following items must be removed: %s
+crystalmod.fusion.message.cantcombine=Unable to combine %s and %s.
+crystalmod.fusion.message.cantenchant=This tool is unable to be enchanted with %s.
+crystalmod.fusion.message.invalid=%s is not usable in this recipe.
+#--Sounds
+crystalmod.subtitle.fusion_startup=Starting Fusion
+crystalmod.subtitle.fusion_running=Fusing Items
+crystalmod.subtitle.fusion_cooldown=Ending Fusion
+crystalmod.subtitle.fusion_ding=Fusion Complete

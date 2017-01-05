@@ -1,12 +1,15 @@
 package alec_wam.CrystalMod.tiles;
 
+import alec_wam.CrystalMod.api.pedistals.IPedistal;
+import alec_wam.CrystalMod.util.BlockUtil;
+import alec_wam.CrystalMod.util.ItemStackTools;
+import alec_wam.CrystalMod.util.ItemUtil;
+import alec_wam.CrystalMod.util.ModLogger;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import alec_wam.CrystalMod.util.ItemStackTools;
-import alec_wam.CrystalMod.util.ItemUtil;
 
 public class TileEntityInventory extends TileEntityMod implements IInventory {
 
@@ -94,7 +97,6 @@ public class TileEntityInventory extends TileEntityMod implements IInventory {
 	}
 	
 	public void onItemChanged(int slot){
-		
 	}
 
 	@Override
@@ -163,7 +165,29 @@ public class TileEntityInventory extends TileEntityMod implements IInventory {
 		return capability == net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
 	}
 	
-	public net.minecraftforge.items.IItemHandler handler = new net.minecraftforge.items.wrapper.InvWrapper(this);
+	public net.minecraftforge.items.IItemHandler handler = new net.minecraftforge.items.wrapper.InvWrapper(this){
+		@Override
+	    public ItemStack insertItem(int slot, ItemStack stack, boolean simulate)
+	    {
+			if(!ItemStackTools.isEmpty(stack)){
+				if(!TileEntityInventory.this.canInsertItem(slot, stack)){
+					return ItemStackTools.getEmptyStack();
+				}
+			}
+			return super.insertItem(slot, stack, simulate);
+		}
+		
+		@Override
+		public ItemStack extractItem(int slot, int amount, boolean simulate)
+		{
+			if(amount > 0){
+				if(!TileEntityInventory.this.canExtract(slot, amount)){
+					return ItemStackTools.getEmptyStack();
+				}
+			}
+			return super.extractItem(slot, amount, simulate);
+		}
+	};
 
     @SuppressWarnings("unchecked")
     @Override
@@ -173,5 +197,13 @@ public class TileEntityInventory extends TileEntityMod implements IInventory {
             return (T) handler;
         return super.getCapability(capability, facing);
     }
+
+	public boolean canExtract(int slot, int amount) {
+		return true;
+	}
+
+	public boolean canInsertItem(int slot, ItemStack stack) {
+		return true;
+	}
 
 }

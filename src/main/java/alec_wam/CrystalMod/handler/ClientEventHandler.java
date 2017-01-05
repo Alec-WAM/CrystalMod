@@ -1,11 +1,32 @@
 package alec_wam.CrystalMod.handler;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.ConcurrentModificationException;
 import java.util.List;
 
 import org.lwjgl.util.glu.Project;
 
+import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.api.CrystalModAPI;
+import alec_wam.CrystalMod.asm.ObfuscatedNames;
+import alec_wam.CrystalMod.blocks.crops.material.TileMaterialCrop;
+import alec_wam.CrystalMod.capability.ExtendedPlayer;
+import alec_wam.CrystalMod.capability.ExtendedPlayerProvider;
+import alec_wam.CrystalMod.entities.accessories.GuiHorseEnderChest;
+import alec_wam.CrystalMod.entities.accessories.HorseAccessories;
+import alec_wam.CrystalMod.items.tools.backpack.BackpackUtil;
+import alec_wam.CrystalMod.items.tools.backpack.network.PacketToolSwap;
+import alec_wam.CrystalMod.items.tools.grapple.GrappleControllerBase;
+import alec_wam.CrystalMod.items.tools.grapple.GrappleHandler;
+import alec_wam.CrystalMod.network.CrystalModNetwork;
+import alec_wam.CrystalMod.network.packets.PacketGuiMessage;
+import alec_wam.CrystalMod.util.ItemNBTHelper;
+import alec_wam.CrystalMod.util.ItemStackTools;
+import alec_wam.CrystalMod.util.ModLogger;
+import alec_wam.CrystalMod.util.ReflectionUtils;
+import alec_wam.CrystalMod.util.client.RenderUtil;
+import alec_wam.CrystalMod.world.game.tag.TagManager;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -30,29 +51,19 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.AnimalChest;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.world.World;
+import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 import net.minecraftforge.client.event.GuiOpenEvent;
+import net.minecraftforge.client.event.MouseEvent;
 import net.minecraftforge.client.event.RenderHandEvent;
 import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
-import alec_wam.CrystalMod.CrystalMod;
-import alec_wam.CrystalMod.asm.ObfuscatedNames;
-import alec_wam.CrystalMod.capability.ExtendedPlayer;
-import alec_wam.CrystalMod.capability.ExtendedPlayerProvider;
-import alec_wam.CrystalMod.entities.accessories.GuiHorseEnderChest;
-import alec_wam.CrystalMod.entities.accessories.HorseAccessories;
-import alec_wam.CrystalMod.items.tools.grapple.GrappleControllerBase;
-import alec_wam.CrystalMod.items.tools.grapple.GrappleHandler;
-import alec_wam.CrystalMod.network.CrystalModNetwork;
-import alec_wam.CrystalMod.network.packets.PacketGuiMessage;
-import alec_wam.CrystalMod.util.BlockUtil;
-import alec_wam.CrystalMod.util.ItemNBTHelper;
-import alec_wam.CrystalMod.util.ItemStackTools;
-import alec_wam.CrystalMod.util.ModLogger;
-import alec_wam.CrystalMod.util.ReflectionUtils;
-import alec_wam.CrystalMod.world.game.tag.TagManager;
+import net.minecraftforge.fml.relauncher.Side;
 
 public class ClientEventHandler {
     
@@ -301,8 +312,15 @@ public class ClientEventHandler {
         GlStateManager.popMatrix();
     }
     
+    public static volatile int elapsedTicks;
+    
     @SubscribeEvent
 	public void onClientTick(TickEvent.ClientTickEvent event) {
+    	
+    	if (event.phase == TickEvent.Phase.END && event.type == TickEvent.Type.CLIENT && event.side == Side.CLIENT) {
+    		elapsedTicks++;
+        }
+    	
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 		if (player != null) {
 			if (!Minecraft.getMinecraft().isGamePaused() || !Minecraft.getMinecraft().isSingleplayer()) {
@@ -345,5 +363,70 @@ public class ClientEventHandler {
 			}
 		}
 	}
+    
+    @SubscribeEvent
+	public void onDrawHighlight(DrawBlockHighlightEvent event){
+    	if(event.getTarget() !=null){
+    		if(event.getTarget().typeOfHit == RayTraceResult.Type.BLOCK){
+    			BlockPos hitPos = event.getTarget().getBlockPos();
+    			World world = event.getPlayer().getEntityWorld();
+    			TileEntity tile = world.getTileEntity(hitPos);
+    			if(tile !=null && tile instanceof TileMaterialCrop){
+    				TileMaterialCrop crop = (TileMaterialCrop)tile;
+    				if(crop.getCrop() == null)return;
+    				int secondsLeft = crop.getTimeRemaining();
+					int minutesLeft = secondsLeft / 60;
+					int hoursLeft = minutesLeft / 60;
+					int daysLeft = hoursLeft / 24;
+					secondsLeft = secondsLeft % 60;
+					minutesLeft = minutesLeft % 60;
+					hoursLeft = hoursLeft % 24;
+					String time = "";
+					if(daysLeft > 0){
+						time = daysLeft+"d "+hoursLeft+"h "+minutesLeft+"m "+secondsLeft+"s";
+					}else if(hoursLeft > 0){
+						time = hoursLeft+"h "+minutesLeft+"m "+secondsLeft+"s";
+					}else if(minutesLeft > 0){
+						time = minutesLeft+"m "+secondsLeft+"s";
+					}else if(secondsLeft > 0){
+						time = secondsLeft+"s";
+					}
+					List<String> list = new ArrayList<String>();
+					list.add(CrystalModAPI.localizeCrop(crop.getCrop()));
+					if(crop.isCombo())list.add("Combining");
+					if(!time.isEmpty())list.add("Time Left: "+time);
+					
+					int timeLeft = crop.getGrowthTime();
+					
+					double percent = (timeLeft * 100) / crop.getCrop().getGrowthTime(tile.getWorld(), tile.getPos());
+					
+					double logic = percent * 0.01;
+					double scale = Math.max(logic, 0.2);
+					double y = 1.2 * scale;
+					RenderUtil.renderFloatingText(list, hitPos.getX()+0.5, hitPos.getY()+y, hitPos.getZ()+0.5f, 0xffffff, true, event.getPartialTicks(), true);
+    			}
+    		}
+    	}
+    }
 	
+    @SubscribeEvent
+    public void handleScroll(MouseEvent event){
+    	int scroll = event.getDwheel();
+    	EntityPlayer player = CrystalMod.proxy.getClientPlayer();
+    	if(player !=null && player.isSneaking()){
+    		if(scroll >=30){
+    			//Up (Weapons)
+    			if(BackpackUtil.canSwapWeapons(player)){
+	    			CrystalModNetwork.sendToServer(new PacketToolSwap(0));
+	    			event.setCanceled(true);
+    			}
+    		} else if(scroll <=-30){
+    			//Down (Tools)
+    			if(BackpackUtil.canSwapTools(player)){
+	    			CrystalModNetwork.sendToServer(new PacketToolSwap(1));
+	    			event.setCanceled(true);
+    			}
+    		}
+    	}
+    }
 }

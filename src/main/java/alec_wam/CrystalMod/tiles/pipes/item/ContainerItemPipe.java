@@ -19,7 +19,7 @@ import net.minecraft.util.EnumFacing;
 
 public class ContainerItemPipe extends Container {
 
-	public class SlotGhostItem extends Slot {
+	public static class SlotGhostItem extends Slot {
 		private IItemStackInventory itemInv;
 		public final int xPos;
 		public final int yPos;

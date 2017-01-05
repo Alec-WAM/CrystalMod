@@ -160,7 +160,7 @@ public class EntityGrapplingHook extends EntityThrowable implements IEntityAddit
 			        {
 			            AxisAlignedBB axisalignedbb = iblockstate.getCollisionBoundingBox(this.worldObj, blockpos);
 
-			            if (axisalignedbb != Block.NULL_AABB && axisalignedbb.offset(blockpos).isVecInside(new Vec3d(this.posX, this.posY, this.posZ)))
+			            if (axisalignedbb != Block.NULL_AABB /*&& axisalignedbb.offset(blockpos).isVecInside(new Vec3d(this.posX, this.posY, this.posZ))*/)
 			            {
 			            	blockPass = true;
 			            }

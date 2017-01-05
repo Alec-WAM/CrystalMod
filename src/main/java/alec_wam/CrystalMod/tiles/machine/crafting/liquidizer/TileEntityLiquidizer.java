@@ -57,7 +57,7 @@ public class TileEntityLiquidizer extends TileEntityMachine {
 	}
 	
 	public boolean canStart() {
-        if (inventory[0] == null) {
+        if (ItemStackTools.isEmpty(inventory[0])) {
             return false;
         }
         final LiquidizerRecipe recipe = LiquidizerRecipeManager.getRecipe(inventory[0]);

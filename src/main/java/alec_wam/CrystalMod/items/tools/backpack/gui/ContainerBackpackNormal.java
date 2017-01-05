@@ -1,35 +1,30 @@
 package alec_wam.CrystalMod.items.tools.backpack.gui;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.annotation.Nullable;
 
 import alec_wam.CrystalMod.capability.ExtendedPlayerProvider;
 import alec_wam.CrystalMod.integration.baubles.BaublesIntegration;
-import alec_wam.CrystalMod.items.tools.backpack.BackpackUtil;
+import alec_wam.CrystalMod.items.tools.backpack.IBackpack;
 import alec_wam.CrystalMod.items.tools.backpack.ItemBackpackBase;
 import alec_wam.CrystalMod.items.tools.backpack.ItemBackpackNormal.CrystalBackpackType;
-import alec_wam.CrystalMod.items.tools.backpack.types.InventoryBackpack;
-import alec_wam.CrystalMod.util.ItemNBTHelper;
+import alec_wam.CrystalMod.items.tools.backpack.types.NormalInventoryBackpack;
+import alec_wam.CrystalMod.items.tools.backpack.upgrade.ContainerBackpackUpgrades;
+import alec_wam.CrystalMod.items.tools.backpack.upgrade.InventoryBackpackUpgrades;
+import alec_wam.CrystalMod.items.tools.backpack.upgrade.ItemBackpackUpgrade.BackpackUpgrade;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
-import alec_wam.CrystalMod.util.ModLogger;
 import alec_wam.CrystalMod.util.inventory.SlotBauble;
-import alec_wam.CrystalMod.util.inventory.SlotLocked;
 import alec_wam.CrystalMod.util.inventory.SlotOffhand;
 import alec_wam.CrystalMod.util.inventory.WrapperBaubleInventory;
-import alec_wam.CrystalMod.util.inventory.WrapperInventory;
+import alec_wam.CrystalMod.util.tool.ToolUtil;
 import baubles.api.BaubleType;
 import baubles.api.IBauble;
 import baubles.api.cap.IBaublesItemHandler;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ClickType;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
@@ -41,44 +36,82 @@ public class ContainerBackpackNormal extends Container {
 
 	private final EntityEquipmentSlot[] entityequipmentslots = new EntityEquipmentSlot[] {EntityEquipmentSlot.HEAD, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS, EntityEquipmentSlot.FEET};
 	
-	private final InventoryBackpack backpackInventory;
+	private final NormalInventoryBackpack backpackInventory;
 	private final EntityPlayer player;
+	private boolean hasPockets;
 	
     protected IBaublesItemHandler baubles;
     
-	public ContainerBackpackNormal(InventoryBackpack backpackInventory){
+	public ContainerBackpackNormal(NormalInventoryBackpack backpackInventory){
 		this.player = backpackInventory.getPlayer();
         this.backpackInventory = backpackInventory;
         baubles = BaublesIntegration.instance().getBaubles(player);
+        boolean hasTabs = false;
+        if(ItemStackTools.isValid(backpackInventory.getBackpack()) && backpackInventory.getBackpack().getItem() instanceof ItemBackpackBase){
+        	IBackpack type = ((ItemBackpackBase)backpackInventory.getBackpack().getItem()).getBackpack();
+        	InventoryBackpackUpgrades upgrades = type.getUpgradeInventory(backpackInventory.getBackpack());
+        	this.hasPockets = (upgrades !=null ? upgrades.hasUpgrade(BackpackUpgrade.POCKETS) : false);
+        	hasTabs = (upgrades !=null ? upgrades.getTabs() !=null ? upgrades.getTabs().length > 0 : false : false);
+        }
         
         if (baubles != null && BaublesIntegration.WhoAmI.whoAmI(player.getEntityWorld()) == BaublesIntegration.WhoAmI.SPCLIENT) {
             baubles = new WrapperBaubleInventory(baubles);
         }
+        int gapLeft = hasPockets ? 34 : 0;
+        int gapRight = hasPockets ? 34 : 0;
         
-        int offset = 34;
+        int offsetArmor = 34;
+        int offsetLeft = offsetArmor + gapLeft;
+        int offsetRight = gapRight;
+        int offsetTabs = hasTabs ? 32 : 0;
         CrystalBackpackType type = CrystalBackpackType.byMetadata(backpackInventory.getBackpack().getMetadata());
-        int rows = backpackInventory.getSizeInventory()/9;
+        int rows = backpackInventory.getSize()/9;
         int offsetY = 18*(rows-3);
         for(int i = 0; i < rows; i++){
             for(int j = 0; j < 9; j++){
-            	this.addSlotToContainer(new SlotBackpack(backpackInventory, j+i*9, (8+offset)+j*18, 17+i*18));
+            	this.addSlotToContainer(new SlotBackpack(backpackInventory, j+i*9, (8+offsetLeft)+j*18, offsetTabs+17+i*18));
             }
         }
+        if(hasPockets){
+	        int invEnd = backpackInventory.getSize()-1;
+	        this.addSlotToContainer(new Slot(backpackInventory, invEnd+1, 16+offsetArmor, offsetTabs+17+((rows-1)*18)){
+	        	@Override
+	        	public boolean isItemValid(ItemStack stack){
+	        		return ToolUtil.isWeapon(stack);
+	        	}
+	        	
+	        	@Override
+	        	public String getSlotTexture(){
+	        		return "crystalmod:items/icon_sword";
+	        	}
+	        });
+	        this.addSlotToContainer(new Slot(backpackInventory, invEnd+2, 8+offsetLeft+(9*18)+8, offsetTabs+17+((rows-1)*18)){
+	        	@Override
+	        	public boolean isItemValid(ItemStack stack){
+	        		return ToolUtil.isTool(stack);
+	        	}
+	        	
+	        	@Override
+	        	public String getSlotTexture(){
+	        		return "crystalmod:items/icon_pickaxe";
+	        	}
+	        });
+		}
         
         for(int i = 0; i < 3; i++){
             for(int j = 0; j < 9; j++){
-                this.addSlotToContainer(new Slot(player.inventory, j+i*9+9, (8+offset)+j*18, (89+offsetY)+i*18));
+                this.addSlotToContainer(new Slot(player.inventory, j+i*9+9, (8+offsetLeft)+j*18, offsetTabs+(89+offsetY)+i*18));
             }
         }
         
         for(int i = 0; i < 9; i++){
-            this.addSlotToContainer(new Slot(player.inventory, i, (8+offset)+i*18, 147+offsetY));
+            this.addSlotToContainer(new Slot(player.inventory, i, (8+offsetLeft)+i*18, offsetTabs+147+offsetY));
         }
         
         for (int k = 0; k < 4; ++k)
         {
         	final EntityEquipmentSlot entityequipmentslot = entityequipmentslots[k];
-            this.addSlotToContainer(new Slot(player.inventory, 36 + (3 - k), 8, 8 + k * 18)
+            this.addSlotToContainer(new Slot(player.inventory, 36 + (3 - k), 8, offsetTabs+8 + k * 18)
             {
                 /**
                  * Returns the maximum stack size for a given slot (usually the same as getInventoryStackLimit(), but 1
@@ -111,11 +144,11 @@ public class ContainerBackpackNormal extends Container {
             });
         }
         
-        this.addSlotToContainer(new SlotOffhand(player.inventory, 40, 8, 147+offsetY));
+        this.addSlotToContainer(new SlotOffhand(player.inventory, 40, 8+gapLeft, offsetTabs+147+offsetY));
         
         if (hasBaublesSlots()) {
             for (int i = 0; i < baubles.getSlots(); i++) {
-              addSlotToContainer(new SlotBauble(player, baubles, i, (176+34+10), 8 + i*18));
+              addSlotToContainer(new SlotBauble(player, baubles, i, (176+34+10)+gapRight+gapLeft, offsetTabs+8 + i*18));
             }
         }
 	}
@@ -130,7 +163,7 @@ public class ContainerBackpackNormal extends Container {
 	
 	 @Override
 	 public ItemStack transferStackInSlot(EntityPlayer player, int slot){
-        int inventoryStart = this.backpackInventory.getSizeInventory();
+		int inventoryStart = this.backpackInventory.getSize() + (hasPockets ? 2 : 0);
         int inventoryEnd = inventoryStart+26;
         int hotbarStart = inventoryEnd+1;
         int hotbarEnd = hotbarStart+8;
@@ -155,10 +188,24 @@ public class ContainerBackpackNormal extends Container {
             }
             
             boolean isBauble = hasBaublesSlots() && currentStack.getItem() instanceof IBauble;
+            boolean skipTransfer = false;
             
-            if(entityequipmentslot == EntityEquipmentSlot.OFFHAND && !(this.inventorySlots.get(offhandStart).getHasStack())){
+            if(hasPockets && ToolUtil.isWeapon(currentStack) && !(this.inventorySlots.get(backpackInventory.getSize()).getHasStack())){
+            	if(mergeItemStack(newStack, backpackInventory.getSize(), backpackInventory.getSize()+1, false)){
+            		skipTransfer = true;
+            	}
+            }
+            else if(hasPockets && ToolUtil.isTool(currentStack) && !(this.inventorySlots.get(backpackInventory.getSize()+1).getHasStack())){
+            	if(this.mergeItemStack(newStack, backpackInventory.getSize()+1, backpackInventory.getSize()+2, false)){
+            		skipTransfer = true;
+            	}
+            }
+            
+            if(skipTransfer){
+            	
+            }
+            else if(entityequipmentslot == EntityEquipmentSlot.OFFHAND && !(this.inventorySlots.get(offhandStart).getHasStack())){
             	if(!this.mergeItemStack(newStack, offhandStart, offhandEnd+1, false)){
-            		
             		return ItemStackTools.getEmptyStack();
             	}
             }

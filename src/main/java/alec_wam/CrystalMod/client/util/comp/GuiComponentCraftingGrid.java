@@ -112,7 +112,7 @@ public class GuiComponentCraftingGrid extends GuiComponentSprite {
 		
 	public ItemStack getCycledIngredients(List<ItemStack> ingredients) {
         if(ingredients == null || ingredients.isEmpty()) return null;
-        return ingredients.get(new Random().nextInt(ingredients.size() > 1 ? ingredients.size()-1 : ingredients.size()));
+        return ingredients.get(Util.rand.nextInt(ingredients.size() > 1 ? ingredients.size()-1 : ingredients.size()));
     }
 	
 	@Override

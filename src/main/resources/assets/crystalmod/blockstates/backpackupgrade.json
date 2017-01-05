@@ -1,0 +1,14 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "transform": "forge:default-item",
+        "model": "forge:item-layer"
+    },
+    "variants": {
+        "hopper": [{ "textures": { "layer0": "crystalmod:items/backpack/upgrade/hopper" }}],
+        "ender": [{ "textures": { "layer0": "crystalmod:items/backpack/upgrade/ender" }}],
+        "restocking": [{ "textures": { "layer0": "crystalmod:items/backpack/upgrade/restock" }}],
+        "void": [{ "textures": { "layer0": "crystalmod:items/backpack/upgrade/void" }}],
+		"pockets": [{ "textures": { "layer0": "crystalmod:items/backpack/upgrade/pockets" }}]
+    }
+}

@@ -72,8 +72,7 @@ public class BlockEnderBuffer extends BlockMachine implements ICustomModel
     
     @Override
     public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-		EnumFacing face = getFacingFromEntity(placer);
-        TileEntity tile = world.getTileEntity(pos);
+		TileEntity tile = world.getTileEntity(pos);
         boolean update = false;
         if(ItemNBTHelper.verifyExistance(stack, TILE_NBT_STACK)){
         	if(tile !=null && tile instanceof TileEntityEnderBuffer){

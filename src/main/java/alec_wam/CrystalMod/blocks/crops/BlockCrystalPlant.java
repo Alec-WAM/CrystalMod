@@ -41,6 +41,7 @@ import alec_wam.CrystalMod.blocks.EnumBlock.IEnumMeta;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
+import alec_wam.CrystalMod.util.Util;
 import alec_wam.CrystalMod.items.ItemCrystal.CrystalType;
 
 public class BlockCrystalPlant extends BlockBush
@@ -214,7 +215,7 @@ public class BlockCrystalPlant extends BlockBush
     		return true;
     	}
     	
-    	Random rand = worldIn instanceof World ? ((World)worldIn).rand : random;
+    	Random rand = worldIn instanceof World ? ((World)worldIn).rand : Util.rand;
     	int fortune = EnchantmentHelper.getMaxEnchantmentLevel(Enchantments.FORTUNE, playerIn);
     	int count = 1 + rand.nextInt(2) + (fortune > 0 ? rand.nextInt(fortune + 1) : 0);
     	ItemStack crop = getCrop();
@@ -227,8 +228,6 @@ public class BlockCrystalPlant extends BlockBush
     	}
     	return true;
     }
-    
-    public final Random random = new Random();
     
     public ItemStack getCrop(){
     	switch(TYPE){
@@ -244,7 +243,7 @@ public class BlockCrystalPlant extends BlockBush
     public java.util.List<ItemStack> getDrops(net.minecraft.world.IBlockAccess world, BlockPos pos, IBlockState state, int fortune)
     {
         java.util.List<ItemStack> ret = new java.util.ArrayList<ItemStack>();
-        Random rand = world instanceof World ? ((World)world).rand : random;
+        Random rand = world instanceof World ? ((World)world).rand : Util.rand;
         int count = 1;
 
         if (((Integer)state.getValue(AGE)) >= 3)

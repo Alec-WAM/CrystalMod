@@ -9,6 +9,7 @@ import java.lang.reflect.Type;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.net.UnknownHostException;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
@@ -39,6 +40,7 @@ import com.mojang.authlib.yggdrasil.response.MinecraftProfilePropertiesResponse;
 import com.mojang.authlib.yggdrasil.response.ProfileSearchResultsResponse;
 import com.mojang.util.UUIDTypeAdapter;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
@@ -102,6 +104,9 @@ public class ProfileUtil {
 		{
 			
 		}
+		catch(UnknownHostException e){
+			
+		}
 		catch (IOException e)
 		{
 			e.printStackTrace();
@@ -111,6 +116,7 @@ public class ProfileUtil {
 	
 	public static JSONObject getJSONObject(String urlLoc){
 		final String data = downloadJsonData(urlLoc);
+		if(data.isEmpty())return null;
 		String jsonString = data.replace("[", "").replace("]", "");
 		try{
 			return new JSONObject(jsonString);
@@ -126,8 +132,9 @@ public class ProfileUtil {
 			UUID uuid = getUnCachedUUID(username);
 			if(uuid !=null){
 				uuidCache.put(username, uuid);
+			}else{
+				return EntityPlayer.getOfflineUUID(username);
 			}
-			return uuid;
 		}
 		return uuidCache.get(username);
 	}

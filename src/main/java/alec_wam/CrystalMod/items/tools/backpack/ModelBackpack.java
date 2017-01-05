@@ -78,15 +78,6 @@ public class ModelBackpack extends ModelBiped
     	
     	if(par7Entity !=null && par7Entity instanceof EntityLivingBase){
     		EntityLivingBase liv = (EntityLivingBase)par7Entity;
-        	
-    		/*ItemStack chest = liv.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
-    		
-    		if (ItemStackTools.isValid(chest))
-                if (chest.getItem() == Items.ELYTRA)
-                    GlStateManager.translate(0, 0, 0.0175);
-                else
-                    GlStateManager.translate(0, 0, -0.04);*/
-    		
     		if (liv.isSneaking()){
     			GlStateManager.rotate(25.0F, 1.0F, 0.0F, 0.0F);
         		GlStateManager.translate(0, 0.2f, -0.1F);

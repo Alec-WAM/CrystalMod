@@ -132,7 +132,7 @@ public class TileEntityPipeItem extends TileEntityPipe implements IInventoryChan
 						if(slots > 0){
 							for(int slot = 0; slot < slots; slot++){
 								ItemStack stack = sInv.getStackInSlot(slot);
-								if(!ItemStackTools.isNullStack(stack)){
+								if(ItemStackTools.isValid(stack)){
 									filterInv.addItem(stack);
 								}
 							}

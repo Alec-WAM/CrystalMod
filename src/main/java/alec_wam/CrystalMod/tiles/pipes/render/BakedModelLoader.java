@@ -11,7 +11,6 @@ public class BakedModelLoader implements ICustomModelLoader {
 
     public static final ModelPipe PIPE_MODEL = new ModelPipe();
 
-
     @Override
     public boolean accepts(ResourceLocation modelLocation) {
         return modelLocation.getResourceDomain().equals(CrystalMod.MODID.toLowerCase()) && "crystalpipe".equals(modelLocation.getResourcePath());

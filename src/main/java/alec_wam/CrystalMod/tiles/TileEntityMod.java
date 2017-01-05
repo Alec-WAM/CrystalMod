@@ -1,6 +1,7 @@
 package alec_wam.CrystalMod.tiles;
 
 import alec_wam.CrystalMod.util.BlockUtil;
+import alec_wam.CrystalMod.util.ModLogger;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
@@ -16,6 +17,7 @@ public class TileEntityMod extends TileEntity implements ITickable {
 	public final void readFromNBT(NBTTagCompound root) {
 		super.readFromNBT(root);
 		readCustomNBT(root);
+		ModLogger.info("readingFromNBT");
 	}
 
 	@Override
@@ -27,19 +29,27 @@ public class TileEntityMod extends TileEntity implements ITickable {
 
 	@Override
 	public NBTTagCompound getUpdateTag() {
-	    NBTTagCompound tag = new NBTTagCompound();
-	    writeToNBT(tag);
+	    NBTTagCompound tag = super.getUpdateTag();
+	    writeCustomNBT(tag);
 	    return tag;
 	}
 
 	@Override
 	public SPacketUpdateTileEntity getUpdatePacket() {
-	    return new SPacketUpdateTileEntity(getPos(), 1, getUpdateTag());
+		NBTTagCompound nbttagcompound = new NBTTagCompound();
+		writeCustomNBT(nbttagcompound);
+	    return new SPacketUpdateTileEntity(getPos(), 0, nbttagcompound);
 	}
 
 	@Override
+    public void handleUpdateTag(NBTTagCompound tag) {
+		super.handleUpdateTag(tag);
+        readCustomNBT(tag);
+    }
+	
+	@Override
 	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
-	    readFromNBT(pkt.getNbtCompound());
+		readCustomNBT(pkt.getNbtCompound());
 	}
 	
 	public void writeCustomNBT(NBTTagCompound cmp) {

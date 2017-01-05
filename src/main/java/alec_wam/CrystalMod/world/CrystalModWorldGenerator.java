@@ -20,8 +20,6 @@ import net.minecraftforge.fml.common.IWorldGenerator;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import alec_wam.CrystalMod.Config;
-import alec_wam.CrystalMod.CrystalMod;
-import alec_wam.CrystalMod.blocks.BlockCrystalOre;
 import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.blocks.BlockCrystalLog.WoodType;
 import alec_wam.CrystalMod.blocks.BlockCrystalOre.CrystalOreType;
@@ -32,6 +30,7 @@ public class CrystalModWorldGenerator implements IWorldGenerator {
 
     public static List<Integer> oreDimBlacklist = new ArrayList<Integer>();
     public static List<Integer> treeDimBlacklist = new ArrayList<Integer>();
+    public static List<Integer> reedDimBlacklist = new ArrayList<Integer>();
     
     @Override
     public void generate(Random random, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) {
@@ -39,16 +38,17 @@ public class CrystalModWorldGenerator implements IWorldGenerator {
     }
 
     public void generateWorld(Random random, int chunkX, int chunkZ, World world, boolean newGen) {
-        generateOres(random, chunkX, chunkZ, world, newGen);
-        generateTrees(random, chunkX, chunkZ, world, newGen);
+        boolean oreDirty = generateOres(random, chunkX, chunkZ, world, newGen);
+        boolean treeDirty = generateTrees(random, chunkX, chunkZ, world, newGen);
+        boolean reedsDirty = generateReeds(random, chunkX, chunkZ, world, newGen);
     	
-
-        if (!newGen) {
+        boolean dirty = oreDirty || treeDirty || reedsDirty;
+        if (!newGen && dirty) {
             world.getChunkFromChunkCoords(chunkX, chunkZ).setChunkModified();
         }
     }
     
-    public void generateOres(Random random, int chunkX, int chunkZ, World world, boolean newGen){
+    public boolean generateOres(Random random, int chunkX, int chunkZ, World world, boolean newGen){
     	if(!oreDimBlacklist.contains(world.provider.getDimension())){
 			if(newGen || Config.retrogenOres){
 				boolean debug = false;
@@ -65,12 +65,10 @@ public class CrystalModWorldGenerator implements IWorldGenerator {
 		            		Config.oreMaximumVeinCount,
 		            		Config.oreMinimumHeight, Config.oreMaximumHeight);
 				}
-
-	            if (!newGen) {
-	                world.getChunkFromChunkCoords(chunkX, chunkZ).setChunkModified();
-	            }
+	            return true;
 			}
     	}
+    	return false;
     }
 
 
@@ -87,19 +85,17 @@ public class CrystalModWorldGenerator implements IWorldGenerator {
         }
     }
 
-    public void generateTrees(Random random, int chunkX, int chunkZ, World world, boolean newGen){
+    public boolean generateTrees(Random random, int chunkX, int chunkZ, World world, boolean newGen){
     	if(!treeDimBlacklist.contains(world.provider.getDimension())){
 			if(newGen || Config.retrogenTrees){
 				if(random.nextInt(60) == 3){
 		        	if(!world.getWorldInfo().getTerrainType().getWorldTypeName().startsWith("flat")){
-			        	generateCrystalTree(world, random, chunkX, chunkZ);
-			            if (!newGen) {
-			                world.getChunkFromChunkCoords(chunkX, chunkZ).setChunkModified();
-			            }
+			        	return generateCrystalTree(world, random, chunkX, chunkZ);
 		            }
 		        }
 			}
     	}
+    	return false;
     }
     
     public static boolean generateCrystalTree(final World world, final Random random, final int chunkX, final int chunkZ) {
@@ -117,6 +113,31 @@ public class CrystalModWorldGenerator implements IWorldGenerator {
             return t;
         }
         return false;
+    }
+    private final WorldGenCrystalReeds reedGen = new WorldGenCrystalReeds();
+    public boolean generateReeds(Random random, int chunkX, int chunkZ, World world, boolean newGen){
+    	if(!reedDimBlacklist.contains(world.provider.getDimension())){
+			if(newGen || Config.retrogenReeds){
+				BlockPos chunkPos = new BlockPos(chunkX * 16, 0, chunkZ * 16);
+				for (int l4 = 0; l4 < Config.maximumReedsPerChunk; ++l4)
+		        {
+		            int j9 = random.nextInt(16) + 8;
+		            int i13 = random.nextInt(16) + 8;
+		            BlockPos pos = world.getHeight(chunkPos.add(j9, 0, i13));
+		            int j16 = pos.getY() * 2;
+		            
+		            Biome biome = world.getBiomeGenForCoords(pos);
+		            if(biome.theBiomeDecorator.reedsPerChunk >= 0){
+			            if (j16 > 0)
+			            {
+			                int i19 = random.nextInt(j16);
+			                return reedGen.generate(world, random, chunkPos.add(j9, i19, i13));
+			            }
+		            }
+		        }
+			}
+    	}
+    	return false;
     }
     
     public static String NBT_RETRO = "CrystalModGen";

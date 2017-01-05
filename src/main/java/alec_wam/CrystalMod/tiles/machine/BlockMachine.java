@@ -24,6 +24,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -54,7 +55,11 @@ public abstract class BlockMachine  extends BlockContainer {
         EnumFacing face = EnumFacing.NORTH;
         boolean active = false;
         if (te !=null) {
-        	if(te instanceof IFacingTile)face = EnumFacing.getHorizontal(((IFacingTile)te).getFacing());
+        	if(te instanceof IFacingTile){
+        		boolean vert = ((IFacingTile)te).useVerticalFacing();
+        		int facing = ((IFacingTile)te).getFacing();
+        		face = vert ? EnumFacing.getFront(facing) : EnumFacing.getHorizontal(facing);
+        	}
         	if(te instanceof IActiveTile)active = ((IActiveTile)te).isActive();
         }
         return state.withProperty(BlockStateMachine.facingProperty, face).withProperty(BlockStateMachine.activeProperty, Boolean.valueOf(active));
@@ -93,8 +98,8 @@ public abstract class BlockMachine  extends BlockContainer {
 	
 	protected ItemStack getNBTDrop(IBlockAccess world, BlockPos pos, TileEntity tileEntity) {
 		ItemStack stack = new ItemStack(this, 1, damageDropped(world.getBlockState(pos)));
-		if(tileEntity !=null && tileEntity instanceof TileEntityMachine){
-			TileEntityMachine machine = (TileEntityMachine)tileEntity;
+		if(tileEntity !=null && tileEntity instanceof INBTDrop){
+			INBTDrop machine = (INBTDrop)tileEntity;
 			NBTTagCompound nbt = new NBTTagCompound();
 			machine.writeToStack(nbt);
 			ItemNBTHelper.getCompound(stack).setTag(TILE_NBT_STACK, nbt);
@@ -104,23 +109,38 @@ public abstract class BlockMachine  extends BlockContainer {
 
 	@Override
     public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-		EnumFacing face = getFacingFromEntity(placer);
+		
         TileEntity tile = world.getTileEntity(pos);
         boolean update = false;
-        if(tile !=null && tile instanceof IFacingTile){
-        	((IFacingTile)tile).setFacing(face.getHorizontalIndex());
-        }
         if(ItemNBTHelper.verifyExistance(stack, TILE_NBT_STACK)){
-        	if(tile !=null && tile instanceof TileEntityMachine){
-        		TileEntityMachine machine = (TileEntityMachine)tile;
+        	if(tile !=null && tile instanceof INBTDrop){
+        		INBTDrop machine = (INBTDrop)tile;
         		machine.readFromStack(ItemNBTHelper.getCompound(stack).getCompoundTag(TILE_NBT_STACK));
         		update = true;
         	}
         }
+        if(tile !=null && tile instanceof IFacingTile){
+        	boolean vert = ((IFacingTile)tile).useVerticalFacing();
+        	EnumFacing face = getFacingFromEntity(pos, placer, vert);
+        	((IFacingTile)tile).setFacing(vert ? face.getIndex() : face.getHorizontalIndex());
+        }
         if(update)BlockUtil.markBlockForUpdate(world, pos);
     }
 	
-    public static EnumFacing getFacingFromEntity(EntityLivingBase entityIn) {
+    public static EnumFacing getFacingFromEntity(BlockPos clickedBlock, EntityLivingBase entityIn, boolean vert) {
+    	
+    	if (vert && MathHelper.abs((float) entityIn.posX - clickedBlock.getX()) < 2.0F && MathHelper.abs((float) entityIn.posZ - clickedBlock.getZ()) < 2.0F) {
+            double d0 = entityIn.posY + entityIn.getEyeHeight();
+
+            if (d0 - clickedBlock.getY() > 2.0D) {
+                return EnumFacing.UP;
+            }
+
+            if (clickedBlock.getY() - d0 > 0.0D) {
+                return EnumFacing.DOWN;
+            }
+        }
+    	
         return entityIn.getHorizontalFacing().getOpposite();
     }
     
@@ -131,7 +151,8 @@ public abstract class BlockMachine  extends BlockContainer {
         	IFacingTile tile = (IFacingTile)te;
         	int next = tile.getFacing();
         	next++;
-        	next%=4;
+        	if(tile.useVerticalFacing())next%=6;
+        	else next%=4;
         	tile.setFacing(next);
         	BlockUtil.markBlockForUpdate(world, pos);
         	return true;
@@ -141,6 +162,11 @@ public abstract class BlockMachine  extends BlockContainer {
     
     public EnumFacing[] getValidRotations(World world, BlockPos pos)
     {
+    	TileEntity tile = world.getTileEntity(pos);
+    	if(tile !=null && tile instanceof IFacingTile){
+    		boolean vert = ((IFacingTile)tile).useVerticalFacing();
+    		if(vert)return EnumFacing.VALUES;
+    	}
         return EnumFacing.HORIZONTALS;
     }
 

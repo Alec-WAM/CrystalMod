@@ -5,6 +5,7 @@ import java.io.File;
 import alec_wam.CrystalMod.Config;
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.ModBlocks;
+import alec_wam.CrystalMod.blocks.crops.material.ModCrops;
 import alec_wam.CrystalMod.capability.ExtendedPlayer;
 import alec_wam.CrystalMod.capability.ExtendedPlayerProvider;
 import alec_wam.CrystalMod.crafting.ModCrafting;
@@ -71,6 +72,7 @@ public class CommonProxy {
         ModFluids.registerFluids();
 		ModBlocks.init();
 		ModItems.init();
+		ModCrops.init();
 		ModCrafting.preInit();
 		ModEntites.init();
         MatterRegistry.init();
@@ -133,7 +135,7 @@ public class CommonProxy {
 		ModIntegration.postInit();
 		ModEnchantments.init();
 		ModEntites.postInit();
-		ModCrafting.addSlabToBlocks();
+		ModCrafting.postInit();
 		GuidePages.createPages();
 		FarmUtil.addDefaultCrops();
 	}

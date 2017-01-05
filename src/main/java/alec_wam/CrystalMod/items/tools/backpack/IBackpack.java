@@ -1,5 +1,6 @@
 package alec_wam.CrystalMod.items.tools.backpack;
 
+import alec_wam.CrystalMod.items.tools.backpack.upgrade.InventoryBackpackUpgrades;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -14,6 +15,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -48,6 +50,20 @@ public interface IBackpack {
 
 	public default TileEntity createTileEntity(World worldIn, int meta) {
 		return null;
+	}
+
+	public default boolean handleItemPickup(EntityItemPickupEvent event, EntityPlayer player, ItemStack backpack) {
+		return false;
+	}
+	
+	public int getUpgradeAmount(ItemStack stack);
+	
+	public default InventoryBackpackUpgrades getUpgradeInventory(ItemStack stack){
+		return new InventoryBackpackUpgrades(stack, getUpgradeAmount(stack));
+	}
+	
+	public default InventoryBackpackUpgrades getUpgradeInventory(EntityPlayer player, ItemStack stack){
+		return new InventoryBackpackUpgrades(player, stack, getUpgradeAmount(stack));
 	}
 
 }

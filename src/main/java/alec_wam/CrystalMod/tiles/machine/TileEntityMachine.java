@@ -16,7 +16,7 @@ import alec_wam.CrystalMod.network.packets.PacketTileMessage;
 import alec_wam.CrystalMod.tiles.TileEntityInventory;
 import alec_wam.CrystalMod.util.BlockUtil;
 
-public abstract class TileEntityMachine extends TileEntityInventory implements ICEnergyReceiver, IMessageHandler, IMachineTile, ISidedInventory {
+public abstract class TileEntityMachine extends TileEntityInventory implements ICEnergyReceiver, IMessageHandler, IMachineTile, ISidedInventory, INBTDrop {
 
 	protected CEnergyStorage eStorage;
 	private EnergyConfig energyConfig;
@@ -48,6 +48,14 @@ public abstract class TileEntityMachine extends TileEntityInventory implements I
         nbt.setInteger("ProcRem", this.processRem);
 	}
 	
+	public void writeToStack(NBTTagCompound nbt){
+		this.writeCustomNBT(nbt);
+	}
+	
+	public void readFromStack(NBTTagCompound nbt){
+		this.readCustomNBT(nbt);
+	}
+	
 	public void readCustomNBT(NBTTagCompound nbt){
 		super.readCustomNBT(nbt);
 		facing = nbt.getInteger("Facing");
@@ -58,14 +66,6 @@ public abstract class TileEntityMachine extends TileEntityInventory implements I
 		this.processMax = nbt.getInteger("ProcMax");
         this.processRem = nbt.getInteger("ProcRem");
 		updateAfterLoad();
-	}
-	
-	public void writeToStack(NBTTagCompound nbt){
-		
-	}
-	
-	public void readFromStack(NBTTagCompound nbt){
-		
 	}
 	
 	public void syncProcessValues(){

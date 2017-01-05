@@ -364,8 +364,7 @@ public class RenderMiniPlayer extends RenderPlayer
 
             if (d0 < (double)(f * f))
             {
-            	//TODO Use Events to Fix Display Name
-                String s = ScorePlayerTeam.formatPlayerName(getFakeTeam(entity), entity.getDisplayNameString());
+            	String s = ScorePlayerTeam.formatPlayerName(getFakeTeam(entity), entity.getDisplayNameString());
                 GlStateManager.alphaFunc(516, 0.1F);
                 this.renderEntityName(entity, x, y, z, s, d0);
             }
@@ -421,7 +420,7 @@ public class RenderMiniPlayer extends RenderPlayer
             }
         }
 
-        return Minecraft.isGuiEnabled() /*&& entity != Minecraft.getMinecraft().getRenderManager().renderViewEntity*/ && flag && !entity.isBeingRidden();
+        return Minecraft.isGuiEnabled() && entity != Minecraft.getMinecraft().getRenderManager().renderViewEntity && flag && !entity.isBeingRidden();
     }
     
     public String getFakeUsername(AbstractClientPlayer entityIn){

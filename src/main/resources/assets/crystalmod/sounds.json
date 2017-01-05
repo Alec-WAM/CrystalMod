@@ -1,0 +1,38 @@
+{
+  "fusion_startup": {
+    "category": "block",
+    "sounds": [
+      {
+        "name": "crystalmod:fusion_startup",
+        "stream": false
+      }
+    ], "subtitle": "crystalmod.subtitle.fusion_startup"
+  },
+  "fusion_running": {
+    "category": "block",
+    "sounds": [
+      {
+        "name": "crystalmod:fusion_running",
+        "stream": false
+      }
+    ], "subtitle": "crystalmod.subtitle.fusion_running"
+  },
+  "fusion_cooldown": {
+    "category": "block",
+    "sounds": [
+      {
+        "name": "crystalmod:fusion_cooldown",
+        "stream": false
+      }
+    ], "subtitle": "crystalmod.subtitle.fusion_cooldown"
+  },
+  "fusion_ding": {
+    "category": "block",
+    "sounds": [
+      {
+        "name": "crystalmod:fusion_ding",
+        "stream": false
+      }
+    ], "subtitle": "crystalmod.subtitle.fusion_ding"
+  }
+}

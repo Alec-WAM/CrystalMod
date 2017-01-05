@@ -51,7 +51,7 @@ public class PacketItemNBT extends AbstractPacketThreadsafe {
 			return;
 		}
 		ItemStack stack = player.inventory.getStackInSlot(slot < 0 ? player.inventory.currentItem : slot);
-		if(!ItemStackTools.isNullStack(stack)){
+		if(ItemStackTools.isValid(stack)){
 			stack.setTagCompound(data);
 		}
 	}
@@ -63,7 +63,7 @@ public class PacketItemNBT extends AbstractPacketThreadsafe {
 			return;
 		}
 		ItemStack stack = player.inventory.getStackInSlot(slot < 0 ? player.inventory.currentItem : slot);
-		if(!ItemStackTools.isNullStack(stack)){
+		if(ItemStackTools.isValid(stack)){
 			stack.setTagCompound(data);
 		}
 	}

@@ -34,7 +34,7 @@ public class BlockCrystalFluid extends BlockFluidClassic implements ICustomModel
   {
 	  Fluid fluid = FluidRegistry.getFluid(fluidName);
 	  if(fluid != null) {
-		  return Lang.translateToLocal(fluid.getUnlocalizedName());
+		  return fluid.getLocalizedName(stack);
 	  }
 	  return super.getLocalizedName();
   }

@@ -2,6 +2,20 @@ package alec_wam.CrystalMod.entities.minions.worker.jobs;
 
 import java.util.List;
 
+import com.google.common.collect.Lists;
+
+import alec_wam.CrystalMod.entities.minions.MinionConstants;
+import alec_wam.CrystalMod.entities.minions.worker.EntityMinionWorker;
+import alec_wam.CrystalMod.entities.minions.worker.WorkerJob;
+import alec_wam.CrystalMod.tiles.machine.worksite.InventorySided.RelativeSide;
+import alec_wam.CrystalMod.tiles.machine.worksite.TileWorksiteBase;
+import alec_wam.CrystalMod.tiles.machine.worksite.WorksiteUpgrade;
+import alec_wam.CrystalMod.tiles.machine.worksite.imp.WorksiteCropFarm;
+import alec_wam.CrystalMod.util.FarmUtil;
+import alec_wam.CrystalMod.util.ItemStackTools;
+import alec_wam.CrystalMod.util.fakeplayer.FakePlayerUtil;
+import alec_wam.CrystalMod.world.DropCapture;
+import alec_wam.CrystalMod.world.DropCapture.CaptureContext;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
@@ -11,21 +25,11 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.event.ForgeEventFactory;
-import alec_wam.CrystalMod.entities.minions.MinionConstants;
-import alec_wam.CrystalMod.entities.minions.worker.EntityMinionWorker;
-import alec_wam.CrystalMod.entities.minions.worker.WorkerJob;
-import alec_wam.CrystalMod.tiles.machine.worksite.TileWorksiteBase;
-import alec_wam.CrystalMod.tiles.machine.worksite.WorksiteUpgrade;
-import alec_wam.CrystalMod.tiles.machine.worksite.InventorySided.RelativeSide;
-import alec_wam.CrystalMod.tiles.machine.worksite.imp.WorksiteCropFarm;
-import alec_wam.CrystalMod.util.FarmUtil;
-import alec_wam.CrystalMod.util.fakeplayer.FakePlayerUtil;
-import alec_wam.CrystalMod.world.DropCapture;
-import alec_wam.CrystalMod.world.DropCapture.CaptureContext;
 
 public class JobHarvestCrop extends WorkerJob {
 
@@ -58,16 +62,20 @@ public class JobHarvestCrop extends WorkerJob {
 
 				final List<EntityItem> drops;
 				try {
-					if(FakePlayerUtil.rightClickBlock(worker.worldObj, cropPos, EnumFacing.UP, null)){
+					if(FakePlayerUtil.rightClickBlock(worker.worldObj, cropPos, EnumFacing.UP, ItemStackTools.getEmptyStack())){
 						worker.swingArm(EnumHand.MAIN_HAND);
 					}
 				} finally {
 					drops = dropsCapturer.stop();
 				}
 				for(EntityItem item : drops){
-					if(item !=null && !item.isDead && item.getEntityItem() !=null){
-						cFarm.addStackToInventory(item.getEntityItem(), RelativeSide.FRONT, RelativeSide.TOP);
-						item.setDead();
+					if(item !=null && item.getEntityItem() !=null){
+						ItemStack copyStack = ItemStackTools.safeCopy(item.getEntityItem());
+						cFarm.addStackToInventoryNoDrop(copyStack, false, RelativeSide.FRONT, RelativeSide.TOP);
+						item.setEntityItemStack(copyStack);
+						if (ItemStackTools.isEmpty(copyStack)) {
+							item.setDead();
+						}
 					}
 				}
 				cropPos = BlockPos.ORIGIN;

@@ -19,6 +19,7 @@ import alec_wam.CrystalMod.tiles.machine.TileEntityMachine;
 import alec_wam.CrystalMod.tiles.machine.crafting.infuser.CrystalInfusionManager.InfusionMachineRecipe;
 import alec_wam.CrystalMod.tiles.tank.Tank;
 import alec_wam.CrystalMod.util.FluidUtil;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.ModLogger;
 
@@ -66,7 +67,7 @@ public class TileEntityCrystalInfuser extends TileEntityMachine {
 	}
 	
 	public boolean canStart() {
-        if (inventory[0] == null || tank.getFluid() == null) {
+        if (ItemStackTools.isEmpty(inventory[0]) || tank.getFluid() == null) {
             return false;
         }
         final InfusionMachineRecipe recipe = CrystalInfusionManager.getRecipe(inventory[0], tank.getFluid());
@@ -74,7 +75,7 @@ public class TileEntityCrystalInfuser extends TileEntityMachine {
             return false;
         }
         final ItemStack output = recipe.getOutput();
-        return output != null && (inventory[1] == null || (ItemUtil.canCombine(output, inventory[1]) && inventory[1].stackSize + output.stackSize <= output.getMaxStackSize()));
+        return ItemStackTools.isValid(output) && (ItemStackTools.isEmpty(inventory[1]) || (ItemUtil.canCombine(output, inventory[1]) && ItemStackTools.getStackSize(inventory[1]) + ItemStackTools.getStackSize(output) <= output.getMaxStackSize()));
     }
 	
 	public boolean canFinish() {
@@ -95,17 +96,17 @@ public class TileEntityCrystalInfuser extends TileEntityMachine {
     public void processFinish() {
     	InfusionMachineRecipe recipe = CrystalInfusionManager.getRecipe(this.inventory[0], tank.getFluid());
     	final ItemStack output = recipe.getOutput();
-        if (this.inventory[1] == null) {
+        if (ItemStackTools.isEmpty(this.inventory[1])) {
             this.inventory[1] = output;
         }
         else {
             final ItemStack itemStack = this.inventory[1];
-            itemStack.stackSize += output.stackSize;
+            ItemStackTools.incStackSize(itemStack, ItemStackTools.getStackSize(output));
         }
         final ItemStack itemStack2 = this.inventory[0];
-        --itemStack2.stackSize;
-        if (this.inventory[0].stackSize <= 0) {
-            this.inventory[0] = null;
+        ItemStackTools.incStackSize(itemStack2, -1);
+        if (ItemStackTools.isEmpty(this.inventory[0])) {
+            this.inventory[0] = ItemStackTools.getEmptyStack();
         }
         final FluidStack fluidStack = tank.getFluid();
         fluidStack.amount-=recipe.getFluidInput().amount;

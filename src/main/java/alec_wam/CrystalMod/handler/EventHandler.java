@@ -7,8 +7,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.lwjgl.input.Keyboard;
-
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
@@ -26,10 +24,14 @@ import alec_wam.CrystalMod.integration.baubles.BaublesIntegration;
 import alec_wam.CrystalMod.integration.baubles.ItemBaubleWings;
 import alec_wam.CrystalMod.items.ItemDragonWings;
 import alec_wam.CrystalMod.items.ModItems;
+import alec_wam.CrystalMod.items.tools.backpack.BackpackUtil;
 import alec_wam.CrystalMod.items.tools.backpack.IBackpack;
+import alec_wam.CrystalMod.items.tools.backpack.IBackpackInventory;
 import alec_wam.CrystalMod.items.tools.backpack.ItemBackpackBase;
 import alec_wam.CrystalMod.items.tools.backpack.types.BackpackNormal;
 import alec_wam.CrystalMod.items.tools.backpack.types.InventoryBackpack;
+import alec_wam.CrystalMod.items.tools.backpack.upgrade.InventoryBackpackUpgrades;
+import alec_wam.CrystalMod.items.tools.backpack.upgrade.ItemBackpackUpgrade.BackpackUpgrade;
 import alec_wam.CrystalMod.items.tools.bat.BatHelper;
 import alec_wam.CrystalMod.items.tools.bat.ModBats;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
@@ -38,12 +40,10 @@ import alec_wam.CrystalMod.tiles.endertorch.TileEnderTorch;
 import alec_wam.CrystalMod.tiles.playercube.CubeManager;
 import alec_wam.CrystalMod.tiles.playercube.PlayerCube;
 import alec_wam.CrystalMod.tiles.playercube.TileEntityPlayerCubePortal;
-import alec_wam.CrystalMod.util.ChatUtil;
 import alec_wam.CrystalMod.util.EntityUtil;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
-import alec_wam.CrystalMod.util.ModLogger;
 import alec_wam.CrystalMod.util.PlayerUtil;
 import alec_wam.CrystalMod.util.Util;
 import alec_wam.CrystalMod.world.ModDimensions;
@@ -51,7 +51,6 @@ import baubles.api.BaubleType;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.boss.EntityDragon;
@@ -70,12 +69,10 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
@@ -85,6 +82,7 @@ import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.living.LootingLevelEvent;
+import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.entity.player.PlayerDropsEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.BreakSpeed;
@@ -93,6 +91,7 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent.EntityInteract
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickBlock;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.ExplosionEvent;
+import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -235,6 +234,7 @@ public class EventHandler {
     }
 
     public static String NBT_WINGS = "DragonWings.Flight";
+	public static boolean blockClickEvent;
     
     @SubscribeEvent
     public void entityUpdate(LivingUpdateEvent event){
@@ -244,6 +244,14 @@ public class EventHandler {
     			updateWings(player);
     		}
     	}
+    }
+    
+    @SubscribeEvent
+    public void cancelLeftClick(final PlayerInteractEvent.LeftClickBlock event) {
+        if (EventHandler.blockClickEvent) {
+        	EventHandler.blockClickEvent = false;
+            event.setUseBlock(Event.Result.DENY);
+        }
     }
     
     public static boolean hasDragonWings(EntityPlayer player){
@@ -600,11 +608,11 @@ public class EventHandler {
 			ExtendedPlayerInventory inventory = ePlayer.getInventory();
 			String[] hashOld = syncCheck.get(player.getCachedUniqueIdString());
 			
+			BackpackUtil.updateBackpack(player);
 			boolean syncTick = player.ticksExisted % 10 == 0;
-			
 			for (int a = 0; a < inventory.getSlots(); a++) {
 				ItemStack stack = inventory.getStackInSlot(a);
-				/*if(!ItemStackTools.isNullStack(stack)){
+				if(!ItemStackTools.isNullStack(stack)){
 					if (!player.getEntityWorld().isRemote) {
 						if (syncTick && !inventory.isChanged(a)) {							
 							String s = stack.toString();
@@ -615,7 +623,7 @@ public class EventHandler {
 							hashOld[a] = s;							
 						}						
 					}
-				}*/
+				}
 				
 				if (inventory.isChanged(a)) {
 					try {
@@ -688,5 +696,24 @@ public class EventHandler {
 			}
 		}
 		return false;
+	}
+	
+	@SubscribeEvent
+	public void itemPickup(EntityItemPickupEvent event){
+		EntityItem ent = event.getItem();
+    	if(ent == null)return;
+    	if(ent.getEntityItem() == null)return;
+    	EntityPlayer player = event.getEntityPlayer();
+    	if(player !=null && player.isEntityAlive()){
+    		ItemStack backpack = BackpackUtil.getBackpackOnBack(player);
+    		if(ItemStackTools.isValid(backpack)){
+    			if(backpack.getItem() instanceof ItemBackpackBase){
+    				IBackpack backpackType = ((ItemBackpackBase)backpack.getItem()).getBackpack();
+    				if(backpackType !=null && backpackType.handleItemPickup(event, player, backpack)){
+    					event.setCanceled(true);
+    				}
+    			}
+    		}
+    	}
 	}
 }

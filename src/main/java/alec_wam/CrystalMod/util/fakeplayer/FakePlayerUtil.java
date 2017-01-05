@@ -42,7 +42,7 @@ public class FakePlayerUtil {
 	private static final WeakHashMap<World, EntityPlayer> FAKE_PLAYERS = new WeakHashMap<World, EntityPlayer>();
 	
 	private static WeakReference<FakePlayer> CRYSTALMOD_PLAYER = null;
-	private static final GameProfile CRYSTALMOD = new GameProfile(UUID.nameUUIDFromBytes("[CrystalMod]".getBytes()), "[CrystalMod]");
+	public static final GameProfile CRYSTALMOD = new GameProfile(UUID.nameUUIDFromBytes("[CrystalMod]".getBytes()), "[CrystalMod]");
 	
 	private static FakePlayer getCrystalMod(WorldServer world)
     {

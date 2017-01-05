@@ -9,6 +9,7 @@ import alec_wam.CrystalMod.tiles.machine.BlockMachine;
 import alec_wam.CrystalMod.tiles.machine.BlockStateMachine;
 import alec_wam.CrystalMod.tiles.machine.TileEntityMachine;
 import alec_wam.CrystalMod.tiles.machine.crafting.furnace.TileEntityCrystalFurnace;
+import alec_wam.CrystalMod.tiles.machine.crafting.grinder.TileEntityGrinder;
 import alec_wam.CrystalMod.tiles.machine.crafting.infuser.TileEntityCrystalInfuser;
 import alec_wam.CrystalMod.tiles.machine.crafting.liquidizer.TileEntityLiquidizer;
 import alec_wam.CrystalMod.tiles.machine.crafting.press.TileEntityPress;
@@ -125,6 +126,7 @@ public class BlockCrystalMachine extends BlockMachine implements ICustomModel  {
 		FURNACE("furnace", TileEntityCrystalFurnace.class),
 		PRESS("press", TileEntityPress.class),
 		LIQUIDIZER("liquidizer", TileEntityLiquidizer.class),
+		GRINDER("grinder", TileEntityGrinder.class),
 		INFUSER("infuser", TileEntityCrystalInfuser.class);
 
 		private final String unlocalizedName;

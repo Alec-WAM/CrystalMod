@@ -1,0 +1,6 @@
+{
+	"variants": {
+		"inventory": { "model": "crystalmod:null" },
+        "normal": { "model": "crystalmod:null" }
+    }
+}

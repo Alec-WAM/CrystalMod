@@ -1,13 +1,12 @@
 package alec_wam.CrystalMod.items;
 
-import java.util.List;
 import java.util.Map;
 
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.blocks.crops.BlockCrystalPlant.PlantType;
-import alec_wam.CrystalMod.blocks.crops.ItemBlockReeds;
+import alec_wam.CrystalMod.blocks.crops.material.ItemMaterialSeed;
 import alec_wam.CrystalMod.entities.disguise.ItemDisguise;
 import alec_wam.CrystalMod.entities.minecarts.chests.ItemCrystalChestMinecart;
 import alec_wam.CrystalMod.entities.minecarts.chests.ItemEnderChestMinecart;
@@ -39,6 +38,7 @@ import alec_wam.CrystalMod.items.tools.backpack.ItemBackpackBase;
 import alec_wam.CrystalMod.items.tools.backpack.ItemBackpackNormal;
 import alec_wam.CrystalMod.items.tools.backpack.types.BackpackCrafting;
 import alec_wam.CrystalMod.items.tools.backpack.types.BackpackNormal;
+import alec_wam.CrystalMod.items.tools.backpack.upgrade.ItemBackpackUpgrade;
 import alec_wam.CrystalMod.items.tools.bat.ItemBat;
 import alec_wam.CrystalMod.tiles.machine.elevator.ItemMiscCard;
 import alec_wam.CrystalMod.tiles.machine.worksite.ItemWorksiteUpgrade;
@@ -53,7 +53,6 @@ import alec_wam.CrystalMod.util.ModLogger;
 
 import com.google.common.collect.Maps;
 
-import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -70,16 +69,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.fml.common.FMLContainer;
-import net.minecraftforge.fml.common.FMLLog;
 import net.minecraftforge.fml.common.InjectedModContainer;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
-import net.minecraftforge.fml.common.event.FMLMissingMappingsEvent;
-import net.minecraftforge.fml.common.event.FMLMissingMappingsEvent.MissingMapping;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -126,6 +120,7 @@ public class ModItems {
 	public static ItemCrystalSeeds crystalSeedsBlue, crystalSeedsRed, crystalSeedsGreen, crystalSeedsDark;
 	public static ItemCrystalSeedTree crystalTreeSeedsBlue, crystalTreeSeedsRed, crystalTreeSeedsGreen, crystalTreeSeedsDark;
 	public static Item crystalReedsBlue, crystalReedsRed, crystalReedsGreen, crystalReedsDark;
+	public static ItemMaterialSeed materialSeed;
 	
 	public static ItemPipeCover pipeCover;
 	public static ItemPipeFilter pipeFilter;
@@ -138,6 +133,7 @@ public class ModItems {
 	public static ItemBackpack backpack;
 	public static ItemBackpackNormal normalBackpack;
 	public static ItemBackpackBase craftingBackpack;
+	public static ItemBackpackUpgrade backpackupgrade;
 	public static ItemLock lock;
 	
 	public static ItemMiscCard miscCard;
@@ -201,6 +197,7 @@ public class ModItems {
 		crystalTreeSeedsRed = new ItemCrystalSeedTree(PlantType.RED);
 		crystalTreeSeedsGreen = new ItemCrystalSeedTree(PlantType.GREEN);
 		crystalTreeSeedsDark = new ItemCrystalSeedTree(PlantType.DARK);
+		materialSeed = new ItemMaterialSeed();
 		pipeCover = new ItemPipeCover();
 		pipeFilter = new ItemPipeFilter();
 		wrench = new ItemCrystalWrench();
@@ -213,6 +210,7 @@ public class ModItems {
 		backpack = new ItemBackpack();
 		normalBackpack = new ItemBackpackNormal(new BackpackNormal());
 		craftingBackpack = new ItemBackpackBase(new BackpackCrafting());
+		backpackupgrade = new ItemBackpackUpgrade();
 		lock = new ItemLock();
 		telePearl = new ItemTeloportTool();
 		superTorch = new ItemSuperTorch();

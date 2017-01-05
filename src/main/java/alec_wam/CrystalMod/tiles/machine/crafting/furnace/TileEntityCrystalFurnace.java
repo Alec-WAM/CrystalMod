@@ -26,7 +26,7 @@ public class TileEntityCrystalFurnace extends TileEntityMachine implements ISide
             return false;
         }
         final ItemStack output = recipe.getOutput();
-        return output != null && (inventory[1] == null || (ItemUtil.canCombine(output, inventory[1]) && ItemStackTools.getStackSize(inventory[1]) + ItemStackTools.getStackSize(output) <= output.getMaxStackSize()));
+        return ItemStackTools.isValid(output) && (inventory[1] == null || (ItemUtil.canCombine(output, inventory[1]) && ItemStackTools.getStackSize(inventory[1]) + ItemStackTools.getStackSize(output) <= output.getMaxStackSize()));
     }
 	
 	public boolean canFinish() {

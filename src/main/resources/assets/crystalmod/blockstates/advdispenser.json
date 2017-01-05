@@ -1,0 +1,32 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "crystalmod:machine",
+    "textures": {
+	  "particle":"crystalmod:blocks/machine/advDispenser/bottom",
+	  "up":"crystalmod:blocks/machine/advDispenser/bottom",
+	  "down":"crystalmod:blocks/machine/advDispenser/bottom",
+	  "front":"crystalmod:blocks/machine/advDispenser/front_off",
+	  "side":"crystalmod:blocks/machine/advDispenser/side"
+    },
+    "transform": "forge:default-block"
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{}],
+    "facing": {
+      "north": {},
+      "south": {"y": 180},
+      "west": {"y": 270},
+      "east": {"y": 90},
+      "up": {"x": -90},
+      "down": {"x": 90}
+    },
+	"active": {
+		"false": {
+		},
+		"true": {
+		}
+	}
+  }
+}

@@ -1,6 +1,5 @@
 package alec_wam.CrystalMod.tiles.machine;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import alec_wam.CrystalMod.util.ItemUtil;

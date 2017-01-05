@@ -27,17 +27,20 @@ import alec_wam.CrystalMod.items.backpack.gui.GuiBackpackEnderChest;
 import alec_wam.CrystalMod.items.backpack.gui.GuiBackpackFurnace;
 import alec_wam.CrystalMod.items.backpack.gui.GuiBackpackRepair;
 import alec_wam.CrystalMod.items.guide.GuiGuideBase;
-import alec_wam.CrystalMod.items.guide.GuiGuideChapter;
 import alec_wam.CrystalMod.items.guide.GuiGuideMainPage;
 import alec_wam.CrystalMod.items.guide.ItemCrystalGuide;
 import alec_wam.CrystalMod.items.guide.ItemCrystalGuide.GuideType;
-import alec_wam.CrystalMod.items.guide.old.GuiCrystalGuide;
 import alec_wam.CrystalMod.items.guide.old.GuiEStorageGuide;
 import alec_wam.CrystalMod.items.tools.backpack.BackpackUtil;
+import alec_wam.CrystalMod.items.tools.backpack.IBackpack;
 import alec_wam.CrystalMod.items.tools.backpack.ItemBackpackBase;
-import alec_wam.CrystalMod.items.tools.backpack.gui.OpenType;
+import alec_wam.CrystalMod.items.tools.backpack.upgrade.ContainerBackpackUpgradeWindow;
+import alec_wam.CrystalMod.items.tools.backpack.upgrade.ContainerBackpackUpgrades;
+import alec_wam.CrystalMod.items.tools.backpack.upgrade.GuiBackpackUpgradeWindow;
+import alec_wam.CrystalMod.items.tools.backpack.upgrade.GuiBackpackUpgrades;
+import alec_wam.CrystalMod.items.tools.backpack.upgrade.InventoryBackpackUpgrades;
+import alec_wam.CrystalMod.items.tools.backpack.upgrade.ItemBackpackUpgrade.BackpackUpgrade;
 import alec_wam.CrystalMod.tiles.chest.ContainerCrystalChest;
-import alec_wam.CrystalMod.tiles.chest.CrystalChestType;
 import alec_wam.CrystalMod.tiles.chest.GUIChest;
 import alec_wam.CrystalMod.tiles.chest.TileEntityBlueCrystalChest;
 import alec_wam.CrystalMod.tiles.chest.wireless.ContainerWirelessChest;
@@ -45,6 +48,9 @@ import alec_wam.CrystalMod.tiles.chest.wireless.GuiWirelessChest;
 import alec_wam.CrystalMod.tiles.chest.wireless.TileWirelessChest;
 import alec_wam.CrystalMod.tiles.machine.ContainerNull;
 import alec_wam.CrystalMod.tiles.machine.TileEntityMachine;
+import alec_wam.CrystalMod.tiles.machine.advDispenser.ContainerAdvDispenser;
+import alec_wam.CrystalMod.tiles.machine.advDispenser.GuiAdvDispenser;
+import alec_wam.CrystalMod.tiles.machine.advDispenser.TileAdvDispenser;
 import alec_wam.CrystalMod.tiles.machine.enderbuffer.TileEntityEnderBuffer;
 import alec_wam.CrystalMod.tiles.machine.enderbuffer.gui.ContainerEnderBuffer;
 import alec_wam.CrystalMod.tiles.machine.enderbuffer.gui.GuiEnderBuffer;
@@ -109,6 +115,10 @@ import alec_wam.CrystalMod.tiles.pipes.estorage.storage.hdd.array.TileHDDArray;
 import alec_wam.CrystalMod.tiles.pipes.item.ContainerItemPipe;
 import alec_wam.CrystalMod.tiles.pipes.item.GuiItemPipe;
 import alec_wam.CrystalMod.tiles.pipes.item.TileEntityPipeItem;
+import alec_wam.CrystalMod.tiles.pipes.item.filters.ContainerItemFilterNormal;
+import alec_wam.CrystalMod.tiles.pipes.item.filters.GuiItemFilterNormal;
+import alec_wam.CrystalMod.tiles.pipes.item.filters.ItemPipeFilter;
+import alec_wam.CrystalMod.tiles.pipes.item.filters.ItemPipeFilter.FilterType;
 import alec_wam.CrystalMod.tiles.pipes.liquid.ContainerLiquidPipe;
 import alec_wam.CrystalMod.tiles.pipes.liquid.GuiLiquidPipe;
 import alec_wam.CrystalMod.tiles.pipes.liquid.TileEntityPipeLiquid;
@@ -120,7 +130,6 @@ import alec_wam.CrystalMod.tiles.workbench.GuiCrystalWorkbench;
 import alec_wam.CrystalMod.tiles.workbench.TileEntityCrystalWorkbench;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ReflectionUtils;
-import net.minecraft.client.gui.inventory.GuiChest;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.entity.player.EntityPlayer;
@@ -198,6 +207,20 @@ public class GuiHandler implements IGuiHandler {
     		ItemStack backpack = BackpackUtil.getPlayerBackpack(player);
     		if(ItemStackTools.isValid(backpack) && backpack.getItem() instanceof ItemBackpackBase){
     			ItemBackpackBase item = (ItemBackpackBase)backpack.getItem();
+    			IBackpack type = item.getBackpack();
+    			if(z >= 1){
+    				ExtendedPlayerProvider.getExtendedPlayer(player).setOpenBackpack(backpack);
+    				InventoryBackpackUpgrades upgradeInv = type.getUpgradeInventory(backpack);
+    				BackpackUpgrade[] tabs = upgradeInv.getTabs();
+    				if(y > 0){
+    					int index = y-1;
+    					BackpackUpgrade tab = tabs[index % tabs.length];
+    					if(tab !=null){
+    						return new GuiBackpackUpgradeWindow(player.inventory, upgradeInv, tab);
+    					}
+    				}
+    				return new GuiBackpackUpgrades(player.inventory, upgradeInv);
+    			}
     			return item.getBackpack().getClientGuiElement(player, world);
     		}
     	}
@@ -245,6 +268,11 @@ public class GuiHandler implements IGuiHandler {
     			if(held.getItem() instanceof ItemCrystalGuide){
     				GuideType type = GuideType.byMetadata(held.getMetadata());
     				if(type == GuideType.ESTORAGE)return new GuiEStorageGuide(held);
+    			}
+    			if(held.getItem() instanceof ItemPipeFilter){
+    				if(held.getMetadata() == FilterType.NORMAL.ordinal() || held.getMetadata() == FilterType.MOD.ordinal()){
+    					return new GuiItemFilterNormal(player, held, hand);
+    				}
     			}
     		}
     		return null;
@@ -294,7 +322,7 @@ public class GuiHandler implements IGuiHandler {
             }
             if(te instanceof TileWirelessChest) return new GuiWirelessChest(player.inventory, (TileWirelessChest)te);
             if(te instanceof TileEntityCrystalWorkbench)return new GuiCrystalWorkbench(player.inventory, world, (TileEntityCrystalWorkbench) te);
-            
+            if(te instanceof TileAdvDispenser)return new GuiAdvDispenser(player.inventory, (TileAdvDispenser) te);
             if(te instanceof TileEntityHDDInterface)return new GuiHDDInterface(player.inventory, (TileEntityHDDInterface) te);
             if(te instanceof TileHDDArray)return new GuiHDDArray(player.inventory, (TileHDDArray) te);
             if(te instanceof TileEntityPanelMonitor)return new GuiPanelMonitor(player, (TileEntityPanelMonitor) te);
@@ -351,6 +379,20 @@ public class GuiHandler implements IGuiHandler {
     		ItemStack backpack = BackpackUtil.getPlayerBackpack(player);
     		if(ItemStackTools.isValid(backpack) && backpack.getItem() instanceof ItemBackpackBase){
     			ItemBackpackBase item = (ItemBackpackBase)backpack.getItem();
+    			IBackpack type = item.getBackpack();
+    			if(z >= 1){
+    				ExtendedPlayerProvider.getExtendedPlayer(player).setOpenBackpack(backpack);
+    				InventoryBackpackUpgrades upgradeInv = type.getUpgradeInventory(backpack);
+    				BackpackUpgrade[] tabs = upgradeInv.getTabs();
+    				if(y > 0){
+    					int index = y-1;
+    					BackpackUpgrade tab = tabs[index % tabs.length];
+    					if(tab !=null){
+    						return new ContainerBackpackUpgradeWindow(player.inventory, upgradeInv, tab);
+    					}
+    				}
+    				return new ContainerBackpackUpgrades(player.inventory, upgradeInv);
+    			}
     			return item.getBackpack().getServerGuiElement(player, world);
     		}
     	}
@@ -386,6 +428,11 @@ public class GuiHandler implements IGuiHandler {
     		        		return new ContainerPanel(player.inventory, new PanelSourceWireless((TileEntityWirelessPanel)te, held));
     		        	}
     		        }
+    			}
+    			if(held.getItem() instanceof ItemPipeFilter){
+    				if(held.getMetadata() == FilterType.NORMAL.ordinal() || held.getMetadata() == FilterType.MOD.ordinal()){
+    					return new ContainerItemFilterNormal(player, held, hand);
+    				}
     			}
     		}
     		return null;
@@ -431,7 +478,7 @@ public class GuiHandler implements IGuiHandler {
         	if(te instanceof TileEntityCrystalWorkbench){
         		return new ContainerCrystalWorkbench(player.inventory, world, (TileEntityCrystalWorkbench) te);
         	}
-        	
+        	if(te instanceof TileAdvDispenser)return new ContainerAdvDispenser(player.inventory, (TileAdvDispenser) te);
         	//if(te instanceof TileEntityPipe)return ((TileEntityPipe)te).getContainer(ID, player);
         	
         	if(te instanceof TileEntityHDDInterface)return new ContainerHDDInterface(player.inventory, (TileEntityHDDInterface)te);

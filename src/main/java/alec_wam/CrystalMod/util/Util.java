@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
+import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -29,6 +30,8 @@ import alec_wam.CrystalMod.CrystalMod;
 
 public class Util {
 	  
+	public static Random rand = new Random();
+	
 	  public static String getNameForBlock(Block block) {
 	        Object obj = Block.REGISTRY.getNameForObject(block);
 	        if (obj == null) {

@@ -1,5 +1,6 @@
 package alec_wam.CrystalMod.items.tools.backpack.types;
 
+import java.util.Arrays;
 import java.util.UUID;
 
 import alec_wam.CrystalMod.capability.ExtendedPlayerProvider;
@@ -7,6 +8,8 @@ import alec_wam.CrystalMod.items.tools.backpack.BackpackUtil;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
+import alec_wam.CrystalMod.util.ModLogger;
+import joptsimple.internal.Strings;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -16,24 +19,35 @@ import net.minecraft.util.text.TextComponentTranslation;
 
 public class InventoryBackpack implements IInventory {
 
-	private EntityPlayer player;
-	private ItemStack backpack;
-	public ItemStack[] slots;
-	private int size;
+	protected EntityPlayer player;
+	protected ItemStack backpack;
+	protected ItemStack[] slots;
+	protected int size;
+	protected final String tagName;
 
     public InventoryBackpack(EntityPlayer player, ItemStack backpack, int size){
+    	this(player, backpack, size, "");
+    }
+    
+    public InventoryBackpack(EntityPlayer player, ItemStack backpack, int size, String tag){
     	this.size = size;
     	this.player = player;
     	this.backpack = backpack;
-        this.slots = new ItemStack[getSizeInventory()];
+        this.slots = new ItemStack[size];
+        tagName = tag;
         readFromNBT(ItemNBTHelper.getCompound(backpack));
     }
     
     public InventoryBackpack(ItemStack backpack, int size){
+    	this(backpack, size, "");
+    }
+    
+    public InventoryBackpack(ItemStack backpack, int size, String tag){
     	this.size = size;
     	this.player = null;
     	this.backpack = backpack;
-        this.slots = new ItemStack[getSizeInventory()];
+        this.slots = new ItemStack[size];
+        tagName = tag;
         readFromNBTNoPlayer(ItemNBTHelper.getCompound(backpack));
     }
 
@@ -97,7 +111,7 @@ public class InventoryBackpack implements IInventory {
 
     @Override
     public void clear(){
-        this.slots = new ItemStack[getSizeInventory()];
+    	Arrays.fill(slots, ItemStackTools.getEmptyStack());
     }
 
     @Override
@@ -110,6 +124,10 @@ public class InventoryBackpack implements IInventory {
     public int getSizeInventory(){
         return size;
     }
+    
+    public int getSize(){
+    	return size;
+    }
 
     @Override
     public ItemStack getStackInSlot(int i){
@@ -121,18 +139,18 @@ public class InventoryBackpack implements IInventory {
 
     @Override
     public ItemStack decrStackSize(int i, int j){
-        if(!ItemStackTools.isNullStack(slots[i])){
+        if(!ItemStackTools.isNullStack(getStackInSlot(i))){
             ItemStack stackAt;
-            if(ItemStackTools.getStackSize(slots[i]) <= j){
-                stackAt = this.slots[i];
-                this.slots[i] = ItemStackTools.getEmptyStack();
+            if(ItemStackTools.getStackSize(getStackInSlot(i)) <= j){
+                stackAt = getStackInSlot(i);
+                setInventorySlotContents(i, ItemStackTools.getEmptyStack());
                 this.markDirty();
                 return stackAt;
             }
             else{
-                stackAt = this.slots[i].splitStack(j);
-                if(ItemStackTools.isEmpty(this.slots[i])){
-                    this.slots[i] = ItemStackTools.getEmptyStack();
+                stackAt = getStackInSlot(i).splitStack(j);
+                if(ItemStackTools.isEmpty(getStackInSlot(i))){
+                    setInventorySlotContents(i, ItemStackTools.getEmptyStack());
                 }
                 this.markDirty();
                 return stackAt;
@@ -143,8 +161,8 @@ public class InventoryBackpack implements IInventory {
 
     @Override
     public ItemStack removeStackFromSlot(int index){
-        ItemStack stack = this.slots[index];
-        this.slots[index] = ItemStackTools.getEmptyStack();
+        ItemStack stack = getStackInSlot(index);
+        setInventorySlotContents(index, ItemStackTools.getEmptyStack());
         return stack;
     }
 
@@ -180,12 +198,18 @@ public class InventoryBackpack implements IInventory {
     }
 
     public void writeToNBT(NBTTagCompound nbt){
-    	if(!player.getEntityWorld().isRemote) {
-    		ItemStack found = findRealStack(player);
-    		ItemStack backpackToUse = (!ItemStackTools.isValid(found) ? backpack : found);
-    		
+    	if(player == null || !player.getEntityWorld().isRemote) {
+    		ItemStack found = player == null ? ItemStackTools.getEmptyStack() : findRealStack(player);
+    		ItemStack backpackToUse = (ItemStackTools.isValid(found) ? found : backpack);
+    		backpack = backpackToUse;
     		nbt = backpackToUse.getTagCompound();
-    		ItemUtil.writeInventoryToNBT(this, nbt);
+    		if(!Strings.isNullOrEmpty(tagName)){
+    			NBTTagCompound nbtInv = new NBTTagCompound();
+    			ItemUtil.writeInventoryToNBT(this, nbtInv);
+    			nbt.setTag(tagName, nbtInv);
+    		} else {
+    			ItemUtil.writeInventoryToNBT(this, nbt);
+    		}
     	}
     }
     
@@ -195,6 +219,9 @@ public class InventoryBackpack implements IInventory {
     		backpack = (!ItemStackTools.isValid(found) ? backpack : found);
     		if(ItemStackTools.isValid(backpack)){
     			nbt = backpack.getTagCompound();
+    			if(!Strings.isNullOrEmpty(tagName)){
+    				nbt = backpack.getTagCompound().getCompoundTag(tagName);
+    			}
     			if(nbt !=null){
     				//Clear inventory before load
     				clear();
@@ -207,6 +234,9 @@ public class InventoryBackpack implements IInventory {
     public void readFromNBTNoPlayer(NBTTagCompound nbt){
     	if(ItemStackTools.isValid(backpack)){
 			nbt = backpack.getTagCompound();
+			if(!Strings.isNullOrEmpty(tagName)){
+				nbt = backpack.getTagCompound().getCompoundTag(tagName);
+			}
 			if(nbt !=null){
 				//Clear inventory before load
 				clear();
@@ -215,7 +245,7 @@ public class InventoryBackpack implements IInventory {
 		}
     }
 
-	private ItemStack findRealStack(EntityPlayer player) {
+	protected ItemStack findRealStack(EntityPlayer player) {
 		if (ItemNBTHelper.hasUUID(backpack)){
             UUID parentUUID = ItemNBTHelper.getUUID(backpack);
             ItemStack found = BackpackUtil.findBackpack(player, parentUUID);

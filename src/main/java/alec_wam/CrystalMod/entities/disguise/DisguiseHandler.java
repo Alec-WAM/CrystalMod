@@ -88,7 +88,6 @@ public class DisguiseHandler {
 		ExtendedPlayer ePlayer = ExtendedPlayerProvider.getExtendedPlayer(event.getEntityPlayer());
 		if(ePlayer !=null && ePlayer.getCurrentDiguise() !=DisguiseType.NONE)
         {
-            
             event.setCanceled(true);
             float f1 = event.getEntityPlayer().prevRotationYaw + (event.getEntityPlayer().rotationYaw - event.getEntityPlayer().prevRotationYaw) * event.getPartialRenderTick();
             if(Minecraft.getMinecraft().getRenderManager().renderEngine != null && Minecraft.getMinecraft().getRenderManager().renderViewEntity != null && Minecraft.getMinecraft().getRenderManager() !=null)
@@ -111,8 +110,6 @@ public class DisguiseHandler {
         }
     }
 	
-	
-	//TODO Edit Name in Chat for maximum disguise
 	@SubscribeEvent
 	public void overrideDisplayName(PlayerEvent.NameFormat event){
 		EntityPlayer player = event.getEntityPlayer();
@@ -148,8 +145,6 @@ public class DisguiseHandler {
 	                GlStateManager.popMatrix();
 	            }
 	        }
-	        
-            //mc.getRenderManager().getSkinMap().put(s, rend);
         }
     }
 	
