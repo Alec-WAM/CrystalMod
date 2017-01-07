@@ -30,6 +30,7 @@ import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.Lang;
+import alec_wam.CrystalMod.util.ModLogger;
 
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
@@ -123,6 +124,11 @@ public class GuiPanel extends GuiContainer implements IGuiScreen, INetworkGui  {
 					index = 0;
 				}
 				panel.setSortType(SortType.values()[index]);
+				boolean safe = panel.getNetwork() !=null && panel.getNetwork() instanceof EStorageNetworkClient;
+				if(safe){
+					EStorageNetworkClient net = (EStorageNetworkClient) panel.getNetwork();
+					net.needsListUpdate = true;
+				}
 				refreshButtons();
 			}
 		}
@@ -134,6 +140,11 @@ public class GuiPanel extends GuiContainer implements IGuiScreen, INetworkGui  {
 					index = 0;
 				}
 				panel.setViewType(ViewType.values()[index]);
+				boolean safe = panel.getNetwork() !=null && panel.getNetwork() instanceof EStorageNetworkClient;
+				if(safe){
+					EStorageNetworkClient net = (EStorageNetworkClient) panel.getNetwork();
+					net.needsListUpdate = true;
+				}
 				refreshButtons();
 			}
 		}
@@ -160,7 +171,7 @@ public class GuiPanel extends GuiContainer implements IGuiScreen, INetworkGui  {
         			if(slot !=null){
         				if (slot.canTakeStack(mc.thePlayer))
         	            {
-        	                if(panel.getNetwork() !=null && slot.getStack() !=null){
+        	                if(panel.getNetwork() !=null && ItemStackTools.isValid(slot.getStack())){
         	                	ItemStack copy = slot.getStack().copy();
         	                	copy.stackSize = 1;
         	                	try {
@@ -491,7 +502,7 @@ public class GuiPanel extends GuiContainer implements IGuiScreen, INetworkGui  {
 	            GlStateManager.enableLighting();
 	            GlStateManager.enableDepth();
 	            RenderHelper.enableStandardItemLighting();
-			}
+			} 
 			stacksRendered++;
 			x+=18;
 			if(stacksRendered%getItemsPerRow()==0){

@@ -484,37 +484,15 @@ public class ItemUtil {
    * @return True if the ItemStack matches the name passed.
    */
   public static boolean itemStackMatchesOredict(ItemStack stack, String oredict) {
-	if(ItemStackTools.isEmpty(stack))return false;
-    int[] ids = OreDictionary.getOreIDs(stack);
-    for (int i : ids) {
-      String name = OreDictionary.getOreName(i);
-      if (name.equals(oredict)) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  /**
-   * Gets an NBT tag from an ItemStack, creating it if needed. The tag returned
-   * will always be the same as the one on the stack.
-   * 
-   * @param stack
-   *          The ItemStack to get the tag from.
-   * @return An NBTTagCompound from the stack.
-   */
-  public static NBTTagCompound getNBTTag(ItemStack stack) {
-    if (!stack.hasTagCompound()) {
-      stack.setTagCompound(new NBTTagCompound());
-    }
-    return stack.getTagCompound();
-  }
-
-  public static NBTTagCompound getOrCreateNBT(ItemStack stack) {
-    if (!stack.hasTagCompound()) {
-      stack.setTagCompound(new NBTTagCompound());
-    }
-    return stack.getTagCompound();
+	  if(ItemStackTools.isEmpty(stack))return false;
+	  int[] ids = OreDictionary.getOreIDs(stack);
+	  for (int i : ids) {
+		  String name = OreDictionary.getOreName(i);
+		  if (name.equals(oredict)) {
+			  return true;
+		  }
+	  }
+	  return false;
   }
 
   public static int doInsertItem(Object into, ItemStack item, EnumFacing side) {
@@ -726,27 +704,7 @@ public class ItemUtil {
     if (ItemStackTools.isNullStack(s1) || ItemStackTools.isNullStack(s2) || !s1.isStackable() || !s2.isStackable()) {
       return false;
     }
-    if (!s1.isItemEqual(s2)) {
-      return false;
-    }
-    return ItemStack.areItemStackTagsEqual(s1, s2);
-  }
-
-  /**
-   * Checks if items, damage and NBT are equal.
-   * 
-   * @param s1
-   * @param s2
-   * @return True if the two stacks are equal, false otherwise.
-   */
-  public static boolean areStacksEqual(ItemStack s1, ItemStack s2) {
-    if (ItemStackTools.isNullStack(s1) || ItemStackTools.isNullStack(s2)) {
-      return false;
-    }
-    if (!s1.isItemEqual(s2)) {
-      return false;
-    }
-    return ItemStack.areItemStackTagsEqual(s1, s2);
+    return ItemUtil.canCombine(s1, s2);
   }
 
   private interface ISlotIterator {
@@ -819,30 +777,28 @@ public class ItemUtil {
 	  ItemStackTools.setStackSize(copy, size);
 	  return copy;
   }
-
-
     
-    public static ItemStack getRandomEnchantedItem(Enchantment enchantment, EntityLivingBase entity)
-    {
-    	Iterable<ItemStack> stacks = entity.getEquipmentAndArmor();
-        if (stacks == null)
-        {
-        	return null;
-        }
-        else
-        {
-            List<ItemStack> list = Lists.newArrayList();
+  public static ItemStack getRandomEnchantedItem(Enchantment enchantment, EntityLivingBase entity)
+  {
+	  Iterable<ItemStack> stacks = entity.getEquipmentAndArmor();
+	  if (stacks == null)
+	  {
+		  return null;
+	  }
+	  else
+	  {
+		  List<ItemStack> list = Lists.newArrayList();
 
-            for (ItemStack itemstack : stacks)
-            {
-                if (!ItemStackTools.isNullStack(itemstack) && EnchantmentHelper.getEnchantmentLevel(enchantment, itemstack) > 0)
-                {
-                    list.add(itemstack);
-                }
-            }
-            return list.isEmpty() ? null : (ItemStack)list.get(entity.getRNG().nextInt(list.size()));
-        }
-    }
+		  for (ItemStack itemstack : stacks)
+		  {
+			  if (!ItemStackTools.isNullStack(itemstack) && EnchantmentHelper.getEnchantmentLevel(enchantment, itemstack) > 0)
+			  {
+				  list.add(itemstack);
+			  }
+		  }
+		  return list.isEmpty() ? null : (ItemStack)list.get(entity.getRNG().nextInt(list.size()));
+	  }
+  }
     
     public static IItemHandler getExternalItemHandler(IBlockAccess world, BlockPos pos, EnumFacing face){
     	if (world == null || pos == null || face == null) {
@@ -1100,8 +1056,6 @@ public class ItemUtil {
 		}
 		return false;
 	}
-
-	
 
 	/** Writes the contents of the inventory to the tag */
 	public static void writeInventoryToNBT(IInventory inventory, NBTTagCompound tag) {
@@ -1366,10 +1320,6 @@ public class ItemUtil {
         }
         return stack1.getDisplayName().compareTo(stack2.getDisplayName());
 	}
-
-	public static boolean isSame(ItemStack stack, EntityPlayer player, EnumHand hand){
-		return ItemStack.areItemStacksEqual(stack, player.getHeldItem(hand));
-	}
 	
 	public static EntityItem dropFromPlayer(EntityPlayer player, ItemStack stack, boolean motion) {
 		EntityItem ei = new EntityItem(player.worldObj,	player.posX, player.posY + player.getEyeHeight(), player.posZ, stack);
@@ -1438,6 +1388,38 @@ public class ItemUtil {
 
             entityIn.addStat(StatList.getObjectsPickedUpStats(itemstack.getItem()), i);
         }
+	}
+
+	/**
+	 * 
+	 * @param handler
+	 * @param stack can be empty if you want to figure out how much empty slots are in the itemhandler
+	 * @param oreDict counts items that also match ore ids
+	 * @return amount of items found
+	 */
+	public static int countItems(IItemHandler handler, ItemStack stack, boolean oreDict) {
+		if(handler == null)return 0;
+		if(ItemStackTools.isEmpty(stack)){
+			int count = 0;
+			for(int i = 0; i < handler.getSlots(); i++){
+				ItemStack invStack = handler.getStackInSlot(i);
+				if(ItemStackTools.isEmpty(invStack)){
+					count++;
+				}
+			}
+			return count;
+		} else {
+			int count = 0;
+			for(int i = 0; i < handler.getSlots(); i++){
+				ItemStack invStack = handler.getStackInSlot(i);
+				if(ItemStackTools.isValid(invStack)){
+					if(oreDict ? ItemUtil.stackMatchUseOre(stack, invStack) : ItemUtil.canCombine(stack, invStack)){
+						count+=ItemStackTools.getStackSize(invStack);
+					}
+				}
+			}
+			return count;
+		}
 	}
 
 }

@@ -62,11 +62,10 @@ public class ContainerPanel extends Container implements INetworkContainer {
 	public void addListener(IContainerListener crafter){
 		super.addListener(crafter);
 		if(panel.getNetwork() !=null){
-			if(!panel.getNetwork().watchers.contains(this))
 			panel.getNetwork().watchers.add(this);
 		}
 		if(crafter !=null && crafter instanceof EntityPlayerMP){
-			sendItemsTo((EntityPlayerMP)crafter);	
+			sendItemsTo((EntityPlayerMP)crafter);
 		}
 	}
 	
@@ -264,6 +263,7 @@ public class ContainerPanel extends Container implements INetworkContainer {
 	public void sendCraftingItemsToAll(List<ItemStackData> dataList){
 		if(panel.getNetwork() !=null){
 			try {
+				ModLogger.info("Sending crafting items");
 				PacketEStorageItemList pil = new PacketEStorageItemList(panel.getPanelPos(), EnumListType.CRAFTING, EStorageNetwork.compressItems(dataList));
 				for(Object crafter : listeners){
 					if(crafter !=null && crafter instanceof EntityPlayerMP){

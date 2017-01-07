@@ -350,6 +350,7 @@ tile.crystalmod.encoder.name=Crafting Recipe Encoder
 tile.crystalmod.craftingEncoder.normal.name=Crafting Recipe Encoder
 tile.crystalmod.craftingEncoder.processing.name=External Crafting Recipe Encoder
 tile.crystalmod.autocrafter.name=Crafting Manager
+tile.crystalmod.stocker.name=Network Stocker
 
 tile.crystalmod.crystalcauldron.name=Crystal Cauldron
 

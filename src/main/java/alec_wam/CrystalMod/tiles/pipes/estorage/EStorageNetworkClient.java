@@ -12,6 +12,7 @@ import alec_wam.CrystalMod.tiles.pipes.estorage.client.CountComp;
 import alec_wam.CrystalMod.tiles.pipes.estorage.client.ItemFilter;
 import alec_wam.CrystalMod.tiles.pipes.estorage.client.ModComp;
 import alec_wam.CrystalMod.tiles.pipes.estorage.client.NameComp;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.ModLogger;
 
@@ -60,18 +61,21 @@ public class EStorageNetworkClient extends EStorageNetwork {
 		
 		if(viewType == ViewType.BOTH || viewType == ViewType.ITEMS){
 			for(ItemStackData data : getItemStorage().getItemList()){
-				if(data.stack !=null){
+				if(ItemStackTools.isValid(data.stack)){
 					copy.add(data);
 				}
 			}
 		}
 		if(viewType == ViewType.BOTH || viewType == ViewType.PATTERNS){
 			for(ItemStackData data : craftingItems){
-				if(data.stack !=null){
+				if(!ItemStackTools.isNullStack(data.stack)){
 					
 					boolean safe = true;
 					search : for(ItemStackData item : getItemStorage().getItemList()){
-						if(item.stack !=null && ItemUtil.canCombine(item.stack, data.stack)){
+						if(!ItemStackTools.isNullStack(item.stack)  && ItemUtil.canCombine(item.stack, data.stack)){
+							if(viewType == ViewType.PATTERNS){
+								copy.add(item);
+							}
 							safe = false;
 							break search;
 						}

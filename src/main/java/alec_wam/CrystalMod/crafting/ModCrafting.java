@@ -332,7 +332,10 @@ public class ModCrafting {
 		addShapedOreRecipe(new ItemStack(ModBlocks.encoder, 1, EncoderType.NORMAL.getMeta()), new Object[]{"#P#", "IWI", "#I#", '#', dIronPlate, 'W', "workbench", 'I', dIronPlate, 'P', ModItems.craftingPattern});
 		addShapelessRecipe(new ItemStack(ModBlocks.encoder, 1, EncoderType.PROCESSING.getMeta()), new Object[]{new ItemStack(ModBlocks.encoder, 1, EncoderType.NORMAL.getMeta())});
 
-		
+		ItemStack attachment_import = ItemPipeAttachment.getAttachmentStack(AttachmentUtil.eStorage_Import.getID());
+		ItemStack attachment_export = ItemPipeAttachment.getAttachmentStack(AttachmentUtil.eStorage_Export.getID());
+		addShapedOreRecipe(ModBlocks.stocker, new Object[]{"#C#", "EMR", "#P#", '#', dIronPlate, 'R', Items.COMPARATOR, 'M', machineFrame, 'E', attachment_export, 'C', ModItems.craftingPattern, 'P', pipeEStorage});
+
 		addShapedOreRecipe(ItemHDD.getFromMeta(0), new Object[]{"#R#", "CIC", "#T#", '#', dIronIngot, 'R', "dustRedstone", 'I', Blocks.HEAVY_WEIGHTED_PRESSURE_PLATE, 'C', blueIngot, 'T', Blocks.TRIPWIRE_HOOK});
 		List<String> copyList = Lists.newArrayList();
 		copyList.add(ItemHDD.NBT_ITEM_LIST);
@@ -354,9 +357,8 @@ public class ModCrafting {
 			ItemStackTools.setStackSize(cover6, 6);
 			addShapedOreRecipe(cover6, "s", "cn", 'c', ItemPipeCover.coverRecipes.get(cover), 's', "slimeball", 'n', "nuggetCrystal");
 		}
-		
-		addShapedRecipe(ItemPipeAttachment.getAttachmentStack(AttachmentUtil.eStorage_Import.getID()), new Object[]{"DHD", " E ", 'D', dIronPlate, 'E', pipeEStorage, 'H', Blocks.HOPPER});
-		addShapelessRecipe(ItemPipeAttachment.getAttachmentStack(AttachmentUtil.eStorage_Export.getID()), new Object[]{ItemPipeAttachment.getAttachmentStack(AttachmentUtil.eStorage_Import.getID()), Blocks.PISTON});
+		addShapedRecipe(attachment_import, new Object[]{"DHD", " E ", 'D', dIronPlate, 'E', pipeEStorage, 'H', Blocks.HOPPER});
+		addShapelessRecipe(attachment_export, new Object[]{ItemPipeAttachment.getAttachmentStack(AttachmentUtil.eStorage_Import.getID()), Blocks.PISTON});
 		addShapedRecipe(ItemPipeAttachment.getAttachmentStack(AttachmentUtil.eStorage_Sensor.getID()), new Object[]{"DCD", " E ", 'D', dIronPlate, 'E', pipeEStorage, 'C', Items.COMPARATOR});
 
 		addShapedOreRecipe(ModBlocks.cubePortal, new Object[]{"#P#", "PEP", "#P#", '#', dIronPlate, 'E', "endereye", 'P', "enderpearl"});

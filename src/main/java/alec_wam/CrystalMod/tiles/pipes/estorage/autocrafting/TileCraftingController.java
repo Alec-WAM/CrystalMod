@@ -150,22 +150,24 @@ public class TileCraftingController extends TileEntityMod implements INetworkTil
 		addCraftingTask(task);
 	}
 
-	public void scheduleCraftingTaskIfUnscheduled(ItemStack stack, int toSchedule) {
+	public void scheduleCraftingTaskIfUnscheduled(ItemStack stack, int toSchedule, boolean ore) {
 		if(network == null)return;
 		int alreadyScheduled = 0;
 
 		for (ICraftingTask task : getCraftingTasks()) {
 			for (ItemStack output : task.getPattern().getOutputs()) {
-				if (ItemUtil.canCombine(output, stack)) {
-					alreadyScheduled++;
+				if (ore ? ItemUtil.stackMatchUseOre(output, stack) : ItemUtil.canCombine(output, stack)) {
+					alreadyScheduled+=ItemStackTools.getStackSize(output);
 				}
 			}
 		}
 
-		CraftingPattern pattern = network.getPatternWithBestScore(stack);
-
-		if (pattern != null) {
-			addCraftingTaskAsLast(createCraftingTask(stack, pattern, toSchedule - alreadyScheduled));
+		CraftingPattern pattern = network.getPatternWithBestScore(stack, ore);
+		int craftAmount = toSchedule - alreadyScheduled;
+		if (pattern != null && craftAmount > 0) {
+			ICraftingTask task = createCraftingTask(stack, pattern, craftAmount);
+			task.calculate(network);
+			addCraftingTaskAsLast(task);
 		}
 	}
 

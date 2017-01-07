@@ -197,7 +197,7 @@ public class ItemStorage {
 				NetworkedItemProvider inter = i1.next();
 				ItemStack took = inter.getInterface().getNetworkInventory().extractItem(network, stack, amt, filter, sim);
 				if(!ItemStackTools.isNullStack(took)){
-					if(ItemStackTools.isNullStack(ret)){
+					if(ItemStackTools.isEmpty(ret)){
 						ret = took;
 					} else {
 						ItemStackTools.incStackSize(ret, ItemStackTools.getStackSize(took));

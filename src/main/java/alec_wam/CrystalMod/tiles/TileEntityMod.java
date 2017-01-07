@@ -17,7 +17,6 @@ public class TileEntityMod extends TileEntity implements ITickable {
 	public final void readFromNBT(NBTTagCompound root) {
 		super.readFromNBT(root);
 		readCustomNBT(root);
-		ModLogger.info("readingFromNBT");
 	}
 
 	@Override

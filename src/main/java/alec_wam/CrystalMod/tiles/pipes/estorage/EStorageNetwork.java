@@ -419,6 +419,7 @@ public class EStorageNetwork extends AbstractPipeNetwork {
 	// AUTO CRAFTING
 
 	public void updatePatterns() {
+		ModLogger.info("Updating Patterns");
 		patterns.clear();
 		List<ItemStackData> data = Lists.newArrayList();
 		for (IAutoCrafter crafter : crafters) {
@@ -443,7 +444,6 @@ public class EStorageNetwork extends AbstractPipeNetwork {
 				}
 			}
 		}
-
 		for (INetworkContainer watcher : this.watchers) {
 			if (watcher != null) {
 				watcher.sendCraftingItemsToAll(data);

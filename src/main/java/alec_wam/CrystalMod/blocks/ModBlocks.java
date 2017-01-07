@@ -87,6 +87,8 @@ import alec_wam.CrystalMod.tiles.pipes.estorage.panel.display.TileEntityPanelIte
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.display.TileEntityPanelItemRenderer;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.wireless.BlockWirelessPanel;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.wireless.TileEntityWirelessPanel;
+import alec_wam.CrystalMod.tiles.pipes.estorage.stocker.BlockStocker;
+import alec_wam.CrystalMod.tiles.pipes.estorage.stocker.TileEntityStocker;
 import alec_wam.CrystalMod.tiles.pipes.estorage.storage.external.BlockExternalInterface;
 import alec_wam.CrystalMod.tiles.pipes.estorage.storage.external.TileEntityExternalInterface;
 import alec_wam.CrystalMod.tiles.pipes.estorage.storage.hdd.BlockHDDInterface;
@@ -161,6 +163,7 @@ public class ModBlocks {
 	public static BlockWirelessPipeWrapper wirelessPipe;
 	public static BlockCraftingController craftingController;
 	public static BlockCrafter crafter;
+	public static BlockStocker stocker;
 	public static BlockPatternEncoder encoder;
 	
 	public static BlockPlayerCubeBlock cubeBlock;
@@ -319,6 +322,9 @@ public class ModBlocks {
 		crafter = new BlockCrafter();
 		registerBlock(crafter, "autocrafter");
 		registerTileEntity(TileCrafter.class);
+		
+		stocker = registerBlock(new BlockStocker(), "stocker");
+		registerTileEntity(TileEntityStocker.class);
 		
 		encoder = new BlockPatternEncoder();
 		registerEnumBlock(encoder, "craftingEncoder");

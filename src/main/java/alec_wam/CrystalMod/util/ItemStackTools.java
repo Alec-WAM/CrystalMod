@@ -75,7 +75,7 @@ public class ItemStackTools {
     
     
     public static boolean isNullStack(@Nullable ItemStack stack){
-    	return isEmpty(stack);
+    	return stack == null;
     }
     
 
