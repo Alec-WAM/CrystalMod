@@ -10,6 +10,7 @@ import alec_wam.CrystalMod.api.recipe.IFusionRecipe;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.Lang;
+import alec_wam.CrystalMod.util.ModLogger;
 import alec_wam.CrystalMod.util.StringUtils;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.Vec3d;
@@ -48,7 +49,7 @@ public class FusionRecipe implements IFusionRecipe {
 	public boolean matches(IFusionPedistal fpedistal, World world, List<IPedistal> pedistals) {
 		if(ItemStackTools.isEmpty(fpedistal.getStack())) return false;
 		
-		if(ItemUtil.matches(getMainInput(), fpedistal.getStack()) && ItemStackTools.getStackSize(fpedistal.getStack()) == 1){
+		if(ItemUtil.matches(getMainInput(), fpedistal.getStack())){
 			List<IPedistal> pedistalCopy = Lists.newArrayList(pedistals);
 			for(Object ingredient : getInputs()){
 				boolean found = false;
@@ -119,7 +120,9 @@ public class FusionRecipe implements IFusionRecipe {
 
 	@Override
 	public void finishCrafting(IFusionPedistal fpedistal, World world, List<IPedistal> linkedPedistals) {
-		if(!matches(fpedistal, world, linkedPedistals))return;
+		if(!matches(fpedistal, world, linkedPedistals)){
+			return;
+		}
 		List<IPedistal> pedistalCopy = Lists.newArrayList(linkedPedistals);
 		for(Object ingredient : getInputs()){
 			search : for(IPedistal pedistal : pedistalCopy){
@@ -131,8 +134,8 @@ public class FusionRecipe implements IFusionRecipe {
 				}
 			}
 		}
-		
-		fpedistal.setStack(getOutput());
+		ItemStack output = ItemUtil.copy(getOutput(), 1);
+		fpedistal.setStack(output);
 		//TODO Consume Energy
 	}
 

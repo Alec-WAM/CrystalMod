@@ -142,19 +142,24 @@ public class TileFusionPedistal extends TileEntityInventory implements IFusionPe
 		return 1;
 	}
 	
+	@Override
+	public boolean canExtract(int slot, int amount){
+		return !isLocked();
+	}
+	
 	public void startCrafting(@Nullable EntityPlayer player){
 		pedistalSearch();
 		
 		runningRecipe = CrystalModAPI.findFusionRecipe(this, getWorld(), linkedPedistals);
 		
-		if(runningRecipe !=null){
-			boolean passes = runningRecipe.matches(this, getWorld(), linkedPedistals);
+		if(runningRecipe !=null && runningRecipe.matches(this, getWorld(), linkedPedistals)){
+			String message = runningRecipe.canCraft(this, getWorld(), linkedPedistals);
+			boolean passes = message.equalsIgnoreCase("true");
 			if(passes){
 				isCrafting.setValue(true);
 			} else {
 				if(player !=null && !getWorld().isRemote){
-					String message = runningRecipe.canCraft(this, getWorld(), linkedPedistals);
-					if(!message.equalsIgnoreCase("true"))ChatUtil.sendChat(player, message);
+					ChatUtil.sendChat(player, message);
 				}
 			}
 		} else {

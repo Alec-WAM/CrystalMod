@@ -2,6 +2,8 @@ package alec_wam.CrystalMod.tiles.fusion;
 
 import javax.annotation.Nullable;
 
+import com.enderio.core.common.util.ChatUtil;
+
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.api.pedistals.IFusionPedistal;
 import alec_wam.CrystalMod.api.pedistals.IPedistal;
@@ -129,7 +131,7 @@ public class BlockPedistal extends BlockContainer implements ICustomModel {
 			if(locked)return false;
 			if(ItemStackTools.isValid(heldItem)){
 				ItemStack insertStack = heldItem;
-				if(playerIn.isSneaking()){
+				if(ItemStackTools.isEmpty(pedistal.getStack())){
 					insertStack = ItemUtil.copy(heldItem, 1);
 				}
 				IItemHandler handler = ItemUtil.getExternalItemHandler(worldIn, pos, EnumFacing.UP);
@@ -140,21 +142,26 @@ public class BlockPedistal extends BlockContainer implements ICustomModel {
 					worldIn.playSound(null, pos, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.BLOCKS, 0.5f, 0.95f);
 					return true;
 				}
-				return false;
-			} else {
-				
-				ItemStack pedistalStack = pedistal.getStack();
-				if(ItemStackTools.isValid(pedistalStack)){
-					ItemStack drop = ItemStackTools.safeCopy(pedistalStack);
-					pedistal.setStack(ItemStackTools.getEmptyStack());
+			} 
+			ItemStack pedistalStack = pedistal.getStack();
+			if(ItemStackTools.isValid(pedistalStack)){
+				ItemStack drop = ItemStackTools.safeCopy(pedistalStack);
+				pedistal.setStack(ItemStackTools.getEmptyStack());
+				boolean dropItem = true;
+				if(ItemStackTools.isEmpty(heldItem) && playerIn.isSneaking()){
+					playerIn.setHeldItem(hand, drop);
+					dropItem = false;
+				}
+				if(dropItem){
 					playerIn.inventory.addItemStackToInventory(drop);
 					if(!ItemStackTools.isEmpty(drop)){
 						ItemUtil.spawnItemInWorldWithRandomMotion(worldIn, drop, pos);
 					}
-					worldIn.playSound(null, pos, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.BLOCKS, 0.5f, 0.85f);
-					return true;
 				}
+				worldIn.playSound(null, pos, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.BLOCKS, 0.5f, 0.85f);
+				return true;
 			}
+			return false;
 		}
         return false;
     }

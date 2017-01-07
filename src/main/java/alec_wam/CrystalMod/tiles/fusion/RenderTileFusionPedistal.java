@@ -2,6 +2,7 @@ package alec_wam.CrystalMod.tiles.fusion;
 
 import java.awt.Color;
 import java.util.List;
+import java.util.Random;
 
 import org.lwjgl.opengl.GL11;
 
@@ -12,6 +13,7 @@ import alec_wam.CrystalMod.handler.ClientEventHandler;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.client.RenderUtil;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.Tessellator;
@@ -36,25 +38,20 @@ public class RenderTileFusionPedistal<T extends TileFusionPedistal> extends Tile
 		float liftDistance = 0.6f;
 		float itemLift = 0.0f;
 		float lazerLift = 0.0f;
-		if(tile.craftingCooldown.getValue() > 0){
+		boolean hasItem = ItemStackTools.isValid(tile.getStack());
+		if(tile.craftingCooldown.getValue() > 0 && hasItem){
         	int remaining = (tile.craftingCooldown.getValue());
         	itemLift = (liftDistance) * ((float)(remaining / 100f));
         	float scale = tile.getStack().getItem() instanceof ItemBlock ? 0.1f : 0.25f;
         	lazerLift = (liftDistance-scale) * ((float)(remaining / 100f));
 		}
 
-        if(ItemStackTools.isValid(tile.getStack())){
+        if(hasItem){
         	GlStateManager.pushMatrix();
         	GlStateManager.translate(x, y, z);
 	        GlStateManager.translate(0.5 + (facing.getFrontOffsetX() * 0.45), 0.5 + (facing.getFrontOffsetY() * 0.45), 0.5 + (facing.getFrontOffsetZ() * 0.45));
 	        float scale = tile.getStack().getItem() instanceof ItemBlock ? 0.65f : 0.5f;
 	        
-	        if(tile.craftingCooldown.getValue() > 0){
-	        	/*int remaining = (tile.craftingCooldown.getValue());
-	        	double offset = 0.2*((float)(remaining / 100f));
-	        	scale+=offset;
-	        	GlStateManager.translate(0, -offset/2, 0);*/
-	        }
 	        GlStateManager.scale(scale, scale, scale);
 	        if (facing.getAxis() == EnumFacing.Axis.Y){
 	            if (facing == EnumFacing.DOWN){
@@ -64,7 +61,8 @@ public class RenderTileFusionPedistal<T extends TileFusionPedistal> extends Tile
 	        else {
 	            GlStateManager.rotate(90, facing.getFrontOffsetZ(), 0, facing.getFrontOffsetX() * -1);
 	        }
-	        float speed = 0.8f;//0.8f;
+	        GlStateManager.pushMatrix();
+	        float speed = 0.8f;
 	        if(tile.craftingCooldown.getValue() > 0){
 	        	speed = 50f;
 	        	GlStateManager.translate(0, itemLift, 0);
@@ -72,14 +70,83 @@ public class RenderTileFusionPedistal<T extends TileFusionPedistal> extends Tile
 	        	double offset = 1.0d + (0.5*((float)(remaining / 100f)));
 	        	GlStateManager.scale(offset, offset, offset);
 	        }
+	        
+	        
 	        GlStateManager.rotate((((ClientEventHandler.elapsedTicks * speed) + partialTicks)) % 360, 0F, 1F, 0F);
 	
 	        RenderUtil.renderItem(tile.getStack(), TransformType.FIXED);
-	
+	        GlStateManager.popMatrix();
+	        
+
+	        
+
+	    	
+	        boolean renderFancyEffect = tile.craftingCooldown.getValue() > 0;
+	        if(renderFancyEffect){
+	        	Tessellator tessellator = Tessellator.getInstance();
+	            VertexBuffer vertexbuffer = tessellator.getBuffer();
+	            RenderHelper.disableStandardItemLighting();
+	            float f = ((float)tile.craftingCooldown.getValue()) / 100.0F;
+	            if(f == 1.0F){
+	            	f = 0.98f;
+	            }
+	            
+	            float f1 = 0.0F;
+
+	            if (f > 0.8F)
+	            {
+	                f1 = (f - 0.8F) / 0.2F;
+	            }
+
+	            Random random = new Random(432L);
+	            GlStateManager.disableTexture2D();
+	            GlStateManager.shadeModel(7425);
+	            GlStateManager.enableBlend();
+	            GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);
+	            GlStateManager.disableAlpha();
+	            GlStateManager.enableCull();
+	            GlStateManager.depthMask(false);
+	            GlStateManager.pushMatrix();
+	            
+	            GlStateManager.translate(0, itemLift, 0);
+	            GlStateManager.scale(0.08, 0.08, 0.08);
+	            
+            	GlStateManager.rotate((float)(((ClientEventHandler.elapsedTicks * 2))) % 360, 0, 1, 0);
+
+	            for (int i = 0; (float)i < (f + f * f) / 2.0F * 60.0F; ++i)
+	            {
+	                GlStateManager.rotate(random.nextFloat() * 360.0F, 1.0F, 0.0F, 0.0F);
+	                GlStateManager.rotate(random.nextFloat() * 360.0F, 0.0F, 1.0F, 0.0F);
+	                GlStateManager.rotate(random.nextFloat() * 360.0F, 0.0F, 0.0F, 1.0F);
+	                GlStateManager.rotate(random.nextFloat() * 360.0F, 1.0F, 0.0F, 0.0F);
+	                GlStateManager.rotate(random.nextFloat() * 360.0F, 0.0F, 1.0F, 0.0F);
+	                GlStateManager.rotate(random.nextFloat() * 360.0F + f * 90.0F, 0.0F, 0.0F, 1.0F);
+	                float f2 = random.nextFloat() * 20.0F + 5.0F + f1 * 10.0F;
+	                float f3 = random.nextFloat() * 2.0F + 1.0F + f1 * 2.0F;
+	                vertexbuffer.begin(6, DefaultVertexFormats.POSITION_COLOR);
+	                vertexbuffer.pos(0.0D, 0.0D, 0.0D).color(255, 255, 255, (int)(255.0F * (1.0F - f1))).endVertex();
+	                vertexbuffer.pos(-0.866D * (double)f3, (double)f2, (double)(-0.5F * f3)).color(255, 255, 255, 0).endVertex();
+	                vertexbuffer.pos(0.866D * (double)f3, (double)f2, (double)(-0.5F * f3)).color(255, 255, 255, 0).endVertex();
+	                vertexbuffer.pos(0.0D, (double)f2, (double)(1.0F * f3)).color(255, 255, 255, 0).endVertex();
+	                vertexbuffer.pos(-0.866D * (double)f3, (double)f2, (double)(-0.5F * f3)).color(255, 255, 255, 0).endVertex();
+	                tessellator.draw();
+	            }
+
+	            GlStateManager.popMatrix();
+	            GlStateManager.depthMask(true);
+	            GlStateManager.disableCull();
+	            GlStateManager.disableBlend();
+	            GlStateManager.shadeModel(7424);
+	            GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+	            GlStateManager.enableTexture2D();
+	            GlStateManager.enableAlpha();
+	            RenderHelper.enableStandardItemLighting();
+	        }
+	        
 	        GlStateManager.popMatrix();
         }
 		
-		if(!tile.linkedPedistals.isEmpty() && tile.isCrafting.getValue()){
+		if(!tile.linkedPedistals.isEmpty() && tile.isCrafting.getValue() && hasItem){
 			Vec3d masterVec = new Vec3d(tile.getPos());
 			
 			masterVec = masterVec.addVector(facing.getFrontOffsetX() * 0.35, facing.getFrontOffsetY() * 0.35, facing.getFrontOffsetZ() * 0.35);
@@ -124,8 +191,6 @@ public class RenderTileFusionPedistal<T extends TileFusionPedistal> extends Tile
 			        RenderUtil.renderItem(pedistal.getStack(), TransformType.FIXED);
 			        GlStateManager.popMatrix();
 				}
-				//renderBeam(masterVec.xCoord+0.5, masterVec.yCoord+0.5+lazerLift, masterVec.zCoord+0.5, pedistalVec.xCoord+0.5, pedistalVec.yCoord+0.5, pedistalVec.zCoord+0.5, (int)(100*progress), partialTicks, 0.1d, r, g, b, 1F);
-
 				lazerList.add(pedistal);
 			}
 			for(IPedistal pedistal : lazerList){

@@ -1,13 +1,10 @@
 package alec_wam.CrystalMod.api;
 
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
-import javax.vecmath.Vector4d;
 
 import com.google.common.collect.Maps;
 
@@ -25,7 +22,6 @@ import alec_wam.CrystalMod.blocks.crops.material.ISeedInfo;
 import alec_wam.CrystalMod.blocks.crops.material.ISeedOverlay;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.Lang;
-import alec_wam.CrystalMod.util.ModLogger;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
