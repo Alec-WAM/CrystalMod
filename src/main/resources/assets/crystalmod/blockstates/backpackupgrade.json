@@ -9,6 +9,9 @@
         "ender": [{ "textures": { "layer0": "crystalmod:items/backpack/upgrade/ender" }}],
         "restocking": [{ "textures": { "layer0": "crystalmod:items/backpack/upgrade/restock" }}],
         "void": [{ "textures": { "layer0": "crystalmod:items/backpack/upgrade/void" }}],
-		"pockets": [{ "textures": { "layer0": "crystalmod:items/backpack/upgrade/pockets" }}]
+		"pockets": [{ "textures": { "layer0": "crystalmod:items/backpack/upgrade/pockets" }}],
+		"bow": [{ "textures": { "layer0": "crystalmod:items/backpack/upgrade/bow" }}],
+		"despawn": [{ "textures": { "layer0": "crystalmod:items/backpack/upgrade/despawn" }}],
+		"death": [{ "textures": { "layer0": "crystalmod:items/backpack/upgrade/death" }}]
     }
 }

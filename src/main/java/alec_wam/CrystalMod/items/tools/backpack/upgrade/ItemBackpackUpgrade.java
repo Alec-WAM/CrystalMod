@@ -52,7 +52,7 @@ public class ItemBackpackUpgrade extends Item implements ICustomModel {
 	}
 	
 	public static enum BackpackUpgrade implements IStringSerializable, IEnumMetaItem {
-		HOPPER, ENDER, RESTOCKING, VOID, POCKETS;
+		HOPPER, ENDER, RESTOCKING, VOID, POCKETS, BOW, DESPAWN, DEATH;
 
 		@Override
 		public int getMetadata() {

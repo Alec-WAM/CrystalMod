@@ -45,7 +45,7 @@ public class ItemDarkIronBow extends ItemBow implements ICustomModel {
 		this.maxStackSize = 1;
         this.setMaxDamage(384*2);
 		this.setCreativeTab(CrystalMod.tabTools);
-		ModItems.registerItem(this, "darkIronBow");
+		ModItems.registerItem(this, "darkironbow");
 		
 		addPropertyOverride(new ResourceLocation("pull"), new IItemPropertyGetter() {
 	      @Override

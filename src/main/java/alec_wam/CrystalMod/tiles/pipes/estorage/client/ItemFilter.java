@@ -16,14 +16,7 @@ public abstract class ItemFilter {
   public static ItemFilter parse(String filter, Locale locale) {
     ArrayList<ItemFilter> list = new ArrayList<ItemFilter>();
 
-    String[] parts = SPLIT_PATTERN.split(filter);
-    /*try{
-	    for(int s = 0; s < parts.length; s++){
-		    parts[s] = parts[s].split("\\|");
-	    }
-    }catch(Exception e){
-    	e.printStackTrace();
-    }*/
+    String[] parts = filter.split("\\|");
     for(String part : parts) {
       if(part.startsWith("@")) {
         part = part.substring(1);
@@ -38,17 +31,7 @@ public abstract class ItemFilter {
     	  }
       }
       else if(!part.isEmpty()) {
-    	String[] fixed = new String[]{part}; 
-    	try{
-    		fixed = part.split("\\|");
-        }catch(Exception e){
-        	e.printStackTrace();
-        }
-    	for(String fix : fixed){
-    		if(!fix.isEmpty()) {
-    			list.add(new NameFilter(fix, locale));
-    		}
-    	}
+    	list.add(new NameFilter(part, locale));
       }
     }
 

@@ -21,6 +21,7 @@ import alec_wam.CrystalMod.tiles.pipes.estorage.client.IGuiScreen;
 import alec_wam.CrystalMod.tiles.pipes.estorage.client.VScrollbar;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.Lang;
+import alec_wam.CrystalMod.util.ModLogger;
 
 public class GuiGuideIndex extends GuiGuideBase implements IGuiScreen {
 
@@ -143,7 +144,7 @@ public class GuiGuideIndex extends GuiGuideBase implements IGuiScreen {
 			final int xStart = guiLeft+10+12;
 			int x = xStart;
 			int y = guiTop+40;
-			int row = scrollbarRight.getScrollPos();
+			int row = scrollbarLeft.getScrollPos();
 			List<GuideChapter> chapters = indexes[0].getChapters();
 			for(int s = row; (s < row+6); s++){
 				

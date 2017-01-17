@@ -81,6 +81,8 @@ public class Config {
 	public static int engine_vampire_maxattack = 16;
 	public static int advDispenser_cooldown = 40; //2 seconds
 	
+	public static boolean backpackDeathUpgradeConsume = false;
+	
 	@SubscribeEvent
 	public void onConfigChanged(OnConfigChangedEvent event) {
 		if(event.getModID().equals(CrystalMod.MODID)) {
@@ -134,6 +136,8 @@ public class Config {
         }
         
         tool_pureDamageAddition = cfg.get(CATEGORY_ITEM, "pureToolDurabilityAdditon", tool_pureDamageAddition, "Durability bonus for pure tools").getInt();
+        
+        backpackDeathUpgradeConsume = cfg.get(CATEGORY_ITEM, "DeathUpgradeConsumed", backpackDeathUpgradeConsume, "Set to true if death upgrades are consumed of death.").getBoolean();
 
         int headtype = cfg.get(CATEGORY_ENTITY, "mobHeadDrop", mobHeadType.ordinal(), "0 = Never Drop; 1 = Drop when killed; 2 = Drop only when killed by player;").getInt(mobHeadType.ordinal());
     	if(headtype < 0)headtype = 0;

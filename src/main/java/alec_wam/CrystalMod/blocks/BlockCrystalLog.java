@@ -38,7 +38,6 @@ public class BlockCrystalLog extends BlockLog implements ICustomModel
 {
     public static final PropertyEnum<WoodType> VARIANT = PropertyEnum.<WoodType>create("variant", WoodType.class);
     
-
     public static enum WoodType implements IEnumMeta, IStringSerializable {
     	BLUE, RED, GREEN, DARK;
 

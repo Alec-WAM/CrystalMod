@@ -10,6 +10,7 @@ import javax.annotation.Nonnull;
 import com.google.common.collect.Lists;
 
 import alec_wam.CrystalMod.api.CrystalModAPI;
+import alec_wam.CrystalMod.blocks.BlockCrystalLog;
 import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.blocks.crops.material.IMaterialCrop;
 import alec_wam.CrystalMod.blocks.crops.material.ItemMaterialSeed;
@@ -149,13 +150,13 @@ public class CrystalMod {
         @Override
         @SideOnly(Side.CLIENT)
         public Item getTabIconItem() {
-            return ModItems.materialSeed;
+            return Item.getItemFromBlock(ModBlocks.crystalSapling);
         }
         
         @SideOnly(Side.CLIENT)
         public ItemStack getIconItemStack()
         {
-            return ItemMaterialSeed.getSeed(ModCrops.DIRT);
+            return new ItemStack(ModBlocks.crystalSapling, 1, BlockCrystalLog.WoodType.BLUE.getMeta());
         }
         
         @Override

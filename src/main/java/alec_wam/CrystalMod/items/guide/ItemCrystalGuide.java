@@ -6,6 +6,8 @@ import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.api.guide.GuideChapter;
 import alec_wam.CrystalMod.api.guide.GuideIndex;
 import alec_wam.CrystalMod.blocks.ICustomModel;
+import alec_wam.CrystalMod.capability.ExtendedPlayer;
+import alec_wam.CrystalMod.capability.ExtendedPlayerProvider;
 import alec_wam.CrystalMod.handler.GuiHandler;
 import alec_wam.CrystalMod.items.IEnumMetaItem;
 import alec_wam.CrystalMod.items.ModItems;
@@ -108,6 +110,12 @@ public class ItemCrystalGuide extends Item implements ICustomModel {
 			if(playerIn.isSneaking()){
 				GuidePages.createPages();
 				ModLogger.info("Created Pages");
+				
+				ExtendedPlayer exPlayer = ExtendedPlayerProvider.getExtendedPlayer(playerIn);
+				if(exPlayer !=null && worldIn.isRemote){
+					exPlayer.lastOpenBook = null;
+				}
+				
 				return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStackIn);
 			}
 			playerIn.openGui(CrystalMod.instance, GuiHandler.GUI_ID_GUIDE, worldIn, 0, 0, 0);

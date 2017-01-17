@@ -12,7 +12,7 @@ public class ItemBaubleWings extends ItemBauble {
 		super();
 		setMaxStackSize(1);
 		this.setCreativeTab(CrystalMod.tabTools);
-		ModItems.registerItem(this, "dragonWingBauble");
+		ModItems.registerItem(this, "dragonwingbauble");
 	}
 	
 	@Override

@@ -41,15 +41,13 @@ public class ItemLock extends Item {
 		EnumHand opp = hand == EnumHand.MAIN_HAND ? EnumHand.OFF_HAND : EnumHand.MAIN_HAND;
 		ItemStack heldOpp = playerIn.getHeldItem(opp);
 		if(ItemStackTools.isValid(heldOpp)){
-			if(heldOpp.getItem() instanceof ItemBackpackBase){
-				IBackpack type = ((ItemBackpackBase)heldOpp.getItem()).getBackpack();
-				if(type.canLock(heldOpp, playerIn)){
-					BackpackUtil.setOwner(heldOpp, playerIn.getUniqueID());
-					if(!playerIn.capabilities.isCreativeMode){
-						playerIn.setHeldItem(hand, ItemUtil.consumeItem(itemStackIn));
-					}
-					return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStackIn);
+			IBackpack type = BackpackUtil.getType(heldOpp);
+			if(type !=null && type.canLock(heldOpp, playerIn)){
+				BackpackUtil.setOwner(heldOpp, playerIn.getUniqueID());
+				if(!playerIn.capabilities.isCreativeMode){
+					playerIn.setHeldItem(hand, ItemUtil.consumeItem(itemStackIn));
 				}
+				return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStackIn);
 			}
 		}
 		return new ActionResult<ItemStack>(EnumActionResult.PASS, itemStackIn);

@@ -35,7 +35,7 @@ public class ItemWirelessPanel extends Item implements ICustomModel {
 		super();
 		setMaxStackSize(1);
 		setCreativeTab(CrystalMod.tabItems);
-		ModItems.registerItem(this, "wirelessPanelReceiver");
+		ModItems.registerItem(this, "wirelesspanelreceiver");
 	}
 	
 	@SideOnly(Side.CLIENT)

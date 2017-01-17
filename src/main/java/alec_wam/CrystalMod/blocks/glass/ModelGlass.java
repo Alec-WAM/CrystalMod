@@ -60,11 +60,10 @@ public class ModelGlass extends DynamicItemAndBlockModel {
 	@Override
 	public List<BakedQuad> getGeneralQuads() {
 		List<BakedQuad> list = Lists.newArrayList();
-		
 		boolean renderUp = true, renderD = true, renderN = true, renderS = true, renderW = true, renderE = true;
 		ModelRotation rot = ModelRotation.X0_Y0;
 		GlassType type = GlassType.BLUE;
-		if(!ItemStackTools.isNullStack(stack)){
+		if(ItemStackTools.isValid(stack)){
 			type = GlassType.values()[stack.getMetadata() % (GlassType.values().length)];
 		}else if(state !=null){
 			
@@ -82,9 +81,9 @@ public class ModelGlass extends DynamicItemAndBlockModel {
 		float[] bottom = new float[] { 0.0f, 15.0f, 16.0f, 16.0f };
 		float[] left = new float[] { 0.0f, 0.0f, 1.0f, 16.0f };
 		float[] right = new float[] { 15.0f, 0.0f, 16.0f, 16.0f };
-		
 		if(state == null){
-			final BlockFaceUV uv = new BlockFaceUV(new float[]{0, 0, 16, 16}, 0);
+			final BlockFaceUV uv = new BlockFaceUV(new float[]{0, 0, 16F, 16F}, 0);
+			final BlockPartFace face = new BlockPartFace(EnumFacing.NORTH, 0, "", uv);
 			final BlockPartFace faceU = new BlockPartFace(EnumFacing.UP, 0, "", uv);
 			final BlockPartFace faceD = new BlockPartFace(EnumFacing.DOWN, 0, "", uv);
 			final BlockPartFace faceN = new BlockPartFace(EnumFacing.NORTH, 0, "", uv);
@@ -102,8 +101,8 @@ public class ModelGlass extends DynamicItemAndBlockModel {
 		}
 		
 		if(renderUp){
-			final BlockFaceUV uv = new BlockFaceUV(new float[]{0, 0, 16, 16}, 0);
-			final BlockPartFace face = new BlockPartFace(EnumFacing.UP, 0, "", uv);
+			final BlockFaceUV uv = new BlockFaceUV(top, 0);
+			final BlockPartFace face = new BlockPartFace(EnumFacing.NORTH, 0, "", uv);
 			boolean showN = !state.getValue(BlockCrystalGlass.CONNECTED_NORTH);
 			boolean showS = !state.getValue(BlockCrystalGlass.CONNECTED_SOUTH);
 			boolean showE = !state.getValue(BlockCrystalGlass.CONNECTED_WEST);

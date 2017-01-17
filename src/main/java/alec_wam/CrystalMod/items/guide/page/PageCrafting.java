@@ -1,5 +1,6 @@
 package alec_wam.CrystalMod.items.guide.page;
 
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
@@ -18,6 +19,7 @@ import alec_wam.CrystalMod.tiles.machine.ContainerNull;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.Lang;
+import alec_wam.CrystalMod.util.ModLogger;
 import alec_wam.CrystalMod.util.Util;
 import alec_wam.CrystalMod.util.client.RenderUtil;
 import net.minecraft.client.Minecraft;
@@ -33,6 +35,7 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
@@ -53,10 +56,14 @@ public class PageCrafting extends GuidePage {
 	private ItemStack output;
 	private List<ItemStack> stacks;
 	
+	public PageCrafting(String id, ItemStack item){
+		this(id, Collections.singletonList(item));
+	}
+	
 	public PageCrafting(String id, List<ItemStack> resultingItem) {
 		super(id);
 		stacks = resultingItem;
-		updateItem(resultingItem.get(0));
+		if(!resultingItem.isEmpty())updateItem(resultingItem.get(0));
 	}
 
 	private static IRecipe getFirstRecipeForItem(ItemStack resultingItem) {
@@ -86,7 +93,7 @@ public class PageCrafting extends GuidePage {
     }
 
 	public void updateItem(ItemStack out){
-		IRecipe recipe = getFirstRecipeForItem(out);
+		/*IRecipe recipe = getFirstRecipeForItem(out);
 		this.ingred = recipe !=null ? getRecipeInput(recipe) : new ItemStack[9];
 		this.items = new ItemStack[ingred.length];
 		this.currentRecipe = recipe;
@@ -98,7 +105,8 @@ public class PageCrafting extends GuidePage {
 			
 			if(obj instanceof ItemStack){
 				items[i] = ((ItemStack) obj).copy();
-				if(items[i] !=null && items[i].getItemDamage() == OreDictionary.WILDCARD_VALUE)items[i].setItemDamage(0);
+				ModLogger.info("Updateing "+i+" to "+items[i]);
+				if(ItemStackTools.isValid(items[i]) && items[i].getItemDamage() == OreDictionary.WILDCARD_VALUE)items[i].setItemDamage(0);
 			} 
 			if(obj instanceof String){
 				String id = (String)obj;
@@ -108,7 +116,7 @@ public class PageCrafting extends GuidePage {
 					continue;
 				}
 				items[i] = stacks.get(0).copy();
-				if(items[i] !=null && items[i].getItemDamage() == OreDictionary.WILDCARD_VALUE)items[i].setItemDamage(0);
+				if(ItemStackTools.isValid(items[i]) && items[i].getItemDamage() == OreDictionary.WILDCARD_VALUE)items[i].setItemDamage(0);
 			}
 			if(obj instanceof List<?>){
 				List<?> list = ((List<?>)obj);
@@ -116,24 +124,126 @@ public class PageCrafting extends GuidePage {
 					Object objL = list.get(0);
 					if(objL instanceof ItemStack){
 						items[i] = ((ItemStack) objL).copy();
-						if(items[i] !=null && items[i].getItemDamage() == OreDictionary.WILDCARD_VALUE)items[i].setItemDamage(0);
+						if(ItemStackTools.isValid(items[i]) && items[i].getItemDamage() == OreDictionary.WILDCARD_VALUE)items[i].setItemDamage(0);
 					}
 				}
 			}
+		}*/
+		IRecipe recipe = getFirstRecipeForItem(out);
+		this.ingred = new Object[9];
+		this.items = new ItemStack[9];
+		this.currentRecipe = recipe;
+		
+		this.output = recipe !=null ? recipe.getRecipeOutput() : out;
+		ItemStack[] stacks = new ItemStack[9];
+        int width = 3;
+        int height = 3;
+
+        if(recipe instanceof ShapedRecipes){
+            ShapedRecipes shaped = (ShapedRecipes)recipe;
+            width = shaped.recipeWidth;
+            height = shaped.recipeHeight;
+            this.ingred = stacks = shaped.recipeItems;
+        }
+        else if(recipe instanceof ShapelessRecipes){
+            ShapelessRecipes shapeless = (ShapelessRecipes)recipe;
+            for(int i = 0; i < shapeless.recipeItems.size(); i++){
+            	ingred[i] = stacks[i] = shapeless.recipeItems.get(i);
+            }
+        }
+        else if(recipe instanceof ShapedOreRecipe){
+            ShapedOreRecipe shaped = (ShapedOreRecipe)recipe;
+            try{
+                width = ReflectionHelper.getPrivateValue(ShapedOreRecipe.class, shaped, 4);
+                height = ReflectionHelper.getPrivateValue(ShapedOreRecipe.class, shaped, 5);
+            }
+            catch(Exception e){
+            }
+            for(int i = 0; i < shaped.getInput().length; i++){
+                Object input = shaped.getInput()[i];
+                if(input != null){
+                	ingred[i] = input;
+                    stacks[i] = input instanceof ItemStack ? (ItemStack)input : (((List<ItemStack>)input).isEmpty() ? ItemStackTools.getEmptyStack() : getRandomIngredient(((List<ItemStack>)input)));
+                }
+            }
+        }
+        else if(recipe instanceof ShapelessOreRecipe){
+            ShapelessOreRecipe shapeless = (ShapelessOreRecipe)recipe;
+            for(int i = 0; i < shapeless.getInput().size(); i++){
+                Object input = shapeless.getInput().get(i);
+                ingred[i] = input;
+                stacks[i] = input instanceof ItemStack ? (ItemStack)input : (((List<ItemStack>)input).isEmpty() ? ItemStackTools.getEmptyStack() : getRandomIngredient(((List<ItemStack>)input)));
+            }
+        }
+        
+        for(int i = 0; i < stacks.length; i++){
+        	ItemStack stack = stacks[i];
+            if(ItemStackTools.isValid(stack)){
+	        	ItemStack copy = ItemUtil.copy(stack, 1);
+	            if(copy.getItemDamage() == OreDictionary.WILDCARD_VALUE){
+	                copy.setItemDamage(0);
+	            }
+	        	int index = getCraftingIndex(i, width, height);
+	            items[index] = copy;
+            }
+        }
+       /* for(int x = 0; x < width; x++){
+            for(int y = 0; y < height; y++){
+            	int i = y*width+x;
+                ItemStack stack = stacks[i];
+                if(ItemStackTools.isValid(stack)){
+                    ItemStack copy = ItemUtil.copy(stack, 1);
+                    if(copy.getItemDamage() == OreDictionary.WILDCARD_VALUE){
+                        copy.setItemDamage(0);
+                    }
+                    int index = getCraftingIndex(i, width, height);
+                    items[index] = copy;
+                }
+            }
+        }*/
+	}
+	
+	/**Offsets index based on size of recipe to fix recipes that do not a specific column or row.**/
+	private int getCraftingIndex(int i, int width, int height) {
+		int index;
+		if (width == 1) {
+			if (height == 3) {
+				index = (i * 3) + 1;
+			} else if (height == 2) {
+				index = (i * 3) + 1;
+			} else {
+				index = 4;
+			}
+		} else if (height == 1) {
+			index = i + 3;
+		} else if (width == 2) {
+			index = i;
+			if (i > 1) {
+				index++;
+				if (i > 3) {
+					index++;
+				}
+			}
+		} else if (height == 2) {
+			index = i + 3;
+		} else {
+			index = i;
 		}
+		return index;
 	}
 	
 	public int listIndex = 0;
 	@SideOnly(Side.CLIENT)
     public void updateScreen(GuiGuideChapter gui, int startX, int startY, int timer){
-		if(!GuiScreen.isShiftKeyDown() && Util.isMultipleOf(timer, 60)){
+		boolean shift = GuiScreen.isShiftKeyDown();
+		if(!shift && Util.isMultipleOf(timer, 60)){
 			ItemStack newStack = stacks.get(listIndex);
 			updateItem(newStack);
 			
 			listIndex++;
 			listIndex%=stacks.size();
 		}
-		if(!GuiScreen.isShiftKeyDown() && Util.isMultipleOf(timer, 20)){
+		/*if(!GuiScreen.isShiftKeyDown() && Util.isMultipleOf(timer, 20)){
 			for(int i = 0; i < ingred.length; i++){
 				Object obj = ingred[i];
 				
@@ -156,17 +266,17 @@ public class PageCrafting extends GuidePage {
 					@SuppressWarnings("unchecked")
 					List<ItemStack> list = ((List<ItemStack>)obj);
 					ItemStack newStack = getRandomIngredient(list);
-					if(!ItemStackTools.isNullStack(newStack) && newStack.getItemDamage() == OreDictionary.WILDCARD_VALUE){
+					if(ItemStackTools.isValid(newStack) && newStack.getItemDamage() == OreDictionary.WILDCARD_VALUE){
 						items[i] = newStack.copy();
 						items[i].setItemDamage(0);
 					}else items[i] = newStack;
 				}
 			}
-		}
+		}*/
 	}
 
 	
-	public ItemStack getRandomIngredient(List<ItemStack> ingredients) {
+	public static ItemStack getRandomIngredient(List<ItemStack> ingredients) {
         if(ingredients == null || ingredients.isEmpty()) return null;
         return ingredients.get(Util.rand.nextInt(ingredients.size() > 1 ? ingredients.size()-1 : ingredients.size()));
     }
@@ -205,22 +315,24 @@ public class PageCrafting extends GuidePage {
 		
 		if(items != null){
 			ItemStack tooltip = ItemStackTools.getEmptyStack();
-			int i = 0;
-			for (ItemStack input : items) {
-				if (!ItemStackTools.isNullStack(input)) {
-					int row = (i % 3);
-					int column = i / 3;
-					int itemX = startX + gridOffsetX + (row * itemBoxSize);
-					int itemY = startY + gridOffsetY + (column * itemBoxSize);
-					drawItemStack(input, x + itemX, y + itemY, "");
-					if (relativeMouseX > itemX - 2 && relativeMouseX < itemX - 2 + itemBoxSize &&
-							relativeMouseY > itemY - 2 && relativeMouseY < itemY - 2 + itemBoxSize) {
-						tooltip = input;
+			for (int i = 0; i < items.length; i++) {
+				ItemStack input = items[i];
+				/*if (ingred[i] !=null && ingred[i] instanceof ItemStack) {
+					ItemStack input = (ItemStack)ingred[i];*/
+					if(ItemStackTools.isValid(input)){
+						int row = (i % 3);
+						int column = i / 3;
+						int itemX = startX + gridOffsetX + (row * itemBoxSize);
+						int itemY = startY + gridOffsetY + (column * itemBoxSize);
+						drawItemStack(input, x + itemX, y + itemY, "");
+						if (relativeMouseX > itemX - 2 && relativeMouseX < itemX - 2 + itemBoxSize &&
+								relativeMouseY > itemY - 2 && relativeMouseY < itemY - 2 + itemBoxSize) {
+							tooltip = input;
+						}
 					}
-				}
-				i++;
+				//}
 			}
-			if (!ItemStackTools.isNullStack(tooltip)) {
+			if (ItemStackTools.isValid(tooltip)) {
 				drawItemStackTooltip(tooltip, relativeMouseX + x, relativeMouseY + y);
 			}
 		}

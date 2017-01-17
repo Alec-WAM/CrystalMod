@@ -28,7 +28,6 @@ import alec_wam.CrystalMod.items.tools.backpack.BackpackUtil;
 import alec_wam.CrystalMod.items.tools.backpack.IBackpack;
 import alec_wam.CrystalMod.items.tools.backpack.IBackpackInventory;
 import alec_wam.CrystalMod.items.tools.backpack.ItemBackpackBase;
-import alec_wam.CrystalMod.items.tools.backpack.types.BackpackNormal;
 import alec_wam.CrystalMod.items.tools.backpack.types.InventoryBackpack;
 import alec_wam.CrystalMod.items.tools.backpack.upgrade.InventoryBackpackUpgrades;
 import alec_wam.CrystalMod.items.tools.backpack.upgrade.ItemBackpackUpgrade.BackpackUpgrade;
@@ -64,9 +63,12 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemArrow;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
@@ -76,12 +78,15 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.item.ItemExpireEvent;
 import net.minecraftforge.event.entity.living.EnderTeleportEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.living.LootingLevelEvent;
+import net.minecraftforge.event.entity.player.ArrowLooseEvent;
+import net.minecraftforge.event.entity.player.ArrowNockEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.entity.player.PlayerDropsEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -273,11 +278,11 @@ public class EventHandler {
     public static final List<String> WINGED_PLAYERS = new ArrayList<String>();
     
     public static boolean isPlayerWinged(EntityPlayer player){
-        return WINGED_PLAYERS.contains(player.getUniqueID()+(player.worldObj.isRemote ? "-Remote" : ""));
+        return WINGED_PLAYERS.contains(player.getUniqueID()+(player.getEntityWorld().isRemote ? "-Remote" : ""));
     }
     
     public static void removeWingsFromPlayer(EntityPlayer player){
-        removeWingsFromPlayer(player, player.worldObj.isRemote);
+        removeWingsFromPlayer(player, player.getEntityWorld().isRemote);
     }
     
     public static void removeWingsFromPlayer(EntityPlayer player, boolean worldRemote){
@@ -285,7 +290,7 @@ public class EventHandler {
     }
     
     public static void addWingsToPlayer(EntityPlayer player){
-        WINGED_PLAYERS.add(player.getUniqueID()+(player.worldObj.isRemote ? "-Remote" : ""));
+        WINGED_PLAYERS.add(player.getUniqueID()+(player.getEntityWorld().isRemote ? "-Remote" : ""));
     }
     
     @SubscribeEvent
@@ -308,7 +313,7 @@ public class EventHandler {
          //If Player is (or should be) winged
          else{
              if(wingsEquipped){
-                 //Allow the Player to fly when he has Wings equipped
+                 //Allow the Player to fly when they have Wings equipped
                  player.capabilities.allowFlying = true;
                  
                  ExtendedPlayer extPlayer = ExtendedPlayerProvider.getExtendedPlayer(player);
@@ -398,6 +403,77 @@ public class EventHandler {
     }
 	
 	@SubscribeEvent
+	public void handleNock(ArrowNockEvent event){
+		if(event.getEntityPlayer() !=null){
+			ExtendedPlayer exPlayer = ExtendedPlayerProvider.getExtendedPlayer(event.getEntityPlayer()); 
+			if(exPlayer !=null){
+				ExtendedPlayerInventory inv = exPlayer.getInventory();
+				ItemStack backpack = inv.getStackInSlot(ExtendedPlayerInventory.BACKPACK_SLOT_ID);
+				if(ItemStackTools.isValid(backpack)){
+					InventoryBackpackUpgrades upgrades = BackpackUtil.getUpgradeInventory(event.getEntityPlayer(), backpack);
+					if(upgrades !=null && upgrades.hasUpgrade(BackpackUpgrade.BOW)){
+						InventoryBackpack backpackInv = BackpackUtil.getInventory(event.getEntityPlayer(), backpack);
+						if(backpackInv !=null){
+							for(int i = 0; i < backpackInv.getSize(); i++){
+								ItemStack st = backpackInv.getStackInSlot(i);
+								if(ItemStackTools.isValid(st) && st.getItem() instanceof ItemArrow){
+									event.getEntityPlayer().setActiveHand(event.getHand());
+									event.setAction(new ActionResult<ItemStack>(EnumActionResult.SUCCESS, event.getBow()));
+									return;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	@SubscribeEvent
+	public void handleLoose(ArrowLooseEvent event){
+		if(event.getEntityPlayer() !=null){
+			ExtendedPlayer exPlayer = ExtendedPlayerProvider.getExtendedPlayer(event.getEntityPlayer()); 
+			if(exPlayer !=null){
+				ExtendedPlayerInventory inv = exPlayer.getInventory();
+				ItemStack backpack = inv.getStackInSlot(ExtendedPlayerInventory.BACKPACK_SLOT_ID);
+				if(ItemStackTools.isValid(backpack)){
+					InventoryBackpackUpgrades upgrades = BackpackUtil.getUpgradeInventory(event.getEntityPlayer(), backpack);
+					if(upgrades !=null && upgrades.hasUpgrade(BackpackUpgrade.BOW)){
+						InventoryBackpack backpackInv = BackpackUtil.getInventory(event.getEntityPlayer(), backpack);
+						if(backpackInv !=null){
+							for(int i = 0; i < backpackInv.getSize(); i++){
+								ItemStack st = backpackInv.getStackInSlot(i);
+								if(ItemStackTools.isValid(st) && st.getItem() instanceof ItemArrow){
+									if(!EntityUtil.shootArrow(event.getWorld(), event.getEntityPlayer(), event.getBow(), st, event.getCharge())){
+										backpackInv.decrStackSize(i, 1);
+										backpackInv.markDirty();
+										backpackInv.guiSave(event.getEntityPlayer());
+										inv.setChanged(ExtendedPlayerInventory.BACKPACK_SLOT_ID, true);
+										event.setCanceled(true);
+										return;
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	@SubscribeEvent
+	public void handleDespawn(ItemExpireEvent event){
+		ItemStack stack = event.getEntityItem().getEntityItem();
+		if(ItemStackTools.isValid(stack)){
+			InventoryBackpackUpgrades upgrades = BackpackUtil.getUpgradeInventory(stack);
+			if(upgrades !=null && upgrades.hasUpgrade(BackpackUpgrade.DESPAWN)){
+				event.getEntityItem().setNoDespawn();
+				event.setCanceled(true);
+			}
+		}
+	}
+	
+	@SubscribeEvent
 	public void playerDeath(PlayerDropsEvent event) {
 		if (event.getEntity() instanceof EntityPlayer && !event.getEntity().worldObj.isRemote) {
 			boolean keepInv = event.getEntity().worldObj.getGameRules().getBoolean("keepInventory");
@@ -411,26 +487,23 @@ public class EventHandler {
 					
 					boolean keepBackpack = false;
 					if(ItemStackTools.isValid(backpack)){
-						if(backpack.getItem() instanceof ItemBackpackBase){
-							IBackpack type = ((ItemBackpackBase)backpack.getItem()).getBackpack();
-							if(type instanceof BackpackNormal){
-								BackpackNormal normal = (BackpackNormal)type;
-								InventoryBackpack bpInv = normal.getInventory(event.getEntityPlayer(), backpack);
-								ItemStack ret = ItemUtil.removeItems(bpInv, null, new ItemStack(Items.SKULL, 1, 1), 1);
-								//If player has wither skulls remove one and allow them to keep the backpack
-								//on death
-								if(ItemStackTools.isValid(ret) && ItemStackTools.getStackSize(ret) == 1){
+						InventoryBackpackUpgrades upgrades = BackpackUtil.getUpgradeInventory(event.getEntityPlayer(), backpack);
+						if(upgrades !=null && upgrades.hasUpgrade(BackpackUpgrade.DEATH)){
+							if(Config.backpackDeathUpgradeConsume){
+								int index = upgrades.getUpgradeIndex(BackpackUpgrade.DEATH);
+								if(index > -1){
+									upgrades.decrStackSize(index, 1);
+									upgrades.markDirty();
+									upgrades.guiSave(event.getEntityPlayer());
+									inv.setChanged(ExtendedPlayerInventory.BACKPACK_SLOT_ID, true);
 									keepBackpack = true;
-									if(!event.getEntityPlayer().getEntityWorld().isRemote) {
-										bpInv.save();
-							    	}
 								}
-							}
+							} else keepBackpack = true;
 						}
 					}
 					
 					for (int i = 0; i < inv.getSlots(); ++i) {
-						if (inv.getStackInSlot(i) != null) {
+						if (ItemStackTools.isValid(inv.getStackInSlot(i))) {
 							if(i == ExtendedPlayerInventory.BACKPACK_SLOT_ID){
 								if(keepBackpack){
 									continue;
@@ -476,7 +549,6 @@ public class EventHandler {
 
         Entity mob = event.getEntityLiving();
         int rand = mob.worldObj.rand.nextInt(Math.max(Config.mobHeadDropChance / fixLooting(event.getLootingLevel()), 1));
-        // roll the dice
         if(!mob.worldObj.getGameRules().getBoolean("doMobLoot") || Config.mobHeadDropChance < 0 || rand != 0)
             return;
 
@@ -484,7 +556,6 @@ public class EventHandler {
         int skullId = -1;
 
         
-        // skelly/witherskelly
         if (mob instanceof EntitySkeleton) {
             if(((EntitySkeleton) event.getEntityLiving()).func_189771_df() == SkeletonType.WITHER)return;
         	skullItem = Items.SKULL;
@@ -517,7 +588,7 @@ public class EventHandler {
  			if(pos !=null){
  				if(event.getWorld().isBlockLoaded(pos)){
  					IBlockState state = event.getWorld().getBlockState(pos);
- 					if(state.getBlock() == Blocks.WOOL && event.getEntityPlayer().getHeldItem(EnumHand.MAIN_HAND) !=null && ItemUtil.itemStackMatchesOredict(event.getEntityPlayer().getHeldItem(EnumHand.MAIN_HAND), "slimeball")){
+ 					if(state.getBlock() == Blocks.WOOL && ItemStackTools.isValid(event.getEntityPlayer().getHeldItem(event.getHand())) && ItemUtil.itemStackMatchesOredict(event.getEntityPlayer().getHeldItem(event.getHand()), "slimeball")){
  						
  						int waterCt = 0;
  						for(EnumFacing face : EnumFacing.VALUES){
@@ -529,7 +600,7 @@ public class EventHandler {
  						
  						if(waterCt >= 4){
  							event.getWorld().setBlockState(pos, Blocks.SPONGE.getDefaultState());
- 							event.getEntityPlayer().swingArm(EnumHand.MAIN_HAND);
+ 							event.getEntityPlayer().swingArm(event.getHand());
  							
  							if (!event.getWorld().isRemote)
  		                    {
@@ -537,7 +608,7 @@ public class EventHandler {
  		                    }
  							
  							if(!event.getEntityPlayer().capabilities.isCreativeMode)
- 							event.getEntityPlayer().inventory.setInventorySlotContents(event.getEntityPlayer().inventory.currentItem, ItemUtil.consumeItem(event.getEntityPlayer().getHeldItem(EnumHand.MAIN_HAND)));
+ 							event.getEntityPlayer().setHeldItem(event.getHand(), ItemUtil.consumeItem(event.getEntityPlayer().getHeldItem(event.getHand())));
  						}
  					}
  				}
@@ -612,7 +683,7 @@ public class EventHandler {
 			boolean syncTick = player.ticksExisted % 10 == 0;
 			for (int a = 0; a < inventory.getSlots(); a++) {
 				ItemStack stack = inventory.getStackInSlot(a);
-				if(!ItemStackTools.isNullStack(stack)){
+				if(ItemStackTools.isValid(stack)){
 					if (!player.getEntityWorld().isRemote) {
 						if (syncTick && !inventory.isChanged(a)) {							
 							String s = stack.toString();
@@ -702,16 +773,14 @@ public class EventHandler {
 	public void itemPickup(EntityItemPickupEvent event){
 		EntityItem ent = event.getItem();
     	if(ent == null)return;
-    	if(ent.getEntityItem() == null)return;
+    	if(!ItemStackTools.isValid(ent.getEntityItem()))return;
     	EntityPlayer player = event.getEntityPlayer();
     	if(player !=null && player.isEntityAlive()){
     		ItemStack backpack = BackpackUtil.getBackpackOnBack(player);
     		if(ItemStackTools.isValid(backpack)){
-    			if(backpack.getItem() instanceof ItemBackpackBase){
-    				IBackpack backpackType = ((ItemBackpackBase)backpack.getItem()).getBackpack();
-    				if(backpackType !=null && backpackType.handleItemPickup(event, player, backpack)){
-    					event.setCanceled(true);
-    				}
+    			IBackpack backpackType = BackpackUtil.getType(backpack);
+    			if(backpackType !=null && backpackType.handleItemPickup(event, player, backpack)){
+    				event.setCanceled(true);
     			}
     		}
     	}

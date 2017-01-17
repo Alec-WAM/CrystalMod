@@ -30,10 +30,10 @@ item.crystalmod.metalplate.dark.name=Dark Crystal Plate
 item.crystalmod.metalplate.pure.name=Pure Crystal Plate
 item.crystalmod.metalplate.darkIron.name=Dark Iron Plate
 
-item.crystalmod.bluecrystalreeds.name=Blue Crystal Reeds
-item.crystalmod.redcrystalreeds.name=Red Crystal Reeds
-item.crystalmod.greencrystalreeds.name=Green Crystal Reeds
-item.crystalmod.darkcrystalreeds.name=Dark Crystal Reeds
+item.crystalmod.crystalreedsblue.name=Blue Crystal Reeds
+item.crystalmod.crystalreedsred.name=Red Crystal Reeds
+item.crystalmod.crystalreedsgreen.name=Green Crystal Reeds
+item.crystalmod.crystalreedsdark.name=Dark Crystal Reeds
 item.crystalmod.bluecrystalseeds.name=Blue Crystal Seeds
 item.crystalmod.redcrystalseeds.name=Red Crystal Seeds
 item.crystalmod.greencrystalseeds.name=Green Crystal Seeds
@@ -125,6 +125,8 @@ batType.minecraft.iron.name=Iron
 batType.minecraft.diamond.name=Diamond
 batType.minecraft.gold.name=Gold
 
+batType.enderio.darksteel.name=Dark Steel
+
 batUpgrade.crystalmod.piston.name=Knockback
 batUpgrade.crystalmod.redstone.name=Speed
 batUpgrade.crystalmod.lapis.name=Looting
@@ -152,6 +154,9 @@ item.crystalmod.darkironleggings.name=Dark Iron Leggings
 item.crystalmod.darkironboots.name=Dark Iron Boots
 
 item.crystalmod.pipecover.name=Crystal Pipe Cover
+item.crystalmod.pipeattachment.estorage.export.name=Network Export Attachment
+item.crystalmod.pipeattachment.estorage.import.name=Network Import Attachment
+item.crystalmod.pipeattachment.estorage.export.name=Network Sensor Attachment
 
 item.crystalmod.pipefilter.normal.name=Pipe Filter (Normal)
 item.crystalmod.pipefilter.mod.name=Pipe Filter (Mod)
@@ -168,7 +173,7 @@ item.crystalmod.harddrivegreen.name=Item Hard-drive (Green)
 item.crystalmod.harddrivedark.name=Item Hard-drive (Dark)
 item.crystalmod.harddrivepure.name=Item Hard-drive (Pure)
 item.crystalmod.craftingcard.name=Crafting Recipe Card
-item.crystalmod.estorage.wpanelitem.name=Hand-held Network Panel
+item.crystalmod.wirelesspanelreceiver.name=Hand-held Network Panel
 
 item.crystalmod.craftingpattern.name=Crafting Recipe Pattern
 
@@ -178,7 +183,7 @@ item.crystalmod.misccard.elevator.name=Elevator Binder (WIP)
 
 item.crystalmod.worksiteupgrade.0.name=Medium Bounds Upgrade
 item.crystalmod.worksiteupgrade.1.name=Large Bounds Upgrade
-item.crystalmod.worksiteupgrade..name=Medium Quarry Upgrade
+item.crystalmod.worksiteupgrade.2.name=Medium Quarry Upgrade
 item.crystalmod.worksiteupgrade.3.name=Large Quarry Upgrade
 item.crystalmod.worksiteupgrade.4.name=\u00a7eLightly Enchanted Tools Upgrade
 item.crystalmod.worksiteupgrade.5.name=\u00a7eHighly Enchanted Tools Upgrade
@@ -206,6 +211,9 @@ item.crystalmod.backpackupgrade.ender.name=Ender Chest Upgrade
 item.crystalmod.backpackupgrade.restocking.name=Restocking Upgrade
 item.crystalmod.backpackupgrade.void.name=Void Upgrade
 item.crystalmod.backpackupgrade.pockets.name=Pocket Upgrade
+item.crystalmod.backpackupgrade.bow.name=Bow Upgrade
+item.crystalmod.backpackupgrade.despawn.name=Despawn Canceling Upgrade
+item.crystalmod.backpackupgrade.death.name=Death Protection Upgrade
 item.crystalmod.lock.name=Lock
 item.crystalmod.flagitem.name=Flag
 item.crystalmod.disguise.empty.name=Empty Disguise
@@ -249,6 +257,13 @@ tile.crystalmod.crystalglass.green.name=Green Crystal Glass
 tile.crystalmod.crystalglass.dark.name=Dark Crystal Glass
 tile.crystalmod.crystalglass.pure.name=Pure Crystal Glass
 
+tile.crystalmod.metalbars.dark_iron.name=Dark Iron Bars
+tile.crystalmod.metalbars.blue.name=Blue Crystal Bars
+tile.crystalmod.metalbars.red.name=Red Crystal Bars
+tile.crystalmod.metalbars.green.name=Green Crystal Bars
+tile.crystalmod.metalbars.dark.name=Dark Crystal Bars
+tile.crystalmod.metalbars.pure.name=Pure Crystal Bars
+
 tile.crystalmod.bluecrystalplant.name=Blue Crystal Plant
 tile.crystalmod.redcrystalplant.name=Red Crystal Plant
 tile.crystalmod.greencrystalplant.name=Green Crystal Plant
@@ -275,6 +290,10 @@ tile.crystalmod.crystalsapling.blue.name=Blue Crystal Sapling
 tile.crystalmod.crystalsapling.red.name=Red Crystal Sapling
 tile.crystalmod.crystalsapling.green.name=Green Crystal Sapling
 tile.crystalmod.crystalsapling.dark.name=Dark Crystal Sapling
+tile.crystalmod.crystalplanks.blue.name=Blue Crystal Planks
+tile.crystalmod.crystalplanks.red.name=Red Crystal Planks
+tile.crystalmod.crystalplanks.green.name=Green Crystal Planks
+tile.crystalmod.crystalplanks.dark.name=Dark Crystal Planks
 
 tile.crystalmod.crystalore.blue.name=Blue Crystal Ore
 tile.crystalmod.crystalore.red.name=Red Crystal Ore
@@ -342,13 +361,13 @@ tile.crystalmod.estoragepanel.display.name=Network Item Panel
 tile.crystalmod.estoragepanel.monitor.name=Network Crafting Monitor Panel
 tile.crystalmod.ewirelesspanel.name=Hand-held Network Panel Router
 tile.crystalmod.pipewrapper.name=Network Pipe Portal
-tile.crystalmod.craftingController.name=Crafting Controller
+tile.crystalmod.craftingcontroller.name=Crafting Controller
 tile.crystalmod.craftingarray.name=Crafting Recipe Array
 tile.crystalmod.craftingio.name=External Crafting Port 
 tile.crystalmod.encoder.name=Crafting Recipe Encoder
 
-tile.crystalmod.craftingEncoder.normal.name=Crafting Recipe Encoder
-tile.crystalmod.craftingEncoder.processing.name=External Crafting Recipe Encoder
+tile.crystalmod.craftingencoder.normal.name=Crafting Recipe Encoder
+tile.crystalmod.craftingencoder.processing.name=External Crafting Recipe Encoder
 tile.crystalmod.autocrafter.name=Crafting Manager
 tile.crystalmod.stocker.name=Network Stocker
 
@@ -375,7 +394,7 @@ tile.crystalmod.battery.creative.name=Creative Crystal Battery
 tile.crystalmod.elevator.name=Elevator
 tile.crystalmod.elevatorfloor.name=Elevator Floor Marker
 tile.crystalmod.elevatorcaller.name=Elevator Dialer
-tile.crystalmod.reinforcedRail.name=Reinforced Rail
+tile.crystalmod.reinforcedrail.name=Reinforced Rail
 
 tile.crystalmod.inventorycharger.cu.name=Inventory Charger (CU)
 tile.crystalmod.inventorycharger.rf.name=Inventory Charger (RF)
@@ -437,7 +456,7 @@ itemGroup.crystalmod.items=Crystal Mod Items
 itemGroup.crystalmod.tools=Crystal Mod Tools
 itemGroup.crystalmod.blocks=Crystal Mod Blocks
 itemGroup.crystalmod.covers=Crystal Pipe Covers
-
+itemGroup.crystalmod.crops=Crystal Mod Crops
 
 #--Enchant
 enchantment.mending=Mending
@@ -458,6 +477,7 @@ crystalmod.gui.label.movematchingitems=Move matching items
 crystalmod.gui.label.leaveonefilledstack=Leave one filled stack of every item type
 crystalmod.gui.label.moveallitems=Move all items
 crystalmod.gui.label.fillstacks=Fill all existing stacks
+crystalmod.gui.cancel_all=Cancel All
 
 crystalmod.gui.sortType.name=Sort by alphabetical order
 crystalmod.gui.sortType.name_reverse=Sort by reversed alphabetical order
@@ -512,6 +532,7 @@ entity.CrystalMod.CrystalPigZombie.name=Crystal Zombie Pigman
 entity.CrystalMod.CrystalCow.name=Crystal Cow
 entity.CrystalMod.CrystalEnderman.name=Crystal Enderman
 entity.CrystalMod.MinionWarrior.name=Warrior Minion
+entity.CrystalMod.MinionWorker.name=Minion Worker
 entity.CrystalMod.Bombomb.name=Bombomb
 
 entity.CrystalMod.minecart_blue.name=Minecart with Blue Crystal Chest
@@ -546,6 +567,7 @@ materialcrop.cobblestone.name=Cobblestone
 materialcrop.sand.name=Sand
 materialcrop.gravel.name=Gravel
 materialcrop.log_oak.name=Oak Wood
+materialcrop.string.name=String
 
 materialcrop.stone.name=Stone
 materialcrop.flint.name=Flint

@@ -19,7 +19,7 @@ public class ItemMinionStaff extends Item {
 		super();
 		setFull3D();
 		setCreativeTab(CrystalMod.tabTools);
-		ModItems.registerItem(this, "minionStaff");
+		ModItems.registerItem(this, "minionstaff");
 	}
 	
 	public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity entity)

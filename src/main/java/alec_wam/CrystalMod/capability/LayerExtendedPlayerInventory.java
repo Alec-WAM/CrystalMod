@@ -39,8 +39,8 @@ public class LayerExtendedPlayerInventory implements LayerRenderer<AbstractClien
 		if(entity.isInvisible())return;
     	ItemStack backpack = BackpackUtil.getBackpackOnBack(entity);
     	if(ItemStackTools.isValid(backpack)){
-    		if(backpack.getItem() instanceof ItemBackpackBase){
-    			IBackpack type = ((ItemBackpackBase)backpack.getItem()).getBackpack();
+    		IBackpack type = BackpackUtil.getType(backpack);
+    		if(type !=null){
     			ResourceLocation res = type.getTexture(backpack, 1);
     			if(res == null){
     				res = TextureMap.LOCATION_MISSING_TEXTURE;

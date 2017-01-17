@@ -14,31 +14,38 @@ import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import com.google.common.collect.Lists;
 
+import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.network.CrystalModNetwork;
+import alec_wam.CrystalMod.network.packets.PacketEntityMessage;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.item.EntityItemFrame;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.projectile.EntityArrow;
+import net.minecraft.init.Enchantments;
+import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.item.ItemArrow;
+import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.stats.StatList;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
-import alec_wam.CrystalMod.CrystalMod;
-import alec_wam.CrystalMod.network.CrystalModNetwork;
-import alec_wam.CrystalMod.network.packets.PacketEntityMessage;
 
 public class EntityUtil {
 
@@ -388,5 +395,72 @@ public class EntityUtil {
 		}
 		catch (IllegalAccessException ex) {ex.printStackTrace();}catch (IllegalArgumentException ex) {ex.printStackTrace();}catch (InvocationTargetException ex) {ex.printStackTrace();}
 	}
+
+	/**Returns if an arrow was infinite or not**/
+	public static boolean shootArrow(World world, EntityPlayer entityplayer, ItemStack bow, ItemStack itemstack, int charge) {
+		boolean flag = entityplayer.capabilities.isCreativeMode || EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, bow) > 0;
+        int i = charge;
+
+        if (ItemStackTools.isValid(itemstack) || flag)
+        {
+            if (ItemStackTools.isEmpty(itemstack))
+            {
+                itemstack = new ItemStack(Items.ARROW);
+            }
+
+            float f = ItemBow.getArrowVelocity(i);
+
+            if ((double)f >= 0.1D)
+            {
+                boolean flag1 = entityplayer.capabilities.isCreativeMode || (itemstack.getItem() instanceof ItemArrow ? ((ItemArrow)itemstack.getItem()).isInfinite(itemstack, bow, entityplayer) : false);
+
+                if (!world.isRemote)
+                {
+                    ItemArrow itemarrow = (ItemArrow)((ItemArrow)(itemstack.getItem() instanceof ItemArrow ? itemstack.getItem() : Items.ARROW));
+                    EntityArrow entityarrow = itemarrow.createArrow(world, itemstack, entityplayer);
+                    entityarrow.setAim(entityplayer, entityplayer.rotationPitch, entityplayer.rotationYaw, 0.0F, f * 3.0F, 1.0F);
+
+                    if (f == 1.0F)
+                    {
+                        entityarrow.setIsCritical(true);
+                    }
+
+                    int j = EnchantmentHelper.getEnchantmentLevel(Enchantments.POWER, bow);
+
+                    if (j > 0)
+                    {
+                        entityarrow.setDamage(entityarrow.getDamage() + (double)j * 0.5D + 0.5D);
+                    }
+
+                    int k = EnchantmentHelper.getEnchantmentLevel(Enchantments.PUNCH, bow);
+
+                    if (k > 0)
+                    {
+                        entityarrow.setKnockbackStrength(k);
+                    }
+
+                    if (EnchantmentHelper.getEnchantmentLevel(Enchantments.FLAME, bow) > 0)
+                    {
+                        entityarrow.setFire(100);
+                    }
+
+                    bow.damageItem(1, entityplayer);
+
+                    if (flag1)
+                    {
+                        entityarrow.pickupStatus = EntityArrow.PickupStatus.CREATIVE_ONLY;
+                    }
+
+                    world.spawnEntityInWorld(entityarrow);
+                }
+
+                world.playSound((EntityPlayer)null, entityplayer.posX, entityplayer.posY, entityplayer.posZ, SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.NEUTRAL, 1.0F, 1.0F / (rand.nextFloat() * 0.4F + 1.2F) + f * 0.5F);
+
+                entityplayer.addStat(StatList.getObjectUseStats(Items.BOW));
+                return flag1;
+            }
+        }
+        return false;
+    }
 	
 }

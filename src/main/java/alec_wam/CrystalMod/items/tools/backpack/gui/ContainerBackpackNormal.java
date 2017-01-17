@@ -4,11 +4,10 @@ import javax.annotation.Nullable;
 
 import alec_wam.CrystalMod.capability.ExtendedPlayerProvider;
 import alec_wam.CrystalMod.integration.baubles.BaublesIntegration;
-import alec_wam.CrystalMod.items.tools.backpack.IBackpack;
+import alec_wam.CrystalMod.items.tools.backpack.BackpackUtil;
 import alec_wam.CrystalMod.items.tools.backpack.ItemBackpackBase;
 import alec_wam.CrystalMod.items.tools.backpack.ItemBackpackNormal.CrystalBackpackType;
 import alec_wam.CrystalMod.items.tools.backpack.types.NormalInventoryBackpack;
-import alec_wam.CrystalMod.items.tools.backpack.upgrade.ContainerBackpackUpgrades;
 import alec_wam.CrystalMod.items.tools.backpack.upgrade.InventoryBackpackUpgrades;
 import alec_wam.CrystalMod.items.tools.backpack.upgrade.ItemBackpackUpgrade.BackpackUpgrade;
 import alec_wam.CrystalMod.util.ItemStackTools;
@@ -47,9 +46,8 @@ public class ContainerBackpackNormal extends Container {
         this.backpackInventory = backpackInventory;
         baubles = BaublesIntegration.instance().getBaubles(player);
         boolean hasTabs = false;
-        if(ItemStackTools.isValid(backpackInventory.getBackpack()) && backpackInventory.getBackpack().getItem() instanceof ItemBackpackBase){
-        	IBackpack type = ((ItemBackpackBase)backpackInventory.getBackpack().getItem()).getBackpack();
-        	InventoryBackpackUpgrades upgrades = type.getUpgradeInventory(backpackInventory.getBackpack());
+        if(ItemStackTools.isValid(backpackInventory.getBackpack())){
+        	InventoryBackpackUpgrades upgrades = BackpackUtil.getUpgradeInventory(backpackInventory.getBackpack());
         	this.hasPockets = (upgrades !=null ? upgrades.hasUpgrade(BackpackUpgrade.POCKETS) : false);
         	hasTabs = (upgrades !=null ? upgrades.getTabs() !=null ? upgrades.getTabs().length > 0 : false : false);
         }

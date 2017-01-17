@@ -1,0 +1,13 @@
+{
+  "forge_marker": 1,
+  "variants": {
+    "normal": [{}],
+    "inventory": [{}],
+    "variant": {
+      "blue": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/planks_blue"} },
+	  "red": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/planks_red"} },
+	  "green": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/planks_green"} },
+	  "dark": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/planks_dark"} }
+    }
+  }
+}

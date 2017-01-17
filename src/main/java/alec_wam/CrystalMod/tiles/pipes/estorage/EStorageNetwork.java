@@ -419,7 +419,6 @@ public class EStorageNetwork extends AbstractPipeNetwork {
 	// AUTO CRAFTING
 
 	public void updatePatterns() {
-		ModLogger.info("Updating Patterns");
 		patterns.clear();
 		List<ItemStackData> data = Lists.newArrayList();
 		for (IAutoCrafter crafter : crafters) {

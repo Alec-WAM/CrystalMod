@@ -208,9 +208,9 @@ public class GuiHandler implements IGuiHandler {
     	}
     	if(ID == GUI_ID_BACKPACK){
     		ItemStack backpack = BackpackUtil.getPlayerBackpack(player);
-    		if(ItemStackTools.isValid(backpack) && backpack.getItem() instanceof ItemBackpackBase){
-    			ItemBackpackBase item = (ItemBackpackBase)backpack.getItem();
-    			IBackpack type = item.getBackpack();
+    		if(ItemStackTools.isValid(backpack)){
+    			IBackpack type = BackpackUtil.getType(backpack);
+    			if(type == null)return null;
     			if(z >= 1){
     				ExtendedPlayerProvider.getExtendedPlayer(player).setOpenBackpack(backpack);
     				InventoryBackpackUpgrades upgradeInv = type.getUpgradeInventory(backpack);
@@ -224,7 +224,7 @@ public class GuiHandler implements IGuiHandler {
     				}
     				return new GuiBackpackUpgrades(player.inventory, upgradeInv);
     			}
-    			return item.getBackpack().getClientGuiElement(player, world);
+    			return type.getClientGuiElement(player, world);
     		}
     	}
     	if(ID == GUI_ID_ITEM){
@@ -382,8 +382,8 @@ public class GuiHandler implements IGuiHandler {
     	if(ID == GUI_ID_BACKPACK){
     		ItemStack backpack = BackpackUtil.getPlayerBackpack(player);
     		if(ItemStackTools.isValid(backpack) && backpack.getItem() instanceof ItemBackpackBase){
-    			ItemBackpackBase item = (ItemBackpackBase)backpack.getItem();
-    			IBackpack type = item.getBackpack();
+    			IBackpack type = BackpackUtil.getType(backpack);
+    			if(type == null)return null;
     			if(z >= 1){
     				ExtendedPlayerProvider.getExtendedPlayer(player).setOpenBackpack(backpack);
     				InventoryBackpackUpgrades upgradeInv = type.getUpgradeInventory(backpack);
@@ -397,7 +397,7 @@ public class GuiHandler implements IGuiHandler {
     				}
     				return new ContainerBackpackUpgrades(player.inventory, upgradeInv);
     			}
-    			return item.getBackpack().getServerGuiElement(player, world);
+    			return type.getServerGuiElement(player, world);
     		}
     	}
     	if(ID == GUI_ID_ITEM){

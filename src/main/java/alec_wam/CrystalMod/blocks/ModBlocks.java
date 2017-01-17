@@ -15,7 +15,9 @@ import alec_wam.CrystalMod.blocks.crops.material.BlockMaterialCrop;
 import alec_wam.CrystalMod.blocks.crops.material.RenderTileMaterialCrop;
 import alec_wam.CrystalMod.blocks.crops.material.TileMaterialCrop;
 import alec_wam.CrystalMod.blocks.glass.BlockCrystalGlass;
+import alec_wam.CrystalMod.blocks.glass.BlockCrystalGlassPane;
 import alec_wam.CrystalMod.blocks.rail.BlockReinforcedRail;
+import alec_wam.CrystalMod.handler.MissingItemHandler;
 import alec_wam.CrystalMod.tiles.cauldron.BlockCrystalCauldron;
 import alec_wam.CrystalMod.tiles.cauldron.TileEntityCrystalCauldron;
 import alec_wam.CrystalMod.tiles.chest.BlockCrystalChest;
@@ -114,14 +116,20 @@ import alec_wam.CrystalMod.tiles.weather.BlockWeather;
 import alec_wam.CrystalMod.tiles.weather.TileEntityWeather;
 import alec_wam.CrystalMod.tiles.workbench.BlockCrystalWorkbench;
 import alec_wam.CrystalMod.tiles.workbench.TileEntityCrystalWorkbench;
+import alec_wam.CrystalMod.util.ModLogger;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.EnumPlantType;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraftforge.fml.common.FMLContainer;
+import net.minecraftforge.fml.common.InjectedModContainer;
+import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.ModContainer;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -134,6 +142,8 @@ public class ModBlocks {
 	public static BlockCrystalOre crystalOre;
 	public static BlockCrystalIngot crystalIngot;
 	public static BlockCrystalGlass crystalGlass;
+	public static BlockCrystalGlassPane crystalGlassPane;
+	public static BlockMetalBars metalBars;
 	public static BlockCrystalReed crystalReedsBlue, crystalReedsRed, crystalReedsGreen, crystalReedsDark;
 	public static BlockFlowerLilyPad flowerLilypad;
 	public static BlockCrystalWorkbench crystalWorkbench;
@@ -144,6 +154,7 @@ public class ModBlocks {
 	public static BlockCrystalLog crystalLog;
 	public static BlockCrystalLeaves crystalLeaves;
 	public static BlockCrystalSapling crystalSapling;
+	public static BlockCrystalPlanks crystalPlanks;
 	public static BlockMaterialCrop materialCrop;
 	public static BlockPipe crystalPipe;
 	public static BlockTank crystalTank;
@@ -198,6 +209,13 @@ public class ModBlocks {
 		crystalIngot = registerEnumBlock(new BlockCrystalIngot(), "crystalingotblock");
 		
 		crystalGlass = registerEnumBlock(new BlockCrystalGlass(), "crystalglass");
+		crystalGlassPane = new BlockCrystalGlassPane();
+		registerBlock(crystalGlassPane, new ItemBlockMeta(crystalGlassPane), "crystalglasspane");
+		ItemBlockMeta.setMappingProperty(crystalGlassPane, BlockCrystalGlass.TYPE);
+		
+		metalBars = new BlockMetalBars();
+		registerBlock(metalBars, new ItemBlockMeta(metalBars), "metalbars");
+		ItemBlockMeta.setMappingProperty(metalBars, BlockMetalBars.TYPE);
 		
 		crystalReedsBlue = registerBlock(new BlockCrystalReed(PlantType.BLUE), "bluecrystalreedblock");
 		crystalReedsRed = registerBlock(new BlockCrystalReed(PlantType.RED), "redcrystalreedblock");
@@ -263,6 +281,8 @@ public class ModBlocks {
 		crystalSapling = new BlockCrystalSapling();
 		registerBlock(crystalSapling, new ItemBlockMeta(crystalSapling), "crystalsapling");
 		ItemBlockMeta.setMappingProperty(crystalSapling, BlockCrystalSapling.VARIANT);
+		
+		crystalPlanks = registerEnumBlock(new BlockCrystalPlanks(), "crystalplanks");
 		
 		materialCrop = new BlockMaterialCrop();
 		registerBlock(materialCrop, "materialcrop");
@@ -461,12 +481,24 @@ public class ModBlocks {
 	}
 	
 	public static <T extends Block> T registerBlock(T block, ItemBlock itemBlock, String name) {
-			block.setUnlocalizedName(CrystalMod.prefix(name));
-			block.setRegistryName(name);
-			GameRegistry.register(block);
-			GameRegistry.register(itemBlock.setRegistryName(name));
-			REGISTRY.put(name, block);
-			return block;
+		String finalName = name;
+		String lowerCase = name.toLowerCase();
+		if(name !=lowerCase){
+			ModLogger.warning("Registering a Block and Item that has a non-lowercase registry name! ("+name+" vs. "+lowerCase+") setting it to "+lowerCase);
+			finalName = lowerCase;
+
+			ModContainer mc = Loader.instance().activeModContainer();
+            String prefix = mc == null || (mc instanceof InjectedModContainer && ((InjectedModContainer)mc).wrappedContainer instanceof FMLContainer) ? "minecraft" : mc.getModId().toLowerCase();
+            MissingItemHandler.remapItems.put(new ResourceLocation(prefix, name), itemBlock);
+            MissingItemHandler.remapBlocks.put(new ResourceLocation(prefix, name), block);
+		}
+
+		block.setUnlocalizedName(CrystalMod.prefix(finalName));
+		block.setRegistryName(finalName);
+		GameRegistry.register(block);
+		GameRegistry.register(itemBlock.setRegistryName(finalName));
+		REGISTRY.put(finalName, block);
+		return block;
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })

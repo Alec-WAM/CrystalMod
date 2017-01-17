@@ -1,8 +1,12 @@
 package alec_wam.CrystalMod.tiles.pipes.estorage.stocker;
 
+import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.slot.SlotSpecimen;
+import alec_wam.CrystalMod.tiles.pipes.item.ContainerItemPipe.SlotGhostItem;
 import alec_wam.CrystalMod.util.ItemStackTools;
+import alec_wam.CrystalMod.util.ItemUtil;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.ClickType;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
@@ -11,7 +15,7 @@ public class ContainerStocker extends Container {
 
 	public ContainerStocker(InventoryPlayer inventory, TileEntityStocker stocker){
 		for(int i = 0; i < 5; i++){
-			addSlotToContainer(new Slot(stocker, i, 8, 19 + i * 18));
+			addSlotToContainer(new SlotGhost(stocker, i, 8, 19 + i * 18));
 		}
 		
 		for (int i = 0; i < 3; i++)
@@ -50,6 +54,24 @@ public class ContainerStocker extends Container {
 
         return stack;
     }
+	
+	@Override
+    public ItemStack slotClick(int id, int clickedButton, ClickType clickType, EntityPlayer player) {
+        Slot slot = id >= 0 ? getSlot(id) : null;
+        if(slot !=null){
+        	if(slot instanceof SlotGhost){
+        		if(ItemStackTools.isValid(slot.getStack())){
+        			slot.putStack(ItemStackTools.getEmptyStack());
+        		} else {
+        			if(ItemStackTools.isValid(player.inventory.getItemStack())){
+        				slot.putStack(ItemUtil.copy(player.inventory.getItemStack(), 1));
+        			}
+        		}
+        		return player.inventory.getItemStack();
+        	}
+        }
+        return super.slotClick(id, clickedButton, clickType, player);
+	}
 	
 	@Override
 	public boolean canInteractWith(EntityPlayer playerIn) {

@@ -21,7 +21,7 @@ public class ItemFlag extends Item implements ICustomModel {
 	public ItemFlag() {
 		super();
 		setCreativeTab(CrystalMod.tabItems);
-		ModItems.registerItem(this, "flagItem");
+		ModItems.registerItem(this, "flagitem");
 	}
 	
 	@SideOnly(Side.CLIENT)

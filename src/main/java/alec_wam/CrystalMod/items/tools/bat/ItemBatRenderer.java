@@ -260,6 +260,21 @@ public class ItemBatRenderer implements ICustomItemRenderer {
 			RenderUtil.addVertexWithUV(buffer, minTop, maxY, maxTop, icon.getMaxU(), icon.getMaxV());
 			RenderUtil.addVertexWithUV(buffer, min, minY, max, icon.getMaxU(), icon.getMinV());
 			tess.draw();
+			/*final int MAX_LIGHT_X = 0xF000F0;
+	        final int MAX_LIGHT_Y = 0xF000F0;
+	        
+	        float red = 255/255F, green = 255/255F, blue = 255/255F;
+			buffer.begin(7, DefaultVertexFormats.POSITION_TEX_LMAP_COLOR);
+			buffer.pos(min, minY, min).tex(icon.getMinU(), icon.getMinV()).lightmap(MAX_LIGHT_X, MAX_LIGHT_Y).color(red, green, blue, 1.0F).endVertex();
+			buffer.pos(minTop, maxY, minTop).tex(icon.getMinU(), icon.getMaxV()).lightmap(MAX_LIGHT_X, MAX_LIGHT_Y).color(red, green, blue, 1.0F).endVertex();
+			buffer.pos(maxTop, maxY, minTop).tex(icon.getMaxU(), icon.getMaxV()).lightmap(MAX_LIGHT_X, MAX_LIGHT_Y).color(red, green, blue, 1.0F).endVertex();
+			buffer.pos(max, minY, min).tex(icon.getMaxU(), icon.getMinV()).lightmap(MAX_LIGHT_X, MAX_LIGHT_Y).color(red, green, blue, 1.0F).endVertex();
+			
+			buffer.pos(max, minY, max).tex(icon.getMinU(), icon.getMinV()).lightmap(MAX_LIGHT_X, MAX_LIGHT_Y).color(red, green, blue, 1.0F).endVertex();
+			buffer.pos(maxTop, maxY, maxTop).tex(icon.getMinU(), icon.getMaxV()).lightmap(MAX_LIGHT_X, MAX_LIGHT_Y).color(red, green, blue, 1.0F).endVertex();
+			buffer.pos(minTop, maxY, maxTop).tex(icon.getMaxU(), icon.getMaxV()).lightmap(MAX_LIGHT_X, MAX_LIGHT_Y).color(red, green, blue, 1.0F).endVertex();
+			buffer.pos(min, minY, max).tex(icon.getMaxU(), icon.getMinV()).lightmap(MAX_LIGHT_X, MAX_LIGHT_Y).color(red, green, blue, 1.0F).endVertex();
+			tess.draw();*/
 			
 			RenderUtil.startDrawing(buffer);
 			RenderUtil.addVertexWithUV(buffer, max, minY, min, icon.getMinU(), icon.getMinV());

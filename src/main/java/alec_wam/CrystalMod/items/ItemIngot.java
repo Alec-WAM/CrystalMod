@@ -27,7 +27,7 @@ public class ItemIngot extends Item implements ICustomModel {
 		this.setHasSubtypes(true);
 		this.setMaxDamage(0);
 		this.setCreativeTab(CrystalMod.tabItems);
-		ModItems.registerItem(this, "crystalIngot");
+		ModItems.registerItem(this, "crystalingot");
 	}
 	
 	@SideOnly(Side.CLIENT)

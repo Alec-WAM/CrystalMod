@@ -37,13 +37,6 @@ public class MissingItemHandler {
 					ModLogger.info("Fixed "+rl+". Remapped it to "+ModItems.lock.getRegistryName());
 					fixed = true;
 				} 
-				if(mapping.resourceLocation.getResourcePath().equalsIgnoreCase("materialCrop")){
-					ModLogger.info("Remapping materialCrop");
-					if(mapping.type == GameRegistry.Type.BLOCK)mapping.remap(ModBlocks.materialCrop);
-					if(mapping.type == GameRegistry.Type.ITEM)mapping.remap(Item.getItemFromBlock(ModBlocks.materialCrop));
-					ModLogger.info("Fixed "+rl+". Remapped it to "+ModBlocks.materialCrop.getRegistryName());
-					fixed = true;
-				} 
 				if(mapping.type == GameRegistry.Type.ITEM && !fixed){
 					ModLogger.info(remapItems.toString());
 					if(remapItems.containsKey(rl)){

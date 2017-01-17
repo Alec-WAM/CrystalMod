@@ -41,7 +41,7 @@ public class BlockCrystalSapling extends BlockSapling implements ICustomModel {
   public static final PropertyEnum<BlockCrystalLog.WoodType> VARIANT = PropertyEnum.<BlockCrystalLog.WoodType>create("variant", BlockCrystalLog.WoodType.class);
 
   public BlockCrystalSapling() {
-    setCreativeTab(CrystalMod.tabItems);
+    setCreativeTab(CrystalMod.tabCrops);
     setDefaultState(this.blockState.getBaseState());
     this.setSoundType(SoundType.PLANT);
   }

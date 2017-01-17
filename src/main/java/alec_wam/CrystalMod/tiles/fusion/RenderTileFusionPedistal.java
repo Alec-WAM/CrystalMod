@@ -76,9 +76,6 @@ public class RenderTileFusionPedistal<T extends TileFusionPedistal> extends Tile
 	
 	        RenderUtil.renderItem(tile.getStack(), TransformType.FIXED);
 	        GlStateManager.popMatrix();
-	        
-
-	        
 
 	    	
 	        boolean renderFancyEffect = tile.craftingCooldown.getValue() > 0;
@@ -123,12 +120,25 @@ public class RenderTileFusionPedistal<T extends TileFusionPedistal> extends Tile
 	                GlStateManager.rotate(random.nextFloat() * 360.0F + f * 90.0F, 0.0F, 0.0F, 1.0F);
 	                float f2 = random.nextFloat() * 20.0F + 5.0F + f1 * 10.0F;
 	                float f3 = random.nextFloat() * 2.0F + 1.0F + f1 * 2.0F;
+	                int r = 255, g = 255, b = 255;
+	                
+	                if(tile.runningRecipe !=null){
+	    				Vec3d colorVec = tile.runningRecipe.getRecipeColor();
+	    				if(colorVec !=null){
+	    					r = (int)colorVec.xCoord;
+	    					g = (int)colorVec.yCoord;
+	    					b = (int)colorVec.zCoord;
+	    				}
+	    			}
+	                
+	                float red = r/255F, green = g/255F, blue = b/255F;
+	                float alpha = 0.0F;
 	                vertexbuffer.begin(6, DefaultVertexFormats.POSITION_COLOR);
 	                vertexbuffer.pos(0.0D, 0.0D, 0.0D).color(255, 255, 255, (int)(255.0F * (1.0F - f1))).endVertex();
-	                vertexbuffer.pos(-0.866D * (double)f3, (double)f2, (double)(-0.5F * f3)).color(255, 255, 255, 0).endVertex();
-	                vertexbuffer.pos(0.866D * (double)f3, (double)f2, (double)(-0.5F * f3)).color(255, 255, 255, 0).endVertex();
-	                vertexbuffer.pos(0.0D, (double)f2, (double)(1.0F * f3)).color(255, 255, 255, 0).endVertex();
-	                vertexbuffer.pos(-0.866D * (double)f3, (double)f2, (double)(-0.5F * f3)).color(255, 255, 255, 0).endVertex();
+	                vertexbuffer.pos(-0.866D * (double)f3, (double)f2, (double)(-0.5F * f3)).color(red, green, blue, alpha).endVertex();
+	                vertexbuffer.pos(0.866D * (double)f3, (double)f2, (double)(-0.5F * f3)).color(red, green, blue, alpha).endVertex();
+	                vertexbuffer.pos(0.0D, (double)f2, (double)(1.0F * f3)).color(red, green, blue, alpha).endVertex();
+	                vertexbuffer.pos(-0.866D * (double)f3, (double)f2, (double)(-0.5F * f3)).color(red, green, blue, alpha).endVertex();
 	                tessellator.draw();
 	            }
 
@@ -155,7 +165,7 @@ public class RenderTileFusionPedistal<T extends TileFusionPedistal> extends Tile
 			int r = color.getRed();
 			int g = color.getGreen();
 			int b = color.getBlue();
-			
+			boolean renderLaser = false;
 			if(tile.runningRecipe !=null){
 				Vec3d colorVec = tile.runningRecipe.getRecipeColor();
 				if(colorVec !=null){
@@ -164,6 +174,8 @@ public class RenderTileFusionPedistal<T extends TileFusionPedistal> extends Tile
 					b = (int)colorVec.zCoord;
 				}
 			}
+			
+			
 			
 			double progress = (double)tile.craftingProgress.getValue() / (double)200;
 			List<IPedistal> lazerList = Lists.newArrayList();
@@ -191,7 +203,7 @@ public class RenderTileFusionPedistal<T extends TileFusionPedistal> extends Tile
 			        RenderUtil.renderItem(pedistal.getStack(), TransformType.FIXED);
 			        GlStateManager.popMatrix();
 				}
-				lazerList.add(pedistal);
+				if(renderLaser)lazerList.add(pedistal);
 			}
 			for(IPedistal pedistal : lazerList){
 				TileEntity pedistalTile = (TileEntity)pedistal;

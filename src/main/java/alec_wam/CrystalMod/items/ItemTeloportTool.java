@@ -53,7 +53,7 @@ public class ItemTeloportTool extends Item implements ICustomModel {
 		super();
 		setMaxStackSize(1);
 		setCreativeTab(CrystalMod.tabItems);
-		ModItems.registerItem(this, "telePearl");
+		ModItems.registerItem(this, "telepearl");
 	}
 	
 	@SideOnly(Side.CLIENT)

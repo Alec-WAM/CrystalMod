@@ -139,7 +139,7 @@ public class InventoryBackpack implements IInventory {
 
     @Override
     public ItemStack decrStackSize(int i, int j){
-        if(!ItemStackTools.isNullStack(getStackInSlot(i))){
+        if(ItemStackTools.isValid(getStackInSlot(i))){
             ItemStack stackAt;
             if(ItemStackTools.getStackSize(getStackInSlot(i)) <= j){
                 stackAt = getStackInSlot(i);

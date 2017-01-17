@@ -93,12 +93,9 @@ public class GuideChapter {
 	private int stackIndex = 0;
 
 	public void update(int pageTimer) {
-		if(stacks !=null && Util.isMultipleOf(pageTimer, 20)){
-			if(stackIndex+1 >=stacks.length){
-				stackIndex = 0;
-			} else {
-				stackIndex++;
-			}
+		if(stacks !=null && Util.isMultipleOf(pageTimer, 40)){
+			stackIndex++;
+			stackIndex%=stacks.length;
 			currentDisplay = stacks[stackIndex];
 		}
 	}

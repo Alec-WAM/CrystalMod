@@ -18,7 +18,7 @@ public class GuiGuideBase extends GuiScreen {
     public void onGuiClosed(){
         super.onGuiClosed();
         
-        this.lastScreen = null;
+        //this.lastScreen = null;
 
         ExtendedPlayer data = ExtendedPlayerProvider.getExtendedPlayer(mc.thePlayer);
         data.lastOpenBook = this;

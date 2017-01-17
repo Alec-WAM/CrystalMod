@@ -44,13 +44,13 @@ public class ItemMachineFrame extends Item implements ICustomModel {
 		this.setHasSubtypes(true);
 		this.setMaxDamage(0);
 		this.setCreativeTab(CrystalMod.tabBlocks);
-		ModItems.registerItem(this, "machineFrame");
+		ModItems.registerItem(this, "machineframe");
 	}
 	
 	@SideOnly(Side.CLIENT)
     public void initModel() {
-		ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation("crystalmod:machineFrame", "inventory"));
-		ModelLoader.setCustomModelResourceLocation(this, 1, new ModelResourceLocation("crystalmod:machineFrame", "ender"));
+		ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation("crystalmod:machineframe", "inventory"));
+		ModelLoader.setCustomModelResourceLocation(this, 1, new ModelResourceLocation("crystalmod:machineframe", "ender"));
     }
 	
 	public String getUnlocalizedName(ItemStack stack)

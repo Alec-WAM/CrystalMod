@@ -28,11 +28,6 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
- /**
-  * Creates a block with textures that connect to other blocks
-  * <p>
-  * Based off a tutorial by Darkhax, used under the Creative Commons Zero 1.0 Universal license
-  */
 public class BlockCrystalGlass extends EnumBlock<BlockCrystalGlass.GlassType> implements ICustomModel {
     
 	public static final PropertyEnum<GlassType> TYPE = PropertyEnum.<GlassType>create("type", GlassType.class);
@@ -132,12 +127,12 @@ public class BlockCrystalGlass extends EnumBlock<BlockCrystalGlass.GlassType> im
         
       // Creates the state to use for the block. This is where we check if every side is
       // connectable or not.
-      return state.withProperty(CONNECTED_DOWN,  this.isSideConnectable(world, position, EnumFacing.DOWN))
-                  .withProperty(CONNECTED_EAST,  this.isSideConnectable(world, position, EnumFacing.EAST))
-                  .withProperty(CONNECTED_NORTH, this.isSideConnectable(world, position, EnumFacing.NORTH))
-                  .withProperty(CONNECTED_SOUTH, this.isSideConnectable(world, position, EnumFacing.SOUTH))
-                  .withProperty(CONNECTED_UP,    this.isSideConnectable(world, position, EnumFacing.UP))
-                  .withProperty(CONNECTED_WEST,  this.isSideConnectable(world, position, EnumFacing.WEST));
+      return state.withProperty(CONNECTED_DOWN,  isSideConnectable(world, position, EnumFacing.DOWN))
+                  .withProperty(CONNECTED_EAST,  isSideConnectable(world, position, EnumFacing.EAST))
+                  .withProperty(CONNECTED_NORTH, isSideConnectable(world, position, EnumFacing.NORTH))
+                  .withProperty(CONNECTED_SOUTH, isSideConnectable(world, position, EnumFacing.SOUTH))
+                  .withProperty(CONNECTED_UP,    isSideConnectable(world, position, EnumFacing.UP))
+                  .withProperty(CONNECTED_WEST,  isSideConnectable(world, position, EnumFacing.WEST));
     }
 
     @Nonnull
@@ -155,7 +150,7 @@ public class BlockCrystalGlass extends EnumBlock<BlockCrystalGlass.GlassType> im
      * @param side The side of the block to check.
      * @return Whether or not the side is connectable.
      */
-    private boolean isSideConnectable(IBlockAccess world, BlockPos pos, EnumFacing side) {
+    public static boolean isSideConnectable(IBlockAccess world, BlockPos pos, EnumFacing side) {
       final IBlockState original = world.getBlockState(pos);
       final IBlockState connected = world.getBlockState(pos.offset(side));
 
@@ -181,7 +176,7 @@ public class BlockCrystalGlass extends EnumBlock<BlockCrystalGlass.GlassType> im
 		@Override
 		protected ModelResourceLocation getModelResourceLocation(IBlockState state)
 		{
-			BlockCrystalGlass block = (BlockCrystalGlass)state.getBlock();
+			//BlockCrystalGlass block = (BlockCrystalGlass)state.getBlock();
 			GlassType type = state.getValue(TYPE);
 			StringBuilder builder = new StringBuilder();
 			String nameOverride = null;
@@ -190,7 +185,7 @@ public class BlockCrystalGlass extends EnumBlock<BlockCrystalGlass.GlassType> im
 			builder.append("=");
 			builder.append(type);
 			
-			nameOverride = block.getRegistryName().getResourcePath();
+			nameOverride = state.getBlock().getRegistryName().getResourcePath();
 
 			if(builder.length() == 0)
 			{

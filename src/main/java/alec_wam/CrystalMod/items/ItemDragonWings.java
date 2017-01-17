@@ -16,7 +16,7 @@ public class ItemDragonWings extends Item implements ICustomModel {
 		super();
 		setMaxStackSize(1);
 		this.setCreativeTab(CrystalMod.tabItems);
-		ModItems.registerItem(this, "dragonWings");
+		ModItems.registerItem(this, "dragonwings");
 	}
 
 	@SideOnly(Side.CLIENT)

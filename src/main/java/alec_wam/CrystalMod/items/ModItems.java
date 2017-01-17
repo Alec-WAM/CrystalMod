@@ -2,6 +2,8 @@ package alec_wam.CrystalMod.items;
 
 import java.util.Map;
 
+import com.google.common.collect.Maps;
+
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.blocks.ModBlocks;
@@ -14,7 +16,6 @@ import alec_wam.CrystalMod.entities.minecarts.chests.wireless.ItemWirelessChestM
 import alec_wam.CrystalMod.entities.minions.ItemMinion;
 import alec_wam.CrystalMod.entities.minions.ItemMinionStaff;
 import alec_wam.CrystalMod.entities.pet.bombomb.ItemBombomb;
-import alec_wam.CrystalMod.handler.MissingItemHandler;
 import alec_wam.CrystalMod.integration.baubles.BaublesIntegration;
 import alec_wam.CrystalMod.integration.baubles.ItemBaubleWings;
 import alec_wam.CrystalMod.items.ItemMetalPlate.PlateType;
@@ -49,10 +50,6 @@ import alec_wam.CrystalMod.tiles.pipes.estorage.panel.wireless.ItemWirelessPanel
 import alec_wam.CrystalMod.tiles.pipes.estorage.storage.hdd.ItemHDD;
 import alec_wam.CrystalMod.tiles.pipes.item.filters.ItemPipeFilter;
 import alec_wam.CrystalMod.tiles.spawner.ItemMobEssence;
-import alec_wam.CrystalMod.util.ModLogger;
-
-import com.google.common.collect.Maps;
-
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -67,13 +64,8 @@ import net.minecraft.item.ItemPickaxe;
 import net.minecraft.item.ItemSpade;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.util.EnumHelper;
-import net.minecraftforge.fml.common.FMLContainer;
-import net.minecraftforge.fml.common.InjectedModContainer;
-import net.minecraftforge.fml.common.Loader;
-import net.minecraftforge.fml.common.ModContainer;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -156,10 +148,10 @@ public class ModItems {
 		crystals = new ItemCrystal();
 		ingots = new ItemIngot();
 		plates = new ItemMetalPlate();
-		crystalReedsBlue = registerItem(new ItemBlockSpecial(ModBlocks.crystalReedsBlue).setCreativeTab(CrystalMod.tabItems), "crystalreedsblue");
-		crystalReedsRed = registerItem(new ItemBlockSpecial(ModBlocks.crystalReedsRed).setCreativeTab(CrystalMod.tabItems), "crystalreedsred");
-		crystalReedsGreen = registerItem(new ItemBlockSpecial(ModBlocks.crystalReedsGreen).setCreativeTab(CrystalMod.tabItems), "crystalreedsgreen");
-		crystalReedsDark = registerItem(new ItemBlockSpecial(ModBlocks.crystalReedsDark).setCreativeTab(CrystalMod.tabItems), "crystalreedsdark");
+		crystalReedsBlue = registerItem(new ItemBlockSpecial(ModBlocks.crystalReedsBlue).setCreativeTab(CrystalMod.tabCrops), "crystalreedsblue");
+		crystalReedsRed = registerItem(new ItemBlockSpecial(ModBlocks.crystalReedsRed).setCreativeTab(CrystalMod.tabCrops), "crystalreedsred");
+		crystalReedsGreen = registerItem(new ItemBlockSpecial(ModBlocks.crystalReedsGreen).setCreativeTab(CrystalMod.tabCrops), "crystalreedsgreen");
+		crystalReedsDark = registerItem(new ItemBlockSpecial(ModBlocks.crystalReedsDark).setCreativeTab(CrystalMod.tabCrops), "crystalreedsdark");
 		toolParts = new ItemToolParts();
 		machineFrame = new ItemMachineFrame();
 		
@@ -171,16 +163,16 @@ public class ModItems {
 		shears = new ItemCrystalShears();
 		
 		ItemStack darkIronPlate = new ItemStack(plates, 1, PlateType.DARK_IRON.getMetadata());
-		darkIronHelmet = registerItem(new ItemCustomArmor(ArmorMaterialDarkIron, EntityEquipmentSlot.HEAD, "darkIron", darkIronPlate), "darkIronHelmet");
-		darkIronChestplate = registerItem(new ItemCustomArmor(ArmorMaterialDarkIron, EntityEquipmentSlot.CHEST, "darkIron", darkIronPlate), "darkIronChestplate");
-		darkIronLeggings = registerItem(new ItemCustomArmor(ArmorMaterialDarkIron, EntityEquipmentSlot.LEGS, "darkIron", darkIronPlate), "darkIronLeggings");
-		darkIronBoots = registerItem(new ItemCustomArmor(ArmorMaterialDarkIron, EntityEquipmentSlot.FEET, "darkIron", darkIronPlate), "darkIronBoots");
+		darkIronHelmet = registerItem(new ItemCustomArmor(ArmorMaterialDarkIron, EntityEquipmentSlot.HEAD, "darkIron", darkIronPlate), "darkironhelmet");
+		darkIronChestplate = registerItem(new ItemCustomArmor(ArmorMaterialDarkIron, EntityEquipmentSlot.CHEST, "darkIron", darkIronPlate), "darkironchestplate");
+		darkIronLeggings = registerItem(new ItemCustomArmor(ArmorMaterialDarkIron, EntityEquipmentSlot.LEGS, "darkIron", darkIronPlate), "darkironleggings");
+		darkIronBoots = registerItem(new ItemCustomArmor(ArmorMaterialDarkIron, EntityEquipmentSlot.FEET, "darkIron", darkIronPlate), "darkironboots");
 		
-		darkIronAxe = registerItem(new ItemCustomAxe(ToolMaterialDarkIron), "darkIronAxe");
-		darkIronHoe = (ItemHoe) registerItem(new ItemHoe(ToolMaterialDarkIron), "darkIronHoe").setCreativeTab(CrystalMod.tabTools);
-		darkIronShovel = (ItemSpade) registerItem(new ItemSpade(ToolMaterialDarkIron), "darkIronShovel").setCreativeTab(CrystalMod.tabTools);
-		darkIronPickaxe = registerItem(new ItemCustomPickaxe(ToolMaterialDarkIron), "darkIronPickaxe");
-		darkIronSword = (ItemSword) registerItem(new ItemSword(ToolMaterialDarkIron), "darkIronSword").setCreativeTab(CrystalMod.tabTools);
+		darkIronAxe = registerItem(new ItemCustomAxe(ToolMaterialDarkIron), "darkironaxe");
+		darkIronHoe = (ItemHoe) registerItem(new ItemHoe(ToolMaterialDarkIron), "darkironhoe").setCreativeTab(CrystalMod.tabTools);
+		darkIronShovel = (ItemSpade) registerItem(new ItemSpade(ToolMaterialDarkIron), "darkironshovel").setCreativeTab(CrystalMod.tabTools);
+		darkIronPickaxe = registerItem(new ItemCustomPickaxe(ToolMaterialDarkIron), "darkironpickaxe");
+		darkIronSword = (ItemSword) registerItem(new ItemSword(ToolMaterialDarkIron), "darkironsword").setCreativeTab(CrystalMod.tabTools);
 		darkIronBow = new ItemDarkIronBow();
 		
 		bat = new ItemBat();
@@ -245,12 +237,13 @@ public class ModItems {
 		String finalName = name;
 		String lowerCase = name.toLowerCase();
 		if(name !=lowerCase){
-			ModLogger.warning("Registering an Item that has a non-lowercase registry name! ("+name+" vs. "+lowerCase+") setting it to "+lowerCase);
+			/*ModLogger.warning("Registering an Item that has a non-lowercase registry name! ("+name+" vs. "+lowerCase+") setting it to "+lowerCase);
 			finalName = lowerCase;
 			
 			ModContainer mc = Loader.instance().activeModContainer();
             String prefix = mc == null || (mc instanceof InjectedModContainer && ((InjectedModContainer)mc).wrappedContainer instanceof FMLContainer) ? "minecraft" : mc.getModId().toLowerCase();
-            MissingItemHandler.remapItems.put(new ResourceLocation(prefix, name), item);
+            MissingItemHandler.remapItems.put(new ResourceLocation(prefix, name), item);*/
+			throw new RuntimeException(name+" is not lowercase!");
 		}
 		
 		item.setUnlocalizedName(CrystalMod.prefix(finalName));

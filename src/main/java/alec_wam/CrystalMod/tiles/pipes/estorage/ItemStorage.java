@@ -44,6 +44,7 @@ public class ItemStorage {
 	private List<ItemStackData> items = new ArrayList<ItemStackData>();
 	private List<NetworkedItemProvider> inventories = new ArrayList<NetworkedItemProvider>();
 	private final EStorageNetwork network;
+	private boolean isDirty;
 	
 	public ItemStorage(EStorageNetwork network){
 		this.network = network;
@@ -220,24 +221,6 @@ public class ItemStorage {
 		}
 		return ret;
 	}
-	
-	/*public int removeItem(ItemStackData data, int amount, boolean sim) {
-		if (data == null || data.stack == null || network == null)
-			return 0;
-		Iterator<NetworkedItemProvider> i1 = inventories.iterator();
-		while(i1.hasNext()){
-			NetworkedItemProvider inter = i1.next();
-			if (network.sameDimAndPos(inter, data.interPos, data.interDim)) {
-				if(inter.getInterface().getNetworkInventory() !=null){
-					int extract = inter.getInterface().getNetworkInventory().extractItem(network, data.stack, amount, true, true);
-					if(extract >= 0){
-						return sim ? extract : inter.getInterface().getNetworkInventory().extractItem(network, data.stack, amount, false, true);
-					}
-				}
-			}
-		}
-		return 0;
-	}*/
 	
 	public boolean hasItem(ItemStack stack){
 		return hasItem(stack, false);
@@ -451,6 +434,20 @@ public class ItemStorage {
 
 	public static ExtractFilter getExtractFilter(boolean oredict) {
 		return oredict ? ORE : NORMAL;
+	}
+
+	/**
+	 * @return does list need an update.
+	 */
+	public boolean isDirty() {
+		return isDirty;
+	}
+
+	/**
+	 * @param if the list needs to update.
+	 */
+	public void setDirty(boolean isDirty) {
+		this.isDirty = isDirty;
 	}
 	
 }

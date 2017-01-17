@@ -104,7 +104,7 @@ public class ItemMobEssence extends Item implements ICustomModel{
 	public ItemMobEssence(){
 		super();
 		this.setCreativeTab(CrystalMod.tabItems);
-		ModItems.registerItem(this, "mobEssence");
+		ModItems.registerItem(this, "mobessence");
 	}
 	
 	@SideOnly(Side.CLIENT)

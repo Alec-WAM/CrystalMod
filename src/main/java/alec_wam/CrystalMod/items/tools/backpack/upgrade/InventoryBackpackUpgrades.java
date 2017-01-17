@@ -78,17 +78,21 @@ public class InventoryBackpackUpgrades extends InventoryBackpack{
 	}
 	
 	public boolean hasUpgrade(BackpackUpgrade upgrade){
+		return getUpgradeIndex(upgrade) > -1;
+	}
+	
+	public int getUpgradeIndex(BackpackUpgrade upgrade){
 		for(int i = 0; i < size; i++){
 			ItemStack stack = getStackInSlot(i);
 			if(ItemStackTools.isValid(stack)){
 				if(stack.getItem() instanceof ItemBackpackUpgrade){
 					if(stack.getMetadata() == upgrade.ordinal()){
-						return true;
+						return i;
 					}
 				}
 			}
 		}
-		return false;
+		return -1;
 	}
 	
 	public int getUpgradeCount(){

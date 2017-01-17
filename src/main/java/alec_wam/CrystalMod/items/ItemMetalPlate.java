@@ -20,7 +20,7 @@ public class ItemMetalPlate extends Item implements ICustomModel {
 		this.setHasSubtypes(true);
 		this.setMaxDamage(0);
 		this.setCreativeTab(CrystalMod.tabItems);
-		ModItems.registerItem(this, "metalPlate");
+		ModItems.registerItem(this, "metalplate");
 	}
 	
 	@SideOnly(Side.CLIENT)

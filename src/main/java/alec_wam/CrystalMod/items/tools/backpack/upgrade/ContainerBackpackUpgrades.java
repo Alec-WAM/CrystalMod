@@ -2,6 +2,7 @@ package alec_wam.CrystalMod.items.tools.backpack.upgrade;
 
 import javax.annotation.Nullable;
 
+import alec_wam.CrystalMod.items.tools.backpack.BackpackUtil;
 import alec_wam.CrystalMod.items.tools.backpack.IBackpack;
 import alec_wam.CrystalMod.items.tools.backpack.IBackpackInventory;
 import alec_wam.CrystalMod.items.tools.backpack.ItemBackpackBase;
@@ -95,9 +96,8 @@ public class ContainerBackpackUpgrades extends Container
     	if(slotId >=0){
     		ItemStack backpack = this.upgradeInventory.getBackpack();
     		if(ItemStackTools.isValid(backpack)){
-    			if(backpack.getItem() instanceof ItemBackpackBase){
-    				IBackpack type = ((ItemBackpackBase)backpack.getItem()).getBackpack();
-    				
+    			IBackpack type = BackpackUtil.getType(backpack);
+    			if(type !=null){
     				Slot slot = getSlot(slotId);
     				ItemStack stack = slot.getStack();
     				if(ItemStackTools.isValid(stack)){

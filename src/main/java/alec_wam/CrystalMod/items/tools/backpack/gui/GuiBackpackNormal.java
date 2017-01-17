@@ -38,9 +38,8 @@ public class GuiBackpackNormal extends GuiContainer {
         super(new ContainerBackpackNormal(backpackInventory));
         this.backpack = backpackInventory.getBackpack();
         
-        if(ItemStackTools.isValid(backpack) && backpack.getItem() instanceof ItemBackpackBase){
-        	IBackpack type = ((ItemBackpackBase)backpack.getItem()).getBackpack();
-        	this.upgrades = type.getUpgradeInventory(backpack);
+        if(ItemStackTools.isValid(backpack)){
+        	this.upgrades = BackpackUtil.getUpgradeInventory(backpack);
         	this.hasTabs = (upgrades !=null ? upgrades.getTabs() !=null ? upgrades.getTabs().length > 0 : false : false);
         	this.hasPockets = (upgrades !=null ? upgrades.hasUpgrade(BackpackUpgrade.POCKETS) : false);
         }

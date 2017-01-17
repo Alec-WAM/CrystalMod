@@ -23,7 +23,7 @@ public class ItemCrystalSeeds extends Item implements net.minecraftforge.common.
     public ItemCrystalSeeds(PlantType type)
     {
     	TYPE = type;
-        this.setCreativeTab(CrystalMod.tabItems);
+        this.setCreativeTab(CrystalMod.tabCrops);
         ModItems.registerItem(this, type.getName().toLowerCase()+"crystalseeds");
     }
     
