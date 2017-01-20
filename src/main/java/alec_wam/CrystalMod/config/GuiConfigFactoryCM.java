@@ -24,6 +24,7 @@ public class GuiConfigFactoryCM extends GuiConfig {
     		Config.CATEGORY_WORLD,
     		Config.CATEGORY_ENTITY,
     		Config.CATEGORY_ITEM,
+    		Config.CATEGORY_BLOCKS,
     		Config.CATEGORY_MACHINE,
     		Config.CATEGORY_MINIONS
     };

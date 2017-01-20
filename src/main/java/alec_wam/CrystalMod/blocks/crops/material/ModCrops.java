@@ -3,6 +3,7 @@ package alec_wam.CrystalMod.blocks.crops.material;
 import java.util.HashMap;
 import java.util.Map;
 
+import alec_wam.CrystalMod.Config;
 import alec_wam.CrystalMod.api.CrystalModAPI;
 import alec_wam.CrystalMod.crafting.ModCrafting;
 import alec_wam.CrystalMod.tiles.fusion.ModFusionRecipes;
@@ -271,8 +272,7 @@ public class ModCrops {
 	}
 	
 	public static void recipes(){
-		//TODO Add Config option
-		boolean useInfusion = true;
+		boolean useInfusion = Config.hardmode_MaterialCrops;
 		
 		if(useInfusion){
 			Vec3d colorGreen = new Vec3d(0, 124, 16);

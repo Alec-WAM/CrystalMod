@@ -25,6 +25,9 @@ import alec_wam.CrystalMod.tiles.chest.CrystalChestType;
 import alec_wam.CrystalMod.tiles.chest.ItemBlockCrystalChest;
 import alec_wam.CrystalMod.tiles.chest.wireless.BlockWirelessChest;
 import alec_wam.CrystalMod.tiles.chest.wireless.TileWirelessChest;
+import alec_wam.CrystalMod.tiles.crate.BlockCrate;
+import alec_wam.CrystalMod.tiles.crate.RenderTileCrate;
+import alec_wam.CrystalMod.tiles.crate.TileCrate;
 import alec_wam.CrystalMod.tiles.endertorch.BlockEnderTorch;
 import alec_wam.CrystalMod.tiles.endertorch.TileEnderTorch;
 import alec_wam.CrystalMod.tiles.entityhopper.BlockEntityHopper;
@@ -165,6 +168,7 @@ public class ModBlocks {
 	public static BlockEnderTorch enderTorch;
 	public static BlockMobGrinder mobGrinder;
 	public static BlockEntityHopper entityHopper;
+	public static BlockCrate crates;
 	
 	public static BlockHDDInterface hddInterface;
 	public static BlockHDDArray hddArray;
@@ -429,6 +433,9 @@ public class ModBlocks {
 		entityHopper = registerBlock(new BlockEntityHopper(), "entityhopper");
 		registerTileEntity(TileEntityEntityHopper.class);
 		
+		crates = registerEnumBlock(new BlockCrate(), "crate");
+		registerTileEntity(TileCrate.class);
+		
 		darkIronRail = new BlockReinforcedRail();
 		registerBlock(darkIronRail, "reinforcedRail");
 		
@@ -462,7 +469,8 @@ public class ModBlocks {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileWorksiteBase.class, new TileWorksiteRenderer<TileWorksiteBase>());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileMaterialCrop.class, new RenderTileMaterialCrop<TileMaterialCrop>());
 		ClientRegistry.bindTileEntitySpecialRenderer(TilePedistal.class, new RenderTilePedistal<TilePedistal>());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileFusionPedistal.class, new RenderTileFusionPedistal<TileFusionPedistal>());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileFusionPedistal.class, new RenderTileFusionPedistal<TileFusionPedistal>());		
+		ClientRegistry.bindTileEntitySpecialRenderer(TileCrate.class, new RenderTileCrate<TileCrate>());
 	}
 	
 	@SideOnly(Side.CLIENT)

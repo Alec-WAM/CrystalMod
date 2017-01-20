@@ -1,20 +1,27 @@
 package alec_wam.CrystalMod.tiles.machine.power.converter;
 
+import alec_wam.CrystalMod.api.energy.ICEnergyReceiver;
+import alec_wam.CrystalMod.tiles.machine.power.CustomEnergyStorage;
+import cofh.api.energy.IEnergyReceiver;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
-import alec_wam.CrystalMod.api.energy.ICEnergyReceiver;
-import cofh.api.energy.EnergyStorage;
-import cofh.api.energy.IEnergyProvider;
-import cofh.api.energy.IEnergyReceiver;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.energy.CapabilityEnergy;
 
-public class TileEnergyConverterCUtoRF extends TileEnergyConveterBase implements IEnergyProvider, ICEnergyReceiver {
-	EnergyStorage energyStorage;
+public class TileEnergyConverterCUtoRF extends TileEnergyConveterBase implements ICEnergyReceiver {
+	CustomEnergyStorage energyStorage;
 	
 	public TileEnergyConverterCUtoRF()
 	{
-	    this.energyStorage = new EnergyStorage(5000);
+	    this.energyStorage = new CustomEnergyStorage(5000){
+	    	@Override
+	    	public boolean canReceive(){
+	    		return false;
+	    	}
+	    };
 	}
+	
 	
 	public void update(){
 		if(this.worldObj.isRemote)return;
@@ -33,40 +40,23 @@ public class TileEnergyConverterCUtoRF extends TileEnergyConveterBase implements
 	    if(tile !=null && tile instanceof IEnergyReceiver){
 	      IEnergyReceiver handler = (IEnergyReceiver) tile;
 	      if(!handler.canConnectEnergy(face))return;
-	      int rec = handler.receiveEnergy(face, Math.min(this.energyStorage.getMaxExtract(), this.energyStorage.getEnergyStored()), false);
-	      this.energyStorage.modifyEnergyStored(-(rec));
+	      handler.receiveEnergy(face, energyStorage.extractEnergy(80, false), false);
 	    }
 	}
 	
+	@Override
 	public void writeCustomNBT(NBTTagCompound nbt){
-		this.energyStorage.writeToNBT(nbt);
-	}
-	public void readCustomNBT(NBTTagCompound nbt){
-		this.energyStorage.readFromNBT(nbt);
+		energyStorage.writeToNBT(nbt);
 	}
 	
 	@Override
-	public boolean canConnectEnergy(EnumFacing from) {
-		return true;
+	public void readCustomNBT(NBTTagCompound nbt){
+		energyStorage.readFromNBT(nbt);
 	}
+	
 	@Override
 	public boolean canConnectCEnergy(EnumFacing from) {
 		return true;
-	}
-
-	@Override
-	public int extractEnergy(EnumFacing from, int maxExtract, boolean simulate) {
-		return this.energyStorage.extractEnergy(maxExtract, simulate);
-	}
-
-	@Override
-	public int getEnergyStored(EnumFacing from) {
-		return this.energyStorage.getEnergyStored();
-	}
-
-	@Override
-	public int getMaxEnergyStored(EnumFacing from) {
-		return this.energyStorage.getMaxEnergyStored();
 	}
 
 	@Override
@@ -110,6 +100,22 @@ public class TileEnergyConverterCUtoRF extends TileEnergyConveterBase implements
 	@Override
 	protected int getMaxEnergyStored() {
 		return energyStorage.getMaxEnergyStored();
+	}
+	
+	@Override
+    public boolean hasCapability(Capability<?> capability, EnumFacing facing){
+		 return capability == CapabilityEnergy.ENERGY || super.hasCapability(capability, facing);
+    }
+	
+	@SuppressWarnings("unchecked")
+	@Override
+    public <T> T getCapability(Capability<T> capability, EnumFacing facing){
+        if(capability == CapabilityEnergy.ENERGY){
+            if(energyStorage != null){
+                return (T)energyStorage;
+            }
+        }
+        return super.getCapability(capability, facing);
 	}
 
 }

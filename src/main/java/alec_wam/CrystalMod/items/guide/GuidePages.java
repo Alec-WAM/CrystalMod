@@ -84,9 +84,9 @@ public class GuidePages {
 		CrystalModAPI.MISC = CrystalModAPI.regiterGuideIndex(new GuideIndex("misc"));
 		
 		CrystalType[] crystalArray = new CrystalType[]{CrystalType.BLUE, CrystalType.RED, CrystalType.GREEN, CrystalType.DARK};
-		List<ItemStack> crystalFullList = getEnumItems(ModItems.crystals, crystalArray);
+		List<ItemStack> crystalFullList = ItemUtil.getItemSubtypes(ModItems.crystals, crystalArray);
 		
-		List<ItemStack> oreList = getEnumBlocks(ModBlocks.crystalOre, CrystalOreType.values());
+		List<ItemStack> oreList = ItemUtil.getBlockSubtypes(ModBlocks.crystalOre, CrystalOreType.values());
 		Map<String, List<?>> lookUp = Maps.newHashMap();
 		lookUp.put("0", oreList);
 		CrystalModAPI.BLOCKS.registerChapter(new GuideChapter("crystalore", new PageIcon("0", oreList), new PageFurnace("smelt", crystalFullList)).setDisplayObject(oreList).setLookUpData(lookUp));
@@ -95,17 +95,17 @@ public class GuidePages {
 		CrystalBlockType[] normalArray = new CrystalBlockType[]{CrystalBlockType.BLUE, CrystalBlockType.RED, CrystalBlockType.GREEN, CrystalBlockType.DARK};
 		CrystalBlockType[] chisledArray = new CrystalBlockType[]{CrystalBlockType.BLUE_CHISELED, CrystalBlockType.RED_CHISELED, CrystalBlockType.GREEN_CHISELED, CrystalBlockType.DARK_CHISELED};
 		CrystalBlockType[] brickArray = new CrystalBlockType[]{CrystalBlockType.BLUE_BRICK, CrystalBlockType.RED_BRICK, CrystalBlockType.GREEN_BRICK, CrystalBlockType.DARK_BRICK};
-		List<ItemStack> normalBlocksDisplayList = getEnumBlocks(ModBlocks.crystal, new CrystalBlockType[]{CrystalBlockType.BLUE, CrystalBlockType.BLUE_CHISELED, CrystalBlockType.BLUE_BRICK});
-		GuideChapter chapterCrystalBlock = new GuideChapter("crystalblock", new PageCrafting("normal", getEnumBlocks(ModBlocks.crystal, normalArray)), new PageIcon("chiseled", getEnumBlocks(ModBlocks.crystal, chisledArray)), new PageCrafting("brick", getEnumBlocks(ModBlocks.crystal, brickArray))).setDisplayObject(normalBlocksDisplayList);
+		List<ItemStack> normalBlocksDisplayList = ItemUtil.getBlockSubtypes(ModBlocks.crystal, CrystalBlockType.BLUE, CrystalBlockType.BLUE_CHISELED, CrystalBlockType.BLUE_BRICK);
+		GuideChapter chapterCrystalBlock = new GuideChapter("crystalblock", new PageCrafting("normal", ItemUtil.getBlockSubtypes(ModBlocks.crystal, normalArray)), new PageIcon("chiseled", ItemUtil.getBlockSubtypes(ModBlocks.crystal, chisledArray)), new PageCrafting("brick", ItemUtil.getBlockSubtypes(ModBlocks.crystal, brickArray))).setDisplayObject(normalBlocksDisplayList);
 		CrystalModAPI.BLOCKS.registerChapter(chapterCrystalBlock);
 		
-		List<ItemStack> ingotBlockList = getEnumBlocks(ModBlocks.crystalIngot, CrystalIngotBlockType.values());
+		List<ItemStack> ingotBlockList = ItemUtil.getBlockSubtypes(ModBlocks.crystalIngot, CrystalIngotBlockType.values());
 		CrystalModAPI.BLOCKS.registerChapter(new GuideChapter("crystalingotblock", new PageCrafting("main", ingotBlockList)).setDisplayObject(ingotBlockList));
 		
-		List<ItemStack> glassList = getEnumBlocks(ModBlocks.crystalGlass, new GlassType[]{GlassType.BLUE, GlassType.RED, GlassType.GREEN, GlassType.DARK});
+		List<ItemStack> glassList = ItemUtil.getBlockSubtypes(ModBlocks.crystalGlass, GlassType.BLUE, GlassType.RED, GlassType.GREEN, GlassType.DARK);
 		CrystalModAPI.BLOCKS.registerChapter(new GuideChapter("crystalglass", new PageCrafting("main", glassList)).setDisplayObject(glassList));
 		
-		List<ItemStack> workbenchList = getEnumBlocks(ModBlocks.crystalWorkbench, WorkbenchType.values());
+		List<ItemStack> workbenchList = ItemUtil.getBlockSubtypes(ModBlocks.crystalWorkbench, WorkbenchType.values());
 		CrystalModAPI.BLOCKS.registerChapter(new GuideChapter("crystalworkbench", new PageCrafting("main", workbenchList)).setDisplayObject(workbenchList));
 		
 		List<ItemStack> chestList = getEnumSpecial(ModBlocks.crystalChest, new CrystalChestType[]{CrystalChestType.DARKIRON, CrystalChestType.BLUE, CrystalChestType.RED, CrystalChestType.GREEN, CrystalChestType.DARK, CrystalChestType.PURE});
@@ -128,8 +128,8 @@ public class GuidePages {
 		plantList.add(new ItemStack(ModItems.crystalSeedsDark));
 		CrystalModAPI.BLOCKS.registerChapter(new GuideChapter("crystalplant", new PageIcon("main", plantList)).setDisplayObject(plantList));
 		
-		List<ItemStack> listSaplings = getEnumBlocks(ModBlocks.crystalSapling, BlockCrystalLog.WoodType.values());
-		List<ItemStack> listLogs = getEnumBlocks(ModBlocks.crystalLog, BlockCrystalLog.WoodType.values());
+		List<ItemStack> listSaplings = ItemUtil.getBlockSubtypes(ModBlocks.crystalSapling, BlockCrystalLog.WoodType.values());
+		List<ItemStack> listLogs = ItemUtil.getBlockSubtypes(ModBlocks.crystalLog, BlockCrystalLog.WoodType.values());
 		List<ItemStack> treePlantList = Lists.newArrayList();
 		treePlantList.add(new ItemStack(ModItems.crystalTreeSeedsBlue));
 		treePlantList.add(new ItemStack(ModItems.crystalTreeSeedsRed));
@@ -137,7 +137,7 @@ public class GuidePages {
 		treePlantList.add(new ItemStack(ModItems.crystalTreeSeedsDark));
 		CrystalModAPI.BLOCKS.registerChapter(new GuideChapter("crystaltrees", new PageIcon("main", listSaplings), new PageIcon("logs", listLogs), new PageIcon("treeplant", treePlantList)).setDisplayObject(listSaplings));
 
-		List<ItemStack> listTanks = getEnumBlocks(ModBlocks.crystalTank, new TankType[]{TankType.BLUE, TankType.RED, TankType.GREEN, TankType.DARK});
+		List<ItemStack> listTanks = ItemUtil.getBlockSubtypes(ModBlocks.crystalTank, TankType.BLUE, TankType.RED, TankType.GREEN, TankType.DARK);
 		CrystalModAPI.BLOCKS.registerChapter(new GuideChapter("crystaltank", new PageCrafting("main", listTanks)).setDisplayObject(listTanks));
 
 		ItemStack weather = new ItemStack(ModBlocks.weather);
@@ -174,19 +174,19 @@ public class GuidePages {
 		CrystalType[] nuggetArray = new CrystalType[]{CrystalType.BLUE_NUGGET, CrystalType.RED_NUGGET, CrystalType.GREEN_NUGGET, CrystalType.DARK_NUGGET};
 		CrystalType[] shardArray = new CrystalType[]{CrystalType.BLUE_SHARD, CrystalType.RED_SHARD, CrystalType.GREEN_SHARD, CrystalType.DARK_SHARD};
 
-		List<ItemStack> shardList = getEnumItems(ModItems.crystals, shardArray);
-		List<ItemStack> crystalList = getEnumItems(ModItems.crystals, new CrystalType[] {CrystalType.BLUE, CrystalType.BLUE_NUGGET, CrystalType.BLUE_SHARD});
-		List<ItemStack> nuggetList = getEnumItems(ModItems.crystals, nuggetArray);
+		List<ItemStack> shardList = ItemUtil.getItemSubtypes(ModItems.crystals, shardArray);
+		List<ItemStack> crystalList = ItemUtil.getItemSubtypes(ModItems.crystals, CrystalType.BLUE, CrystalType.BLUE_NUGGET, CrystalType.BLUE_SHARD);
+		List<ItemStack> nuggetList = ItemUtil.getItemSubtypes(ModItems.crystals, nuggetArray);
 		GuideChapter chapterCrystals = new GuideChapter("crystals", new PageIcon("shards", shardList), new PageCrafting("craftShard", shardList), new PageIcon("nuggets", nuggetList), new PageFurnace("smeltNugget", nuggetList), new PageIcon("crystal", crystalFullList), new PageFurnace("smeltCrystal", crystalFullList)).setDisplayObject(crystalList);
 		CrystalModAPI.ITEMS.registerChapter(chapterCrystals);
 		
 		IngotType[] ingotArray = new IngotType[]{IngotType.BLUE, IngotType.RED, IngotType.GREEN, IngotType.DARK};
-		List<ItemStack> ingotList = getEnumItems(ModItems.ingots, ingotArray);
+		List<ItemStack> ingotList = ItemUtil.getItemSubtypes(ModItems.ingots, ingotArray);
 		CrystalModAPI.ITEMS.registerChapter(new GuideChapter("crystalingots", new PageIcon("0", ingotList), new PageFurnace("smelt", ingotList)).setDisplayObject(ingotList));
 		
 		//TODO Move Plate Page to Press Page
 		PlateType[] plateArray = new PlateType[]{PlateType.BLUE, PlateType.RED, PlateType.GREEN, PlateType.DARK};
-		List<ItemStack> plateList = getEnumItems(ModItems.plates, plateArray);
+		List<ItemStack> plateList = ItemUtil.getItemSubtypes(ModItems.plates, plateArray);
 		CrystalModAPI.ITEMS.registerChapter(new GuideChapter("metalplate", new PageIcon("main", plateList), new PagePress("press", plateList)).setDisplayObject(plateList));
 
 		List<ItemStack> darkArmorList = Lists.newArrayList();
@@ -209,8 +209,8 @@ public class GuidePages {
 				new PageCrafting("main", basicDarkTools), 
 				new PageCrafting("bow", new ItemStack(ModItems.darkIronBow))).setDisplayObject(darkToolList));
 		
-		List<ItemStack> backpacks = getEnumItems(ModItems.normalBackpack, CrystalBackpackType.values());
-		List<ItemStack> backpackUpgrades = getEnumItems(ModItems.backpackupgrade, BackpackUpgrade.values());
+		List<ItemStack> backpacks = ItemUtil.getItemSubtypes(ModItems.normalBackpack, CrystalBackpackType.values());
+		List<ItemStack> backpackUpgrades = ItemUtil.getItemSubtypes(ModItems.backpackupgrade, BackpackUpgrade.values());
 		CrystalModAPI.ITEMS.registerChapter(new GuideChapter("backpacknormal", new PageCrafting("main", backpacks), new PageCrafting("upgrades", backpackUpgrades)).setDisplayObject(backpacks));
 
 		ItemStack lock = new ItemStack(ModItems.lock);
@@ -254,7 +254,7 @@ public class GuidePages {
 		GuiComponentStandardRecipePage pagePipePowerRF = getRecipePage("pipePowerRF", powerPipesRF);
 		pagePipePowerRF.setDescription(String.format(pagePipePowerRF.getDescription(), ""+Config.powerConduitTierOneRF, ""+Config.powerConduitTierTwoRF, ""+Config.powerConduitTierThreeRF, ""+Config.powerConduitTierFourRF), true);
 		blockData.add(pagePipePowerRF); 
-		GuiComponentStandardRecipePage pageTank = getRecipePage("tank", getEnumBlocks(ModBlocks.crystalTank, TankType.values()));
+		GuiComponentStandardRecipePage pageTank = getRecipePage("tank", ItemUtil.getBlockSubtypes(ModBlocks.crystalTank, TankType.values()));
 		pageTank.setDescription(String.format(pageTank.getDescription(), (BlockTank.tankCaps[0]*Fluid.BUCKET_VOLUME)+"mB", (BlockTank.tankCaps[1]*Fluid.BUCKET_VOLUME)+"mB", (BlockTank.tankCaps[2]*Fluid.BUCKET_VOLUME)+"mB", (BlockTank.tankCaps[3]*Fluid.BUCKET_VOLUME)+"mB", (BlockTank.tankCaps[4]*Fluid.BUCKET_VOLUME)+"mB"), true);
 		blockData.add(pageTank); 
 		blockData.add(getRecipePage("engineFurnace", new ItemStack(ModBlocks.engine, 1, EngineType.FURNACE.getMeta()))); 
@@ -284,15 +284,14 @@ public class GuidePages {
 		//ITEMS
 		
 		//TODO Add Furnace Page
-		itemData.add(getBasicPage("crystal", getEnumItems(ModItems.crystals, crystalArray)));
+		itemData.add(getBasicPage("crystal", ItemUtil.getItemSubtypes(ModItems.crystals, crystalArray)));
 		GuiComponentStandardRecipePage pagePureCrystal = getRecipePage("crystalPure", new ItemStack(ModItems.crystals, 1, CrystalType.PURE.getMetadata()));
 		if(Loader.isModLoaded("tconstruct"))pagePureCrystal.setDescription(String.format(pagePureCrystal.getDescription(), Lang.localize("guide.page.crystalPure.desc2")), true);
 		itemData.add(pagePureCrystal);
 		
-		itemData.add(getBasicPage("crystalIngot", getEnumItems(ModItems.ingots, ingotArray)));
+		itemData.add(getBasicPage("crystalIngot", ItemUtil.getItemSubtypes(ModItems.ingots, ingotArray)));
 		itemData.add(getBasicPage("darkIronIngot", new ItemStack(ModItems.ingots, 1, IngotType.DARK_IRON.getMetadata())));
-		//TODO Add Press Page
-		itemData.add(getBasicPage("metalPlate", getEnumItems(ModItems.plates, PlateType.values())));
+		itemData.add(getBasicPage("metalPlate", ItemUtil.getItemSubtypes(ModItems.plates, PlateType.values())));
 
 		itemData.add(getBasicPage("crystalReeds", ModItems.crystalReedsBlue));
 		List<ItemStack> seeds = Lists.newArrayList();
@@ -383,22 +382,6 @@ public class GuidePages {
 	public static void initEStorage(){
 		eStorageBlockData.clear();
 		eStorageItemData.clear();
-	}
-	
-	public static List<ItemStack> getEnumBlocks(Block obj, IEnumMeta[] array){
-		List<ItemStack> list = Lists.newArrayList();
-		for(IEnumMeta type : array){
-			list.add(new ItemStack(obj, 1, type.getMeta()));
-		}
-		return list;
-	}
-	
-	public static List<ItemStack> getEnumItems(Item obj, IEnumMetaItem[] array){
-		List<ItemStack> list = Lists.newArrayList();
-		for(IEnumMetaItem type : array){
-			list.add(new ItemStack(obj, 1, type.getMetadata()));
-		}
-		return list;
 	}
 	
 	public static List<ItemStack> getEnumSpecial(Block obj, Enum<?>[] array){

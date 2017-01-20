@@ -16,6 +16,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
+import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
@@ -73,7 +74,6 @@ public class RenderTileFusionPedistal<T extends TileFusionPedistal> extends Tile
 	        
 	        
 	        GlStateManager.rotate((((ClientEventHandler.elapsedTicks * speed) + partialTicks)) % 360, 0F, 1F, 0F);
-	
 	        RenderUtil.renderItem(tile.getStack(), TransformType.FIXED);
 	        GlStateManager.popMatrix();
 

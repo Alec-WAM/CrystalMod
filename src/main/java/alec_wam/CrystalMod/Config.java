@@ -19,6 +19,7 @@ public class Config {
 	public static final String CATEGORY_CLIENT = "client";
 	public static final String CATEGORY_WORLD = "world";
 	public static final String CATEGORY_ITEM = "items";
+	public static final String CATEGORY_BLOCKS = "blocks";
 	public static final String CATEGORY_ENTITY = "entities";
 	public static final String CATEGORY_MINIONS = "minions";
 	public static final String CATEGORY_MACHINE = "machines";
@@ -80,8 +81,10 @@ public class Config {
 	
 	public static int engine_vampire_maxattack = 16;
 	public static int advDispenser_cooldown = 40; //2 seconds
+	public static boolean crates_leaveOneItem = true;
 	
 	public static boolean backpackDeathUpgradeConsume = false;
+	public static boolean hardmode_MaterialCrops = false;
 	
 	@SubscribeEvent
 	public void onConfigChanged(OnConfigChangedEvent event) {
@@ -129,7 +132,7 @@ public class Config {
         	CrystalModWorldGenerator.treeDimBlacklist.add(i);
         }
         
-        superTorchMaxCount = cfg.get(CATEGORY_ITEM, "superTorchCapacity", superTorchMaxCount, "Max amount of torches allowed to be stored in a Super Torch.").getInt();
+        superTorchMaxCount = cfg.get(CATEGORY_ITEM, "superTorchCapacity", superTorchMaxCount, "Maximum amount of torches allowed to be stored in a Super Torch.").getInt();
         
         if(superTorchMaxCount < 0){
         	superTorchMaxCount = 0;
@@ -137,7 +140,9 @@ public class Config {
         
         tool_pureDamageAddition = cfg.get(CATEGORY_ITEM, "pureToolDurabilityAdditon", tool_pureDamageAddition, "Durability bonus for pure tools").getInt();
         
-        backpackDeathUpgradeConsume = cfg.get(CATEGORY_ITEM, "DeathUpgradeConsumed", backpackDeathUpgradeConsume, "Set to true if death upgrades are consumed of death.").getBoolean();
+        backpackDeathUpgradeConsume = cfg.get(CATEGORY_ITEM, "DeathUpgradeConsumed", backpackDeathUpgradeConsume, "Set to true if death upgrades are consumed on death.").getBoolean();
+        
+        hardmode_MaterialCrops = cfg.get(CATEGORY_ITEM, "HardmodeMaterialCrops", hardmode_MaterialCrops, "Set to true if seeds must be crafted with fusion instead of normal crafting.").getBoolean();
 
         int headtype = cfg.get(CATEGORY_ENTITY, "mobHeadDrop", mobHeadType.ordinal(), "0 = Never Drop; 1 = Drop when killed; 2 = Drop only when killed by player;").getInt(mobHeadType.ordinal());
     	if(headtype < 0)headtype = 0;
@@ -154,9 +159,10 @@ public class Config {
     	hoeStrings = cfg.get(CATEGORY_MINIONS, "Hoes", hoeStrings, "Use this to specify items that are hoes. Use the registry name (eg. modid:name).").getStringList();
     
     	//Machines
-    	PowerUnits.CU.conversionRation = cfg.get(CATEGORY_MACHINE, "RFtoCU", PowerUnits.CU.conversionRation, "Amount of RF needed to convert to one unit of CU").getInt(PowerUnits.CU.conversionRation);
+    	PowerUnits.RF.conversionRation = cfg.get(CATEGORY_MACHINE, "RFValue", 5, "Amount of RF needed to convert to one unit of CU").getInt(5);
     	engine_vampire_maxattack = cfg.get(CATEGORY_MACHINE, "Engine_Vampire_AttackAmt", engine_vampire_maxattack, "Amount of entites the vampire engine can attack at once").getInt();
     	advDispenser_cooldown = cfg.get(CATEGORY_MACHINE, "advDispenser_cooldown", advDispenser_cooldown, "Amount of ticks inbetween each click on the Advanced Dispenser").getInt();
+    	crates_leaveOneItem = cfg.get(CATEGORY_BLOCKS, "crates_leaveOneItem", crates_leaveOneItem, "Set to true to leave one item in a crate when it is clicked.").getBoolean();
 
     	//Client
     	vanillaMinecarts3d = cfg.get(CATEGORY_CLIENT, "3dMinecartItems", vanillaMinecarts3d, "Override Minecart Item Render to 3d items.").getBoolean();

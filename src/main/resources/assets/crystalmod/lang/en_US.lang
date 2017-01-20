@@ -185,15 +185,15 @@ item.crystalmod.worksiteupgrade.0.name=Medium Bounds Upgrade
 item.crystalmod.worksiteupgrade.1.name=Large Bounds Upgrade
 item.crystalmod.worksiteupgrade.2.name=Medium Quarry Upgrade
 item.crystalmod.worksiteupgrade.3.name=Large Quarry Upgrade
-item.crystalmod.worksiteupgrade.4.name=\u00a7eLightly Enchanted Tools Upgrade
-item.crystalmod.worksiteupgrade.5.name=\u00a7eHighly Enchanted Tools Upgrade
-item.crystalmod.worksiteupgrade.6.name=\u00a7eExtremely Enchanted Tools Upgrade
-item.crystalmod.worksiteupgrade.7.name=Basic Tool Quality Upgrade
-item.crystalmod.worksiteupgrade.8.name=Intermediate Tool Quality Upgrade
-item.crystalmod.worksiteupgrade.9.name=Advanced Tool Quality Upgrade
+item.crystalmod.worksiteupgrade.4.name=Fortune I Upgrade
+item.crystalmod.worksiteupgrade.5.name=Fortune II Upgrade
+item.crystalmod.worksiteupgrade.6.name=Fortune III Upgrade
+item.crystalmod.worksiteupgrade.7.name=Iron Tool Upgrade
+item.crystalmod.worksiteupgrade.8.name=Diamond Tool Upgrade
+item.crystalmod.worksiteupgrade.9.name=Crystal Tool Upgrade
 item.crystalmod.worksiteupgrade.10.name=Basic Chunk-loader Upgrade
-item.crystalmod.worksiteupgrade.11.name=\u00a75Quarry Chunk-loader Upgrade
-item.crystalmod.worksiteupgrade.12.name=\u00a7eQuarry Silk-Touch Upgrade
+item.crystalmod.worksiteupgrade.11.name=Quarry Chunk-loader Upgrade
+item.crystalmod.worksiteupgrade.12.name=Quarry Silk-Touch Upgrade
 item.crystalmod.worksiteupgrade.13.name=Quarry Only Ore Upgrade
 
 item.crystalmod.telepearl.name=Teleporting Pearl
@@ -256,6 +256,11 @@ tile.crystalmod.crystalglass.red.name=Red Crystal Glass
 tile.crystalmod.crystalglass.green.name=Green Crystal Glass
 tile.crystalmod.crystalglass.dark.name=Dark Crystal Glass
 tile.crystalmod.crystalglass.pure.name=Pure Crystal Glass
+tile.crystalmod.crystalglasspane.blue.name=Blue Crystal Glass Pane
+tile.crystalmod.crystalglasspane.red.name=Red Crystal Glass Pane
+tile.crystalmod.crystalglasspane.green.name=Green Crystal Glass Pane
+tile.crystalmod.crystalglasspane.dark.name=Dark Crystal Glass Pane
+tile.crystalmod.crystalglasspane.pure.name=Pure Crystal Glass Pane
 
 tile.crystalmod.metalbars.dark_iron.name=Dark Iron Bars
 tile.crystalmod.metalbars.blue.name=Blue Crystal Bars
@@ -318,6 +323,11 @@ tile.crystalmod.crystalchest.GREEN.name=Green Crystal Chest
 tile.crystalmod.crystalchest.DARK.name=Dark Crystal Chest
 tile.crystalmod.crystalchest.PURE.name=Pure Crystal Chest
 tile.crystalmod.crystalchest.DARKIRON.name=Dark Iron Chest
+
+tile.crystalmod.crate.blue.name=Blue Crystal Crate
+tile.crystalmod.crate.red.name=Red Crystal Crate
+tile.crystalmod.crate.green.name=Green Crystal Crate
+tile.crystalmod.crate.dark.name=Dark Crystal Crate
 
 tile.crystalmod.wirelesschest.name=Super Chest
 tile.crystalmod.advdispenser.name=Advanced Dispenser

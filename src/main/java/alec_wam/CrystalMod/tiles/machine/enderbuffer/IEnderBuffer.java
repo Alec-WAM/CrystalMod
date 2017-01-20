@@ -5,6 +5,6 @@ import alec_wam.CrystalMod.api.energy.ICEnergyReceiver;
 import cofh.api.energy.IEnergyProvider;
 import cofh.api.energy.IEnergyReceiver;
 
-public abstract interface IEnderBuffer extends IEnergyProvider, IEnergyReceiver, ICEnergyProvider, ICEnergyReceiver{
+public abstract interface IEnderBuffer extends ICEnergyProvider, ICEnergyReceiver{
 
 }

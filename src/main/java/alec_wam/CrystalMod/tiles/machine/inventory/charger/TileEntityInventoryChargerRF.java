@@ -1,19 +1,25 @@
 package alec_wam.CrystalMod.tiles.machine.inventory.charger;
 
+import alec_wam.CrystalMod.tiles.machine.power.CustomEnergyStorage;
 import alec_wam.CrystalMod.util.ItemStackTools;
-import cofh.api.energy.EnergyStorage;
-import cofh.api.energy.IEnergyContainerItem;
-import cofh.api.energy.IEnergyReceiver;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.energy.IEnergyStorage;
 
-public class TileEntityInventoryChargerRF extends TileEntityInventoryCharger implements IEnergyReceiver {
+public class TileEntityInventoryChargerRF extends TileEntityInventoryCharger {
 
-	public EnergyStorage energyStorage;
+	public CustomEnergyStorage energyStorage;
 	
 	public TileEntityInventoryChargerRF(){
-		energyStorage = new EnergyStorage(20000);
+		energyStorage = new CustomEnergyStorage(20000) {
+			@Override
+			public boolean canExtract(){
+				return false;
+			}
+		};
 	}
 	
 	public void writeCustomNBT(NBTTagCompound nbt){
@@ -31,45 +37,25 @@ public class TileEntityInventoryChargerRF extends TileEntityInventoryCharger imp
 	
 	@Override
 	public boolean canChargeItem(ItemStack stack) {
-		return ItemStackTools.isValid(stack) && stack.getItem() !=null && stack.getItem() instanceof cofh.api.energy.IEnergyContainerItem && ItemStackTools.getStackSize(stack) == 1;
+		return ItemStackTools.isValid(stack) && stack.getItem() !=null && stack.hasCapability(CapabilityEnergy.ENERGY, null) && ItemStackTools.getStackSize(stack) == 1;
 	}
 
 	@Override
 	public void chargeItem(ItemStack stack) {
 		if(!canChargeItem(stack))return;
-		IEnergyContainerItem chargable = (IEnergyContainerItem)stack.getItem();
-		int max = chargable.getMaxEnergyStored(stack);
-        int cur = chargable.getEnergyStored(stack);
+		IEnergyStorage cap = stack.getCapability(CapabilityEnergy.ENERGY, null);
+		if(cap == null)return;
+		int max = cap.getMaxEnergyStored();
+        int cur = cap.getEnergyStored();
         int canUse = Math.min(energyStorage.getEnergyStored(), max - cur);
         if(cur < max) {
-          int used = chargable.receiveEnergy(stack, canUse, true);
+          int used = cap.receiveEnergy(canUse, true);
           if(used > 0) {
         	  if(energyStorage.extractEnergy(used, false) >=used){
-        		  chargable.receiveEnergy(stack, used, false);
+        		  cap.receiveEnergy(used, false);
         	  }
           }
         }
-	}
-
-	@Override
-	public int getEnergyStored(EnumFacing from) {
-		return energyStorage.getEnergyStored();
-	}
-
-	@Override
-	public int getMaxEnergyStored(EnumFacing from) {
-		return energyStorage.getMaxEnergyStored();
-	}
-
-	@Override
-	public boolean canConnectEnergy(EnumFacing from) {
-		return from.ordinal() !=facing;
-	}
-
-	@Override
-	public int receiveEnergy(EnumFacing from, int maxReceive, boolean simulate) {
-		int fill = energyStorage.receiveEnergy(maxReceive, simulate);
-		return fill;
 	}
 
 	@Override
@@ -80,6 +66,22 @@ public class TileEntityInventoryChargerRF extends TileEntityInventoryCharger imp
 	@Override
 	protected void setEnergyStored(int energy) {
 		energyStorage.setEnergyStored(energy);
+	}
+	
+	@Override
+    public boolean hasCapability(Capability<?> capability, EnumFacing facing){
+        return this.getCapability(capability, facing) != null;
+    }
+	
+	@SuppressWarnings("unchecked")
+	@Override
+    public <T> T getCapability(Capability<T> capability, EnumFacing facing){
+        if(capability == CapabilityEnergy.ENERGY){
+            if(energyStorage != null){
+                return (T)energyStorage;
+            }
+        }
+        return super.getCapability(capability, facing);
 	}
 
 }

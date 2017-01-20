@@ -2,23 +2,7 @@ package alec_wam.CrystalMod.tiles.machine.enderbuffer;
 
 import java.util.UUID;
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTank;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fluids.capability.IFluidTankProperties;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.wrapper.InvWrapper;
 import alec_wam.CrystalMod.api.energy.ICEnergyReceiver;
-import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.IMessageHandler;
 import alec_wam.CrystalMod.network.packets.PacketTileMessage;
@@ -27,9 +11,19 @@ import alec_wam.CrystalMod.tiles.machine.IActiveTile;
 import alec_wam.CrystalMod.tiles.machine.enderbuffer.EnderBufferManager.EnderBuffer;
 import alec_wam.CrystalMod.tiles.pipes.TileEntityPipe.RedstoneMode;
 import alec_wam.CrystalMod.util.BlockUtil;
-import alec_wam.CrystalMod.util.ModLogger;
 import alec_wam.CrystalMod.util.PlayerUtil;
-import cofh.api.energy.IEnergyReceiver;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.energy.IEnergyStorage;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTank;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidTankProperties;
 
 public class TileEntityEnderBuffer extends TileEntityMod implements IEnderBuffer, IMessageHandler, IActiveTile {
 
@@ -116,7 +110,7 @@ public class TileEntityEnderBuffer extends TileEntityMod implements IEnderBuffer
 	    }
 		if(getRedstone("RF")){
 	        if(this.rfMode == Mode.BOTH || this.rfMode == Mode.RECIEVE){
-	        	for(int i = 0; (i < 6) && this.getEnergyStored(null) > 0; i++){
+	        	for(int i = 0; (i < 6) && this.getBuffer().rfStorage.getEnergyStored() > 0; i++){
 					transferEnergy(i);
 				}
 			}
@@ -228,9 +222,9 @@ public class TileEntityEnderBuffer extends TileEntityMod implements IEnderBuffer
 		if(!hasBuffer())return;
 		EnumFacing face = EnumFacing.getFront(bSide);
 		TileEntity tile = getWorld().getTileEntity(getPos().offset(face));
-		if(tile !=null && tile instanceof IEnergyReceiver){
-			IEnergyReceiver rec = (IEnergyReceiver)tile;
-			getBuffer().rfStorage.modifyEnergyStored(-rec.receiveEnergy(face, getBuffer().rfStorage.getEnergyStored(), false));
+		if(tile !=null && tile.hasCapability(CapabilityEnergy.ENERGY, face)){
+			IEnergyStorage rec = tile.getCapability(CapabilityEnergy.ENERGY, face);
+			if(rec !=null)getBuffer().rfStorage.extractEnergy(rec.receiveEnergy(getBuffer().rfStorage.getEnergyStored(), false), false);
 		}
     }
 	
@@ -284,11 +278,6 @@ public class TileEntityEnderBuffer extends TileEntityMod implements IEnderBuffer
     	this.invRSMode = modeInv;
     	}
 	}
-	
-	@Override
-	public boolean canConnectEnergy(EnumFacing from) {
-		return rfMode !=Mode.DISABLED;
-	}
 
 	@Override
 	public boolean canConnectCEnergy(EnumFacing from) {
@@ -315,27 +304,6 @@ public class TileEntityEnderBuffer extends TileEntityMod implements IEnderBuffer
 	@Override
 	public int getMaxCEnergyStored(EnumFacing from) {
 		return hasBuffer() ? getBuffer().cuStorage.getMaxCEnergyStored() : 0;
-	}
-    //RF
-	@Override
-	public int receiveEnergy(EnumFacing from, int maxReceive, boolean simulate) {
-		if(this.rfMode !=Mode.BOTH && this.rfMode !=Mode.SEND || !hasBuffer())return 0;
-		return this.getRedstone("RF") ? getBuffer().rfStorage.receiveEnergy(maxReceive, simulate) : 0;
-	}
-
-	@Override
-	public int extractEnergy(EnumFacing from, int maxExtract, boolean simulate) {
-		return 0;
-	}
-
-	@Override
-	public int getEnergyStored(EnumFacing from) {
-		return hasBuffer() ? getBuffer().rfStorage.getEnergyStored() : 0;
-	}
-
-	@Override
-	public int getMaxEnergyStored(EnumFacing from) {
-		return hasBuffer() ? getBuffer().rfStorage.getMaxEnergyStored() : 0;
 	}
 	
 	public static enum Mode{
@@ -428,7 +396,13 @@ public class TileEntityEnderBuffer extends TileEntityMod implements IEnderBuffer
 		if(capability == net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY){
 			return this.invMode !=Mode.DISABLED && hasBuffer();
 		}
-      return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY  || super.hasCapability(capability, facingIn);
+		if(capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY){
+			return this.fluidMode !=Mode.DISABLED && hasBuffer();
+		}
+		if(capability == CapabilityEnergy.ENERGY){
+			return this.rfMode !=Mode.DISABLED && hasBuffer();
+		}
+		return super.hasCapability(capability, facingIn);
     }
 	
     @SuppressWarnings("unchecked")
@@ -438,6 +412,50 @@ public class TileEntityEnderBuffer extends TileEntityMod implements IEnderBuffer
         if (capability == net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY){
         	if(!hasBuffer() || this.invMode ==Mode.DISABLED)return super.getCapability(capability, facing);
         	return (T) getBuffer().sendInv;
+        }
+        if (capability == CapabilityEnergy.ENERGY){
+        	if(!hasBuffer() || this.rfMode ==Mode.DISABLED)return super.getCapability(capability, facing);
+        	return (T) new IEnergyStorage(){
+
+				@Override
+				public int receiveEnergy(int maxReceive, boolean simulate) {
+					if(!canReceive())return 0;
+					return getBuffer().rfStorage.receiveEnergy(maxReceive, simulate);
+				}
+
+				@Override
+				public int extractEnergy(int maxExtract, boolean simulate) {
+					if(!canExtract())return 0;
+					return getBuffer().rfStorage.extractEnergy(maxExtract, simulate);
+				}
+
+				@Override
+				public int getEnergyStored() {
+					return getBuffer().rfStorage.getEnergyStored();
+				}
+
+				@Override
+				public int getMaxEnergyStored() {
+					return getBuffer().rfStorage.getMaxEnergyStored();
+				}
+
+				@Override
+				public boolean canExtract() {
+					if(TileEntityEnderBuffer.this.rfMode == Mode.BOTH || TileEntityEnderBuffer.this.rfMode == Mode.SEND){
+						return getBuffer().rfStorage.canExtract() && TileEntityEnderBuffer.this.getRedstone("RF");
+					}
+					return false;
+				}
+
+				@Override
+				public boolean canReceive() {
+					if(TileEntityEnderBuffer.this.rfMode == Mode.BOTH || TileEntityEnderBuffer.this.rfMode == Mode.RECIEVE){
+						return getBuffer().rfStorage.canReceive() && TileEntityEnderBuffer.this.getRedstone("RF");
+					}
+					return false;
+				}
+        		
+        	};
         }
         if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
         	if(!hasBuffer())return super.getCapability(capability, facing);

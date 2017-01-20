@@ -1,19 +1,44 @@
 package alec_wam.CrystalMod.tiles.machine.power.converter;
 
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
 import alec_wam.CrystalMod.api.energy.CEnergyStorage;
 import alec_wam.CrystalMod.api.energy.ICEnergyProvider;
 import alec_wam.CrystalMod.api.energy.ICEnergyReceiver;
-import cofh.api.energy.IEnergyReceiver;
+import alec_wam.CrystalMod.tiles.machine.power.CustomEnergyStorage;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.energy.CapabilityEnergy;
 
-public class TileEnergyConverterRFtoCU extends TileEnergyConveterBase implements IEnergyReceiver, ICEnergyProvider{
+public class TileEnergyConverterRFtoCU extends TileEnergyConveterBase implements ICEnergyProvider{
 	CEnergyStorage energyStorage;
+	CustomEnergyStorage rfEnergyStorage;
 	
 	public TileEnergyConverterRFtoCU()
 	{
 	    this.energyStorage = new CEnergyStorage(5000);
+	    this.rfEnergyStorage = new CustomEnergyStorage(5000){
+	    	@Override
+	    	public boolean canExtract(){
+	    		return false;
+	    	}
+	    	
+	    	@Override
+	        public int receiveEnergy(int maxReceive, boolean simulate){
+	            if(!this.canReceive()){
+	                return 0;
+	            }
+	            final int rfDemand = (int) Math.floor( TileEnergyConverterRFtoCU.this.getPowerNeeded( PowerUnits.RF, maxReceive ) );
+	    		final int usedRF = Math.min( maxReceive, rfDemand );
+
+	    		if( !simulate )
+	    		{
+	    			injectExternalPower( PowerUnits.RF, usedRF );
+	    		}
+
+	    		return usedRF;
+	        }
+	    };
 	}
 	
 	public void update(){
@@ -45,35 +70,8 @@ public class TileEnergyConverterRFtoCU extends TileEnergyConveterBase implements
 	}
 	
 	@Override
-	public boolean canConnectEnergy(EnumFacing from) {
-		return true;
-	}
-	@Override
 	public boolean canConnectCEnergy(EnumFacing from) {
 		return true;
-	}
-
-	@Override
-	public int receiveEnergy(EnumFacing from, int maxReceive, boolean simulate) {
-		final int rfDemand = (int) Math.floor( this.getPowerNeeded( PowerUnits.RF, maxReceive ) );
-		final int usedRF = Math.min( maxReceive, rfDemand );
-
-		if( !simulate )
-		{
-			injectExternalPower( PowerUnits.RF, usedRF );
-		}
-
-		return usedRF;
-	}
-
-	@Override
-	public int getEnergyStored(EnumFacing from) {
-		return (int) Math.floor( getUnitType().convertTo( PowerUnits.RF, this.energyStorage.getCEnergyStored() ) );
-	}
-
-	@Override
-	public int getMaxEnergyStored(EnumFacing from) {
-		return (int) Math.floor( getUnitType().convertTo( PowerUnits.RF, this.energyStorage.getMaxCEnergyStored() ) );
 	}
 	
 	@Override
@@ -109,6 +107,22 @@ public class TileEnergyConverterRFtoCU extends TileEnergyConveterBase implements
 	@Override
 	protected int getMaxEnergyStored() {
 		return energyStorage.getMaxCEnergyStored();
+	}
+	
+	@Override
+    public boolean hasCapability(Capability<?> capability, EnumFacing facing){
+		 return capability == CapabilityEnergy.ENERGY || super.hasCapability(capability, facing);
+    }
+	
+	@SuppressWarnings("unchecked")
+	@Override
+    public <T> T getCapability(Capability<T> capability, EnumFacing facing){
+        if(capability == CapabilityEnergy.ENERGY){
+            if(energyStorage != null){
+                return (T)energyStorage;
+            }
+        }
+        return super.getCapability(capability, facing);
 	}
 
 }

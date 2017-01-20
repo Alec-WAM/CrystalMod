@@ -11,6 +11,8 @@ import java.util.Set;
 
 import javax.annotation.Nonnull;
 
+import alec_wam.CrystalMod.blocks.EnumBlock.IEnumMeta;
+import alec_wam.CrystalMod.items.IEnumMetaItem;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.tiles.machine.worksite.InventorySided;
 import alec_wam.CrystalMod.tiles.pipes.item.GhostItemHelper;
@@ -1420,6 +1422,24 @@ public class ItemUtil {
 			}
 			return count;
 		}
+	}
+	
+	/**Returns stacks that correspond to the provided IEnumMeta enum array**/
+	public static List<ItemStack> getBlockSubtypes(Block obj, IEnumMeta...array){
+		List<ItemStack> list = Lists.newArrayList();
+		for(IEnumMeta type : array){
+			list.add(new ItemStack(obj, 1, type.getMeta()));
+		}
+		return list;
+	}
+
+	/**Returns stacks that correspond to the provided IEnumMetaItem enum array**/
+	public static List<ItemStack> getItemSubtypes(Item obj, IEnumMetaItem... array){
+		List<ItemStack> list = Lists.newArrayList();
+		for(IEnumMetaItem type : array){
+			list.add(new ItemStack(obj, 1, type.getMetadata()));
+		}
+		return list;
 	}
 
 }

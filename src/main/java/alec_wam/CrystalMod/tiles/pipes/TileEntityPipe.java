@@ -36,6 +36,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -48,6 +49,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockAccess;
@@ -598,6 +600,8 @@ public abstract class TileEntityPipe extends TileEntityMod implements ITickable,
 									ItemNBTHelper.setString(attach, "ID", data.getID());
 									ItemUtil.spawnItemInWorldWithoutMotion(getWorld(), attach, getPos());
 								}
+								SoundType soundtype = SoundType.METAL;
+				                getWorld().playSound((EntityPlayer)null, getPos(), soundtype.getBreakSound(), SoundCategory.BLOCKS, (soundtype.getVolume() + 1.0F) / 2.0F, soundtype.getPitch() * 0.8F);
 								return true;
 							}
 							if(player.worldObj.isRemote)return true;
@@ -625,6 +629,9 @@ public abstract class TileEntityPipe extends TileEntityMod implements ITickable,
 							if(hasWrench){
 								final CoverData coverData = this.getCoverData(dir);
 								this.setCover(dir, null);
+								SoundType soundtype = coverData.getBlockState().getBlock().getSoundType(coverData.getBlockState(), getWorld(), getPos(), player);
+				                getWorld().playSound((EntityPlayer)null, getPos(), soundtype.getBreakSound(), SoundCategory.BLOCKS, (soundtype.getVolume() + 1.0F) / 2.0F, soundtype.getPitch() * 0.8F);
+								
 								if (!player.capabilities.isCreativeMode) {
 									ItemStack cover = ItemPipeCover.getCover(coverData);
 									if (ItemStackTools.isValid(cover)) {
@@ -693,6 +700,10 @@ public abstract class TileEntityPipe extends TileEntityMod implements ITickable,
 					}
 				}
 				this.setCover(coverDir, data);
+
+				SoundType soundtype = data.getBlockState().getBlock().getSoundType(data.getBlockState(), getWorld(), getPos(), player);
+                getWorld().playSound((EntityPlayer)null, getPos(), soundtype.getPlaceSound(), SoundCategory.BLOCKS, (soundtype.getVolume() + 1.0F) / 2.0F, soundtype.getPitch() * 0.8F);
+				
 				wrapBlockAdded(coverDir);
 				if(!player.capabilities.isCreativeMode){
 					player.setHeldItem(hand, ItemUtil.consumeItem(player.getHeldItem(hand)));
@@ -700,6 +711,8 @@ public abstract class TileEntityPipe extends TileEntityMod implements ITickable,
 				return true;
 			}
 			this.setCover(coverDir, data);
+			SoundType soundtype = data.getBlockState().getBlock().getSoundType(data.getBlockState(), getWorld(), getPos(), player);
+            getWorld().playSound((EntityPlayer)null, getPos(), soundtype.getPlaceSound(), SoundCategory.BLOCKS, (soundtype.getVolume() + 1.0F) / 2.0F, soundtype.getPitch() * 0.8F);
 			wrapBlockAdded(coverDir);
 			if(!player.capabilities.isCreativeMode){
 				player.setHeldItem(hand, ItemUtil.consumeItem(player.getHeldItem(hand)));
@@ -716,6 +729,11 @@ public abstract class TileEntityPipe extends TileEntityMod implements ITickable,
 			AttachmentData data = AttachmentUtil.getFromID(ItemPipeAttachment.getID(held));
 			if(data !=null && data.isPipeValid(this, side, held)){
 				this.setAttachment(side, data);
+				if(!player.capabilities.isCreativeMode){
+					player.setHeldItem(hand, ItemUtil.consumeItem(player.getHeldItem(hand)));
+				}
+				SoundType soundtype = SoundType.METAL;
+                getWorld().playSound((EntityPlayer)null, getPos(), soundtype.getPlaceSound(), SoundCategory.BLOCKS, (soundtype.getVolume() + 1.0F) / 2.0F, soundtype.getPitch() * 0.8F);
 				BlockUtil.markBlockForUpdate(getWorld(), getPos());
 				return true;
 			}

@@ -55,7 +55,7 @@ public class JEIPlugin  extends BlankModPlugin {
 		LiquidizerRecipeCategory.register(jeiHelpers, registry, guiHelper);
 		GrinderRecipeCategory.register(jeiHelpers, registry, guiHelper);
 		InfuserRecipeCategory.register(jeiHelpers, registry, guiHelper);
-		
+		FusionRecipeCategory.register(jeiHelpers, registry, guiHelper);
 		
 		registry.addRecipeCategoryCraftingItem(new ItemStack(ModBlocks.crystalWorkbench), CrystalModRecipeUids.WORKBENCH);
 		registry.addRecipeCategoryCraftingItem(new ItemStack(ModBlocks.crystalWorkbench), VanillaRecipeCategoryUid.CRAFTING);

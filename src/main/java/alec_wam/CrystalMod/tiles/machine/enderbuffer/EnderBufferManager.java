@@ -16,6 +16,7 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.api.energy.CEnergyStorage;
+import alec_wam.CrystalMod.tiles.machine.power.CustomEnergyStorage;
 import alec_wam.CrystalMod.tiles.tank.Tank;
 import alec_wam.CrystalMod.util.ModLogger;
 import alec_wam.CrystalMod.util.PlayerUtil;
@@ -218,7 +219,7 @@ public class EnderBufferManager extends WorldSavedData implements IEnderBufferLi
 		public CEnergyStorage cuStorage;
 		public int lastSyncedCU;
 		
-		public EnergyStorage rfStorage;
+		public CustomEnergyStorage rfStorage;
 		public int lastSyncedRF;
 		
 		public Tank tank;
@@ -229,7 +230,7 @@ public class EnderBufferManager extends WorldSavedData implements IEnderBufferLi
 		public boolean forceSync;
 		
 		public EnderBuffer(IEnderBufferList list){
-			this.rfStorage = new EnergyStorage(500000, Integer.MAX_VALUE);
+			this.rfStorage = new CustomEnergyStorage(500000, Integer.MAX_VALUE, Integer.MAX_VALUE);
 			this.cuStorage = new CEnergyStorage(500000, Integer.MAX_VALUE);
 			this.tank = new Tank("Tank", Fluid.BUCKET_VOLUME * 16, null);
 			this.sendInv = new GenericInventory(10, list);

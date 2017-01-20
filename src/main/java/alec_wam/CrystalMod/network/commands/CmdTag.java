@@ -2,29 +2,36 @@ package alec_wam.CrystalMod.network.commands;
 
 import java.awt.Color;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map.Entry;
 import java.util.UUID;
 
 import mezz.jei.Internal;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.Item;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.capability.ExtendedPlayer;
 import alec_wam.CrystalMod.capability.ExtendedPlayerProvider;
+import alec_wam.CrystalMod.handler.MissingItemHandler;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.packets.PacketExtendedPlayer;
 import alec_wam.CrystalMod.util.ChatUtil;
 import alec_wam.CrystalMod.util.ModLogger;
 import alec_wam.CrystalMod.util.ProfileUtil;
+import alec_wam.CrystalMod.util.StringUtils;
 import alec_wam.CrystalMod.util.TimeUtil;
 import alec_wam.CrystalMod.util.UUIDUtils;
 import alec_wam.CrystalMod.world.game.tag.TagManager;
 import alec_wam.CrystalMod.world.game.tag.TagManager.PlayerData;
 
 import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
 
 public class CmdTag extends AbstractCMCommand{
 
@@ -90,6 +97,14 @@ public class CmdTag extends AbstractCMCommand{
 					return;
 				}
 					
+				if(args.length > 1 && args[1].equalsIgnoreCase("dumpItems")){
+					List<String> list = Lists.newArrayList();
+					for(Entry<ResourceLocation, Item> res : MissingItemHandler.remapItems.entrySet()){
+						list.add(""+res.getKey().toString()+"["+res.getValue().getRegistryName()+"]");
+					}
+					ModLogger.info("Missing Items: "+StringUtils.makeReadable(list));
+					return;
+				}
 				
 				//TagRound round = new TagRound(GameType.ADVENTURE, (int)TagRound.MINUTE*5, 10);
 				if(args.length > 1 && args[1].equalsIgnoreCase("name")){

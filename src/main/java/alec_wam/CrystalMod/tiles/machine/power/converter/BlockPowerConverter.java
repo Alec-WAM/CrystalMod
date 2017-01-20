@@ -1,5 +1,6 @@
 package alec_wam.CrystalMod.tiles.machine.power.converter;
 
+import java.util.List;
 import java.util.Locale;
 
 import net.minecraft.block.ITileEntityProvider;
@@ -24,6 +25,7 @@ import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.EnumBlock;
 import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.util.ChatUtil;
+import alec_wam.CrystalMod.util.ItemStackTools;
 
 public class BlockPowerConverter extends EnumBlock<BlockPowerConverter.ConverterType> implements ITileEntityProvider, ICustomModel {
 
@@ -43,6 +45,20 @@ public class BlockPowerConverter extends EnumBlock<BlockPowerConverter.Converter
 	        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), type.getMeta(), new ModelResourceLocation(this.getRegistryName(), "energy"+"="+type.getName()));
     }
 	
+	@Override
+	public void addInformation(ItemStack stack, EntityPlayer player, List<String> tooltip, boolean advanced)
+    {
+		if(ItemStackTools.isValid(stack)){
+			int meta = stack.getMetadata();
+			if(meta == ConverterType.CU.getMeta()){
+				tooltip.add("CU Value: "+PowerUnits.RF.conversionRation+":"+PowerUnits.CU.conversionRation);
+			}
+			if(meta == ConverterType.RF.getMeta()){
+				tooltip.add("RF Value: "+PowerUnits.CU.conversionRation+":"+PowerUnits.RF.conversionRation);
+			}
+		}
+    }
+	
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, ItemStack stack, EnumFacing side, float hX, float hY, float hZ){
 		TileEntity tile = world.getTileEntity(pos);
 		if(tile !=null && tile instanceof TileEnergyConverterRFtoCU){
@@ -55,7 +71,7 @@ public class BlockPowerConverter extends EnumBlock<BlockPowerConverter.Converter
 		if(tile !=null && tile instanceof TileEnergyConverterCUtoRF){
 			TileEnergyConverterCUtoRF con = (TileEnergyConverterCUtoRF)tile;
 			if(!world.isRemote){
-				ChatUtil.sendNoSpam(player, TextFormatting.RED+""+(con.getEnergyStored(side))+" / "+(con.getMaxEnergyStored(side)+" RF"));
+				ChatUtil.sendNoSpam(player, TextFormatting.RED+""+(con.energyStorage.getEnergyStored())+" / "+(con.energyStorage.getMaxEnergyStored()+" RF"));
 			}
 			return true;
 		}

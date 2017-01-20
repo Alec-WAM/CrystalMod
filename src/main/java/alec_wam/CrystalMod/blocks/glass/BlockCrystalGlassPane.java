@@ -45,10 +45,8 @@ public class BlockCrystalGlassPane extends BlockPane implements ICustomModel {
     @SideOnly(Side.CLIENT)
 	public void initModel() {
     	ModelLoader.setCustomStateMapper(this, new GlassBlockStateMapper());
-    	ModelResourceLocation inv = new ModelResourceLocation(this.getRegistryName(), "inventory");
-    	ClientProxy.registerCustomModel(inv, ModelGlassPane.INSTANCE);
 		for(GlassType type : GlassType.values()){
-	        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), type.getMeta(), inv);
+			 ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), type.getMeta(), new ModelResourceLocation(new ResourceLocation("crystalmod", getRegistryName().getResourcePath() + "_" + type.getName()), "inventory"));
 	        ClientProxy.registerCustomModel(new ModelResourceLocation(getRegistryName(), "type="+type.getName()), ModelGlassPane.INSTANCE);
 		}
 	}
