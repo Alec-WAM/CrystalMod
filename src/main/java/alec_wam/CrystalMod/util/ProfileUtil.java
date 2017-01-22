@@ -15,8 +15,6 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.StringUtils;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import com.google.common.base.Strings;
 import com.google.common.cache.CacheBuilder;
@@ -38,6 +36,7 @@ import com.mojang.authlib.exceptions.UserMigratedException;
 import com.mojang.authlib.properties.PropertyMap;
 import com.mojang.authlib.yggdrasil.response.MinecraftProfilePropertiesResponse;
 import com.mojang.authlib.yggdrasil.response.ProfileSearchResultsResponse;
+import com.mojang.authlib.yggdrasil.response.Response;
 import com.mojang.util.UUIDTypeAdapter;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -45,6 +44,7 @@ import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.server.FMLServerHandler;
+import scala.util.parsing.json.JSONObject;
 
 public class ProfileUtil {
 	public static final ConcurrentMap<UUID, GameProfile> profileCache = buildCache(3 * 60 * 60, 1024 * 5);
@@ -114,19 +114,6 @@ public class ProfileUtil {
 		return string;
 	}
 	
-	public static JSONObject getJSONObject(String urlLoc){
-		final String data = downloadJsonData(urlLoc);
-		if(data.isEmpty())return null;
-		String jsonString = data.replace("[", "").replace("]", "");
-		try{
-			return new JSONObject(jsonString);
-		} catch(JSONException e){
-			ModLogger.warning(data);
-			e.printStackTrace();
-		}
-		return null;
-	}
-	
 	public static UUID getUUID(String username){
 		if(!uuidCache.containsKey(username)){
 			UUID uuid = getUnCachedUUID(username);
@@ -149,17 +136,16 @@ public class ProfileUtil {
 	}
 	
 	private static UUID getUnCachedUUID(String username){
-		JSONObject jsonResult = getJSONObject(getURL(username, RequestType.NAMETOUUID));
-	
-		if(jsonResult == null || !jsonResult.has("id"))return null;
-		
-		Object object = jsonResult.get("id");
-		if(object == null || !(object instanceof String))return null;
-		String uuid = jsonResult.getString("id");
-		if(!Strings.isNullOrEmpty(uuid)){
-			return UUIDUtils.fromString(uuid);
+		NameResponse jsonResult;
+		try {
+			jsonResult = getNameResponse(downloadJsonData(getURL(username, RequestType.NAMETOUUID)));
+		} catch (AuthenticationException e) {
+			e.printStackTrace();
+			return null;
 		}
-		return null;
+		if(jsonResult == null)return null;
+		
+		return jsonResult.getId();
 	}
 	
 	public static MinecraftProfilePropertiesResponse getProfileData(UUID uuid){
@@ -194,13 +180,17 @@ public class ProfileUtil {
 	}
 	
 	private static String getUnCachedName(UUID uuid){
-		JSONObject jsonResult = getJSONObject(getURL(UUIDUtils.fromUUID(uuid), RequestType.UUIDTONAME));
+		MinecraftProfilePropertiesResponse jsonResult;
+		try {
+			jsonResult = getResponse(downloadJsonData(getURL(UUIDUtils.fromUUID(uuid), RequestType.UUIDTONAME)));
+		} catch (AuthenticationException e) {
+			e.printStackTrace();
+			return ERROR;
+		}
 	
-		if(jsonResult == null || !jsonResult.has("name"))return ERROR;
+		if(jsonResult == null)return ERROR;
 		
-		Object object = jsonResult.get("name");
-		if(object == null || !(object instanceof String))return ERROR;
-		String name = jsonResult.getString("name");
+		String name = jsonResult.getName();
 		if(!Strings.isNullOrEmpty(name)){
 			return name;
 		}
@@ -232,23 +222,57 @@ public class ProfileUtil {
 		UUIDTONAME, NAMETOUUID;
 	}
 	
-	private static Gson gson;
+	private static Gson gsonProfile;
+	private static Gson gsonName;
 	
-	public static Gson getGSon(){
-		if(gson == null){
+	public static Gson getGSonProfile(){
+		if(gsonProfile == null){
 			GsonBuilder builder = new GsonBuilder();
 	        builder.registerTypeAdapter(GameProfile.class, new GameProfileSerializer());
 	        builder.registerTypeAdapter(PropertyMap.class, new PropertyMap.Serializer());
 	        builder.registerTypeAdapter(UUID.class, new UUIDTypeAdapter());
 	        builder.registerTypeAdapter(ProfileSearchResultsResponse.class, new ProfileSearchResultsResponse.Serializer());
-	        gson = builder.create();
+	        gsonProfile = builder.create();
 		}
-		return gson;
+		return gsonProfile;
+	}
+	
+	public static Gson getGSonName(){
+		if(gsonName == null){
+			GsonBuilder builder = new GsonBuilder();
+	        builder.registerTypeAdapter(GameProfile.class, new GameProfileSerializer());
+	        gsonName = builder.create();
+		}
+		return gsonName;
 	}
 	
 	public static MinecraftProfilePropertiesResponse getResponse(String jsonResult) throws AuthenticationException {
 		try {
-			MinecraftProfilePropertiesResponse result = getGSon().fromJson(jsonResult, MinecraftProfilePropertiesResponse.class);
+			MinecraftProfilePropertiesResponse result = getGSonProfile().fromJson(jsonResult, MinecraftProfilePropertiesResponse.class);
+
+			if (result == null) return null;
+
+			if (StringUtils.isNotBlank(result.getError())) {
+				if ("UserMigratedException".equals(result.getCause())) {
+					throw new UserMigratedException(result.getErrorMessage());
+				} else if (result.getError().equals("ForbiddenOperationException")) {
+					throw new InvalidCredentialsException(result.getErrorMessage());
+				} else {
+					throw new AuthenticationException(result.getErrorMessage());
+				}
+			}
+
+			return result;
+		} catch (IllegalStateException e) {
+			throw new AuthenticationUnavailableException("Cannot contact authentication server", e);
+		} catch (JsonParseException e) {
+			throw new AuthenticationUnavailableException("Cannot contact authentication server", e);
+		}
+	}
+	
+	public static NameResponse getNameResponse(String jsonResult) throws AuthenticationException {
+		try {
+			NameResponse result = getGSonName().fromJson(jsonResult, NameResponse.class);
 
 			if (result == null) return null;
 
@@ -288,4 +312,16 @@ public class ProfileUtil {
         }
     }
 	
+	public static class NameResponse extends Response{
+		private UUID id;
+	    private String name;
+
+	    public UUID getId() {
+	        return id;
+	    }
+
+	    public String getName() {
+	        return name;
+	    }
+	}
 }

@@ -340,7 +340,7 @@ public class ModBlocks {
 		registerTileEntity(TileEntityPipeWrapper.class);
 		
 		craftingController = new BlockCraftingController();
-		registerBlock(craftingController, "craftingController");
+		registerBlock(craftingController, "craftingcontroller");
 		registerTileEntity(TileCraftingController.class);
 		
 		crafter = new BlockCrafter();
@@ -351,7 +351,7 @@ public class ModBlocks {
 		registerTileEntity(TileEntityStocker.class);
 		
 		encoder = new BlockPatternEncoder();
-		registerEnumBlock(encoder, "craftingEncoder");
+		registerEnumBlock(encoder, "craftingencoder");
 		registerTileEntity(TilePatternEncoder.class);
 		registerTileEntity(TileProcessingPatternEncoder.class);
 		
@@ -437,7 +437,7 @@ public class ModBlocks {
 		registerTileEntity(TileCrate.class);
 		
 		darkIronRail = new BlockReinforcedRail();
-		registerBlock(darkIronRail, "reinforcedRail");
+		registerBlock(darkIronRail, "reinforcedrail");
 		
 		pedistal = new BlockPedistal();
 		registerBlock(pedistal, new ItemBlockPedistal(pedistal), "pedistal");
