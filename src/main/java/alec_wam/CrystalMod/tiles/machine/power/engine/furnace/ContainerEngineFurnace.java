@@ -22,7 +22,7 @@ public class ContainerEngineFurnace extends Container
     @Override
     public boolean canInteractWith(EntityPlayer player)
     {
-        return (this.tileFurnace != null && this.tileFurnace.isUseableByPlayer(player));
+        return (this.tileFurnace != null && this.tileFurnace.isUsableByPlayer(player));
     }
 
     protected void addPlayerInventory(InventoryPlayer paramInventoryPlayer)
@@ -100,7 +100,7 @@ public class ContainerEngineFurnace extends Container
 				return ItemStackTools.getEmptyStack();
 			}
 
-			slot.onPickupFromSlot(player, itemstack1);
+			slot.onTake(player, itemstack1);
 		}
 
 		return itemstack;

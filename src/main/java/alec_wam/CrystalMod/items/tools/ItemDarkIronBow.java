@@ -103,9 +103,9 @@ public class ItemDarkIronBow extends ItemBow implements ICustomModel {
     private float fovMultiplier = 0.35f;
     
     @Override
-    public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand)
+    public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand hand)
     {
-    	return super.onItemRightClick(itemStackIn, worldIn, playerIn, hand);
+    	return super.onItemRightClick(worldIn, playerIn, hand);
     }
     
     @Override
@@ -213,7 +213,7 @@ public class ItemDarkIronBow extends ItemBow implements ICustomModel {
   				GrappleHandler.setHook(entityplayer, entityhook);
   				worldIn.playSound((EntityPlayer)null, entityplayer.posX, entityplayer.posY, entityplayer.posZ, SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.NEUTRAL, 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + f * 0.5F);
   				
-  				worldIn.spawnEntityInWorld(entityhook);
+  				worldIn.spawnEntity(entityhook);
   			} else {
   				Entity shooter = worldIn.getEntityByID(entityhook.shootingEntityID);
   				if(shooter !=null && shooter instanceof EntityPlayerMP){
@@ -249,7 +249,7 @@ public class ItemDarkIronBow extends ItemBow implements ICustomModel {
 	
 	          entityarrow.setDamage(entityarrow.getDamage() + damageBonus);
 	
-	          worldIn.spawnEntityInWorld(entityarrow);
+	          worldIn.spawnEntity(entityarrow);
           }
         }
 
@@ -257,8 +257,8 @@ public class ItemDarkIronBow extends ItemBow implements ICustomModel {
             1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + drawRatio * 0.5F);
 
         if (!arrowIsInfinite) {
-          --itemstack.stackSize;
-          if (itemstack.stackSize == 0) {
+          ItemStackTools.incStackSize(itemstack, -1);
+          if (ItemStackTools.isEmpty(itemstack)) {
             entityplayer.inventory.deleteStack(itemstack);
           }
         }

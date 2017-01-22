@@ -1,28 +1,27 @@
 package alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting;
 
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.World;
-import net.minecraftforge.common.util.Constants;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
 
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.Lang;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
 
 public class ItemPattern extends Item {
 	
@@ -55,7 +54,7 @@ public class ItemPattern extends Item {
             return;
         }
 
-        CraftingPattern cpattern = getPatternFromCache(player.worldObj, pattern);
+        CraftingPattern cpattern = getPatternFromCache(player.getEntityWorld(), pattern);
 
         if (cpattern.isValid()) {
         	if (GuiScreen.isShiftKeyDown() || isProcessing(pattern)) {
@@ -87,10 +86,10 @@ public class ItemPattern extends Item {
         String id = String.format(NBT_SLOT, slot);
 
         if (!pattern.hasTagCompound() || !pattern.getTagCompound().hasKey(id)) {
-            return null;
+            return ItemStackTools.getEmptyStack();
         }
 
-        return ItemStack.loadItemStackFromNBT(pattern.getTagCompound().getCompoundTag(id));
+        return ItemStackTools.loadFromNBT(pattern.getTagCompound().getCompoundTag(id));
     }
 
     public static void addOutput(ItemStack pattern, ItemStack stack) {
@@ -110,19 +109,19 @@ public class ItemPattern extends Item {
         pattern.getTagCompound().setTag(NBT_OUTPUTS, outputs);
     }
 
-    public static List<ItemStack> getOutputs(ItemStack pattern) {
+    public static NonNullList<ItemStack> getOutputs(ItemStack pattern) {
     	if (!isProcessing(pattern)) {
-            return null;
+            return NonNullList.create();
         }
 
-        List<ItemStack> outputs = new ArrayList<ItemStack>();
+    	NonNullList<ItemStack> outputs = NonNullList.create();
 
         NBTTagList outputsTag = pattern.getTagCompound().getTagList(NBT_OUTPUTS, Constants.NBT.TAG_COMPOUND);
 
         for (int i = 0; i < outputsTag.tagCount(); ++i) {
             ItemStack stack = ItemStackTools.loadFromNBT(outputsTag.getCompoundTagAt(i));
 
-            if (!ItemStackTools.isNullStack(stack)) {
+            if (ItemStackTools.isValid(stack)) {
                 outputs.add(stack);
             }
         }

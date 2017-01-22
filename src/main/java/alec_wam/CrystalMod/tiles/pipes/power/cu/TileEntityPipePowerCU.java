@@ -71,7 +71,7 @@ public class TileEntityPipePowerCU extends TileEntityPipe implements ICEnergyRec
 	}
 	
 	public void setCEnergyStored(int energy){
-		energyStoredCU = MathHelper.clamp_int(energy, 0, getMaxCEnergyStored()); 
+		energyStoredCU = MathHelper.clamp(energy, 0, getMaxCEnergyStored()); 
 	}
 	
 	public int getCEnergyStored(){

@@ -83,7 +83,7 @@ public class ItemRenderMinion implements ICustomItemRenderer {
 
 		            if (nbttaglist1.tagCount() > 0)
 		            {
-		                handStack = ItemStack.loadItemStackFromNBT(nbttaglist1.getCompoundTagAt(0));
+		                handStack = ItemStackTools.loadFromNBT(nbttaglist1.getCompoundTagAt(0));
 		            }
 		        }
 				if(compound.hasKey("OwnerUUID")){

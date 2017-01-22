@@ -3,8 +3,6 @@ package alec_wam.CrystalMod.items.guide;
 import java.util.List;
 
 import alec_wam.CrystalMod.CrystalMod;
-import alec_wam.CrystalMod.api.guide.GuideChapter;
-import alec_wam.CrystalMod.api.guide.GuideIndex;
 import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.capability.ExtendedPlayer;
 import alec_wam.CrystalMod.capability.ExtendedPlayerProvider;
@@ -13,9 +11,7 @@ import alec_wam.CrystalMod.items.IEnumMetaItem;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.items.guide.GuidePages.LookupResult;
 import alec_wam.CrystalMod.util.EntityUtil;
-import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ModLogger;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
@@ -27,10 +23,9 @@ import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.IStringSerializable;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
@@ -60,7 +55,8 @@ public class ItemCrystalGuide extends Item implements ICustomModel {
     }
 	
 	@SideOnly(Side.CLIENT)
-    public void getSubItems(Item itemIn, CreativeTabs tab, List<ItemStack> subItems)
+	@Override
+    public void getSubItems(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> subItems)
     {
         for (int i = 0; i < GuideType.values().length; ++i)
         {
@@ -72,7 +68,7 @@ public class ItemCrystalGuide extends Item implements ICustomModel {
 	public static GuiGuideBase forcedChapter;
 	
 	@Override
-	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
+	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
     {
 		RayTraceResult ray = EntityUtil.getRayTraceEntity(world, player, 3.0D, CrystalMod.proxy.getReachDistanceForPlayer(player));
 		if(ray !=null){
@@ -104,24 +100,21 @@ public class ItemCrystalGuide extends Item implements ICustomModel {
     }
 	
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand)
+	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand hand)
     {
-		if(itemStackIn !=null){
-			if(playerIn.isSneaking()){
-				GuidePages.createPages();
-				ModLogger.info("Created Pages");
-				
-				ExtendedPlayer exPlayer = ExtendedPlayerProvider.getExtendedPlayer(playerIn);
-				if(exPlayer !=null && worldIn.isRemote){
-					exPlayer.lastOpenBook = null;
-				}
-				
-				return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStackIn);
+		if(playerIn.isSneaking()){
+			GuidePages.createPages();
+			ModLogger.info("Created Pages");
+
+			ExtendedPlayer exPlayer = ExtendedPlayerProvider.getExtendedPlayer(playerIn);
+			if(exPlayer !=null && worldIn.isRemote){
+				exPlayer.lastOpenBook = null;
 			}
-			playerIn.openGui(CrystalMod.instance, GuiHandler.GUI_ID_GUIDE, worldIn, 0, 0, 0);
-			return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStackIn);
+
+			return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, playerIn.getHeldItem(hand));
 		}
-		return new ActionResult<ItemStack>(EnumActionResult.PASS, itemStackIn);
+		playerIn.openGui(CrystalMod.instance, GuiHandler.GUI_ID_GUIDE, worldIn, 0, 0, 0);
+		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, playerIn.getHeldItem(hand));
     }
 	
 	@SideOnly(Side.CLIENT)

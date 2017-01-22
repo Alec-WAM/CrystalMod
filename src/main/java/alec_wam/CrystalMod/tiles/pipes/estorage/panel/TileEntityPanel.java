@@ -87,7 +87,7 @@ public class TileEntityPanel extends TileEntityMod implements IMessageHandler, I
 	
 	public void setSort(SortType newType){
 		this.sortType = newType;
-		if(this.worldObj !=null && this.worldObj.isRemote){
+		if(this.getWorld() !=null && this.getWorld().isRemote){
 			NBTTagCompound nbt = new NBTTagCompound();
 			nbt.setString("SortType", newType.name());
 			CrystalModNetwork.sendToServer(new PacketTileMessage(getPos(), "Sort", nbt));
@@ -98,7 +98,7 @@ public class TileEntityPanel extends TileEntityMod implements IMessageHandler, I
 	
 	public void setView(ViewType newType){
 		this.viewType = newType;
-		if(this.worldObj !=null && this.worldObj.isRemote){
+		if(this.getWorld() !=null && this.getWorld().isRemote){
 			NBTTagCompound nbt = new NBTTagCompound();
 			nbt.setString("ViewType", newType.name());
 			CrystalModNetwork.sendToServer(new PacketTileMessage(getPos(), "View", nbt));
@@ -109,7 +109,7 @@ public class TileEntityPanel extends TileEntityMod implements IMessageHandler, I
 	
 	public void setSearchBar(String text){
 		this.searchBarText = text;
-		if(this.worldObj !=null && this.worldObj.isRemote){
+		if(this.getWorld() !=null && this.getWorld().isRemote){
 			NBTTagCompound nbt = new NBTTagCompound();
 			nbt.setString("SearchBar", text);
 			CrystalModNetwork.sendToServer(new PacketTileMessage(getPos(), "Search", nbt));
@@ -120,7 +120,7 @@ public class TileEntityPanel extends TileEntityMod implements IMessageHandler, I
 	
 	public void setJEISync(boolean mode){
 		this.jeiSync = mode;
-		if(this.worldObj !=null && this.worldObj.isRemote){
+		if(this.getWorld() !=null && this.getWorld().isRemote){
 			NBTTagCompound nbt = new NBTTagCompound();
 			nbt.setBoolean("JEISync", mode);
 			CrystalModNetwork.sendToServer(new PacketTileMessage(getPos(), "JEISync", nbt));
@@ -148,7 +148,7 @@ public class TileEntityPanel extends TileEntityMod implements IMessageHandler, I
 				BlockUtil.markBlockForUpdate(getWorld(), getPos());
 			}
             if (this instanceof TileEntityPanelMonitor) {
-                for (EntityPlayer player : worldObj.playerEntities) {
+                for (EntityPlayer player : getWorld().playerEntities) {
                     if (((ISynchronizedContainer) this).getContainer() == player.openContainer.getClass()) {
                         CrystalModNetwork.sendTo(new MessageTileContainerUpdate(this), (EntityPlayerMP) player);
                     }

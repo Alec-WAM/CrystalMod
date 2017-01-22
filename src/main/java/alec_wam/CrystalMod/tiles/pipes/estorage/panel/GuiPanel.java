@@ -7,20 +7,21 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
+import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
+
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.api.estorage.INetworkGui;
 import alec_wam.CrystalMod.api.estorage.IPanelSource;
+import alec_wam.CrystalMod.client.util.GuiButtonHoverText;
 import alec_wam.CrystalMod.integration.jei.JEIUtil;
-import alec_wam.CrystalMod.items.backpack.gui.GuiBackpack;
-import alec_wam.CrystalMod.items.backpack.gui.GuiButtonHoverText;
-import alec_wam.CrystalMod.items.backpack.gui.GuiButtonIcon;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetwork;
 import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetworkClient;
-import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage.ItemStackData;
-import alec_wam.CrystalMod.tiles.pipes.estorage.PacketEStorageAddItem;
 import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetworkClient.SortType;
 import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetworkClient.ViewType;
+import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage.ItemStackData;
+import alec_wam.CrystalMod.tiles.pipes.estorage.PacketEStorageAddItem;
 import alec_wam.CrystalMod.tiles.pipes.estorage.client.IGuiScreen;
 import alec_wam.CrystalMod.tiles.pipes.estorage.client.VScrollbar;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.crafting.GuiPanelCrafting;
@@ -31,15 +32,9 @@ import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.Lang;
 import alec_wam.CrystalMod.util.ModLogger;
-
-import com.google.common.base.Strings;
-import com.google.common.collect.Lists;
-
-import mezz.jei.config.KeyBindings;
-import mezz.jei.gui.Focus;
+import alec_wam.CrystalMod.util.client.RenderUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
@@ -49,7 +44,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.ResourceLocation;
 
 public class GuiPanel extends GuiContainer implements IGuiScreen, INetworkGui  {
@@ -169,7 +163,7 @@ public class GuiPanel extends GuiContainer implements IGuiScreen, INetworkGui  {
         		if(i > 0){
         			Slot slot = this.getSlotUnderMouse();
         			if(slot !=null){
-        				if (slot.canTakeStack(mc.thePlayer))
+        				if (slot.canTakeStack(mc.player))
         	            {
         	                if(panel.getNetwork() !=null && ItemStackTools.isValid(slot.getStack())){
         	                	ItemStack copy = ItemUtil.copy(slot.getStack(), 1);
@@ -193,16 +187,16 @@ public class GuiPanel extends GuiContainer implements IGuiScreen, INetworkGui  {
         				if(data !=null && ItemStackTools.isValid(data.stack)){
         					int slot = -1;
 							boolean found = false;
-							slotSearch : for(int iS = 0; iS < mc.thePlayer.inventory.getSizeInventory(); iS++){
-								if(ItemStackTools.isValid(mc.thePlayer.inventory.getStackInSlot(iS)) && ItemStackTools.getStackSize(mc.thePlayer.inventory.getStackInSlot(iS)) < mc.thePlayer.inventory.getStackInSlot(iS).getMaxStackSize() && ItemUtil.canCombine(data.stack, mc.thePlayer.inventory.getStackInSlot(iS))){
+							slotSearch : for(int iS = 0; iS < mc.player.inventory.getSizeInventory(); iS++){
+								if(ItemStackTools.isValid(mc.player.inventory.getStackInSlot(iS)) && ItemStackTools.getStackSize(mc.player.inventory.getStackInSlot(iS)) < mc.player.inventory.getStackInSlot(iS).getMaxStackSize() && ItemUtil.canCombine(data.stack, mc.player.inventory.getStackInSlot(iS))){
 									slot = iS;
 									found = true;
 									break slotSearch;
 								}
 							}
 							if(found == false){
-								slotSearch : for(int iS = 0; iS < mc.thePlayer.inventory.getSizeInventory(); iS++){
-									if(ItemStackTools.isEmpty(mc.thePlayer.inventory.getStackInSlot(iS))){
+								slotSearch : for(int iS = 0; iS < mc.player.inventory.getSizeInventory(); iS++){
+									if(ItemStackTools.isEmpty(mc.player.inventory.getStackInSlot(iS))){
 										slot = iS;
 										found = true;
 										break slotSearch;
@@ -272,7 +266,7 @@ public class GuiPanel extends GuiContainer implements IGuiScreen, INetworkGui  {
 		if(currentSort == SortType.MOD_REVERSE){
 			y=14*5;
 		}
-		this.buttonList.add(new GuiButtonHoverText(0, sx+9, sy+7, 14, 14, 134, y, GuiBackpack.WIDGETS, 14, 0, Lang.prefix+"gui.sortType."+currentSort.name().toLowerCase()));
+		this.buttonList.add(new GuiButtonHoverText(0, sx+9, sy+7, 14, 14, 134, y, RenderUtil.WIDGETS, 14, 0, Lang.prefix+"gui.sortType."+currentSort.name().toLowerCase()));
 		
 		if(currentView == ViewType.BOTH){
 			y=14*8;
@@ -284,12 +278,12 @@ public class GuiPanel extends GuiContainer implements IGuiScreen, INetworkGui  {
 			y=14*10;
 		}
 		
-		this.buttonList.add(new GuiButtonHoverText(1, sx+9, sy+7+16, 14, 14, 134, y, GuiBackpack.WIDGETS, 14, 0, Lang.prefix+"gui.viewType."+currentView.name().toLowerCase()));
+		this.buttonList.add(new GuiButtonHoverText(1, sx+9, sy+7+16, 14, 14, 134, y, RenderUtil.WIDGETS, 14, 0, Lang.prefix+"gui.viewType."+currentView.name().toLowerCase()));
 		
 		if(JEIUtil.isInstalled()){
 			boolean sync = panel !=null ? panel.getJEISync() : false;
 			String mode = sync ? "enabled" : "disabled";
-			this.buttonList.add(new GuiButtonHoverText(2, sx+9, sy+7+32, 14, 14, 134, sync ? 14*6 : 14*7, GuiBackpack.WIDGETS, 14, 0, Lang.prefix+"gui.jeisync."+mode));
+			this.buttonList.add(new GuiButtonHoverText(2, sx+9, sy+7+32, 14, 14, 134, sync ? 14*6 : 14*7, RenderUtil.WIDGETS, 14, 0, Lang.prefix+"gui.jeisync."+mode));
 		}
 	}
 
@@ -343,12 +337,11 @@ public class GuiPanel extends GuiContainer implements IGuiScreen, INetworkGui  {
 				EStorageNetworkClient net = (EStorageNetworkClient) panel.getNetwork();
 				
 				ItemStack held = player.inventory.getItemStack();
-				
-				if(held !=null && (mouseButton == 0 || mouseButton == 1)){
+				if(ItemStackTools.isValid(held) && (mouseButton == 0 || mouseButton == 1)){
 					try {
 						ItemStack copy = held.copy();
 						if(mouseButton == 1){
-							copy.stackSize = 1;
+							ItemStackTools.setStackSize(copy, 1);
 						}
 						sendUpdate(0, -1, -1, new ItemStackData(copy));
 					} catch (Exception e) {
@@ -358,9 +351,9 @@ public class GuiPanel extends GuiContainer implements IGuiScreen, INetworkGui  {
 				}
 				
 				ItemStackData data = (fixednSlot < 0 || getDisplayItems().size() <= fixednSlot) ? null : getDisplayItems().get(fixednSlot);
-				if(data !=null && data.stack !=null){
+				if(data !=null && ItemStackTools.isValid(data.stack)){
 					ItemStack dis = data.stack;
-					if (held == null)
+					if (ItemStackTools.isEmpty(held))
 	                {
 	                    if (player.capabilities.isCreativeMode && mouseButton == mc.gameSettings.keyBindPickBlock.getKeyCode() + 100)
 	                    {
@@ -371,7 +364,7 @@ public class GuiPanel extends GuiContainer implements IGuiScreen, INetworkGui  {
 					if(mouseButton == 0 || mouseButton == 1 || mouseButton == 2){
 						boolean craftable = false;
 						search : for(ItemStackData data2 : net.craftingItems){
-							if(data2.stack !=null && ItemUtil.canCombine(dis, data2.stack)){
+							if(ItemStackTools.isValid(data2.stack) && ItemUtil.canCombine(dis, data2.stack)){
 								craftable = true;
 								break search;
 							}
@@ -382,7 +375,7 @@ public class GuiPanel extends GuiContainer implements IGuiScreen, INetworkGui  {
 						}
 						
 						int amount = dis.getMaxStackSize();
-						
+						//TODO Figure out why Shifting leaves one item behind
 						if(mouseButton == 1){
 							//HALF (Right Click)
 							amount = dis.getMaxStackSize()/2;
@@ -471,7 +464,12 @@ public class GuiPanel extends GuiContainer implements IGuiScreen, INetworkGui  {
 			ItemStackData data = getDisplayItems().get(s);
 			ItemStack dis = data.stack;
 			
-			if(!ItemStackTools.isNullStack(dis)){
+			boolean canRender = ItemStackTools.isValid(dis);
+			if(data.isCrafting){
+				canRender = !ItemStackTools.isNullStack(dis);
+			}
+			
+			if(canRender){
 				GlStateManager.pushMatrix();
 	            RenderHelper.enableGUIStandardItemLighting();
 	            GlStateManager.disableLighting();
@@ -517,20 +515,26 @@ public class GuiPanel extends GuiContainer implements IGuiScreen, INetworkGui  {
 		//Inside List
 		if(nslot > -1 && currentPopup == null){
 			ItemStackData data = (fixednSlot < 0 || getDisplayItems().size() <= fixednSlot) ? null : getDisplayItems().get(fixednSlot);
-			if(data !=null && !ItemStackTools.isNullStack(data.stack)){
-				ItemStack disOrg = data.stack;
-				ItemStack dis = disOrg.copy();
-				ItemNBTHelper.setBoolean(dis, "DummyItem", true);
-				GlStateManager.pushMatrix();
-	            RenderHelper.enableGUIStandardItemLighting();
-	            GlStateManager.disableLighting();
-	            GlStateManager.enableRescaleNormal();
-	            GlStateManager.enableColorMaterial();
-	            renderToolTip(dis, mouseX-sx, mouseY-sy);
-	            GlStateManager.popMatrix();
-	            GlStateManager.enableLighting();
-	            GlStateManager.enableDepth();
-	            RenderHelper.enableStandardItemLighting();
+			if(data !=null){
+				boolean canRender = ItemStackTools.isValid(data.stack);
+				if(data.isCrafting){
+					canRender = !ItemStackTools.isNullStack(data.stack);
+				}
+				if(canRender){
+					ItemStack disOrg = data.stack;
+					ItemStack dis = disOrg.copy();
+					ItemNBTHelper.setBoolean(dis, "DummyItem", true);
+					GlStateManager.pushMatrix();
+		            RenderHelper.enableGUIStandardItemLighting();
+		            GlStateManager.disableLighting();
+		            GlStateManager.enableRescaleNormal();
+		            GlStateManager.enableColorMaterial();
+		            renderToolTip(dis, mouseX-sx, mouseY-sy);
+		            GlStateManager.popMatrix();
+		            GlStateManager.enableLighting();
+		            GlStateManager.enableDepth();
+		            RenderHelper.enableStandardItemLighting();
+				}
 			}
 		}
 		
@@ -594,7 +598,7 @@ public class GuiPanel extends GuiContainer implements IGuiScreen, INetworkGui  {
 				searchBar.setFocused(false);
 		        return;
 			} else{
-				this.mc.thePlayer.closeScreen();
+				this.mc.player.closeScreen();
 				return;
 			}
     	}
@@ -616,9 +620,9 @@ public class GuiPanel extends GuiContainer implements IGuiScreen, INetworkGui  {
 				if(data !=null && !ItemStackTools.isNullStack(data.stack)){
 					ItemStack dis = data.stack;
 					
-					if (ItemStackTools.isNullStack(this.mc.thePlayer.inventory.getItemStack()))
+					if (ItemStackTools.isNullStack(this.mc.player.inventory.getItemStack()))
 				    {
-						if (mc.thePlayer.capabilities.isCreativeMode && keyCode == this.mc.gameSettings.keyBindPickBlock.getKeyCode())
+						if (mc.player.capabilities.isCreativeMode && keyCode == this.mc.gameSettings.keyBindPickBlock.getKeyCode())
 	                    {
 	                    	sendUpdate(2, -1, -1, data);
 	    					return;
@@ -629,7 +633,7 @@ public class GuiPanel extends GuiContainer implements IGuiScreen, INetworkGui  {
 				            {
 				            	int slot = i;
 							
-				            	if(slot !=-1 && (ItemStackTools.isNullStack(this.mc.thePlayer.inventory.getStackInSlot(i)) || ItemUtil.canCombine(this.mc.thePlayer.inventory.getStackInSlot(i), dis))){
+				            	if(slot !=-1 && (ItemStackTools.isNullStack(this.mc.player.inventory.getStackInSlot(i)) || ItemUtil.canCombine(this.mc.player.inventory.getStackInSlot(i), dis))){
 									sendUpdate(1, slot, dis.getMaxStackSize(), data);
 								}
 								return;

@@ -85,7 +85,10 @@ public class TileEntityGrinder extends TileEntityMachine implements ISidedInvent
 	        }
         }
         
-        setInventorySlotContents(0, ItemUtil.consumeItem(stack));
+        ItemStackTools.incStackSize(stack, -1);
+        if (ItemStackTools.isEmpty(stack)) {
+            setInventorySlotContents(0, ItemStackTools.getEmptyStack());
+        }
     }
 
 	@Override

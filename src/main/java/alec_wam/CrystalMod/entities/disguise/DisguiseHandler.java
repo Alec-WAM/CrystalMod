@@ -2,6 +2,7 @@ package alec_wam.CrystalMod.entities.disguise;
 
 import java.util.UUID;
 
+import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.capability.ExtendedPlayer;
 import alec_wam.CrystalMod.capability.ExtendedPlayerProvider;
 import alec_wam.CrystalMod.entities.disguise.render.RenderMiniPlayer;
@@ -127,7 +128,7 @@ public class DisguiseHandler {
     public void onRenderHand(RenderSpecificHandEvent event)
     {
 		Minecraft mc = Minecraft.getMinecraft();
-		AbstractClientPlayer abstractclientplayer = mc.thePlayer;
+		AbstractClientPlayer abstractclientplayer = (AbstractClientPlayer) CrystalMod.proxy.getClientPlayer();
 		ExtendedPlayer ePlayer = ExtendedPlayerProvider.getExtendedPlayer(abstractclientplayer);
 		if(ePlayer !=null && ePlayer.getCurrentDiguise() !=DisguiseType.NONE)
         {
@@ -152,7 +153,7 @@ public class DisguiseHandler {
     {
         boolean flag = p_187456_3_ != EnumHandSide.LEFT;
         float f = flag ? 1.0F : -1.0F;
-        float f1 = MathHelper.sqrt_float(p_187456_2_);
+        float f1 = MathHelper.sqrt(p_187456_2_);
         float f2 = -0.3F * MathHelper.sin(f1 * (float)Math.PI);
         float f3 = 0.4F * MathHelper.sin(f1 * ((float)Math.PI * 2F));
         float f4 = -0.4F * MathHelper.sin(p_187456_2_ * (float)Math.PI);
@@ -162,7 +163,7 @@ public class DisguiseHandler {
         float f6 = MathHelper.sin(f1 * (float)Math.PI);
         GlStateManager.rotate(f * f6 * 70.0F, 0.0F, 1.0F, 0.0F);
         GlStateManager.rotate(f * f5 * -20.0F, 0.0F, 0.0F, 1.0F);
-        AbstractClientPlayer abstractclientplayer = Minecraft.getMinecraft().thePlayer;
+        AbstractClientPlayer abstractclientplayer = (AbstractClientPlayer) CrystalMod.proxy.getClientPlayer();
         Minecraft.getMinecraft().getTextureManager().bindTexture(abstractclientplayer.getLocationSkin());
         GlStateManager.translate(f * -1.0F, 3.6F, 3.5F);
         GlStateManager.rotate(f * 120.0F, 0.0F, 0.0F, 1.0F);

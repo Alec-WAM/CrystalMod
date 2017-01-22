@@ -290,7 +290,7 @@ public class ContainerBackpackNormal extends Container {
             if(ItemStackTools.getStackSize(newStack) == ItemStackTools.getStackSize(currentStack)){
                 return ItemStackTools.getEmptyStack();
             }
-            theSlot.onPickupFromSlot(player, newStack);
+            theSlot.onTake(player, newStack);
 
             return currentStack;
         }
@@ -340,7 +340,7 @@ public class ContainerBackpackNormal extends Container {
 
     @Override
     public boolean canInteractWith(EntityPlayer player){
-        return this.backpackInventory.isUseableByPlayer(player);
+        return this.backpackInventory.isUsableByPlayer(player);
     }
 
 

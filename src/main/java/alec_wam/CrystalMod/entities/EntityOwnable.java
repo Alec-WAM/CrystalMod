@@ -115,7 +115,7 @@ public abstract class EntityOwnable extends EntityLiving implements IEntityOwnab
             double d0 = this.rand.nextGaussian() * 0.02D;
             double d1 = this.rand.nextGaussian() * 0.02D;
             double d2 = this.rand.nextGaussian() * 0.02D;
-            this.worldObj.spawnParticle(enumparticletypes, this.posX + (double)(this.rand.nextFloat() * this.width * 2.0F) - (double)this.width, this.posY + 0.5D + (double)(this.rand.nextFloat() * this.height), this.posZ + (double)(this.rand.nextFloat() * this.width * 2.0F) - (double)this.width, d0, d1, d2, new int[0]);
+            this.getEntityWorld().spawnParticle(enumparticletypes, this.posX + (double)(this.rand.nextFloat() * this.width * 2.0F) - (double)this.width, this.posY + 0.5D + (double)(this.rand.nextFloat() * this.height), this.posZ + (double)(this.rand.nextFloat() * this.width * 2.0F) - (double)this.width, d0, d1, d2, new int[0]);
         }
     }
 
@@ -202,7 +202,7 @@ public abstract class EntityOwnable extends EntityLiving implements IEntityOwnab
         try
         {
             UUID uuid = this.getOwnerId();
-            return uuid == null ? null : this.worldObj.getPlayerEntityByUUID(uuid);
+            return uuid == null ? null : this.getEntityWorld().getPlayerEntityByUUID(uuid);
         }
         catch (IllegalArgumentException var2)
         {
@@ -268,9 +268,9 @@ public abstract class EntityOwnable extends EntityLiving implements IEntityOwnab
      */
     public void onDeath(DamageSource cause)
     {
-        if (!this.worldObj.isRemote && this.worldObj.getGameRules().getBoolean("showDeathMessages") && this.hasCustomName() && this.getOwner() instanceof EntityPlayerMP)
+        if (!this.getEntityWorld().isRemote && this.getEntityWorld().getGameRules().getBoolean("showDeathMessages") && this.hasCustomName() && this.getOwner() instanceof EntityPlayerMP)
         {
-            ((EntityPlayerMP)this.getOwner()).addChatMessage(this.getCombatTracker().getDeathMessage());
+            ((EntityPlayerMP)this.getOwner()).sendMessage(this.getCombatTracker().getDeathMessage());
         }
 
         super.onDeath(cause);

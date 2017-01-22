@@ -97,7 +97,7 @@ public class TileEntityPipeWrapper extends TileEntityMod implements IPipeWrapper
 						
 						if(pipe.canConnectToExternal(face.getOpposite(), false)){
 							pipeDir = face;
-							if(this.worldObj.isBlockLoaded(getPos())){
+							if(this.getWorld().isBlockLoaded(getPos())){
 								BlockUtil.markBlockForUpdate(getWorld(), getPos());
 							}else markDirty();
 							break;
@@ -108,7 +108,7 @@ public class TileEntityPipeWrapper extends TileEntityMod implements IPipeWrapper
 				TileEntity tile = getWorld().getTileEntity(getPos().offset(pipeDir));
 				if(tile == null || !(tile instanceof TileEntityPipe) || !((TileEntityPipe)tile).canConnectToExternal(pipeDir.getOpposite(), false)){
 					pipeDir = null;
-					if(this.worldObj.isBlockLoaded(getPos())){
+					if(this.getWorld().isBlockLoaded(getPos())){
 						BlockUtil.markBlockForUpdate(getWorld(), getPos());
 					}else markDirty();
 				}
@@ -116,7 +116,7 @@ public class TileEntityPipeWrapper extends TileEntityMod implements IPipeWrapper
 		}else{
 			if(pipeDir != null){
 				pipeDir = null;
-				if(this.worldObj.isBlockLoaded(getPos())){
+				if(this.getWorld().isBlockLoaded(getPos())){
 					BlockUtil.markBlockForUpdate(getWorld(), getPos());
 				}else markDirty();
 			}

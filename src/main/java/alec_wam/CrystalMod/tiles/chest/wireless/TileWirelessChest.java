@@ -38,12 +38,12 @@ public class TileWirelessChest extends TileEntityMod implements IMessageHandler 
 	public void update(){
 		super.update();
 		// Resynchronize clients with the server state
-        if (worldObj != null && !worldObj.isRemote)
+        if (getWorld() != null && !getWorld().isRemote)
         {
         	//First Init
             if(ticksSinceSync < 0){
             	dirtyCollison = true;
-            	worldObj.addBlockEvent(pos, ModBlocks.wirelessChest, 3, (((open ? 1 : 0) << 3) & 0xF8) | (facing & 0x7));
+            	getWorld().addBlockEvent(pos, ModBlocks.wirelessChest, 3, (((open ? 1 : 0) << 3) & 0xF8) | (facing & 0x7));
             }
             
             boolean newOpen = open;
@@ -54,7 +54,7 @@ public class TileWirelessChest extends TileEntityMod implements IMessageHandler 
             if(newOpen !=open){
             	open = newOpen;
             	dirtyCollison = true;
-            	worldObj.addBlockEvent(pos, ModBlocks.wirelessChest, 1, open ? 1 : 0);
+            	getWorld().addBlockEvent(pos, ModBlocks.wirelessChest, 1, open ? 1 : 0);
             }
         }
 
@@ -65,7 +65,7 @@ public class TileWirelessChest extends TileEntityMod implements IMessageHandler 
         {
             double d = pos.getX() + 0.5D;
             double d1 = pos.getZ() + 0.5D;
-            worldObj.playSound(null, d, pos.getY() + 0.5D, d1, SoundEvents.BLOCK_CHEST_OPEN, SoundCategory.BLOCKS, 0.5F, worldObj.rand.nextFloat() * 0.1F + 0.9F);
+            getWorld().playSound(null, d, pos.getY() + 0.5D, d1, SoundEvents.BLOCK_CHEST_OPEN, SoundCategory.BLOCKS, 0.5F, getWorld().rand.nextFloat() * 0.1F + 0.9F);
         }
         if (!open && lidAngle > 0.0F || open && lidAngle < 1.0F)
         {
@@ -86,7 +86,7 @@ public class TileWirelessChest extends TileEntityMod implements IMessageHandler 
             {
                 double d2 = pos.getX() + 0.5D;
                 double d3 = pos.getZ() + 0.5D;
-                worldObj.playSound(null, d2, pos.getY() + 0.5D, d3, SoundEvents.BLOCK_CHEST_CLOSE, SoundCategory.BLOCKS, 0.5F, worldObj.rand.nextFloat() * 0.1F + 0.9F);
+                getWorld().playSound(null, d2, pos.getY() + 0.5D, d3, SoundEvents.BLOCK_CHEST_CLOSE, SoundCategory.BLOCKS, 0.5F, getWorld().rand.nextFloat() * 0.1F + 0.9F);
             }
             if (lidAngle < 0.0F)
             {
@@ -152,8 +152,8 @@ public class TileWirelessChest extends TileEntityMod implements IMessageHandler 
         releasePreviousInventory();
         markDirty();
 
-        IBlockState state = worldObj.getBlockState(pos);
-        worldObj.notifyBlockUpdate(pos, state, state, 3);
+        IBlockState state = getWorld().getBlockState(pos);
+        getWorld().notifyBlockUpdate(pos, state, state, 3);
     }
 
     public boolean isBoundToPlayer()
@@ -182,9 +182,9 @@ public class TileWirelessChest extends TileEntityMod implements IMessageHandler 
     	if (inventory == null)
         {
             if (isBoundToPlayer())
-            	inventory = WirelessChestManager.get(worldObj).getPrivate(boundToPlayer).getInventory(code);
+            	inventory = WirelessChestManager.get(getWorld()).getPrivate(boundToPlayer).getInventory(code);
             else
-            	inventory = WirelessChestManager.get(worldObj).getInventory(code);
+            	inventory = WirelessChestManager.get(getWorld()).getInventory(code);
         }
     	return inventory;
     }
@@ -223,7 +223,7 @@ public class TileWirelessChest extends TileEntityMod implements IMessageHandler 
             facing = (byte) EnumFacing.NORTH.ordinal();
         }
         setFacing(facing);
-        worldObj.addBlockEvent(pos, ModBlocks.wirelessChest, 2, facing);
+        getWorld().addBlockEvent(pos, ModBlocks.wirelessChest, 2, facing);
     }
     
     @Override

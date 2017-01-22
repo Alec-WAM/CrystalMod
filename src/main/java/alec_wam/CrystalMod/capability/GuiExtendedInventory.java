@@ -33,7 +33,7 @@ public class GuiExtendedInventory extends InventoryEffectRenderer {
 
     public GuiExtendedInventory(EntityPlayer player)
     {
-        super(new ContainerExtendedInventory(player.inventory, !player.worldObj.isRemote, player));
+        super(new ContainerExtendedInventory(player.inventory, !player.getEntityWorld().isRemote, player));
         this.allowUserInput = true;
     }
 
@@ -98,7 +98,7 @@ public class GuiExtendedInventory extends InventoryEffectRenderer {
             }
         }*/
         
-        drawPlayerModel(k + 51, l + 75, 30, (float)(k + 51) - this.xSizeFloat, (float)(l + 75 - 50) - this.ySizeFloat, this.mc.thePlayer);
+        drawPlayerModel(k + 51, l + 75, 30, (float)(k + 51) - this.xSizeFloat, (float)(l + 75 - 50) - this.ySizeFloat, CrystalMod.proxy.getClientPlayer());
     }
 
     public static void drawPlayerModel(int x, int y, int scale, float yaw, float pitch, EntityLivingBase playerdrawn)
@@ -142,25 +142,11 @@ public class GuiExtendedInventory extends InventoryEffectRenderer {
         GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);
     }
 
-    @Override
-    protected void actionPerformed(GuiButton button)
-    {
-        if (button.id == 0)
-        {
-            this.mc.displayGuiScreen(new GuiAchievements(this, this.mc.thePlayer.getStatFileWriter()));
-        }
-
-        if (button.id == 1)
-        {
-            this.mc.displayGuiScreen(new GuiStats(this, this.mc.thePlayer.getStatFileWriter()));
-        }
-    }
-
 	@Override
 	protected void keyTyped(char par1, int par2) throws IOException {
 		if (par2 == CrystalMod.proxy.keyHandler.key.getKeyCode())
         {
-            this.mc.thePlayer.closeScreen();
+            CrystalMod.proxy.getClientPlayer().closeScreen();
         } else
 		super.keyTyped(par1, par2);
 	}

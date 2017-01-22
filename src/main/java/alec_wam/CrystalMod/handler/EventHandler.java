@@ -26,8 +26,6 @@ import alec_wam.CrystalMod.items.ItemDragonWings;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.items.tools.backpack.BackpackUtil;
 import alec_wam.CrystalMod.items.tools.backpack.IBackpack;
-import alec_wam.CrystalMod.items.tools.backpack.IBackpackInventory;
-import alec_wam.CrystalMod.items.tools.backpack.ItemBackpackBase;
 import alec_wam.CrystalMod.items.tools.backpack.types.InventoryBackpack;
 import alec_wam.CrystalMod.items.tools.backpack.upgrade.InventoryBackpackUpgrades;
 import alec_wam.CrystalMod.items.tools.backpack.upgrade.ItemBackpackUpgrade.BackpackUpgrade;
@@ -57,7 +55,6 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.monster.EntityZombie;
-import net.minecraft.entity.monster.SkeletonType;
 import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -70,7 +67,6 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -320,7 +316,7 @@ public class EventHandler {
                  if(extPlayer !=null){
 					//Copied from Ender Dragon
  					extPlayer.prevWingAnimTime = extPlayer.wingAnimTime;
- 					float f10 = 0.2F * (MathHelper.sqrt_double(player.motionX * player.motionX + player.motionZ * player.motionZ) * 0.5F + 1.0F);
+ 					float f10 = 0.2F * (MathHelper.sqrt(player.motionX * player.motionX + player.motionZ * player.motionZ) * 0.5F + 1.0F);
  					f10 = f10 * (float)Math.pow(2.0D, player.motionY);
 
      	            
@@ -557,8 +553,7 @@ public class EventHandler {
 
         
         if (mob instanceof EntitySkeleton) {
-            if(((EntitySkeleton) event.getEntityLiving()).func_189771_df() == SkeletonType.WITHER)return;
-        	skullItem = Items.SKULL;
+            skullItem = Items.SKULL;
             skullId = 0;
         }
         else if (mob instanceof EntityZombie) {

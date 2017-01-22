@@ -27,6 +27,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.RecipeSorter;
 
@@ -36,7 +37,7 @@ public class RecipeBatUpgrade implements IRecipe {
         RecipeSorter.register(CrystalMod.MODID.toLowerCase() + ":batupgrade", RecipeBatUpgrade.class, RecipeSorter.Category.SHAPELESS, "");
     }
 
-    private ItemStack modifiedTool = null;
+    private ItemStack modifiedTool = ItemStackTools.getEmptyStack();
 
     public RecipeBatUpgrade() {
     }
@@ -165,7 +166,7 @@ public class RecipeBatUpgrade implements IRecipe {
     }
 
 	@Override
-	public ItemStack[] getRemainingItems(InventoryCrafting inv) {
-		return new ItemStack[inv.getSizeInventory()];
+	public NonNullList<ItemStack> getRemainingItems(InventoryCrafting inv) {
+		return NonNullList.create();
 	}
 }

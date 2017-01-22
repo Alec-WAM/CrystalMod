@@ -185,7 +185,7 @@ public class TileEntityPipeLiquid extends TileEntityPipe implements IInventoryCh
 	  @Override
 	  public void update() {
 		  super.update();
-	    if(worldObj.isRemote) {
+	    if(getWorld().isRemote) {
 	      return;
 	    }
 	    doExtract();
@@ -265,7 +265,7 @@ public class TileEntityPipeLiquid extends TileEntityPipe implements IInventoryCh
 	    }
 
 		@Override
-		public void onInventoryChanged(InventoryBasic invBasic) {
+		public void onInventoryChanged(IInventory invBasic) {
 			this.markDirty();
 		}
 

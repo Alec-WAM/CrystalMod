@@ -3,6 +3,14 @@ package alec_wam.CrystalMod.tiles.tank;
 import java.util.List;
 import java.util.Locale;
 
+import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.blocks.EnumBlock;
+import alec_wam.CrystalMod.blocks.ICustomModel;
+import alec_wam.CrystalMod.blocks.ModBlocks;
+import alec_wam.CrystalMod.proxy.ClientProxy;
+import alec_wam.CrystalMod.util.BlockUtil;
+import alec_wam.CrystalMod.util.ChatUtil;
+import alec_wam.CrystalMod.util.tool.ToolUtil;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -16,12 +24,13 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
@@ -30,14 +39,6 @@ import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import alec_wam.CrystalMod.CrystalMod;
-import alec_wam.CrystalMod.blocks.EnumBlock;
-import alec_wam.CrystalMod.blocks.ICustomModel;
-import alec_wam.CrystalMod.blocks.ModBlocks;
-import alec_wam.CrystalMod.proxy.ClientProxy;
-import alec_wam.CrystalMod.util.BlockUtil;
-import alec_wam.CrystalMod.util.ChatUtil;
-import alec_wam.CrystalMod.util.tool.ToolUtil;
 
 public class BlockTank extends EnumBlock<BlockTank.TankType> implements ITileEntityProvider, ICustomModel {
 
@@ -64,7 +65,7 @@ public class BlockTank extends EnumBlock<BlockTank.TankType> implements ITileEnt
 	
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list){
+	public void getSubBlocks(Item item, CreativeTabs tab, NonNullList<ItemStack> list){
 		for(TankType type : TankType.values()){
 			list.add(new ItemStack(item, 1, type.getMeta()));
 		}
@@ -139,10 +140,10 @@ public class BlockTank extends EnumBlock<BlockTank.TankType> implements ITileEnt
     }
     
     @Override
-    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer entityplayer, EnumHand hand, ItemStack held, EnumFacing side, float par7, float par8,
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer entityplayer, EnumHand hand, EnumFacing side, float par7, float par8,
             float par9) {
 
-        ItemStack current = held;
+        ItemStack current = entityplayer.getHeldItem(hand);
         TileEntity tile = world.getTileEntity(pos);
 
         if (tile instanceof TileEntityTank) {
@@ -151,7 +152,7 @@ public class BlockTank extends EnumBlock<BlockTank.TankType> implements ITileEnt
             	if(ToolUtil.isToolEquipped(entityplayer, hand)){
             		return ToolUtil.breakBlockWithTool(this, world, pos, entityplayer, hand);
             	}
-                if(FluidUtil.interactWithFluidHandler(current, FluidUtil.getFluidHandler(world, pos, side), entityplayer)){
+                if(FluidUtil.interactWithFluidHandler(current, FluidUtil.getFluidHandler(world, pos, side), entityplayer).isSuccess()){
                 	return true;
                 }
         	}

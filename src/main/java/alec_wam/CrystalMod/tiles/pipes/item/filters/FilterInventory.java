@@ -1,9 +1,11 @@
 package alec_wam.CrystalMod.tiles.pipes.item.filters;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
@@ -12,14 +14,14 @@ import alec_wam.CrystalMod.util.ItemStackTools;
 public class FilterInventory implements IItemStackInventory
 {
     protected int[] syncedSlots = new int[0];
-    private ItemStack[] inventory;
+    private NonNullList<ItemStack> inventory;
     private int size;
     private String name;
     protected ItemStack masterStack;
 
     public FilterInventory(ItemStack masterStack, int size, String name)
     {
-        this.inventory = new ItemStack[size];
+    	inventory = NonNullList.<ItemStack>withSize(size, ItemStack.EMPTY);
         this.size = size;
         this.name = name;
         this.masterStack = masterStack;
@@ -49,40 +51,12 @@ public class FilterInventory implements IItemStackInventory
 
     public void readFromNBT(NBTTagCompound tagCompound)
     {
-        NBTTagList tags = tagCompound.getTagList("Items", 10);
-        inventory = new ItemStack[getSizeInventory()];
-
-        for (int i = 0; i < tags.tagCount(); i++)
-        {
-            if (!isSyncedSlot(i))
-            {
-                NBTTagCompound data = tags.getCompoundTagAt(i);
-                byte j = data.getByte("Slot");
-
-                if (j >= 0 && j < inventory.length)
-                {
-                    inventory[j] = ItemStackTools.loadFromNBT(data);
-                }
-            }
-        }
+        ItemStackHelper.loadAllItems(tagCompound, inventory);
     }
 
     public void writeToNBT(NBTTagCompound tagCompound)
     {
-        NBTTagList tags = new NBTTagList();
-
-        for (int i = 0; i < inventory.length; i++)
-        {
-            if ((inventory[i] != null) && !isSyncedSlot(i))
-            {
-                NBTTagCompound data = new NBTTagCompound();
-                data.setByte("Slot", (byte) i);
-                inventory[i].writeToNBT(data);
-                tags.appendTag(data);
-            }
-        }
-
-        tagCompound.setTag("Items", tags);
+        ItemStackHelper.saveAllItems(tagCompound, inventory);
     }
 
     public void readFromStack(ItemStack masterStack)
@@ -114,25 +88,25 @@ public class FilterInventory implements IItemStackInventory
     @Override
     public ItemStack getStackInSlot(int index)
     {
-        return inventory[index];
+        return inventory.get(index);
     }
 
     @Override
     public ItemStack decrStackSize(int index, int count)
     {
-        if (!ItemStackTools.isNullStack(inventory[index]))
+        if (!ItemStackTools.isNullStack(getStackInSlot(index)))
         {
-            if (ItemStackTools.getStackSize(inventory[index]) <= count)
+            if (ItemStackTools.getStackSize(getStackInSlot(index)) <= count)
             {
-                ItemStack itemStack = inventory[index];
-                inventory[index] = ItemStackTools.getEmptyStack();
+                ItemStack itemStack = getStackInSlot(index);
+                setInventorySlotContents(index, ItemStackTools.getEmptyStack());
                 markDirty();
                 return itemStack;
             }
 
-            ItemStack itemStack = inventory[index].splitStack(count);
-            if (ItemStackTools.isEmpty(inventory[index]))
-                inventory[index] = ItemStackTools.getEmptyStack();
+            ItemStack itemStack = getStackInSlot(index).splitStack(count);
+            if (ItemStackTools.isEmpty(getStackInSlot(index)))
+            	setInventorySlotContents(index, ItemStackTools.getEmptyStack());
 
             markDirty();
             return itemStack;
@@ -144,9 +118,9 @@ public class FilterInventory implements IItemStackInventory
     @Override
     public ItemStack removeStackFromSlot(int slot)
     {
-        if (!ItemStackTools.isNullStack(inventory[slot]))
+        if (!ItemStackTools.isNullStack(getStackInSlot(slot)))
         {
-            ItemStack itemStack = inventory[slot];
+            ItemStack itemStack = getStackInSlot(slot);
             setInventorySlotContents(slot, ItemStackTools.getEmptyStack());
             return itemStack;
         }
@@ -156,7 +130,7 @@ public class FilterInventory implements IItemStackInventory
     @Override
     public void setInventorySlotContents(int slot, ItemStack stack)
     {
-        inventory[slot] = stack;
+        inventory.set(slot, stack);
         if (!ItemStackTools.isNullStack(stack) && ItemStackTools.getStackSize(stack) > getInventoryStackLimit())
         	ItemStackTools.setStackSize(stack, getInventoryStackLimit());
         markDirty();
@@ -169,7 +143,7 @@ public class FilterInventory implements IItemStackInventory
     }
 
     @Override
-    public boolean isUseableByPlayer(EntityPlayer player)
+    public boolean isUsableByPlayer(EntityPlayer player)
     {
         return true;
     }
@@ -213,7 +187,7 @@ public class FilterInventory implements IItemStackInventory
     @Override
     public void clear()
     {
-        this.inventory = new ItemStack[size];
+        this.inventory.clear();
     }
 
     @Override
@@ -255,5 +229,15 @@ public class FilterInventory implements IItemStackInventory
 	
 	public ItemStack getMasterStack(){
 		return masterStack;
+	}
+	
+	@Override
+	public boolean isEmpty(){
+		for(ItemStack stack : inventory){
+			if(ItemStackTools.isValid(stack)){
+				return false;
+			}
+		}
+		return true;
 	}
 }

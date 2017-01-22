@@ -3,11 +3,11 @@
   "defaults": {
     "model": "crystalmod:machine",
     "textures": {
-	  "particle":"crystalmod:blocks/machine/mobGrinder/bottom",
-	  "up":"crystalmod:blocks/machine/mobGrinder/bottom",
-	  "down":"crystalmod:blocks/machine/mobGrinder/bottom",
-      "front": "crystalmod:blocks/machine/mobGrinder/front_off",
-	  "side":"crystalmod:blocks/machine/mobGrinder/side"
+	  "particle":"crystalmod:blocks/machine/mobgrinder/bottom",
+	  "up":"crystalmod:blocks/machine/mobgrinder/bottom",
+	  "down":"crystalmod:blocks/machine/mobgrinder/bottom",
+      "front": "crystalmod:blocks/machine/mobgrinder/front_off",
+	  "side":"crystalmod:blocks/machine/mobgrinder/side"
     },
     "transform": "forge:default-block"
   },

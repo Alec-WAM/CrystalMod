@@ -32,7 +32,7 @@ public enum WorkerClass{
 	AXE  {
 		@Override
 		boolean match(ItemStack item) {
-			return item.getItem().getHarvestLevel(item, "axe") >= 0;
+			return item.getItem().getHarvestLevel(item, "axe", null, null) >= 0;
 		}
 	}, 
 	INTERACT  {

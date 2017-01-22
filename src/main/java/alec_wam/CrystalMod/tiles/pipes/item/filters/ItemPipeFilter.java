@@ -2,6 +2,13 @@ package alec_wam.CrystalMod.tiles.pipes.item.filters;
 
 import java.util.List;
 
+import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.blocks.ICustomModel;
+import alec_wam.CrystalMod.handler.GuiHandler;
+import alec_wam.CrystalMod.items.ModItems;
+import alec_wam.CrystalMod.util.ItemNBTHelper;
+import alec_wam.CrystalMod.util.ItemStackTools;
+import alec_wam.CrystalMod.util.ItemUtil;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -11,19 +18,13 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.IItemHandler;
-import alec_wam.CrystalMod.CrystalMod;
-import alec_wam.CrystalMod.blocks.ICustomModel;
-import alec_wam.CrystalMod.handler.GuiHandler;
-import alec_wam.CrystalMod.items.ModItems;
-import alec_wam.CrystalMod.util.ItemNBTHelper;
-import alec_wam.CrystalMod.util.ItemStackTools;
-import alec_wam.CrystalMod.util.ItemUtil;
 
 public class ItemPipeFilter extends Item implements ICustomModel {
 	
@@ -52,7 +53,7 @@ public class ItemPipeFilter extends Item implements ICustomModel {
 	}
 	
 	@Override
-	public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> list){
+	public void getSubItems(Item item, CreativeTabs tab, NonNullList<ItemStack> list){
 		for(int m = 0; m < FilterType.values().length; m++){
 			list.add(new ItemStack(this, 1, m));
 		}
@@ -73,9 +74,10 @@ public class ItemPipeFilter extends Item implements ICustomModel {
 	}
 	
 	@Override
-	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
+	public EnumActionResult onItemUse(EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
     {
-		if(stack.getMetadata() == FilterType.CAMERA.ordinal()){
+		ItemStack stack = playerIn.getHeldItem(hand);
+		if(ItemStackTools.isValid(stack) && stack.getMetadata() == FilterType.CAMERA.ordinal()){
 			IItemHandler inv = ItemUtil.getExternalItemHandler(worldIn, pos, facing);
 			if(inv !=null){
 				if(worldIn.isRemote){
@@ -98,8 +100,9 @@ public class ItemPipeFilter extends Item implements ICustomModel {
     }
 	
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand)
+	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand hand)
     {
+		ItemStack itemStackIn = playerIn.getHeldItem(hand);
 		if(itemStackIn.getMetadata() == FilterType.NORMAL.ordinal() || itemStackIn.getMetadata() == FilterType.MOD.ordinal()){
 			playerIn.openGui(CrystalMod.instance, GuiHandler.GUI_ID_ITEM, worldIn, 0, -1, hand.ordinal());
 			return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStackIn); 

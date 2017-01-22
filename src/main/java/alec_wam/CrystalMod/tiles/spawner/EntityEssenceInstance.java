@@ -6,6 +6,7 @@ import alec_wam.CrystalMod.util.Lang;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
@@ -43,13 +44,9 @@ public class EntityEssenceInstance<T extends EntityLivingBase> {
 	}
 	
 	public void addInfo(List<String> list){
-		String s = EntityList.getEntityStringFromClass(entityClass);
-
-        if (s == null)
-        {
-            s = "generic";
-        }
-		list.add(Lang.translateToLocal("entity." + s + ".name"));
+		net.minecraftforge.fml.common.registry.EntityEntry entry = net.minecraftforge.fml.common.registry.EntityRegistry.getEntry(entityClass);
+		if(entry !=null)list.add(Lang.translateToLocal("entity." + entry.getName() + ".name"));
+		else list.add(Lang.translateToLocal("entity.generic.name"));
 	}
 	
 	public float getRenderScale(TransformType type){

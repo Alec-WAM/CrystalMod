@@ -85,8 +85,8 @@ public class TileEntityPlayerCubePortal extends TileEntityMod {
         }
         
         if (mobileChunk == null) {
-            if (worldObj != null) {
-                if (worldObj.isRemote) {
+            if (getWorld() != null) {
+                if (getWorld().isRemote) {
                     initClient();
                 } else {
                     initCommon();
@@ -112,7 +112,7 @@ public class TileEntityPlayerCubePortal extends TileEntityMod {
 	            for (int i = 0; i < tiles.tagCount(); i++) {
 	                try {
 	                    NBTTagCompound comp = tiles.getCompoundTagAt(i);
-	                    TileEntity tileentity = TileEntity.func_190200_a(worldObj, comp);
+	                    TileEntity tileentity = TileEntity.create(getWorld(), comp);
 	                    mobileChunk.setTileEntity(tileentity.getPos(), tileentity);
 	                } catch (Exception e) {
 	                    e.printStackTrace();
@@ -134,7 +134,7 @@ public class TileEntityPlayerCubePortal extends TileEntityMod {
 	public void clearCube(){
 		if(mobileChunk !=null){
 			this.mobileChunk.clear();
-			if(!worldObj.isRemote){
+			if(!getWorld().isRemote){
 				this.sendUpdatePackets();
 			}
 		}
@@ -172,7 +172,7 @@ public class TileEntityPlayerCubePortal extends TileEntityMod {
 		mobileChunk.setChunkModified();
 		mobileChunk.onChunkLoad();
 		
-		/*if(!worldObj.isRemote){
+		/*if(!getWorld().isRemote){
 			this.sendUpdatePackets();
 		}*/
 	}

@@ -1,7 +1,6 @@
 package alec_wam.CrystalMod.tiles.machine.worksite;
 
 import java.util.List;
-import java.util.Map;
 
 import alec_wam.CrystalMod.tiles.machine.worksite.InventorySided.RelativeSide;
 import alec_wam.CrystalMod.util.ItemStackTools;
@@ -9,19 +8,13 @@ import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.fakeplayer.FakePlayerUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Enchantments;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
-import net.minecraftforge.common.util.FakePlayer;
-import net.minecraftforge.common.util.FakePlayerFactory;
 import net.minecraftforge.event.ForgeEventFactory;
 
 public abstract class TileWorksiteBoundedInventory extends TileWorksiteBounded implements ISidedInventory {
@@ -67,8 +60,8 @@ public abstract class TileWorksiteBoundedInventory extends TileWorksiteBounded i
 		{
 			return false;
 		}
-		worldObj.playEvent(player, 2001, pos, Block.getStateId(state));
-		worldObj.setBlockToAir(pos);
+		getWorld().playEvent(player, 2001, pos, Block.getStateId(state));
+		getWorld().setBlockToAir(pos);
 		for(ItemStack stack : drops)
 		{
 			if(getWorld().rand.nextFloat() <= chance){
@@ -147,9 +140,9 @@ public abstract class TileWorksiteBoundedInventory extends TileWorksiteBounded i
 	}
 
 	@Override
-	public boolean isUseableByPlayer(EntityPlayer var1)
+	public boolean isUsableByPlayer(EntityPlayer var1)
 	{
-	  return inventory.isUseableByPlayer(var1);
+	  return inventory.isUsableByPlayer(var1);
 	}
 
 	@Override
@@ -211,6 +204,11 @@ public abstract class TileWorksiteBoundedInventory extends TileWorksiteBounded i
 	@Override
 	public void clear() {
 		inventory.clear();
+	}
+	
+	@Override
+	public boolean isEmpty() {
+		return inventory.isEmpty();
 	}
 	
 	@Override

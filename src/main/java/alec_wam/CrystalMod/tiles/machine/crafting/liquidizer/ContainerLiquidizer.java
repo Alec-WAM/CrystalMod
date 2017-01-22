@@ -24,7 +24,7 @@ public class ContainerLiquidizer extends Container
     @Override
     public boolean canInteractWith(EntityPlayer player)
     {
-        return (this.tileMachine != null && this.tileMachine.isUseableByPlayer(player));
+        return (this.tileMachine != null && this.tileMachine.isUsableByPlayer(player));
     }
 
     protected void addPlayerInventory(InventoryPlayer paramInventoryPlayer)
@@ -103,7 +103,7 @@ public class ContainerLiquidizer extends Container
 				return ItemStackTools.getEmptyStack();
 			}
 
-			slot.onPickupFromSlot(player, itemstack1);
+			slot.onTake(player, itemstack1);
 		}
 
 		return itemstack;

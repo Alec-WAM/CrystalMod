@@ -49,9 +49,9 @@ public class PacketPipe extends AbstractPacketThreadsafe {
 		x = buffer.readInt();
 		y = buffer.readInt();
 		z = buffer.readInt();
-		type = buffer.readStringFromBuffer(200);
+		type = buffer.readString(200);
 		dir = buffer.readShort();
-		data = buffer.readStringFromBuffer(200);
+		data = buffer.readString(200);
 	}
 
 	@Override
@@ -67,7 +67,7 @@ public class PacketPipe extends AbstractPacketThreadsafe {
 
 	@Override
 	public void handleClientSafe(NetHandlerPlayClient netHandler) {
-		World world = CrystalMod.proxy.getClientPlayer() == null ? null : CrystalMod.proxy.getClientPlayer().worldObj;
+		World world = CrystalMod.proxy.getClientPlayer() == null ? null : CrystalMod.proxy.getClientPlayer().getEntityWorld();
 		if(world == null){
 			return;
 		}
@@ -91,7 +91,7 @@ public class PacketPipe extends AbstractPacketThreadsafe {
 
 	@Override
 	public void handleServerSafe(NetHandlerPlayServer netHandler) {
-		World world = netHandler.playerEntity.worldObj;
+		World world = netHandler.playerEntity.getEntityWorld();
 		if(world == null){
 			return;
 		}

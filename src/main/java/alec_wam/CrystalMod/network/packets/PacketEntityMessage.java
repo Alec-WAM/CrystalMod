@@ -48,9 +48,9 @@ public class PacketEntityMessage extends AbstractPacketThreadsafe {
 	public void fromBytes(ByteBuf buf) {
 		PacketBuffer buffer = new PacketBuffer(buf);
 		id = buffer.readInt();
-		type = buffer.readStringFromBuffer(100);
+		type = buffer.readString(100);
 		try {
-			data = buffer.readNBTTagCompoundFromBuffer();
+			data = buffer.readCompoundTag();
 		} catch (IOException e) {
 			data = new NBTTagCompound();
 		}
@@ -61,17 +61,17 @@ public class PacketEntityMessage extends AbstractPacketThreadsafe {
 		PacketBuffer buffer = new PacketBuffer(buf);
 		buffer.writeInt(id);
 		buffer.writeString(type);
-		buffer.writeNBTTagCompoundToBuffer(data);
+		buffer.writeCompoundTag(data);
 	}
 
 	@Override
 	public void handleClientSafe(NetHandlerPlayClient netHandler) {
-		handle(CrystalMod.proxy.getClientPlayer() == null ? null : CrystalMod.proxy.getClientPlayer().worldObj, id, true);
+		handle(CrystalMod.proxy.getClientPlayer() == null ? null : CrystalMod.proxy.getClientPlayer().getEntityWorld(), id, true);
 	}
 
 	@Override
 	public void handleServerSafe(NetHandlerPlayServer netHandler) {
-		handle(netHandler.playerEntity.worldObj, id, false);
+		handle(netHandler.playerEntity.getEntityWorld(), id, false);
 	}
 	
 	public void handle(World world, int id, boolean client){

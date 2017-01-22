@@ -1,21 +1,15 @@
 package alec_wam.CrystalMod.tiles.machine.worksite;
 
-import java.util.List;
-
-import com.enderio.core.common.util.ChatUtil;
-
 import alec_wam.CrystalMod.CrystalMod;
-import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.blocks.EnumBlock.IEnumMeta;
+import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.tiles.BlockStateFacing;
-import alec_wam.CrystalMod.tiles.machine.BlockStateMachine;
-import alec_wam.CrystalMod.tiles.machine.IActiveTile;
-import alec_wam.CrystalMod.tiles.machine.IFacingTile;
 import alec_wam.CrystalMod.tiles.machine.worksite.InventorySided.IRotatableTile;
 import alec_wam.CrystalMod.tiles.machine.worksite.imp.WorksiteAnimalFarm;
 import alec_wam.CrystalMod.tiles.machine.worksite.imp.WorksiteCropFarm;
 import alec_wam.CrystalMod.tiles.machine.worksite.imp.WorksiteTreeFarm;
+import alec_wam.CrystalMod.util.ChatUtil;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import net.minecraft.block.BlockContainer;
@@ -35,6 +29,7 @@ import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -54,7 +49,8 @@ public class BlockWorksite extends BlockContainer implements ICustomModel {
 	}
 
 	@SideOnly(Side.CLIENT)
-	public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list){
+	@Override
+	public void getSubBlocks(Item item, CreativeTabs tab, NonNullList<ItemStack> list){
 		for(WorksiteType type : WorksiteType.values()) {
 			ItemStack stack = new ItemStack(item, 1, type.getMeta());
 			list.add(stack);
@@ -124,12 +120,13 @@ public class BlockWorksite extends BlockContainer implements ICustomModel {
 	}
 
 	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, ItemStack held, EnumFacing side, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
 		TileEntity te = world.getTileEntity(pos);
 		if (te instanceof IWorkSite && te instanceof TileWorksiteBase) {
 			
 			TileWorksiteBase worksite = (TileWorksiteBase)te;
 			if(!world.isRemote){
+				ItemStack held = player.getHeldItem(hand);
 				if(ItemStackTools.isValid(held)){
 					if(held.getItem() == ModItems.minionStaff){
 						ChatUtil.sendNoSpam(player, "Workers: "+worksite.workers.size());

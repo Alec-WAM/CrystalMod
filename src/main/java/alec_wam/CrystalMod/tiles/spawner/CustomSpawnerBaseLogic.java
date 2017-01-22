@@ -138,13 +138,13 @@ public abstract class CustomSpawnerBaseLogic {
 	}
 
 	public Entity spawnEntity(Entity par1Entity) {
-		if (par1Entity instanceof EntityLivingBase && par1Entity.worldObj != null) {
+		if (par1Entity instanceof EntityLivingBase && par1Entity.getEntityWorld() != null) {
 			EntityEssenceInstance<?> essence = ItemMobEssence.getEssence(getEntityNameToSpawn());
 			if(essence !=null && essence.useInitialSpawn()){
 				if (!net.minecraftforge.event.ForgeEventFactory.doSpecialSpawn(((EntityLiving) par1Entity), this.getSpawnerWorld(), (float)par1Entity.posX, (float)par1Entity.posY, (float)par1Entity.posZ))
 				((EntityLiving) par1Entity).onInitialSpawn(getSpawnerWorld().getDifficultyForLocation(new BlockPos(((EntityLiving)par1Entity))), null);
 			}
-			this.getSpawnerWorld().spawnEntityInWorld(par1Entity);
+			this.getSpawnerWorld().spawnEntity(par1Entity);
 			((EntityLiving)par1Entity).playLivingSound();
 		}
 

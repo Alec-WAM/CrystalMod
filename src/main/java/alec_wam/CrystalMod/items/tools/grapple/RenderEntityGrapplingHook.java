@@ -1,5 +1,6 @@
 package alec_wam.CrystalMod.items.tools.grapple;
 
+import alec_wam.CrystalMod.CrystalMod;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderItem;
@@ -138,7 +139,7 @@ public class RenderEntityGrapplingHook<T extends Entity> extends Render<T>
 
         int k = e.getPrimaryHand() == EnumHandSide.RIGHT ? 1 : -1;
         float f7 = e.getSwingProgress(partialTicks);
-        float f8 = MathHelper.sin(MathHelper.sqrt_float(f7) * (float)Math.PI);
+        float f8 = MathHelper.sin(MathHelper.sqrt(f7) * (float)Math.PI);
         float f9 = (e.prevRenderYawOffset + (e.renderYawOffset - e.prevRenderYawOffset) * partialTicks) * 0.017453292F;
         double d0 = (double)MathHelper.sin(f9);
         double d1 = (double)MathHelper.cos(f9);
@@ -148,7 +149,7 @@ public class RenderEntityGrapplingHook<T extends Entity> extends Render<T>
         double d6;
         double d7;
 
-        if ((this.renderManager.options == null || this.renderManager.options.thirdPersonView <= 0) && e == Minecraft.getMinecraft().thePlayer)
+        if ((this.renderManager.options == null || this.renderManager.options.thirdPersonView <= 0) && e == CrystalMod.proxy.getClientPlayer())
         {
         	Vec3d vec3d;
         	if (hook.hand == EnumHand.MAIN_HAND) {

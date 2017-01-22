@@ -89,7 +89,7 @@ public class CrystalModWorldGenerator implements IWorldGenerator {
     	if(!treeDimBlacklist.contains(world.provider.getDimension())){
 			if(newGen || Config.retrogenTrees){
 				if(random.nextInt(60) == 3){
-		        	if(!world.getWorldInfo().getTerrainType().getWorldTypeName().startsWith("flat")){
+		        	if(!world.getWorldInfo().getTerrainType().getName().startsWith("flat")){
 			        	return generateCrystalTree(world, random, chunkX, chunkZ);
 		            }
 		        }
@@ -102,13 +102,13 @@ public class CrystalModWorldGenerator implements IWorldGenerator {
         final int x = chunkX * 16 + random.nextInt(16);
         final int z = chunkZ * 16 + random.nextInt(16);
         final BlockPos bp = world.getHeight(new BlockPos(x, 0, z));
-        Biome biome = world.getBiomeGenForCoords(bp);
-        if (BiomeDictionary.isBiomeOfType(biome, BiomeDictionary.Type.MAGICAL) || biome instanceof BiomeForest) {
+        Biome biome = world.getBiome(bp);
+        if (BiomeDictionary.hasType(biome, BiomeDictionary.Type.MAGICAL) || biome instanceof BiomeForest) {
         	WoodType type = WoodType.BLUE;
         	try{
-        		type = WoodType.byMetadata(MathHelper.getRandomIntegerInRange(random, 0, WoodType.values().length-1));
+        		type = WoodType.byMetadata(MathHelper.getInt(random, 0, WoodType.values().length-1));
         	} catch(Exception e){}
-        	int size = MathHelper.getRandomIntegerInRange(random, 4, 6);
+        	int size = MathHelper.getInt(random, 4, 6);
             final boolean t = new WorldGenCrystalTree(false, size, type, random.nextInt(2) == 0).generate(world, random, bp);
             return t;
         }
@@ -126,7 +126,7 @@ public class CrystalModWorldGenerator implements IWorldGenerator {
 		            BlockPos pos = world.getHeight(chunkPos.add(j9, 0, i13));
 		            int j16 = pos.getY() * 2;
 		            
-		            Biome biome = world.getBiomeGenForCoords(pos);
+		            Biome biome = world.getBiome(pos);
 		            if(biome.theBiomeDecorator.reedsPerChunk >= 0){
 			            if (j16 > 0)
 			            {
@@ -158,8 +158,8 @@ public class CrystalModWorldGenerator implements IWorldGenerator {
 		if((!event.getData().getCompoundTag(NBT_RETRO).hasKey(Config.retrogenID)) && (Config.retrogenOres || Config.retrogenTrees))
 		{
 			if(Config.retrogenInfo)
-				ModLogger.info("Chunk "+event.getChunk().getChunkCoordIntPair()+" has been flagged for RetroGen by CM.");
-			WorldTickHandler.retrogenChunks.put(dimension, event.getChunk().getChunkCoordIntPair());
+				ModLogger.info("Chunk "+event.getChunk().getPos()+" has been flagged for RetroGen by CM.");
+			WorldTickHandler.retrogenChunks.put(dimension, event.getChunk().getPos());
 		}
     }
 

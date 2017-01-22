@@ -92,7 +92,7 @@ public class FusionRecipeEnchantment implements IFusionRecipe {
 						
 						for (Enchantment toolEnchantment : toolEnchantments.keySet())
 						{
-							if (toolEnchantment != enchantment && !(enchantment.canApplyTogether(toolEnchantment) && toolEnchantment.canApplyTogether(enchantment)))  //Forge BugFix: Let Both enchantments veto being together
+							if (toolEnchantment != enchantment && !(enchantment.func_191560_c(toolEnchantment)))
 							{
 								return Lang.localizeFormat("fusion.message.cantcombine", name, Lang.translateToLocal(toolEnchantment.getName())); 
 							}
@@ -146,7 +146,7 @@ public class FusionRecipeEnchantment implements IFusionRecipe {
 
                         for (Enchantment enchantment : toolEnchantments.keySet())
                         {
-                            if (enchantment != enchantment1 && !(enchantment1.canApplyTogether(enchantment) && enchantment.canApplyTogether(enchantment1)))  //Forge BugFix: Let Both enchantments veto being together
+                            if (enchantment != enchantment1 && !(enchantment1.func_191560_c(enchantment)))
                             {
                                 flag1 = false;
                             }

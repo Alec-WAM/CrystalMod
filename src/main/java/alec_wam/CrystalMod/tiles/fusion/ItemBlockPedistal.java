@@ -29,7 +29,7 @@ public class ItemBlockPedistal extends ItemBlock {
     TileEntity te = world.getTileEntity(pos);
     if(te instanceof IFacingTile) {
     	IFacingTile tile = (IFacingTile) te;
-    	EnumFacing face = player.isSneaking() ? BlockPistonBase.getFacingFromEntity(pos, player) : side;
+    	EnumFacing face = player.isSneaking() ? EnumFacing.getDirectionFromEntityLiving(pos, player) : side;
     	tile.setFacing(face.getIndex());
     	BlockUtil.markBlockForUpdate(world, pos);
     }

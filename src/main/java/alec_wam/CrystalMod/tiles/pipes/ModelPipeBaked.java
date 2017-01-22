@@ -321,7 +321,7 @@ public class ModelPipeBaked implements IPerspectiveAwareModel
             if(color == -1){
             	 
             	float f = 1.0f;
-                int i = MathHelper.clamp_int((int)(f * 255.0F), 0, 255);
+                int i = MathHelper.clamp((int)(f * 255.0F), 0, 255);
                 color = -16777216 | i << 16 | i << 8 | i;
             }
         	

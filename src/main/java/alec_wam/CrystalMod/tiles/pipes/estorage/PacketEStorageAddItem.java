@@ -121,7 +121,7 @@ public class PacketEStorageAddItem extends AbstractPacketThreadsafe {
 						int decAmt = ItemStackTools.isNullStack(remain) ? old : (old-ItemStackTools.getStackSize(remain));
 						pSlot.decrStackSize(decAmt);
 						if(decAmt > 0){
-							pSlot.onPickupFromSlot(netHandler.playerEntity, data.stack);
+							pSlot.onTake(netHandler.playerEntity, data.stack);
 						}
 					}
 				} catch (IOException e) {

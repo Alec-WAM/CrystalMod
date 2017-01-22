@@ -78,8 +78,8 @@ public class ContainerAttachmentExport extends Container {
 
                         ItemStackTools.setStackSize(slot.getStack(), amount);
                     }
-                } else if (!ItemStackTools.isNullStack(player.inventory.getItemStack())) {
-                    int amount = player.inventory.getItemStack().stackSize;
+                } else if (ItemStackTools.isValid(player.inventory.getItemStack())) {
+                    int amount = ItemStackTools.getStackSize(player.inventory.getItemStack());
 
                     if (clickedButton == 1) {
                         amount = 1;

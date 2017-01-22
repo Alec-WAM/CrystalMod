@@ -80,7 +80,7 @@ public class ContainerHDDInterface extends Container {
                 return ItemStackTools.getEmptyStack();
             }
 
-            slot.onPickupFromSlot(playerIn, itemstack1);
+            slot.onTake(playerIn, itemstack1);
         }
 
         return itemstack;

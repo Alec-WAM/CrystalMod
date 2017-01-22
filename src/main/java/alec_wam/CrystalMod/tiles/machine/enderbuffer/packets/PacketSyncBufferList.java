@@ -27,7 +27,7 @@ public class PacketSyncBufferList extends AbstractPacketThreadsafe {
 	public void fromBytes(ByteBuf buf) {
 		PacketBuffer buffer = new PacketBuffer(buf);
 		try {
-			nbt = buffer.readNBTTagCompoundFromBuffer();
+			nbt = buffer.readCompoundTag();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -36,7 +36,7 @@ public class PacketSyncBufferList extends AbstractPacketThreadsafe {
 	@Override
 	public void toBytes(ByteBuf buf) {
 		PacketBuffer buffer = new PacketBuffer(buf);
-		buffer.writeNBTTagCompoundToBuffer(nbt);
+		buffer.writeCompoundTag(nbt);
 	}
 
 	@Override

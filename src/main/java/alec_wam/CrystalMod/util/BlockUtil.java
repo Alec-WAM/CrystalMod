@@ -55,13 +55,17 @@ public class BlockUtil {
     }
 
 	public static void markBlockForUpdate(World world, BlockPos pos){
+		markBlockForUpdate(world, pos, false);
+	}
+	
+	public static void markBlockForUpdate(World world, BlockPos pos, boolean notifyObv){
 		IBlockState state = world.getBlockState(pos);
 		world.notifyBlockUpdate(pos, state, state, 3);
-		world.notifyBlockOfStateChange(pos, state.getBlock());
+		world.notifyNeighborsOfStateChange(pos, state.getBlock(), notifyObv);
 	}
 
 	public static void openWorksiteGui(EntityPlayer player, int id, int x, int y, int z) {
-		if(player.worldObj.isRemote)
+		if(player.getEntityWorld().isRemote)
 	    {
 			PacketGuiMessage pkt = new PacketGuiMessage("Gui");
 			pkt.setOpenGui(id, x, y, z);
@@ -69,7 +73,7 @@ public class BlockUtil {
 	    }
 		else
 	    {
-		    player.openGui(CrystalMod.instance, id, player.worldObj, x, y, z);
+		    player.openGui(CrystalMod.instance, id, player.getEntityWorld(), x, y, z);
 		    if(player.openContainer instanceof ContainerMessageBase)
 		    {
 		    	((ContainerMessageBase)player.openContainer).sendInitData();

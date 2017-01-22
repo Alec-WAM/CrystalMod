@@ -11,6 +11,6 @@ public final class ObfuscatedNames {
 	public static String[] RenderLivingBase_layerRenderers = new String[] {"layerRenderers", "field_177097_h"};
 	public static String[] EntityRenderer_rendererUpdateCount = new String[] {"rendererUpdateCount", "field_78529_t"};
 	public static String[] GuiScreenHorseInventory_horseEntity = new String[] {"horseEntity", "field_147034_x"};
-	public static String[] EntityHorse_horseChest = new String[] {"horseChest", "field_110296_bG"};
+	public static String[] AbstractHorse_horseChest = new String[] {"horseChest", "field_110296_bG"};
 
 }

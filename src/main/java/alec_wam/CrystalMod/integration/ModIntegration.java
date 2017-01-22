@@ -11,7 +11,7 @@ public class ModIntegration {
 	
 	
 	public static void register(){
-		integrations.add(new TConstructIntegration());
+		//integrations.add(new TConstructIntegration());
 		integrations.add(new EnderIOIntegration());
 	}
 	

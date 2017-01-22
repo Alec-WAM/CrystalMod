@@ -38,8 +38,8 @@ public class WrapperState implements IBlockState {
 	}
 
 	@Override
-	public void neighborChanged(World worldIn, BlockPos pos, Block p_189546_3_) {
-		state.neighborChanged(worldIn, pos, p_189546_3_);
+	public void neighborChanged(World worldIn, BlockPos pos, Block p_189546_3_, BlockPos fromPos) {
+		state.neighborChanged(worldIn, pos, p_189546_3_, fromPos);
 	}
 
 	@Override
@@ -50,11 +50,6 @@ public class WrapperState implements IBlockState {
 	@Override
 	public boolean isFullBlock() {
 		return state.isFullBlock();
-	}
-
-	@Override
-	public boolean func_189884_a(Entity p_189884_1_) {
-		return state.func_189884_a(p_189884_1_);
 	}
 
 	@SuppressWarnings("deprecation")
@@ -195,13 +190,13 @@ public class WrapperState implements IBlockState {
 	}
 
 	@Override
-	public AxisAlignedBB getCollisionBoundingBox(World worldIn, BlockPos pos) {
+	public AxisAlignedBB getCollisionBoundingBox(IBlockAccess worldIn, BlockPos pos) {
 		return state.getCollisionBoundingBox(worldIn, pos);
 	}
 
 	@Override
-	public void addCollisionBoxToList(World worldIn, BlockPos pos, AxisAlignedBB p_185908_3_, List<AxisAlignedBB> p_185908_4_,	Entity p_185908_5_) {
-		state.addCollisionBoxToList(worldIn, pos, p_185908_3_, p_185908_4_, p_185908_5_);
+	public void addCollisionBoxToList(World worldIn, BlockPos pos, AxisAlignedBB p_185908_3_, List<AxisAlignedBB> p_185908_4_,	Entity p_185908_5_, boolean bool) {
+		state.addCollisionBoxToList(worldIn, pos, p_185908_3_, p_185908_4_, p_185908_5_, bool);
 	}
 
 	@Override
@@ -231,8 +226,8 @@ public class WrapperState implements IBlockState {
 	}
 
 	@Override
-	public Collection<IProperty<?>> getPropertyNames() {
-		return state.getPropertyNames();
+	public Collection<IProperty<?>> getPropertyKeys() {
+		return state.getPropertyKeys();
 	}
 
 	@Override
@@ -258,6 +253,26 @@ public class WrapperState implements IBlockState {
 	@Override
 	public Block getBlock() {
 		return state.getBlock();
+	}
+	
+	@Override
+	public boolean canEntitySpawn(Entity entityIn) {
+		return state.canEntitySpawn(entityIn);
+	}
+
+	@Override
+	public boolean hasCustomBreakingProgress() {
+		return state.hasCustomBreakingProgress();
+	}
+
+	@Override
+	public Vec3d getOffset(IBlockAccess access, BlockPos pos) {
+		return state.getOffset(access, pos);
+	}
+
+	@Override
+	public boolean causesSuffocation() {
+		return state.causesSuffocation();
 	}
 
 }

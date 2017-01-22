@@ -49,7 +49,7 @@ public class ContainerBackpackUpgrades extends Container
 
     public boolean canInteractWith(EntityPlayer playerIn)
     {
-        return this.upgradeInventory.isUseableByPlayer(playerIn);
+        return this.upgradeInventory.isUsableByPlayer(playerIn);
     }
 
     /**

@@ -60,8 +60,8 @@ public class TileEntityMod extends TileEntity implements ITickable {
 	}
 	
 	public void updateAfterLoad(){
-		if(this.worldObj !=null){
-			if(worldObj.isRemote)this.dirtyClient = true;
+		if(this.getWorld() !=null){
+			if(getWorld().isRemote)this.dirtyClient = true;
 			else{
 				//dirtyServer = true;
 				//markDirty();
@@ -101,7 +101,7 @@ public class TileEntityMod extends TileEntity implements ITickable {
 	 * If you have different work items in your TE, use this variant to stagger your work.
 	 */
 	protected boolean shouldDoWorkThisTick(int interval, int offset) {
-		return (worldObj.getTotalWorldTime() + checkOffset + offset) % interval == 0;
+		return (getWorld().getTotalWorldTime() + checkOffset + offset) % interval == 0;
 	}
 	private final int checkOffset = (int) (Math.random() * 20);
 }

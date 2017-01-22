@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.client.util.ModelUVAverager;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.ReflectionWrapper;
@@ -191,7 +192,7 @@ public class CoverUtil {
 
 		}
 
-		final IBakedModel secondModel = model.getOverrides().handleItemState( model, ItemUtil.getItemFromBlock( state ), Minecraft.getMinecraft().theWorld, Minecraft.getMinecraft().thePlayer );
+		final IBakedModel secondModel = model.getOverrides().handleItemState( model, ItemUtil.getItemFromBlock( state ), CrystalMod.proxy.getClientWorld(), CrystalMod.proxy.getClientPlayer());
 
 		if ( secondModel != null )
 		{

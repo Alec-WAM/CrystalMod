@@ -36,7 +36,7 @@ public class MinionAIWander extends AIBase<EntityMinionWarrior>{
                 return false;
             }*/
 
-        	Random rand = minion.worldObj != null ? minion.worldObj.rand : minion.getRNG();
+        	Random rand = minion.getEntityWorld() != null ? minion.getEntityWorld().rand : minion.getRNG();
         	
             if (rand == null || rand.nextInt(120) != 0)
             {

@@ -32,7 +32,7 @@ public class ItemCrystalWrench extends Item implements ITool{
 	}
 
 	@Override  
-	public EnumActionResult onItemUseFirst(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) {
+	public EnumActionResult onItemUseFirst(EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) {
 		if (world.isRemote) {
 	      //If its client side we have to return pass so this method is called on server, where we need to perform the op 
 	      return EnumActionResult.PASS;
@@ -42,7 +42,7 @@ public class ItemCrystalWrench extends Item implements ITool{
 		Block block = bs.getBlock();
 		boolean ret = false;
 		if (block != null) {
-			RightClickBlock e = new RightClickBlock(player, hand, player.getHeldItem(hand), pos,side, new Vec3d(hitX, hitY, hitZ));
+			RightClickBlock e = new RightClickBlock(player, hand, pos,side, new Vec3d(hitX, hitY, hitZ));
 			if (MinecraftForge.EVENT_BUS.post(e) || e.getResult() == Result.DENY || e.getUseBlock() == Result.DENY || e.getUseItem() == Result.DENY) {
 				return EnumActionResult.PASS;
 			}

@@ -26,6 +26,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -41,7 +42,7 @@ public class ItemWirelessChestMinecart extends Item implements ICustomModel
          */
         public ItemStack dispenseStack(IBlockSource source, ItemStack stack)
         {
-            EnumFacing enumfacing = (EnumFacing)source.func_189992_e().getValue(BlockDispenser.FACING);
+            EnumFacing enumfacing = (EnumFacing)source.getBlockState().getValue(BlockDispenser.FACING);
             World world = source.getWorld();
             double d0 = source.getX() + (double)enumfacing.getFrontOffsetX() * 1.125D;
             double d1 = Math.floor(source.getY()) + (double)enumfacing.getFrontOffsetY();
@@ -92,7 +93,7 @@ public class ItemWirelessChestMinecart extends Item implements ICustomModel
                 entityminecart.setCustomNameTag(stack.getDisplayName());
             }
 
-            world.spawnEntityInWorld(entityminecart);
+            world.spawnEntity(entityminecart);
             stack.splitStack(1);
             return stack;
         }
@@ -122,7 +123,8 @@ public class ItemWirelessChestMinecart extends Item implements ICustomModel
     }
     
     @SideOnly(Side.CLIENT)
-    public void getSubItems(Item itemIn, CreativeTabs tab, List<ItemStack> subItems)
+    @Override
+    public void getSubItems(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> subItems)
     {
     	for(EnumDyeColor dye : EnumDyeColor.values()){
     		ItemStack stack = new ItemStack(this, 1, 0);
@@ -179,7 +181,7 @@ public class ItemWirelessChestMinecart extends Item implements ICustomModel
                     entityminecart.setCustomNameTag(stack.getDisplayName());
                 }
 
-                worldIn.spawnEntityInWorld(entityminecart);
+                worldIn.spawnEntity(entityminecart);
             }
 
             ItemStackTools.incStackSize(stack, -1);

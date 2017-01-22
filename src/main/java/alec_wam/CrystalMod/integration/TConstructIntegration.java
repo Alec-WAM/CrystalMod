@@ -3,8 +3,8 @@ package alec_wam.CrystalMod.integration;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import slimeknights.tconstruct.library.TinkerRegistry;
-import slimeknights.tconstruct.library.fluid.FluidMolten;
+//import slimeknights.tconstruct.library.TinkerRegistry;
+//import slimeknights.tconstruct.library.fluid.FluidMolten;
 import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.blocks.BlockCrystalIngot.CrystalIngotBlockType;
 import alec_wam.CrystalMod.crafting.ModCrafting;
@@ -28,21 +28,22 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.event.FMLInterModComms;
 
-public class TConstructIntegration implements IModIntegration {
+//TODO Add when TiC Updates
+public class TConstructIntegration{/* implements IModIntegration {
 
 	private static ResourceLocation moltenMetal = new ResourceLocation("tconstruct:blocks/fluids/molten_metal");
 	private static ResourceLocation moltenMetalFlowing = new ResourceLocation(
 			"tconstruct:blocks/fluids/molten_metal_flow");
 	
-	public static FluidMolten moltenCrystalBlue = new FluidMolten("moltenCrystalBlue", ItemIngot.RGB_BLUE, moltenMetal, moltenMetalFlowing);
+	/*public static FluidMolten moltenCrystalBlue = new FluidMolten("moltenCrystalBlue", ItemIngot.RGB_BLUE, moltenMetal, moltenMetalFlowing);
 	public static FluidMolten moltenCrystalRed = new FluidMolten("moltenCrystalRed", ItemIngot.RGB_RED, moltenMetal, moltenMetalFlowing);
 	public static FluidMolten moltenCrystalGreen = new FluidMolten("moltenCrystalGreen", ItemIngot.RGB_GREEN, moltenMetal, moltenMetalFlowing);
 	public static FluidMolten moltenCrystalDark = new FluidMolten("moltenCrystalDark", ItemIngot.RGB_DARK, moltenMetal, moltenMetalFlowing);
 	public static FluidMolten moltenCrystalPure = new FluidMolten("moltenCrystalPure", ItemIngot.RGB_PURE, moltenMetal, moltenMetalFlowing);
 
-	public static FluidMolten moltenDarkIron = new FluidMolten("moltenDarkIron", ItemIngot.RGB_DARK_IRON, moltenMetal, moltenMetalFlowing);
+	public static FluidMolten moltenDarkIron = new FluidMolten("moltenDarkIron", ItemIngot.RGB_DARK_IRON, moltenMetal, moltenMetalFlowing);*/
 	
-	public String getModID(){
+	/*public String getModID(){
 		return "tconstruct";
 	}
 	
@@ -97,14 +98,14 @@ public class TConstructIntegration implements IModIntegration {
 		TinkerRegistry.registerBasinCasting(new OreCastingRecipe(Lists.newArrayList(new ItemStack(ModBlocks.crystalIngot, 1, CrystalIngotBlockType.GREEN.getMeta())), null, moltenCrystalGreen, 144*9));
 		TinkerRegistry.registerBasinCasting(new OreCastingRecipe(Lists.newArrayList(new ItemStack(ModBlocks.crystalIngot, 1, CrystalIngotBlockType.DARK.getMeta())), null, moltenCrystalDark, 144*9));
 		TinkerRegistry.registerBasinCasting(new OreCastingRecipe(Lists.newArrayList(new ItemStack(ModBlocks.crystalIngot, 1, CrystalIngotBlockType.PURE.getMeta())), null, moltenCrystalPure, 144*9));*/
-	}
+	/*}
 	
 	/*TinkerRegistry.registerBasinCasting(new OreCastingRecipe(blockOre.getLeft(),
                                                              null, // no cast
                                                              fluid,
                                                              blockOre.getRight()));*/
 	
-	public static void oreDictionary(){
+	/*public static void oreDictionary(){
 		Map<String, int[]> map = Maps.newHashMap();
 		map.put("Blue", new int[] {CrystalType.BLUE_NUGGET.getMetadata(), IngotType.BLUE.getMetadata(), CrystalIngotBlockType.BLUE.getMeta()});
 		map.put("Red", new int[] {CrystalType.RED_NUGGET.getMetadata(), IngotType.RED.getMetadata(), CrystalIngotBlockType.RED.getMeta()});
@@ -135,7 +136,7 @@ public class TConstructIntegration implements IModIntegration {
 	 * 
 	 * @param outputFluid
 	 */
-	public static void registerAlloy(FluidStack outputFluid, FluidStack... inputFluids)
+	/*public static void registerAlloy(FluidStack outputFluid, FluidStack... inputFluids)
 	{
 		if(Loader.isModLoaded("tconstruct")) {
 			NBTTagList tagList = new NBTTagList();
@@ -152,6 +153,6 @@ public class TConstructIntegration implements IModIntegration {
 				FMLInterModComms.sendMessage("tconstruct", "alloy", message);
 			}
 		}
-	}
+	}*/
 	
 }

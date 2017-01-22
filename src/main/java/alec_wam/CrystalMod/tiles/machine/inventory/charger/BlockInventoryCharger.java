@@ -2,11 +2,9 @@ package alec_wam.CrystalMod.tiles.machine.inventory.charger;
 
 
 
-import java.util.List;
-
 import alec_wam.CrystalMod.CrystalMod;
-import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.blocks.EnumBlock.IEnumMeta;
+import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.tiles.BlockStateFacing;
 import alec_wam.CrystalMod.util.BlockUtil;
 import net.minecraft.block.BlockContainer;
@@ -20,10 +18,11 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -71,7 +70,7 @@ public class BlockInventoryCharger extends BlockContainer implements ICustomMode
 	  
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void getSubBlocks(Item itemIn, CreativeTabs tab, List<ItemStack> list) {
+	public void getSubBlocks(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> list) {
 		for(ChargerBlockType type : ChargerBlockType.values()) {
 			list.add(new ItemStack(this, 1, type.getMeta()));
 		}

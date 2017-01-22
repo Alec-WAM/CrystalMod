@@ -40,15 +40,14 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityList.EntityEggInfo;
-import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.monster.EntityEnderman;
 import net.minecraft.entity.monster.EntityPigZombie;
 import net.minecraft.entity.passive.EntityCow;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biome.SpawnListEntry;
-import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
@@ -58,18 +57,18 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class ModEntites {
 	
 	public static void init(){
-		addEntity(EntityCrystalPigZombie.class, "CrystalPigZombie");
-		EntityRegistry.registerEgg(EntityCrystalPigZombie.class, /*PINK*/ 15373203, 0x6CE5F8);
+		ResourceLocation pigzombie = addEntity(EntityCrystalPigZombie.class, "crystalpigzombie");
+		EntityRegistry.registerEgg(pigzombie, /*PINK*/ 15373203, 0x6CE5F8);
 		
-		addEntity(EntityCrystalCow.class, "CrystalCow");
-		EntityRegistry.registerEgg(EntityCrystalCow.class, /*BROWN*/ 4470310, 0x6CE5F8);
+		ResourceLocation cow = addEntity(EntityCrystalCow.class, "crystalcow");
+		EntityRegistry.registerEgg(cow, /*BROWN*/ 4470310, 0x6CE5F8);
 		
-		addEntity(EntityCrystalEnderman.class, "CrystalEnderman");
-		EntityRegistry.registerEgg(EntityCrystalEnderman.class, /*BLACK*/ 0, 0x6CE5F8);
+		ResourceLocation enderman = addEntity(EntityCrystalEnderman.class, "crystalenderman");
+		EntityRegistry.registerEgg(enderman, /*BLACK*/ 0, 0x6CE5F8);
 		
-		addEntity(EntityMinionWorker.class, "MinionWorker");
+		addEntity(EntityMinionWorker.class, "minionworker");
 		
-		addEntity(EntityMinionWarrior.class, "MinionWarrior");
+		addEntity(EntityMinionWarrior.class, "minionwarrior");
 		
 		EntityCrystalChestMinecartBase.register(EntityCrystalChestMinecartBlue.class, CrystalChestType.BLUE);
 		EntityCrystalChestMinecartBase.register(EntityCrystalChestMinecartRed.class, CrystalChestType.RED);
@@ -81,7 +80,7 @@ public class ModEntites {
 		for(Entry<CrystalChestType, Class<? extends EntityCrystalChestMinecartBase>> entry : EntityCrystalChestMinecartBase.minecarts.entrySet()){
 			addEntity(entry.getValue(), "minecart_chest_"+entry.getKey().name().toLowerCase(), 64, 1, true);
 		}
-		addEntity(EntityBombomb.class, "Bombomb");
+		addEntity(EntityBombomb.class, "bombomb");
 		
 		addEntity(EntityWirelessChestMinecart.class, "minecart_wirelesschest", 64, 1, true);
 		addEntity(EntityEnderChestMinecart.class, "minecart_enderchest", 64, 1, true);
@@ -122,18 +121,21 @@ public class ModEntites {
 		return nextEntityId++;
 	}
 	
-	public static void addEntity(Class<? extends Entity> entclass, String name){
-		addEntity(entclass, name, 32, 1, true);
+	public static ResourceLocation addEntity(Class<? extends Entity> entclass, String name){
+		return addEntity(entclass, name, 32, 1, true);
 	}
 	
-	public static void addEntity(Class<? extends Entity> entclass, String name, int trackingRange, int updateFrequency, boolean sendsVelocityUpdates){
-		EntityRegistry.registerModEntity(entclass, name, getNextID(), CrystalMod.instance, trackingRange, updateFrequency, sendsVelocityUpdates);
+	public static ResourceLocation addEntity(Class<? extends Entity> entclass, String name, int trackingRange, int updateFrequency, boolean sendsVelocityUpdates){
+		ResourceLocation res = CrystalMod.resourceL(name);
+		EntityRegistry.registerModEntity(res, entclass, name, getNextID(), CrystalMod.instance, trackingRange, updateFrequency, sendsVelocityUpdates);
+		return res;
 	}
 
 	public static EntityEggInfo registerEntityEgg(String id, Class<? extends Entity> entity,
 			int primaryColor, int secondaryColor) {
-		EntityEggInfo info = new EntityEggInfo(id, primaryColor, secondaryColor);
-		EntityList.ENTITY_EGGS.put(id, info);
+		ResourceLocation res = CrystalMod.resourceL(id);
+		EntityEggInfo info = new EntityEggInfo(res, primaryColor, secondaryColor);
+		EntityList.ENTITY_EGGS.put(res, info);
 		return info;
 	}
 	

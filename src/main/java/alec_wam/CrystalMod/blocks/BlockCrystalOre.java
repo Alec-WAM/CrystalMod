@@ -84,7 +84,7 @@ public class BlockCrystalOre extends EnumBlock<BlockCrystalOre.CrystalOreType> {
         Random rand = world instanceof World ? ((World)world).rand : new Random();
         if (this.getItemDropped(state, rand, fortune) != Item.getItemFromBlock(this))
         {
-            return MathHelper.getRandomIntegerInRange(rand, 3, 7);
+            return MathHelper.getInt(rand, 3, 7);
         }
         return 0;
     }

@@ -2,11 +2,9 @@ package alec_wam.CrystalMod.entities.mob.zombiePigmen;
 
 import java.util.UUID;
 
-import javax.annotation.Nullable;
-
-import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.items.ItemCrystal.CrystalType;
 import alec_wam.CrystalMod.items.ItemIngot.IngotType;
+import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.items.tools.ItemCrystalSword;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import net.minecraft.entity.Entity;
@@ -18,8 +16,7 @@ import net.minecraft.entity.ai.EntityAIHurtByTarget;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
-import net.minecraft.entity.monster.EntityZombie;
-import net.minecraft.entity.monster.ZombieType;
+import net.minecraft.entity.monster.EntityPigZombie;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
@@ -36,7 +33,7 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 
-public class EntityCrystalPigZombie extends EntityZombie
+public class EntityCrystalPigZombie extends EntityPigZombie
 {
     private static final UUID ATTACK_SPEED_BOOST_MODIFIER_UUID = UUID.fromString("49455A49-7EC5-45BA-B886-3B90B23A1718");
     private static final AttributeModifier ATTACK_SPEED_BOOST_MODIFIER = (new AttributeModifier(ATTACK_SPEED_BOOST_MODIFIER_UUID, "Attacking speed boost", 0.05D, 0)).setSaved(false);
@@ -117,7 +114,7 @@ public class EntityCrystalPigZombie extends EntityZombie
 
         if (this.angerLevel > 0 && this.angerTargetUUID != null && this.getAITarget() == null)
         {
-            EntityPlayer entityplayer = this.worldObj.getPlayerEntityByUUID(this.angerTargetUUID);
+            EntityPlayer entityplayer = this.getEntityWorld().getPlayerEntityByUUID(this.angerTargetUUID);
             this.setRevengeTarget(entityplayer);
             this.attackingPlayer = entityplayer;
             this.recentlyHit = this.getRevengeTimer();
@@ -131,7 +128,7 @@ public class EntityCrystalPigZombie extends EntityZombie
      */
     public boolean getCanSpawnHere()
     {
-        return this.worldObj.getDifficulty() != EnumDifficulty.PEACEFUL;
+        return this.getEntityWorld().getDifficulty() != EnumDifficulty.PEACEFUL;
     }
     
     /**
@@ -139,7 +136,7 @@ public class EntityCrystalPigZombie extends EntityZombie
      */
     public boolean isNotColliding()
     {
-        return this.worldObj.checkNoEntityCollision(this.getEntityBoundingBox(), this) && this.worldObj.getCollisionBoxes(this, this.getEntityBoundingBox()).isEmpty() && !this.worldObj.containsAnyLiquid(this.getEntityBoundingBox());
+        return this.getEntityWorld().checkNoEntityCollision(this.getEntityBoundingBox(), this) && this.getEntityWorld().getCollisionBoxes(this, this.getEntityBoundingBox()).isEmpty() && !this.getEntityWorld().containsAnyLiquid(this.getEntityBoundingBox());
     }
 
     /**
@@ -178,7 +175,7 @@ public class EntityCrystalPigZombie extends EntityZombie
         if (s.length() > 0)
         {
             this.angerTargetUUID = UUID.fromString(s);
-            EntityPlayer entityplayer = this.worldObj.getPlayerEntityByUUID(this.angerTargetUUID);
+            EntityPlayer entityplayer = this.getEntityWorld().getPlayerEntityByUUID(this.angerTargetUUID);
             this.setRevengeTarget(entityplayer);
 
             if (entityplayer != null)
@@ -236,6 +233,7 @@ public class EntityCrystalPigZombie extends EntityZombie
      * @param wasRecentlyHit true if this this entity was recently hit by appropriate entity (generally only if player
      * or tameable)
      */
+    @Override
     protected void dropFewItems(boolean wasRecentlyHit, int lootingModifier)
     {
         int i = this.rand.nextInt(2 + lootingModifier);
@@ -252,23 +250,24 @@ public class EntityCrystalPigZombie extends EntityZombie
         	int META = CrystalType.BLUE_SHARD.getMetadata() + getColor();
             this.entityDropItem(new ItemStack(ModItems.crystals, 1, META), 0.0f);
         }
+        
+        if(wasRecentlyHit){
+        	//Taken from ZombiePigman Loottable
+        	double chance = 0.025 + (0.01 * lootingModifier);
+        	if(rand.nextFloat() < chance){
+        		int META = IngotType.BLUE.getMetadata() + getColor();
+                this.entityDropItem(new ItemStack(ModItems.ingots, 1, META), 0.0f);
+        	}
+        }
     }
 
     /**
      * Called when a player interacts with a mob. e.g. gets milk from a cow, gets into the saddle on a pig.
      */
-    public boolean processInteract(EntityPlayer player, EnumHand hand, @Nullable ItemStack stack)
+    @Override
+    public boolean processInteract(EntityPlayer player, EnumHand hand)
     {
     	return false;
-    }
-
-    /**
-     * Causes this Entity to drop a random item.
-     */
-    protected void addRandomDrop()
-    {
-        int META = IngotType.BLUE.getMetadata() + this.getColor();
-        this.entityDropItem(new ItemStack(ModItems.ingots, 1, META), 0.0f);
     }
 
     /**
@@ -283,11 +282,9 @@ public class EntityCrystalPigZombie extends EntityZombie
      * Called only once on an entity when first time spawned, via egg, mob spawner, natural spawning etc, but not called
      * when entity is reloaded from nbt. Mainly used for initializing attributes and inventory
      */
-    @SuppressWarnings("deprecation")
-	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, IEntityLivingData livingdata)
+    public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, IEntityLivingData livingdata)
     {
         super.onInitialSpawn(difficulty, livingdata);
-        this.func_189778_a(ZombieType.NORMAL);
         setColor(rand.nextInt(5));
         return livingdata;
     }

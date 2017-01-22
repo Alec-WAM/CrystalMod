@@ -38,8 +38,8 @@ public class CraftingAmountPopup extends Popup {
 
 	@Override
 	public boolean clicked(GuiPanel guiPanel, int mouseX, int mouseY, int mouseButton) {
-		int mX = mouseX - guiPanel.guiLeft;
-		int mY = mouseY - guiPanel.guiTop;
+		int mX = mouseX - guiPanel.getGuiLeft();
+		int mY = mouseY - guiPanel.getGuiTop();
 		if(mX >= guiPanel.getCraftBoxX() && mY >= guiPanel.getCraftBoxY()){
 			if(mX <= guiPanel.getCraftBoxX()+90 && mY <= guiPanel.getCraftBoxY()+59){
 				int x = mX - guiPanel.getCraftBoxX();
@@ -118,8 +118,8 @@ public class CraftingAmountPopup extends Popup {
             int mouseX = Mouse.getX() * i1 / mc.displayWidth;
             int mouseY = j1 - Mouse.getY() * j1 / mc.displayHeight - 1;
             
-            int mX = mouseX - guiPanel.guiLeft;
-    		int mY = mouseY - guiPanel.guiTop;
+            int mX = mouseX - guiPanel.getGuiLeft();
+    		int mY = mouseY - guiPanel.getGuiTop();
     		if(mX >= guiPanel.getCraftBoxX()+48 && mY >= guiPanel.getCraftBoxY()+41){
     			if(mX <= guiPanel.getCraftBoxX()+78 && mY <= guiPanel.getCraftBoxY()+52){
     				hovered = true;

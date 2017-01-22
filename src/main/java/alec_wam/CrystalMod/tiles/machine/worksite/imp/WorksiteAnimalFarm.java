@@ -4,24 +4,19 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import com.enderio.core.common.util.ChatUtil;
-
 import alec_wam.CrystalMod.entities.minions.worker.EntityMinionWorker;
 import alec_wam.CrystalMod.entities.minions.worker.jobs.JobKillEntity;
 import alec_wam.CrystalMod.entities.minions.worker.jobs.JobShearEntity;
 import alec_wam.CrystalMod.handler.GuiHandler;
-import alec_wam.CrystalMod.items.ModItems;
-import alec_wam.CrystalMod.proxy.CommonProxy;
 import alec_wam.CrystalMod.tiles.machine.worksite.InventorySided;
+import alec_wam.CrystalMod.tiles.machine.worksite.InventorySided.RelativeSide;
+import alec_wam.CrystalMod.tiles.machine.worksite.InventorySided.RotationType;
 import alec_wam.CrystalMod.tiles.machine.worksite.ItemSlotFilter;
 import alec_wam.CrystalMod.tiles.machine.worksite.TileWorksiteBoundedInventory;
 import alec_wam.CrystalMod.tiles.machine.worksite.WorkerFilter;
-import alec_wam.CrystalMod.tiles.machine.worksite.InventorySided.RelativeSide;
-import alec_wam.CrystalMod.tiles.machine.worksite.InventorySided.RotationType;
 import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
-import alec_wam.CrystalMod.util.ModLogger;
 import alec_wam.CrystalMod.util.tool.ToolUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -30,7 +25,6 @@ import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntityChicken;
 import net.minecraft.entity.passive.EntityCow;
 import net.minecraft.entity.passive.EntityPig;
-import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -153,20 +147,20 @@ public class WorksiteAnimalFarm extends TileWorksiteBoundedInventory {
 	
 	@Override
 	protected void updateWorksite() {
-		worldObj.theProfiler.startSection("Count Resources");
+		getWorld().theProfiler.startSection("Count Resources");
 		if (shouldCountResources) {
 			countResources();
 		}
-		worldObj.theProfiler.endStartSection("Animal Rescan");
+		getWorld().theProfiler.endStartSection("Animal Rescan");
 		workerRescanDelay--;
 		if (workerRescanDelay <= 0) {
 			rescan();
 		}
-		worldObj.theProfiler.endStartSection("EggPickup");
-		if (worldObj.getWorldTime() % 20 == 0) {
+		getWorld().theProfiler.endStartSection("EggPickup");
+		if (getWorld().getWorldTime() % 20 == 0) {
 			pickupEggs();
 		}
-		worldObj.theProfiler.endStartSection("ToolManager");
+		getWorld().theProfiler.endStartSection("ToolManager");
 		Iterator<EntityMinionWorker> iter = workers.iterator();
 		while(iter.hasNext()){
 			EntityMinionWorker worker = iter.next();
@@ -174,7 +168,7 @@ public class WorksiteAnimalFarm extends TileWorksiteBoundedInventory {
 				takeBrokenItems(worker);
 			}
 		}
-		worldObj.theProfiler.endSection();
+		getWorld().theProfiler.endSection();
 	}
 
 	private void countResources() {
@@ -212,7 +206,7 @@ public class WorksiteAnimalFarm extends TileWorksiteBoundedInventory {
 
 	private void rescan() {
 		// AWLog.logDebug("rescanning animal farm");
-		worldObj.theProfiler.startSection("Animal Rescan");
+		getWorld().theProfiler.startSection("Animal Rescan");
 		pigsToBreed.clear();
 		cowsToBreed.clear();
 		cowsToMilk.clear();
@@ -224,7 +218,7 @@ public class WorksiteAnimalFarm extends TileWorksiteBoundedInventory {
 		BlockPos max = getWorkBoundsMax();
 		AxisAlignedBB bb = new AxisAlignedBB(min, max.add(1, 1, 1));
 
-		List<EntityAnimal> entityList = worldObj.getEntitiesWithinAABB(
+		List<EntityAnimal> entityList = getWorld().getEntitiesWithinAABB(
 				EntityAnimal.class, bb);
 
 		List<EntityAnimal> cows = new ArrayList<EntityAnimal>();
@@ -249,7 +243,7 @@ public class WorksiteAnimalFarm extends TileWorksiteBoundedInventory {
 		scanForAnimals(chickens, chickensToBreed, maxChickenCount);
 		scanForAnimals(pigs, pigsToBreed, maxPigCount);
 		workerRescanDelay = 200;
-		worldObj.theProfiler.endSection();
+		getWorld().theProfiler.endSection();
 	}
 
 	public boolean hasBreedingItem(EntityAnimal animal) {
@@ -325,7 +319,7 @@ public class WorksiteAnimalFarm extends TileWorksiteBoundedInventory {
 		for (EntityAnimal animal : sheep) {
 			if (animal instanceof IShearable) {
 				IShearable sheep1 = (IShearable) animal;
-				if (sheep1.isShearable(null, worldObj, new BlockPos(animal))) {
+				if (sheep1.isShearable(null, getWorld(), new BlockPos(animal))) {
 					sheepToShear.add(animal.getEntityId());
 				}
 			}
@@ -435,8 +429,8 @@ public class WorksiteAnimalFarm extends TileWorksiteBoundedInventory {
 		EntityPair pair;
 		if (!targets.isEmpty()) {
 			pair = targets.remove(0);
-			animalA = pair.getEntityA(worldObj);
-			animalB = pair.getEntityB(worldObj);
+			animalA = pair.getEntityA(getWorld());
+			animalB = pair.getEntityB(getWorld());
 			if (!(animalA instanceof EntityAnimal)
 					|| !(animalB instanceof EntityAnimal)) {
 				return false;
@@ -456,7 +450,7 @@ public class WorksiteAnimalFarm extends TileWorksiteBoundedInventory {
 		if (targets.isEmpty()) {
 			return false;
 		}
-		EntityCow cow = (EntityCow) worldObj.getEntityByID(targets.remove(0));
+		EntityCow cow = (EntityCow) getWorld().getEntityByID(targets.remove(0));
 		if (cow == null) {
 			return false;
 		}
@@ -496,12 +490,12 @@ public class WorksiteAnimalFarm extends TileWorksiteBoundedInventory {
 		}
 		
 		
-		EntityLivingBase sheep = (EntityLivingBase) worldObj.getEntityByID(targets.remove(0));
+		EntityLivingBase sheep = (EntityLivingBase) getWorld().getEntityByID(targets.remove(0));
 		if (sheep == null || !(sheep instanceof IShearable)) {
 			return false;
 		}
 		IShearable shear = (IShearable)sheep;
-		if (!shear.isShearable(null, worldObj, new BlockPos(sheep))) {
+		if (!shear.isShearable(null, getWorld(), new BlockPos(sheep))) {
 			return false;
 		}
 		if(worker.addCommand(new JobShearEntity(sheep))){
@@ -543,7 +537,7 @@ public class WorksiteAnimalFarm extends TileWorksiteBoundedInventory {
 
 		while (!targets.isEmpty()) {
 			entityId = targets.remove(0);
-			entity = worldObj.getEntityByID(entityId);
+			entity = getWorld().getEntityByID(entityId);
 			if (entity instanceof EntityAnimal) {
 				animal = (EntityAnimal) entity;
 				if (animal.isInLove() || !(animal.getGrowingAge() >= 0)) {
@@ -559,7 +553,7 @@ public class WorksiteAnimalFarm extends TileWorksiteBoundedInventory {
 
 	@Override
 	public boolean onBlockClicked(EntityPlayer player) {
-		if (!player.worldObj.isRemote) {
+		if (!player.getEntityWorld().isRemote) {
 			BlockUtil.openWorksiteGui(player, 0, getPos().getX(), getPos().getY(), getPos().getZ());
 		}
 		return true;
@@ -569,7 +563,7 @@ public class WorksiteAnimalFarm extends TileWorksiteBoundedInventory {
 		BlockPos p1 = getWorkBoundsMin();
 		BlockPos p2 = getWorkBoundsMax().add(1, 1, 1);
 		AxisAlignedBB bb = new AxisAlignedBB(p1, p2);
-		List<EntityItem> items = worldObj.getEntitiesWithinAABB(
+		List<EntityItem> items = getWorld().getEntitiesWithinAABB(
 				EntityItem.class, bb);
 		ItemStack stack;
 		for (EntityItem item : items) {

@@ -45,7 +45,7 @@ public class BlockElevator extends BlockContainer {
 	}
 	
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack stack, EnumFacing side, float hitX, float hitY, float hitZ)
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ)
     {
 		TileEntity te = worldIn.getTileEntity(pos);
         if (te instanceof TileEntityElevator) {
@@ -66,57 +66,12 @@ public class BlockElevator extends BlockContainer {
         			return true;
         		}
         		if(!worldIn.isRemote){
-        		if(stack !=null && stack.getItem() == Items.STICK){
-        			if(stack.hasDisplayName()){
-        				String input = stack.getDisplayName();
-        				int floor = -1;
-        				try{
-        					floor = Integer.parseInt(input);
-        				}catch(Exception e){}
-        				
-        				if(floor > -1){
-        					int lvl = -1;
-        					String error = "";
-        					TileEntityElevator con = null;
-        					BlockPos conPos = ele.findBottomElevator();
-							if(conPos !=null){
-								TileEntity tile2 = worldIn.getTileEntity(conPos);
-								if(tile2 !=null && tile2 instanceof TileEntityElevator){
-									con = (TileEntityElevator)tile2;
-								}
-							}
-							if(con !=null){
-								if(floor < con.floors.size()){
-		    						BlockPos fPos = con.floors.get(floor);
-		    						if(fPos !=null){
-	    								lvl = fPos.getY()-conPos.getY();
-	    							}else{
-	        							error = "CONTROLLER POS";
-	        						}
-        						}else{
-        							error = "FLOOR POS";
-        						}
-        					}else{
-    							error = "NULL CON";
-    						}
-        					if(lvl > -1){
-        						if(ele.getCurrentLevel() !=lvl){
-	        						ele.toLevel(lvl);
-	        						ChatUtil.sendChat(playerIn, "Level "+lvl);
-        						}
-        					}else{
-        						ChatUtil.sendChat(playerIn, "Error: "+error);
-        					}
-        					return true;
+        			for(Entry<Integer, BlockPos> entry : ele.floors.entrySet()){
+        				int index = entry.getKey();
+        				BlockPos fPos = entry.getValue();
+        				if(fPos !=null){
+        					ChatUtil.sendChat(playerIn, "Floor "+index+": "+fPos.toString());
         				}
-        			}
-        		}
-        		for(Entry<Integer, BlockPos> entry : ele.floors.entrySet()){
-        			int index = entry.getKey();
-        			BlockPos fPos = entry.getValue();
-        			if(fPos !=null){
-        				ChatUtil.sendChat(playerIn, "Floor "+index+": "+fPos.toString());
-        			}
         		}
         	}
         	return false;

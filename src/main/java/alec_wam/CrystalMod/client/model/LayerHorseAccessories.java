@@ -1,8 +1,8 @@
 package alec_wam.CrystalMod.client.model;
 
+import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.entities.accessories.HorseAccessories;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.ModelHorse;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.entity.passive.EntityHorse;
@@ -22,7 +22,7 @@ public class LayerHorseAccessories implements LayerRenderer<EntityHorse> {
 
 	@Override
 	public void doRenderLayer(EntityHorse entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
-		boolean invis = entity.isInvisible() || entity.isInvisibleToPlayer(Minecraft.getMinecraft().thePlayer);
+		boolean invis = entity.isInvisible() || entity.isInvisibleToPlayer(CrystalMod.proxy.getClientPlayer());
 		if(invis)return;
 		if(HorseAccessories.hasEnderChest(entity)){
 			GlStateManager.pushMatrix();

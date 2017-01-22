@@ -24,7 +24,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.math.MathHelper;
 
-public class RecipeTransferEncoder implements IRecipeTransferHandler {
+public class RecipeTransferEncoder implements IRecipeTransferHandler<ContainerPatternEncoder> {
 
 	private IModRegistry registry;
 	public RecipeTransferEncoder(IModRegistry registry){
@@ -32,17 +32,12 @@ public class RecipeTransferEncoder implements IRecipeTransferHandler {
 	}
 	
 	@Override
-	public Class<? extends Container> getContainerClass() {
+	public Class<ContainerPatternEncoder> getContainerClass() {
 		return ContainerPatternEncoder.class;
 	}
 
 	@Override
-	public String getRecipeCategoryUid() {
-		return VanillaRecipeCategoryUid.CRAFTING;
-	}
-
-	@Override
-	public IRecipeTransferError transferRecipe(Container container, IRecipeLayout recipeLayout, EntityPlayer player, boolean maxTransfer, boolean doTransfer) {
+	public IRecipeTransferError transferRecipe(ContainerPatternEncoder container, IRecipeLayout recipeLayout, EntityPlayer player, boolean maxTransfer, boolean doTransfer) {
 		
 		if (!doTransfer) {
 		      return null;
@@ -62,8 +57,8 @@ public class RecipeTransferEncoder implements IRecipeTransferHandler {
 	        	Map<Integer, ItemStack> inputs = Maps.newHashMap();
 	        	Map<Integer, ItemStack> outputs = Maps.newHashMap();
 	        	for (IGuiIngredient<ItemStack> guiIngredient : guiIngredients.values()) {
-	                if (guiIngredient != null && guiIngredient.getCurrentlyDisplayed() != null && guiIngredient.getCurrentlyDisplayed().getValue() !=null) {
-	                    ItemStack ingredient = guiIngredient.getCurrentlyDisplayed().getValue().copy();
+	                if (guiIngredient != null && guiIngredient.getDisplayedIngredient() != null && ItemStackTools.isValid(guiIngredient.getDisplayedIngredient())) {
+	                    ItemStack ingredient = ItemStackTools.safeCopy(guiIngredient.getDisplayedIngredient());
 	                    int hash = ingredient.getItem().hashCode() * (ingredient.getItemDamage() + 1) * (ingredient.hasTagCompound() ? ingredient.getTagCompound().hashCode() : 1);
 	                    if (guiIngredient.isInput()) {
 	                        if (inputs.containsKey(hash)) {

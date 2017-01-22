@@ -183,7 +183,7 @@ public class Config {
         int meta = nameAndMeta.length == 1 ? 0 : Integer.parseInt(nameAndMeta[1]);
         ItemStack stack = GameRegistry.makeItemStack(nameAndMeta[0], meta, 1, "");
         if(ItemStackTools.isNullStack(stack)) {
-          return null;
+          return ItemStackTools.getEmptyStack();
         }
         stack.setItemDamage(meta);
         return stack;

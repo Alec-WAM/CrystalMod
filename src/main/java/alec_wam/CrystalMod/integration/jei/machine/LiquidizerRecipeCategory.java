@@ -55,19 +55,6 @@ public class LiquidizerRecipeCategory extends BlankRecipeCategory<LiquidizerReci
 		}
 		
 		@Override
-		public @Nonnull List<?> getInputs() {
-		    List<ItemStack> inputStacks = recipe.getInputs();
-		    return inputStacks != null ? inputStacks : new ArrayList<ItemStack>();
-		}
-		
-		@Override
-		public @Nonnull List<FluidStack> getFluidOutputs() {
-			List<FluidStack> list = new ArrayList<FluidStack>();
-			list.add(recipe.getOutput());
-			return list;
-		}
-		
-		@Override
 	    public List<String> getTooltipStrings(int mouseX, int mouseY) {
 	      List<String> res = new ArrayList<String>(1);
 	      FluidStack output = recipe.getOutput();
@@ -101,7 +88,7 @@ public class LiquidizerRecipeCategory extends BlankRecipeCategory<LiquidizerReci
 		public void getIngredients(IIngredients ingredients) {
 			IStackHelper stackHelper = jeiHelpers.getStackHelper();
 
-			List<List<ItemStack>> inputs = stackHelper.expandRecipeItemStackInputs(getInputs());
+			List<List<ItemStack>> inputs = stackHelper.expandRecipeItemStackInputs(recipe.getInputs());
 			ingredients.setInputLists(ItemStack.class, inputs);
 
 			FluidStack recipeOutput = recipe.getOutput();
@@ -167,17 +154,9 @@ public class LiquidizerRecipeCategory extends BlankRecipeCategory<LiquidizerReci
 	}
 
 	@Override
-	public void drawAnimations(@Nonnull Minecraft minecraft) {
+	public void drawExtras(@Nonnull Minecraft minecraft) {
 		arrow.draw(minecraft, 80-xOff, 34-yOff);
 	}
-	
-	@Override
-	public void drawExtras(@Nonnull Minecraft minecraft) {
-	    if(currentRecipe == null) {
-	      return;
-	    }
-	    
-  	}
 
 	@Override
 	public void setRecipe(IRecipeLayout recipeLayout, LiquidizerJEIRecipe recipeWrapper, IIngredients ingredients) {

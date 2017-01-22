@@ -10,6 +10,7 @@ import com.google.common.collect.Lists;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.items.ItemHandlerHelper;
@@ -31,11 +32,11 @@ public class CraftingProcessNormal extends CraftingProcessBase {
 	public static final String ID = "Normal";
 	private static final String NBT_TO_INSERT = "ToInsert";
 	
-	private List<ItemStack> toInsert;
+	private NonNullList<ItemStack> toInsert;
 	
 	public CraftingProcessNormal(EStorageNetwork network, CraftingPattern pattern, List<ItemStack> toInsert) {
 		super(network, pattern);
-		this.toInsert = new LinkedList<ItemStack>();
+		this.toInsert = NonNullList.create();
 		for(ItemStack stack : toInsert){
 			if(!ItemStackTools.isNullStack(stack)){
 				this.toInsert.add(stack.copy());
@@ -96,13 +97,13 @@ public class CraftingProcessNormal extends CraftingProcessBase {
             }
         }
 		
-		ItemStack[] took = new ItemStack[9];
+		NonNullList<ItemStack> took = NonNullList.withSize(9, ItemStackTools.getEmptyStack());
         for (int i = 0; i < getToInsert().size(); i++) {
             ItemStack input = getToInsert().get(i);
             if (!ItemStackTools.isNullStack(input)) {
                 ItemStack actualInput = actualInputs.get(input, pattern.isOredict());
                 ItemStack taken = ItemHandlerHelper.copyStackWithSize(actualInput, ItemStackTools.getStackSize(input));
-                took[i] = taken;
+                took.set(i, taken);
                 if(!ItemStackTools.isNullStack(taken))actualInputs.remove(taken, true);
             }
         }
@@ -135,9 +136,9 @@ public class CraftingProcessNormal extends CraftingProcessBase {
 		 if(super.readFromNBT(tag)){
 			 if (tag.hasKey(NBT_TO_INSERT)) {
 				 NBTTagList toInsertList = tag.getTagList(NBT_TO_INSERT, Constants.NBT.TAG_COMPOUND);
-				 toInsert = new ArrayList<ItemStack>(toInsertList.tagCount());
+				 toInsert = NonNullList.withSize(toInsertList.tagCount(), ItemStackTools.getEmptyStack());
 				 for (int i = 0; i < toInsertList.tagCount(); ++i) {
-					 ItemStack insertStack = ItemStack.loadItemStackFromNBT(toInsertList.getCompoundTagAt(i));
+					 ItemStack insertStack = ItemStackTools.loadFromNBT(toInsertList.getCompoundTagAt(i));
 					 if (!ItemStackTools.isNullStack(insertStack)) {
 						 toInsert.add(insertStack);
 					 }

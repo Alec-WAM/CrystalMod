@@ -6,6 +6,7 @@ import java.util.Deque;
 import java.util.List;
 import java.util.Stack;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.google.common.collect.Lists;
@@ -264,7 +265,7 @@ public class TileCraftingController extends TileEntityMod implements INetworkTil
 	}
 	
 	public static ICraftingTask readCraftingTask(EStorageNetwork network, NBTTagCompound tag) {
-        ItemStack stack = ItemStack.loadItemStackFromNBT(tag.getCompoundTag(BasicCraftingTask.NBT_PATTERN));
+        ItemStack stack = ItemStackTools.loadFromNBT(tag.getCompoundTag(BasicCraftingTask.NBT_PATTERN));
 
         if (!ItemStackTools.isNullStack(stack) && stack.getItem() instanceof ItemPattern) {
         	NBTTagCompound posTag = tag.getCompoundTag(BasicCraftingTask.NBT_CRAFTER);
@@ -274,14 +275,14 @@ public class TileCraftingController extends TileEntityMod implements INetworkTil
             if (container instanceof IAutoCrafter) {
                 CraftingPattern pattern = ((IAutoCrafter)container).createPattern(stack);
 
-                return create(network, world, tag.hasKey(BasicCraftingTask.NBT_REQUESTED) ? ItemStack.loadItemStackFromNBT(tag.getCompoundTag(BasicCraftingTask.NBT_REQUESTED)) : null, pattern, tag.getInteger(BasicCraftingTask.NBT_QUANTITY), tag);
+                return create(network, world, tag.hasKey(BasicCraftingTask.NBT_REQUESTED) ? ItemStackTools.loadFromNBT(tag.getCompoundTag(BasicCraftingTask.NBT_REQUESTED)) : null, pattern, tag.getInteger(BasicCraftingTask.NBT_QUANTITY), tag);
             }
         }
 
         return null;
     }
 	
-	private static ICraftingTask create(EStorageNetwork network, World world, @Nullable ItemStack stack, CraftingPattern pattern, int quantity, @Nullable NBTTagCompound tag) {
+	private static ICraftingTask create(EStorageNetwork network, World world, @Nonnull ItemStack stack, CraftingPattern pattern, int quantity, @Nullable NBTTagCompound tag) {
 		if (tag != null) {
         	NBTTagList processList = tag.getTagList(BasicCraftingTask.NBT_PROCESSES, Constants.NBT.TAG_COMPOUND);
 	

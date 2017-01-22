@@ -7,6 +7,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import alec_wam.CrystalMod.api.energy.CEnergyStorage;
 import alec_wam.CrystalMod.tiles.machine.power.engine.TileEntityEngineBase;
@@ -15,7 +16,7 @@ import alec_wam.CrystalMod.util.ItemUtil;
 
 public class TileEntityEngineFurnace extends TileEntityEngineBase implements ISidedInventory {
 
-	private ItemStack[] inventory = new ItemStack[1];
+	private NonNullList<ItemStack> inventory = NonNullList.<ItemStack>withSize(1, ItemStack.EMPTY);
 	
 	public TileEntityEngineFurnace(){
 		super();
@@ -32,12 +33,12 @@ public class TileEntityEngineFurnace extends TileEntityEngineBase implements ISi
 	
 	public void writeCustomNBT(NBTTagCompound nbt){
 		super.writeCustomNBT(nbt);
-		ItemUtil.writeInventoryToNBT(this, nbt);
+		ItemUtil.writeInventoryToNBT(inventory, nbt);
 	}
 	
 	public void readCustomNBT(NBTTagCompound nbt){
 		super.readCustomNBT(nbt);
-		ItemUtil.readInventoryFromNBT(this, nbt);
+		ItemUtil.readInventoryFromNBT(inventory, nbt);
 	}
 
 	public static int getItemEnergyValue(ItemStack fuel)
@@ -72,11 +73,12 @@ public class TileEntityEngineFurnace extends TileEntityEngineBase implements ISi
 	}
 	
 	public void refuel(){
-		int amt = (this.getStackInSlot(0) == null || (getItemEnergyValue(getStackInSlot(0)) == 0)) ? 0 : Math.min(multi, this.getStackInSlot(0).stackSize);
+		ItemStack stack = getStackInSlot(0);
+		int amt = (ItemStackTools.isEmpty(stack) || (getItemEnergyValue(stack) == 0)) ? 0 : Math.min(multi, ItemStackTools.getStackSize(stack));
 		for(int m = 0; m < amt; m++){
-			fuel.setValue(fuel.getValue()+getItemEnergyValue(getStackInSlot(0)));
+			fuel.setValue(fuel.getValue()+getItemEnergyValue(stack));
 			maxFuel.setValue(fuel.getValue());
-			setInventorySlotContents(0, consumeItem(getStackInSlot(0)));
+			setInventorySlotContents(0, consumeItem(stack));
 		}
 	}
 	
@@ -99,16 +101,16 @@ public class TileEntityEngineFurnace extends TileEntityEngineBase implements ISi
 	
 	@Override
 	public int getSizeInventory() {
-		return inventory.length;
+		return 1;
 	}
 
 	@Override
 	public ItemStack getStackInSlot(int slot) {
-		if(slot < 0 || slot >= inventory.length) {
-			return null;
+		if(slot < 0 || slot >= inventory.size()) {
+			return ItemStackTools.getEmptyStack();
 		}
 
-		return inventory[slot];
+		return inventory.get(slot);
 	}
 
 	@Override
@@ -147,11 +149,11 @@ public class TileEntityEngineFurnace extends TileEntityEngineBase implements ISi
 
 	@Override
 	public void setInventorySlotContents(int slot, ItemStack itemstack) {
-		if(slot < 0 || slot >= inventory.length) {
+		if(slot < 0 || slot >= inventory.size()) {
 	      return;
 	    }
 
-	    inventory[slot] = itemstack;
+	    inventory.set(slot, itemstack);
 	    if(ItemStackTools.getStackSize(itemstack) > getInventoryStackLimit()) {
 	    	ItemStackTools.setStackSize(itemstack, getInventoryStackLimit());
 	    }
@@ -163,8 +165,8 @@ public class TileEntityEngineFurnace extends TileEntityEngineBase implements ISi
 	}
 
 	@Override
-	public boolean isUseableByPlayer(EntityPlayer player) {
-		if(worldObj.getTileEntity(pos) != this || worldObj.getBlockState(pos).getBlock() == Blocks.AIR) {
+	public boolean isUsableByPlayer(EntityPlayer player) {
+		if(getWorld().getTileEntity(pos) != this || getWorld().getBlockState(pos).getBlock() == Blocks.AIR) {
 	      return false;
 	    }
 
@@ -201,9 +203,7 @@ public class TileEntityEngineFurnace extends TileEntityEngineBase implements ISi
 
 	@Override
 	public void clear() {
-		for(int i = 0; i < inventory.length; i++) {
-		      inventory[i] = null;
-	    }
+		inventory.clear();
 	}
 
 	@Override
@@ -234,6 +234,16 @@ public class TileEntityEngineFurnace extends TileEntityEngineBase implements ISi
 	@Override
 	public int drainCEnergy(EnumFacing from, int maxExtract, boolean simulate) {
 		return 0;
+	}
+
+	@Override
+	public boolean isEmpty() {
+		for(ItemStack stack : inventory){
+			if(ItemStackTools.isValid(stack)){
+				return false;
+			}
+		}
+		return true;
 	}
 
 }

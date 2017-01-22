@@ -4,20 +4,6 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map.Entry;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.IInventoryChangedListener;
-import net.minecraft.inventory.InventoryBasic;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.items.IItemHandler;
 import alec_wam.CrystalMod.tiles.pipes.AbstractPipeNetwork;
 import alec_wam.CrystalMod.tiles.pipes.ConnectionMode;
 import alec_wam.CrystalMod.tiles.pipes.ContainerNormalPipe;
@@ -28,6 +14,19 @@ import alec_wam.CrystalMod.tiles.pipes.item.filters.ItemPipeFilter.FilterType;
 import alec_wam.CrystalMod.tiles.pipes.types.IPipeType;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.IInventoryChangedListener;
+import net.minecraft.inventory.InventoryBasic;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.items.IItemHandler;
 
 public class TileEntityPipeItem extends TileEntityPipe implements IInventoryChangedListener {
 
@@ -301,7 +300,7 @@ public class TileEntityPipeItem extends TileEntityPipe implements IInventoryChan
 	  }
 
 	@Override
-	public void onInventoryChanged(InventoryBasic p_76316_1_) {
+	public void onInventoryChanged(IInventory p_76316_1_) {
 		if(network != null && network instanceof ItemPipeNetwork) {
 		      ((ItemPipeNetwork)network).routesChanged();
 	    }

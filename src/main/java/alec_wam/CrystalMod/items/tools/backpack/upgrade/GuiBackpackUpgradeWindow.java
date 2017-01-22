@@ -2,6 +2,7 @@ package alec_wam.CrystalMod.items.tools.backpack.upgrade;
 
 import java.io.IOException;
 
+import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.handler.GuiHandler;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.items.tools.backpack.BackpackUtil;
@@ -255,7 +256,7 @@ public class GuiBackpackUpgradeWindow extends GuiContainer {
             int j = mouseY - this.guiTop;
 
             if(this.isMouseOverTab(0, i, j)){
-            	BlockUtil.openWorksiteGui(Minecraft.getMinecraft().thePlayer, GuiHandler.GUI_ID_BACKPACK, OpenType.BACK.ordinal(), 0, 0);
+            	BlockUtil.openWorksiteGui(CrystalMod.proxy.getClientPlayer(), GuiHandler.GUI_ID_BACKPACK, OpenType.BACK.ordinal(), 0, 0);
                 return;
             }
             
@@ -264,7 +265,7 @@ public class GuiBackpackUpgradeWindow extends GuiContainer {
             {
                 if (upgrade[u] !=null && this.isMouseOverTab(u+1, i, j))
                 {
-                    BlockUtil.openWorksiteGui(Minecraft.getMinecraft().thePlayer, GuiHandler.GUI_ID_BACKPACK, OpenType.BACK.ordinal(), u+1, 1);
+                    BlockUtil.openWorksiteGui(CrystalMod.proxy.getClientPlayer(), GuiHandler.GUI_ID_BACKPACK, OpenType.BACK.ordinal(), u+1, 1);
                     return;
                 }
             }

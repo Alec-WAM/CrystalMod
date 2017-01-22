@@ -35,7 +35,7 @@ public class ItemEnderChestMinecart extends Item implements ICustomModel
          */
         public ItemStack dispenseStack(IBlockSource source, ItemStack stack)
         {
-            EnumFacing enumfacing = (EnumFacing)source.func_189992_e().getValue(BlockDispenser.FACING);
+            EnumFacing enumfacing = (EnumFacing)source.getBlockState().getValue(BlockDispenser.FACING);
             World world = source.getWorld();
             double d0 = source.getX() + (double)enumfacing.getFrontOffsetX() * 1.125D;
             double d1 = Math.floor(source.getY()) + (double)enumfacing.getFrontOffsetY();
@@ -83,7 +83,7 @@ public class ItemEnderChestMinecart extends Item implements ICustomModel
                 entityminecart.setCustomNameTag(stack.getDisplayName());
             }
 
-            world.spawnEntityInWorld(entityminecart);
+            world.spawnEntity(entityminecart);
             stack.splitStack(1);
             return stack;
         }
@@ -110,12 +110,6 @@ public class ItemEnderChestMinecart extends Item implements ICustomModel
     public void initModel() {
     	ModItems.initBasicModel(this);
     	ClientProxy.registerItemRenderCustom(getRegistryName().toString(), new ItemEnderMinecartRender());
-    }
-    
-    @SideOnly(Side.CLIENT)
-    public void getSubItems(Item itemIn, CreativeTabs tab, List<ItemStack> subItems)
-    {
-    	super.getSubItems(itemIn, tab, subItems);
     }
 
     /**
@@ -148,7 +142,7 @@ public class ItemEnderChestMinecart extends Item implements ICustomModel
                     entityminecart.setCustomNameTag(stack.getDisplayName());
                 }
 
-                worldIn.spawnEntityInWorld(entityminecart);
+                worldIn.spawnEntity(entityminecart);
             }
 
             ItemStackTools.incStackSize(stack, -1);

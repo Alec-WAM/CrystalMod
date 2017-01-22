@@ -27,17 +27,17 @@ public class BlockFusionPedistal extends BlockPedistal {
 	}
 	
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ)
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ)
     {
 		TileEntity tile = worldIn.getTileEntity(pos);
 		if(tile !=null && tile instanceof TileFusionPedistal){
 			TileFusionPedistal pedistal = (TileFusionPedistal)tile;
-			if(playerIn.isSneaking() && ToolUtil.isWrench(heldItem)){
+			if(playerIn.isSneaking() && ToolUtil.isToolEquipped(playerIn, hand)){
 				pedistal.startCrafting(playerIn);
 				return true;
 			}
 		}		
-		return super.onBlockActivated(worldIn, pos, state, playerIn, hand, heldItem, side, hitX, hitY, hitZ);
+		return super.onBlockActivated(worldIn, pos, state, playerIn, hand, side, hitX, hitY, hitZ);
     }
 	
 	@Override

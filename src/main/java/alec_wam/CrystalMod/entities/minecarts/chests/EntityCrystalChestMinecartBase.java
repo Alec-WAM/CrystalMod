@@ -10,9 +10,7 @@ import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.handler.GuiHandler;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.tiles.chest.CrystalChestType;
-import alec_wam.CrystalMod.tiles.chest.wireless.BlockWirelessChest;
 import alec_wam.CrystalMod.util.ItemStackTools;
-import alec_wam.CrystalMod.util.ItemUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecartChest;
@@ -23,9 +21,9 @@ import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
@@ -56,7 +54,7 @@ public abstract class EntityCrystalChestMinecartBase extends EntityMinecartChest
 		}
 	}
 	
-	private ItemStack[] inventory = new ItemStack[getSizeInventory()];
+	private NonNullList<ItemStack> inventory = NonNullList.<ItemStack>withSize(getSizeInventory(), ItemStack.EMPTY);
 	
 	public EntityCrystalChestMinecartBase(World worldIn)
     {
@@ -75,7 +73,7 @@ public abstract class EntityCrystalChestMinecartBase extends EntityMinecartChest
 		this.isDead = true;
         if (this.dropContentsWhenDead)
         {
-        	if(!worldObj.isRemote)InventoryHelper.dropInventoryItems(this.worldObj, this, this);
+        	if(!getEntityWorld().isRemote)InventoryHelper.dropInventoryItems(this.getEntityWorld(), this, this);
         }
     }
 	
@@ -83,7 +81,7 @@ public abstract class EntityCrystalChestMinecartBase extends EntityMinecartChest
     {
 		this.setDead();
 
-        if (this.worldObj.getGameRules().getBoolean("doEntityDrops"))
+        if (this.getEntityWorld().getGameRules().getBoolean("doEntityDrops"))
         {
             ItemStack itemstack = new ItemStack(Items.MINECART, 1);
 
@@ -96,7 +94,7 @@ public abstract class EntityCrystalChestMinecartBase extends EntityMinecartChest
             
             if (this.dropContentsWhenDead)
             {
-            	if(!worldObj.isRemote)InventoryHelper.dropInventoryItems(this.worldObj, this, this);
+            	if(!getEntityWorld().isRemote)InventoryHelper.dropInventoryItems(this.getEntityWorld(), this, this);
             }
             entityDropItem(new ItemStack(ModBlocks.crystalChest, 1, getChestType().ordinal()), 0.0F);
         }
@@ -119,7 +117,7 @@ public abstract class EntityCrystalChestMinecartBase extends EntityMinecartChest
 	@Nullable
     public ItemStack getStackInSlot(int index)
     {
-        return this.inventory[index];
+        return this.inventory.get(index);
     }
 	
 	@Nullable
@@ -131,10 +129,10 @@ public abstract class EntityCrystalChestMinecartBase extends EntityMinecartChest
 	@Nullable
     public ItemStack removeStackFromSlot(int index)
     {
-        if (!ItemStackTools.isNullStack(this.inventory[index]))
+		ItemStack itemstack = this.inventory.get(index);
+        if (ItemStackTools.isValid(itemstack))
         {
-            ItemStack itemstack = this.inventory[index];
-            this.inventory[index] = ItemStackTools.getEmptyStack();
+            this.inventory.set(index, ItemStackTools.getEmptyStack());
             return itemstack;
         }
         else
@@ -145,7 +143,7 @@ public abstract class EntityCrystalChestMinecartBase extends EntityMinecartChest
 	
 	public void setInventorySlotContents(int index, @Nullable ItemStack stack)
     {
-        this.inventory[index] = stack;
+		this.inventory.set(index, stack);
 
         if (ItemStackTools.isValid(stack) && ItemStackTools.getStackSize(stack) > this.getInventoryStackLimit())
         {
@@ -155,10 +153,10 @@ public abstract class EntityCrystalChestMinecartBase extends EntityMinecartChest
 	
 	public boolean processInitialInteract(EntityPlayer player, @Nullable ItemStack stack, EnumHand hand)
     {
-        if(net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.event.entity.minecart.MinecartInteractEvent(this, player, stack, hand))) return true;
-        if (!this.worldObj.isRemote)
+        if(net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.event.entity.minecart.MinecartInteractEvent(this, player, hand))) return true;
+        if (!this.getEntityWorld().isRemote)
         {
-            player.openGui(CrystalMod.instance, GuiHandler.GUI_ID_ENTITY, player.worldObj, getEntityId(), 0, 0);
+            player.openGui(CrystalMod.instance, GuiHandler.GUI_ID_ENTITY, player.getEntityWorld(), getEntityId(), 0, 0);
         }
 
         return true;
@@ -175,7 +173,7 @@ public abstract class EntityCrystalChestMinecartBase extends EntityMinecartChest
             compound.setInteger("DisplayData", iblockstate.getBlock().getMetaFromState(iblockstate));
             compound.setInteger("DisplayOffset", this.getDisplayTileOffset());
         }
-        ItemUtil.writeInventoryToNBT(this, compound);
+		ItemStackHelper.saveAllItems(compound, inventory);
     }
 
     /**
@@ -200,8 +198,7 @@ public abstract class EntityCrystalChestMinecartBase extends EntityMinecartChest
             this.setDisplayTile(block == null ? Blocks.AIR.getDefaultState() : block.getStateFromMeta(i));
             this.setDisplayTileOffset(compound.getInteger("DisplayOffset"));
         }
-        this.inventory = new ItemStack[this.getSizeInventory()];
-        ItemUtil.readInventoryFromNBT(this, compound);
+    	ItemStackHelper.loadAllItems(compound, inventory);
     }
 
 

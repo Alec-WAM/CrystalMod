@@ -17,6 +17,7 @@ import alec_wam.CrystalMod.client.util.SpriteData;
 import alec_wam.CrystalMod.client.util.comp.GuiComponentSprite;
 import alec_wam.CrystalMod.client.util.comp.GuiComponentSpriteButton;
 import alec_wam.CrystalMod.items.guide.GuiGuideChapter;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.Util;
 import alec_wam.CrystalMod.util.client.RenderUtil;
@@ -148,7 +149,7 @@ public class PageFurnace extends GuidePage {
 			GlStateManager.pushMatrix();
 			GlStateManager.translate(startX + 16, startY+26, 0);
 			GlStateManager.scale(2, 2, 1);
-			drawItemStack(input, 0, 0, ""+(input.stackSize > 1 ? input.stackSize : ""));
+			drawItemStack(input, 0, 0, ""+(ItemStackTools.getStackSize(input) > 1 ? ItemStackTools.getStackSize(input) : ""));
         	GL11.glPopMatrix();
 	        RenderHelper.enableStandardItemLighting();
 			if (mouseX > startX + 75 - 2 && mouseX < startX + 75 - 2 + itemBoxSize &&
@@ -160,7 +161,7 @@ public class PageFurnace extends GuidePage {
 			GlStateManager.pushMatrix();
 			GlStateManager.translate(startX + 136, startY+61, 0);
 			GlStateManager.scale(2, 2, 1);
-			drawItemStack(output, 0, 0, ""+(output.stackSize > 1 ? output.stackSize : ""));
+			drawItemStack(output, 0, 0, ""+(ItemStackTools.getStackSize(output) > 1 ? ItemStackTools.getStackSize(output) : ""));
 			GlStateManager.popMatrix();
 			if (mouseX > startX + 150 - 2 && mouseX < startX + 150 - 2 + itemBoxSize &&
 					mouseY > startY+40 - 2 && mouseY < startY+40 - 2 + itemBoxSize) {
@@ -175,7 +176,7 @@ public class PageFurnace extends GuidePage {
 
 		GL11.glColor3f(1, 1, 1);
 		GL11.glDisable(GL11.GL_LIGHTING);
-		List<String> list = stack.getTooltip(mc.thePlayer, mc.gameSettings.advancedItemTooltips);
+		List<String> list = stack.getTooltip(mc.player, mc.gameSettings.advancedItemTooltips);
 
 		List<String> colored = Lists.newArrayListWithCapacity(list.size());
 		Iterator<String> it = list.iterator();

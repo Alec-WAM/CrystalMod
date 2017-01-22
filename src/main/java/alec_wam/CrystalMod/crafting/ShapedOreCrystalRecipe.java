@@ -6,15 +6,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import alec_wam.CrystalMod.api.crafting.ICrystalRecipe;
 import net.minecraft.block.Block;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.ShapedRecipes;
+import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.oredict.OreDictionary;
-import alec_wam.CrystalMod.api.crafting.ICrystalRecipe;
 
 public class ShapedOreCrystalRecipe implements ICrystalRecipe
 {
@@ -268,7 +269,7 @@ public class ShapedOreCrystalRecipe implements ICrystalRecipe
     }
 
     @Override
-    public ItemStack[] getRemainingItems(InventoryCrafting inv) //getRecipeLeftovers
+    public NonNullList<ItemStack> getRemainingItems(InventoryCrafting inv) //getRecipeLeftovers
     {
         return ForgeHooks.defaultRecipeGetRemainingItems(inv);
     }

@@ -81,7 +81,7 @@ public class ContainerEngineVampire extends Container
 				return ItemStackTools.getEmptyStack();
 			}
 
-			slot.onPickupFromSlot(player, itemstack1);
+			slot.onTake(player, itemstack1);
 		}
 
 		return itemstack;

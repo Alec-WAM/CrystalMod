@@ -1,7 +1,6 @@
 package alec_wam.CrystalMod.tiles.machine.worksite;
 
 import java.util.HashSet;
-import java.util.List;
 
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.ICustomModel;
@@ -17,6 +16,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
@@ -61,21 +61,23 @@ public class ItemWorksiteUpgrade extends Item implements ICustomModel {
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	public void getSubItems(Item item, CreativeTabs p_150895_2_, List list) {
+	public void getSubItems(Item item, CreativeTabs p_150895_2_, NonNullList<ItemStack> list) {
 		for (WorksiteUpgrade type : WorksiteUpgrade.values()) {
 			list.add(new ItemStack(item, 1, type.flag()));
 		}
 	}
 
-	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
+	@Override
+	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
     {
 		if(world.isRemote){
 			return EnumActionResult.PASS;
 		}
 		if (pos != null) {
-			TileEntity te = player.worldObj.getTileEntity(pos);
+			TileEntity te = player.getEntityWorld().getTileEntity(pos);
 			if (te instanceof IWorkSite) {
 				IWorkSite ws = (IWorkSite) te;
+				ItemStack stack = player.getHeldItem(hand);
 				WorksiteUpgrade upgrade = getUpgrade(stack);
 				if (!ws.getValidUpgrades().contains(upgrade)) {
 					return EnumActionResult.PASS;
@@ -92,14 +94,14 @@ public class ItemWorksiteUpgrade extends Item implements ICustomModel {
 				}
 				for (WorksiteUpgrade ug : wsug) {
 					if (upgrade.overrides(ug)) {
-						ItemUtil.spawnItemInWorldWithRandomMotion(player.worldObj, getStack(ug), te.getPos());
+						ItemUtil.spawnItemInWorldWithRandomMotion(player.getEntityWorld(), getStack(ug), te.getPos());
 						ws.removeUpgrade(ug);
 					}
 				}
 				ws.addUpgrade(upgrade);
-				stack.stackSize--;
-				if (stack.stackSize <= 0) {
-					stack = null;
+				ItemStackTools.incStackSize(stack, -1);
+				if (ItemStackTools.isEmpty(stack)) {
+					player.setHeldItem(hand, ItemStackTools.getEmptyStack());
 				}
 				player.openContainer.detectAndSendChanges();
 				return EnumActionResult.SUCCESS;

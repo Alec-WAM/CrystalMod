@@ -34,7 +34,7 @@ public class RedstoneBatUpgrade extends BatUpgrade {
 
 	@Override
 	public void update(EntityPlayer player, ItemStack bat, UpgradeData data, int heldSlot, EnumHand hand) {
-		if(player.worldObj.isRemote)return;
+		if(player.getEntityWorld().isRemote)return;
 		if(hand !=null && hand == EnumHand.MAIN_HAND){
 			int lvl = (int)getValue(data);
 			if(lvl > 0 && player.isSprinting()){

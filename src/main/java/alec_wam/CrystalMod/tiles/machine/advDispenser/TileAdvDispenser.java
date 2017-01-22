@@ -1,12 +1,8 @@
 package alec_wam.CrystalMod.tiles.machine.advDispenser;
 
 import java.util.Iterator;
-import java.util.List;
-
-import org.apache.commons.lang3.tuple.Pair;
 
 import alec_wam.CrystalMod.Config;
-import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.api.ItemStackList;
 import alec_wam.CrystalMod.handler.EventHandler;
 import alec_wam.CrystalMod.network.IMessageHandler;
@@ -17,7 +13,6 @@ import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.EntityUtil;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
-import alec_wam.CrystalMod.util.ModLogger;
 import alec_wam.CrystalMod.util.fakeplayer.FakePlayerCM;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -31,10 +26,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -152,7 +145,7 @@ public class TileAdvDispenser extends TileEntityInventory implements IFacingTile
 	                slot = ItemStackTools.getEmptyStack();
 	            }
 	            playerInv.setInventorySlotContents(l, ItemStackTools.getEmptyStack());
-	            setInventorySlotContents(l, ItemStack.copyItemStack(slot));
+	            setInventorySlotContents(l, ItemStackTools.safeCopy(slot));
 	        }
 	        for (int l = 9; l < playerInv.getSizeInventory(); ++l) {
 	            ItemStack stackInSlot = playerInv.getStackInSlot(l);
@@ -190,7 +183,7 @@ public class TileAdvDispenser extends TileEntityInventory implements IFacingTile
 				ItemBlock itemblock = (ItemBlock)copy.getItem();
 				int meta = itemblock.getMetadata(copy);
 				@SuppressWarnings("deprecation")
-				IBlockState placedState = itemblock.block.onBlockPlaced(getWorld(), facingPos, facing.getOpposite(), hX, hY, hZ, meta, fakePlayer);
+				IBlockState placedState = itemblock.block.getStateForPlacement(getWorld(), facingPos, facing.getOpposite(), hX, hY, hZ, meta, fakePlayer);
 				if(itemblock.placeBlockAt(copy, fakePlayer, getWorld(), facingPos, facing.getOpposite(), hX, hY, hZ, placedState)){
 					ItemStackTools.incStackSize(copy, -1);
 					return EnumActionResult.SUCCESS;
@@ -201,10 +194,12 @@ public class TileAdvDispenser extends TileEntityInventory implements IFacingTile
 			if(click == ClickType.RIGHT){
 				if(!ItemStackTools.isValid(copy))return EnumActionResult.FAIL;
 				//Can Interact
-				final PlayerInteractEvent.RightClickBlock event = (PlayerInteractEvent.RightClickBlock)ForgeHooks.onRightClickBlock(this.fakePlayer, EnumHand.MAIN_HAND, copy, facingPos, facing.getOpposite(), ForgeHooks.rayTraceEyeHitVec(this.fakePlayer, 2.0));
-                if (!event.isCanceled() && event.getUseItem() != Event.Result.DENY && copy.getItem().onItemUseFirst(copy, this.fakePlayer, getWorld(), facingPos, facing.getOpposite(), hX, hY, hZ, EnumHand.MAIN_HAND) == EnumActionResult.PASS) {
+				this.fakePlayer.setHeldItem(EnumHand.MAIN_HAND, copy);
+				final PlayerInteractEvent.RightClickBlock event = (PlayerInteractEvent.RightClickBlock)ForgeHooks.onRightClickBlock(this.fakePlayer, EnumHand.MAIN_HAND, facingPos, facing.getOpposite(), ForgeHooks.rayTraceEyeHitVec(this.fakePlayer, 2.0));
+                if (!event.isCanceled() && event.getUseItem() != Event.Result.DENY && copy.getItem().onItemUseFirst(this.fakePlayer, getWorld(), facingPos, facing.getOpposite(), hX, hY, hZ, EnumHand.MAIN_HAND) == EnumActionResult.PASS) {
                     return copy.onItemUse(this.fakePlayer, getWorld(), facingPos, EnumHand.MAIN_HAND, facing.getOpposite(), hX, hY, hZ);
                 }
+                this.fakePlayer.setHeldItem(EnumHand.MAIN_HAND, ItemStackTools.getEmptyStack());
                 return EnumActionResult.FAIL;
 			} else {
 				final PlayerInteractEvent.LeftClickBlock event = (PlayerInteractEvent.LeftClickBlock)ForgeHooks.onLeftClickBlock(this.fakePlayer, facingPos, facing.getOpposite(), ForgeHooks.rayTraceEyeHitVec(this.fakePlayer, 2.0));
@@ -225,12 +220,15 @@ public class TileAdvDispenser extends TileEntityInventory implements IFacingTile
 		} else if(interact == InteractType.ACTIVATE){
 			if(click == ClickType.RIGHT){
 				//Can Interact
-				final PlayerInteractEvent.RightClickBlock event = (PlayerInteractEvent.RightClickBlock)ForgeHooks.onRightClickBlock(this.fakePlayer, EnumHand.MAIN_HAND, copy, facingPos, facing.getOpposite(), ForgeHooks.rayTraceEyeHitVec(this.fakePlayer, 2.0));
+				this.fakePlayer.setHeldItem(EnumHand.MAIN_HAND, copy);
+				final PlayerInteractEvent.RightClickBlock event = (PlayerInteractEvent.RightClickBlock)ForgeHooks.onRightClickBlock(this.fakePlayer, EnumHand.MAIN_HAND, facingPos, facing.getOpposite(), ForgeHooks.rayTraceEyeHitVec(this.fakePlayer, 2.0));
                 if (!event.isCanceled() && event.getUseItem() != Event.Result.DENY){
                 	IBlockState blockFacing = getWorld().getBlockState(facingPos);
-                	boolean interacted = blockFacing.getBlock().onBlockActivated(getWorld(), facingPos, blockFacing, fakePlayer, EnumHand.MAIN_HAND, copy, facing.getOpposite(), hX, hY, hZ);
+                	boolean interacted = blockFacing.getBlock().onBlockActivated(getWorld(), facingPos, blockFacing, fakePlayer, EnumHand.MAIN_HAND, facing.getOpposite(), hX, hY, hZ);
                 	return interacted ? EnumActionResult.SUCCESS : EnumActionResult.PASS;
                 }
+                this.fakePlayer.setHeldItem(EnumHand.MAIN_HAND, ItemStackTools.getEmptyStack());
+                return EnumActionResult.FAIL;
 			} else {
 				//Mainly for single clicks
 				final PlayerInteractEvent.LeftClickBlock event = (PlayerInteractEvent.LeftClickBlock)ForgeHooks.onLeftClickBlock(this.fakePlayer, facingPos, facing.getOpposite(), ForgeHooks.rayTraceEyeHitVec(this.fakePlayer, 2.0));
@@ -292,7 +290,8 @@ public class TileAdvDispenser extends TileEntityInventory implements IFacingTile
             }
             
             if(click == ClickType.RIGHT){
-            	return this.fakePlayer.interact(hitEntity, copy, EnumHand.MAIN_HAND);
+            	this.fakePlayer.setHeldItem(EnumHand.MAIN_HAND, copy);
+            	return this.fakePlayer.interactOn(hitEntity, EnumHand.MAIN_HAND);
             } else {
             	if(!(hitEntity instanceof EntityItem) && !(hitEntity instanceof EntityXPOrb) && !(hitEntity instanceof EntityArrow)){
             		this.fakePlayer.updateCooldown();

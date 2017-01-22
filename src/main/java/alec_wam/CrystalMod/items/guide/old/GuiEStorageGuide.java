@@ -38,7 +38,7 @@ public class GuiEStorageGuide extends GuiGuideBase {
 		
 		book.addPage(new BlankPage());
 		book.addPage(new SectionPage("Blocks"));
-		book.addPages(GuidePages.eStorageBlockData);
+		//book.addPages(GuidePages.eStorageBlockData);
 		
 		itemsIndex = book.getNumberOfPages();
 		if (itemsIndex % 2 == 1) {
@@ -48,7 +48,7 @@ public class GuiEStorageGuide extends GuiGuideBase {
 		
 		book.addPage(new BlankPage());
 		book.addPage(new SectionPage("Items"));
-		book.addPages(GuidePages.eStorageItemData);
+		//book.addPages(GuidePages.eStorageItemData);
 	}
 	
 	@Override

@@ -14,18 +14,6 @@ import alec_wam.CrystalMod.entities.minecarts.chests.wireless.EntityWirelessChes
 import alec_wam.CrystalMod.entities.minecarts.chests.wireless.GuiWirelessChestMinecart;
 import alec_wam.CrystalMod.entities.minions.warrior.ContainerMinionWarrior;
 import alec_wam.CrystalMod.entities.minions.warrior.EntityMinionWarrior;
-import alec_wam.CrystalMod.items.backpack.BackpackUtils;
-import alec_wam.CrystalMod.items.backpack.ItemBackpack;
-import alec_wam.CrystalMod.items.backpack.container.ContainerBackpack;
-import alec_wam.CrystalMod.items.backpack.container.ContainerBackpackCrafting;
-import alec_wam.CrystalMod.items.backpack.container.ContainerBackpackEnderChest;
-import alec_wam.CrystalMod.items.backpack.container.ContainerBackpackFurnace;
-import alec_wam.CrystalMod.items.backpack.container.ContainerBackpackRepair;
-import alec_wam.CrystalMod.items.backpack.gui.GuiBackpack;
-import alec_wam.CrystalMod.items.backpack.gui.GuiBackpackCrafting;
-import alec_wam.CrystalMod.items.backpack.gui.GuiBackpackEnderChest;
-import alec_wam.CrystalMod.items.backpack.gui.GuiBackpackFurnace;
-import alec_wam.CrystalMod.items.backpack.gui.GuiBackpackRepair;
 import alec_wam.CrystalMod.items.guide.GuiGuideBase;
 import alec_wam.CrystalMod.items.guide.GuiGuideMainPage;
 import alec_wam.CrystalMod.items.guide.ItemCrystalGuide;
@@ -134,9 +122,10 @@ import alec_wam.CrystalMod.tiles.workbench.TileEntityCrystalWorkbench;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ReflectionUtils;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.passive.AbstractHorse;
 import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.AnimalChest;
+import net.minecraft.inventory.ContainerHorseChest;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -184,7 +173,7 @@ public class GuiHandler implements IGuiHandler {
     			if(entity instanceof EntityHorse){
     				EntityHorse horse = (EntityHorse)entity;
     				if(HorseAccessories.hasEnderChest(horse)){
-    					AnimalChest horseChest = new AnimalChest("HorseChest", 2);//(IInventory) ReflectionUtils.getPrivateValue(horse, EntityHorse.class, ObfuscatedNames.EntityHorse_horseChest);
+    					ContainerHorseChest horseChest = new ContainerHorseChest("HorseChest", 2);
     					horseChest.setCustomName(horse.getName());
     					return new GuiHorseEnderChest(player.inventory, horseChest, horse);
     				}
@@ -228,24 +217,6 @@ public class GuiHandler implements IGuiHandler {
     		}
     	}
     	if(ID == GUI_ID_ITEM){
-    		if(y >=0 && y < player.inventory.getSizeInventory()){
-    			ItemStack held = player.inventory.getStackInSlot(y);
-    			if(held.getItem() instanceof ItemBackpack){
-    				if(x == 1 && BackpackUtils.hasCraftingUpgrade(held)){
-    					return new GuiBackpackCrafting(new ContainerBackpackCrafting(player, held));
-    				}
-    				if(x == 2 && BackpackUtils.hasEnderChestUpgrade(held)){
-    					return new GuiBackpackEnderChest(new ContainerBackpackEnderChest(player, held));
-    				}
-    				if(x == 3 && BackpackUtils.hasAnvilUpgrade(held)){
-    					return new GuiBackpackRepair(new ContainerBackpackRepair(player, held));
-    				}
-    				if(x == 4 && BackpackUtils.hasFurnaceUpgrade(held)){
-    					return new GuiBackpackFurnace(new ContainerBackpackFurnace(player, held));
-    				}
-    				return new GuiBackpack(new ContainerBackpack(player, held));
-    			}
-    		}
     		EnumHand hand = z > 0 ? EnumHand.OFF_HAND : EnumHand.MAIN_HAND;
     		if(player.getHeldItem(hand) !=null){
     			ItemStack held = player.getHeldItem(hand);
@@ -259,14 +230,6 @@ public class GuiHandler implements IGuiHandler {
     		        		return new GuiPanel(player.inventory, new PanelSourceWireless((TileEntityWirelessPanel)te, held));
     		        	}
     		        }
-    			}
-    			if(held.getItem() instanceof ItemBackpack){
-    				if(x == 0){
-    					return new GuiBackpack(new ContainerBackpack(player, held));
-    				}
-    				if(x == 1){
-    					return new GuiBackpackCrafting(new ContainerBackpackCrafting(player, held));
-    				}
     			}
     			if(held.getItem() instanceof ItemCrystalGuide){
     				GuideType type = GuideType.byMetadata(held.getMetadata());
@@ -369,10 +332,10 @@ public class GuiHandler implements IGuiHandler {
     				EntityWirelessChestMinecart minecart = (EntityWirelessChestMinecart)entity;
     				return new ContainerWirelessChestMinecart(player.inventory, minecart);
     			}
-    			if(entity instanceof EntityHorse){
-    				EntityHorse horse = (EntityHorse)entity;
+    			if(entity instanceof AbstractHorse){
+    				AbstractHorse horse = (AbstractHorse)entity;
     				if(HorseAccessories.hasEnderChest(horse)){
-    					IInventory horseChest = (IInventory) ReflectionUtils.getPrivateValue(horse, EntityHorse.class, ObfuscatedNames.EntityHorse_horseChest);
+    					IInventory horseChest = HorseAccessories.getHorseChest(horse);
     					if(horseChest !=null)return new ContainerHorseEnderChest(player.inventory, horseChest, horse, player);
     				}
     			}
@@ -401,24 +364,6 @@ public class GuiHandler implements IGuiHandler {
     		}
     	}
     	if(ID == GUI_ID_ITEM){
-    		if(y >=0 && y < player.inventory.getSizeInventory()){
-    			ItemStack held = player.inventory.getStackInSlot(y);
-    			if(ItemStackTools.isValid(held) && held.getItem() instanceof ItemBackpack){
-    				if(x == 1 && BackpackUtils.hasCraftingUpgrade(held)){
-    					return new ContainerBackpackCrafting(player, held);
-    				}
-    				if(x == 2 && BackpackUtils.hasEnderChestUpgrade(held)){
-    					return new ContainerBackpackEnderChest(player, held);
-    				}
-    				if(x == 3 && BackpackUtils.hasAnvilUpgrade(held)){
-    					return new ContainerBackpackRepair(player, held);
-    				}
-    				if(x == 4 && BackpackUtils.hasFurnaceUpgrade(held)){
-    					return new ContainerBackpackFurnace(player, held);
-    				}
-    				return new ContainerBackpack(player, held);
-    			}
-    		}
     		EnumHand hand = z > 0 ? EnumHand.OFF_HAND : EnumHand.MAIN_HAND;
     		if(player.getHeldItem(hand) !=null){
     			ItemStack held = player.getHeldItem(hand);

@@ -84,8 +84,9 @@ public class ItemTeloportTool extends Item implements ICustomModel {
 	}
 	
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand)
+	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand hand)
     {
+		ItemStack itemStackIn = playerIn.getHeldItem(hand);
 		if(getLocation(itemStackIn) !=null){
 			if(playerIn.isSneaking()){
 				this.removeLocation(itemStackIn);
@@ -106,7 +107,7 @@ public class ItemTeloportTool extends Item implements ICustomModel {
     }
 	
 	public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity entity){
-		World world = player.worldObj;
+		World world = player.getEntityWorld();
 		if(getLocation(stack) !=null){
 			if (entity instanceof EntityPlayer){
 				EntityPlayer player2 = (EntityPlayer) entity;
@@ -131,9 +132,9 @@ public class ItemTeloportTool extends Item implements ICustomModel {
      */
     protected boolean teleportRandomly(Entity ent)
     {
-        double d0 = ent.posX + (ent.worldObj.rand.nextDouble() - 0.5D) * 32.0D;
-        double d1 = ent.posY + (double)(ent.worldObj.rand.nextInt(64) - 32);
-        double d2 = ent.posZ + (ent.worldObj.rand.nextDouble() - 0.5D) * 32.0D;
+        double d0 = ent.posX + (ent.getEntityWorld().rand.nextDouble() - 0.5D) * 32.0D;
+        double d1 = ent.posY + (double)(ent.getEntityWorld().rand.nextInt(64) - 32);
+        double d2 = ent.posZ + (ent.getEntityWorld().rand.nextDouble() - 0.5D) * 32.0D;
         return this.teleportTo(ent, d0, d1, d2);
     }
     
@@ -151,19 +152,19 @@ public class ItemTeloportTool extends Item implements ICustomModel {
         ent.posY = par3;
         ent.posZ = par5;
         boolean flag = false;
-        int i = MathHelper.floor_double(ent.posX);
-        int j = MathHelper.floor_double(ent.posY);
-        int k = MathHelper.floor_double(ent.posZ);
+        int i = MathHelper.floor(ent.posX);
+        int j = MathHelper.floor(ent.posY);
+        int k = MathHelper.floor(ent.posZ);
 
         BlockPos pos = new BlockPos(i, j, k);
         
-        if (ent.worldObj.isBlockLoaded(pos))
+        if (ent.getEntityWorld().isBlockLoaded(pos))
         {
             boolean flag1 = false;
 
             while (!flag1 && j > 0)
             {
-            	IBlockState state = ent.worldObj.getBlockState(pos.offset(EnumFacing.DOWN));
+            	IBlockState state = ent.getEntityWorld().getBlockState(pos.offset(EnumFacing.DOWN));
                 Block block = state.getBlock();
 
                 if (block.getMaterial(state).blocksMovement())
@@ -181,7 +182,7 @@ public class ItemTeloportTool extends Item implements ICustomModel {
             {
             	ent.setPosition(ent.posX, ent.posY, ent.posZ);
 
-                if (ent.worldObj.getCollisionBoxes(ent, ent.getEntityBoundingBox()).isEmpty() && !ent.worldObj.containsAnyLiquid(ent.getEntityBoundingBox()))
+                if (ent.getEntityWorld().getCollisionBoxes(ent, ent.getEntityBoundingBox()).isEmpty() && !ent.getEntityWorld().containsAnyLiquid(ent.getEntityBoundingBox()))
                 {
                     flag = true;
                 }
@@ -200,16 +201,16 @@ public class ItemTeloportTool extends Item implements ICustomModel {
             for (int l = 0; l < short1; ++l)
             {
                 double d6 = (double)l / ((double)short1 - 1.0D);
-                float f = (ent.worldObj.rand.nextFloat() - 0.5F) * 0.2F;
-                float f1 = (ent.worldObj.rand.nextFloat() - 0.5F) * 0.2F;
-                float f2 = (ent.worldObj.rand.nextFloat() - 0.5F) * 0.2F;
-                double d7 = d3 + (ent.posX - d3) * d6 + (ent.worldObj.rand.nextDouble() - 0.5D) * (double)ent.width * 2.0D;
-                double d8 = d4 + (ent.posY - d4) * d6 + ent.worldObj.rand.nextDouble() * (double)ent.height;
-                double d9 = d5 + (ent.posZ - d5) * d6 + (ent.worldObj.rand.nextDouble() - 0.5D) * (double)ent.width * 2.0D;
-                ent.worldObj.spawnParticle(EnumParticleTypes.PORTAL, d7, d8, d9, (double)f, (double)f1, (double)f2);
+                float f = (ent.getEntityWorld().rand.nextFloat() - 0.5F) * 0.2F;
+                float f1 = (ent.getEntityWorld().rand.nextFloat() - 0.5F) * 0.2F;
+                float f2 = (ent.getEntityWorld().rand.nextFloat() - 0.5F) * 0.2F;
+                double d7 = d3 + (ent.posX - d3) * d6 + (ent.getEntityWorld().rand.nextDouble() - 0.5D) * (double)ent.width * 2.0D;
+                double d8 = d4 + (ent.posY - d4) * d6 + ent.getEntityWorld().rand.nextDouble() * (double)ent.height;
+                double d9 = d5 + (ent.posZ - d5) * d6 + (ent.getEntityWorld().rand.nextDouble() - 0.5D) * (double)ent.width * 2.0D;
+                ent.getEntityWorld().spawnParticle(EnumParticleTypes.PORTAL, d7, d8, d9, (double)f, (double)f1, (double)f2);
             }
 
-            ent.worldObj.playSound(null, d3, d4, d5, SoundEvents.ENTITY_ENDERMEN_TELEPORT, SoundCategory.PLAYERS, 1.0F, 1.0F);
+            ent.getEntityWorld().playSound(null, d3, d4, d5, SoundEvents.ENTITY_ENDERMEN_TELEPORT, SoundCategory.PLAYERS, 1.0F, 1.0F);
             ent.playSound(SoundEvents.ENTITY_ENDERMEN_TELEPORT, 1.0F, 1.0F);
             return true;
         }
@@ -359,10 +360,10 @@ public class ItemTeloportTool extends Item implements ICustomModel {
 		}
 
 		public void sendEntityToCoords(Entity entity){
-			entity.worldObj.playSound(null, entity.posX, entity.posY, entity.posZ, SoundEvents.BLOCK_PORTAL_TRAVEL, SoundCategory.BLOCKS, 0.1F, entity.worldObj.rand.nextFloat() * 0.1F + 0.9F);
+			entity.getEntityWorld().playSound(null, entity.posX, entity.posY, entity.posZ, SoundEvents.BLOCK_PORTAL_TRAVEL, SoundCategory.BLOCKS, 0.1F, entity.getEntityWorld().rand.nextFloat() * 0.1F + 0.9F);
 
 			teleportEntity(entity, this);
-			entity.worldObj.playSound(null, entity.posX, entity.posY, entity.posZ, SoundEvents.BLOCK_PORTAL_TRAVEL, SoundCategory.BLOCKS, 0.1F, entity.worldObj.rand.nextFloat() * 0.1F + 0.9F);
+			entity.getEntityWorld().playSound(null, entity.posX, entity.posY, entity.posZ, SoundEvents.BLOCK_PORTAL_TRAVEL, SoundCategory.BLOCKS, 0.1F, entity.getEntityWorld().rand.nextFloat() * 0.1F + 0.9F);
 		}
 
 		public void setDimentionName(String dimentionName) {
@@ -371,9 +372,9 @@ public class ItemTeloportTool extends Item implements ICustomModel {
 		
 		private static Entity teleportEntity(Entity entity, TeleportLocation destination)
 		{
-			if (entity == null || entity.worldObj.isRemote) return entity;
+			if (entity == null || entity.getEntityWorld().isRemote) return entity;
 
-			World startWorld = entity.worldObj;
+			World startWorld = entity.getEntityWorld();
 			World destinationWorld = DimensionManager.getWorld(destination.dimension);
 
 			if (destinationWorld == null){
@@ -397,7 +398,7 @@ public class ItemTeloportTool extends Item implements ICustomModel {
 				EntityPlayerMP player = (EntityPlayerMP)entity;
 				player.closeScreen();//added
 				player.dimension = destination.dimension;
-				player.connection.sendPacket(new SPacketRespawn(player.dimension, player.worldObj.getDifficulty(), destinationWorld.getWorldInfo().getTerrainType(), player.interactionManager.getGameType()));
+				player.connection.sendPacket(new SPacketRespawn(player.dimension, player.getEntityWorld().getDifficulty(), destinationWorld.getWorldInfo().getTerrainType(), player.interactionManager.getGameType()));
 				((WorldServer)startWorld).getPlayerChunkMap().removePlayer(player);
 
 				startWorld.playerEntities.remove(player);
@@ -435,7 +436,7 @@ public class ItemTeloportTool extends Item implements ICustomModel {
 					}
 					entity.dimension = destinationWorld.provider.getDimension();
 				}
-				destinationWorld.spawnEntityInWorld(entity);
+				destinationWorld.spawnEntity(entity);
 				entity.setWorld(destinationWorld);
 			}
 			entity.setLocationAndAngles(destination.xCoord, destination.yCoord, destination.zCoord, destination.yaw, entity.rotationPitch);

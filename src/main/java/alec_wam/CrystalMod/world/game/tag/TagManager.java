@@ -441,7 +441,7 @@ public class TagManager {
 	{
 		Minecraft mc = Minecraft.getMinecraft();
 		FontRenderer fontrenderer = mc.fontRendererObj;
-		String playerUsername = mc.thePlayer.getName();
+		String playerUsername = CrystalMod.proxy.getClientPlayer().getName();
 		PlayerData playerData = getData(playerUsername);
 		ScaledResolution scaledresolution = new ScaledResolution(Minecraft.getMinecraft());
 		int i = scaledresolution.getScaledWidth();
@@ -558,7 +558,7 @@ public class TagManager {
 		
 		if(!event.isCancelable() && event.getType() == ElementType.HOTBAR){
 			
-			if(this.enabled && Minecraft.getMinecraft().thePlayer != null && (players.size() > 0) && playerData !=null)
+			if(this.enabled && CrystalMod.proxy.getClientPlayer() != null && (players.size() > 0) && playerData !=null)
 			{
 				GlStateManager.pushMatrix();
 				GlStateManager.enableBlend();
@@ -709,7 +709,7 @@ public class TagManager {
 	public void playerInteract(PlayerInteractEvent.EntityInteract event){
 		Entity target = event.getTarget();
 		EntityPlayer player = event.getEntityPlayer();
-		if(target !=null && player !=null && !player.worldObj.isRemote){
+		if(target !=null && player !=null && !player.getEntityWorld().isRemote){
 			if(target instanceof EntityPlayer){
 			   EntityPlayer tPlayer = (EntityPlayer) target;
                tagPlayer(tPlayer.getName(), player.getName());

@@ -28,12 +28,6 @@ public class ShapelessCrystalRecipeHandler implements IRecipeHandler<ShapelessCr
 
 	@Nonnull
 	@Override
-	public String getRecipeCategoryUid() {
-		return CrystalModRecipeUids.WORKBENCH;
-	}
-
-	@Nonnull
-	@Override
 	public IRecipeWrapper getRecipeWrapper(@Nonnull ShapelessCrystalRecipe recipe) {
 		return new ShapelessCrystalRecipeWrapper(jeiHelpers, recipe);
 	}
@@ -41,7 +35,7 @@ public class ShapelessCrystalRecipeHandler implements IRecipeHandler<ShapelessCr
 	@Override
 	public boolean isRecipeValid(@Nonnull ShapelessCrystalRecipe recipe) {
 		if (recipe.getRecipeOutput() == null) {
-			String recipeInfo = ErrorUtil.getInfoFromBrokenRecipe(recipe, this);
+			String recipeInfo = ErrorUtil.getInfoFromRecipe(recipe, this);
 			Log.error("Recipe has no output. {}", recipeInfo);
 			return false;
 		}
@@ -50,13 +44,13 @@ public class ShapelessCrystalRecipeHandler implements IRecipeHandler<ShapelessCr
 			if (input instanceof ItemStack) {
 				inputCount++;
 			} else {
-				String recipeInfo = ErrorUtil.getInfoFromBrokenRecipe(recipe, this);
+				String recipeInfo = ErrorUtil.getInfoFromRecipe(recipe, this);
 				Log.error("Recipe has an input that is not an ItemStack. {}", recipeInfo);
 				return false;
 			}
 		}
 		if (inputCount > 9) {
-			String recipeInfo = ErrorUtil.getInfoFromBrokenRecipe(recipe, this);
+			String recipeInfo = ErrorUtil.getInfoFromRecipe(recipe, this);
 			Log.error("Recipe has too many inputs. {}", recipeInfo);
 			return false;
 		}

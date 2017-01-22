@@ -26,10 +26,10 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-import net.minecraftforge.client.model.ModelDynBucket;
 import net.minecraftforge.client.model.ModelLoader;
 
 public class ItemMaterialSeed extends Item implements ICustomModel {
@@ -55,13 +55,14 @@ public class ItemMaterialSeed extends Item implements ICustomModel {
 	}
 	
 	@Override
-	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
+	public EnumActionResult onItemUse(EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
     {
 		if(facing != EnumFacing.UP){
 			return EnumActionResult.PASS; 
 		}
 		BlockPos up = pos.up();
 		//Permission Check
+		ItemStack stack = playerIn.getHeldItem(hand);
 		if(playerIn.canPlayerEdit(pos, facing, stack) && playerIn.canPlayerEdit(up, facing, stack)){
 			IBlockState state = worldIn.getBlockState(pos);
 			if(state.isSideSolid(worldIn, pos, facing) && worldIn.isAirBlock(up)){
@@ -81,7 +82,7 @@ public class ItemMaterialSeed extends Item implements ICustomModel {
     }
 	
 	@Override
-	public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> list){
+	public void getSubItems(Item item, CreativeTabs tab, NonNullList<ItemStack> list){
 		for(Entry<String, IMaterialCrop> entry : CrystalModAPI.getCropMap().entrySet()){
 			list.add(getSeed(entry.getValue()));
 		}

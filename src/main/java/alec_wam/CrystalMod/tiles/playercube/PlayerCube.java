@@ -2,19 +2,20 @@ package alec_wam.CrystalMod.tiles.playercube;
 
 import java.util.List;
 
+import com.google.common.collect.Lists;
+import com.mojang.authlib.GameProfile;
+
+import alec_wam.CrystalMod.blocks.ModBlocks;
+import alec_wam.CrystalMod.util.NBTUtil;
+import alec_wam.CrystalMod.util.UUIDUtils;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.IInventoryChangedListener;
 import net.minecraft.inventory.InventoryBasic;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
-import alec_wam.CrystalMod.blocks.ModBlocks;
-import alec_wam.CrystalMod.util.NBTUtil;
-import alec_wam.CrystalMod.util.UUIDUtils;
-
-import com.google.common.collect.Lists;
-import com.mojang.authlib.GameProfile;
 
 public class PlayerCube  implements IInventoryChangedListener
 {
@@ -125,7 +126,7 @@ public class PlayerCube  implements IInventoryChangedListener
 	}
 
 	@Override
-	public void onInventoryChanged(InventoryBasic inventory)
+	public void onInventoryChanged(IInventory inventory)
 	{
 		this.manager.markDirty();
 	}

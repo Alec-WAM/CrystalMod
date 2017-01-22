@@ -2,6 +2,7 @@ package alec_wam.CrystalMod.api.crafting;
 
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 
 public interface ICrystalRecipe
@@ -23,5 +24,5 @@ public interface ICrystalRecipe
 
     ItemStack getRecipeOutput();
 
-    ItemStack[] getRemainingItems(InventoryCrafting inv);
+    NonNullList<ItemStack> getRemainingItems(InventoryCrafting inv);
 }

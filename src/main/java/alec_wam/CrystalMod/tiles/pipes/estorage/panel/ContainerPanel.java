@@ -83,6 +83,7 @@ public class ContainerPanel extends Container implements INetworkContainer {
 	}
 	
 	//SLOT CLICK
+	@Override
 	public ItemStack slotClick(int slotId, int clickedButton, ClickType mode, EntityPlayer playerIn)
     {
 		//if(this instanceof ContainerPanelCrafting && (mode !=1 || clickedButton != 1))return super.slotClick(slotId, clickedButton, mode, playerIn);
@@ -145,9 +146,10 @@ public class ContainerPanel extends Container implements INetworkContainer {
 			List<ItemStackData> data = Lists.newArrayList();
 			for(CraftingPattern pattern : panel.getNetwork().getPatterns()){
 				for(ItemStack stack : pattern.getOutputs()){
-					if(stack !=null){
+					if(!ItemStackTools.isNullStack(stack)){
 						ItemStack copy = stack.copy();
-						copy.stackSize = 0;
+						//Dont set empty because it updates the actual empty state
+						ItemStackTools.setStackSize(copy, 0);
 						ItemStackData iData = new ItemStackData(copy);
 						iData.isCrafting = true;
 						data.add(iData);
@@ -185,9 +187,10 @@ public class ContainerPanel extends Container implements INetworkContainer {
 			List<ItemStackData> data = Lists.newArrayList();
 			for(CraftingPattern pattern : panel.getNetwork().getPatterns()){
 				for(ItemStack stack : pattern.getOutputs()){
-					if(stack !=null){
+					if(ItemStackTools.isValid(stack)){
 						ItemStack copy = stack.copy();
-						copy.stackSize = 0;
+						//Dont set empty because it updates the actual empty state
+						ItemStackTools.setStackSize(copy, 0);
 						ItemStackData iData = new ItemStackData(copy);
 						iData.isCrafting = true;
 						data.add(iData);
@@ -206,17 +209,17 @@ public class ContainerPanel extends Container implements INetworkContainer {
 	}
 
 	public void sendItemStackToNetwork(EntityPlayerMP player, int slot, ItemStackData data) {
-		if(panel.getNetwork() !=null && data.stack !=null){
+		if(panel.getNetwork() !=null && ItemStackTools.isValid(data.stack)){
 			ItemStack insertStack = data.stack.copy();
-			final int old = insertStack.stackSize;
+			final int old = ItemStackTools.getStackSize(insertStack);
 			ItemStack remain = panel.getNetwork().getItemStorage().addItem(data.stack, false);
-			int added = remain == null ? old : old - remain.stackSize;
+			int added = ItemStackTools.isEmpty(remain) ? old : old - ItemStackTools.getStackSize(remain);
 			if(added > 0){
 				if(slot < 0){
-					if(player.inventory.getItemStack() !=null){
-						player.inventory.getItemStack().stackSize-=added;
-						if(player.inventory.getItemStack().stackSize <= 0)
-						player.inventory.setItemStack(null);
+					if(ItemStackTools.isValid(player.inventory.getItemStack())){
+						ItemStackTools.incStackSize(player.inventory.getItemStack(), -added);
+						if(ItemStackTools.isEmpty(player.inventory.getItemStack()))
+							player.inventory.setItemStack(ItemStackTools.getEmptyStack());
 					}
 					
 					player.updateHeldItem();
@@ -228,7 +231,8 @@ public class ContainerPanel extends Container implements INetworkContainer {
 	}
 	
 	public void grabItemStackFromNetwork(EntityPlayerMP player, int slot, int amount, ItemStackData data) {
-		if(panel.getNetwork() !=null && data !=null && !ItemStackTools.isNullStack(data.stack)){
+		//TODO Check into crafting items being stack size of 0
+		if(panel.getNetwork() !=null && data !=null && ItemStackTools.isValid(data.stack)){
 			int invSlot = -1;
 			int realAmount = amount;
 			if(slot < 0){
@@ -239,15 +243,15 @@ public class ContainerPanel extends Container implements INetworkContainer {
 			}
 			ItemStack grabStack = ItemHandlerHelper.copyStackWithSize(data.stack, 1);
 			ItemStack removed = panel.getNetwork().getItemStorage().removeItem(grabStack, realAmount, ItemStorage.NORMAL, false);
-			if(!ItemStackTools.isNullStack(removed)){
+			if(ItemStackTools.isValid(removed)){
 				if(invSlot > -1){
 					ItemStack remainder = ItemHandlerHelper.insertItem(player.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.UP), removed, false);
 
-	                if (!ItemStackTools.isNullStack(remainder)) {
+	                if (ItemStackTools.isValid(remainder)) {
 	                	panel.getNetwork().getItemStorage().addItem(remainder, false);
 	                }
 				}else{
-					if(ItemStackTools.isNullStack(player.inventory.getItemStack())){
+					if(ItemStackTools.isEmpty(player.inventory.getItemStack())){
 						player.inventory.setItemStack(removed);
 					}else{
 						ItemStack current = player.inventory.getItemStack();

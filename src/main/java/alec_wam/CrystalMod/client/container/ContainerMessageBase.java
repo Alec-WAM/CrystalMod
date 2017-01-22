@@ -77,7 +77,7 @@ public class ContainerMessageBase extends Container implements IMessageHandler {
 	 * @param data
 	 */
 	protected final void sendDataToGui(NBTTagCompound data) {
-		if (!player.worldObj.isRemote) {
+		if (!player.getEntityWorld().isRemote) {
 			PacketGuiMessage pkt = new PacketGuiMessage("Data");
 			pkt.data.setTag("gui", data);
 			CrystalModNetwork.sendTo(pkt, (EntityPlayerMP) player);
@@ -90,7 +90,7 @@ public class ContainerMessageBase extends Container implements IMessageHandler {
 	 * @param data
 	 */
 	protected void sendDataToServer(NBTTagCompound data) {
-		if (player.worldObj.isRemote) {
+		if (player.getEntityWorld().isRemote) {
 			PacketGuiMessage pkt = new PacketGuiMessage("Data", data);
 			CrystalModNetwork.sendToServer(pkt);
 		}
@@ -102,7 +102,7 @@ public class ContainerMessageBase extends Container implements IMessageHandler {
 	 * @param data
 	 */
 	protected void sendDataToClient(NBTTagCompound data) {
-		if (!player.worldObj.isRemote) {
+		if (!player.getEntityWorld().isRemote) {
 			PacketGuiMessage pkt = new PacketGuiMessage("Data", data);
 			CrystalModNetwork.sendTo(pkt, (EntityPlayerMP) player);
 		}
@@ -165,8 +165,8 @@ public class ContainerMessageBase extends Container implements IMessageHandler {
 	 */
 	public void removeSlots() {
 		for (Slot s : ((List<Slot>) this.inventorySlots)) {
-			if (s.yDisplayPosition >= 0) {
-				s.yDisplayPosition -= 10000;
+			if (s.yPos >= 0) {
+				s.yPos -= 10000;
 			}
 		}
 	}
@@ -176,8 +176,8 @@ public class ContainerMessageBase extends Container implements IMessageHandler {
 	 */
 	public void addSlots() {
 		for (Slot s : ((List<Slot>) this.inventorySlots)) {
-			if (s.yDisplayPosition < 0) {
-				s.yDisplayPosition += 10000;
+			if (s.yPos < 0) {
+				s.yPos += 10000;
 			}
 		}
 	}

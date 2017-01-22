@@ -116,7 +116,7 @@ public class ContainerPanelCrafting extends ContainerPanel {
                 return ItemStackTools.getEmptyStack();
             }
 
-            slot.onPickupFromSlot(playerIn, itemstack1);
+            slot.onTake(playerIn, itemstack1);
         }
 
         return itemstack;

@@ -8,6 +8,7 @@ import net.minecraft.inventory.InventoryCraftResult;
 import net.minecraft.inventory.Slot;
 import net.minecraft.inventory.SlotCrafting;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import alec_wam.CrystalMod.blocks.ModBlocks;
@@ -34,18 +35,19 @@ public class ContainerCrystalWorkbench extends Container
         craftMatrix = new InventoryCraftingPersistent(this, tile, 3, 3);
         
         this.addSlotToContainer(new SlotCrafting(playerInventory.player, this.craftMatrix, this.craftResult, 0, 124, 35){
-        	public void onPickupFromSlot(EntityPlayer playerIn, ItemStack stack)
+        	@Override
+        	public ItemStack onTake(EntityPlayer playerIn, ItemStack stack)
             {
                 //net.minecraftforge.fml.common.FMLCommonHandler.instance().firePlayerCraftingEvent(playerIn, stack, craftMatrix);
                 this.onCrafting(stack);
                 //net.minecraftforge.common.ForgeHooks.setCraftingPlayer(playerIn);
-                ItemStack[] aitemstack = CrystalCraftingManager.getInstance().func_180303_b(craftMatrix, playerIn.worldObj);
+                NonNullList<ItemStack> aitemstack = CrystalCraftingManager.getInstance().getRemainingItems(craftMatrix, playerIn.getEntityWorld());
                 //net.minecraftforge.common.ForgeHooks.setCraftingPlayer(null);
 
-                for (int i = 0; i < aitemstack.length; ++i)
+                for (int i = 0; i < aitemstack.size(); ++i)
                 {
                     ItemStack itemstack = craftMatrix.getStackInSlot(i);
-                    ItemStack itemstack1 = aitemstack[i];
+                    ItemStack itemstack1 = aitemstack.get(i);
 
                     if (!ItemStackTools.isNullStack(itemstack))
                     {
@@ -64,6 +66,7 @@ public class ContainerCrystalWorkbench extends Container
                         }
                     }
                 }
+                return stack;
             }
         });
 
@@ -167,7 +170,7 @@ public class ContainerCrystalWorkbench extends Container
                 return ItemStackTools.getEmptyStack();
             }
 
-            slot.onPickupFromSlot(playerIn, itemstack1);
+            slot.onTake(playerIn, itemstack1);
         }
 
         return itemstack;

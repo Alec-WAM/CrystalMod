@@ -3,9 +3,7 @@ package alec_wam.CrystalMod.entities.accessories;
 import javax.annotation.Nullable;
 
 import alec_wam.CrystalMod.util.ItemStackTools;
-import alec_wam.CrystalMod.util.ModLogger;
-import net.minecraft.entity.passive.EntityHorse;
-import net.minecraft.entity.passive.HorseArmorType;
+import net.minecraft.entity.passive.AbstractHorse;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.Container;
@@ -13,16 +11,14 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryEnderChest;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ContainerHorseEnderChest extends Container
 {
     private final IInventory horseInventory;
     private final InventoryEnderChest enderchestInventory;
-    private final EntityHorse theHorse;
+    private final AbstractHorse theHorse;
 
-    public ContainerHorseEnderChest(IInventory playerInventory, final IInventory horseInventoryIn, final EntityHorse horse, EntityPlayer player)
+    public ContainerHorseEnderChest(IInventory playerInventory, final IInventory horseInventoryIn, final AbstractHorse horse, EntityPlayer player)
     {
         this.horseInventory = horseInventoryIn;
         this.enderchestInventory = player.getInventoryEnderChest();
@@ -66,7 +62,7 @@ public class ContainerHorseEnderChest extends Container
 
     public boolean canInteractWith(EntityPlayer playerIn)
     {
-        return this.enderchestInventory.isUseableByPlayer(playerIn) && this.theHorse.isEntityAlive() && this.theHorse.getDistanceToEntity(playerIn) < 8.0F && HorseAccessories.hasEnderChest(this.theHorse);
+        return this.enderchestInventory.isUsableByPlayer(playerIn) && this.theHorse.isEntityAlive() && this.theHorse.getDistanceToEntity(playerIn) < 8.0F && HorseAccessories.hasEnderChest(this.theHorse);
     }
 
     /**

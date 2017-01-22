@@ -38,7 +38,7 @@ public class TileEntityElevatorFloor extends TileEntityMod {
 			EnumFacing[] sides = EnumFacing.HORIZONTALS;
 			if(sides !=null){
 				for(EnumFacing side : sides){
-					TileEntity tile = worldObj.getTileEntity(getPos().offset(side));
+					TileEntity tile = getWorld().getTileEntity(getPos().offset(side));
 					if(tile !=null && tile instanceof TileEntityElevator){
 						TileEntityElevator elevator = (TileEntityElevator)tile;
 						elevator.updateFloors(false);

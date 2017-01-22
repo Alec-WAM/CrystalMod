@@ -72,12 +72,12 @@ public class BlockEnderTorch extends BlockContainer {
     }
 
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ)
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ)
     {
     	TileEntity tile = worldIn.getTileEntity(pos);
     	if(tile == null || !(tile instanceof TileEnderTorch))return false;
     	TileEnderTorch torch = (TileEnderTorch)tile;
-    	if(ItemStackTools.isEmpty(heldItem)){
+    	if(ItemStackTools.isEmpty(playerIn.getHeldItem(hand))){
         	if(!worldIn.isRemote){
         		double incrs = 1.0D;
         		if(playerIn.isSneaking()){
@@ -131,9 +131,9 @@ public class BlockEnderTorch extends BlockContainer {
     }
 
     @Override
-    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn)
+    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos pos2)
     {
-        this.onNeighborChangeInternal(worldIn, pos, state);
+    	this.onNeighborChangeInternal(worldIn, pos, state);
     }
 
     protected boolean onNeighborChangeInternal(World worldIn, BlockPos pos, IBlockState state)

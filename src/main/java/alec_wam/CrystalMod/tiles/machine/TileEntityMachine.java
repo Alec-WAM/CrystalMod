@@ -69,7 +69,7 @@ public abstract class TileEntityMachine extends TileEntityInventory implements I
 	}
 	
 	public void syncProcessValues(){
-		if(worldObj !=null && !worldObj.isRemote){
+		if(hasWorld() && !getWorld().isRemote){
 			NBTTagCompound nbt = new NBTTagCompound();
             nbt.setInteger("Progress", processRem);
             nbt.setInteger("Max", processMax);

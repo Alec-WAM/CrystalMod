@@ -2,22 +2,8 @@ package alec_wam.CrystalMod.blocks;
 
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.EnumBlock.IEnumMeta;
-import alec_wam.CrystalMod.tiles.BlockStateFacing;
-import alec_wam.CrystalMod.tiles.machine.worksite.BlockWorksite;
-import alec_wam.CrystalMod.tiles.machine.worksite.BlockWorksite.WorksiteBlockStateMapper;
-import alec_wam.CrystalMod.tiles.machine.worksite.BlockWorksite.WorksiteType;
-
-import com.google.common.base.Predicate;
-
-import java.util.List;
-
-import javax.annotation.Nullable;
-
 import net.minecraft.block.BlockLog;
-import net.minecraft.block.BlockPlanks;
-import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
-import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
@@ -29,6 +15,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
@@ -122,7 +109,8 @@ public class BlockCrystalLog extends BlockLog implements ICustomModel
      * returns a list of blocks with the same ID, but different meta (eg: wood returns 4 blocks)
      */
     @SideOnly(Side.CLIENT)
-    public void getSubBlocks(Item itemIn, CreativeTabs tab, List<ItemStack> list)
+    @Override
+    public void getSubBlocks(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> list)
     {
         for(WoodType type : WoodType.values()){
         	list.add(new ItemStack(this, 1, type.getMeta()));

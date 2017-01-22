@@ -32,15 +32,15 @@ public class GrinderManager {
 	    final int inputSize;
 	    @Nonnull
 	    final ItemStack output;
-	    @Nullable
+	    @Nonnull
 	    final ItemStack output2;
 	    final int secondChance;
 	    final int energy;
 	    
-	    public GrinderRecipe(ItemStack input, @Nonnull ItemStack output, @Nullable ItemStack output2, int chance, int energy)
+	    public GrinderRecipe(ItemStack input, @Nonnull ItemStack output, @Nonnull ItemStack output2, int chance, int energy)
 	    {
 	    	this.input = input;
-	        this.inputSize = input.stackSize;
+	        this.inputSize = ItemStackTools.getStackSize(input);
 	        this.output = output;
 	        this.output2 = output2;
 	        this.secondChance = chance;

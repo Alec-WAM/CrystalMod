@@ -10,7 +10,9 @@ import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.oredict.RecipeSorter;
 
 public class HDDUpgradeRecipe implements IRecipe {
@@ -95,7 +97,7 @@ public class HDDUpgradeRecipe implements IRecipe {
     }
 
 	@Override
-	public ItemStack[] getRemainingItems(InventoryCrafting inv) {
-		return new ItemStack[inv.getSizeInventory()];
+	public NonNullList<ItemStack> getRemainingItems(InventoryCrafting inv) {
+		return ForgeHooks.defaultRecipeGetRemainingItems(inv);
 	}
 }

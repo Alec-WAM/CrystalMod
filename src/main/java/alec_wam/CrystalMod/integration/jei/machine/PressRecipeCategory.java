@@ -53,17 +53,6 @@ public class PressRecipeCategory extends BlankRecipeCategory<PressRecipeCategory
 		}
 		
 		@Override
-		public @Nonnull List<?> getInputs() {
-		    List<ItemStack> inputStacks = recipe.getInputs();
-		    return inputStacks != null ? inputStacks : new ArrayList<ItemStack>();
-		}
-		
-		@Override
-		public @Nonnull List<?> getOutputs() {
-		    return recipe.getOutput() !=null ? Lists.newArrayList(recipe.getOutput()) : Lists.newArrayList();
-		}
-		
-		@Override
 		public void drawInfo(@Nonnull Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {
 			String energyString = getEnergyRequired()+" "+Lang.localize("power.cu");
 		    minecraft.fontRendererObj.drawString(energyString, 108 - xOff, 62 - yOff, 0x808080, false);    
@@ -78,7 +67,7 @@ public class PressRecipeCategory extends BlankRecipeCategory<PressRecipeCategory
 		public void getIngredients(IIngredients ingredients) {
 			IStackHelper stackHelper = jeiHelpers.getStackHelper();
 
-			List<List<ItemStack>> inputs = stackHelper.expandRecipeItemStackInputs(getInputs());
+			List<List<ItemStack>> inputs = stackHelper.expandRecipeItemStackInputs(recipe.getInputs());
 			ingredients.setInputLists(ItemStack.class, inputs);
 
 			ItemStack recipeOutput = recipe.getOutput();
@@ -143,16 +132,9 @@ public class PressRecipeCategory extends BlankRecipeCategory<PressRecipeCategory
 	}
 
 	@Override
-	public void drawAnimations(@Nonnull Minecraft minecraft) {
+	public void drawExtras(@Nonnull Minecraft minecraft) {
 		arrow.draw(minecraft, 80-xOff, 34-yOff);
 	}
-	
-	@Override
-	public void drawExtras(@Nonnull Minecraft minecraft) {
-	    if(currentRecipe == null) {
-	      return;
-	    }
-  	}
 
 	@Override
 	public void setRecipe(IRecipeLayout recipeLayout, PressRecipe recipeWrapper, IIngredients arg2) {

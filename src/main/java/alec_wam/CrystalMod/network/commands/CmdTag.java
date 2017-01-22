@@ -80,7 +80,7 @@ public class CmdTag extends AbstractCMCommand{
 	            EntityPlayer player = (EntityPlayer) sender;
 				if(TagManager.getInstance() == null)
 				{
-					sender.addChatMessage(new TextComponentString("Teams mod is broken. You will need to look at the server side logs to see what's wrong"));
+					sender.sendMessage(new TextComponentString("Teams mod is broken. You will need to look at the server side logs to see what's wrong"));
 					return;
 				}
 				

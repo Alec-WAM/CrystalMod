@@ -84,9 +84,6 @@ public class PlayerCubeChunkLoaderManager implements ForgeChunkManager.LoadingCa
             final HashMap<GameProfile, ForgeChunkManager.Ticket> map = PlayerCubeChunkLoaderManager.playerTickets;
             for (final ForgeChunkManager.Ticket ticket : map.values()) {
                 final ImmutableSet<ChunkPos> chunkList = (ImmutableSet<ChunkPos>)ticket.getChunkList();
-                for (final ChunkPos pair : chunkList) {
-                    ticket.world.getBlockState(pair.getCenterBlock(20));
-                }
                 worldChunks.addAll(chunkList);
                 toUnload.putAll(ticket, chunkList);
                 loaded.putAll(ticket, chunkList);

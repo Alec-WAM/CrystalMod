@@ -43,26 +43,26 @@ public class JobHarvestCrop extends WorkerJob {
 	
 	@Override
 	public boolean run(EntityMinionWorker worker, TileWorksiteBase worksite) {
-		if(worker.worldObj.isRemote) return false;
+		if(worker.getEntityWorld().isRemote) return false;
 		if(cropPos == null || cropPos == BlockPos.ORIGIN) return true;
 		if(worksite == null || !(worksite instanceof WorksiteCropFarm)) return true;
 		WorksiteCropFarm cFarm = (WorksiteCropFarm)worksite;
-		if(worker.worldObj.isAirBlock(cropPos)){ 
+		if(worker.getEntityWorld().isAirBlock(cropPos)){ 
 			return true;
 		}
-		IBlockState cropState = worker.worldObj.getBlockState(cropPos);
+		IBlockState cropState = worker.getEntityWorld().getBlockState(cropPos);
 		boolean isGoard = (cropState.getBlock() == Blocks.MELON_BLOCK || cropState.getBlock() == Blocks.PUMPKIN);
-		if(!FarmUtil.isGrownCrop(worker.worldObj, cropPos) && !isGoard) return true;
+		if(!FarmUtil.isGrownCrop(worker.getEntityWorld(), cropPos) && !isGoard) return true;
 		worker.getLookHelper().setLookPosition(cropPos.getX() + 0.5, cropPos.getY() + 0.5, cropPos.getZ() + 0.5, 10, 40);
 		double d = worker.getDistance(cropPos.getX() + 0.5, cropPos.down().getY() + 0.5, cropPos.getZ() + 0.5);
 		if(d <= 1.5D){
 			
-			if(FarmUtil.isClickableCrop(worker.worldObj, cropPos)){
+			if(FarmUtil.isClickableCrop(worker.getEntityWorld(), cropPos)){
 				final CaptureContext dropsCapturer = DropCapture.instance.start(cropPos);
 
 				final List<EntityItem> drops;
 				try {
-					if(FakePlayerUtil.rightClickBlock(worker.worldObj, cropPos, EnumFacing.UP, ItemStackTools.getEmptyStack())){
+					if(FakePlayerUtil.rightClickBlock(worker.getEntityWorld(), cropPos, EnumFacing.UP, ItemStackTools.getEmptyStack())){
 						worker.swingArm(EnumHand.MAIN_HAND);
 					}
 				} finally {
@@ -83,20 +83,20 @@ public class JobHarvestCrop extends WorkerJob {
 			} else {
 				int fortune = cFarm.getUpgrades().contains(WorksiteUpgrade.ENCHANTED_TOOLS_1)? 1 : cFarm.getUpgrades().contains(WorksiteUpgrade.ENCHANTED_TOOLS_2)? 2 : cFarm.getUpgrades().contains(WorksiteUpgrade.ENCHANTED_TOOLS_3) ? 3 : 0;
 				worker.swingArm(EnumHand.MAIN_HAND);
-				EntityPlayer player = FakePlayerUtil.getPlayer((WorldServer)worker.worldObj);
+				EntityPlayer player = FakePlayerUtil.getPlayer((WorldServer)worker.getEntityWorld());
 				float chance = 1.0f;
-				List<ItemStack> drops = cropState.getBlock().getDrops(worker.worldObj, cropPos, cropState, fortune);
-				chance = ForgeEventFactory.fireBlockHarvesting(drops, worker.worldObj, cropPos, cropState, fortune, chance, false, player);
+				List<ItemStack> drops = cropState.getBlock().getDrops(worker.getEntityWorld(), cropPos, cropState, fortune);
+				chance = ForgeEventFactory.fireBlockHarvesting(drops, worker.getEntityWorld(), cropPos, cropState, fortune, chance, false, player);
 				
-				worker.worldObj.playEvent(player, 2001, cropPos, Block.getStateId(cropState));
-				worker.worldObj.setBlockToAir(cropPos);
+				worker.getEntityWorld().playEvent(player, 2001, cropPos, Block.getStateId(cropState));
+				worker.getEntityWorld().setBlockToAir(cropPos);
 				drop : for(ItemStack stack : drops)
 				{
-					if(worker.worldObj.rand.nextFloat() <= chance){
+					if(worker.getEntityWorld().rand.nextFloat() <= chance){
 						if(worker.getHeldItemMainhand() == null){
 							if (stack.getItem() instanceof IPlantable) {
 								IPlantable plantable = (IPlantable) stack.getItem();
-								if(FarmUtil.canPlant(worker.worldObj, cropPos, plantable)){
+								if(FarmUtil.canPlant(worker.getEntityWorld(), cropPos, plantable)){
 									if(worker.addCommand(new JobPlantCrop(cropPos))){
 										worker.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, stack);
 										continue drop;

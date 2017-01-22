@@ -219,7 +219,7 @@ public class BlockCrystalTreePlant extends BlockHorizontal implements IGrowable
 
         if (i >= 2)
         {
-            j = MathHelper.getRandomIntegerInRange(RANDOM, 1, 4);
+            j = MathHelper.getInt(RANDOM, 1, 4);
         }
         ItemStack crop = ItemStackTools.getEmptyStack();
         PlantType type = TYPE;

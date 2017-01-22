@@ -25,7 +25,7 @@ public class PlayerCubeWorldProvider extends WorldProvider
 	@Override
 	public IChunkGenerator createChunkGenerator()
 	{
-		return new PlayerCubeChunkProvider(this.worldObj);
+		return new PlayerCubeChunkProvider(this.world);
 	}
 
 	@Override
@@ -69,10 +69,11 @@ public class PlayerCubeWorldProvider extends WorldProvider
 	}
 
 	@Override
-	protected void createBiomeProvider()
-	{
-		this.biomeProvider = new BiomeProviderSingle(Biomes.SKY);
-	}
+	protected void init()
+    {
+        this.hasSkyLight = true;
+        this.biomeProvider = new BiomeProviderSingle(Biomes.SKY);
+    }
 
 	@Override
 	@SideOnly(Side.CLIENT)

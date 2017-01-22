@@ -36,7 +36,7 @@ public class ItemBlockTank extends ItemBlockMeta {
 	private static final FluidTank dummy = new FluidTank(FluidRegistry.WATER, 16000, 16000);
 	private FluidTank loadTank(ItemStack stack) {
 		int tankType = stack.getMetadata();
-		tankType = MathHelper.clamp_int(tankType, 0, BlockTank.tankCaps.length);
+		tankType = MathHelper.clamp(tankType, 0, BlockTank.tankCaps.length);
 		int cap = BlockTank.tankCaps[tankType]*Fluid.BUCKET_VOLUME;
 	    if (stack.hasTagCompound()) {
 	      FluidTank tank = loadTank(stack.getTagCompound());
@@ -50,7 +50,7 @@ public class ItemBlockTank extends ItemBlockMeta {
 	
 	public static FluidTank loadTank(NBTTagCompound nbtRoot) {
 		int tankType = nbtRoot.hasKey("tankType") ? nbtRoot.getInteger("tankType") : 0;
-		tankType = MathHelper.clamp_int(tankType, 0, BlockTank.tankCaps.length);
+		tankType = MathHelper.clamp(tankType, 0, BlockTank.tankCaps.length);
 		int cap = BlockTank.tankCaps[tankType]*Fluid.BUCKET_VOLUME;
 	    FluidTank ret = new FluidTank(cap);
 	    

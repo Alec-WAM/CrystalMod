@@ -1,6 +1,5 @@
 package alec_wam.CrystalMod.items;
 
-import java.util.List;
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.ICustomModel;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -8,6 +7,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -60,7 +60,8 @@ public class ItemMachineFrame extends Item implements ICustomModel {
     }
 	
 	@SideOnly(Side.CLIENT)
-    public void getSubItems(Item itemIn, CreativeTabs tab, List<ItemStack> subItems)
+    @Override
+	public void getSubItems(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> subItems)
     {
         for (int i = 0; i < FrameType.values().length; ++i)
         {

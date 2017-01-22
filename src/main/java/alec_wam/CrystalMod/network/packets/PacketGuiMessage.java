@@ -43,9 +43,9 @@ public class PacketGuiMessage extends AbstractPacketThreadsafe {
 	@Override
 	public void fromBytes(ByteBuf buf) {
 		PacketBuffer buffer = new PacketBuffer(buf);
-		type = buffer.readStringFromBuffer(100);
+		type = buffer.readString(100);
 		try {
-			data = buffer.readNBTTagCompoundFromBuffer();
+			data = buffer.readCompoundTag();
 		} catch (IOException e) {
 			data = new NBTTagCompound();
 		}
@@ -55,7 +55,7 @@ public class PacketGuiMessage extends AbstractPacketThreadsafe {
 	public void toBytes(ByteBuf buf) {
 		PacketBuffer buffer = new PacketBuffer(buf);
 		buffer.writeString(type);
-		buffer.writeNBTTagCompoundToBuffer(data);
+		buffer.writeCompoundTag(data);
 	}
 
 	@Override

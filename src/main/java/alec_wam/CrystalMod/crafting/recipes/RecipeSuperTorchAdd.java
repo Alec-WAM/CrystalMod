@@ -4,12 +4,15 @@ import alec_wam.CrystalMod.Config;
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.items.tools.ItemSuperTorch;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.oredict.RecipeSorter;
 
 public class RecipeSuperTorchAdd implements IRecipe {
@@ -18,25 +21,25 @@ public class RecipeSuperTorchAdd implements IRecipe {
         RecipeSorter.register(CrystalMod.MODID.toLowerCase() + ":supertorchadd", RecipeSuperTorchAdd.class, RecipeSorter.Category.SHAPELESS, "");
     }
 
-    private ItemStack modifiedTorch = null;
+    private ItemStack modifiedTorch = ItemStackTools.getEmptyStack();
 
     public RecipeSuperTorchAdd() {
     }
 
     @Override
     public boolean matches(InventoryCrafting inventoryCrafting, World world) {
-        ItemStack storch = null;
+        ItemStack storch = ItemStackTools.getEmptyStack();
         int inputTorchCount = 0;
         for(int i = 0; i < inventoryCrafting.getSizeInventory(); i++)
         {
             ItemStack slot = inventoryCrafting.getStackInSlot(i);
             // empty slot
-            if(slot == null)
+            if(ItemStackTools.isEmpty(slot))
                 continue;
 
             // is it the tool?
             if(slot.getItem() instanceof ItemSuperTorch){
-            	if(storch !=null)return false;
+            	if(ItemStackTools.isValid(storch))return false;
                 storch = slot;
             }
             // otherwise.. input material
@@ -49,7 +52,7 @@ public class RecipeSuperTorchAdd implements IRecipe {
             }
         }
         // no super torch found?
-        if(storch == null || inputTorchCount < 1)
+        if(ItemStackTools.isEmpty(storch) || inputTorchCount < 1)
             return false;
         
         ItemStack torch = storch.copy();
@@ -85,7 +88,7 @@ public class RecipeSuperTorchAdd implements IRecipe {
     }
 
 	@Override
-	public ItemStack[] getRemainingItems(InventoryCrafting inv) {
-		return new ItemStack[inv.getSizeInventory()];
+	public NonNullList<ItemStack> getRemainingItems(InventoryCrafting inv) {
+		return ForgeHooks.defaultRecipeGetRemainingItems(inv);
 	}
 }

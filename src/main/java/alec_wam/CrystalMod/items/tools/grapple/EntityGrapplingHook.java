@@ -112,7 +112,7 @@ public class EntityGrapplingHook extends EntityThrowable implements IEntityAddit
 	@Override
 	public void readSpawnData(ByteBuf additionalData) {
 		this.shootingEntityID = additionalData.readInt();
-	    this.shootingEntity = this.worldObj.getEntityByID(this.shootingEntityID);
+	    this.shootingEntity = this.getEntityWorld().getEntityByID(this.shootingEntityID);
 	    this.hand = additionalData.readBoolean() ? EnumHand.OFF_HAND : EnumHand.MAIN_HAND;
 	    this.canGrabEntities = additionalData.readBoolean();
 	    this.canGrabMobs = additionalData.readBoolean();
@@ -125,7 +125,7 @@ public class EntityGrapplingHook extends EntityThrowable implements IEntityAddit
 	
 	@Override
 	protected void onImpact(RayTraceResult movingobjectposition) {
-		if (!this.worldObj.isRemote) {
+		if (!this.getEntityWorld().isRemote) {
 			if (this.shootingEntityID != 0) {
 				if (movingobjectposition.typeOfHit == RayTraceResult.Type.ENTITY) {
 					// hit entity
@@ -154,11 +154,11 @@ public class EntityGrapplingHook extends EntityThrowable implements IEntityAddit
 				if (movingobjectposition.typeOfHit == RayTraceResult.Type.BLOCK) {
 					blockpos = movingobjectposition.getBlockPos();
 					
-					IBlockState iblockstate = this.worldObj.getBlockState(blockpos);
+					IBlockState iblockstate = this.getEntityWorld().getBlockState(blockpos);
 
 			        if (iblockstate.getMaterial() != Material.AIR)
 			        {
-			            AxisAlignedBB axisalignedbb = iblockstate.getCollisionBoundingBox(this.worldObj, blockpos);
+			            AxisAlignedBB axisalignedbb = iblockstate.getCollisionBoundingBox(this.getEntityWorld(), blockpos);
 
 			            if (axisalignedbb != Block.NULL_AABB /*&& axisalignedbb.offset(blockpos).isVecInside(new Vec3d(this.posX, this.posY, this.posZ))*/)
 			            {

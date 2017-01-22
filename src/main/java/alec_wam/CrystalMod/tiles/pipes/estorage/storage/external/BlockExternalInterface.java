@@ -100,11 +100,11 @@ public class BlockExternalInterface extends BlockContainer implements ICustomMod
     }
 	
 	@Override
-    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, ItemStack held, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
     	TileEntity tile = world.getTileEntity(pos);
         if (tile !=null && (tile instanceof TileEntityExternalInterface)) {
         	TileEntityExternalInterface inter = (TileEntityExternalInterface)tile;
-        	if(ItemStackTools.isNullStack(held)){
+        	if(ItemStackTools.isEmpty(player.getHeldItem(hand))){
 	        	if(!world.isRemote){
 		        	if(player.isSneaking()){
 		        		inter.setPriority(inter.getPriority()-1);

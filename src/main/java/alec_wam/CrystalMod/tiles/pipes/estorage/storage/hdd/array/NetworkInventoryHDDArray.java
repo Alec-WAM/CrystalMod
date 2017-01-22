@@ -20,6 +20,7 @@ import alec_wam.CrystalMod.tiles.pipes.estorage.storage.hdd.NetworkInventoryHDDI
 import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
+import alec_wam.CrystalMod.util.ModLogger;
 
 public class NetworkInventoryHDDArray implements INetworkInventory {
 
@@ -63,11 +64,10 @@ public class NetworkInventoryHDDArray implements INetworkInventory {
 		ItemStack remaining = ItemHandlerHelper.copyStackWithSize(stack, amount);
 		for(int i = 0; i < array.getSizeInventory(); i++){
 			ItemStack hdd = array.getStackInSlot(i);
-			if(!ItemStackTools.isNullStack(hdd) && hdd.getItem() instanceof IItemProvider){
+			if(ItemStackTools.isValid(hdd) && hdd.getItem() instanceof IItemProvider){
 				IItemProvider provider = (IItemProvider)hdd.getItem();
 				final int preSize = ItemStackTools.getStackSize(remaining);
 				remaining = provider.insert(hdd, remaining, ItemStackTools.getStackSize(remaining), sim);
-				
 				if(!sim && (ItemStackTools.getStackSize(remaining) !=preSize)){
 					array.markDirty();
 					BlockUtil.markBlockForUpdate(array.getWorld(), array.getPos());

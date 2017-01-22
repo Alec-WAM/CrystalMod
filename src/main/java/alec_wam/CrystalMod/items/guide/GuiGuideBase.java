@@ -3,6 +3,7 @@ package alec_wam.CrystalMod.items.guide;
 import java.io.IOException;
 
 import net.minecraft.client.gui.GuiScreen;
+import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.capability.ExtendedPlayer;
 import alec_wam.CrystalMod.capability.ExtendedPlayerProvider;
 
@@ -20,7 +21,7 @@ public class GuiGuideBase extends GuiScreen {
         
         //this.lastScreen = null;
 
-        ExtendedPlayer data = ExtendedPlayerProvider.getExtendedPlayer(mc.thePlayer);
+        ExtendedPlayer data = ExtendedPlayerProvider.getExtendedPlayer(CrystalMod.proxy.getClientPlayer());
         data.lastOpenBook = this;
     }
 	

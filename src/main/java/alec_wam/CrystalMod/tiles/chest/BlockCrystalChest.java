@@ -24,6 +24,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
@@ -90,7 +91,7 @@ public class BlockCrystalChest extends BlockContainer implements ICustomModel
     }
 
     @Override
-    public boolean onBlockActivated(World world, BlockPos pos, IBlockState blockState, EntityPlayer player, EnumHand hand, ItemStack stack, EnumFacing direction, float p_180639_6_, float p_180639_7_, float p_180639_8_)
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState blockState, EntityPlayer player, EnumHand hand, EnumFacing direction, float p_180639_6_, float p_180639_7_, float p_180639_8_)
     {
         TileEntity te = world.getTileEntity(pos);
 
@@ -121,7 +122,7 @@ public class BlockCrystalChest extends BlockContainer implements ICustomModel
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void getSubBlocks(Item itemIn, CreativeTabs tab, List<ItemStack> list)
+    public void getSubBlocks(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> list)
     {
         for (CrystalChestType type : CrystalChestType.values())
         {
@@ -163,14 +164,14 @@ public class BlockCrystalChest extends BlockContainer implements ICustomModel
     public void onBlockAdded(World world, BlockPos pos, IBlockState blockState)
     {
         super.onBlockAdded(world, pos, blockState);
-        world.notifyBlockOfStateChange(pos, this);
+        world.notifyNeighborsOfStateChange(pos, this, true);
     }
 
     @Override
     public void onBlockPlacedBy(World world, BlockPos pos, IBlockState blockState, EntityLivingBase entityliving, ItemStack itemStack)
     {
         byte chestFacing = 0;
-        int facing = MathHelper.floor_double((entityliving.rotationYaw * 4F) / 360F + 0.5D) & 3;
+        int facing = MathHelper.floor((entityliving.rotationYaw * 4F) / 360F + 0.5D) & 3;
         if (facing == 0)
         {
             chestFacing = 2;

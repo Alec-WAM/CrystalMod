@@ -14,7 +14,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
@@ -39,7 +38,7 @@ public class BlockEntityHopper extends BlockContainer {
     }
     
 	@Override
-    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
     	TileEntity tile = world.getTileEntity(pos);
         if (tile !=null && (tile instanceof TileEntityEntityHopper)) {
         	TileEntityEntityHopper hopper = (TileEntityEntityHopper)tile;
@@ -58,9 +57,8 @@ public class BlockEntityHopper extends BlockContainer {
 	
 	@SuppressWarnings("deprecation")
 	@Override
-	public void addCollisionBoxToList (IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, Entity collidingEntity) {
-	        
-		/*TileEntity tile = worldIn.getTileEntity(pos);
+	public void addCollisionBoxToList (IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity collidingEntity, boolean bool) {
+	    /*TileEntity tile = worldIn.getTileEntity(pos);
 		if(tile == null || !(tile instanceof TileEntityEntityHopper)){
 			super.addCollisionBoxToList(state, worldIn, pos, entityBox,
 					collidingBoxes, collidingEntity);
@@ -71,7 +69,7 @@ public class BlockEntityHopper extends BlockContainer {
 			return;
 		}*/
 		super.addCollisionBoxToList(state, worldIn, pos, entityBox,
-				collidingBoxes, collidingEntity);
+				collidingBoxes, collidingEntity, bool);
 	}
 	
 	@Override

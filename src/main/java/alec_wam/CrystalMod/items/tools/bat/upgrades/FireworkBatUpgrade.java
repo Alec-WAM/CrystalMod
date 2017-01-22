@@ -45,11 +45,11 @@ public class FireworkBatUpgrade extends BatUpgrade {
 			ItemStack fireW = new ItemStack(Items.FIREWORKS);
     		fireW.setTagCompound(batData.getCompoundTag(NBT_FIREWORK));
     		for(Entity entity : entities){
-	    		EntityFireworkRocket rocket = new EntityFireworkRocket(attacker.worldObj, (entity.posX), (entity.posY)+entity.height/2, (entity.posZ), fireW);
+	    		EntityFireworkRocket rocket = new EntityFireworkRocket(attacker.getEntityWorld(), (entity.posX), (entity.posY)+entity.height/2, (entity.posZ), fireW);
 	    		
-	    		if(!attacker.worldObj.isRemote){
-	    			attacker.worldObj.spawnEntityInWorld(rocket);
-	    			attacker.worldObj.setEntityState(rocket, (byte)17);
+	    		if(!attacker.getEntityWorld().isRemote){
+	    			attacker.getEntityWorld().spawnEntity(rocket);
+	    			attacker.getEntityWorld().setEntityState(rocket, (byte)17);
 	    			rocket.setDead();
 	    		}
     		}

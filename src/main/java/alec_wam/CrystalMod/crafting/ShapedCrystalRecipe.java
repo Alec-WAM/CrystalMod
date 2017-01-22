@@ -1,11 +1,13 @@
 package alec_wam.CrystalMod.crafting;
 
+import alec_wam.CrystalMod.api.crafting.ICrystalRecipe;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
-import alec_wam.CrystalMod.api.crafting.ICrystalRecipe;
-import alec_wam.CrystalMod.util.ItemStackTools;
+import net.minecraftforge.common.ForgeHooks;
 
 public class ShapedCrystalRecipe implements ICrystalRecipe {
 
@@ -37,17 +39,9 @@ public class ShapedCrystalRecipe implements ICrystalRecipe {
         return this.recipeOutput;
     }
 
-    public ItemStack[] getRemainingItems(InventoryCrafting inv)
+    public NonNullList<ItemStack> getRemainingItems(InventoryCrafting inv)
     {
-        ItemStack[] aitemstack = new ItemStack[inv.getSizeInventory()];
-
-        for (int i = 0; i < aitemstack.length; ++i)
-        {
-            ItemStack itemstack = inv.getStackInSlot(i);
-            aitemstack[i] = net.minecraftforge.common.ForgeHooks.getContainerItem(itemstack);
-        }
-
-        return aitemstack;
+        return ForgeHooks.defaultRecipeGetRemainingItems(inv);
     }
 
     /**

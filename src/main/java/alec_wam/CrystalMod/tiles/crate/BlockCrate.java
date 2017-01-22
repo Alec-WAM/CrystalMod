@@ -150,13 +150,13 @@ public class BlockCrate extends EnumBlock<BlockCrate.CrateType> implements ICust
 	}
 	
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ)
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ)
     {
 		if(worldIn.isRemote)return true;
 		TileEntity tile = worldIn.getTileEntity(pos);
 		if (tile != null && tile instanceof TileCrate){
 			TileCrate crate = (TileCrate)tile;
-			ItemStack playerItem = heldItem;
+			ItemStack playerItem = player.getHeldItem(hand);
 			ItemStack stored = crate.getStack();
 			boolean changed = false;
 			if(crate.isTimerActive()){
@@ -165,7 +165,7 @@ public class BlockCrate extends EnumBlock<BlockCrate.CrateType> implements ICust
 					if(crate.getMode() == 0 && ItemStackTools.isValid(playerItem) && playerItem.getItem() == Item.getItemFromBlock(this) && playerItem.getMetadata() > crate.getBlockMetadata()){
 						playerItem = playerItem.copy();
 						if(!player.capabilities.isCreativeMode && ItemStackTools.isValid(spawnItem(player, new ItemStack(this, 1, crate.getBlockMetadata())))){
-							playerItem = heldItem;
+							playerItem = player.getHeldItem(hand);
 						} else {
 							final ItemStack oldStored = crate.getStack();
 							final EnumFacing oldFacing = crate.facing;
@@ -186,7 +186,7 @@ public class BlockCrate extends EnumBlock<BlockCrate.CrateType> implements ICust
 							return true;
 						}
 					} else if(crate.getMode() == 1 && (ItemStackTools.isEmpty(playerItem) || ItemUtil.canCombine(playerItem, stored))){
-						for (int slot = 0; slot < player.inventory.mainInventory.length; slot++) {
+						for (int slot = 0; slot < player.inventory.mainInventory.size(); slot++) {
 							ItemStack original = player.inventory.getStackInSlot(slot);
 							ItemStack newItem = crate.addItem(original);
 							if(original !=newItem){
@@ -220,7 +220,7 @@ public class BlockCrate extends EnumBlock<BlockCrate.CrateType> implements ICust
 				return true;
 			}
 		}
-        return super.onBlockActivated(worldIn, pos, state, player, hand, heldItem, side, hitX, hitY, hitZ);
+        return super.onBlockActivated(worldIn, pos, state, player, hand, side, hitX, hitY, hitZ);
     }
 	
 	@Override
@@ -354,10 +354,10 @@ public class BlockCrate extends EnumBlock<BlockCrate.CrateType> implements ICust
 	}
 	
 	public ItemStack spawnItem(EntityPlayer player, ItemStack item){
-		if (player.worldObj.isRemote) return item;
+		if (player.getEntityWorld().isRemote) return item;
 		
 		int currentSlot = player.inventory.currentItem;
-		int inventorySize = player.inventory.mainInventory.length;
+		int inventorySize = player.inventory.mainInventory.size();
 		int maxStackSize = Math.min(player.inventory.getInventoryStackLimit(), item.getMaxStackSize());
 		
 		int pass = 0;
@@ -370,7 +370,7 @@ public class BlockCrate extends EnumBlock<BlockCrate.CrateType> implements ICust
 				slot++;
 			}
 			
-			ItemStack playerItem = player.inventory.mainInventory[slot];
+			ItemStack playerItem = player.inventory.getStackInSlot(slot);
 			
 			if ((pass == 0 || pass == 2) && (ItemStackTools.isEmpty(playerItem))){
 				playerItem = item.copy();
@@ -382,7 +382,7 @@ public class BlockCrate extends EnumBlock<BlockCrate.CrateType> implements ICust
 					item = ItemStackTools.getEmptyStack();
 				}
 				
-				playerItem.animationsToGo = 5;
+				playerItem.setAnimationsToGo(5);
 			}else if ((pass == 0 || pass == 1) && ItemUtil.canCombine(item, playerItem) && ItemStackTools.getStackSize(playerItem) < maxStackSize){
 				if (ItemStackTools.getStackSize(item) + ItemStackTools.getStackSize(playerItem) > maxStackSize){
 					int len = Math.min(ItemStackTools.getStackSize(item), maxStackSize - ItemStackTools.getStackSize(playerItem));
@@ -397,10 +397,10 @@ public class BlockCrate extends EnumBlock<BlockCrate.CrateType> implements ICust
 					item = ItemStackTools.getEmptyStack();
 				}
 				
-				playerItem.animationsToGo = 5;
+				playerItem.setAnimationsToGo(5);
 			}
 			
-			player.inventory.mainInventory[slot] = playerItem;
+			player.inventory.mainInventory.set(slot, playerItem);
 			
 			if (pass == 0){
 				pass = 1;
@@ -424,7 +424,7 @@ public class BlockCrate extends EnumBlock<BlockCrate.CrateType> implements ICust
 	
 	public static void dropItemInWorld(TileEntity source, EntityPlayer player, ItemStack stack, double speedfactor)
 	{
-		int hitOrientation = MathHelper.floor_double(player.rotationYaw * 4.0F / 360.0F + 0.5D) & 0x3;
+		int hitOrientation = MathHelper.floor(player.rotationYaw * 4.0F / 360.0F + 0.5D) & 0x3;
 		double stackCoordX = 0.0D;double stackCoordY = 0.0D;double stackCoordZ = 0.0D;
 		switch (hitOrientation)
 		{
@@ -463,7 +463,7 @@ public class BlockCrate extends EnumBlock<BlockCrate.CrateType> implements ICust
 		droppedEntity.motionY *= speedfactor;
 		droppedEntity.motionZ *= speedfactor;
 
-		if(!source.getWorld().isRemote)source.getWorld().spawnEntityInWorld(droppedEntity);
+		if(!source.getWorld().isRemote)source.getWorld().spawnEntity(droppedEntity);
 	}
     
 	@Override

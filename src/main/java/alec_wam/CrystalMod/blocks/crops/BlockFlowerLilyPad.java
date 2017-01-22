@@ -168,7 +168,7 @@ public class BlockFlowerLilyPad extends BlockBush implements IGrowable, ICustomM
 	@Override
 	public void grow(World worldIn, Random rand, BlockPos pos, IBlockState state) {
 		int age = ((Integer)state.getValue(AGE)).intValue();
-		int incr = MathHelper.getRandomIntegerInRange(worldIn.rand, 2, 5);
+		int incr = MathHelper.getInt(worldIn.rand, 2, 5);
 		int newAge = Integer.valueOf(age + incr);
 		if(newAge > 15){
 			newAge = 15;

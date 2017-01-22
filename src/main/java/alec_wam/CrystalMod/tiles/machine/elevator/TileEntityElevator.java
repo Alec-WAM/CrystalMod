@@ -27,6 +27,7 @@ import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.tiles.TileEntityMod;
 import alec_wam.CrystalMod.tiles.machine.elevator.caller.TileEntityElevatorCaller;
@@ -65,13 +66,13 @@ public class TileEntityElevator extends TileEntityMod implements ITickable {
     private boolean entitiesOnPlatformComplete = false; // If true then we know entitiesOnPlatform is complete, otherwise it only contains players.
 	
     public void clearCaches() {
-        EnumFacing side = worldObj.getBlockState(getPos()) != ModBlocks.elevator ? null : worldObj.getBlockState(getPos()).getValue(BlockElevator.FACING_HORIZ);
-        for (int y = 0 ; y < worldObj.getHeight() ; y++) {
+        EnumFacing side = getWorld().getBlockState(getPos()) != ModBlocks.elevator ? null : getWorld().getBlockState(getPos()).getValue(BlockElevator.FACING_HORIZ);
+        for (int y = 0 ; y < getWorld().getHeight() ; y++) {
             BlockPos pos2 = getPosAtY(getPos(), y);
-            TileEntity te = worldObj.getTileEntity(pos2);
-            if (worldObj.getBlockState(pos2).getBlock() == ModBlocks.elevator) {
+            TileEntity te = getWorld().getTileEntity(pos2);
+            if (getWorld().getBlockState(pos2).getBlock() == ModBlocks.elevator) {
 	            if (te instanceof TileEntityElevator) {
-	                EnumFacing side2 = worldObj.getBlockState(getPos()) != ModBlocks.elevator ? null : worldObj.getBlockState(pos2).getValue(BlockElevator.FACING_HORIZ);
+	                EnumFacing side2 = getWorld().getBlockState(getPos()) != ModBlocks.elevator ? null : getWorld().getBlockState(pos2).getValue(BlockElevator.FACING_HORIZ);
 	                if (side == null || side2 == null || side2 == side) {
 	                	TileEntityElevator tileEntity = (TileEntityElevator) te;
 	                    tileEntity.cachedControllerPos = null;
@@ -93,7 +94,7 @@ public class TileEntityElevator extends TileEntityMod implements ITickable {
 	
     @Override
     public void update() {
-        if (!worldObj.isRemote) {
+        if (!getWorld().isRemote) {
             if (isMoving()) {
             	markDirty();
 
@@ -138,9 +139,9 @@ public class TileEntityElevator extends TileEntityMod implements ITickable {
         double d = calculateSpeed();
         handlePlatformMovement(d);
         if(bounds !=null){
-	        EntityPlayerSP player = Minecraft.getMinecraft().thePlayer;
+	        EntityPlayerSP player = (EntityPlayerSP) CrystalMod.proxy.getClientPlayer();
 	        AxisAlignedBB aabb = getAABBAboveElevator(d);
-	        boolean on = Minecraft.getMinecraft().thePlayer.getEntityBoundingBox().intersectsWith(aabb);
+	        boolean on = player.getEntityBoundingBox().intersectsWith(aabb);
 	        if (on) {
 	            player.setPosition(player.posX, movingY + 1, player.posZ);
 	        }
@@ -189,7 +190,7 @@ public class TileEntityElevator extends TileEntityMod implements ITickable {
     }
 
     private void moveEntities(double speed, boolean stop) {
-    	List<Entity> entities = worldObj.getEntitiesWithinAABB(Entity.class, getAABBAboveElevator(speed));
+    	List<Entity> entities = getWorld().getEntitiesWithinAABB(Entity.class, getAABBAboveElevator(speed));
     	double offset = speed > 0 ? speed * 2 : speed;
     	Set<Entity> oldEntities = this.entitiesOnPlatform;
     	entitiesOnPlatform = new HashSet<Entity>();
@@ -253,11 +254,11 @@ public class TileEntityElevator extends TileEntityMod implements ITickable {
             return cachedControllerPos;
         }
         // The orientation of this elevator.
-        EnumFacing side = worldObj.getBlockState(getPos()).getValue(BlockElevator.FACING_HORIZ);
+        EnumFacing side = getWorld().getBlockState(getPos()).getValue(BlockElevator.FACING_HORIZ);
 
-        for (int y = 0 ; y < worldObj.getHeight() ; y++) {
+        for (int y = 0 ; y < getWorld().getHeight() ; y++) {
             BlockPos elevatorPos = getPosAtY(getPos(), y);
-            IBlockState otherState = worldObj.getBlockState(elevatorPos);
+            IBlockState otherState = getWorld().getBlockState(elevatorPos);
             if (otherState.getBlock() instanceof BlockElevator) {
                 EnumFacing otherSide = otherState.getValue(BlockElevator.FACING_HORIZ);
                 if (otherSide == side) {
@@ -272,11 +273,11 @@ public class TileEntityElevator extends TileEntityMod implements ITickable {
     // Find the position of the elevator that has the platform.
     public BlockPos findElevatorWithPlatform() {
         // The orientation of this elevator.
-        EnumFacing side = worldObj.getBlockState(getPos()).getValue(BlockElevator.FACING_HORIZ);
+        EnumFacing side = getWorld().getBlockState(getPos()).getValue(BlockElevator.FACING_HORIZ);
 
-        for (int y = 0 ; y < worldObj.getHeight() ; y++) {
+        for (int y = 0 ; y < getWorld().getHeight() ; y++) {
             BlockPos elevatorPos = getPosAtY(getPos(), y);
-            IBlockState otherState = worldObj.getBlockState(elevatorPos);
+            IBlockState otherState = getWorld().getBlockState(elevatorPos);
             if (otherState.getBlock() instanceof BlockElevator) {
                 EnumFacing otherSide = otherState.getValue(BlockElevator.FACING_HORIZ);
                 if (otherSide == side) {
@@ -291,10 +292,10 @@ public class TileEntityElevator extends TileEntityMod implements ITickable {
     }
 
     private boolean isValidPlatformBlock(BlockPos frontPos) {
-        if (worldObj.isAirBlock(frontPos)) {
+        if (getWorld().isAirBlock(frontPos)) {
             return false;
         }
-        if (worldObj.getTileEntity(frontPos) != null) {
+        if (getWorld().getTileEntity(frontPos) != null) {
             return false;
         }
         return true;
@@ -311,7 +312,7 @@ public class TileEntityElevator extends TileEntityMod implements ITickable {
     private void stopMoving() {
         movingY = stopY;
         for (BlockPos pos : positions) {
-            worldObj.setBlockState(getPosAtY(pos, (int) stopY), movingState, 3);
+            getWorld().setBlockState(getPosAtY(pos, (int) stopY), movingState, 3);
         }
         // Current level will have to be recalculated
         cachedCurrent = -1;
@@ -392,19 +393,19 @@ public class TileEntityElevator extends TileEntityMod implements ITickable {
 
  	// Always called on controller TE (bottom one)
     private void getBounds(BlockPos start) {
-        EnumFacing side = worldObj.getBlockState(getPos()).getValue(BlockElevator.FACING_HORIZ);
+        EnumFacing side = getWorld().getBlockState(getPos()).getValue(BlockElevator.FACING_HORIZ);
         bounds = new Bounds();
         for (int a = 1; a < maxPlatformSize; a++) {
             BlockPos offset = start.offset(side, a);
-            if (worldObj.getBlockState(offset) == movingState) {
-                worldObj.setBlockToAir(offset);
+            if (getWorld().getBlockState(offset) == movingState) {
+                getWorld().setBlockToAir(offset);
                 bounds.addPos(offset);
                 positions.add(getPosAtY(offset, getPos().getY()));
 
                 for (int b = 1; b <= (maxPlatformSize / 2); b++) {
                     BlockPos offsetLeft = offset.offset(side.rotateY(), b);
-                    if (worldObj.getBlockState(offsetLeft) == movingState) {
-                        worldObj.setBlockToAir(offsetLeft);
+                    if (getWorld().getBlockState(offsetLeft) == movingState) {
+                        getWorld().setBlockToAir(offsetLeft);
                         bounds.addPos(offsetLeft);
                         positions.add(getPosAtY(offsetLeft, getPos().getY()));
                     } else {
@@ -414,8 +415,8 @@ public class TileEntityElevator extends TileEntityMod implements ITickable {
 
                 for (int b = 1; b <= (maxPlatformSize / 2); b++) {
                     BlockPos offsetRight = offset.offset(side.rotateYCCW(), b);
-                    if (worldObj.getBlockState(offsetRight) == movingState) {
-                        worldObj.setBlockToAir(offsetRight);
+                    if (getWorld().getBlockState(offsetRight) == movingState) {
+                        getWorld().setBlockToAir(offsetRight);
                         bounds.addPos(offsetRight);
                         positions.add(getPosAtY(offsetRight, getPos().getY()));
                     } else {
@@ -447,8 +448,8 @@ public class TileEntityElevator extends TileEntityMod implements ITickable {
     
     public void markDirtyClient() {
         markDirty();
-        if (worldObj != null) {
-            worldObj.notifyBlockOfStateChange(getPos(), ModBlocks.elevator);
+        if (getWorld() != null) {
+        	getWorld().notifyNeighborsOfStateChange(pos, ModBlocks.elevator, false);
         }
     }
 
@@ -465,7 +466,7 @@ public class TileEntityElevator extends TileEntityMod implements ITickable {
         // What about TE blocks in front of platform?
 
         // First check if the platform is here already:
-        EnumFacing side = worldObj.getBlockState(getPos()).getValue(BlockElevator.FACING_HORIZ);
+        EnumFacing side = getWorld().getBlockState(getPos()).getValue(BlockElevator.FACING_HORIZ);
         BlockPos frontPos = getPos().offset(side);
         if (isValidPlatformBlock(frontPos)) {
             // Platform is already here (or something is blocking here)
@@ -481,26 +482,26 @@ public class TileEntityElevator extends TileEntityMod implements ITickable {
 
         // Find the bottom elevator (this is the one doing the work).
         BlockPos controllerPos = findBottomElevator();
-        TileEntityElevator controller = (TileEntityElevator) worldObj.getTileEntity(controllerPos);
+        TileEntityElevator controller = (TileEntityElevator) getWorld().getTileEntity(controllerPos);
 
         if (controller.isMoving()) {
             // Already moving, do nothing
             return;
         }
-        IBlockState state = worldObj.getBlockState(platformPos.offset(side));
+        IBlockState state = getWorld().getBlockState(platformPos.offset(side));
         controller.startMoving(platformPos, getPos(), state);
     }
 
  // Go to the specific level (levels start at 0)
     public void toLevel(int level) {
-        EnumFacing side = worldObj.getBlockState(getPos()).getValue(BlockElevator.FACING_HORIZ);
+        EnumFacing side = getWorld().getBlockState(getPos()).getValue(BlockElevator.FACING_HORIZ);
         BlockPos controllerPos = findBottomElevator();
-        for (int y = controllerPos.getY() ; y < worldObj.getHeight() ; y++) {
+        for (int y = controllerPos.getY() ; y < getWorld().getHeight() ; y++) {
             BlockPos pos2 = getPosAtY(controllerPos, y);
-            TileEntity te2 = worldObj.getTileEntity(pos2);
-            if (worldObj.getBlockState(pos2).getBlock() == ModBlocks.elevator) {
+            TileEntity te2 = getWorld().getTileEntity(pos2);
+            if (getWorld().getBlockState(pos2).getBlock() == ModBlocks.elevator) {
 	            if (te2 instanceof TileEntityElevator) {
-	                EnumFacing side2 = worldObj.getBlockState(pos2).getValue(BlockElevator.FACING_HORIZ);
+	                EnumFacing side2 = getWorld().getBlockState(pos2).getValue(BlockElevator.FACING_HORIZ);
 	                if (side == side2) {
 	                    if (level == 0) {
 	                        ((TileEntityElevator) te2).movePlatformHere();
@@ -515,21 +516,21 @@ public class TileEntityElevator extends TileEntityMod implements ITickable {
 
     public int getCurrentLevel() {
         BlockPos controllerPos = findBottomElevator();
-        IBlockState blockState = worldObj.getBlockState(getPos());
+        IBlockState blockState = getWorld().getBlockState(getPos());
         if (blockState.getBlock() != ModBlocks.elevator) {
         	return 0;
         }
-        EnumFacing side = worldObj.getBlockState(getPos()).getValue(BlockElevator.FACING_HORIZ);
-        TileEntity te = worldObj.getTileEntity(controllerPos);
+        EnumFacing side = getWorld().getBlockState(getPos()).getValue(BlockElevator.FACING_HORIZ);
+        TileEntity te = getWorld().getTileEntity(controllerPos);
         if (te instanceof TileEntityElevator) {
             TileEntityElevator controller = (TileEntityElevator) te;
             if (controller.cachedCurrent == -1) {
                 int level = 0;
-                for (int y = controllerPos.getY() ; y < worldObj.getHeight() ; y++) {
+                for (int y = controllerPos.getY() ; y < getWorld().getHeight() ; y++) {
                     BlockPos pos2 = getPosAtY(controllerPos, y);
-                    TileEntity te2 = worldObj.getTileEntity(pos2);
+                    TileEntity te2 = getWorld().getTileEntity(pos2);
                     if (te2 instanceof TileEntityElevator) {
-                        EnumFacing side2 = worldObj.getBlockState(pos2).getValue(BlockElevator.FACING_HORIZ);
+                        EnumFacing side2 = getWorld().getBlockState(pos2).getValue(BlockElevator.FACING_HORIZ);
                         if (side == side2) {
                             BlockPos frontPos = pos2.offset(side);
                             if (isValidPlatformBlock(frontPos)) {
@@ -547,16 +548,16 @@ public class TileEntityElevator extends TileEntityMod implements ITickable {
 
     public int getLevelCount() {
         BlockPos controllerPos = findBottomElevator();
-        EnumFacing side = worldObj.getBlockState(getPos()).getValue(BlockElevator.FACING_HORIZ);
-        TileEntity te = worldObj.getTileEntity(controllerPos);
+        EnumFacing side = getWorld().getBlockState(getPos()).getValue(BlockElevator.FACING_HORIZ);
+        TileEntity te = getWorld().getTileEntity(controllerPos);
         if (te instanceof TileEntityElevator) {
             TileEntityElevator controller = (TileEntityElevator) te;
             if (controller.cachedLevels == 0) {
-                for (int y = controllerPos.getY() ; y < worldObj.getHeight() ; y++) {
+                for (int y = controllerPos.getY() ; y < getWorld().getHeight() ; y++) {
                     BlockPos pos2 = getPosAtY(controllerPos, y);
-                    TileEntity te2 = worldObj.getTileEntity(pos2);
+                    TileEntity te2 = getWorld().getTileEntity(pos2);
                     if (te2 instanceof TileEntityElevator) {
-                        EnumFacing side2 = worldObj.getBlockState(pos2).getValue(BlockElevator.FACING_HORIZ);
+                        EnumFacing side2 = getWorld().getBlockState(pos2).getValue(BlockElevator.FACING_HORIZ);
                         if (side == side2) {
                             controller.cachedLevels++;
                         }
@@ -614,7 +615,7 @@ public class TileEntityElevator extends TileEntityMod implements ITickable {
         if (tagCompound.hasKey("players")) {
             entitiesOnPlatform.clear();
             WorldServer world = DimensionManager.getWorld(0);
-            List<EntityPlayerMP> serverPlayers = world.getMinecraftServer().getPlayerList().getPlayerList();
+            List<EntityPlayerMP> serverPlayers = world.getMinecraftServer().getPlayerList().getPlayers();
             NBTTagList playerList = tagCompound.getTagList("players", Constants.NBT.TAG_COMPOUND);
             for (int i = 0; i < playerList.tagCount(); i++) {
                 NBTTagCompound p = playerList.getCompoundTagAt(i);

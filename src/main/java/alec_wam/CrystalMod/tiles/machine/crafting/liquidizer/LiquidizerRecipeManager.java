@@ -84,7 +84,7 @@ public class LiquidizerRecipeManager {
 		}
 		
 		for(LiquidizerRecipe recipe : recipes){
-			if(recipe.matchesInput(input) && recipe.getInputSize() <=input.stackSize){
+			if(recipe.matchesInput(input) && recipe.getInputSize() <=ItemStackTools.getStackSize(input)){
 				return recipe;
 			}
 		}

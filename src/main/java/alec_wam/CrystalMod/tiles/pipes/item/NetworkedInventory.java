@@ -122,7 +122,7 @@ public class NetworkedInventory {
 		  ItemStack item = inventory.getStackInSlot(slot);
 		  if(canExtractItem(item)) {
 			  extractItem = item.copy();        
-			  if (!ItemStackTools.isNullStack(inventory.extractItem(slot, extractItem.stackSize, true))) {
+			  if (!ItemStackTools.isNullStack(inventory.extractItem(slot, ItemStackTools.getStackSize(extractItem), true))) {
 				  if(doTransfer(extractItem, slot, maxExtracted)) {
 					  setNextStartingSlot(slot);
 					  return true;

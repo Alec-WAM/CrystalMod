@@ -249,8 +249,8 @@ public class ClientProxy extends CommonProxy {
         
         if(Minecraft.getMinecraft().currentScreen !=null && (Minecraft.getMinecraft().currentScreen instanceof GuiHDDInterface || Minecraft.getMinecraft().currentScreen instanceof GuiPanel)){
         	if(ItemNBTHelper.getBoolean(stack, "DummyItem", false)){
-        		if(stack.stackSize > 999){
-        			event.getToolTip().add("Stack Size: "+stack.stackSize);
+        		if(ItemStackTools.getStackSize(stack) > 999){
+        			event.getToolTip().add("Stack Size: "+ItemStackTools.getStackSize(stack));
         		}
         	}
         }
@@ -278,12 +278,12 @@ public class ClientProxy extends CommonProxy {
     
     @Override
     public EntityPlayer getClientPlayer() {
-      return Minecraft.getMinecraft().thePlayer;
+      return Minecraft.getMinecraft().player;
     }
     
     @Override
     public World getClientWorld() {
-      return Minecraft.getMinecraft().theWorld;
+      return Minecraft.getMinecraft().world;
     }
     
     @Override

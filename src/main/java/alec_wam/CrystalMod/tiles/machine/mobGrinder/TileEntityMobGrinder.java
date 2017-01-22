@@ -180,13 +180,13 @@ public class TileEntityMobGrinder extends TileEntityMod implements IMessageHandl
 	}
 	
 	public boolean killNextEntity() {
-		if (worldObj.isRemote) return false;
+		if (getWorld().isRemote) return false;
 		
 		if (fakePlayer == null){
-			fakePlayer = FakePlayerFactory.get((WorldServer) worldObj, GRINDER);
+			fakePlayer = FakePlayerFactory.get((WorldServer) getWorld(), GRINDER);
 		}
 
-		killList = worldObj.getEntitiesWithinAABB(EntityLiving.class, getKillBox());
+		killList = getWorld().getEntitiesWithinAABB(EntityLiving.class, getKillBox());
 
 		DamageSource playerSource = DamageSource.causePlayerDamage(fakePlayer);
 		
@@ -241,7 +241,7 @@ public class TileEntityMobGrinder extends TileEntityMod implements IMessageHandl
 		  return;	
 	  }
 	  ItemStack stack;
-	  List<EntityItem> items = this.worldObj.getEntitiesWithinAABB(EntityItem.class, getKillBox());
+	  List<EntityItem> items = getWorld().getEntitiesWithinAABB(EntityItem.class, getKillBox());
 	  for(EntityItem item : items)
 	  {
 	    stack = item.getEntityItem();
@@ -282,7 +282,7 @@ public class TileEntityMobGrinder extends TileEntityMod implements IMessageHandl
 
 	    double maxDist = 4.5*2;
 
-	    List<EntityXPOrb> xp = worldObj.getEntitiesWithinAABB(EntityXPOrb.class, getKillBox());
+	    List<EntityXPOrb> xp = getWorld().getEntitiesWithinAABB(EntityXPOrb.class, getKillBox());
 
 	    for (EntityXPOrb entity : xp) {
 	      double xDist = (getPos().getX() + 0.5D - entity.posX);
@@ -309,7 +309,7 @@ public class TileEntityMobGrinder extends TileEntityMod implements IMessageHandl
 	}
 
 	private void pickupXP(EntityXPOrb entity) {
-	    if (!worldObj.isRemote) {
+	    if (!getWorld().isRemote) {
 	      if (!entity.isDead) {
 	        int xpValue = entity.getXpValue();
 	        if (xpValue > 0) {

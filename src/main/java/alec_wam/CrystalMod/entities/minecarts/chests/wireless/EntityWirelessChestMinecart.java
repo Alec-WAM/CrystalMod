@@ -81,7 +81,7 @@ public class EntityWirelessChestMinecart extends EntityMinecartChest implements 
 	
 	public boolean getOpen()
     {
-        return this.worldObj.isRemote ? dataManager.get(OPEN) : this.open;
+        return this.getEntityWorld().isRemote ? dataManager.get(OPEN) : this.open;
     }
     
     public void setOwner(UUID owner){
@@ -92,7 +92,7 @@ public class EntityWirelessChestMinecart extends EntityMinecartChest implements 
     
     public UUID getOwner()
     {
-        return this.worldObj.isRemote ? dataManager.get(OWNER).orNull() : this.boundToPlayer;
+        return this.getEntityWorld().isRemote ? dataManager.get(OWNER).orNull() : this.boundToPlayer;
     }
     
     public boolean isBoundToPlayer()
@@ -112,7 +112,7 @@ public class EntityWirelessChestMinecart extends EntityMinecartChest implements 
     
     public int getCode()
     {
-        return this.worldObj.isRemote ? dataManager.get(CODE) : code;
+        return this.getEntityWorld().isRemote ? dataManager.get(CODE) : code;
     }
     
     public boolean hasValidCode(){
@@ -126,9 +126,9 @@ public class EntityWirelessChestMinecart extends EntityMinecartChest implements 
     	if (inventory == null)
         {
             if (isBoundToPlayer())
-            	inventory = WirelessChestManager.get(worldObj).getPrivate(getOwner()).getInventory(getCode());
+            	inventory = WirelessChestManager.get(getEntityWorld()).getPrivate(getOwner()).getInventory(getCode());
             else
-            	inventory = WirelessChestManager.get(worldObj).getInventory(getCode());
+            	inventory = WirelessChestManager.get(getEntityWorld()).getInventory(getCode());
         }
     	return inventory;
     }
@@ -137,7 +137,7 @@ public class EntityWirelessChestMinecart extends EntityMinecartChest implements 
     public void onUpdate(){
     	super.onUpdate();
     	// Resynchronize clients with the server state
-        if (worldObj != null && !worldObj.isRemote)
+        if (getEntityWorld() != null && !getEntityWorld().isRemote)
         {
         	boolean newOpen = getOpen();
             WirelessInventory inventory = getInventory();
@@ -155,7 +155,7 @@ public class EntityWirelessChestMinecart extends EntityMinecartChest implements 
         {
             double d = posX + 0.5D;
             double d1 = posZ + 0.5D;
-            worldObj.playSound(null, d, posY + 0.5D, d1, SoundEvents.BLOCK_CHEST_OPEN, SoundCategory.NEUTRAL, 0.5F, worldObj.rand.nextFloat() * 0.1F + 0.9F);
+            getEntityWorld().playSound(null, d, posY + 0.5D, d1, SoundEvents.BLOCK_CHEST_OPEN, SoundCategory.NEUTRAL, 0.5F, getEntityWorld().rand.nextFloat() * 0.1F + 0.9F);
         }
         if (!getOpen() && lidAngle > 0.0F || getOpen() && lidAngle < 1.0F)
         {
@@ -176,7 +176,7 @@ public class EntityWirelessChestMinecart extends EntityMinecartChest implements 
             {
                 double d2 = posX + 0.5D;
                 double d3 = posZ + 0.5D;
-                worldObj.playSound(null, d2, posY + 0.5D, d3, SoundEvents.BLOCK_CHEST_CLOSE, SoundCategory.NEUTRAL, 0.5F, worldObj.rand.nextFloat() * 0.1F + 0.9F);
+                getEntityWorld().playSound(null, d2, posY + 0.5D, d3, SoundEvents.BLOCK_CHEST_CLOSE, SoundCategory.NEUTRAL, 0.5F, getEntityWorld().rand.nextFloat() * 0.1F + 0.9F);
             }
             if (lidAngle < 0.0F)
             {
@@ -194,7 +194,7 @@ public class EntityWirelessChestMinecart extends EntityMinecartChest implements 
     {
 		this.setDead();
 
-        if (this.worldObj.getGameRules().getBoolean("doEntityDrops"))
+        if (this.getEntityWorld().getGameRules().getBoolean("doEntityDrops"))
         {
             ItemStack itemstack = new ItemStack(Items.MINECART, 1);
 
@@ -282,7 +282,7 @@ public class EntityWirelessChestMinecart extends EntityMinecartChest implements 
 	
 	public boolean processInitialInteract(EntityPlayer player, @Nullable ItemStack stack, EnumHand hand)
     {
-        if(net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.event.entity.minecart.MinecartInteractEvent(this, player, stack, hand))) return true;
+        if(net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.event.entity.minecart.MinecartInteractEvent(this, player, hand))) return true;
         
         if(isOwner(player.getUniqueID())){
         	if(ItemStackTools.isValid(stack) && ItemUtil.itemStackMatchesOredict(stack, "gemDiamond")){
@@ -294,13 +294,13 @@ public class EntityWirelessChestMinecart extends EntityMinecartChest implements 
         		}
         	}
 
-            if (!this.worldObj.isRemote)
+            if (!this.getEntityWorld().isRemote)
             {
-                player.openGui(CrystalMod.instance, GuiHandler.GUI_ID_ENTITY, player.worldObj, getEntityId(), 0, 0);
+                player.openGui(CrystalMod.instance, GuiHandler.GUI_ID_ENTITY, player.getEntityWorld(), getEntityId(), 0, 0);
             }
         } else {
         	if(isBoundToPlayer()){
-        		if(!worldObj.isRemote)
+        		if(!getEntityWorld().isRemote)
         		ChatUtil.sendChat(player, "You do not own this chest, "+ProfileUtil.getUsername(boundToPlayer)+" does.");
         	}
         }

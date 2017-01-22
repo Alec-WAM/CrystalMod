@@ -33,7 +33,7 @@ public class ContainerBackpackUpgradeWindow extends Container {
 	protected IBaublesItemHandler baubles;
 	private final EntityEquipmentSlot[] entityequipmentslots = new EntityEquipmentSlot[] {EntityEquipmentSlot.HEAD, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS, EntityEquipmentSlot.FEET};
 
-    public ContainerBackpackUpgradeWindow(InventoryPlayer playerInventory, InventoryBackpackUpgrades upgradeInventory, BackpackUpgrade upgrade)
+    public ContainerBackpackUpgradeWindow(final InventoryPlayer playerInventory, InventoryBackpackUpgrades upgradeInventory, BackpackUpgrade upgrade)
     {
         this.upgradeInventory = upgradeInventory;
         this.upgrade = upgrade;
@@ -146,7 +146,7 @@ public class ContainerBackpackUpgradeWindow extends Container {
 
     public boolean canInteractWith(EntityPlayer playerIn)
     {
-        return this.upgradeInventory.isUseableByPlayer(playerIn);
+        return this.upgradeInventory.isUsableByPlayer(playerIn);
     }
 
     /**
@@ -286,7 +286,7 @@ public class ContainerBackpackUpgradeWindow extends Container {
             if(ItemStackTools.getStackSize(newStack) == ItemStackTools.getStackSize(currentStack)){
                 return ItemStackTools.getEmptyStack();
             }
-            theSlot.onPickupFromSlot(playerIn, newStack);
+            theSlot.onTake(playerIn, newStack);
 
             return currentStack;
         }

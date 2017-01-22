@@ -28,11 +28,11 @@ public class JobPlantCrop extends WorkerJob {
 	
 	@Override
 	public boolean run(EntityMinionWorker worker, TileWorksiteBase worksite) {
-		if(worker.worldObj.isRemote) return false;
+		if(worker.getEntityWorld().isRemote) return false;
 		if(dirtPos == null || dirtPos == BlockPos.ORIGIN) return true;
 		if(worksite == null || !(worksite instanceof WorksiteCropFarm)) return true;
 		WorksiteCropFarm cFarm = (WorksiteCropFarm)worksite;
-		if(!worker.worldObj.isAirBlock(dirtPos)){ 
+		if(!worker.getEntityWorld().isAirBlock(dirtPos)){ 
 			return true;
 		}
 		ItemStack held = worker.getHeldItemMainhand();
@@ -43,7 +43,7 @@ public class JobPlantCrop extends WorkerJob {
 		worker.getLookHelper().setLookPosition(dirtPos.getX() + 0.5, dirtPos.getY() - 1 + 0.5, dirtPos.getZ() + 0.5, 10, 40);
 		double d = worker.getDistance(dirtPos.getX() + 0.5, dirtPos.down().getY() + 0.5, dirtPos.getZ() + 0.5);
 		if(d <= 1.5D){
-			if(FakePlayerUtil.rightClickBlock(worker.worldObj, dirtPos.down(), EnumFacing.UP, held)){
+			if(FakePlayerUtil.rightClickBlock(worker.getEntityWorld(), dirtPos.down(), EnumFacing.UP, held)){
 				if(!ItemStackTools.isValid(held)){
 					held = ItemStackTools.getEmptyStack();
 				}

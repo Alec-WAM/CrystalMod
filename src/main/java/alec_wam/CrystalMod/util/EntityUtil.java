@@ -72,7 +72,7 @@ public class EntityUtil {
 
     public static RayTraceResult getEntityLookedObject(EntityLivingBase entity, float maxDistance){
         Pair<Vec3d, Vec3d> vecs = getStartAndEndLookVec(entity, maxDistance);
-        return entity.worldObj.rayTraceBlocks(vecs.getLeft(), vecs.getRight());
+        return entity.getEntityWorld().rayTraceBlocks(vecs.getLeft(), vecs.getRight());
     }
 
     public static Pair<Vec3d, Vec3d> getStartAndEndLookVec(EntityLivingBase entity){
@@ -197,7 +197,7 @@ public class EntityUtil {
 
         if (flag)
         {
-            entity.worldObj.playSound((EntityPlayer)null, entity.prevPosX, entity.prevPosY, entity.prevPosZ, SoundEvents.ENTITY_ENDERMEN_TELEPORT, entity.getSoundCategory(), 1.0F, 1.0F);
+            entity.getEntityWorld().playSound((EntityPlayer)null, entity.prevPosX, entity.prevPosY, entity.prevPosZ, SoundEvents.ENTITY_ENDERMEN_TELEPORT, entity.getSoundCategory(), 1.0F, 1.0F);
             entity.playSound(SoundEvents.ENTITY_ENDERMEN_TELEPORT, 1.0F, 1.0F);
         }
         return flag;
@@ -213,7 +213,7 @@ public class EntityUtil {
         entity.posZ = z;
         boolean flag = false;
         BlockPos blockpos = new BlockPos(entity);
-        World world = entity.worldObj;
+        World world = entity.getEntityWorld();
         Random random = entity instanceof EntityLivingBase ? ((EntityLivingBase)entity).getRNG() : rand;
 
         if (world.isBlockLoaded(blockpos))
@@ -285,7 +285,7 @@ public class EntityUtil {
 			}
 			if(stack == null)stack = entity.getPickedResult(ray);
 		}
-		return ItemStack.copyItemStack(stack);
+		return ItemStackTools.safeCopy(stack);
 	}
 
 	public static RayTraceResult getRayTraceEntity(World world, EntityPlayer living, double maxrange, double range) {
@@ -451,7 +451,7 @@ public class EntityUtil {
                         entityarrow.pickupStatus = EntityArrow.PickupStatus.CREATIVE_ONLY;
                     }
 
-                    world.spawnEntityInWorld(entityarrow);
+                    world.spawnEntity(entityarrow);
                 }
 
                 world.playSound((EntityPlayer)null, entityplayer.posX, entityplayer.posY, entityplayer.posZ, SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.NEUTRAL, 1.0F, 1.0F / (rand.nextFloat() * 0.4F + 1.2F) + f * 0.5F);

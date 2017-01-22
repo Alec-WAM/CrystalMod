@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
+import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.capability.ExtendedPlayer;
 import alec_wam.CrystalMod.capability.ExtendedPlayerProvider;
 import alec_wam.CrystalMod.entities.disguise.DisguiseType;
@@ -244,7 +245,7 @@ public class RenderMiniPlayer extends RenderPlayer
             float f7 = entity.prevRotationPitch + (entity.rotationPitch - entity.prevRotationPitch) * partialTicks;
             this.renderLivingAt(entity, x, y, z);
             float f8 = this.handleRotationFloat(entity, partialTicks);
-            this.rotateCorpse(entity, f8, f, partialTicks);
+            this.applyRotations(entity, f8, f, partialTicks);
             float f4 = this.prepareScale(entity, partialTicks);
             float f5 = 0.0F;
             float f6 = 0.0F;
@@ -392,7 +393,7 @@ public class RenderMiniPlayer extends RenderPlayer
 
     protected boolean canRenderName(AbstractClientPlayer entity)
     {
-        EntityPlayerSP entityplayersp = Minecraft.getMinecraft().thePlayer;
+        EntityPlayerSP entityplayersp = (EntityPlayerSP) CrystalMod.proxy.getClientPlayer();
         boolean flag = !entity.isInvisibleToPlayer(entityplayersp);
 
         if (entity != entityplayersp)

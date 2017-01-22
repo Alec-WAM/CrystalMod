@@ -1,22 +1,11 @@
 package alec_wam.CrystalMod.network;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.WorldServer;
-import net.minecraft.world.chunk.Chunk;
-import net.minecraftforge.fml.common.network.NetworkRegistry;
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.capability.PacketExtendedPlayerInvSync;
 import alec_wam.CrystalMod.capability.PacketOpenExtendedInventory;
-import alec_wam.CrystalMod.items.backpack.PacketBackpackGuiAction;
-import alec_wam.CrystalMod.items.backpack.container.PacketBackpackGuiActionRename;
 import alec_wam.CrystalMod.items.tools.backpack.PacketOpenBackpack;
 import alec_wam.CrystalMod.items.tools.backpack.network.PacketToolSwap;
 import alec_wam.CrystalMod.network.packets.InventoryCraftingSyncPacket;
-import alec_wam.CrystalMod.network.packets.MessageSyncSlot;
 import alec_wam.CrystalMod.network.packets.MessageTileContainerUpdate;
 import alec_wam.CrystalMod.network.packets.PacketEntityMessage;
 import alec_wam.CrystalMod.network.packets.PacketExtendedPlayer;
@@ -33,8 +22,15 @@ import alec_wam.CrystalMod.tiles.pipes.item.PacketPipe;
 import alec_wam.CrystalMod.tiles.playercube.ChunkBlockUpdateMessage;
 import alec_wam.CrystalMod.tiles.playercube.PacketRequestTileEntitites;
 import alec_wam.CrystalMod.tiles.playercube.TileEntitiesMessage;
-import alec_wam.CrystalMod.util.ModLogger;
 import alec_wam.CrystalMod.util.ChatUtil.PacketNoSpamChat;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.WorldServer;
+import net.minecraft.world.chunk.Chunk;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
 
 public class CrystalModNetwork extends NetworkWrapper {
 	  public static CrystalModNetwork instance = new CrystalModNetwork();
@@ -50,15 +46,12 @@ public class CrystalModNetwork extends NetworkWrapper {
 	    // TOOLS
 	    registerPacketServer(InventoryCraftingSyncPacket.class);
 	    registerPacket(PacketPlayerMove.class);
-	    registerPacketClient(MessageSyncSlot.class);
 	    
 	    registerPacketClient(PacketExtendedPlayerInvSync.class);
 	    registerPacketServer(PacketOpenExtendedInventory.class);
 	    registerPacketServer(PacketOpenBackpack.class);
 	    registerPacketServer(PacketToolSwap.class);
 	    
-	    registerPacketServer(PacketBackpackGuiAction.class);
-	    registerPacketServer(PacketBackpackGuiActionRename.class);
 	    registerPacketClient(PacketNoSpamChat.class);
 	    registerPacket(PacketExtendedPlayer.class);
 	    
@@ -106,7 +99,7 @@ public class CrystalModNetwork extends NetworkWrapper {
 	  
 	  public static void sendToAllAround(AbstractPacket packet, Entity tile)
 	  {
-		  sendToAllAround(packet, new NetworkRegistry.TargetPoint(tile.worldObj.provider.getDimension(), tile.posX, tile.posY, tile.posZ, 64));
+		  sendToAllAround(packet, new NetworkRegistry.TargetPoint(tile.getEntityWorld().provider.getDimension(), tile.posX, tile.posY, tile.posZ, 64));
 	  }
 
 	  public static void sendToAllAround(AbstractPacket packet, NetworkRegistry.TargetPoint point)

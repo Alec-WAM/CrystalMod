@@ -80,7 +80,7 @@ public class ItemSuperTorch extends Item implements ICustomModel {
 				if(torchCount > 0){
 					BlockPos pos = new BlockPos(player);
 					int neededLight = ItemNBTHelper.getInteger(stack, NBT_AUTO_LIGHT, 0);
-					int currentLight = player.worldObj.getLightFromNeighbors(pos);
+					int currentLight = player.getEntityWorld().getLightFromNeighbors(pos);
 					if(currentLight <= neededLight){
 						placeTorch(player, stack, pos);
 					}
@@ -90,7 +90,8 @@ public class ItemSuperTorch extends Item implements ICustomModel {
     }
 	
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand){
+	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand){
+		ItemStack stack = player.getHeldItem(hand);
 		if(!world.isRemote){
 			if(!player.isSneaking()){
 				boolean oldOn = ItemNBTHelper.getBoolean(stack, NBT_ON, false);
@@ -107,16 +108,16 @@ public class ItemSuperTorch extends Item implements ICustomModel {
 				return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
 			}
 		}
-		return super.onItemRightClick(stack, world, player, hand);
+		return super.onItemRightClick(world, player, hand);
 	}
 	
 	@Override
-	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hX, float hY, float hZ){
+	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hX, float hY, float hZ){
 		if(world.isRemote){
 			return EnumActionResult.SUCCESS;
 		}
 		
-		if(placeTorch(player, stack, pos)){
+		if(placeTorch(player, player.getHeldItem(hand), pos)){
 			return EnumActionResult.SUCCESS;
 		}
 		
@@ -132,7 +133,7 @@ public class ItemSuperTorch extends Item implements ICustomModel {
 			boolean placed = false;
 			
 			for(EnumFacing facing : EnumFacing.VALUES){
-				if(torchStack.onItemUse(player, player.worldObj, pos.offset(facing), EnumHand.MAIN_HAND, facing.getOpposite(), 0, 0, 0) == EnumActionResult.SUCCESS){
+				if(torchStack.onItemUse(player, player.getEntityWorld(), pos.offset(facing), EnumHand.MAIN_HAND, facing.getOpposite(), 0, 0, 0) == EnumActionResult.SUCCESS){
 					placed = true;
 					break;
 				}

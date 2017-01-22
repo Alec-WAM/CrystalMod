@@ -10,12 +10,11 @@ import java.util.Random;
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.EnumBlock;
 import alec_wam.CrystalMod.blocks.ICustomModel;
-import alec_wam.CrystalMod.handler.GuiHandler;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.tiles.pipes.TileEntityPipe.PipePart;
 import alec_wam.CrystalMod.tiles.pipes.attachments.AttachmentUtil.AttachmentData;
-import alec_wam.CrystalMod.tiles.pipes.covers.ItemPipeCover;
 import alec_wam.CrystalMod.tiles.pipes.covers.CoverUtil.CoverData;
+import alec_wam.CrystalMod.tiles.pipes.covers.ItemPipeCover;
 import alec_wam.CrystalMod.tiles.pipes.estorage.TileEntityPipeEStorage;
 import alec_wam.CrystalMod.tiles.pipes.item.TileEntityPipeItem;
 import alec_wam.CrystalMod.tiles.pipes.liquid.TileEntityPipeLiquid;
@@ -26,14 +25,9 @@ import alec_wam.CrystalMod.util.EntityUtil;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
-import alec_wam.CrystalMod.util.ModLogger;
 import alec_wam.CrystalMod.util.Util;
 import alec_wam.CrystalMod.util.client.RenderUtil;
-
-import com.google.common.collect.Lists;
-
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockFence;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.IBlockState;
@@ -50,16 +44,17 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -146,23 +141,23 @@ public class BlockPipe extends EnumBlock<BlockPipe.PipeType> implements ICustomM
     }
 	
 	@SideOnly(Side.CLIENT)
-	  @Override
-	  public void getSubBlocks(Item itemIn, CreativeTabs tab, List<ItemStack> list) {
-	    for(PipeType type : PipeType.values()) {
-	    	ItemStack stack = new ItemStack(this, 1, type.getMeta());
-	    	if(type.isTiered()){
-	    		for(int t = 0; t < type.getNumberOfTiers(); t++){
-	    			ItemStack stack2 = new ItemStack(this, 1, type.getMeta());
-	    			ItemNBTHelper.setInteger(stack2, "Tier", t);
-	    			list.add(stack2);
-	    		}
-	    	}else list.add(stack);
-	    }
-	  }
+	@Override
+	public void getSubBlocks(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> list) {
+		for(PipeType type : PipeType.values()) {
+			ItemStack stack = new ItemStack(this, 1, type.getMeta());
+			if(type.isTiered()){
+				for(int t = 0; t < type.getNumberOfTiers(); t++){
+					ItemStack stack2 = new ItemStack(this, 1, type.getMeta());
+					ItemNBTHelper.setInteger(stack2, "Tier", t);
+					list.add(stack2);
+				}
+			}else list.add(stack);
+		}
+	}
 	
 	@SuppressWarnings("deprecation")
 	@Override
-	public void addCollisionBoxToList(final IBlockState state, final World worldIn, final BlockPos pos, final AxisAlignedBB mask, final List<AxisAlignedBB> list, final Entity collidingEntity) {
+	public void addCollisionBoxToList(final IBlockState state, final World worldIn, final BlockPos pos, final AxisAlignedBB mask, final List<AxisAlignedBB> list, final Entity collidingEntity, boolean bool) {
 		TileEntity te = worldIn.getTileEntity(pos);
 	    if (!(te instanceof TileEntityPipe)) {
 	      return;
@@ -171,7 +166,7 @@ public class BlockPipe extends EnumBlock<BlockPipe.PipeType> implements ICustomM
 	    Collection<CollidableComponent> bounds = con.getCollidableComponents();
 	      for (CollidableComponent bnd : bounds) {
 	        setBlockBounds((float)bnd.bound.minX, (float)bnd.bound.minY, (float)bnd.bound.minZ, (float)bnd.bound.maxX, (float)bnd.bound.maxY, (float)bnd.bound.maxZ);
-	        super.addCollisionBoxToList(state, worldIn, pos, mask, list, collidingEntity);
+	        super.addCollisionBoxToList(state, worldIn, pos, mask, list, collidingEntity, bool);
 	      }
 
 	    setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
@@ -230,7 +225,7 @@ public class BlockPipe extends EnumBlock<BlockPipe.PipeType> implements ICustomM
               double d0 = pos.getX() + (j + 0.5D) / i;
               double d1 = pos.getY() + (k + 0.5D) / i;
               double d2 = pos.getZ() + (l + 0.5D) / i;
-              ParticleDigging fx = (ParticleDigging) new ParticleDigging.Factory().getEntityFX(-1, world, d0, d1, d2, d0 - pos.getX() - 0.5D,
+              ParticleDigging fx = (ParticleDigging) new ParticleDigging.Factory().createParticle(-1, world, d0, d1, d2, d0 - pos.getX() - 0.5D,
                   d1 - pos.getY() - 0.5D, d2 - pos.getZ() - 0.5D, 0);
               fx.setBlockPos(pos);
               fx.setParticleTexture(tex);
@@ -345,8 +340,8 @@ public class BlockPipe extends EnumBlock<BlockPipe.PipeType> implements ICustomM
     }
     
     @Override
-    public boolean canRenderInLayer(final BlockRenderLayer layer) {
-        return true;
+    public boolean canRenderInLayer(IBlockState state, final BlockRenderLayer layer) {
+    	return true;
     }
     
     @Override
@@ -879,8 +874,8 @@ public class BlockPipe extends EnumBlock<BlockPipe.PipeType> implements ICustomM
     
     @SuppressWarnings("deprecation")
 	@Override
-    public void neighborChanged(IBlockState state, World world, BlockPos pos, Block neighborBlock) {
-    	super.neighborChanged(state, world, pos, neighborBlock);
+    public void neighborChanged(IBlockState state, World world, BlockPos pos, Block neighborBlock, BlockPos otherPos) {
+    	super.neighborChanged(state, world, pos, neighborBlock, otherPos);
         TileEntity tile = world.getTileEntity(pos);
         if (tile !=null && (tile instanceof TileEntityPipe)) {
         	TileEntityPipe pipe = ((TileEntityPipe) tile);
@@ -892,7 +887,7 @@ public class BlockPipe extends EnumBlock<BlockPipe.PipeType> implements ICustomM
 					Block block = cState.getBlock();
 					if(block !=null){
 						IBlockState realState = cState.getActualState(new PipeBlockAccessWrapper(world, pos, dir), pos);
-						realState.neighborChanged(new PipeWorldWrapper(world, pos, dir), pos, neighborBlock);
+						realState.neighborChanged(new PipeWorldWrapper(world, pos, dir), pos, neighborBlock, otherPos);
 					}
 				}
         	}
@@ -900,10 +895,10 @@ public class BlockPipe extends EnumBlock<BlockPipe.PipeType> implements ICustomM
       }
     
     @Override
-    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, ItemStack stack, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
     	TileEntity tile = world.getTileEntity(pos);
         if ((tile instanceof TileEntityPipe)) {
-        	if(((TileEntityPipe)tile).onActivated(world, player, hand, stack, side, new Vec3d(hitX, hitY, hitZ))){
+        	if(((TileEntityPipe)tile).onActivated(world, player, hand, player.getHeldItem(hand), side, new Vec3d(hitX, hitY, hitZ))){
         		tile.markDirty();
         		return true;
         	}
@@ -916,7 +911,7 @@ public class BlockPipe extends EnumBlock<BlockPipe.PipeType> implements ICustomM
     public AxisAlignedBB getSelectedBoundingBox(IBlockState state, World world, BlockPos pos) {
 
       TileEntity te = world.getTileEntity(pos);
-      EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+      EntityPlayer player = CrystalMod.proxy.getClientPlayer();
       if (!(te instanceof TileEntityPipe)) {
         return null;
       }

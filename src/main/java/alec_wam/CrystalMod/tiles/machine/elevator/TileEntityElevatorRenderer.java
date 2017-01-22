@@ -24,6 +24,8 @@ import net.minecraft.world.WorldType;
 
 import org.lwjgl.opengl.GL11;
 
+import alec_wam.CrystalMod.CrystalMod;
+
 public class TileEntityElevatorRenderer extends TileEntitySpecialRenderer<TileEntityElevator> {
 
 	@Override
@@ -33,7 +35,7 @@ public class TileEntityElevatorRenderer extends TileEntitySpecialRenderer<TileEn
         if (te.isMoving()) {
         	// Correction in the y translation to avoid jitter when both player and platform are moving
         	AxisAlignedBB aabb = te.getAABBAboveElevator(0);
-        	boolean on = Minecraft.getMinecraft().thePlayer.getEntityBoundingBox().intersectsWith(aabb);
+        	boolean on = CrystalMod.proxy.getClientPlayer().getEntityBoundingBox().intersectsWith(aabb);
         	double diff = on ? (te.getPos().getY() - (y+te.getMovingY()) - 1) : 0;
         	 
             GlStateManager.pushMatrix();

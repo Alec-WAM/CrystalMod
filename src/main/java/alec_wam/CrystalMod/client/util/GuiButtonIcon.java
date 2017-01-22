@@ -1,4 +1,4 @@
-package alec_wam.CrystalMod.items.backpack.gui;
+package alec_wam.CrystalMod.client.util;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;

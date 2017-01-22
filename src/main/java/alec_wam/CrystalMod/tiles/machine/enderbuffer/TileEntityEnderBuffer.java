@@ -96,8 +96,8 @@ public class TileEntityEnderBuffer extends TileEntityMod implements IEnderBuffer
 	
 	public void update(){
 		super.update();
-		if(this.worldObj.isRemote){
-			//worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+		if(this.getWorld().isRemote){
+			//getWorld().markBlockForUpdate(xCoord, yCoord, zCoord);
 			return;
 		}
 		
@@ -330,8 +330,8 @@ public class TileEntityEnderBuffer extends TileEntityMod implements IEnderBuffer
         releasePreviousInventory();
         markDirty();
 
-        IBlockState state = worldObj.getBlockState(pos);
-        worldObj.notifyBlockUpdate(pos, state, state, 3);
+        IBlockState state = getWorld().getBlockState(pos);
+        getWorld().notifyBlockUpdate(pos, state, state, 3);
     }
 
     public boolean isBoundToPlayer()
@@ -357,9 +357,9 @@ public class TileEntityEnderBuffer extends TileEntityMod implements IEnderBuffer
         if (buffer == null)
         {
             if (isBoundToPlayer())
-                buffer = EnderBufferManager.get(worldObj).getPrivate(boundToPlayer).getBuffer(code);
+                buffer = EnderBufferManager.get(getWorld()).getPrivate(boundToPlayer).getBuffer(code);
             else
-                buffer = EnderBufferManager.get(worldObj).getBuffer(code);
+                buffer = EnderBufferManager.get(getWorld()).getBuffer(code);
         }
         return buffer;
     }

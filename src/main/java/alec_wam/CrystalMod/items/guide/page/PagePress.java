@@ -10,6 +10,7 @@ import org.lwjgl.opengl.GL12;
 import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 
+import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.api.guide.GuidePage;
 import alec_wam.CrystalMod.client.util.SpriteData;
 import alec_wam.CrystalMod.client.util.comp.GuiComponentSprite;
@@ -157,7 +158,7 @@ public class PagePress extends GuidePage {
 
 		GL11.glColor3f(1, 1, 1);
 		GL11.glDisable(GL11.GL_LIGHTING);
-		List<String> list = stack.getTooltip(mc.thePlayer, mc.gameSettings.advancedItemTooltips);
+		List<String> list = stack.getTooltip(CrystalMod.proxy.getClientPlayer(), mc.gameSettings.advancedItemTooltips);
 
 		List<String> colored = Lists.newArrayListWithCapacity(list.size());
 		Iterator<String> it = list.iterator();

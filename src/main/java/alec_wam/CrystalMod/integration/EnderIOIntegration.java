@@ -7,7 +7,7 @@ import alec_wam.CrystalMod.integration.enderio.DarkSteelBatType;
 import alec_wam.CrystalMod.integration.enderio.MaterialCropFarmer;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.items.tools.bat.BatHelper;
-import crazypants.enderio.machine.farm.farmers.FarmersCommune;
+//import crazypants.enderio.machine.farm.farmers.FarmersCommune;
 import net.minecraft.item.ItemStack;
 
 public class EnderIOIntegration implements IModIntegration {
@@ -24,7 +24,8 @@ public class EnderIOIntegration implements IModIntegration {
 	}
 	
 	public void postInit(){
-		FarmersCommune.joinCommune(new MaterialCropFarmer(ModBlocks.materialCrop, 1, new ItemStack(ModItems.materialSeed)));
+		//TODO Add when enderio updates
+		//FarmersCommune.joinCommune(new MaterialCropFarmer(ModBlocks.materialCrop, 1, new ItemStack(ModItems.materialSeed)));
 	}
 	
 }

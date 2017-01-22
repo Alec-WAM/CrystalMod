@@ -417,7 +417,7 @@ public class ModCrafting {
 		ItemStack lavaEngineTier1 = new ItemStack(ModBlocks.engine, 1, EngineType.LAVA.getMeta()); ItemNBTHelper.setInteger(lavaEngineTier1, "Tier", 1);
 		ItemStack lavaEngineTier2 = new ItemStack(ModBlocks.engine, 1, EngineType.LAVA.getMeta()); ItemNBTHelper.setInteger(lavaEngineTier2, "Tier", 2);
 
-		addShapedRecipe(lavaEngineTier0, new Object[]{"MCM", "LFL", "IPI", 'I', dIronPlate, 'L', Items.LAVA_BUCKET, 'P', ItemUtil.copy(tier0CU, 1), 'C', Blocks.NETHER_BRICK, 'F', machineFrame, 'M', Blocks.field_189877_df/*Magma*/});
+		addShapedRecipe(lavaEngineTier0, new Object[]{"MCM", "LFL", "IPI", 'I', dIronPlate, 'L', Items.LAVA_BUCKET, 'P', ItemUtil.copy(tier0CU, 1), 'C', Blocks.NETHER_BRICK, 'F', machineFrame, 'M', Blocks.MAGMA/*Magma*/});
 		addShapedRecipe(lavaEngineTier1, new Object[]{"EEE", "EPE", "EEE", 'E', lavaEngineTier0, 'P', ItemUtil.copy(tier2CU, 1)});
 		addShapedRecipe(lavaEngineTier2, new Object[]{"EEE", "EPE", "EEE", 'E', lavaEngineTier1, 'P', ItemUtil.copy(tier3CU, 1)});
 		

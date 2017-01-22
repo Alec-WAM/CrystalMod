@@ -7,37 +7,24 @@ import javax.annotation.Nullable;
 
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.tiles.pipes.item.GhostItemHelper;
-import alec_wam.CrystalMod.tiles.pipes.item.filters.CameraFilterInventory;
 import alec_wam.CrystalMod.tiles.pipes.item.filters.FilterInventory;
 import alec_wam.CrystalMod.tiles.pipes.item.filters.ItemPipeFilter.FilterType;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidBlock;
-import net.minecraftforge.fluids.IFluidContainerItem;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fluids.capability.wrappers.FluidContainerItemWrapper;
-import net.minecraftforge.fluids.capability.wrappers.FluidContainerRegistryWrapper;
-import net.minecraftforge.fluids.capability.wrappers.FluidHandlerWrapper;
-import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.wrapper.InvWrapper;
-import net.minecraftforge.items.wrapper.SidedInvWrapper;
-import net.minecraftforge.oredict.OreDictionary;
 
 public class FluidUtil {
 
@@ -59,7 +46,8 @@ public class FluidUtil {
 	
 	@Deprecated
 	private static IFluidHandler getLegacyHandler(ICapabilityProvider provider, EnumFacing side) {
-	    if (provider instanceof ItemStack) {
+		//TODO Investigate
+	    /*if (provider instanceof ItemStack) {
 	      ItemStack stack = (ItemStack) provider;
 	      if (stack.getItem() instanceof IFluidContainerItem) {
 	        return new FluidContainerItemWrapper((IFluidContainerItem) stack.getItem(), stack);
@@ -70,7 +58,7 @@ public class FluidUtil {
 	    }
 	    if (provider instanceof net.minecraftforge.fluids.IFluidHandler) {
 	      return new FluidHandlerWrapper((net.minecraftforge.fluids.IFluidHandler) provider, side);
-	    }
+	    }*/
 	    return null;
 	}
 
@@ -152,15 +140,7 @@ public class FluidUtil {
             return null;
         }
 
-        IFluidHandler handler = tile.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, side);
-
-        if (handler == null) {
-            if (side != null && tile instanceof net.minecraftforge.fluids.IFluidHandler) {
-      	      return new FluidHandlerWrapper((net.minecraftforge.fluids.IFluidHandler) tile, side);
-    	    }
-        }
-
-        return handler;
+        return tile.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, side);
     }
 	
 	public static boolean passesFilter(FluidStack fluid, ItemStack filter){

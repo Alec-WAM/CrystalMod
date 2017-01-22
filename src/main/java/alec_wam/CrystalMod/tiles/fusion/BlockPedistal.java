@@ -2,8 +2,6 @@ package alec_wam.CrystalMod.tiles.fusion;
 
 import javax.annotation.Nullable;
 
-import com.enderio.core.common.util.ChatUtil;
-
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.api.pedistals.IFusionPedistal;
 import alec_wam.CrystalMod.api.pedistals.IPedistal;
@@ -14,7 +12,6 @@ import alec_wam.CrystalMod.tiles.machine.IFacingTile;
 import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
-import alec_wam.CrystalMod.util.ModLogger;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -116,7 +113,7 @@ public class BlockPedistal extends BlockContainer implements ICustomModel {
 	}
 	
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ)
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ)
     {
 		if (worldIn.isRemote) {
             return true;
@@ -129,6 +126,7 @@ public class BlockPedistal extends BlockContainer implements ICustomModel {
 				locked = ((IFusionPedistal)tile).isLocked();
 			}
 			if(locked)return false;
+			ItemStack heldItem = playerIn.getHeldItem(hand);
 			if(ItemStackTools.isValid(heldItem)){
 				ItemStack insertStack = heldItem;
 				if(ItemStackTools.isEmpty(pedistal.getStack())){

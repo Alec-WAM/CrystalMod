@@ -57,7 +57,10 @@ public class TileEntityCrystalFurnace extends TileEntityMachine implements ISide
         else {
             ItemStackTools.incStackSize(stack2, ItemStackTools.getStackSize(output));
         }
-        setInventorySlotContents(0, ItemUtil.consumeItem(stack));
+        ItemStackTools.incStackSize(stack, -1);
+        if (ItemStackTools.isEmpty(stack)) {
+            this.setInventorySlotContents(0, ItemStackTools.getEmptyStack());
+        }
     }
 
 	@Override

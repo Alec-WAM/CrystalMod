@@ -28,12 +28,6 @@ public class ShapedCrystalRecipeHandler implements IRecipeHandler<ShapedCrystalR
 
 	@Nonnull
 	@Override
-	public String getRecipeCategoryUid() {
-		return CrystalModRecipeUids.WORKBENCH;
-	}
-
-	@Nonnull
-	@Override
 	public IRecipeWrapper getRecipeWrapper(@Nonnull ShapedCrystalRecipe recipe) {
 		return new ShapedCrystalRecipeWrapper(jeiHelpers, recipe);
 	}
@@ -41,7 +35,7 @@ public class ShapedCrystalRecipeHandler implements IRecipeHandler<ShapedCrystalR
 	@Override
 	public boolean isRecipeValid(@Nonnull ShapedCrystalRecipe recipe) {
 		if (recipe.getRecipeOutput() == null) {
-			String recipeInfo = ErrorUtil.getInfoFromBrokenRecipe(recipe, this);
+			String recipeInfo = ErrorUtil.getInfoFromRecipe(recipe, this);
 			Log.error("Recipe has no outputs. {}", recipeInfo);
 			return false;
 		}
@@ -52,12 +46,12 @@ public class ShapedCrystalRecipeHandler implements IRecipeHandler<ShapedCrystalR
 			}
 		}
 		if (inputCount > 9) {
-			String recipeInfo = ErrorUtil.getInfoFromBrokenRecipe(recipe, this);
+			String recipeInfo = ErrorUtil.getInfoFromRecipe(recipe, this);
 			Log.error("Recipe has too many inputs. {}", recipeInfo);
 			return false;
 		}
 		if (inputCount == 0) {
-			String recipeInfo = ErrorUtil.getInfoFromBrokenRecipe(recipe, this);
+			String recipeInfo = ErrorUtil.getInfoFromRecipe(recipe, this);
 			Log.error("Recipe has no inputs. {}", recipeInfo);
 			return false;
 		}

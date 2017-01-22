@@ -33,16 +33,16 @@ public class JobChopTree extends WorkerJob {
 	
 	@Override
 	public boolean run(EntityMinionWorker worker, TileWorksiteBase worksite) {
-		if(worker.worldObj.isRemote) return false;
+		if(worker.getEntityWorld().isRemote) return false;
 		if(logPos == null || logPos == BlockPos.ORIGIN) return true;
 		if(worksite == null || !(worksite instanceof WorksiteTreeFarm)) return true;
 		WorksiteTreeFarm tFarm = (WorksiteTreeFarm)worksite;
-		if(worker.worldObj.isAirBlock(logPos)){ 
+		if(worker.getEntityWorld().isAirBlock(logPos)){ 
 			return true;
 		}
-		IBlockState state = worker.worldObj.getBlockState(logPos);
+		IBlockState state = worker.getEntityWorld().getBlockState(logPos);
 		if(state == null || !TreeUtil.isLog(state)){
-			FakePlayerUtil.destroyBlockPartially(worker.worldObj, worker.getEntityId(), logPos, -1);
+			FakePlayerUtil.destroyBlockPartially(worker.getEntityWorld(), worker.getEntityId(), logPos, -1);
 			return true;
 		}
 
@@ -59,7 +59,7 @@ public class JobChopTree extends WorkerJob {
 		
 		double d0 = worker.posX - (logPos.getX() + 0.5);
         double d2 = worker.posZ - (logPos.getZ() + 0.5);
-        d =(double)MathHelper.sqrt_double(d0 * d0 + d2 * d2);
+        d =(double)MathHelper.sqrt(d0 * d0 + d2 * d2);
 		
 		if(d <= 2.5D){
 			if (delay < 0)
@@ -68,7 +68,7 @@ public class JobChopTree extends WorkerJob {
 				if(held !=null && ToolUtil.isAxe(held)){
 					str = (int) held.getStrVsBlock(state) / 10;
 				}
-		        delay = ((int)Math.max(5.0F, (20.0F - (str) * 3.0F) * state.getBlockHardness(worker.worldObj, logPos)));
+		        delay = ((int)Math.max(5.0F, (20.0F - (str) * 3.0F) * state.getBlockHardness(worker.getEntityWorld(), logPos)));
 		        maxDelay = delay;
 		        mod = (delay / Math.round(delay / 12.0F));
 		    }
@@ -77,13 +77,13 @@ public class JobChopTree extends WorkerJob {
 				if ((--delay > 0) && (delay % mod == 0))
 				{
 					int des = 10-(int)(1.0F * ((10*delay)/maxDelay));
-					FakePlayerUtil.destroyBlockPartially(worker.worldObj, worker.getEntityId(), logPos, des);
+					FakePlayerUtil.destroyBlockPartially(worker.getEntityWorld(), worker.getEntityId(), logPos, des);
 					worker.swingArm(EnumHand.MAIN_HAND);
 				}
 				if (delay == 0)
 				{
-					worker.worldObj.playEvent(2001, logPos, Block.getStateId(state));
-					FakePlayerUtil.destroyBlockPartially(worker.worldObj, worker.getEntityId(), logPos, -1);
+					worker.getEntityWorld().playEvent(2001, logPos, Block.getStateId(state));
+					FakePlayerUtil.destroyBlockPartially(worker.getEntityWorld(), worker.getEntityId(), logPos, -1);
 					tFarm.chopDownTree(held, logPos);
 					worker.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, held);
 					destroyTool(worker);

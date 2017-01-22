@@ -19,6 +19,7 @@ import org.lwjgl.opengl.GL12;
 
 import alec_wam.CrystalMod.api.guide.GuidePage;
 import alec_wam.CrystalMod.items.guide.GuiGuideChapter;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.Lang;
 import alec_wam.CrystalMod.util.Util;
@@ -77,7 +78,7 @@ public class PageIcon extends GuidePage {
 			GlStateManager.pushMatrix();
 			GlStateManager.translate(startX+80, startY+30, 0);
 			GlStateManager.scale(2, 2, 1);
-			drawItemStack(outputStack, 0, 0, ""+(outputStack.stackSize > 1 ? outputStack.stackSize : ""));
+			drawItemStack(outputStack, 0, 0, ""+(ItemStackTools.getStackSize(outputStack) > 1 ? ItemStackTools.getStackSize(outputStack) : ""));
 			GlStateManager.popMatrix();
 			if (mouseX > startX + 90 - 2 && mouseX < startX + 90 - 2 + itemBoxSize &&
 					mouseY > startY+40 - 2 && mouseY < startY+40 - 2 + itemBoxSize) {
@@ -112,7 +113,7 @@ public class PageIcon extends GuidePage {
 
 		GL11.glColor3f(1, 1, 1);
 		GL11.glDisable(GL11.GL_LIGHTING);
-		List<String> list = stack.getTooltip(mc.thePlayer, mc.gameSettings.advancedItemTooltips);
+		List<String> list = stack.getTooltip(mc.player, mc.gameSettings.advancedItemTooltips);
 
 		List<String> colored = Lists.newArrayListWithCapacity(list.size());
 		Iterator<String> it = list.iterator();

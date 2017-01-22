@@ -31,6 +31,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagIntArray;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.items.ItemHandlerHelper;
 
@@ -257,7 +258,7 @@ public class BasicCraftingTask implements ICraftingTask {
         	toProcess.add(new CraftingProcessNormal(network, pattern, usedStacks));
         }
         
-        ItemStack[] took = new ItemStack[9];
+        NonNullList<ItemStack> took = NonNullList.withSize(9, ItemStackTools.getEmptyStack());
         if (missing.isEmpty()) {
         	if (!pattern.isProcessing()) {
 	            for (int i = 0; i < usedStacks.size(); i++) {
@@ -265,7 +266,7 @@ public class BasicCraftingTask implements ICraftingTask {
 	                if (input != null) {
 	                    ItemStack actualInput = actualInputs.get(input, pattern.isOredict());
 	                    ItemStack taken = ItemHandlerHelper.copyStackWithSize(actualInput, ItemStackTools.getStackSize(input));
-	                    took[i] = taken;
+	                    took.set(i, taken);
 	                    actualInputs.remove(taken, true);
 	                }
 	            }

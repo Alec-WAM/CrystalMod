@@ -23,15 +23,16 @@ public class SlotCraftingWrapper extends SlotCrafting {
   }
 
   @Override
-  public void onPickupFromSlot(EntityPlayer playerIn, ItemStack stack) {
+  public ItemStack onTake(EntityPlayer playerIn, ItemStack stack) {
 
 	net.minecraftforge.fml.common.FMLCommonHandler.instance().firePlayerCraftingEvent(playerIn, stack, craftMatrix);
     onCrafting(stack);
     
-    if(!playerIn.worldObj.isRemote){
+    if(!playerIn.getEntityWorld().isRemote){
     	panel.onCrafted(playerIn);
     	container.sendCraftingSlots();
     }
+    return stack;
   }
 
   @Override

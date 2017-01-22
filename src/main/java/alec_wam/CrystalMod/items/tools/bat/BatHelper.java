@@ -140,10 +140,10 @@ public class BatHelper {
 		for(IBatType type : TYPE_REGISTRY){
 			ItemStack bat = getBasicBat(item, type);
 			bats.add(bat);
-			ItemStack allBat = ItemStack.copyItemStack(bat);
+			ItemStack allBat = ItemStackTools.safeCopy(bat);
 			//Seperate Upgrades 
 			for(IBatUpgrade upgrade : CREATIVELIST_UPGRADES){
-				ItemStack copyBat = ItemStack.copyItemStack(bat);
+				ItemStack copyBat = ItemStackTools.safeCopy(bat);
 				UpgradeData data = upgrade.getCreativeListData();
 				if(data !=null){
 					setBatUpgrade(copyBat, data);
@@ -413,7 +413,7 @@ public class BatHelper {
         }
 
         if(debug && player !=null && earlyUpgradeDamage > 0){
-        	if(!player.worldObj.isRemote)
+        	if(!player.getEntityWorld().isRemote)
         	ChatUtil.sendChat(player, "Sharpness: "+earlyUpgradeDamage+" / "+damage+" ("+earlyUpgradeDamage/2+" Hearts)");
         }
         
@@ -506,14 +506,14 @@ public class BatHelper {
             double range = data.rangeBoost;
         	if(range > 0){
                 AxisAlignedBB bb = new AxisAlignedBB(entity.posX, entity.posY, entity.posZ, entity.posX+1, entity.posY+1, entity.posZ+1).expand(range, 1.0D, range);
-            	List<EntityLivingBase> list = attacker.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, bb);                    
+            	List<EntityLivingBase> list = attacker.getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, bb);                    
                 list.remove(entity);
                 list.remove(attacker);
                 if(attacker.getRidingEntity() !=null){
                 	list.remove(attacker.getRidingEntity());
                 }
                 
-                List<EntityLivingBase> attacked = EntityUtil.attackEntitiesInArea(attacker.worldObj, list, attackSource, doDamage ? damage : 0.0f, (entity instanceof IMob));
+                List<EntityLivingBase> attacked = EntityUtil.attackEntitiesInArea(attacker.getEntityWorld(), list, attackSource, doDamage ? damage : 0.0f, (entity instanceof IMob));
                 attackedEntities.addAll(attacked);
         	}
             
@@ -533,9 +533,9 @@ public class BatHelper {
                  player.addStat(StatList.DAMAGE_DEALT, Math.round(damageDealt * 10f));
                  player.addExhaustion(0.3f);
 
-                 if(player.worldObj instanceof WorldServer && damageDealt > 2f) {
+                 if(player.getEntityWorld() instanceof WorldServer && damageDealt > 2f) {
                    int k = (int) (damageDealt * 0.5);
-                   ((WorldServer) player.worldObj).spawnParticle(EnumParticleTypes.DAMAGE_INDICATOR, target.posX, target.posY + (double) (target.height * 0.5F), target.posZ, k, 0.1D, 0.0D, 0.1D, 0.2D);
+                   ((WorldServer) player.getEntityWorld()).spawnParticle(EnumParticleTypes.DAMAGE_INDICATOR, target.posX, target.posY + (double) (target.height * 0.5F), target.posZ, k, 0.1D, 0.0D, 0.1D, 0.2D);
                  }
 
                  //if(applyCooldown) {
@@ -586,12 +586,12 @@ public class BatHelper {
             double range = data.rangeBoost;
         	if(range > 0){
                 AxisAlignedBB bb = new AxisAlignedBB(target.posX, target.posY, target.posZ, target.posX+1, target.posY+1, target.posZ+1).expand(range, 1.0D, range);
-            	List<EntityLivingBase> list = attacker.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, bb);                    
+            	List<EntityLivingBase> list = attacker.getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, bb);                    
                 list.remove(target);
                 list.remove(attacker);
                 if(attacker.getRidingEntity() !=null)list.remove(attacker.getRidingEntity());
                 
-                List<EntityLivingBase> attacked = EntityUtil.attackEntitiesInArea(attacker.worldObj, list, null, 0.0f, (target instanceof IMob));
+                List<EntityLivingBase> attacked = EntityUtil.attackEntitiesInArea(attacker.getEntityWorld(), list, null, 0.0f, (target instanceof IMob));
                 attackedEntities.addAll(attacked);
         	}
             
@@ -657,7 +657,7 @@ public class BatHelper {
     {
     	getBatData(stack).setBoolean("Broken", true);
         if (entity != null){
-        	entity.worldObj.playSound(entity.posX, entity.posY, entity.posZ, SoundEvents.ENTITY_ITEM_BREAK, entity instanceof EntityPlayer ? SoundCategory.PLAYERS : SoundCategory.NEUTRAL, 1f, 1f, true);
+        	entity.getEntityWorld().playSound(entity.posX, entity.posY, entity.posZ, SoundEvents.ENTITY_ITEM_BREAK, entity instanceof EntityPlayer ? SoundCategory.PLAYERS : SoundCategory.NEUTRAL, 1f, 1f, true);
         }
     }
 

@@ -54,7 +54,7 @@ public class EntityMinionWarrior extends EntityMinionBase {
 	
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt){
 		super.writeToNBT(nbt);
-		NBTTagList invList = new NBTTagList();
+		NBTTagCompound invList = new NBTTagCompound();
 		this.inventory.writeToNBT(invList);
 		nbt.setTag("Inventory", invList);
 		nbt.setInteger("MovementState", getMovementState().getId());
@@ -71,7 +71,7 @@ public class EntityMinionWarrior extends EntityMinionBase {
 		this.movementState = EnumMovementState.fromId(nbt.hasKey("MovementState") ? nbt.getInteger("MovementState") : 0);
 		if(nbt.hasKey("Inventory")){
 			inventory.clear();
-			inventory.readFromNBT(nbt.getTagList("Inventory", Constants.NBT.TAG_COMPOUND));
+			inventory.readFromNBT(nbt.getCompoundTag("Inventory"));
 		}
 		backStack = null;
 		if(nbt.hasKey("BackStack")){
@@ -86,19 +86,20 @@ public class EntityMinionWarrior extends EntityMinionBase {
 		backStack = held;
 	}
 	
-	public boolean processInteract(EntityPlayer player, EnumHand hand, ItemStack stack)
+	@Override
+	public boolean processInteract(EntityPlayer player, EnumHand hand)
     {
-        boolean inter = super.processInteract(player, hand, stack);
+        boolean inter = super.processInteract(player, hand);
 
         if(inter){
         	return true;
         }
-        
+        ItemStack stack = player.getHeldItem(hand);
         if(!ItemStackTools.isNullStack(stack)){
         	
         	if(stack.getItem() == Items.STICK){
         		if(getHeldItemMainhand() !=null && !player.isSneaking()){
-        			if (!this.worldObj.isRemote)
+        			if (!this.getEntityWorld().isRemote)
                     {
         				entityDropItem(getHeldItemMainhand(), 0.0F);
                     }
@@ -106,7 +107,7 @@ public class EntityMinionWarrior extends EntityMinionBase {
         			return true;
         		}
         		if(!ItemStackTools.isNullStack(backStack) && player.isSneaking()){
-        			if (!this.worldObj.isRemote)
+        			if (!this.getEntityWorld().isRemote)
                     {
         				entityDropItem(backStack, 0.0F);
                     }
@@ -119,7 +120,7 @@ public class EntityMinionWarrior extends EntityMinionBase {
         	if(slot.getSlotType() == EntityEquipmentSlot.Type.ARMOR){
         		ItemStack old = getItemStackFromSlot(slot);
         		if(!ItemStackTools.isNullStack(old)){
-        			if (!this.worldObj.isRemote)
+        			if (!this.getEntityWorld().isRemote)
                     {
         				entityDropItem(old, 0.0F);
                     }
@@ -136,7 +137,7 @@ public class EntityMinionWarrior extends EntityMinionBase {
             			if(ItemUtil.canCombine(stack, backStack)){
             				return false;
             			}
-            			if (!this.worldObj.isRemote)
+            			if (!this.getEntityWorld().isRemote)
                         {
             				entityDropItem(backStack, 0.0F);
                         }
@@ -149,7 +150,7 @@ public class EntityMinionWarrior extends EntityMinionBase {
         			if(ItemUtil.canCombine(stack, getHeldItemMainhand())){
         				return false;
         			}
-        			if (!this.worldObj.isRemote)
+        			if (!this.getEntityWorld().isRemote)
                     {
         				entityDropItem(getHeldItemMainhand(), 0.0F);
                     }
@@ -166,7 +167,7 @@ public class EntityMinionWarrior extends EntityMinionBase {
             			if(ItemUtil.canCombine(stack, backStack)){
             				return false;
             			}
-            			if (!this.worldObj.isRemote)
+            			if (!this.getEntityWorld().isRemote)
                         {
             				entityDropItem(backStack, 0.0F);
                         }
@@ -179,7 +180,7 @@ public class EntityMinionWarrior extends EntityMinionBase {
         			if(ItemUtil.canCombine(stack, getHeldItemMainhand())){
         				return false;
         			}
-        			if (!this.worldObj.isRemote)
+        			if (!this.getEntityWorld().isRemote)
                     {
         				entityDropItem(getHeldItemMainhand(), 0.0F);
                     }
@@ -191,7 +192,7 @@ public class EntityMinionWarrior extends EntityMinionBase {
         	
         	if(stack.getItem() == Items.ARROW){
         		MinionAICombat combatAI = getAIManager().getAI(MinionAICombat.class);
-        		if(!worldObj.isRemote){
+        		if(!getEntityWorld().isRemote){
         			final int next = !player.isSneaking() ? combatAI.getNextMethodBehavior() : combatAI.getPrevMethodBehavior();
         			combatAI.setMethodBehavior(next);
         			NBTTagCompound nbt = new NBTTagCompound();
@@ -203,7 +204,7 @@ public class EntityMinionWarrior extends EntityMinionBase {
         	}
         	if(stack.getItem() == Item.getItemFromBlock(Blocks.WOODEN_PRESSURE_PLATE)){
         		MinionAICombat combatAI = getAIManager().getAI(MinionAICombat.class);
-        		if(!worldObj.isRemote){
+        		if(!getEntityWorld().isRemote){
         			final int next = !player.isSneaking() ? combatAI.getNextTriggerBehavior() : combatAI.getPrevTriggerBehavior();
         			combatAI.setTriggerBehavior(next);
         			NBTTagCompound nbt = new NBTTagCompound();
@@ -215,7 +216,7 @@ public class EntityMinionWarrior extends EntityMinionBase {
         	}
         	if(stack.getItem() == Items.BONE){
         		MinionAICombat combatAI = getAIManager().getAI(MinionAICombat.class);
-        		if(!worldObj.isRemote){
+        		if(!getEntityWorld().isRemote){
         			final int next = !player.isSneaking() ? combatAI.getNextTargetBehavior() : combatAI.getPrevTargetBehavior();
         			combatAI.setTargetBehavior(next);
         			NBTTagCompound nbt = new NBTTagCompound();
@@ -226,7 +227,7 @@ public class EntityMinionWarrior extends EntityMinionBase {
         		return true;
         	}
         	if(stack.getItem() == Item.getItemFromBlock(Blocks.STONE_PRESSURE_PLATE)){
-        		if(!worldObj.isRemote){
+        		if(!getEntityWorld().isRemote){
         			EnumMovementState next = null;
         			if(getMovementState() == EnumMovementState.STAY){
         				next = EnumMovementState.MOVE;
@@ -247,15 +248,15 @@ public class EntityMinionWarrior extends EntityMinionBase {
         	}
         	if(stack.getItem() == Items.SADDLE){
         		if(getRidingEntity() == null){
-        			List<EntityHorse> entities = worldObj.getEntitiesWithinAABB(EntityHorse.class, this.getEntityBoundingBox().expand(5, 2, 5));
+        			List<EntityHorse> entities = getEntityWorld().getEntitiesWithinAABB(EntityHorse.class, this.getEntityBoundingBox().expand(5, 2, 5));
         			for(EntityHorse horse : entities){
         				if(horse.isEntityAlive() && horse.getPassengers().isEmpty()){
-        					if(!worldObj.isRemote)startRiding(horse);
+        					if(!getEntityWorld().isRemote)startRiding(horse);
         					return true;
         				}
         			}
         		}else{
-        			if(!worldObj.isRemote)dismountRidingEntity();
+        			if(!getEntityWorld().isRemote)dismountRidingEntity();
         			return true;
         		}
         	}

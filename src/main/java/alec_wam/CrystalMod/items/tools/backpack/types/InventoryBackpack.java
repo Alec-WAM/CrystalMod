@@ -12,8 +12,10 @@ import alec_wam.CrystalMod.util.ModLogger;
 import joptsimple.internal.Strings;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 
@@ -21,7 +23,7 @@ public class InventoryBackpack implements IInventory {
 
 	protected EntityPlayer player;
 	protected ItemStack backpack;
-	protected ItemStack[] slots;
+	protected NonNullList<ItemStack> slots;
 	protected int size;
 	protected final String tagName;
 
@@ -33,7 +35,7 @@ public class InventoryBackpack implements IInventory {
     	this.size = size;
     	this.player = player;
     	this.backpack = backpack;
-        this.slots = new ItemStack[size];
+        this.slots = NonNullList.withSize(size, ItemStackTools.getEmptyStack());
         tagName = tag;
         readFromNBT(ItemNBTHelper.getCompound(backpack));
     }
@@ -46,7 +48,7 @@ public class InventoryBackpack implements IInventory {
     	this.size = size;
     	this.player = null;
     	this.backpack = backpack;
-        this.slots = new ItemStack[size];
+        this.slots = NonNullList.withSize(size, ItemStackTools.getEmptyStack());
         tagName = tag;
         readFromNBTNoPlayer(ItemNBTHelper.getCompound(backpack));
     }
@@ -75,7 +77,7 @@ public class InventoryBackpack implements IInventory {
     }
 
     @Override
-    public boolean isUseableByPlayer(EntityPlayer player){
+    public boolean isUsableByPlayer(EntityPlayer player){
         return true;
     }
 
@@ -111,12 +113,22 @@ public class InventoryBackpack implements IInventory {
 
     @Override
     public void clear(){
-    	Arrays.fill(slots, ItemStackTools.getEmptyStack());
+    	slots.clear();
     }
 
     @Override
+    public boolean isEmpty(){
+    	for(ItemStack stack : slots){
+    		if(ItemStackTools.isValid(stack)){
+    			return false;
+    		}
+    	}
+    	return true;
+    }
+    
+    @Override
     public void setInventorySlotContents(int i, ItemStack stack){
-    	this.slots[i] = stack;
+    	this.slots.set(i, stack);
         this.markDirty();
     }
 
@@ -132,9 +144,9 @@ public class InventoryBackpack implements IInventory {
     @Override
     public ItemStack getStackInSlot(int i){
         if(i < this.getSizeInventory()){
-            return this.slots[i];
+            return slots.get(i);
         }
-        return null;
+        return ItemStackTools.getEmptyStack();
     }
 
     @Override
@@ -205,10 +217,10 @@ public class InventoryBackpack implements IInventory {
     		nbt = backpackToUse.getTagCompound();
     		if(!Strings.isNullOrEmpty(tagName)){
     			NBTTagCompound nbtInv = new NBTTagCompound();
-    			ItemUtil.writeInventoryToNBT(this, nbtInv);
+    			ItemStackHelper.saveAllItems(nbtInv, slots);
     			nbt.setTag(tagName, nbtInv);
     		} else {
-    			ItemUtil.writeInventoryToNBT(this, nbt);
+    			ItemUtil.writeInventoryToNBT(slots, nbt);
     		}
     	}
     }
@@ -225,7 +237,7 @@ public class InventoryBackpack implements IInventory {
     			if(nbt !=null){
     				//Clear inventory before load
     				clear();
-    				ItemUtil.readInventoryFromNBT(this, nbt);
+    				ItemStackHelper.loadAllItems(nbt, slots);
     			}
     		}
     	}
@@ -240,7 +252,7 @@ public class InventoryBackpack implements IInventory {
 			if(nbt !=null){
 				//Clear inventory before load
 				clear();
-				ItemUtil.readInventoryFromNBT(this, nbt);
+				ItemStackHelper.loadAllItems(nbt, slots);
 			}
 		}
     }

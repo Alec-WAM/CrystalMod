@@ -2,6 +2,8 @@ package alec_wam.CrystalMod.tiles.pipes.estorage.panel;
 
 import java.util.Locale;
 
+import alec_wam.CrystalMod.blocks.ModBlocks;
+import alec_wam.CrystalMod.util.BlockUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -36,7 +38,7 @@ public class ItemBlockPanel extends ItemBlock {
       TileEntityPanel teInvPanel = (TileEntityPanel) te;
       teInvPanel.facing = (side);
       if(!world.isRemote) {
-        world.notifyNeighborsOfStateChange(pos, world.getBlockState(pos).getBlock());
+        BlockUtil.markBlockForUpdate(world, pos, true);
       }
     }
     return true;

@@ -49,7 +49,7 @@ public class TileHDDArray extends TileEntityInventory implements ITickable, IMes
 		if(this.network !=null && getNetworkInventory() !=null){
 			network.getItemStorage().invalidate();
 		}
-		if(this.worldObj !=null && this.getPos() !=null)BlockUtil.markBlockForUpdate(getWorld(), getPos());
+		if(this.getWorld() !=null && this.getPos() !=null)BlockUtil.markBlockForUpdate(getWorld(), getPos());
 	}
 	
 	@Override

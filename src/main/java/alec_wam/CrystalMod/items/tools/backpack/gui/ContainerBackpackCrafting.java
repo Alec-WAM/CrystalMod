@@ -263,7 +263,7 @@ public class ContainerBackpackCrafting extends Container {
                 return ItemStackTools.getEmptyStack();
             }
 
-            slot.onPickupFromSlot(player, itemstack1);
+            slot.onTake(player, itemstack1);
         }
 
         return itemstack;
@@ -316,7 +316,7 @@ public class ContainerBackpackCrafting extends Container {
 
     @Override
     public boolean canInteractWith(EntityPlayer player){
-        return backpackInventory.isUseableByPlayer(player);
+        return backpackInventory.isUsableByPlayer(player);
     }
 
 }

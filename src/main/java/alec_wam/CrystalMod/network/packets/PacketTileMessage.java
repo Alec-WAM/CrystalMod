@@ -45,9 +45,9 @@ public class PacketTileMessage extends AbstractPacketThreadsafe {
 		x = buffer.readInt();
 		y = buffer.readInt();
 		z = buffer.readInt();
-		type = buffer.readStringFromBuffer(100);
+		type = buffer.readString(100);
 		try {
-			data = buffer.readNBTTagCompoundFromBuffer();
+			data = buffer.readCompoundTag();
 		} catch (IOException e) {
 			data = new NBTTagCompound();
 		}
@@ -60,12 +60,12 @@ public class PacketTileMessage extends AbstractPacketThreadsafe {
 		buffer.writeInt(y);
 		buffer.writeInt(z);
 		buffer.writeString(type);
-		buffer.writeNBTTagCompoundToBuffer(data);
+		buffer.writeCompoundTag(data);
 	}
 
 	@Override
 	public void handleClientSafe(NetHandlerPlayClient netHandler) {
-		World world = CrystalMod.proxy.getClientPlayer() == null ? null : CrystalMod.proxy.getClientPlayer().worldObj;
+		World world = CrystalMod.proxy.getClientPlayer() == null ? null : CrystalMod.proxy.getClientPlayer().getEntityWorld();
 		if(world == null){
 			return;
 		}
@@ -87,7 +87,7 @@ public class PacketTileMessage extends AbstractPacketThreadsafe {
 
 	@Override
 	public void handleServerSafe(NetHandlerPlayServer netHandler) {
-		World world = netHandler.playerEntity.worldObj;
+		World world = netHandler.playerEntity.getEntityWorld();
 		if(world == null){
 			return;
 		}

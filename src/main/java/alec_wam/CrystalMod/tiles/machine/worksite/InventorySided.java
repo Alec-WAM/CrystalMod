@@ -12,6 +12,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 
@@ -30,7 +31,7 @@ public class InventorySided implements IInventory, ISidedInventory
 	private HashMap<RelativeSide, boolean[]> extractInsertFlags = new HashMap<RelativeSide, boolean[]>();//inventoryside x boolean[2]; [0]=extract, [1]=insert
 	public final IRotatableTile te;
 	public final RotationType rType;
-	private ItemStack[] inventorySlots;
+	private NonNullList<ItemStack> inventorySlots;
 	private ItemSlotFilter[] filtersByInventorySlot;
 
 	public InventorySided(IRotatableTile te, RotationType rType, int inventorySize)
@@ -38,7 +39,7 @@ public class InventorySided implements IInventory, ISidedInventory
 		if(te==null || rType==null || inventorySize<=0){throw new IllegalArgumentException("te and rotation type may not be null, inventory size must be greater than 0");}
 		this.te = te;
 		this.rType = rType;
-		inventorySlots = new ItemStack[inventorySize];
+		inventorySlots= NonNullList.<ItemStack>withSize(inventorySize, ItemStack.EMPTY);
 		filtersByInventorySlot = new ItemSlotFilter[inventorySize];
 		for(RelativeSide rSide : rType.getValidSides())
 		{    
@@ -183,19 +184,19 @@ public class InventorySided implements IInventory, ISidedInventory
 	@Override
 	public int getSizeInventory()
 	{
-		return inventorySlots.length;
+		return inventorySlots.size();
 	}
 
 	@Override
 	public ItemStack getStackInSlot(int var1)
 	{
-		return inventorySlots[var1];
+		return inventorySlots.get(var1);
 	}
 
 	@Override
 	public ItemStack decrStackSize(int var1, int var2)
 	{
-		ItemStack stack = inventorySlots[var1];
+		ItemStack stack = getStackInSlot(var1);
 		if(ItemStackTools.isValid(stack))
 		{
 			int qty = var2 > ItemStackTools.getStackSize(stack) ? ItemStackTools.getStackSize(stack) : var2;
@@ -204,7 +205,7 @@ public class InventorySided implements IInventory, ISidedInventory
 			ItemStackTools.setStackSize(returnStack, qty);
 			if(ItemStackTools.isEmpty(stack))      
 			{
-				inventorySlots[var1]=ItemStackTools.getEmptyStack();
+				setInventorySlotContents(var1, ItemStackTools.getEmptyStack());
 			}
 			if(ItemStackTools.isEmpty(returnStack)){returnStack=ItemStackTools.getEmptyStack();}  
 			markDirty();
@@ -216,7 +217,7 @@ public class InventorySided implements IInventory, ISidedInventory
 	@Override
 	public void setInventorySlotContents(int var1, ItemStack var2)
 	{
-	  inventorySlots[var1]=var2;  
+	  inventorySlots.set(var1, var2);  
 	  markDirty();
 	}
 
@@ -251,9 +252,13 @@ public class InventorySided implements IInventory, ISidedInventory
 	}
 
 	@Override
-	public boolean isUseableByPlayer(EntityPlayer var1)
+	public boolean isUsableByPlayer(EntityPlayer var1)
 	{
 	  return true;
+	}
+	@Override
+	public boolean isEmpty() {
+		return false;
 	}
 
 	@Override
@@ -564,9 +569,7 @@ public class InventorySided implements IInventory, ISidedInventory
 
 	@Override
 	public void clear() {
-		for(int s = 0; s < inventorySlots.length; s++){
-			inventorySlots[s] = null;
-		}
+		inventorySlots.clear();
 		markDirty();
 	}
 }

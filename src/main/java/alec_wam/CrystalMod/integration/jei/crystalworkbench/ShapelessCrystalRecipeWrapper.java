@@ -1,18 +1,17 @@
 package alec_wam.CrystalMod.integration.jei.crystalworkbench;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.Nonnull;
 
+import alec_wam.CrystalMod.crafting.ShapelessCrystalRecipe;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import mezz.jei.api.IJeiHelpers;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.BlankRecipeWrapper;
 import mezz.jei.api.recipe.IStackHelper;
 import mezz.jei.api.recipe.wrapper.ICraftingRecipeWrapper;
 import net.minecraft.item.ItemStack;
-import alec_wam.CrystalMod.crafting.ShapelessCrystalRecipe;
 
 public class ShapelessCrystalRecipeWrapper extends BlankRecipeWrapper implements ICraftingRecipeWrapper {
 	private final IJeiHelpers jeiHelpers;
@@ -22,30 +21,17 @@ public class ShapelessCrystalRecipeWrapper extends BlankRecipeWrapper implements
 		this.jeiHelpers = jeiHelpers;
 		this.recipe = recipe2;
 		for (ItemStack itemStack : this.recipe.recipeItems) {
-			if (itemStack != null && itemStack.stackSize != 1) {
-				itemStack.stackSize = 1;
+			if (ItemStackTools.isValid(itemStack) && ItemStackTools.getStackSize(itemStack) !=1) {
+				ItemStackTools.setStackSize(itemStack, 1);
 			}
 		}
-	}
-
-	@Override
-	@Nonnull
-	public List<ItemStack> getOutputs() {
-		return Collections.singletonList(recipe.getRecipeOutput());
-	}
-
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@Override
-	@Nonnull
-	public List getInputs() {
-		return Arrays.asList(recipe.recipeItems);
 	}
 
 	@Override
 	public void getIngredients(IIngredients ingredients) {
 		IStackHelper stackHelper = jeiHelpers.getStackHelper();
 
-		List<List<ItemStack>> inputs = stackHelper.expandRecipeItemStackInputs(getInputs());
+		List<List<ItemStack>> inputs = stackHelper.expandRecipeItemStackInputs(recipe.recipeItems);
 		ingredients.setInputLists(ItemStack.class, inputs);
 
 		ItemStack recipeOutput = recipe.getRecipeOutput();

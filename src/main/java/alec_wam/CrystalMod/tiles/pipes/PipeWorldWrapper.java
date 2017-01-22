@@ -51,7 +51,7 @@ public class PipeWorldWrapper extends World {
     }
 	
 	@Override
-    public boolean spawnEntityInWorld(Entity entity) {
+    public boolean spawnEntity(Entity entity) {
         return false;
     }
 	

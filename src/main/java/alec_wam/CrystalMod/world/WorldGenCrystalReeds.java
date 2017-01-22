@@ -36,7 +36,7 @@ public class WorldGenCrystalReeds extends WorldGenerator
 	                	}; 
 	                IBlockState reed = null;
 	            	try{
-	            		reed = reeds[MathHelper.getRandomIntegerInRange(rand, 0, reeds.length-1)];
+	            		reed = reeds[MathHelper.getInt(rand, 0, reeds.length-1)];
 	            	} catch(Exception e){}
                 	
                     int j = 2 + rand.nextInt(rand.nextInt(3) + 1);

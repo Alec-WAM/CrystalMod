@@ -35,7 +35,7 @@ public class TileEntityEngineVampire extends TileEntityEngineBase {
 		if(!entites.isEmpty()){
 			for(EntityLivingBase entity : entites){
 				if(entity.isEntityAlive() && !(entity instanceof EntityPlayer)){
-					if(entity.attackEntityFrom(DamageSource.wither, 1)){
+					if(entity.attackEntityFrom(DamageSource.WITHER, 1)){
 						
 						//One pig is worth 1/4 of a piece of coal in a furnace generator. At 40 ticks * 30 CU per tick
 						

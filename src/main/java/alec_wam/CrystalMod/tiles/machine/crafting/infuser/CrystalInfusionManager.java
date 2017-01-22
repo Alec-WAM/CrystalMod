@@ -105,7 +105,7 @@ public class CrystalInfusionManager {
 		recipes.add(new InfusionMachineRecipe(new ItemStack(Blocks.COBBLESTONE), new FluidStack(FluidRegistry.WATER, 125), new ItemStack(Blocks.MOSSY_COBBLESTONE), 1600));
 		recipes.add(new InfusionMachineRecipe(new ItemStack(Blocks.COBBLESTONE), new FluidStack(FluidRegistry.LAVA, 125), new ItemStack(Blocks.NETHERRACK), 1600));
 		//Molten Block
-		recipes.add(new InfusionMachineRecipe(new ItemStack(Blocks.NETHERRACK), new FluidStack(FluidRegistry.LAVA, 125), new ItemStack(Blocks.field_189877_df), 1600));
+		recipes.add(new InfusionMachineRecipe(new ItemStack(Blocks.NETHERRACK), new FluidStack(FluidRegistry.LAVA, 125), new ItemStack(Blocks.MAGMA), 1600));
 		recipes.add(new InfusionMachineRecipe(new ItemStack(Blocks.NETHERRACK), new FluidStack(ModFluids.fluidEnder, 125), new ItemStack(Blocks.END_STONE), 1600));
 	}
 	

@@ -50,12 +50,13 @@ public class BlockCustomSpawner extends BlockContainer {
 	}
 
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack stack, EnumFacing side, float hitX, float hitY, float hitZ)
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ)
     {
 		TileEntity tile = worldIn.getTileEntity(pos);
 		if(tile !=null && tile instanceof TileEntityCustomSpawner){
 			TileEntityCustomSpawner spawner = (TileEntityCustomSpawner)tile;
-			if(!ItemStackTools.isNullStack(stack)){
+			ItemStack stack = playerIn.getHeldItem(hand);
+			if(ItemStackTools.isValid(stack)){
 				if(stack.getItem() instanceof ItemMobEssence){
 					String name = ItemNBTHelper.getString(stack, ItemMobEssence.NBT_ENTITYNAME, "Pig");
 					if(spawner.getBaseLogic().getEntityNameToSpawn().equals(name))return false;
@@ -135,7 +136,7 @@ public class BlockCustomSpawner extends BlockContainer {
 	}
 	
 	@Override
-	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn){
+	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos){
 		TileEntity tile = worldIn.getTileEntity(pos);
 		if (tile != null && tile instanceof TileEntityCustomSpawner)
 		{
@@ -181,7 +182,7 @@ public class BlockCustomSpawner extends BlockContainer {
 				item.motionX = (-0.5F + world.rand.nextFloat()) * multiplyer;
 				item.motionY = (4 + world.rand.nextFloat()) * multiplyer;
 				item.motionZ = (-0.5F + world.rand.nextFloat()) * multiplyer;
-				world.spawnEntityInWorld(item);
+				world.spawnEntity(item);
 			}
 			if (spawner.getBaseLogic().spawnSpeed > 1)
 			{
@@ -189,7 +190,7 @@ public class BlockCustomSpawner extends BlockContainer {
 				item.motionX = (-0.5F + world.rand.nextFloat()) * multiplyer;
 				item.motionY = (4 + world.rand.nextFloat()) * multiplyer;
 				item.motionZ = (-0.5F + world.rand.nextFloat()) * multiplyer;
-				world.spawnEntityInWorld(item);
+				world.spawnEntity(item);
 			}
 			if (spawner.getBaseLogic().spawnSpeed > 2)
 			{
@@ -197,7 +198,7 @@ public class BlockCustomSpawner extends BlockContainer {
 				item.motionX = (-0.5F + world.rand.nextFloat()) * multiplyer;
 				item.motionY = (4 + world.rand.nextFloat()) * multiplyer;
 				item.motionZ = (-0.5F + world.rand.nextFloat()) * multiplyer;
-				world.spawnEntityInWorld(item);
+				world.spawnEntity(item);
 			}
 			if (!spawner.getBaseLogic().requiresPlayer)
 			{
@@ -205,7 +206,7 @@ public class BlockCustomSpawner extends BlockContainer {
 				item.motionX = (-0.5F + world.rand.nextFloat()) * multiplyer;
 				item.motionY = (4 + world.rand.nextFloat()) * multiplyer;
 				item.motionZ = (-0.5F + world.rand.nextFloat()) * multiplyer;
-				world.spawnEntityInWorld(item);
+				world.spawnEntity(item);
 			}
 			
 			boolean dropEssence = !Strings.isNullOrEmpty(spawner.getBaseLogic().getEntityNameToSpawn());
@@ -216,7 +217,7 @@ public class BlockCustomSpawner extends BlockContainer {
 				item.motionX = (-0.5F + world.rand.nextFloat()) * multiplyer;
 				item.motionY = (4 + world.rand.nextFloat()) * multiplyer;
 				item.motionZ = (-0.5F + world.rand.nextFloat()) * multiplyer;
-				world.spawnEntityInWorld(item);
+				world.spawnEntity(item);
 			}
 		}
 		super.breakBlock(world, pos, state);

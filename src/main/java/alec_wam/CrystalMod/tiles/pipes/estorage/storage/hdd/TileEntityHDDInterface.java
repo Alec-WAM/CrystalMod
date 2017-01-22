@@ -57,7 +57,7 @@ public class TileEntityHDDInterface extends TileEntityInventory implements ITick
 			if(this.network !=null){
 				network.getItemStorage().invalidate();
 			}
-			if(this.worldObj !=null && this.getPos() !=null)BlockUtil.markBlockForUpdate(getWorld(), getPos());
+			if(this.getWorld() !=null && this.getPos() !=null)BlockUtil.markBlockForUpdate(getWorld(), getPos());
 		}
 	}
 	
@@ -83,7 +83,7 @@ public class TileEntityHDDInterface extends TileEntityInventory implements ITick
 								network.getItemStorage().invalidate();
 							}
 							setInventorySlotContents(1, ItemStackTools.getEmptyStack());
-							this.worldObj.markChunkDirty( this.pos, this );
+							this.getWorld().markChunkDirty( this.pos, this );
 						}
 					}
 				}else{
@@ -94,7 +94,7 @@ public class TileEntityHDDInterface extends TileEntityInventory implements ITick
 							network.getItemStorage().invalidate();
 						}
 						setInventorySlotContents(1, ItemStackTools.getEmptyStack());
-						this.worldObj.markChunkDirty( this.pos, this );
+						this.getWorld().markChunkDirty( this.pos, this );
 					}
 				}
 			}
@@ -133,7 +133,7 @@ public class TileEntityHDDInterface extends TileEntityInventory implements ITick
 				  				network.getItemStorage().invalidate();
 				  			  }
 				          }
-				          this.worldObj.markChunkDirty( this.pos, this );
+				          this.getWorld().markChunkDirty( this.pos, this );
 				        }
 					}
 				}

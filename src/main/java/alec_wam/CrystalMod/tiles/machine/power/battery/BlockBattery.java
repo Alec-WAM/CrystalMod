@@ -4,6 +4,16 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.blocks.EnumBlock.IEnumMeta;
+import alec_wam.CrystalMod.blocks.ICustomModel;
+import alec_wam.CrystalMod.blocks.ModBlocks;
+import alec_wam.CrystalMod.proxy.ClientProxy;
+import alec_wam.CrystalMod.util.BlockUtil;
+import alec_wam.CrystalMod.util.ItemNBTHelper;
+import alec_wam.CrystalMod.util.ItemUtil;
+import alec_wam.CrystalMod.util.Lang;
+import alec_wam.CrystalMod.util.tool.ToolUtil;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -20,28 +30,19 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import alec_wam.CrystalMod.CrystalMod;
-import alec_wam.CrystalMod.blocks.ICustomModel;
-import alec_wam.CrystalMod.blocks.ModBlocks;
-import alec_wam.CrystalMod.blocks.EnumBlock.IEnumMeta;
-import alec_wam.CrystalMod.proxy.ClientProxy;
-import alec_wam.CrystalMod.util.BlockUtil;
-import alec_wam.CrystalMod.util.ItemNBTHelper;
-import alec_wam.CrystalMod.util.ItemUtil;
-import alec_wam.CrystalMod.util.Lang;
-import alec_wam.CrystalMod.util.tool.ToolUtil;
 
 public class BlockBattery extends BlockContainer implements ICustomModel {
 	
@@ -92,7 +93,7 @@ public class BlockBattery extends BlockContainer implements ICustomModel {
 	
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void getSubBlocks(Item itemIn, CreativeTabs tab, List<ItemStack> list) {
+	public void getSubBlocks(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> list) {
 		for(BatteryType type : BatteryType.values()) {
 			list.add(new ItemStack(this, 1, type.getMeta()));
 		}
@@ -162,7 +163,7 @@ public class BlockBattery extends BlockContainer implements ICustomModel {
     }
     
 	@Override
-    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
     	TileEntity tile = world.getTileEntity(pos);
         if (tile !=null && (tile instanceof TileEntityBattery)) {
         	TileEntityBattery battery = (TileEntityBattery)tile;

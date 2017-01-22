@@ -1,11 +1,8 @@
 package alec_wam.CrystalMod.blocks.glass;
 
-import java.util.List;
-
 import javax.annotation.Nonnull;
 
 import alec_wam.CrystalMod.CrystalMod;
-import alec_wam.CrystalMod.blocks.BlockMetalBars.EnumMetalBarType;
 import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.blocks.glass.BlockCrystalGlass.GlassBlockStateMapper;
 import alec_wam.CrystalMod.blocks.glass.BlockCrystalGlass.GlassType;
@@ -17,13 +14,13 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.Mirror;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
@@ -64,7 +61,8 @@ public class BlockCrystalGlassPane extends BlockPane implements ICustomModel {
      * returns a list of blocks with the same ID, but different meta (eg: wood returns 4 blocks)
      */
     @SideOnly(Side.CLIENT)
-    public void getSubBlocks(Item itemIn, CreativeTabs tab, List<ItemStack> list)
+    @Override
+    public void getSubBlocks(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> list)
     {
         for (int i = 0; i < GlassType.values().length; ++i)
         {

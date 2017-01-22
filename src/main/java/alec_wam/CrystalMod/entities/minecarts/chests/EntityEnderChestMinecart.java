@@ -46,7 +46,7 @@ public class EntityEnderChestMinecart extends EntityMinecart {
     {
 		super.killMinecart(source);
 
-        if (this.worldObj.getGameRules().getBoolean("doEntityDrops"))
+        if (this.getEntityWorld().getGameRules().getBoolean("doEntityDrops"))
         {
             entityDropItem(new ItemStack(Blocks.ENDER_CHEST), 0.0F);
         }
@@ -65,10 +65,10 @@ public class EntityEnderChestMinecart extends EntityMinecart {
 	
 	public boolean processInitialInteract(EntityPlayer player, @Nullable ItemStack stack, EnumHand hand)
     {
-        if(net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.event.entity.minecart.MinecartInteractEvent(this, player, stack, hand))) return true;
+        if(net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.event.entity.minecart.MinecartInteractEvent(this, player, hand))) return true;
         
         InventoryEnderChest chest = player.getInventoryEnderChest();
-    	if(!worldObj.isRemote && chest !=null){
+    	if(!getEntityWorld().isRemote && chest !=null){
     		player.displayGUIChest(chest);
     		return true;
     	}

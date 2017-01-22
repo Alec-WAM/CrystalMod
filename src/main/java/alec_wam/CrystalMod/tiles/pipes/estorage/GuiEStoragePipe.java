@@ -113,8 +113,8 @@ public class GuiEStoragePipe extends GuiContainer {
 		            this.itemRender.zLevel = 100.0F;
 		            this.itemRender.renderItemAndEffectIntoGUI(dis, x, y);
 		            
-		            String stackSize;
-		    		if (dis.stackSize == 1) {
+		            String stackSize = "";
+		    		/*if (dis.stackSize == 1) {
 		    			stackSize = "";
 		    		} else if (dis.stackSize < 1000) {
 		    			stackSize = dis.stackSize + "";
@@ -124,7 +124,7 @@ public class GuiEStoragePipe extends GuiContainer {
 		    			stackSize = "0M" + dis.stackSize / 100000;
 		    		} else {
 		    			stackSize = dis.stackSize / 1000000 + "M";
-		    		}
+		    		}*/
 		            
 		            this.itemRender.renderItemOverlayIntoGUI(this.fontRendererObj, dis, x, y, stackSize);
 		            this.itemRender.zLevel = 0.0F;

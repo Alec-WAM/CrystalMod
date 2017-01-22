@@ -98,7 +98,7 @@ public class BlockHDDInterface extends BlockContainer implements ICustomModel {
     }
 	
 	@Override
-    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, ItemStack stack, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
     	TileEntity tile = world.getTileEntity(pos);
         if (tile !=null && (tile instanceof TileEntityHDDInterface)) {
         	TileEntityHDDInterface inter = (TileEntityHDDInterface)tile;
@@ -114,7 +114,8 @@ public class BlockHDDInterface extends BlockContainer implements ICustomModel {
     			}
     			return true;
     		}
-        	if(!ItemStackTools.isNullStack(stack) && stack.getItem() instanceof ItemHDD && ItemStackTools.isNullStack(inter.getStackInSlot(0))){
+    		ItemStack stack = player.getHeldItem(hand);
+        	if(ItemStackTools.isValid(stack) && stack.getItem() instanceof ItemHDD && ItemStackTools.isNullStack(inter.getStackInSlot(0))){
     			inter.setInventorySlotContents(0, stack);
     			player.setHeldItem(hand, ItemStackTools.getEmptyStack());
 				return true;

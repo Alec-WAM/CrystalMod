@@ -1,10 +1,8 @@
 package alec_wam.CrystalMod.tiles.machine.crafting;
 
-import java.util.List;
-
 import alec_wam.CrystalMod.CrystalMod;
-import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.blocks.EnumBlock.IEnumMeta;
+import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.tiles.machine.BlockMachine;
 import alec_wam.CrystalMod.tiles.machine.BlockStateMachine;
 import alec_wam.CrystalMod.tiles.machine.TileEntityMachine;
@@ -24,11 +22,12 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
@@ -47,7 +46,7 @@ public class BlockCrystalMachine extends BlockMachine implements ICustomModel  {
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void getSubBlocks(Item itemIn, CreativeTabs tab, List<ItemStack> list) {
+	public void getSubBlocks(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> list) {
 	    for(MachineType type : MachineType.values()) {
 	      list.add(new ItemStack(this, 1, type.getMeta()));
 	    }
@@ -92,7 +91,7 @@ public class BlockCrystalMachine extends BlockMachine implements ICustomModel  {
 	}
 
 	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, ItemStack stack, EnumFacing side, float hX, float hY, float hZ){
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hX, float hY, float hZ){
 		TileEntity tile = world.getTileEntity(pos);
 		if(tile !=null && tile instanceof TileEntityMachine){
 			if(!world.isRemote){

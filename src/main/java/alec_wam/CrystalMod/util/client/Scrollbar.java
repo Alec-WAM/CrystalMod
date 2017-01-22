@@ -5,7 +5,6 @@ import net.minecraft.client.gui.GuiScreen;
 
 import org.lwjgl.input.Mouse;
 
-import alec_wam.CrystalMod.items.backpack.gui.GuiBackpack;
 import alec_wam.CrystalMod.tiles.pipes.estorage.client.IGuiScreen;
 
 public class Scrollbar {
@@ -72,7 +71,7 @@ public class Scrollbar {
     public void draw(IGuiScreen gui) {
     	if(!(gui instanceof GuiScreen))return;
     	GuiScreen screen = (GuiScreen)gui;
-    	Minecraft.getMinecraft().getTextureManager().bindTexture(GuiBackpack.WIDGETS);
+    	Minecraft.getMinecraft().getTextureManager().bindTexture(RenderUtil.WIDGETS);
         screen.drawTexturedModalRect(gui.getGuiLeft() + x, gui.getGuiTop() + y + (int) currentScroll, canScroll() ? 232 : 244, 32, 12, 15);
     }
 

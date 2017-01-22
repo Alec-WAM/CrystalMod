@@ -10,6 +10,7 @@ import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetwork;
 import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage.ItemStackData;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.crafting.ContainerPanelCrafting;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.crafting.TileEntityPanelCrafting;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.Lang;
 import com.google.common.collect.Lists;
@@ -40,11 +41,6 @@ public class RecipeTransferHandler implements IRecipeTransferHandler {
 	@Override
 	public Class<? extends Container> getContainerClass() {
 		return ContainerPanelCrafting.class;
-	}
-
-	@Override
-	public String getRecipeCategoryUid() {
-		return VanillaRecipeCategoryUid.CRAFTING;
 	}
 
 	@Override
@@ -98,9 +94,9 @@ public class RecipeTransferHandler implements IRecipeTransferHandler {
 	        		
 	        		
 	        		
-    	      		if (stack != null && stack.stackSize >=s.stackSize+added) {
+    	      		if (ItemStackTools.isValid(stack) && ItemStackTools.getStackSize(stack) >=ItemStackTools.getStackSize(s)+added) {
     	      			ingredients[i] = allIng.toArray(new ItemStack[allIng.size()]);
-    	      			stacksPlayer.put(id, s.stackSize+added);
+    	      			stacksPlayer.put(id, ItemStackTools.getStackSize(s)+added);
     	      			passPlayer = true;
     	      			break ingd;
     	      		}
@@ -124,9 +120,9 @@ public class RecipeTransferHandler implements IRecipeTransferHandler {
 	        			}
 	        		}
 	        		
-      	      		if (stack != null && stack.stack !=null && !stack.isCrafting && stack.getAmount() >=s.stackSize+added) {
+      	      		if (stack != null && stack.stack !=null && !stack.isCrafting && stack.getAmount() >=ItemStackTools.getStackSize(s)+added) {
       	      			ingredients[i] = allIng.toArray(new ItemStack[allIng.size()]);
-      	      			stacksNet.put(id, s.stackSize+added);
+      	      			stacksNet.put(id, ItemStackTools.getStackSize(s)+added);
       	      			passNetwork = true;
       	      			break ingd;
       	      		}
@@ -174,7 +170,7 @@ public class RecipeTransferHandler implements IRecipeTransferHandler {
                 actualRecipe[x] = new ItemStack[list.tagCount()];
 
                 for (int y = 0; y < list.tagCount(); y++) {
-                    actualRecipe[x][y] = ItemStack.loadItemStackFromNBT(list.getCompoundTagAt(y));
+                    actualRecipe[x][y] = ItemStackTools.loadFromNBT(list.getCompoundTagAt(y));
                 }
             }
         }
@@ -193,31 +189,31 @@ public class RecipeTransferHandler implements IRecipeTransferHandler {
         	trys : for(int t = 0; t < tries; t++){
         		
 	            slot : for (int i = 0; i < actualRecipe.length; ++i) {
-	                if (actualRecipe[i] != null) {
+	                if (actualRecipe[i] !=null) {
 	                	if(failedSlots.contains(i))continue slot;
 	                    ItemStack[] possibilities = actualRecipe[i];
 	                    for (int i2 = 0; i2 < possibilities.length; ++i2) {
 	                    	ItemStack poss = possibilities[i2];
-	                    	if (poss != null) {
+	                    	if (ItemStackTools.isValid(poss)) {
 		                    	ItemStack copy = poss.copy();
 		                        ItemStack took = ItemUtil.removeFromPlayerInventory(con, copy);
-		                        if(took == null){
+		                        if(ItemStackTools.isNullStack(took)){
 		                        	ItemStack ret = panel.getNetwork().getItemStorage().removeItem(copy, false);
-		                        	if(ret !=null){
+		                        	if(ItemStackTools.isValid(ret)){
 		                        		took = ret;
 		                        	}
-		                        }else if(took.stackSize < poss.stackSize){
-		                        	ItemStack ret = panel.getNetwork().getItemStorage().removeItem(ItemUtil.copy(copy, poss.stackSize-took.stackSize), false);
-		                        	if(ret !=null){
-		                        		took.stackSize+=ret.stackSize;
+		                        }else if(ItemStackTools.getStackSize(took) < ItemStackTools.getStackSize(poss)){
+		                        	ItemStack ret = panel.getNetwork().getItemStorage().removeItem(ItemUtil.copy(copy, ItemStackTools.getStackSize(poss)-ItemStackTools.getStackSize(took)), false);
+		                        	if(ItemStackTools.isValid(ret)){
+		                        		ItemStackTools.incStackSize(took, ItemStackTools.getStackSize(ret));
 		                        	}
 		                        }
 		
-		                        if (took != null) {
-		                        	if(panel.getMatrix().getStackInSlot(i) == null){
+		                        if (ItemStackTools.isValid(took)) {
+		                        	if(ItemStackTools.isNullStack(panel.getMatrix().getStackInSlot(i))){
 		                        		panel.getMatrix().setInventorySlotContents(i, took);
 		                        	}else{
-		                        		panel.getMatrix().getStackInSlot(i).stackSize+=took.stackSize;
+		                        		ItemStackTools.incStackSize(panel.getMatrix().getStackInSlot(i), ItemStackTools.getStackSize(took));
 		                        	}
 		                            continue slot;
 		                        }

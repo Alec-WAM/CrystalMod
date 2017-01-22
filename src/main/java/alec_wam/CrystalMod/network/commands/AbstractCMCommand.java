@@ -20,7 +20,7 @@ public abstract class AbstractCMCommand implements CMCommand {
             value = Integer.parseInt(args[index]);
         } catch (NumberFormatException e) {
             value = 0;
-            sender.addChatMessage(new TextComponentString(TextFormatting.RED + "Parameter is not a valid integer!"));
+            sender.sendMessage(new TextComponentString(TextFormatting.RED + "Parameter is not a valid integer!"));
         } catch (ArrayIndexOutOfBoundsException e) {
             return defaultValue;
         }
@@ -33,7 +33,7 @@ public abstract class AbstractCMCommand implements CMCommand {
             value = Float.parseFloat(args[index]);
         } catch (NumberFormatException e) {
             value = 0.0f;
-            sender.addChatMessage(new TextComponentString(TextFormatting.RED + "Parameter is not a valid real number!"));
+            sender.sendMessage(new TextComponentString(TextFormatting.RED + "Parameter is not a valid real number!"));
         } catch (ArrayIndexOutOfBoundsException e) {
             return defaultValue;
         }

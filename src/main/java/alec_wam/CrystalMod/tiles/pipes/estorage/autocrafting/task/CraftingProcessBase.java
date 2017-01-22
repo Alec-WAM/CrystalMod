@@ -47,9 +47,13 @@ public abstract class CraftingProcessBase{
     	this.network = network;
     }
     
+    public void setNetwork(EStorageNetwork network){
+    	this.network = network;
+    }
+    
     public boolean readFromNBT(NBTTagCompound tag) {
-    	ItemStack patternStack = ItemStack.loadItemStackFromNBT(tag.getCompoundTag(NBT_PATTERN));
-    	if(patternStack !=null){
+    	ItemStack patternStack = ItemStackTools.loadFromNBT(tag.getCompoundTag(NBT_PATTERN));
+    	if(ItemStackTools.isValid(patternStack)){
     		NBTTagCompound nbtContainer = tag.getCompoundTag(NBT_PATTERN_CONTAINER);
     		World world = FMLCommonHandler.instance().getMinecraftServerInstance().worldServerForDimension(nbtContainer.getInteger("Dim"));
     		if(world == null)return false;
@@ -81,7 +85,7 @@ public abstract class CraftingProcessBase{
     public List<ItemStack> getToInsert() {
     	List<ItemStack> list = Lists.newArrayList();
     	for(ItemStack stack : pattern.getInputs()){
-    		if(!ItemStackTools.isNullStack(stack)){
+    		if(ItemStackTools.isValid(stack)){
     			list.add(stack);
     		}
     	}
@@ -101,7 +105,7 @@ public abstract class CraftingProcessBase{
     	if(i < pattern.getOutputs().size()){
 	    	ItemStack stack = pattern.getOutputs().get(i);
 			Integer rec = satisfied.get(i);
-			if(rec == null || (!ItemStackTools.isNullStack(stack) && ItemStackTools.getStackSize(stack) > rec)){
+			if(rec == null || (ItemStackTools.isValid(stack) && ItemStackTools.getStackSize(stack) > rec)){
 				return false;
 			}
 			return true;
@@ -132,8 +136,8 @@ public abstract class CraftingProcessBase{
             }
         	ItemStack item = pattern.getOutputs().get(i);
             if (pattern.isOredict() ? ItemUtil.stackMatchUseOre(stack, item) : ItemUtil.canCombine(stack, item)) {
-            	 if (rec < item.stackSize) {
-            		 satisfied.put(i, rec + stack.stackSize);
+            	 if (rec < ItemStackTools.getStackSize(item)) {
+            		 satisfied.put(i, rec + ItemStackTools.getStackSize(stack));
             		 return true;
             	 }
             }

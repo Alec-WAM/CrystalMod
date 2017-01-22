@@ -105,7 +105,7 @@ public class TileEntityCrystalInfuser extends TileEntityMachine {
         else {
             ItemStackTools.incStackSize(stack2, ItemStackTools.getStackSize(output));
         }
-        setInventorySlotContents(0, ItemUtil.consumeItem(stack));
+        ItemStackTools.incStackSize(stack, -1);
         if (ItemStackTools.isEmpty(stack)) {
             setInventorySlotContents(0, ItemStackTools.getEmptyStack());
         }

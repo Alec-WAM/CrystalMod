@@ -1,8 +1,14 @@
 package alec_wam.CrystalMod.items.tools;
 
-import java.util.List;
 import java.util.Map;
 
+import com.google.common.collect.Maps;
+
+import alec_wam.CrystalMod.Config;
+import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.blocks.ICustomModel;
+import alec_wam.CrystalMod.items.ModItems;
+import alec_wam.CrystalMod.util.ItemNBTHelper;
 import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -10,16 +16,10 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemSpade;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import alec_wam.CrystalMod.Config;
-import alec_wam.CrystalMod.CrystalMod;
-import alec_wam.CrystalMod.blocks.ICustomModel;
-import alec_wam.CrystalMod.items.ModItems;
-import alec_wam.CrystalMod.util.ItemNBTHelper;
-
-import com.google.common.collect.Maps;
 
 public class ItemCrystalShovel extends ItemSpade implements ICustomModel {
 
@@ -53,7 +53,8 @@ public class ItemCrystalShovel extends ItemSpade implements ICustomModel {
     }
 	
 	@SideOnly(Side.CLIENT)
-    public void getSubItems(Item itemIn, CreativeTabs tab, List<ItemStack> subItems)
+    @Override
+	public void getSubItems(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> subItems)
     {
         for(String color : new String[]{"blue", "red", "green", "dark", "pure"}){
 			ItemStack stack = new ItemStack(itemIn);

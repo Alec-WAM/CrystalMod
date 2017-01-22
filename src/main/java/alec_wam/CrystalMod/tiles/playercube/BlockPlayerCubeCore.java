@@ -124,7 +124,7 @@ public class BlockPlayerCubeCore extends Block implements IExplosionImmune
 	}
 
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack held, EnumFacing side, float hitX, float hitY, float hitZ)
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ)
 	{
 		if (worldIn.provider.getDimension() == ModDimensions.CUBE_ID)
 		{
@@ -135,6 +135,6 @@ public class BlockPlayerCubeCore extends Block implements IExplosionImmune
 			return true;
 		}
 
-		return super.onBlockActivated(worldIn, pos, state, playerIn, hand, held, side, hitX, hitY, hitZ);
+		return super.onBlockActivated(worldIn, pos, state, playerIn, hand, side, hitX, hitY, hitZ);
 	}
 }

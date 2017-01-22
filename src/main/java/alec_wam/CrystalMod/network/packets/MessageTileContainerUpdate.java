@@ -29,7 +29,7 @@ public class MessageTileContainerUpdate extends AbstractPacketThreadsafe {
         y = buf.readInt();
         z = buf.readInt();
 
-        if (Minecraft.getMinecraft().theWorld != null) {
+        if (CrystalMod.proxy.getClientWorld() != null) {
             tile = CrystalMod.proxy.getClientWorld().getTileEntity(new BlockPos(x, y, z));
 
             if (tile instanceof ISynchronizedContainer) {

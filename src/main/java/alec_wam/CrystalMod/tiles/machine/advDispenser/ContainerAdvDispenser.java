@@ -41,7 +41,7 @@ public class ContainerAdvDispenser extends Container
 
     public boolean canInteractWith(EntityPlayer playerIn)
     {
-        return this.dispenser.isUseableByPlayer(playerIn);
+        return this.dispenser.isUsableByPlayer(playerIn);
     }
 
     /**
@@ -84,7 +84,7 @@ public class ContainerAdvDispenser extends Container
                 return ItemStackTools.getEmptyStack();
             }
 
-            slot.onPickupFromSlot(playerIn, itemstack1);
+            slot.onTake(playerIn, itemstack1);
         }
 
         return itemstack;

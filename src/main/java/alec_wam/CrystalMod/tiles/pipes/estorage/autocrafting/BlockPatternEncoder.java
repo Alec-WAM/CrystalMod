@@ -58,7 +58,7 @@ public class BlockPatternEncoder extends EnumBlock<BlockPatternEncoder.EncoderTy
     }
 	
 	@Override
-    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, ItemStack held, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
 		if(!player.isSneaking()){
 			player.openGui(CrystalMod.instance, 0, world, pos.getX(), pos.getY(), pos.getZ());
 			return true;

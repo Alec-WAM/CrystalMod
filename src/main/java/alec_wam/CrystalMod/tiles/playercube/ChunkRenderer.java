@@ -93,7 +93,7 @@ public class ChunkRenderer {
 	        Block block = blockState.getBlock();
 	
 	        for (BlockRenderLayer enumWorldBlockLayer : BlockRenderLayer.values()) {
-	            if (!block.canRenderInLayer(enumWorldBlockLayer)) continue;
+	            if (!block.canRenderInLayer(blockState, enumWorldBlockLayer)) continue;
 	            
 	
 	            if (block.getRenderType(blockState) != EnumBlockRenderType.INVISIBLE) {
@@ -111,7 +111,7 @@ public class ChunkRenderer {
           //RenderHelper.enableStandardItemLighting();
 
            GlStateManager.pushMatrix();
-	       World tesrDispatchWorld = TileEntityRendererDispatcher.instance.worldObj;
+	       World tesrDispatchWorld = TileEntityRendererDispatcher.instance.world;
 	
 	        for(TileEntity tile : chunk.chunkTileEntityMap.values()){
 		        if (tile != null) {
@@ -119,8 +119,8 @@ public class ChunkRenderer {
 		
 		            if (renderer != null && tile.shouldRenderInPass(MinecraftForgeClient.getRenderPass())) {
 		                TileEntity tileClone = tile;
-		                final World world = TileEntityRendererDispatcher.instance.worldObj;
-		                tileClone.setWorldObj(chunk.getFakeWorld());
+		                final World world = TileEntityRendererDispatcher.instance.world;
+		                tileClone.setWorld(chunk.getFakeWorld());
 		                TileEntityRendererDispatcher.instance.setWorld(chunk.getFakeWorld());
 		                TileEntityRendererDispatcher.instance.renderTileEntityAt(tileClone, tileClone.getPos().getX(), tileClone.getPos().getY(), tileClone.getPos().getZ(), partialTicks);
 		                TileEntityRendererDispatcher.instance.setWorld(world);

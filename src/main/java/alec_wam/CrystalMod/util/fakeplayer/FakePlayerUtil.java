@@ -145,7 +145,7 @@ public class FakePlayerUtil {
 		
 		IBlockState state = worldObj.getBlockState(blockPos);
 		if(state !=null && state.getBlock() !=null){
-			boolean result = state.getBlock().onBlockActivated(worldObj, blockPos, state, fakePlayer, EnumHand.MAIN_HAND, fakePlayer.getHeldItem(EnumHand.MAIN_HAND), face, 0f, 0f, 0f);
+			boolean result = state.getBlock().onBlockActivated(worldObj, blockPos, state, fakePlayer, EnumHand.MAIN_HAND, face, 0f, 0f, 0f);
 			fakePlayer.setPosition(oldPos.xCoord, oldPos.yCoord, oldPos.zCoord);
 			return result;
 		}

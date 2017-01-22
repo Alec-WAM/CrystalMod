@@ -1,38 +1,25 @@
 package alec_wam.CrystalMod.tiles.chest;
-import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
 
 import alec_wam.CrystalMod.blocks.ModBlocks;
-import alec_wam.CrystalMod.util.BlockUtil;
-import alec_wam.CrystalMod.util.ItemStackTools;
+import alec_wam.CrystalMod.tiles.TileEntityInventory;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SPacketUpdateTileEntity;
-import net.minecraft.tileentity.TileEntityLockable;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.common.util.Constants;
 
-public class TileEntityBlueCrystalChest extends TileEntityLockable implements ITickable, IInventory
+public class TileEntityBlueCrystalChest extends TileEntityInventory
 {
     private int ticksSinceSync = -1;
     public float prevLidAngle;
     public float lidAngle;
     private int numUsingPlayers;
     private CrystalChestType type;
-    public ItemStack[] chestContents;
-    private ItemStack[] topStacks;
     private byte facing;
     private boolean inventoryTouched;
     private boolean hadStuff;
@@ -45,34 +32,8 @@ public class TileEntityBlueCrystalChest extends TileEntityLockable implements IT
 
     protected TileEntityBlueCrystalChest(CrystalChestType type)
     {
-        super();
+        super("", type.size);
         this.type = type;
-        this.chestContents = new ItemStack[getSizeInventory()];
-        this.topStacks = new ItemStack[8];
-    }
-
-    public ItemStack[] getContents()
-    {
-        return chestContents;
-    }
-
-    public void setContents(ItemStack[] contents)
-    {
-        chestContents = new ItemStack[getSizeInventory()];
-        for (int i = 0; i < contents.length; i++)
-        {
-            if (i < chestContents.length)
-            {
-                chestContents[i] = contents[i];
-            }
-        }
-        inventoryTouched = true;
-    }
-
-    @Override
-    public int getSizeInventory()
-    {
-        return type.size;
     }
 
     public int getFacing()
@@ -83,134 +44,6 @@ public class TileEntityBlueCrystalChest extends TileEntityLockable implements IT
     public CrystalChestType getType()
     {
         return type;
-    }
-
-    @Override
-    public ItemStack getStackInSlot(int i)
-    {
-        inventoryTouched = true;
-        return chestContents[i];
-    }
-
-    @Override
-    public void markDirty()
-    {
-        super.markDirty();
-        sortTopStacks();
-    }
-
-    protected void sortTopStacks()
-    {
-        if (!type.isTransparent() || (worldObj != null && worldObj.isRemote))
-        {
-            return;
-        }
-        ItemStack[] tempCopy = new ItemStack[getSizeInventory()];
-        boolean hasStuff = false;
-        int compressedIdx = 0;
-        mainLoop: for (int i = 0; i < getSizeInventory(); i++)
-        {
-            if (!ItemStackTools.isNullStack(chestContents[i]))
-            {
-                for (int j = 0; j < compressedIdx; j++)
-                {
-                    if (tempCopy[j].isItemEqual(chestContents[i]))
-                    {
-                    	ItemStackTools.incStackSize(tempCopy[j], ItemStackTools.getStackSize(chestContents[i]));
-                        continue mainLoop;
-                    }
-                }
-                tempCopy[compressedIdx++] = chestContents[i].copy();
-                hasStuff = true;
-            }
-        }
-        if (!hasStuff && hadStuff)
-        {
-            hadStuff = false;
-            for (int i = 0; i < topStacks.length; i++)
-            {
-                topStacks[i] = null;
-            }
-            if (worldObj != null)
-            {
-            	BlockUtil.markBlockForUpdate(getWorld(), getPos());
-            }
-            return;
-        }
-        hadStuff = true;
-        Arrays.sort(tempCopy, new Comparator<ItemStack>()
-        {
-            @Override
-            public int compare(ItemStack o1, ItemStack o2)
-            {
-                if (ItemStackTools.isNullStack(o1))
-                {
-                    return 1;
-                } else if (ItemStackTools.isNullStack(o2))
-                {
-                    return -1;
-                } else
-                {
-                    return ItemStackTools.getStackSize(o2) - ItemStackTools.getStackSize(o1);
-                }
-            }
-        });
-        int p = 0;
-        for (int i = 0; i < tempCopy.length; i++)
-        {
-            if (ItemStackTools.isValid(tempCopy[i]))
-            {
-                topStacks[p++] = tempCopy[i];
-                if (p == topStacks.length)
-                {
-                    break;
-                }
-            }
-        }
-        for (int i = p; i < topStacks.length; i++)
-        {
-            topStacks[i] = ItemStackTools.getEmptyStack();
-        }
-        if (worldObj != null)
-        {
-        	BlockUtil.markBlockForUpdate(getWorld(), getPos());
-        }
-    }
-
-    @Override
-    public ItemStack decrStackSize(int i, int j)
-    {
-        if (!ItemStackTools.isNullStack(chestContents[i]))
-        {
-            if (ItemStackTools.getStackSize(chestContents[i]) <= j)
-            {
-                ItemStack itemstack = chestContents[i];
-                chestContents[i] = ItemStackTools.getEmptyStack();
-                markDirty();
-                return itemstack;
-            }
-            ItemStack itemstack1 = chestContents[i].splitStack(j);
-            if (ItemStackTools.isEmpty(chestContents[i]))
-            {
-                chestContents[i] = ItemStackTools.getEmptyStack();
-            }
-            markDirty();
-            return itemstack1;
-        } else
-        {
-            return ItemStackTools.getEmptyStack();
-        }
-    }
-
-    @Override
-    public void setInventorySlotContents(int i, ItemStack itemstack)
-    {
-        chestContents[i] = itemstack;
-        if (ItemStackTools.getStackSize(itemstack) > getInventoryStackLimit())
-        {
-        	ItemStackTools.setStackSize(itemstack, getInventoryStackLimit());
-        }
-        markDirty();
     }
 
     @Override
@@ -231,71 +64,37 @@ public class TileEntityBlueCrystalChest extends TileEntityLockable implements IT
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound nbttagcompound)
+    public void readCustomNBT(NBTTagCompound nbttagcompound)
     {
-        super.readFromNBT(nbttagcompound);
-
-        NBTTagList nbttaglist = nbttagcompound.getTagList("Items", Constants.NBT.TAG_COMPOUND);
-        this.chestContents = new ItemStack[getSizeInventory()];
+        super.readCustomNBT(nbttagcompound);
 
         if (nbttagcompound.hasKey("CustomName", Constants.NBT.TAG_STRING))
         {
             this.customName = nbttagcompound.getString("CustomName");
         }
-
-        for (int i = 0; i < nbttaglist.tagCount(); i++)
-        {
-            NBTTagCompound nbttagcompound1 = nbttaglist.getCompoundTagAt(i);
-            int j = nbttagcompound1.getByte("Slot") & 0xff;
-            if (j >= 0 && j < chestContents.length)
-            {
-                chestContents[j] = ItemStackTools.loadFromNBT(nbttagcompound1);
-            }
-        }
         facing = nbttagcompound.getByte("facing");
-        sortTopStacks();
     }
 
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound)
+    public void writeCustomNBT(NBTTagCompound nbttagcompound)
     {
-        super.writeToNBT(nbttagcompound);
-        NBTTagList nbttaglist = new NBTTagList();
-        for (int i = 0; i < chestContents.length; i++)
-        {
-            if (chestContents[i] != null)
-            {
-                NBTTagCompound nbttagcompound1 = new NBTTagCompound();
-                nbttagcompound1.setByte("Slot", (byte) i);
-                chestContents[i].writeToNBT(nbttagcompound1);
-                nbttaglist.appendTag(nbttagcompound1);
-            }
-        }
-
-        nbttagcompound.setTag("Items", nbttaglist);
+        super.writeCustomNBT(nbttagcompound);
         nbttagcompound.setByte("facing", facing);
 
         if (this.hasCustomName())
         {
             nbttagcompound.setString("CustomName", this.customName);
         }
-        return nbttagcompound;
     }
 
     @Override
-    public int getInventoryStackLimit()
+    public boolean isUsableByPlayer(EntityPlayer entityplayer)
     {
-        return 64;
-    }
-
-    @Override
-    public boolean isUseableByPlayer(EntityPlayer entityplayer)
-    {
-        if (worldObj == null)
+        if (!hasWorld())
         {
             return true;
         }
-        if (worldObj.getTileEntity(pos) != this)
+        if (getWorld().getTileEntity(pos) != this)
         {
             return false;
         }
@@ -305,12 +104,13 @@ public class TileEntityBlueCrystalChest extends TileEntityLockable implements IT
     @Override
     public void update()
     {
+    	super.update();
         // Resynchronize clients with the server state
-        if (worldObj != null && !this.worldObj.isRemote && this.numUsingPlayers != 0 && (this.ticksSinceSync + pos.getX() + pos.getY() + pos.getZ()) % 200 == 0)
+        if (hasWorld() && !this.getWorld().isRemote && this.numUsingPlayers != 0 && (this.ticksSinceSync + pos.getX() + pos.getY() + pos.getZ()) % 200 == 0)
         {
             this.numUsingPlayers = 0;
             float var1 = 5.0F;
-            List<EntityPlayer> var2 = this.worldObj.getEntitiesWithinAABB(EntityPlayer.class, new AxisAlignedBB(pos.getX() - var1, pos.getY() - var1, pos.getZ() - var1, pos.getX() + 1 + var1, pos.getY() + 1 + var1, pos.getZ() + 1 + var1));
+            List<EntityPlayer> var2 = this.getWorld().getEntitiesWithinAABB(EntityPlayer.class, new AxisAlignedBB(pos.getX() - var1, pos.getY() - var1, pos.getZ() - var1, pos.getX() + 1 + var1, pos.getY() + 1 + var1, pos.getZ() + 1 + var1));
 
             for (EntityPlayer var4 : var2)
             {
@@ -321,14 +121,13 @@ public class TileEntityBlueCrystalChest extends TileEntityLockable implements IT
             }
         }
 
-        if (worldObj != null && !worldObj.isRemote && ticksSinceSync < 0)
+        if (hasWorld() && !getWorld().isRemote && ticksSinceSync < 0)
         {
-            worldObj.addBlockEvent(pos, ModBlocks.crystalChest, 3, ((numUsingPlayers << 3) & 0xF8) | (facing & 0x7));
+            getWorld().addBlockEvent(pos, ModBlocks.crystalChest, 3, ((numUsingPlayers << 3) & 0xF8) | (facing & 0x7));
         }
-        if (!worldObj.isRemote && inventoryTouched)
+        if (!getWorld().isRemote && inventoryTouched)
         {
             inventoryTouched = false;
-            sortTopStacks();
         }
 
         this.ticksSinceSync++;
@@ -338,7 +137,7 @@ public class TileEntityBlueCrystalChest extends TileEntityLockable implements IT
         {
             double d = pos.getX() + 0.5D;
             double d1 = pos.getZ() + 0.5D;
-            worldObj.playSound(null, d, pos.getY() + 0.5D, d1, SoundEvents.BLOCK_CHEST_OPEN, SoundCategory.BLOCKS, 0.5F, worldObj.rand.nextFloat() * 0.1F + 0.9F);
+            getWorld().playSound(null, d, pos.getY() + 0.5D, d1, SoundEvents.BLOCK_CHEST_OPEN, SoundCategory.BLOCKS, 0.5F, getWorld().rand.nextFloat() * 0.1F + 0.9F);
         }
         if (numUsingPlayers == 0 && lidAngle > 0.0F || numUsingPlayers > 0 && lidAngle < 1.0F)
         {
@@ -359,7 +158,7 @@ public class TileEntityBlueCrystalChest extends TileEntityLockable implements IT
             {
                 double d2 = pos.getX() + 0.5D;
                 double d3 = pos.getZ() + 0.5D;
-                worldObj.playSound(null, d2, pos.getY() + 0.5D, d3, SoundEvents.BLOCK_CHEST_CLOSE, SoundCategory.BLOCKS, 0.5F, worldObj.rand.nextFloat() * 0.1F + 0.9F);
+                getWorld().playSound(null, d2, pos.getY() + 0.5D, d3, SoundEvents.BLOCK_CHEST_CLOSE, SoundCategory.BLOCKS, 0.5F, getWorld().rand.nextFloat() * 0.1F + 0.9F);
             }
             if (lidAngle < 0.0F)
             {
@@ -388,23 +187,23 @@ public class TileEntityBlueCrystalChest extends TileEntityLockable implements IT
     @Override
     public void openInventory(EntityPlayer player)
     {
-        if (worldObj == null)
+        if (!hasWorld())
         {
             return;
         }
         numUsingPlayers++;
-        worldObj.addBlockEvent(pos, ModBlocks.crystalChest, 1, numUsingPlayers);
+        getWorld().addBlockEvent(pos, ModBlocks.crystalChest, 1, numUsingPlayers);
     }
 
     @Override
     public void closeInventory(EntityPlayer player)
     {
-        if (worldObj == null)
+        if (!hasWorld())
         {
             return;
         }
         numUsingPlayers--;
-        worldObj.addBlockEvent(pos, ModBlocks.crystalChest, 1, numUsingPlayers);
+        getWorld().addBlockEvent(pos, ModBlocks.crystalChest, 1, numUsingPlayers);
     }
 
     public void setFacing(byte facing2)
@@ -412,130 +211,17 @@ public class TileEntityBlueCrystalChest extends TileEntityLockable implements IT
         this.facing = facing2;
     }
 
-    public ItemStack[] getTopItemStacks()
-    {
-        return topStacks;
-    }
-
     public TileEntityBlueCrystalChest updateFromMetadata(int l)
     {
-        if (worldObj != null && worldObj.isRemote)
+        if (hasWorld() && getWorld().isRemote)
         {
             if (l != type.ordinal())
             {
-                worldObj.setTileEntity(pos, CrystalChestType.makeEntity(l));
-                return (TileEntityBlueCrystalChest) worldObj.getTileEntity(pos);
+            	getWorld().setTileEntity(pos, CrystalChestType.makeEntity(l));
+                return (TileEntityBlueCrystalChest) getWorld().getTileEntity(pos);
             }
         }
         return this;
-    }
-
-    @Override
-    public SPacketUpdateTileEntity getUpdatePacket()
-    {
-
-        NBTTagCompound nbt = new NBTTagCompound();
-        nbt.setInteger("type", getType().ordinal());
-        nbt.setByte("facing", facing);
-        ItemStack[] stacks = buildItemStackDataList();
-        if (stacks != null)
-        {
-            NBTTagList nbttaglist = new NBTTagList();
-            for (int i = 0; i < stacks.length; i++)
-            {
-                if (stacks[i] != null)
-                {
-                    NBTTagCompound nbttagcompound1 = new NBTTagCompound();
-                    nbttagcompound1.setByte("Slot", (byte) i);
-                    stacks[i].writeToNBT(nbttagcompound1);
-                    nbttaglist.appendTag(nbttagcompound1);
-                }
-            }
-            nbt.setTag("stacks", nbttaglist);
-        }
-
-        return new SPacketUpdateTileEntity(pos, 0, nbt);
-    }
-
-    @Override
-    public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt)
-    {
-        if (pkt.getTileEntityType() == 0)
-        {
-            NBTTagCompound nbt = pkt.getNbtCompound();
-            type = CrystalChestType.values()[nbt.getInteger("type")];
-            facing = nbt.getByte("facing");
-
-            NBTTagList tagList = nbt.getTagList("stacks", Constants.NBT.TAG_COMPOUND);
-            ItemStack[] stacks = new ItemStack[topStacks.length];
-
-            for (int i = 0; i < stacks.length; i++)
-            {
-                NBTTagCompound nbt1 = tagList.getCompoundTagAt(i);
-                int j = nbt1.getByte("Slot") & 0xff;
-                if (j >= 0 && j < stacks.length)
-                {
-                    stacks[j] = ItemStackTools.loadFromNBT(nbt1);
-                }
-            }
-
-            if (type.isTransparent() && stacks != null)
-            {
-                int pos = 0;
-                for (int i = 0; i < topStacks.length; i++)
-                {
-                    if (stacks[pos] != null)
-                    {
-                        topStacks[i] = stacks[pos];
-                    } else
-                    {
-                        topStacks[i] = null;
-                    }
-                    pos++;
-                }
-            }
-        }
-    }
-
-    public ItemStack[] buildItemStackDataList()
-    {
-        if (type.isTransparent())
-        {
-            ItemStack[] sortList = new ItemStack[topStacks.length];
-            int pos = 0;
-            for (ItemStack is : topStacks)
-            {
-                if (is != null)
-                {
-                    sortList[pos++] = is;
-                } else
-                {
-                    sortList[pos++] = null;
-                }
-            }
-            return sortList;
-        }
-        return null;
-    }
-
-    @Override
-    public ItemStack removeStackFromSlot(int par1)
-    {
-        if (this.chestContents[par1] != null)
-        {
-            ItemStack var2 = this.chestContents[par1];
-            this.chestContents[par1] = ItemStackTools.getEmptyStack();
-            return var2;
-        } else
-        {
-            return ItemStackTools.getEmptyStack();
-        }
-    }
-
-    @Override
-    public boolean isItemValidForSlot(int i, ItemStack itemstack)
-    {
-        return true;
     }
 
     public void rotateAround()
@@ -546,7 +232,7 @@ public class TileEntityBlueCrystalChest extends TileEntityLockable implements IT
             facing = (byte) EnumFacing.NORTH.ordinal();
         }
         setFacing(facing);
-        worldObj.addBlockEvent(pos, ModBlocks.crystalChest, 2, facing);
+        getWorld().addBlockEvent(pos, ModBlocks.crystalChest, 2, facing);
     }
 
     public void wasPlaced(EntityLivingBase entityliving, ItemStack itemStack)
@@ -555,44 +241,6 @@ public class TileEntityBlueCrystalChest extends TileEntityLockable implements IT
 
     public void removeAdornments()
     {
-    }
-
-    @Override
-    public int getField(int id)
-    {
-        return 0;
-    }
-
-    @Override
-    public void setField(int id, int value)
-    {
-    }
-
-    @Override
-    public int getFieldCount()
-    {
-        return 0;
-    }
-
-    @Override
-    public void clear()
-    {
-        for (int i = 0; i < this.chestContents.length; ++i)
-        {
-            this.chestContents[i] = null;
-        }
-    }
-
-    @Override
-    public Container createContainer(InventoryPlayer playerInventory, EntityPlayer player)
-    {
-        return null;
-    }
-
-    @Override
-    public String getGuiID()
-    {
-        return "CrystalMod:" + type.name();
     }
 
     @Override

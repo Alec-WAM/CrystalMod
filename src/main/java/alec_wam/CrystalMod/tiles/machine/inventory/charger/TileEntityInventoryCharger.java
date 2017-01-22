@@ -34,7 +34,7 @@ public abstract class TileEntityInventoryCharger extends TileEntityMod implement
 	
 	public void update(){
 		super.update();
-		if(!worldObj.isRemote){
+		if(!getWorld().isRemote){
 			
 			boolean powerChanged = (lastSyncPowerStored != getEnergyStored() && shouldDoWorkThisTick(5));
 		    if(powerChanged) {

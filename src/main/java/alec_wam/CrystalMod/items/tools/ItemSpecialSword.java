@@ -48,13 +48,6 @@ public class ItemSpecialSword extends ItemSword  {
     {
         return true;
     }
-    
-    /* Vanilla overrides */
-    @Override
-    public boolean isItemTool (ItemStack par1ItemStack)
-    {
-        return false;
-    }
 
     @Override
     public boolean getIsRepairable (ItemStack par1ItemStack, ItemStack par2ItemStack)
@@ -79,9 +72,10 @@ public class ItemSpecialSword extends ItemSword  {
         return EnumAction.NONE;
     }
     
-    public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand)
+    @Override
+    public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand hand)
     {
-    	return super.onItemRightClick(itemStackIn, worldIn, playerIn, hand);
+    	return super.onItemRightClick(worldIn, playerIn, hand);
     }
     
     @Override

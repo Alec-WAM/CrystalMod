@@ -31,7 +31,7 @@ public class PacketItemNBT extends AbstractPacketThreadsafe {
 		PacketBuffer buffer = new PacketBuffer(buf);
 		slot = buffer.readInt();
 		try {
-			data = buffer.readNBTTagCompoundFromBuffer();
+			data = buffer.readCompoundTag();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -41,7 +41,7 @@ public class PacketItemNBT extends AbstractPacketThreadsafe {
 	public void toBytes(ByteBuf buf) {
 		PacketBuffer buffer = new PacketBuffer(buf);
 		buffer.writeInt(slot);
-		buffer.writeNBTTagCompoundToBuffer(data);
+		buffer.writeCompoundTag(data);
 	}
 
 	@Override

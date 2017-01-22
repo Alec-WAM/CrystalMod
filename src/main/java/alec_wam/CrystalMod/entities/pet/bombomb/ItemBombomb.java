@@ -94,7 +94,7 @@ public class ItemBombomb extends Item implements ICustomModel {
             	bombomb.setTamed(true);
             	bombomb.setOwnerId(EntityPlayer.getUUID(playerIn.getGameProfile()));
             	bombomb.loadFromItem(playerIn, stack);
-            	worldIn.spawnEntityInWorld(bombomb);
+            	worldIn.spawnEntity(bombomb);
                 if (!playerIn.capabilities.isCreativeMode)
                 {
                 	ItemStackTools.incStackSize(stack, -1);

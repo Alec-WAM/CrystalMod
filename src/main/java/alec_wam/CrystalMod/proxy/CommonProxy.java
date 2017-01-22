@@ -2,6 +2,8 @@ package alec_wam.CrystalMod.proxy;
 
 import java.io.File;
 
+import com.mojang.authlib.GameProfile;
+
 import alec_wam.CrystalMod.Config;
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.ModBlocks;
@@ -23,21 +25,18 @@ import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.items.guide.GuidePages;
 import alec_wam.CrystalMod.items.tools.bat.ModBats;
 import alec_wam.CrystalMod.tiles.machine.worksite.WorksiteChunkLoader;
-import alec_wam.CrystalMod.tiles.matter.MatterRegistry;
 import alec_wam.CrystalMod.tiles.pipes.PipeNetworkTickHandler;
 import alec_wam.CrystalMod.tiles.pipes.attachments.AttachmentUtil;
 import alec_wam.CrystalMod.tiles.pipes.covers.ItemPipeCover;
 import alec_wam.CrystalMod.tiles.playercube.PlayerCubeChunkLoaderManager;
 import alec_wam.CrystalMod.tiles.spawner.ItemMobEssence;
 import alec_wam.CrystalMod.util.FarmUtil;
+import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.world.CrystalModWorldGenerator;
 import alec_wam.CrystalMod.world.DropCapture;
 import alec_wam.CrystalMod.world.ModDimensions;
 import alec_wam.CrystalMod.world.WorldTickHandler;
 import alec_wam.CrystalMod.world.game.tag.TagManager;
-
-import com.mojang.authlib.GameProfile;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
@@ -75,7 +74,6 @@ public class CommonProxy {
 		ModCrops.init();
 		ModCrafting.preInit();
 		ModEntites.init();
-        MatterRegistry.init();
         ItemMobEssence.initDefaultMobs();
         ModBats.registerBats();
         ModBats.registerUpgrades();
@@ -110,7 +108,6 @@ public class CommonProxy {
 	
 	public void init(FMLInitializationEvent event) {
 		ModDimensions.register();
-		MatterRegistry.initValues();
 		AttachmentUtil.initAttachments();
 		MinecraftForge.EVENT_BUS.register(PipeNetworkTickHandler.instance);
 		MinecraftForge.EVENT_BUS.register(new EventHandler());
@@ -125,8 +122,7 @@ public class CommonProxy {
 	public void postInit(FMLPostInitializationEvent event) {
 		ModItems.pipeCover.initialize();
 		for(ItemStack cover : ItemPipeCover.coverRecipes.keySet()){
-			ItemStack cover6 = cover.copy();
-			cover6.stackSize = 6;
+			ItemStack cover6 = ItemUtil.copy(cover, 6);
 			GameRegistry.addRecipe(new ShapedOreRecipe(cover6, new Object[] { "S ", "CN", 'C', ItemPipeCover.coverRecipes.get(cover), 'S', "slimeball", 'N', "nuggetCrystal" }));
 		}
 		if(ModFluids.fluidXpJuice == null) { //should have been registered by enderio

@@ -86,7 +86,7 @@ public class TileEntityFluidManager extends TileEntityIOSides {
 	
 	public void update(){
 		super.update();
-		if(!worldObj.isRemote){
+		if(!getWorld().isRemote){
 			/*int filledLevel = getFilledLevel();
 		    if(lastUpdateLevel != filledLevel) {
 		      lastUpdateLevel = filledLevel;

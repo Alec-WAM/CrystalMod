@@ -13,7 +13,7 @@ public interface ICraftingTask {
 	public static final String NBT_REQUESTED = "Quantity";
 	public static final String NBT_QUANTITY = "Quantity";
 	
-    CraftingPattern getPattern();
+	CraftingPattern getPattern();
 
     void calculate(EStorageNetwork network);
     

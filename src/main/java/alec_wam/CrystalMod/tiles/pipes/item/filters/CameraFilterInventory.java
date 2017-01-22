@@ -12,18 +12,19 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 
 public class CameraFilterInventory implements IItemStackInventory
 {
-    private List<ItemStack> inventory;
+    private NonNullList<ItemStack> inventory;
     private String name;
     protected ItemStack masterStack;
 
     public CameraFilterInventory(ItemStack masterStack, String name)
     {
-        this.inventory = Lists.newArrayList();
+        this.inventory = NonNullList.create();
         this.name = name;
         this.masterStack = masterStack;
 
@@ -41,7 +42,7 @@ public class CameraFilterInventory implements IItemStackInventory
     public void readFromNBT(NBTTagCompound tagCompound)
     {
         NBTTagList tags = tagCompound.getTagList("Items", 10);
-        inventory = Lists.newArrayList();
+        inventory = NonNullList.create();
 
         for (int i = 0; i < tags.tagCount(); i++)
         {
@@ -61,7 +62,7 @@ public class CameraFilterInventory implements IItemStackInventory
 
         for (int i = 0; i < inventory.size(); i++)
         {
-            if ((inventory.get(i) != null))
+            if (ItemStackTools.isValid(inventory.get(i)))
             {
                 NBTTagCompound data = new NBTTagCompound();
                 data.setByte("Slot", (byte) i);
@@ -174,7 +175,7 @@ public class CameraFilterInventory implements IItemStackInventory
     }
 
     @Override
-    public boolean isUseableByPlayer(EntityPlayer player)
+    public boolean isUsableByPlayer(EntityPlayer player)
     {
         return true;
     }
@@ -218,7 +219,7 @@ public class CameraFilterInventory implements IItemStackInventory
     @Override
     public void clear()
     {
-        this.inventory = Lists.newArrayList();
+        this.inventory.clear();
     }
 
     @Override
@@ -256,5 +257,15 @@ public class CameraFilterInventory implements IItemStackInventory
 	@Override
 	public boolean hasGhostSlots() {
 		return false;
+	}
+	
+	@Override
+	public boolean isEmpty(){
+		for(ItemStack stack : inventory){
+			if(ItemStackTools.isValid(stack)){
+				return false;
+			}
+		}
+		return true;
 	}
 }

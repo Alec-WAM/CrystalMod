@@ -40,11 +40,11 @@ public class SlotBauble extends SlotItemHandler
 	}	
 	
 	@Override
-	public void onPickupFromSlot(EntityPlayer playerIn, ItemStack stack) {
+	public ItemStack onTake(EntityPlayer playerIn, ItemStack stack) {
 		if (!getHasStack() && !((IBaublesItemHandler)getItemHandler()).isEventBlocked()) {
 			((IBauble)stack.getItem()).onUnequipped(stack, playerIn);
 		}
-		super.onPickupFromSlot(playerIn, stack);		
+		return super.onTake(playerIn, stack);		
 	}
 
 	@Override

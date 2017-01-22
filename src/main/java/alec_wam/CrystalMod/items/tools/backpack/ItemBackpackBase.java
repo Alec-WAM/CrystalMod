@@ -53,15 +53,15 @@ public class ItemBackpackBase extends Item implements ICustomModel {
     }
 	
 	@Override
-	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
+	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
     {
-		return backpack.itemUse(stack, player, world, pos, hand, facing, hitX, hitY, hitZ);
+		return backpack.itemUse(player.getHeldItem(hand), player, world, pos, hand, facing, hitX, hitY, hitZ);
     }
 	
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand)
+	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand hand)
     {
-		return backpack.rightClick(itemStackIn, worldIn, playerIn, hand);
+		return backpack.rightClick(playerIn.getHeldItem(hand), worldIn, playerIn, hand);
     }
 	
 	@SideOnly(Side.CLIENT)

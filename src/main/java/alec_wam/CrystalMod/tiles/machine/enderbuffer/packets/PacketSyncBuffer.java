@@ -30,7 +30,7 @@ public class PacketSyncBuffer extends AbstractPacketThreadsafe {
 		mode = pBuffer.readInt();
 		channel = pBuffer.readInt();
 		try{
-			nbt = pBuffer.readNBTTagCompoundFromBuffer();
+			nbt = pBuffer.readCompoundTag();
 		}catch(Exception e){e.printStackTrace();}
 	}
 
@@ -39,7 +39,7 @@ public class PacketSyncBuffer extends AbstractPacketThreadsafe {
 		PacketBuffer pBuffer = new PacketBuffer(buf);
 		pBuffer.writeInt(mode);
 		pBuffer.writeInt(channel);
-		pBuffer.writeNBTTagCompoundToBuffer(nbt);
+		pBuffer.writeCompoundTag(nbt);
 	}
 
 	@Override

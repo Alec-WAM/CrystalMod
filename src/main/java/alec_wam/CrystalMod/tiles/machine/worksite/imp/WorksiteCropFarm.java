@@ -167,15 +167,15 @@ public class WorksiteCropFarm extends TileWorksiteUserBlocks {
 	@Override
 	protected void scanBlockPosition(BlockPos position) {
 		IBlockState state = getWorld().getBlockState(position);
-		if (worldObj.isAirBlock(position)) {
-			state = worldObj.getBlockState(position.down());
+		if (getWorld().isAirBlock(position)) {
+			state = getWorld().getBlockState(position.down());
 			if (state.getBlock() == Blocks.DIRT || state.getBlock() == Blocks.GRASS) {
 				blocksToTill.add(position.down());
-			} else if (state.getBlock() == Blocks.FARMLAND || !worldObj.isAirBlock(position.down())) {
+			} else if (state.getBlock() == Blocks.FARMLAND || !getWorld().isAirBlock(position.down())) {
 				blocksToPlant.add(position);
 			}
-		} else if (FarmUtil.isCrop(worldObj, position)) {
-			if (FarmUtil.isGrownCrop(worldObj, position)) {
+		} else if (FarmUtil.isCrop(getWorld(), position)) {
+			if (FarmUtil.isGrownCrop(getWorld(), position)) {
 				blocksToHarvest.add(position);
 			} else {
 				blocksToFertilize.add(position);
@@ -183,7 +183,7 @@ public class WorksiteCropFarm extends TileWorksiteUserBlocks {
 		} else if (state.getBlock() instanceof BlockStem) {
 			if (state.getValue(BlockStem.AGE) >= 7) {
 				stem : for(EnumFacing face : EnumFacing.HORIZONTALS){
-					IBlockState state2 = worldObj.getBlockState(position.offset(face));
+					IBlockState state2 = getWorld().getBlockState(position.offset(face));
 					if(state2.getBlock() == Blocks.MELON_BLOCK || state2.getBlock() == Blocks.PUMPKIN){
 						blocksToHarvest.add(position.offset(face));
 						break stem;
@@ -199,7 +199,7 @@ public class WorksiteCropFarm extends TileWorksiteUserBlocks {
 		BlockPos p1 = getWorkBoundsMin();
 		BlockPos p2 = getWorkBoundsMax().add(1, 1, 1);
 		AxisAlignedBB bb = new AxisAlignedBB(p1, p2);
-		List<EntityItem> items = worldObj.getEntitiesWithinAABB(EntityItem.class, bb);
+		List<EntityItem> items = getWorld().getEntitiesWithinAABB(EntityItem.class, bb);
 		ItemStack stack;
 		for (EntityItem item : items) {
 			stack = item.getEntityItem();
@@ -237,8 +237,8 @@ public class WorksiteCropFarm extends TileWorksiteUserBlocks {
 			it = blocksToTill.iterator();
 			while (it.hasNext() && (position = it.next()) != null) {
 				it.remove();
-				state = worldObj.getBlockState(position);
-				if (worldObj.isAirBlock(position.up()) && (state.getBlock() == Blocks.GRASS || state.getBlock() == Blocks.DIRT)) {
+				state = getWorld().getBlockState(position);
+				if (getWorld().isAirBlock(position.up()) && (state.getBlock() == Blocks.GRASS || state.getBlock() == Blocks.DIRT)) {
 					EntityMinionWorker worker = getRandomWorker(new WorkerFilter(){
 						public boolean matches(EntityMinionWorker worker){
 							ItemStack held = worker.getHeldItemMainhand();
@@ -257,10 +257,10 @@ public class WorksiteCropFarm extends TileWorksiteUserBlocks {
 			it = blocksToHarvest.iterator();
 			while (it.hasNext() && (position = it.next()) != null) {
 				it.remove();
-				IBlockState cropState = worldObj.getBlockState(position);
+				IBlockState cropState = getWorld().getBlockState(position);
 				boolean isGoard = (cropState.getBlock() == Blocks.MELON_BLOCK || cropState.getBlock() == Blocks.PUMPKIN);
-				if (FarmUtil.isCrop(worldObj, position) || isGoard) {
-					boolean grown = FarmUtil.isGrownCrop(worldObj, position);
+				if (FarmUtil.isCrop(getWorld(), position) || isGoard) {
+					boolean grown = FarmUtil.isGrownCrop(getWorld(), position);
 					if (grown || isGoard) {
 						EntityMinionWorker worker = getClosestWorker(position, WorkerFilter.idleFilter, WorkerFilter.anyFilter);
 						if (worker != null) {
@@ -274,7 +274,7 @@ public class WorksiteCropFarm extends TileWorksiteUserBlocks {
 			it = blocksToPlant.iterator();
 			while (it.hasNext() && (position = it.next()) != null) {
 				it.remove();
-				if (worldObj.isAirBlock(position)) {
+				if (getWorld().isAirBlock(position)) {
 					ItemStack stack = ItemStackTools.getEmptyStack();
 					Item item;
 					for (int i = 27; i < 30; i++) {
@@ -313,7 +313,7 @@ public class WorksiteCropFarm extends TileWorksiteUserBlocks {
 			it = blocksToFertilize.iterator();
 			while (it.hasNext() && (position = it.next()) != null) {
 				it.remove();
-				if (FarmUtil.isCrop(worldObj, position)	&& !FarmUtil.isGrownCrop(worldObj, position)) {
+				if (FarmUtil.isCrop(getWorld(), position)	&& !FarmUtil.isGrownCrop(getWorld(), position)) {
 					ItemStack stack = null;
 					Item item;
 					for (int i = 30; i < 33; i++) {
@@ -324,14 +324,14 @@ public class WorksiteCropFarm extends TileWorksiteUserBlocks {
 						item = stack.getItem();
 						if (item == Items.DYE && stack.getItemDamage() == 15) {
 							bonemealCount--;
-							if(!worldObj.isRemote && ItemDye.applyBonemeal(stack, worldObj, position)){
+							if(!getWorld().isRemote && ItemDye.applyBonemeal(stack, getWorld(), position)){
 								if (ItemStackTools.isEmpty(stack)) {
 									inventory.setInventorySlotContents(i, ItemStackTools.getEmptyStack());
 								}
 							}
 							
-							if (FarmUtil.isCrop(worldObj, position)) {
-								if (!FarmUtil.isGrownCrop(worldObj,	position)) {
+							if (FarmUtil.isCrop(getWorld(), position)) {
+								if (!FarmUtil.isGrownCrop(getWorld(),	position)) {
 									blocksToFertilize.add(position);
 								} else {
 									blocksToHarvest.add(position);
@@ -356,7 +356,7 @@ public class WorksiteCropFarm extends TileWorksiteUserBlocks {
 
 	@Override
 	public boolean onBlockClicked(EntityPlayer player) {
-		if (!player.worldObj.isRemote) {
+		if (!player.getEntityWorld().isRemote) {
 			BlockUtil.openWorksiteGui(player,
 					0, getPos().getX(), getPos().getY(), getPos().getZ());
 			return true;
@@ -373,11 +373,11 @@ public class WorksiteCropFarm extends TileWorksiteUserBlocks {
 
 	@Override
 	protected void updateBlockWorksite() {
-		worldObj.theProfiler.startSection("Count Resources");
+		getWorld().theProfiler.startSection("Count Resources");
 		if (shouldCountResources) {
 			countResources();
 		}
-		worldObj.theProfiler.endSection();
+		getWorld().theProfiler.endSection();
 	}
 
 	@Override

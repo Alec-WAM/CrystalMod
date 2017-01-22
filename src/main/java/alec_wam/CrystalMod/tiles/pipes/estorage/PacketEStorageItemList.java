@@ -72,7 +72,7 @@ public class PacketEStorageItemList extends AbstractPacketThreadsafe {
 
 	@Override
 	public void handleClientSafe(NetHandlerPlayClient netHandler) {
-		World world = CrystalMod.proxy.getClientPlayer() == null ? null : CrystalMod.proxy.getClientPlayer().worldObj;
+		World world = CrystalMod.proxy.getClientPlayer() == null ? null : CrystalMod.proxy.getClientPlayer().getEntityWorld();
 		if(world == null){
 			return;
 		}

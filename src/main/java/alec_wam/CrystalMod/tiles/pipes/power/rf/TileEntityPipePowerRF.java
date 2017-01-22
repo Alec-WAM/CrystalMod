@@ -71,7 +71,7 @@ public class TileEntityPipePowerRF extends TileEntityPipe implements IEnergyRece
 	}
 	
 	public void setEnergyStored(int energy){
-		energyStoredRF = MathHelper.clamp_int(energy, 0, getMaxEnergyStored()); 
+		energyStoredRF = MathHelper.clamp(energy, 0, getMaxEnergyStored()); 
 	}
 	
 	public int getEnergyStored(){

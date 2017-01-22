@@ -5,6 +5,12 @@ import java.util.List;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 
+import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.api.tools.IBatType;
+import alec_wam.CrystalMod.blocks.ICustomModel;
+import alec_wam.CrystalMod.items.ModItems;
+import alec_wam.CrystalMod.items.tools.ItemSpecialSword;
+import alec_wam.CrystalMod.proxy.ClientProxy;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -14,15 +20,10 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import alec_wam.CrystalMod.CrystalMod;
-import alec_wam.CrystalMod.api.tools.IBatType;
-import alec_wam.CrystalMod.blocks.ICustomModel;
-import alec_wam.CrystalMod.items.ModItems;
-import alec_wam.CrystalMod.items.tools.ItemSpecialSword;
-import alec_wam.CrystalMod.proxy.ClientProxy;
 
 public class ItemBat extends ItemSpecialSword implements ICustomModel {
 
@@ -39,7 +40,7 @@ public class ItemBat extends ItemSpecialSword implements ICustomModel {
 	}
 	
 	@Override
-	public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> list){
+	public void getSubItems(Item item, CreativeTabs tab, NonNullList<ItemStack> list){
 		list.addAll(BatHelper.getCreativeListBats(item));
 	}
 	
@@ -70,8 +71,8 @@ public class ItemBat extends ItemSpecialSword implements ICustomModel {
         if (equipmentSlot == EntityEquipmentSlot.MAINHAND)
         {
         	IBatType type = BatHelper.getBat(stack);
-            multimap.put(SharedMonsterAttributes.ATTACK_DAMAGE.getAttributeUnlocalizedName(), new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", (double)type.getBaseDamage(), 0));
-            multimap.put(SharedMonsterAttributes.ATTACK_SPEED.getAttributeUnlocalizedName(), new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier", -2.4000000953674316D, 0));
+            multimap.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(), new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", (double)type.getBaseDamage(), 0));
+            multimap.put(SharedMonsterAttributes.ATTACK_SPEED.getName(), new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier", -2.4000000953674316D, 0));
         }
 
         return multimap;

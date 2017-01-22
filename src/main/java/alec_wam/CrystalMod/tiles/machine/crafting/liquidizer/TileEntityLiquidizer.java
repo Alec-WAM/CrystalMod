@@ -57,10 +57,11 @@ public class TileEntityLiquidizer extends TileEntityMachine {
 	}
 	
 	public boolean canStart() {
-        if (ItemStackTools.isEmpty(inventory[0])) {
+		ItemStack stack = getStackInSlot(0);
+        if (ItemStackTools.isEmpty(stack)) {
             return false;
         }
-        final LiquidizerRecipe recipe = LiquidizerRecipeManager.getRecipe(inventory[0]);
+        final LiquidizerRecipe recipe = LiquidizerRecipeManager.getRecipe(stack);
         if (recipe == null || eStorage.getCEnergyStored() < recipe.getEnergy()) {
             return false;
         }
@@ -73,18 +74,19 @@ public class TileEntityLiquidizer extends TileEntityMachine {
     }
     
     protected boolean hasValidInput() {
-    	final LiquidizerRecipe recipe = LiquidizerRecipeManager.getRecipe(this.inventory[0]);
-        return recipe != null && recipe.getInputSize() <= this.inventory[0].stackSize;
+    	ItemStack stack = getStackInSlot(0);
+    	final LiquidizerRecipe recipe = LiquidizerRecipeManager.getRecipe(stack);
+        return recipe != null && recipe.getInputSize() <= ItemStackTools.getStackSize(stack);
     }
     
     public void processStart() {
-    	this.processMax = LiquidizerRecipeManager.getRecipe(this.inventory[0]).getEnergy();
+    	this.processMax = LiquidizerRecipeManager.getRecipe(getStackInSlot(0)).getEnergy();
         this.processRem = this.processMax;
         syncProcessValues();
     }
     
     public void processFinish() {
-    	LiquidizerRecipe recipe = LiquidizerRecipeManager.getRecipe(this.inventory[0]);
+    	LiquidizerRecipe recipe = LiquidizerRecipeManager.getRecipe(getStackInSlot(0));
     	final FluidStack output = recipe.getOutput();
         if (this.tank.getFluid() == null) {
         	this.tank.setFluid(output);
@@ -92,10 +94,10 @@ public class TileEntityLiquidizer extends TileEntityMachine {
         else {
         	this.tank.getFluid().amount+=output.amount;
         }
-        final ItemStack itemStack2 = this.inventory[0];
+        final ItemStack itemStack2 = getStackInSlot(0);
         ItemStackTools.incStackSize(itemStack2, -recipe.getInputSize());
-        if (ItemStackTools.isEmpty(this.inventory[0])) {
-            this.inventory[0] = ItemStackTools.getEmptyStack();
+        if (ItemStackTools.isEmpty(getStackInSlot(0))) {
+        	this.setInventorySlotContents(0, ItemStackTools.getEmptyStack());
         }
     }
 

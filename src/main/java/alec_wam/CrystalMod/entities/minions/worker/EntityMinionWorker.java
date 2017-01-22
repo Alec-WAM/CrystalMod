@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
 import com.google.common.collect.Maps;
 
 import alec_wam.CrystalMod.entities.minions.EntityMinionBase;
@@ -168,7 +169,8 @@ public class EntityMinionWorker extends EntityMinionBase {
 		}
 	}
 	
-	public boolean processInteract(EntityPlayer player, EnumHand hand, ItemStack held)
+	@Override
+	public boolean processInteract(EntityPlayer player, EnumHand hand)
     {
 		ItemStack stack = player.getHeldItem(hand);
 		if(!ItemStackTools.isNullStack(stack) && isOwner(player)){
@@ -214,7 +216,7 @@ public class EntityMinionWorker extends EntityMinionBase {
 	    		return true;
 			}
     	}
-		if(ItemStackTools.isNullStack(held) && isOwner(player)){
+		if(ItemStackTools.isNullStack(stack) && isOwner(player)){
 			if(!this.isWorking()){
     			BlockPos pos = new BlockPos(this).down();
     			TileEntity tile = getEntityWorld().getTileEntity(pos);
@@ -235,7 +237,7 @@ public class EntityMinionWorker extends EntityMinionBase {
     			}
     		}
     	}  
-		return super.processInteract(player, hand, held);
+		return super.processInteract(player, hand);
 	}
 	
 	@Override

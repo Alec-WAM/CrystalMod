@@ -68,21 +68,21 @@ public class TileEntityEntityHopper extends TileEntityMod {
 	@Override
 	public void update(){
 		super.update();
-		if(this.worldObj == null || this.worldObj.isRemote || !worldObj.isBlockLoaded(getPos())) return;
+		if(this.getWorld() == null || this.getWorld().isRemote || !getWorld().isBlockLoaded(getPos())) return;
 		
 		//Powered
-		if(worldObj.isBlockIndirectlyGettingPowered(getPos()) > 0)return;
+		if(getWorld().isBlockIndirectlyGettingPowered(getPos()) > 0)return;
 		BlockPos abovePos = getPos().offset(EnumFacing.UP);
 		AxisAlignedBB above = new AxisAlignedBB(abovePos, abovePos.add(1, 1, 1));
 		BlockPos belowPos = getPos().offset(EnumFacing.DOWN);
 		AxisAlignedBB below = new AxisAlignedBB(belowPos, getPos().add(1, 0, 1));
-		List<Entity> entities = worldObj.getEntitiesWithinAABB(Entity.class, above);
+		List<Entity> entities = getWorld().getEntitiesWithinAABB(Entity.class, above);
 		for(Entity entity : entities){
 			if(entity !=null && entity.isEntityAlive()){
 				if(passesFilter(entity)){
 					if(entity instanceof EntityItem){
 						EntityItem item = (EntityItem)entity;
-						IItemHandler handler = ItemUtil.getItemHandler(worldObj.getTileEntity(belowPos), EnumFacing.UP);
+						IItemHandler handler = ItemUtil.getItemHandler(getWorld().getTileEntity(belowPos), EnumFacing.UP);
 						if(handler !=null){
 							ItemStack stack = item.getEntityItem();
 							ItemStack insert = ItemHandlerHelper.insertItem(handler, stack, false);

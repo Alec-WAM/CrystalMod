@@ -38,7 +38,7 @@ public class AIManager
 			{
 				AI.onUpdateCommon(entity);
 
-				if (entity.worldObj.isRemote)
+				if (entity.getEntityWorld().isRemote)
 				{
 					AI.onUpdateClient(entity);
 				}

@@ -66,7 +66,7 @@ public abstract class TileWorksiteBase extends TileEntityMod implements IWorkSit
 	{
 		for(WorksiteUpgrade ug : this.upgrades)
 		{
-			ItemUtil.spawnItemInWorldWithoutMotion(worldObj, ItemWorksiteUpgrade.getStack(ug), getPos());
+			ItemUtil.spawnItemInWorldWithoutMotion(getWorld(), ItemWorksiteUpgrade.getStack(ug), getPos());
 	    }
 		efficiencyBonusFactor = 0;
 		upgrades.clear();
@@ -192,13 +192,13 @@ public abstract class TileWorksiteBase extends TileEntityMod implements IWorkSit
 	}
 	
 	public void addWorker(EntityMinionWorker minion){
-		if(worldObj.isRemote){return;}
+		if(getWorld().isRemote){return;}
 		if(!isWorkerOkay(minion))return;
 		workers.add(minion);
 	}
 	
 	public void removeWorker(EntityMinionWorker minion){
-		if(worldObj.isRemote){return;}
+		if(getWorld().isRemote){return;}
 		workers.remove(minion);
 	}
 	
@@ -206,8 +206,8 @@ public abstract class TileWorksiteBase extends TileEntityMod implements IWorkSit
 	public void update()
 	{
 	  super.update();
-	  if(worldObj.isRemote){return;}  
-	  worldObj.theProfiler.startSection("CMWorksite");
+	  if(getWorld().isRemote){return;}  
+	  getWorld().theProfiler.startSection("CMWorksite");
 	  if(workers !=null){
 		  Iterator<EntityMinionWorker> it = workers.iterator();
 		  while(it.hasNext()){
@@ -224,11 +224,11 @@ public abstract class TileWorksiteBase extends TileEntityMod implements IWorkSit
 	  }
 	  else
 	  {
-	    worldObj.theProfiler.endStartSection("Check For Work");
+	    getWorld().theProfiler.endStartSection("Check For Work");
 	    int ePerUse = (int) IWorkSite.WorksiteImplementation.getEnergyPerActivation(efficiencyBonusFactor);
 	    boolean hasWork = hasWorksiteWork();
 	    if(hasWork && powered() && getEnergyStorage() !=null)hasWork = getEnergyStorage().getCEnergyStored() >= ePerUse;
-	    worldObj.theProfiler.endStartSection("Process Work");
+	    getWorld().theProfiler.endStartSection("Process Work");
 	    if(hasWork)
 	    {
 	      if(processWork())
@@ -241,10 +241,10 @@ public abstract class TileWorksiteBase extends TileEntityMod implements IWorkSit
 	      }
 	    }
 	  }  
-	  worldObj.theProfiler.endStartSection("WorksiteBaseUpdate");
+	  getWorld().theProfiler.endStartSection("WorksiteBaseUpdate");
 	  updateWorksite();
-	  worldObj.theProfiler.endSection();
-	  worldObj.theProfiler.endSection();
+	  getWorld().theProfiler.endSection();
+	  getWorld().theProfiler.endSection();
 	}
 	
 	protected final void updateEfficiency()
@@ -372,7 +372,7 @@ public abstract class TileWorksiteBase extends TileEntityMod implements IWorkSit
 		if(chunkTicket!=null){ForgeChunkManager.releaseTicket(chunkTicket);}
 	  	if(getUpgrades().contains(WorksiteUpgrade.BASIC_CHUNK_LOADER) || getUpgrades().contains(WorksiteUpgrade.QUARRY_CHUNK_LOADER))
 	    {
-	  		setTicket(ForgeChunkManager.requestTicket(CrystalMod.instance, worldObj, Type.NORMAL));    
+	  		setTicket(ForgeChunkManager.requestTicket(CrystalMod.instance, getWorld(), Type.NORMAL));    
 	    }
 	}
 	

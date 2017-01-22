@@ -212,11 +212,11 @@ public class ItemStorage {
 			}
 		}
 
-        if(!sim && ret !=null){
+        if(!sim && ItemStackTools.isValid(ret)){
         	invalidate();
 			Iterator<IInsertListener> iter = network.listeners.iterator();
 			while (iter.hasNext()) {
-				iter.next().onItemExtracted(ret, ret.stackSize);
+				iter.next().onItemExtracted(ret, ItemStackTools.getStackSize(ret));
 			}
 		}
 		return ret;
@@ -305,7 +305,7 @@ public class ItemStorage {
 		}
 
 		public void toBytes(CompressedDataOutput cdo) throws IOException {
-			if (stack == null) {
+			if (stack == null || ItemStackTools.isNullStack(stack)) {
 				cdo.writeShort(-1);
 			} else {
 				cdo.writeShort(Item.getIdFromItem(stack.getItem()));
@@ -428,7 +428,7 @@ public class ItemStorage {
 		}
 		
 		public int getAmount(){
-			return !ItemStackTools.isValid(stack) ? 0 : stack.stackSize;
+			return ItemStackTools.isNullStack(stack) ? 0 : ItemStackTools.getStackSize(stack);
 		}
 	}
 

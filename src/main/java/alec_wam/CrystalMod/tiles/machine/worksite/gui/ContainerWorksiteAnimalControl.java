@@ -38,7 +38,7 @@ public class ContainerWorksiteAnimalControl extends ContainerWorksite {
 		maxPigs = tag.getInteger("pigs");
 		maxChickens = tag.getInteger("chickens");
 		maxSheep = tag.getInteger("sheep");
-		if (!player.worldObj.isRemote) {
+		if (!player.getEntityWorld().isRemote) {
 			worksite.maxCowCount = maxCows;
 			worksite.maxPigCount = maxPigs;
 			worksite.maxChickenCount = maxChickens;

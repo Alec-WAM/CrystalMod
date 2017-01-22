@@ -1,6 +1,6 @@
 package alec_wam.CrystalMod.integration.enderio;
 
-import com.enderio.core.common.util.BlockCoord;
+/*import com.enderio.core.common.util.BlockCoord;
 
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.util.ItemStackTools;
@@ -14,9 +14,10 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.EnumHand;*/
 
-public class MaterialCropFarmer extends PickableFarmer {
+//TODO Add when enderio updates
+public class MaterialCropFarmer{ /*extends PickableFarmer {
 
 	public MaterialCropFarmer(Block plantedBlock, int plantedBlockMeta, int grownBlockMeta, ItemStack seeds) {
 		super(plantedBlock, plantedBlockMeta, grownBlockMeta, seeds);
@@ -52,5 +53,5 @@ public class MaterialCropFarmer extends PickableFarmer {
 			return true;
 		}
 		return false;
-    }
+    }*/
 }

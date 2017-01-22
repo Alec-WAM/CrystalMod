@@ -50,25 +50,25 @@ public class TileEntityTank extends TileEntityMod {
     @Override
     public void update() {
     	super.update();
-        if (worldObj == null) return;
+        if (getWorld() == null) return;
         
         if (!isInvalid() && !init) {
             initialize();
             init = true;
         }
 
-        if (worldObj.isRemote) {
+        if (getWorld().isRemote) {
         	int lightValue = getFluidLightLevel();
             if (prevLightValue != lightValue) {
                 prevLightValue = lightValue;
-                worldObj.setLightFor(EnumSkyBlock.BLOCK, pos, lightValue);
+                getWorld().setLightFor(EnumSkyBlock.BLOCK, pos, lightValue);
             }
             return;
         }
 
         if (hasUpdate) {
         	BlockUtil.markBlockForUpdate(getWorld(), getPos());
-            worldObj.updateComparatorOutputLevel(pos, getBlockType());
+            getWorld().updateComparatorOutputLevel(pos, getBlockType());
             hasUpdate = false;
         }
 

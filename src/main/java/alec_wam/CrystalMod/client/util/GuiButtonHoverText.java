@@ -1,11 +1,10 @@
-package alec_wam.CrystalMod.items.backpack.gui;
+package alec_wam.CrystalMod.client.util;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
-
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 

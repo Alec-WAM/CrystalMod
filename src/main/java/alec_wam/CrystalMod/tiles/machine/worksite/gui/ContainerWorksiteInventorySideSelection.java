@@ -65,7 +65,7 @@ public class ContainerWorksiteInventorySideSelection extends ContainerMessageBas
 			RelativeSide access = RelativeSide.values()[slotTag
 					.getInteger("accessSide")];
 			sideMap.put(base, access);
-			if (!player.worldObj.isRemote) {
+			if (!player.getEntityWorld().isRemote) {
 				worksite.inventory.remapSideAccess(base, access);
 			}
 		}

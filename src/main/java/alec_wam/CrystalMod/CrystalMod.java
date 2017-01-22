@@ -5,29 +5,29 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 
-import javax.annotation.Nonnull;
-
 import com.google.common.collect.Lists;
 
 import alec_wam.CrystalMod.api.CrystalModAPI;
 import alec_wam.CrystalMod.blocks.BlockCrystalLog;
 import alec_wam.CrystalMod.blocks.ModBlocks;
+import alec_wam.CrystalMod.blocks.BlockCrystal.CrystalBlockType;
 import alec_wam.CrystalMod.blocks.crops.material.IMaterialCrop;
 import alec_wam.CrystalMod.blocks.crops.material.ItemMaterialSeed;
-import alec_wam.CrystalMod.blocks.crops.material.ModCrops;
 import alec_wam.CrystalMod.fluids.ModFluids;
 import alec_wam.CrystalMod.handler.GuiHandler;
 import alec_wam.CrystalMod.handler.MissingItemHandler;
+import alec_wam.CrystalMod.items.ItemCrystal.CrystalType;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.commands.CommandCrystalMod;
 import alec_wam.CrystalMod.proxy.CommonProxy;
-import alec_wam.CrystalMod.tiles.pipes.covers.ItemPipeCover;
 import alec_wam.CrystalMod.tiles.pipes.covers.CoverUtil.CoverData;
+import alec_wam.CrystalMod.tiles.pipes.covers.ItemPipeCover;
 import alec_wam.CrystalMod.util.ItemUtil;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -44,7 +44,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @Mod(modid = CrystalMod.MODID, name = CrystalMod.MODNAME, version = CrystalMod.VERSION, guiFactory = "alec_wam.CrystalMod.config.ConfigFactoryCM")
 public class CrystalMod {
-	public static final String MODID = "CrystalMod";
+	public static final String MODID = "crystalmod";
 	public static final String MODNAME = "Crystal Mod";
 	public static final String VERSION = "1.0.0dev1";
 	
@@ -65,11 +65,11 @@ public class CrystalMod {
 		}
 		
 		@SideOnly(Side.CLIENT)
-        public void displayAllRelevantItems(@Nonnull final List<ItemStack> list) {
-            final List<ItemStack> newList = Lists.newArrayList();
-            super.displayAllRelevantItems((List<ItemStack>)newList);
-            Collections.sort(newList, this);
-            list.addAll(newList);
+        public void displayAllRelevantItems(final NonNullList<ItemStack> list) {
+            //final NonNullList<ItemStack> newList = NonNullList.create();
+            super.displayAllRelevantItems(list);
+            //Collections.sort(newList, this);
+            //list.addAll(newList);
         }
 		
 	}
@@ -77,8 +77,8 @@ public class CrystalMod {
 	public static CreativeTabs tabItems = new CustomCreativeTab(MODID.toLowerCase()+".items") {
         @Override
         @SideOnly(Side.CLIENT)
-        public Item getTabIconItem() {
-            return ModItems.crystals;
+        public ItemStack getTabIconItem() {
+            return new ItemStack(ModItems.crystals, 1, CrystalType.BLUE.getMetadata());
         }
 
 		@Override
@@ -92,8 +92,8 @@ public class CrystalMod {
     
     public static CreativeTabs tabTools = new CustomCreativeTab(MODID.toLowerCase()+".tools") {
     	@Override
-		public Item getTabIconItem() {
-			return ModItems.wrench;
+		public ItemStack getTabIconItem() {
+			return new ItemStack(ModItems.wrench);
 		}
 
 		@Override
@@ -108,8 +108,8 @@ public class CrystalMod {
     public static CreativeTabs tabBlocks = new CustomCreativeTab(MODID.toLowerCase()+".blocks") {
         @Override
         @SideOnly(Side.CLIENT)
-        public Item getTabIconItem() {
-            return Item.getItemFromBlock(ModBlocks.crystal);
+        public ItemStack getTabIconItem() {
+            return new ItemStack(ModBlocks.crystal, 1, CrystalBlockType.BLUE.getMeta());
         }
 
 		@Override
@@ -124,13 +124,7 @@ public class CrystalMod {
     public static CreativeTabs tabCovers = new CustomCreativeTab(MODID.toLowerCase()+".covers") {
         @Override
         @SideOnly(Side.CLIENT)
-        public Item getTabIconItem() {
-            return ModItems.pipeCover;
-        }
-        
-        @SideOnly(Side.CLIENT)
-        public ItemStack getIconItemStack()
-        {
+        public ItemStack getTabIconItem() {
             return ItemPipeCover.getCover(new CoverData(ModBlocks.crystal.getDefaultState()));
         }
         
@@ -149,13 +143,7 @@ public class CrystalMod {
     public static CreativeTabs tabCrops = new CustomCreativeTab(MODID.toLowerCase()+".crops") {
         @Override
         @SideOnly(Side.CLIENT)
-        public Item getTabIconItem() {
-            return Item.getItemFromBlock(ModBlocks.crystalSapling);
-        }
-        
-        @SideOnly(Side.CLIENT)
-        public ItemStack getIconItemStack()
-        {
+        public ItemStack getTabIconItem() {
             return new ItemStack(ModBlocks.crystalSapling, 1, BlockCrystalLog.WoodType.BLUE.getMeta());
         }
         

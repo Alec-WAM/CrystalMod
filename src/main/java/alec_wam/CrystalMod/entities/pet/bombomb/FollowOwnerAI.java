@@ -54,9 +54,9 @@ public class FollowOwnerAI extends AIBase<EntityOwnable> {
 
 			if (distanceToPlayer >= 10.0D && entityPlayer.getEntityBoundingBox() != null)
 			{
-				final int playerX = net.minecraft.util.math.MathHelper.floor_double(entityPlayer.posX) - 2;
-				final int playerY = net.minecraft.util.math.MathHelper.floor_double(entityPlayer.getEntityBoundingBox().minY);
-				final int playerZ = net.minecraft.util.math.MathHelper.floor_double(entityPlayer.posZ) - 2;
+				final int playerX = net.minecraft.util.math.MathHelper.floor(entityPlayer.posX) - 2;
+				final int playerY = net.minecraft.util.math.MathHelper.floor(entityPlayer.getEntityBoundingBox().minY);
+				final int playerZ = net.minecraft.util.math.MathHelper.floor(entityPlayer.posZ) - 2;
 
 				for (int i = 0; i <= 4; ++i)
 				{
@@ -64,10 +64,10 @@ public class FollowOwnerAI extends AIBase<EntityOwnable> {
 					{
 						BlockPos below = new BlockPos(playerX + i, playerY - 1, playerZ + i2);
 						BlockPos pos = new BlockPos(playerX + i, playerY, playerZ + i2);
-						IBlockState posState = entity.worldObj.getBlockState(pos);
+						IBlockState posState = entity.getEntityWorld().getBlockState(pos);
 						BlockPos above = new BlockPos(playerX + i, playerY + 1, playerZ + i2);
-						IBlockState aboveState = entity.worldObj.getBlockState(above);
-						if ((i < 1 || i2 < 1 || i > 3 || i2 > 3) && entity.worldObj.getBlockState(below).isSideSolid(entity.worldObj, below, EnumFacing.UP) && !posState.getBlock().isNormalCube(posState) && !aboveState.getBlock().isNormalCube(aboveState))
+						IBlockState aboveState = entity.getEntityWorld().getBlockState(above);
+						if ((i < 1 || i2 < 1 || i > 3 || i2 > 3) && entity.getEntityWorld().getBlockState(below).isSideSolid(entity.getEntityWorld(), below, EnumFacing.UP) && !posState.getBlock().isNormalCube(posState) && !aboveState.getBlock().isNormalCube(aboveState))
 						{
 							entityPathController.setLocationAndAngles(playerX + i + 0.5F, playerY, playerZ + i2 + 0.5F, entityPlayer.rotationYaw, entityPlayer.rotationPitch);
 							entityPathController.getNavigator().clearPathEntity();

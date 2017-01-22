@@ -17,6 +17,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import alec_wam.CrystalMod.blocks.ModBlocks;
+import alec_wam.CrystalMod.util.ItemStackTools;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableMap.Builder;
@@ -47,7 +48,7 @@ public class TileEntityBlueCrystalChestRenderer<T extends TileEntityBlueCrystalC
         itemRenderer = new RenderEntityItem(Minecraft.getMinecraft().getRenderManager(), Minecraft.getMinecraft().getRenderItem()){
             @Override
             public int getModelCount(ItemStack stack) {
-                return SignedBytes.saturatedCast(Math.min(stack.stackSize / 32, 15) + 1);
+                return SignedBytes.saturatedCast(Math.min(ItemStackTools.getStackSize(stack) / 32, 15) + 1);
             }
             @Override
             public boolean shouldBob() {
@@ -165,7 +166,7 @@ public class TileEntityBlueCrystalChestRenderer<T extends TileEntityBlueCrystalC
         int facing = 3;
         CrystalChestType type = tile.getType();
 
-        if (tile != null && tile.hasWorldObj() && tile.getWorld().getBlockState(tile.getPos()).getBlock() == ModBlocks.crystalChest) {
+        if (tile != null && tile.hasWorld() && tile.getWorld().getBlockState(tile.getPos()).getBlock() == ModBlocks.crystalChest) {
             facing = tile.getFacing();
             type = tile.getType();
             IBlockState state = tile.getWorld().getBlockState(tile.getPos());

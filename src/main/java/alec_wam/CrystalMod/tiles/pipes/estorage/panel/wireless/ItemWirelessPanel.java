@@ -28,6 +28,7 @@ import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.proxy.CommonProxy;
 import alec_wam.CrystalMod.util.ChatUtil;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
+import alec_wam.CrystalMod.util.ItemStackTools;
 
 public class ItemWirelessPanel extends Item implements ICustomModel {
 
@@ -93,37 +94,36 @@ public class ItemWirelessPanel extends Item implements ICustomModel {
     }
 	
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand)
+	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand hand)
     {
-		if(itemStackIn !=null){
-			if(isValid(itemStackIn)){
-				if(!worldIn.isRemote){
-					World panelWorld = worldIn;
-					BlockPos pos = getBlockPos(itemStackIn);
-					int dim = ItemNBTHelper.getInteger(itemStackIn, "PanelDim", playerIn.dimension);
-					boolean interDim = true;
-					
-					
-					if(playerIn.dimension !=dim && !interDim){
-						ChatUtil.sendNoSpam(playerIn, "Unable to reach target panel. It is in another dimension");
+		ItemStack itemStackIn = playerIn.getHeldItem(hand);
+		if(isValid(itemStackIn)){
+			if(!worldIn.isRemote){
+				World panelWorld = worldIn;
+				BlockPos pos = getBlockPos(itemStackIn);
+				int dim = ItemNBTHelper.getInteger(itemStackIn, "PanelDim", playerIn.dimension);
+				boolean interDim = true;
+
+
+				if(playerIn.dimension !=dim && !interDim){
+					ChatUtil.sendNoSpam(playerIn, "Unable to reach target panel. It is in another dimension");
+					return new ActionResult<ItemStack>(EnumActionResult.PASS, itemStackIn);
+				}
+
+				panelWorld = DimensionManager.getWorld(dim);
+
+				if(panelWorld !=null){
+					if(!panelWorld.isAreaLoaded(pos, pos.add(1,1,1))){
+						ChatUtil.sendNoSpam(playerIn, "Unable to reach target panel. It is not loaded");
 						return new ActionResult<ItemStack>(EnumActionResult.PASS, itemStackIn);
 					}
-					
-					panelWorld = DimensionManager.getWorld(dim);
-					
-					if(panelWorld !=null){
-						if(!panelWorld.isAreaLoaded(pos, pos.add(1,1,1))){
-							ChatUtil.sendNoSpam(playerIn, "Unable to reach target panel. It is not loaded");
-							return new ActionResult<ItemStack>(EnumActionResult.PASS, itemStackIn);
-						}
-						TileEntity tile = panelWorld.getTileEntity(pos);
-						if(tile == null || !(tile instanceof TileEntityWirelessPanel)){
-							ChatUtil.sendNoSpam(playerIn, "There is no wireless panel at this location");
-							return new ActionResult<ItemStack>(EnumActionResult.PASS, itemStackIn);
-						}
-						playerIn.openGui(CrystalMod.instance, GuiHandler.GUI_ID_ITEM, panelWorld, 0, 0, hand.ordinal());
-						return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStackIn);
+					TileEntity tile = panelWorld.getTileEntity(pos);
+					if(tile == null || !(tile instanceof TileEntityWirelessPanel)){
+						ChatUtil.sendNoSpam(playerIn, "There is no wireless panel at this location");
+						return new ActionResult<ItemStack>(EnumActionResult.PASS, itemStackIn);
 					}
+					playerIn.openGui(CrystalMod.instance, GuiHandler.GUI_ID_ITEM, panelWorld, 0, 0, hand.ordinal());
+					return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStackIn);
 				}
 			}
 		}
@@ -131,9 +131,10 @@ public class ItemWirelessPanel extends Item implements ICustomModel {
     }
 	
 	@Override
-	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ)
+	public EnumActionResult onItemUse(EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ)
     {
-		if(stack !=null){
+		ItemStack stack = playerIn.getHeldItem(hand);
+		if(ItemStackTools.isValid(stack)){
 			TileEntity tile = worldIn.getTileEntity(pos);
 			if(tile !=null && tile instanceof TileEntityWirelessPanel){
 				ItemNBTHelper.setInteger(stack, "PanelX", pos.getX());

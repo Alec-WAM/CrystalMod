@@ -73,8 +73,6 @@ import alec_wam.CrystalMod.tiles.machine.worksite.BlockWorksite.WorksiteType;
 import alec_wam.CrystalMod.tiles.machine.worksite.ItemBlockWorksite;
 import alec_wam.CrystalMod.tiles.machine.worksite.TileWorksiteBase;
 import alec_wam.CrystalMod.tiles.machine.worksite.TileWorksiteRenderer;
-import alec_wam.CrystalMod.tiles.matter.BlockMatterCollector;
-import alec_wam.CrystalMod.tiles.matter.TileEntityMatterCollector;
 import alec_wam.CrystalMod.tiles.pipes.BlockPipe;
 import alec_wam.CrystalMod.tiles.pipes.BlockPipe.PipeType;
 import alec_wam.CrystalMod.tiles.pipes.ItemBlockPipe;
@@ -185,7 +183,6 @@ public class ModBlocks {
 	public static BlockPlayerCubeCore cubeCore;
 	public static BlockPlayerCubePortal cubePortal;
 	
-	public static BlockMatterCollector matterCollector;
 	public static BlockBattery battery;
 	public static BlockElevator elevator;
 	public static BlockElevatorFloor elevatorFloor;
@@ -340,7 +337,7 @@ public class ModBlocks {
 		registerTileEntity(TileEntityPipeWrapper.class);
 		
 		craftingController = new BlockCraftingController();
-		registerBlock(craftingController, "craftingController");
+		registerBlock(craftingController, "craftingcontroller");
 		registerTileEntity(TileCraftingController.class);
 		
 		crafter = new BlockCrafter();
@@ -351,7 +348,7 @@ public class ModBlocks {
 		registerTileEntity(TileEntityStocker.class);
 		
 		encoder = new BlockPatternEncoder();
-		registerEnumBlock(encoder, "craftingEncoder");
+		registerEnumBlock(encoder, "craftingencoder");
 		registerTileEntity(TilePatternEncoder.class);
 		registerTileEntity(TileProcessingPatternEncoder.class);
 		
@@ -368,10 +365,6 @@ public class ModBlocks {
 		cubePortal = new BlockPlayerCubePortal();
 		registerBlock(cubePortal, "playercubeportal");
 		registerTileEntity(TileEntityPlayerCubePortal.class);
-		
-		matterCollector = new BlockMatterCollector();
-		registerBlock(matterCollector, "mattercollector");
-		registerTileEntity(TileEntityMatterCollector.class);
 		
 		battery = new BlockBattery();
 		registerBlock(battery, new ItemBlockMeta(battery), "battery");
@@ -437,7 +430,7 @@ public class ModBlocks {
 		registerTileEntity(TileCrate.class);
 		
 		darkIronRail = new BlockReinforcedRail();
-		registerBlock(darkIronRail, "reinforcedRail");
+		registerBlock(darkIronRail, "reinforcedrail");
 		
 		pedistal = new BlockPedistal();
 		registerBlock(pedistal, new ItemBlockPedistal(pedistal), "pedistal");

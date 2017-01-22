@@ -140,7 +140,7 @@ public class TileMaterialCrop extends TileEntityMod implements IMessageHandler {
 				
 		int min = crop.getMinYield(getWorld(), getPos());
 		int max = crop.getMaxYield(getWorld(), getPos());
-		this.cropYield = MathHelper.getRandomIntegerInRange(getWorld().rand, min, max);
+		this.cropYield = MathHelper.getInt(getWorld().rand, min, max);
 	}
 
 	@Override

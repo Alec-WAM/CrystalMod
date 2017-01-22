@@ -19,15 +19,16 @@ public class SlotCraftingPanelResult extends SlotCrafting {
     }
 
     @Override
-    public void onPickupFromSlot(EntityPlayer player, ItemStack stack) {
+    public ItemStack onTake(EntityPlayer player, ItemStack stack) {
         FMLCommonHandler.instance().firePlayerCraftingEvent(player, stack, panel.getMatrix());
 
         onCrafting(stack);
 
-        if (!player.worldObj.isRemote) {
+        if (!player.getEntityWorld().isRemote) {
         	panel.onCrafted(player);
 
             container.sendCraftingSlots();
         }
+        return stack;
     }
 }

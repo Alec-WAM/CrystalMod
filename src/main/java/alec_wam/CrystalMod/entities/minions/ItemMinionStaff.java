@@ -24,7 +24,7 @@ public class ItemMinionStaff extends Item {
 	
 	public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity entity)
     {
-		if ((!entity.isDead) && entity.worldObj !=null)
+		if ((!entity.isDead) && entity.getEntityWorld() !=null)
 		{
 			if(((entity instanceof EntityMinionBase)) && ((EntityMinionBase)entity).isOwner(player)){
 				EntityMinionBase minion = (EntityMinionBase)entity;
@@ -34,7 +34,7 @@ public class ItemMinionStaff extends Item {
 				} else if(minion instanceof EntityMinionWarrior){
 					type = MinionType.WARRIOR;
 				}
-				if(!entity.worldObj.isRemote){
+				if(!entity.getEntityWorld().isRemote){
 					ItemStack drop = ItemMinion.createMinion(type);
 					minion.saveToItem(player, drop);
 					minion.dropItem(drop, false, false);
@@ -45,7 +45,7 @@ public class ItemMinionStaff extends Item {
 			if(((entity instanceof EntityBombomb)) && ((EntityBombomb)entity).isOwner(player)){
 				EntityBombomb bombomb = (EntityBombomb)entity;
 				
-				if(!entity.worldObj.isRemote){
+				if(!entity.getEntityWorld().isRemote){
 					ItemStack drop = new ItemStack(ModItems.bombomb);
 					bombomb.saveToItem(player, drop);
 					bombomb.entityDropItem(drop, 0.0f);

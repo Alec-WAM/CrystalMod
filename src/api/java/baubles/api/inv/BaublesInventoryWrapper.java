@@ -1,5 +1,6 @@
 package baubles.api.inv;
 
+import alec_wam.CrystalMod.util.ItemStackTools;
 import baubles.api.cap.IBaublesItemHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -57,7 +58,7 @@ public class BaublesInventoryWrapper implements IInventory {
 	@Override
 	public ItemStack removeStackFromSlot(int index) {
 		ItemStack out = this.getStackInSlot(index);
-		handler.setStackInSlot(index, null);
+		handler.setStackInSlot(index, ItemStackTools.getEmptyStack());
 		return out;
 	}
 
@@ -75,7 +76,7 @@ public class BaublesInventoryWrapper implements IInventory {
 	public void markDirty() {	}
 
 	@Override
-	public boolean isUseableByPlayer(EntityPlayer player) {
+	public boolean isUsableByPlayer(EntityPlayer player) {
 		return true;
 	}
 
@@ -107,8 +108,19 @@ public class BaublesInventoryWrapper implements IInventory {
 	public void clear() {	
 		for (int i = 0; i < this.getSizeInventory(); ++i)
         {
-			this.setInventorySlotContents(i, null);
+			this.setInventorySlotContents(i, ItemStackTools.getEmptyStack());
         }
+	}
+	
+	@Override
+	public boolean isEmpty(){
+		for (int i = 0; i < this.getSizeInventory(); ++i)
+        {
+			if(ItemStackTools.isValid(getStackInSlot(i))){
+				return false;
+			}
+        }
+		return true;
 	}
 
 }

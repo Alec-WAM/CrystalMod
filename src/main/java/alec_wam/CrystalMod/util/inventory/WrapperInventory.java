@@ -3,20 +3,21 @@ package alec_wam.CrystalMod.util.inventory;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemHandlerHelper;
 
 public class WrapperInventory implements IItemHandlerModifiable {
 
-	private final ItemStack[] items;
+	private final NonNullList<ItemStack> items;
 	private IItemHandler master;
 	
 	public WrapperInventory(IItemHandler inv){
 		master = inv;
-		items = new ItemStack[master.getSlots()];
+		items = NonNullList.withSize(master.getSlots(), ItemStackTools.getEmptyStack());
 		for(int s = 0; s < master.getSlots(); s++){
-			items[s] = master.getStackInSlot(s);
+			items.set(s, master.getStackInSlot(s));
 		}
 	}
 
@@ -32,7 +33,7 @@ public class WrapperInventory implements IItemHandlerModifiable {
 
         validateSlotIndex(slot);
 
-        ItemStack existing = this.items[slot];
+        ItemStack existing = this.items.get(slot);
 
         int limit = getStackLimit(slot, stack);
 
@@ -53,7 +54,7 @@ public class WrapperInventory implements IItemHandlerModifiable {
         {
             if (ItemStackTools.isNullStack(existing))
             {
-                this.items[slot] = reachedLimit ? ItemHandlerHelper.copyStackWithSize(stack, limit) : stack;
+                this.items.set(slot, reachedLimit ? ItemHandlerHelper.copyStackWithSize(stack, limit) : stack);
             }
             else
             {
@@ -72,7 +73,7 @@ public class WrapperInventory implements IItemHandlerModifiable {
 
         validateSlotIndex(slot);
 
-        ItemStack existing = this.items[slot];
+        ItemStack existing = this.items.get(slot);
 
         if (ItemStackTools.isNullStack(existing))
             return ItemStackTools.getEmptyStack();
@@ -83,7 +84,7 @@ public class WrapperInventory implements IItemHandlerModifiable {
         {
             if (!simulate)
             {
-                this.items[slot] = ItemStackTools.getEmptyStack();
+                this.items.set(slot, ItemStackTools.getEmptyStack());
                 onContentsChanged(slot);
             }
             return existing;
@@ -92,7 +93,7 @@ public class WrapperInventory implements IItemHandlerModifiable {
         {
             if (!simulate)
             {
-                this.items[slot] = ItemHandlerHelper.copyStackWithSize(existing, ItemStackTools.getStackSize(existing) - toExtract);
+                this.items.set(slot, ItemHandlerHelper.copyStackWithSize(existing, ItemStackTools.getStackSize(existing) - toExtract));
                 onContentsChanged(slot);
             }
 
@@ -107,8 +108,8 @@ public class WrapperInventory implements IItemHandlerModifiable {
 
 	protected void validateSlotIndex(int slot)
 	{
-	        if (slot < 0 || slot >= items.length)
-	            throw new RuntimeException("Slot " + slot + " not in valid range - [0," + items.length + ")");
+	        if (slot < 0 || slot >= items.size())
+	            throw new RuntimeException("Slot " + slot + " not in valid range - [0," + items.size() + ")");
     }
 
     protected void onContentsChanged(int slot)
@@ -118,12 +119,17 @@ public class WrapperInventory implements IItemHandlerModifiable {
 	
 	@Override
 	public void setStackInSlot(int slot, ItemStack stack) {
-		items[slot] = stack;
+		items.set(slot, stack);
 	}
 
 	@Override
 	public ItemStack getStackInSlot(int slot) {
-		return items[slot];
+		return items.get(slot);
+	}
+
+	@Override
+	public int getSlotLimit(int slot) {
+		return 64;
 	}
 
 }

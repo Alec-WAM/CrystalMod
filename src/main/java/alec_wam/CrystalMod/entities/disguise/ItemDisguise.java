@@ -3,8 +3,6 @@ package alec_wam.CrystalMod.entities.disguise;
 import java.util.List;
 import java.util.UUID;
 
-import org.apache.logging.log4j.core.helpers.UUIDUtil;
-
 import com.google.common.collect.Lists;
 
 import alec_wam.CrystalMod.CrystalMod;
@@ -34,6 +32,7 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
@@ -80,7 +79,8 @@ public class ItemDisguise extends Item implements ICustomModel {
 	}
 	
 	@SideOnly(Side.CLIENT)
-    public void getSubItems(Item itemIn, CreativeTabs tab, List<ItemStack> subItems)
+	@Override
+    public void getSubItems(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> subItems)
     {
         subItems.add(new ItemStack(itemIn, 1, 0));
         
@@ -112,9 +112,9 @@ public class ItemDisguise extends Item implements ICustomModel {
 	}
 	
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand){
+	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand){
 		player.setActiveHand(hand);
-        return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
+        return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, player.getHeldItem(hand));
 	}
 	
 	@Override

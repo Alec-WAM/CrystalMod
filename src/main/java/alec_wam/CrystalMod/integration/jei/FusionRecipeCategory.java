@@ -40,23 +40,6 @@ public class FusionRecipeCategory extends BlankRecipeCategory<FusionRecipeCatego
 		}
 		
 		@Override
-		public @Nonnull List<?> getInputs() {
-			List<Object> inputs = Lists.newArrayList();
-			inputs.add(recipe.getMainInput());
-			inputs.addAll(recipe.getInputs());
-		    return inputs;
-		}
-		
-		@Override
-		public @Nonnull List<?> getOutputs() {
-			List<ItemStack> outputStacks = Lists.newArrayList();
-			if(ItemStackTools.isValid(recipe.getOutput())){
-				outputStacks.add(recipe.getOutput());
-			}
-			return outputStacks;
-		}
-		
-		@Override
 		public void drawInfo(@Nonnull Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {
 			 super.drawInfo(minecraft, recipeWidth, recipeHeight, mouseX, mouseY);
 		}
@@ -65,7 +48,10 @@ public class FusionRecipeCategory extends BlankRecipeCategory<FusionRecipeCatego
 		public void getIngredients(IIngredients ingredients) {
 			IStackHelper stackHelper = jeiHelpers.getStackHelper();
 
-			List<List<ItemStack>> inputs = stackHelper.expandRecipeItemStackInputs(getInputs());
+			List<Object> inputList = Lists.newArrayList();
+			inputList.add(recipe.getMainInput());
+			inputList.addAll(recipe.getInputs());
+			List<List<ItemStack>> inputs = stackHelper.expandRecipeItemStackInputs(inputList);
 			ingredients.setInputLists(ItemStack.class, inputs);
 
 			List<ItemStack> outputStacks = Lists.newArrayList();
@@ -93,11 +79,7 @@ public class FusionRecipeCategory extends BlankRecipeCategory<FusionRecipeCatego
 	@Nonnull
 	private final IDrawable background;
 
-	private static int xOff = 44;
-	private static int yOff = 30;
-
-  	public FusionRecipeCategory(IGuiHelper guiHelper) {
-	    ResourceLocation backgroundLocation = new ResourceLocation("crystalmod", "textures/gui/machine/grinder.png");
+	public FusionRecipeCategory(IGuiHelper guiHelper) {
 	    background = guiHelper.createBlankDrawable(100, 100);
   	}
 	
@@ -117,10 +99,6 @@ public class FusionRecipeCategory extends BlankRecipeCategory<FusionRecipeCatego
 	public String getUid() {
 		return UID;
 	}
-
-	@Override
-	public void drawAnimations(@Nonnull Minecraft minecraft) {
-	}
 	
 	@Override
 	public void drawExtras(@Nonnull Minecraft minecraft) {
@@ -135,7 +113,7 @@ public class FusionRecipeCategory extends BlankRecipeCategory<FusionRecipeCatego
 		guiItemStacks.init(0, false, x+55, y);
 		
 		guiItemStacks.init(1, true, x, y);
-		int inputSize = recipeWrapper.getInputs().size()-1;
+		int inputSize = recipeWrapper.recipe.getInputs().size();
 		double theta = ((Math.PI*2)/inputSize);
 		for(int i = 0; i < inputSize; i++){
 			double angle = theta * i;

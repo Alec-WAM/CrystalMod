@@ -11,31 +11,25 @@ import java.util.Set;
 import alec_wam.CrystalMod.entities.minions.worker.EntityMinionWorker;
 import alec_wam.CrystalMod.entities.minions.worker.jobs.JobChopTree;
 import alec_wam.CrystalMod.tiles.machine.worksite.InventorySided;
+import alec_wam.CrystalMod.tiles.machine.worksite.InventorySided.RelativeSide;
+import alec_wam.CrystalMod.tiles.machine.worksite.InventorySided.RotationType;
 import alec_wam.CrystalMod.tiles.machine.worksite.ItemSlotFilter;
 import alec_wam.CrystalMod.tiles.machine.worksite.TileWorksiteUserBlocks;
 import alec_wam.CrystalMod.tiles.machine.worksite.WorkerFilter;
 import alec_wam.CrystalMod.tiles.machine.worksite.WorksiteUpgrade;
-import alec_wam.CrystalMod.tiles.machine.worksite.InventorySided.RelativeSide;
-import alec_wam.CrystalMod.tiles.machine.worksite.InventorySided.RotationType;
 import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.HarvestResult;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
-import alec_wam.CrystalMod.util.ModLogger;
 import alec_wam.CrystalMod.util.fakeplayer.FakePlayerUtil;
 import alec_wam.CrystalMod.util.tool.MultiHarvestComparator;
 import alec_wam.CrystalMod.util.tool.ToolUtil;
 import alec_wam.CrystalMod.util.tool.TreeHarvestUtil;
 import alec_wam.CrystalMod.util.tool.TreeUtil;
-
-import com.enderio.core.common.util.ChatUtil;
-import com.google.common.collect.Lists;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockSapling;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -43,7 +37,6 @@ import net.minecraft.init.Enchantments;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.EnumDyeColor;
-import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
@@ -224,10 +217,10 @@ public class WorksiteTreeFarm extends TileWorksiteUserBlocks {
 				Iterator<BlockPos> it = blocksToPlant.iterator();
 				while (it.hasNext() && (position = it.next()) != null) {
 					it.remove();
-					if (worldObj.isAirBlock(position)) {
+					if (getWorld().isAirBlock(position)) {
 						Block block = ((ItemBlock) stack.getItem()).getBlock();
 						int i = ((ItemBlock) stack.getItem()).getMetadata(stack.getMetadata());
-						worldObj.setBlockState(position, block.getStateFromMeta(i), 3);
+						getWorld().setBlockState(position, block.getStateFromMeta(i), 3);
 						saplingCount--;
 						inventory.decrStackSize(slot, 1);
 						return true;
@@ -238,7 +231,7 @@ public class WorksiteTreeFarm extends TileWorksiteUserBlocks {
 			Iterator<BlockPos> it = blocksToFertilize.iterator();
 			while (it.hasNext() && (position = it.next()) != null) {
 				it.remove();
-				IBlockState state = worldObj.getBlockState(position);
+				IBlockState state = getWorld().getBlockState(position);
 				if (state.getBlock() instanceof BlockSapling) {
 					ItemStack stack = ItemStackTools.getEmptyStack();
 					for (int i = 30; i < 33; i++) {
@@ -246,11 +239,11 @@ public class WorksiteTreeFarm extends TileWorksiteUserBlocks {
 						if (stack != null && stack.getItem() == Items.DYE
 								&& stack.getItemDamage() == EnumDyeColor.WHITE.getDyeDamage()) {
 							bonemealCount--;
-							ItemDye.applyBonemeal(stack, worldObj, position, FakePlayerUtil.getPlayer((WorldServer)worldObj));
+							ItemDye.applyBonemeal(stack, getWorld(), position, FakePlayerUtil.getPlayer((WorldServer)getWorld()));
 							if (ItemStackTools.isEmpty(stack)) {
 								inventory.setInventorySlotContents(i, ItemStackTools.getEmptyStack());
 							}
-							state = worldObj.getBlockState(position);
+							state = getWorld().getBlockState(position);
 							if (state.getBlock() instanceof BlockSapling) {
 								blocksToFertilize.add(position);
 							} else if (TreeUtil.isLog(state)) {
@@ -270,7 +263,7 @@ public class WorksiteTreeFarm extends TileWorksiteUserBlocks {
 		BlockPos p1 = getWorkBoundsMin();
 		BlockPos p2 = getWorkBoundsMax().add(1, 1, 1);
 		AxisAlignedBB bb = new AxisAlignedBB(p1, p2);
-		List<EntityItem> items = worldObj.getEntitiesWithinAABB(EntityItem.class, bb);
+		List<EntityItem> items = getWorld().getEntitiesWithinAABB(EntityItem.class, bb);
 		ItemStack stack;
 		for (EntityItem item : items) {
 			stack = item.getEntityItem();
@@ -317,11 +310,11 @@ public class WorksiteTreeFarm extends TileWorksiteUserBlocks {
 	}
 
 	private void addTreeBlocks(BlockPos base) {
-		worldObj.theProfiler.startSection("TreeFinder");
-		// TreeFinder.findAttachedTreeBlocks(worldObj.getBlock(base.x, base.y,
-		// base.z), worldObj, base.x, base.y, base.z, blocksToChop);
+		getWorld().theProfiler.startSection("TreeFinder");
+		// TreeFinder.findAttachedTreeBlocks(getWorld().getBlock(base.x, base.y,
+		// base.z), getWorld(), base.x, base.y, base.z, blocksToChop);
 		blocksToChop.add(base);
-		worldObj.theProfiler.endSection();
+		getWorld().theProfiler.endSection();
 	}
 
 	@Override
@@ -331,7 +324,7 @@ public class WorksiteTreeFarm extends TileWorksiteUserBlocks {
 
 	@Override
 	public boolean onBlockClicked(EntityPlayer player) {
-		if (!player.worldObj.isRemote) {
+		if (!player.getEntityWorld().isRemote) {
 			BlockUtil.openWorksiteGui(player, 0, getPos().getX(), getPos().getY(), getPos().getZ());
 			return true;
 		}
@@ -385,13 +378,13 @@ public class WorksiteTreeFarm extends TileWorksiteUserBlocks {
 	@Override
 	protected void scanBlockPosition(BlockPos pos) {
 		IBlockState state;
-		if (worldObj.isAirBlock(pos)) {
-			state = worldObj.getBlockState(pos.down());
+		if (getWorld().isAirBlock(pos)) {
+			state = getWorld().getBlockState(pos.down());
 			if (state.getBlock() == Blocks.DIRT || state.getBlock() == Blocks.GRASS) {
 				blocksToPlant.add(pos);
 			}
 		} else {
-			state = worldObj.getBlockState(pos);
+			state = getWorld().getBlockState(pos);
 			if (state.getBlock() instanceof BlockSapling) {
 				blocksToFertilize.add(pos);
 			} else if (TreeUtil.isLog(state)) {
@@ -411,19 +404,19 @@ public class WorksiteTreeFarm extends TileWorksiteUserBlocks {
 
 	@Override
 	protected void updateBlockWorksite() {
-		worldObj.theProfiler.startSection("Count Resources");
+		getWorld().theProfiler.startSection("Count Resources");
 		if (shouldCountResources) {
 			countResources();
 		}
-		worldObj.theProfiler.endStartSection("SaplingPickup");
-		if (worldObj.getWorldTime() % 20 == 0) {
+		getWorld().theProfiler.endStartSection("SaplingPickup");
+		if (getWorld().getWorldTime() % 20 == 0) {
 			pickupSaplings();
 		}
-		worldObj.theProfiler.endStartSection("MinionAxe");
-		if (worldObj.getWorldTime() % 20 == 0) {
+		getWorld().theProfiler.endStartSection("MinionAxe");
+		if (getWorld().getWorldTime() % 20 == 0) {
 			manageAxes();
 		}
-		worldObj.theProfiler.endSection();
+		getWorld().theProfiler.endSection();
 	}
 
 	@Override

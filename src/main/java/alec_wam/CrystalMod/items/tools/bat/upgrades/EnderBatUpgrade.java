@@ -77,9 +77,9 @@ public class EnderBatUpgrade extends BatUpgrade {
 	protected static boolean teleportRandomly(Entity ent)
     {
 		if(ent == null)return false;
-        double d0 = ent.posX + (ent.worldObj.rand.nextDouble() - 0.5D) * 32.0D;
-        double d1 = ent.posY + (double)(ent.worldObj.rand.nextInt(64) - 32);
-        double d2 = ent.posZ + (ent.worldObj.rand.nextDouble() - 0.5D) * 32.0D;
+        double d0 = ent.posX + (ent.getEntityWorld().rand.nextDouble() - 0.5D) * 32.0D;
+        double d1 = ent.posY + (double)(ent.getEntityWorld().rand.nextInt(64) - 32);
+        double d2 = ent.posZ + (ent.getEntityWorld().rand.nextDouble() - 0.5D) * 32.0D;
         return teleportTo(ent, d0, d1, d2);
     }
     
@@ -97,13 +97,13 @@ public class EnderBatUpgrade extends BatUpgrade {
         boolean flag = false;
         BlockPos entityPos = new BlockPos(ent);
 
-        if (ent.worldObj.isBlockLoaded(entityPos))
+        if (ent.getEntityWorld().isBlockLoaded(entityPos))
         {
             boolean flag1 = false;
 
             while (!flag1 && entityPos.getY() > 0)
             {
-                IBlockState state = ent.worldObj.getBlockState(entityPos.down());
+                IBlockState state = ent.getEntityWorld().getBlockState(entityPos.down());
 
                 if (state.getMaterial().blocksMovement())
                 {
@@ -120,7 +120,7 @@ public class EnderBatUpgrade extends BatUpgrade {
             {
             	ent.setPosition(ent.posX, ent.posY, ent.posZ);
 
-                if (ent.worldObj.getCollisionBoxes(ent, ent.getEntityBoundingBox()).isEmpty())
+                if (ent.getEntityWorld().getCollisionBoxes(ent, ent.getEntityBoundingBox()).isEmpty())
                 {
                     flag = true;
                 }
@@ -139,16 +139,16 @@ public class EnderBatUpgrade extends BatUpgrade {
             for (int l = 0; l < short1; ++l)
             {
                 double d6 = (double)l / ((double)short1 - 1.0D);
-                float f = (ent.worldObj.rand.nextFloat() - 0.5F) * 0.2F;
-                float f1 = (ent.worldObj.rand.nextFloat() - 0.5F) * 0.2F;
-                float f2 = (ent.worldObj.rand.nextFloat() - 0.5F) * 0.2F;
-                double d7 = d3 + (ent.posX - d3) * d6 + (ent.worldObj.rand.nextDouble() - 0.5D) * (double)ent.width * 2.0D;
-                double d8 = d4 + (ent.posY - d4) * d6 + ent.worldObj.rand.nextDouble() * (double)ent.height;
-                double d9 = d5 + (ent.posZ - d5) * d6 + (ent.worldObj.rand.nextDouble() - 0.5D) * (double)ent.width * 2.0D;
-                ent.worldObj.spawnParticle(EnumParticleTypes.PORTAL, d7, d8, d9, (double)f, (double)f1, (double)f2);
+                float f = (ent.getEntityWorld().rand.nextFloat() - 0.5F) * 0.2F;
+                float f1 = (ent.getEntityWorld().rand.nextFloat() - 0.5F) * 0.2F;
+                float f2 = (ent.getEntityWorld().rand.nextFloat() - 0.5F) * 0.2F;
+                double d7 = d3 + (ent.posX - d3) * d6 + (ent.getEntityWorld().rand.nextDouble() - 0.5D) * (double)ent.width * 2.0D;
+                double d8 = d4 + (ent.posY - d4) * d6 + ent.getEntityWorld().rand.nextDouble() * (double)ent.height;
+                double d9 = d5 + (ent.posZ - d5) * d6 + (ent.getEntityWorld().rand.nextDouble() - 0.5D) * (double)ent.width * 2.0D;
+                ent.getEntityWorld().spawnParticle(EnumParticleTypes.PORTAL, d7, d8, d9, (double)f, (double)f1, (double)f2);
             }
 
-            ent.worldObj.playSound(null, d3, d4, d5, SoundEvents.ENTITY_ENDERMEN_TELEPORT, SoundCategory.NEUTRAL, 1.0F, 1.0F);
+            ent.getEntityWorld().playSound(null, d3, d4, d5, SoundEvents.ENTITY_ENDERMEN_TELEPORT, SoundCategory.NEUTRAL, 1.0F, 1.0F);
             ent.playSound(SoundEvents.ENTITY_ENDERMEN_TELEPORT, 1.0F, 1.0F);
             return true;
         }

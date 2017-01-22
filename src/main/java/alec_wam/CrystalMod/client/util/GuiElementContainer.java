@@ -19,6 +19,8 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
+import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.Lang;
 
 /**
@@ -75,7 +77,7 @@ public abstract class GuiElementContainer extends GuiContainer {
 
 		super.drawScreen(x, y, partialTick);
 
-		if (tooltips && mc.thePlayer.inventory.getItemStack() == null) {
+		if (tooltips && ItemStackTools.isNullStack(CrystalMod.proxy.getClientPlayer().inventory.getItemStack())) {
 			addTooltips(tooltip);
 			drawTooltip(tooltip);
 		}
@@ -228,7 +230,7 @@ public abstract class GuiElementContainer extends GuiContainer {
 
 	public boolean isMouseOverSlot(Slot theSlot, int xCoord, int yCoord) {
 
-		return this.isPointInRegion(theSlot.xDisplayPosition, theSlot.yDisplayPosition, 16, 16, xCoord, yCoord);
+		return this.isPointInRegion(theSlot.xPos, theSlot.yPos, 16, 16, xCoord, yCoord);
 	}
 
 	/**
@@ -259,7 +261,7 @@ public abstract class GuiElementContainer extends GuiContainer {
 	// @Override
 	public List<String> handleTooltip(int mousex, int mousey, List<String> tooltip) {
 
-		if (mc.thePlayer.inventory.getItemStack() == null) {
+		if (ItemStackTools.isEmpty(CrystalMod.proxy.getClientPlayer().inventory.getItemStack())) {
 			addTooltips(tooltip);
 		}
 		return tooltip;

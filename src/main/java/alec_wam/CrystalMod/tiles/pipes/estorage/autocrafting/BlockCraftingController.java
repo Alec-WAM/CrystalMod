@@ -113,7 +113,7 @@ public class BlockCraftingController extends BlockContainer {
         TileEntity tile = world.getTileEntity(pos);
 
         if (tile instanceof TileCrafter) {
-            EnumFacing facing = BlockPistonBase.getFacingFromEntity(pos, player);
+            EnumFacing facing = EnumFacing.getDirectionFromEntityLiving(pos, player);
 
             if (player.isSneaking() && hasOppositeFacingOnSneakPlace()) {
                 facing = facing.getOpposite();

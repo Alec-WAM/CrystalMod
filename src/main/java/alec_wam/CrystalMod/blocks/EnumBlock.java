@@ -10,11 +10,10 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import java.util.List;
 
 public class EnumBlock<E extends Enum<E> & EnumBlock.IEnumMeta & IStringSerializable> extends Block implements ICustomModel {
   public final PropertyEnum<E> prop;
@@ -35,7 +34,7 @@ public class EnumBlock<E extends Enum<E> & EnumBlock.IEnumMeta & IStringSerializ
 
   @SideOnly(Side.CLIENT)
   @Override
-  public void getSubBlocks(Item itemIn, CreativeTabs tab, List<ItemStack> list) {
+  public void getSubBlocks(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> list) {
     for(E type : values) {
       list.add(new ItemStack(this, 1, type.getMeta()));
     }

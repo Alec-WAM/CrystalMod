@@ -218,14 +218,14 @@ public class AttachmentEStorageSensor extends AttachmentData {
 		BlockPos bc2 = pos.offset(dir);
 		world.scheduleUpdate(pos, ModBlocks.crystalPipe, ModBlocks.crystalPipe.tickRate(world));
 		if (world.isBlockLoaded(bc2)) {
-			world.notifyBlockOfStateChange(bc2, ModBlocks.crystalPipe);
+			world.notifyNeighborsOfStateChange(bc2, ModBlocks.crystalPipe, true);
 			
 			IBlockState bs = world.getBlockState(bc2);
 			if (bs.isBlockNormalCube()) {
 				for (EnumFacing dir2 : EnumFacing.VALUES) {
 					BlockPos bc3 = bc2.offset(dir2);
 					if (!bc3.equals(pos) && world.isBlockLoaded(bc3)) {
-						world.notifyBlockOfStateChange(bc3, ModBlocks.crystalPipe);
+						world.notifyNeighborsOfStateChange(bc3, ModBlocks.crystalPipe, true);
 					}
 				}
 			}

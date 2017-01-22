@@ -29,9 +29,9 @@ public abstract class DefaultCommand implements ICommand {
     }
 
     public void showHelp(ICommandSender sender) {
-        sender.addChatMessage(new TextComponentString(TextFormatting.BLUE + getCommandName() + " <subcommand> <args>"));
+        sender.sendMessage(new TextComponentString(TextFormatting.BLUE + getName() + " <subcommand> <args>"));
         for (Map.Entry<String, CMCommand> me : commands.entrySet()) {
-            sender.addChatMessage(new TextComponentString("    " + me.getKey() + " " + me.getValue().getHelp()));
+            sender.sendMessage(new TextComponentString("    " + me.getKey() + " " + me.getValue().getHelp()));
         }
     }
 
@@ -63,13 +63,13 @@ public abstract class DefaultCommand implements ICommand {
     }
 
     @Override
-    public String getCommandUsage(ICommandSender sender) {
-        return getCommandName() + " <subcommand> <args> (try '" + getCommandName() + " help' for more info)";
+    public String getUsage(ICommandSender sender) {
+        return getName() + " <subcommand> <args> (try '" + getName() + " help' for more info)";
     }
 
     @Override
-    public List<String> getCommandAliases() {
-        return Lists.newArrayList();
+    public List<String> getAliases() {
+    	return Lists.newArrayList();
     }
 
     public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
@@ -82,7 +82,7 @@ public abstract class DefaultCommand implements ICommand {
             CMCommand command = commands.get(args[0]);
             if (command == null) {
                 if (!world.isRemote) {
-                    sender.addChatMessage(new TextComponentString(TextFormatting.RED + "Unknown CMCD command: " + args[0]));
+                    sender.sendMessage(new TextComponentString(TextFormatting.RED + "Unknown CMCD command: " + args[0]));
                 }
             } else {
                 if (world.isRemote) {
@@ -92,8 +92,8 @@ public abstract class DefaultCommand implements ICommand {
                     }
                 } else {
                     // Server-side.
-                    if (!sender.canCommandSenderUseCommand(command.getPermissionLevel(), getCommandName())) {
-                        sender.addChatMessage(new TextComponentString(TextFormatting.RED + "Command is not allowed!"));
+                    if (!sender.canUseCommand(command.getPermissionLevel(), getName())) {
+                        sender.sendMessage(new TextComponentString(TextFormatting.RED + "Command is not allowed!"));
                     } else {
                         command.execute(sender, args);
                     }
@@ -106,7 +106,7 @@ public abstract class DefaultCommand implements ICommand {
         return true;
     }
 
-    public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos pos) {
+    public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos pos) {
         return Lists.newArrayList();
     }
 
@@ -122,6 +122,6 @@ public abstract class DefaultCommand implements ICommand {
     
     @Override
     public int compareTo(ICommand o) {
-        return getCommandName().compareTo(o.getCommandName());
+        return getName().compareTo(o.getName());
     }
 }

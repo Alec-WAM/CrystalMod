@@ -3,17 +3,17 @@ package alec_wam.CrystalMod.capability;
 import java.awt.Color;
 import java.util.UUID;
 
-import net.minecraft.client.gui.GuiScreen;
+import javax.annotation.Nonnull;
+
+import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.entities.disguise.DisguiseType;
+import alec_wam.CrystalMod.items.guide.GuiGuideBase;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import alec_wam.CrystalMod.CrystalMod;
-import alec_wam.CrystalMod.entities.disguise.DisguiseType;
-import alec_wam.CrystalMod.items.guide.GuiGuideBase;
-import alec_wam.CrystalMod.util.ItemStackTools;
-import alec_wam.CrystalMod.util.ModLogger;
 
 public class ExtendedPlayer {
 
@@ -29,7 +29,7 @@ public class ExtendedPlayer {
 	public GuiGuideBase lastOpenBook;
 	
 	private ExtendedPlayerInventory inventory = new ExtendedPlayerInventory();
-	private ItemStack openBackpack;
+	private @Nonnull ItemStack openBackpack = ItemStackTools.getEmptyStack();
 	
 	private DisguiseType lastDiguise;
 	private DisguiseType currentDiguise = DisguiseType.NONE;

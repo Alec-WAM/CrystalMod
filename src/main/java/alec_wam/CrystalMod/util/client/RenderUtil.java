@@ -6,6 +6,7 @@ import java.util.List;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Vector3f;
 
+import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.asm.ObfuscatedNames;
 import alec_wam.CrystalMod.client.model.dynamic.DynamicBaseModel;
 import alec_wam.CrystalMod.util.ItemStackTools;
@@ -35,6 +36,7 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
@@ -49,6 +51,7 @@ import net.minecraftforge.fluids.FluidTank;
 public class RenderUtil {
 
 	public static final ResourceLocation RES_ITEM_GLINT = new ResourceLocation("textures/misc/enchanted_item_glint.png");
+	public static final ResourceLocation WIDGETS = new ResourceLocation("crystalmod:textures/gui/widgets.png");
 	
 	public static void startDrawing(Tessellator tess){
 		startDrawing(tess.getBuffer());
@@ -329,7 +332,7 @@ public class RenderUtil {
         GlStateManager.disableLighting();
         GlStateManager.disableCull();
         GlStateManager.disableBlend();
-        RenderGlobal.func_189697_a(bb, r, g, b, 1.0f);
+        RenderGlobal.drawSelectionBoundingBox(bb, r, g, b, 1.0f);
         GlStateManager.enableTexture2D();
         GlStateManager.enableLighting();
         GlStateManager.enableCull();
@@ -443,7 +446,7 @@ public class RenderUtil {
 		Minecraft.getMinecraft().renderEngine
 				.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 		// RenderUtil.setColorRGBA(color);
-		int brightness = Minecraft.getMinecraft().theWorld.getCombinedLight(
+		int brightness = CrystalMod.proxy.getClientWorld().getCombinedLight(
 				pos, fluid.getFluid().getLuminosity());
 
 		pre(x, y, z);
@@ -686,10 +689,10 @@ public class RenderUtil {
     	
     	RenderManager renderManager = mc.getRenderManager();
         FontRenderer fontRenderer = mc.fontRendererObj;
-        
-        float playerX = (float) (mc.thePlayer.lastTickPosX + (mc.thePlayer.posX - mc.thePlayer.lastTickPosX) * partialTickTime);
-        float playerY = (float) (mc.thePlayer.lastTickPosY + (mc.thePlayer.posY - mc.thePlayer.lastTickPosY) * partialTickTime);
-        float playerZ = (float) (mc.thePlayer.lastTickPosZ + (mc.thePlayer.posZ - mc.thePlayer.lastTickPosZ) * partialTickTime);
+        EntityPlayer clientPlayer = CrystalMod.proxy.getClientPlayer();
+        float playerX = (float) (clientPlayer.lastTickPosX + (clientPlayer.posX - clientPlayer.lastTickPosX) * partialTickTime);
+        float playerY = (float) (clientPlayer.lastTickPosY + (clientPlayer.posY - clientPlayer.lastTickPosY) * partialTickTime);
+        float playerZ = (float) (clientPlayer.lastTickPosZ + (clientPlayer.posZ - clientPlayer.lastTickPosZ) * partialTickTime);
 
         double dx = x-playerX;
         double dy = y-playerY;

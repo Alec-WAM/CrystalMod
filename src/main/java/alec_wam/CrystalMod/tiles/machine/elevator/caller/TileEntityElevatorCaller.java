@@ -99,12 +99,12 @@ public class TileEntityElevatorCaller extends TileEntityMod {
 			EnumFacing[] sides = EnumFacing.HORIZONTALS;
 			if(sides !=null){
 				for(EnumFacing side : sides){
-					TileEntity tile = worldObj.getTileEntity(getPos().offset(side));
+					TileEntity tile = getWorld().getTileEntity(getPos().offset(side));
 					if(tile !=null && tile instanceof TileEntityElevator){
 						TileEntityElevator elevator = (TileEntityElevator)tile;
 						BlockPos pos = elevator.findBottomElevator();
 						if(pos !=null){
-							TileEntity tile2 = worldObj.getTileEntity(pos);
+							TileEntity tile2 = getWorld().getTileEntity(pos);
 							if(tile2 !=null && tile2 instanceof TileEntityElevator){
 								TileEntityElevator elevator2 = (TileEntityElevator)tile2;
 								elevator2.updateFloors(false);

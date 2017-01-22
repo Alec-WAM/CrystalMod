@@ -1,7 +1,11 @@
 package alec_wam.CrystalMod.util;
 
+import net.minecraft.init.Blocks;
+import net.minecraft.inventory.ItemStackHelper;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.items.ItemHandlerHelper;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -16,9 +20,9 @@ public class ItemStackTools {
      */
     @Nullable
     public static ItemStack incStackSize(@Nonnull ItemStack stack, int amount) {
-        stack.stackSize += amount;
-        if (stack.stackSize <= 0) {
-            return null;
+    	stack.grow(amount);
+        if (stack.getCount() <= 0) {
+            return getEmptyStack();
         }
         return stack;
     }
@@ -28,13 +32,13 @@ public class ItemStackTools {
      */
     @Nullable
     public static ItemStack safeCopy(@Nullable ItemStack stack) {
-        if (stack == null) {
+        if (stack.isEmpty()) {
             return getEmptyStack();
         }
         stack = stack.copy();
         // Safety
-        if (stack.stackSize == 0) {
-            stack.stackSize = 1;
+        if (stack.getCount() == 0) {
+            stack.setCount(1);
         }
         return stack;
     }
@@ -47,7 +51,7 @@ public class ItemStackTools {
         if (isEmpty(stack)) {
             return 0;
         }
-        return stack.stackSize;
+        return stack.getCount();
     }
 
     /**
@@ -59,23 +63,26 @@ public class ItemStackTools {
         if (amount <= 0) {
             return getEmptyStack();
         }
-        stack.stackSize = amount;
+        stack.setCount(amount);
         return stack;
     }
-
     /**
      * Check if this is a valid stack. Tests for null on 1.10.
      */
     public static boolean isValid(@Nullable ItemStack stack) {
-        if (stack == null) {
+        if (stack.isEmpty()) {
             return false;
         }
-        return stack.stackSize > 0;
+        return stack.getCount() > 0;
     }
     
     
-    public static boolean isNullStack(@Nullable ItemStack stack){
-    	return stack == null;
+    public static boolean isNullStack(@Nonnull ItemStack stack){
+    	if(stack == null){
+    		//This is not supposed to happen
+    		return true;
+    	}
+        return stack == ItemStack.EMPTY ? true : (stack.getItem() == Item.getItemFromBlock(Blocks.AIR)) ? true : false;
     }
     
 
@@ -83,14 +90,11 @@ public class ItemStackTools {
      * Check if this is an empty stack. Tests for null on 1.10.
      */
     public static boolean isEmpty(@Nullable ItemStack stack) {
-        if (stack == null) {
-            return true;
-        }
-        return stack.stackSize <= 0;
+        return stack.isEmpty();
     }
 
     public static void makeEmpty(@Nonnull ItemStack stack) {
-        stack.stackSize = 0;
+        stack.setCount(0);
     }
 
     /**
@@ -98,12 +102,12 @@ public class ItemStackTools {
      */
     @Nullable
     public static ItemStack loadFromNBT(@Nonnull NBTTagCompound nbt) {
-        return ItemStack.loadItemStackFromNBT(nbt);
+        return new ItemStack(nbt);
     }
 
     @Nullable
     public static ItemStack getEmptyStack() {
-        return null;
+        return ItemStack.EMPTY;
     }
 
 }

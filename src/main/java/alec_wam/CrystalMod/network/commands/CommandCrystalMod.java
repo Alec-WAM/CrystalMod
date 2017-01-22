@@ -1,6 +1,5 @@
 package alec_wam.CrystalMod.network.commands;
 
-
 public class CommandCrystalMod extends DefaultCommand {
 
 	public CommandCrystalMod(){
@@ -9,7 +8,7 @@ public class CommandCrystalMod extends DefaultCommand {
 	}
 	
 	@Override
-	public String getCommandName() {
+	public String getName() {
 		return "crystalmod";
 	}
 }

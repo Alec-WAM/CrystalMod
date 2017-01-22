@@ -75,9 +75,9 @@ public class MinionRandomPositionGenerator
 
             if (targetVec3d == null || (double)l * targetVec3d.xCoord + (double)i1 * targetVec3d.zCoord >= 0.0D)
             {
-                l = l + MathHelper.floor_double(entitycreatureIn.posX);
-                k1 = k1 + MathHelper.floor_double(entitycreatureIn.posY);
-                i1 = i1 + MathHelper.floor_double(entitycreatureIn.posZ);
+                l = l + MathHelper.floor(entitycreatureIn.posX);
+                k1 = k1 + MathHelper.floor(entitycreatureIn.posY);
+                i1 = i1 + MathHelper.floor(entitycreatureIn.posZ);
                 BlockPos blockpos1 = new BlockPos(l, k1, i1);
 
                 if (!flag1)

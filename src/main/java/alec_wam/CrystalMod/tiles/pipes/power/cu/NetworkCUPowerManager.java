@@ -146,7 +146,7 @@ public class NetworkCUPowerManager {
       }
       return;
     }
-    energyStored = MathHelper.clamp_int(energyStored, 0, maxEnergyStored);
+    energyStored = MathHelper.clamp(energyStored, 0, maxEnergyStored);
 
     float filledRatio = (float) energyStored / maxEnergyStored;
     int energyLeft = energyStored;
@@ -182,7 +182,7 @@ public class NetworkCUPowerManager {
       maxEnergyStored += con.getMaxCEnergyStored();
       energyStored += con.getCEnergyStored();
     }
-    energyStored = MathHelper.clamp_int(energyStored, 0, maxEnergyStored);
+    energyStored = MathHelper.clamp(energyStored, 0, maxEnergyStored);
   }
 
   public void receptorsChanged() {

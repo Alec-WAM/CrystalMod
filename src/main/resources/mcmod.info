@@ -1,6 +1,6 @@
 [
 {
-  "modid": "CrystalMod",
+  "modid": "crystalmod",
   "name": "Crystal Mod",
   "description": "A crazy mod based on different colored crystals.",
   "version": "${version}",
@@ -9,7 +9,7 @@
   "updateUrl": "",
   "authorList": ["Alec_WAM"],
   "credits": "",
-  "logoFile": "",
+  "logoFile": "/assets/crystalmod/logo.png",
   "screenshots": [],
   "dependencies": []
 }

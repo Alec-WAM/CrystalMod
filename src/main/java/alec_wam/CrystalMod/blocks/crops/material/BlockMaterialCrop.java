@@ -74,13 +74,13 @@ public class BlockMaterialCrop extends BlockContainer {
 
 	@Override
     @Nullable
-    public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, World worldIn, BlockPos pos)
+    public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos)
     {
-        return NULL_AABB;
+		return NULL_AABB;
     }
 	
 	@Override
-    public boolean onBlockActivated(World world, BlockPos pos, IBlockState blockState, EntityPlayer player, EnumHand hand, ItemStack stack, EnumFacing direction, float p_180639_6_, float p_180639_7_, float p_180639_8_)
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState blockState, EntityPlayer player, EnumHand hand, EnumFacing direction, float p_180639_6_, float p_180639_7_, float p_180639_8_)
     {
 		TileEntity tile = world.getTileEntity(pos);
 		if(tile !=null && tile instanceof TileMaterialCrop){
@@ -90,6 +90,7 @@ public class BlockMaterialCrop extends BlockContainer {
 				return true;
 			}
 			if(!world.isRemote){
+				ItemStack stack = player.getHeldItem(hand);
 				if(ItemStackTools.isValid(stack)){
 					IMaterialCrop newCrop = null;
 					if(stack.getItem() instanceof ItemMaterialSeed){

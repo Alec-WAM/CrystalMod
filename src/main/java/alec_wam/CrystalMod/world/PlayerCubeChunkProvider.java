@@ -3,6 +3,8 @@ package alec_wam.CrystalMod.world;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -48,8 +50,8 @@ public class PlayerCubeChunkProvider implements IChunkGenerator
 		return new ArrayList<SpawnListEntry>();
 	}
 
-	@Override
-	public BlockPos getStrongholdGen(World worldIn, String p_180513_2_, BlockPos p_180513_3_)
+	@Nullable
+    public BlockPos getStrongholdGen(World worldIn, String structureName, BlockPos position, boolean p_180513_4_)
 	{
 		return null;
 	}

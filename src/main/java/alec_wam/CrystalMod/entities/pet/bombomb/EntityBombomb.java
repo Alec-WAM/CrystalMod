@@ -115,7 +115,7 @@ public class EntityBombomb extends EntityOwnable implements IMessageHandler {
         	if(getOwner() instanceof EntityPlayer){
         		EntityPlayer player = (EntityPlayer)getOwner();
 	        	String ownerName = player.getName();
-	        	ScorePlayerTeam scoreplayerteam = this.worldObj.getScoreboard().getPlayersTeam(ownerName);
+	        	ScorePlayerTeam scoreplayerteam = this.getEntityWorld().getScoreboard().getPlayersTeam(ownerName);
 	        	
 	        	String name = scoreplayerteam != null ? scoreplayerteam.formatString(ownerName): ownerName;
 	        	setCustomNameTag(name);
@@ -127,10 +127,10 @@ public class EntityBombomb extends EntityOwnable implements IMessageHandler {
     {
         super.onUpdate();
         aiManager.onUpdate();
-        if(!worldObj.isRemote){
+        if(!getEntityWorld().isRemote){
         	//Needs Healing
         	if(getHealth() < getMaxHealth()){
-	        	List<EntityItem> items = this.worldObj.getEntitiesWithinAABB(EntityItem.class, getEntityBoundingBox());
+	        	List<EntityItem> items = this.getEntityWorld().getEntitiesWithinAABB(EntityItem.class, getEntityBoundingBox());
 		        for(EntityItem item : items){
 		        	if(item !=null && ItemStackTools.isValid(item.getEntityItem())){
 		        		ItemStack stack = item.getEntityItem();
@@ -181,7 +181,7 @@ public class EntityBombomb extends EntityOwnable implements IMessageHandler {
 	{
 		super.onDeath(damageSource);
 
-		if (!worldObj.isRemote)
+		if (!getEntityWorld().isRemote)
 		{
 			aiManager.disableAllToggleAIs();
 		}
@@ -209,7 +209,7 @@ public class EntityBombomb extends EntityOwnable implements IMessageHandler {
 				if(player.isSneaking()){
 					BombombAICombat ai = getAIManager().getAI(BombombAICombat.class);
 					if(ai !=null){
-						if(!worldObj.isRemote){
+						if(!getEntityWorld().isRemote){
 		        			final int next = !player.isSneaking() ? ai.getNextTriggerBehavior() : ai.getPrevTriggerBehavior();
 		        			ai.setTriggerBehavior(next);
 		        			NBTTagCompound nbt = new NBTTagCompound();
@@ -265,7 +265,7 @@ public class EntityBombomb extends EntityOwnable implements IMessageHandler {
 			double x = posX;
         	double y = posY;
         	double z = posZ;
-            worldObj.spawnParticle(EnumParticleTypes.EXPLOSION_HUGE, x, y, z, 1.0D, 0.0D, 0.0D, new int[0]);
+            getEntityWorld().spawnParticle(EnumParticleTypes.EXPLOSION_HUGE, x, y, z, 1.0D, 0.0D, 0.0D, new int[0]);
 		}
 	}
 

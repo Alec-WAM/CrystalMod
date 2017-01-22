@@ -16,6 +16,7 @@ import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.RecipeSorter;
 
@@ -25,7 +26,7 @@ public class RecipeWirelessChestMinecart implements IRecipe {
         RecipeSorter.register(CrystalMod.MODID.toLowerCase() + ":wirelesschestminecart", RecipeWirelessChestMinecart.class, RecipeSorter.Category.SHAPELESS, "");
     }
 
-    private ItemStack modifiedMinecart = null;
+    private ItemStack modifiedMinecart = ItemStackTools.getEmptyStack();
 
     public RecipeWirelessChestMinecart() {
     }
@@ -96,7 +97,7 @@ public class RecipeWirelessChestMinecart implements IRecipe {
     }
 
 	@Override
-	public ItemStack[] getRemainingItems(InventoryCrafting inv) {
-		return new ItemStack[inv.getSizeInventory()];
+	public NonNullList<ItemStack> getRemainingItems(InventoryCrafting inv) {
+		return NonNullList.create();
 	}
 }

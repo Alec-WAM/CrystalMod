@@ -48,7 +48,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.AnimalChest;
+import net.minecraft.inventory.ContainerHorseChest;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -176,9 +176,9 @@ public class ClientEventHandler {
     		GuiScreenHorseInventory horseGui = (GuiScreenHorseInventory)gui;
     		EntityHorse horse = (EntityHorse)ReflectionUtils.getPrivateValue(horseGui, GuiScreenHorseInventory.class, ObfuscatedNames.GuiScreenHorseInventory_horseEntity);
     		if(horse !=null && HorseAccessories.hasEnderChest(horse)){
-    			AnimalChest animalchest = new AnimalChest("HorseChest", 2);
+    			ContainerHorseChest animalchest = new ContainerHorseChest("HorseChest", 2);
     			animalchest.setCustomName(horse.getName());
-    			event.setGui(new GuiHorseEnderChest(Minecraft.getMinecraft().thePlayer.inventory, animalchest, horse));
+    			event.setGui(new GuiHorseEnderChest(CrystalMod.proxy.getClientPlayer().inventory, animalchest, horse));
     			PacketGuiMessage pkt = new PacketGuiMessage("Gui");
     			pkt.setOpenGui(GuiHandler.GUI_ID_ENTITY, horse.getEntityId(), 0, 0);
     			CrystalModNetwork.sendToServer(pkt);
@@ -212,7 +212,7 @@ public class ClientEventHandler {
         Entity entity = Minecraft.getMinecraft().getRenderViewEntity();
         float fov = 70.0F;
 
-        IBlockState blockState = ActiveRenderInfo.getBlockStateAtEntityViewpoint(Minecraft.getMinecraft().theWorld, entity, event.getPartialTicks());
+        IBlockState blockState = ActiveRenderInfo.getBlockStateAtEntityViewpoint(CrystalMod.proxy.getClientWorld(), entity, event.getPartialTicks());
 
         if (blockState.getBlock().getMaterial(blockState) == Material.WATER)
         {
@@ -245,7 +245,7 @@ public class ClientEventHandler {
 	            }
         	}
         	
-        	AbstractClientPlayer abstractclientplayer = Minecraft.getMinecraft().thePlayer;
+        	AbstractClientPlayer abstractclientplayer = (AbstractClientPlayer) CrystalMod.proxy.getClientPlayer();
             float fPitch = abstractclientplayer.prevRotationPitch + (abstractclientplayer.rotationPitch - abstractclientplayer.prevRotationPitch) * event.getPartialTicks();
             float fYaw = abstractclientplayer.prevRotationYaw + (abstractclientplayer.rotationYaw - abstractclientplayer.prevRotationYaw) * event.getPartialTicks();
             GlStateManager.pushMatrix();
@@ -254,7 +254,7 @@ public class ClientEventHandler {
             RenderHelper.enableStandardItemLighting();
             GlStateManager.popMatrix();
             
-            int i = Minecraft.getMinecraft().theWorld.getCombinedLight(new BlockPos(abstractclientplayer.posX, abstractclientplayer.posY + (double)abstractclientplayer.getEyeHeight(), abstractclientplayer.posZ), 0);
+            int i = CrystalMod.proxy.getClientWorld().getCombinedLight(new BlockPos(abstractclientplayer.posX, abstractclientplayer.posY + (double)abstractclientplayer.getEyeHeight(), abstractclientplayer.posZ), 0);
             float f = (float)(i & 65535);
             float f1 = (float)(i >> 16);
             OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, f, f1);
@@ -288,7 +288,7 @@ public class ClientEventHandler {
             double height = 1.8;
             GlStateManager.translate(0.3, -height/2, -0.1);
             
-            AbstractClientPlayer entitylivingbaseIn = Minecraft.getMinecraft().thePlayer;
+            AbstractClientPlayer entitylivingbaseIn = (AbstractClientPlayer) CrystalMod.proxy.getClientPlayer();
             double d0 = entitylivingbaseIn.prevChasingPosX + (entitylivingbaseIn.chasingPosX - entitylivingbaseIn.prevChasingPosX) * (double)event.getPartialTicks() - (entitylivingbaseIn.prevPosX + (entitylivingbaseIn.posX - entitylivingbaseIn.prevPosX) * (double)event.getPartialTicks());
             double d2 = entitylivingbaseIn.prevChasingPosZ + (entitylivingbaseIn.chasingPosZ - entitylivingbaseIn.prevChasingPosZ) * (double)event.getPartialTicks() - (entitylivingbaseIn.prevPosZ + (entitylivingbaseIn.posZ - entitylivingbaseIn.prevPosZ) * (double)event.getPartialTicks());
             float fYaw2 = entitylivingbaseIn.prevRenderYawOffset + (entitylivingbaseIn.renderYawOffset - entitylivingbaseIn.prevRenderYawOffset) * event.getPartialTicks();
@@ -321,7 +321,7 @@ public class ClientEventHandler {
     		elapsedTicks++;
         }
     	
-		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+		EntityPlayer player = CrystalMod.proxy.getClientPlayer();
 		if (player != null) {
 			if (!Minecraft.getMinecraft().isGamePaused() || !Minecraft.getMinecraft().isSingleplayer()) {
 				try {

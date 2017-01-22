@@ -1,5 +1,6 @@
 package alec_wam.CrystalMod.tiles.weather;
 
+import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.asm.ObfuscatedNames;
 import alec_wam.CrystalMod.util.ReflectionUtils;
 import alec_wam.CrystalMod.util.client.RenderUtil;
@@ -10,8 +11,8 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.biome.Biome;
 
 public class GuiWeather extends GuiContainer {
@@ -38,15 +39,15 @@ public class GuiWeather extends GuiContainer {
         GlStateManager.pushMatrix();
         GlStateManager.translate(5, 23, 0);
         GlStateManager.scale(18, 18, 0);
-        float f = mc.theWorld.getRainStrength(partialTicks);
+        float f = CrystalMod.proxy.getClientWorld().getRainStrength(partialTicks);
 
         if (f > 0.0F)
         {
             BlockPos.MutableBlockPos blockpos$mutableblockpos = new BlockPos.MutableBlockPos();
         	blockpos$mutableblockpos.setPos(weather.getPos().getX(), weather.getPos().getY(), weather.getPos().getZ());
-        	Biome biomegenbase = mc.theWorld.getBiomeGenForCoords(blockpos$mutableblockpos);
+        	Biome biomegenbase = CrystalMod.proxy.getClientWorld().getBiome(blockpos$mutableblockpos);
         	float f2 = biomegenbase.getFloatTemperature(blockpos$mutableblockpos);
-        	f2 = mc.theWorld.getBiomeProvider().getTemperatureAtHeight(f2, weather.getPos().getY());
+        	f2 = CrystalMod.proxy.getClientWorld().getBiomeProvider().getTemperatureAtHeight(f2, weather.getPos().getY());
         	boolean canSnow = (f2 < 0.15F);
 			mc.getTextureManager().bindTexture(canSnow ? locationSnowPng : locationRainPng);
 	        worldrenderer.begin(7, DefaultVertexFormats.POSITION_TEX);
@@ -75,7 +76,7 @@ public class GuiWeather extends GuiContainer {
         GlStateManager.translate(2+(76*2), 23, 0);
         GlStateManager.scale(18.3, 18, 0);
 		mc.getTextureManager().bindTexture(locationMoonPhasesPng);
-        int i = mc.theWorld.getMoonPhase();
+        int i = CrystalMod.proxy.getClientWorld().getMoonPhase();
         int k = i % 4;
         int i1 = i / 4 % 2;
         float f22 = (float)(k + 0) / 4.0F;
@@ -91,7 +92,7 @@ public class GuiWeather extends GuiContainer {
         GlStateManager.popMatrix();
         
         /*if(f > 0){
-        	String time = ""+TimeUtil.getTimeFromTicks(mc.theWorld.getWorldInfo().getRainTime());
+        	String time = ""+TimeUtil.getTimeFromTicks(CrystalMod.proxy.getClientWorld().getWorldInfo().getRainTime());
         	this.drawString(fontRendererObj, "Rain Left: "+time, 5, 23+76+3, java.awt.Color.BLUE.getRGB());
         }*/
     }

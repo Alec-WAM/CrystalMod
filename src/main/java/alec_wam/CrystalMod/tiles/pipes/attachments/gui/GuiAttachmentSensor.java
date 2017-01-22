@@ -2,6 +2,15 @@ package alec_wam.CrystalMod.tiles.pipes.attachments.gui;
 
 import java.io.IOException;
 
+import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.client.util.GuiSlider;
+import alec_wam.CrystalMod.network.CrystalModNetwork;
+import alec_wam.CrystalMod.network.packets.PacketTileMessage;
+import alec_wam.CrystalMod.tiles.pipes.attachments.AttachmentEStorageSensor;
+import alec_wam.CrystalMod.tiles.pipes.attachments.AttachmentEStorageSensor.CompareType;
+import alec_wam.CrystalMod.tiles.pipes.attachments.AttachmentUtil.AttachmentData;
+import alec_wam.CrystalMod.tiles.pipes.estorage.TileEntityPipeEStorage;
+import alec_wam.CrystalMod.util.ModLogger;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiTextField;
@@ -12,18 +21,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
-import alec_wam.CrystalMod.CrystalMod;
-import alec_wam.CrystalMod.client.util.GuiSlider;
-import alec_wam.CrystalMod.network.CrystalModNetwork;
-import alec_wam.CrystalMod.network.packets.PacketTileMessage;
-import alec_wam.CrystalMod.tiles.pipes.TileEntityPipe.RedstoneMode;
-import alec_wam.CrystalMod.tiles.pipes.attachments.AttachmentEStorageExport;
-import alec_wam.CrystalMod.tiles.pipes.attachments.AttachmentEStorageSensor;
-import alec_wam.CrystalMod.tiles.pipes.attachments.AttachmentEStorageSensor.CompareType;
-import alec_wam.CrystalMod.tiles.pipes.attachments.AttachmentUtil.AttachmentData;
-import alec_wam.CrystalMod.tiles.pipes.estorage.TileEntityPipeEStorage;
-import alec_wam.CrystalMod.tiles.pipes.item.PacketPipe;
-import alec_wam.CrystalMod.util.ModLogger;
 
 public class GuiAttachmentSensor extends GuiContainer {
 
@@ -130,7 +127,7 @@ public class GuiAttachmentSensor extends GuiContainer {
 		if(this.isPointInRegion(50, 20, 16, 16, mouseX, mouseY)){
 			NBTTagCompound nbt = new NBTTagCompound();
 			nbt.setInteger("Dir", dir.getIndex());
-			getPart().filterStack = mc.thePlayer.inventory.getItemStack();
+			getPart().filterStack = CrystalMod.proxy.getClientPlayer().inventory.getItemStack();
 			nbt.setTag("FilterStack", getPart().filterStack == null ? new NBTTagCompound() : getPart().filterStack.writeToNBT(new NBTTagCompound()));
 			CrystalModNetwork.sendToServer(new PacketTileMessage(pipe.getPos(), "Attachment", nbt));
 		}

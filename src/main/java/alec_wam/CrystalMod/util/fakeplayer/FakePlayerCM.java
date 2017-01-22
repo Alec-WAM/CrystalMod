@@ -2,7 +2,6 @@ package alec_wam.CrystalMod.util.fakeplayer;
 
 import javax.annotation.Nullable;
 
-import com.enderio.core.common.util.BlockCoord;
 import com.mojang.authlib.GameProfile;
 
 import net.minecraft.inventory.EntityEquipmentSlot;

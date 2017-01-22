@@ -8,35 +8,8 @@ import java.util.UUID;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.block.BlockContainer;
-import net.minecraft.block.material.Material;
-import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.EnumDyeColor;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.EnumBlockRenderType;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.Explosion;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import com.google.common.collect.Lists;
+
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.blocks.ModBlocks;
@@ -54,8 +27,36 @@ import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.ProfileUtil;
 import alec_wam.CrystalMod.util.UUIDUtils;
-
-import com.google.common.collect.Lists;
+import net.minecraft.block.BlockContainer;
+import net.minecraft.block.material.Material;
+import net.minecraft.block.state.BlockStateContainer;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.EnumDyeColor;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumBlockRenderType;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.Explosion;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockWirelessChest extends BlockContainer implements ICustomModel 
 {
@@ -109,7 +110,7 @@ public class BlockWirelessChest extends BlockContainer implements ICustomModel
     }
     
     @Override
-    public boolean onBlockActivated(World world, BlockPos pos, IBlockState blockState, EntityPlayer player, EnumHand hand, ItemStack stack, EnumFacing direction, float p_180639_6_, float p_180639_7_, float p_180639_8_)
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState blockState, EntityPlayer player, EnumHand hand, EnumFacing direction, float p_180639_6_, float p_180639_7_, float p_180639_8_)
     {
         TileEntity te = world.getTileEntity(pos);
 
@@ -131,7 +132,7 @@ public class BlockWirelessChest extends BlockContainer implements ICustomModel
         }
         
         if(!world.isRemote){
-        	
+        	ItemStack stack = player.getHeldItem(hand);
         	if(ItemStackTools.isValid(stack) && stack.getItem() == ModItems.lock){
         		if(!chest.isBoundToPlayer()){
 	        		if (!player.capabilities.isCreativeMode)
@@ -215,7 +216,7 @@ public class BlockWirelessChest extends BlockContainer implements ICustomModel
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void getSubBlocks(Item itemIn, CreativeTabs tab, List<ItemStack> list)
+    public void getSubBlocks(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> list)
     {
     	for(EnumDyeColor dye : EnumDyeColor.values()){
     		ItemStack stack = new ItemStack(this, 1, 0);
@@ -295,14 +296,14 @@ public class BlockWirelessChest extends BlockContainer implements ICustomModel
     public void onBlockAdded(World world, BlockPos pos, IBlockState blockState)
     {
         super.onBlockAdded(world, pos, blockState);
-        world.notifyBlockOfStateChange(pos, this);
+        world.notifyNeighborsOfStateChange(pos, this, true);
     }
 
     @Override
     public void onBlockPlacedBy(World world, BlockPos pos, IBlockState blockState, EntityLivingBase entityliving, ItemStack itemStack)
     {
         byte chestFacing = 0;
-        int facing = MathHelper.floor_double((entityliving.rotationYaw * 4F) / 360F + 0.5D) & 3;
+        int facing = MathHelper.floor((entityliving.rotationYaw * 4F) / 360F + 0.5D) & 3;
         if (facing == 0)
         {
             chestFacing = 2;
@@ -406,7 +407,7 @@ public class BlockWirelessChest extends BlockContainer implements ICustomModel
     public AxisAlignedBB getSelectedBoundingBox(IBlockState state, World world, BlockPos pos) {
 
 		TileEntity te = world.getTileEntity(pos);
-		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+		EntityPlayer player = CrystalMod.proxy.getClientPlayer();
 		if (!(te instanceof TileWirelessChest)) {
 			return null;
 		}

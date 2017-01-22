@@ -426,13 +426,14 @@ public class EStorageNetwork extends AbstractPipeNetwork {
 				continue;
 			for (int s = 0; s < crafter.getPatterns().getSlots(); s++) {
 				ItemStack patStack = crafter.getPatterns().getStackInSlot(s);
-				if (!ItemStackTools.isNullStack(patStack)) {
+				if (ItemStackTools.isValid(patStack)) {
 					CraftingPattern pattern = crafter.createPattern(patStack);
 					if(pattern.isValid()){
 						patterns.add(pattern);
 						for (ItemStack stack : pattern.getOutputs()) {
-							if (stack != null) {
-								ItemStack copy = stack.copy();
+							if (ItemStackTools.isValid(stack)) {
+								ItemStack copy = ItemStackTools.safeCopy(stack);
+								//Dont set empty because it updates the actual empty state
 								ItemStackTools.setStackSize(copy, 0);
 								ItemStackData iData = new ItemStackData(copy);
 								iData.isCrafting = true;

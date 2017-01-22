@@ -130,7 +130,7 @@ public class GrappleHandler {
 			EntityPlayerMP sender = (EntityPlayerMP) entity;
 			int dimension = sender.dimension;
 			MinecraftServer minecraftServer = sender.mcServer;
-			for (EntityPlayerMP player : minecraftServer.getPlayerList().getPlayerList()) {
+			for (EntityPlayerMP player : minecraftServer.getPlayerList().getPlayers()) {
 				nbtAttach = new NBTTagCompound();
 		        nbtAttach.setDouble("x", vec3.xCoord);
 		        nbtAttach.setDouble("y", vec3.yCoord);

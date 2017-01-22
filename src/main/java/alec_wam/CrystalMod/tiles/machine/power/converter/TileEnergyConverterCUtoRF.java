@@ -22,9 +22,10 @@ public class TileEnergyConverterCUtoRF extends TileEnergyConveterBase implements
 	    };
 	}
 	
-	
+	@Override
 	public void update(){
-		if(this.worldObj.isRemote)return;
+		super.update();
+		if(this.getWorld().isRemote)return;
 		
 		if (this.energyStorage !=null)
 	    {

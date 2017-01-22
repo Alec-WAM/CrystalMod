@@ -168,14 +168,14 @@ public class BombombAICombat extends AIBase<EntityBombomb>
 		double explosionY = bombomb.posY;
 		double explosionZ = bombomb.posZ;
 		float f3 = explosionSize * 2.0F;
-        int k1 = MathHelper.floor_double(explosionX - (double)f3 - 1.0D);
-        int l1 = MathHelper.floor_double(explosionX + (double)f3 + 1.0D);
-        int i2 = MathHelper.floor_double(explosionY - (double)f3 - 1.0D);
-        int i1 = MathHelper.floor_double(explosionY + (double)f3 + 1.0D);
-        int j2 = MathHelper.floor_double(explosionZ - (double)f3 - 1.0D);
-        int j1 = MathHelper.floor_double(explosionZ + (double)f3 + 1.0D);
-        List<Entity> list = bombomb.worldObj.getEntitiesWithinAABBExcludingEntity(bombomb, new AxisAlignedBB((double)k1, (double)i2, (double)j2, (double)l1, (double)i1, (double)j1));
-        //net.minecraftforge.event.ForgeEventFactory.onExplosionDetonate(this.worldObj, this, list, f3);
+        int k1 = MathHelper.floor(explosionX - (double)f3 - 1.0D);
+        int l1 = MathHelper.floor(explosionX + (double)f3 + 1.0D);
+        int i2 = MathHelper.floor(explosionY - (double)f3 - 1.0D);
+        int i1 = MathHelper.floor(explosionY + (double)f3 + 1.0D);
+        int j2 = MathHelper.floor(explosionZ - (double)f3 - 1.0D);
+        int j1 = MathHelper.floor(explosionZ + (double)f3 + 1.0D);
+        List<Entity> list = bombomb.getEntityWorld().getEntitiesWithinAABBExcludingEntity(bombomb, new AxisAlignedBB((double)k1, (double)i2, (double)j2, (double)l1, (double)i1, (double)j1));
+        //net.minecraftforge.event.ForgeEventFactory.onExplosionDetonate(this.getEntityWorld(), this, list, f3);
         Vec3d vec3d = new Vec3d(explosionX, explosionY, explosionZ);
 
         for (int k2 = 0; k2 < list.size(); ++k2)
@@ -191,14 +191,14 @@ public class BombombAICombat extends AIBase<EntityBombomb>
                     double d5 = entity.posX - explosionX;
                     double d7 = entity.posY + (double)entity.getEyeHeight() - explosionY;
                     double d9 = entity.posZ - explosionZ;
-                    double d13 = (double)MathHelper.sqrt_double(d5 * d5 + d7 * d7 + d9 * d9);
+                    double d13 = (double)MathHelper.sqrt(d5 * d5 + d7 * d7 + d9 * d9);
 
                     if (d13 != 0.0D)
                     {
                         d5 = d5 / d13;
                         d7 = d7 / d13;
                         d9 = d9 / d13;
-                        double d14 = (double)bombomb.worldObj.getBlockDensity(vec3d, entity.getEntityBoundingBox());
+                        double d14 = (double)bombomb.getEntityWorld().getBlockDensity(vec3d, entity.getEntityBoundingBox());
                         double d10 = (1.0D - d12) * d14;
                         entity.attackEntityFrom(DamageSource.causeExplosionDamage(bombomb), (float)((int)((d10 * d10 + d10) / 2.0D * 7.0D * (double)f3 + 1.0D)));
                         double d11 = 1.0D;
@@ -243,33 +243,33 @@ public class BombombAICombat extends AIBase<EntityBombomb>
         	}
         }
         
-        bombomb.worldObj.playSound((EntityPlayer)null, explosionX, explosionY, explosionZ, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.BLOCKS, 4.0F, (1.0F + (bombomb.worldObj.rand.nextFloat() - bombomb.worldObj.rand.nextFloat()) * 0.2F) * 0.7F);
-        //bombomb.worldObj.spawnParticle(EnumParticleTypes.EXPLOSION_HUGE, explosionX, explosionY, explosionZ, 1.0D, 0.0D, 0.0D, new int[0]);
+        bombomb.getEntityWorld().playSound((EntityPlayer)null, explosionX, explosionY, explosionZ, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.BLOCKS, 4.0F, (1.0F + (bombomb.getEntityWorld().rand.nextFloat() - bombomb.getEntityWorld().rand.nextFloat()) * 0.2F) * 0.7F);
+        //bombomb.getEntityWorld().spawnParticle(EnumParticleTypes.EXPLOSION_HUGE, explosionX, explosionY, explosionZ, 1.0D, 0.0D, 0.0D, new int[0]);
 
-        if(!bombomb.worldObj.isRemote)
+        if(!bombomb.getEntityWorld().isRemote)
            CrystalModNetwork.sendToAllAround(new PacketEntityMessage(bombomb, "Explosion"), bombomb);
         
         /*if (explosionSize >= 2.0F)
         {
-            bombomb.worldObj.spawnParticle(EnumParticleTypes.EXPLOSION_HUGE, explosionX, explosionY, explosionZ, 1.0D, 0.0D, 0.0D, new int[0]);
+            bombomb.getEntityWorld().spawnParticle(EnumParticleTypes.EXPLOSION_HUGE, explosionX, explosionY, explosionZ, 1.0D, 0.0D, 0.0D, new int[0]);
         }
         else
         {
-        	bombomb.worldObj.spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, explosionX, explosionY, explosionZ, 1.0D, 0.0D, 0.0D, new int[0]);
+        	bombomb.getEntityWorld().spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, explosionX, explosionY, explosionZ, 1.0D, 0.0D, 0.0D, new int[0]);
         }*/
 
         /*if (this.isSmoking)
         {
             for (BlockPos blockpos : this.affectedBlockPositions)
             {
-                IBlockState iblockstate = this.worldObj.getBlockState(blockpos);
+                IBlockState iblockstate = this.getEntityWorld().getBlockState(blockpos);
                 Block block = iblockstate.getBlock();
 
                 if (spawnParticles)
                 {
-                    double d0 = (double)((float)blockpos.getX() + this.worldObj.rand.nextFloat());
-                    double d1 = (double)((float)blockpos.getY() + this.worldObj.rand.nextFloat());
-                    double d2 = (double)((float)blockpos.getZ() + this.worldObj.rand.nextFloat());
+                    double d0 = (double)((float)blockpos.getX() + this.getEntityWorld().rand.nextFloat());
+                    double d1 = (double)((float)blockpos.getY() + this.getEntityWorld().rand.nextFloat());
+                    double d2 = (double)((float)blockpos.getZ() + this.getEntityWorld().rand.nextFloat());
                     double d3 = d0 - this.explosionX;
                     double d4 = d1 - this.explosionY;
                     double d5 = d2 - this.explosionZ;
@@ -278,22 +278,22 @@ public class BombombAICombat extends AIBase<EntityBombomb>
                     d4 = d4 / d6;
                     d5 = d5 / d6;
                     double d7 = 0.5D / (d6 / (double)this.explosionSize + 0.1D);
-                    d7 = d7 * (double)(this.worldObj.rand.nextFloat() * this.worldObj.rand.nextFloat() + 0.3F);
+                    d7 = d7 * (double)(this.getEntityWorld().rand.nextFloat() * this.getEntityWorld().rand.nextFloat() + 0.3F);
                     d3 = d3 * d7;
                     d4 = d4 * d7;
                     d5 = d5 * d7;
-                    this.worldObj.spawnParticle(EnumParticleTypes.EXPLOSION_NORMAL, (d0 + this.explosionX) / 2.0D, (d1 + this.explosionY) / 2.0D, (d2 + this.explosionZ) / 2.0D, d3, d4, d5, new int[0]);
-                    this.worldObj.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, d0, d1, d2, d3, d4, d5, new int[0]);
+                    this.getEntityWorld().spawnParticle(EnumParticleTypes.EXPLOSION_NORMAL, (d0 + this.explosionX) / 2.0D, (d1 + this.explosionY) / 2.0D, (d2 + this.explosionZ) / 2.0D, d3, d4, d5, new int[0]);
+                    this.getEntityWorld().spawnParticle(EnumParticleTypes.SMOKE_NORMAL, d0, d1, d2, d3, d4, d5, new int[0]);
                 }
 
                 if (iblockstate.getMaterial() != Material.AIR)
                 {
                     if (block.canDropFromExplosion(this))
                     {
-                        block.dropBlockAsItemWithChance(this.worldObj, blockpos, this.worldObj.getBlockState(blockpos), 1.0F / this.explosionSize, 0);
+                        block.dropBlockAsItemWithChance(this.getEntityWorld(), blockpos, this.getEntityWorld().getBlockState(blockpos), 1.0F / this.explosionSize, 0);
                     }
 
-                    block.onBlockExploded(this.worldObj, blockpos, this);
+                    block.onBlockExploded(this.getEntityWorld(), blockpos, this);
                 }
             }
         }*/
@@ -412,7 +412,7 @@ public class BombombAICombat extends AIBase<EntityBombomb>
 
 	private void findAttackTarget(EntityBombomb bombomb)
 	{
-		List<Entity> entitiesAroundMe = EntityUtil.getAllEntitiesWithinDistanceOfCoordinates(bombomb.worldObj, bombomb.posX, bombomb.posY, bombomb.posZ, 10);
+		List<Entity> entitiesAroundMe = EntityUtil.getAllEntitiesWithinDistanceOfCoordinates(bombomb.getEntityWorld(), bombomb.posX, bombomb.posY, bombomb.posZ, 10);
 		double distance = 100.0D;
 		EntityLivingBase target = null;
 

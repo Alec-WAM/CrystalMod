@@ -150,7 +150,7 @@ public class GuiLiquidPipe extends GuiContainer {
 	      return;
 	    }
 	    
-	    ItemStack st = Minecraft.getMinecraft().thePlayer.inventory.getItemStack();
+	    ItemStack st = CrystalMod.proxy.getClientPlayer().inventory.getItemStack();
 	    FluidFilter filter = getFilter();
 	    if(filter == null && ItemStackTools.isNullStack(st)) {
 	      return;

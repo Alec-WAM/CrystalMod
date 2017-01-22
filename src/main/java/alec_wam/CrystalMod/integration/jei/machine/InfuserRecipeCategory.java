@@ -60,25 +60,6 @@ public class InfuserRecipeCategory extends BlankRecipeCategory<InfuserRecipeCate
 		}
 		
 		@Override
-		public @Nonnull List<?> getInputs() {
-		    List<ItemStack> inputStacks = recipe.getInputs();
-		    return inputStacks != null ? inputStacks : new ArrayList<ItemStack>();
-		}
-		
-		@Override
-		public @Nonnull List<?> getOutputs() {
-		    ItemStack out = recipe.getOutput();
-		    return out != null ? Lists.newArrayList(out) : new ArrayList<ItemStack>();
-		}
-		
-		@Override
-		public @Nonnull List<FluidStack> getFluidInputs() {
-			List<FluidStack> list = new ArrayList<FluidStack>();
-			list.add(recipe.getFluidInput());
-			return list;
-		}
-		
-		@Override
 	    public List<String> getTooltipStrings(int mouseX, int mouseY) {
 	      /*List<String> res = new ArrayList<String>(1);
 	      FluidStack output = recipe.getFluidInput();
@@ -112,11 +93,11 @@ public class InfuserRecipeCategory extends BlankRecipeCategory<InfuserRecipeCate
 		public void getIngredients(IIngredients ingredients) {
 			IStackHelper stackHelper = jeiHelpers.getStackHelper();
 
-			List<List<ItemStack>> inputs = stackHelper.expandRecipeItemStackInputs(getInputs());
+			List<List<ItemStack>> inputs = stackHelper.expandRecipeItemStackInputs(recipe.getInputs());
 			ingredients.setInputLists(ItemStack.class, inputs);
 			
 			List<List<FluidStack>> fluids = Lists.newArrayList();
-			fluids.add(getFluidInputs());
+			fluids.add(Lists.newArrayList(recipe.getFluidInput()));
 			ingredients.setInputLists(FluidStack.class, fluids);
 
 			ItemStack recipeOutput = recipe.getOutput();
@@ -187,17 +168,11 @@ public class InfuserRecipeCategory extends BlankRecipeCategory<InfuserRecipeCate
 	}
 
 	@Override
-	public void drawAnimations(@Nonnull Minecraft minecraft) {
+	public void drawExtras(@Nonnull Minecraft minecraft) {
 		arrow.draw(minecraft, 49-xOff, 33-yOff);
 		arrow2.draw(minecraft, 103-xOff, 33-yOff);
 	}
 	
-	@Override
-	public void drawExtras(@Nonnull Minecraft minecraft) {
-	    if(currentRecipe == null) {
-	      return;
-	    }
-  	}
 
 	@Override
 	public void setRecipe(IRecipeLayout recipeLayout, InfuserJEIRecipe recipeWrapper, IIngredients ingredients) {

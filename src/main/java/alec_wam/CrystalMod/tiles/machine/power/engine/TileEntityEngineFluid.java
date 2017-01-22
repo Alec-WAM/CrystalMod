@@ -64,7 +64,7 @@ public abstract class TileEntityEngineFluid extends TileEntityEngineBase {
 			fuel.setValue(fuel.getValue()+getFuelEnergyValue(tank.getFluid()));
 			renderFluid = tank.getFluid();
 			maxFuel.setValue(fuel.getValue());
-			tank.drain(getFuelUsage(), !worldObj.isRemote);
+			tank.drain(getFuelUsage(), !getWorld().isRemote);
 		}
 	}
 	

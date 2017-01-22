@@ -3,7 +3,6 @@ package alec_wam.CrystalMod.items.guide.page;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Random;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
@@ -15,11 +14,9 @@ import alec_wam.CrystalMod.api.guide.GuidePage;
 import alec_wam.CrystalMod.client.util.comp.GuiComponentSprite;
 import alec_wam.CrystalMod.client.util.comp.GuiComponentStandardRecipePage;
 import alec_wam.CrystalMod.items.guide.GuiGuideChapter;
-import alec_wam.CrystalMod.tiles.machine.ContainerNull;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.Lang;
-import alec_wam.CrystalMod.util.ModLogger;
 import alec_wam.CrystalMod.util.Util;
 import alec_wam.CrystalMod.util.client.RenderUtil;
 import net.minecraft.client.Minecraft;
@@ -28,12 +25,12 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.RenderItem;
-import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.item.crafting.ShapelessRecipes;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
@@ -51,16 +48,16 @@ public class PageCrafting extends GuidePage {
 
 	protected static RenderItem itemRenderer = Minecraft.getMinecraft().getRenderItem();
 	public Object[] ingred;
-	public ItemStack[] items;
+	public NonNullList<ItemStack> items;
 	private IRecipe currentRecipe;
 	private ItemStack output;
-	private List<ItemStack> stacks;
+	private NonNullList<ItemStack> stacks;
 	
 	public PageCrafting(String id, ItemStack item){
-		this(id, Collections.singletonList(item));
+		this(id, NonNullList.withSize(1, item));
 	}
 	
-	public PageCrafting(String id, List<ItemStack> resultingItem) {
+	public PageCrafting(String id, NonNullList<ItemStack> resultingItem) {
 		super(id);
 		stacks = resultingItem;
 		if(!resultingItem.isEmpty())updateItem(resultingItem.get(0));
@@ -131,11 +128,11 @@ public class PageCrafting extends GuidePage {
 		}*/
 		IRecipe recipe = getFirstRecipeForItem(out);
 		this.ingred = new Object[9];
-		this.items = new ItemStack[9];
+		this.items = NonNullList.withSize(9, ItemStackTools.getEmptyStack());
 		this.currentRecipe = recipe;
 		
 		this.output = recipe !=null ? recipe.getRecipeOutput() : out;
-		ItemStack[] stacks = new ItemStack[9];
+		NonNullList<ItemStack> stacks = NonNullList.withSize(9, ItemStackTools.getEmptyStack());
         int width = 3;
         int height = 3;
 
@@ -143,12 +140,17 @@ public class PageCrafting extends GuidePage {
             ShapedRecipes shaped = (ShapedRecipes)recipe;
             width = shaped.recipeWidth;
             height = shaped.recipeHeight;
-            this.ingred = stacks = shaped.recipeItems;
+            this.ingred = shaped.recipeItems;
+            stacks = NonNullList.withSize(shaped.recipeItems.length, ItemStackTools.getEmptyStack());
+            for(int i = 0; i < shaped.recipeItems.length; i++){
+            	stacks.set(i, shaped.recipeItems[i]);
+            }
         }
         else if(recipe instanceof ShapelessRecipes){
             ShapelessRecipes shapeless = (ShapelessRecipes)recipe;
             for(int i = 0; i < shapeless.recipeItems.size(); i++){
-            	ingred[i] = stacks[i] = shapeless.recipeItems.get(i);
+            	ingred[i] = shapeless.recipeItems.get(i);
+            	stacks.set(i, shapeless.recipeItems.get(i));
             }
         }
         else if(recipe instanceof ShapedOreRecipe){
@@ -163,7 +165,7 @@ public class PageCrafting extends GuidePage {
                 Object input = shaped.getInput()[i];
                 if(input != null){
                 	ingred[i] = input;
-                    stacks[i] = input instanceof ItemStack ? (ItemStack)input : (((List<ItemStack>)input).isEmpty() ? ItemStackTools.getEmptyStack() : getRandomIngredient(((List<ItemStack>)input)));
+                    stacks.set(i, input instanceof ItemStack ? (ItemStack)input : (((List<ItemStack>)input).isEmpty() ? ItemStackTools.getEmptyStack() : getRandomIngredient(((List<ItemStack>)input))));
                 }
             }
         }
@@ -172,19 +174,19 @@ public class PageCrafting extends GuidePage {
             for(int i = 0; i < shapeless.getInput().size(); i++){
                 Object input = shapeless.getInput().get(i);
                 ingred[i] = input;
-                stacks[i] = input instanceof ItemStack ? (ItemStack)input : (((List<ItemStack>)input).isEmpty() ? ItemStackTools.getEmptyStack() : getRandomIngredient(((List<ItemStack>)input)));
+                stacks.set(i, input instanceof ItemStack ? (ItemStack)input : (((List<ItemStack>)input).isEmpty() ? ItemStackTools.getEmptyStack() : getRandomIngredient(((List<ItemStack>)input))));
             }
         }
         
-        for(int i = 0; i < stacks.length; i++){
-        	ItemStack stack = stacks[i];
+        for(int i = 0; i < stacks.size(); i++){
+        	ItemStack stack = stacks.get(i);
             if(ItemStackTools.isValid(stack)){
 	        	ItemStack copy = ItemUtil.copy(stack, 1);
 	            if(copy.getItemDamage() == OreDictionary.WILDCARD_VALUE){
 	                copy.setItemDamage(0);
 	            }
 	        	int index = getCraftingIndex(i, width, height);
-	            items[index] = copy;
+	            items.set(index, copy);
             }
         }
        /* for(int x = 0; x < width; x++){
@@ -305,7 +307,7 @@ public class PageCrafting extends GuidePage {
 		ItemStack outputStack = output;
 		
 		if(!ItemStackTools.isNullStack(outputStack)){
-			drawItemStack(outputStack, startX + 150, startY+40, ""+(outputStack.stackSize > 1 ? outputStack.stackSize : ""));
+			drawItemStack(outputStack, startX + 150, startY+40, ""+(ItemStackTools.getStackSize(outputStack) > 1 ? ItemStackTools.getStackSize(outputStack) : ""));
 			
 			if (mouseX > startX + 150 - 2 && mouseX < startX + 150 - 2 + itemBoxSize &&
 					mouseY > startY+40 - 2 && mouseY < startY+40 - 2 + itemBoxSize) {
@@ -315,8 +317,8 @@ public class PageCrafting extends GuidePage {
 		
 		if(items != null){
 			ItemStack tooltip = ItemStackTools.getEmptyStack();
-			for (int i = 0; i < items.length; i++) {
-				ItemStack input = items[i];
+			for (int i = 0; i < items.size(); i++) {
+				ItemStack input = items.get(i);
 				/*if (ingred[i] !=null && ingred[i] instanceof ItemStack) {
 					ItemStack input = (ItemStack)ingred[i];*/
 					if(ItemStackTools.isValid(input)){
@@ -364,7 +366,7 @@ public class PageCrafting extends GuidePage {
 
 		GL11.glColor3f(1, 1, 1);
 		GL11.glDisable(GL11.GL_LIGHTING);
-		List<String> list = stack.getTooltip(mc.thePlayer, mc.gameSettings.advancedItemTooltips);
+		List<String> list = stack.getTooltip(mc.player, mc.gameSettings.advancedItemTooltips);
 
 		List<String> colored = Lists.newArrayListWithCapacity(list.size());
 		Iterator<String> it = list.iterator();

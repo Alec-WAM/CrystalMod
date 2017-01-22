@@ -115,7 +115,7 @@ public class ContainerExtendedInventory extends Container
     @Override
     public void onCraftMatrixChanged(IInventory par1IInventory)
     {
-        this.craftResult.setInventorySlotContents(0, CraftingManager.getInstance().findMatchingRecipe(this.craftMatrix, this.thePlayer.worldObj));
+        this.craftResult.setInventorySlotContents(0, CraftingManager.getInstance().findMatchingRecipe(this.craftMatrix, this.thePlayer.getEntityWorld()));
     }
 
     /**
@@ -259,7 +259,7 @@ public class ContainerExtendedInventory extends Container
                 return ItemStackTools.getEmptyStack();
             }
 
-            slot.onPickupFromSlot(par1EntityPlayer, itemstack1);
+            slot.onTake(par1EntityPlayer, itemstack1);
         }
 
         return itemstack;

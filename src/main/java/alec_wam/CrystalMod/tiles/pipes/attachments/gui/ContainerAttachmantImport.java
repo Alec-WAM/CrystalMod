@@ -24,15 +24,15 @@ public class ContainerAttachmantImport extends Container {
 
 	public class SlotGhostItem extends Slot {
 		private IItemStackInventory itemInv;
-		public final int xPos;
-		public final int yPos;
+		public final int xPos2;
+		public final int yPos2;
 
         public SlotGhostItem(IItemStackInventory inventory, int slotIndex, int x, int y)
         {
             super(inventory, slotIndex, x, y);
             itemInv = inventory;
-            xPos = x;
-            yPos = y;
+            xPos2 = x;
+            yPos2 = y;
         }
 
         @Override
@@ -139,11 +139,11 @@ public class ContainerAttachmantImport extends Container {
 			if(slot instanceof SlotGhostItem){
 	        	SlotGhostItem ghost = (SlotGhostItem)slot;
 	        	if(!vis){
-	        		ghost.xDisplayPosition = -3000;
-	        		ghost.yDisplayPosition = -3000;
+	        		ghost.xPos = -3000;
+	        		ghost.xPos = -3000;
 	        	}else{
-	        		ghost.xDisplayPosition = ghost.xPos;
-	        		ghost.yDisplayPosition = ghost.yPos;
+	        		ghost.xPos = ghost.xPos2;
+	        		ghost.xPos = ghost.yPos2;
 	        	}
 	        }
 		}
@@ -183,13 +183,13 @@ public class ContainerAttachmantImport extends Container {
 	                                    }
 	                                    if (!ItemStackTools.isNullStack(slotStack) && ItemUtil.canCombine(slotStack, heldStack))
 	                                    {
-	                                        GhostItemHelper.incrementGhostAmout(slotStack, heldStack.stackSize);
+	                                        GhostItemHelper.incrementGhostAmout(slotStack, ItemStackTools.getStackSize(heldStack));
 	                                        slot.putStack(slotStack);
 	                                        CrystalModNetwork.sendToAllAround(new PacketPipe(pipe, "FilterGhost", dir, slot+";"+GhostItemHelper.getItemGhostAmount(slotStack)), pipe);
 	                                    } else
 	                                    {
 	                                        ItemStack copyStack = heldStack.copy();
-	                                        GhostItemHelper.setItemGhostAmount(copyStack, copyStack.stackSize);
+	                                        GhostItemHelper.setItemGhostAmount(copyStack, ItemStackTools.getStackSize(copyStack));
 	                                        ItemStackTools.setStackSize(copyStack, 1);
 	                                        slot.putStack(copyStack);
 	                                        CrystalModNetwork.sendToAllAround(new PacketPipe(pipe, "FilterGhost", dir, slot+";"+GhostItemHelper.getItemGhostAmount(copyStack)), pipe);

@@ -34,7 +34,7 @@ public class BlockStocker extends BlockMachine {
 	}
 
 	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, ItemStack held, EnumFacing side,float hX, float hY, float hZ){
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side,float hX, float hY, float hZ){
 		if(!player.isSneaking()){
 			player.openGui(CrystalMod.instance, 0, world, pos.getX(), pos.getY(), pos.getZ());
 			return true;

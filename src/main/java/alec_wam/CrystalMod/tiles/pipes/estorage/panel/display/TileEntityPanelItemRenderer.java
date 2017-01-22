@@ -1,30 +1,22 @@
 package alec_wam.CrystalMod.tiles.pipes.estorage.panel.display;
 
-import java.awt.Color;
-
-import org.lwjgl.opengl.GL11;
-
+import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.util.client.RenderUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.renderer.block.model.IBakedModel;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.init.Items;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemBanner;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemSkull;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.storage.MapData;
 
 public class TileEntityPanelItemRenderer<T extends TileEntityPanelItem> extends TileEntitySpecialRenderer<T> {
@@ -164,7 +156,7 @@ public class TileEntityPanelItemRenderer<T extends TileEntityPanelItem> extends 
 			GlStateManager.translate( 0.0f, 0.14f, 0 );
 			if(sis.getItem() instanceof net.minecraft.item.ItemMap){
 				bindTexture(new ResourceLocation("textures/map/map_background.png"));
-				MapData mapdata = Items.FILLED_MAP.getMapData(sis, Minecraft.getMinecraft().theWorld);
+				MapData mapdata = Items.FILLED_MAP.getMapData(sis, CrystalMod.proxy.getClientWorld());
 
 		        if (mapdata != null)
 		        {

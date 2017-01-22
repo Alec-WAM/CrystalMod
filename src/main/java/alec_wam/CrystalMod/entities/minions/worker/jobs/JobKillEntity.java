@@ -41,7 +41,7 @@ public class JobKillEntity extends WorkerJob {
 	
 	@Override
 	public boolean run(EntityMinionWorker worker, TileWorksiteBase worksite) {
-		if(worker.worldObj.isRemote) return false;
+		if(worker.getEntityWorld().isRemote) return false;
 		if(this.animalToKill == null || this.animalToKill.isDead) return true;
 		if(worksite == null || !(worksite instanceof WorksiteAnimalFarm)) return true;
 		WorksiteAnimalFarm aFarm = (WorksiteAnimalFarm)worksite;
@@ -53,7 +53,7 @@ public class JobKillEntity extends WorkerJob {
 		if(held == null){
 			return true;
 		}
-		EntityPlayer player = FakePlayerUtil.getPlayer((WorldServer)worker.worldObj);
+		EntityPlayer player = FakePlayerUtil.getPlayer((WorldServer)worker.getEntityWorld());
 		worker.getLookHelper().setLookPositionWithEntity(animalToKill, 10, 40);
 		double d = worker.getDistanceToEntity(animalToKill);
 		if(d <= 2.5D){

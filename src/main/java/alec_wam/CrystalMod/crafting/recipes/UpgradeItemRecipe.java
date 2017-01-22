@@ -4,17 +4,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import alec_wam.CrystalMod.CrystalMod;
-import alec_wam.CrystalMod.items.ItemDragonWings;
-import alec_wam.CrystalMod.items.ModItems;
-import alec_wam.CrystalMod.items.ItemIngot.IngotType;
-import alec_wam.CrystalMod.util.ItemNBTHelper;
-import alec_wam.CrystalMod.util.ItemUtil;
-import alec_wam.CrystalMod.util.ModLogger;
-
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
+import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.items.ItemDragonWings;
+import alec_wam.CrystalMod.items.ItemIngot.IngotType;
+import alec_wam.CrystalMod.items.ModItems;
+import alec_wam.CrystalMod.util.ItemNBTHelper;
+import alec_wam.CrystalMod.util.ItemStackTools;
+import alec_wam.CrystalMod.util.ItemUtil;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.inventory.InventoryCrafting;
@@ -22,6 +21,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.RecipeSorter;
 
@@ -31,7 +31,7 @@ public class UpgradeItemRecipe implements IRecipe {
         RecipeSorter.register(CrystalMod.MODID.toLowerCase() + ":itemupgrade", UpgradeItemRecipe.class, RecipeSorter.Category.SHAPELESS, "after:minecraft:shapeless");
     }
 
-    private ItemStack modifiedItem = null;
+    private ItemStack modifiedItem = ItemStackTools.getEmptyStack();
     private Map<Integer, ItemStack> byproducts = Maps.newHashMap();
     
     public UpgradeItemRecipe() {
@@ -178,13 +178,13 @@ public class UpgradeItemRecipe implements IRecipe {
     }
 
 	@Override
-	public ItemStack[] getRemainingItems(InventoryCrafting inv) {
-		ItemStack[] array = new ItemStack[inv.getSizeInventory()];
+	public NonNullList<ItemStack> getRemainingItems(InventoryCrafting inv) {
+		NonNullList<ItemStack> array = NonNullList.withSize(inv.getSizeInventory(), ItemStackTools.getEmptyStack());
 		for(Entry<Integer, ItemStack> entry : byproducts.entrySet()){
 			int slot = entry.getKey();
 			ItemStack stack = entry.getValue();
-			if(slot >= 0 && slot < array.length){
-				array[slot] = stack.copy();
+			if(slot >= 0 && slot < array.size()){
+				array.set(slot, stack.copy());
 			}
 		}
 		byproducts.clear();

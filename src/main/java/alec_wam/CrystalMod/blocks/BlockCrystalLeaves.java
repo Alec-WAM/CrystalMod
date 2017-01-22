@@ -19,6 +19,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumBlockRenderType;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -94,7 +95,8 @@ public class BlockCrystalLeaves extends BlockLeaves implements ICustomModel
      * returns a list of blocks with the same ID, but different meta (eg: wood returns 4 blocks)
      */
     @SideOnly(Side.CLIENT)
-    public void getSubBlocks(Item itemIn, CreativeTabs tab, List<ItemStack> list)
+    @Override
+    public void getSubBlocks(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> list)
     {
     	for(BlockCrystalLog.WoodType type : BlockCrystalLog.WoodType.values()){
     		list.add(new ItemStack(itemIn, 1, type.getMeta()));

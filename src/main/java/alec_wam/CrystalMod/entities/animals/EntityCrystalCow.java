@@ -36,7 +36,7 @@ public class EntityCrystalCow extends EntityCow implements net.minecraftforge.co
 
     public EntityCrystalCow createChild(EntityAgeable ageable)
     {
-    	EntityCrystalCow cow = new EntityCrystalCow(this.worldObj);
+    	EntityCrystalCow cow = new EntityCrystalCow(this.getEntityWorld());
     	if(ageable instanceof EntityCrystalCow){
     		cow.setColor(((EntityCrystalCow)ageable).getColor());
     	}
@@ -50,7 +50,7 @@ public class EntityCrystalCow extends EntityCow implements net.minecraftforge.co
 	
 	public int getDelay()
     {
-        return this.worldObj.isRemote ? this.dataManager.get(DELAY) : this.crystalDelay;
+        return this.getEntityWorld().isRemote ? this.dataManager.get(DELAY) : this.crystalDelay;
     }
 	
 	public int getColor()
@@ -89,7 +89,7 @@ public class EntityCrystalCow extends EntityCow implements net.minecraftforge.co
     public void onLivingUpdate()
     {
         super.onLivingUpdate();
-        if(!worldObj.isRemote){
+        if(!getEntityWorld().isRemote){
         	if(getDelay() > 0){
         		final int delay = getDelay();
         		setDelay(delay-1);

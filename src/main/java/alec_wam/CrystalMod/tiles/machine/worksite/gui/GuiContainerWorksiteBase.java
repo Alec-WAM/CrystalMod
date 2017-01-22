@@ -20,6 +20,7 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
+import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.client.container.ContainerMessageBase;
 import alec_wam.CrystalMod.client.container.IContainerGuiCallback;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
@@ -174,7 +175,7 @@ public abstract class GuiContainerWorksiteBase extends GuiContainer implements I
 
 	protected final void closeGui() {
 		if (onGuiCloseRequested()) {
-			Minecraft.getMinecraft().thePlayer.closeScreen();
+			CrystalMod.proxy.getClientPlayer().closeScreen();
 		}
 	}
 
@@ -228,7 +229,7 @@ public abstract class GuiContainerWorksiteBase extends GuiContainer implements I
 		}
 		Minecraft.getMinecraft().renderEngine.bindTexture(GuiElement.widgetTexture1);
 		for (Slot slot : (List<Slot>) this.inventorySlots.inventorySlots) {
-			drawTexturedModalRect(slot.xDisplayPosition - 1 + guiLeft,	slot.yDisplayPosition - 1 + guiTop, 152, 120, 18, 18);
+			drawTexturedModalRect(slot.xPos - 1 + guiLeft,	slot.yPos - 1 + guiTop, 152, 120, 18, 18);
 		}
 	}
 

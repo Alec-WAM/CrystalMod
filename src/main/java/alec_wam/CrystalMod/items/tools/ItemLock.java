@@ -36,8 +36,9 @@ public class ItemLock extends Item {
     }
 	
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand)
+	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand hand)
     {
+		ItemStack itemStackIn = playerIn.getHeldItem(hand);
 		EnumHand opp = hand == EnumHand.MAIN_HAND ? EnumHand.OFF_HAND : EnumHand.MAIN_HAND;
 		ItemStack heldOpp = playerIn.getHeldItem(opp);
 		if(ItemStackTools.isValid(heldOpp)){

@@ -2,6 +2,7 @@ package alec_wam.CrystalMod.network.packets;
 
 import java.io.IOException;
 
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ModLogger;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -25,7 +26,7 @@ public class ByteBufUtils
 
         buf.writeShort(Item.getIdFromItem(stack.getItem()));
         buf.writeShort(stack.getItemDamage());
-        buf.writeInt(stack.stackSize);
+        buf.writeInt(ItemStackTools.getStackSize(stack));
 
         NBTTagCompound tag = null;
         if (stack.getItem().isDamageable() == true || stack.getItem().getShareTag() == true)

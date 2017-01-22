@@ -51,6 +51,7 @@ import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.ResourceLocation;
@@ -187,7 +188,7 @@ public class ItemUtil {
     }
 
     ItemStack stack = (ItemStack) parseStringIntoRecipeItem(string, true);
-    stack.stackSize = MathHelper.clamp_int(size, 1, stack.getMaxStackSize());
+    ItemStackTools.setStackSize(stack, MathHelper.clamp(size, 1, stack.getMaxStackSize()));
     return stack;
   }
 
@@ -255,7 +256,7 @@ public class ItemUtil {
               {
                   entityitem.getEntityItem().setTagCompound((NBTTagCompound) itemstack.getTagCompound().copy());
               }
-              world.spawnEntityInWorld(entityitem);
+              world.spawnEntity(entityitem);
           }
       }
   }
@@ -291,7 +292,7 @@ public class ItemUtil {
               {
                   entityitem.getEntityItem().setTagCompound((NBTTagCompound) itemstack.getTagCompound().copy());
               }
-              world.spawnEntityInWorld(entityitem);
+              world.spawnEntity(entityitem);
           }
       }
   }
@@ -339,8 +340,8 @@ public class ItemUtil {
     entity.motionY += f1;
     entity.motionZ += f2;
 
-    if(!entity.worldObj.isRemote)
-    entity.worldObj.spawnEntityInWorld(entity);
+    if(!entity.getEntityWorld().isRemote)
+    entity.getEntityWorld().spawnEntity(entity);
   }
   
   public static void spawnItemsInWorldWithoutMotion(World world, List<ItemStack> items, BlockPos pos) {
@@ -385,8 +386,8 @@ public class ItemUtil {
     entity.motionX = entity.motionY = entity.motionZ = 0.0D;
 	entity.setDefaultPickupDelay();
 
-    if(!entity.worldObj.isRemote)
-    entity.worldObj.spawnEntityInWorld(entity);
+    if(!entity.getEntityWorld().isRemote)
+    entity.getEntityWorld().spawnEntity(entity);
   }
 
   
@@ -449,13 +450,13 @@ public class ItemUtil {
 	  return false;
   }
   
-  public static List<ItemStack> getMatchingOreStacks(ItemStack stack){
-	  if(ItemStackTools.isNullStack(stack)) return Lists.newArrayList();
+  public static NonNullList<ItemStack> getMatchingOreStacks(ItemStack stack){
+	  if(ItemStackTools.isNullStack(stack)) return NonNullList.create();
 	  int[] ids = OreDictionary.getOreIDs(stack);
 	  if(ids == null || ids.length == 0){
-		  return Collections.singletonList(stack);
+		  return NonNullList.withSize(1, stack);
 	  }
-	  List<ItemStack> stacks = Lists.newArrayList();
+	  NonNullList<ItemStack> stacks = NonNullList.create();
 	  for(int id : ids){
 		  for(ItemStack oreStack : OreDictionary.getOres(OreDictionary.getOreName(id))){
 			  if(!ItemStackTools.isNullStack(oreStack) && ItemStackTools.getStackSize(oreStack) == ItemStackTools.getStackSize(stack)){
@@ -1060,6 +1061,25 @@ public class ItemUtil {
 	}
 
 	/** Writes the contents of the inventory to the tag */
+	public static void writeInventoryToNBT(NonNullList<ItemStack> stacks, NBTTagCompound tag) {
+		writeInventoryToNBT(stacks, tag, "Items");
+	}
+	
+	public static void writeInventoryToNBT(NonNullList<ItemStack> stacks, NBTTagCompound tag, String list) {
+		NBTTagList nbttaglist = new NBTTagList();
+
+	    for(int i = 0; i < stacks.size(); i++) {
+	      if(!ItemStackTools.isNullStack(stacks.get(i))) {
+	        NBTTagCompound itemTag = new NBTTagCompound();
+	        itemTag.setByte("Slot", (byte) i);
+	        stacks.get(i).writeToNBT(itemTag);
+	        nbttaglist.appendTag(itemTag);
+	      }
+	    }
+
+	    tag.setTag(list, nbttaglist);
+	}
+
 	public static void writeInventoryToNBT(IInventory inventory, NBTTagCompound tag) {
 		NBTTagList nbttaglist = new NBTTagList();
 
@@ -1075,22 +1095,24 @@ public class ItemUtil {
 	    tag.setTag("Items", nbttaglist);
 	}
 	
-	public static void writeInventoryToNBT(ItemStack[] stacks, NBTTagCompound tag, String list) {
-		NBTTagList nbttaglist = new NBTTagList();
+	/** Reads a an inventory from the tag. Overwrites current content */
+	public static void readInventoryFromNBT(NonNullList<ItemStack> stacks, NBTTagCompound tag) {
+		readInventoryFromNBT(stacks, tag, "Items");
+	}
+	
+	public static void readInventoryFromNBT(NonNullList<ItemStack> stacks, NBTTagCompound tag, String list) {
+	    NBTTagList nbttaglist = tag.getTagList(list, 10);
 
-	    for(int i = 0; i < stacks.length; i++) {
-	      if(!ItemStackTools.isNullStack(stacks[i])) {
-	        NBTTagCompound itemTag = new NBTTagCompound();
-	        itemTag.setByte("Slot", (byte) i);
-	        stacks[i].writeToNBT(itemTag);
-	        nbttaglist.appendTag(itemTag);
+	    for(int i = 0; i < nbttaglist.tagCount(); ++i) {
+	      NBTTagCompound itemTag = nbttaglist.getCompoundTagAt(i);
+	      int slot = itemTag.getByte("Slot");
+
+	      if(slot >= 0 && slot < stacks.size()) {
+	    	  stacks.set(slot, ItemStackTools.loadFromNBT(itemTag));
 	      }
 	    }
-
-	    tag.setTag(list, nbttaglist);
 	}
-
-	/** Reads a an inventory from the tag. Overwrites current content */
+	
 	public static void readInventoryFromNBT(IInventory inventory, NBTTagCompound tag) {
 	    NBTTagList nbttaglist = tag.getTagList("Items", 10);
 
@@ -1100,19 +1122,6 @@ public class ItemUtil {
 
 	      if(slot >= 0 && slot < inventory.getSizeInventory()) {
 	        inventory.setInventorySlotContents(slot, ItemStackTools.loadFromNBT(itemTag));
-	      }
-	    }
-	}
-	
-	public static void readInventoryFromNBT(ItemStack[] stacks, NBTTagCompound tag, String list) {
-	    NBTTagList nbttaglist = tag.getTagList(list, 10);
-
-	    for(int i = 0; i < nbttaglist.tagCount(); ++i) {
-	      NBTTagCompound itemTag = nbttaglist.getCompoundTagAt(i);
-	      int slot = itemTag.getByte("Slot");
-
-	      if(slot >= 0 && slot < stacks.length) {
-	    	  stacks[slot] = ItemStackTools.loadFromNBT(itemTag);
 	      }
 	    }
 	}
@@ -1324,11 +1333,11 @@ public class ItemUtil {
 	}
 	
 	public static EntityItem dropFromPlayer(EntityPlayer player, ItemStack stack, boolean motion) {
-		EntityItem ei = new EntityItem(player.worldObj,	player.posX, player.posY + player.getEyeHeight(), player.posZ, stack);
+		EntityItem ei = new EntityItem(player.getEntityWorld(),	player.posX, player.posY + player.getEyeHeight(), player.posZ, stack);
 		ei.setDefaultPickupDelay();
 		if(motion){
-			float f1 = player.worldObj.rand.nextFloat() * 0.5F;
-			float f2 = player.worldObj.rand.nextFloat() * (float) Math.PI * 2.0F;
+			float f1 = player.getEntityWorld().rand.nextFloat() * 0.5F;
+			float f2 = player.getEntityWorld().rand.nextFloat() * (float) Math.PI * 2.0F;
 			ei.motionX = (double) (-MathHelper.sin(f2) * f1);
 			ei.motionZ = (double) (MathHelper.cos(f2) * f1);
 			ei.motionY = 0.20000000298023224D;
@@ -1425,8 +1434,8 @@ public class ItemUtil {
 	}
 	
 	/**Returns stacks that correspond to the provided IEnumMeta enum array**/
-	public static List<ItemStack> getBlockSubtypes(Block obj, IEnumMeta...array){
-		List<ItemStack> list = Lists.newArrayList();
+	public static NonNullList<ItemStack> getBlockSubtypes(Block obj, IEnumMeta...array){
+		NonNullList<ItemStack> list = NonNullList.create();
 		for(IEnumMeta type : array){
 			list.add(new ItemStack(obj, 1, type.getMeta()));
 		}
@@ -1434,8 +1443,8 @@ public class ItemUtil {
 	}
 
 	/**Returns stacks that correspond to the provided IEnumMetaItem enum array**/
-	public static List<ItemStack> getItemSubtypes(Item obj, IEnumMetaItem... array){
-		List<ItemStack> list = Lists.newArrayList();
+	public static NonNullList<ItemStack> getItemSubtypes(Item obj, IEnumMetaItem... array){
+		NonNullList<ItemStack> list = NonNullList.create();
 		for(IEnumMetaItem type : array){
 			list.add(new ItemStack(obj, 1, type.getMetadata()));
 		}

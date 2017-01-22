@@ -22,6 +22,7 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
@@ -34,10 +35,10 @@ public class CraftingPattern {
 	private IRecipe recipe;
     private IAutoCrafter crafter;
     private ItemStack pattern;
-    private List<ItemStack> inputs = Lists.newArrayList();
-    private List<List<ItemStack>> oreInputs = Lists.newArrayList();
-    private List<ItemStack> outputs = Lists.newArrayList();
-    private List<ItemStack> byproducts = Lists.newArrayList();
+    private NonNullList<ItemStack> inputs = NonNullList.create();
+    private List<NonNullList<ItemStack>> oreInputs = Lists.newArrayList();
+    private NonNullList<ItemStack> outputs = NonNullList.create();
+    private NonNullList<ItemStack> byproducts = NonNullList.create();
     
     //Credit way2muchnoise
     private boolean mekanism;
@@ -46,9 +47,9 @@ public class CraftingPattern {
     public CraftingPattern(World world, IAutoCrafter crafter, ItemStack pattern){
     	this.crafter = crafter;
     	this.pattern = pattern;
-        this.inputs = Lists.newArrayList();
-        this.outputs = Lists.newArrayList();
-        this.byproducts = Lists.newArrayList();
+        this.inputs = NonNullList.create();
+        this.outputs = NonNullList.create();
+        this.byproducts = NonNullList.create();
         
         InventoryCrafting inv = new InventoryCrafting(new Container() {
             @Override
@@ -100,13 +101,13 @@ public class CraftingPattern {
                         }
                         for (Object input : inputs) {
                             if (input == null) {
-                                oreInputs.add(new ArrayList<ItemStack>());
+                                oreInputs.add(NonNullList.create());
                             }
                             else {
 	                            if (input instanceof ItemStack) {
-	                                oreInputs.add(Collections.singletonList(fixItemStack((ItemStack) input)));
+	                                oreInputs.add(NonNullList.withSize(1, fixItemStack((ItemStack) input)));
 	                            } else if(input instanceof List){
-	                            	List<ItemStack> cleaned = new LinkedList<ItemStack>();
+	                            	NonNullList<ItemStack> cleaned = NonNullList.create();
 	                            	for (ItemStack in : (List<ItemStack>) input) {
 	                            		cleaned.add(fixItemStack(in));
 	                            	}
@@ -136,9 +137,9 @@ public class CraftingPattern {
         if (oreInputs.isEmpty()) {
             for (ItemStack input : inputs) {
                 if (ItemStackTools.isNullStack(input)) {
-                    oreInputs.add(new ArrayList<ItemStack>());
+                    oreInputs.add(NonNullList.create());
                 } else {
-                    oreInputs.add(Collections.singletonList(input));
+                    oreInputs.add(NonNullList.withSize(1, input));
                 }
             }
         }
@@ -160,20 +161,20 @@ public class CraftingPattern {
         return ItemPattern.isOredict(pattern);
     }
 
-    public List<ItemStack> getInputs() {
+    public NonNullList<ItemStack> getInputs() {
         return inputs;
     }
 
-    public List<List<ItemStack>> getOreInputs() {
+    public List<NonNullList<ItemStack>> getOreInputs() {
         return oreInputs;
     }
     
-    public List<ItemStack> getOutputs() {
+    public NonNullList<ItemStack> getOutputs() {
         return outputs;
     }
     
-    public List<ItemStack> getOutputs(ItemStack[] took) {
-        List<ItemStack> outputs = new ArrayList<ItemStack>();
+    public NonNullList<ItemStack> getOutputs(NonNullList<ItemStack> took) {
+    	NonNullList<ItemStack> outputs = NonNullList.create();
 
         InventoryCrafting inv = new InventoryCrafting(new Container() {
             @Override
@@ -183,7 +184,7 @@ public class CraftingPattern {
         }, 3, 3);
 
         for (int i = 0; i < 9; ++i) {
-            inv.setInventorySlotContents(i, took[i]);
+            if(i < took.size())inv.setInventorySlotContents(i, took.get(i));
         }
 
         outputs.add(fixItemStack(recipe.getCraftingResult(inv)));
@@ -191,12 +192,12 @@ public class CraftingPattern {
         return outputs;
     }
 
-    public List<ItemStack> getByproducts() {
+    public NonNullList<ItemStack> getByproducts() {
         return byproducts;
     }
     
-    public List<ItemStack> getByproducts(ItemStack[] took) {
-        List<ItemStack> byproducts = new ArrayList<ItemStack>();
+    public NonNullList<ItemStack> getByproducts(NonNullList<ItemStack> took) {
+    	NonNullList<ItemStack> byproducts = NonNullList.create();
 
         InventoryCrafting inv = new InventoryCrafting(new Container() {
             @Override
@@ -206,11 +207,11 @@ public class CraftingPattern {
         }, 3, 3);
 
         for (int i = 0; i < 9; ++i) {
-            inv.setInventorySlotContents(i, took[i]);
+        	if(i < took.size())inv.setInventorySlotContents(i, took.get(i));
         }
 
         for (ItemStack remaining : recipe.getRemainingItems(inv)) {
-            if (!ItemStackTools.isNullStack(remaining)) {
+            if (ItemStackTools.isValid(remaining)) {
                 byproducts.add(fixItemStack(remaining));
             }
         }

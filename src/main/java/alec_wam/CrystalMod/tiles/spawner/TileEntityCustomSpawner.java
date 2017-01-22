@@ -13,7 +13,7 @@ public class TileEntityCustomSpawner extends TileEntityMod {
 	private final CustomSpawnerBaseLogic spawnerBaseLogic = new CustomSpawnerBaseLogic(){
 		public void blockEvent(int par1)
 		{
-			worldObj.addBlockEvent(getPos(), Blocks.MOB_SPAWNER, par1, 0);
+			getWorld().addBlockEvent(getPos(), Blocks.MOB_SPAWNER, par1, 0);
 		}
 		public World getSpawnerWorld()
 		{

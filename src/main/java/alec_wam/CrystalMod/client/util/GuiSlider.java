@@ -50,9 +50,9 @@ public class GuiSlider extends GuiButton
             {
             	float q = ((float)((mouseX - (this.xPosition + 4)) / (float)(this.width - 8)));
                 
-                float d = minValue + (maxValue - minValue) * MathHelper.clamp_float(q, 0.0F, 1.0F);
+                float d = minValue + (maxValue - minValue) * MathHelper.clamp(q, 0.0F, 1.0F);
                 float f = 1.0F * (float)Math.round(d / 1.0F);
-                fin = MathHelper.clamp_float((f - minValue) / (maxValue - minValue), 0.0F, 1.0F);
+                fin = MathHelper.clamp((f - minValue) / (maxValue - minValue), 0.0F, 1.0F);
                 this.sliderValue = (int) (maxValue * fin);
             }
 
@@ -73,9 +73,9 @@ public class GuiSlider extends GuiButton
         {
             float q = ((float)((mouseX - (this.xPosition + 4)) / (float)(this.width - 8)));
             
-            float d = minValue + (maxValue - minValue) * MathHelper.clamp_float(q, 0.0F, 1.0F);
+            float d = minValue + (maxValue - minValue) * MathHelper.clamp(q, 0.0F, 1.0F);
             float f = 1.0F * (float)Math.round(d / 1.0F);
-            this.sliderValue = (int) (maxValue * MathHelper.clamp_float((f - minValue) / (maxValue - minValue), 0.0F, 1.0F));
+            this.sliderValue = (int) (maxValue * MathHelper.clamp((f - minValue) / (maxValue - minValue), 0.0F, 1.0F));
             this.dragging = true;
             return true;
         }

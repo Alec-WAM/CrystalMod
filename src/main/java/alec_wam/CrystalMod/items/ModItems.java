@@ -20,7 +20,6 @@ import alec_wam.CrystalMod.integration.baubles.BaublesIntegration;
 import alec_wam.CrystalMod.integration.baubles.ItemBaubleWings;
 import alec_wam.CrystalMod.items.ItemMetalPlate.PlateType;
 import alec_wam.CrystalMod.items.armor.ItemCustomArmor;
-import alec_wam.CrystalMod.items.backpack.ItemBackpack;
 import alec_wam.CrystalMod.items.game.ItemFlag;
 import alec_wam.CrystalMod.items.guide.ItemCrystalGuide;
 import alec_wam.CrystalMod.items.tools.ItemCrystalAxe;
@@ -122,7 +121,6 @@ public class ModItems {
 	public static ItemWirelessPanel wirelessPanel; 
 	public static ItemPipeAttachment pipeAttachmant;
 	
-	public static ItemBackpack backpack;
 	public static ItemBackpackNormal normalBackpack;
 	public static ItemBackpackBase craftingBackpack;
 	public static ItemBackpackUpgrade backpackupgrade;
@@ -199,7 +197,6 @@ public class ModItems {
 		wirelessPanel = new ItemWirelessPanel();
 		pipeAttachmant = new ItemPipeAttachment();
 		miscCard = new ItemMiscCard();
-		backpack = new ItemBackpack();
 		normalBackpack = new ItemBackpackNormal(new BackpackNormal());
 		craftingBackpack = new ItemBackpackBase(new BackpackCrafting());
 		backpackupgrade = new ItemBackpackUpgrade();

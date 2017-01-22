@@ -66,8 +66,8 @@ public class InventoryWrapper implements ISidedInventory {
   }
 
   @Override
-  public boolean isUseableByPlayer(EntityPlayer entityplayer) {
-    return inv.isUseableByPlayer(entityplayer);
+  public boolean isUsableByPlayer(EntityPlayer entityplayer) {
+    return inv.isUsableByPlayer(entityplayer);
   }
 
   @Override
@@ -145,6 +145,11 @@ public class InventoryWrapper implements ISidedInventory {
   @Override
   public ITextComponent getDisplayName() {
     return inv.getDisplayName();
+  }
+  
+  @Override
+  public boolean isEmpty(){
+	  return inv.isEmpty();
   }
 
 }

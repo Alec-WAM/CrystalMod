@@ -1,7 +1,16 @@
 package alec_wam.CrystalMod.tiles.machine.power.engine;
 
-import java.util.List;
-
+import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.blocks.EnumBlock.IEnumMeta;
+import alec_wam.CrystalMod.blocks.ICustomModel;
+import alec_wam.CrystalMod.tiles.machine.BlockMachine;
+import alec_wam.CrystalMod.tiles.machine.BlockStateMachine;
+import alec_wam.CrystalMod.tiles.machine.power.engine.furnace.TileEntityEngineFurnace;
+import alec_wam.CrystalMod.tiles.machine.power.engine.lava.TileEntityEngineLava;
+import alec_wam.CrystalMod.tiles.machine.power.engine.vampire.TileEntityEngineVampire;
+import alec_wam.CrystalMod.util.ChatUtil;
+import alec_wam.CrystalMod.util.ItemNBTHelper;
+import alec_wam.CrystalMod.util.ItemUtil;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
@@ -14,29 +23,18 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import alec_wam.CrystalMod.CrystalMod;
-import alec_wam.CrystalMod.blocks.ICustomModel;
-import alec_wam.CrystalMod.blocks.EnumBlock.IEnumMeta;
-import alec_wam.CrystalMod.tiles.machine.BlockMachine;
-import alec_wam.CrystalMod.tiles.machine.BlockStateMachine;
-import alec_wam.CrystalMod.tiles.machine.power.engine.furnace.TileEntityEngineFurnace;
-import alec_wam.CrystalMod.tiles.machine.power.engine.lava.TileEntityEngineLava;
-import alec_wam.CrystalMod.tiles.machine.power.engine.vampire.TileEntityEngineVampire;
-import alec_wam.CrystalMod.util.ChatUtil;
-import alec_wam.CrystalMod.util.ItemNBTHelper;
-import alec_wam.CrystalMod.util.ItemUtil;
-import alec_wam.CrystalMod.util.ModLogger;
 
 public class BlockEngine extends BlockMachine implements ICustomModel {
 	
@@ -51,7 +49,8 @@ public class BlockEngine extends BlockMachine implements ICustomModel {
 	}
 
 	@SideOnly(Side.CLIENT)
-	public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list){
+	@Override
+	public void getSubBlocks(Item item, CreativeTabs tab, NonNullList<ItemStack> list){
 		for(EngineType type : EngineType.values()) {
 			for(int i = 0; i < tierMulti.length; i++){
 				ItemStack stack = new ItemStack(item, 1, type.getMeta());
@@ -100,7 +99,7 @@ public class BlockEngine extends BlockMachine implements ICustomModel {
 	}
 	
 	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, ItemStack stack, EnumFacing side, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
     	TileEntity tile = world.getTileEntity(pos);
         if ((tile instanceof TileEntityEngineBase)) {
         	TileEntityEngineBase engine = (TileEntityEngineBase)tile;

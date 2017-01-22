@@ -48,14 +48,14 @@ public class PlayerUtil {
 		// If a player is teleported from the end certain logic elements are ignored in transferPlayerToDimension
 		if (comingFromEnd)
 		{
-			double d0 = (double) MathHelper.clamp_int((int) player.posX, -29999872, 29999872);
-			double d1 = (double) MathHelper.clamp_int((int) player.posZ, -29999872, 29999872);
+			double d0 = (double) MathHelper.clamp((int) player.posX, -29999872, 29999872);
+			double d1 = (double) MathHelper.clamp((int) player.posZ, -29999872, 29999872);
 
 			if (player.isEntityAlive())
 			{
 				player.setLocationAndAngles(d0, player.posY, d1, player.rotationYaw, player.rotationPitch);
-				player.worldObj.spawnEntityInWorld(player);
-				player.worldObj.updateEntityWithOptionalForce(player, false);
+				player.getEntityWorld().spawnEntity(player);
+				player.getEntityWorld().updateEntityWithOptionalForce(player, false);
 			}
 		}
 

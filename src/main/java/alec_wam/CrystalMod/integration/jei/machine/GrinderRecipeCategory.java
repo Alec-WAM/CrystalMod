@@ -1,36 +1,22 @@
 package alec_wam.CrystalMod.integration.jei.machine;
 
-import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nonnull;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fluids.FluidStack;
+import com.google.common.collect.Lists;
+
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.integration.jei.RecipeHandler;
-import alec_wam.CrystalMod.tiles.machine.BasicMachineRecipe;
 import alec_wam.CrystalMod.tiles.machine.crafting.BlockCrystalMachine.MachineType;
 import alec_wam.CrystalMod.tiles.machine.crafting.grinder.ContainerGrinder;
 import alec_wam.CrystalMod.tiles.machine.crafting.grinder.GrinderManager;
 import alec_wam.CrystalMod.tiles.machine.crafting.grinder.GrinderManager.GrinderRecipe;
 import alec_wam.CrystalMod.tiles.machine.crafting.grinder.GuiGrinder;
-import alec_wam.CrystalMod.tiles.machine.crafting.liquidizer.TileEntityLiquidizer;
-import alec_wam.CrystalMod.tiles.machine.crafting.press.ContainerPress;
-import alec_wam.CrystalMod.tiles.machine.crafting.press.GuiPress;
-import alec_wam.CrystalMod.tiles.machine.crafting.press.PressRecipeManager;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.Lang;
-import alec_wam.CrystalMod.util.client.RenderUtil;
-
-import com.google.common.collect.Lists;
-
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.IJeiHelpers;
 import mezz.jei.api.IModRegistry;
@@ -43,6 +29,10 @@ import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.BlankRecipeCategory;
 import mezz.jei.api.recipe.BlankRecipeWrapper;
 import mezz.jei.api.recipe.IStackHelper;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 
 public class GrinderRecipeCategory extends BlankRecipeCategory<GrinderRecipeCategory.GrinderJEIRecipe>  {
 
@@ -55,24 +45,6 @@ public class GrinderRecipeCategory extends BlankRecipeCategory<GrinderRecipeCate
 		public GrinderJEIRecipe(IJeiHelpers jeiHelpers, GrinderRecipe recipe){
 			this.jeiHelpers = jeiHelpers;
 			this.recipe = recipe;
-		}
-		
-		@Override
-		public @Nonnull List<?> getInputs() {
-		    List<ItemStack> inputStacks = recipe.getInputs();
-		    return inputStacks != null ? inputStacks : new ArrayList<ItemStack>();
-		}
-		
-		@Override
-		public @Nonnull List<?> getOutputs() {
-			List<ItemStack> outputStacks = Lists.newArrayList();
-			if(ItemStackTools.isValid(recipe.getMainOutput())){
-				outputStacks.add(recipe.getMainOutput());
-			}
-			if(ItemStackTools.isValid(recipe.getSecondaryOutput())){
-				outputStacks.add(recipe.getSecondaryOutput());
-			}
-			return outputStacks;
 		}
 		
 		@Override
@@ -94,7 +66,7 @@ public class GrinderRecipeCategory extends BlankRecipeCategory<GrinderRecipeCate
 		public void getIngredients(IIngredients ingredients) {
 			IStackHelper stackHelper = jeiHelpers.getStackHelper();
 
-			List<List<ItemStack>> inputs = stackHelper.expandRecipeItemStackInputs(getInputs());
+			List<List<ItemStack>> inputs = stackHelper.expandRecipeItemStackInputs(recipe.getInputs());
 			ingredients.setInputLists(ItemStack.class, inputs);
 
 			List<ItemStack> outputStacks = Lists.newArrayList();
@@ -163,16 +135,9 @@ public class GrinderRecipeCategory extends BlankRecipeCategory<GrinderRecipeCate
 	}
 
 	@Override
-	public void drawAnimations(@Nonnull Minecraft minecraft) {
+	public void drawExtras(@Nonnull Minecraft minecraft) {
 		arrow.draw(minecraft, 80-xOff, 34-yOff);
 	}
-	
-	@Override
-	public void drawExtras(@Nonnull Minecraft minecraft) {
-	    if(currentRecipe == null) {
-	      return;
-	    }
-  	}
 
 	@Override
 	public void setRecipe(IRecipeLayout recipeLayout, GrinderJEIRecipe recipeWrapper, IIngredients arg2) {

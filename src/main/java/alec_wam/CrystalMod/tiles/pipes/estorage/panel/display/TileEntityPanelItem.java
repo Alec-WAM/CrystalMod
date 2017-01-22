@@ -16,12 +16,12 @@ import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.CraftingPattern;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.GuiPanel;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.TileEntityPanel;
 import alec_wam.CrystalMod.util.BlockUtil;
+import alec_wam.CrystalMod.util.ChatUtil;
 import alec_wam.CrystalMod.util.FluidUtil;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.tool.ToolUtil;
 
-import com.enderio.core.common.util.ChatUtil;
 import com.google.common.base.Strings;
 
 public class TileEntityPanelItem extends TileEntityPanel implements IInsertListener {
@@ -34,7 +34,7 @@ public class TileEntityPanelItem extends TileEntityPanel implements IInsertListe
 	
 	public boolean onActivated(EntityPlayer player, EnumHand hand, ItemStack held, EnumFacing side){
 		if(network == null || !connected) return false;
-		if(worldObj.isRemote) return true;
+		if(getWorld().isRemote) return true;
 		ItemStack stack = held;
 		if(!ItemStackTools.isNullStack(stack)){
 			
@@ -113,7 +113,7 @@ public class TileEntityPanelItem extends TileEntityPanel implements IInsertListe
 			if(player.isSneaking()){
 				boolean old = isLocked;
 				isLocked = !old;
-				BlockUtil.markBlockForUpdate(worldObj, pos);
+				BlockUtil.markBlockForUpdate(getWorld(), pos);
 				return true;
 			}
 			
@@ -124,17 +124,18 @@ public class TileEntityPanelItem extends TileEntityPanel implements IInsertListe
 			
 			if(!ItemStackTools.isNullStack(displayItem) && network !=null){
 				boolean changed = false;
-				for(int s = 0; s < player.inventory.mainInventory.length; s++){
-					ItemStack invStack = player.inventory.mainInventory[s];
-					if(!ItemStackTools.isNullStack(invStack) && ItemUtil.canCombine(invStack, displayItem)){
+				int s = 0;
+				for(ItemStack invStack : player.inventory.mainInventory){
+					if(ItemStackTools.isValid(invStack) && ItemUtil.canCombine(invStack, displayItem)){
 						ItemStack insert = network.getItemStorage().addItem(stack, false);
 						stack = insert;
 						if(ItemStackTools.isEmpty(stack)){
 							stack = ItemStackTools.getEmptyStack();
 						}
-						player.inventory.mainInventory[s]=stack;
+						player.inventory.mainInventory.set(s, stack);
 						changed = true;
 					}
+					s++;
 				}
 				if (!player.isHandActive() && changed)
                 {
@@ -172,7 +173,7 @@ public class TileEntityPanelItem extends TileEntityPanel implements IInsertListe
 			displayText = "";
 		}
 		isLocked = nbt.getBoolean("isLocked");
-		if(worldObj !=null && !this.worldObj.isRemote){
+		if(getWorld() !=null && !this.getWorld().isRemote){
 			update = true;
 		}
 	}
@@ -237,7 +238,7 @@ public class TileEntityPanelItem extends TileEntityPanel implements IInsertListe
 	public void onItemInserted(ItemStack stack) {
 		if(!ItemStackTools.isNullStack(stack) && !ItemStackTools.isNullStack(displayItem)){
 			if(ItemUtil.canCombine(stack, displayItem)){
-				if(worldObj !=null && !worldObj.isRemote)
+				if(getWorld() !=null && !getWorld().isRemote)
 				update = true;
 			}
 		}
@@ -247,7 +248,7 @@ public class TileEntityPanelItem extends TileEntityPanel implements IInsertListe
 	public void onItemExtracted(ItemStack stack, int amount) {
 		if(!ItemStackTools.isNullStack(stack) && !ItemStackTools.isNullStack(displayItem) && amount > 0){
 			if(ItemUtil.canCombine(stack, displayItem)){
-				if(worldObj !=null && !worldObj.isRemote)
+				if(getWorld() !=null && !getWorld().isRemote)
 				update = true;
 			}
 		}
@@ -257,7 +258,7 @@ public class TileEntityPanelItem extends TileEntityPanel implements IInsertListe
 	public void onFluidInserted(FluidStack stack) {
 		if(stack !=null && this.displayFluid !=null){
 			if(FluidUtil.canCombine(stack, displayFluid)){
-				if(worldObj !=null && !worldObj.isRemote)
+				if(getWorld() !=null && !getWorld().isRemote)
 				update = true;
 			}
 		}
@@ -267,7 +268,7 @@ public class TileEntityPanelItem extends TileEntityPanel implements IInsertListe
 	public void onFluidExtracted(FluidStack stack, int amount) {
 		if(stack !=null && this.displayFluid !=null && amount > 0){
 			if(FluidUtil.canCombine(stack, displayFluid)){
-				if(worldObj !=null && !worldObj.isRemote)
+				if(getWorld() !=null && !getWorld().isRemote)
 				update = true;
 			}
 		}

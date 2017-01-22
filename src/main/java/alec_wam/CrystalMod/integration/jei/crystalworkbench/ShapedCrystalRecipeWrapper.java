@@ -14,6 +14,7 @@ import mezz.jei.api.recipe.wrapper.ICraftingRecipeWrapper;
 import mezz.jei.api.recipe.wrapper.IShapedCraftingRecipeWrapper;
 import net.minecraft.item.ItemStack;
 import alec_wam.CrystalMod.crafting.ShapedCrystalRecipe;
+import alec_wam.CrystalMod.util.ItemStackTools;
 
 public class ShapedCrystalRecipeWrapper extends BlankRecipeWrapper implements IShapedCraftingRecipeWrapper {
 	private final IJeiHelpers jeiHelpers;
@@ -23,16 +24,10 @@ public class ShapedCrystalRecipeWrapper extends BlankRecipeWrapper implements IS
 		this.jeiHelpers = jeiHelpers;
 		this.recipe = recipe;
 		for (ItemStack itemStack : this.recipe.recipeItems) {
-			if (itemStack != null && itemStack.stackSize != 1) {
-				itemStack.stackSize = 1;
+			if (itemStack !=null && ItemStackTools.isValid(itemStack) && ItemStackTools.getStackSize(itemStack) !=1) {
+				ItemStackTools.setStackSize(itemStack, 1);
 			}
 		}
-	}
-
-	@Override
-	@Nonnull
-	public List<ItemStack> getOutputs() {
-		return Collections.singletonList(recipe.getRecipeOutput());
 	}
 	
 	@Override
@@ -43,12 +38,6 @@ public class ShapedCrystalRecipeWrapper extends BlankRecipeWrapper implements IS
 	@Override
 	public int getHeight() {
 		return recipe.recipeHeight;
-	}
-
-	@Override
-	@Nonnull
-	public List<ItemStack> getInputs() {
-		return Arrays.asList(recipe.recipeItems);
 	}
 	
 	@Override

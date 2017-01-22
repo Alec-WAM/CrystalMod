@@ -44,7 +44,7 @@ public class BlockCrystalWorkbench extends EnumBlock<BlockCrystalWorkbench.Workb
     }
 	
 	@Override
-    public boolean onBlockActivated(World world, BlockPos pos, IBlockState blockState, EntityPlayer player, EnumHand hand, ItemStack stack, EnumFacing direction, float p_180639_6_, float p_180639_7_, float p_180639_8_)
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState blockState, EntityPlayer player, EnumHand hand, EnumFacing direction, float p_180639_6_, float p_180639_7_, float p_180639_8_)
     {
         TileEntity te = world.getTileEntity(pos);
 

@@ -121,4 +121,11 @@ public class ItemHandlerCrate implements IItemHandler
     {
         return stack.getMaxStackSize()*crate.getCrateSize();
     }
+
+	@Override
+	public int getSlotLimit(int slot) {
+		ItemStack existing = crate.getStack();
+		if(ItemStackTools.isEmpty(existing))return 64;
+        return getStackLimit(slot, existing);
+	}
 }

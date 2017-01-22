@@ -4,7 +4,9 @@ import java.util.List;
 
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeHooks;
 import alec_wam.CrystalMod.api.crafting.ICrystalRecipe;
 
 import com.google.common.collect.Lists;
@@ -26,17 +28,9 @@ public class ShapelessCrystalRecipe implements ICrystalRecipe {
         return this.recipeOutput;
     }
 
-    public ItemStack[] getRemainingItems(InventoryCrafting inv)
+    public NonNullList<ItemStack> getRemainingItems(InventoryCrafting inv)
     {
-        ItemStack[] aitemstack = new ItemStack[inv.getSizeInventory()];
-
-        for (int i = 0; i < aitemstack.length; ++i)
-        {
-            ItemStack itemstack = inv.getStackInSlot(i);
-            aitemstack[i] = net.minecraftforge.common.ForgeHooks.getContainerItem(itemstack);
-        }
-
-        return aitemstack;
+        return ForgeHooks.defaultRecipeGetRemainingItems(inv);
     }
 
     /**

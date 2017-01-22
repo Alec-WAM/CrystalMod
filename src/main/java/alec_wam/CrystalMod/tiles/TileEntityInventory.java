@@ -1,50 +1,48 @@
 package alec_wam.CrystalMod.tiles;
 
-import alec_wam.CrystalMod.api.pedistals.IPedistal;
-import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.ItemStackTools;
-import alec_wam.CrystalMod.util.ItemUtil;
-import alec_wam.CrystalMod.util.ModLogger;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.NonNullList;
 
 public class TileEntityInventory extends TileEntityMod implements IInventory {
 
 	private String name;
-	protected ItemStack[] inventory;
+	private NonNullList<ItemStack> inventory;
 	
 	public TileEntityInventory(String name, int size){
 		this.name = name;
-		inventory = new ItemStack[size];
+		inventory = NonNullList.<ItemStack>withSize(size, ItemStack.EMPTY);
 	}
 	
 	public void writeCustomNBT(NBTTagCompound nbt){
 		super.writeCustomNBT(nbt);
 		nbt.setString("InvName", name);
-		ItemUtil.writeInventoryToNBT(this, nbt);
+		ItemStackHelper.saveAllItems(nbt, inventory);
 	}
 	
 	public void readCustomNBT(NBTTagCompound nbt){
 		super.readCustomNBT(nbt);
 		name = nbt.getString("InvName");
-		ItemUtil.readInventoryFromNBT(this, nbt);
+		ItemStackHelper.loadAllItems(nbt, inventory);
 	}
 	
 	@Override
 	public int getSizeInventory() {
-		return inventory.length;
+		return inventory.size();
 	}
 
 	@Override
 	public ItemStack getStackInSlot(int slot) {
-		if(slot < 0 || slot >= inventory.length) {
+		if(slot < 0 || slot >= inventory.size()) {
 			return null;
 		}
 
-		return inventory[slot];
+		return inventory.get(slot);
 	}
 
 	@Override
@@ -84,11 +82,11 @@ public class TileEntityInventory extends TileEntityMod implements IInventory {
 
 	@Override
 	public void setInventorySlotContents(int slot, ItemStack itemstack) {
-		if(slot < 0 || slot >= inventory.length) {
+		if(slot < 0 || slot >= inventory.size()) {
 	      return;
 	    }
 
-	    inventory[slot] = itemstack;
+	    inventory.set(slot, itemstack);
 	    if(ItemStackTools.getStackSize(itemstack) > getInventoryStackLimit()) {
 	    	ItemStackTools.setStackSize(itemstack, getInventoryStackLimit());
 	    }
@@ -105,8 +103,8 @@ public class TileEntityInventory extends TileEntityMod implements IInventory {
 	}
 
 	@Override
-	public boolean isUseableByPlayer(EntityPlayer player) {
-		if(worldObj.getTileEntity(pos) != this || worldObj.getBlockState(pos).getBlock() == Blocks.AIR) {
+	public boolean isUsableByPlayer(EntityPlayer player) {
+		if(getWorld().getTileEntity(pos) != this || getWorld().getBlockState(pos).getBlock() == Blocks.AIR) {
 	      return false;
 	    }
 
@@ -143,9 +141,7 @@ public class TileEntityInventory extends TileEntityMod implements IInventory {
 
 	@Override
 	public void clear() {
-		for(int i = 0; i < inventory.length; i++) {
-		      inventory[i] = ItemStackTools.getEmptyStack();
-	    }
+		inventory.clear();
 	}
 
 	@Override
@@ -203,6 +199,16 @@ public class TileEntityInventory extends TileEntityMod implements IInventory {
 	}
 
 	public boolean canInsertItem(int slot, ItemStack stack) {
+		return true;
+	}
+	
+	@Override
+	public boolean isEmpty() {
+		for(ItemStack stack : inventory){
+			if(ItemStackTools.isValid(stack)){
+				return false;
+			}
+		}
 		return true;
 	}
 

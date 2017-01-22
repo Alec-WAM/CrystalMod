@@ -1,5 +1,6 @@
 package alec_wam.CrystalMod.entities.accessories;
 
+import alec_wam.CrystalMod.CrystalMod;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.gui.inventory.GuiInventory;
@@ -30,11 +31,11 @@ public class GuiHorseEnderChest extends GuiContainer
 
     public GuiHorseEnderChest(IInventory playerInv, IInventory horseInv, EntityHorse horse)
     {
-        super(new ContainerHorseEnderChest(playerInv, horseInv, horse, Minecraft.getMinecraft().thePlayer));
+        super(new ContainerHorseEnderChest(playerInv, horseInv, horse, CrystalMod.proxy.getClientPlayer()));
         xSize = 176;
         ySize = 213;
         this.playerInventory = playerInv;
-        this.enderChestInventory = Minecraft.getMinecraft().thePlayer.getInventoryEnderChest();
+        this.enderChestInventory = CrystalMod.proxy.getClientPlayer().getInventoryEnderChest();
         this.horseInventory = horseInv;
         this.horseEntity = horse;
         this.allowUserInput = false;

@@ -78,7 +78,7 @@ public class TilePatternEncoder extends TileEntityMod implements IMessageHandler
     public void onCraftingMatrixChanged() {
         markDirty();
 
-        result.setInventorySlotContents(0, CraftingManager.getInstance().findMatchingRecipe(matrix, worldObj));
+        result.setInventorySlotContents(0, CraftingManager.getInstance().findMatchingRecipe(matrix, getWorld()));
     }
     
     public void clearMatrix(){

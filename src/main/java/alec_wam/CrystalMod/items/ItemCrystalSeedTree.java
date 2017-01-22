@@ -91,8 +91,9 @@ public class ItemCrystalSeedTree extends Item implements net.minecraftforge.comm
      * Called when a Block is right-clicked with this Item
      */
     @Override
-    public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ)
+    public EnumActionResult onItemUse(EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ)
     {
+    	ItemStack stack = playerIn.getHeldItem(hand);
     	if (side == EnumFacing.DOWN && side == EnumFacing.UP)
         {
             return EnumActionResult.PASS;
@@ -114,7 +115,7 @@ public class ItemCrystalSeedTree extends Item implements net.minecraftforge.comm
 
             if (worldIn.isAirBlock(pos))
             {
-                IBlockState iblockstate1 = getPlant().getBlock().onBlockPlaced(worldIn, pos, side, hitX, hitY, hitZ, 0, playerIn);
+                IBlockState iblockstate1 = getPlant().getBlock().getStateForPlacement(worldIn, pos, side, hitX, hitY, hitZ, 0, playerIn);
                 worldIn.setBlockState(pos, iblockstate1, 10);
 
                 if (!playerIn.capabilities.isCreativeMode)

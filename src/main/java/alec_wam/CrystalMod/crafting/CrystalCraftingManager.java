@@ -23,6 +23,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 
 public class CrystalCraftingManager
@@ -350,7 +351,7 @@ public class CrystalCraftingManager
         return null;
     }
 
-    public ItemStack[] func_180303_b(InventoryCrafting p_180303_1_, World worldIn)
+    public NonNullList<ItemStack> getRemainingItems(InventoryCrafting p_180303_1_, World worldIn)
     {
         for (ICrystalRecipe irecipe : this.recipes)
         {
@@ -368,11 +369,11 @@ public class CrystalCraftingManager
             }
         }
 
-        ItemStack[] aitemstack = new ItemStack[p_180303_1_.getSizeInventory()];
+        NonNullList<ItemStack> aitemstack = NonNullList.withSize(p_180303_1_.getSizeInventory(), ItemStackTools.getEmptyStack());
 
-        for (int i = 0; i < aitemstack.length; ++i)
+        for (int i = 0; i < aitemstack.size(); ++i)
         {
-            aitemstack[i] = p_180303_1_.getStackInSlot(i);
+            aitemstack.set(i, p_180303_1_.getStackInSlot(i));
         }
 
         return aitemstack;

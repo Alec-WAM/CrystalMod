@@ -29,8 +29,8 @@ public class TileCrafter extends TileEntityMod implements INetworkTile, IAutoCra
         @Override
         public boolean valid(ItemStack stack) {
         	boolean isPattern = stack.getItem() == ModItems.craftingPattern;
-        	if(isPattern && TileCrafter.this.worldObj !=null){
-        		return new CraftingPattern(TileCrafter.this.worldObj, TileCrafter.this, stack).isValid();
+        	if(isPattern && TileCrafter.this.getWorld() !=null){
+        		return new CraftingPattern(TileCrafter.this.getWorld(), TileCrafter.this, stack).isValid();
         	}
         	
             return isPattern;
@@ -112,7 +112,7 @@ public class TileCrafter extends TileEntityMod implements INetworkTile, IAutoCra
     }
     
 	public TileEntity getFacingTile() {
-		return worldObj.getTileEntity(pos.offset(direction));
+		return getWorld().getTileEntity(pos.offset(direction));
 	}
 
 	public EnumFacing getDirection() {
@@ -154,7 +154,7 @@ public class TileCrafter extends TileEntityMod implements INetworkTile, IAutoCra
 
 	@Override
 	public int getDimension() {
-		return worldObj !=null ? worldObj.provider.getDimension() : 0;
+		return hasWorld() ? getWorld().provider.getDimension() : 0;
 	}
 	
 	public IItemHandler getFacingInventory(){

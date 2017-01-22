@@ -61,7 +61,7 @@ public class TileEntityStocker extends TileEntityInventory implements INetworkTi
 	
 	public void update(){
 		super.update();
-		if(worldObj.isRemote || network == null || network.craftingController == null)return;
+		if(getWorld().isRemote || network == null || network.craftingController == null)return;
 		if(RedstoneMode.ON.passes(getWorld(), getPos())){
 			for(int i = 0; i < getSizeInventory(); i++){
 				ItemStack stack = getStackInSlot(i);

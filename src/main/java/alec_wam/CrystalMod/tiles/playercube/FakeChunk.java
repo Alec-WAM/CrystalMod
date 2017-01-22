@@ -182,7 +182,7 @@ public class FakeChunk implements IBlockAccess {
     private void setChunkBlockTileEntity(BlockPos pos, TileEntity tileentity) {
     	if(worldObj == null)return;
     	BlockPos chunkPosition = new BlockPos(pos.getX(), pos.getY(), pos.getZ());
-        tileentity.setWorldObj(worldObj);
+        tileentity.setWorld(worldObj);
         tileentity.setPos(pos);
 
         IBlockState blockState = getBlockState(pos);
@@ -325,7 +325,7 @@ public class FakeChunk implements IBlockAccess {
     }
 
 	@Override
-	public Biome getBiomeGenForCoords(BlockPos pos) {
+	public Biome getBiome(BlockPos pos) {
 		return Biomes.SKY;
 	}
 

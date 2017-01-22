@@ -62,14 +62,15 @@ public class EntityMinionBase extends EntityOwnable implements IMessageHandler {
         this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(50.0D);
     }
 	
-	public boolean processInteract(EntityPlayer par1EntityPlayer, EnumHand hand, ItemStack held)
+	@Override
+	public boolean processInteract(EntityPlayer par1EntityPlayer, EnumHand hand)
     {
-		ItemStack itemstack = held;
+		ItemStack itemstack = par1EntityPlayer.getHeldItem(hand);
         
         if (ItemStackTools.isNullStack(itemstack) && !this.isTamed())
         {
            
-           if (!this.worldObj.isRemote)
+           if (!this.getEntityWorld().isRemote)
             {
                 this.setTamed(true);
                 this.navigator.clearPathEntity();
@@ -78,13 +79,13 @@ public class EntityMinionBase extends EntityOwnable implements IMessageHandler {
                 this.setOwnerId(par1EntityPlayer.getUniqueID());
                 this.playTameEffect(true);
                 this.setSitting(false);
-                this.worldObj.setEntityState(this, (byte)7);
+                this.getEntityWorld().setEntityState(this, (byte)7);
             }
 
             return true;
         }
 
-        return super.processInteract(par1EntityPlayer, hand, itemstack);
+        return super.processInteract(par1EntityPlayer, hand);
     }
 
 	@Override
@@ -124,7 +125,7 @@ public class EntityMinionBase extends EntityOwnable implements IMessageHandler {
         else
         {
             double d0 = this.posY - 0.30000001192092896D + (double)this.getEyeHeight();
-            EntityItem entityitem = new EntityItem(this.worldObj, this.posX, d0, this.posZ, droppedItem);
+            EntityItem entityitem = new EntityItem(this.getEntityWorld(), this.posX, d0, this.posZ, droppedItem);
             entityitem.setPickupDelay(40);
 
             if (traceItem)
@@ -153,8 +154,8 @@ public class EntityMinionBase extends EntityOwnable implements IMessageHandler {
                 entityitem.motionZ += Math.sin((double)f3) * (double)f2;
             }
 
-            if(!this.worldObj.isRemote)
-            this.worldObj.spawnEntityInWorld(entityitem);
+            if(!this.getEntityWorld().isRemote)
+            this.getEntityWorld().spawnEntity(entityitem);
 
             return entityitem;
         }
@@ -181,7 +182,7 @@ public class EntityMinionBase extends EntityOwnable implements IMessageHandler {
 	{
 		super.onDeath(damageSource);
 
-		if (!worldObj.isRemote)
+		if (!getEntityWorld().isRemote)
 		{
 			aiManager.disableAllToggleAIs();
 		}

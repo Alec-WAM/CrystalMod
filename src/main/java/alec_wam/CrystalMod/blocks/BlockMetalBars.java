@@ -1,6 +1,5 @@
 package alec_wam.CrystalMod.blocks;
 
-import java.util.List;
 import java.util.Locale;
 
 import alec_wam.CrystalMod.CrystalMod;
@@ -18,6 +17,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.Mirror;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Rotation;
 import net.minecraftforge.client.model.ModelLoader;
@@ -83,7 +83,8 @@ public class BlockMetalBars extends BlockPane implements ICustomModel
      * returns a list of blocks with the same ID, but different meta (eg: wood returns 4 blocks)
      */
     @SideOnly(Side.CLIENT)
-    public void getSubBlocks(Item itemIn, CreativeTabs tab, List<ItemStack> list)
+    @Override
+    public void getSubBlocks(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> list)
     {
         for (int i = 0; i < EnumMetalBarType.values().length; ++i)
         {

@@ -15,6 +15,7 @@ import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.NonNullList;
 
 public class TileEntityPanelCrafting extends TileEntityPanel {
 	
@@ -83,28 +84,29 @@ public class TileEntityPanelCrafting extends TileEntityPanel {
 	public void onCraftingMatrixChanged() {
         markDirty();
 
-        result.setInventorySlotContents(0, CraftingManager.getInstance().findMatchingRecipe(matrix, worldObj));
+        result.setInventorySlotContents(0, CraftingManager.getInstance().findMatchingRecipe(matrix, getWorld()));
     }
 	
 	public void onCrafted(EntityPlayer player) {
 		//matrix.clear();
-		ItemStack[] remainder = CraftingManager.getInstance().getRemainingItems(matrix, worldObj);
+		NonNullList<ItemStack> remainder = CraftingManager.getInstance().getRemainingItems(matrix, getWorld());
 
         for (int i = 0; i < matrix.getSizeInventory(); ++i) {
             ItemStack slot = matrix.getStackInSlot(i);
 
-            if (i < remainder.length && !ItemStackTools.isNullStack(remainder[i])) {
-                if (!ItemStackTools.isNullStack(slot) && ItemStackTools.getStackSize(slot) > 1) {
-                    if (!player.inventory.addItemStackToInventory(remainder[i].copy())) {
-                    	ItemUtil.spawnItemInWorldWithoutMotion(player.worldObj, remainder[i].copy(), player.getPosition().getX(), player.getPosition().getY(), player.getPosition().getZ());
+            if (i < remainder.size() && ItemStackTools.isValid(remainder.get(i))) {
+                if (ItemStackTools.isValid(slot) && ItemStackTools.getStackSize(slot) > 1) {
+                	ItemStack copy = ItemStackTools.safeCopy(remainder.get(i));
+                    if (!player.inventory.addItemStackToInventory(copy)) {
+                    	ItemUtil.spawnItemInWorldWithoutMotion(player.getEntityWorld(), copy, player.getPosition().getX(), player.getPosition().getY(), player.getPosition().getZ());
                     }
 
                     matrix.decrStackSize(i, 1);
                 } else {
-                    matrix.setInventorySlotContents(i, remainder[i].copy());
+                    matrix.setInventorySlotContents(i, ItemStackTools.safeCopy(remainder.get(i)));
                 }
             } else {
-                if (!ItemStackTools.isNullStack(slot)) {
+                if (ItemStackTools.isValid(slot)) {
                     if (ItemStackTools.getStackSize(slot) == 1 && getNetwork() !=null) {
                     	ItemStack copy = ItemUtil.copy(slot, 1);
                         matrix.setInventorySlotContents(i, getNetwork().getItemStorage().removeItem(copy, false));
@@ -139,7 +141,7 @@ public class TileEntityPanelCrafting extends TileEntityPanel {
 
         for (ItemStack craftedItem : craftedItemsList) {
             if (!player.inventory.addItemStackToInventory(craftedItem.copy())) {
-                ItemUtil.spawnItemInWorldWithoutMotion(player.worldObj, craftedItem, player.getPosition().getX(), player.getPosition().getY(), player.getPosition().getZ());
+                ItemUtil.spawnItemInWorldWithoutMotion(player.getEntityWorld(), craftedItem, player.getPosition().getX(), player.getPosition().getY(), player.getPosition().getZ());
             }
         }
 

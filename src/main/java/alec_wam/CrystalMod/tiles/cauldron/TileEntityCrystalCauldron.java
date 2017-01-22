@@ -74,7 +74,7 @@ public class TileEntityCrystalCauldron extends TileEntityMod {
 						entItem.motionX = entItem.motionY = entItem.motionZ = 0;
 						entItem.motionY = 0.3D;
 						entItem.setDefaultPickupDelay();
-						getWorld().spawnEntityInWorld(entItem);
+						getWorld().spawnEntity(entItem);
 						if(crystalStack !=null){
 							this.crystalStack.amount-=decAmt;
 							if(this.crystalStack.amount <=0){

@@ -262,7 +262,7 @@ public abstract class TileEntityPipe extends TileEntityMod implements ITickable,
 		pipeConnections.clear();
 
 		if (!externalConnections.isEmpty()) {
-			world.notifyNeighborsOfStateChange(getPos(), ModBlocks.crystalPipe);
+			world.notifyNeighborsOfStateChange(getPos(), ModBlocks.crystalPipe, true);
 		}
 		externalConnections.clear();
 
@@ -604,17 +604,17 @@ public abstract class TileEntityPipe extends TileEntityMod implements ITickable,
 				                getWorld().playSound((EntityPlayer)null, getPos(), soundtype.getBreakSound(), SoundCategory.BLOCKS, (soundtype.getVolume() + 1.0F) / 2.0F, soundtype.getPitch() * 0.8F);
 								return true;
 							}
-							if(player.worldObj.isRemote)return true;
+							if(player.getEntityWorld().isRemote)return true;
 							player.openGui(CrystalMod.instance, GuiHandler.GUI_ID_TE_FACING+dir.getIndex(),
-									player.worldObj, getPos().getX(), getPos()
+									player.getEntityWorld(), getPos().getX(), getPos()
 											.getY(), getPos().getZ());
 							return true;
 						}
 						
 						if (part == PipePart.CONNECTOR_LARGE) {
-							if(player.worldObj.isRemote)return true;
+							if(player.getEntityWorld().isRemote)return true;
 							player.openGui(CrystalMod.instance, GuiHandler.GUI_ID_TE_FACING+dir.getIndex(),
-									player.worldObj, getPos().getX(), getPos()
+									player.getEntityWorld(), getPos().getX(), getPos()
 											.getY(), getPos().getZ());
 							return true;
 						}
@@ -635,14 +635,14 @@ public abstract class TileEntityPipe extends TileEntityMod implements ITickable,
 								if (!player.capabilities.isCreativeMode) {
 									ItemStack cover = ItemPipeCover.getCover(coverData);
 									if (ItemStackTools.isValid(cover)) {
-										ItemUtil.spawnItemInWorldWithoutMotion(worldObj, cover, getPos());
+										ItemUtil.spawnItemInWorldWithoutMotion(getWorld(), cover, getPos());
 									}
 								}
 								return true;
 							} else {
 								CoverData coverData = this.getCoverData(dir);
 								World worldWrapped = new PipeWorldWrapper(world, getPos(), dir);
-								if(coverData.getBlockState().getBlock().onBlockActivated(worldWrapped, getPos(), coverData.getBlockState(), player, hand, stack, dir, (float)hitVec.xCoord, (float)hitVec.yCoord, (float)hitVec.zCoord)){
+								if(coverData.getBlockState().getBlock().onBlockActivated(worldWrapped, getPos(), coverData.getBlockState(), player, hand, dir, (float)hitVec.xCoord, (float)hitVec.yCoord, (float)hitVec.zCoord)){
 									return true;
 								}
 							}
@@ -695,7 +695,7 @@ public abstract class TileEntityPipe extends TileEntityMod implements ITickable,
 								.getX() + 0.5, getPos().getY() + 0.5, getPos()
 								.getZ() + 0.5, cover);
 						if (!getWorld().isRemote) {
-							getWorld().spawnEntityInWorld(ent);
+							getWorld().spawnEntity(ent);
 						}
 					}
 				}

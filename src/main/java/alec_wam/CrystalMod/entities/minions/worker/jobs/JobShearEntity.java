@@ -31,7 +31,7 @@ public class JobShearEntity extends WorkerJob {
 	
 	@Override
 	public boolean run(EntityMinionWorker worker, TileWorksiteBase worksite) {
-		if(worker.worldObj.isRemote) return false;
+		if(worker.getEntityWorld().isRemote) return false;
 		if(this.animalToShear == null || this.animalToShear.isDead || !(this.animalToShear instanceof IShearable)) return true;
 		if(worksite == null || !(worksite instanceof WorksiteAnimalFarm)) return true;
 		WorksiteAnimalFarm aFarm = (WorksiteAnimalFarm)worksite;
@@ -48,13 +48,13 @@ public class JobShearEntity extends WorkerJob {
 		if(d <= 2.5D){
 			IShearable shearable = (IShearable)this.animalToShear;
 			BlockPos shearPos = new BlockPos(animalToShear);
-			if(shearable.isShearable(held, worker.worldObj, shearPos)){
+			if(shearable.isShearable(held, worker.getEntityWorld(), shearPos)){
 				worker.swingArm(EnumHand.MAIN_HAND);
 	            
 				int fourtune = EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, held);
 		  		if(fourtune < 2)fourtune += aFarm.getUpgrades().contains(WorksiteUpgrade.ENCHANTED_TOOLS_1)? 1 : aFarm.getUpgrades().contains(WorksiteUpgrade.ENCHANTED_TOOLS_2)? 2 : aFarm.getUpgrades().contains(WorksiteUpgrade.ENCHANTED_TOOLS_3) ? 3 : 0;
 		  		
-				List<ItemStack> stacks = shearable.onSheared(held, worker.worldObj, shearPos, fourtune);
+				List<ItemStack> stacks = shearable.onSheared(held, worker.getEntityWorld(), shearPos, fourtune);
 				for(ItemStack item : stacks){
 					if(item !=null){
 						aFarm.addStackToInventory(item, RelativeSide.TOP);

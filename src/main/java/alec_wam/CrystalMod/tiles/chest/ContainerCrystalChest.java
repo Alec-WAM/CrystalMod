@@ -26,7 +26,7 @@ public class ContainerCrystalChest extends Container {
     @Override
     public boolean canInteractWith(EntityPlayer player)
     {
-        return chest.isUseableByPlayer(player);
+        return chest.isUsableByPlayer(player);
     }
 
     @Override

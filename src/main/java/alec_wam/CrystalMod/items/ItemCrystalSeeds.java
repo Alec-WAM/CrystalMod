@@ -53,8 +53,9 @@ public class ItemCrystalSeeds extends Item implements net.minecraftforge.common.
      * Called when a Block is right-clicked with this Item
      */
     @Override
-    public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ)
+    public EnumActionResult onItemUse(EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ)
     {
+    	ItemStack stack = playerIn.getHeldItem(hand);
     	if (side != EnumFacing.UP)
         {
             return EnumActionResult.PASS;

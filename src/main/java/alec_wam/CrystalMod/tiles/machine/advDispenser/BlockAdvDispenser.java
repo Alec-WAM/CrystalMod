@@ -41,7 +41,7 @@ public class BlockAdvDispenser extends BlockMachine implements ICustomModel {
 	}
 	
 	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, ItemStack stack, EnumFacing side, float hX, float hY, float hZ){
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hX, float hY, float hZ){
 		TileEntity tile = world.getTileEntity(pos);
 		if(tile !=null && tile instanceof TileAdvDispenser){
 			if(!world.isRemote){

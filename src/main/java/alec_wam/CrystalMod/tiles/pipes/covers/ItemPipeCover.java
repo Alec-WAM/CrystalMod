@@ -13,6 +13,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -81,10 +82,9 @@ public class ItemPipeCover extends Item implements ICustomModel {
         return s;
     }
     
-    @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
     @SideOnly(Side.CLIENT)
-    public void getSubItems(Item item, CreativeTabs par2CreativeTabs, List itemList) {
+    public void getSubItems(Item item, CreativeTabs par2CreativeTabs, NonNullList<ItemStack> itemList) {
         for (ItemStack stack : allCovers) {
             itemList.add(stack);
         }
@@ -119,7 +119,7 @@ public class ItemPipeCover extends Item implements ICustomModel {
     }
 
     private void registerValidCovers(Block block, Item item) {
-        ArrayList<ItemStack> stacks = new ArrayList<ItemStack>(16);
+        NonNullList<ItemStack> stacks = NonNullList.create();
         try {
             if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
                 for (CreativeTabs ct : item.getCreativeTabs()) {

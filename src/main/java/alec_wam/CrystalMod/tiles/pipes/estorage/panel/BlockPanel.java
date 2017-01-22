@@ -1,8 +1,14 @@
 package alec_wam.CrystalMod.tiles.pipes.estorage.panel;
 
 
-import java.util.List;
-
+import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.blocks.EnumBlock.IEnumMeta;
+import alec_wam.CrystalMod.blocks.ICustomModel;
+import alec_wam.CrystalMod.tiles.pipes.estorage.EnumRenderMode6;
+import alec_wam.CrystalMod.tiles.pipes.estorage.panel.crafting.TileEntityPanelCrafting;
+import alec_wam.CrystalMod.tiles.pipes.estorage.panel.display.TileEntityPanelItem;
+import alec_wam.CrystalMod.tiles.pipes.estorage.panel.monitor.TileEntityPanelMonitor;
+import alec_wam.CrystalMod.util.ItemUtil;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -17,26 +23,19 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import alec_wam.CrystalMod.CrystalMod;
-import alec_wam.CrystalMod.blocks.ICustomModel;
-import alec_wam.CrystalMod.blocks.EnumBlock.IEnumMeta;
-import alec_wam.CrystalMod.tiles.pipes.estorage.EnumRenderMode6;
-import alec_wam.CrystalMod.tiles.pipes.estorage.panel.crafting.TileEntityPanelCrafting;
-import alec_wam.CrystalMod.tiles.pipes.estorage.panel.display.TileEntityPanelItem;
-import alec_wam.CrystalMod.tiles.pipes.estorage.panel.monitor.TileEntityPanelMonitor;
-import alec_wam.CrystalMod.util.ItemUtil;
 
 public class BlockPanel extends BlockContainer implements ICustomModel {
 	
@@ -51,7 +50,7 @@ public class BlockPanel extends BlockContainer implements ICustomModel {
 	
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void getSubBlocks(Item itemIn, CreativeTabs tab, List<ItemStack> list) {
+	public void getSubBlocks(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> list) {
 	    for(PanelType type : PanelType.values()) {
 	      list.add(new ItemStack(this, 1, type.getMeta()));
 	    }
@@ -112,10 +111,10 @@ public class BlockPanel extends BlockContainer implements ICustomModel {
     }
 
 	@Override
-    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, ItemStack held, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
     	TileEntity tile = world.getTileEntity(pos);
         if (tile !=null && (tile instanceof TileEntityPanel)) {
-        	return ((TileEntityPanel)tile).onActivated(player, hand, held, side);
+        	return ((TileEntityPanel)tile).onActivated(player, hand, player.getHeldItem(hand), side);
         }
     	return false;
     }
