@@ -18,15 +18,17 @@ public class TileEntityCrystalFurnace extends TileEntityMachine implements ISide
 	}
 	
 	public boolean canStart() {
-        if (ItemStackTools.isNullStack(inventory[0])) {
+		ItemStack stack = getStackInSlot(0);
+        if (ItemStackTools.isNullStack(stack)) {
             return false;
         }
-        final BasicMachineRecipe recipe = CrystalFurnaceManager.getRecipe(inventory[0]);
+        final BasicMachineRecipe recipe = CrystalFurnaceManager.getRecipe(stack);
         if (recipe == null || eStorage.getCEnergyStored() < recipe.getEnergy()) {
             return false;
         }
         final ItemStack output = recipe.getOutput();
-        return ItemStackTools.isValid(output) && (inventory[1] == null || (ItemUtil.canCombine(output, inventory[1]) && ItemStackTools.getStackSize(inventory[1]) + ItemStackTools.getStackSize(output) <= output.getMaxStackSize()));
+        ItemStack stack2 = getStackInSlot(1);
+        return ItemStackTools.isValid(output) && (ItemStackTools.isNullStack(stack2) || (ItemUtil.canCombine(output, stack2) && ItemStackTools.getStackSize(stack2) + ItemStackTools.getStackSize(output) <= output.getMaxStackSize()));
     }
 	
 	public boolean canFinish() {
@@ -34,30 +36,28 @@ public class TileEntityCrystalFurnace extends TileEntityMachine implements ISide
     }
     
     protected boolean hasValidInput() {
-    	final BasicMachineRecipe recipe = CrystalFurnaceManager.getRecipe(this.inventory[0]);
-        return recipe != null && recipe.getInputSize() <= ItemStackTools.getStackSize(this.inventory[0]);
+    	ItemStack stack = getStackInSlot(0);
+    	final BasicMachineRecipe recipe = CrystalFurnaceManager.getRecipe(stack);
+        return recipe != null && recipe.getInputSize() <= ItemStackTools.getStackSize(stack);
     }
     
     public void processStart() {
-    	this.processMax = CrystalFurnaceManager.getRecipe(this.inventory[0]).getEnergy();
+    	this.processMax = CrystalFurnaceManager.getRecipe(getStackInSlot(0)).getEnergy();
         this.processRem = this.processMax;
         syncProcessValues();
     }
     
     public void processFinish() {
-    	final ItemStack output = CrystalFurnaceManager.getRecipe(this.inventory[0]).getOutput();
-        if (ItemStackTools.isNullStack(this.inventory[1])) {
-            this.inventory[1] = output;
+    	ItemStack stack = getStackInSlot(0);
+    	ItemStack stack2 = getStackInSlot(1);
+    	final ItemStack output = CrystalFurnaceManager.getRecipe(stack).getOutput();
+        if (ItemStackTools.isNullStack(stack2)) {
+            setInventorySlotContents(1, output);
         }
         else {
-            final ItemStack itemStack = this.inventory[1];
-            ItemStackTools.incStackSize(itemStack, ItemStackTools.getStackSize(output));
+            ItemStackTools.incStackSize(stack2, ItemStackTools.getStackSize(output));
         }
-        final ItemStack itemStack2 = this.inventory[0];
-        ItemStackTools.incStackSize(itemStack2, -1);
-        if (ItemStackTools.isEmpty(itemStack2)) {
-            this.inventory[0] = ItemStackTools.getEmptyStack();
-        }
+        setInventorySlotContents(0, ItemUtil.consumeItem(stack));
     }
 
 	@Override

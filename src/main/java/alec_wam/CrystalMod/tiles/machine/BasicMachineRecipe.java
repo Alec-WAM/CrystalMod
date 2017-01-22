@@ -2,6 +2,7 @@ package alec_wam.CrystalMod.tiles.machine;
 
 import java.util.List;
 
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 
 import com.google.common.collect.Lists;
@@ -19,7 +20,7 @@ public class BasicMachineRecipe
     public BasicMachineRecipe(ItemStack input, ItemStack output, int energy)
     {
     	this.input = input;
-        this.inputSize = input.stackSize;
+        this.inputSize = ItemStackTools.getStackSize(input);
         this.output = output;
         this.energy = energy;
     }

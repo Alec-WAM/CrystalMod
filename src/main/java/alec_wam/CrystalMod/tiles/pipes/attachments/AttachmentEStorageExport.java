@@ -131,7 +131,7 @@ public class AttachmentEStorageExport extends AttachmentData {
 		                	if(ioType == AttachmentIOType.ITEM && iHandler !=null){
 			                	ItemStack took = net.getItemStorage().removeItem(cop, true);
 			                	if(!ItemStackTools.isNullStack(took)){
-			                		if(ItemUtil.doInsertItem(iHandler, slot, oDir, false) == cop.stackSize){
+			                		if(ItemUtil.doInsertItem(iHandler, slot, oDir, false) == ItemStackTools.getStackSize(cop)){
 			                			ItemUtil.doInsertItem(iHandler, slot, oDir, true);
 			                			net.getItemStorage().removeItem(cop, false);
 			                		}

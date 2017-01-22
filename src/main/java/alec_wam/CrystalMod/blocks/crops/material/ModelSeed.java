@@ -199,7 +199,7 @@ public final class ModelSeed implements IModel, IModelCustomData
     }
 
     // the dynamic bucket is based on the empty bucket
-    private static final class BakedSeed implements IPerspectiveAwareModel
+    public static final class BakedSeed implements IPerspectiveAwareModel
     {
 
         private final ModelSeed parent;

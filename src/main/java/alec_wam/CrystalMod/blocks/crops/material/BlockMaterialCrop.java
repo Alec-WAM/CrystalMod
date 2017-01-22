@@ -3,14 +3,13 @@ package alec_wam.CrystalMod.blocks.crops.material;
 import java.util.List;
 
 import javax.annotation.Nullable;
-
-import com.enderio.core.common.util.ChatUtil;
 import com.google.common.collect.Lists;
 
 import alec_wam.CrystalMod.api.CrystalModAPI;
 import alec_wam.CrystalMod.api.crop.CropRecipe;
 import alec_wam.CrystalMod.api.crop.SpecialCropRecipe;
 import alec_wam.CrystalMod.util.BlockUtil;
+import alec_wam.CrystalMod.util.ChatUtil;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import net.minecraft.block.BlockContainer;

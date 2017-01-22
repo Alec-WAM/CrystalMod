@@ -19,17 +19,20 @@ public class TileEntityGrinder extends TileEntityMachine implements ISidedInvent
 	}
 	
 	public boolean canStart() {
-        if (ItemStackTools.isNullStack(inventory[0])) {
+		ItemStack stack = getStackInSlot(0);
+        if (ItemStackTools.isNullStack(stack)) {
             return false;
         }
-        final GrinderRecipe recipe = GrinderManager.getRecipe(inventory[0]);
+        final GrinderRecipe recipe = GrinderManager.getRecipe(stack);
         if (recipe == null || eStorage.getCEnergyStored() < recipe.getEnergy()) {
             return false;
         }
         final ItemStack output = recipe.getMainOutput();
-        boolean passesMain = ItemStackTools.isValid(output) && (ItemStackTools.isEmpty(inventory[1]) || (ItemUtil.canCombine(output, inventory[1]) && ItemStackTools.getStackSize(inventory[1]) + ItemStackTools.getStackSize(output) <= output.getMaxStackSize()));
+        ItemStack stack2 = getStackInSlot(1);
+        boolean passesMain = ItemStackTools.isValid(output) && (ItemStackTools.isEmpty(stack2) || (ItemUtil.canCombine(output, stack2) && ItemStackTools.getStackSize(stack2) + ItemStackTools.getStackSize(output) <= output.getMaxStackSize()));
         final ItemStack outputSecond = recipe.getSecondaryOutput();
-        boolean passesSecond = ItemStackTools.isValid(outputSecond) ? (ItemStackTools.isEmpty(inventory[2]) || (ItemUtil.canCombine(outputSecond, inventory[2]) && ItemStackTools.getStackSize(inventory[2]) + ItemStackTools.getStackSize(outputSecond) <= outputSecond.getMaxStackSize())) : true;
+        ItemStack stack3 = getStackInSlot(2);
+        boolean passesSecond = ItemStackTools.isValid(outputSecond) ? (ItemStackTools.isEmpty(stack3) || (ItemUtil.canCombine(outputSecond, stack3) && ItemStackTools.getStackSize(stack3) + ItemStackTools.getStackSize(outputSecond) <= outputSecond.getMaxStackSize())) : true;
         return passesMain && passesSecond;
 	}
 	
@@ -38,30 +41,32 @@ public class TileEntityGrinder extends TileEntityMachine implements ISidedInvent
     }
     
     protected boolean hasValidInput() {
-    	final GrinderRecipe recipe = GrinderManager.getRecipe(this.inventory[0]);
-        return recipe != null && recipe.getInputSize() <= ItemStackTools.getStackSize(this.inventory[0]);
+    	final GrinderRecipe recipe = GrinderManager.getRecipe(getStackInSlot(0));
+        return recipe != null && recipe.getInputSize() <= ItemStackTools.getStackSize(getStackInSlot(0));
     }
     
     public void processStart() {
-    	this.processMax = GrinderManager.getRecipe(this.inventory[0]).getEnergy();
+    	this.processMax = GrinderManager.getRecipe(getStackInSlot(0)).getEnergy();
         this.processRem = this.processMax;
         syncProcessValues();
     }
     
     public void processFinish() {
-    	final GrinderRecipe recipe = GrinderManager.getRecipe(this.inventory[0]);
+    	ItemStack stack = getStackInSlot(0);
+    	ItemStack stack2 = getStackInSlot(1);
+    	ItemStack stack3 = getStackInSlot(2);
+    	final GrinderRecipe recipe = GrinderManager.getRecipe(stack);
     	final ItemStack output = recipe.getMainOutput();
     	if(ItemStackTools.isValid(output)){
     		if (output.getItemDamage() == OreDictionary.WILDCARD_VALUE) {
     			output.setItemDamage(0);
         	}
     	}
-        if (ItemStackTools.isNullStack(this.inventory[1])) {
-            this.inventory[1] = output;
+        if (ItemStackTools.isNullStack(stack2)) {
+            setInventorySlotContents(1, output);
         }
         else {
-            final ItemStack itemStack = this.inventory[1];
-            ItemStackTools.incStackSize(itemStack, ItemStackTools.getStackSize(output));
+            ItemStackTools.incStackSize(stack2, ItemStackTools.getStackSize(output));
         }
         
         int rand = this.getWorld().rand.nextInt(100)+1;
@@ -72,20 +77,15 @@ public class TileEntityGrinder extends TileEntityMachine implements ISidedInvent
 	    			outputSecond.setItemDamage(0);
 	        	}
 	    	}
-	        if (ItemStackTools.isNullStack(this.inventory[2])) {
-	            this.inventory[2] = outputSecond;
+	        if (ItemStackTools.isNullStack(stack3)) {
+	            setInventorySlotContents(2, outputSecond);
 	        }
 	        else {
-	            final ItemStack itemStack = this.inventory[2];
-	            ItemStackTools.incStackSize(itemStack, ItemStackTools.getStackSize(outputSecond));
+	            ItemStackTools.incStackSize(stack3, ItemStackTools.getStackSize(outputSecond));
 	        }
         }
         
-        final ItemStack itemStack2 = this.inventory[0];
-        ItemStackTools.incStackSize(itemStack2, -1);
-        if (ItemStackTools.isEmpty(itemStack2)) {
-            this.inventory[0] = ItemStackTools.getEmptyStack();
-        }
+        setInventorySlotContents(0, ItemUtil.consumeItem(stack));
     }
 
 	@Override

@@ -89,7 +89,7 @@ public class ContainerPanel extends Container implements INetworkContainer {
 		if(mode == ClickType.QUICK_MOVE && (clickedButton == 0 || clickedButton == 1)){
 			if (slotId < 0)
             {
-                return null;
+                return ItemStackTools.getEmptyStack();
             }
 
             Slot slot6 = (Slot)this.inventorySlots.get(slotId);
@@ -100,31 +100,31 @@ public class ContainerPanel extends Container implements INetworkContainer {
             		if(this instanceof ContainerPanelCrafting && (clickedButton == 0)){
             			final ItemStack copy = slot6.getStack();
             			super.slotClick(slotId, clickedButton, mode, playerIn);
-            			if (slot6.getStack() != null && slot6.getStack().getItem() == copy.getItem())
+            			if (ItemStackTools.isValid(slot6.getStack()) && slot6.getStack().getItem() == copy.getItem())
                         {
                             this.retrySlotClick(slotId, clickedButton, true, playerIn);
                         }
             			this.detectAndSendChanges();
-            			return null;
+            			return ItemStackTools.getEmptyStack();
             		}
             	}
-                if(panel !=null && panel.getNetwork() !=null && slot6.getStack() !=null){
+                if(panel !=null && panel.getNetwork() !=null && ItemStackTools.isValid(slot6.getStack())){
                 	final ItemStack copy = slot6.getStack();
-                	final int old = copy.stackSize;
+                	final int old = ItemStackTools.getStackSize(copy);
         			ItemStack remain = panel.getNetwork().getItemStorage().addItem(copy, false);
-        			int added = remain == null ? old : old - remain.stackSize;
+        			int added = ItemStackTools.isEmpty(remain) ? old : old - ItemStackTools.getStackSize(remain);
         			if(added > 0){
         				slot6.decrStackSize(added);
         				detectAndSendChanges();
-        				if (slot6.getStack() != null && slot6.getStack().getItem() == copy.getItem())
+        				if (ItemStackTools.isValid(slot6.getStack()) && slot6.getStack().getItem() == copy.getItem())
                         {
                             this.retrySlotClick(slotId, clickedButton, true, playerIn);
                         }
-        				return null;
+        				return ItemStackTools.getEmptyStack();
         			}
         		}
             }
-            return null;
+            return ItemStackTools.getEmptyStack();
 		}
 		return super.slotClick(slotId, clickedButton, mode, playerIn);
 	}
@@ -263,7 +263,6 @@ public class ContainerPanel extends Container implements INetworkContainer {
 	public void sendCraftingItemsToAll(List<ItemStackData> dataList){
 		if(panel.getNetwork() !=null){
 			try {
-				ModLogger.info("Sending crafting items");
 				PacketEStorageItemList pil = new PacketEStorageItemList(panel.getPanelPos(), EnumListType.CRAFTING, EStorageNetwork.compressItems(dataList));
 				for(Object crafter : listeners){
 					if(crafter !=null && crafter instanceof EntityPlayerMP){

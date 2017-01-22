@@ -4,10 +4,9 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
-import com.enderio.core.common.util.ChatUtil;
-
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.tiles.entityhopper.TileEntityEntityHopper.FilterType;
+import alec_wam.CrystalMod.util.ChatUtil;
 import alec_wam.CrystalMod.util.Lang;
 import alec_wam.CrystalMod.util.tool.ToolUtil;
 import net.minecraft.block.BlockContainer;

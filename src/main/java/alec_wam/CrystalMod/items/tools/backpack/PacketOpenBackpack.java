@@ -1,12 +1,11 @@
 package alec_wam.CrystalMod.items.tools.backpack;
 
-import com.enderio.core.common.util.ChatUtil;
-
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.capability.ExtendedPlayerProvider;
 import alec_wam.CrystalMod.handler.GuiHandler;
 import alec_wam.CrystalMod.items.tools.backpack.gui.OpenType;
 import alec_wam.CrystalMod.network.AbstractPacketThreadsafe;
+import alec_wam.CrystalMod.util.ChatUtil;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import io.netty.buffer.ByteBuf;

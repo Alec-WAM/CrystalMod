@@ -32,6 +32,7 @@ public class PacketCraftingInfo extends AbstractPacketThreadsafe {
 	public void fromBytes(ByteBuf buf) {
 		PacketBuffer buffer = new PacketBuffer(buf);
 		try {
+			//TODO Investigate why this is commented
 			//this.task = EStorageNetwork.readCraftingTask(buffer.readNBTTagCompoundFromBuffer());
 			this.stack = buffer.readItemStackFromBuffer();
 			this.quantity = buffer.readInt();

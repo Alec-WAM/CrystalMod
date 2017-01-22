@@ -3,14 +3,11 @@ package alec_wam.CrystalMod.items.tools.backpack;
 import java.util.Collections;
 import java.util.UUID;
 
-import com.enderio.core.common.util.ChatUtil;
-
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.capability.ExtendedPlayer;
 import alec_wam.CrystalMod.capability.ExtendedPlayerInventory;
 import alec_wam.CrystalMod.capability.ExtendedPlayerProvider;
-import alec_wam.CrystalMod.capability.PacketExtendedPlayerInvSync;
 import alec_wam.CrystalMod.crafting.ModCrafting;
 import alec_wam.CrystalMod.handler.GuiHandler;
 import alec_wam.CrystalMod.items.ItemCrystal.CrystalType;
@@ -19,17 +16,15 @@ import alec_wam.CrystalMod.items.ItemMetalPlate.PlateType;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.items.tools.backpack.ItemBackpackNormal.CrystalBackpackType;
 import alec_wam.CrystalMod.items.tools.backpack.gui.OpenType;
-import alec_wam.CrystalMod.items.tools.backpack.network.PacketToolSwap;
 import alec_wam.CrystalMod.items.tools.backpack.types.InventoryBackpack;
 import alec_wam.CrystalMod.items.tools.backpack.types.NormalInventoryBackpack;
 import alec_wam.CrystalMod.items.tools.backpack.upgrade.InventoryBackpackUpgrades;
 import alec_wam.CrystalMod.items.tools.backpack.upgrade.ItemBackpackUpgrade.BackpackUpgrade;
-import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.tiles.chest.CrystalChestType;
+import alec_wam.CrystalMod.util.ChatUtil;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
-import alec_wam.CrystalMod.util.ModLogger;
 import alec_wam.CrystalMod.util.UUIDUtils;
 import alec_wam.CrystalMod.util.inventory.NBTUtils;
 import alec_wam.CrystalMod.util.tool.ToolUtil;
@@ -41,7 +36,6 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.client.FMLClientHandler;
 
 public class BackpackUtil {
 
@@ -141,7 +135,7 @@ public class BackpackUtil {
                 }
             }
         }
-        if (!player.worldObj.isRemote && ItemStackTools.isValid(backpack)) {
+        if (!player.getEntityWorld().isRemote && ItemStackTools.isValid(backpack)) {
             ItemNBTHelper.updateUUID(backpack);
         }
 
@@ -221,12 +215,12 @@ public class BackpackUtil {
 		ModCrafting.addShapedOreRecipe(new ItemStack(ModItems.normalBackpack, 1, CrystalBackpackType.GREEN.ordinal()), new Object[]{"LTL", "SCS", "L#L", 'S', Items.LEAD, 'T', Blocks.TRIPWIRE_HOOK, 'C', new ItemStack(ModBlocks.crystalChest, 1, CrystalChestType.GREEN.ordinal()), 'L', "leather", '#', "ingotCrystal"});
 		ModCrafting.addShapedOreRecipe(new ItemStack(ModItems.normalBackpack, 1, CrystalBackpackType.DARK.ordinal()), new Object[]{"LTL", "SCS", "L#L", 'S', Items.LEAD, 'T', Blocks.TRIPWIRE_HOOK, 'C', new ItemStack(ModBlocks.crystalChest, 1, CrystalChestType.DARK.ordinal()), 'L', "leather", '#', "ingotCrystal"});
 		ModCrafting.addShapedOreRecipe(new ItemStack(ModItems.normalBackpack, 1, CrystalBackpackType.PURE.ordinal()), new Object[]{"LTL", "SCS", "L#L", 'S', Items.LEAD, 'T', Blocks.TRIPWIRE_HOOK, 'C', new ItemStack(ModBlocks.crystalChest, 1, CrystalChestType.PURE.ordinal()), 'L', "leather", '#', "ingotCrystal"});
-		ModCrafting.addNBTRecipe(new ItemStack(ModItems.normalBackpack, 1, CrystalBackpackType.DARK_IRON.ordinal()), Collections.emptyList(), new Object[]{"III", "IBI", "III", 'I', dIronIngot, 'B', new ItemStack(ModItems.normalBackpack, 1, CrystalBackpackType.NORMAL.ordinal())});
-		ModCrafting.addNBTRecipe(new ItemStack(ModItems.normalBackpack, 1, CrystalBackpackType.BLUE.ordinal()), Collections.emptyList(), new Object[]{"III", "IBI", "III", 'I', blueIngot, 'B', new ItemStack(ModItems.normalBackpack, 1, CrystalBackpackType.DARK_IRON.ordinal())});
-		ModCrafting.addNBTRecipe(new ItemStack(ModItems.normalBackpack, 1, CrystalBackpackType.RED.ordinal()), Collections.emptyList(), new Object[]{"III", "IBI", "III", 'I', redIngot, 'B', new ItemStack(ModItems.normalBackpack, 1, CrystalBackpackType.BLUE.ordinal())});
-		ModCrafting.addNBTRecipe(new ItemStack(ModItems.normalBackpack, 1, CrystalBackpackType.GREEN.ordinal()), Collections.emptyList(), new Object[]{"III", "IBI", "III", 'I', greenIngot, 'B', new ItemStack(ModItems.normalBackpack, 1, CrystalBackpackType.RED.ordinal())});
-		ModCrafting.addNBTRecipe(new ItemStack(ModItems.normalBackpack, 1, CrystalBackpackType.DARK.ordinal()), Collections.emptyList(), new Object[]{"III", "IBI", "III", 'I', darkIngot, 'B', new ItemStack(ModItems.normalBackpack, 1, CrystalBackpackType.GREEN.ordinal())});
-		ModCrafting.addNBTRecipe(new ItemStack(ModItems.normalBackpack, 1, CrystalBackpackType.PURE.ordinal()), Collections.emptyList(), new Object[]{"III", "IBI", "III", 'I', pureIngot, 'B', new ItemStack(ModItems.normalBackpack, 1, CrystalBackpackType.DARK.ordinal())});
+		ModCrafting.addNBTRecipe(new ItemStack(ModItems.normalBackpack, 1, CrystalBackpackType.DARK_IRON.ordinal()), Collections.<String>emptyList(), new Object[]{"III", "IBI", "III", 'I', dIronIngot, 'B', new ItemStack(ModItems.normalBackpack, 1, CrystalBackpackType.NORMAL.ordinal())});
+		ModCrafting.addNBTRecipe(new ItemStack(ModItems.normalBackpack, 1, CrystalBackpackType.BLUE.ordinal()), Collections.<String>emptyList(), new Object[]{"III", "IBI", "III", 'I', blueIngot, 'B', new ItemStack(ModItems.normalBackpack, 1, CrystalBackpackType.DARK_IRON.ordinal())});
+		ModCrafting.addNBTRecipe(new ItemStack(ModItems.normalBackpack, 1, CrystalBackpackType.RED.ordinal()), Collections.<String>emptyList(), new Object[]{"III", "IBI", "III", 'I', redIngot, 'B', new ItemStack(ModItems.normalBackpack, 1, CrystalBackpackType.BLUE.ordinal())});
+		ModCrafting.addNBTRecipe(new ItemStack(ModItems.normalBackpack, 1, CrystalBackpackType.GREEN.ordinal()), Collections.<String>emptyList(), new Object[]{"III", "IBI", "III", 'I', greenIngot, 'B', new ItemStack(ModItems.normalBackpack, 1, CrystalBackpackType.RED.ordinal())});
+		ModCrafting.addNBTRecipe(new ItemStack(ModItems.normalBackpack, 1, CrystalBackpackType.DARK.ordinal()), Collections.<String>emptyList(), new Object[]{"III", "IBI", "III", 'I', darkIngot, 'B', new ItemStack(ModItems.normalBackpack, 1, CrystalBackpackType.GREEN.ordinal())});
+		ModCrafting.addNBTRecipe(new ItemStack(ModItems.normalBackpack, 1, CrystalBackpackType.PURE.ordinal()), Collections.<String>emptyList(), new Object[]{"III", "IBI", "III", 'I', pureIngot, 'B', new ItemStack(ModItems.normalBackpack, 1, CrystalBackpackType.DARK.ordinal())});
 	
 		//Upgrades
 		ModCrafting.addShapedRecipe(new ItemStack(ModItems.backpackupgrade, 1, BackpackUpgrade.HOPPER.getMetadata()), new Object[]{"#!#", "!M!", "#!#", '#', dIronPlate, '!', dIronNugget, 'M', Blocks.HOPPER});

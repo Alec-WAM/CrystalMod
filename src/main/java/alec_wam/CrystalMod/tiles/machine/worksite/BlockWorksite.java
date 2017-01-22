@@ -130,8 +130,8 @@ public class BlockWorksite extends BlockContainer implements ICustomModel {
 			
 			TileWorksiteBase worksite = (TileWorksiteBase)te;
 			if(!world.isRemote){
-				if(ItemStackTools.isValid(player.getHeldItemMainhand())){
-					if(player.getHeldItemMainhand().getItem() == ModItems.minionStaff){
+				if(ItemStackTools.isValid(held)){
+					if(held.getItem() == ModItems.minionStaff){
 						ChatUtil.sendNoSpam(player, "Workers: "+worksite.workers.size());
 						return true;
 					}

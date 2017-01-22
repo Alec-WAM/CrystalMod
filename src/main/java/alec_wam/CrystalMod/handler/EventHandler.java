@@ -351,7 +351,7 @@ public class EventHandler {
     @SubscribeEvent
     public void entityJoin(EntityJoinWorldEvent event){
     	Entity entity = event.getEntity();
-    	if(entity !=null && entity.worldObj !=null && !entity.worldObj.isRemote){
+    	if(entity !=null && entity.getEntityWorld() !=null && !entity.getEntityWorld().isRemote){
 	    	if(EntityUtil.hasCustomData(entity)){
 	    		CrystalModNetwork.sendToAllAround(new PacketEntityMessage(entity, "CustomDataSync"), entity);
 	    	}
@@ -377,7 +377,7 @@ public class EventHandler {
 	@SubscribeEvent
     public void onEntityLivingDeath(LivingDeathEvent event)
     {
-      if (event.getEntityLiving().worldObj.isRemote) {
+      if (event.getEntityLiving().getEntityWorld().isRemote) {
         return;
       }
       EntityLivingBase entity = event.getEntityLiving();
@@ -390,12 +390,12 @@ public class EventHandler {
 	@SubscribeEvent
     public void onLivingDrop(LivingDropsEvent event)
     {
-        if (event.getEntityLiving() == null || event.getEntityLiving().worldObj.isRemote)
+        if (event.getEntityLiving() == null || event.getEntityLiving().getEntityWorld().isRemote)
             return;
         
         if(Util.notNullAndInstanceOf(event.getEntityLiving(), EntityDragon.class)){
         	ItemStack stack = new ItemStack(ModItems.wings);
-        	EntityItem item = new EntityItem(event.getEntity().worldObj, event.getEntity().posX, event.getEntity().posY, event.getEntity().posZ, stack);
+        	EntityItem item = new EntityItem(event.getEntity().getEntityWorld(), event.getEntity().posX, event.getEntity().posY, event.getEntity().posZ, stack);
         	event.getDrops().add(item);
         }
         
@@ -475,8 +475,8 @@ public class EventHandler {
 	
 	@SubscribeEvent
 	public void playerDeath(PlayerDropsEvent event) {
-		if (event.getEntity() instanceof EntityPlayer && !event.getEntity().worldObj.isRemote) {
-			boolean keepInv = event.getEntity().worldObj.getGameRules().getBoolean("keepInventory");
+		if (event.getEntity() instanceof EntityPlayer && !event.getEntity().getEntityWorld().isRemote) {
+			boolean keepInv = event.getEntity().getEntityWorld().getGameRules().getBoolean("keepInventory");
 			addPlayerHeads(event);
 			if(!keepInv){
 				ExtendedPlayer exPlayer = ExtendedPlayerProvider.getExtendedPlayer(event.getEntityPlayer()); 
@@ -523,9 +523,9 @@ public class EventHandler {
 		DamageSource source = event.getSource();
 		Entity attacker = source.getSourceOfDamage();
  	   	if(Config.playerHeadType == ItemDropType.NONE)return;
- 	   	if(player == null || player.worldObj == null)return;
+ 	   	if(player == null || player.getEntityWorld() == null)return;
  	   
- 	   	int rand = player.worldObj.rand.nextInt(Math.max(Config.playerHeadDropChance / fixLooting(event.getLootingLevel()), 1));
+ 	   	int rand = player.getEntityWorld().rand.nextInt(Math.max(Config.playerHeadDropChance / fixLooting(event.getLootingLevel()), 1));
  	   
  	   	if(Config.playerHeadDropChance < 0 || rand !=0)
  	   		return;
@@ -548,8 +548,8 @@ public class EventHandler {
         }
 
         Entity mob = event.getEntityLiving();
-        int rand = mob.worldObj.rand.nextInt(Math.max(Config.mobHeadDropChance / fixLooting(event.getLootingLevel()), 1));
-        if(!mob.worldObj.getGameRules().getBoolean("doMobLoot") || Config.mobHeadDropChance < 0 || rand != 0)
+        int rand = mob.getEntityWorld().rand.nextInt(Math.max(Config.mobHeadDropChance / fixLooting(event.getLootingLevel()), 1));
+        if(!mob.getEntityWorld().getGameRules().getBoolean("doMobLoot") || Config.mobHeadDropChance < 0 || rand != 0)
             return;
 
         Item skullItem = null;
@@ -575,7 +575,7 @@ public class EventHandler {
             return;
 
         // drop it like it's hot
-        EntityItem entityitemSkull = new EntityItem(mob.worldObj, mob.posX, mob.posY, mob.posZ, new ItemStack(skullItem, 1, skullId));
+        EntityItem entityitemSkull = new EntityItem(mob.getEntityWorld(), mob.posX, mob.posY, mob.posZ, new ItemStack(skullItem, 1, skullId));
         entityitemSkull.setDefaultPickupDelay();
         event.getDrops().add(entityitemSkull);
     }
@@ -733,10 +733,10 @@ public class EventHandler {
 	
 	@SubscribeEvent
 	public void onEnderTeleport(EnderTeleportEvent event) {
-		if (isTeleportPrevented(event.getEntity().worldObj, event.getEntity().posX, event.getEntity().posY, event.getEntity().posZ, false)) {
+		if (isTeleportPrevented(event.getEntity().getEntityWorld(), event.getEntity().posX, event.getEntity().posY, event.getEntity().posZ, false)) {
 			event.setCanceled(true);
 		}
-		if (isTeleportPrevented(event.getEntity().worldObj, event.getTargetX(), event.getTargetY(), event.getTargetZ(), true)) {
+		if (isTeleportPrevented(event.getEntity().getEntityWorld(), event.getTargetX(), event.getTargetY(), event.getTargetZ(), true)) {
 			event.setCanceled(true);
 		}
 	}

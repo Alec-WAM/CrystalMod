@@ -245,7 +245,7 @@ public class TileEntityMobGrinder extends TileEntityMod implements IMessageHandl
 	  for(EntityItem item : items)
 	  {
 	    stack = item.getEntityItem();
-	    if(stack==null){continue;}
+	    if(ItemStackTools.isNullStack(stack)){continue;}
 	    int added = ItemUtil.doInsertItem(inv, stack, face);
 	    ItemStackTools.incStackSize(stack, -added);
 	    if(ItemStackTools.isEmpty(stack)){
@@ -271,9 +271,9 @@ public class TileEntityMobGrinder extends TileEntityMod implements IMessageHandl
 		  return;	
 	  }
 	  int added = ItemUtil.doInsertItem(inv, item, face);
-	  item.stackSize-=added;
-	  if(item.stackSize <= 0){
-		  item = null;
+	  ItemStackTools.incStackSize(item, -added);
+	  if(ItemStackTools.isEmpty(item)){
+		  ItemStackTools.makeEmpty(item);
 	  }
 	}
 	

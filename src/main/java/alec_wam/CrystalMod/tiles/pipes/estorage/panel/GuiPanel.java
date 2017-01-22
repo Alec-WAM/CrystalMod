@@ -172,8 +172,7 @@ public class GuiPanel extends GuiContainer implements IGuiScreen, INetworkGui  {
         				if (slot.canTakeStack(mc.thePlayer))
         	            {
         	                if(panel.getNetwork() !=null && ItemStackTools.isValid(slot.getStack())){
-        	                	ItemStack copy = slot.getStack().copy();
-        	                	copy.stackSize = 1;
+        	                	ItemStack copy = ItemUtil.copy(slot.getStack(), 1);
         	                	try {
         							CrystalModNetwork.sendToServer(new PacketEStorageAddItem(3, slot.slotNumber, 1, EStorageNetwork.compressItem(new ItemStackData(copy))));
         						} catch (Exception e) {
@@ -191,11 +190,11 @@ public class GuiPanel extends GuiContainer implements IGuiScreen, INetworkGui  {
         			int fixednSlot = (s+getItemRow()*getItemsPerRow());
         			if(s > -1){
         				ItemStackData data = (fixednSlot < 0 || getDisplayItems().size() <= fixednSlot) ? null : getDisplayItems().get(fixednSlot);
-        				if(data !=null && data.stack !=null){
+        				if(data !=null && ItemStackTools.isValid(data.stack)){
         					int slot = -1;
 							boolean found = false;
 							slotSearch : for(int iS = 0; iS < mc.thePlayer.inventory.getSizeInventory(); iS++){
-								if(mc.thePlayer.inventory.getStackInSlot(iS) !=null && mc.thePlayer.inventory.getStackInSlot(iS).stackSize < mc.thePlayer.inventory.getStackInSlot(iS).getMaxStackSize() && ItemUtil.canCombine(data.stack, mc.thePlayer.inventory.getStackInSlot(iS))){
+								if(ItemStackTools.isValid(mc.thePlayer.inventory.getStackInSlot(iS)) && ItemStackTools.getStackSize(mc.thePlayer.inventory.getStackInSlot(iS)) < mc.thePlayer.inventory.getStackInSlot(iS).getMaxStackSize() && ItemUtil.canCombine(data.stack, mc.thePlayer.inventory.getStackInSlot(iS))){
 									slot = iS;
 									found = true;
 									break slotSearch;
@@ -203,7 +202,7 @@ public class GuiPanel extends GuiContainer implements IGuiScreen, INetworkGui  {
 							}
 							if(found == false){
 								slotSearch : for(int iS = 0; iS < mc.thePlayer.inventory.getSizeInventory(); iS++){
-									if(mc.thePlayer.inventory.getStackInSlot(iS) == null){
+									if(ItemStackTools.isEmpty(mc.thePlayer.inventory.getStackInSlot(iS))){
 										slot = iS;
 										found = true;
 										break slotSearch;

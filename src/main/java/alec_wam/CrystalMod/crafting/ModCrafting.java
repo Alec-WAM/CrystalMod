@@ -448,7 +448,7 @@ public class ModCrafting {
 			ItemNBTHelper.setInteger(wMinecart, WirelessChestHelper.NBT_CODE, code);
 			ItemStack chestStack = new ItemStack(ModBlocks.crystalChest, 1, CrystalChestType.DARKIRON.ordinal());
 			
-			addShapedOreRecipe(wChest, new Object[] {"W", "C", "E", 'W', "wool"+dyeOreNames[i], 'C', chestStack, 'E', "chestEnder"});
+			addShapedOreRecipe(wChest, new Object[] {"W", "C", "E", 'W', "wool"+dyeOreNames[15-i], 'C', chestStack, 'E', "chestEnder"});
 			addShapedNBTRecipe(wMinecart, new Object[] {"A", "B", 'A', wChest, 'B', Items.MINECART});
 			
 			ItemStack buffer = new ItemStack(ModBlocks.enderBuffer);

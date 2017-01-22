@@ -325,8 +325,8 @@ public class WorksiteCropFarm extends TileWorksiteUserBlocks {
 						if (item == Items.DYE && stack.getItemDamage() == 15) {
 							bonemealCount--;
 							if(!worldObj.isRemote && ItemDye.applyBonemeal(stack, worldObj, position)){
-								if (stack.stackSize <= 0) {
-									inventory.setInventorySlotContents(i, null);
+								if (ItemStackTools.isEmpty(stack)) {
+									inventory.setInventorySlotContents(i, ItemStackTools.getEmptyStack());
 								}
 							}
 							

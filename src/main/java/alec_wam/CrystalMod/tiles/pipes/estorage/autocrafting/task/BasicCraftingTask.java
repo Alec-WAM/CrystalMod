@@ -1,12 +1,5 @@
 package alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.task;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagIntArray;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.items.ItemHandlerHelper;
-
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
@@ -18,12 +11,15 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+
 import alec_wam.CrystalMod.api.FluidStackList;
 import alec_wam.CrystalMod.api.ItemStackList;
 import alec_wam.CrystalMod.api.estorage.ICraftingTask;
 import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetwork;
-import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage;
 import alec_wam.CrystalMod.tiles.pipes.estorage.FluidStorage.FluidStackData;
+import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage;
 import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage.ItemStackData;
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.CraftingPattern;
 import alec_wam.CrystalMod.util.BlockUtil;
@@ -31,10 +27,12 @@ import alec_wam.CrystalMod.util.FluidUtil;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.Lang;
-import alec_wam.CrystalMod.util.ModLogger;
-
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagIntArray;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.items.ItemHandlerHelper;
 
 //HUGE credit to https://github.com/raoulvdberge/refinedstorage way2muchnoise
 
@@ -185,8 +183,8 @@ public class BasicCraftingTask implements ICraftingTask {
         		 ItemStackData data = network.getItemStorage().getItemData(input);
         		 
         		 if(data !=null){
-        			 usedStacks.add(ItemStack.copyItemStack(input));
-        			 inputs.add(ItemStack.copyItemStack(input));
+        			 usedStacks.add(ItemStackTools.safeCopy(input));
+        			 inputs.add(ItemStackTools.safeCopy(input));
         			 added = true;
         			 break;
         		 }
@@ -194,9 +192,9 @@ public class BasicCraftingTask implements ICraftingTask {
         			 ItemStack choice = ItemStackTools.getEmptyStack();
         			 if (!oreInputs.isEmpty()) {
         				 choice = oreInputs.get(0);
-        				 inputs.add(ItemStack.copyItemStack(choice));
+        				 inputs.add(ItemStackTools.safeCopy(choice));
         			 }
-        			 usedStacks.add(ItemStack.copyItemStack(choice));
+        			 usedStacks.add(ItemStackTools.safeCopy(choice));
         		 }
         	 }
         }
@@ -245,7 +243,7 @@ public class BasicCraftingTask implements ICraftingTask {
                     	}
                     	
                     	if (!ItemStackTools.isEmpty(input)) {
-                    		missing.add(ItemStack.copyItemStack(input));
+                    		missing.add(ItemStackTools.safeCopy(input));
                     		ItemStackTools.setStackSize(input, 0);
                     	}
                     }
@@ -292,7 +290,7 @@ public class BasicCraftingTask implements ICraftingTask {
                 FluidStackData fluidInStorage = network.getFluidStorage().getFluidData(fluidInItem);
                 
                 if (fluidInStorage == null || fluidInStorage.getAmount() < fluidInItem.amount) {
-                    missing.add(ItemStack.copyItemStack(input));
+                    missing.add(ItemStackTools.safeCopy(input));
                 } else {
                 	ItemStack buk = networkList.get(container, false);
                     boolean hasBucket = ItemStackTools.isValid(buk);
@@ -300,7 +298,7 @@ public class BasicCraftingTask implements ICraftingTask {
 
                     if (!hasBucket) {
                         if (bucketPattern == null) {
-                            missing.add(ItemStack.copyItemStack(container));
+                            missing.add(ItemStackTools.safeCopy(container));
                         } else {
                             calculate(network, networkList, bucketPattern, insertList);
                         }

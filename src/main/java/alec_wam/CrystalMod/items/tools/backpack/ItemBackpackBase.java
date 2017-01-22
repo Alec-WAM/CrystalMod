@@ -5,7 +5,9 @@ import java.util.UUID;
 
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.ICustomModel;
+import alec_wam.CrystalMod.client.model.dynamic.ItemRenderDragonWings;
 import alec_wam.CrystalMod.items.ModItems;
+import alec_wam.CrystalMod.proxy.ClientProxy;
 import alec_wam.CrystalMod.util.Lang;
 import alec_wam.CrystalMod.util.ProfileUtil;
 import alec_wam.CrystalMod.util.UUIDUtils;
@@ -41,6 +43,7 @@ public class ItemBackpackBase extends Item implements ICustomModel {
 	@SideOnly(Side.CLIENT)
 	public void initModel(){
 		backpack.initModel(this);
+		ClientProxy.registerItemRenderCustom(getRegistryName().toString(), new ItemRenderBackpack());
 	}
 	
 	@Override

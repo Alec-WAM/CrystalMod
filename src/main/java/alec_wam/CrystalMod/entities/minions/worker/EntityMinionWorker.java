@@ -4,11 +4,17 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import com.google.common.collect.Maps;
 
+import alec_wam.CrystalMod.entities.minions.EntityMinionBase;
+import alec_wam.CrystalMod.tiles.machine.worksite.TileWorksiteBase;
+import alec_wam.CrystalMod.util.ChatUtil;
+import alec_wam.CrystalMod.util.ItemStackTools;
+import alec_wam.CrystalMod.util.ItemUtil;
+import alec_wam.CrystalMod.util.tool.ToolUtil;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.nbt.NBTTagCompound;
@@ -17,17 +23,6 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import alec_wam.CrystalMod.entities.minions.EntityMinionBase;
-import alec_wam.CrystalMod.entities.minions.worker.jobs.JobShearEntity;
-import alec_wam.CrystalMod.tiles.machine.worksite.TileWorksiteBase;
-import alec_wam.CrystalMod.util.ItemStackTools;
-import alec_wam.CrystalMod.util.ItemUtil;
-import alec_wam.CrystalMod.util.ModLogger;
-import alec_wam.CrystalMod.util.UUIDUtils;
-import alec_wam.CrystalMod.util.tool.ToolUtil;
-
-import com.enderio.core.common.util.ChatUtil;
-import com.google.common.collect.Maps;
 
 public class EntityMinionWorker extends EntityMinionBase {
 	
@@ -93,7 +88,7 @@ public class EntityMinionWorker extends EntityMinionBase {
 			}
 	    }
 		
-		if(!this.worldObj.isRemote){
+		if(!getEntityWorld().isRemote){
 			if(getWorksite() == null && this.wStation !=null){
 				this.fireFromWorksite();
 				return;
@@ -109,9 +104,9 @@ public class EntityMinionWorker extends EntityMinionBase {
 	}
 	
 	public TileWorksiteBase getWorksite(){
-		if(this.wStationDim !=worldObj.provider.getDimension()) return null;
+		if(this.wStationDim !=getEntityWorld().provider.getDimension()) return null;
 		if(wStation !=null){
-			TileEntity tile = worldObj.getTileEntity(wStation);
+			TileEntity tile = getEntityWorld().getTileEntity(wStation);
 			if(tile !=null && tile instanceof TileWorksiteBase){
 			  return (TileWorksiteBase) tile;
 			}
@@ -182,7 +177,7 @@ public class EntityMinionWorker extends EntityMinionBase {
 	    			if(ItemUtil.canCombine(stack, getHeldItemMainhand())){
 	    				return false;
 	    			}
-	    			if (!this.worldObj.isRemote)
+	    			if (!getEntityWorld().isRemote)
 	                {
 	    				entityDropItem(getHeldItemMainhand(), 0.0F);
 	                }
@@ -196,7 +191,7 @@ public class EntityMinionWorker extends EntityMinionBase {
 	    			if(ItemUtil.canCombine(stack, getHeldItemMainhand())){
 	    				return false;
 	    			}
-	    			if (!this.worldObj.isRemote)
+	    			if (!getEntityWorld().isRemote)
 	                {
 	    				entityDropItem(getHeldItemMainhand(), 0.0F);
 	                }
@@ -210,7 +205,7 @@ public class EntityMinionWorker extends EntityMinionBase {
 	    			if(ItemUtil.canCombine(stack, getHeldItemMainhand())){
 	    				return false;
 	    			}
-	    			if (!this.worldObj.isRemote)
+	    			if (!getEntityWorld().isRemote)
 	                {
 	    				entityDropItem(getHeldItemMainhand(), 0.0F);
 	                }
@@ -222,20 +217,20 @@ public class EntityMinionWorker extends EntityMinionBase {
 		if(ItemStackTools.isNullStack(held) && isOwner(player)){
 			if(!this.isWorking()){
     			BlockPos pos = new BlockPos(this).down();
-    			TileEntity tile = worldObj.getTileEntity(pos);
+    			TileEntity tile = getEntityWorld().getTileEntity(pos);
     			if(tile !=null && tile instanceof TileWorksiteBase){
     				TileWorksiteBase tfarm = (TileWorksiteBase) tile;
     				if(tfarm.isWorkerOkay(this)){
     					BlockPos coord = tfarm.getPos();
     					if(isWorkingAtWorksite(coord)){
-    						if(!this.worldObj.isRemote)ChatUtil.sendNoSpam(player, "I already work here.");
+    						if(!getEntityWorld().isRemote)ChatUtil.sendNoSpam(player, "I already work here.");
     						return true;
     					}
     					addToWorksite(coord);
-    					if(!this.worldObj.isRemote)ChatUtil.sendNoSpam(player, (this.wStation !=null ? wStation.getX()+", "+wStation.getY()+", "+wStation.getZ() : "NULL"));
+    					if(!getEntityWorld().isRemote)ChatUtil.sendNoSpam(player, (this.wStation !=null ? wStation.getX()+", "+wStation.getY()+", "+wStation.getZ() : "NULL"));
     					return true;
     				}
-    				if(!this.worldObj.isRemote)ChatUtil.sendNoSpam(player, "I can not work here");
+    				if(!getEntityWorld().isRemote)ChatUtil.sendNoSpam(player, "I can not work here");
     				return true;
     			}
     		}

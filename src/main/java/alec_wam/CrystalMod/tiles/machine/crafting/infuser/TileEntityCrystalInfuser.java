@@ -1,5 +1,13 @@
 package alec_wam.CrystalMod.tiles.machine.crafting.infuser;
 
+import alec_wam.CrystalMod.network.CrystalModNetwork;
+import alec_wam.CrystalMod.network.packets.PacketTileMessage;
+import alec_wam.CrystalMod.tiles.machine.TileEntityMachine;
+import alec_wam.CrystalMod.tiles.machine.crafting.infuser.CrystalInfusionManager.InfusionMachineRecipe;
+import alec_wam.CrystalMod.tiles.tank.Tank;
+import alec_wam.CrystalMod.util.FluidUtil;
+import alec_wam.CrystalMod.util.ItemStackTools;
+import alec_wam.CrystalMod.util.ItemUtil;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -13,15 +21,6 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import alec_wam.CrystalMod.network.CrystalModNetwork;
-import alec_wam.CrystalMod.network.packets.PacketTileMessage;
-import alec_wam.CrystalMod.tiles.machine.TileEntityMachine;
-import alec_wam.CrystalMod.tiles.machine.crafting.infuser.CrystalInfusionManager.InfusionMachineRecipe;
-import alec_wam.CrystalMod.tiles.tank.Tank;
-import alec_wam.CrystalMod.util.FluidUtil;
-import alec_wam.CrystalMod.util.ItemStackTools;
-import alec_wam.CrystalMod.util.ItemUtil;
-import alec_wam.CrystalMod.util.ModLogger;
 
 public class TileEntityCrystalInfuser extends TileEntityMachine {
 
@@ -67,15 +66,17 @@ public class TileEntityCrystalInfuser extends TileEntityMachine {
 	}
 	
 	public boolean canStart() {
-        if (ItemStackTools.isEmpty(inventory[0]) || tank.getFluid() == null) {
+		ItemStack stack = getStackInSlot(0);
+        if (ItemStackTools.isEmpty(stack) || tank.getFluid() == null) {
             return false;
         }
-        final InfusionMachineRecipe recipe = CrystalInfusionManager.getRecipe(inventory[0], tank.getFluid());
+        final InfusionMachineRecipe recipe = CrystalInfusionManager.getRecipe(stack, tank.getFluid());
         if (recipe == null || eStorage.getCEnergyStored() < recipe.getEnergy()) {
             return false;
         }
         final ItemStack output = recipe.getOutput();
-        return ItemStackTools.isValid(output) && (ItemStackTools.isEmpty(inventory[1]) || (ItemUtil.canCombine(output, inventory[1]) && ItemStackTools.getStackSize(inventory[1]) + ItemStackTools.getStackSize(output) <= output.getMaxStackSize()));
+        ItemStack stack2 = getStackInSlot(1);
+        return ItemStackTools.isValid(output) && (ItemStackTools.isEmpty(stack2) || (ItemUtil.canCombine(output, stack2) && ItemStackTools.getStackSize(stack2) + ItemStackTools.getStackSize(output) <= output.getMaxStackSize()));
     }
 	
 	public boolean canFinish() {
@@ -83,30 +84,30 @@ public class TileEntityCrystalInfuser extends TileEntityMachine {
     }
     
     protected boolean hasValidInput() {
-    	final InfusionMachineRecipe recipe = CrystalInfusionManager.getRecipe(this.inventory[0], tank.getFluid());
+    	final InfusionMachineRecipe recipe = CrystalInfusionManager.getRecipe(getStackInSlot(0), tank.getFluid());
         return recipe != null && recipe.getFluidInput().amount <= tank.getFluidAmount();
     }
     
     public void processStart() {
-    	this.processMax = CrystalInfusionManager.getRecipe(this.inventory[0], tank.getFluid()).getEnergy();
+    	this.processMax = CrystalInfusionManager.getRecipe(getStackInSlot(0), tank.getFluid()).getEnergy();
         this.processRem = this.processMax;
         syncProcessValues();
     }
     
     public void processFinish() {
-    	InfusionMachineRecipe recipe = CrystalInfusionManager.getRecipe(this.inventory[0], tank.getFluid());
+    	ItemStack stack = getStackInSlot(0);
+    	ItemStack stack2 = getStackInSlot(1);
+    	InfusionMachineRecipe recipe = CrystalInfusionManager.getRecipe(stack, tank.getFluid());
     	final ItemStack output = recipe.getOutput();
-        if (ItemStackTools.isEmpty(this.inventory[1])) {
-            this.inventory[1] = output;
+        if (ItemStackTools.isEmpty(stack2)) {
+            setInventorySlotContents(1, output);
         }
         else {
-            final ItemStack itemStack = this.inventory[1];
-            ItemStackTools.incStackSize(itemStack, ItemStackTools.getStackSize(output));
+            ItemStackTools.incStackSize(stack2, ItemStackTools.getStackSize(output));
         }
-        final ItemStack itemStack2 = this.inventory[0];
-        ItemStackTools.incStackSize(itemStack2, -1);
-        if (ItemStackTools.isEmpty(this.inventory[0])) {
-            this.inventory[0] = ItemStackTools.getEmptyStack();
+        setInventorySlotContents(0, ItemUtil.consumeItem(stack));
+        if (ItemStackTools.isEmpty(stack)) {
+            setInventorySlotContents(0, ItemStackTools.getEmptyStack());
         }
         final FluidStack fluidStack = tank.getFluid();
         fluidStack.amount-=recipe.getFluidInput().amount;
