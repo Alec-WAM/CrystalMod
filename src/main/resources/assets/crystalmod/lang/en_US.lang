@@ -225,6 +225,7 @@ item.crystalmod.mobessence.name=Mob Essence
 crystalmod.info.mobessence1.txt=Can be used on an Advanced Mob Spawner to set the entity
 crystalmod.info.mobessence2.txt=Or used anywhere when sneaking to spawn the entity in the world
 crystalmod.info.mobessence3.txt=(Single Use)
+item.crystalmod.emptymobessence.name=Mob Cage
 item.crystalmod.minion.basic.name=Minion
 item.crystalmod.minion.worker.name=Worker Minion
 item.crystalmod.minion.warrior.name=Warrior Minion
@@ -445,21 +446,21 @@ tile.crystalmod.pedistal.name=Pedistal
 tile.crystalmod.fusionpedistal.name=Crystal Fusion Pedistal
 
 #--Fluids
-fluid.crystalmod.xpjuice.name=Liquid XP
-fluid.crystalmod.crystal.blue.name=Blue Liquid Crystal
-fluid.crystalmod.crystal.red.name=Red Liquid Crystal
-fluid.crystalmod.crystal.green.name=Green Liquid Crystal
-fluid.crystalmod.crystal.dark.name=Dark Liquid Crystal
-fluid.crystalmod.crystal.pure.name=Pure Liquid Crystal
-fluid.crystalmod.darkiron.name=Liquid Dark Iron
-fluid.crystalmod.ender.name=Liquid Ender
+fluid.crystalmod.xpjuice=Liquid XP
+fluid.crystalmod.crystal.blue=Blue Liquid Crystal
+fluid.crystalmod.crystal.red=Red Liquid Crystal
+fluid.crystalmod.crystal.green=Green Liquid Crystal
+fluid.crystalmod.crystal.dark=Dark Liquid Crystal
+fluid.crystalmod.crystal.pure=Pure Liquid Crystal
+fluid.crystalmod.darkiron=Liquid Dark Iron
+fluid.crystalmod.ender=Liquid Ender
 
-fluid.moltenCrystalBlue.name=Molten Blue Crystal
-fluid.moltenCrystalRed.name=Molten Red Crystal
-fluid.moltenCrystalGreen.name=Molten Green Crystal
-fluid.moltenCrystalDark.name=Molten Dark Crystal
-fluid.moltenCrystalPure.name=Molten Pure Crystal
-fluid.moltenDarkIron.name=Molten Dark Iron
+fluid.moltenCrystalBlue=Molten Blue Crystal
+fluid.moltenCrystalRed=Molten Red Crystal
+fluid.moltenCrystalGreen=Molten Green Crystal
+fluid.moltenCrystalDark=Molten Dark Crystal
+fluid.moltenCrystalPure=Molten Pure Crystal
+fluid.moltenDarkIron=Molten Dark Iron
 
 #--Creative Tab
 itemGroup.crystalmod.items=Crystal Mod Items
@@ -538,22 +539,22 @@ crystalmod.guistrings.direction=Direction
 crystalmod.guistrings.inventory_accessed=Inventory
 
 #--Entity
-entity.CrystalMod.CrystalPigZombie.name=Crystal Zombie Pigman
-entity.CrystalMod.CrystalCow.name=Crystal Cow
-entity.CrystalMod.CrystalEnderman.name=Crystal Enderman
-entity.CrystalMod.MinionWarrior.name=Warrior Minion
-entity.CrystalMod.MinionWorker.name=Minion Worker
-entity.CrystalMod.Bombomb.name=Bombomb
+entity.crystalpigzombie.name=Crystal Zombie Pigman
+entity.crystalcow.name=Crystal Cow
+entity.crystalenderman.name=Crystal Enderman
+entity.minionwarrior.name=Warrior Minion
+entity.minionworker.name=Minion Worker
+entity.bombomb.name=Bombomb
 
-entity.CrystalMod.minecart_blue.name=Minecart with Blue Crystal Chest
-entity.CrystalMod.minecart_red.name=Minecart with Red Crystal Chest
-entity.CrystalMod.minecart_green.name=Minecart with Green Crystal Chest
-entity.CrystalMod.minecart_dark.name=Minecart with Dark Crystal Chest
-entity.CrystalMod.minecart_pure.name=Minecart with Pure Crystal Chest
-entity.CrystalMod.minecart_darkiron.name=Minecart with Dark Iron Chest
+entity.minecart_blue.name=Minecart with Blue Crystal Chest
+entity.minecart_red.name=Minecart with Red Crystal Chest
+entity.minecart_green.name=Minecart with Green Crystal Chest
+entity.minecart_dark.name=Minecart with Dark Crystal Chest
+entity.minecart_pure.name=Minecart with Pure Crystal Chest
+entity.minecart_darkiron.name=Minecart with Dark Iron Chest
 
-entity.CrystalMod.minecart_wirelesschest.name=Minecart with Super Chest
-entity.CrystalMod.minecart_enderchest.name=Minecart with Ender Chest
+entity.minecart_wirelesschest.name=Minecart with Super Chest
+entity.minecart_enderchest.name=Minecart with Ender Chest
 
 #--Misc
 crystalmod.power.cu=CU
@@ -619,7 +620,7 @@ materialcrop.blazerod.name=Blaze Rod
 
 materialcrop.emerald.name=Emerald
 
-#--Guide
+#--Guideorig.split("\n")
 crystalmod.guide.page.crystalOre.title=Crystal Ore
 crystalmod.guide.page.crystalOre.desc=A Rare Ore that when smelted results in a crystal of the same color. Generates from y level %s to %s.
 crystalmod.guide.page.crystalBlock.title=Crystal Block

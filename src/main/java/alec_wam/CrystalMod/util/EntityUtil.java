@@ -23,6 +23,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.item.EntityItemFrame;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -50,9 +51,7 @@ import net.minecraftforge.fml.relauncher.ReflectionHelper;
 public class EntityUtil {
 
 	public static Vec3d getEyePosition(EntityPlayer player) {
-	    double y = player.posY;
-	    y += player.getEyeHeight();
-	    return new Vec3d(player.posX, y, player.posZ);
+	   return player.getPositionEyes(1.0F);
 	}
 
 	public static Vector3d getEyePositionCM(EntityPlayer player) {
@@ -289,19 +288,26 @@ public class EntityUtil {
 	}
 
 	public static RayTraceResult getRayTraceEntity(World world, EntityPlayer living, double maxrange, double range) {
-		double d0 = range;
+		RayTraceResult rayTrace = null;
+        double d0 = (double)range;
+        rayTrace = living.rayTrace(d0, 1.0F);
         Vec3d vec3d = EntityUtil.getEyePosition(living);
         boolean flag = false;
+        int i = 3;
         double d1 = d0;
-        
+
         if (d0 > maxrange)
         {
-            flag = true;
+        	flag = true;
         }
-        RayTraceResult rayTrace = null;
-		Vec3d vec3d1 = living.getLookVec();
+
+        if (rayTrace != null)
+        {
+            d1 = rayTrace.hitVec.distanceTo(vec3d);
+        }
+        Entity pointedEntity = null;
+        Vec3d vec3d1 = living.getLook(1.0F);
         Vec3d vec3d2 = vec3d.addVector(vec3d1.xCoord * d0, vec3d1.yCoord * d0, vec3d1.zCoord * d0);
-		Entity pointedEntity = null;
         Vec3d vec3d3 = null;
         float f = 1.0F;
         List<Entity> list = world.getEntitiesInAABBexcluding(living, living.getEntityBoundingBox().addCoord(vec3d1.xCoord * d0, vec3d1.yCoord * d0, vec3d1.zCoord * d0).expand(1.0D, 1.0D, 1.0D), Predicates.and(EntitySelectors.NOT_SPECTATING, new Predicate<Entity>()
@@ -360,7 +366,7 @@ public class EntityUtil {
 
         if (pointedEntity != null && (d2 < d1 || rayTrace == null))
         {
-        	rayTrace = new RayTraceResult(pointedEntity, vec3d3);
+            rayTrace = new RayTraceResult(pointedEntity, vec3d3);
         }
         
         return rayTrace;

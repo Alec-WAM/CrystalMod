@@ -1,5 +1,6 @@
 package alec_wam.CrystalMod.items.tools.backpack.types;
 
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -14,6 +15,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.fml.common.eventhandler.Event.Result;
 import net.minecraftforge.fml.relauncher.Side;
@@ -65,7 +67,9 @@ public class BackpackNormal implements IBackpackInventory {
 	
 	@SideOnly(Side.CLIENT)
 	public void initModel(Item item){
-		ModItems.initBasicModel(item);
+		for(int i = 0; i < CrystalBackpackType.values().length; i++){
+			ModelLoader.setCustomModelResourceLocation(item, i, new ModelResourceLocation(item.getRegistryName(), "inventory"));
+		}
 	}
 	
 	@Override

@@ -4,10 +4,12 @@ import javax.annotation.Nullable;
 
 import com.mojang.authlib.GameProfile;
 
+import alec_wam.CrystalMod.util.ItemStackTools;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -20,8 +22,8 @@ public class FakePlayerCM extends FakePlayer {
 	  this(world, FakePlayerUtil.CRYSTALMOD);
   }
   
-  private final ItemStack[] cachedHandInventory;
-  private final ItemStack[] cachedArmorArray;
+  private final NonNullList<ItemStack> cachedHandInventory;
+  private final NonNullList<ItemStack> cachedArmorArray;
   
   public FakePlayerCM(World world, GameProfile profile) {
     super(FMLCommonHandler.instance().getMinecraftServerInstance().worldServerForDimension(world.provider.getDimension()), profile);
@@ -29,8 +31,8 @@ public class FakePlayerCM extends FakePlayer {
     connection = new FakeNetHandlerPlayServer(this);
     this.setSize(0.0f, 0.0f);
     this.capabilities.disableDamage = true;
-    cachedHandInventory = new ItemStack[2];
-    cachedArmorArray = new ItemStack[4];
+    cachedHandInventory = NonNullList.withSize(2, ItemStack.EMPTY);
+    cachedArmorArray = NonNullList.withSize(4, ItemStack.EMPTY);
   }
 
   // These do things with packets...which crash since the net handler is null. Potion effects are not needed anyways.
@@ -118,11 +120,11 @@ public class FakePlayerCM extends FakePlayer {
     	  ItemStack itemstack = null;
     	  switch (entityequipmentslot.getSlotType()) {
 	    	  case HAND: {
-	    		  itemstack = this.cachedHandInventory[entityequipmentslot.getIndex()];
+	    		  itemstack = this.cachedHandInventory.get(entityequipmentslot.getIndex());
 	    		  break;
 	    	  }
 	    	  case ARMOR: {
-	    		  itemstack = this.cachedArmorArray[entityequipmentslot.getIndex()];
+	    		  itemstack = this.cachedArmorArray.get(entityequipmentslot.getIndex());
 	    		  break;
 	    	  }
 	    	  default: {
@@ -139,11 +141,11 @@ public class FakePlayerCM extends FakePlayer {
     		  }
     		  switch (entityequipmentslot.getSlotType()) {
 	    		  case HAND: {
-	    			  this.cachedHandInventory[entityequipmentslot.getIndex()] = ((newStack == null) ? null : newStack.copy());
+	    			  this.cachedHandInventory.set(entityequipmentslot.getIndex(), ItemStackTools.safeCopy(newStack));
 	    			  break;
 	    		  }
 	    		  case ARMOR: {
-	    			  this.cachedArmorArray[entityequipmentslot.getIndex()] = ((newStack == null) ? null : newStack.copy());
+	    			  this.cachedArmorArray.set(entityequipmentslot.getIndex(), ItemStackTools.safeCopy(newStack));
 	    			  break;
 	    		  }
     		  }

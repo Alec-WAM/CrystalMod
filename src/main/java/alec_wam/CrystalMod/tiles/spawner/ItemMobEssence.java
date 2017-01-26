@@ -16,13 +16,16 @@ import alec_wam.CrystalMod.proxy.ClientProxy;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.Lang;
+import alec_wam.CrystalMod.util.ModLogger;
 import net.minecraft.block.BlockFence;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityLivingData;
+import net.minecraft.entity.monster.EntityBlaze;
 import net.minecraft.entity.monster.EntityCaveSpider;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.monster.EntityEnderman;
@@ -34,27 +37,35 @@ import net.minecraft.entity.monster.EntityIronGolem;
 import net.minecraft.entity.monster.EntityMagmaCube;
 import net.minecraft.entity.monster.EntityPigZombie;
 import net.minecraft.entity.monster.EntityPolarBear;
+import net.minecraft.entity.monster.EntityShulker;
 import net.minecraft.entity.monster.EntitySilverfish;
 import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.monster.EntitySlime;
 import net.minecraft.entity.monster.EntitySnowman;
 import net.minecraft.entity.monster.EntitySpider;
 import net.minecraft.entity.monster.EntityStray;
+import net.minecraft.entity.monster.EntityVindicator;
 import net.minecraft.entity.monster.EntityWitch;
 import net.minecraft.entity.monster.EntityWitherSkeleton;
 import net.minecraft.entity.monster.EntityZombie;
+import net.minecraft.entity.monster.EntityZombieVillager;
 import net.minecraft.entity.passive.EntityBat;
 import net.minecraft.entity.passive.EntityChicken;
 import net.minecraft.entity.passive.EntityCow;
+import net.minecraft.entity.passive.EntityDonkey;
 import net.minecraft.entity.passive.EntityHorse;
+import net.minecraft.entity.passive.EntityLlama;
 import net.minecraft.entity.passive.EntityMooshroom;
+import net.minecraft.entity.passive.EntityMule;
 import net.minecraft.entity.passive.EntityOcelot;
 import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.entity.passive.EntityRabbit;
 import net.minecraft.entity.passive.EntitySheep;
+import net.minecraft.entity.passive.EntitySkeletonHorse;
 import net.minecraft.entity.passive.EntitySquid;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.passive.EntityWolf;
+import net.minecraft.entity.passive.EntityZombieHorse;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -73,19 +84,16 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class ItemMobEssence extends Item implements ICustomModel{
 
 	public static final String NBT_ENTITYNAME = "Entity";
-	public static final EntityEssenceInstance<EntityPig> DEFAULT_PIG = new EntityEssenceInstance<EntityPig>(EntityPig.class);
+	public static final String NBT_KILLCOUNT = "Kills";
+	public static final EntityEssenceInstance<EntityPig> DEFAULT_PIG = new EntityEssenceInstance<EntityPig>("Pig", EntityPig.class, 16);
 	
 	@SuppressWarnings("rawtypes")
 	private static Map<String, EntityEssenceInstance> entityRegistry = new TreeMap<String, EntityEssenceInstance>();
 	
-	@SuppressWarnings("rawtypes")
-	private static Map<Class, String> classToID = new HashMap<Class, String>();
-	
 	
 	@SuppressWarnings({ "rawtypes" })
-	public static EntityEssenceInstance addEntity(String id, EntityEssenceInstance instance){
-		entityRegistry.put(id, instance);
-		classToID.put(instance.getEntityClass(), id);
+	public static EntityEssenceInstance addEntity(EntityEssenceInstance instance){
+		entityRegistry.put(instance.getID(), instance);
 		return instance;
 	}
 	
@@ -95,12 +103,18 @@ public class ItemMobEssence extends Item implements ICustomModel{
 	}
 	
 	@SuppressWarnings("rawtypes")
-	public static String getEssenceID(Class clazz){
-		return classToID.get(clazz);
+	public static EntityEssenceInstance getEntityEssence(Entity entity){
+		for(EntityEssenceInstance<?> e : entityRegistry.values()){
+			if(e.isValid(entity)){
+				return e;
+			}
+		}
+		return null;
 	}
 	
 	public ItemMobEssence(){
 		super();
+		this.setMaxStackSize(1);
 		this.setCreativeTab(CrystalMod.tabItems);
 		ModItems.registerItem(this, "mobessence");
 	}
@@ -120,6 +134,8 @@ public class ItemMobEssence extends Item implements ICustomModel{
 		EntityEssenceInstance essence = getEssence(name);
 		if(essence !=null){
 			essence.addInfo(list);
+			int currentKills = ItemNBTHelper.getInteger(stack, NBT_KILLCOUNT, 0);
+			list.add(currentKills+ " / "+essence.getNeededKills()+" Kills");
 		}
 		list.add(Lang.localize("info.mobessence1.txt"));
 		list.add(Lang.localize("info.mobessence2.txt"));
@@ -130,9 +146,56 @@ public class ItemMobEssence extends Item implements ICustomModel{
 	public void getSubItems(Item item, CreativeTabs tab, NonNullList<ItemStack> list){
 		Set<String> names = entityRegistry.keySet();
 		for(String name : names){
-			list.add(createStack(name));
+			ItemStack stack = createStack(name);
+			@SuppressWarnings("rawtypes")
+			EntityEssenceInstance essence = getEssence(name);
+			if(essence !=null){
+				ItemNBTHelper.setInteger(stack, NBT_KILLCOUNT, essence.getNeededKills());
+			}
+			list.add(stack);
 		}
 	}
+	
+	@Override
+	public boolean showDurabilityBar(ItemStack stack)
+    {
+		String name = ItemNBTHelper.getString(stack, NBT_ENTITYNAME, "Pig");
+		@SuppressWarnings("rawtypes")
+		EntityEssenceInstance essence = getEssence(name);
+		if(essence !=null){
+			int currentKills = ItemNBTHelper.getInteger(stack, NBT_KILLCOUNT, 0);
+			return currentKills < essence.getNeededKills();
+		}
+		return false;
+    }
+	
+	@Override
+	public double getDurabilityForDisplay(ItemStack stack){
+		String name = ItemNBTHelper.getString(stack, NBT_ENTITYNAME, "Pig");
+		@SuppressWarnings("rawtypes")
+		EntityEssenceInstance essence = getEssence(name);
+		if(essence !=null){
+			int currentKills = ItemNBTHelper.getInteger(stack, NBT_KILLCOUNT, 0);
+			int needed = essence.getNeededKills();
+			return (double)(needed-currentKills) / (double)needed;
+		}
+		return super.getDurabilityForDisplay(stack);
+	}
+	
+	@Override
+	public int getRGBDurabilityForDisplay(ItemStack stack)
+    {
+		int current = 0; 
+		int max = 1;
+		String name = ItemNBTHelper.getString(stack, NBT_ENTITYNAME, "Pig");
+		@SuppressWarnings("rawtypes")
+		EntityEssenceInstance essence = getEssence(name);
+		if(essence !=null){
+			current = ItemNBTHelper.getInteger(stack, NBT_KILLCOUNT, 0);
+			max = essence.getNeededKills();
+		}
+        return MathHelper.hsvToRGB(Math.max(0.0F, (float)(current) / max) / 3.0F, 1.0F, 1.0F);
+    }
 	
 	public static ItemStack createStack(String name){
 		ItemStack stack = new ItemStack(ModItems.mobEssence);
@@ -141,9 +204,10 @@ public class ItemMobEssence extends Item implements ICustomModel{
 	}
 	
 	public static void initDefaultMobs(){
-		addEntity("Creeper", new EntityEssenceInstance<EntityCreeper>(EntityCreeper.class));
-		addEntity("Skeleton", new EntityEssenceInstance<EntitySkeleton>(EntitySkeleton.class));
-		addEntity("WitherSkeleton", new EntityEssenceInstance<EntityWitherSkeleton>(EntityWitherSkeleton.class){
+		entityRegistry.clear();
+		addEntity(new EntityEssenceInstance<EntityCreeper>("Creeper", EntityCreeper.class, 16));
+		addEntity(new EntityEssenceInstance<EntitySkeleton>("Skeleton", EntitySkeleton.class, 16));
+		addEntity(new EntityEssenceInstance<EntityWitherSkeleton>("WitherSkeleton", EntityWitherSkeleton.class, 32){
 			
 			public float getRenderScale(TransformType type){
 				return (type == TransformType.GUI || type == TransformType.FIXED) ? 1.4F : super.getRenderScale(type);
@@ -154,22 +218,30 @@ public class ItemMobEssence extends Item implements ICustomModel{
 			}
 			
 		});
-		addEntity("Stray", new EntityEssenceInstance<EntityStray>(EntityStray.class));
-		addEntity("Spider", new EntityEssenceInstance<EntitySpider>(EntitySpider.class));
-		addEntity("CaveSpider", new EntityEssenceInstance<EntityCaveSpider>(EntityCaveSpider.class));
-		addEntity("Zombie", new EntityEssenceInstance<EntityZombie>(EntityZombie.class));
-		addEntity("Husk", new EntityEssenceInstance<EntityHusk>(EntityHusk.class));
-		addEntity("Zombie.Child", new EntityEssenceInstance<EntityZombie>(EntityZombie.class){
+		addEntity(new EntityEssenceInstance<EntityStray>("Stray", EntityStray.class, 16));
+		addEntity(new EntityEssenceInstance<EntitySpider>("Spider", EntitySpider.class, 16));
+		addEntity(new EntityEssenceInstance<EntityCaveSpider>("CaveSpider", EntityCaveSpider.class, 16));
+		addEntity(new EntityEssenceInstance<EntityZombie>("Zombie", EntityZombie.class, 16));
+		addEntity(new EntityEssenceInstance<EntityZombieVillager>("ZombieVillager", EntityZombieVillager.class, 16));
+		addEntity(new EntityEssenceInstance<EntityHusk>("Husk", EntityHusk.class, 16));
+		addEntity(new EntityEssenceInstance<EntityZombie>("Zombie.Child", EntityZombie.class, 8){
+			@Override
 			public void preSpawn(EntityZombie zombie){
 				zombie.setChild(true);
 			}
 			
+			@Override
 			public void addInfo(List<String> list){
 				super.addInfo(list);
 				list.add("Child");
 			}
+			
+			@Override
+			public boolean isValid(Entity entity){
+				return super.isValid(entity) && entity instanceof EntityLivingBase && ((EntityLivingBase)entity).isChild();
+			}
 		});
-		addEntity("Witch", new EntityEssenceInstance<EntityWitch>(EntityWitch.class){
+		addEntity(new EntityEssenceInstance<EntityWitch>("Witch", EntityWitch.class, 16){
 			public Vec3d getRenderOffset(TransformType type){
 				return new Vec3d(0, -1.2, 0);
 			}
@@ -179,7 +251,7 @@ public class ItemMobEssence extends Item implements ICustomModel{
 			}
 		});
 		
-		addEntity("Slime", new EntityEssenceInstance<EntitySlime>(EntitySlime.class){
+		addEntity(new EntityEssenceInstance<EntitySlime>("Slime", EntitySlime.class, 16){
 			public EntitySlime createRenderEntity(World world){
 				EntitySlime slime = super.createRenderEntity(world);
 				NBTTagCompound nbt = new NBTTagCompound();
@@ -193,23 +265,23 @@ public class ItemMobEssence extends Item implements ICustomModel{
 				return 1.4F;
 			}
 		});
-		addEntity("Silverfish", new EntityEssenceInstance<EntitySilverfish>(EntitySilverfish.class));
-		addEntity("Bat", new EntityEssenceInstance<EntityBat>(EntityBat.class){
+		addEntity(new EntityEssenceInstance<EntitySilverfish>("Silverfish", EntitySilverfish.class, 20));
+		addEntity(new EntityEssenceInstance<EntityBat>("Bat", EntityBat.class, 8){
 			public EntityBat createRenderEntity(World world){
 				EntityBat bat = super.createRenderEntity(world);
 				bat.setIsBatHanging(false);
 				return bat;
 			}
 		});
-		addEntity("Squid", new EntityEssenceInstance<EntitySquid>(EntitySquid.class){
+		addEntity(new EntityEssenceInstance<EntitySquid>("Squid", EntitySquid.class, 8){
 			public Vec3d getRenderOffset(TransformType type){
 				return new Vec3d(0, 0, 0);
 			}
 		});
-		addEntity("Guardian", new EntityEssenceInstance<EntityGuardian>(EntityGuardian.class));
-		addEntity("Wolf", new EntityEssenceInstance<EntityWolf>(EntityWolf.class));
-		addEntity("Ocelot", new EntityEssenceInstance<EntityOcelot>(EntityOcelot.class));
-		addEntity("Rabbit", new EntityEssenceInstance<EntityRabbit>(EntityRabbit.class){
+		addEntity(new EntityEssenceInstance<EntityGuardian>("Guardian", EntityGuardian.class, 32));
+		addEntity(new EntityEssenceInstance<EntityWolf>("Wolf", EntityWolf.class, 10));
+		addEntity(new EntityEssenceInstance<EntityOcelot>("Ocelot", EntityOcelot.class, 10));
+		addEntity(new EntityEssenceInstance<EntityRabbit>("Rabbit", EntityRabbit.class, 8){
 			public Vec3d getRenderOffset(TransformType type){
 				return new Vec3d(0, -0.5, 0);
 			}
@@ -218,25 +290,30 @@ public class ItemMobEssence extends Item implements ICustomModel{
 				return super.getRenderScale(type)*2F;
 			}
 		});
-		addEntity("PolarBear", new EntityEssenceInstance<EntityPolarBear>(EntityPolarBear.class));
-		addEntity("Snowman", new EntityEssenceInstance<EntitySnowman>(EntitySnowman.class));
-		addEntity("Villager", new EntityEssenceInstance<EntityVillager>(EntityVillager.class));
-		addEntity("IronGolem", new EntityEssenceInstance<EntityIronGolem>(EntityIronGolem.class){
+		addEntity(new EntityEssenceInstance<EntityPolarBear>("PolarBear", EntityPolarBear.class, 8));
+		addEntity(new EntityEssenceInstance<EntitySnowman>("Snowman", EntitySnowman.class, 16));
+		addEntity(new EntityEssenceInstance<EntityVillager>("Villager", EntityVillager.class, 8));
+		addEntity(new EntityEssenceInstance<EntityVindicator>("Vindicator", EntityVindicator.class, 8));
+		addEntity(new EntityEssenceInstance<EntityIronGolem>("IronGolem", EntityIronGolem.class, 8){
 			public float getRenderScale(TransformType type){
 				return type == TransformType.GUI ? 1.2f : super.getRenderScale(type);
 			}
 		});
 		
-		addEntity("Sheep", new EntityEssenceInstance<EntitySheep>(EntitySheep.class));
-		addEntity("Pig", DEFAULT_PIG);
-		addEntity("Cow", new EntityEssenceInstance<EntityCow>(EntityCow.class));
-		addEntity("CrystalCow", new EntityEssenceInstance<EntityCrystalCow>(EntityCrystalCow.class));
-		addEntity("Mooshroom", new EntityEssenceInstance<EntityMooshroom>(EntityMooshroom.class));
-		addEntity("Chicken", new EntityEssenceInstance<EntityChicken>(EntityChicken.class));
-		addEntity("Horse", new EntityEssenceInstance<EntityHorse>(EntityHorse.class));
-		
+		addEntity(new EntityEssenceInstance<EntitySheep>("Sheep", EntitySheep.class, 16));
+		addEntity(DEFAULT_PIG);
+		addEntity(new EntityEssenceInstance<EntityCow>("Cow", EntityCow.class, 16));
+		addEntity(new EntityEssenceInstance<EntityCrystalCow>("CrystalCow", EntityCrystalCow.class, 16));
+		addEntity(new EntityEssenceInstance<EntityMooshroom>("Mooshroom", EntityMooshroom.class, 8));
+		addEntity(new EntityEssenceInstance<EntityChicken>("Chicken", EntityChicken.class, 16));
+		addEntity(new EntityEssenceInstance<EntityHorse>("Horse", EntityHorse.class, 4));
+		addEntity(new EntityEssenceInstance<EntitySkeletonHorse>("SkeletonHorse", EntitySkeletonHorse.class, 4));
+		addEntity(new EntityEssenceInstance<EntityZombieHorse>("ZombieHorse", EntityZombieHorse.class, 4));
+		addEntity(new EntityEssenceInstance<EntityDonkey>("Donkey", EntityDonkey.class, 4));
+		addEntity(new EntityEssenceInstance<EntityMule>("Mule", EntityMule.class, 4));
+		addEntity(new EntityEssenceInstance<EntityLlama>("Llama", EntityLlama.class, 4));
 		//NETHER
-		addEntity("Ghast", new EntityEssenceInstance<EntityGhast>(EntityGhast.class){
+		addEntity(new EntityEssenceInstance<EntityGhast>("Ghast", EntityGhast.class, 8){
 			public Vec3d getRenderOffset(TransformType type){
 				return new Vec3d(0, -0.5, 0);
 			}
@@ -245,9 +322,9 @@ public class ItemMobEssence extends Item implements ICustomModel{
 				return super.getRenderScale(type)/3F;
 			}
 		});
-		addEntity("Blaze", new EntityEssenceInstance<EntityEndermite>(EntityEndermite.class));
-		addEntity("PigZombie", new EntityEssenceInstance<EntityPigZombie>(EntityPigZombie.class));
-		addEntity("PigZombie.Child", new EntityEssenceInstance<EntityPigZombie>(EntityPigZombie.class){
+		addEntity(new EntityEssenceInstance<EntityBlaze>("Blaze", EntityBlaze.class, 16));
+		addEntity(new EntityEssenceInstance<EntityPigZombie>("PigZombie", EntityPigZombie.class, 16));
+		addEntity(new EntityEssenceInstance<EntityPigZombie>("PigZombie.Child", EntityPigZombie.class, 8){
 			public void preSpawn(EntityPigZombie zombie){
 				zombie.setChild(true);
 			}
@@ -256,9 +333,17 @@ public class ItemMobEssence extends Item implements ICustomModel{
 				super.addInfo(list);
 				list.add("Child");
 			}
+			
+			@Override
+			public boolean isValid(Entity entity){
+				if(super.isValid(entity)){
+					return entity instanceof EntityLivingBase && ((EntityLivingBase)entity).isChild();
+				}
+				return false;
+			}
 		});
-		addEntity("CrystalPigZombie", new EntityEssenceInstance<EntityCrystalPigZombie>(EntityCrystalPigZombie.class));
-		addEntity("MagmaCube", new EntityEssenceInstance<EntityMagmaCube>(EntityMagmaCube.class){
+		addEntity(new EntityEssenceInstance<EntityCrystalPigZombie>("CrystalPigZombie", EntityCrystalPigZombie.class, 16));
+		addEntity(new EntityEssenceInstance<EntityMagmaCube>("MagmaCube", EntityMagmaCube.class, 16){
 			public EntityMagmaCube createRenderEntity(World world){
 				EntityMagmaCube cube = super.createRenderEntity(world);
 				NBTTagCompound nbt = new NBTTagCompound();
@@ -274,7 +359,7 @@ public class ItemMobEssence extends Item implements ICustomModel{
 		});
 		
 		//END
-		addEntity("Enderman", new EntityEssenceInstance<EntityEnderman>(EntityEnderman.class){
+		addEntity(new EntityEssenceInstance<EntityEnderman>("Enderman", EntityEnderman.class, 20){
 			public float getRenderScale(TransformType type){
 				return 1.2F;
 			}
@@ -283,7 +368,7 @@ public class ItemMobEssence extends Item implements ICustomModel{
 				return new Vec3d(0, -1.2, 0);
 			}
 		});
-		addEntity("CrystalEnderman", new EntityEssenceInstance<EntityCrystalEnderman>(EntityCrystalEnderman.class){
+		addEntity(new EntityEssenceInstance<EntityCrystalEnderman>("CrystalEnderman", EntityCrystalEnderman.class, 30){
 			public float getRenderScale(TransformType type){
 				return 1.2F;
 			}
@@ -292,8 +377,8 @@ public class ItemMobEssence extends Item implements ICustomModel{
 				return new Vec3d(0, -1.2, 0);
 			}
 		});
-		addEntity("Endermite", new EntityEssenceInstance<EntityEndermite>(EntityEndermite.class));
-		
+		addEntity(new EntityEssenceInstance<EntityEndermite>("Endermite", EntityEndermite.class, 8));
+		addEntity(new EntityEssenceInstance<EntityShulker>("Skulker", EntityShulker.class, 10));
 	}
 	
 	@Override
@@ -316,26 +401,29 @@ public class ItemMobEssence extends Item implements ICustomModel{
 		String name = ItemNBTHelper.getString(stack, "Entity", "Pig");
 		EntityEssenceInstance<?> instance = entityRegistry.get(name);
 		if(instance !=null){
-			EntityLivingBase entity = instance.createEntity(world);
-			double sX = pos.getX() + 0.5;
-			double sY = pos.getY() + d0;
-			double sZ = pos.getZ() + 0.5;
-			if (entity == null) {
-				return EnumActionResult.PASS;
-			}
-			entity.setLocationAndAngles(sX, sY, sZ, MathHelper.wrapDegrees(world.rand.nextFloat() * 360.0F), 0F);
-			entity.rotationYawHead = entity.rotationYaw;
-			entity.renderYawOffset = entity.rotationYaw;
-			if (!world.isRemote) {
-				if(instance.useInitialSpawn() && entity instanceof EntityLiving)((EntityLiving)entity).onInitialSpawn(world.getDifficultyForLocation(new BlockPos(((EntityLiving)entity))), (IEntityLivingData)null);
-                world.spawnEntity(entity);
-                if(entity instanceof EntityLiving)((EntityLiving)entity).playLivingSound();
-				if (!player.capabilities.isCreativeMode)
-				{
-					ItemStackTools.incStackSize(stack, -1);
+			int killCount = ItemNBTHelper.getInteger(stack, NBT_KILLCOUNT, 0);
+			if(killCount > 0){
+				EntityLivingBase entity = instance.createEntity(world);
+				double sX = pos.getX() + 0.5;
+				double sY = pos.getY() + d0;
+				double sZ = pos.getZ() + 0.5;
+				if (entity == null) {
+					return EnumActionResult.PASS;
 				}
+				entity.setLocationAndAngles(sX, sY, sZ, MathHelper.wrapDegrees(world.rand.nextFloat() * 360.0F), 0F);
+				entity.rotationYawHead = entity.rotationYaw;
+				entity.renderYawOffset = entity.rotationYaw;
+				if (!world.isRemote) {
+					if(instance.useInitialSpawn() && entity instanceof EntityLiving)((EntityLiving)entity).onInitialSpawn(world.getDifficultyForLocation(new BlockPos(((EntityLiving)entity))), (IEntityLivingData)null);
+	                world.spawnEntity(entity);
+	                if(entity instanceof EntityLiving)((EntityLiving)entity).playLivingSound();
+					if (!player.capabilities.isCreativeMode)
+					{
+						ItemNBTHelper.setInteger(stack, NBT_KILLCOUNT, killCount-1);
+					}
+				}
+				return EnumActionResult.SUCCESS;
 			}
-			return EnumActionResult.SUCCESS;
 		}
 		
 		return EnumActionResult.PASS;

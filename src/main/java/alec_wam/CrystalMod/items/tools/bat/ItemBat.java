@@ -134,4 +134,15 @@ public class ItemBat extends ItemSpecialSword implements ICustomModel {
         getDamage(stack); // called to synchronize with itemstack value
     }
 	
+    @Override
+    public boolean isEnchantable(ItemStack stack){
+    	return false;
+    }
+    
+    @Override
+    public boolean isBookEnchantable(ItemStack stack, ItemStack book)
+    {
+        return false;
+    }
+    
 }

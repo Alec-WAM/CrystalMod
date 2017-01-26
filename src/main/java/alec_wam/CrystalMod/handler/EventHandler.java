@@ -37,6 +37,8 @@ import alec_wam.CrystalMod.tiles.endertorch.TileEnderTorch;
 import alec_wam.CrystalMod.tiles.playercube.CubeManager;
 import alec_wam.CrystalMod.tiles.playercube.PlayerCube;
 import alec_wam.CrystalMod.tiles.playercube.TileEntityPlayerCubePortal;
+import alec_wam.CrystalMod.tiles.spawner.EntityEssenceInstance;
+import alec_wam.CrystalMod.tiles.spawner.ItemMobEssence;
 import alec_wam.CrystalMod.util.EntityUtil;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemStackTools;
@@ -45,6 +47,7 @@ import alec_wam.CrystalMod.util.PlayerUtil;
 import alec_wam.CrystalMod.util.Util;
 import alec_wam.CrystalMod.world.ModDimensions;
 import baubles.api.BaubleType;
+import joptsimple.internal.Strings;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -55,10 +58,11 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.monster.EntityZombie;
-import net.minecraft.entity.passive.EntityHorse;
+import net.minecraft.entity.passive.AbstractHorse;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArrow;
 import net.minecraft.item.ItemStack;
@@ -362,8 +366,8 @@ public class EventHandler {
     	EntityPlayer player = event.getEntityPlayer();
     	ItemStack held = event.getItemStack();
     	Entity entity = event.getTarget();
-        if(entity instanceof EntityHorse){
-      	  EntityHorse horse = (EntityHorse)entity;
+        if(entity instanceof AbstractHorse){
+      	  AbstractHorse horse = (AbstractHorse)entity;
       	  if(HorseAccessories.handleHorseInteract(player, held, horse)){
       		  event.setCanceled(true);
       	  }
@@ -377,8 +381,42 @@ public class EventHandler {
         return;
       }
       EntityLivingBase entity = event.getEntityLiving();
-      if(entity instanceof EntityHorse){
-    	  EntityHorse horse = (EntityHorse)entity;
+      
+      if(entity instanceof EntityLivingBase){
+    	  Entity attacker = event.getSource().getSourceOfDamage();
+    	  if(attacker !=null){
+    		  if(attacker instanceof EntityPlayer){
+    			  EntityPlayer player = (EntityPlayer)attacker;
+    			  ItemStack offHand = player.getHeldItemOffhand();
+    			  if(ItemStackTools.isValid(offHand)){
+    				  if(offHand.getItem() == ModItems.emptyMobEssence){
+    					  EntityEssenceInstance<?> essence = ItemMobEssence.getEntityEssence(entity);
+    					  if(essence !=null){
+    						  String id = essence.getID();
+    						  if(Strings.isNullOrEmpty(id))id = "Pig";
+    						  ItemStack essenceStack = ItemMobEssence.createStack(id);
+    						  ItemNBTHelper.setInteger(essenceStack, ItemMobEssence.NBT_KILLCOUNT, 1);
+    						  player.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, essenceStack);
+    					  }
+    				  } else if(offHand.getItem() == ModItems.mobEssence){
+    					  EntityEssenceInstance<?> essence = ItemMobEssence.getEntityEssence(entity);
+    					  if(essence !=null){
+    						  String id = essence.getID();
+    						  if(Strings.isNullOrEmpty(id))id = "Pig";
+    						  String heldID = ItemNBTHelper.getString(offHand, ItemMobEssence.NBT_ENTITYNAME, "");
+    						  int currentKills = ItemNBTHelper.getInteger(offHand, ItemMobEssence.NBT_KILLCOUNT, 1);
+    						  if(id.equals(heldID) && currentKills < essence.getNeededKills()){
+    							  ItemNBTHelper.setInteger(offHand, ItemMobEssence.NBT_KILLCOUNT, currentKills+1);
+    						  }
+    					  }
+    				  }
+    			  }
+    		  }
+    	  }
+      }
+      
+      if(entity instanceof AbstractHorse){
+    	  AbstractHorse horse = (AbstractHorse)entity;
     	  HorseAccessories.onHorseDeath(horse);
       }
     }

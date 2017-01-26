@@ -65,7 +65,7 @@ public class ContainerExtendedInventory extends Container
                 @Override
                 public boolean isItemValid(ItemStack stack)
                 {
-                    if (stack == null)
+                    if (ItemStackTools.isEmpty(stack))
                     {
                         return false;
                     }
@@ -86,7 +86,7 @@ public class ContainerExtendedInventory extends Container
         this.addSlotToContainer(new SlotItemHandler(inventory, ExtendedPlayerInventory.BACKPACK_SLOT_ID, 77, 8 + 2 * 18){
         	@Override
         	public boolean isItemValid(ItemStack stack){
-        		return !ItemStackTools.isNullStack(stack) && stack.getItem() instanceof ItemBackpackBase;
+        		return ItemStackTools.isValid(stack) && stack.getItem() instanceof ItemBackpackBase;
         	}
         });   
 
@@ -129,13 +129,13 @@ public class ContainerExtendedInventory extends Container
         {
             ItemStack itemstack = this.craftMatrix.removeStackFromSlot(i);
 
-            if (itemstack != null)
+            if (ItemStackTools.isValid(itemstack))
             {
                 player.dropItem(itemstack, false);
             }
         }
 
-        this.craftResult.setInventorySlotContents(0, (ItemStack)null);
+        this.craftResult.setInventorySlotContents(0, ItemStackTools.getEmptyStack());
     }
 
     @Override

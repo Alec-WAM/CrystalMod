@@ -24,7 +24,7 @@ public class TileCrate extends TileEntityMod implements IFacingTile, IMessageHan
 	private int lastClicked, lastClickedExpected = -1;
 	
 	public int tier;
-	private ItemStack storedStack;
+	private ItemStack storedStack = ItemStackTools.getEmptyStack();
 	private final ItemHandlerCrate storage = new ItemHandlerCrate(this);
 	
 	public TileCrate(){

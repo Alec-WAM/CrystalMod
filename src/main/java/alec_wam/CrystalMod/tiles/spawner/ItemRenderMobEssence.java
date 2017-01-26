@@ -80,7 +80,6 @@ public class ItemRenderMobEssence implements ICustomItemRenderer {
 		
 		if(type == null){
 			GlStateManager.pushMatrix();
-			GlStateManager.disableCull();
 			GlStateManager.enableBlend();
 			GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 			GlStateManager.pushAttrib();
@@ -104,17 +103,11 @@ public class ItemRenderMobEssence implements ICustomItemRenderer {
 			GlStateManager.scale(scale, scale, scale);
 			GlStateManager.translate(offset.xCoord, offset.yCoord, offset.zCoord);
 			
-			GlStateManager.disableCull();
-			//GlStateManager.depthMask(false);
 			GlStateManager.enableBlend();
 			GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 			GlStateManager.pushAttrib();
 			Minecraft.getMinecraft().getRenderManager().doRenderEntity(entity, 0.0D, 0.0D, 0.0D, 0.0F, partialTicks, true);
 			GlStateManager.popAttrib();
-			
-			GlStateManager.enableCull();
-			
-			//GlStateManager.enableLighting();
 			GlStateManager.popMatrix();
 			GlStateManager.enableBlend();
 	        GlStateManager.setActiveTexture(OpenGlHelper.lightmapTexUnit);

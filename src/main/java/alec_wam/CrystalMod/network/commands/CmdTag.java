@@ -15,12 +15,14 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.fml.common.Loader;
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.capability.ExtendedPlayer;
 import alec_wam.CrystalMod.capability.ExtendedPlayerProvider;
 import alec_wam.CrystalMod.handler.MissingItemHandler;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.packets.PacketExtendedPlayer;
+import alec_wam.CrystalMod.tiles.spawner.ItemMobEssence;
 import alec_wam.CrystalMod.util.ChatUtil;
 import alec_wam.CrystalMod.util.ModLogger;
 import alec_wam.CrystalMod.util.ProfileUtil;
@@ -93,7 +95,12 @@ public class CmdTag extends AbstractCMCommand{
 			    }
 				
 				if(args.length > 1 && args[1].equalsIgnoreCase("jei")){
-					Internal.getHelpers().reload();
+					if(Loader.isModLoaded("jei"))Internal.getHelpers().reload();
+					return;
+				}
+				
+				if(args.length > 1 && args[1].equalsIgnoreCase("essence")){
+					ItemMobEssence.initDefaultMobs();
 					return;
 				}
 					

@@ -59,15 +59,18 @@ public class BlockCustomSpawner extends BlockContainer {
 			if(ItemStackTools.isValid(stack)){
 				if(stack.getItem() instanceof ItemMobEssence){
 					String name = ItemNBTHelper.getString(stack, ItemMobEssence.NBT_ENTITYNAME, "Pig");
+					int killCount = ItemNBTHelper.getInteger(stack, ItemMobEssence.NBT_KILLCOUNT, 0);
 					if(spawner.getBaseLogic().getEntityNameToSpawn().equals(name))return false;
 					@SuppressWarnings("rawtypes")
 					EntityEssenceInstance essence = ItemMobEssence.getEssence(name);
 					if(essence !=null){
+						if(killCount < essence.getNeededKills()) return false;
 						spawner.getBaseLogic().setEntityName(name);
 						spawner.isSetToSpawn = true;
 						BlockUtil.markBlockForUpdate(worldIn, pos);
 						if(!playerIn.capabilities.isCreativeMode){
-							playerIn.setHeldItem(hand, ItemUtil.consumeItem(stack));
+							ItemNBTHelper.setInteger(stack, ItemMobEssence.NBT_KILLCOUNT, 0);
+							playerIn.setHeldItem(hand, stack);
 						}
 						return true;
 					}
@@ -209,7 +212,8 @@ public class BlockCustomSpawner extends BlockContainer {
 				world.spawnEntity(item);
 			}
 			
-			boolean dropEssence = !Strings.isNullOrEmpty(spawner.getBaseLogic().getEntityNameToSpawn());
+			//TODO Dont drop essence. Maybe full essence?
+			/*boolean dropEssence = !Strings.isNullOrEmpty(spawner.getBaseLogic().getEntityNameToSpawn());
 			if(dropEssence){
 				ItemStack mobEssence = new ItemStack(ModItems.mobEssence);
 				ItemNBTHelper.setString(mobEssence, ItemMobEssence.NBT_ENTITYNAME, spawner.getBaseLogic().getEntityNameToSpawn());
@@ -218,7 +222,7 @@ public class BlockCustomSpawner extends BlockContainer {
 				item.motionY = (4 + world.rand.nextFloat()) * multiplyer;
 				item.motionZ = (-0.5F + world.rand.nextFloat()) * multiplyer;
 				world.spawnEntity(item);
-			}
+			}*/
 		}
 		super.breakBlock(world, pos, state);
 	}

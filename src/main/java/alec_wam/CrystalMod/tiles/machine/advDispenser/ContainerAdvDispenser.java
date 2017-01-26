@@ -17,14 +17,13 @@ public class ContainerAdvDispenser extends Container
     {
         this.dispenser = dispenser;
 
-        for (int i = 0; i < 3; ++i)
+        for (int j = 0; j < 9; ++j)
         {
-            for (int j = 0; j < 3; ++j)
-            {
-                this.addSlotToContainer(new Slot(dispenser, j + i * 3, 62 + j * 18, 17 + i * 18));
-            }
+        	this.addSlotToContainer(new Slot(dispenser, j, 8 + j * 18, 53));
         }
 
+        this.addSlotToContainer(new Slot(dispenser, 9, 8, 32));
+        
         for (int k = 0; k < 3; ++k)
         {
             for (int i1 = 0; i1 < 9; ++i1)
@@ -58,9 +57,9 @@ public class ContainerAdvDispenser extends Container
             ItemStack itemstack1 = slot.getStack();
             itemstack = itemstack1.copy();
 
-            if (index < 9)
+            if (index < 10)
             {
-                if (!this.mergeItemStack(itemstack1, 9, 45, true))
+                if (!this.mergeItemStack(itemstack1, 10, 46, true))
                 {
                     return null;
                 }

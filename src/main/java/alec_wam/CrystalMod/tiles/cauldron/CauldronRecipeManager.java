@@ -131,8 +131,9 @@ public class CauldronRecipeManager {
 
 	public static void initRecipes() {
 		int bucket = 100;
-		addRecipe("ingotIron", new FluidStack(ModFluids.fluidDarkCrystal, 1 * bucket), new ItemStack(ModItems.ingots, 1, IngotType.DARK_IRON.getMetadata()));
-		addRecipe("blockIron", new FluidStack(ModFluids.fluidDarkCrystal, 9 * bucket), new ItemStack(ModBlocks.crystalIngot, 1, CrystalIngotBlockType.DARKIRON.getMeta()));
+		addRecipe("nuggetIron", new FluidStack(ModFluids.fluidDarkCrystal, 10), new ItemStack(ModItems.crystals, 1, CrystalType.DIRON_NUGGET.getMetadata()));
+		addRecipe("ingotIron", new FluidStack(ModFluids.fluidDarkCrystal, 90), new ItemStack(ModItems.ingots, 1, IngotType.DARK_IRON.getMetadata()));
+		addRecipe("blockIron", new FluidStack(ModFluids.fluidDarkCrystal, 900), new ItemStack(ModBlocks.crystalIngot, 1, CrystalIngotBlockType.DARKIRON.getMeta()));
 
 		addRecipe("gemQuartz", new FluidStack(ModFluids.fluidBlueCrystal, 6 * bucket), new ItemStack(ModItems.crystals, 1, CrystalType.BLUE.getMetadata()));
 		addRecipe("gemQuartz", new FluidStack(ModFluids.fluidRedCrystal, 6 * bucket), new ItemStack(ModItems.crystals, 1, CrystalType.RED.getMetadata()));

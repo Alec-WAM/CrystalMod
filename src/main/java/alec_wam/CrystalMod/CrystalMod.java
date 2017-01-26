@@ -2,15 +2,12 @@ package alec_wam.CrystalMod;
 
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.List;
 import java.util.Locale;
 
-import com.google.common.collect.Lists;
-
 import alec_wam.CrystalMod.api.CrystalModAPI;
+import alec_wam.CrystalMod.blocks.BlockCrystal.CrystalBlockType;
 import alec_wam.CrystalMod.blocks.BlockCrystalLog;
 import alec_wam.CrystalMod.blocks.ModBlocks;
-import alec_wam.CrystalMod.blocks.BlockCrystal.CrystalBlockType;
 import alec_wam.CrystalMod.blocks.crops.material.IMaterialCrop;
 import alec_wam.CrystalMod.blocks.crops.material.ItemMaterialSeed;
 import alec_wam.CrystalMod.fluids.ModFluids;
@@ -25,7 +22,6 @@ import alec_wam.CrystalMod.tiles.pipes.covers.CoverUtil.CoverData;
 import alec_wam.CrystalMod.tiles.pipes.covers.ItemPipeCover;
 import alec_wam.CrystalMod.util.ItemUtil;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
@@ -66,10 +62,10 @@ public class CrystalMod {
 		
 		@SideOnly(Side.CLIENT)
         public void displayAllRelevantItems(final NonNullList<ItemStack> list) {
-            //final NonNullList<ItemStack> newList = NonNullList.create();
-            super.displayAllRelevantItems(list);
-            //Collections.sort(newList, this);
-            //list.addAll(newList);
+            final NonNullList<ItemStack> newList = NonNullList.create();
+            super.displayAllRelevantItems(newList);
+            Collections.sort(newList, this);
+            list.addAll(newList);
         }
 		
 	}

@@ -11,6 +11,7 @@ import alec_wam.CrystalMod.util.client.RenderUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelChest;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
@@ -60,7 +61,9 @@ public class RenderTileWirelessChest extends TileEntitySpecialRenderer<TileWirel
 			y-=0.5;
 			z-=0.5;
 		}*/
-		renderChest(x, y, z, code, facing, owner !=null, 0.0f, -1);
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+        GlStateManager.enableRescaleNormal();
+        renderChest(x, y, z, code, facing, owner !=null, 0.0f, -1);
 		GlStateManager.popMatrix();
 	}
 	

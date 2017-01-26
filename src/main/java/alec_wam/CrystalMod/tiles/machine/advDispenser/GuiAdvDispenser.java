@@ -3,6 +3,7 @@ package alec_wam.CrystalMod.tiles.machine.advDispenser;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.packets.PacketTileMessage;
 import alec_wam.CrystalMod.tiles.machine.advDispenser.TileAdvDispenser.ClickType;
+import alec_wam.CrystalMod.tiles.machine.advDispenser.TileAdvDispenser.HandType;
 import alec_wam.CrystalMod.tiles.machine.advDispenser.TileAdvDispenser.InteractType;
 import alec_wam.CrystalMod.tiles.pipes.TileEntityPipe.RedstoneMode;
 import net.minecraft.client.gui.GuiButton;
@@ -17,7 +18,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class GuiAdvDispenser extends GuiContainer
 {
-    private static final ResourceLocation DISPENSER_GUI_TEXTURES = new ResourceLocation("textures/gui/container/dispenser.png");
+    private static final ResourceLocation DISPENSER_GUI_TEXTURES = new ResourceLocation("crystalmod:textures/gui/machine/advdispenser.png");
     private final InventoryPlayer playerInventory;
     public TileAdvDispenser dispenser;
 
@@ -40,22 +41,27 @@ public class GuiAdvDispenser extends GuiContainer
     	if(dispenser !=null){
     		interact = dispenser.interact.name();
     	}
-    	this.buttonList.add(new GuiButton(0, guiLeft + 10, guiTop + 20, 20, 10, interact));
+    	this.buttonList.add(new GuiButton(0, guiLeft + 10, guiTop + 10, 20, 10, interact));
     	String click = "";
     	if(dispenser !=null){
     		click = dispenser.click.name();
     	}
-    	this.buttonList.add(new GuiButton(1, guiLeft + 10, guiTop + 30, 20, 10, click));
+    	this.buttonList.add(new GuiButton(1, guiLeft + 40, guiTop + 10, 20, 10, click));
     	String redstone = "";
     	if(dispenser !=null){
     		redstone = dispenser.redstone.name();
     	}
-    	this.buttonList.add(new GuiButton(2, guiLeft + 10, guiTop + 40, 20, 10, redstone));
+    	this.buttonList.add(new GuiButton(2, guiLeft + 70, guiTop + 10, 20, 10, redstone));
     	String sneak = "";
     	if(dispenser !=null){
     		sneak = dispenser.isSneaking ? "Sneaking" : "Normal";
     	}
-    	this.buttonList.add(new GuiButton(3, guiLeft + 10, guiTop + 50, 20, 10, sneak));
+    	this.buttonList.add(new GuiButton(3, guiLeft + 100, guiTop + 10, 20, 10, sneak));
+    	String hand = "";
+    	if(dispenser !=null){
+    		hand = dispenser.hand.name();
+    	}
+    	this.buttonList.add(new GuiButton(4, guiLeft + 130, guiTop + 10, 20, 10, hand));
     }
     
     @Override
@@ -109,6 +115,22 @@ public class GuiAdvDispenser extends GuiContainer
     		dispenser.isSneaking = newSneak;
     		NBTTagCompound nbt = new NBTTagCompound();
     		nbt.setBoolean("Sneaking", newSneak);
+    		CrystalModNetwork.sendToServer(new PacketTileMessage(dispenser.getPos(), "Settings", nbt));
+    		refreshButtons();
+    		return;
+    	}
+    	//Hand
+    	if(button.id == 4){
+    		int next = dispenser.hand.ordinal();
+    		if(next+1 < HandType.values().length){
+    			next++;
+    		} else {
+    			next = 0;
+    		}
+    		HandType nextType = HandType.values()[next];
+    		dispenser.hand = nextType;
+    		NBTTagCompound nbt = new NBTTagCompound();
+    		nbt.setInteger("Hand", next);
     		CrystalModNetwork.sendToServer(new PacketTileMessage(dispenser.getPos(), "Settings", nbt));
     		refreshButtons();
     		return;

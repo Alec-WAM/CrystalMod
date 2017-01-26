@@ -20,6 +20,7 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -39,12 +40,13 @@ public class TileAdvDispenser extends TileEntityInventory implements IFacingTile
 	private EnumFacing facing = EnumFacing.NORTH;
 	private final ItemStackList pendingStacks = new ItemStackList();
 	public InteractType interact = InteractType.BLOCK;
+	public HandType hand = HandType.BOTH;
 	public ClickType click = ClickType.RIGHT;
 	public boolean isSneaking;
 	public RedstoneMode redstone = RedstoneMode.ON;
 	public int cooldown;
 	public TileAdvDispenser() {
-		super("AdvDispenser", 9);
+		super("AdvDispenser", 10);
 	}
 	
 	@Override
@@ -53,6 +55,7 @@ public class TileAdvDispenser extends TileEntityInventory implements IFacingTile
 		nbt.setInteger("Facing", getFacing());
 		nbt.setInteger("InteractType", interact.ordinal());
 		nbt.setInteger("ClickType", click.ordinal());
+		nbt.setInteger("HandType", hand.ordinal());
 		nbt.setBoolean("Sneaking", isSneaking);
 		nbt.setInteger("Cooldown", cooldown);
 	}
@@ -63,6 +66,7 @@ public class TileAdvDispenser extends TileEntityInventory implements IFacingTile
 		setFacing(nbt.getInteger("Facing"));
 		interact = InteractType.values()[nbt.getInteger("InteractType")];
 		click = ClickType.values()[nbt.getInteger("ClickType")];
+		hand = HandType.values()[nbt.getInteger("HandType")];
 		isSneaking = nbt.getBoolean("Sneaking");
 		cooldown = nbt.getInteger("Cooldown");
 		updateAfterLoad();
@@ -120,24 +124,57 @@ public class TileAdvDispenser extends TileEntityInventory implements IFacingTile
 			for(int i = 0; i < 9; i++){
 				playerInv.setInventorySlotContents(i, ItemStackTools.safeCopy(getStackInSlot(i)));
 			}
+			this.fakePlayer.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, ItemStackTools.safeCopy(getStackInSlot(9)));
 			playerInv.currentItem = slotIndex;
 			this.fakePlayer.updateAttributes();
-			final ItemStack copy = playerInv.getStackInSlot(slotIndex);
+			
 			final float hX = (float)(fakePlayer.posX - facingPos.getX());
 			final float hY = (float)(fakePlayer.posY - facingPos.getX());
 			final float hZ = (float)(fakePlayer.posZ - facingPos.getX());
 			
-			
-			
-			EnumActionResult result = performInteraction(facingPos, copy, interact, click, hX, hY, hZ);
-			
-			if(result !=null){
-				cooldown = Config.advDispenser_cooldown;
+			if(hand == HandType.MAIN){
+				EnumActionResult result = performInteraction(facingPos, fakePlayer.getHeldItem(EnumHand.MAIN_HAND), interact, click, EnumHand.MAIN_HAND, hX, hY, hZ);
+				
+				if(result !=null){
+					cooldown = Config.advDispenser_cooldown;
+				}
+				
+				if(ItemStackTools.isValid(fakePlayer.getHeldItem(EnumHand.MAIN_HAND))){
+					this.fakePlayer.getCooldownTracker().setCooldown(fakePlayer.getHeldItem(EnumHand.MAIN_HAND).getItem(), 0);
+					this.fakePlayer.updateCooldown();
+				}
 			}
-			
-			if(ItemStackTools.isValid(copy)){
-				this.fakePlayer.getCooldownTracker().setCooldown(copy.getItem(), 0);
-				this.fakePlayer.updateCooldown();
+			if(hand == HandType.OFF){
+				EnumActionResult result = performInteraction(facingPos, fakePlayer.getHeldItem(EnumHand.OFF_HAND), interact, click, EnumHand.OFF_HAND, hX, hY, hZ);
+				
+				if(result !=null){
+					cooldown = Config.advDispenser_cooldown;
+				}
+				
+				if(ItemStackTools.isValid(fakePlayer.getHeldItem(EnumHand.OFF_HAND))){
+					this.fakePlayer.getCooldownTracker().setCooldown(fakePlayer.getHeldItem(EnumHand.OFF_HAND).getItem(), 0);
+					this.fakePlayer.updateCooldown();
+				}
+			}
+			if(hand == HandType.BOTH){
+				EnumActionResult result = performInteraction(facingPos, fakePlayer.getHeldItem(EnumHand.MAIN_HAND), interact, click, EnumHand.MAIN_HAND, hX, hY, hZ);
+				
+				if(result == null || result != EnumActionResult.SUCCESS){
+					result = performInteraction(facingPos, fakePlayer.getHeldItem(EnumHand.OFF_HAND), interact, click, EnumHand.OFF_HAND, hX, hY, hZ);;
+				}
+				
+				if(result !=null){
+					cooldown = Config.advDispenser_cooldown;
+				}
+				
+				if(ItemStackTools.isValid(fakePlayer.getHeldItem(EnumHand.MAIN_HAND))){
+					this.fakePlayer.getCooldownTracker().setCooldown(fakePlayer.getHeldItem(EnumHand.MAIN_HAND).getItem(), 0);
+					this.fakePlayer.updateCooldown();
+				}
+				if(ItemStackTools.isValid(fakePlayer.getHeldItem(EnumHand.OFF_HAND))){
+					this.fakePlayer.getCooldownTracker().setCooldown(fakePlayer.getHeldItem(EnumHand.OFF_HAND).getItem(), 0);
+					this.fakePlayer.updateCooldown();
+				}
 			}
 			for (int l = 0; l < 9; ++l) {
 	            ItemStack slot = playerInv.getStackInSlot(l);
@@ -147,7 +184,7 @@ public class TileAdvDispenser extends TileEntityInventory implements IFacingTile
 	            playerInv.setInventorySlotContents(l, ItemStackTools.getEmptyStack());
 	            setInventorySlotContents(l, ItemStackTools.safeCopy(slot));
 	        }
-	        for (int l = 9; l < playerInv.getSizeInventory(); ++l) {
+	        /*for (int l = 9; l < playerInv.getSizeInventory(); ++l) {
 	            ItemStack stackInSlot = playerInv.getStackInSlot(l);
 	            if (ItemStackTools.isValid(stackInSlot)) {
 	                ItemStackTools.incStackSize(stackInSlot, -ItemUtil.doInsertItem(this, stackInSlot, EnumFacing.UP));
@@ -155,7 +192,13 @@ public class TileAdvDispenser extends TileEntityInventory implements IFacingTile
 	                    this.pendingStacks.add(stackInSlot);
 	                }
 	            }
-	        }
+	        }*/
+	        ItemStack slot = fakePlayer.getItemStackFromSlot(EntityEquipmentSlot.OFFHAND);
+            if (ItemStackTools.isEmpty(slot)) {
+                slot = ItemStackTools.getEmptyStack();
+            }
+            this.fakePlayer.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, ItemStackTools.getEmptyStack());
+            setInventorySlotContents(9, ItemStackTools.safeCopy(slot));
 	        playerInv.clear();
 	        this.fakePlayer.updateAttributes();
 	        this.fakePlayer.setSneaking(false);
@@ -163,11 +206,11 @@ public class TileAdvDispenser extends TileEntityInventory implements IFacingTile
 	}
 
 	
-	public EnumActionResult performInteraction(BlockPos facingPos, ItemStack copy, InteractType interact, ClickType click, float hX, float hY, float hZ){
+	public EnumActionResult performInteraction(BlockPos facingPos, ItemStack copy, InteractType interact, ClickType click, EnumHand hand, float hX, float hY, float hZ){
 		if(interact == InteractType.BLOCK){
 			if(!ItemStackTools.isValid(copy))return EnumActionResult.FAIL;
 			if(click == ClickType.RIGHT){
-				return this.fakePlayer.interactionManager.processRightClick(fakePlayer, getWorld(), copy, EnumHand.MAIN_HAND);
+				return this.fakePlayer.interactionManager.processRightClick(fakePlayer, getWorld(), copy, hand);
 			} else {
 				this.fakePlayer.interactionManager.onBlockClicked(facingPos, facing.getOpposite());
 				for(int u = 0; u < 20; u++){
@@ -194,12 +237,10 @@ public class TileAdvDispenser extends TileEntityInventory implements IFacingTile
 			if(click == ClickType.RIGHT){
 				if(!ItemStackTools.isValid(copy))return EnumActionResult.FAIL;
 				//Can Interact
-				this.fakePlayer.setHeldItem(EnumHand.MAIN_HAND, copy);
-				final PlayerInteractEvent.RightClickBlock event = (PlayerInteractEvent.RightClickBlock)ForgeHooks.onRightClickBlock(this.fakePlayer, EnumHand.MAIN_HAND, facingPos, facing.getOpposite(), ForgeHooks.rayTraceEyeHitVec(this.fakePlayer, 2.0));
-                if (!event.isCanceled() && event.getUseItem() != Event.Result.DENY && copy.getItem().onItemUseFirst(this.fakePlayer, getWorld(), facingPos, facing.getOpposite(), hX, hY, hZ, EnumHand.MAIN_HAND) == EnumActionResult.PASS) {
-                    return copy.onItemUse(this.fakePlayer, getWorld(), facingPos, EnumHand.MAIN_HAND, facing.getOpposite(), hX, hY, hZ);
+				final PlayerInteractEvent.RightClickBlock event = (PlayerInteractEvent.RightClickBlock)ForgeHooks.onRightClickBlock(this.fakePlayer, hand, facingPos, facing.getOpposite(), ForgeHooks.rayTraceEyeHitVec(this.fakePlayer, 2.0));
+                if (!event.isCanceled() && event.getUseItem() != Event.Result.DENY && copy.getItem().onItemUseFirst(this.fakePlayer, getWorld(), facingPos, facing.getOpposite(), hX, hY, hZ, hand) == EnumActionResult.PASS) {
+                    return copy.onItemUse(this.fakePlayer, getWorld(), facingPos, hand, facing.getOpposite(), hX, hY, hZ);
                 }
-                this.fakePlayer.setHeldItem(EnumHand.MAIN_HAND, ItemStackTools.getEmptyStack());
                 return EnumActionResult.FAIL;
 			} else {
 				final PlayerInteractEvent.LeftClickBlock event = (PlayerInteractEvent.LeftClickBlock)ForgeHooks.onLeftClickBlock(this.fakePlayer, facingPos, facing.getOpposite(), ForgeHooks.rayTraceEyeHitVec(this.fakePlayer, 2.0));
@@ -220,14 +261,12 @@ public class TileAdvDispenser extends TileEntityInventory implements IFacingTile
 		} else if(interact == InteractType.ACTIVATE){
 			if(click == ClickType.RIGHT){
 				//Can Interact
-				this.fakePlayer.setHeldItem(EnumHand.MAIN_HAND, copy);
-				final PlayerInteractEvent.RightClickBlock event = (PlayerInteractEvent.RightClickBlock)ForgeHooks.onRightClickBlock(this.fakePlayer, EnumHand.MAIN_HAND, facingPos, facing.getOpposite(), ForgeHooks.rayTraceEyeHitVec(this.fakePlayer, 2.0));
+				final PlayerInteractEvent.RightClickBlock event = (PlayerInteractEvent.RightClickBlock)ForgeHooks.onRightClickBlock(this.fakePlayer, hand, facingPos, facing.getOpposite(), ForgeHooks.rayTraceEyeHitVec(this.fakePlayer, 2.0));
                 if (!event.isCanceled() && event.getUseItem() != Event.Result.DENY){
                 	IBlockState blockFacing = getWorld().getBlockState(facingPos);
-                	boolean interacted = blockFacing.getBlock().onBlockActivated(getWorld(), facingPos, blockFacing, fakePlayer, EnumHand.MAIN_HAND, facing.getOpposite(), hX, hY, hZ);
+                	boolean interacted = blockFacing.getBlock().onBlockActivated(getWorld(), facingPos, blockFacing, fakePlayer, hand, facing.getOpposite(), hX, hY, hZ);
                 	return interacted ? EnumActionResult.SUCCESS : EnumActionResult.PASS;
                 }
-                this.fakePlayer.setHeldItem(EnumHand.MAIN_HAND, ItemStackTools.getEmptyStack());
                 return EnumActionResult.FAIL;
 			} else {
 				//Mainly for single clicks
@@ -242,43 +281,8 @@ public class TileAdvDispenser extends TileEntityInventory implements IFacingTile
 		} else if(interact == InteractType.USEAIR){
 			if(click !=ClickType.RIGHT || !ItemStackTools.isValid(copy))return EnumActionResult.FAIL;
 			//Proper events called 
-			return this.fakePlayer.interactionManager.processRightClick(fakePlayer, getWorld(), copy, EnumHand.MAIN_HAND);
+			return this.fakePlayer.interactionManager.processRightClick(fakePlayer, getWorld(), copy, hand);
 		} else if(interact == InteractType.ENTITY){
-			/*Pair<Vec3d, Vec3d> rayVecs = EntityUtil.getStartAndEndLookVec(fakePlayer, 3.0f);
-			final Vec3d start = rayVecs.getLeft();
-            Vec3d end = rayVecs.getRight();
-            final RayTraceResult trace = this.fakePlayer.worldObj.rayTraceBlocks(start, end, false, true, true);
-            if (trace != null && trace.hitVec != null) {
-                end = trace.hitVec;
-            }
-            Entity hitEntity = null;
-            final List<Entity> list = (List<Entity>)this.worldObj.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(facingPos));
-            if (list.isEmpty()) {
-            	return EnumActionResult.FAIL;
-            }
-            double distance = 0.0;
-            Entity backupEntity = null;
-            for(Entity entity : list){
-            	//Right Click Anything
-            	if(entity.canBeCollidedWith() && !entity.noClip && (click == ClickType.RIGHT || (!(hitEntity instanceof EntityItem) && !(hitEntity instanceof EntityXPOrb) && !(hitEntity instanceof EntityArrow)))){
-            		backupEntity = hitEntity;
-            		final AxisAlignedBB axisalignedbb = entity.getEntityBoundingBox().expandXyz(0.30000001192092896);
-                    final RayTraceResult raytraceresult1 = axisalignedbb.calculateIntercept(start, end);
-                    if (raytraceresult1 == null) {
-                        continue;
-                    }
-                    final double distance2 = start.squareDistanceTo(raytraceresult1.hitVec);
-                    if (distance2 >= distance && distance != 0.0) {
-                        continue;
-                    }
-                    hitEntity = entity;
-                    distance = distance2;
-            	}
-            }
-            
-            if(hitEntity == null && backupEntity !=null){
-            	hitEntity = backupEntity;
-            }*/
             Entity hitEntity = null;
             
             RayTraceResult ray = EntityUtil.getRayTraceEntity(getWorld(), fakePlayer, 3.0D, fakePlayer.interactionManager.getBlockReachDistance());
@@ -290,8 +294,7 @@ public class TileAdvDispenser extends TileEntityInventory implements IFacingTile
             }
             
             if(click == ClickType.RIGHT){
-            	this.fakePlayer.setHeldItem(EnumHand.MAIN_HAND, copy);
-            	return this.fakePlayer.interactOn(hitEntity, EnumHand.MAIN_HAND);
+            	return this.fakePlayer.interactOn(hitEntity, hand);
             } else {
             	if(!(hitEntity instanceof EntityItem) && !(hitEntity instanceof EntityXPOrb) && !(hitEntity instanceof EntityArrow)){
             		this.fakePlayer.updateCooldown();
@@ -309,6 +312,10 @@ public class TileAdvDispenser extends TileEntityInventory implements IFacingTile
 	
 	public static enum ClickType {
 		LEFT, RIGHT;
+	}
+	
+	public static enum HandType {
+		MAIN, OFF, BOTH;
 	}
 	
 	@Override
@@ -340,6 +347,10 @@ public class TileAdvDispenser extends TileEntityInventory implements IFacingTile
 			}
 			if(messageData.hasKey("Click")){
 				this.click = ClickType.values()[messageData.getInteger("Click")];
+				dirty = true;
+			}
+			if(messageData.hasKey("Hand")){
+				this.hand = HandType.values()[messageData.getInteger("Hand")];
 				dirty = true;
 			}
 			if(messageData.hasKey("Redstone")){

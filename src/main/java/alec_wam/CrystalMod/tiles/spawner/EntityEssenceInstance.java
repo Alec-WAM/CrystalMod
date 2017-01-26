@@ -3,7 +3,9 @@ package alec_wam.CrystalMod.tiles.spawner;
 import java.util.List;
 
 import alec_wam.CrystalMod.util.Lang;
+import alec_wam.CrystalMod.util.ModLogger;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.ResourceLocation;
@@ -12,14 +14,30 @@ import net.minecraft.world.World;
 
 public class EntityEssenceInstance<T extends EntityLivingBase> {
 
+	protected final String ID;
 	protected Class<? extends T> entityClass;
+	protected final int neededKills;
 	
-	public EntityEssenceInstance(Class<T> entityClass){
+	public EntityEssenceInstance(String id, Class<T> entityClass){
+		this(id, entityClass, 1);
+	}
+	
+	public EntityEssenceInstance(String id, Class<T> entityClass, int neededKills){
+		this.ID = id;
 		this.entityClass = entityClass;
+		this.neededKills = neededKills;
+	}
+	
+	public String getID(){
+		return ID;
 	}
 	
 	public Class<? extends T> getEntityClass(){
 		return entityClass;
+	}
+	
+	public int getNeededKills(){
+		return neededKills;
 	}
 	
 	public T createEntity(World world){
@@ -59,6 +77,10 @@ public class EntityEssenceInstance<T extends EntityLivingBase> {
 	
 	public boolean shouldSpinDuringRender(){
 		return true;
+	}
+
+	public boolean isValid(Entity entity) {
+		return entityClass.equals(entity.getClass());
 	}
 	
 }

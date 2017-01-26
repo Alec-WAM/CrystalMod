@@ -275,7 +275,7 @@ public abstract class DynamicBaseModel implements IPerspectiveAwareModel {
     }
     
     public static final TRSRTransformation THIRD_PERSON_RIGHT_HAND = TRSRTransformation.blockCenterToCorner(new TRSRTransformation(
-            new Vector3f(0, 2.5f, 0),
+            new Vector3f(0, 0, 0),
             TRSRTransformation.quatFromXYZDegrees(new Vector3f(75, 45, 0)),
             new Vector3f(0.375f, 0.375f, 0.375f),
             null));

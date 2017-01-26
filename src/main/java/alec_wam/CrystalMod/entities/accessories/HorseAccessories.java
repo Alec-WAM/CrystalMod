@@ -8,7 +8,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockChest;
 import net.minecraft.entity.passive.AbstractChestHorse;
 import net.minecraft.entity.passive.AbstractHorse;
-import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.ContainerHorseChest;
@@ -20,7 +19,7 @@ import net.minecraft.nbt.NBTTagCompound;
 public class HorseAccessories {
     public static String NBT_ACCESSORY_HORSE_ENDERCHEST = "EnderChest";
     
-    public static boolean handleHorseInteract(EntityPlayer player, ItemStack held, EntityHorse horse){
+    public static boolean handleHorseInteract(EntityPlayer player, ItemStack held, AbstractHorse horse){
     	if(handleEnderChestInteract(horse, held, player))return true;
     	return false;
     }
@@ -83,7 +82,7 @@ public class HorseAccessories {
     	return null;
     }
     
-	public static void onHorseDeath(EntityHorse horse) {
+	public static void onHorseDeath(AbstractHorse horse) {
 		if(hasEnderChest(horse)){
 			horse.dropItem(Item.getItemFromBlock(Blocks.ENDER_CHEST), 1);
 		}

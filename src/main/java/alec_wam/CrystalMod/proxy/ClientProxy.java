@@ -28,6 +28,7 @@ import alec_wam.CrystalMod.handler.KeyHandler;
 import alec_wam.CrystalMod.integration.minecraft.ItemMinecartRender;
 import alec_wam.CrystalMod.items.ItemDragonWings;
 import alec_wam.CrystalMod.items.ModItems;
+import alec_wam.CrystalMod.items.guide.GuidePages;
 import alec_wam.CrystalMod.tiles.machine.power.battery.BlockBattery.BatteryType;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.GuiPanel;
 import alec_wam.CrystalMod.tiles.pipes.estorage.storage.hdd.GuiHDDInterface;
@@ -42,6 +43,8 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderLivingBase;
 import net.minecraft.client.renderer.entity.RenderPlayer;
+import net.minecraft.client.resources.IReloadableResourceManager;
+import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -69,6 +72,10 @@ public class ClientProxy extends CommonProxy {
         ModItems.initClient();
         ModelLoaderRegistry.registerLoader(new BakedModelLoader());
         ModelLoaderRegistry.registerLoader(ModelSeed.LoaderSeeds.INSTANCE);
+        IResourceManager manager = FMLClientHandler.instance().getClient().getResourceManager();
+        if(manager !=null && manager instanceof IReloadableResourceManager){
+        	((IReloadableResourceManager)manager).registerReloadListener(new GuidePages());
+        }
         ModBlocks.initClient();
         ModEntites.initClient();
     }

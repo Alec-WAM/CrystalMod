@@ -88,6 +88,7 @@ public class ItemMinecartRender implements ICustomItemRenderer {
 		if (type == TransformType.GUI)
 		{
 			GlStateManager.pushMatrix();
+			GlStateManager.color(1, 1, 1, 1);
 			float scale = 1.8f;
 			//Vec3d offset = essence.getRenderOffset();
 			GlStateManager.scale(scale, scale, scale);
@@ -95,14 +96,11 @@ public class ItemMinecartRender implements ICustomItemRenderer {
 			
 			GlStateManager.enableBlend();
 			GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+			GlStateManager.pushAttrib();
 			Minecraft.getMinecraft().getRenderManager().doRenderEntity(minecart, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F, true);
-			GlStateManager.disableBlend();
-			
-			GlStateManager.enableLighting();
-            GlStateManager.enableBlend();
-            GlStateManager.enableColorMaterial();
+			GlStateManager.popAttrib();
 			GlStateManager.popMatrix();
-	        GlStateManager.disableRescaleNormal();
+			GlStateManager.enableBlend();
 	        GlStateManager.setActiveTexture(OpenGlHelper.lightmapTexUnit);
 	        GlStateManager.disableTexture2D();
 	        GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);
