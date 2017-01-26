@@ -15,10 +15,14 @@ import alec_wam.CrystalMod.api.guide.GuidePage;
 import alec_wam.CrystalMod.client.util.SpriteData;
 import alec_wam.CrystalMod.client.util.comp.GuiComponentSprite;
 import alec_wam.CrystalMod.items.guide.GuiGuideChapter;
+import alec_wam.CrystalMod.items.guide.GuidePages;
+import alec_wam.CrystalMod.items.guide.GuidePages.ManualChapter;
+import alec_wam.CrystalMod.items.guide.GuidePages.PageData;
 import alec_wam.CrystalMod.tiles.machine.BasicMachineRecipe;
 import alec_wam.CrystalMod.tiles.machine.crafting.press.PressRecipeManager;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
+import alec_wam.CrystalMod.util.Lang;
 import alec_wam.CrystalMod.util.Util;
 import alec_wam.CrystalMod.util.client.RenderUtil;
 import net.minecraft.client.Minecraft;
@@ -105,6 +109,27 @@ public class PagePress extends GuidePage {
 	@SideOnly(Side.CLIENT)
 	public void drawBackground(GuiGuideChapter gui, int startX, int startY, int mouseX, int mouseY, float partialTicks){
 		super.drawBackground(gui, startX, startY, mouseX, mouseY, partialTicks);
+		String lang = Lang.prefix+"guide.chapter."+getChapter().getID()+".text."+getId();
+		String title = "";
+		ManualChapter chapter = GuidePages.CHAPTERTEXT.get(getChapter().getID());
+		if(chapter !=null){
+			PageData data = chapter.pages.get(getId());
+			if(data !=null){
+				title = data.title;
+			}
+		}
+		if(title != null && !title.isEmpty()){
+			title = title.replaceAll("<n>", "\n");
+			GlStateManager.pushMatrix();
+			boolean oldUnicode = gui.getFont().getUnicodeFlag();
+			gui.getFont().setUnicodeFlag(false);
+
+			gui.getFont().drawString(title, startX+6, startY+10, 0, false);
+
+			gui.getFont().setUnicodeFlag(oldUnicode);
+			GlStateManager.popMatrix();
+		}
+		
 		int x = 10;
 		int y = 20;
 		SpriteData guiSprite = new SpriteData(55-2, 16-2, 82+4, 54+4);
@@ -125,7 +150,7 @@ public class PagePress extends GuidePage {
 	
 	@SideOnly(Side.CLIENT)
     public void drawForeground(GuiGuideChapter gui, int startX, int startY, int mouseX, int mouseY, float partialTicks){
-		int itemBoxSize = 19;
+		int itemBoxSize = 34;
 
 		if(ItemStackTools.isValid(currentInput)){
 			GlStateManager.pushMatrix();
@@ -134,8 +159,8 @@ public class PagePress extends GuidePage {
 			drawItemStack(currentInput, 0, 0, ""+(ItemStackTools.getStackSize(currentInput) > 1 ? ItemStackTools.getStackSize(currentInput) : ""));
         	GL11.glPopMatrix();
 	        RenderHelper.enableStandardItemLighting();
-			if (mouseX > startX + 75 - 2 && mouseX < startX + 75 - 2 + itemBoxSize &&
-					mouseY > startY+40 - 2 && mouseY < startY+40 - 2 + itemBoxSize) {
+			if (mouseX > startX + 16 - 2 && mouseX < startX + 16 - 2 + itemBoxSize &&
+					mouseY > startY+61 - 2 && mouseY < startY+61 - 2 + itemBoxSize) {
 				drawItemStackTooltip(currentInput, mouseX, mouseY);
 			}
 		}
@@ -145,8 +170,8 @@ public class PagePress extends GuidePage {
 			GlStateManager.scale(2, 2, 1);
 			drawItemStack(currentOutput, 0, 0, ""+(ItemStackTools.getStackSize(currentOutput) > 1 ? ItemStackTools.getStackSize(currentOutput) : ""));
 			GlStateManager.popMatrix();
-			if (mouseX > startX + 150 - 2 && mouseX < startX + 150 - 2 + itemBoxSize &&
-					mouseY > startY+40 - 2 && mouseY < startY+40 - 2 + itemBoxSize) {
+			if (mouseX > startX + 136 - 2 && mouseX < startX + 136 - 2 + itemBoxSize &&
+					mouseY > startY+61 - 2 && mouseY < startY+61 - 2 + itemBoxSize) {
 				drawItemStackTooltip(currentOutput, mouseX, mouseY);
 			}
 		}

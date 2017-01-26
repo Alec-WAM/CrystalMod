@@ -11,6 +11,7 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -19,11 +20,15 @@ import org.lwjgl.opengl.GL12;
 
 import alec_wam.CrystalMod.api.guide.GuidePage;
 import alec_wam.CrystalMod.items.guide.GuiGuideChapter;
+import alec_wam.CrystalMod.items.guide.GuidePages;
+import alec_wam.CrystalMod.items.guide.GuidePages.ManualChapter;
+import alec_wam.CrystalMod.items.guide.GuidePages.PageData;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.Lang;
 import alec_wam.CrystalMod.util.Util;
 import alec_wam.CrystalMod.util.client.RenderUtil;
+import joptsimple.internal.Strings;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
@@ -70,7 +75,7 @@ public class PageIcon extends GuidePage {
     public void drawForeground(GuiGuideChapter gui, int startX, int startY, int mouseX, int mouseY, float partialTicks){
 		int x = 20;
 		int y = 20;
-		int itemBoxSize = 19;
+		int itemBoxSize = 34;
 
 		ItemStack outputStack = currentItem;
 		
@@ -80,15 +85,41 @@ public class PageIcon extends GuidePage {
 			GlStateManager.scale(2, 2, 1);
 			drawItemStack(outputStack, 0, 0, ""+(ItemStackTools.getStackSize(outputStack) > 1 ? ItemStackTools.getStackSize(outputStack) : ""));
 			GlStateManager.popMatrix();
-			if (mouseX > startX + 90 - 2 && mouseX < startX + 90 - 2 + itemBoxSize &&
-					mouseY > startY+40 - 2 && mouseY < startY+40 - 2 + itemBoxSize) {
+			if (mouseX > startX + 80 - 2 && mouseX < startX + 80 - 2 + itemBoxSize &&
+					mouseY > startY+30 - 2 && mouseY < startY+30 - 2 + itemBoxSize) {
 				drawItemStackTooltip(outputStack, mouseX, mouseY);
 			}
 		}
 		
-		String text = Lang.localize("guide.chapter."+getChapter().getID()+".text."+getId());
+		String lang = Lang.prefix+"guide.chapter."+getChapter().getID()+".text."+getId();
+		String text = "";
+		String title = getChapter().getIndex(this) == 0 ? getChapter().getLocalizedTitle() : "";
+		if(I18n.canTranslate(lang))text = Lang.translateToLocal(lang);
+		else {
+			ManualChapter chapter = GuidePages.CHAPTERTEXT.get(getChapter().getID());
+			if(chapter !=null){
+				PageData data = chapter.pages.get(getId());
+				if(data !=null){
+					text = data.text;
+					if(!Strings.isNullOrEmpty(data.title))title = data.title;
+				}
+			}
+		}
 		text = text.replaceAll("<n>", "\n");
 		x = startX+6;
+		int yOffset = 0;
+		if(title != null && !title.isEmpty()){
+			yOffset = 12;
+			title = title.replaceAll("<n>", "\n");
+			GlStateManager.pushMatrix();
+			boolean oldUnicode = gui.getFont().getUnicodeFlag();
+			gui.getFont().setUnicodeFlag(false);
+
+			gui.getFont().drawString(title, x, startY+10, 0, false);
+
+			gui.getFont().setUnicodeFlag(oldUnicode);
+			GlStateManager.popMatrix();
+		}
 		if(text != null && !text.isEmpty()){
 			 float scale = 0.75f;
 			 List<String> lines = gui.getFont().listFormattedStringToWidth(text, (int)(189/scale));

@@ -34,7 +34,7 @@ repositories {
     }
 }
 
-version = "${config.version}-${config.build_number}"
+version = "${config.mc_version}-${config.version}-${config.build_number}"
 group= "alec_wam.CrystalMod" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = config.mod_name
 
@@ -60,8 +60,11 @@ minecraft {
 }
 
 dependencies {
-	deobfCompile "mezz.jei:jei_1.10.2:3.13.2.353:api"
-    runtime "mezz.jei:jei_1.10.2:3.13.2.353"
+	deobfCompile "mezz.jei:jei_${config.mc_version}:${config.jei_version}:api"
+	deobfCompile "mezz.jei:jei_${config.mc_version}:${config.jei_version}"
+    runtime "mezz.jei:jei_${config.mc_version}:${config.jei_version}"
+	compile fileTree(dir: 'lib', include: ['*.jar'])
+	runtime fileTree(dir: 'lib', include: ['*.jar'])
 }
 
 processResources

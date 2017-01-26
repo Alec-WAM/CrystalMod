@@ -140,7 +140,7 @@ public class GuiGuideIndex extends GuiGuideBase implements IGuiScreen {
 		}
 		super.mouseClicked(mouseX, mouseY, mouseButton);
 		
-		if(indexes[0] !=null){
+		if(indexes[0] !=null && mouseButton == 0){
 			final int xStart = guiLeft+10+12;
 			int x = xStart;
 			int y = guiTop+40;
@@ -158,7 +158,7 @@ public class GuiGuideIndex extends GuiGuideBase implements IGuiScreen {
 				y+=20;
 			}
 		}
-		if(indexes[1] !=null){
+		if(indexes[1] !=null && mouseButton == 0){
 			int middle = width/2;
 			final int xStart = middle+10;
 			int x = xStart;
@@ -279,8 +279,14 @@ public class GuiGuideIndex extends GuiGuideBase implements IGuiScreen {
 			            GlStateManager.enableLighting();
 			            GlStateManager.enableDepth();
 					}
-					
-					this.fontRendererObj.drawString(chapter.getLocalizedTitle(), x+20, y+6, 0);
+					GlStateManager.pushMatrix();
+					String chapterTitle = chapter.getLocalizedTitle();
+					int width = this.fontRendererObj.getStringWidth(chapterTitle);
+					GlStateManager.translate(x+20, y+6, 0f );
+					float scale2 = Math.min(164F / (float) (width+10), 1.0F);
+			        GlStateManager.scale(scale2, scale2, 1);
+			        this.fontRendererObj.drawString(chapterTitle, 0, 0, 0);
+					GlStateManager.popMatrix();
 				}
 				y+=20;
 			}
@@ -329,7 +335,14 @@ public class GuiGuideIndex extends GuiGuideBase implements IGuiScreen {
 			            GlStateManager.enableDepth();
 					}
 					
-					this.fontRendererObj.drawString(chapter.getLocalizedTitle(), x+20, y+6, 0);
+					GlStateManager.pushMatrix();
+					String chapterTitle = chapter.getLocalizedTitle();
+					int width = this.fontRendererObj.getStringWidth(chapterTitle);
+					GlStateManager.translate(x+20, y+6, 0f );
+					float scale2 = Math.min(164F / (float) (width+10), 1.0F);
+			        GlStateManager.scale(scale2, scale2, 1);
+			        this.fontRendererObj.drawString(chapterTitle, 0, 0, 0);
+					GlStateManager.popMatrix();
 				}
 				y+=20;
 			}

@@ -1,15 +1,24 @@
 package alec_wam.CrystalMod.items.guide;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-import alec_wam.CrystalMod.Config;
+import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.api.CrystalModAPI;
 import alec_wam.CrystalMod.api.guide.GuideChapter;
 import alec_wam.CrystalMod.api.guide.GuideIndex;
@@ -20,7 +29,6 @@ import alec_wam.CrystalMod.blocks.BlockCrystalLog;
 import alec_wam.CrystalMod.blocks.BlockCrystalOre.CrystalOreType;
 import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.blocks.glass.BlockCrystalGlass.GlassType;
-import alec_wam.CrystalMod.client.util.comp.BaseComponent;
 import alec_wam.CrystalMod.client.util.comp.GuiComponentBasicItemPage;
 import alec_wam.CrystalMod.client.util.comp.GuiComponentBook;
 import alec_wam.CrystalMod.client.util.comp.GuiComponentStandardRecipePage;
@@ -37,31 +45,29 @@ import alec_wam.CrystalMod.items.tools.backpack.ItemBackpackNormal.CrystalBackpa
 import alec_wam.CrystalMod.items.tools.backpack.upgrade.ItemBackpackUpgrade.BackpackUpgrade;
 import alec_wam.CrystalMod.tiles.chest.CrystalChestType;
 import alec_wam.CrystalMod.tiles.chest.wireless.WirelessChestHelper;
-import alec_wam.CrystalMod.tiles.machine.crafting.BlockCrystalMachine.MachineType;
 import alec_wam.CrystalMod.tiles.machine.enderbuffer.BlockEnderBuffer;
-import alec_wam.CrystalMod.tiles.machine.power.engine.BlockEngine.EngineType;
-import alec_wam.CrystalMod.tiles.pipes.BlockPipe.PipeType;
-import alec_wam.CrystalMod.tiles.pipes.covers.ItemPipeCover;
-import alec_wam.CrystalMod.tiles.pipes.item.filters.ItemPipeFilter.FilterType;
 import alec_wam.CrystalMod.tiles.spawner.ItemMobEssence;
-import alec_wam.CrystalMod.tiles.tank.BlockTank;
 import alec_wam.CrystalMod.tiles.tank.BlockTank.TankType;
 import alec_wam.CrystalMod.tiles.workbench.BlockCrystalWorkbench.WorkbenchType;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.Lang;
+import alec_wam.CrystalMod.util.ModLogger;
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.IResource;
+import net.minecraft.client.resources.IResourceManager;
+import net.minecraft.client.resources.IResourceManagerReloadListener;
+import net.minecraft.client.resources.Language;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.client.FMLClientHandler;
 
-public class GuidePages {
+public class GuidePages implements IResourceManagerReloadListener {
 
 	public static void createPages(){
 		CrystalModAPI.GUIDE_INDEXES.clear();
@@ -91,7 +97,10 @@ public class GuidePages {
 		CrystalModAPI.BLOCKS.registerChapter(new GuideChapter("crystalingotblock", new PageCrafting("main", ingotBlockList)).setDisplayObject(ingotBlockList));
 		
 		NonNullList<ItemStack> glassList = ItemUtil.getBlockSubtypes(ModBlocks.crystalGlass, GlassType.BLUE, GlassType.RED, GlassType.GREEN, GlassType.DARK);
-		CrystalModAPI.BLOCKS.registerChapter(new GuideChapter("crystalglass", new PageCrafting("main", glassList)).setDisplayObject(glassList));
+		NonNullList<ItemStack> paneList = ItemUtil.getBlockSubtypes(ModBlocks.crystalGlassPane, GlassType.BLUE, GlassType.RED, GlassType.GREEN, GlassType.DARK);
+		NonNullList<ItemStack> glassDisplayList = NonNullList.create();
+		glassDisplayList.addAll(glassList); glassDisplayList.addAll(paneList);
+		CrystalModAPI.BLOCKS.registerChapter(new GuideChapter("crystalglass", new PageCrafting("main", glassList), new PageCrafting("pane", paneList)).setDisplayObject(glassDisplayList));
 		
 		NonNullList<ItemStack> workbenchList = ItemUtil.getBlockSubtypes(ModBlocks.crystalWorkbench, WorkbenchType.values());
 		CrystalModAPI.BLOCKS.registerChapter(new GuideChapter("crystalworkbench", new PageCrafting("main", workbenchList)).setDisplayObject(workbenchList));
@@ -116,14 +125,15 @@ public class GuidePages {
 		plantList.add(new ItemStack(ModItems.crystalSeedsDark));
 		CrystalModAPI.BLOCKS.registerChapter(new GuideChapter("crystalplant", new PageIcon("main", plantList)).setDisplayObject(plantList));
 		
-		List<ItemStack> listSaplings = ItemUtil.getBlockSubtypes(ModBlocks.crystalSapling, BlockCrystalLog.WoodType.values());
-		List<ItemStack> listLogs = ItemUtil.getBlockSubtypes(ModBlocks.crystalLog, BlockCrystalLog.WoodType.values());
-		List<ItemStack> treePlantList = Lists.newArrayList();
+		NonNullList<ItemStack> listSaplings = ItemUtil.getBlockSubtypes(ModBlocks.crystalSapling, BlockCrystalLog.WoodType.values());
+		NonNullList<ItemStack> listLogs = ItemUtil.getBlockSubtypes(ModBlocks.crystalLog, BlockCrystalLog.WoodType.values());
+		NonNullList<ItemStack> treePlantList = NonNullList.create();
 		treePlantList.add(new ItemStack(ModItems.crystalTreeSeedsBlue));
 		treePlantList.add(new ItemStack(ModItems.crystalTreeSeedsRed));
 		treePlantList.add(new ItemStack(ModItems.crystalTreeSeedsGreen));
 		treePlantList.add(new ItemStack(ModItems.crystalTreeSeedsDark));
-		CrystalModAPI.BLOCKS.registerChapter(new GuideChapter("crystaltrees", new PageIcon("main", listSaplings), new PageIcon("logs", listLogs), new PageIcon("treeplant", treePlantList)).setDisplayObject(listSaplings));
+		NonNullList<ItemStack> plankList = ItemUtil.getBlockSubtypes(ModBlocks.crystalPlanks, BlockCrystalLog.WoodType.values());
+		CrystalModAPI.BLOCKS.registerChapter(new GuideChapter("crystaltrees", new PageIcon("main", listSaplings), new PageIcon("logs", listLogs), new PageCrafting("planks", plankList), new PageIcon("treeplant", treePlantList)).setDisplayObject(listSaplings));
 
 		NonNullList<ItemStack> listTanks = ItemUtil.getBlockSubtypes(ModBlocks.crystalTank, TankType.BLUE, TankType.RED, TankType.GREEN, TankType.DARK);
 		CrystalModAPI.BLOCKS.registerChapter(new GuideChapter("crystaltank", new PageCrafting("main", listTanks)).setDisplayObject(listTanks));
@@ -316,6 +326,109 @@ public class GuidePages {
 		}
 		GuiComponentBasicItemPage recipe = new GuiComponentBasicItemPage(Lang.localize("guide.page."+pageID+".title"), Lang.localize("guide.page."+pageID+".desc"), list);
 		return recipe;
+	}
+	
+
+	
+	public static class ManualChapter{
+		public String id;
+		public String title;
+		public Map<String, PageData> pages = new HashMap<String, PageData>();
+	}
+
+	public static class PageData{
+		public String title;
+		public String text;
+	}
+	public static Map<String, ManualChapter> CHAPTERTEXT = Maps.newHashMap();
+	public static void loadGuideText(String lang){
+		CHAPTERTEXT.clear();
+		try {
+            IResource iresource = FMLClientHandler.instance().getClient().getResourceManager().getResource(CrystalMod.resourceL("text/guide/"+lang+".txt"));
+            InputStream inputstream = iresource.getInputStream();
+            BufferedReader br = new BufferedReader(new InputStreamReader(inputstream, "UTF-8"));
+            List<ManualChapter> chapters = new ArrayList<ManualChapter>();
+            ManualChapter currentChapter = null;
+            String currentPageID = null;
+            PageData currentPage = null;
+            String line = br.readLine();
+            while (line != null) {
+            	if (line.startsWith("{[")) {
+            		if(currentChapter == null){
+            			currentChapter = new ManualChapter();
+            		}
+            	} 
+            	else if (line.startsWith(" {")) {
+            		if(currentPage == null){
+            			currentPage = new PageData();
+            		}
+            	} 
+            	if(currentChapter !=null){
+            		if(currentPage !=null){
+            			if(line.startsWith("  [")){
+            				String rest = line.substring(3);
+            				int arrayEnd = line.indexOf("]");
+            				String type = rest.substring(0, arrayEnd-2);
+            				String value = rest.substring(arrayEnd-2);
+            				if(type.startsWith("title")){
+            					currentPage.title = value;
+            				} else if(type.startsWith("text")){
+            					currentPage.text = value;
+            				}
+            			}
+            		} else {
+            			if(line.startsWith(" [")){
+            				String rest = line.substring(2);
+            				int arrayEnd = line.indexOf("]");
+            				String type = rest.substring(0, arrayEnd-2);
+            				String value = rest.substring(arrayEnd-1);
+            				if(type.startsWith("chapter")){
+            					currentChapter.id = value;
+            				} else if(type.startsWith("title")){
+            					currentChapter.title = value;
+            				} else if(type.startsWith("page")){
+            					String pageId = type.substring(type.indexOf(":")+1);
+            					currentPageID = pageId;
+            				}
+            			}
+            		}
+            	}
+            	if (line.startsWith("]}")) {
+            		if(currentChapter != null){
+            			chapters.add(currentChapter);
+            			currentChapter = null;
+            		}
+            	} else if (line.startsWith(" }")) {
+            		if(currentPage !=null){
+            			if(currentChapter !=null){
+            				if(currentPageID !=null){
+            					currentChapter.pages.put(currentPageID, currentPage);
+            					currentPage = null; 
+            					currentPageID = null;
+            				}
+            			}
+            		}
+            	}
+            	line = br.readLine();
+            }
+
+            for(ManualChapter chapter : chapters){
+            	CHAPTERTEXT.put(chapter.id, chapter);
+            }
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void onResourceManagerReload(IResourceManager resourceManager) {
+		Language language = FMLClientHandler.instance().getClient().getLanguageManager().getCurrentLanguage();
+		String lang = language.getJavaLocale().getLanguage();
+		ModLogger.info("Loading guide text... ("+lang+")");
+		loadGuideText(lang);
+		ModLogger.info("("+CHAPTERTEXT.size()+") chapters loaded.");
 	}
 	
 }

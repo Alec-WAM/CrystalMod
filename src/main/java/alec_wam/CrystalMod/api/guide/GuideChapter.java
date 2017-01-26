@@ -10,9 +10,12 @@ import com.google.common.collect.Maps;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 import alec_wam.CrystalMod.api.CrystalModAPI;
+import alec_wam.CrystalMod.items.guide.GuidePages;
+import alec_wam.CrystalMod.items.guide.GuidePages.ManualChapter;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.Lang;
 import alec_wam.CrystalMod.util.Util;
+import joptsimple.internal.Strings;
 
 public class GuideChapter {
 
@@ -49,6 +52,8 @@ public class GuideChapter {
 	}
 	
 	public String getLocalizedTitle() {
+		ManualChapter chapter = GuidePages.CHAPTERTEXT.get(getID());
+		if(chapter !=null && !Strings.isNullOrEmpty(chapter.title))return chapter.title;
 		return Lang.localize("guide.chapter."+unlocalizedName);
 	}
 	
