@@ -11,8 +11,8 @@ public class ModIntegration {
 	
 	
 	public static void register(){
-		integrations.add(new TConstructIntegration());
-		integrations.add(new EnderIOIntegration());
+		if(Loader.isModLoaded("tconstruct"))integrations.add(new TConstructIntegration());
+		if(Loader.isModLoaded("EnderIO"))integrations.add(new EnderIOIntegration());
 	}
 	
 	public static void preInit(){
