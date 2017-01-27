@@ -172,6 +172,10 @@ public class ContainerBackpackCrafting extends Container {
             	isArmorFull = !((Slot)this.inventorySlots.get(armorEnd - entityequipmentslot.getIndex())).getHasStack();
             }
             
+            if(slot instanceof SlotCrafting){
+            	isArmorFull = false;
+            }
+            
             boolean isBauble = hasBaublesSlots() && itemstack1.getItem() instanceof IBauble;
             
             if(entityequipmentslot == EntityEquipmentSlot.OFFHAND && !(this.inventorySlots.get(offhandStart).getHasStack())){
@@ -221,7 +225,7 @@ public class ContainerBackpackCrafting extends Container {
             
 		        if (index == 0)
 		        {
-		            if (!this.mergeItemStack(itemstack1, inventoryStart, hotbarEnd+1, true))
+		            if (!this.mergeItemStack(itemstack1, inventoryStart, hotbarEnd+1, false))
 		            {
 		                return ItemStackTools.getEmptyStack();
 		            }

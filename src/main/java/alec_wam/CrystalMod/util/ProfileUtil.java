@@ -145,7 +145,7 @@ public class ProfileUtil {
 		}
 		if(jsonResult == null)return null;
 		
-		return jsonResult.getId();
+		return UUIDUtils.fromString(jsonResult.getId());
 	}
 	
 	public static MinecraftProfilePropertiesResponse getProfileData(UUID uuid){
@@ -313,10 +313,10 @@ public class ProfileUtil {
     }
 	
 	public static class NameResponse extends Response{
-		private UUID id;
+		private String id;
 	    private String name;
 
-	    public UUID getId() {
+	    public String getId() {
 	        return id;
 	    }
 

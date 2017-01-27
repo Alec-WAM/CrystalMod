@@ -49,6 +49,7 @@ import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.ItemPattern;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.wireless.ItemWirelessPanel;
 import alec_wam.CrystalMod.tiles.pipes.estorage.storage.hdd.ItemHDD;
 import alec_wam.CrystalMod.tiles.pipes.item.filters.ItemPipeFilter;
+import alec_wam.CrystalMod.tiles.spawner.ItemEmptyMobEssence;
 import alec_wam.CrystalMod.tiles.spawner.ItemMobEssence;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.init.SoundEvents;
@@ -136,6 +137,7 @@ public class ModItems {
 	public static ItemFlag flag;
 	public static ItemDragonWings wings;
 	public static ItemMobEssence mobEssence;
+	public static ItemEmptyMobEssence emptyMobEssence;
 	public static ItemMinion minion;
 	public static ItemMinionStaff minionStaff;
 	public static ItemWorksiteUpgrade worksiteUpgrade;
@@ -210,6 +212,7 @@ public class ModItems {
 		flag = new ItemFlag();
 		wings = new ItemDragonWings();
 		mobEssence = new ItemMobEssence();
+		emptyMobEssence = new ItemEmptyMobEssence();
 		minion = new ItemMinion();
 		minionStaff = new ItemMinionStaff();
 		worksiteUpgrade = new ItemWorksiteUpgrade();

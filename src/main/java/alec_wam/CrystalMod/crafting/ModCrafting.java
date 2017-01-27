@@ -239,6 +239,8 @@ public class ModCrafting {
 		//TOOLS
 		addShapedRecipe(ModItems.lock, new Object[]{" N ", "NPN", "NNN", 'N', dIronNugget, 'P', dIronPlate});
 
+		addShapedOreRecipe(ModItems.emptyMobEssence, new Object[]{" D ", "DID", " D ", 'D', new ItemStack(ModBlocks.metalBars, 1, EnumMetalBarType.DARK_IRON.getMeta()) , 'I', "ingotIron"});
+
 		ItemStack cShears = new ItemStack(ModItems.shears);
 		ItemNBTHelper.setString(cShears, "Color", "darkIron");
 		addShapedRecipe(cShears, new Object[] {" #", "# ", '#', dIronIngot});

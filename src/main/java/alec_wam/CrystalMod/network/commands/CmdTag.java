@@ -93,7 +93,7 @@ public class CmdTag extends AbstractCMCommand{
 			    }
 				
 				if(args.length > 1 && args[1].equalsIgnoreCase("jei")){
-					Internal.getHelpers().reload();
+					//Internal.getHelpers().reload();
 					return;
 				}
 					

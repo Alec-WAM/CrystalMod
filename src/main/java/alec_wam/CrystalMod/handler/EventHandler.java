@@ -26,8 +26,6 @@ import alec_wam.CrystalMod.items.ItemDragonWings;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.items.tools.backpack.BackpackUtil;
 import alec_wam.CrystalMod.items.tools.backpack.IBackpack;
-import alec_wam.CrystalMod.items.tools.backpack.IBackpackInventory;
-import alec_wam.CrystalMod.items.tools.backpack.ItemBackpackBase;
 import alec_wam.CrystalMod.items.tools.backpack.types.InventoryBackpack;
 import alec_wam.CrystalMod.items.tools.backpack.upgrade.InventoryBackpackUpgrades;
 import alec_wam.CrystalMod.items.tools.backpack.upgrade.ItemBackpackUpgrade.BackpackUpgrade;
@@ -39,6 +37,8 @@ import alec_wam.CrystalMod.tiles.endertorch.TileEnderTorch;
 import alec_wam.CrystalMod.tiles.playercube.CubeManager;
 import alec_wam.CrystalMod.tiles.playercube.PlayerCube;
 import alec_wam.CrystalMod.tiles.playercube.TileEntityPlayerCubePortal;
+import alec_wam.CrystalMod.tiles.spawner.EntityEssenceInstance;
+import alec_wam.CrystalMod.tiles.spawner.ItemMobEssence;
 import alec_wam.CrystalMod.util.EntityUtil;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemStackTools;
@@ -47,6 +47,7 @@ import alec_wam.CrystalMod.util.PlayerUtil;
 import alec_wam.CrystalMod.util.Util;
 import alec_wam.CrystalMod.world.ModDimensions;
 import baubles.api.BaubleType;
+import joptsimple.internal.Strings;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -62,6 +63,7 @@ import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArrow;
 import net.minecraft.item.ItemStack;
@@ -70,7 +72,6 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -381,6 +382,38 @@ public class EventHandler {
         return;
       }
       EntityLivingBase entity = event.getEntityLiving();
+      if(entity instanceof EntityLivingBase){
+    	  Entity attacker = event.getSource().getSourceOfDamage();
+    	  if(attacker !=null){
+    		  if(attacker instanceof EntityPlayer){
+    			  EntityPlayer player = (EntityPlayer)attacker;
+    			  ItemStack offHand = player.getHeldItemOffhand();
+    			  if(ItemStackTools.isValid(offHand)){
+    				  if(offHand.getItem() == ModItems.emptyMobEssence){
+    					  EntityEssenceInstance<?> essence = ItemMobEssence.getEntityEssence(entity);
+    					  if(essence !=null){
+    						  String id = essence.getID();
+    						  if(Strings.isNullOrEmpty(id))id = "Pig";
+    						  ItemStack essenceStack = ItemMobEssence.createStack(id);
+    						  ItemNBTHelper.setInteger(essenceStack, ItemMobEssence.NBT_KILLCOUNT, 1);
+    						  player.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, essenceStack);
+    					  }
+    				  } else if(offHand.getItem() == ModItems.mobEssence){
+    					  EntityEssenceInstance<?> essence = ItemMobEssence.getEntityEssence(entity);
+    					  if(essence !=null){
+    						  String id = essence.getID();
+    						  if(Strings.isNullOrEmpty(id))id = "Pig";
+    						  String heldID = ItemNBTHelper.getString(offHand, ItemMobEssence.NBT_ENTITYNAME, "");
+    						  int currentKills = ItemNBTHelper.getInteger(offHand, ItemMobEssence.NBT_KILLCOUNT, 1);
+    						  if(id.equals(heldID) && currentKills < essence.getNeededKills()){
+    							  ItemNBTHelper.setInteger(offHand, ItemMobEssence.NBT_KILLCOUNT, currentKills+1);
+    						  }
+    					  }
+    				  }
+    			  }
+    		  }
+    	  }
+      }
       if(entity instanceof EntityHorse){
     	  EntityHorse horse = (EntityHorse)entity;
     	  HorseAccessories.onHorseDeath(horse);
