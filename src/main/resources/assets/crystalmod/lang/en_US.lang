@@ -225,6 +225,7 @@ item.crystalmod.mobessence.name=Mob Essence
 crystalmod.info.mobessence1.txt=Can be used on an Advanced Mob Spawner to set the entity
 crystalmod.info.mobessence2.txt=Or used anywhere when sneaking to spawn the entity in the world
 crystalmod.info.mobessence3.txt=(Single Use)
+item.crystalmod.emptymobessence.name=Mob Cage
 item.crystalmod.minion.basic.name=Minion
 item.crystalmod.minion.worker.name=Worker Minion
 item.crystalmod.minion.warrior.name=Warrior Minion
