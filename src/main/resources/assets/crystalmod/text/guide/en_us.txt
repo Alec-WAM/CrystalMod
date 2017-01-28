@@ -18,26 +18,6 @@
  [page:normal]
  {
   [title]Normal Crystal Blocks
-  [text]Used ad both storage and decoration.  
- }
- [page:chiseled]
- {
-  [title]Chiseled Crystal Blocks
-  [text]Exactly the same as chisled quartz.
- }
- [page:brick]
- {
-  [title]Crystal Bricks
-  [text]Stone bricks infused with Crystal.
- }
-]}
-//Crystal Block
-{[
- [chapter]crystalblock
- [title]Crystal Blocks
- [page:normal]
- {
-  [title]Normal Crystal Blocks
   [text]Used as both storage and decoration.  
  }
  [page:chiseled]

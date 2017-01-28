@@ -426,7 +426,8 @@ public class ModBlocks {
 		entityHopper = registerBlock(new BlockEntityHopper(), "entityhopper");
 		registerTileEntity(TileEntityEntityHopper.class);
 		
-		crates = registerEnumBlock(new BlockCrate(), "crate");
+		crates = new BlockCrate();
+		registerEnumBlock(crates, "crate");
 		registerTileEntity(TileCrate.class);
 		
 		darkIronRail = new BlockReinforcedRail();

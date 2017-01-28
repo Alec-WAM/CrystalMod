@@ -1,5 +1,6 @@
 package alec_wam.CrystalMod.tiles.fusion;
 
+import java.util.Arrays;
 import java.util.List;
 
 import com.google.common.collect.Lists;
@@ -15,7 +16,6 @@ import alec_wam.CrystalMod.tiles.fusion.recipes.FusionRecipeEnchantment;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.Vec3d;
-import scala.actors.threadpool.Arrays;
 
 public class ModFusionRecipes {
 
