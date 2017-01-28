@@ -17,7 +17,11 @@ import alec_wam.CrystalMod.client.util.SpriteData;
 import alec_wam.CrystalMod.client.util.comp.GuiComponentSprite;
 import alec_wam.CrystalMod.client.util.comp.GuiComponentSpriteButton;
 import alec_wam.CrystalMod.items.guide.GuiGuideChapter;
+import alec_wam.CrystalMod.items.guide.GuidePages;
+import alec_wam.CrystalMod.items.guide.GuidePages.ManualChapter;
+import alec_wam.CrystalMod.items.guide.GuidePages.PageData;
 import alec_wam.CrystalMod.util.ItemUtil;
+import alec_wam.CrystalMod.util.Lang;
 import alec_wam.CrystalMod.util.Util;
 import alec_wam.CrystalMod.util.client.RenderUtil;
 import net.minecraft.client.Minecraft;
@@ -113,6 +117,27 @@ public class PageFurnace extends GuidePage {
 	@SideOnly(Side.CLIENT)
 	public void drawBackground(GuiGuideChapter gui, int startX, int startY, int mouseX, int mouseY, float partialTicks){
 		super.drawBackground(gui, startX, startY, mouseX, mouseY, partialTicks);
+		String lang = Lang.prefix+"guide.chapter."+getChapter().getID()+".text."+getId();
+		String title = "";
+		ManualChapter chapter = GuidePages.CHAPTERTEXT.get(getChapter().getID());
+		if(chapter !=null){
+			PageData data = chapter.pages.get(getId());
+			if(data !=null){
+				title = data.title;
+			}
+		}
+		if(title != null && !title.isEmpty()){
+			title = title.replaceAll("<n>", "\n");
+			GlStateManager.pushMatrix();
+			boolean oldUnicode = gui.getFont().getUnicodeFlag();
+			gui.getFont().setUnicodeFlag(false);
+
+			gui.getFont().drawString(title, startX+6, startY+10, 0, false);
+
+			gui.getFont().setUnicodeFlag(oldUnicode);
+			GlStateManager.popMatrix();
+		}
+		
 		int x = 10;
 		int y = 20;
 		SpriteData guiSprite = new SpriteData(55-2, 16-2, 82+4, 54+4);
@@ -142,7 +167,7 @@ public class PageFurnace extends GuidePage {
 	
 	@SideOnly(Side.CLIENT)
     public void drawForeground(GuiGuideChapter gui, int startX, int startY, int mouseX, int mouseY, float partialTicks){
-		int itemBoxSize = 19;
+		int itemBoxSize = 34;
 
 		if(input !=null){
 			GlStateManager.pushMatrix();
@@ -151,8 +176,8 @@ public class PageFurnace extends GuidePage {
 			drawItemStack(input, 0, 0, ""+(input.stackSize > 1 ? input.stackSize : ""));
         	GL11.glPopMatrix();
 	        RenderHelper.enableStandardItemLighting();
-			if (mouseX > startX + 75 - 2 && mouseX < startX + 75 - 2 + itemBoxSize &&
-					mouseY > startY+40 - 2 && mouseY < startY+40 - 2 + itemBoxSize) {
+			if (mouseX > startX + 16 - 2 && mouseX < startX + 16 - 2 + itemBoxSize &&
+					mouseY > startY+26 - 2 && mouseY < startY+26 - 2 + itemBoxSize) {
 				drawItemStackTooltip(input, mouseX, mouseY);
 			}
 		}
@@ -162,8 +187,8 @@ public class PageFurnace extends GuidePage {
 			GlStateManager.scale(2, 2, 1);
 			drawItemStack(output, 0, 0, ""+(output.stackSize > 1 ? output.stackSize : ""));
 			GlStateManager.popMatrix();
-			if (mouseX > startX + 150 - 2 && mouseX < startX + 150 - 2 + itemBoxSize &&
-					mouseY > startY+40 - 2 && mouseY < startY+40 - 2 + itemBoxSize) {
+			if (mouseX > startX + 136 - 2 && mouseX < startX + 136 - 2 + itemBoxSize &&
+					mouseY > startY+61 - 2 && mouseY < startY+61 - 2 + itemBoxSize) {
 				drawItemStackTooltip(output, mouseX, mouseY);
 			}
 		}

@@ -34,7 +34,7 @@ repositories {
     }
 }
 
-version = "${config.mc_version}-${config.version}-${config.build_number}"
+version = "${config.mc_version}-${config.version}${config.build_number}"
 group= "alec_wam.CrystalMod" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = config.mod_name
 
@@ -51,7 +51,7 @@ minecraft {
     version = "${config.mc_version}-${config.forge_version}"
     runDir = "run"
     
-	replace "@VERSION@", project.version
+	replace "@VERSION@", "${config.version}${config.build_number}"
     
     mappings = config.mc_mappings
     useDepAts = true

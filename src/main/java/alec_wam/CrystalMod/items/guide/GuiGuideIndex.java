@@ -280,7 +280,14 @@ public class GuiGuideIndex extends GuiGuideBase implements IGuiScreen {
 			            GlStateManager.enableDepth();
 					}
 					
-					this.fontRendererObj.drawString(chapter.getLocalizedTitle(), x+20, y+6, 0);
+					GlStateManager.pushMatrix();
+					String chapterTitle = chapter.getLocalizedTitle();
+					int width = this.fontRendererObj.getStringWidth(chapterTitle);
+					GlStateManager.translate(x+20, y+6, 0f );
+					float scale2 = Math.min(164F / (float) (width+10), 1.0F);
+			        GlStateManager.scale(scale2, scale2, 1);
+			        this.fontRendererObj.drawString(chapterTitle, 0, 0, 0);
+					GlStateManager.popMatrix();
 				}
 				y+=20;
 			}
@@ -329,7 +336,14 @@ public class GuiGuideIndex extends GuiGuideBase implements IGuiScreen {
 			            GlStateManager.enableDepth();
 					}
 					
-					this.fontRendererObj.drawString(chapter.getLocalizedTitle(), x+20, y+6, 0);
+					GlStateManager.pushMatrix();
+					String chapterTitle = chapter.getLocalizedTitle();
+					int width = this.fontRendererObj.getStringWidth(chapterTitle);
+					GlStateManager.translate(x+20, y+6, 0f );
+					float scale2 = Math.min(164F / (float) (width+10), 1.0F);
+			        GlStateManager.scale(scale2, scale2, 1);
+			        this.fontRendererObj.drawString(chapterTitle, 0, 0, 0);
+					GlStateManager.popMatrix();
 				}
 				y+=20;
 			}

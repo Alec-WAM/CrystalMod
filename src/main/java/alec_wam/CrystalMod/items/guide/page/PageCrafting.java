@@ -15,6 +15,9 @@ import alec_wam.CrystalMod.api.guide.GuidePage;
 import alec_wam.CrystalMod.client.util.comp.GuiComponentSprite;
 import alec_wam.CrystalMod.client.util.comp.GuiComponentStandardRecipePage;
 import alec_wam.CrystalMod.items.guide.GuiGuideChapter;
+import alec_wam.CrystalMod.items.guide.GuidePages;
+import alec_wam.CrystalMod.items.guide.GuidePages.ManualChapter;
+import alec_wam.CrystalMod.items.guide.GuidePages.PageData;
 import alec_wam.CrystalMod.tiles.machine.ContainerNull;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
@@ -22,6 +25,7 @@ import alec_wam.CrystalMod.util.Lang;
 import alec_wam.CrystalMod.util.ModLogger;
 import alec_wam.CrystalMod.util.Util;
 import alec_wam.CrystalMod.util.client.RenderUtil;
+import joptsimple.internal.Strings;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
@@ -35,6 +39,7 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -337,9 +342,32 @@ public class PageCrafting extends GuidePage {
 			}
 		}
 		
-		String text = Lang.localize("guide.chapter."+getChapter().getID()+".text."+getId());
+		String lang = Lang.prefix+"guide.chapter."+getChapter().getID()+".text."+getId();
+		String text = "";
+		String title = getChapter().getIndex(this) == 0 ? getChapter().getLocalizedTitle() : "";
+		if(I18n.canTranslate(lang))text = Lang.translateToLocal(lang);
+		else {
+			ManualChapter chapter = GuidePages.CHAPTERTEXT.get(getChapter().getID());
+			if(chapter !=null){
+				PageData data = chapter.pages.get(getId());
+				if(data !=null){
+					text = data.text;
+					if(!Strings.isNullOrEmpty(data.title))title = data.title;
+				}
+			}
+		}
 		text = text.replaceAll("<n>", "\n");
 		x = startX+6;
+		if(!Strings.isNullOrEmpty(title)){
+			GlStateManager.pushMatrix();
+			boolean oldUnicode = gui.getFont().getUnicodeFlag();
+			gui.getFont().setUnicodeFlag(false);
+
+			gui.getFont().drawString(title, x, startY+10, 0, false);
+
+			gui.getFont().setUnicodeFlag(oldUnicode);
+			GlStateManager.popMatrix();
+		}
 		if(text != null && !text.isEmpty()){
 			 float scale = 0.75f;
 			 List<String> lines = gui.getFont().listFormattedStringToWidth(text, (int)(189/scale));

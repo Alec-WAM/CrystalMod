@@ -1,0 +1,344 @@
+//Crystal Ore
+{[
+ [chapter]crystalore
+ [title]Crystal Ore
+ [page:0]
+ {
+  [text]A rare ore found very close to bedrock. 
+ }
+ [page:smelt]
+ {
+  [text]Smelt in a furnace to get the crystal of the same color.
+ }
+]}
+//Crystal Block
+{[
+ [chapter]crystalblock
+ [title]Crystal Blocks
+ [page:normal]
+ {
+  [title]Normal Crystal Blocks
+  [text]Used as both storage and decoration.  
+ }
+ [page:chiseled]
+ {
+  [title]Chiseled Crystal Blocks
+  [text]Exactly the same as chisled quartz.
+ }
+ [page:brick]
+ {
+  [title]Crystal Bricks
+  [text]Stone bricks infused with Crystal.
+ }
+]}
+//Crystal Ingot Block
+{[
+ [chapter]crystalingotblock
+ [title]Crystal Ingot Block
+ [page:main]
+ {
+  [text]Storage of Crystal Ingots.  
+ }
+]}
+//Crystal Glass
+{[
+ [chapter]crystalglass
+ [title]Crystal Glass
+ [page:main]
+ {
+  [title]Normal Glass
+  [text]Mostly clear glass with connected borders. Does not require silktouch to pickup.  
+ }
+ [page:pane]
+ {
+  [title]Glass Panes
+  [text]Same as its full block counterpart. Does not require silktouch to pickup.  
+ }
+]}
+//Crystal Chests
+{[
+ [chapter]crystalchest
+ [title]Crystal Chests
+ [page:main]
+ {
+  [text]Multi tier chests that are very similar to Iron Chests.   
+ }
+]}
+//Crystal Reeds
+{[
+ [chapter]crystalreeds
+ [title]Crystal Reeds
+ [page:main]
+ {
+  [text]Generate around the world much like normal reeds. Used to make Crystal Shards.   
+ }
+]}
+//Flower Lillypad
+{[
+ [chapter]flowerlilypad
+ [title]Flower Lilypad
+ [page:main]
+ {
+  [text]Have you ever completly removed all of the lilypads from a swamp? Now you can grow more!   
+ }
+]}
+//Crystal Seeds
+{[
+ [chapter]crystalplant
+ [title]Crystal Plant
+ [page:main]
+ {
+  [text]Grows Crystal Shards much like nether-wart. Must be place on a Crystal Block.   
+ }
+]}
+//Crystal Trees
+{[
+ [chapter]crystaltrees
+ [title]Crystal Trees
+ [page:main]
+ {
+  [title]Saplings
+  [text]Just your average sapling. Grows an oak tree size Crystal Tree.   
+ }
+ [page:logs]
+ {
+  [title]Crystal Log
+  [text]A normal log. Used to craft Crystal Planks.  
+ }
+ [page:planks]
+ {
+  [title]Crystal Planks
+  [text]Can be used just like normal wood planks. 
+ }
+ [page:treeplant]
+ {
+  [title]Tree Plants
+  [text]Just like coco beans, but instead of Cocoa you grow Crystal Shards.<n>Must be planted on the same color Crystal Log.   
+ }
+]}
+//Crystal Tanks
+{[
+ [chapter]crystaltank
+ [title]Crystal Tank
+ [page:main]
+ {
+  [text]Great for storing fluids.    
+ }
+]}
+//Weather Forecaster
+{[
+ [chapter]weatherforcaster
+ [title]Weather Forcaster
+ [page:main]
+ {
+  [text]Will tell you if it is raining or sunny.<n>Also tells you if it can snow in its current location.   
+ }
+]}
+//Advanced Mob Spawner
+{[
+ [chapter]spawner
+ [title]Advanced Mob Spawner
+ [page:main]
+ {
+  [text]When given a mob essence it will spawn that mob like a normal spawner.   
+ }
+ [page:upgrades]
+ {
+  [title]Upgrades
+  [text]Nether Star: No player needed to spawn.<n>Pure Crystal Block: Speed II<n>Pure Crystal Ingot Block: Speed III<n>Golden Apple: Ignore light level   
+ }
+]}
+//Mob Grinder
+{[
+ [chapter]mobgrinder
+ [title]Mob Grinder
+ [page:main]
+ {
+  [text]Automaticlly kills mobs in the 5x5 area. Vacuums up xp in the area and puts it in an internal tank.    
+ }
+]}
+//Elevator
+{[
+ [chapter]elevator
+ [title]Elevator
+ [page:elevator]
+ {
+  [title]Elevator
+  [text]Creates a elevator in a 3x3 area infront of the Elevator.  
+ }
+ [page:floor]
+ {
+  [title]Elevator Floor
+  [text]Marks a floor for the floor caller. Can be named.  
+ }
+ [page:caller]
+ {
+  [title]Elevator Caller
+  [text]Sends the elevator the the selected floor.  
+ }
+]}
+//EnderBuffer
+{[
+ [chapter]enderbuffer
+ [title]Ender Buffer
+ [page:main]
+ {
+  [text]Much like the old Tesseract from Thermal Expansion it sends CU, RF, items, and fluids wirelessly.<n>R-Click with a Lock to make the Ender Buffer Private.    
+ }
+]}
+//AdvDispenser
+{[
+ [chapter]advdispenser
+ [title]Advanced Dispenser
+ [page:main]
+ {
+  [text]Acts like a fake player. Does whatever you set it to do with the item in the upper left slot.
+ }
+ [page:modes]
+ {
+  [title]Modes
+  [text]Block: Normal Right or Left Click.<n>Place: Places a block if it is a block.<n>Use: Uses the item on facing block.<n>Activate: Right or Left clicks block once.<n>Use Air: Ignores facing block and activates item.<n>Entity: Left or Right clicks entity with item. 
+ }
+]}
+//ITEMS Begin
+//Crystal
+{[
+ [chapter]crystals
+ [title]Crystal
+ [page:shards]
+ {
+  [title]Crystal Shards
+  [text]The most common form of Crystals Grown in the World. 
+ }
+ [page:craftShard]
+ {
+  [title]Crafting
+  [text]Instead of paper Shards are crafted from 3 Crystal Reeds of the same color.
+ }
+ [page:nuggets]
+ {
+  [title]Crystal Nuggets
+  [text]Just your average nugget. Smelt a shard in a Furnace and you will get a nugget of the same color.
+ }
+ [page:smeltNugget]
+ {
+  [title]Smelting
+ }
+ [page:crystal]
+ {
+  [title]Crystals
+  [text]Main form of Crystals. Crafted with 9 shards of the same color.<n>When smelted in a Furnace you will get a Crystal Ingot of the same color.
+ }
+ [page:smeltCrystal]
+ {
+  [title]Smelting
+ }
+]}
+//Crystal Ingot
+{[
+ [chapter]crystalingots
+ [title]Crystal Ingots
+ [page:0]
+ {
+  [text]Used to craft many advanced things in Crystal Mod.
+ }
+ [page:smelt]
+ {
+  [title]Smelting
+ }
+]}
+//Crystal Plates
+{[
+ [chapter]metalplate
+ [title]Metal Plates
+ [page:main]
+ {
+  [text]Used to craft many advanced things in Crystal Mod.
+ }
+ [page:press]
+ {
+  [title]Press
+ }
+]}
+//Dark Iron Armor
+{[
+ [chapter]darkarmor
+ [title]Dark Iron Armor
+ [page:main]
+ {
+  [text]Slightly stronger than basic Iron Armor.
+ }
+]}
+//Dark Iron Tools
+{[
+ [chapter]darktools
+ [title]Dark Iron Tools
+ [page:main]
+ {
+  [text]Slightly stronger than basic Iron Tools.
+ }
+ [page:bow]
+ {
+  [title]Dark Iron Bow
+  [text]Fires arrows with more damage. When you have a Lead in your off-hand it will create a grappling hook. 
+ }
+]}
+//Normal Backpack
+{[
+ [chapter]backpacknormal
+ [title]Normal Backpack
+ [page:main]
+ {
+  [text]Useful for storing items if your inventory begins to fill up. Each tier of the backpack increases the amount of upgrades that are able to be equipped.<n>The Pure backpack is capablie of storing other backpacks inside of it.
+ }
+ [page:upgrades]
+ {
+  [title]Upgrades
+  [text]Hopper: Any pickedup Items will go into your backpack instead of your inventory.<n>Ender: Adds a Ender Chest tab to your backpack.<n>Restocking: Refills items in your hotbar with items in your backpack.<n>Void: WIP<n>Pockets: Adds a weapon and tool pocket to your backpack. Use the scroll wheel to take or insert your tool or weapon.<n>Bow: Allows normal bows to use arrows out of your backpack instead of your inventory.<n>Despawn: If added your backpack will never despawn.<n>Death: Allows the backpack to stay in your inventory on death.
+ }
+]}
+//Lock
+{[
+ [chapter]lock
+ [title]Lock
+ [page:main]
+ {
+  [text]Allows your to lock your backpack, Wireless Chest, or Ender Buffer.
+ }
+]}
+//TelePearl
+{[
+ [chapter]telepearl
+ [title]Teleporting Pearl
+ [page:main]
+ {
+  [text]When given a location, It will teleport you back to the location from any dimenison.
+ }
+]}
+//Super Torch
+{[
+ [chapter]supertorch
+ [title]Super Torch
+ [page:main]
+ {
+  [text]When given torches it will place them automaticlly for you. It can be refilled by just placing it in a Crafting Table with torches. 
+ }
+]}
+//Wings
+{[
+ [chapter]wings
+ [title]Dragon Wings
+ [page:main]
+ {
+  [text]Dropped from the EnderDragon. If you craft it with any chestplate it will attach wings to that armor piece and will allow you to fly just like creative. 
+ }
+]}
+//Mobessence
+{[
+ [chapter]mobessence
+ [title]Mob Essence
+ [page:main]
+ {
+  [text]When you hold a Mob Cage in your off-hand and kill a valid entity it will create a Mob Essence. Activate an Advanced Mob Spawner with a full essence to set its type.<n>Sneak and Use the item to place on of the killed entites back in the world. 
+ }
+]}

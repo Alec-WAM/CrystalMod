@@ -1,13 +1,20 @@
 package alec_wam.CrystalMod.items.guide;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.resources.IResource;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.EnumDyeColor;
@@ -15,10 +22,12 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import alec_wam.CrystalMod.Config;
+import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.api.CrystalModAPI;
 import alec_wam.CrystalMod.api.guide.GuideChapter;
 import alec_wam.CrystalMod.api.guide.GuideIndex;
@@ -39,6 +48,8 @@ import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.items.ItemCrystal.CrystalType;
 import alec_wam.CrystalMod.items.ItemIngot.IngotType;
 import alec_wam.CrystalMod.items.ItemMetalPlate.PlateType;
+import alec_wam.CrystalMod.items.guide.GuidePages.ManualChapter;
+import alec_wam.CrystalMod.items.guide.GuidePages.PageData;
 import alec_wam.CrystalMod.items.guide.page.PageCrafting;
 import alec_wam.CrystalMod.items.guide.page.PageFurnace;
 import alec_wam.CrystalMod.items.guide.page.PageIcon;
@@ -422,6 +433,100 @@ public class GuidePages {
 		}
 		GuiComponentBasicItemPage recipe = new GuiComponentBasicItemPage(Lang.localize("guide.page."+pageID+".title"), Lang.localize("guide.page."+pageID+".desc"), list);
 		return recipe;
+	}
+	
+
+	
+	public static class ManualChapter{
+		public String id;
+		public String title;
+		public Map<String, PageData> pages = new HashMap<String, PageData>();
+	}
+
+	public static class PageData{
+		public String title;
+		public String text;
+	}
+	public static Map<String, ManualChapter> CHAPTERTEXT = Maps.newHashMap();
+	public static void loadGuideText(String lang){
+		CHAPTERTEXT.clear();
+		try {
+            IResource iresource = FMLClientHandler.instance().getClient().getResourceManager().getResource(CrystalMod.resourceL("text/guide/"+lang+".txt"));
+            InputStream inputstream = iresource.getInputStream();
+            BufferedReader br = new BufferedReader(new InputStreamReader(inputstream, "UTF-8"));
+            List<ManualChapter> chapters = new ArrayList<ManualChapter>();
+            ManualChapter currentChapter = null;
+            String currentPageID = null;
+            PageData currentPage = null;
+            String line = br.readLine();
+            while (line != null) {
+            	if (line.startsWith("{[")) {
+            		if(currentChapter == null){
+            			currentChapter = new ManualChapter();
+            		}
+            	} 
+            	else if (line.startsWith(" {")) {
+            		if(currentPage == null){
+            			currentPage = new PageData();
+            		}
+            	} 
+            	if(currentChapter !=null){
+            		if(currentPage !=null){
+            			if(line.startsWith("  [")){
+            				String rest = line.substring(3);
+            				int arrayEnd = line.indexOf("]");
+            				String type = rest.substring(0, arrayEnd-2);
+            				String value = rest.substring(arrayEnd-2);
+            				if(type.startsWith("title")){
+            					currentPage.title = value;
+            				} else if(type.startsWith("text")){
+            					currentPage.text = value;
+            				}
+            			}
+            		} else {
+            			if(line.startsWith(" [")){
+            				String rest = line.substring(2);
+            				int arrayEnd = line.indexOf("]");
+            				String type = rest.substring(0, arrayEnd-2);
+            				String value = rest.substring(arrayEnd-1);
+            				if(type.startsWith("chapter")){
+            					currentChapter.id = value;
+            				} else if(type.startsWith("title")){
+            					currentChapter.title = value;
+            				} else if(type.startsWith("page")){
+            					String pageId = type.substring(type.indexOf(":")+1);
+            					currentPageID = pageId;
+            				}
+            			}
+            		}
+            	}
+            	if (line.startsWith("]}")) {
+            		if(currentChapter != null){
+            			chapters.add(currentChapter);
+            			currentChapter = null;
+            		}
+            	} else if (line.startsWith(" }")) {
+            		if(currentPage !=null){
+            			if(currentChapter !=null){
+            				if(currentPageID !=null){
+            					currentChapter.pages.put(currentPageID, currentPage);
+            					currentPage = null; 
+            					currentPageID = null;
+            				}
+            			}
+            		}
+            	}
+            	line = br.readLine();
+            }
+
+            for(ManualChapter chapter : chapters){
+            	CHAPTERTEXT.put(chapter.id, chapter);
+            }
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 }
