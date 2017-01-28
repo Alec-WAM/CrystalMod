@@ -64,9 +64,6 @@ public class ItemCrystalGuide extends Item implements ICustomModel {
         }
     }
 	
-	@SideOnly(Side.CLIENT)
-	public static GuiGuideBase forcedChapter;
-	
 	@Override
 	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
     {
@@ -78,24 +75,12 @@ public class ItemCrystalGuide extends Item implements ICustomModel {
 			if(entityItem !=null){
 				LookupResult result = GuidePages.getGuideData(player, entityItem);
 				if(result !=null){
-					if(world.isRemote){
-						GuiGuideChapter chapterGui = null;
-						if(result.getChapter() != null){
-							if(result.getPage() !=null){
-								chapterGui = new GuiGuideChapter(null, result.getChapter(), result.getPage());
-							} else {
-								chapterGui = new GuiGuideChapter(null, result.getChapter());
-							}
-						}
-						forcedChapter = chapterGui;
-					}
+					CrystalMod.proxy.setForcedGuidePage(result);
 					player.openGui(CrystalMod.instance, GuiHandler.GUI_ID_GUIDE, world, 0, 0, 0);
 					return EnumActionResult.SUCCESS;
 				}
 			}
 		}
-			//}
-		//}
 		return EnumActionResult.PASS;
     }
 	

@@ -67,7 +67,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.fml.client.FMLClientHandler;
 
-public class GuidePages implements IResourceManagerReloadListener {
+public class GuidePages {
 
 	public static void createPages(){
 		CrystalModAPI.GUIDE_INDEXES.clear();
@@ -420,15 +420,6 @@ public class GuidePages implements IResourceManagerReloadListener {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	}
-
-	@Override
-	public void onResourceManagerReload(IResourceManager resourceManager) {
-		Language language = FMLClientHandler.instance().getClient().getLanguageManager().getCurrentLanguage();
-		String lang = language.getJavaLocale().getLanguage();
-		ModLogger.info("Loading guide text... ("+lang+")");
-		loadGuideText(lang);
-		ModLogger.info("("+CHAPTERTEXT.size()+") chapters loaded.");
 	}
 	
 }

@@ -92,6 +92,7 @@ public class BlockCrate extends EnumBlock<BlockCrate.CrateType> implements ICust
     }
     
     @Override
+    @SideOnly(Side.CLIENT)
     public void initModel(){
     	ModelLoader.setCustomStateMapper(this, new CustomBlockStateMapper());
 		for(CrateType type : CrateType.values()){

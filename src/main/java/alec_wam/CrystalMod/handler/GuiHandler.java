@@ -1,5 +1,6 @@
 package alec_wam.CrystalMod.handler;
 
+import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.asm.ObfuscatedNames;
 import alec_wam.CrystalMod.capability.ContainerExtendedInventory;
 import alec_wam.CrystalMod.capability.ExtendedPlayer;
@@ -182,9 +183,9 @@ public class GuiHandler implements IGuiHandler {
     		return null;
     	}
     	if(ID == GUI_ID_GUIDE){
-    		if(ItemCrystalGuide.forcedChapter !=null){
-    			final GuiGuideBase gui = ItemCrystalGuide.forcedChapter;
-    			ItemCrystalGuide.forcedChapter = null;
+    		if(CrystalMod.proxy.getForcedGuidePage() !=null && CrystalMod.proxy.getForcedGuidePage() instanceof GuiGuideBase){
+    			final GuiGuideBase gui = (GuiGuideBase)CrystalMod.proxy.getForcedGuidePage();
+    			CrystalMod.proxy.setForcedGuidePage(null);
     			return gui;
     		}
     		ExtendedPlayer playerData = ExtendedPlayerProvider.getExtendedPlayer(player);

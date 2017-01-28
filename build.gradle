@@ -35,6 +35,7 @@ repositories {
 }
 
 version = "${config.mc_version}-${config.version}-${config.build_number}"
+internalVersion = "${config.version}"
 group= "alec_wam.CrystalMod" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = config.mod_name
 
@@ -51,9 +52,7 @@ minecraft {
     version = "${config.mc_version}-${config.forge_version}"
     runDir = "run"
     
-	replace "@VERSION@", project.version
-	replaceIn "CrystalMod.java"
-	replaceIn "mcmod.info"
+	replace "@VERSION@", project.internalVersion
     
     mappings = config.mc_mappings
     useDepAts = true

@@ -31,6 +31,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemMaterialSeed extends Item implements ICustomModel {
 
@@ -42,7 +44,8 @@ public class ItemMaterialSeed extends Item implements ICustomModel {
 	}
 	
 	@Override
-	public void initModel(){
+	@SideOnly(Side.CLIENT)
+    public void initModel(){
 		ModelLoader.setCustomMeshDefinition(this, new ItemMeshDefinition()
         {
             @Override
