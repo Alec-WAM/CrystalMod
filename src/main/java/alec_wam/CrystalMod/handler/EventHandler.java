@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
@@ -47,7 +48,6 @@ import alec_wam.CrystalMod.util.PlayerUtil;
 import alec_wam.CrystalMod.util.Util;
 import alec_wam.CrystalMod.world.ModDimensions;
 import baubles.api.BaubleType;
-import joptsimple.internal.Strings;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
