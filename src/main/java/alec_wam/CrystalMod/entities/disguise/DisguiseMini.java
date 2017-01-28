@@ -13,6 +13,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class DisguiseMini {
 
-	public RenderMiniPlayer renderNormal = new RenderMiniPlayer(Minecraft.getMinecraft().getRenderManager(), false);
-	public RenderMiniPlayer renderSlim = new RenderMiniPlayer(Minecraft.getMinecraft().getRenderManager(), true);
+	@SideOnly(Side.CLIENT)
+    public RenderMiniPlayer renderNormal = new RenderMiniPlayer(Minecraft.getMinecraft().getRenderManager(), false);
+	@SideOnly(Side.CLIENT)
+    public RenderMiniPlayer renderSlim = new RenderMiniPlayer(Minecraft.getMinecraft().getRenderManager(), true);
 }

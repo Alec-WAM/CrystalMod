@@ -2,20 +2,6 @@ package alec_wam.CrystalMod.tiles.machine.elevator;
 
 import java.util.List;
 
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.IStringSerializable;
-import net.minecraft.world.World;
-import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.blocks.ModBlocks;
@@ -24,6 +10,22 @@ import alec_wam.CrystalMod.tiles.pipes.wireless.BlockWirelessPipeWrapper;
 import alec_wam.CrystalMod.tiles.pipes.wireless.TileEntityPipeWrapper;
 import alec_wam.CrystalMod.util.ChatUtil;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemMiscCard extends Item implements ICustomModel {
 
@@ -58,7 +60,8 @@ public class ItemMiscCard extends Item implements ICustomModel {
 		}
     }
 	
-	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hX, float hY, float hZ){
+	@Override
+	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing side, float hX, float hY, float hZ){
 		TileEntity tile = world.getTileEntity(pos);
 		NBTTagCompound nbt = ItemNBTHelper.getCompound(stack);
 		boolean gotCoords = false;
@@ -99,7 +102,7 @@ public class ItemMiscCard extends Item implements ICustomModel {
 			if(!world.isRemote)ChatUtil.sendChat(player, "Card Cleared");
 		}
 		stack.setTagCompound(nbt);
-		return true;
+		return EnumActionResult.PASS;
 	}
 	
 	@SideOnly(Side.CLIENT)

@@ -52,8 +52,6 @@ minecraft {
     runDir = "run"
     
 	replace "@VERSION@", project.version
-	replaceIn "CrystalMod.java"
-	replaceIn "mcmod.info"
     
     mappings = config.mc_mappings
     useDepAts = true

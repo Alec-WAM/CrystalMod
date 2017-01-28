@@ -1,16 +1,11 @@
 package alec_wam.CrystalMod.client.model.dynamic;
 
-import scala.actors.threadpool.Arrays;
+import java.util.Arrays;
+
 import alec_wam.CrystalMod.Config;
-import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.proxy.ClientProxy;
-import alec_wam.CrystalMod.tiles.spawner.ItemRenderMobEssence;
 import alec_wam.CrystalMod.util.ItemStackTools;
-import alec_wam.CrystalMod.util.ModLogger;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;

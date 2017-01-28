@@ -21,6 +21,7 @@ import alec_wam.CrystalMod.integration.ModIntegration;
 import alec_wam.CrystalMod.integration.minecraft.ModBanners;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.items.guide.GuidePages;
+import alec_wam.CrystalMod.items.guide.GuidePages.LookupResult;
 import alec_wam.CrystalMod.items.tools.bat.ModBats;
 import alec_wam.CrystalMod.tiles.machine.worksite.WorksiteChunkLoader;
 import alec_wam.CrystalMod.tiles.matter.MatterRegistry;
@@ -90,7 +91,6 @@ public class CommonProxy {
         MinecraftForge.EVENT_BUS.register(generator);
         
         MinecraftForge.EVENT_BUS.register(DropCapture.instance);
-        MinecraftForge.EVENT_BUS.register(new ClientEventHandler());
         
         MinecraftForge.EVENT_BUS.register(new DisguiseHandler());
         
@@ -138,7 +138,6 @@ public class CommonProxy {
 		ModEnchantments.init();
 		ModEntites.postInit();
 		ModCrafting.postInit();
-		GuidePages.createPages();
 		FarmUtil.addDefaultCrops();
 	}
 
@@ -172,5 +171,9 @@ public class CommonProxy {
 	public boolean isShiftKeyDown() {
 		return false;
 	}
+	
+	public void setForcedGuidePage(LookupResult result) {}
+	
+	public Object getForcedGuidePage(){return null;}
 	
 }

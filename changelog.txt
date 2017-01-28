@@ -1,0 +1,3 @@
+3.0.1
+-Removed hard dependency on TiConstruct and EnderIO.
+-Mob Essence is now obtained by killing a mob with a Mob Cage in your off-hand.

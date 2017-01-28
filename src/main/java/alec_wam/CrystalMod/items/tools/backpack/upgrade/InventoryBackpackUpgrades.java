@@ -1,5 +1,6 @@
 package alec_wam.CrystalMod.items.tools.backpack.upgrade;
 
+import java.util.Arrays;
 import java.util.List;
 
 import com.google.common.collect.Lists;
@@ -10,7 +11,6 @@ import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import scala.actors.threadpool.Arrays;
 
 public class InventoryBackpackUpgrades extends InventoryBackpack{
 

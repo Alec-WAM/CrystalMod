@@ -23,6 +23,7 @@ public class ItemBackpackNormal extends ItemBackpackBase implements ICustomModel
 	
 	@SideOnly(Side.CLIENT)
     public void initModel() {
+		super.initModel();
         for(CrystalBackpackType type : CrystalBackpackType.values()){
         	 ModelLoader.setCustomModelResourceLocation(this, type.getMetadata(), new ModelResourceLocation(getRegistryName(), type.getUnlocalizedName()));
         }

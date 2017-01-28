@@ -22,12 +22,18 @@ import alec_wam.CrystalMod.client.model.LayerDragonWings;
 import alec_wam.CrystalMod.client.model.LayerHorseAccessories;
 import alec_wam.CrystalMod.client.model.dynamic.ICustomItemRenderer;
 import alec_wam.CrystalMod.entities.ModEntites;
+import alec_wam.CrystalMod.entities.disguise.DisguiseClientHandler;
 import alec_wam.CrystalMod.fluids.FluidColored;
 import alec_wam.CrystalMod.fluids.ModFluids;
+import alec_wam.CrystalMod.handler.ClientEventHandler;
 import alec_wam.CrystalMod.handler.KeyHandler;
 import alec_wam.CrystalMod.integration.minecraft.ItemMinecartRender;
 import alec_wam.CrystalMod.items.ItemDragonWings;
 import alec_wam.CrystalMod.items.ModItems;
+import alec_wam.CrystalMod.items.guide.GuiGuideBase;
+import alec_wam.CrystalMod.items.guide.GuiGuideChapter;
+import alec_wam.CrystalMod.items.guide.GuidePages;
+import alec_wam.CrystalMod.items.guide.GuidePages.LookupResult;
 import alec_wam.CrystalMod.tiles.machine.power.battery.BlockBattery.BatteryType;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.GuiPanel;
 import alec_wam.CrystalMod.tiles.pipes.estorage.storage.hdd.GuiHDDInterface;
@@ -61,6 +67,8 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ClientProxy extends CommonProxy {
     @Override
@@ -69,6 +77,8 @@ public class ClientProxy extends CommonProxy {
         ModItems.initClient();
         ModelLoaderRegistry.registerLoader(new BakedModelLoader());
         ModelLoaderRegistry.registerLoader(ModelSeed.LoaderSeeds.INSTANCE);
+        MinecraftForge.EVENT_BUS.register(new ClientEventHandler());
+        MinecraftForge.EVENT_BUS.register(new DisguiseClientHandler());
         ModBlocks.initClient();
         ModEntites.initClient();
     }
@@ -97,6 +107,7 @@ public class ClientProxy extends CommonProxy {
     @Override
     public void postInit(FMLPostInitializationEvent e) {
         super.postInit(e);
+		GuidePages.createPages();
     }
     
     private static final Map<ResourceLocation, ICustomItemRenderer> CUSTOM_RENDERS = Maps.newHashMap();
@@ -301,5 +312,24 @@ public class ClientProxy extends CommonProxy {
     public boolean isShiftKeyDown()
     {
         return Keyboard.isKeyDown(42) || Keyboard.isKeyDown(54);
+    }
+    
+    @SideOnly(Side.CLIENT)
+	public static GuiGuideBase forcedChapter;
+    
+    public void setForcedGuidePage(LookupResult result){
+    	GuiGuideChapter chapterGui = null;
+		if(result.getChapter() != null){
+			if(result.getPage() !=null){
+				chapterGui = new GuiGuideChapter(null, result.getChapter(), result.getPage());
+			} else {
+				chapterGui = new GuiGuideChapter(null, result.getChapter());
+			}
+		}
+		forcedChapter = chapterGui;
+    }
+    
+    public Object getForcedGuidePage(){
+    	return forcedChapter;
     }
 }
