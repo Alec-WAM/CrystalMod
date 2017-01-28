@@ -2,11 +2,12 @@ package alec_wam.CrystalMod.items.tools.backpack.types;
 
 import java.util.Arrays;
 
+import com.google.common.base.Strings;
+
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.ModLogger;
-import joptsimple.internal.Strings;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;

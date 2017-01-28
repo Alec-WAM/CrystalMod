@@ -1,15 +1,27 @@
 package alec_wam.CrystalMod.items.tools.bat;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Random;
-import java.util.SortedMap;
-import java.util.TreeMap;
 
-import joptsimple.internal.Strings;
+import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+
+import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.api.ItemStackList;
+import alec_wam.CrystalMod.api.tools.AttackData;
+import alec_wam.CrystalMod.api.tools.IBatType;
+import alec_wam.CrystalMod.api.tools.IBatUpgrade;
+import alec_wam.CrystalMod.api.tools.UpgradeData;
+import alec_wam.CrystalMod.util.ChatUtil;
+import alec_wam.CrystalMod.util.EntityUtil;
+import alec_wam.CrystalMod.util.ItemNBTHelper;
+import alec_wam.CrystalMod.util.ItemStackTools;
+import alec_wam.CrystalMod.util.Lang;
+import alec_wam.CrystalMod.util.ModLogger;
+import alec_wam.CrystalMod.util.client.RenderUtil;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.Entity;
@@ -40,22 +52,6 @@ import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import alec_wam.CrystalMod.CrystalMod;
-import alec_wam.CrystalMod.api.ItemStackList;
-import alec_wam.CrystalMod.api.tools.AttackData;
-import alec_wam.CrystalMod.api.tools.IBatType;
-import alec_wam.CrystalMod.api.tools.IBatUpgrade;
-import alec_wam.CrystalMod.api.tools.UpgradeData;
-import alec_wam.CrystalMod.util.ChatUtil;
-import alec_wam.CrystalMod.util.EntityUtil;
-import alec_wam.CrystalMod.util.ItemNBTHelper;
-import alec_wam.CrystalMod.util.ItemStackTools;
-import alec_wam.CrystalMod.util.Lang;
-import alec_wam.CrystalMod.util.ModLogger;
-import alec_wam.CrystalMod.util.client.RenderUtil;
-
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 
 public class BatHelper {
 	
@@ -187,7 +183,7 @@ public class BatHelper {
 		}
 		
 		if(shift && ctrl){
-    		String str = Strings.repeat("~".toCharArray()[0], ((String)list.get(list.size()-1)).length());
+    		String str = Strings.repeat("~", ((String)list.get(list.size()-1)).length());
     		list.add(str);
     	}
 		
