@@ -261,7 +261,7 @@ public class EventHandler {
     }
     
     public static boolean hasDragonWings(EntityPlayer player){
-    	ItemStack chest = player.inventory.armorItemInSlot(2);
+    	ItemStack chest = player.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
 		if(ItemStackTools.isValid(chest) && ItemNBTHelper.verifyExistance(chest, ItemDragonWings.UPGRADE_NBT)){
 			return true;
 		}

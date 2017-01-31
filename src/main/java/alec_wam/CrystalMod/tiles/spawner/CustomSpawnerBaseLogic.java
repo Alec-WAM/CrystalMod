@@ -1,8 +1,11 @@
 package alec_wam.CrystalMod.tiles.spawner;
 
+import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.monster.EntityGuardian;
+import net.minecraft.entity.passive.EntityWaterMob;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -117,7 +120,12 @@ public abstract class CustomSpawnerBaseLogic {
 					EntityLiving entityliving = entity instanceof EntityLiving ? (EntityLiving) entity : null;
 					entity.setLocationAndAngles(x, y, z, world.rand.nextFloat() * 360.0F, 0.0F);
 
-					if (entityliving == null || (net.minecraftforge.event.ForgeEventFactory.canEntitySpawnSpawner(entityliving, getSpawnerWorld(), (float)entity.posX, (float)entity.posY, (float)entity.posZ) || ignoreSpawnRequirements && getSpawnerWorld().isAirBlock(new BlockPos(x, y, z)))) {
+					//Make Water Mobs require water
+					boolean specialCheck = ignoreSpawnRequirements && getSpawnerWorld().isAirBlock(new BlockPos(x, y, z));
+					if(!ignoreSpawnRequirements && (entity instanceof EntityWaterMob || entity instanceof EntityGuardian)){
+						specialCheck = world.isMaterialInBB(entity.getEntityBoundingBox(), Material.WATER);
+					}
+					if (entityliving == null || (net.minecraftforge.event.ForgeEventFactory.canEntitySpawnSpawner(entityliving, getSpawnerWorld(), (float)entity.posX, (float)entity.posY, (float)entity.posZ) || specialCheck)) {
 						this.spawnEntity(entity);
 						this.getSpawnerWorld().playEvent(2004, this.getSpawnerPos(), 0);
 
@@ -126,7 +134,6 @@ public abstract class CustomSpawnerBaseLogic {
 						}
 
 						flag = true;
-
 					}
 				}
 

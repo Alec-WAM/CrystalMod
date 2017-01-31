@@ -152,13 +152,13 @@ public class ItemRenderMobEssence implements ICustomItemRenderer {
 				GlStateManager.rotate(90, 0, 1, 0);
 				GlStateManager.rotate(90-20, 0, 0, 1);
 				GlStateManager.rotate(-45, 1, 0, 0);
-				GlStateManager.translate(0, -10, 0.5);
+				GlStateManager.translate(0, 0, 0.5);
 			}else{
 				GlStateManager.rotate(90, 0, 1, 0);
 				GlStateManager.rotate(90-20, 0, 0, 1);
 				GlStateManager.rotate(45, 1, 0, 0);
 				GlStateManager.rotate(180, 0, 1, 0);
-				GlStateManager.translate(0, -1, 0.5);
+				GlStateManager.translate(0, 0, 0.5);
 			}
 			Minecraft.getMinecraft().getRenderManager().doRenderEntity(entity, 0.0D, 0.0D, 0.0D, 0.0F, partialTicks, true);
 			GlStateManager.popMatrix();

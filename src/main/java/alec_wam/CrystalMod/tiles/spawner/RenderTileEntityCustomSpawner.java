@@ -32,7 +32,6 @@ public class RenderTileEntityCustomSpawner<T extends TileEntityCustomSpawner> ex
 			float f1 = 0.4375F * essence.getRenderScale(TransformType.NONE);
 			GlStateManager.translate(0.0F, 0.4F, 0.0F);
 			GlStateManager.rotate((float) (baseLogic.renderRotation1 + (baseLogic.renderRotation0 - baseLogic.renderRotation1) * (double) partialTicks) * 10.0F, 0.0F, 1.0F, 0.0F);
-			//GlStateManager.rotate(-30.0F, 1.0F, 0.0F, 0.0F);
 			GlStateManager.translate(0.0F, -0.4F, 0.0F);
 			GlStateManager.scale(f1, f1, f1);
 			entity.setLocationAndAngles(x, y, z, 0.0F, 0.0F);
