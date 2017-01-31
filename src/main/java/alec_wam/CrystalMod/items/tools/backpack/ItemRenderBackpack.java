@@ -67,7 +67,6 @@ public class ItemRenderBackpack implements ICustomItemRenderer {
             if (enchanted) {
                 LayerArmorBase.renderEnchantedGlint(this.playerRenderer, entity, this.backpackModel, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch, scale);
             }*/
-            GlStateManager.popMatrix();
 			if(type instanceof IBackpackInventory){
 				IBackpackInventory inv = (IBackpackInventory)type;
 				InventoryBackpack inventory = inv.getInventory(stack);
@@ -98,6 +97,7 @@ public class ItemRenderBackpack implements ICustomItemRenderer {
 					}
 				}
 			}
+            GlStateManager.popMatrix();
 			GlStateManager.popMatrix();
 		}
     	GlStateManager.popMatrix();

@@ -378,7 +378,7 @@ public class ItemTeloportTool extends Item implements ICustomModel {
 			World destinationWorld = DimensionManager.getWorld(destination.dimension);
 
 			if (destinationWorld == null){
-				ModLogger.warning("Destination world dose not exist!");
+				ModLogger.warning("Destination world does not exist!");
 				return entity;
 			}
 
