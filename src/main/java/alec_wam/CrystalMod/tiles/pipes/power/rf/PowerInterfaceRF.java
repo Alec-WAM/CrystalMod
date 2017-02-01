@@ -1,32 +1,20 @@
 package alec_wam.CrystalMod.tiles.pipes.power.rf;
 
 import alec_wam.CrystalMod.tiles.pipes.power.IPowerInterface;
-import cofh.api.energy.IEnergyConnection;
-import cofh.api.energy.IEnergyHandler;
-import cofh.api.energy.IEnergyReceiver;
 import net.minecraft.util.EnumFacing;
+import net.minecraftforge.energy.IEnergyStorage;
 
 public class PowerInterfaceRF implements IPowerInterface {
 
-  
-
-  private final IEnergyConnection con;
-  private IEnergyHandler eh;
-  private IEnergyReceiver er;
-
-  public PowerInterfaceRF(IEnergyConnection con) {       
-    this.con = con;
-    if(con instanceof IEnergyHandler) {
-      eh = (IEnergyHandler)con;
-    }
-    if(con instanceof IEnergyReceiver) {
-      er = (IEnergyReceiver)con;
-    }       
+  private IEnergyStorage storage;	
+	
+  public PowerInterfaceRF(IEnergyStorage con) {       
+    this.storage = con;
   }
 
   @Override
   public Object getDelegate() {
-    return con;
+    return storage;
   }
 
   @Override
@@ -34,32 +22,32 @@ public class PowerInterfaceRF implements IPowerInterface {
     if(from != null) {
       from = from.getOpposite();
     }
-    return con.canConnectEnergy(from);
+    return true;
   }
 
   @Override
   public int getEnergyStored(EnumFacing dir) {
-    if (eh == null) {
+    if (storage == null) {
     	return 0;
     }
-    return eh.getEnergyStored(dir);
+    return storage.getEnergyStored();
   }
 
   @Override
   public int getMaxEnergyStored(EnumFacing dir) {
-    if (eh == null) {
+    if (storage == null) {
       return 0;
     }
-    return eh.getMaxEnergyStored(dir);
+    return storage.getMaxEnergyStored();
 
   }
 
   @Override
   public int getPowerRequest(EnumFacing dir) {
-    if(er == null) {
+    if(storage == null) {
     	return 0;
     }
-    return er.receiveEnergy(dir, 9999999, true);
+    return storage.receiveEnergy(9999999, true);
   }
 
   @Override
@@ -69,15 +57,15 @@ public class PowerInterfaceRF implements IPowerInterface {
 
   @Override
   public int fillEnergy(EnumFacing dir, int canOffer) {
-    if(er == null) {
+    if(storage == null) {
     	return 0;
     }
-    return er.receiveEnergy(dir, canOffer, false);
+    return storage.receiveEnergy(canOffer, false);
   }
 
   @Override
   public boolean isOutputOnly() {
-    return er == null;
+    return !storage.canReceive();
   }
 
   @Override

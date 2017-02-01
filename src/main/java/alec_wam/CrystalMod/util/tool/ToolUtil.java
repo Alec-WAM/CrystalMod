@@ -23,8 +23,6 @@ import net.minecraftforge.energy.CapabilityEnergy;
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.util.ItemStackTools;
-import cofh.api.energy.IEnergyContainerItem;
-import cofh.api.energy.IEnergyStorage;
 
 public class ToolUtil {
 
@@ -182,7 +180,7 @@ public class ToolUtil {
 	  if(stack.hasCapability(CapabilityEnergy.ENERGY, null)){
 		  return true;
 	  }
-	  return stack.getItem() instanceof IEnergyContainerItem;
+	  return false;
   }
   
   public static boolean isEmptyRfTool(ItemStack stack) {
@@ -196,10 +194,7 @@ public class ToolUtil {
 			  return storage.getMaxEnergyStored() > 0 && storage.getEnergyStored() <=0;
 		  }
 	  }
-	  
-	  if(!(stack.getItem() instanceof IEnergyContainerItem))return false;
-	  IEnergyContainerItem container = (IEnergyContainerItem)stack.getItem();
-	  return container.getMaxEnergyStored(stack) > 0 && container.getEnergyStored(stack) <= 0;
+	  return false;
   }
   
   public static boolean isWeapon(ItemStack stack){

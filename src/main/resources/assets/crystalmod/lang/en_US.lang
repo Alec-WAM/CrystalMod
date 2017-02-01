@@ -108,13 +108,19 @@ item.crystalmod.crystalshears.dark.name=Dark Crystal Shears
 item.crystalmod.crystalshears.pure.name=Pure Crystal Shears
 item.crystalmod.crystalshears.darkIron.name=Dark Iron Shears
 
-
 item.crystalmod.darkironaxe.name=Dark Iron Axe
 item.crystalmod.darkironhoe.name=Dark Iron Hoe
 item.crystalmod.darkironshovel.name=Dark Iron Shovel
 item.crystalmod.darkironpickaxe.name=Dark Iron Pickaxe
 item.crystalmod.darkironsword.name=Dark Iron Sword
 item.crystalmod.darkironbow.name=Dark Iron Bow
+
+item.crystalmod.wolfarmor.leather.name=Leather Wolf Armor
+item.crystalmod.wolfarmor.chain.name=Chain Wolf Armor
+item.crystalmod.wolfarmor.iron.name=Iron Wolf Armor
+item.crystalmod.wolfarmor.diron.name=Dark Iron Wolf Armor
+item.crystalmod.wolfarmor.diamond.name=Diamond Wolf Armor
+item.crystalmod.wolfarmor.gold.name=Gold Wolf Armor
 
 item.crystalmod.supertorch.name=Super Torch
 

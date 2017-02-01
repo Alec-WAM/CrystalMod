@@ -15,16 +15,17 @@ import net.minecraft.inventory.InventoryEnderChest;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumHand;
 
 public class HorseAccessories {
     public static String NBT_ACCESSORY_HORSE_ENDERCHEST = "EnderChest";
     
-    public static boolean handleHorseInteract(EntityPlayer player, ItemStack held, AbstractHorse horse){
-    	if(handleEnderChestInteract(horse, held, player))return true;
+    public static boolean handleHorseInteract(EntityPlayer player, ItemStack held, EnumHand hand, AbstractHorse horse){
+    	if(handleEnderChestInteract(horse, held, hand, player))return true;
     	return false;
     }
 
-    private static boolean handleEnderChestInteract(AbstractHorse horse, ItemStack held, EntityPlayer player){
+    private static boolean handleEnderChestInteract(AbstractHorse horse, ItemStack held, EnumHand hand, EntityPlayer player){
     	if(hasEnderChest(horse)){
     		if(ItemStackTools.isNullStack(held)){
     			if(!player.isSneaking())return false;

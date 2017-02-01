@@ -2,12 +2,12 @@ package alec_wam.CrystalMod.tiles.machine.power.converter;
 
 import alec_wam.CrystalMod.api.energy.ICEnergyReceiver;
 import alec_wam.CrystalMod.tiles.machine.power.CustomEnergyStorage;
-import cofh.api.energy.IEnergyReceiver;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.energy.IEnergyStorage;
 
 public class TileEnergyConverterCUtoRF extends TileEnergyConveterBase implements ICEnergyReceiver {
 	CustomEnergyStorage energyStorage;
@@ -38,10 +38,9 @@ public class TileEnergyConverterCUtoRF extends TileEnergyConveterBase implements
 	protected void transferEnergy(EnumFacing face)
 	{
 	    TileEntity tile= getWorld().getTileEntity(getPos().offset(face));
-	    if(tile !=null && tile instanceof IEnergyReceiver){
-	      IEnergyReceiver handler = (IEnergyReceiver) tile;
-	      if(!handler.canConnectEnergy(face))return;
-	      handler.receiveEnergy(face, energyStorage.extractEnergy(80, false), false);
+	    if(tile !=null && tile.hasCapability(CapabilityEnergy.ENERGY, face)){
+	    	IEnergyStorage storage = tile.getCapability(CapabilityEnergy.ENERGY, face);
+	    	if(storage !=null)storage.receiveEnergy(energyStorage.extractEnergy(80, false), false);
 	    }
 	}
 	

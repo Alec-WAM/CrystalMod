@@ -1,12 +1,5 @@
 package alec_wam.CrystalMod.tiles.pipes.estorage;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import alec_wam.CrystalMod.api.estorage.INetworkTile;
 import alec_wam.CrystalMod.tiles.pipes.AbstractPipeNetwork;
 import alec_wam.CrystalMod.tiles.pipes.ConnectionMode;
@@ -14,8 +7,15 @@ import alec_wam.CrystalMod.tiles.pipes.IPipeWrapper;
 import alec_wam.CrystalMod.tiles.pipes.PipeUtil;
 import alec_wam.CrystalMod.tiles.pipes.TileEntityPipe;
 import alec_wam.CrystalMod.tiles.pipes.types.IPipeType;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 public class TileEntityPipeEStorage extends TileEntityPipe {
+	
+	public TileEntityPipeEStorage(){}
 	
 	public void writeCustomNBT(NBTTagCompound nbt){
 		super.writeCustomNBT(nbt);

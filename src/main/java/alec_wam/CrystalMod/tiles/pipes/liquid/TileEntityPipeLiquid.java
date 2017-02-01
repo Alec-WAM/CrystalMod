@@ -44,6 +44,8 @@ public class TileEntityPipeLiquid extends TileEntityPipe implements IInventoryCh
 	private final EnumMap<EnumFacing, FluidFilter> outputFilters = new EnumMap<EnumFacing, FluidFilter>(EnumFacing.class);
 	private final EnumMap<EnumFacing, FluidFilter> inputFilters = new EnumMap<EnumFacing, FluidFilter>(EnumFacing.class);
 	
+	public TileEntityPipeLiquid(){}
+	
 	public FluidFilter getFilter(EnumFacing dir, boolean isInput) {
 	    if(isInput) {
 	      return inputFilters.get(dir);

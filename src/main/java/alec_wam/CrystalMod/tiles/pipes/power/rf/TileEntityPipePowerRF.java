@@ -2,6 +2,8 @@ package alec_wam.CrystalMod.tiles.pipes.power.rf;
 
 import java.util.EnumMap;
 
+import javax.annotation.Nullable;
+
 import alec_wam.CrystalMod.Config;
 import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.tiles.pipes.AbstractPipeNetwork;
@@ -11,8 +13,6 @@ import alec_wam.CrystalMod.tiles.pipes.BlockPipe.PipeType;
 import alec_wam.CrystalMod.tiles.pipes.power.IPowerInterface;
 import alec_wam.CrystalMod.tiles.pipes.types.IPipeType;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
-import cofh.api.energy.IEnergyConnection;
-import cofh.api.energy.IEnergyReceiver;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -20,8 +20,10 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.energy.IEnergyStorage;
 
-public class TileEntityPipePowerRF extends TileEntityPipe implements IEnergyReceiver, IEnergyConnection {
+public class TileEntityPipePowerRF extends TileEntityPipe {
 
 	protected RFPowerPipeNetwork network;
 
@@ -30,6 +32,8 @@ public class TileEntityPipePowerRF extends TileEntityPipe implements IEnergyRece
 	private int subtype;
 
 	protected EnumMap<EnumFacing, Long> recievedTicks;
+	
+	public TileEntityPipePowerRF(){}
 	
 	public void setSubType(int sub){
 		this.subtype = sub;
@@ -77,11 +81,6 @@ public class TileEntityPipePowerRF extends TileEntityPipe implements IEnergyRece
 	public int getEnergyStored(){
 		return energyStoredRF;
 	}
-	
-	@Override
-	public int getEnergyStored(EnumFacing from) {
-		return getEnergyStored();
-	}
 
 	public int getMaxEnergyRecieved(EnumFacing dir) {
       ConnectionMode mode = getConnectionMode(dir);
@@ -114,11 +113,6 @@ public class TileEntityPipePowerRF extends TileEntityPipe implements IEnergyRece
 	    }
 	    return false;
 	}
-	
-	@Override
-	public int getMaxEnergyStored(EnumFacing from) {
-		return getMaxEnergyStored();
-	}
 
 	static int getMaxEnergyIO(int subtype) {
 	    switch (subtype) {
@@ -136,13 +130,7 @@ public class TileEntityPipePowerRF extends TileEntityPipe implements IEnergyRece
 	public int getMaxEnergyStored() {
 	    return getMaxEnergyIO(subtype);
 	}
-	
-	@Override
-	public boolean canConnectEnergy(EnumFacing from) {
-		return this.getConnectionMode(from) != ConnectionMode.DISABLED;
-	}
 
-	@Override
 	public int receiveEnergy(EnumFacing from, int maxExtract, boolean simulate) {
 		if(getMaxEnergyRecieved(from) == 0 || maxExtract <= 0) {
 	      return 0;
@@ -156,7 +144,6 @@ public class TileEntityPipePowerRF extends TileEntityPipe implements IEnergyRece
 	          recievedTicks = new EnumMap<EnumFacing, Long>(EnumFacing.class);
 	        }
 	        recievedTicks.put(from, getWorld().getTotalWorldTime());
-
 	    }
 	    return result;
 	}
@@ -219,8 +206,8 @@ public class TileEntityPipePowerRF extends TileEntityPipe implements IEnergyRece
 		if(test instanceof TileEntityPipePowerRF) {
 		  return null;
 		}
-		if (test instanceof IEnergyConnection) {
-		    return new PowerInterfaceRF((IEnergyConnection) test);
+		if (test.hasCapability(CapabilityEnergy.ENERGY, direction.getOpposite())) {
+		    return new PowerInterfaceRF(test.getCapability(CapabilityEnergy.ENERGY, direction.getOpposite()));
 		}     
 		return null;
     }	
@@ -229,5 +216,55 @@ public class TileEntityPipePowerRF extends TileEntityPipe implements IEnergyRece
     	ItemStack stack = new ItemStack(ModBlocks.crystalPipe, 1, PipeType.POWERRF.getMeta());
     	ItemNBTHelper.setInteger(stack, "Tier", getSubType());
     	return stack;
+    }
+    
+    @Override
+    public boolean hasCapability(net.minecraftforge.common.capabilities.Capability<?> capability, @Nullable net.minecraft.util.EnumFacing facing)
+    {
+    	if(capability == CapabilityEnergy.ENERGY)return true;
+    	return super.hasCapability(capability, facing);
+    }
+    
+    @Override
+    @Nullable
+    public <T> T getCapability(net.minecraftforge.common.capabilities.Capability<T> capability, @Nullable net.minecraft.util.EnumFacing facing)
+    {
+    	if(capability == CapabilityEnergy.ENERGY && getConnectionMode(facing) != ConnectionMode.DISABLED){
+    		final EnumFacing dir = facing;
+    		return (T) new IEnergyStorage(){
+
+				@Override
+				public int receiveEnergy(int maxReceive, boolean simulate) {
+					return TileEntityPipePowerRF.this.receiveEnergy(dir, maxReceive, simulate);
+				}
+
+				@Override
+				public int extractEnergy(int maxExtract, boolean simulate) {
+					return 0;
+				}
+
+				@Override
+				public int getEnergyStored() {
+					return TileEntityPipePowerRF.this.getEnergyStored();
+				}
+
+				@Override
+				public int getMaxEnergyStored() {
+					return TileEntityPipePowerRF.this.getMaxEnergyStored();
+				}
+
+				@Override
+				public boolean canExtract() {
+					return false;
+				}
+
+				@Override
+				public boolean canReceive() {
+					return getConnectionMode(dir) == ConnectionMode.IN_OUT || getConnectionMode(dir) == ConnectionMode.INPUT;
+				}
+    			
+    		};
+    	}
+    	return super.getCapability(capability, facing);
     }
 }

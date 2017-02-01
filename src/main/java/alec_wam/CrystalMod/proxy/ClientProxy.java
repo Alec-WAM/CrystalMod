@@ -20,6 +20,7 @@ import alec_wam.CrystalMod.client.model.CustomBakedModel;
 import alec_wam.CrystalMod.client.model.CustomItemModelFactory;
 import alec_wam.CrystalMod.client.model.LayerDragonWings;
 import alec_wam.CrystalMod.client.model.LayerHorseAccessories;
+import alec_wam.CrystalMod.client.model.LayerWolfAccessories;
 import alec_wam.CrystalMod.client.model.dynamic.ICustomItemRenderer;
 import alec_wam.CrystalMod.entities.ModEntites;
 import alec_wam.CrystalMod.entities.disguise.DisguiseClientHandler;
@@ -51,7 +52,9 @@ import net.minecraft.client.renderer.entity.RenderLivingBase;
 import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.client.resources.IReloadableResourceManager;
 import net.minecraft.client.resources.IResourceManager;
+import net.minecraft.entity.passive.AbstractHorse;
 import net.minecraft.entity.passive.EntityHorse;
+import net.minecraft.entity.passive.EntityWolf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Items;
@@ -100,10 +103,15 @@ public class ClientProxy extends CommonProxy {
 		}
 		
 		LayerHorseAccessories horseAccessoryRenderer = new LayerHorseAccessories();
-		Render<?> renderHorse = Minecraft.getMinecraft().getRenderManager().getEntityClassRenderObject(EntityHorse.class);
+		Render<?> renderHorse = Minecraft.getMinecraft().getRenderManager().getEntityClassRenderObject(AbstractHorse.class);
 		if(renderHorse !=null && renderHorse instanceof RenderLivingBase){
 			RenderLivingBase<?> livingRender = (RenderLivingBase<?>)renderHorse;
 			livingRender.addLayer(horseAccessoryRenderer);
+		}
+		Render<?> renderWolf = Minecraft.getMinecraft().getRenderManager().getEntityClassRenderObject(EntityWolf.class);
+		if(renderWolf !=null && renderWolf instanceof RenderLivingBase){
+			RenderLivingBase<?> livingRender = (RenderLivingBase<?>)renderWolf;
+			livingRender.addLayer(new LayerWolfAccessories(livingRender));
 		}
         MinecraftForge.EVENT_BUS.register(this);
         

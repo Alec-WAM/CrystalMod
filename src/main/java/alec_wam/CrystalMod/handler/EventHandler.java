@@ -20,6 +20,7 @@ import alec_wam.CrystalMod.capability.ExtendedPlayerInventory;
 import alec_wam.CrystalMod.capability.ExtendedPlayerProvider;
 import alec_wam.CrystalMod.capability.PacketExtendedPlayerInvSync;
 import alec_wam.CrystalMod.entities.accessories.HorseAccessories;
+import alec_wam.CrystalMod.entities.accessories.WolfAccessories;
 import alec_wam.CrystalMod.entities.minions.warrior.EntityMinionWarrior;
 import alec_wam.CrystalMod.integration.baubles.BaublesIntegration;
 import alec_wam.CrystalMod.integration.baubles.ItemBaubleWings;
@@ -44,6 +45,7 @@ import alec_wam.CrystalMod.util.EntityUtil;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
+import alec_wam.CrystalMod.util.ModLogger;
 import alec_wam.CrystalMod.util.PlayerUtil;
 import alec_wam.CrystalMod.util.Util;
 import alec_wam.CrystalMod.world.ModDimensions;
@@ -59,6 +61,7 @@ import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.passive.AbstractHorse;
+import net.minecraft.entity.passive.EntityWolf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -244,6 +247,13 @@ public class EventHandler {
     @SubscribeEvent
     public void entityUpdate(LivingUpdateEvent event){
     	if(event.getEntityLiving() !=null){
+    		if(EntityUtil.hasCustomData(event.getEntityLiving())){
+	    		if(EntityUtil.getCustomEntityData(event.getEntityLiving()).hasKey("NEEDSDATASYNC")){
+	    			ModLogger.info("Sending Custom NBT "+event.getEntityLiving());
+	    			EntityUtil.getCustomEntityData(event.getEntityLiving()).removeTag("NEEDSDATASYNC");
+	    			CrystalModNetwork.sendToAllAround(new PacketEntityMessage(event.getEntityLiving(), "CustomDataSync", EntityUtil.getCustomEntityData(event.getEntityLiving())), event.getEntityLiving());
+	    		}
+    		}
     		if(event.getEntityLiving() instanceof EntityPlayer){
     			EntityPlayer player = (EntityPlayer)event.getEntityLiving();
     			updateWings(player);
@@ -353,7 +363,9 @@ public class EventHandler {
     	Entity entity = event.getEntity();
     	if(entity !=null && entity.getEntityWorld() !=null && !entity.getEntityWorld().isRemote){
 	    	if(EntityUtil.hasCustomData(entity)){
-	    		CrystalModNetwork.sendToAllAround(new PacketEntityMessage(entity, "CustomDataSync"), entity);
+	    		ModLogger.info("Loading Custom NBT ("+EntityUtil.getCustomEntityData(entity).getSize()+")");
+	    		WolfAccessories.onEntityLoad(entity);
+	    		EntityUtil.getCustomEntityData(entity).setBoolean("NEEDSDATASYNC", true);
 	    	}
     	}
     }
@@ -368,9 +380,14 @@ public class EventHandler {
     	Entity entity = event.getTarget();
         if(entity instanceof AbstractHorse){
       	  AbstractHorse horse = (AbstractHorse)entity;
-      	  if(HorseAccessories.handleHorseInteract(player, held, horse)){
+      	  if(HorseAccessories.handleHorseInteract(player, held, event.getHand(), horse)){
       		  event.setCanceled(true);
       	  }
+        }
+        if(entity instanceof EntityWolf){
+        	if(WolfAccessories.handleWolfInteract(player, held, event.getHand(), (EntityWolf)entity)){
+        		event.setCanceled(true);
+        	}
         }
     }
     
@@ -418,6 +435,12 @@ public class EventHandler {
       if(entity instanceof AbstractHorse){
     	  AbstractHorse horse = (AbstractHorse)entity;
     	  HorseAccessories.onHorseDeath(horse);
+      }
+      if(entity instanceof EntityWolf){
+    	  ItemStack armor = WolfAccessories.getWolfArmorStack((EntityWolf)entity);
+    	  if(ItemStackTools.isValid(armor)){
+    		  entity.entityDropItem(armor, 0);
+    	  }
       }
     }
 	

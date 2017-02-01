@@ -124,6 +124,12 @@ public class PacketEntityMessage extends AbstractPacketThreadsafe {
 				entity.posX = x; entity.posY = y; entity.posZ = z;
 				entity.motionX = mX; entity.motionY = mY; entity.motionZ = mZ;
 			}
+			if(type.equalsIgnoreCase("AddMotion")){
+				double x = data.getDouble("X");
+				double y = data.getDouble("Y");
+				double z = data.getDouble("Z");
+				entity.motionX = x; entity.motionY = y; entity.motionZ = z;
+			}
 			if(type.equalsIgnoreCase("GrappleConnect")){
 				GrappleType type = GrappleType.values()[data.getByte("Type")];
 				double x = data.getDouble("x");

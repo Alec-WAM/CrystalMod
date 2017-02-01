@@ -20,7 +20,6 @@ import alec_wam.CrystalMod.tiles.machine.power.CustomEnergyStorage;
 import alec_wam.CrystalMod.tiles.tank.Tank;
 import alec_wam.CrystalMod.util.ModLogger;
 import alec_wam.CrystalMod.util.PlayerUtil;
-import cofh.api.energy.EnergyStorage;
 
 import com.google.common.collect.Maps;
 

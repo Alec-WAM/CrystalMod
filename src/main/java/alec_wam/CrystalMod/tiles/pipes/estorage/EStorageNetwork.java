@@ -30,6 +30,7 @@ import alec_wam.CrystalMod.api.estorage.ICraftingTask;
 import alec_wam.CrystalMod.api.estorage.IInsertListener;
 import alec_wam.CrystalMod.api.estorage.INetworkContainer;
 import alec_wam.CrystalMod.api.estorage.INetworkItemProvider;
+import alec_wam.CrystalMod.api.estorage.INetworkPowerTile;
 import alec_wam.CrystalMod.api.estorage.INetworkTile;
 import alec_wam.CrystalMod.api.estorage.INetworkTileConnectable;
 import alec_wam.CrystalMod.network.CompressedDataInput;
@@ -37,6 +38,7 @@ import alec_wam.CrystalMod.network.CompressedDataOutput;
 import alec_wam.CrystalMod.tiles.pipes.AbstractPipeNetwork;
 import alec_wam.CrystalMod.tiles.pipes.IPipeWrapper;
 import alec_wam.CrystalMod.tiles.pipes.TileEntityPipe;
+import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetwork.NetworkPos;
 import alec_wam.CrystalMod.tiles.pipes.estorage.FluidStorage.FluidStackData;
 import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage.ItemStackData;
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.CraftingPattern;
@@ -57,7 +59,18 @@ public class EStorageNetwork extends AbstractPipeNetwork {
 	private final ItemStorage itemStorage = new ItemStorage(this);
 	private final FluidStorage fluidStorage = new FluidStorage(this);
 
-	public final Map<BlockPos, TileEntity> networkTiles = new HashMap<BlockPos, TileEntity>();
+	public static class NetworkPos {
+		public BlockPos pos;
+		public int dim;
+		
+		public NetworkPos(BlockPos pos, int dim){
+			this.pos = pos;
+			this.dim = dim;
+		}
+	}
+	
+	public final Map<NetworkPos, TileEntity> networkTiles = new HashMap<NetworkPos, TileEntity>();
+	public final Map<NetworkPos, INetworkPowerTile> networkPoweredTiles = new HashMap<NetworkPos, INetworkPowerTile>();
 	public TileCraftingController craftingController;
 	public final List<NetworkedItemProvider> masterInterfaces = Lists.newArrayList();
 	public final NavigableMap<Integer, List<NetworkedItemProvider>> interfaces = new TreeMap<Integer, List<NetworkedItemProvider>>(
@@ -245,7 +258,9 @@ public class EStorageNetwork extends AbstractPipeNetwork {
 			return;
 		}
 		
-		networkTiles.put(bc, externalTile);
+		int dim = externalTile.getWorld().provider.getDimension();
+		NetworkPos nPos = new NetworkPos(bc, dim);
+		networkTiles.put(nPos, externalTile);
 		
 		if(externalTile instanceof TileCraftingController){
 			TileCraftingController crafter = (TileCraftingController)externalTile;
@@ -260,6 +275,10 @@ public class EStorageNetwork extends AbstractPipeNetwork {
 
 		if (externalTile instanceof IInsertListener) {
 			listeners.add((IInsertListener) externalTile);
+		}
+
+		if(externalTile instanceof INetworkPowerTile){
+			networkPoweredTiles.put(nPos, (INetworkPowerTile)externalTile);
 		}
 
 		if (externalTile instanceof INetworkItemProvider) {
@@ -333,8 +352,10 @@ public class EStorageNetwork extends AbstractPipeNetwork {
 	}
 
 	public void tileRemoved(TileEntityPipeEStorage itemConduit, BlockPos bc) {
-		networkTiles.remove(bc);
 		int dim = itemConduit.getWorld().provider.getDimension();
+		NetworkPos nPos = new NetworkPos(bc, dim);
+		networkTiles.remove(nPos);
+		networkPoweredTiles.remove(nPos);
 
 		NetworkedItemProvider inter = getInterface(bc, dim);
 		if (inter != null) {

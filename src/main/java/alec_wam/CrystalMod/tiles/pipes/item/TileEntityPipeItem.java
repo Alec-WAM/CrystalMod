@@ -40,6 +40,8 @@ public class TileEntityPipeItem extends TileEntityPipe implements IInventoryChan
 	
 	protected final EnumMap<EnumFacing, RedstoneMode> redstoneSettings = new EnumMap<EnumFacing, RedstoneMode>(EnumFacing.class);
 	
+	public TileEntityPipeItem(){}
+	
 	public InventoryBasic getFilter(EnumFacing dir){
 		InventoryBasic inv = filters.get(dir);
 		if(inv == null){

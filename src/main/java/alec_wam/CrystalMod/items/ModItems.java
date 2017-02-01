@@ -20,6 +20,7 @@ import alec_wam.CrystalMod.integration.baubles.BaublesIntegration;
 import alec_wam.CrystalMod.integration.baubles.ItemBaubleWings;
 import alec_wam.CrystalMod.items.ItemMetalPlate.PlateType;
 import alec_wam.CrystalMod.items.armor.ItemCustomArmor;
+import alec_wam.CrystalMod.items.armor.ItemWolfArmor;
 import alec_wam.CrystalMod.items.game.ItemFlag;
 import alec_wam.CrystalMod.items.guide.ItemCrystalGuide;
 import alec_wam.CrystalMod.items.tools.ItemCrystalAxe;
@@ -83,7 +84,7 @@ public class ModItems {
 	public static ToolMaterial ToolMaterialCrystal = EnumHelper.addToolMaterial(CrystalMod.MODID.toLowerCase()+".crystal", 5, 2000, 20.0F, 6.0F, 22);
 	public static ToolMaterial ToolMaterialDarkIron = EnumHelper.addToolMaterial(CrystalMod.MODID.toLowerCase()+".darkIron", 2, 500/*250*/, 7.0F/*6.0F*/, 2.5F/*2.0F*/, 12/*14*/);
 
-	public static ArmorMaterial ArmorMaterialDarkIron = EnumHelper.addArmorMaterial(CrystalMod.MODID.toLowerCase()+".darkIron", "darkiron", 16, new int[]{2, 5, 6, 2}, 16, SoundEvents.ITEM_ARMOR_EQUIP_IRON, 0.0F);
+	public static ArmorMaterial ArmorMaterialDarkIron = EnumHelper.addArmorMaterial(CrystalMod.MODID.toLowerCase()+".darkIron", "darkiron", 16, new int[]{2, 6, 7, 2}, 16, SoundEvents.ITEM_ARMOR_EQUIP_IRON, 0.0F);
 	
 	public static ItemCrystalAxe crystalAxe;
 	public static ItemCrystalHoe crystalHoe;
@@ -93,6 +94,7 @@ public class ModItems {
 	public static ItemCrystalShears shears;
 	
 	public static ItemArmor darkIronHelmet, darkIronChestplate, darkIronLeggings, darkIronBoots;
+	public static ItemWolfArmor wolfArmor;
 	
 	public static ItemAxe darkIronAxe;
 	public static ItemHoe darkIronHoe;
@@ -167,6 +169,8 @@ public class ModItems {
 		darkIronChestplate = registerItem(new ItemCustomArmor(ArmorMaterialDarkIron, EntityEquipmentSlot.CHEST, "darkIron", darkIronPlate), "darkironchestplate");
 		darkIronLeggings = registerItem(new ItemCustomArmor(ArmorMaterialDarkIron, EntityEquipmentSlot.LEGS, "darkIron", darkIronPlate), "darkironleggings");
 		darkIronBoots = registerItem(new ItemCustomArmor(ArmorMaterialDarkIron, EntityEquipmentSlot.FEET, "darkIron", darkIronPlate), "darkironboots");
+		
+		wolfArmor = new ItemWolfArmor();
 		
 		darkIronAxe = registerItem(new ItemCustomAxe(ToolMaterialDarkIron), "darkironaxe");
 		darkIronHoe = (ItemHoe) registerItem(new ItemHoe(ToolMaterialDarkIron), "darkironhoe").setCreativeTab(CrystalMod.tabTools);

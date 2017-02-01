@@ -31,6 +31,8 @@ public class TileEntityPipePowerCU extends TileEntityPipe implements ICEnergyRec
 
 	protected EnumMap<EnumFacing, Long> recievedTicks;
 	
+	public TileEntityPipePowerCU(){}
+	
 	public void setSubType(int sub){
 		this.subtype = sub;
 	}
