@@ -186,6 +186,7 @@ item.crystalmod.craftingpattern.name=Crafting Recipe Pattern
 item.crystalmod.misccard.eportal.name=Network Pipe Portal Binder
 item.crystalmod.misccard.pcube.name=Player Cube Card
 item.crystalmod.misccard.elevator.name=Elevator Binder (WIP)
+item.crystalmod.misccard.tportal.name=Teleportal Link Card
 
 item.crystalmod.worksiteupgrade.0.name=Medium Bounds Upgrade
 item.crystalmod.worksiteupgrade.1.name=Large Bounds Upgrade
@@ -412,6 +413,8 @@ tile.crystalmod.elevator.name=Elevator
 tile.crystalmod.elevatorfloor.name=Elevator Floor Marker
 tile.crystalmod.elevatorcaller.name=Elevator Dialer
 tile.crystalmod.reinforcedrail.name=Reinforced Rail
+
+tile.crystalmod.teleportal.name=Teleporting Portal
 
 tile.crystalmod.inventorycharger.cu.name=Inventory Charger (CU)
 tile.crystalmod.inventorycharger.rf.name=Inventory Charger (RF)
