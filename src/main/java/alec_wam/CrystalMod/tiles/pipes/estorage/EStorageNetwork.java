@@ -1,10 +1,8 @@
 package alec_wam.CrystalMod.tiles.pipes.estorage;
 
 import java.io.IOException;
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.Deque;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -12,24 +10,14 @@ import java.util.Map;
 import java.util.NavigableMap;
 import java.util.TreeMap;
 
-import javax.annotation.Nullable;
+import com.google.common.collect.Lists;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.world.World;
-import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import alec_wam.CrystalMod.api.ItemStackList;
 import alec_wam.CrystalMod.api.estorage.IAutoCrafter;
-import alec_wam.CrystalMod.api.estorage.ICraftingTask;
 import alec_wam.CrystalMod.api.estorage.IInsertListener;
 import alec_wam.CrystalMod.api.estorage.INetworkContainer;
 import alec_wam.CrystalMod.api.estorage.INetworkItemProvider;
+import alec_wam.CrystalMod.api.estorage.INetworkPowerTile;
 import alec_wam.CrystalMod.api.estorage.INetworkTile;
 import alec_wam.CrystalMod.api.estorage.INetworkTileConnectable;
 import alec_wam.CrystalMod.network.CompressedDataInput;
@@ -40,25 +28,32 @@ import alec_wam.CrystalMod.tiles.pipes.TileEntityPipe;
 import alec_wam.CrystalMod.tiles.pipes.estorage.FluidStorage.FluidStackData;
 import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage.ItemStackData;
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.CraftingPattern;
-import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.ItemPattern;
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.TileCraftingController;
-import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.task.BasicCraftingTask;
-import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.task.CraftingProcessBase;
-import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.task.CraftingProcessExternal;
-import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.task.CraftingProcessNormal;
-import alec_wam.CrystalMod.util.BlockUtil;
+import alec_wam.CrystalMod.tiles.pipes.estorage.energy.TileNetworkPowerCore;
 import alec_wam.CrystalMod.util.ItemStackTools;
-import alec_wam.CrystalMod.util.ItemUtil;
-import alec_wam.CrystalMod.util.ModLogger;
-
-import com.google.common.collect.Lists;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 
 public class EStorageNetwork extends AbstractPipeNetwork {
 	private final ItemStorage itemStorage = new ItemStorage(this);
 	private final FluidStorage fluidStorage = new FluidStorage(this);
 
-	public final Map<BlockPos, TileEntity> networkTiles = new HashMap<BlockPos, TileEntity>();
+	public static class NetworkPos {
+		public BlockPos pos;
+		public int dim;
+		
+		public NetworkPos(BlockPos pos, int dim){
+			this.pos = pos;
+			this.dim = dim;
+		}
+	}
+	
+	public final Map<NetworkPos, TileEntity> networkTiles = new HashMap<NetworkPos, TileEntity>();
+	public final Map<NetworkPos, INetworkPowerTile> networkPoweredTiles = new HashMap<NetworkPos, INetworkPowerTile>();
 	public TileCraftingController craftingController;
+	public TileNetworkPowerCore powerCore;
 	public final List<NetworkedItemProvider> masterInterfaces = Lists.newArrayList();
 	public final NavigableMap<Integer, List<NetworkedItemProvider>> interfaces = new TreeMap<Integer, List<NetworkedItemProvider>>(
 			PRIORITY_SORTER);
@@ -229,14 +224,16 @@ public class EStorageNetwork extends AbstractPipeNetwork {
 		if(tile instanceof TileCraftingController){
 			return craftingController == null;
 		}
+		if(tile instanceof TileNetworkPowerCore){
+			return powerCore == null;
+		}
 		if(tile instanceof INetworkTileConnectable){
 			return ((INetworkTileConnectable)tile).canConnect(this);
 		}
 		return true;
 	}
 	
-	public void tileAdded(TileEntityPipeEStorage itemPipe,
-			EnumFacing direction, BlockPos bc, TileEntity externalTile) {
+	public void tileAdded(TileEntityPipeEStorage itemPipe, EnumFacing direction, BlockPos bc, TileEntity externalTile) {
 
 		if(networkTiles.containsKey(bc)){
 			return;
@@ -245,7 +242,9 @@ public class EStorageNetwork extends AbstractPipeNetwork {
 			return;
 		}
 		
-		networkTiles.put(bc, externalTile);
+		int dim = externalTile.getWorld().provider.getDimension();
+		NetworkPos nPos = new NetworkPos(bc, dim);
+		networkTiles.put(nPos, externalTile);
 		
 		if(externalTile instanceof TileCraftingController){
 			TileCraftingController crafter = (TileCraftingController)externalTile;
@@ -253,6 +252,11 @@ public class EStorageNetwork extends AbstractPipeNetwork {
 			craftingController = crafter;
 		}
 		
+		if(externalTile instanceof TileNetworkPowerCore){
+			TileNetworkPowerCore core = (TileNetworkPowerCore)externalTile;
+			if(powerCore !=null)return;
+			powerCore = core;
+		}
 		
 		if (externalTile instanceof INetworkTile) {
 			((INetworkTile) externalTile).setNetwork(this);
@@ -262,6 +266,10 @@ public class EStorageNetwork extends AbstractPipeNetwork {
 			listeners.add((IInsertListener) externalTile);
 		}
 
+		if(externalTile instanceof INetworkPowerTile){
+			networkPoweredTiles.put(nPos, (INetworkPowerTile)externalTile);
+		}
+		
 		if (externalTile instanceof INetworkItemProvider) {
 			INetworkItemProvider inter = (INetworkItemProvider) externalTile;
 			NetworkedItemProvider inv = new NetworkedItemProvider(inter, externalTile.getWorld(), bc);
@@ -333,9 +341,10 @@ public class EStorageNetwork extends AbstractPipeNetwork {
 	}
 
 	public void tileRemoved(TileEntityPipeEStorage itemConduit, BlockPos bc) {
-		networkTiles.remove(bc);
 		int dim = itemConduit.getWorld().provider.getDimension();
-
+		NetworkPos nPos = new NetworkPos(bc, dim);
+		networkTiles.remove(nPos);
+		networkPoweredTiles.remove(nPos);
 		NetworkedItemProvider inter = getInterface(bc, dim);
 		if (inter != null) {
 			this.masterInterfaces.remove(inter);

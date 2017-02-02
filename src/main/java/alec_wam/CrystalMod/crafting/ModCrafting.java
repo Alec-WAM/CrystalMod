@@ -20,6 +20,7 @@ import alec_wam.CrystalMod.crafting.recipes.ShapedOreRecipeNBT;
 import alec_wam.CrystalMod.crafting.recipes.ShapedRecipeNBT;
 import alec_wam.CrystalMod.crafting.recipes.ShapelessRecipeNBT;
 import alec_wam.CrystalMod.crafting.recipes.UpgradeItemRecipe;
+import alec_wam.CrystalMod.entities.accessories.WolfAccessories.WolfArmor;
 import alec_wam.CrystalMod.entities.minecarts.chests.wireless.RecipeWirelessChestMinecart;
 import alec_wam.CrystalMod.entities.minions.ItemMinion;
 import alec_wam.CrystalMod.entities.minions.MinionType;
@@ -460,6 +461,26 @@ public class ModCrafting {
 			
 			addShapedOreRecipe(buffer, new Object[]{"ECE", "RFP", "ETE", 'E', ender, 'P', ItemUtil.copy(tier2CU, 1), 'R', ItemUtil.copy(tier2RF, 1), 'T', new ItemStack(ModBlocks.crystalTank, 1, TankType.GREEN.getMeta()), 'C', wChest, 'F', machineFrameEnder});
 		}
+		
+		ItemStack leatherWolfArmor = new ItemStack(ModItems.wolfArmor);
+		ItemNBTHelper.setString(leatherWolfArmor, "ArmorID", WolfArmor.LEATHER.name().toLowerCase());
+		addShapedOreRecipe(leatherWolfArmor, new Object[]{"ICH", "BLB", 'I', "leather", 'C', Items.LEATHER_CHESTPLATE, 'H', Items.LEATHER_HELMET, 'B', Items.LEATHER_BOOTS, 'L', "leather"});
+		ItemStack chainWolfArmor = new ItemStack(ModItems.wolfArmor);
+		ItemNBTHelper.setString(chainWolfArmor, "ArmorID", WolfArmor.CHAIN.name().toLowerCase());
+		addShapedOreRecipe(chainWolfArmor, new Object[]{"ICH", "BLB", 'I', "ingotIron", 'C', Items.CHAINMAIL_CHESTPLATE, 'H', Items.CHAINMAIL_HELMET, 'B', Items.CHAINMAIL_BOOTS, 'L', "leather"});
+		ItemStack ironWolfArmor = new ItemStack(ModItems.wolfArmor);
+		ItemNBTHelper.setString(ironWolfArmor, "ArmorID", WolfArmor.IRON.name().toLowerCase());
+		addShapedOreRecipe(ironWolfArmor, new Object[]{"ICH", "BLB", 'I', "ingotIron", 'C', Items.IRON_CHESTPLATE, 'H', Items.IRON_HELMET, 'B', Items.IRON_BOOTS, 'L', "leather"});
+		ItemStack dironWolfArmor = new ItemStack(ModItems.wolfArmor);
+		ItemNBTHelper.setString(dironWolfArmor, "ArmorID", WolfArmor.DIRON.name().toLowerCase());
+		addShapedOreRecipe(dironWolfArmor, new Object[]{"ICH", "BLB", 'I', "ingotIronDark", 'C', ModItems.darkIronChestplate, 'H', ModItems.darkIronHelmet, 'B', ModItems.darkIronBoots, 'L', "leather"});
+		ItemStack diamondWolfArmor = new ItemStack(ModItems.wolfArmor);
+		ItemNBTHelper.setString(diamondWolfArmor, "ArmorID", WolfArmor.DIAMOND.name().toLowerCase());
+		addShapedOreRecipe(diamondWolfArmor, new Object[]{"ICH", "BLB", 'I', "gemDiamond", 'C', Items.DIAMOND_CHESTPLATE, 'H', Items.DIAMOND_HELMET, 'B', Items.DIAMOND_BOOTS, 'L', "leather"});
+		ItemStack goldWolfArmor = new ItemStack(ModItems.wolfArmor);
+		ItemNBTHelper.setString(goldWolfArmor, "ArmorID", WolfArmor.GOLD.name().toLowerCase());
+		addShapedOreRecipe(goldWolfArmor, new Object[]{"ICH", "BLB", 'I', "ingotGold", 'C', Items.GOLDEN_CHESTPLATE, 'H', Items.GOLDEN_HELMET, 'B', Items.GOLDEN_BOOTS, 'L', "leather"});
+		
 		addShapedRecipe(ModItems.enderChestMinecart, new Object[] {"A", "B", 'A', Blocks.ENDER_CHEST, 'B', Items.MINECART});
 		
 		addShapedOreRecipe(ModItems.minionStaff, new Object[]{" NE", " GN", "G  ", 'N', greenNugget, 'E', "gemEmerald", 'G', "ingotGold"});

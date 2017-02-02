@@ -11,6 +11,7 @@ import alec_wam.CrystalMod.blocks.crops.BlockCrystalReed;
 import alec_wam.CrystalMod.blocks.crops.BlockCrystalSapling;
 import alec_wam.CrystalMod.blocks.crops.BlockCrystalTreePlant;
 import alec_wam.CrystalMod.blocks.crops.BlockFlowerLilyPad;
+import alec_wam.CrystalMod.blocks.crops.ItemBlockWater;
 import alec_wam.CrystalMod.blocks.crops.material.BlockMaterialCrop;
 import alec_wam.CrystalMod.blocks.crops.material.RenderTileMaterialCrop;
 import alec_wam.CrystalMod.blocks.crops.material.TileMaterialCrop;
@@ -109,6 +110,8 @@ import alec_wam.CrystalMod.tiles.playercube.BlockPlayerCubeCore;
 import alec_wam.CrystalMod.tiles.playercube.BlockPlayerCubePortal;
 import alec_wam.CrystalMod.tiles.playercube.TileEntityPlayerCubePortal;
 import alec_wam.CrystalMod.tiles.playercube.TileEntityPlayerCubePortalRenderer;
+import alec_wam.CrystalMod.tiles.portal.BlockTelePortal;
+import alec_wam.CrystalMod.tiles.portal.TileTelePortal;
 import alec_wam.CrystalMod.tiles.spawner.BlockCustomSpawner;
 import alec_wam.CrystalMod.tiles.spawner.RenderTileEntityCustomSpawner;
 import alec_wam.CrystalMod.tiles.spawner.TileEntityCustomSpawner;
@@ -184,6 +187,7 @@ public class ModBlocks {
 	public static BlockPlayerCubeBlock cubeBlock;
 	public static BlockPlayerCubeCore cubeCore;
 	public static BlockPlayerCubePortal cubePortal;
+	public static BlockTelePortal telePortal;
 	
 	public static BlockMatterCollector matterCollector;
 	public static BlockBattery battery;
@@ -228,7 +232,7 @@ public class ModBlocks {
 
 		
 		flowerLilypad = new BlockFlowerLilyPad();
-		registerBlock(flowerLilypad, "flowerlilypad");
+		registerBlock(flowerLilypad, new ItemBlockWater(flowerLilypad), "flowerlilypad");
 		
 		crystalWorkbench = new BlockCrystalWorkbench();
 		registerEnumBlock(crystalWorkbench, "crystalworkbench");
@@ -368,6 +372,10 @@ public class ModBlocks {
 		cubePortal = new BlockPlayerCubePortal();
 		registerBlock(cubePortal, "playercubeportal");
 		registerTileEntity(TileEntityPlayerCubePortal.class);
+		
+		telePortal = new BlockTelePortal();
+		registerBlock(telePortal, "teleportal");
+		registerTileEntity(TileTelePortal.class);
 		
 		matterCollector = new BlockMatterCollector();
 		registerBlock(matterCollector, "mattercollector");

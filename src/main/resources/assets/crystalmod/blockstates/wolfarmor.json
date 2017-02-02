@@ -1,0 +1,16 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "crystalmod:item/fixedonetexture"
+    },
+    "variants": {
+        "armor": {
+			"leather": { "textures": { "layer0": "crystalmod:items/accessories/wolf_leather"}},
+			"chain": { "textures": { "layer0": "crystalmod:items/accessories/wolf_chain" }},
+			"iron": { "textures": { "layer0": "crystalmod:items/accessories/wolf_iron" }},
+			"diron": { "textures": { "layer0": "crystalmod:items/accessories/wolf_diron" }},
+			"diamond": { "textures": { "layer0": "crystalmod:items/accessories/wolf_diamond" }},
+			"gold": { "textures": { "layer0": "crystalmod:items/accessories/wolf_gold" }}
+		}
+    }
+}

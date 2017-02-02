@@ -1,5 +1,7 @@
 package alec_wam.CrystalMod.entities.accessories;
 
+import alec_wam.CrystalMod.util.EntityUtil;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockChest;
 import net.minecraft.entity.passive.EntityHorse;
@@ -9,18 +11,17 @@ import net.minecraft.inventory.InventoryEnderChest;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import alec_wam.CrystalMod.util.EntityUtil;
-import alec_wam.CrystalMod.util.ItemStackTools;
+import net.minecraft.util.EnumHand;
 
 public class HorseAccessories {
     public static String NBT_ACCESSORY_HORSE_ENDERCHEST = "EnderChest";
     
-    public static boolean handleHorseInteract(EntityPlayer player, ItemStack held, EntityHorse horse){
-    	if(handleEnderChestInteract(horse, held, player))return true;
+    public static boolean handleHorseInteract(EntityPlayer player, ItemStack held, EnumHand hand,EntityHorse horse){
+    	if(handleEnderChestInteract(horse, held, hand, player))return true;
     	return false;
     }
 
-    private static boolean handleEnderChestInteract(EntityHorse horse, ItemStack held, EntityPlayer player){
+    private static boolean handleEnderChestInteract(EntityHorse horse, ItemStack held, EnumHand hand, EntityPlayer player){
     	if(hasEnderChest(horse)){
     		if(ItemStackTools.isNullStack(held)){
     			if(!player.isSneaking())return false;

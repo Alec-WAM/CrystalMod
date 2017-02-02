@@ -6,8 +6,10 @@ import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.items.ModItems;
+import alec_wam.CrystalMod.tiles.machine.elevator.ItemMiscCard.CardType;
 import alec_wam.CrystalMod.tiles.pipes.wireless.BlockWirelessPipeWrapper;
 import alec_wam.CrystalMod.tiles.pipes.wireless.TileEntityPipeWrapper;
+import alec_wam.CrystalMod.tiles.portal.TileTelePortal;
 import alec_wam.CrystalMod.util.ChatUtil;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -16,6 +18,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTUtil;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
@@ -50,6 +53,13 @@ public class ItemMiscCard extends Item implements ICustomModel {
 			String displayName = new ItemStack(ModBlocks.elevator).getDisplayName();
 			tooltip.add("Bound to "+displayName+" at "+x+" "+y+" "+z+" in dimension "+dim);
 		}
+		if(type == CardType.TELEPORT_PORTAL && ItemNBTHelper.verifyExistance(stack, "portalx")){
+			int x = ItemNBTHelper.getInteger(stack, "portalx", 0);
+			int y = ItemNBTHelper.getInteger(stack, "portaly", -1);
+			int z = ItemNBTHelper.getInteger(stack, "portalz", 0);
+			int dim = ItemNBTHelper.getInteger(stack, "portaldim", 0);
+			tooltip.add("Bound to a Portal at "+x+" "+y+" "+z+" in dimension "+dim);
+		}
 		if(type == CardType.EPORTAL && ItemNBTHelper.verifyExistance(stack, BlockWirelessPipeWrapper.NBT_CON_X)){
 			int x = ItemNBTHelper.getInteger(stack, BlockWirelessPipeWrapper.NBT_CON_X, 0);
 			int y = ItemNBTHelper.getInteger(stack, BlockWirelessPipeWrapper.NBT_CON_Y, -1);
@@ -76,6 +86,14 @@ public class ItemMiscCard extends Item implements ICustomModel {
 				gotCoords = true;
 			}
 		}
+		if(type !=null && type == CardType.TELEPORT_PORTAL){
+			if(tile !=null && tile instanceof TileTelePortal){
+				nbt.setTag("PortalPos", NBTUtil.createPosTag(pos));
+				nbt.setInteger("PortalDim", world.provider.getDimension());
+				if(!world.isRemote)ChatUtil.sendChat(player, "Card set to "+pos.getX()+" "+pos.getY()+" "+pos.getZ());
+				gotCoords = true;
+			}
+		}
 		if(type !=null && type == CardType.EPORTAL){
 			if(tile !=null && tile instanceof TileEntityPipeWrapper){
 				nbt.setInteger(BlockWirelessPipeWrapper.NBT_CON_X, pos.getX());
@@ -92,6 +110,10 @@ public class ItemMiscCard extends Item implements ICustomModel {
 				nbt.removeTag("elevatory");
 				nbt.removeTag("elevatorz");
 				nbt.removeTag("elevatordim");
+			}
+			if(type !=null && type == CardType.TELEPORT_PORTAL){
+				nbt.removeTag("PortalPos");
+				nbt.removeTag("PortalDim");
 			}
 			if(type !=null && type == CardType.EPORTAL){
 				nbt.removeTag(BlockWirelessPipeWrapper.NBT_CON_X);
@@ -131,7 +153,8 @@ public class ItemMiscCard extends Item implements ICustomModel {
     {
         EPORTAL(0, "eportal"),
         CUBE(1, "pcube"),
-        ELEVATOR(2, "elevator");
+        ELEVATOR(2, "elevator"),
+        TELEPORT_PORTAL(3, "tportal");
 
         private static final CardType[] METADATA_LOOKUP = new CardType[values().length];
         private final int metadata;

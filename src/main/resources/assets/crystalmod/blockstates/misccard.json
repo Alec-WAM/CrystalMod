@@ -7,6 +7,7 @@
     "variants": {
         "eportal": [{ "textures": { "layer0": "crystalmod:items/card_estorage_portal" }}],
         "pcube": [{ "textures": { "layer0": "crystalmod:items/card_cube" }}],
-        "elevator": [{ "textures": { "layer0": "crystalmod:items/card_elevator" }}]
+        "elevator": [{ "textures": { "layer0": "crystalmod:items/card_elevator" }}],
+		"tportal": [{ "textures": { "layer0": "crystalmod:items/card_tportal" }}]
     }
 }
