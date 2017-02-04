@@ -154,10 +154,10 @@ public class ProfileUtil {
 			MinecraftProfilePropertiesResponse response = null;
 			try {
 				response = getResponse(jsonResult);
+				propertiesCache.put(uuid, response);
 			} catch (AuthenticationException e) {
 				e.printStackTrace();
 			}
-			propertiesCache.put(uuid, response);
 			return response;
 		}
 		return propertiesCache.get(uuid);
@@ -252,7 +252,7 @@ public class ProfileUtil {
 
 			if (result == null) return null;
 
-			if (StringUtils.isNotBlank(result.getError())) {
+			if (StringUtils.isNotBlank(result.getError())) {		
 				if ("UserMigratedException".equals(result.getCause())) {
 					throw new UserMigratedException(result.getErrorMessage());
 				} else if (result.getError().equals("ForbiddenOperationException")) {

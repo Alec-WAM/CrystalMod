@@ -2,7 +2,9 @@ package alec_wam.CrystalMod.entities.minions.ai;
 
 import java.util.Random;
 
+import alec_wam.CrystalMod.entities.minions.warrior.EntityMinionWarrior;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -61,6 +63,20 @@ public class MinionRandomPositionGenerator
     {
         Random random = entitycreatureIn.getRNG();
         boolean flag = false;
+        
+        boolean homeLock = (entitycreatureIn instanceof EntityMinionWarrior) ? true : false;
+        
+        if (homeLock && ((EntityMinionWarrior)entitycreatureIn).getWanderHome() !=null)
+        {
+        	BlockPos wanderHome = ((EntityMinionWarrior)entitycreatureIn).getWanderHome();
+            double d0 = wanderHome.distanceSq((double)MathHelper.floor(entitycreatureIn.posX), (double)MathHelper.floor(entitycreatureIn.posY), (double)MathHelper.floor(entitycreatureIn.posZ)) + 4.0D;
+            double d1 = (double)(((EntityMinionWarrior)entitycreatureIn).getMaximumWanderDistance() + (float)xz);
+            flag = d0 < d1 * d1;
+        }
+        else
+        {
+            flag = false;
+        }
         int i = 0;
         int j = 0;
         int k = 0;
@@ -75,12 +91,34 @@ public class MinionRandomPositionGenerator
 
             if (targetVec3d == null || (double)l * targetVec3d.xCoord + (double)i1 * targetVec3d.zCoord >= 0.0D)
             {
-                l = l + MathHelper.floor(entitycreatureIn.posX);
+                if (homeLock && ((EntityMinionWarrior)entitycreatureIn).getWanderHome() !=null && xz > 1)
+                {
+                    BlockPos blockpos = ((EntityMinionWarrior)entitycreatureIn).getWanderHome();
+
+                    if (entitycreatureIn.posX > (double)blockpos.getX())
+                    {
+                        l -= random.nextInt(xz / 2);
+                    }
+                    else
+                    {
+                        l += random.nextInt(xz / 2);
+                    }
+
+                    if (entitycreatureIn.posZ > (double)blockpos.getZ())
+                    {
+                        j1 -= random.nextInt(xz / 2);
+                    }
+                    else
+                    {
+                        j1 += random.nextInt(xz / 2);
+                    }
+                }
+            	l = l + MathHelper.floor(entitycreatureIn.posX);
                 k1 = k1 + MathHelper.floor(entitycreatureIn.posY);
                 i1 = i1 + MathHelper.floor(entitycreatureIn.posZ);
                 BlockPos blockpos1 = new BlockPos(l, k1, i1);
-
-                if (!flag1)
+                boolean withinHome = homeLock && ((EntityMinionWarrior)entitycreatureIn).isWithinWanderBounds(blockpos1);
+                if ((!flag1 || withinHome))
                 {
                     float f1 = entitycreatureIn instanceof IBlockWeighted ? ((IBlockWeighted)entitycreatureIn).getBlockPathWeight(blockpos1) : 0.0F;
 

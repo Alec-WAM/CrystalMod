@@ -1,35 +1,29 @@
-package alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting;
+package alec_wam.CrystalMod.tiles.pipes.estorage.power;
 
 import alec_wam.CrystalMod.CrystalMod;
-import alec_wam.CrystalMod.util.BlockUtil;
-import alec_wam.CrystalMod.util.ItemUtil;
 import net.minecraft.block.BlockContainer;
-import net.minecraft.block.BlockPistonBase;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
-import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.items.IItemHandler;
 
-public class BlockCraftingController extends BlockContainer {
+public class BlockNetworkPowerCore extends BlockContainer {
 
 	public static final PropertyBool CONNECTED = PropertyBool.create("connected");
 	
-	public BlockCraftingController() {
+	public BlockNetworkPowerCore() {
 		super(Material.IRON);
 		setHardness(2F);
 		setCreativeTab(CrystalMod.tabBlocks);
@@ -43,12 +37,15 @@ public class BlockCraftingController extends BlockContainer {
 
 	@Override
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side,float hX, float hY, float hZ){
-		return false;
+		if(!world.isRemote){
+			player.openGui(CrystalMod.instance, 0, world, pos.getX(), pos.getY(), pos.getZ());
+		}
+		return true;
 	}
 	
 	@Override
 	public TileEntity createNewTileEntity(World worldIn, int meta) {
-		return new TileCraftingController();
+		return new TileNetworkPowerCore();
 	}
 	
 	@Override
@@ -72,8 +69,8 @@ public class BlockCraftingController extends BlockContainer {
     public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
         TileEntity tile = world.getTileEntity(pos);
 
-        if (tile instanceof TileCraftingController) {
-            return state.withProperty(CONNECTED, ((TileCraftingController) tile).connected);
+        if (tile instanceof TileNetworkPowerCore) {
+            return state.withProperty(CONNECTED, ((TileNetworkPowerCore) tile).connected);
         }
 
         return state;

@@ -67,7 +67,7 @@ public class PageCrafting extends GuidePage {
 		if(!resultingItem.isEmpty())updateItem(resultingItem.get(0));
 	}
 
-	private static IRecipe getFirstRecipeForItem(ItemStack resultingItem) {
+	public static IRecipe getFirstRecipeForItem(ItemStack resultingItem) {
 		for (IRecipe recipe : (List<IRecipe>)CraftingManager.getInstance().getRecipeList()) {
 			if (recipe == null) continue;
 
@@ -342,21 +342,8 @@ public class PageCrafting extends GuidePage {
 				drawItemStackTooltip(tooltip, relativeMouseX + x, relativeMouseY + y);
 			}
 		}
-		String lang = Lang.prefix+"guide.chapter."+getChapter().getID()+".text."+getId();
-		String text = "";
-		String title = getChapter().getIndex(this) == 0 ? getChapter().getLocalizedTitle() : "";
-		if(I18n.canTranslate(lang))text = Lang.translateToLocal(lang);
-		else {
-			ManualChapter chapter = GuidePages.CHAPTERTEXT.get(getChapter().getID());
-			if(chapter !=null){
-				PageData data = chapter.pages.get(getId());
-				if(data !=null){
-					text = data.text;
-					if(!Strings.isNullOrEmpty(data.title))title = data.title;
-				}
-			}
-		}
-		text = text.replaceAll("<n>", "\n");
+		String text = GuidePages.getText(getChapter(), this);
+		String title = GuidePages.getTitle(getChapter(), this);
 		x = startX+6;
 		if(!Strings.isNullOrEmpty(title)){
 			GlStateManager.pushMatrix();

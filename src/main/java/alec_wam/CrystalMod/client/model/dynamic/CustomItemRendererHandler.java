@@ -5,6 +5,7 @@ import java.util.Arrays;
 import alec_wam.CrystalMod.Config;
 import alec_wam.CrystalMod.proxy.ClientProxy;
 import alec_wam.CrystalMod.util.ItemStackTools;
+import alec_wam.CrystalMod.util.ModLogger;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -23,22 +24,8 @@ public class CustomItemRendererHandler {
 	
 	public boolean overrideRender(ItemStack itemStackIn)
 	{
-		if(!ItemStackTools.isNullStack(itemStackIn)){
+		if(ItemStackTools.isValid(itemStackIn)){
 			Item item = itemStackIn.getItem();
-			/*if(item == Items.BEEF){
-				
-				
-				GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-	            GlStateManager.enableRescaleNormal();
-				GlStateManager.pushMatrix();
-				GlStateManager.rotate(180, 0, 1, 0);
-				ClientProxy.MinecartRenderer3d.render(new ItemStack(Items.MINECART));
-				GlStateManager.popMatrix();
-				
-				Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-				
-				return false;
-			}*/
 			ICustomItemRenderer render = ClientProxy.getRenderer(item);
 			if(render !=null){
 				GlStateManager.pushMatrix();

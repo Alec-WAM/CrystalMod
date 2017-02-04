@@ -1,10 +1,8 @@
 package alec_wam.CrystalMod.tiles.pipes.estorage;
 
 import java.io.IOException;
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.Deque;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -12,21 +10,10 @@ import java.util.Map;
 import java.util.NavigableMap;
 import java.util.TreeMap;
 
-import javax.annotation.Nullable;
+import com.google.common.collect.Lists;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.world.World;
-import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import alec_wam.CrystalMod.api.ItemStackList;
 import alec_wam.CrystalMod.api.estorage.IAutoCrafter;
-import alec_wam.CrystalMod.api.estorage.ICraftingTask;
 import alec_wam.CrystalMod.api.estorage.IInsertListener;
 import alec_wam.CrystalMod.api.estorage.INetworkContainer;
 import alec_wam.CrystalMod.api.estorage.INetworkItemProvider;
@@ -38,22 +25,16 @@ import alec_wam.CrystalMod.network.CompressedDataOutput;
 import alec_wam.CrystalMod.tiles.pipes.AbstractPipeNetwork;
 import alec_wam.CrystalMod.tiles.pipes.IPipeWrapper;
 import alec_wam.CrystalMod.tiles.pipes.TileEntityPipe;
-import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetwork.NetworkPos;
 import alec_wam.CrystalMod.tiles.pipes.estorage.FluidStorage.FluidStackData;
 import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage.ItemStackData;
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.CraftingPattern;
-import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.ItemPattern;
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.TileCraftingController;
-import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.task.BasicCraftingTask;
-import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.task.CraftingProcessBase;
-import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.task.CraftingProcessExternal;
-import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.task.CraftingProcessNormal;
-import alec_wam.CrystalMod.util.BlockUtil;
+import alec_wam.CrystalMod.tiles.pipes.estorage.power.TileNetworkPowerCore;
 import alec_wam.CrystalMod.util.ItemStackTools;
-import alec_wam.CrystalMod.util.ItemUtil;
-import alec_wam.CrystalMod.util.ModLogger;
-
-import com.google.common.collect.Lists;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 
 public class EStorageNetwork extends AbstractPipeNetwork {
 	private final ItemStorage itemStorage = new ItemStorage(this);
@@ -69,9 +50,13 @@ public class EStorageNetwork extends AbstractPipeNetwork {
 		}
 	}
 	
+	//Contollers
+	public TileCraftingController craftingController;
+	public TileNetworkPowerCore powerController;
+	
 	public final Map<NetworkPos, TileEntity> networkTiles = new HashMap<NetworkPos, TileEntity>();
 	public final Map<NetworkPos, INetworkPowerTile> networkPoweredTiles = new HashMap<NetworkPos, INetworkPowerTile>();
-	public TileCraftingController craftingController;
+	
 	public final List<NetworkedItemProvider> masterInterfaces = Lists.newArrayList();
 	public final NavigableMap<Integer, List<NetworkedItemProvider>> interfaces = new TreeMap<Integer, List<NetworkedItemProvider>>(
 			PRIORITY_SORTER);
@@ -242,6 +227,9 @@ public class EStorageNetwork extends AbstractPipeNetwork {
 		if(tile instanceof TileCraftingController){
 			return craftingController == null;
 		}
+		if(tile instanceof TileNetworkPowerCore){
+			return powerController == null;
+		}
 		if(tile instanceof INetworkTileConnectable){
 			return ((INetworkTileConnectable)tile).canConnect(this);
 		}
@@ -268,6 +256,11 @@ public class EStorageNetwork extends AbstractPipeNetwork {
 			craftingController = crafter;
 		}
 		
+		if(externalTile instanceof TileNetworkPowerCore){
+			TileNetworkPowerCore powerCore = (TileNetworkPowerCore)externalTile;
+			if(powerController !=null)return;
+			powerController = powerCore;
+		}
 		
 		if (externalTile instanceof INetworkTile) {
 			((INetworkTile) externalTile).setNetwork(this);
@@ -540,5 +533,12 @@ public class EStorageNetwork extends AbstractPipeNetwork {
 		while (iter.hasNext()) {
 			iter.next().onItemInserted(stack);
 		}
+	}
+
+	public int getEnergy() {
+		if(this.powerController !=null){
+			return this.powerController.getCEnergyStored(null);
+		}
+		return 0;
 	}
 }

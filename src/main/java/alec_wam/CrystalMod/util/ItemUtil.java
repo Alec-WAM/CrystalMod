@@ -1010,17 +1010,17 @@ public class ItemUtil {
 
 		if ( i == null )
 		{
-			return null;
+			return ItemStackTools.getEmptyStack();
 		}
 
 		if ( blockVarient == null )
 		{
-			return null;
+			return ItemStackTools.getEmptyStack();
 		}
 
 		if ( blockVarient != i )
 		{
-			return null;
+			return ItemStackTools.getEmptyStack();
 		}
 
 		if ( blockVarient instanceof ItemBlock )
@@ -1029,7 +1029,7 @@ public class ItemUtil {
 			if ( meta != ib.getMetadata( damage ) )
 			{
 				// this item dosn't drop itself... BAIL!
-				return null;
+				return ItemStackTools.getEmptyStack();
 			}
 		}
 
