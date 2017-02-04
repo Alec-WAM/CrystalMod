@@ -1,7 +1,6 @@
 package alec_wam.CrystalMod.handler;
 
 import alec_wam.CrystalMod.CrystalMod;
-import alec_wam.CrystalMod.asm.ObfuscatedNames;
 import alec_wam.CrystalMod.capability.ContainerExtendedInventory;
 import alec_wam.CrystalMod.capability.ExtendedPlayer;
 import alec_wam.CrystalMod.capability.ExtendedPlayerProvider;
@@ -95,6 +94,9 @@ import alec_wam.CrystalMod.tiles.pipes.estorage.panel.monitor.TileEntityPanelMon
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.wireless.ItemWirelessPanel;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.wireless.PanelSourceWireless;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.wireless.TileEntityWirelessPanel;
+import alec_wam.CrystalMod.tiles.pipes.estorage.power.ContainerPowerCore;
+import alec_wam.CrystalMod.tiles.pipes.estorage.power.GuiPowerCore;
+import alec_wam.CrystalMod.tiles.pipes.estorage.power.TileNetworkPowerCore;
 import alec_wam.CrystalMod.tiles.pipes.estorage.stocker.ContainerStocker;
 import alec_wam.CrystalMod.tiles.pipes.estorage.stocker.GuiStocker;
 import alec_wam.CrystalMod.tiles.pipes.estorage.stocker.TileEntityStocker;
@@ -121,7 +123,6 @@ import alec_wam.CrystalMod.tiles.workbench.ContainerCrystalWorkbench;
 import alec_wam.CrystalMod.tiles.workbench.GuiCrystalWorkbench;
 import alec_wam.CrystalMod.tiles.workbench.TileEntityCrystalWorkbench;
 import alec_wam.CrystalMod.util.ItemStackTools;
-import alec_wam.CrystalMod.util.ReflectionUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.AbstractHorse;
 import net.minecraft.entity.passive.EntityHorse;
@@ -293,6 +294,7 @@ public class GuiHandler implements IGuiHandler {
             if(te instanceof TileEntityHDDInterface)return new GuiHDDInterface(player.inventory, (TileEntityHDDInterface) te);
             if(te instanceof TileHDDArray)return new GuiHDDArray(player.inventory, (TileHDDArray) te);
             if(te instanceof TileEntityPanelMonitor)return new GuiPanelMonitor(player, (TileEntityPanelMonitor) te);
+            if(te instanceof TileNetworkPowerCore)return new GuiPowerCore(player, (TileNetworkPowerCore) te);
             if(te instanceof TileEntityPanelCrafting)return new GuiPanelCrafting(player.inventory, (TileEntityPanelCrafting) te);
             if(te instanceof TileEntityPanel)return new GuiPanel(player.inventory, new PanelSourceNormal((TileEntityPanel) te));
         	if(te instanceof TilePatternEncoder) return new GuiPatternEncoder(player, (TilePatternEncoder)te);
@@ -434,6 +436,7 @@ public class GuiHandler implements IGuiHandler {
         	if(te instanceof TileEntityHDDInterface)return new ContainerHDDInterface(player.inventory, (TileEntityHDDInterface)te);
         	if(te instanceof TileHDDArray)return new ContainerHDDArray(player.inventory, (TileHDDArray) te);
         	if(te instanceof TileEntityPanelMonitor)return new ContainerPanelMonitor(player, (TileEntityPanelMonitor)te);
+        	if(te instanceof TileNetworkPowerCore)return new ContainerPowerCore(player, (TileNetworkPowerCore) te);
         	if(te instanceof TileEntityPanelCrafting)return new ContainerPanelCrafting(player.inventory, (TileEntityPanelCrafting)te);
         	if(te instanceof TileEntityPanel)return new ContainerPanel(player.inventory, new PanelSourceNormal((TileEntityPanel)te));
         	if(te instanceof TilePatternEncoder) return new ContainerPatternEncoder(player, (TilePatternEncoder)te);

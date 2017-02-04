@@ -47,10 +47,38 @@ public class GuiGuideIndex extends GuiGuideBase implements IGuiScreen {
     	buttonRight.visible = indexes[1] != null && CrystalModAPI.GUIDE_INDEXES.indexOf(indexes[1])+1 < CrystalModAPI.GUIDE_INDEXES.size();
 		this.buttonList.add(buttonRight);
 		
+		int oldPos = -1;
+		int oldMax = -1;
+		
+		if(this.scrollbarLeft !=null){
+			oldMax = this.scrollbarLeft.getScrollMax();
+			oldPos = this.scrollbarLeft.getScrollPos();
+		}
+		
+		int oldPosR = -1;
+		int oldMaxR = -1;
+		
+		if(this.scrollbarRight !=null){
+			oldMaxR = this.scrollbarRight.getScrollMax();
+			oldPosR = this.scrollbarRight.getScrollPos();
+		}
+		
 		scrollbarLeft = new VScrollbar(this, 8, 41, 123);
 		scrollbarLeft.adjustPosition();
+		if(oldMax >= 0){
+			scrollbarLeft.setScrollMax(oldMax);
+		}
+		if(oldPos >= 0){
+			scrollbarLeft.setScrollPos(oldPos);
+		}
 		scrollbarRight = new VScrollbar(this, (xSize*2)-19, 41, 123);
 		scrollbarRight.adjustPosition();
+		if(oldMaxR >= 0){
+			scrollbarRight.setScrollMax(oldMaxR);
+		}
+		if(oldPosR >= 0){
+			scrollbarRight.setScrollPos(oldPosR);
+		}
 	}
 	
 	public GuideIndex[] getIndexes(GuideIndex index){

@@ -380,6 +380,7 @@ tile.crystalmod.estoragepanel.monitor.name=Network Crafting Monitor Panel
 tile.crystalmod.ewirelesspanel.name=Hand-held Network Panel Router
 tile.crystalmod.pipewrapper.name=Network Pipe Portal
 tile.crystalmod.craftingcontroller.name=Crafting Controller
+tile.crystalmod.powercore.name=Network Power Core
 tile.crystalmod.craftingarray.name=Crafting Recipe Array
 tile.crystalmod.craftingio.name=External Crafting Port 
 tile.crystalmod.encoder.name=Crafting Recipe Encoder
@@ -629,7 +630,8 @@ materialcrop.blazerod.name=Blaze Rod
 
 materialcrop.emerald.name=Emerald
 
-#--Guideorig.split("\n")
+#--Guide
+crystalmod.guide.text.defaultMaterialCrop=Info:<n>-Growth Time: <growthTime><n>-Drops: <cropItems>
 crystalmod.guide.page.crystalOre.title=Crystal Ore
 crystalmod.guide.page.crystalOre.desc=A Rare Ore that when smelted results in a crystal of the same color. Generates from y level %s to %s.
 crystalmod.guide.page.crystalBlock.title=Crystal Block

@@ -96,7 +96,7 @@ public class ModCrops {
 	
 	public static IMaterialCrop createGlassCrop(int damage, int color){
 		EnumDyeColor dye = EnumDyeColor.byDyeDamage(damage);
-		IMaterialCrop crop = CrystalModAPI.createCrop("glass_"+dye.getName().toLowerCase(), ItemUtil.getDyeName(dye) + " "+CrystalModAPI.localizeCrop(GLASS), CrystalModAPI.createSeed(3, 0x86D7EC, color, CropOverlays.ARROW), 2, false, CropOverlays.PLANT_NORMAL, 2*MINUTE, new ItemStack(Blocks.STAINED_GLASS, 1, damage));
+		IMaterialCrop crop = CrystalModAPI.createCrop("glass_"+dye.getName().toLowerCase(), ItemUtil.getDyeName(dye) + " "+CrystalModAPI.localizeCrop(GLASS), CrystalModAPI.createSeed(3, 0x86D7EC, color, CropOverlays.ARROW), 2, false, CropOverlays.PLANT_NORMAL, 2*MINUTE, new ItemStack(Blocks.STAINED_GLASS, 1, 15-damage));
 		GLASS_CROPS.put(damage, crop);
 		return crop;
 	}
@@ -242,7 +242,7 @@ public class ModCrops {
 		createColorBlocks();
 		for(int d = 0; d < 16; d++){
 			CrystalModAPI.registerCrop(HARDENED_CLAY_CROPS.get(d));
-			CrystalModAPI.createAndRegSpecialRecipe(HARDENED_CLAY, ItemUtil.getOreName(d), HARDENED_CLAY_CROPS.get(d));
+			CrystalModAPI.createAndRegRecipe(HARDENED_CLAY, DYE_CROPS.get(d), HARDENED_CLAY_CROPS.get(d));
 		}
 	}
 	

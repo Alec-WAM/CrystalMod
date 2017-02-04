@@ -1,8 +1,6 @@
 package alec_wam.CrystalMod.items.guide;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,14 +18,20 @@ import com.google.common.collect.Maps;
 
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.api.CrystalModAPI;
+import alec_wam.CrystalMod.api.crop.CropRecipe;
+import alec_wam.CrystalMod.api.crop.SpecialCropRecipe;
 import alec_wam.CrystalMod.api.guide.GuideChapter;
 import alec_wam.CrystalMod.api.guide.GuideIndex;
 import alec_wam.CrystalMod.api.guide.GuidePage;
+import alec_wam.CrystalMod.api.guide.ITextEditor;
+import alec_wam.CrystalMod.api.guide.TranslationHandler;
 import alec_wam.CrystalMod.blocks.BlockCrystal.CrystalBlockType;
 import alec_wam.CrystalMod.blocks.BlockCrystalIngot.CrystalIngotBlockType;
 import alec_wam.CrystalMod.blocks.BlockCrystalLog;
 import alec_wam.CrystalMod.blocks.BlockCrystalOre.CrystalOreType;
 import alec_wam.CrystalMod.blocks.ModBlocks;
+import alec_wam.CrystalMod.blocks.crops.material.IMaterialCrop;
+import alec_wam.CrystalMod.blocks.crops.material.ItemMaterialSeed;
 import alec_wam.CrystalMod.blocks.glass.BlockCrystalGlass.GlassType;
 import alec_wam.CrystalMod.client.util.comp.GuiComponentBasicItemPage;
 import alec_wam.CrystalMod.client.util.comp.GuiComponentBook;
@@ -36,9 +40,12 @@ import alec_wam.CrystalMod.items.ItemCrystal.CrystalType;
 import alec_wam.CrystalMod.items.ItemIngot.IngotType;
 import alec_wam.CrystalMod.items.ItemMetalPlate.PlateType;
 import alec_wam.CrystalMod.items.ModItems;
+import alec_wam.CrystalMod.items.guide.GuidePages.ManualChapter;
+import alec_wam.CrystalMod.items.guide.GuidePages.PageData;
 import alec_wam.CrystalMod.items.guide.page.PageCrafting;
 import alec_wam.CrystalMod.items.guide.page.PageFurnace;
 import alec_wam.CrystalMod.items.guide.page.PageIcon;
+import alec_wam.CrystalMod.items.guide.page.PageMaterialCropRecipe;
 import alec_wam.CrystalMod.items.guide.page.PagePress;
 import alec_wam.CrystalMod.items.guide.page.PageText;
 import alec_wam.CrystalMod.items.tools.backpack.ItemBackpackNormal.CrystalBackpackType;
@@ -50,21 +57,21 @@ import alec_wam.CrystalMod.tiles.spawner.ItemMobEssence;
 import alec_wam.CrystalMod.tiles.tank.BlockTank.TankType;
 import alec_wam.CrystalMod.tiles.workbench.BlockCrystalWorkbench.WorkbenchType;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.Lang;
 import alec_wam.CrystalMod.util.ModLogger;
+import alec_wam.CrystalMod.util.StringUtils;
 import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.IResource;
-import net.minecraft.client.resources.IResourceManager;
-import net.minecraft.client.resources.IResourceManagerReloadListener;
-import net.minecraft.client.resources.Language;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fml.client.FMLClientHandler;
 
 public class GuidePages {
@@ -73,14 +80,15 @@ public class GuidePages {
 		CrystalModAPI.GUIDE_INDEXES.clear();
 		CrystalModAPI.BLOCKS = CrystalModAPI.regiterGuideIndex(new GuideIndex("blocks"));
 		CrystalModAPI.ITEMS = CrystalModAPI.regiterGuideIndex(new GuideIndex("items"));
+		CrystalModAPI.MATERIALCROPS = CrystalModAPI.regiterGuideIndex(new GuideIndex("materialcrops"));
 		CrystalModAPI.ENTITES = CrystalModAPI.regiterGuideIndex(new GuideIndex("entites"));
 		CrystalModAPI.WORKBENCH = CrystalModAPI.regiterGuideIndex(new GuideIndex("workbench"));
 		CrystalModAPI.MISC = CrystalModAPI.regiterGuideIndex(new GuideIndex("misc"));
 		
 		CrystalType[] crystalArray = new CrystalType[]{CrystalType.BLUE, CrystalType.RED, CrystalType.GREEN, CrystalType.DARK};
-		List<ItemStack> crystalFullList = ItemUtil.getItemSubtypes(ModItems.crystals, crystalArray);
+		NonNullList<ItemStack> crystalFullList = ItemUtil.getItemSubtypes(ModItems.crystals, crystalArray);
 		
-		List<ItemStack> oreList = ItemUtil.getBlockSubtypes(ModBlocks.crystalOre, CrystalOreType.values());
+		NonNullList<ItemStack> oreList = ItemUtil.getBlockSubtypes(ModBlocks.crystalOre, CrystalOreType.values());
 		Map<String, List<?>> lookUp = Maps.newHashMap();
 		lookUp.put("0", oreList);
 		CrystalModAPI.BLOCKS.registerChapter(new GuideChapter("crystalore", new PageIcon("0", oreList), new PageFurnace("smelt", crystalFullList)).setDisplayObject(oreList).setLookUpData(lookUp));
@@ -108,7 +116,7 @@ public class GuidePages {
 		NonNullList<ItemStack> chestList = getEnumSpecial(ModBlocks.crystalChest, new CrystalChestType[]{CrystalChestType.DARKIRON, CrystalChestType.BLUE, CrystalChestType.RED, CrystalChestType.GREEN, CrystalChestType.DARK, CrystalChestType.PURE});
 		CrystalModAPI.BLOCKS.registerChapter(new GuideChapter("crystalchest", new PageCrafting("main", chestList)).setDisplayObject(chestList));
 
-		List<ItemStack> reedList = Lists.newArrayList();
+		NonNullList<ItemStack> reedList = NonNullList.create();
 		reedList.add(new ItemStack(ModItems.crystalReedsBlue));
 		reedList.add(new ItemStack(ModItems.crystalReedsRed));
 		reedList.add(new ItemStack(ModItems.crystalReedsGreen));
@@ -118,7 +126,7 @@ public class GuidePages {
 		ItemStack lilyPad = new ItemStack(ModBlocks.flowerLilypad);
 		CrystalModAPI.BLOCKS.registerChapter(new GuideChapter("flowerlilypad", new PageCrafting("main", lilyPad)).setDisplayObject(lilyPad));
 		
-		List<ItemStack> plantList = Lists.newArrayList();
+		NonNullList<ItemStack> plantList = NonNullList.create();
 		plantList.add(new ItemStack(ModItems.crystalSeedsBlue));
 		plantList.add(new ItemStack(ModItems.crystalSeedsRed));
 		plantList.add(new ItemStack(ModItems.crystalSeedsGreen));
@@ -178,12 +186,12 @@ public class GuidePages {
 		CrystalModAPI.ITEMS.registerChapter(chapterCrystals);
 		
 		IngotType[] ingotArray = new IngotType[]{IngotType.BLUE, IngotType.RED, IngotType.GREEN, IngotType.DARK};
-		List<ItemStack> ingotList = ItemUtil.getItemSubtypes(ModItems.ingots, ingotArray);
+		NonNullList<ItemStack> ingotList = ItemUtil.getItemSubtypes(ModItems.ingots, ingotArray);
 		CrystalModAPI.ITEMS.registerChapter(new GuideChapter("crystalingots", new PageIcon("0", ingotList), new PageFurnace("smelt", ingotList)).setDisplayObject(ingotList));
 		
 		//TODO Move Plate Page to Press Page
 		PlateType[] plateArray = new PlateType[]{PlateType.BLUE, PlateType.RED, PlateType.GREEN, PlateType.DARK};
-		List<ItemStack> plateList = ItemUtil.getItemSubtypes(ModItems.plates, plateArray);
+		NonNullList<ItemStack> plateList = ItemUtil.getItemSubtypes(ModItems.plates, plateArray);
 		CrystalModAPI.ITEMS.registerChapter(new GuideChapter("metalplate", new PageIcon("main", plateList), new PagePress("press", plateList)).setDisplayObject(plateList));
 
 		NonNullList<ItemStack> darkArmorList = NonNullList.create();
@@ -214,17 +222,36 @@ public class GuidePages {
 		CrystalModAPI.ITEMS.registerChapter(new GuideChapter("lock", new PageCrafting("main", lock)).setDisplayObject(lock));
 
 		ItemStack telePearl = new ItemStack(ModItems.telePearl);
-		CrystalModAPI.ITEMS.registerChapter(new GuideChapter("telepearl", new PageIcon("main", Collections.singletonList(telePearl))).setDisplayObject(telePearl));
+		CrystalModAPI.ITEMS.registerChapter(new GuideChapter("telepearl", new PageIcon("main", NonNullList.withSize(1, telePearl))).setDisplayObject(telePearl));
 		
 		ItemStack superTorch = new ItemStack(ModItems.superTorch);
 		CrystalModAPI.ITEMS.registerChapter(new GuideChapter("supertorch", new PageCrafting("main", superTorch)).setDisplayObject(superTorch));
 		
 		ItemStack wings = new ItemStack(ModItems.wings);
-		CrystalModAPI.ITEMS.registerChapter(new GuideChapter("wings", new PageIcon("main", Collections.singletonList(wings))).setDisplayObject(wings));
+		CrystalModAPI.ITEMS.registerChapter(new GuideChapter("wings", new PageIcon("main", NonNullList.withSize(1, wings))).setDisplayObject(wings));
 		
-		List<ItemStack> essenceList = Lists.newArrayList();
-		essenceList.add(ItemMobEssence.createStack("Pig"));
+		NonNullList<ItemStack> essenceList = NonNullList.withSize(1, ItemMobEssence.createStack("Pig"));
 		CrystalModAPI.ITEMS.registerChapter(new GuideChapter("mobessence", new PageIcon("main", essenceList)).setDisplayObject(essenceList));
+		
+		//Material Crops
+		for(Entry<String, IMaterialCrop> entry : CrystalModAPI.getCropMap().entrySet()){
+			IMaterialCrop crop = entry.getValue();
+			ItemStack seed = ItemMaterialSeed.getSeed(crop);
+			CropRecipe normalRecipe = CrystalModAPI.lookupRecipe(crop);
+			SpecialCropRecipe specialRecipe = CrystalModAPI.lookupSpecialRecipe(crop);
+			MaterialCropEditor editor = new MaterialCropEditor(crop);
+			DefaultMaterialCropText defaultText = new DefaultMaterialCropText();
+			DefaultMaterialCropTitle defaultTitle = new DefaultMaterialCropTitle(crop);
+			if(normalRecipe !=null){
+				CrystalModAPI.MATERIALCROPS.registerChapter(new GuideChapter("materialcrop."+crop.getUnlocalizedName(), new PageMaterialCropRecipe("recipe", normalRecipe).setTextEditor(editor).setTranslator(defaultText)).setTranslator(defaultTitle).setDisplayObject(seed));
+			} else if(specialRecipe !=null){
+				
+			} else if(PageCrafting.getFirstRecipeForItem(seed) !=null){
+				CrystalModAPI.MATERIALCROPS.registerChapter(new GuideChapter("materialcrop."+crop.getUnlocalizedName(), new PageCrafting("recipe", seed).setTextEditor(editor).setTranslator(defaultText)).setTranslator(defaultTitle).setDisplayObject(seed));
+			} else {
+				CrystalModAPI.MATERIALCROPS.registerChapter(new GuideChapter("materialcrop."+crop.getUnlocalizedName(), new PageIcon("main", seed).setTextEditor(editor).setTranslator(defaultText)).setTranslator(defaultTitle).setDisplayObject(seed));
+			}
+		}
 		
 		initEStorage();
 	}
@@ -422,4 +449,104 @@ public class GuidePages {
 		}
 	}
 	
+	public static String getTitle(GuideChapter chapter, GuidePage page){
+		String title = chapter.getIndex(page) == 0 ? chapter.getLocalizedTitle() : "";
+		ManualChapter mchapter = GuidePages.CHAPTERTEXT.get(chapter.getID());
+		if(mchapter !=null){
+			PageData data = mchapter.pages.get(page.getId());
+			if(data !=null){
+				if(!Strings.isNullOrEmpty(data.title))title = data.title;
+			}
+		}
+		return title;
+	}
+	
+	public static String getText(GuideChapter chapter, GuidePage page){
+		return getText(chapter, page, true);
+	}
+	
+	public static String getText(GuideChapter chapter, GuidePage page, boolean useTranslator){
+		String lang = Lang.prefix+"guide.chapter."+chapter.getID()+".text."+page.getId();
+		String text = "";
+		if(I18n.canTranslate(lang))text = Lang.translateToLocal(lang);
+		if(page.getTranslator() !=null && useTranslator) text = page.getTranslator().getTranslatedText();
+		//Allow forced text
+		ManualChapter mchapter = GuidePages.CHAPTERTEXT.get(chapter.getID());
+		if(mchapter !=null){
+			PageData data = mchapter.pages.get(page.getId());
+			if(data !=null){
+				text = data.text;
+			}
+		}
+		text = text.replaceAll("<n>", "\n");
+		if(page.getTextEditor() !=null){
+			text = page.getTextEditor().editText(text);
+		}
+		return text;
+	}
+	
+	public static class DefaultMaterialCropTitle implements TranslationHandler{
+
+		private IMaterialCrop crop;
+		public DefaultMaterialCropTitle(IMaterialCrop crop){
+			this.crop = crop;
+		}
+		
+		@Override
+		public String getTranslatedText() {
+			return CrystalModAPI.localizeCrop(crop);
+		}
+		
+	}
+	
+	
+	public static class DefaultMaterialCropText implements TranslationHandler{
+
+		@Override
+		public String getTranslatedText() {
+			return Lang.localize("guide.text.defaultMaterialCrop");
+		}
+		
+	}
+	
+	public static class MaterialCropEditor implements ITextEditor{
+
+		public IMaterialCrop crop;
+		public MaterialCropEditor(IMaterialCrop crop){
+			this.crop = crop;
+		}
+		@Override
+		public String editText(String text) {
+			int secondsLeft = (crop == null) ? 0 : crop.getGrowthTime(null, null);
+			int minutesLeft = secondsLeft / 60;
+			int hoursLeft = minutesLeft / 60;
+			int daysLeft = hoursLeft / 24;
+			secondsLeft = secondsLeft % 60;
+			minutesLeft = minutesLeft % 60;
+			hoursLeft = hoursLeft % 24;
+			String time = "";
+			if(daysLeft > 0){
+				time = daysLeft+"d "+hoursLeft+"h "+minutesLeft+"m "+secondsLeft+"s";
+			}else if(hoursLeft > 0){
+				time = hoursLeft+"h "+minutesLeft+"m "+secondsLeft+"s";
+			}else if(minutesLeft > 0){
+				time = minutesLeft+"m "+secondsLeft+"s";
+			}else if(secondsLeft > 0){
+				time = secondsLeft+"s";
+			}
+			String cropItemList = "Error";
+			
+			if(crop !=null){
+				List<ItemStack> drops = crop.getDrops(null, null, crop.getMaxYield(null, null), 0);
+				List<String> names = Lists.newArrayList();
+				for(ItemStack stack : drops){
+					names.add(stack.getDisplayName());
+				}
+				cropItemList = StringUtils.makeReadable(names);
+			}
+			
+			return text.replaceAll("<growthTime>", time).replaceAll("<cropItems>", cropItemList);
+		}
+		
+	}
 }

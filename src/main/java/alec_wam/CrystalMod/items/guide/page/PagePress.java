@@ -109,15 +109,7 @@ public class PagePress extends GuidePage {
 	@SideOnly(Side.CLIENT)
 	public void drawBackground(GuiGuideChapter gui, int startX, int startY, int mouseX, int mouseY, float partialTicks){
 		super.drawBackground(gui, startX, startY, mouseX, mouseY, partialTicks);
-		String lang = Lang.prefix+"guide.chapter."+getChapter().getID()+".text."+getId();
-		String title = "";
-		ManualChapter chapter = GuidePages.CHAPTERTEXT.get(getChapter().getID());
-		if(chapter !=null){
-			PageData data = chapter.pages.get(getId());
-			if(data !=null){
-				title = data.title;
-			}
-		}
+		String title = GuidePages.getTitle(getChapter(), this);
 		if(title != null && !title.isEmpty()){
 			title = title.replaceAll("<n>", "\n");
 			GlStateManager.pushMatrix();
@@ -151,7 +143,7 @@ public class PagePress extends GuidePage {
 	@SideOnly(Side.CLIENT)
     public void drawForeground(GuiGuideChapter gui, int startX, int startY, int mouseX, int mouseY, float partialTicks){
 		int itemBoxSize = 34;
-
+		ItemStack tooltipStack = ItemStackTools.getEmptyStack();
 		if(ItemStackTools.isValid(currentInput)){
 			GlStateManager.pushMatrix();
 			GlStateManager.translate(startX + 16, startY+61, 0);
@@ -161,7 +153,7 @@ public class PagePress extends GuidePage {
 	        RenderHelper.enableStandardItemLighting();
 			if (mouseX > startX + 16 - 2 && mouseX < startX + 16 - 2 + itemBoxSize &&
 					mouseY > startY+61 - 2 && mouseY < startY+61 - 2 + itemBoxSize) {
-				drawItemStackTooltip(currentInput, mouseX, mouseY);
+				tooltipStack = currentInput;
 			}
 		}
 		if(ItemStackTools.isValid(currentOutput)){
@@ -172,8 +164,11 @@ public class PagePress extends GuidePage {
 			GlStateManager.popMatrix();
 			if (mouseX > startX + 136 - 2 && mouseX < startX + 136 - 2 + itemBoxSize &&
 					mouseY > startY+61 - 2 && mouseY < startY+61 - 2 + itemBoxSize) {
-				drawItemStackTooltip(currentOutput, mouseX, mouseY);
+				tooltipStack = currentOutput;
 			}
+		}
+		if(ItemStackTools.isValid(tooltipStack)){
+			drawItemStackTooltip(tooltipStack, mouseX, mouseY);
 		}
 	}
 
