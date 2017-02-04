@@ -1,11 +1,13 @@
 package alec_wam.CrystalMod.client.sound;
 
 import alec_wam.CrystalMod.tiles.fusion.TileFusionPedistal;
-import alec_wam.CrystalMod.util.ModLogger;
 import net.minecraft.client.audio.ITickableSound;
 import net.minecraft.client.audio.PositionedSound;
 import net.minecraft.util.SoundCategory;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public class FusionRunningSound extends PositionedSound implements ITickableSound {
 
 	public TileFusionPedistal pedistal;

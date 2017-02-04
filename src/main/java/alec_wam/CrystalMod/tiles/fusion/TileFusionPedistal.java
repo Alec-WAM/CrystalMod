@@ -127,13 +127,19 @@ public class TileFusionPedistal extends TileEntityInventory implements IFusionPe
 				}
 			}
 		} else {
-			if(isCrafting.getValue() && fusionSound == null){
-				fusionSound = new FusionRunningSound(this);
-				FMLClientHandler.instance().getClient().getSoundHandler().playSound(fusionSound);
-			}
-			if(fusionSound !=null && !isCrafting.getValue()){
-				fusionSound = null;
-			}
+			updateSound();
+		}
+	}
+	
+	@SideOnly(Side.CLIENT)
+	public void updateSound(){
+		//Remote
+		if(isCrafting.getValue() && fusionSound == null){
+			fusionSound = new FusionRunningSound(this);
+			FMLClientHandler.instance().getClient().getSoundHandler().playSound(fusionSound);
+		}
+		if(fusionSound !=null && !isCrafting.getValue()){
+			fusionSound = null;
 		}
 	}
 
