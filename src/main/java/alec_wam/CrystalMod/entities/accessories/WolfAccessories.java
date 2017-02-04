@@ -72,7 +72,6 @@ public class WolfAccessories {
 
 	public static void onEntityLoad(Entity entity) {
 		if(entity instanceof EntityWolf){
-			ModLogger.info("Found "+getWolfArmorStack((EntityWolf)entity)+" on "+entity);
 			syncArmor((EntityWolf)entity, false);
 		}
 	}

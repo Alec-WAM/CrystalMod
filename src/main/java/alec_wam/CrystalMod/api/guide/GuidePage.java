@@ -11,8 +11,6 @@ public abstract class GuidePage {
 
 	private String id;
 	private GuideChapter chapter;
-	protected TranslationHandler translator;
-	protected ITextEditor textEditor;
 
 	public GuidePage(String id) {
 		this.id = id;
@@ -20,24 +18,6 @@ public abstract class GuidePage {
 
 	public String getId() {
 		return id;
-	}
-	
-	public GuidePage setTranslator(TranslationHandler translator) {
-		this.translator = translator;
-		return this;
-	}
-	
-	public TranslationHandler getTranslator(){
-		return translator;
-	}
-	
-	public GuidePage setTextEditor(ITextEditor editor) {
-		this.textEditor = editor;
-		return this;
-	}
-	
-	public ITextEditor getTextEditor(){
-		return textEditor;
 	}
 
 	public GuideChapter getChapter() {

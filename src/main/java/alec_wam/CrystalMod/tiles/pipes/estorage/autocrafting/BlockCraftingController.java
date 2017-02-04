@@ -41,8 +41,7 @@ public class BlockCraftingController extends BlockContainer {
         return EnumBlockRenderType.MODEL;
     }
 
-	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side,float hX, float hY, float hZ){
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, ItemStack held, EnumFacing side,float hX, float hY, float hZ){
 		return false;
 	}
 	
@@ -82,6 +81,70 @@ public class BlockCraftingController extends BlockContainer {
     @Override
     public int damageDropped(IBlockState state) {
         return getMetaFromState(state);
+    }
+
+    @Override
+    public boolean rotateBlock(World world, BlockPos pos, EnumFacing axis) {
+        TileEntity tile = world.getTileEntity(pos);
+
+        if (!world.isRemote && tile instanceof TileCrafter) {
+            EnumFacing dir = ((TileCrafter) tile).getDirection();
+
+            int newDir = dir.ordinal() + 1;
+
+            if (newDir > EnumFacing.VALUES.length - 1) {
+                newDir = 0;
+            }
+
+            ((TileCrafter) tile).setDirection(EnumFacing.getFront(newDir));
+
+            BlockUtil.markBlockForUpdate(world, pos);
+
+            return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase player, ItemStack itemStack) {
+        super.onBlockPlacedBy(world, pos, state, player, itemStack);
+
+        TileEntity tile = world.getTileEntity(pos);
+
+        if (tile instanceof TileCrafter) {
+            EnumFacing facing = EnumFacing.getDirectionFromEntityLiving(pos, player);
+
+            if (player.isSneaking() && hasOppositeFacingOnSneakPlace()) {
+                facing = facing.getOpposite();
+            }
+
+            ((TileCrafter) tile).setDirection(facing);
+        }
+    }
+
+    @Override
+    public void breakBlock(World world, BlockPos pos, IBlockState state) {
+        TileEntity tile = world.getTileEntity(pos);
+
+        if (tile instanceof TileCrafter) {
+        	if(((TileCrafter) tile).getDroppedItems() != null){
+	            IItemHandler handler = ((TileCrafter) tile).getDroppedItems();
+	
+	            for (int i = 0; i < handler.getSlots(); ++i) {
+	                if (handler.getStackInSlot(i) != null) {
+	                	ItemUtil.spawnItemInWorldWithRandomMotion(world, handler.getStackInSlot(i), pos);
+	                }
+	            }
+        	}
+            if (!world.isRemote) {
+            	((TileCrafter) tile).onDisconnected();
+            }
+        }
+
+        
+        
+        super.breakBlock(world, pos, state);
     }
 
     @Override

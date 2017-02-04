@@ -36,7 +36,6 @@ public class CrystalModAPI {
 
 	public static GuideIndex BLOCKS = null;
 	public static GuideIndex ITEMS = null;
-	public static GuideIndex MATERIALCROPS = null;
 	public static GuideIndex ENTITES = null;
 	public static GuideIndex WORKBENCH = null;
 	public static GuideIndex MISC = null;

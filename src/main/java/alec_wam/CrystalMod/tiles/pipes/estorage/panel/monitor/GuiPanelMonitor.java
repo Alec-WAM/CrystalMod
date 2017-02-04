@@ -83,12 +83,10 @@ public class GuiPanelMonitor extends GuiContainer implements IGuiScreen {
         cancelAllButton.enabled = craftingMonitor.getTasks().size() > 0;
     }
 
-    ResourceLocation TEXTURE = new ResourceLocation("crystalmod:textures/gui/eStorage_crafting_monitor.png");
-    
     @Override
     protected void drawGuiContainerBackgroundLayer(float renderPartialTicks, int mouseX, int mouseY) {
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-        mc.getTextureManager().bindTexture(TEXTURE);
+        mc.getTextureManager().bindTexture(new ResourceLocation("crystalmod:textures/gui/eStorage_crafting_monitor.png"));
 
         drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
 

@@ -285,7 +285,7 @@ public class TileAdvDispenser extends TileEntityInventory implements IFacingTile
 		} else if(interact == InteractType.ENTITY){
             Entity hitEntity = null;
             
-            RayTraceResult ray = EntityUtil.getRayTraceEntity(fakePlayer, 1D, true);
+            RayTraceResult ray = EntityUtil.getRayTraceEntity(getWorld(), fakePlayer, 3.0D, fakePlayer.interactionManager.getBlockReachDistance());
             
             hitEntity = ray == null ? null : ray.entityHit;
             

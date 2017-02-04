@@ -11,8 +11,6 @@ import alec_wam.CrystalMod.items.IEnumMetaItem;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.items.guide.GuidePages.LookupResult;
 import alec_wam.CrystalMod.util.EntityUtil;
-import alec_wam.CrystalMod.util.ItemStackTools;
-import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.ModLogger;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
@@ -69,12 +67,12 @@ public class ItemCrystalGuide extends Item implements ICustomModel {
 	@Override
 	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
     {
-		/*RayTraceResult ray = EntityUtil.getRayTraceEntity(player, CrystalMod.proxy.getReachDistanceForPlayer(player), false);
+		RayTraceResult ray = EntityUtil.getRayTraceEntity(world, player, 3.0D, CrystalMod.proxy.getReachDistanceForPlayer(player));
 		if(ray !=null){
 			Entity entity = ray.entityHit;
 			if(entity == null)return EnumActionResult.PASS;
 			ItemStack entityItem = EntityUtil.getItemFromEntity(entity, ray);
-			if(ItemStackTools.isValid(entityItem)){
+			if(entityItem !=null){
 				LookupResult result = GuidePages.getGuideData(player, entityItem);
 				if(result !=null){
 					CrystalMod.proxy.setForcedGuidePage(result);
@@ -82,28 +80,19 @@ public class ItemCrystalGuide extends Item implements ICustomModel {
 					return EnumActionResult.SUCCESS;
 				}
 			}
-		}*/
-		/*ItemStack blockStack = ItemUtil.getItemFromBlock(world.getBlockState(pos));
-		if(ItemStackTools.isValid(blockStack)){
-			LookupResult result = GuidePages.getGuideData(player, blockStack);
-			if(result !=null){
-				CrystalMod.proxy.setForcedGuidePage(result);
-				player.openGui(CrystalMod.instance, GuiHandler.GUI_ID_GUIDE, world, 0, 0, 0);
-				return EnumActionResult.SUCCESS;
-			}
-		}*/
+		}
 		return EnumActionResult.PASS;
     }
 	
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand hand)
     {
-		if(playerIn.isSneaking() && worldIn.isRemote){
+		if(playerIn.isSneaking()){
 			GuidePages.createPages();
 			ModLogger.info("Created Pages");
 
 			ExtendedPlayer exPlayer = ExtendedPlayerProvider.getExtendedPlayer(playerIn);
-			if(exPlayer !=null){
+			if(exPlayer !=null && worldIn.isRemote){
 				exPlayer.lastOpenBook = null;
 			}
 

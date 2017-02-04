@@ -11,10 +11,8 @@ import alec_wam.CrystalMod.items.tools.grapple.GrappleControllerBase;
 import alec_wam.CrystalMod.items.tools.grapple.GrappleHandler;
 import alec_wam.CrystalMod.items.tools.grapple.GrappleType;
 import alec_wam.CrystalMod.network.AbstractPacketThreadsafe;
-import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.IMessageHandler;
 import alec_wam.CrystalMod.util.EntityUtil;
-import alec_wam.CrystalMod.util.ModLogger;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.entity.Entity;
@@ -83,17 +81,7 @@ public class PacketEntityMessage extends AbstractPacketThreadsafe {
 		Entity entity = world.getEntityByID(id);
 		if(entity !=null){
 			if(type.equalsIgnoreCase("CustomDataSync")){
-				ModLogger.info("Syncing "+entity+" data from packet."+data);
 				EntityUtil.setCustomEntityData(entity, data);
-			}
-			if(type.equalsIgnoreCase("CustomDataSyncWithResponse")){
-				ModLogger.info("Syncing "+entity+" data from packet."+data);
-				EntityUtil.setCustomEntityData(entity, data);
-				CrystalModNetwork.sendToServer(new PacketEntityMessage(entity, "DataSyncResponse"));
-			}
-			if(type.equalsIgnoreCase("DataSyncResponse")){
-				EntityUtil.getCustomEntityData(entity).removeTag("NeedsDataSyncServer");
-				ModLogger.info("Removed sync tag!");
 			}
 			if(type.equalsIgnoreCase("SetSize")){
 				float width = data.getFloat("Width");

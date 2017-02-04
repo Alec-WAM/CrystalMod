@@ -3,22 +3,6 @@ package alec_wam.CrystalMod.items.guide.page;
 import java.util.Iterator;
 import java.util.List;
 
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
-
-import com.google.common.base.Objects;
-import com.google.common.base.Strings;
-import com.google.common.collect.Lists;
-
-import alec_wam.CrystalMod.api.guide.GuidePage;
-import alec_wam.CrystalMod.items.guide.GuiGuideChapter;
-import alec_wam.CrystalMod.items.guide.GuidePages;
-import alec_wam.CrystalMod.items.guide.GuidePages.ManualChapter;
-import alec_wam.CrystalMod.items.guide.GuidePages.PageData;
-import alec_wam.CrystalMod.util.ItemStackTools;
-import alec_wam.CrystalMod.util.Lang;
-import alec_wam.CrystalMod.util.Util;
-import alec_wam.CrystalMod.util.client.RenderUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
@@ -26,11 +10,28 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
+
+import alec_wam.CrystalMod.api.guide.GuidePage;
+import alec_wam.CrystalMod.items.guide.GuiGuideChapter;
+import alec_wam.CrystalMod.items.guide.GuidePages;
+import alec_wam.CrystalMod.items.guide.GuidePages.ManualChapter;
+import alec_wam.CrystalMod.items.guide.GuidePages.PageData;
+import alec_wam.CrystalMod.util.ItemStackTools;
+import alec_wam.CrystalMod.util.ItemUtil;
+import alec_wam.CrystalMod.util.Lang;
+import alec_wam.CrystalMod.util.Util;
+import alec_wam.CrystalMod.util.client.RenderUtil;
+
+import com.google.common.base.Objects;
+import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
 
 public class PageIcon extends GuidePage {
 
@@ -40,14 +41,10 @@ public class PageIcon extends GuidePage {
 	private static final int CRAZY_3 = 0xF0100010;
 
 	protected static RenderItem itemRenderer = Minecraft.getMinecraft().getRenderItem();
-	private NonNullList<ItemStack> stacks;
+	private List<ItemStack> stacks;
 	private ItemStack currentItem;
 	
-	public PageIcon(String id, ItemStack stack){
-		this(id, NonNullList.withSize(1, stack));
-	}
-	
-	public PageIcon(String id, NonNullList<ItemStack> resultingItem) {
+	public PageIcon(String id, List<ItemStack> resultingItem) {
 		super(id);
 		stacks = resultingItem;
 	}
@@ -82,7 +79,7 @@ public class PageIcon extends GuidePage {
 
 		ItemStack outputStack = currentItem;
 		
-		if(ItemStackTools.isValid(outputStack)){
+		if(outputStack !=null){
 			GlStateManager.pushMatrix();
 			GlStateManager.translate(startX+80, startY+30, 0);
 			GlStateManager.scale(2, 2, 1);
@@ -94,8 +91,21 @@ public class PageIcon extends GuidePage {
 			}
 		}
 		
-		String text = GuidePages.getText(getChapter(), this);
-		String title = GuidePages.getTitle(getChapter(), this);
+		String lang = Lang.prefix+"guide.chapter."+getChapter().getID()+".text."+getId();
+		String text = "";
+		String title = getChapter().getIndex(this) == 0 ? getChapter().getLocalizedTitle() : "";
+		if(I18n.canTranslate(lang))text = Lang.translateToLocal(lang);
+		else {
+			ManualChapter chapter = GuidePages.CHAPTERTEXT.get(getChapter().getID());
+			if(chapter !=null){
+				PageData data = chapter.pages.get(getId());
+				if(data !=null){
+					text = data.text;
+					if(!Strings.isNullOrEmpty(data.title))title = data.title;
+				}
+			}
+		}
+		text = text.replaceAll("<n>", "\n");
 		x = startX+6;
 		int yOffset = 0;
 		if(title != null && !title.isEmpty()){

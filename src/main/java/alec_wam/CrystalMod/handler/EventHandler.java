@@ -69,7 +69,6 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArrow;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.DamageSource;
@@ -249,16 +248,11 @@ public class EventHandler {
     public void entityUpdate(LivingUpdateEvent event){
     	if(event.getEntityLiving() !=null){
     		if(EntityUtil.hasCustomData(event.getEntityLiving())){
-	    		/*if(EntityUtil.getCustomEntityData(event.getEntityLiving()).hasKey("NEEDSDATASYNC")){
+	    		if(EntityUtil.getCustomEntityData(event.getEntityLiving()).hasKey("NEEDSDATASYNC")){
 	    			ModLogger.info("Sending Custom NBT "+event.getEntityLiving());
 	    			EntityUtil.getCustomEntityData(event.getEntityLiving()).removeTag("NEEDSDATASYNC");
 	    			CrystalModNetwork.sendToAllAround(new PacketEntityMessage(event.getEntityLiving(), "CustomDataSync", EntityUtil.getCustomEntityData(event.getEntityLiving())), event.getEntityLiving());
-	    		}*/
-    			//TODO Figure out nbt loading
-    			if(!event.getEntityLiving().getEntityWorld().isRemote && EntityUtil.getCustomEntityData(event.getEntityLiving()).hasKey("NeedsDataSyncServer")){
-    				EntityUtil.getCustomEntityData(event.getEntityLiving()).removeTag("NeedsDataSyncServer");
-    				CrystalModNetwork.sendToAllAround(new PacketEntityMessage(event.getEntityLiving(), "CustomDataSyncWithResponse", EntityUtil.getCustomEntityData(event.getEntityLiving())), event.getEntityLiving());
-    	    	}
+	    		}
     		}
     		if(event.getEntityLiving() instanceof EntityPlayer){
     			EntityPlayer player = (EntityPlayer)event.getEntityLiving();
@@ -367,18 +361,13 @@ public class EventHandler {
     @SubscribeEvent
     public void entityJoin(EntityJoinWorldEvent event){
     	Entity entity = event.getEntity();
-    	if(EntityUtil.hasCustomData(entity)){
-    		ModLogger.info(""+entity+" data: "+EntityUtil.getCustomEntityData(entity)+" isRemote: "+event.getWorld().isRemote);
-    		WolfAccessories.onEntityLoad(entity);
-    		EntityUtil.getCustomEntityData(entity).setBoolean("NeedsDataSyncServer", true);
-    	}
-    	/*if(entity !=null && entity.getEntityWorld() !=null && !entity.getEntityWorld().isRemote){
+    	if(entity !=null && entity.getEntityWorld() !=null && !entity.getEntityWorld().isRemote){
 	    	if(EntityUtil.hasCustomData(entity)){
-	    		ModLogger.info("Loading Custom NBT "+entity);
+	    		ModLogger.info("Loading Custom NBT ("+EntityUtil.getCustomEntityData(entity).getSize()+")");
 	    		WolfAccessories.onEntityLoad(entity);
 	    		EntityUtil.getCustomEntityData(entity).setBoolean("NEEDSDATASYNC", true);
 	    	}
-    	}*/
+    	}
     }
     
     @SubscribeEvent

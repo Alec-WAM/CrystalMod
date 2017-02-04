@@ -334,7 +334,7 @@ public class ClientProxy extends CommonProxy {
     
     public void setForcedGuidePage(LookupResult result){
     	GuiGuideChapter chapterGui = null;
-		if(result !=null && result.getChapter() != null){
+		if(result.getChapter() != null){
 			if(result.getPage() !=null){
 				chapterGui = new GuiGuideChapter(null, result.getChapter(), result.getPage());
 			} else {

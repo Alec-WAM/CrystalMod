@@ -183,9 +183,6 @@ public class ModCrafting {
 		create9x9Recipe(new ItemStack(ModBlocks.crystal, 1, CrystalBlockType.DARK.getMeta()), darkCrystal, 9);
 		create9x9Recipe(new ItemStack(ModBlocks.crystal, 1, CrystalBlockType.PURE.getMeta()), pureCrystal, 9);
 		
-		//More Expensive than using the Liguidizer and Infuser
-		addShapedOreRecipe(dIronIngot, " N ", "NIN", " N ", 'N', darkNugget, 'I', "ingotIron");
-		
 		addShapedRecipe(new ItemStack(ModItems.wrench), new Object[] { "N N", " I ", " I ", 'N', dIronNugget, 'I', dIronIngot });
 		addShapelessOreRecipe(new ItemStack(ModItems.guide, 1, GuideType.CRYSTAL.getMetadata()), new Object[] {Items.BOOK, "gemCrystal"});
 		addShapelessRecipe(new ItemStack(ModItems.guide, 1, GuideType.ESTORAGE.getMetadata()), new Object[] {new ItemStack(ModItems.guide, 1, GuideType.CRYSTAL.getMetadata()), new ItemStack(ModBlocks.crystalPipe, 1, PipeType.ESTORAGE.getMeta())});
@@ -355,7 +352,6 @@ public class ModCrafting {
 		addShapedOreRecipe(ModBlocks.wirelessPipe, new Object[]{"#I#", "ICI", "#P#", '#', Items.ENDER_EYE, 'C', new ItemStack(ModBlocks.enderBuffer), 'I', pureIngot, 'P', pipeEStorage});
 		addShapedOreRecipe(ModBlocks.craftingController, new Object[]{"#W#", "WPW", "#W#", '#', dIronPlate, 'W', "workbench", 'P', pipeEStorage});
 		addShapedOreRecipe(ModBlocks.crafter, new Object[]{"#F#", "SMD", "#W#", '#', dIronPlate, 'W', "workbench", 'M', machineFrame, 'F', Blocks.FURNACE, 'S', pipeEStorage, 'D', Blocks.DROPPER});
-		addShapedOreRecipe(ModBlocks.powerCore, new Object[]{"###", "#B#", "#P#", '#', dIronPlate, 'B', new ItemStack(ModBlocks.battery, 1, BatteryType.BLUE.getMeta()), 'P', pipeEStorage});
 		addShapedOreRecipe(new ItemStack(ModBlocks.encoder, 1, EncoderType.NORMAL.getMeta()), new Object[]{"#P#", "IWI", "#I#", '#', dIronPlate, 'W', "workbench", 'I', dIronPlate, 'P', ModItems.craftingPattern});
 		addShapelessRecipe(new ItemStack(ModBlocks.encoder, 1, EncoderType.PROCESSING.getMeta()), new Object[]{new ItemStack(ModBlocks.encoder, 1, EncoderType.NORMAL.getMeta())});
 
@@ -441,8 +437,7 @@ public class ModCrafting {
 		addShapedRecipe(new ItemStack(ModBlocks.crystalMachine, 1, MachineType.LIQUIDIZER.getMeta()), new Object[]{"III", "PFB", "ICI", 'I', dIronPlate, 'P', Blocks.PISTON, 'B', Items.BUCKET, 'C', ItemUtil.copy(tier0CU, 1), 'F', machineFrame});
 		addShapedRecipe(new ItemStack(ModBlocks.crystalMachine, 1, MachineType.INFUSER.getMeta()), new Object[]{"ICI", "IFI", "IPI", 'I', dIronPlate, 'C', ModBlocks.cauldron, 'P', ItemUtil.copy(tier0CU, 1), 'F', machineFrame});
 
-		addShapedRecipe(new ItemStack(ModBlocks.advDispenser), new Object[]{"PPP", "PMP", "PDP", 'P', dIronPlate, 'M', "skull", 'D', Blocks.DISPENSER});
-
+		
 		addShapedRecipe(new ItemStack(ModBlocks.converter, 1, ConverterType.CU.getMeta()), new Object[]{"III", "RFC", "III", 'I', dIronPlate, 'C', ItemUtil.copy(tier0CU, 1), 'R', ItemUtil.copy(tier0RF, 1), 'F', machineFrame});
 		addShapedRecipe(new ItemStack(ModBlocks.converter, 1, ConverterType.RF.getMeta()), new Object[]{"III", "CFR", "III", 'I', dIronPlate, 'C', ItemUtil.copy(tier0CU, 1), 'R', ItemUtil.copy(tier0RF, 1), 'F', machineFrame});
 		//EnderIO before default enderpearl

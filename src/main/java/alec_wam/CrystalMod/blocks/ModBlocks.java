@@ -91,8 +91,6 @@ import alec_wam.CrystalMod.tiles.pipes.estorage.panel.display.TileEntityPanelIte
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.display.TileEntityPanelItemRenderer;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.wireless.BlockWirelessPanel;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.wireless.TileEntityWirelessPanel;
-import alec_wam.CrystalMod.tiles.pipes.estorage.power.BlockNetworkPowerCore;
-import alec_wam.CrystalMod.tiles.pipes.estorage.power.TileNetworkPowerCore;
 import alec_wam.CrystalMod.tiles.pipes.estorage.stocker.BlockStocker;
 import alec_wam.CrystalMod.tiles.pipes.estorage.stocker.TileEntityStocker;
 import alec_wam.CrystalMod.tiles.pipes.estorage.storage.external.BlockExternalInterface;
@@ -180,7 +178,6 @@ public class ModBlocks {
 	public static BlockWirelessPanel wirelessPanel;
 	public static BlockWirelessPipeWrapper wirelessPipe;
 	public static BlockCraftingController craftingController;
-	public static BlockNetworkPowerCore powerCore;
 	public static BlockCrafter crafter;
 	public static BlockStocker stocker;
 	public static BlockPatternEncoder encoder;
@@ -346,10 +343,6 @@ public class ModBlocks {
 		craftingController = new BlockCraftingController();
 		registerBlock(craftingController, "craftingcontroller");
 		registerTileEntity(TileCraftingController.class);
-		
-		powerCore = new BlockNetworkPowerCore();
-		registerBlock(powerCore, "powercore");
-		registerTileEntity(TileNetworkPowerCore.class);
 		
 		crafter = new BlockCrafter();
 		registerBlock(crafter, "autocrafter");

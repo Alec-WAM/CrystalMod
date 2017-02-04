@@ -3,7 +3,6 @@ package alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Stack;
 
@@ -12,23 +11,6 @@ import javax.annotation.Nullable;
 
 import com.google.common.collect.Lists;
 
-import alec_wam.CrystalMod.api.FluidStackList;
-import alec_wam.CrystalMod.api.estorage.IAutoCrafter;
-import alec_wam.CrystalMod.api.estorage.ICraftingTask;
-import alec_wam.CrystalMod.api.estorage.INetworkPowerTile;
-import alec_wam.CrystalMod.network.CrystalModNetwork;
-import alec_wam.CrystalMod.tiles.TileEntityMod;
-import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetwork;
-import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage.ItemStackData;
-import alec_wam.CrystalMod.tiles.pipes.estorage.PacketCraftingInfo;
-import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.task.BasicCraftingTask;
-import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.task.CraftingProcessBase;
-import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.task.CraftingProcessExternal;
-import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.task.CraftingProcessNormal;
-import alec_wam.CrystalMod.util.BlockUtil;
-import alec_wam.CrystalMod.util.ItemStackTools;
-import alec_wam.CrystalMod.util.ItemUtil;
-import alec_wam.CrystalMod.util.ModLogger;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -38,8 +20,25 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+import alec_wam.CrystalMod.api.FluidStackList;
+import alec_wam.CrystalMod.api.estorage.IAutoCrafter;
+import alec_wam.CrystalMod.api.estorage.ICraftingTask;
+import alec_wam.CrystalMod.api.estorage.INetworkTile;
+import alec_wam.CrystalMod.network.CrystalModNetwork;
+import alec_wam.CrystalMod.tiles.TileEntityMod;
+import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetwork;
+import alec_wam.CrystalMod.tiles.pipes.estorage.PacketCraftingInfo;
+import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage.ItemStackData;
+import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.task.BasicCraftingTask;
+import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.task.CraftingProcessBase;
+import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.task.CraftingProcessExternal;
+import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.task.CraftingProcessNormal;
+import alec_wam.CrystalMod.util.BlockUtil;
+import alec_wam.CrystalMod.util.ItemStackTools;
+import alec_wam.CrystalMod.util.ItemUtil;
+import alec_wam.CrystalMod.util.ModLogger;
 
-public class TileCraftingController extends TileEntityMod implements INetworkPowerTile {
+public class TileCraftingController extends TileEntityMod implements INetworkTile {
 
 	private Stack<ICraftingTask> craftingTasks = new Stack<ICraftingTask>();
 	private List<ICraftingTask> craftingTasksToAddAsLast = new ArrayList<ICraftingTask>();
@@ -100,22 +99,21 @@ public class TileCraftingController extends TileEntityMod implements INetworkPow
 				}
 				craftingTasks.removeAll(craftingTasksToCancel);
 				craftingTasksToCancel.clear();
-				
+		
 				for (ICraftingTask task : craftingTasksToAdd) {
 					craftingTasks.push(task);
 				}
 				craftingTasksToAdd.clear();
-
+		
 				for (ICraftingTask task : craftingTasksToAddAsLast) {
 					craftingTasks.add(0, task);
 				}
 				craftingTasksToAddAsLast.clear();
-				if(network.getEnergy() > 0){
-					if (!craftingTasks.empty()) {
-						ICraftingTask top = craftingTasks.peek();
-						if (ticks % top.getPattern().getCrafter().getSpeed() == 0 && top.update(network)) {
-							craftingTasks.pop();
-						}
+		
+				if (!craftingTasks.empty()) {
+					ICraftingTask top = craftingTasks.peek();
+					if (ticks % top.getPattern().getCrafter().getSpeed() == 0 && top.update(network)) {
+						craftingTasks.pop();
 					}
 				}
 			}
@@ -362,18 +360,5 @@ public class TileCraftingController extends TileEntityMod implements INetworkPow
 	
         return new BasicCraftingTask(stack, pattern, quantity);
    }
-
-	@Override
-	public int getEnergyUsage() {
-		int usage = 0;
-		final Iterator<ICraftingTask> i = craftingTasks.iterator();
-		while(i.hasNext()){
-			ICraftingTask task = i.next();
-			if(task !=null){
-				usage+=10*task.getToProcess().size();
-			}
-		}
-		return usage;
-	}
 	
 }
