@@ -50,6 +50,7 @@ public class JEIPlugin  extends BlankModPlugin {
 		registry.addRecipes(CrystalCraftingManager.getInstance().getRecipeList());
 
 		PressRecipeCategory.register(jeiHelpers, registry, guiHelper);
+		CauldronRecipeCategory.register(jeiHelpers, registry, guiHelper);
 		LiquidizerRecipeCategory.register(jeiHelpers, registry, guiHelper);
 		GrinderRecipeCategory.register(jeiHelpers, registry, guiHelper);
 		InfuserRecipeCategory.register(jeiHelpers, registry, guiHelper);

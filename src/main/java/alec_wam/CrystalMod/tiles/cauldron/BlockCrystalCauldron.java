@@ -47,9 +47,10 @@ public class BlockCrystalCauldron extends BlockContainer
         return EnumBlockRenderType.MODEL;
     }
 
-    public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn)
+    @Override
+    public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn, boolean bol)
     {
-        addCollisionBoxToList(pos, entityBox, collidingBoxes, AABB_LEGS);
+    	addCollisionBoxToList(pos, entityBox, collidingBoxes, AABB_LEGS);
         addCollisionBoxToList(pos, entityBox, collidingBoxes, AABB_WALL_WEST);
         addCollisionBoxToList(pos, entityBox, collidingBoxes, AABB_WALL_NORTH);
         addCollisionBoxToList(pos, entityBox, collidingBoxes, AABB_WALL_EAST);
@@ -74,7 +75,8 @@ public class BlockCrystalCauldron extends BlockContainer
         return false;
     }
 
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack held, EnumFacing side, float hitX, float hitY, float hitZ)
+    @Override
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ)
     {
     	TileEntity tile = worldIn.getTileEntity(pos);
         if(tile !=null && tile instanceof TileEntityCrystalCauldron){
@@ -87,17 +89,6 @@ public class BlockCrystalCauldron extends BlockContainer
         	return true;
         }
 		return false;
-    }
-
-    @Override
-    public void breakBlock(World world, BlockPos pos, IBlockState blockState)
-    {
-		TileEntity tileentitychest = world.getTileEntity(pos);
-        if (tileentitychest != null && tileentitychest instanceof IInventory)
-        {
-        	ItemUtil.dropContent(0, (IInventory)tileentitychest, world, tileentitychest.getPos());
-        }
-        super.breakBlock(world, pos, blockState);
     }
     
 	@Override
