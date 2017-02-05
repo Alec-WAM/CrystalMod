@@ -440,6 +440,8 @@ public class ModCrafting {
 		addShapedRecipe(new ItemStack(ModBlocks.crystalMachine, 1, MachineType.PRESS.getMeta()), new Object[]{"IPI", "I I", "ICI", 'I', dIronIngot, 'P', Blocks.PISTON, 'C', ItemUtil.copy(tier0CU, 1)});
 		addShapedRecipe(new ItemStack(ModBlocks.crystalMachine, 1, MachineType.LIQUIDIZER.getMeta()), new Object[]{"III", "PFB", "ICI", 'I', dIronPlate, 'P', Blocks.PISTON, 'B', Items.BUCKET, 'C', ItemUtil.copy(tier0CU, 1), 'F', machineFrame});
 		addShapedRecipe(new ItemStack(ModBlocks.crystalMachine, 1, MachineType.INFUSER.getMeta()), new Object[]{"ICI", "IFI", "IPI", 'I', dIronPlate, 'C', ModBlocks.cauldron, 'P', ItemUtil.copy(tier0CU, 1), 'F', machineFrame});
+		
+		addShapedRecipe(new ItemStack(ModBlocks.advDispenser), new Object[]{"PPP", "PMP", "PDP", 'P', dIronPlate, 'M', "skull", 'D', Blocks.DISPENSER});
 
 		
 		addShapedRecipe(new ItemStack(ModBlocks.converter, 1, ConverterType.CU.getMeta()), new Object[]{"III", "RFC", "III", 'I', dIronPlate, 'C', ItemUtil.copy(tier0CU, 1), 'R', ItemUtil.copy(tier0RF, 1), 'F', machineFrame});
