@@ -1,108 +1,64 @@
 package alec_wam.CrystalMod.items.guide.page;
 
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.RenderItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.translation.I18n;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
-
-import alec_wam.CrystalMod.api.guide.GuidePage;
-import alec_wam.CrystalMod.items.guide.GuiGuideChapter;
-import alec_wam.CrystalMod.items.guide.GuidePages;
-import alec_wam.CrystalMod.items.guide.GuidePages.ManualChapter;
-import alec_wam.CrystalMod.items.guide.GuidePages.PageData;
-import alec_wam.CrystalMod.util.ItemUtil;
-import alec_wam.CrystalMod.util.Lang;
-import alec_wam.CrystalMod.util.Util;
-import alec_wam.CrystalMod.util.client.RenderUtil;
 
 import com.google.common.base.Objects;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 
-public class PageIcon extends GuidePage {
+import alec_wam.CrystalMod.api.crop.CropRecipe;
+import alec_wam.CrystalMod.api.guide.GuidePage;
+import alec_wam.CrystalMod.blocks.crops.material.ItemMaterialSeed;
+import alec_wam.CrystalMod.client.util.SpriteData;
+import alec_wam.CrystalMod.client.util.comp.GuiComponentSprite;
+import alec_wam.CrystalMod.items.guide.GuiGuideChapter;
+import alec_wam.CrystalMod.items.guide.GuidePages;
+import alec_wam.CrystalMod.items.guide.GuidePages.ManualChapter;
+import alec_wam.CrystalMod.items.guide.GuidePages.PageData;
+import alec_wam.CrystalMod.util.ItemStackTools;
+import alec_wam.CrystalMod.util.Lang;
+import alec_wam.CrystalMod.util.StringUtils;
+import alec_wam.CrystalMod.util.client.RenderUtil;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.RenderItem;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.translation.I18n;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-	
+public class PageMaterialCropRecipe extends GuidePage {
+
 	private static final int CRAZY_1 = 0x505000FF;
 	private static final int CRAZY_2 = (CRAZY_1 & 0xFEFEFE) >> 1 | CRAZY_1 & -0xFF000000;
 	private static final int CRAZY_3 = 0xF0100010;
 
 	protected static RenderItem itemRenderer = Minecraft.getMinecraft().getRenderItem();
-	private List<ItemStack> stacks;
-	private ItemStack currentItem;
+	private CropRecipe recipe;
 	
-	public PageIcon(String id, ItemStack resultingItem) {
-		this(id, Collections.singletonList(resultingItem));
-	}
-	
-	public PageIcon(String id, List<ItemStack> resultingItem) {
+	public PageMaterialCropRecipe(String id, CropRecipe recipe) {
 		super(id);
-		stacks = resultingItem;
+		this.recipe = recipe;
 	}
 	
-	@SideOnly(Side.CLIENT)
-    public void initGui(GuiGuideChapter gui, int startX, int startY){
-		this.listIndex = 0;
-    }
-	
-	public int listIndex = 0;
-	@SideOnly(Side.CLIENT)
-    public void updateScreen(GuiGuideChapter gui, int startX, int startY, int timer){
-		if(!GuiScreen.isShiftKeyDown() && Util.isMultipleOf(timer, 20)){
-			currentItem = stacks.get(listIndex);
-			
-			listIndex++;
-			listIndex%=stacks.size();
-		}
-	}
+	private ResourceLocation guideTexture = new ResourceLocation("crystalmod", "textures/gui/guide.png");
 	
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void drawBackground(GuiGuideChapter gui, int startX, int startY, int mouseX, int mouseY, float partialTicks){
 		super.drawBackground(gui, startX, startY, mouseX, mouseY, partialTicks);
-	}
-	
-	@SideOnly(Side.CLIENT)
-    public void drawForeground(GuiGuideChapter gui, int startX, int startY, int mouseX, int mouseY, float partialTicks){
-		int x = 20;
-		int y = 20;
-		int itemBoxSize = 34;
-
-		ItemStack outputStack = currentItem;
-		
-		if(outputStack !=null){
-			GlStateManager.pushMatrix();
-			GlStateManager.translate(startX+80, startY+30, 0);
-			GlStateManager.scale(2, 2, 1);
-			drawItemStack(outputStack, 0, 0, ""+(outputStack.stackSize > 1 ? outputStack.stackSize : ""));
-			GlStateManager.popMatrix();
-			if (mouseX > startX + 80 - 2 && mouseX < startX + 80 - 2 + itemBoxSize &&
-					mouseY > startY+30 - 2 && mouseY < startY+30 - 2 + itemBoxSize) {
-				drawItemStackTooltip(outputStack, mouseX, mouseY);
-			}
-		}
-		
 		String text = GuidePages.getText(getChapter(), this);
 		String title = GuidePages.getTitle(getChapter(), this);
-		
-		x = startX+6;
-		int yOffset = 0;
-		if(title != null && !title.isEmpty()){
-			yOffset = 12;
-			title = title.replaceAll("<n>", "\n");
+		int x = startX+6;
+		if(!Strings.isNullOrEmpty(title)){
 			GlStateManager.pushMatrix();
 			boolean oldUnicode = gui.getFont().getUnicodeFlag();
 			gui.getFont().setUnicodeFlag(false);
@@ -116,7 +72,7 @@ public class PageIcon extends GuidePage {
 			 float scale = 0.75f;
 			 List<String> lines = gui.getFont().listFormattedStringToWidth(text, (int)(189/scale));
 			 for(int i = 0; i < lines.size(); i++){
-				 y = startY+80+(i*(int)(gui.getFont().FONT_HEIGHT*scale+3));
+				 int y = startY+80+(i*(int)(gui.getFont().FONT_HEIGHT*scale+3));
 				 GlStateManager.pushMatrix();
 				 GlStateManager.scale(scale, scale, scale);
 				 boolean oldUnicode = gui.getFont().getUnicodeFlag();
@@ -128,6 +84,76 @@ public class PageIcon extends GuidePage {
 				 GlStateManager.popMatrix();
 			 }
 		 }
+		
+		x = 10;
+		int y = 20;
+		SpriteData arrowSprite = new SpriteData(60, 196, 48, 16);
+		GlStateManager.pushMatrix();
+		GlStateManager.translate(startX+x+37, startY+y+33, 0);
+		GlStateManager.scale(0.5, 0.5, 1);
+		GuiComponentSprite.renderSprite(gui.mc, 0, 0, 0, 0, mouseX, mouseY, arrowSprite, guideTexture, 1f, 1f, 1f);
+		GlStateManager.popMatrix();
+		
+		GlStateManager.pushMatrix();
+		GlStateManager.translate(startX+x+124, startY+y+41.5, 0);
+		GlStateManager.scale(0.5, 0.5, 1);
+		GlStateManager.rotate(180, 0, 0, 1);
+		GuiComponentSprite.renderSprite(gui.mc, 0, 0, 0, 0, mouseX, mouseY, arrowSprite, guideTexture, 1f, 1f, 1f);
+		GlStateManager.popMatrix();
+
+	}
+	
+	@SideOnly(Side.CLIENT)
+    public void drawForeground(GuiGuideChapter gui, int startX, int startY, int mouseX, int mouseY, float partialTicks){
+		int itemBoxSize = 34;
+		int rowY = 41;
+		ItemStack tooltipStack = ItemStackTools.getEmptyStack();
+		if(recipe !=null){
+			if(recipe.getInput1() !=null){
+				ItemStack input = ItemMaterialSeed.getSeed(recipe.getInput1());
+				GlStateManager.pushMatrix();
+				GlStateManager.translate(startX + 16, startY+rowY, 0);
+				GlStateManager.scale(2, 2, 1);
+				drawItemStack(input, 0, 0, ""+(ItemStackTools.getStackSize(input) > 1 ? ItemStackTools.getStackSize(input) : ""));
+	        	GL11.glPopMatrix();
+		        RenderHelper.enableStandardItemLighting();
+				if (mouseX > startX + 16 - 2 && mouseX < startX + 16 - 2 + itemBoxSize &&
+						mouseY > startY+rowY - 2 && mouseY < startY+rowY - 2 + itemBoxSize) {
+					tooltipStack = input;
+				}
+			}
+			
+			if(recipe.getOutput() !=null){
+				ItemStack input = ItemMaterialSeed.getSeed(recipe.getOutput());
+				GlStateManager.pushMatrix();
+				GlStateManager.translate(startX + 76, startY+rowY, 0);
+				GlStateManager.scale(2, 2, 1);
+				drawItemStack(input, 0, 0, ""+(ItemStackTools.getStackSize(input) > 1 ? ItemStackTools.getStackSize(input) : ""));
+	        	GL11.glPopMatrix();
+		        RenderHelper.enableStandardItemLighting();
+				if (mouseX > startX + 76 - 2 && mouseX < startX + 76 - 2 + itemBoxSize &&
+						mouseY > startY+rowY - 2 && mouseY < startY+rowY - 2 + itemBoxSize) {
+					tooltipStack = input;
+				}
+			}
+			
+			if(recipe.getInput2() !=null){
+				ItemStack input = ItemMaterialSeed.getSeed(recipe.getInput2());
+				GlStateManager.pushMatrix();
+				GlStateManager.translate(startX + 136, startY+rowY, 0);
+				GlStateManager.scale(2, 2, 1);
+				drawItemStack(input, 0, 0, ""+(ItemStackTools.getStackSize(input) > 1 ? ItemStackTools.getStackSize(input) : ""));
+	        	GL11.glPopMatrix();
+		        RenderHelper.enableStandardItemLighting();
+				if (mouseX > startX + 136 - 2 && mouseX < startX + 136 - 2 + itemBoxSize &&
+						mouseY > startY+rowY - 2 && mouseY < startY+rowY - 2 + itemBoxSize) {
+					tooltipStack = input;
+				}
+			}
+		}
+		if(ItemStackTools.isValid(tooltipStack)){
+			drawItemStackTooltip(tooltipStack, mouseX, mouseY);
+		}
 	}
 
 	protected void drawItemStackTooltip(ItemStack stack, int x, int y) {
@@ -208,7 +234,6 @@ public class PageIcon extends GuidePage {
 		itemRenderer.renderItemOverlayIntoGUI(font, par1ItemStack, par2, par3, par4Str);
 		GlStateManager.disableDepth();
 		itemRenderer.zLevel = 0.0F;
-		
 	}
 	
 }

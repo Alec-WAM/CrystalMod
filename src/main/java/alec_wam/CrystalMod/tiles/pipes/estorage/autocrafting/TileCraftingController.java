@@ -3,6 +3,7 @@ package alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Stack;
 
@@ -22,6 +23,7 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import alec_wam.CrystalMod.api.FluidStackList;
 import alec_wam.CrystalMod.api.estorage.IAutoCrafter;
 import alec_wam.CrystalMod.api.estorage.ICraftingTask;
+import alec_wam.CrystalMod.api.estorage.INetworkPowerTile;
 import alec_wam.CrystalMod.api.estorage.INetworkTile;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.tiles.TileEntityMod;
@@ -37,7 +39,7 @@ import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.ModLogger;
 
-public class TileCraftingController extends TileEntityMod implements INetworkTile {
+public class TileCraftingController extends TileEntityMod implements INetworkPowerTile {
 
 	private Stack<ICraftingTask> craftingTasks = new Stack<ICraftingTask>();
 	private List<ICraftingTask> craftingTasksToAddAsLast = new ArrayList<ICraftingTask>();
@@ -109,10 +111,12 @@ public class TileCraftingController extends TileEntityMod implements INetworkTil
 				}
 				craftingTasksToAddAsLast.clear();
 		
-				if (!craftingTasks.empty()) {
-					ICraftingTask top = craftingTasks.peek();
-					if (ticks % top.getPattern().getCrafter().getSpeed() == 0 && top.update(network)) {
-						craftingTasks.pop();
+				if(network.getEnergy() > 0){
+					if (!craftingTasks.empty()) {
+						ICraftingTask top = craftingTasks.peek();
+						if (ticks % top.getPattern().getCrafter().getSpeed() == 0 && top.update(network)) {
+							craftingTasks.pop();
+						}
 					}
 				}
 			}
@@ -359,5 +363,18 @@ public class TileCraftingController extends TileEntityMod implements INetworkTil
 	
         return new BasicCraftingTask(stack, pattern, quantity);
    }
+
+	@Override
+	public int getEnergyUsage() {
+		int usage = 0;
+		final Iterator<ICraftingTask> i = craftingTasks.iterator();
+		while(i.hasNext()){
+			ICraftingTask task = i.next();
+			if(task !=null){
+				usage+=10*task.getToProcess().size();
+			}
+		}
+		return usage;
+	}
 	
 }

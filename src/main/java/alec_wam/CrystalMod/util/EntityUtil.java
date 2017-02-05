@@ -288,82 +288,63 @@ public class EntityUtil {
 		return ItemStack.copyItemStack(stack);
 	}
 
-	public static RayTraceResult getRayTraceEntity(World world, EntityPlayer living, double maxrange, double range) {
-		double d0 = range;
-        Vec3d vec3d = EntityUtil.getEyePosition(living);
-        boolean flag = false;
-        double d1 = d0;
-        
-        if (d0 > maxrange)
-        {
-            flag = true;
-        }
-        RayTraceResult rayTrace = null;
-		Vec3d vec3d1 = living.getLookVec();
-        Vec3d vec3d2 = vec3d.addVector(vec3d1.xCoord * d0, vec3d1.yCoord * d0, vec3d1.zCoord * d0);
+	public static RayTraceResult getRayTraceEntity(EntityPlayer player, double range, boolean ignoreCanBeCollidedWith) {
+		Vec3d eye = EntityUtil.getEyePosition(player);
+		Vec3d look = player.getLook(1.0f);
+
+		return getRayTraceEntity(player, eye, look, range, ignoreCanBeCollidedWith);
+	}
+	
+	
+	public static RayTraceResult getRayTraceEntity(Entity entity, Vec3d start, Vec3d look, double range, boolean ignoreCanBeCollidedWith) {
+		Vec3d direction = start.addVector(look.xCoord * range, look.yCoord * range, look.zCoord * range);
+
 		Entity pointedEntity = null;
-        Vec3d vec3d3 = null;
-        float f = 1.0F;
-        List<Entity> list = world.getEntitiesInAABBexcluding(living, living.getEntityBoundingBox().addCoord(vec3d1.xCoord * d0, vec3d1.yCoord * d0, vec3d1.zCoord * d0).expand(1.0D, 1.0D, 1.0D), Predicates.and(EntitySelectors.NOT_SPECTATING, new Predicate<Entity>()
-        {
-            public boolean apply(@Nullable Entity p_apply_1_)
-            {
-                return p_apply_1_ != null && p_apply_1_.canBeCollidedWith();
-            }
-        }));
-        double d2 = d1;
+		Vec3d hit = null;
+		AxisAlignedBB bb = entity.getEntityBoundingBox().addCoord(look.xCoord * range, look.yCoord * range, look.zCoord * range).expand(1, 1, 1);
+		@SuppressWarnings("unchecked")
+		List<Entity> entitiesInArea = entity.getEntityWorld().getEntitiesWithinAABBExcludingEntity(entity, bb);
+		double range2 = range; // range to the current candidate. Used to find the closest entity.
 
-        for (int j = 0; j < list.size(); ++j)
-        {
-            Entity entity1 = (Entity)list.get(j);
-            AxisAlignedBB axisalignedbb = entity1.getEntityBoundingBox().expandXyz((double)entity1.getCollisionBorderSize());
-            RayTraceResult raytraceresult = axisalignedbb.calculateIntercept(vec3d, vec3d2);
+		for(Entity candidate : entitiesInArea) {
+			if(ignoreCanBeCollidedWith || candidate.canBeCollidedWith()) {
+				// does our vector go through the entity?
+				double colBorder = candidate.getCollisionBorderSize();
+				AxisAlignedBB entityBB = candidate.getEntityBoundingBox().expand(colBorder, colBorder, colBorder);
+				RayTraceResult movingobjectposition = entityBB.calculateIntercept(start, direction);
 
-            if (axisalignedbb.isVecInside(vec3d))
-            {
-                if (d2 >= 0.0D)
-                {
-                    pointedEntity = entity1;
-                    vec3d3 = raytraceresult == null ? vec3d : raytraceresult.hitVec;
-                    d2 = 0.0D;
-                }
-            }
-            else if (raytraceresult != null)
-            {
-                double d3 = vec3d.distanceTo(raytraceresult.hitVec);
+				// needs special casing: vector starts inside the entity
+				if(entityBB.isVecInside(start)) {
+					if(0.0D < range2 || range2 == 0.0D) {
+						pointedEntity = candidate;
+						hit = movingobjectposition == null ? start : movingobjectposition.hitVec;
+						range2 = 0.0D;
+					}
+				}
+				else if(movingobjectposition != null) {
+					double dist = start.distanceTo(movingobjectposition.hitVec);
 
-                if (d3 < d2 || d2 == 0.0D)
-                {
-                    if (entity1.getLowestRidingEntity() == living.getLowestRidingEntity() && !living.canRiderInteract())
-                    {
-                        if (d2 == 0.0D)
-                        {
-                            pointedEntity = entity1;
-                            vec3d3 = raytraceresult.hitVec;
-                        }
-                    }
-                    else
-                    {
-                        pointedEntity = entity1;
-                        vec3d3 = raytraceresult.hitVec;
-                        d2 = d3;
-                    }
-                }
-            }
-        }
+					if(dist < range2 || range2 == 0.0D) {
+						if(candidate == entity.getRidingEntity() && !entity.canRiderInteract()) {
+							if(range2 == 0.0D) {
+								pointedEntity = candidate;
+								hit = movingobjectposition.hitVec;
+							}
+						}
+						else {
+							pointedEntity = candidate;
+							hit = movingobjectposition.hitVec;
+							range2 = dist;
+						}
+					}
+				}
+			}
+		}
 
-        if (pointedEntity != null && flag && vec3d.distanceTo(vec3d3) > maxrange)
-        {
-            pointedEntity = null;
-            rayTrace = new RayTraceResult(RayTraceResult.Type.MISS, vec3d3, (EnumFacing)null, new BlockPos(vec3d3));
-        }
-
-        if (pointedEntity != null && (d2 < d1 || rayTrace == null))
-        {
-        	rayTrace = new RayTraceResult(pointedEntity, vec3d3);
-        }
-        
-        return rayTrace;
+		if(pointedEntity != null && range2 < range) {
+			return new RayTraceResult(pointedEntity, hit);
+		}
+		return null;
 	}
 
 	public static void setSize(EntityPlayer player, float width, float height, float stepSize, float eyeHeight, boolean sendPacket) {

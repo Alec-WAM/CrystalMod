@@ -25,21 +25,8 @@ public class PageText extends GuidePage {
 	 @SideOnly(Side.CLIENT)
 	 public void drawBackground(GuiGuideChapter gui, int startX, int startY, int mouseX, int mouseY, float partialTicks){
 		 super.drawBackground(gui, startX, startY, mouseX, mouseY, partialTicks);
-		 String lang = Lang.prefix+"guide.chapter."+getChapter().getID()+".text."+getId();
-		 String text = "";
-		 String title = "";
-		 if(I18n.canTranslate(lang))text = Lang.translateToLocal(lang);
-		 else {
-			 ManualChapter chapter = GuidePages.CHAPTERTEXT.get(getChapter().getID());
-			 if(chapter !=null){
-				 PageData data = chapter.pages.get(getId());
-				 if(data !=null){
-					 text = data.text;
-					 title = data.title;
-				 }
-			 }
-		 }
-		 text = text.replaceAll("<n>", "\n");
+		 String text = GuidePages.getText(getChapter(), this);
+		 String title = GuidePages.getTitle(getChapter(), this);
 		 int x = startX+6;
 		 int yOffset = 0;
 		 if(title != null && !title.isEmpty()){

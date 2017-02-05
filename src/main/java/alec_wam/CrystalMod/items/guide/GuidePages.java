@@ -12,47 +12,45 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import net.minecraft.block.Block;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.resources.IResource;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.EnumDyeColor;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fml.client.FMLClientHandler;
-import net.minecraftforge.fml.common.Loader;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+
 import alec_wam.CrystalMod.Config;
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.api.CrystalModAPI;
+import alec_wam.CrystalMod.api.crop.CropRecipe;
+import alec_wam.CrystalMod.api.crop.SpecialCropRecipe;
 import alec_wam.CrystalMod.api.guide.GuideChapter;
 import alec_wam.CrystalMod.api.guide.GuideIndex;
 import alec_wam.CrystalMod.api.guide.GuidePage;
-import alec_wam.CrystalMod.blocks.ModBlocks;
+import alec_wam.CrystalMod.api.guide.ITextEditor;
+import alec_wam.CrystalMod.api.guide.TranslationHandler;
 import alec_wam.CrystalMod.blocks.BlockCrystal.CrystalBlockType;
 import alec_wam.CrystalMod.blocks.BlockCrystalIngot.CrystalIngotBlockType;
 import alec_wam.CrystalMod.blocks.BlockCrystalLog;
 import alec_wam.CrystalMod.blocks.BlockCrystalOre.CrystalOreType;
-import alec_wam.CrystalMod.blocks.EnumBlock.IEnumMeta;
+import alec_wam.CrystalMod.blocks.crops.material.IMaterialCrop;
+import alec_wam.CrystalMod.blocks.crops.material.ItemMaterialSeed;
+import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.blocks.glass.BlockCrystalGlass.GlassType;
 import alec_wam.CrystalMod.client.util.comp.BaseComponent;
 import alec_wam.CrystalMod.client.util.comp.GuiComponentBasicItemPage;
 import alec_wam.CrystalMod.client.util.comp.GuiComponentBook;
 import alec_wam.CrystalMod.client.util.comp.GuiComponentStandardRecipePage;
-import alec_wam.CrystalMod.items.IEnumMetaItem;
-import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.items.ItemCrystal.CrystalType;
 import alec_wam.CrystalMod.items.ItemIngot.IngotType;
 import alec_wam.CrystalMod.items.ItemMetalPlate.PlateType;
+import alec_wam.CrystalMod.items.ModItems;
+import alec_wam.CrystalMod.items.guide.GuidePages.DefaultMaterialCropText;
+import alec_wam.CrystalMod.items.guide.GuidePages.DefaultMaterialCropTitle;
 import alec_wam.CrystalMod.items.guide.GuidePages.ManualChapter;
+import alec_wam.CrystalMod.items.guide.GuidePages.MaterialCropEditor;
 import alec_wam.CrystalMod.items.guide.GuidePages.PageData;
 import alec_wam.CrystalMod.items.guide.page.PageCrafting;
 import alec_wam.CrystalMod.items.guide.page.PageFurnace;
 import alec_wam.CrystalMod.items.guide.page.PageIcon;
+import alec_wam.CrystalMod.items.guide.page.PageMaterialCropRecipe;
 import alec_wam.CrystalMod.items.guide.page.PagePress;
 import alec_wam.CrystalMod.items.guide.page.PageText;
 import alec_wam.CrystalMod.items.tools.backpack.ItemBackpackNormal.CrystalBackpackType;
@@ -72,9 +70,19 @@ import alec_wam.CrystalMod.tiles.workbench.BlockCrystalWorkbench.WorkbenchType;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.Lang;
-
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
+import alec_wam.CrystalMod.util.StringUtils;
+import net.minecraft.block.Block;
+import net.minecraft.client.resources.IResource;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.EnumDyeColor;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.text.translation.I18n;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fml.client.FMLClientHandler;
+import net.minecraftforge.fml.common.Loader;
 
 public class GuidePages {
 
@@ -118,6 +126,9 @@ public class GuidePages {
 		
 		List<ItemStack> workbenchList = ItemUtil.getBlockSubtypes(ModBlocks.crystalWorkbench, WorkbenchType.values());
 		CrystalModAPI.BLOCKS.registerChapter(new GuideChapter("crystalworkbench", new PageCrafting("main", workbenchList)).setDisplayObject(workbenchList));
+		
+		ItemStack cauldron = new ItemStack(ModBlocks.cauldron);
+		CrystalModAPI.BLOCKS.registerChapter(new GuideChapter("cauldron", new PageCrafting("main", cauldron)).setDisplayObject(cauldron));
 		
 		List<ItemStack> chestList = getEnumSpecial(ModBlocks.crystalChest, new CrystalChestType[]{CrystalChestType.DARKIRON, CrystalChestType.BLUE, CrystalChestType.RED, CrystalChestType.GREEN, CrystalChestType.DARK, CrystalChestType.PURE});
 		CrystalModAPI.BLOCKS.registerChapter(new GuideChapter("crystalchest", new PageCrafting("main", chestList)).setDisplayObject(chestList));
@@ -239,7 +250,25 @@ public class GuidePages {
 		List<ItemStack> essenceList = Lists.newArrayList();
 		essenceList.add(ItemMobEssence.createStack("Pig"));
 		CrystalModAPI.ITEMS.registerChapter(new GuideChapter("mobessence", new PageIcon("main", essenceList)).setDisplayObject(essenceList));
-		
+		//Material Crops
+		for(Entry<String, IMaterialCrop> entry : CrystalModAPI.getCropMap().entrySet()){
+			IMaterialCrop crop = entry.getValue();
+			ItemStack seed = ItemMaterialSeed.getSeed(crop);
+			CropRecipe normalRecipe = CrystalModAPI.lookupRecipe(crop);
+			SpecialCropRecipe specialRecipe = CrystalModAPI.lookupSpecialRecipe(crop);
+			MaterialCropEditor editor = new MaterialCropEditor(crop);
+			DefaultMaterialCropText defaultText = new DefaultMaterialCropText();
+			DefaultMaterialCropTitle defaultTitle = new DefaultMaterialCropTitle(crop);
+			if(normalRecipe !=null){
+				CrystalModAPI.MATERIALCROPS.registerChapter(new GuideChapter("materialcrop."+crop.getUnlocalizedName(), new PageMaterialCropRecipe("recipe", normalRecipe).setTextEditor(editor).setTranslator(defaultText)).setTranslator(defaultTitle).setDisplayObject(seed));
+			} else if(specialRecipe !=null){
+
+			} else if(PageCrafting.getFirstRecipeForItem(seed) !=null){
+				CrystalModAPI.MATERIALCROPS.registerChapter(new GuideChapter("materialcrop."+crop.getUnlocalizedName(), new PageCrafting("recipe", seed).setTextEditor(editor).setTranslator(defaultText)).setTranslator(defaultTitle).setDisplayObject(seed));
+			} else {
+				CrystalModAPI.MATERIALCROPS.registerChapter(new GuideChapter("materialcrop."+crop.getUnlocalizedName(), new PageIcon("main", seed).setTextEditor(editor).setTranslator(defaultText)).setTranslator(defaultTitle).setDisplayObject(seed));
+			}
+		}
 		blockData.clear();
 		itemData.clear();
 		entityData.clear();
@@ -529,4 +558,104 @@ public class GuidePages {
 		}
 	}
 	
+	public static String getTitle(GuideChapter chapter, GuidePage page){
+		String title = chapter.getIndex(page) == 0 ? chapter.getLocalizedTitle() : "";
+		ManualChapter mchapter = GuidePages.CHAPTERTEXT.get(chapter.getID());
+		if(mchapter !=null){
+			PageData data = mchapter.pages.get(page.getId());
+			if(data !=null){
+				if(!Strings.isNullOrEmpty(data.title))title = data.title;
+			}
+		}
+		return title;
+	}
+	
+	public static String getText(GuideChapter chapter, GuidePage page){
+		return getText(chapter, page, true);
+	}
+	
+	public static String getText(GuideChapter chapter, GuidePage page, boolean useTranslator){
+		String lang = Lang.prefix+"guide.chapter."+chapter.getID()+".text."+page.getId();
+		String text = "";
+		if(I18n.canTranslate(lang))text = Lang.translateToLocal(lang);
+		if(page.getTranslator() !=null && useTranslator) text = page.getTranslator().getTranslatedText();
+		//Allow forced text
+		ManualChapter mchapter = GuidePages.CHAPTERTEXT.get(chapter.getID());
+		if(mchapter !=null){
+			PageData data = mchapter.pages.get(page.getId());
+			if(data !=null){
+				text = data.text;
+			}
+		}
+		text = text.replaceAll("<n>", "\n");
+		if(page.getTextEditor() !=null){
+			text = page.getTextEditor().editText(text);
+		}
+		return text;
+	}
+	
+	public static class DefaultMaterialCropTitle implements TranslationHandler{
+
+		private IMaterialCrop crop;
+		public DefaultMaterialCropTitle(IMaterialCrop crop){
+			this.crop = crop;
+		}
+		
+		@Override
+		public String getTranslatedText() {
+			return CrystalModAPI.localizeCrop(crop);
+		}
+		
+	}
+	
+	
+	public static class DefaultMaterialCropText implements TranslationHandler{
+
+		@Override
+		public String getTranslatedText() {
+			return Lang.localize("guide.text.defaultMaterialCrop");
+		}
+		
+	}
+	
+	public static class MaterialCropEditor implements ITextEditor{
+
+		public IMaterialCrop crop;
+		public MaterialCropEditor(IMaterialCrop crop){
+			this.crop = crop;
+		}
+		@Override
+		public String editText(String text) {
+			int secondsLeft = (crop == null) ? 0 : crop.getGrowthTime(null, null);
+			int minutesLeft = secondsLeft / 60;
+			int hoursLeft = minutesLeft / 60;
+			int daysLeft = hoursLeft / 24;
+			secondsLeft = secondsLeft % 60;
+			minutesLeft = minutesLeft % 60;
+			hoursLeft = hoursLeft % 24;
+			String time = "";
+			if(daysLeft > 0){
+				time = daysLeft+"d "+hoursLeft+"h "+minutesLeft+"m "+secondsLeft+"s";
+			}else if(hoursLeft > 0){
+				time = hoursLeft+"h "+minutesLeft+"m "+secondsLeft+"s";
+			}else if(minutesLeft > 0){
+				time = minutesLeft+"m "+secondsLeft+"s";
+			}else if(secondsLeft > 0){
+				time = secondsLeft+"s";
+			}
+			String cropItemList = "Error";
+			
+			if(crop !=null){
+				List<ItemStack> drops = crop.getDrops(null, null, crop.getMaxYield(null, null), 0);
+				List<String> names = Lists.newArrayList();
+				for(ItemStack stack : drops){
+					names.add(stack.getDisplayName());
+				}
+				cropItemList = StringUtils.makeReadable(names);
+			}
+			
+			return text.replaceAll("<growthTime>", time).replaceAll("<cropItems>", cropItemList);
+		}
+		
+	}
 }

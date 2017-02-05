@@ -94,6 +94,9 @@ import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.GuiCrafter;
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.GuiPatternEncoder;
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.TileCrafter;
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.TilePatternEncoder;
+import alec_wam.CrystalMod.tiles.pipes.estorage.energy.ContainerPowerCore;
+import alec_wam.CrystalMod.tiles.pipes.estorage.energy.GuiPowerCore;
+import alec_wam.CrystalMod.tiles.pipes.estorage.energy.TileNetworkPowerCore;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.ContainerPanel;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.GuiPanel;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.PanelSourceNormal;
@@ -334,6 +337,7 @@ public class GuiHandler implements IGuiHandler {
             if(te instanceof TileEntityPanel)return new GuiPanel(player.inventory, new PanelSourceNormal((TileEntityPanel) te));
         	if(te instanceof TilePatternEncoder) return new GuiPatternEncoder(player, (TilePatternEncoder)te);
         	if(te instanceof TileCrafter) return new GuiCrafter(player, (TileCrafter)te);
+        	if(te instanceof TileNetworkPowerCore)return new GuiPowerCore(player, (TileNetworkPowerCore) te);
         	if(te instanceof TileEntityStocker) return new GuiStocker(player.inventory, (TileEntityStocker)te);
         	if(te instanceof TileEntityWeather) return new GuiWeather((TileEntityWeather)te);
         	if(te instanceof TileEntityMachine) return ((TileEntityMachine)te).getGui(player, ID);
@@ -493,6 +497,7 @@ public class GuiHandler implements IGuiHandler {
         	if(te instanceof TileEntityPanel)return new ContainerPanel(player.inventory, new PanelSourceNormal((TileEntityPanel)te));
         	if(te instanceof TilePatternEncoder) return new ContainerPatternEncoder(player, (TilePatternEncoder)te);
         	if(te instanceof TileCrafter) return new ContainerCrafter(player, (TileCrafter)te);
+        	if(te instanceof TileNetworkPowerCore)return new ContainerPowerCore(player, (TileNetworkPowerCore) te);
         	if(te instanceof TileEntityStocker) return new ContainerStocker(player.inventory, (TileEntityStocker)te);
         	if(te instanceof TileEntityWeather) return new ContainerWeather();
         	if(te instanceof TileEntityMachine) return ((TileEntityMachine)te).getContainer(player, ID);

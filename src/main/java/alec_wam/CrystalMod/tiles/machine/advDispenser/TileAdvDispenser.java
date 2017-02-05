@@ -246,44 +246,9 @@ public class TileAdvDispenser extends TileEntityInventory implements IFacingTile
 			//Proper events called 
 			return this.fakePlayer.interactionManager.processRightClick(fakePlayer, getWorld(), copy, EnumHand.MAIN_HAND);
 		} else if(interact == InteractType.ENTITY){
-			/*Pair<Vec3d, Vec3d> rayVecs = EntityUtil.getStartAndEndLookVec(fakePlayer, 3.0f);
-			final Vec3d start = rayVecs.getLeft();
-            Vec3d end = rayVecs.getRight();
-            final RayTraceResult trace = this.fakePlayer.worldObj.rayTraceBlocks(start, end, false, true, true);
-            if (trace != null && trace.hitVec != null) {
-                end = trace.hitVec;
-            }
-            Entity hitEntity = null;
-            final List<Entity> list = (List<Entity>)this.worldObj.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(facingPos));
-            if (list.isEmpty()) {
-            	return EnumActionResult.FAIL;
-            }
-            double distance = 0.0;
-            Entity backupEntity = null;
-            for(Entity entity : list){
-            	//Right Click Anything
-            	if(entity.canBeCollidedWith() && !entity.noClip && (click == ClickType.RIGHT || (!(hitEntity instanceof EntityItem) && !(hitEntity instanceof EntityXPOrb) && !(hitEntity instanceof EntityArrow)))){
-            		backupEntity = hitEntity;
-            		final AxisAlignedBB axisalignedbb = entity.getEntityBoundingBox().expandXyz(0.30000001192092896);
-                    final RayTraceResult raytraceresult1 = axisalignedbb.calculateIntercept(start, end);
-                    if (raytraceresult1 == null) {
-                        continue;
-                    }
-                    final double distance2 = start.squareDistanceTo(raytraceresult1.hitVec);
-                    if (distance2 >= distance && distance != 0.0) {
-                        continue;
-                    }
-                    hitEntity = entity;
-                    distance = distance2;
-            	}
-            }
+			Entity hitEntity = null;
             
-            if(hitEntity == null && backupEntity !=null){
-            	hitEntity = backupEntity;
-            }*/
-            Entity hitEntity = null;
-            
-            RayTraceResult ray = EntityUtil.getRayTraceEntity(getWorld(), fakePlayer, 3.0D, fakePlayer.interactionManager.getBlockReachDistance());
+            RayTraceResult ray = EntityUtil.getRayTraceEntity(fakePlayer, 1D, true);
             
             hitEntity = ray == null ? null : ray.entityHit;
             

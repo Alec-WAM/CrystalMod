@@ -53,6 +53,7 @@ public class JEIPlugin  extends BlankModPlugin {
 
 		PressRecipeCategory.register(jeiHelpers, registry, guiHelper);
 		LiquidizerRecipeCategory.register(jeiHelpers, registry, guiHelper);
+		CauldronRecipeCategory.register(jeiHelpers, registry, guiHelper);
 		GrinderRecipeCategory.register(jeiHelpers, registry, guiHelper);
 		InfuserRecipeCategory.register(jeiHelpers, registry, guiHelper);
 		FusionRecipeCategory.register(jeiHelpers, registry, guiHelper);

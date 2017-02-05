@@ -71,7 +71,7 @@ public class ItemCrystalGuide extends Item implements ICustomModel {
 	@Override
 	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
     {
-		RayTraceResult ray = EntityUtil.getRayTraceEntity(world, player, 3.0D, CrystalMod.proxy.getReachDistanceForPlayer(player));
+		/*RayTraceResult ray = EntityUtil.getRayTraceEntity(world, player, 3.0D, CrystalMod.proxy.getReachDistanceForPlayer(player));
 		if(ray !=null){
 			Entity entity = ray.entityHit;
 			if(entity == null)return EnumActionResult.PASS;
@@ -84,7 +84,7 @@ public class ItemCrystalGuide extends Item implements ICustomModel {
 					return EnumActionResult.SUCCESS;
 				}
 			}
-		}
+		}*/
 			//}
 		//}
 		return EnumActionResult.PASS;
@@ -94,7 +94,7 @@ public class ItemCrystalGuide extends Item implements ICustomModel {
 	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand)
     {
 		if(itemStackIn !=null){
-			if(playerIn.isSneaking()){
+			if(playerIn.isSneaking() && worldIn.isRemote){
 				GuidePages.createPages();
 				ModLogger.info("Created Pages");
 				

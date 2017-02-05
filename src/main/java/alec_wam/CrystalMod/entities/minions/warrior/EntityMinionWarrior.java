@@ -15,6 +15,7 @@ import net.minecraft.item.ItemSword;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import alec_wam.CrystalMod.entities.minions.EntityMinionBase;
@@ -26,12 +27,14 @@ import alec_wam.CrystalMod.util.ChatUtil;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.Lang;
+import alec_wam.CrystalMod.util.NBTUtil;
 
 public class EntityMinionWarrior extends EntityMinionBase {
 
 	public InventoryWarrior inventory;
 	
 	private EnumMovementState movementState;
+	private BlockPos wanderHome;
 	private ItemStack backStack;
 	
 	public EntityMinionWarrior(World worldIn) {
@@ -44,6 +47,19 @@ public class EntityMinionWarrior extends EntityMinionBase {
 		aiManager.addAI(new MinionAICombat());
 		
 		inventory = new InventoryWarrior(this);
+	}
+	
+	public BlockPos getWanderHome(){
+		return wanderHome;
+	}
+	
+	public double getMaximumWanderDistance(){
+		return 24;
+	}
+	
+	public boolean isWithinWanderBounds(BlockPos pos){
+		if(wanderHome == null)return true;
+		return wanderHome.distanceSq(pos) < (double)(getMaximumWanderDistance() * getMaximumWanderDistance());
 	}
 	
 	protected void applyEntityAttributes()
@@ -63,6 +79,9 @@ public class EntityMinionWarrior extends EntityMinionBase {
 			backStack.writeToNBT(backNBT);
 			nbt.setTag("BackStack", backNBT);
 		}
+		if(wanderHome !=null){
+			NBTUtil.writeBlockPosToNBT(nbt, "WanderPos", wanderHome);
+		}
 		return nbt;
 	}
 	
@@ -77,6 +96,7 @@ public class EntityMinionWarrior extends EntityMinionBase {
 		if(nbt.hasKey("BackStack")){
 			backStack = ItemStackTools.loadFromNBT(nbt.getCompoundTag("BackStack"));
 		}
+		wanderHome = nbt.hasKey("WanderPos") ? NBTUtil.readBlockPosFromNBT(nbt, "WanderPos") : null;
 	}
 	
 	public void switchItems(){
@@ -228,10 +248,12 @@ public class EntityMinionWarrior extends EntityMinionBase {
         	if(stack.getItem() == Item.getItemFromBlock(Blocks.STONE_PRESSURE_PLATE)){
         		if(!worldObj.isRemote){
         			EnumMovementState next = null;
+        			this.wanderHome = null;
         			if(getMovementState() == EnumMovementState.STAY){
         				next = EnumMovementState.MOVE;
         				MinionAIWander wander = this.getAIManager().getAI(MinionAIWander.class);
         				wander.setSpeed(MinionConstants.SPEED_WALK/2);
+        				this.wanderHome = new BlockPos(this);
         			} else if(getMovementState() == EnumMovementState.MOVE){
         				next = EnumMovementState.FOLLOW;
         			} else if(getMovementState() == EnumMovementState.FOLLOW){

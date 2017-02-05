@@ -117,15 +117,7 @@ public class PageFurnace extends GuidePage {
 	@SideOnly(Side.CLIENT)
 	public void drawBackground(GuiGuideChapter gui, int startX, int startY, int mouseX, int mouseY, float partialTicks){
 		super.drawBackground(gui, startX, startY, mouseX, mouseY, partialTicks);
-		String lang = Lang.prefix+"guide.chapter."+getChapter().getID()+".text."+getId();
-		String title = "";
-		ManualChapter chapter = GuidePages.CHAPTERTEXT.get(getChapter().getID());
-		if(chapter !=null){
-			PageData data = chapter.pages.get(getId());
-			if(data !=null){
-				title = data.title;
-			}
-		}
+		String title = GuidePages.getTitle(getChapter(), this);
 		if(title != null && !title.isEmpty()){
 			title = title.replaceAll("<n>", "\n");
 			GlStateManager.pushMatrix();

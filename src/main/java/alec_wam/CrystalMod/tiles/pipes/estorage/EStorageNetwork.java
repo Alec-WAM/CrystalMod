@@ -50,10 +50,11 @@ public class EStorageNetwork extends AbstractPipeNetwork {
 		}
 	}
 	
+	//Contollers
+	public TileCraftingController craftingController;
+	public TileNetworkPowerCore powerController;
 	public final Map<NetworkPos, TileEntity> networkTiles = new HashMap<NetworkPos, TileEntity>();
 	public final Map<NetworkPos, INetworkPowerTile> networkPoweredTiles = new HashMap<NetworkPos, INetworkPowerTile>();
-	public TileCraftingController craftingController;
-	public TileNetworkPowerCore powerCore;
 	public final List<NetworkedItemProvider> masterInterfaces = Lists.newArrayList();
 	public final NavigableMap<Integer, List<NetworkedItemProvider>> interfaces = new TreeMap<Integer, List<NetworkedItemProvider>>(
 			PRIORITY_SORTER);
@@ -225,7 +226,7 @@ public class EStorageNetwork extends AbstractPipeNetwork {
 			return craftingController == null;
 		}
 		if(tile instanceof TileNetworkPowerCore){
-			return powerCore == null;
+			return powerController == null;
 		}
 		if(tile instanceof INetworkTileConnectable){
 			return ((INetworkTileConnectable)tile).canConnect(this);
@@ -254,8 +255,8 @@ public class EStorageNetwork extends AbstractPipeNetwork {
 		
 		if(externalTile instanceof TileNetworkPowerCore){
 			TileNetworkPowerCore core = (TileNetworkPowerCore)externalTile;
-			if(powerCore !=null)return;
-			powerCore = core;
+			if(powerController !=null)return;
+			powerController = core;
 		}
 		
 		if (externalTile instanceof INetworkTile) {
@@ -527,5 +528,12 @@ public class EStorageNetwork extends AbstractPipeNetwork {
 		while (iter.hasNext()) {
 			iter.next().onItemInserted(stack);
 		}
+	}
+	
+	public int getEnergy(){
+		if(this.powerController !=null){
+			return powerController.getCEnergyStored(null);
+		}
+		return 0;
 	}
 }

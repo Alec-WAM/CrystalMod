@@ -24,6 +24,7 @@ public class GuideChapter {
 	private final GuidePage[] pages;
 	private Map<String, List<?>> lookUpData = Maps.newHashMap();
 	private GuideIndex index;
+	private TranslationHandler translator;
 	
 	public GuideChapter(String unlocalizedName, GuidePage... pages){
 		this.unlocalizedName = unlocalizedName;
@@ -33,6 +34,12 @@ public class GuideChapter {
 			CrystalModAPI.GUIDE_PAGES.add(page);
 		}
 	}
+	
+	public GuideChapter setTranslator(TranslationHandler handler){
+		this.translator = handler;
+		return this;
+	}
+	
 	
 	public void setIndex(GuideIndex index){
 		this.index = index;
@@ -52,9 +59,12 @@ public class GuideChapter {
 	}
 	
 	public String getLocalizedTitle() {
-		ManualChapter chapter = GuidePages.CHAPTERTEXT.get(getID());
-		if(chapter !=null && !Strings.isNullOrEmpty(chapter.title))return chapter.title;
-		return Lang.localize("guide.chapter."+unlocalizedName);
+		if(translator == null){
+			ManualChapter chapter = GuidePages.CHAPTERTEXT.get(getID());
+			if(chapter !=null && !Strings.isNullOrEmpty(chapter.title))return chapter.title;
+			return Lang.localize("guide.chapter."+unlocalizedName);
+		}
+		return translator.getTranslatedText();
 	}
 	
 	public String getID(){
