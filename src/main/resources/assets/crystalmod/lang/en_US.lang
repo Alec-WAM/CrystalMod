@@ -384,6 +384,8 @@ tile.crystalmod.powercore.name=Network Power Core
 tile.crystalmod.craftingarray.name=Crafting Recipe Array
 tile.crystalmod.craftingio.name=External Crafting Port 
 tile.crystalmod.encoder.name=Crafting Recipe Encoder
+tile.crystalmod.securitycontroller.name=Security Controller
+tile.crystalmod.securityencoder.name=Security Card Encoder
 
 tile.crystalmod.craftingencoder.normal.name=Crafting Recipe Encoder
 tile.crystalmod.craftingencoder.processing.name=External Crafting Recipe Encoder
@@ -454,6 +456,8 @@ tile.crystalmod.powerconverter.cu.name=CU to RF Converter
 
 tile.crystalmod.pedistal.name=Pedistal
 tile.crystalmod.fusionpedistal.name=Crystal Fusion Pedistal
+
+tile.crystalmod.crystalcluster.name=Crystal Cluster
 
 #--Fluids
 fluid.crystalmod.xpjuice=Liquid XP

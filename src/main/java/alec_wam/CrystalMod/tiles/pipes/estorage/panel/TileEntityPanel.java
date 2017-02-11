@@ -3,6 +3,8 @@ package alec_wam.CrystalMod.tiles.pipes.estorage.panel;
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.api.estorage.INetworkItemProvider;
 import alec_wam.CrystalMod.api.estorage.INetworkTile;
+import alec_wam.CrystalMod.api.estorage.security.NetworkAbility;
+import alec_wam.CrystalMod.handler.GuiHandler;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.IMessageHandler;
 import alec_wam.CrystalMod.network.packets.MessageTileContainerUpdate;
@@ -267,8 +269,9 @@ public class TileEntityPanel extends TileEntityMod implements IMessageHandler, I
 	public void onDisconnected() {}
 
 	public boolean onActivated(EntityPlayer player, EnumHand hand, ItemStack held, EnumFacing side) {
+		if(getWorld().isRemote)return true;
 		if(!player.isSneaking()){
-			player.openGui(CrystalMod.instance, 0, getWorld(), getPos().getX(), getPos().getY(), getPos().getZ());
+			GuiHandler.openNetworkGui(getWorld(), getPos(), player, NetworkAbility.VIEW);
 			return true;
 		}
 		return false;

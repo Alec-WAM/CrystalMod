@@ -22,6 +22,7 @@ import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.api.estorage.security.NetworkAbility;
 import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.handler.GuiHandler;
 import alec_wam.CrystalMod.items.ModItems;
@@ -29,6 +30,7 @@ import alec_wam.CrystalMod.proxy.CommonProxy;
 import alec_wam.CrystalMod.util.ChatUtil;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemStackTools;
+import alec_wam.CrystalMod.util.Lang;
 
 public class ItemWirelessPanel extends Item implements ICustomModel {
 
@@ -120,6 +122,20 @@ public class ItemWirelessPanel extends Item implements ICustomModel {
 					TileEntity tile = panelWorld.getTileEntity(pos);
 					if(tile == null || !(tile instanceof TileEntityWirelessPanel)){
 						ChatUtil.sendNoSpam(playerIn, "There is no wireless panel at this location");
+						return new ActionResult<ItemStack>(EnumActionResult.PASS, itemStackIn);
+					}
+					TileEntityWirelessPanel panel = (TileEntityWirelessPanel)tile;
+					
+					if(panel.network !=null){
+						if(!panel.network.hasAbility(playerIn, NetworkAbility.VIEW)){
+							ChatUtil.sendNoSpam(playerIn, Lang.localize("gui.networkability."+NetworkAbility.VIEW.getId()));
+							return new ActionResult<ItemStack>(EnumActionResult.PASS, itemStackIn);
+						}
+						panel.network.extractEnergy(4, false);
+					}
+					
+					if(panel.network == null || panel.network.getEnergy() <= 0){
+						ChatUtil.sendNoSpam(playerIn, "The network has no energy");
 						return new ActionResult<ItemStack>(EnumActionResult.PASS, itemStackIn);
 					}
 					playerIn.openGui(CrystalMod.instance, GuiHandler.GUI_ID_ITEM, panelWorld, 0, 0, hand.ordinal());

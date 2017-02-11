@@ -1,6 +1,8 @@
 package alec_wam.CrystalMod.tiles.pipes.estorage.panel.wireless;
 
+import alec_wam.CrystalMod.api.estorage.INetworkPowerTile;
 import alec_wam.CrystalMod.api.estorage.INetworkTile;
+import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.IMessageHandler;
 import alec_wam.CrystalMod.network.packets.PacketTileMessage;
@@ -10,11 +12,12 @@ import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetwork;
 import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetworkClient;
 import alec_wam.CrystalMod.tiles.pipes.estorage.TileEntityPipeEStorage;
 import alec_wam.CrystalMod.util.BlockUtil;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 
-public class TileEntityWirelessPanel extends TileEntityMod implements IMessageHandler, INetworkTile {
+public class TileEntityWirelessPanel extends TileEntityMod implements IMessageHandler, INetworkPowerTile {
 
 	public EStorageNetwork network;
 	public EnumFacing connectionDir;
@@ -126,5 +129,17 @@ public class TileEntityWirelessPanel extends TileEntityMod implements IMessageHa
 
 	@Override
 	public void onDisconnected() {}
+	
+	@Override
+	public int getEnergyUsage() {
+		return 16;
+	}
+	
+	public final ItemStack displayStack = new ItemStack(ModBlocks.wirelessPanel);
+	
+	@Override
+	public ItemStack getDisplayStack(){
+		return displayStack;
+	}
 
 }

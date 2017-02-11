@@ -120,8 +120,8 @@ public class TileEnergyConverterRFtoCU extends TileEnergyConveterBase implements
 	@Override
     public <T> T getCapability(Capability<T> capability, EnumFacing facing){
         if(capability == CapabilityEnergy.ENERGY){
-            if(energyStorage != null){
-                return (T)energyStorage;
+            if(rfEnergyStorage != null){
+                return (T)rfEnergyStorage;
             }
         }
         return super.getCapability(capability, facing);

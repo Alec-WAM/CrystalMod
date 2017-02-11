@@ -207,7 +207,8 @@ public class BackpackUtil {
 		ItemStack dIronNugget = new ItemStack(ModItems.crystals, 1, CrystalType.DIRON_NUGGET.getMetadata());
 		ItemStack dIronPlate = new ItemStack(ModItems.plates, 1, PlateType.DARK_IRON.getMetadata());
 
-		
+		ModCrafting.addShapedOreRecipe(new ItemStack(ModItems.craftingBackpack), new Object[]{"LTL", "SCS", "L#L", 'S', Items.LEAD, 'T', Blocks.TRIPWIRE_HOOK, 'C', "workbench", 'L', "leather", '#', "ingotCrystal"});
+
 		ModCrafting.addShapedOreRecipe(new ItemStack(ModItems.normalBackpack, 1, CrystalBackpackType.NORMAL.ordinal()), new Object[]{"LTL", "SCS", "L#L", 'S', Items.LEAD, 'T', Blocks.TRIPWIRE_HOOK, 'C', "chestWood", 'L', "leather", '#', "ingotCrystal"});
 		ModCrafting.addShapedOreRecipe(new ItemStack(ModItems.normalBackpack, 1, CrystalBackpackType.DARK_IRON.ordinal()), new Object[]{"LTL", "SCS", "L#L", 'S', Items.LEAD, 'T', Blocks.TRIPWIRE_HOOK, 'C', new ItemStack(ModBlocks.crystalChest, 1, CrystalChestType.DARKIRON.ordinal()), 'L', "leather", '#', "ingotCrystal"});
 		ModCrafting.addShapedOreRecipe(new ItemStack(ModItems.normalBackpack, 1, CrystalBackpackType.BLUE.ordinal()), new Object[]{"LTL", "SCS", "L#L", 'S', Items.LEAD, 'T', Blocks.TRIPWIRE_HOOK, 'C', new ItemStack(ModBlocks.crystalChest, 1, CrystalChestType.BLUE.ordinal()), 'L', "leather", '#', "ingotCrystal"});

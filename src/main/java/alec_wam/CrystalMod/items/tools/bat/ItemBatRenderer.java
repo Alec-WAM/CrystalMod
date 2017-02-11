@@ -55,7 +55,7 @@ public class ItemBatRenderer implements ICustomItemRenderer {
 			GlStateManager.scale(1.5, 1.5, 1.5);
 			GlStateManager.rotate(75, 1, 0, 1);
 			x = 0;
-			y = -0.8;
+			y = 3.65;
 			z = 0;
 		}
 		if(type == TransformType.THIRD_PERSON_LEFT_HAND){
@@ -63,7 +63,7 @@ public class ItemBatRenderer implements ICustomItemRenderer {
 			GlStateManager.scale(1.5, 1.5, 1.5);
 			GlStateManager.rotate(70, 1, 0, -1);
 			x = 0;
-			y = -0.8;
+			y = -0.5;
 			z = 0;
 		}
 		

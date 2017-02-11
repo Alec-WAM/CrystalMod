@@ -1,0 +1,12 @@
+{
+	"variants": {
+        "inventory":[{"model": "crystalmod:pipe"}],
+        "normal": [{ "model": "crystalmod:pipe" }],
+		"type": {
+			"blue": {},
+			"red": {},
+			"green": {},
+			"dark": {}
+		}
+    }
+}

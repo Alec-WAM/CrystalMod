@@ -7,6 +7,8 @@ public class TimeUtil {
 	public static int HOUR = MINUTE*60;
 	public static int DAY = HOUR*24;
 	
+	public static int MINECRAFT_DAY_TICKS = 24000;
+	
 	public static String getTimeFromTicks(int ticks){
 		int seconds = getSeconds(ticks);
 		int minutes = seconds/60;

@@ -592,7 +592,7 @@ public abstract class TileEntityPipe extends TileEntityMod implements ITickable,
 						}
 
 						if (part == PipePart.ATTACHMENT) {
-							if(hasWrench && player.isSneaking()){
+							if(hasWrench && player.isSneaking() && canEditAttachments(player)){
 								final AttachmentData data = this.getAttachmentData(dir);
 								this.setAttachment(dir, null);
 								if(!player.capabilities.isCreativeMode){
@@ -727,7 +727,7 @@ public abstract class TileEntityPipe extends TileEntityMod implements ITickable,
 		
 		if(ItemStackTools.isValid(held) && held.getItem() == ModItems.pipeAttachmant){
 			AttachmentData data = AttachmentUtil.getFromID(ItemPipeAttachment.getID(held));
-			if(data !=null && data.isPipeValid(this, side, held)){
+			if(data !=null && data.isPipeValid(this, side, held) && canEditAttachments(player)){
 				this.setAttachment(side, data);
 				if(!player.capabilities.isCreativeMode){
 					player.setHeldItem(hand, ItemUtil.consumeItem(player.getHeldItem(hand)));
@@ -751,6 +751,10 @@ public abstract class TileEntityPipe extends TileEntityMod implements ITickable,
 		}
 		
 		return false;
+	}
+
+	public boolean canEditAttachments(EntityPlayer player) {
+		return true;
 	}
 
 	public void wrapBlockAdded(EnumFacing face){

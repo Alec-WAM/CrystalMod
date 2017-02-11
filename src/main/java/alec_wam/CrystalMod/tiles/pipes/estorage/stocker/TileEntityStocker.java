@@ -1,6 +1,9 @@
 package alec_wam.CrystalMod.tiles.pipes.estorage.stocker;
 
+import java.util.UUID;
+
 import alec_wam.CrystalMod.api.estorage.INetworkTile;
+import alec_wam.CrystalMod.api.estorage.security.NetworkAbility;
 import alec_wam.CrystalMod.network.IMessageHandler;
 import alec_wam.CrystalMod.tiles.TileEntityInventory;
 import alec_wam.CrystalMod.tiles.machine.IFacingTile;
@@ -11,6 +14,7 @@ import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage.ItemStackData;
 import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
+import alec_wam.CrystalMod.util.UUIDUtils;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -148,6 +152,17 @@ public class TileEntityStocker extends TileEntityInventory implements INetworkTi
 
 	@Override
 	public void handleMessage(String messageId, NBTTagCompound messageData, boolean client) {
+		//TODO Not allow settings changes
+		if(network !=null){
+			if(messageData.hasKey("UUID")){
+				UUID uuid = UUIDUtils.fromString(messageData.getString("UUID"));
+				if(uuid !=null){
+					if(!network.hasAbility(uuid, NetworkAbility.SETTINGS)){
+						return;
+					}
+				}
+			}
+		}
 		if(messageId.equalsIgnoreCase("StockAmount")){
 			int index = messageData.getInteger("Index") % 5;
 			stockAmts[index] = messageData.getInteger("Value");

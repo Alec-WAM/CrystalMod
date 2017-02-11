@@ -16,6 +16,7 @@ import alec_wam.CrystalMod.api.FluidStackList;
 import alec_wam.CrystalMod.api.estorage.IAutoCrafter;
 import alec_wam.CrystalMod.api.estorage.ICraftingTask;
 import alec_wam.CrystalMod.api.estorage.INetworkPowerTile;
+import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.tiles.TileEntityMod;
 import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetwork;
@@ -259,9 +260,7 @@ public class TileCraftingController extends TileEntityMod implements INetworkPow
 
 	@Override
 	public void onDisconnected() {
-		if(network !=null){
-			network.craftingController = null;
-		}
+		if(network !=null)network.craftingController = null;
 		this.connected = false;
 		markDirty();
 	}
@@ -365,15 +364,21 @@ public class TileCraftingController extends TileEntityMod implements INetworkPow
 
 	@Override
 	public int getEnergyUsage() {
-		int usage = 0;
+		int usage = 4;
 		final Iterator<ICraftingTask> i = craftingTasks.iterator();
 		while(i.hasNext()){
 			ICraftingTask task = i.next();
 			if(task !=null){
-				usage+=10*task.getToProcess().size();
+				usage+=8*task.getToProcess().size();
 			}
 		}
 		return usage;
 	}
 	
+	public final ItemStack displayStack = new ItemStack(ModBlocks.craftingController);
+	
+	@Override
+	public ItemStack getDisplayStack(){
+		return displayStack;
+	}
 }

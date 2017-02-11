@@ -9,9 +9,12 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.NetHandlerPlayServer;
 import alec_wam.CrystalMod.api.estorage.INetworkContainer;
+import alec_wam.CrystalMod.api.estorage.security.NetworkAbility;
 import alec_wam.CrystalMod.network.AbstractPacketThreadsafe;
 import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage.ItemStackData;
+import alec_wam.CrystalMod.util.ChatUtil;
 import alec_wam.CrystalMod.util.ItemStackTools;
+import alec_wam.CrystalMod.util.Lang;
 import alec_wam.CrystalMod.util.ModLogger;
 
 public class PacketEStorageAddItem extends AbstractPacketThreadsafe {
@@ -69,11 +72,15 @@ public class PacketEStorageAddItem extends AbstractPacketThreadsafe {
 			Container con = netHandler.playerEntity.openContainer;
 			if(con !=null && con instanceof INetworkContainer){
 				INetworkContainer pan = ((INetworkContainer)con);
-				try{
-					ItemStackData data = EStorageNetwork.decompressItem(compressed);
-					pan.sendItemStackToNetwork(netHandler.playerEntity, slot, data);
-				} catch (IOException e) {
-					e.printStackTrace();
+				if(pan.getNetwork() !=null && pan.getNetwork().hasAbility(netHandler.playerEntity, NetworkAbility.INSERT)){
+					try{
+						ItemStackData data = EStorageNetwork.decompressItem(compressed);
+						pan.sendItemStackToNetwork(netHandler.playerEntity, slot, data);
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				} else {
+					ChatUtil.sendNoSpam(netHandler.playerEntity, Lang.localize("gui.networkability."+NetworkAbility.INSERT.getId()));
 				}
 			}
 			return;
@@ -82,11 +89,15 @@ public class PacketEStorageAddItem extends AbstractPacketThreadsafe {
 			Container con = netHandler.playerEntity.openContainer;
 			if(con !=null && con instanceof INetworkContainer){
 				INetworkContainer pan = ((INetworkContainer)con);
-				try{
-					ItemStackData data = EStorageNetwork.decompressItem(compressed);
-					pan.grabItemStackFromNetwork(netHandler.playerEntity, slot, amount, data);
-				} catch (IOException e) {
-					e.printStackTrace();
+				if(pan.getNetwork() !=null && pan.getNetwork().hasAbility(netHandler.playerEntity, NetworkAbility.EXTRACT)){
+					try{
+						ItemStackData data = EStorageNetwork.decompressItem(compressed);
+						pan.grabItemStackFromNetwork(netHandler.playerEntity, slot, amount, data);
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				} else {
+					ChatUtil.sendNoSpam(netHandler.playerEntity, Lang.localize("gui.networkability."+NetworkAbility.EXTRACT.getId()));
 				}
 			}
 		}
@@ -110,22 +121,26 @@ public class PacketEStorageAddItem extends AbstractPacketThreadsafe {
 			Container con = netHandler.playerEntity.openContainer;
 			if(con !=null && con instanceof INetworkContainer){
 				INetworkContainer pan = ((INetworkContainer)con);
-				try{
-					ItemStackData data = EStorageNetwork.decompressItem(compressed);
-					if(pan.getNetwork() !=null && !ItemStackTools.isNullStack(data.stack)){
-						ItemStack copy = data.stack.copy();
-						ItemStackTools.setStackSize(copy, amount);
-						final int old = amount;
-						ItemStack remain = pan.getNetwork().getItemStorage().addItem(copy, false);
-						Slot pSlot = con.getSlot(slot);
-						int decAmt = ItemStackTools.isNullStack(remain) ? old : (old-ItemStackTools.getStackSize(remain));
-						pSlot.decrStackSize(decAmt);
-						if(decAmt > 0){
-							pSlot.onTake(netHandler.playerEntity, data.stack);
+				if(pan.getNetwork() !=null && pan.getNetwork().hasAbility(netHandler.playerEntity, NetworkAbility.INSERT)){
+					try{
+						ItemStackData data = EStorageNetwork.decompressItem(compressed);
+						if(!ItemStackTools.isNullStack(data.stack)){
+							ItemStack copy = data.stack.copy();
+							ItemStackTools.setStackSize(copy, amount);
+							final int old = amount;
+							ItemStack remain = pan.getNetwork().getItemStorage().addItem(copy, false);
+							Slot pSlot = con.getSlot(slot);
+							int decAmt = ItemStackTools.isNullStack(remain) ? old : (old-ItemStackTools.getStackSize(remain));
+							pSlot.decrStackSize(decAmt);
+							if(decAmt > 0){
+								pSlot.onTake(netHandler.playerEntity, data.stack);
+							}
 						}
+					} catch (IOException e) {
+						e.printStackTrace();
 					}
-				} catch (IOException e) {
-					e.printStackTrace();
+				}else {
+					ChatUtil.sendNoSpam(netHandler.playerEntity, Lang.localize("gui.networkability."+NetworkAbility.INSERT.getId()));
 				}
 			}
 		}
@@ -134,18 +149,22 @@ public class PacketEStorageAddItem extends AbstractPacketThreadsafe {
 			Container con = netHandler.playerEntity.openContainer;
 			if(con !=null && con instanceof INetworkContainer){
 				INetworkContainer pan = ((INetworkContainer)con);
-				try{
-					ItemStackData data = EStorageNetwork.decompressItem(compressed);
-					if(pan.getNetwork() !=null && !ItemStackTools.isNullStack(data.stack)){
-						if(pan.getNetwork().craftingController !=null){
-							pan.getNetwork().craftingController.handleCraftingRequest(data, Math.max(1, amount));
-						}else {
-							ModLogger.info("Missing crafting controller");
+				if(pan.getNetwork() !=null && pan.getNetwork().hasAbility(netHandler.playerEntity, NetworkAbility.CRAFT)){
+					try{
+						ItemStackData data = EStorageNetwork.decompressItem(compressed);
+						if(pan.getNetwork() !=null && !ItemStackTools.isNullStack(data.stack)){
+							if(pan.getNetwork().craftingController !=null){
+								pan.getNetwork().craftingController.handleCraftingRequest(data, Math.max(1, amount));
+							}else {
+								ChatUtil.sendNoSpam(netHandler.playerEntity, "Missing crafting controller");
+							}
+
 						}
-						
+					} catch (IOException e) {
+						e.printStackTrace();
 					}
-				} catch (IOException e) {
-					e.printStackTrace();
+				}else {
+					ChatUtil.sendNoSpam(netHandler.playerEntity, Lang.localize("gui.networkability."+NetworkAbility.CRAFT.getId()));
 				}
 			}
 		}
@@ -154,8 +173,12 @@ public class PacketEStorageAddItem extends AbstractPacketThreadsafe {
 			Container con = netHandler.playerEntity.openContainer;
 			if(con !=null && con instanceof INetworkContainer){
 				INetworkContainer pan = ((INetworkContainer)con);
-				if(pan.getNetwork() !=null && pan.getNetwork().craftingController !=null){
-					pan.getNetwork().craftingController.handleCraftingCancel(slot);
+				if(pan.getNetwork() !=null && pan.getNetwork().hasAbility(netHandler.playerEntity, NetworkAbility.SETTINGS)){
+					if(pan.getNetwork().craftingController !=null){
+						pan.getNetwork().craftingController.handleCraftingCancel(slot);
+					}
+				}else {
+					ChatUtil.sendNoSpam(netHandler.playerEntity, Lang.localize("gui.networkability."+NetworkAbility.SETTINGS.getId()));
 				}
 			}
 		}

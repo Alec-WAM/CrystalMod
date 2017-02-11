@@ -33,7 +33,7 @@ public class EntityMinionWarrior extends EntityMinionBase {
 	
 	private EnumMovementState movementState;
 	private BlockPos wanderHome;
-	private ItemStack backStack;
+	private ItemStack backStack = ItemStackTools.getEmptyStack();
 	
 	public EntityMinionWarrior(World worldIn) {
 		super(worldIn);
@@ -90,7 +90,7 @@ public class EntityMinionWarrior extends EntityMinionBase {
 			inventory.clear();
 			inventory.readFromNBT(nbt.getCompoundTag("Inventory"));
 		}
-		backStack = null;
+		backStack = ItemStackTools.getEmptyStack();
 		if(nbt.hasKey("BackStack")){
 			backStack = ItemStackTools.loadFromNBT(nbt.getCompoundTag("BackStack"));
 		}
@@ -116,7 +116,7 @@ public class EntityMinionWarrior extends EntityMinionBase {
         if(!ItemStackTools.isNullStack(stack)){
         	
         	if(stack.getItem() == Items.STICK){
-        		if(getHeldItemMainhand() !=null && !player.isSneaking()){
+        		if(ItemStackTools.isValid(getHeldItemMainhand()) && !player.isSneaking()){
         			if (!this.getEntityWorld().isRemote)
                     {
         				entityDropItem(getHeldItemMainhand(), 0.0F);
@@ -124,7 +124,7 @@ public class EntityMinionWarrior extends EntityMinionBase {
         			setItemStackToSlot(EntityEquipmentSlot.MAINHAND, ItemStackTools.getEmptyStack());
         			return true;
         		}
-        		if(!ItemStackTools.isNullStack(backStack) && player.isSneaking()){
+        		if(ItemStackTools.isValid(backStack) && player.isSneaking()){
         			if (!this.getEntityWorld().isRemote)
                     {
         				entityDropItem(backStack, 0.0F);
@@ -137,7 +137,7 @@ public class EntityMinionWarrior extends EntityMinionBase {
         	EntityEquipmentSlot slot = getSlotForItemStack(stack);
         	if(slot.getSlotType() == EntityEquipmentSlot.Type.ARMOR){
         		ItemStack old = getItemStackFromSlot(slot);
-        		if(!ItemStackTools.isNullStack(old)){
+        		if(ItemStackTools.isValid(old)){
         			if (!this.getEntityWorld().isRemote)
                     {
         				entityDropItem(old, 0.0F);
@@ -149,9 +149,9 @@ public class EntityMinionWarrior extends EntityMinionBase {
         	}
         	
         	if(stack.getItem() instanceof ItemSword){
-        		boolean useBack = getHeldItemMainhand() !=null && !(getHeldItemMainhand().getItem() instanceof ItemSword);
+        		boolean useBack = ItemStackTools.isValid(getHeldItemMainhand()) && !(getHeldItemMainhand().getItem() instanceof ItemSword);
         		if(useBack){
-        			if(!ItemStackTools.isNullStack(backStack)){
+        			if(ItemStackTools.isValid(backStack)){
             			if(ItemUtil.canCombine(stack, backStack)){
             				return false;
             			}
@@ -164,7 +164,7 @@ public class EntityMinionWarrior extends EntityMinionBase {
             		consumeItemFromStack(player, stack);
             		return true;
         		}
-        		if(!ItemStackTools.isNullStack(getHeldItemMainhand())){
+        		if(ItemStackTools.isValid(getHeldItemMainhand())){
         			if(ItemUtil.canCombine(stack, getHeldItemMainhand())){
         				return false;
         			}
@@ -179,9 +179,9 @@ public class EntityMinionWarrior extends EntityMinionBase {
         	}
         	
         	if(isBow(stack)){
-        		boolean useBack = getHeldItemMainhand() !=null && !isBow(getHeldItemMainhand());
+        		boolean useBack = ItemStackTools.isValid(getHeldItemMainhand()) && !isBow(getHeldItemMainhand());
         		if(useBack){
-        			if(!ItemStackTools.isNullStack(backStack)){
+        			if(ItemStackTools.isValid(backStack)){
             			if(ItemUtil.canCombine(stack, backStack)){
             				return false;
             			}
@@ -194,7 +194,7 @@ public class EntityMinionWarrior extends EntityMinionBase {
             		consumeItemFromStack(player, stack);
             		return true;
         		}
-        		if(!ItemStackTools.isNullStack(getHeldItemMainhand())){
+        		if(ItemStackTools.isValid(getHeldItemMainhand())){
         			if(ItemUtil.canCombine(stack, getHeldItemMainhand())){
         				return false;
         			}
@@ -318,7 +318,7 @@ public class EntityMinionWarrior extends EntityMinionBase {
 	}
 	
 	public static boolean isBow(ItemStack stack){
-		return !ItemStackTools.isNullStack(stack) && stack.getItem() == Items.BOW;
+		return ItemStackTools.isValid(stack) && stack.getItem() == Items.BOW;
 	}
 
 	public ItemStack getBackItem() {

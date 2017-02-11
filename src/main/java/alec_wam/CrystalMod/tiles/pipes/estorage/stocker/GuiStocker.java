@@ -7,13 +7,16 @@ import org.lwjgl.opengl.GL11;
 
 import com.google.common.primitives.Ints;
 
+import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.packets.PacketTileMessage;
 import alec_wam.CrystalMod.util.ModLogger;
+import alec_wam.CrystalMod.util.UUIDUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
@@ -75,6 +78,7 @@ public class GuiStocker extends GuiContainer {
 			NBTTagCompound nbt = new NBTTagCompound();
 			nbt.setInteger("Index", index);
 			nbt.setBoolean("Value", newOre);
+			nbt.setString("UUID", UUIDUtils.fromUUID(EntityPlayer.getUUID(CrystalMod.proxy.getClientPlayer().getGameProfile())));
 			CrystalModNetwork.sendToServer(new PacketTileMessage(stocker.getPos(), "Ore", nbt));
 			refreshButtons();
 			return;

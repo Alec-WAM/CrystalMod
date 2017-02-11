@@ -36,7 +36,10 @@ public class Config {
     public static boolean retrogenReeds = false;
     public static int maximumReedsPerChunk = 5;
     public static int reedPlacementTrys = 10;
-	
+    public static boolean retrogenClusters = false;
+    public static int clusterSpawnChance = 24;
+    public static int clusterSpawnTries = 8;
+    
 	public static ItemDropType mobHeadType = ItemDropType.KILLED;
 	public static int mobHeadDropChance = 200;
 	public static ItemDropType playerHeadType = ItemDropType.ALL;

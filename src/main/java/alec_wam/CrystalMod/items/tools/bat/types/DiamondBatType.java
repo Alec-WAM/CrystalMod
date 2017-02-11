@@ -23,7 +23,7 @@ public class DiamondBatType extends BatType {
 
 	@Override
 	public void addCraftingRecipe() {
-		ModCrafting.addShapedOreRecipe(BatHelper.getBasicBat(ModItems.bat, this), new Object[] {"X", "X", "S", 'X', "gemDiamond", 'S', "stickWood"});
+		ModCrafting.addShapedOreRecipe(BatHelper.getBasicBat(ModItems.bat, this), new Object[] {" X ", " X ", "LSL", 'X', "gemDiamond", 'S', "stickWood", 'L', "leather"});
 	}
 
 }

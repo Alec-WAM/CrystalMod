@@ -113,6 +113,9 @@ public class GuidePages {
 		NonNullList<ItemStack> workbenchList = ItemUtil.getBlockSubtypes(ModBlocks.crystalWorkbench, WorkbenchType.values());
 		CrystalModAPI.BLOCKS.registerChapter(new GuideChapter("crystalworkbench", new PageCrafting("main", workbenchList)).setDisplayObject(workbenchList));
 		
+		ItemStack cauldron = new ItemStack(ModBlocks.cauldron);
+		CrystalModAPI.BLOCKS.registerChapter(new GuideChapter("cauldron", new PageCrafting("main", cauldron)).setDisplayObject(cauldron));
+		
 		NonNullList<ItemStack> chestList = getEnumSpecial(ModBlocks.crystalChest, new CrystalChestType[]{CrystalChestType.DARKIRON, CrystalChestType.BLUE, CrystalChestType.RED, CrystalChestType.GREEN, CrystalChestType.DARK, CrystalChestType.PURE});
 		CrystalModAPI.BLOCKS.registerChapter(new GuideChapter("crystalchest", new PageCrafting("main", chestList)).setDisplayObject(chestList));
 

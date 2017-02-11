@@ -36,6 +36,7 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -59,6 +60,10 @@ public class RenderUtil {
 	
 	public static void startDrawing(VertexBuffer buffer){
 		buffer.begin(7, DefaultVertexFormats.POSITION_TEX);
+	}
+	
+	public static void startDrawing(VertexBuffer buffer, VertexFormat format){
+		buffer.begin(7, format);
 	}
 	
 	public static void addVertexWithUV(VertexBuffer buffer, Vector3d vec, double u, double v){

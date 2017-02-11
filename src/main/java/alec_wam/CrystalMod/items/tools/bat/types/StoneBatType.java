@@ -23,7 +23,7 @@ public class StoneBatType extends BatType {
 
 	@Override
 	public void addCraftingRecipe() {
-		ModCrafting.addShapedOreRecipe(BatHelper.getBasicBat(ModItems.bat, this), new Object[] {"X", "X", "S", 'X', "stone", 'S', "stickWood"});
+		ModCrafting.addShapedOreRecipe(BatHelper.getBasicBat(ModItems.bat, this), new Object[] {" X ", " X ", "LSL", 'X', "stone", 'S', "stickWood", 'L', "leather"});
 	}
 
 }

@@ -17,6 +17,10 @@ public final class ItemNBTHelper {
 		return stack.getTagCompound();
 	}
 
+	public static void resetNBT(ItemStack stack) {
+		stack.setTagCompound(new NBTTagCompound());
+	}
+
 	public static ItemStack setByte(ItemStack stack, String tag, byte b)
 	{
 		NBTTagCompound compound = getCompound(stack);

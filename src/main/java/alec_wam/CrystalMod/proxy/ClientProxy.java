@@ -11,6 +11,7 @@ import com.google.common.collect.Maps;
 import com.mojang.authlib.GameProfile;
 
 import alec_wam.CrystalMod.Config;
+import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.blocks.crops.material.CropOverlays;
 import alec_wam.CrystalMod.blocks.crops.material.ModelSeed;
@@ -66,6 +67,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
+import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.fml.client.FMLClientHandler;
@@ -91,6 +93,7 @@ public class ClientProxy extends CommonProxy {
         MinecraftForge.EVENT_BUS.register(new DisguiseClientHandler());
         ModBlocks.initClient();
         ModEntites.initClient();
+        OBJLoader.INSTANCE.addDomain(CrystalMod.MODID);
     }
 
     @Override
@@ -246,6 +249,7 @@ public class ClientProxy extends CommonProxy {
             event.getMap().registerSprite(ModFluids.fluidXpJuice.getStill());
             event.getMap().registerSprite(ModFluids.fluidXpJuice.getFlowing());
         }
+        event.getMap().registerSprite(new ResourceLocation("crystalmod:blocks/crystalcluster"));
         
         event.getMap().registerSprite(FluidColored.LiquidStill);
         event.getMap().registerSprite(FluidColored.LiquidFlowing);
@@ -254,6 +258,8 @@ public class ClientProxy extends CommonProxy {
         event.getMap().registerSprite(new ResourceLocation("crystalmod:items/crop/seed_overlay"));
         event.getMap().registerSprite(new ResourceLocation("crystalmod:items/icon_sword"));
         event.getMap().registerSprite(new ResourceLocation("crystalmod:items/icon_pickaxe"));
+        
+        event.getMap().registerSprite(new ResourceLocation("crystalmod:items/bat/leather_handle"));
     }
     
     public EntityPlayer getPlayerForUsername(String playerName) {

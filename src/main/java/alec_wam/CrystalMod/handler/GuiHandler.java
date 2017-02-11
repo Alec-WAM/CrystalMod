@@ -1,6 +1,8 @@
 package alec_wam.CrystalMod.handler;
 
 import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.api.estorage.INetworkTile;
+import alec_wam.CrystalMod.api.estorage.security.NetworkAbility;
 import alec_wam.CrystalMod.capability.ContainerExtendedInventory;
 import alec_wam.CrystalMod.capability.ExtendedPlayer;
 import alec_wam.CrystalMod.capability.ExtendedPlayerProvider;
@@ -73,6 +75,7 @@ import alec_wam.CrystalMod.tiles.machine.worksite.imp.GuiWorksiteTreeFarm;
 import alec_wam.CrystalMod.tiles.machine.worksite.imp.WorksiteAnimalFarm;
 import alec_wam.CrystalMod.tiles.machine.worksite.imp.WorksiteCropFarm;
 import alec_wam.CrystalMod.tiles.machine.worksite.imp.WorksiteTreeFarm;
+import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetwork;
 import alec_wam.CrystalMod.tiles.pipes.estorage.GuiEStoragePipe;
 import alec_wam.CrystalMod.tiles.pipes.estorage.TileEntityPipeEStorage;
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.ContainerCrafter;
@@ -97,6 +100,12 @@ import alec_wam.CrystalMod.tiles.pipes.estorage.panel.wireless.TileEntityWireles
 import alec_wam.CrystalMod.tiles.pipes.estorage.power.ContainerPowerCore;
 import alec_wam.CrystalMod.tiles.pipes.estorage.power.GuiPowerCore;
 import alec_wam.CrystalMod.tiles.pipes.estorage.power.TileNetworkPowerCore;
+import alec_wam.CrystalMod.tiles.pipes.estorage.security.ContainerSecurityController;
+import alec_wam.CrystalMod.tiles.pipes.estorage.security.ContainerSecurityEncoder;
+import alec_wam.CrystalMod.tiles.pipes.estorage.security.GuiSecurityController;
+import alec_wam.CrystalMod.tiles.pipes.estorage.security.GuiSecurityEncoder;
+import alec_wam.CrystalMod.tiles.pipes.estorage.security.TileSecurityController;
+import alec_wam.CrystalMod.tiles.pipes.estorage.security.TileSecurityEncoder;
 import alec_wam.CrystalMod.tiles.pipes.estorage.stocker.ContainerStocker;
 import alec_wam.CrystalMod.tiles.pipes.estorage.stocker.GuiStocker;
 import alec_wam.CrystalMod.tiles.pipes.estorage.stocker.TileEntityStocker;
@@ -122,6 +131,7 @@ import alec_wam.CrystalMod.tiles.weather.TileEntityWeather;
 import alec_wam.CrystalMod.tiles.workbench.ContainerCrystalWorkbench;
 import alec_wam.CrystalMod.tiles.workbench.GuiCrystalWorkbench;
 import alec_wam.CrystalMod.tiles.workbench.TileEntityCrystalWorkbench;
+import alec_wam.CrystalMod.util.ChatUtil;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.AbstractHorse;
@@ -299,6 +309,8 @@ public class GuiHandler implements IGuiHandler {
             if(te instanceof TileEntityPanel)return new GuiPanel(player.inventory, new PanelSourceNormal((TileEntityPanel) te));
         	if(te instanceof TilePatternEncoder) return new GuiPatternEncoder(player, (TilePatternEncoder)te);
         	if(te instanceof TileCrafter) return new GuiCrafter(player, (TileCrafter)te);
+        	if(te instanceof TileSecurityController) return new GuiSecurityController(player, (TileSecurityController)te);
+        	if(te instanceof TileSecurityEncoder) return new GuiSecurityEncoder(player, (TileSecurityEncoder)te);
         	if(te instanceof TileEntityStocker) return new GuiStocker(player.inventory, (TileEntityStocker)te);
         	if(te instanceof TileEntityWeather) return new GuiWeather((TileEntityWeather)te);
         	if(te instanceof TileEntityMachine) return ((TileEntityMachine)te).getGui(player, ID);
@@ -441,6 +453,8 @@ public class GuiHandler implements IGuiHandler {
         	if(te instanceof TileEntityPanel)return new ContainerPanel(player.inventory, new PanelSourceNormal((TileEntityPanel)te));
         	if(te instanceof TilePatternEncoder) return new ContainerPatternEncoder(player, (TilePatternEncoder)te);
         	if(te instanceof TileCrafter) return new ContainerCrafter(player, (TileCrafter)te);
+        	if(te instanceof TileSecurityController) return new ContainerSecurityController(player, (TileSecurityController)te);
+        	if(te instanceof TileSecurityEncoder) return new ContainerSecurityEncoder(player, (TileSecurityEncoder)te);
         	if(te instanceof TileEntityStocker) return new ContainerStocker(player.inventory, (TileEntityStocker)te);
         	if(te instanceof TileEntityWeather) return new ContainerWeather();
         	if(te instanceof TileEntityMachine) return ((TileEntityMachine)te).getContainer(player, ID);
@@ -453,5 +467,21 @@ public class GuiHandler implements IGuiHandler {
         }
         return null;
     }
+
+	public static void openNetworkGui(World world, BlockPos pos, EntityPlayer player, NetworkAbility...abilities) {
+		TileEntity tile = world.getTileEntity(pos);
+		if(tile !=null && TileEntityPipeEStorage.isNetworkTile(tile)){
+			EStorageNetwork network = TileEntityPipeEStorage.getTileNetwork(tile);
+			if(network !=null){
+				if(network.hasAbility(player, abilities)){
+					player.openGui(CrystalMod.instance, 0, world, pos.getX(), pos.getY(), pos.getZ());
+				} else {
+					ChatUtil.sendNoSpam(player, "You cannot open this screen.");
+				}
+			} else {
+				player.openGui(CrystalMod.instance, 0, world, pos.getX(), pos.getY(), pos.getZ());
+			}
+		}
+	}
 	
 }

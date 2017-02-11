@@ -1,6 +1,8 @@
 package alec_wam.CrystalMod.tiles.pipes.estorage.storage.hdd.array;
 
 import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.api.estorage.security.NetworkAbility;
+import alec_wam.CrystalMod.handler.GuiHandler;
 import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.ItemUtil;
 import net.minecraft.block.BlockContainer;
@@ -68,7 +70,7 @@ public class BlockHDDArray extends BlockContainer {
     	TileEntity tile = world.getTileEntity(pos);
         if (tile !=null && (tile instanceof TileHDDArray)) {
         	TileHDDArray array = (TileHDDArray)tile;
-        	player.openGui(CrystalMod.instance, 0, world, pos.getX(), pos.getY(), pos.getZ());
+        	if(!world.isRemote)GuiHandler.openNetworkGui(world, pos, player, NetworkAbility.VIEW);
         	return true;
         }
     	return false;

@@ -23,7 +23,7 @@ public class GoldBatType extends BatType {
 
 	@Override
 	public void addCraftingRecipe() {
-		ModCrafting.addShapedOreRecipe(BatHelper.getBasicBat(ModItems.bat, this), new Object[] {"X", "X", "S", 'X', "ingotGold", 'S', "stickWood"});
+		ModCrafting.addShapedOreRecipe(BatHelper.getBasicBat(ModItems.bat, this), new Object[] {" X ", " X ", "LSL", 'X', "ingotGold", 'S', "stickWood", 'L', "leather"});
 	}
 
 }

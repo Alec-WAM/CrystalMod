@@ -47,6 +47,7 @@ import alec_wam.CrystalMod.tiles.pipes.attachments.ItemPipeAttachment;
 import alec_wam.CrystalMod.tiles.pipes.covers.ItemPipeCover;
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.ItemPattern;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.wireless.ItemWirelessPanel;
+import alec_wam.CrystalMod.tiles.pipes.estorage.security.ItemSecurityCard;
 import alec_wam.CrystalMod.tiles.pipes.estorage.storage.hdd.ItemHDD;
 import alec_wam.CrystalMod.tiles.pipes.item.filters.ItemPipeFilter;
 import alec_wam.CrystalMod.tiles.spawner.ItemEmptyMobEssence;
@@ -121,6 +122,7 @@ public class ModItems {
 	
 	public static ItemHDD harddrive;
 	public static ItemPattern craftingPattern; 
+	public static ItemSecurityCard securityCard;
 	public static ItemWirelessPanel wirelessPanel; 
 	public static ItemPipeAttachment pipeAttachmant;
 	
@@ -200,6 +202,7 @@ public class ModItems {
 		guide = new ItemCrystalGuide();
 		harddrive = new ItemHDD();
 		craftingPattern = new ItemPattern();
+		securityCard = new ItemSecurityCard();
 		wirelessPanel = new ItemWirelessPanel();
 		pipeAttachmant = new ItemPipeAttachment();
 		miscCard = new ItemMiscCard();

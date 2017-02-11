@@ -14,7 +14,9 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import alec_wam.CrystalMod.api.estorage.IAutoCrafter;
 import alec_wam.CrystalMod.api.estorage.ICraftingTask;
+import alec_wam.CrystalMod.api.estorage.INetworkPowerTile;
 import alec_wam.CrystalMod.api.estorage.INetworkTile;
+import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.tiles.BasicItemHandler;
 import alec_wam.CrystalMod.tiles.IItemValidator;
@@ -23,7 +25,7 @@ import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetwork;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 
-public class TileCrafter extends TileEntityMod implements INetworkTile, IAutoCrafter {
+public class TileCrafter extends TileEntityMod implements INetworkPowerTile, IAutoCrafter {
 
 	private BasicItemHandler patterns = new BasicItemHandler(16, this, new IItemValidator() {
         @Override
@@ -169,6 +171,27 @@ public class TileCrafter extends TileEntityMod implements INetworkTile, IAutoCra
 	@Override
 	public CraftingPattern createPattern(ItemStack patternStack) {
 		return new CraftingPattern(getWorld(), this, patternStack);
+	}
+	
+	@Override
+	public int getEnergyUsage() {
+		int usage = 0;
+		for(int i = 0; i < patterns.getSlots(); i++){
+			ItemStack pattern = patterns.getStackInSlot(i);
+			if(ItemStackTools.isValid(pattern)){
+				if(pattern.getItem() instanceof ItemPattern){
+					usage+=1;
+				}
+			}
+		}
+		return usage;
+	}
+	
+	public final ItemStack displayStack = new ItemStack(ModBlocks.crafter);
+	
+	@Override
+	public ItemStack getDisplayStack(){
+		return displayStack;
 	}
 
 }

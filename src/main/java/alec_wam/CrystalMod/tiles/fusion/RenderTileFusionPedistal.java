@@ -35,6 +35,7 @@ public class RenderTileFusionPedistal<T extends TileFusionPedistal> extends Tile
 	{
 		if(tile == null)return;
 		GlStateManager.pushMatrix();
+		tile.getWorld().theProfiler.startSection("crystalmod-fusionpedistal");
 		EnumFacing facing = tile.getRotation();
 		float liftDistance = 0.6f;
 		float itemLift = 0.0f;
@@ -212,6 +213,7 @@ public class RenderTileFusionPedistal<T extends TileFusionPedistal> extends Tile
 				renderBeam(masterVec.xCoord+0.5, masterVec.yCoord+0.5+lazerLift, masterVec.zCoord+0.5, pedistalVec.xCoord+0.5, pedistalVec.yCoord+0.5, pedistalVec.zCoord+0.5, (int)(50*progress), partialTicks, 0.1d, r, g, b, 1F);
 			}
 		}
+		tile.getWorld().theProfiler.endSection();
 		GlStateManager.popMatrix();
 	}
 	

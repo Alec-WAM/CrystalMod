@@ -1,6 +1,11 @@
 package alec_wam.CrystalMod.tiles.pipes.estorage.power;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
+import java.util.List;
+
+import com.google.common.collect.Lists;
 
 import alec_wam.CrystalMod.api.energy.CEnergyStorage;
 import alec_wam.CrystalMod.api.energy.ICEnergyReceiver;
@@ -11,12 +16,17 @@ import alec_wam.CrystalMod.network.packets.MessageTileContainerUpdate;
 import alec_wam.CrystalMod.tiles.ISynchronizedContainer;
 import alec_wam.CrystalMod.tiles.TileEntityMod;
 import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetwork;
+import alec_wam.CrystalMod.util.ItemStackTools;
+import alec_wam.CrystalMod.util.ItemUtil;
+import alec_wam.CrystalMod.util.ModLogger;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.Container;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+import net.minecraftforge.fml.common.network.ByteBufUtils;
 
 public class TileNetworkPowerCore extends TileEntityMod implements INetworkTile, ICEnergyReceiver, ISynchronizedContainer {
 
@@ -29,6 +39,10 @@ public class TileNetworkPowerCore extends TileEntityMod implements INetworkTile,
 	
 	public TileNetworkPowerCore(){
 		energyStorage = new CEnergyStorage(5000);
+	}
+	
+	public CEnergyStorage getEnergyStorage(){
+		return energyStorage;
 	}
 	
 	@Override
@@ -92,9 +106,7 @@ public class TileNetworkPowerCore extends TileEntityMod implements INetworkTile,
 
 	@Override
 	public void onDisconnected() {
-		if(network !=null){
-			network.powerController = null;
-		}
+		if(network !=null)network.powerController = null;
 		this.connected = false;
 		markDirty();
 	}
@@ -124,7 +136,15 @@ public class TileNetworkPowerCore extends TileEntityMod implements INetworkTile,
 		int energy = buf.readInt();
 		int maxEnergy = buf.readInt();
 		int usage = buf.readInt();
-		this.info = new NetworkPowerInfo(energy, maxEnergy, usage);
+		List<ClientPowerTileInfo> infoList = Lists.newArrayList();
+		int size = buf.readInt();
+		for(int i = 0; i < size; i++){
+			ItemStack tileStack = ByteBufUtils.readItemStack(buf);
+			int count = buf.readInt();
+			int energyUsage = buf.readInt();
+			infoList.add(new ClientPowerTileInfo(tileStack, count, energyUsage));
+		}
+		this.info = new NetworkPowerInfo(energy, maxEnergy, usage, infoList);
 	}
 
 	@Override
@@ -132,6 +152,37 @@ public class TileNetworkPowerCore extends TileEntityMod implements INetworkTile,
 		buf.writeInt(energyStorage.getCEnergyStored());
 		buf.writeInt(energyStorage.getMaxCEnergyStored());
 		buf.writeInt(getEnergyUsage());
+		
+		if(network == null) buf.writeInt(0);
+		else {
+			List<ClientPowerTileInfo> infoList = Lists.newArrayList();
+			Iterator<INetworkPowerTile> i = network.networkPoweredTiles.values().iterator();
+			while(i.hasNext()){
+				INetworkPowerTile powerTile = i.next();
+				ItemStack tileStack = powerTile.getDisplayStack();
+				ClientPowerTileInfo info = new ClientPowerTileInfo(tileStack, 1, powerTile.getEnergyUsage());
+				if(infoList.contains(info)){
+					ClientPowerTileInfo otherInfo = infoList.get(infoList.indexOf(info));
+					otherInfo.count+=1;
+				} else {
+					infoList.add(info);
+				}
+			}
+			Collections.sort(infoList, new Comparator<ClientPowerTileInfo>(){
+
+				@Override
+				public int compare(ClientPowerTileInfo arg0, ClientPowerTileInfo arg1) {
+					return Integer.compare(arg0.usage, arg1.usage);
+				}
+				
+			});
+			buf.writeInt(infoList.size());
+			for(ClientPowerTileInfo info : infoList){
+				ByteBufUtils.writeItemStack(buf, info.stack);
+				buf.writeInt(info.count);
+				buf.writeInt(info.usage);
+			}
+		}
 	}
 
 	@Override
@@ -143,12 +194,46 @@ public class TileNetworkPowerCore extends TileEntityMod implements INetworkTile,
 		public int storedEnergy;
 		public int maxEnergy;
 		public int energyUsage;
+		public List<ClientPowerTileInfo> infoList;
 		
-		public NetworkPowerInfo(int stored, int maxEnergy, int usage){
+		public NetworkPowerInfo(int stored, int maxEnergy, int usage, List<ClientPowerTileInfo> infoList){
 			this.storedEnergy = stored;
 			this.maxEnergy = maxEnergy;
 			this.energyUsage = usage;
+			this.infoList = infoList;
 		}
+	}
+	
+	public static class ClientPowerTileInfo {
+		public ItemStack stack = ItemStackTools.getEmptyStack();
+		public int count;
+		public int usage;
+		
+		public ClientPowerTileInfo(ItemStack stack, int count, int usage){
+			this.stack = stack;
+			this.count = count;
+			this.usage = usage;
+		}
+		
+		@Override
+	    public boolean equals(Object other) {
+	        if (this == other) {
+	            return true;
+	        }
+
+	        if (!(other instanceof ClientPowerTileInfo)) {
+	            return false;
+	        }
+
+	        return usage == ((ClientPowerTileInfo) other).usage && ItemUtil.canCombine(stack, ((ClientPowerTileInfo) other).stack);
+	    }
+
+	    @Override
+	    public int hashCode() {
+	        int result = stack.hashCode();
+	        result = 31 * result + usage;
+	        return result;
+	    } 
 	}
 
 }

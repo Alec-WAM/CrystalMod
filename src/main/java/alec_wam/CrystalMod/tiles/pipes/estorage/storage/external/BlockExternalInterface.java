@@ -2,10 +2,12 @@ package alec_wam.CrystalMod.tiles.pipes.estorage.storage.external;
 
 
 import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.api.estorage.security.NetworkAbility;
 import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.ChatUtil;
 import alec_wam.CrystalMod.util.ItemStackTools;
+import alec_wam.CrystalMod.util.Lang;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -104,8 +106,17 @@ public class BlockExternalInterface extends BlockContainer implements ICustomMod
     	TileEntity tile = world.getTileEntity(pos);
         if (tile !=null && (tile instanceof TileEntityExternalInterface)) {
         	TileEntityExternalInterface inter = (TileEntityExternalInterface)tile;
+        	
+        	
         	if(ItemStackTools.isEmpty(player.getHeldItem(hand))){
-	        	if(!world.isRemote){
+        		if(!world.isRemote){
+        			if(inter.getNetwork() !=null){
+                		if(!inter.getNetwork().hasAbility(player, NetworkAbility.SETTINGS)){
+                			ChatUtil.sendNoSpam(player, Lang.localize("gui.networkability."+NetworkAbility.SETTINGS.getId()));
+                			return false;
+                		}
+                	}
+    	        	
 		        	if(player.isSneaking()){
 		        		inter.setPriority(inter.getPriority()-1);
 		        	}else{

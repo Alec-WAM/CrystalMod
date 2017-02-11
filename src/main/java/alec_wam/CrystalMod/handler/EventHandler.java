@@ -14,6 +14,8 @@ import com.google.common.collect.Maps;
 import alec_wam.CrystalMod.Config;
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.api.block.IExplosionImmune;
+import alec_wam.CrystalMod.api.estorage.INetworkTile;
+import alec_wam.CrystalMod.api.estorage.security.NetworkAbility;
 import alec_wam.CrystalMod.api.tools.UpgradeData;
 import alec_wam.CrystalMod.capability.ExtendedPlayer;
 import alec_wam.CrystalMod.capability.ExtendedPlayerInventory;
@@ -36,15 +38,19 @@ import alec_wam.CrystalMod.items.tools.bat.ModBats;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.packets.PacketEntityMessage;
 import alec_wam.CrystalMod.tiles.endertorch.TileEnderTorch;
+import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetwork;
+import alec_wam.CrystalMod.tiles.pipes.estorage.TileEntityPipeEStorage;
 import alec_wam.CrystalMod.tiles.playercube.CubeManager;
 import alec_wam.CrystalMod.tiles.playercube.PlayerCube;
 import alec_wam.CrystalMod.tiles.playercube.TileEntityPlayerCubePortal;
 import alec_wam.CrystalMod.tiles.spawner.EntityEssenceInstance;
 import alec_wam.CrystalMod.tiles.spawner.ItemMobEssence;
+import alec_wam.CrystalMod.util.ChatUtil;
 import alec_wam.CrystalMod.util.EntityUtil;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
+import alec_wam.CrystalMod.util.Lang;
 import alec_wam.CrystalMod.util.ModLogger;
 import alec_wam.CrystalMod.util.PlayerUtil;
 import alec_wam.CrystalMod.util.Util;
@@ -852,4 +858,41 @@ public class EventHandler {
     		}
     	}
 	}
+	
+	@SubscribeEvent
+    public void onBlockPlace(BlockEvent.PlaceEvent e) {
+        if (!e.getWorld().isRemote) {
+            for (EnumFacing facing : EnumFacing.VALUES) {
+                TileEntity tile = e.getWorld().getTileEntity(e.getBlockSnapshot().getPos().offset(facing));
+
+                if (tile != null && TileEntityPipeEStorage.isNetworkTile(tile)) {
+                    EStorageNetwork network = TileEntityPipeEStorage.getTileNetwork(tile);
+                    if (network != null && !network.hasAbility(e.getPlayer(), NetworkAbility.BUILD)) {
+                        ChatUtil.sendNoSpam(e.getPlayer(), Lang.localize("gui.networkability."+NetworkAbility.BUILD.getId()));
+
+                        e.setCanceled(true);
+
+                        return;
+                    }
+                }
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public void onBlockBreak(BlockEvent.BreakEvent e) {
+        if (!e.getWorld().isRemote) {
+            TileEntity tile = e.getWorld().getTileEntity(e.getPos());
+
+            if (tile != null && TileEntityPipeEStorage.isNetworkTile(tile)) {
+            	 EStorageNetwork network = TileEntityPipeEStorage.getTileNetwork(tile);
+
+                if (network != null && !network.hasAbility(e.getPlayer(), NetworkAbility.BUILD)) {
+                	ChatUtil.sendNoSpam(e.getPlayer(), Lang.localize("gui.networkability."+NetworkAbility.BUILD.getId()));
+
+                    e.setCanceled(true);
+                }
+            }
+        }
+    }
 }

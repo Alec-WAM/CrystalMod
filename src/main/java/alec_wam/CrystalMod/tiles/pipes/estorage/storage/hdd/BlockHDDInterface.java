@@ -2,10 +2,13 @@ package alec_wam.CrystalMod.tiles.pipes.estorage.storage.hdd;
 
 
 import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.api.estorage.security.NetworkAbility;
 import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.util.BlockUtil;
+import alec_wam.CrystalMod.util.ChatUtil;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
+import alec_wam.CrystalMod.util.Lang;
 import alec_wam.CrystalMod.util.tool.ToolUtil;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -102,27 +105,32 @@ public class BlockHDDInterface extends BlockContainer implements ICustomModel {
     	TileEntity tile = world.getTileEntity(pos);
         if (tile !=null && (tile instanceof TileEntityHDDInterface)) {
         	TileEntityHDDInterface inter = (TileEntityHDDInterface)tile;
-        	
-    		if(ToolUtil.isToolEquipped(player, hand)){
-    			if(player.isSneaking()){
-    				if(!ItemStackTools.isNullStack(inter.getStackInSlot(0))){
-    					EnumFacing face = EnumFacing.getFront(inter.facing);
-        				ItemUtil.spawnItemInWorldWithoutMotion(world, inter.getStackInSlot(0), pos.offset(face));
-        				inter.setInventorySlotContents(0, ItemStackTools.getEmptyStack());
+        	if(!world.isRemote){
+        		if(inter.getNetwork() == null || inter.getNetwork().hasAbility(player, NetworkAbility.VIEW)){
+        			if(ToolUtil.isToolEquipped(player, hand)){
+        				if(player.isSneaking()){
+        					if(!ItemStackTools.isNullStack(inter.getStackInSlot(0))){
+        						EnumFacing face = EnumFacing.getFront(inter.facing);
+        						ItemUtil.spawnItemInWorldWithoutMotion(world, inter.getStackInSlot(0), pos.offset(face));
+        						inter.setInventorySlotContents(0, ItemStackTools.getEmptyStack());
+        						return true;
+        					}
+        				}
         				return true;
-    				}
-    			}
-    			return true;
-    		}
-    		ItemStack stack = player.getHeldItem(hand);
-        	if(ItemStackTools.isValid(stack) && stack.getItem() instanceof ItemHDD && ItemStackTools.isNullStack(inter.getStackInSlot(0))){
-    			inter.setInventorySlotContents(0, stack);
-    			player.setHeldItem(hand, ItemStackTools.getEmptyStack());
-				return true;
-    		}
-        	
-        	player.openGui(CrystalMod.instance, 0, world, pos.getX(), pos.getY(), pos.getZ());
-        	return true;
+        			}
+        			ItemStack stack = player.getHeldItem(hand);
+        			if(ItemStackTools.isValid(stack) && stack.getItem() instanceof ItemHDD && ItemStackTools.isNullStack(inter.getStackInSlot(0))){
+        				inter.setInventorySlotContents(0, stack);
+        				player.setHeldItem(hand, ItemStackTools.getEmptyStack());
+        				return true;
+        			}
+
+        			player.openGui(CrystalMod.instance, 0, world, pos.getX(), pos.getY(), pos.getZ());
+        			return true;
+        		} else {
+        			ChatUtil.sendNoSpam(player, Lang.localize("gui.networkability."+NetworkAbility.VIEW.getId()));
+        		}
+        	}
         }
     	return false;
     }

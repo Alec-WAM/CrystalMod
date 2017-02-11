@@ -55,6 +55,24 @@
   [text]Same as its full block counterpart. Does not require silktouch to pickup.  
  }
 ]}
+//Crystal Workbench
+{[
+ [chapter]crystalworkbench
+ [title]Crystal Workbench
+ [page:main]
+ {
+  [text]The only way to craft Crystal Tools. Hold all of the items in its internal Inventory when you close the screen.  
+ }
+]}
+//Crystal Cauldron
+{[
+ [chapter]cauldron
+ [title]Crystal Cauldron
+ [page:main]
+ {
+  [text]The starting point for Crystal Mod. Just drop a Crystal Shard into the Cauldron and it will turn into 100mb of the same color Liquid Crystal. Then drop your ingredient in and it will use up some of the Liquid Crystal in exchange for the output.  
+ }
+]}
 //Crystal Chests
 {[
  [chapter]crystalchest

@@ -6,6 +6,7 @@ import net.minecraft.item.Item.ToolMaterial;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.api.tools.IBatType;
 import alec_wam.CrystalMod.util.client.RenderUtil;
 
@@ -40,10 +41,12 @@ public abstract class BatType implements IBatType {
 		return damage;
 	}
 	
+	public final ResourceLocation LEATHER_HANDLE = CrystalMod.resourceL("item/bat/leather_handle");
+	
 	@SideOnly(Side.CLIENT)
 	@Override
 	public TextureAtlasSprite getHandleTexture() {
-		return RenderUtil.getTexture(Blocks.LOG.getDefaultState());
+		return RenderUtil.getSprite("crystalmod:items/bat/leather_handle");
 	}
 
 }

@@ -30,6 +30,7 @@ public class UUIDUtils
     }
 
 	public static boolean areEqual(UUID uuid1, UUID uuid2) {
+		if(uuid1 == null || uuid2 == null)return false;
 		return uuid1.getMostSignificantBits() == uuid2.getMostSignificantBits() && uuid1.getLeastSignificantBits() == uuid2.getLeastSignificantBits();
 	}
 }

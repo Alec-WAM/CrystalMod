@@ -26,6 +26,9 @@ import alec_wam.CrystalMod.tiles.chest.CrystalChestType;
 import alec_wam.CrystalMod.tiles.chest.ItemBlockCrystalChest;
 import alec_wam.CrystalMod.tiles.chest.wireless.BlockWirelessChest;
 import alec_wam.CrystalMod.tiles.chest.wireless.TileWirelessChest;
+import alec_wam.CrystalMod.tiles.cluster.BlockCrystalCluster;
+import alec_wam.CrystalMod.tiles.cluster.RenderTileCrystalCluster;
+import alec_wam.CrystalMod.tiles.cluster.TileCrystalCluster;
 import alec_wam.CrystalMod.tiles.crate.BlockCrate;
 import alec_wam.CrystalMod.tiles.crate.RenderTileCrate;
 import alec_wam.CrystalMod.tiles.crate.TileCrate;
@@ -93,6 +96,10 @@ import alec_wam.CrystalMod.tiles.pipes.estorage.panel.wireless.BlockWirelessPane
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.wireless.TileEntityWirelessPanel;
 import alec_wam.CrystalMod.tiles.pipes.estorage.power.BlockNetworkPowerCore;
 import alec_wam.CrystalMod.tiles.pipes.estorage.power.TileNetworkPowerCore;
+import alec_wam.CrystalMod.tiles.pipes.estorage.security.BlockSecurityController;
+import alec_wam.CrystalMod.tiles.pipes.estorage.security.BlockSecurityEncoder;
+import alec_wam.CrystalMod.tiles.pipes.estorage.security.TileSecurityController;
+import alec_wam.CrystalMod.tiles.pipes.estorage.security.TileSecurityEncoder;
 import alec_wam.CrystalMod.tiles.pipes.estorage.stocker.BlockStocker;
 import alec_wam.CrystalMod.tiles.pipes.estorage.stocker.TileEntityStocker;
 import alec_wam.CrystalMod.tiles.pipes.estorage.storage.external.BlockExternalInterface;
@@ -184,6 +191,8 @@ public class ModBlocks {
 	public static BlockCrafter crafter;
 	public static BlockStocker stocker;
 	public static BlockPatternEncoder encoder;
+	public static BlockSecurityController securityController;
+	public static BlockSecurityEncoder securityEncoder;
 	
 	public static BlockPlayerCubeBlock cubeBlock;
 	public static BlockPlayerCubeCore cubeCore;
@@ -206,6 +215,8 @@ public class ModBlocks {
 	
 	public static BlockPedistal pedistal;
 	public static BlockFusionPedistal fusionPedistal;
+	
+	public static BlockCrystalCluster crystalCluster;
 
 	public static final EnumPlantType crystalPlantType = EnumPlantType.getPlantType("crystal");
 	
@@ -363,6 +374,14 @@ public class ModBlocks {
 		registerTileEntity(TilePatternEncoder.class);
 		registerTileEntity(TileProcessingPatternEncoder.class);
 		
+		securityController = new BlockSecurityController();
+		registerBlock(securityController, "securitycontroller");
+		registerTileEntity(TileSecurityController.class);
+		
+		securityEncoder = new BlockSecurityEncoder();
+		registerBlock(securityEncoder, "securityencoder");
+		registerTileEntity(TileSecurityEncoder.class);
+		
 		cauldron = new BlockCrystalCauldron();
 		registerBlock(cauldron, "crystalcauldron");
 		registerTileEntity(TileEntityCrystalCauldron.class);
@@ -455,6 +474,10 @@ public class ModBlocks {
 		fusionPedistal = new BlockFusionPedistal();
 		registerBlock(fusionPedistal, new ItemBlockPedistal(fusionPedistal), "fusionpedistal");
 		registerTileEntity(TileFusionPedistal.class);
+		
+		crystalCluster = new BlockCrystalCluster();
+		registerEnumBlock(crystalCluster, new ItemBlockFacing(crystalCluster), "crystalcluster");
+		registerTileEntity(TileCrystalCluster.class);
 	}
 	
 	@SideOnly(Side.CLIENT)
@@ -485,6 +508,17 @@ public class ModBlocks {
 	@SideOnly(Side.CLIENT)
 	public static void initBasicModel(Block block){
 		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, new ModelResourceLocation(block.getRegistryName(), "inventory"));
+	}
+	
+	@SideOnly(Side.CLIENT)
+	public static void initBasicModel(Block block, int meta){
+		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), meta, new ModelResourceLocation(block.getRegistryName(), "inventory"));
+	}
+	
+	protected static <T extends EnumBlock<?>, I extends ItemBlockMeta> T registerEnumBlock(T block, I itemblock, String name) {
+	    registerBlock(block, itemblock, name);
+	    ItemBlockMeta.setMappingProperty(block, block.prop);
+	    return block;
 	}
 	
 	protected static <T extends EnumBlock<?>> T registerEnumBlock(T block, String name) {

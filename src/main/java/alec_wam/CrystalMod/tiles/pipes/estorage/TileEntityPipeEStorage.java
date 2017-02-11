@@ -1,12 +1,14 @@
 package alec_wam.CrystalMod.tiles.pipes.estorage;
 
 import alec_wam.CrystalMod.api.estorage.INetworkTile;
+import alec_wam.CrystalMod.api.estorage.security.NetworkAbility;
 import alec_wam.CrystalMod.tiles.pipes.AbstractPipeNetwork;
 import alec_wam.CrystalMod.tiles.pipes.ConnectionMode;
 import alec_wam.CrystalMod.tiles.pipes.IPipeWrapper;
 import alec_wam.CrystalMod.tiles.pipes.PipeUtil;
 import alec_wam.CrystalMod.tiles.pipes.TileEntityPipe;
 import alec_wam.CrystalMod.tiles.pipes.types.IPipeType;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -155,5 +157,32 @@ public class TileEntityPipeEStorage extends TileEntityPipe {
 			}
 		}
 	  }
+	  
+	public boolean canEditAttachments(EntityPlayer player){
+		if(network != null && network instanceof EStorageNetwork) {
+			return ((EStorageNetwork)network).hasAbility(player, NetworkAbility.BUILD);
+		}
+		return true;
+	}
+
+	public static boolean isNetworkTile(TileEntity tile) {
+		return (tile instanceof IPipeWrapper || tile instanceof INetworkTile || tile instanceof TileEntityPipeEStorage);
+	}
 	
+	public static EStorageNetwork getTileNetwork(TileEntity tile){
+		if(tile instanceof TileEntityPipeEStorage){
+			AbstractPipeNetwork network = ((TileEntityPipeEStorage)tile).network;
+			return network !=null && network instanceof EStorageNetwork ? (EStorageNetwork)network : null;
+		}
+		if(tile instanceof INetworkTile){
+			return ((INetworkTile)tile).getNetwork();
+		}
+		if(tile instanceof IPipeWrapper){
+			if(((IPipeWrapper)tile).getPipe() !=null){
+				AbstractPipeNetwork network = ((IPipeWrapper)tile).getPipe().getNetwork();
+				return network !=null && network instanceof EStorageNetwork ? (EStorageNetwork)network : null;
+			}
+		}
+		return null;
+	}
 }

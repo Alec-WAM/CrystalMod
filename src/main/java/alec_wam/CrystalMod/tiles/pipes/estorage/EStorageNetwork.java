@@ -9,8 +9,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.NavigableMap;
 import java.util.TreeMap;
+import java.util.UUID;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 import alec_wam.CrystalMod.api.ItemStackList;
 import alec_wam.CrystalMod.api.estorage.IAutoCrafter;
@@ -20,6 +22,8 @@ import alec_wam.CrystalMod.api.estorage.INetworkItemProvider;
 import alec_wam.CrystalMod.api.estorage.INetworkPowerTile;
 import alec_wam.CrystalMod.api.estorage.INetworkTile;
 import alec_wam.CrystalMod.api.estorage.INetworkTileConnectable;
+import alec_wam.CrystalMod.api.estorage.security.NetworkAbility;
+import alec_wam.CrystalMod.api.estorage.security.SecurityData;
 import alec_wam.CrystalMod.network.CompressedDataInput;
 import alec_wam.CrystalMod.network.CompressedDataOutput;
 import alec_wam.CrystalMod.tiles.pipes.AbstractPipeNetwork;
@@ -30,7 +34,10 @@ import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage.ItemStackData;
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.CraftingPattern;
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.TileCraftingController;
 import alec_wam.CrystalMod.tiles.pipes.estorage.power.TileNetworkPowerCore;
+import alec_wam.CrystalMod.tiles.pipes.estorage.security.ItemSecurityCard;
+import alec_wam.CrystalMod.tiles.pipes.estorage.security.TileSecurityController;
 import alec_wam.CrystalMod.util.ItemStackTools;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -48,11 +55,28 @@ public class EStorageNetwork extends AbstractPipeNetwork {
 			this.pos = pos;
 			this.dim = dim;
 		}
+		
+		@Override
+	    public boolean equals(Object other) {
+	        if (!(other instanceof NetworkPos)) {
+	            return false;
+	        }
+
+	        return pos.equals(((NetworkPos)other).pos) && dim == ((NetworkPos)other).dim;
+	    }
+		
+		@Override
+	    public int hashCode() {
+	        int result = pos.hashCode();
+	        result = 31 * result + dim;
+	        return result;
+	    } 
 	}
 	
 	//Contollers
 	public TileCraftingController craftingController;
 	public TileNetworkPowerCore powerController;
+	public List<TileSecurityController> securityControllers = Lists.newArrayList();
 	
 	public final Map<NetworkPos, TileEntity> networkTiles = new HashMap<NetworkPos, TileEntity>();
 	public final Map<NetworkPos, INetworkPowerTile> networkPoweredTiles = new HashMap<NetworkPos, INetworkPowerTile>();
@@ -70,7 +94,7 @@ public class EStorageNetwork extends AbstractPipeNetwork {
 	public boolean updateFluids = true;
 
 	// AUTO CRAFTING
-	final List<IAutoCrafter> crafters = new ArrayList<IAutoCrafter>();
+	private final List<IAutoCrafter> crafters = new ArrayList<IAutoCrafter>();
 	private List<CraftingPattern> patterns = new ArrayList<CraftingPattern>();
 
 	public ItemStorage getItemStorage() {
@@ -216,8 +240,7 @@ public class EStorageNetwork extends AbstractPipeNetwork {
 			for (EnumFacing direction : pip.getExternalConnections()) {
 				TileEntity extCon = pip.getExternalTile(direction);
 				if (extCon != null) {
-					BlockPos p = te.getPos().offset(direction);
-					tileAdded(pip, direction, p, extCon);
+					tileAdded(pip, direction, extCon.getPos(), extCon);
 				}
 			}
 		}
@@ -236,30 +259,46 @@ public class EStorageNetwork extends AbstractPipeNetwork {
 		return true;
 	}
 	
-	public void tileAdded(TileEntityPipeEStorage itemPipe,
-			EnumFacing direction, BlockPos bc, TileEntity externalTile) {
+	public void tileAdded(TileEntityPipeEStorage itemPipe, EnumFacing direction, BlockPos bc, TileEntity externalTile) {
 
-		if(networkTiles.containsKey(bc)){
-			return;
-		}
 		if(!canConnect(externalTile)){
 			return;
 		}
-		
 		int dim = externalTile.getWorld().provider.getDimension();
 		NetworkPos nPos = new NetworkPos(bc, dim);
+		
+		Iterator<NetworkPos> nPosI = networkTiles.keySet().iterator();
+		while(nPosI.hasNext()){
+			NetworkPos pos = nPosI.next();
+			if(pos.equals(nPos)){
+				return;
+			}
+		}
+		
+		nPosI = networkPoweredTiles.keySet().iterator();
+		while(nPosI.hasNext()){
+			NetworkPos pos = nPosI.next();
+			if(pos.equals(nPos)){
+				return;
+			}
+		}
+		
 		networkTiles.put(nPos, externalTile);
 		
 		if(externalTile instanceof TileCraftingController){
 			TileCraftingController crafter = (TileCraftingController)externalTile;
-			if(craftingController !=null)return;
 			craftingController = crafter;
 		}
 		
 		if(externalTile instanceof TileNetworkPowerCore){
 			TileNetworkPowerCore powerCore = (TileNetworkPowerCore)externalTile;
-			if(powerController !=null)return;
 			powerController = powerCore;
+		}
+		
+		if(externalTile instanceof TileSecurityController){
+			TileSecurityController controller = (TileSecurityController)externalTile;
+			securityControllers.add(controller);
+			updateSecurity();
 		}
 		
 		if (externalTile instanceof INetworkTile) {
@@ -388,7 +427,8 @@ public class EStorageNetwork extends AbstractPipeNetwork {
 
 	@Override
 	public void destroyNetwork() {
-		super.destroyNetwork();
+		networkTiles.clear();
+		networkPoweredTiles.clear();
 		masterInterfaces.clear();
 		interfaces.clear();
 		crafters.clear();
@@ -537,8 +577,55 @@ public class EStorageNetwork extends AbstractPipeNetwork {
 
 	public int getEnergy() {
 		if(this.powerController !=null){
-			return this.powerController.getCEnergyStored(null);
+			return this.powerController.getEnergyStorage().getCEnergyStored();
 		}
 		return 0;
+	}
+
+	public int extractEnergy(int amount, boolean simulate) {
+		if(this.powerController !=null){
+			this.powerController.getEnergyStorage().drainCEnergy(amount, simulate);
+		}
+		return 0;
+	}
+	
+	private Map<UUID, SecurityData> securityData = Maps.newHashMap();
+	
+	public boolean hasAbility(EntityPlayer player, NetworkAbility... abilities){
+		UUID uuid = EntityPlayer.getUUID(player.getGameProfile());
+		return hasAbility(uuid, abilities);
+	}
+	
+	public boolean hasAbility(UUID uuid, NetworkAbility... abilities){
+		if(uuid !=null){
+			SecurityData data = securityData.get(uuid);
+			if(data !=null){
+				for(NetworkAbility ability : abilities){
+					if(!data.hasAbility(ability)){
+						return false;
+					}
+				}
+			}
+			if(!securityData.isEmpty())return true;
+		}
+		return securityData.isEmpty();
+	}
+	
+	public void updateSecurity(){
+		securityData.clear();
+		for (TileSecurityController controller : securityControllers) {
+			for (int s = 0; s < controller.getCards().getSlots(); s++) {
+				ItemStack patStack = controller.getCards().getStackInSlot(s);
+				if (ItemStackTools.isValid(patStack)) {
+					if(ItemSecurityCard.isValid(patStack)){
+						SecurityData data = new SecurityData(ItemSecurityCard.getUUID(patStack));
+						for(NetworkAbility ability : NetworkAbility.values()){
+							data.getAbilities().put(ability, ItemSecurityCard.hasAbility(patStack, ability));
+						}
+						securityData.put(data.getUUID(), data);
+					}
+				}
+			}
+		}
 	}
 }
