@@ -75,7 +75,7 @@ public class RenderTileCrystalCluster extends TileEntitySpecialRenderer<TileCrys
     	EnumClusterType type = te.getWorld().getBlockState(te.getPos()).getValue(BlockCrystalCluster.TYPE);
 		Vector3d color = getColor(type);
 		
-		boolean debug = true;
+		boolean debug = false;
 		if(debug){
 			GlStateManager.disableDepth();
 		}

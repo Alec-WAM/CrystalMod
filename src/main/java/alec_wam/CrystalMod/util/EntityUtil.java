@@ -46,6 +46,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
 public class EntityUtil {
@@ -456,9 +457,9 @@ public class EntityUtil {
 			if (methodEntitySetSize == null) {
 				methodEntitySetSize = ReflectionHelper.findMethod(Entity.class, entity, new String[] { "setSize", "func_177725_a"}, new Class[] { Float.TYPE, Float.TYPE });
 			}
-			methodEntitySetSize.invoke(entity, new Object[] { Float.valueOf(width), Float.valueOf(height) });
+			if (methodEntitySetSize != null)methodEntitySetSize.invoke(entity, new Object[] { Float.valueOf(width), Float.valueOf(height) });
 		}
-		catch (IllegalAccessException ex) {ex.printStackTrace();}catch (IllegalArgumentException ex) {ex.printStackTrace();}catch (InvocationTargetException ex) {ex.printStackTrace();}
+		catch (Exception ex) {ex.printStackTrace();}
 	}
 
 	/**Returns if an arrow was infinite or not**/
