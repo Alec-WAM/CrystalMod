@@ -12,6 +12,7 @@ import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.tiles.cauldron.CauldronRecipeManager;
 import alec_wam.CrystalMod.tiles.cauldron.CauldronRecipeManager.InfusionRecipe;
 import alec_wam.CrystalMod.util.ItemStackTools;
+import alec_wam.CrystalMod.util.client.RenderUtil;
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.IJeiHelpers;
 import mezz.jei.api.IModRegistry;
@@ -24,6 +25,13 @@ import mezz.jei.api.recipe.BlankRecipeCategory;
 import mezz.jei.api.recipe.BlankRecipeWrapper;
 import mezz.jei.api.recipe.IStackHelper;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
@@ -107,7 +115,9 @@ public class CauldronRecipeCategory extends BlankRecipeCategory<CauldronRecipeCa
 	
 	@Override
 	public void drawExtras(@Nonnull Minecraft minecraft) {
-		minecraft.getRenderItem().renderItemAndEffectIntoGUI(displayStack, 36, 36);
+		TextureAtlasSprite sprite = RenderUtil.getSprite("crystalmod:blocks/cauldron/cauldron_side");
+		minecraft.renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+		RenderUtil.renderTexturedQuad(36-8, 36, 36+32-8, 36+32, sprite.getMinU(), sprite.getMinV(), sprite.getMaxU(), sprite.getMaxV());
   	}
 
 	@Override
@@ -116,14 +126,13 @@ public class CauldronRecipeCategory extends BlankRecipeCategory<CauldronRecipeCa
 		int x = 36;
 		int y = 36;
 		
-		guiItemStacks.init(0, false, x+55, y);
+		guiItemStacks.init(0, false, x+30, y);
 		
 		guiItemStacks.init(1, true, x, y-20);
 		guiItemStacks.set(arg2);
 		
 		IGuiFluidStackGroup guiFluidStacks = recipeLayout.getFluidStacks();
-		//guiFluidStacks.init(0, true, x, y-10, 16, 16, Fluid.BUCKET_VOLUME * 4, false, null);
-		guiFluidStacks.init(0, true, x, y+20, 16, 16, Fluid.BUCKET_VOLUME, true, null);
+		guiFluidStacks.init(0, true, x, y+5, 16, 16, Fluid.BUCKET_VOLUME, true, null);
 		guiFluidStacks.set(arg2);
 	}
 

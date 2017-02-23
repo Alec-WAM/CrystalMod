@@ -169,6 +169,19 @@ public class ItemRenderMobEssence implements ICustomItemRenderer {
             GlStateManager.enableBlend();
             GlStateManager.enableColorMaterial();
 			GlStateManager.popMatrix();
+		} else if(type == TransformType.HEAD){
+			GlStateManager.pushMatrix();
+			float scale = essence.getRenderScale(type);
+			GlStateManager.scale(scale, scale, scale);
+			GlStateManager.translate(0, -1, 0);
+			GlStateManager.enableBlend();
+			GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+			Minecraft.getMinecraft().getRenderManager().doRenderEntity(entity, 0.0D, 0.0D, 0.0D, 0.0F, partialTicks, true);
+			GlStateManager.disableBlend();
+			GlStateManager.enableLighting();
+            GlStateManager.enableBlend();
+            GlStateManager.enableColorMaterial();
+			GlStateManager.popMatrix();
 		} else if(type == TransformType.FIXED){
 			GlStateManager.pushMatrix();
 			float scale = essence.getRenderScale(type);

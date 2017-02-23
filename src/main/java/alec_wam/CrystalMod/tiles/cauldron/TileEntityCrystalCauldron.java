@@ -21,6 +21,7 @@ import alec_wam.CrystalMod.items.ItemIngot.IngotType;
 import alec_wam.CrystalMod.tiles.TileEntityMod;
 import alec_wam.CrystalMod.tiles.cauldron.CauldronRecipeManager.InfusionRecipe;
 import alec_wam.CrystalMod.tiles.cauldron.TileEntityCrystalCauldron.LiquidCrystalColor;
+import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 
@@ -81,7 +82,7 @@ public class TileEntityCrystalCauldron extends TileEntityMod {
 								crystalStack = null;
 							}
 						}
-						markDirty();
+						BlockUtil.markBlockForUpdate(getWorld(), getPos());
 					}else getWorld().spawnParticle(EnumParticleTypes.REDSTONE, getPos().getX(), getPos().getY()+1.5d, getPos().getZ(), 0, 0, 0, new int[0]);
 					break;
 				}
@@ -104,6 +105,7 @@ public class TileEntityCrystalCauldron extends TileEntityMod {
 						if(pass){
 							ItemStackTools.incStackSize(item.getEntityItem(), -1);
 							if(ItemStackTools.isEmpty(item.getEntityItem()))item.setDead();
+							BlockUtil.markBlockForUpdate(getWorld(), getPos());
 						}
 					}
 				}

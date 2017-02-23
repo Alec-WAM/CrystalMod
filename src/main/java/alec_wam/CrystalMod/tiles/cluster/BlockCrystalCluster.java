@@ -88,7 +88,6 @@ public class BlockCrystalCluster extends EnumBlock<BlockCrystalCluster.EnumClust
 
 	@SideOnly(Side.CLIENT)
 	public void initModel(){
-		ModelLoader.setCustomStateMapper(this, new CustomBlockStateMapper());
 		for(EnumClusterType type : EnumClusterType.values()){
 			ModBlocks.initBasicModel(this, type.getMeta());
 		}

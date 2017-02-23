@@ -152,8 +152,6 @@ public class CauldronRecipeManager {
 		addRecipe(new ItemStack(Blocks.STONEBRICK), new FluidStack(ModFluids.fluidDarkCrystal, 100), new ItemStack(ModBlocks.crystal, 1, CrystalBlockType.DARK_BRICK.getMeta()));
 		addRecipe(new ItemStack(Blocks.STONEBRICK), new FluidStack(ModFluids.fluidPureCrystal, 100), new ItemStack(ModBlocks.crystal, 1, CrystalBlockType.PURE_BRICK.getMeta()));
 		
-		addRecipe(new ItemStack(ModItems.machineFrame, 1, FrameType.BASIC.getMetadata()), new FluidStack(ModFluids.fluidEnder, 1000), new ItemStack(ModItems.machineFrame, 1, FrameType.ENDER.getMetadata()));
-
 		addRecipe(new ItemStack(Items.REEDS), new FluidStack(ModFluids.fluidBlueCrystal, 3 * bucket), new ItemStack(ModItems.crystalReedsBlue));
 		addRecipe(new ItemStack(Items.REEDS), new FluidStack(ModFluids.fluidRedCrystal, 3 * bucket), new ItemStack(ModItems.crystalReedsRed));
 		addRecipe(new ItemStack(Items.REEDS), new FluidStack(ModFluids.fluidGreenCrystal, 3 * bucket), new ItemStack(ModItems.crystalReedsGreen));

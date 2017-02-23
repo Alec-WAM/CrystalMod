@@ -1,7 +1,6 @@
 package alec_wam.CrystalMod.tiles.cluster;
 
 
-import java.awt.Color;
 import java.util.List;
 
 import com.google.common.base.Function;
@@ -9,12 +8,10 @@ import com.google.common.base.Function;
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.client.model.dynamic.DynamicBaseModel;
 import alec_wam.CrystalMod.client.model.dynamic.ICustomItemRenderer;
-import alec_wam.CrystalMod.items.ItemIngot;
 import alec_wam.CrystalMod.tiles.cluster.BlockCrystalCluster.EnumClusterType;
 import alec_wam.CrystalMod.tiles.cluster.TileCrystalCluster.ClusterData;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemStackTools;
-import alec_wam.CrystalMod.util.ModLogger;
 import alec_wam.CrystalMod.util.TimeUtil;
 import alec_wam.CrystalMod.util.Vector3d;
 import alec_wam.CrystalMod.util.client.RenderUtil;
@@ -159,13 +156,19 @@ public class RenderTileCrystalCluster extends TileEntitySpecialRenderer<TileCrys
 				int health = tileNBT.getInteger("Health");
 				ClusterData data = new ClusterData(0, 0);
 				data.deserializeNBT(tileNBT.getCompoundTag("ClusterData"));
+				GlStateManager.pushMatrix();
 				if(lastTransform == TransformType.GUI){
 					GlStateManager.translate(0, -0.8, 0);
 					GlStateManager.scale(0.8, 0.8, 0.8);
 				}
+				if(lastTransform == TransformType.HEAD){
+					GlStateManager.scale(1.2, 1.2, 1.2);
+					GlStateManager.translate(0, -0.4, 0);
+				}
 				EnumClusterType type = EnumClusterType.values()[stack.getMetadata()];
 				Vector3d color = getColor(type);
 				renderCluster(data, health, color, type !=EnumClusterType.DARK);
+				GlStateManager.popMatrix();
 			}
 		}
 	}

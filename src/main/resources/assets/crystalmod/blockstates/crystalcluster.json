@@ -1,12 +1,17 @@
 {
+	"forge_marker": 1,
+	"defaults": {
+		"model": "crystalmod:null",
+		"transform": "forge:default-block"
+	},
 	"variants": {
-        "inventory":[{"model": "crystalmod:pipe"}],
-        "normal": [{ "model": "crystalmod:pipe" }],
-		"type": {
-			"blue": {},
-			"red": {},
-			"green": {},
-			"dark": {}
+        "inventory":{"model": "crystalmod:null"},
+        "normal":{"model": "crystalmod:null"},
+		"type":{
+			"blue":{"model": "crystalmod:null"},
+			"red":{"model": "crystalmod:null"},
+			"green":{"model": "crystalmod:null"},
+			"dark":{"model": "crystalmod:null"}
 		}
     }
 }

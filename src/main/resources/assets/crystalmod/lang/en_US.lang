@@ -162,7 +162,7 @@ item.crystalmod.darkironboots.name=Dark Iron Boots
 item.crystalmod.pipecover.name=Crystal Pipe Cover
 item.crystalmod.pipeattachment.estorage.export.name=Network Export Attachment
 item.crystalmod.pipeattachment.estorage.import.name=Network Import Attachment
-item.crystalmod.pipeattachment.estorage.export.name=Network Sensor Attachment
+item.crystalmod.pipeattachment.estorage.sensor.name=Network Sensor Attachment
 
 item.crystalmod.pipefilter.normal.name=Pipe Filter (Normal)
 item.crystalmod.pipefilter.mod.name=Pipe Filter (Mod)
@@ -457,7 +457,13 @@ tile.crystalmod.powerconverter.cu.name=CU to RF Converter
 tile.crystalmod.pedistal.name=Pedistal
 tile.crystalmod.fusionpedistal.name=Crystal Fusion Pedistal
 
-tile.crystalmod.crystalcluster.name=Crystal Cluster
+tile.crystalmod.crystalcluster.blue.name=Blue Crystal Cluster
+tile.crystalmod.crystalcluster.red.name=Red Crystal Cluster
+tile.crystalmod.crystalcluster.green.name=Green Crystal Cluster
+tile.crystalmod.crystalcluster.dark.name=Dark Crystal Cluster
+tile.crystalmod.jar.name=Glass Jar
+crystalmod.tooltip.jar.shulker=Shulker Lamp
+crystalmod.tooltip.jar.contains=Contains: %s/%s
 
 #--Fluids
 fluid.crystalmod.xpjuice=Liquid XP

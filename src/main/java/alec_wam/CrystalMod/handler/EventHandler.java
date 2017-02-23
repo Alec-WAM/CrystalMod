@@ -17,6 +17,7 @@ import alec_wam.CrystalMod.api.block.IExplosionImmune;
 import alec_wam.CrystalMod.api.estorage.INetworkTile;
 import alec_wam.CrystalMod.api.estorage.security.NetworkAbility;
 import alec_wam.CrystalMod.api.tools.UpgradeData;
+import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.capability.ExtendedPlayer;
 import alec_wam.CrystalMod.capability.ExtendedPlayerInventory;
 import alec_wam.CrystalMod.capability.ExtendedPlayerProvider;
@@ -38,6 +39,7 @@ import alec_wam.CrystalMod.items.tools.bat.ModBats;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.packets.PacketEntityMessage;
 import alec_wam.CrystalMod.tiles.endertorch.TileEnderTorch;
+import alec_wam.CrystalMod.tiles.jar.BlockJar;
 import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetwork;
 import alec_wam.CrystalMod.tiles.pipes.estorage.TileEntityPipeEStorage;
 import alec_wam.CrystalMod.tiles.playercube.CubeManager;
@@ -69,6 +71,7 @@ import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.passive.AbstractHorse;
 import net.minecraft.entity.passive.EntityWolf;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.projectile.EntityShulkerBullet;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -404,6 +407,30 @@ public class EventHandler {
         if(entity instanceof EntityWolf){
         	if(WolfAccessories.handleWolfInteract(player, held, event.getHand(), (EntityWolf)entity)){
         		event.setCanceled(true);
+        	}
+        }
+        if(entity instanceof EntityShulkerBullet){
+        	if(ItemStackTools.isValid(held)){
+        		if(held.getItem() == Item.getItemFromBlock(ModBlocks.jar)){
+        			NBTTagCompound nbt = new NBTTagCompound();
+        			if(held.hasTagCompound() && held.getTagCompound().hasKey(BlockJar.TILE_NBT_STACK)){
+        				nbt = ItemNBTHelper.getCompound(held).getCompoundTag(BlockJar.TILE_NBT_STACK);
+        			}
+        			if((!nbt.hasKey("IsShulker") || !nbt.getBoolean("IsShulker")) && (!nbt.hasKey("Count") || nbt.getInteger("Count") <=0)){
+        				nbt.setBoolean("IsShulker", true);
+        				if(ItemStackTools.getStackSize(held) == 1){
+        					ItemNBTHelper.getCompound(held).setTag(BlockJar.TILE_NBT_STACK, nbt);
+        				} else {
+        					ItemStack newStack = ItemUtil.copy(held, 1);
+        					ItemNBTHelper.getCompound(newStack).setTag(BlockJar.TILE_NBT_STACK, nbt);
+        					player.setHeldItem(event.getHand(), ItemUtil.consumeItem(held));
+        					if(!player.inventory.addItemStackToInventory(newStack)){
+        						ItemUtil.dropFromPlayer(player, newStack, false);
+        					}
+        				}
+        				entity.setDead();
+        			}
+        		}
         	}
         }
     }

@@ -154,7 +154,7 @@ public class ProfileUtil {
 			MinecraftProfilePropertiesResponse response = null;
 			try {
 				response = getResponse(jsonResult);
-				propertiesCache.put(uuid, response);
+				if(response !=null)propertiesCache.put(uuid, response);
 			} catch (AuthenticationException e) {
 				e.printStackTrace();
 			}

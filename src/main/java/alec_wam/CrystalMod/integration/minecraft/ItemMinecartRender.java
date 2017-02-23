@@ -133,9 +133,6 @@ public class ItemMinecartRender implements ICustomItemRenderer {
 			float scale = 2.0f;
 			GlStateManager.scale(1.5F*scale, 1.5F*scale, 1.5F*scale);
 			if(type == TransformType.THIRD_PERSON_RIGHT_HAND){
-				//GlStateManager.rotate(90, 0, 1, 0);
-				//GlStateManager.rotate(90-20, 0, 0, 1);
-				//GlStateManager.rotate(-45, 1, 0, 0);
 				GlStateManager.translate(2.7, -1.3, -2.7);
 				GlStateManager.rotate(180, 0, 1, 0);
 				GlStateManager.scale(0.8, 0.8, 0.8);
@@ -146,7 +143,7 @@ public class ItemMinecartRender implements ICustomItemRenderer {
 			Minecraft.getMinecraft().getRenderManager().doRenderEntity(minecart, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F, true);
 			GlStateManager.popMatrix();
 		}
-		else if(type == TransformType.GROUND || type == null){
+		else if(type == TransformType.GROUND){
 			GlStateManager.pushMatrix();
 			float scale = 3.0f;
 			GlStateManager.scale(scale, scale, scale);
@@ -159,7 +156,21 @@ public class ItemMinecartRender implements ICustomItemRenderer {
             GlStateManager.enableBlend();
             GlStateManager.enableColorMaterial();
 			GlStateManager.popMatrix();
-		} else if(type == TransformType.FIXED || type == null){
+		} else if(type == TransformType.HEAD){
+			GlStateManager.pushMatrix();
+			float scale = 3f;
+			GlStateManager.scale(scale, scale, scale);
+			GlStateManager.translate(0, -0.4, 0);
+			GlStateManager.rotate(90, 0, 1, 0);
+			GlStateManager.enableBlend();
+			GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+			Minecraft.getMinecraft().getRenderManager().doRenderEntity(minecart, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F, true);
+			GlStateManager.disableBlend();
+			GlStateManager.enableLighting();
+            GlStateManager.enableBlend();
+            GlStateManager.enableColorMaterial();
+			GlStateManager.popMatrix();
+		}else if(type == TransformType.FIXED || type == null){
 			GlStateManager.pushMatrix();
 			float scale = 3.0f;
 			GlStateManager.scale(scale, scale, scale);

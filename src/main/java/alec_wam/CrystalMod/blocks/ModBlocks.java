@@ -15,11 +15,14 @@ import alec_wam.CrystalMod.blocks.crops.ItemBlockWater;
 import alec_wam.CrystalMod.blocks.crops.material.BlockMaterialCrop;
 import alec_wam.CrystalMod.blocks.crops.material.RenderTileMaterialCrop;
 import alec_wam.CrystalMod.blocks.crops.material.TileMaterialCrop;
+import alec_wam.CrystalMod.blocks.decorative.bridge.BlockBridge;
+import alec_wam.CrystalMod.blocks.decorative.bridge.TileBridge;
 import alec_wam.CrystalMod.blocks.glass.BlockCrystalGlass;
 import alec_wam.CrystalMod.blocks.glass.BlockCrystalGlassPane;
 import alec_wam.CrystalMod.blocks.rail.BlockReinforcedRail;
 import alec_wam.CrystalMod.handler.MissingItemHandler;
 import alec_wam.CrystalMod.tiles.cauldron.BlockCrystalCauldron;
+import alec_wam.CrystalMod.tiles.cauldron.RenderTileCrystalCauldron;
 import alec_wam.CrystalMod.tiles.cauldron.TileEntityCrystalCauldron;
 import alec_wam.CrystalMod.tiles.chest.BlockCrystalChest;
 import alec_wam.CrystalMod.tiles.chest.CrystalChestType;
@@ -27,7 +30,6 @@ import alec_wam.CrystalMod.tiles.chest.ItemBlockCrystalChest;
 import alec_wam.CrystalMod.tiles.chest.wireless.BlockWirelessChest;
 import alec_wam.CrystalMod.tiles.chest.wireless.TileWirelessChest;
 import alec_wam.CrystalMod.tiles.cluster.BlockCrystalCluster;
-import alec_wam.CrystalMod.tiles.cluster.RenderTileCrystalCluster;
 import alec_wam.CrystalMod.tiles.cluster.TileCrystalCluster;
 import alec_wam.CrystalMod.tiles.crate.BlockCrate;
 import alec_wam.CrystalMod.tiles.crate.RenderTileCrate;
@@ -43,6 +45,9 @@ import alec_wam.CrystalMod.tiles.fusion.RenderTileFusionPedistal;
 import alec_wam.CrystalMod.tiles.fusion.RenderTilePedistal;
 import alec_wam.CrystalMod.tiles.fusion.TileFusionPedistal;
 import alec_wam.CrystalMod.tiles.fusion.TilePedistal;
+import alec_wam.CrystalMod.tiles.jar.BlockJar;
+import alec_wam.CrystalMod.tiles.jar.RenderTileJar;
+import alec_wam.CrystalMod.tiles.jar.TileJar;
 import alec_wam.CrystalMod.tiles.machine.advDispenser.BlockAdvDispenser;
 import alec_wam.CrystalMod.tiles.machine.advDispenser.TileAdvDispenser;
 import alec_wam.CrystalMod.tiles.machine.crafting.BlockCrystalMachine;
@@ -212,6 +217,8 @@ public class ModBlocks {
 	public static BlockAdvDispenser advDispenser;
 	
 	public static BlockReinforcedRail darkIronRail;
+	public static BlockBridge bridge;
+	public static BlockJar jar;
 	
 	public static BlockPedistal pedistal;
 	public static BlockFusionPedistal fusionPedistal;
@@ -467,6 +474,14 @@ public class ModBlocks {
 		darkIronRail = new BlockReinforcedRail();
 		registerBlock(darkIronRail, "reinforcedrail");
 		
+		bridge = new BlockBridge();
+		registerBlock(bridge, "bridge");
+		registerTileEntity(TileBridge.class);
+		
+		jar = new BlockJar();
+		registerBlock(jar, "jar");
+		registerTileEntity(TileJar.class);
+		
 		pedistal = new BlockPedistal();
 		registerBlock(pedistal, new ItemBlockPedistal(pedistal), "pedistal");
 		registerTileEntity(TilePedistal.class);
@@ -489,7 +504,8 @@ public class ModBlocks {
 				initBasicModel(block);
 			}
 		}
-		
+
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCrystalCauldron.class, new RenderTileCrystalCauldron());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityHDDInterface.class, new TileEntityHDDInterfaceRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileHDDArray.class, new TileHDDArrayRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPanelItem.class, new TileEntityPanelItemRenderer<TileEntityPanelItem>());

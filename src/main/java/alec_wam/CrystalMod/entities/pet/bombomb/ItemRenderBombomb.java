@@ -125,6 +125,20 @@ public class ItemRenderBombomb implements ICustomItemRenderer {
 			Minecraft.getMinecraft().getRenderManager().doRenderEntity(bombomb, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F, true);
 			GlStateManager.popMatrix();
 		}
+		else if(type == TransformType.HEAD){
+			GlStateManager.pushMatrix();
+			float scale = 4.0f;
+			GlStateManager.scale(scale, scale, scale);
+			GlStateManager.translate(0, -0.4, 0);
+			GlStateManager.enableBlend();
+			GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+			Minecraft.getMinecraft().getRenderManager().doRenderEntity(bombomb, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F, true);
+			GlStateManager.disableBlend();
+			GlStateManager.enableLighting();
+            GlStateManager.enableBlend();
+            GlStateManager.enableColorMaterial();
+			GlStateManager.popMatrix();
+		}
 		else if(type == TransformType.GROUND || type == TransformType.FIXED){
 			GlStateManager.pushMatrix();
 			float scale = 3.0f;

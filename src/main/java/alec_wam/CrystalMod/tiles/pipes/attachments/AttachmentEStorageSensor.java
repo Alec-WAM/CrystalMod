@@ -3,26 +3,9 @@ package alec_wam.CrystalMod.tiles.pipes.attachments;
 import java.util.Iterator;
 import java.util.List;
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.block.model.BlockFaceUV;
-import net.minecraft.client.renderer.block.model.BlockPartFace;
-import net.minecraft.client.renderer.block.model.BlockPartRotation;
-import net.minecraft.client.renderer.block.model.FaceBakery;
-import net.minecraft.client.renderer.block.model.ModelRotation;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
 import org.lwjgl.util.vector.Vector3f;
+
+import com.google.common.collect.Lists;
 
 import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
@@ -35,57 +18,30 @@ import alec_wam.CrystalMod.tiles.pipes.attachments.gui.GuiAttachmentSensor;
 import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetwork;
 import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage.ItemStackData;
 import alec_wam.CrystalMod.tiles.pipes.estorage.TileEntityPipeEStorage;
+import alec_wam.CrystalMod.util.CompareType;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.client.RenderUtil;
-
-import com.google.common.collect.Lists;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.renderer.block.model.BlockFaceUV;
+import net.minecraft.client.renderer.block.model.BlockPartFace;
+import net.minecraft.client.renderer.block.model.BlockPartRotation;
+import net.minecraft.client.renderer.block.model.FaceBakery;
+import net.minecraft.client.renderer.block.model.ModelRotation;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class AttachmentEStorageSensor extends AttachmentData {
 
-	public static enum CompareType{
-		NOT("!=") {
-			public boolean passes(int amount, int filter){
-				return amount !=filter;
-			}
-		}, 
-		EQUALS("=") {
-			public boolean passes(int amount, int filter){
-				return amount == filter;
-			}
-		}, 
-		LESS("<") {
-			public boolean passes(int amount, int filter){
-				return amount < filter;
-			}
-		}, 
-		GREATER(">") {
-			public boolean passes(int amount, int filter){
-				return amount > filter;
-			}
-		}, 
-		LESS_EQUAL("<=") {
-			public boolean passes(int amount, int filter){
-				return amount <= filter;
-			}
-		}, 
-		GREATER_EQUAL(">=") {
-			public boolean passes(int amount, int filter){
-				return amount >= filter;
-			}
-		};
-		
-		final String visual;
-		CompareType(String visual){
-			this.visual = visual;
-		}
-		
-		public String getStringValue(){
-			return visual;
-		}
-		
-		public abstract boolean passes(int amount, int filter);
-	}
-	
 	public ItemStack filterStack;
 	public int filterAmount = 0;
 	public CompareType compare = CompareType.GREATER;

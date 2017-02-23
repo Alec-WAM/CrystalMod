@@ -60,6 +60,10 @@ public class ItemRenderBackpack implements ICustomItemRenderer {
 				GlStateManager.translate(0, -0.8, -0.5);
 				GlStateManager.scale(1.7, 1.7, 1.7);
 			}
+			if(lastTransform == TransformType.HEAD){
+				GlStateManager.translate(0, -0.8, -0.5);
+				GlStateManager.scale(1.5, 1.5, 1.5);
+			}
 			
 			this.backpackModel.Strap_Long.isHidden = this.backpackModel.Strap_Long2.isHidden = true;
             this.backpackModel.render(null, 0, 0, 0, 0, 0, 0.0625F);
@@ -79,18 +83,20 @@ public class ItemRenderBackpack implements ICustomItemRenderer {
 							ItemStack tool = normalInv.getToolStack(1);
 							if(ItemStackTools.isValid(weapon)){
 								GlStateManager.pushMatrix();
-								GlStateManager.translate(0.40, 0.3, 0.3);
+								GlStateManager.translate(0.4, 0.4, 0.4);
 								GlStateManager.rotate(90, 0, 1, 0);
-								GlStateManager.rotate(45, 0, 0, 1);
-								RenderUtil.renderItem(weapon, TransformType.GROUND);
+								GlStateManager.rotate(-45, 0, 0, 1);
+								GlStateManager.scale(0.5, 0.5, 0.5);
+								RenderUtil.renderItem(weapon, TransformType.FIXED);
 								GlStateManager.popMatrix();
 							}
 							if(ItemStackTools.isValid(tool)){
 								GlStateManager.pushMatrix();
-								GlStateManager.translate(-0.4, 0.5, 0.4);
+								GlStateManager.translate(-0.4, 0.4, 0.4);
 								GlStateManager.rotate(90, 0, 1, 0);
-								GlStateManager.rotate(225, 0, 0, 1);
-								RenderUtil.renderItem(tool, TransformType.GROUND);
+								GlStateManager.rotate(135, 0, 0, 1);
+								GlStateManager.scale(0.5, 0.5, 0.5);
+								RenderUtil.renderItem(tool, TransformType.FIXED);
 								GlStateManager.popMatrix();
 							}
 						}

@@ -15,6 +15,7 @@ import net.minecraft.network.NetHandlerPlayServer;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 
 public class PacketTileMessage extends AbstractPacketThreadsafe {
@@ -69,6 +70,11 @@ public class PacketTileMessage extends AbstractPacketThreadsafe {
 		if(world == null){
 			return;
 		}
+		if(type.equals("#LightUpdate#")){
+			world.checkLightFor(EnumSkyBlock.BLOCK, new BlockPos(x, y, z));
+			return;
+		}
+		
 		TileEntity tile = world.getTileEntity(new BlockPos(x, y, z));
 		if(tile !=null){
 			if(tile instanceof IMessageHandler)((IMessageHandler)tile).handleMessage(type, data, true);

@@ -79,5 +79,10 @@ public class MuffleBatUpgrade extends BatUpgrade {
 		}
 		return 0;
 	}
+	
+	@Override
+    public UpgradeData getCreativeListData(){
+    	return null;
+    }
 
 }

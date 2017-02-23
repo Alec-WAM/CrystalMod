@@ -101,9 +101,10 @@ public class BlockBattery extends BlockContainer implements ICustomModel {
 	
 	@Override
     public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
-        return state;
+        return super.getActualState(state, world, pos);
     }
 	
+	@Override
 	public IBlockState getExtendedState(final IBlockState state, final IBlockAccess world, final BlockPos pos) {
 		TileEntity tile = world.getTileEntity(pos);
         return (IBlockState)new FakeBatteryState(state, world, pos, (tile !=null && tile instanceof TileEntityBattery) ? (TileEntityBattery)tile : null);

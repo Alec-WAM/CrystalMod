@@ -411,7 +411,7 @@ public class BlockWirelessChest extends BlockContainer implements ICustomModel
 		if (!(te instanceof TileWirelessChest)) {
 			return null;
 		}
-		AxisAlignedBB minBB = new AxisAlignedBB(0, 0, 0, 1, 1, 1);
+		AxisAlignedBB minBB = new AxisAlignedBB(0.0625F, 0F, 0.0625F, 0.9375F, 0.875F, 0.9375F);
 
 		List<RaytraceResult> results = doRayTraceAll(world, pos.getX(),
 				pos.getY(), pos.getZ(), player);
@@ -427,7 +427,7 @@ public class BlockWirelessChest extends BlockContainer implements ICustomModel
 		if (hit != null && hit.component != null && hit.component.bound != null) {
 			minBB = hit.component.bound;
 		} else {
-			minBB = new AxisAlignedBB(0.25f, 0.25f, 0.25f, 0.75f, 0.75f, 0.75f);
+			minBB = new AxisAlignedBB(0.0625F, 0F, 0.0625F, 0.9375F, 0.875F, 0.9375F);
 		}
 		return new AxisAlignedBB(pos.getX() + minBB.minX, pos.getY()
 				+ minBB.minY, pos.getZ() + minBB.minZ, pos.getX() + minBB.maxX,
@@ -530,7 +530,7 @@ public class BlockWirelessChest extends BlockContainer implements ICustomModel
 			}
 		}
 
-		setBlockBounds(0, 0, 0, 1, 1, 1);
+		setBlockBounds(0.0625F, 0F, 0.0625F, 0.9375F, 0.875F, 0.9375F);
 
 		return hits;
 	}

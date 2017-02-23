@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import alec_wam.CrystalMod.fluids.ModFluids;
+import alec_wam.CrystalMod.items.ModItems;
+import alec_wam.CrystalMod.items.ItemMachineFrame.FrameType;
 import alec_wam.CrystalMod.tiles.cauldron.CauldronRecipeManager;
 import alec_wam.CrystalMod.tiles.cauldron.CauldronRecipeManager.InfusionRecipe;
 import alec_wam.CrystalMod.util.ItemStackTools;
@@ -102,6 +104,9 @@ public class CrystalInfusionManager {
 		for(InfusionRecipe recipe : CauldronRecipeManager.getRecipes()){
 			recipes.add(new InfusionMachineRecipe(recipe.getInput(), recipe.getFluidInput(), recipe.getOutput().copy(), 1600));
 		}
+		
+		recipes.add(new InfusionMachineRecipe(new ItemStack(ModItems.machineFrame, 1, FrameType.BASIC.getMetadata()), new FluidStack(ModFluids.fluidEnder, 1000), new ItemStack(ModItems.machineFrame, 1, FrameType.ENDER.getMetadata()), 1600));
+
 		recipes.add(new InfusionMachineRecipe(new ItemStack(Blocks.COBBLESTONE), new FluidStack(FluidRegistry.WATER, 125), new ItemStack(Blocks.MOSSY_COBBLESTONE), 1600));
 		recipes.add(new InfusionMachineRecipe(new ItemStack(Blocks.COBBLESTONE), new FluidStack(FluidRegistry.LAVA, 125), new ItemStack(Blocks.NETHERRACK), 1600));
 		//Molten Block

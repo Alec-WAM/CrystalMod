@@ -24,6 +24,8 @@ import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.packets.PacketExtendedPlayer;
 import alec_wam.CrystalMod.tiles.spawner.ItemMobEssence;
 import alec_wam.CrystalMod.util.ChatUtil;
+import alec_wam.CrystalMod.util.ItemNBTHelper;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ModLogger;
 import alec_wam.CrystalMod.util.ProfileUtil;
 import alec_wam.CrystalMod.util.StringUtils;
@@ -96,6 +98,11 @@ public class CmdTag extends AbstractCMCommand{
 				
 				if(args.length > 1 && args[1].equalsIgnoreCase("jei")){
 					if(Loader.isModLoaded("jei"))Internal.getHelpers().reload();
+					return;
+				}
+				
+				if(args.length > 1 && args[1].equalsIgnoreCase("itemnbt")){
+					ChatUtil.sendChat(player, (ItemStackTools.isValid(player.getHeldItemMainhand()) && player.getHeldItemMainhand().hasTagCompound() ? player.getHeldItemMainhand().getTagCompound().toString() : "empty"));
 					return;
 				}
 				
