@@ -1,0 +1,11 @@
+{
+	"forge_marker": 1,
+	"defaults": {
+		"model": "crystalmod:jar",
+		"transform": "forge:default-block"
+	},
+	"variants": {
+        "inventory":{"model": "crystalmod:jar"},
+        "normal":{"model": "crystalmod:jar"}
+    }
+}

@@ -1,0 +1,71 @@
+{
+    "__createdwith": "opl's Model Creator",
+    "ambientocclusion": false,
+    "textures": {
+		"particle": "crystalmod:blocks/jarglass",
+        "glass": "crystalmod:blocks/jarglass",
+        "cork": "crystalmod:blocks/jarcork"
+    },
+    "elements": [
+        {
+            "from": [3,0,3],
+            "to": [13,13,13],
+            "faces": {
+                "up": {
+                    "uv": [0,0,16,16],
+                    "texture": "#glass"
+                },
+                "down": {
+                    "uv": [0,0,16,16],
+                    "texture": "#glass"
+                },
+                "west": {
+                    "uv": [0,0,16,16],
+                    "texture": "#glass"
+                },
+                "east": {
+                    "uv": [0,0,16,16],
+                    "texture": "#glass"
+                },
+                "north": {
+                    "uv": [0,0,16,16],
+                    "texture": "#glass"
+                },
+                "south": {
+                    "uv": [0,0,16,16],
+                    "texture": "#glass"
+                }
+            }
+        },
+        {
+            "from": [5,13,5],
+            "to": [11,15,11],
+            "faces": {
+                "up": {
+                    "uv": [0,0,16,16],
+                    "texture": "#cork"
+                },
+                "down": {
+                    "uv": [0,0,16,16],
+                    "texture": "#cork"
+                },
+                "west": {
+                    "uv": [0,0,16,3],
+                    "texture": "#cork"
+                },
+                "east": {
+                    "uv": [0,0,16,3],
+                    "texture": "#cork"
+                },
+                "north": {
+                    "uv": [0,0,16,3],
+                    "texture": "#cork"
+                },
+                "south": {
+                    "uv": [0,0,16,3],
+                    "texture": "#cork"
+                }
+            }
+        }
+    ]
+}
