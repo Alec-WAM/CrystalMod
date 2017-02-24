@@ -73,6 +73,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockPlanks;
 import net.minecraft.block.BlockSlab;
 import net.minecraft.enchantment.EnchantmentData;
 import net.minecraft.block.BlockFlower.EnumFlowerType;
@@ -318,6 +319,10 @@ public class ModCrafting {
 
 		addShapedOreRecipe(new ItemStack(ModBlocks.jar, 1, 4), new Object[]{" S ", "P P", "PPP", 'S', "slabWood", 'P', "paneGlassColorless"});
 		
+		for(BlockPlanks.EnumType woodType : BlockPlanks.EnumType.values()){
+			addShapedOreRecipe(new ItemStack(ModBlocks.shieldRack, 1, woodType.getMetadata()), new Object[]{"HSH", "SHS", " S ", 'S', new ItemStack(Blocks.WOODEN_SLAB, 1, woodType.getMetadata()), 'H', Blocks.TRIPWIRE_HOOK});
+		}
+
 		List<String> copyListBattery = Lists.newArrayList();
 		copyListBattery.add("Energy");
 		copyListBattery.add("BatteryData");

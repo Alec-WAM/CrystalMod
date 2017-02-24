@@ -465,6 +465,13 @@ tile.crystalmod.jar.name=Glass Jar
 crystalmod.tooltip.jar.shulker=Shulker Lamp
 crystalmod.tooltip.jar.contains=Contains: %s/%s
 
+tile.crystalmod.shieldrack.oak.name=Oak Shield Rack
+tile.crystalmod.shieldrack.spruce.name=Spruce Shield Rack
+tile.crystalmod.shieldrack.birch.name=Birch Shield Rack
+tile.crystalmod.shieldrack.jungle.name=Jungle Shield Rack
+tile.crystalmod.shieldrack.acacia.name=Acacia Shield Rack
+tile.crystalmod.shieldrack.darkoak.name=Dark Oak Shield Rack
+
 #--Fluids
 fluid.crystalmod.xpjuice=Liquid XP
 fluid.crystalmod.crystal.blue=Blue Liquid Crystal
