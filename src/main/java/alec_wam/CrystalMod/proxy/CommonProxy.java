@@ -6,6 +6,8 @@ import com.mojang.authlib.GameProfile;
 
 import alec_wam.CrystalMod.Config;
 import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.api.energy.CapabilityCrystalEnergy;
+import alec_wam.CrystalMod.api.oxygen.CapabilityOxygen;
 import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.blocks.crops.material.ModCrops;
 import alec_wam.CrystalMod.capability.ExtendedPlayer;
@@ -15,14 +17,12 @@ import alec_wam.CrystalMod.enchantment.ModEnchantments;
 import alec_wam.CrystalMod.entities.ModEntites;
 import alec_wam.CrystalMod.entities.disguise.DisguiseHandler;
 import alec_wam.CrystalMod.fluids.ModFluids;
-import alec_wam.CrystalMod.handler.ClientEventHandler;
 import alec_wam.CrystalMod.handler.EventHandler;
 import alec_wam.CrystalMod.handler.KeyHandler;
 import alec_wam.CrystalMod.handler.MissingItemHandler;
 import alec_wam.CrystalMod.integration.ModIntegration;
 import alec_wam.CrystalMod.integration.minecraft.ModBanners;
 import alec_wam.CrystalMod.items.ModItems;
-import alec_wam.CrystalMod.items.guide.GuidePages;
 import alec_wam.CrystalMod.items.guide.GuidePages.LookupResult;
 import alec_wam.CrystalMod.items.tools.bat.ModBats;
 import alec_wam.CrystalMod.tiles.machine.worksite.WorksiteChunkLoader;
@@ -81,6 +81,8 @@ public class CommonProxy {
         
         
         CapabilityManager.INSTANCE.register(ExtendedPlayer.class, new ExtendedPlayerProvider.Storage(), ExtendedPlayer.class);
+        CapabilityCrystalEnergy.register();
+        CapabilityOxygen.register();
         
         CrystalModWorldGenerator generator = CrystalModWorldGenerator.instance;
         GameRegistry.registerWorldGenerator(generator, 5);

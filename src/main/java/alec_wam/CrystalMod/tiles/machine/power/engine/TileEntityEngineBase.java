@@ -1,22 +1,20 @@
 package alec_wam.CrystalMod.tiles.machine.power.engine;
 
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
 import alec_wam.CrystalMod.api.energy.CEnergyStorage;
-import alec_wam.CrystalMod.api.energy.ICEnergyProvider;
-import alec_wam.CrystalMod.api.energy.ICEnergyReceiver;
+import alec_wam.CrystalMod.api.energy.CapabilityCrystalEnergy;
+import alec_wam.CrystalMod.api.energy.ICEnergyStorage;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.IMessageHandler;
 import alec_wam.CrystalMod.network.packets.PacketTileMessage;
 import alec_wam.CrystalMod.tiles.TileEntityMod;
 import alec_wam.CrystalMod.tiles.machine.IMachineTile;
-import alec_wam.CrystalMod.util.BlockUtil;
-import alec_wam.CrystalMod.util.ModLogger;
 import alec_wam.CrystalMod.util.data.watchable.WatchableBoolean;
 import alec_wam.CrystalMod.util.data.watchable.WatchableInteger;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 
-public abstract class TileEntityEngineBase extends TileEntityMod implements ICEnergyProvider, IMessageHandler, IMachineTile {
+public abstract class TileEntityEngineBase extends TileEntityMod implements IMessageHandler, IMachineTile {
 
 	public CEnergyStorage energyStorage;
 	public WatchableInteger fuel = new WatchableInteger();
@@ -121,10 +119,10 @@ public abstract class TileEntityEngineBase extends TileEntityMod implements ICEn
 		    if(!powered){
 				for(EnumFacing face : EnumFacing.VALUES){
 					TileEntity tile = this.getWorld().getTileEntity(getPos().offset(face));
-					if(tile !=null && tile instanceof ICEnergyReceiver){
-						ICEnergyReceiver rec = (ICEnergyReceiver)tile;
-						if(!rec.canConnectCEnergy(face.getOpposite()))continue;
-						int fill = rec.fillCEnergy(face.getOpposite(), Math.min(energyStorage.getMaxExtract(), energyStorage.getCEnergyStored()), false);
+					if(tile !=null && tile.hasCapability(CapabilityCrystalEnergy.CENERGY, face.getOpposite())){
+						ICEnergyStorage rec = tile.getCapability(CapabilityCrystalEnergy.CENERGY, face.getOpposite());
+						if(!rec.canReceive())continue;
+						int fill = rec.fillCEnergy(Math.min(energyStorage.getMaxExtract(), energyStorage.getCEnergyStored()), false);
 						if(fill > 0){
 							this.energyStorage.modifyEnergyStored(-fill);
 						}
@@ -142,21 +140,6 @@ public abstract class TileEntityEngineBase extends TileEntityMod implements ICEn
 	public abstract void refuel();
 	
 	public abstract int getFuelValue();
-	
-	@Override
-	public boolean canConnectCEnergy(EnumFacing from) {
-		return from !=EnumFacing.getFront(facing).getOpposite();
-	}
-
-	@Override
-	public int getCEnergyStored(EnumFacing from) {
-		return energyStorage.getCEnergyStored();
-	}
-
-	@Override
-	public int getMaxCEnergyStored(EnumFacing from) {
-		return energyStorage.getMaxCEnergyStored();
-	}
 
 	public int getScaledFuel(int scale) {
 		if ((this.maxFuel.getValue() <= 0) || (this.fuel.getValue() <= 0)) {
@@ -195,4 +178,52 @@ public abstract class TileEntityEngineBase extends TileEntityMod implements ICEn
 			this.maxFuel.setValue(newMax);
 		}
 	}
+	
+	@Override
+	public boolean hasCapability(net.minecraftforge.common.capabilities.Capability<?> capability, net.minecraft.util.EnumFacing facing)
+    {
+		return capability == CapabilityCrystalEnergy.CENERGY || super.hasCapability(capability, facing);
+	}
+	
+	@SuppressWarnings("unchecked")
+    @Override
+    public <T> T getCapability(net.minecraftforge.common.capabilities.Capability<T> capability, net.minecraft.util.EnumFacing facing)
+    {
+        if (facing != null && capability == CapabilityCrystalEnergy.CENERGY){
+            return (T) new ICEnergyStorage(){
+
+				@Override
+				public int fillCEnergy(int maxReceive, boolean simulate) {
+					return 0;
+				}
+
+				@Override
+				public int drainCEnergy(int maxExtract, boolean simulate) {
+					return 0;
+				}
+
+				@Override
+				public int getCEnergyStored() {
+					return energyStorage.getCEnergyStored();
+				}
+
+				@Override
+				public int getMaxCEnergyStored() {
+					return energyStorage.getMaxCEnergyStored();
+				}
+
+				@Override
+				public boolean canExtract() {
+					return true;
+				}
+
+				@Override
+				public boolean canReceive() {
+					return false;
+				}
+            	
+            };
+        }
+        return super.getCapability(capability, facing);
+    }
 }

@@ -1,20 +1,20 @@
 package alec_wam.CrystalMod.tiles.machine.power.battery;
 
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumFacing.Axis;
-import net.minecraft.util.ITickable;
 import alec_wam.CrystalMod.api.energy.CEnergyStorage;
-import alec_wam.CrystalMod.api.energy.ICEnergyProvider;
-import alec_wam.CrystalMod.api.energy.ICEnergyReceiver;
+import alec_wam.CrystalMod.api.energy.CapabilityCrystalEnergy;
+import alec_wam.CrystalMod.api.energy.ICEnergyStorage;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.IMessageHandler;
 import alec_wam.CrystalMod.network.packets.PacketTileMessage;
 import alec_wam.CrystalMod.tiles.TileEntityIOSides;
 import alec_wam.CrystalMod.tiles.machine.power.battery.BlockBattery.BatteryType;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumFacing.Axis;
+import net.minecraft.util.ITickable;
 
-public class TileEntityBattery extends TileEntityIOSides implements IMessageHandler, ITickable, ICEnergyReceiver, ICEnergyProvider {
+public class TileEntityBattery extends TileEntityIOSides implements IMessageHandler, ITickable {
 	public static final int[] MAX_SEND = { 80, 400, 2000, 10000, 50000, 50000};
 	public static final int[] MAX_RECEIVE = { 80, 400, 2000, 10000, 50000, 0};
 	public static final int[] MAX_ENERGY = new int[]{400000, 2000000, 10000000, 30000000, 50000000, 100000000};
@@ -70,10 +70,10 @@ public class TileEntityBattery extends TileEntityIOSides implements IMessageHand
 				IOType io = getIO(fix);
 				if(io == IOType.OUT){
 					TileEntity tile = this.getWorld().getTileEntity(getPos().offset(face));
-					if(tile !=null && tile instanceof ICEnergyReceiver){
-						ICEnergyReceiver rec = (ICEnergyReceiver)tile;
+					if(tile !=null && tile.hasCapability(CapabilityCrystalEnergy.CENERGY, face.getOpposite())){
+						ICEnergyStorage rec = tile.getCapability(CapabilityCrystalEnergy.CENERGY, face.getOpposite());
 						boolean creative = BlockBattery.fromMeta(getBlockMetadata()) == BatteryType.CREATIVE;
-						int drain = rec.fillCEnergy(face.getOpposite(), creative ? energyStorage.getMaxExtract() : Math.min(energyStorage.getMaxExtract(), energyStorage.getCEnergyStored()), false);
+						int drain = !rec.canReceive() ? 0 : rec.fillCEnergy(creative ? energyStorage.getMaxExtract() : Math.min(energyStorage.getMaxExtract(), energyStorage.getCEnergyStored()), false);
 						if(!creative){
 							this.energyStorage.modifyEnergyStored(-drain);
 							if(drain > 0){
@@ -87,16 +87,6 @@ public class TileEntityBattery extends TileEntityIOSides implements IMessageHand
 				}
 			}
 		}
-	}
-	
-	@Override
-	public int getCEnergyStored(EnumFacing from) {
-		return energyStorage.getCEnergyStored();
-	}
-
-	@Override
-	public int getMaxCEnergyStored(EnumFacing from) {
-		return energyStorage.getMaxCEnergyStored();
 	}
 
 	public EnumFacing fixFace(EnumFacing side){
@@ -126,34 +116,66 @@ public class TileEntityBattery extends TileEntityIOSides implements IMessageHand
 	}
 	
 	@Override
-	public boolean canConnectCEnergy(EnumFacing from) {
-		return getIO(fixFace(from)) !=IOType.BLOCKED;
+	public boolean hasCapability(net.minecraftforge.common.capabilities.Capability<?> capability, net.minecraft.util.EnumFacing facing)
+    {
+		return capability == CapabilityCrystalEnergy.CENERGY || super.hasCapability(capability, facing);
 	}
+	
+	@SuppressWarnings("unchecked")
+    @Override
+    public <T> T getCapability(net.minecraftforge.common.capabilities.Capability<T> capability, net.minecraft.util.EnumFacing facing)
+    {
+        if (facing != null && capability == CapabilityCrystalEnergy.CENERGY){
+            return (T) new ICEnergyStorage(){
 
-	@Override
-	public int fillCEnergy(EnumFacing from, int maxReceive, boolean simulate) {
-		if(getIO(fixFace(from)) == IOType.BLOCKED || getIO(fixFace(from)) == IOType.OUT)return 0;
-		
-		boolean creative = BlockBattery.fromMeta(getBlockMetadata()) == BatteryType.CREATIVE;
-		if(creative){
-			return 0;
-		}
-		
-		int fill = energyStorage.fillCEnergy(Math.min(MAX_RECEIVE[0], maxReceive), simulate);
-		if(fill > 0 && !simulate){
-			if(!getWorld().isRemote){
-				NBTTagCompound nbt = new NBTTagCompound();
-				nbt.setInteger("Energy", energyStorage.getCEnergyStored());
-				CrystalModNetwork.sendToAllAround(new PacketTileMessage(getPos(), "UpdateEnergy", nbt), this);
-			}
-			//getWorld().notifyBlockOfStateChange(getPos(), ModBlocks.battery);
-		}
-		return fill;
-	}
+				@Override
+				public int fillCEnergy(int maxReceive, boolean simulate) {
+					if(!canReceive())return 0;
+					
+					boolean creative = BlockBattery.fromMeta(getBlockMetadata()) == BatteryType.CREATIVE;
+					if(creative){
+						return 0;
+					}
+					
+					int fill = energyStorage.fillCEnergy(Math.min(MAX_RECEIVE[0], maxReceive), simulate);
+					if(fill > 0 && !simulate){
+						if(!getWorld().isRemote){
+							NBTTagCompound nbt = new NBTTagCompound();
+							nbt.setInteger("Energy", energyStorage.getCEnergyStored());
+							CrystalModNetwork.sendToAllAround(new PacketTileMessage(getPos(), "UpdateEnergy", nbt), TileEntityBattery.this);
+						}
+					}
+					return fill;
+				}
 
-	@Override
-	public int drainCEnergy(EnumFacing from, int maxExtract, boolean simulate) {
-		return 0;
-	}
+				@Override
+				public int drainCEnergy(int maxExtract, boolean simulate) {
+					return 0;
+				}
+
+				@Override
+				public int getCEnergyStored() {
+					return energyStorage.getCEnergyStored();
+				}
+
+				@Override
+				public int getMaxCEnergyStored() {
+					return energyStorage.getMaxCEnergyStored();
+				}
+
+				@Override
+				public boolean canExtract() {
+					return false;
+				}
+
+				@Override
+				public boolean canReceive() {
+					return !(getIO(fixFace(facing)) == IOType.BLOCKED || getIO(fixFace(facing)) == IOType.OUT);
+				}
+            	
+            };
+        }
+        return super.getCapability(capability, facing);
+    }
 
 }

@@ -1,22 +1,23 @@
 package alec_wam.CrystalMod.tiles.machine;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import alec_wam.CrystalMod.api.energy.CEnergyStorage;
-import alec_wam.CrystalMod.api.energy.ICEnergyReceiver;
+import alec_wam.CrystalMod.api.energy.CapabilityCrystalEnergy;
 import alec_wam.CrystalMod.api.energy.ICEnergyStorage;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.IMessageHandler;
 import alec_wam.CrystalMod.network.packets.PacketTileMessage;
 import alec_wam.CrystalMod.tiles.TileEntityInventory;
 import alec_wam.CrystalMod.util.BlockUtil;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-public abstract class TileEntityMachine extends TileEntityInventory implements ICEnergyReceiver, IMessageHandler, IMachineTile, ISidedInventory, INBTDrop {
+public abstract class TileEntityMachine extends TileEntityInventory implements IMessageHandler, IMachineTile, ISidedInventory, INBTDrop {
 
 	protected CEnergyStorage eStorage;
 	private EnergyConfig energyConfig;
@@ -33,7 +34,11 @@ public abstract class TileEntityMachine extends TileEntityInventory implements I
     	super(name, size);
 
 		energyConfig = new EnergyConfig().setEnergyParams(20);
-		eStorage = new CEnergyStorage(this.energyConfig.maxEnergy, this.energyConfig.maxPower * 4);
+		eStorage = new CEnergyStorage(this.energyConfig.maxEnergy, this.energyConfig.maxPower * 4) {
+			public boolean canExtract(){
+				return false;
+			}
+		};
     }
     
 	public void writeCustomNBT(NBTTagCompound nbt){
@@ -154,28 +159,7 @@ public abstract class TileEntityMachine extends TileEntityInventory implements I
 	
 	public abstract boolean canFinish();
 	public abstract void processFinish();
-	
 
-	@Override
-	public int getCEnergyStored(EnumFacing from) {
-		return eStorage.getCEnergyStored();
-	}
-
-	@Override
-	public int getMaxCEnergyStored(EnumFacing from) {
-		return eStorage.getMaxCEnergyStored();
-	}
-
-	@Override
-	public boolean canConnectCEnergy(EnumFacing from) {
-		return from !=EnumFacing.getHorizontal(facing);
-	}
-
-	@Override
-	public int fillCEnergy(EnumFacing from, int maxReceive, boolean simulate) {
-		return eStorage.fillCEnergy(maxReceive, simulate);
-	}
-	
 	public ICEnergyStorage getEnergyStorage() {
 		return eStorage;
 	}
@@ -292,12 +276,23 @@ public abstract class TileEntityMachine extends TileEntityInventory implements I
 	net.minecraftforge.items.IItemHandler handlerInput = new net.minecraftforge.items.wrapper.SidedInvWrapper(this, EnumFacing.UP);
 	net.minecraftforge.items.IItemHandler handlerOut = new net.minecraftforge.items.wrapper.SidedInvWrapper(this, EnumFacing.NORTH);
 
+	@Override
+    public boolean hasCapability(Capability<?> capability, EnumFacing facingIn) {
+	  if(capability == CapabilityCrystalEnergy.CENERGY){
+		  return facingIn.getHorizontalIndex() !=facing;
+	  }
+      return capability == net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || super.hasCapability(capability, facingIn);
+    }
+	
     @SuppressWarnings("unchecked")
     @Override
     public <T> T getCapability(net.minecraftforge.common.capabilities.Capability<T> capability, net.minecraft.util.EnumFacing facing)
     {
         if (facing != null && capability == net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
             return facing == EnumFacing.UP ? (T) handlerInput : (T) handlerOut;
+        if(capability == CapabilityCrystalEnergy.CENERGY){
+        	return (T) eStorage;
+        }
         return super.getCapability(capability, facing);
     }
 

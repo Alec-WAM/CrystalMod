@@ -133,7 +133,9 @@ public class CEnergyStorage implements ICEnergyStorage {
 	/* IEnergyStorage */
 	@Override
 	public int fillCEnergy(int maxReceive, boolean simulate) {
-
+		if(!this.canReceive()){
+            return 0;
+        }
 		int energyReceived = Math.min(capacity - energy, Math.min(this.maxReceive, maxReceive));
 
 		if (!simulate) {
@@ -144,7 +146,9 @@ public class CEnergyStorage implements ICEnergyStorage {
 
 	@Override
 	public int drainCEnergy(int maxExtract, boolean simulate) {
-
+		if(!this.canExtract()){
+            return 0;
+        }
 		int energyExtracted = Math.min(energy, Math.min(this.maxExtract, maxExtract));
 
 		if (!simulate) {
@@ -163,6 +167,16 @@ public class CEnergyStorage implements ICEnergyStorage {
 	public int getMaxCEnergyStored() {
 
 		return capacity;
+	}
+
+	@Override
+	public boolean canExtract() {
+		return true;
+	}
+
+	@Override
+	public boolean canReceive() {
+		return true;
 	}
 
 }

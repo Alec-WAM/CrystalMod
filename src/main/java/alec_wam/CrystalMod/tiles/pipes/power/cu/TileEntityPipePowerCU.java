@@ -2,14 +2,16 @@ package alec_wam.CrystalMod.tiles.pipes.power.cu;
 
 import java.util.EnumMap;
 
+import javax.annotation.Nullable;
+
 import alec_wam.CrystalMod.Config;
-import alec_wam.CrystalMod.api.energy.ICEnergyConnection;
-import alec_wam.CrystalMod.api.energy.ICEnergyReceiver;
+import alec_wam.CrystalMod.api.energy.CapabilityCrystalEnergy;
+import alec_wam.CrystalMod.api.energy.ICEnergyStorage;
 import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.tiles.pipes.AbstractPipeNetwork;
+import alec_wam.CrystalMod.tiles.pipes.BlockPipe.PipeType;
 import alec_wam.CrystalMod.tiles.pipes.ConnectionMode;
 import alec_wam.CrystalMod.tiles.pipes.TileEntityPipe;
-import alec_wam.CrystalMod.tiles.pipes.BlockPipe.PipeType;
 import alec_wam.CrystalMod.tiles.pipes.power.IPowerInterface;
 import alec_wam.CrystalMod.tiles.pipes.types.IPipeType;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
@@ -17,11 +19,11 @@ import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 
-public class TileEntityPipePowerCU extends TileEntityPipe implements ICEnergyReceiver, ICEnergyConnection {
+public class TileEntityPipePowerCU extends TileEntityPipe {
 
 	protected CUPowerPipeNetwork network;
 
@@ -79,11 +81,6 @@ public class TileEntityPipePowerCU extends TileEntityPipe implements ICEnergyRec
 	public int getCEnergyStored(){
 		return energyStoredCU;
 	}
-	
-	@Override
-	public int getCEnergyStored(EnumFacing from) {
-		return getCEnergyStored();
-	}
 
 	public int getMaxEnergyRecieved(EnumFacing dir) {
       ConnectionMode mode = getConnectionMode(dir);
@@ -116,11 +113,6 @@ public class TileEntityPipePowerCU extends TileEntityPipe implements ICEnergyRec
 	    }
 	    return false;
 	}
-	
-	@Override
-	public int getMaxCEnergyStored(EnumFacing from) {
-		return getMaxCEnergyStored();
-	}
 
 	static int getMaxEnergyIO(int subtype) {
 	    switch (subtype) {
@@ -138,13 +130,7 @@ public class TileEntityPipePowerCU extends TileEntityPipe implements ICEnergyRec
 	public int getMaxCEnergyStored() {
 	    return getMaxEnergyIO(subtype);
 	}
-	
-	@Override
-	public boolean canConnectCEnergy(EnumFacing from) {
-		return this.getConnectionMode(from) != ConnectionMode.DISABLED;
-	}
 
-	@Override
 	public int fillCEnergy(EnumFacing from, int maxExtract, boolean simulate) {
 		if(getMaxEnergyRecieved(from) == 0 || maxExtract <= 0) {
 	      return 0;
@@ -221,8 +207,8 @@ public class TileEntityPipePowerCU extends TileEntityPipe implements ICEnergyRec
 		if(test instanceof TileEntityPipePowerCU) {
 		  return null;
 		}
-		if (test instanceof ICEnergyConnection) {
-		    return new PowerInterfaceCU((ICEnergyConnection) test);
+		if (test.hasCapability(CapabilityCrystalEnergy.CENERGY, direction.getOpposite())) {
+		    return new PowerInterfaceCU(test.getCapability(CapabilityCrystalEnergy.CENERGY, direction.getOpposite()));
 		}     
 		return null;
     }	
@@ -231,5 +217,55 @@ public class TileEntityPipePowerCU extends TileEntityPipe implements ICEnergyRec
     	ItemStack stack = new ItemStack(ModBlocks.crystalPipe, 1, PipeType.POWERCU.getMeta());
     	ItemNBTHelper.setInteger(stack, "Tier", getSubType());
     	return stack;
+    }
+    
+    @Override
+    public boolean hasCapability(net.minecraftforge.common.capabilities.Capability<?> capability, @Nullable net.minecraft.util.EnumFacing facing)
+    {
+    	if(capability == CapabilityCrystalEnergy.CENERGY)return this.getConnectionMode(facing) != ConnectionMode.DISABLED;
+    	return super.hasCapability(capability, facing);
+    }
+    
+    @Override
+    @Nullable
+    public <T> T getCapability(net.minecraftforge.common.capabilities.Capability<T> capability, @Nullable net.minecraft.util.EnumFacing facing)
+    {
+    	if(capability == CapabilityCrystalEnergy.CENERGY && getConnectionMode(facing) != ConnectionMode.DISABLED){
+    		final EnumFacing dir = facing;
+    		return (T) new ICEnergyStorage(){
+
+				@Override
+				public int fillCEnergy(int maxReceive, boolean simulate) {
+					return TileEntityPipePowerCU.this.fillCEnergy(dir, maxReceive, simulate);
+				}
+
+				@Override
+				public int drainCEnergy(int maxExtract, boolean simulate) {
+					return 0;
+				}
+
+				@Override
+				public int getCEnergyStored() {
+					return TileEntityPipePowerCU.this.getCEnergyStored();
+				}
+
+				@Override
+				public int getMaxCEnergyStored() {
+					return TileEntityPipePowerCU.this.getMaxCEnergyStored();
+				}
+
+				@Override
+				public boolean canExtract() {
+					return false;
+				}
+
+				@Override
+				public boolean canReceive() {
+					return getConnectionMode(dir) == ConnectionMode.IN_OUT || getConnectionMode(dir) == ConnectionMode.INPUT;
+				}
+    			
+    		};
+    	}
+    	return super.getCapability(capability, facing);
     }
 }

@@ -9,5 +9,9 @@ public interface ICEnergyStorage {
 	int getCEnergyStored();
 
 	int getMaxCEnergyStored();
+	
+	boolean canExtract();
+	
+	boolean canReceive();
 
 }

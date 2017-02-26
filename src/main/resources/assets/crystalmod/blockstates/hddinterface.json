@@ -1,10 +1,10 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "model": "crystalmod:eStorage/hddinterface",
+    "model": "crystalmod:estorage/hddinterface",
     "textures": {
-	  "particle":"crystalmod:blocks/eStorage/hddInterface/sides",
-      "front": "crystalmod:blocks/eStorage/hddInterface/front_empty"
+	  "particle":"crystalmod:blocks/estorage/hddInterface/sides",
+      "front": "crystalmod:blocks/estorage/hddInterface/front_empty"
     },
     "transform": "forge:default-block"
   },
@@ -20,12 +20,12 @@
       "down": {"x": 90}
     },
     "hdd": {
-      "empty": { "model": "crystalmod:eStorage/hddinterface_empty", "textures": { "front": "crystalmod:blocks/eStorage/hddInterface/front_empty" } },
-      "blue": { "textures": { "front": "crystalmod:blocks/eStorage/hddInterface/front_blue" } },
-      "red": { "textures": { "front": "crystalmod:blocks/eStorage/hddInterface/front_red" } },
-      "green": { "textures": { "front": "crystalmod:blocks/eStorage/hddInterface/front_green" } },
-      "dark": { "textures": { "front": "crystalmod:blocks/eStorage/hddInterface/front_dark" } },
-      "pure": { "textures": { "front": "crystalmod:blocks/eStorage/hddInterface/front_pure" } }
+      "empty": { "model": "crystalmod:estorage/hddinterface_empty", "textures": { "front": "crystalmod:blocks/estorage/hddInterface/front_empty" } },
+      "blue": { "textures": { "front": "crystalmod:blocks/estorage/hddInterface/front_blue" } },
+      "red": { "textures": { "front": "crystalmod:blocks/estorage/hddInterface/front_red" } },
+      "green": { "textures": { "front": "crystalmod:blocks/estorage/hddInterface/front_green" } },
+      "dark": { "textures": { "front": "crystalmod:blocks/estorage/hddInterface/front_dark" } },
+      "pure": { "textures": { "front": "crystalmod:blocks/estorage/hddInterface/front_pure" } }
     }
   }
 }

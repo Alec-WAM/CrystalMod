@@ -4,6 +4,7 @@ import java.util.Locale;
 
 import alec_wam.CrystalMod.CrystalMod;
 import net.minecraft.block.BlockPane;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
@@ -56,8 +57,10 @@ public class BlockMetalBars extends BlockPane implements ICustomModel
     public BlockMetalBars()
     {
         super(Material.IRON, true);
-        this.setDefaultState(this.blockState.getBaseState().withProperty(NORTH, Boolean.valueOf(false)).withProperty(EAST, Boolean.valueOf(false)).withProperty(SOUTH, Boolean.valueOf(false)).withProperty(WEST, Boolean.valueOf(false)).withProperty(TYPE, EnumMetalBarType.DARK_IRON));
-        this.setCreativeTab(CrystalMod.tabBlocks);
+        setDefaultState(this.blockState.getBaseState().withProperty(NORTH, Boolean.valueOf(false)).withProperty(EAST, Boolean.valueOf(false)).withProperty(SOUTH, Boolean.valueOf(false)).withProperty(WEST, Boolean.valueOf(false)).withProperty(TYPE, EnumMetalBarType.DARK_IRON));
+        setCreativeTab(CrystalMod.tabBlocks);
+        setHardness(5.0F).setResistance(10.0F);
+        setSoundType(SoundType.METAL);
     }
 
     @SideOnly(Side.CLIENT)

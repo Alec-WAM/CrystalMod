@@ -8,7 +8,7 @@ import java.util.List;
 import com.google.common.collect.Lists;
 
 import alec_wam.CrystalMod.api.energy.CEnergyStorage;
-import alec_wam.CrystalMod.api.energy.ICEnergyReceiver;
+import alec_wam.CrystalMod.api.energy.CapabilityCrystalEnergy;
 import alec_wam.CrystalMod.api.estorage.INetworkPowerTile;
 import alec_wam.CrystalMod.api.estorage.INetworkTile;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
@@ -18,7 +18,6 @@ import alec_wam.CrystalMod.tiles.TileEntityMod;
 import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetwork;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
-import alec_wam.CrystalMod.util.ModLogger;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -26,9 +25,10 @@ import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 
-public class TileNetworkPowerCore extends TileEntityMod implements INetworkTile, ICEnergyReceiver, ISynchronizedContainer {
+public class TileNetworkPowerCore extends TileEntityMod implements INetworkTile, ISynchronizedContainer {
 
 	//TODO Finish up Energy
 	private EStorageNetwork network;
@@ -38,7 +38,12 @@ public class TileNetworkPowerCore extends TileEntityMod implements INetworkTile,
 	private CEnergyStorage energyStorage;
 	
 	public TileNetworkPowerCore(){
-		energyStorage = new CEnergyStorage(5000);
+		energyStorage = new CEnergyStorage(5000) {
+			@Override
+			public boolean canExtract(){
+				return false;
+			}
+		};
 	}
 	
 	public CEnergyStorage getEnergyStorage(){
@@ -112,26 +117,6 @@ public class TileNetworkPowerCore extends TileEntityMod implements INetworkTile,
 	}
 
 	@Override
-	public int getCEnergyStored(EnumFacing from) {
-		return energyStorage.getCEnergyStored();
-	}
-
-	@Override
-	public int getMaxCEnergyStored(EnumFacing from) {
-		return energyStorage.getMaxCEnergyStored();
-	}
-
-	@Override
-	public boolean canConnectCEnergy(EnumFacing from) {
-		return true;
-	}
-
-	@Override
-	public int fillCEnergy(EnumFacing from, int maxReceive, boolean simulate) {
-		return energyStorage.fillCEnergy(maxReceive, simulate);
-	}
-
-	@Override
 	public void readContainerData(ByteBuf buf) {
 		int energy = buf.readInt();
 		int maxEnergy = buf.readInt();
@@ -189,6 +174,23 @@ public class TileNetworkPowerCore extends TileEntityMod implements INetworkTile,
 	public Class<? extends Container> getContainer() {
 		return ContainerPowerCore.class;
 	}
+	
+	@Override
+    public boolean hasCapability(Capability<?> capability, EnumFacing facingIn) {
+	  if(capability == CapabilityCrystalEnergy.CENERGY){
+		  return true;
+	  }
+      return super.hasCapability(capability, facingIn);
+    }
+
+	@SuppressWarnings("unchecked")
+	@Override
+    public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+        if (capability == CapabilityCrystalEnergy.CENERGY) {
+            return (T) energyStorage;
+        }
+        return super.getCapability(capability, facing);
+    }
 	
 	public static class NetworkPowerInfo {
 		public int storedEnergy;

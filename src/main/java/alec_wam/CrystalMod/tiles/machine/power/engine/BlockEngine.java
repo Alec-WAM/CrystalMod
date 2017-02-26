@@ -104,7 +104,7 @@ public class BlockEngine extends BlockMachine implements ICustomModel {
         if ((tile instanceof TileEntityEngineBase)) {
         	TileEntityEngineBase engine = (TileEntityEngineBase)tile;
         	if(player.isSneaking()){
-        		String powerinfo = engine.getCEnergyStored(side)+" / "+engine.getMaxCEnergyStored(side)+" CU";
+        		String powerinfo = engine.energyStorage.getCEnergyStored()+" / "+engine.energyStorage.getMaxCEnergyStored()+" CU";
         		String fuelInfo = engine.fuel.getValue()+" / "+engine.maxFuel.getValue();
         		ChatUtil.sendNoSpam(player, powerinfo, fuelInfo);
         	} else {

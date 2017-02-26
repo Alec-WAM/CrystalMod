@@ -204,23 +204,45 @@ public class BlockShieldRack extends EnumBlock<BlockShieldRack.WoodType> impleme
 				BlockUtil.markBlockForUpdate(world, pos);
 				return true;
 			}
-			if(hitZ < 0.3 && (ItemStackTools.isEmpty(held) || ToolUtil.isWeapon(held))){
-				//Left
-				final ItemStack handStack = held;
-				final ItemStack shieldStack = rack.getLeftStack();
-				rack.setLeftStack(handStack);
-				player.setHeldItem(hand, shieldStack);
-				BlockUtil.markBlockForUpdate(world, pos);
-				return true;
+			if(rot == EnumFacing.WEST){
+				if(hitZ < 0.3 && (ItemStackTools.isEmpty(held) || ToolUtil.isMeleeWeapon(held))){
+					//Left
+					final ItemStack handStack = held;
+					final ItemStack shieldStack = rack.getLeftStack();
+					rack.setLeftStack(handStack);
+					player.setHeldItem(hand, shieldStack);
+					BlockUtil.markBlockForUpdate(world, pos);
+					return true;
+				}
+				if(hitZ > 0.6 && (ItemStackTools.isEmpty(held) || ToolUtil.isMeleeWeapon(held))){
+					//Right
+					final ItemStack handStack = held;
+					final ItemStack shieldStack = rack.getRightStack();
+					rack.setRightStack(handStack);
+					player.setHeldItem(hand, shieldStack);
+					BlockUtil.markBlockForUpdate(world, pos);
+					return true;
+				}
 			}
-			if(hitZ > 0.6 && (ItemStackTools.isEmpty(held) || ToolUtil.isWeapon(held))){
-				//Right
-				final ItemStack handStack = held;
-				final ItemStack shieldStack = rack.getRightStack();
-				rack.setRightStack(handStack);
-				player.setHeldItem(hand, shieldStack);
-				BlockUtil.markBlockForUpdate(world, pos);
-				return true;
+			if(rot == EnumFacing.EAST){
+				if(hitZ > 0.6 && (ItemStackTools.isEmpty(held) || ToolUtil.isMeleeWeapon(held))){
+					//Left
+					final ItemStack handStack = held;
+					final ItemStack shieldStack = rack.getLeftStack();
+					rack.setLeftStack(handStack);
+					player.setHeldItem(hand, shieldStack);
+					BlockUtil.markBlockForUpdate(world, pos);
+					return true;
+				}
+				if(hitZ < 0.3 && (ItemStackTools.isEmpty(held) || ToolUtil.isMeleeWeapon(held))){
+					//Right
+					final ItemStack handStack = held;
+					final ItemStack shieldStack = rack.getRightStack();
+					rack.setRightStack(handStack);
+					player.setHeldItem(hand, shieldStack);
+					BlockUtil.markBlockForUpdate(world, pos);
+					return true;
+				}
 			}
 		}
 		if(rot.getAxis() == Axis.Z){
@@ -233,23 +255,45 @@ public class BlockShieldRack extends EnumBlock<BlockShieldRack.WoodType> impleme
 				BlockUtil.markBlockForUpdate(world, pos);
 				return true;
 			}
-			if(hitX < 0.3 && (ItemStackTools.isEmpty(held) || ToolUtil.isWeapon(held))){
-				//Left
-				final ItemStack handStack = held;
-				final ItemStack shieldStack = rack.getLeftStack();
-				rack.setLeftStack(handStack);
-				player.setHeldItem(hand, shieldStack);
-				BlockUtil.markBlockForUpdate(world, pos);
-				return true;
+			if(rot == EnumFacing.SOUTH){
+				if(hitX < 0.3 && (ItemStackTools.isEmpty(held) || ToolUtil.isMeleeWeapon(held))){
+					//Left
+					final ItemStack handStack = held;
+					final ItemStack shieldStack = rack.getLeftStack();
+					rack.setLeftStack(handStack);
+					player.setHeldItem(hand, shieldStack);
+					BlockUtil.markBlockForUpdate(world, pos);
+					return true;
+				}
+				if(hitX > 0.6 && (ItemStackTools.isEmpty(held) || ToolUtil.isMeleeWeapon(held))){
+					//Right
+					final ItemStack handStack = held;
+					final ItemStack shieldStack = rack.getRightStack();
+					rack.setRightStack(handStack);
+					player.setHeldItem(hand, shieldStack);
+					BlockUtil.markBlockForUpdate(world, pos);
+					return true;
+				}
 			}
-			if(hitX > 0.6 && (ItemStackTools.isEmpty(held) || ToolUtil.isWeapon(held))){
-				//Right
-				final ItemStack handStack = held;
-				final ItemStack shieldStack = rack.getRightStack();
-				rack.setRightStack(handStack);
-				player.setHeldItem(hand, shieldStack);
-				BlockUtil.markBlockForUpdate(world, pos);
-				return true;
+			if(rot == EnumFacing.NORTH){
+				if(hitX > 0.6 && (ItemStackTools.isEmpty(held) || ToolUtil.isMeleeWeapon(held))){
+					//Left
+					final ItemStack handStack = held;
+					final ItemStack shieldStack = rack.getLeftStack();
+					rack.setLeftStack(handStack);
+					player.setHeldItem(hand, shieldStack);
+					BlockUtil.markBlockForUpdate(world, pos);
+					return true;
+				}
+				if(hitX < 0.3 && (ItemStackTools.isEmpty(held) || ToolUtil.isMeleeWeapon(held))){
+					//Right
+					final ItemStack handStack = held;
+					final ItemStack shieldStack = rack.getRightStack();
+					rack.setRightStack(handStack);
+					player.setHeldItem(hand, shieldStack);
+					BlockUtil.markBlockForUpdate(world, pos);
+					return true;
+				}
 			}
 		}
         return false;

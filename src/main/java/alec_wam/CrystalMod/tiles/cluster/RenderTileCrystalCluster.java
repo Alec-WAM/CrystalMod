@@ -15,6 +15,7 @@ import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.TimeUtil;
 import alec_wam.CrystalMod.util.Vector3d;
 import alec_wam.CrystalMod.util.client.RenderUtil;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
@@ -42,6 +43,8 @@ public class RenderTileCrystalCluster extends TileEntitySpecialRenderer<TileCrys
 	
 	@Override
     public void renderTileEntityAt(TileCrystalCluster te, double x, double y, double z, float partialTicks, int destroyStage) {
+		IBlockState state = te.getWorld().getBlockState(te.getPos());
+		if(!(state.getBlock() instanceof BlockCrystalCluster))return;
 		GlStateManager.pushMatrix();
     	GlStateManager.translate(x + 0.5, y, z + 0.5);
     	GlStateManager.scale(0.5, 0.5, 0.5);

@@ -130,7 +130,7 @@ public class TileEntityBatteryRenderer extends TileEntitySpecialRenderer<TileEnt
         tessellator.draw();
         
         
-        String meterTex = te.getCEnergyStored(face) > 0 ? "charged" : "uncharged";
+        String meterTex = te.energyStorage.getCEnergyStored() > 0 ? "charged" : "uncharged";
         bindTexture(new ResourceLocation("crystalmod:textures/blocks/machine/battery/meter/"+meterTex+".png"));
         worldrenderer.begin(7, DefaultVertexFormats.POSITION_TEX);
         min = new Vector3f(0.67f-offset, -0.34f+0.67f, 0.67f);
@@ -141,7 +141,7 @@ public class TileEntityBatteryRenderer extends TileEntitySpecialRenderer<TileEnt
         worldrenderer.pos(max.x, min.y, min.z).tex(maxU, minV).endVertex();
         tessellator.draw();
         
-        meterTex = te.getCEnergyStored(face) >= te.getMaxCEnergyStored(face) ? "charged" : "uncharged";
+        meterTex = te.energyStorage.getCEnergyStored() >= te.energyStorage.getMaxCEnergyStored() ? "charged" : "uncharged";
         bindTexture(new ResourceLocation("crystalmod:textures/blocks/machine/battery/meter/"+meterTex+".png"));
         worldrenderer.begin(7, DefaultVertexFormats.POSITION_TEX);
         min = new Vector3f(0.67f-offset, -0.34f, 0.67f*2);

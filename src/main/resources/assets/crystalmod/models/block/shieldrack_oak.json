@@ -1,8 +1,8 @@
 {
     "__comment": "Model generated using MrCrayfish's Model Creator (http://mrcrayfish.com/modelcreator/)",
     "textures": {
-		"particle": "crystalmod:blocks/shieldrack_spruce",
-        "0": "crystalmod:blocks/shieldrack_spruce"
+		"particle": "crystalmod:blocks/shieldrack_oak",
+        "0": "crystalmod:blocks/shieldrack_oak"
     },
     "elements": [
         {

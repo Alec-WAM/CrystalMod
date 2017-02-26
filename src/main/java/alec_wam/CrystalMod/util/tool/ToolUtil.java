@@ -7,6 +7,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemFishingRod;
 import net.minecraft.item.ItemFlintAndSteel;
@@ -202,7 +203,7 @@ public class ToolUtil {
 	  boolean valid = false;
 
 	  String[] validWeaponNames = {
-			  "sword", "dagger", "sabre", "rapier", "cutlass", "bow", "whip"	
+			  "bow", "whip"	
 	  };
 
 	  if (ItemStackTools.isValid(stack) && stack.getMaxStackSize() == 1)
@@ -210,7 +211,7 @@ public class ToolUtil {
 		  Item item = stack.getItem();
 		  String name = stack.getUnlocalizedName().toLowerCase();
 		  // Vanilla
-		  if (item instanceof ItemSword || item instanceof ItemBow)
+		  if (isSword(stack) || item instanceof ItemBow)
 		  {
 			  return true;
 		  }
@@ -233,6 +234,53 @@ public class ToolUtil {
 	  }
 
 	  return valid;
+  }
+  
+  public static boolean isMeleeWeapon(ItemStack stack){
+	  if (ItemStackTools.isValid(stack) && stack.getMaxStackSize() == 1)
+	  {
+		  Item item = stack.getItem();
+		  // Vanilla
+		  if (isSword(stack) || isAxe(stack))
+		  {
+			  return true;
+		  }
+		  //And also this because I'm awesome
+		  try
+		  {
+			  // Tinker's Construct
+			  if (item.getClass().getName().contains("tconstruct.items.tools.melee")) return true;
+		  } catch (Exception oops)
+		  {
+			  //  oops.printStackTrace();
+		  }
+	  }
+	  return false;
+  }
+  
+  public static boolean isSword(ItemStack stack){
+	  String[] validWeaponNames = {
+			  "sword", "dagger", "sabre", "rapier", "cutlass"	
+	  };
+
+	  if (ItemStackTools.isValid(stack) && stack.getMaxStackSize() == 1)
+	  {
+		  Item item = stack.getItem();
+		  String name = stack.getUnlocalizedName().toLowerCase();
+		  // Vanilla
+		  if (item instanceof ItemSword)
+		  {
+			  return true;
+		  }
+
+		  // Just for extra compatibility and/or security and/or less annoyance
+		  for (String toolName : validWeaponNames)
+		  {
+			  String a = toolName;
+			  if (name.contains(toolName)) return true;
+		  }
+	  }
+	  return false;
   }
   
   public static boolean isTool(ItemStack stack){

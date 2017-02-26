@@ -1,24 +1,34 @@
 package alec_wam.CrystalMod.tiles.machine.mobGrinder;
 
-import java.lang.ref.WeakReference;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-import net.minecraft.enchantment.EnchantmentHelper;
+import com.google.common.collect.Sets;
+import com.mojang.authlib.GameProfile;
+
+import alec_wam.CrystalMod.api.energy.CEnergyStorage;
+import alec_wam.CrystalMod.api.energy.CapabilityCrystalEnergy;
+import alec_wam.CrystalMod.fluids.XpUtil;
+import alec_wam.CrystalMod.fluids.xp.ExperienceContainer;
+import alec_wam.CrystalMod.items.ModItems;
+import alec_wam.CrystalMod.network.CrystalModNetwork;
+import alec_wam.CrystalMod.network.IMessageHandler;
+import alec_wam.CrystalMod.network.packets.PacketTileMessage;
+import alec_wam.CrystalMod.tiles.TileEntityMod;
+import alec_wam.CrystalMod.tiles.machine.IMachineTile;
+import alec_wam.CrystalMod.util.ItemStackTools;
+import alec_wam.CrystalMod.util.ItemUtil;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.init.Items;
-import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.WorldServer;
@@ -35,26 +45,8 @@ import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fml.common.eventhandler.Event.Result;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.items.IItemHandler;
-import alec_wam.CrystalMod.api.energy.CEnergyStorage;
-import alec_wam.CrystalMod.api.energy.ICEnergyReceiver;
-import alec_wam.CrystalMod.fluids.XpUtil;
-import alec_wam.CrystalMod.fluids.xp.ExperienceContainer;
-import alec_wam.CrystalMod.items.ModItems;
-import alec_wam.CrystalMod.network.CrystalModNetwork;
-import alec_wam.CrystalMod.network.IMessageHandler;
-import alec_wam.CrystalMod.network.packets.PacketTileMessage;
-import alec_wam.CrystalMod.tiles.TileEntityMod;
-import alec_wam.CrystalMod.tiles.machine.IMachineTile;
-import alec_wam.CrystalMod.util.ItemStackTools;
-import alec_wam.CrystalMod.util.ItemUtil;
-import alec_wam.CrystalMod.util.ModLogger;
-import alec_wam.CrystalMod.world.DropCapture;
-import alec_wam.CrystalMod.world.DropCapture.CaptureContext;
 
-import com.google.common.collect.Sets;
-import com.mojang.authlib.GameProfile;
-
-public class TileEntityMobGrinder extends TileEntityMod implements IMessageHandler, ICEnergyReceiver, IMachineTile {
+public class TileEntityMobGrinder extends TileEntityMod implements IMessageHandler, IMachineTile {
 
 	
 	public static class ZombieBlocker {
@@ -84,7 +76,12 @@ public class TileEntityMobGrinder extends TileEntityMod implements IMessageHandl
 	public boolean disabledCach = false;
 	private boolean readyNext = false;
 	
-	public CEnergyStorage energyStorage = new CEnergyStorage(100000, 32000, 0);
+	public CEnergyStorage energyStorage = new CEnergyStorage(100000, 32000, 0) {
+		@Override
+		public boolean canExtract(){
+			return false;
+		}
+	};
 	private int lastEnergyCach;
 	public ExperienceContainer xpCon;
 	
@@ -376,26 +373,6 @@ public class TileEntityMobGrinder extends TileEntityMod implements IMessageHandl
 	}
 
 	@Override
-	public int getCEnergyStored(EnumFacing from) {
-		return energyStorage.getCEnergyStored();
-	}
-
-	@Override
-	public int getMaxCEnergyStored(EnumFacing from) {
-		return energyStorage.getMaxCEnergyStored();
-	}
-
-	@Override
-	public boolean canConnectCEnergy(EnumFacing from) {
-		return from !=EnumFacing.getHorizontal(facing);
-	}
-
-	@Override
-	public int fillCEnergy(EnumFacing from, int maxReceive, boolean simulate) {
-		return energyStorage.fillCEnergy(maxReceive, simulate);
-	}
-
-	@Override
 	public void setFacing(int facing) {
 		this.facing = facing;
 	}
@@ -412,7 +389,10 @@ public class TileEntityMobGrinder extends TileEntityMod implements IMessageHandl
 	
 	@Override
     public boolean hasCapability(Capability<?> capability, EnumFacing facingIn) {
-      return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || super.hasCapability(capability, facingIn);
+		if(capability == CapabilityCrystalEnergy.CENERGY){
+			return facingIn.getHorizontalIndex() !=facing;
+		}
+		return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || super.hasCapability(capability, facingIn);
     }
 
     @SuppressWarnings("unchecked")
@@ -450,6 +430,10 @@ public class TileEntityMobGrinder extends TileEntityMod implements IMessageHandl
 				}
                 
             };
+        }
+        if(capability == CapabilityCrystalEnergy.CENERGY){
+        	if(facing.getHorizontalIndex() == this.facing)return null;
+        	return (T) energyStorage;
         }
         return super.getCapability(capability, facing);
     }

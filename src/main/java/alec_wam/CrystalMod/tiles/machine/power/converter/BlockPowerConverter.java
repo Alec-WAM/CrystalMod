@@ -65,7 +65,7 @@ public class BlockPowerConverter extends EnumBlock<BlockPowerConverter.Converter
 		if(tile !=null && tile instanceof TileEnergyConverterRFtoCU){
 			TileEnergyConverterRFtoCU con = (TileEnergyConverterRFtoCU)tile;
 			if(!world.isRemote){
-				ChatUtil.sendNoSpam(player, TextFormatting.AQUA+""+(con.getCEnergyStored(side))+" / "+(con.getMaxCEnergyStored(side)+" CU"));
+				ChatUtil.sendNoSpam(player, TextFormatting.AQUA+""+(con.energyStorage.getCEnergyStored())+" / "+(con.energyStorage.getMaxCEnergyStored()+" CU"));
 			}
 			return true;
 		}

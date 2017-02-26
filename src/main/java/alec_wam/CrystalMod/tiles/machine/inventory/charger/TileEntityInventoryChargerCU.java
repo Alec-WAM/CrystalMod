@@ -1,19 +1,25 @@
 package alec_wam.CrystalMod.tiles.machine.inventory.charger;
 
 import alec_wam.CrystalMod.api.energy.CEnergyStorage;
+import alec_wam.CrystalMod.api.energy.CapabilityCrystalEnergy;
 import alec_wam.CrystalMod.api.energy.ICEnergyContainerItem;
-import alec_wam.CrystalMod.api.energy.ICEnergyReceiver;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.capabilities.Capability;
 
-public class TileEntityInventoryChargerCU extends TileEntityInventoryCharger implements ICEnergyReceiver {
+public class TileEntityInventoryChargerCU extends TileEntityInventoryCharger {
 
 	public CEnergyStorage energyStorage;
 	
 	public TileEntityInventoryChargerCU(){
-		energyStorage = new CEnergyStorage(20000);
+		energyStorage = new CEnergyStorage(20000) {
+			@Override
+			public boolean canExtract(){
+				return false;
+			}
+		};
 	}
 	
 	public void writeCustomNBT(NBTTagCompound nbt){
@@ -52,27 +58,6 @@ public class TileEntityInventoryChargerCU extends TileEntityInventoryCharger imp
 	}
 
 	@Override
-	public int getCEnergyStored(EnumFacing from) {
-		return energyStorage.getCEnergyStored();
-	}
-
-	@Override
-	public int getMaxCEnergyStored(EnumFacing from) {
-		return energyStorage.getMaxCEnergyStored();
-	}
-
-	@Override
-	public boolean canConnectCEnergy(EnumFacing from) {
-		return from.ordinal() !=facing;
-	}
-
-	@Override
-	public int fillCEnergy(EnumFacing from, int maxReceive, boolean simulate) {
-		int fill = energyStorage.fillCEnergy(maxReceive, simulate);
-		return fill;
-	}
-
-	@Override
 	protected int getEnergyStored() {
 		return energyStorage.getCEnergyStored();
 	}
@@ -81,5 +66,22 @@ public class TileEntityInventoryChargerCU extends TileEntityInventoryCharger imp
 	protected void setEnergyStored(int energy) {
 		energyStorage.setEnergyStored(energy);
 	}
+	
+	@Override
+    public boolean hasCapability(Capability<?> capability, EnumFacing facingIn) {
+	  if(capability == CapabilityCrystalEnergy.CENERGY){
+		  return facingIn.ordinal() !=facing;
+	  }
+      return super.hasCapability(capability, facingIn);
+    }
+
+	@SuppressWarnings("unchecked")
+	@Override
+    public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+        if (capability == CapabilityCrystalEnergy.CENERGY) {
+            return facing.ordinal() !=this.facing ? (T) energyStorage : super.getCapability(capability, facing);
+        }
+        return super.getCapability(capability, facing);
+    }
 
 }

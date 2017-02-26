@@ -10,6 +10,13 @@ import java.util.Set;
 
 import javax.vecmath.Vector4f;
 
+import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.api.energy.CEnergyStorage;
+import alec_wam.CrystalMod.entities.minions.worker.EntityMinionWorker;
+import alec_wam.CrystalMod.tiles.TileEntityMod;
+import alec_wam.CrystalMod.tiles.machine.worksite.InventorySided.IRotatableTile;
+import alec_wam.CrystalMod.util.BlockUtil;
+import alec_wam.CrystalMod.util.ItemUtil;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
@@ -22,16 +29,8 @@ import net.minecraft.util.math.ChunkPos;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.ForgeChunkManager.Ticket;
 import net.minecraftforge.common.ForgeChunkManager.Type;
-import alec_wam.CrystalMod.CrystalMod;
-import alec_wam.CrystalMod.api.energy.CEnergyStorage;
-import alec_wam.CrystalMod.api.energy.ICEnergyReceiver;
-import alec_wam.CrystalMod.entities.minions.worker.EntityMinionWorker;
-import alec_wam.CrystalMod.tiles.TileEntityMod;
-import alec_wam.CrystalMod.tiles.machine.worksite.InventorySided.IRotatableTile;
-import alec_wam.CrystalMod.util.BlockUtil;
-import alec_wam.CrystalMod.util.ItemUtil;
 
-public abstract class TileWorksiteBase extends TileEntityMod implements IWorkSite, IChunkLoaderTile, ICEnergyReceiver, IRotatableTile {
+public abstract class TileWorksiteBase extends TileEntityMod implements IWorkSite, IChunkLoaderTile, IRotatableTile {
 
 	private double efficiencyBonusFactor = 0.f;
 
@@ -396,22 +395,6 @@ public abstract class TileWorksiteBase extends TileEntityMod implements IWorkSit
 	
 	public boolean canConnectCEnergy(EnumFacing from){
 		return powered();
-	}
-	
-	@Override
-	public int getCEnergyStored(EnumFacing from) {
-		return getEnergyStorage() !=null ? getEnergyStorage().getCEnergyStored() : 0;
-	}
-	@Override
-	public int getMaxCEnergyStored(EnumFacing from) {
-		return getEnergyStorage() !=null ? getEnergyStorage().getMaxCEnergyStored() : 0;
-	}
-	
-	@Override
-	public int fillCEnergy(EnumFacing from, int maxReceive, boolean simulate) {
-		if(getEnergyStorage() == null || this.getCEnergyStored(from) >= this.getMaxCEnergyStored(from))return 0;
-		int amt = getEnergyStorage().fillCEnergy(Math.min(maxReceive, getEnergyStorage().getMaxReceive()), simulate);
-		return amt;
 	}
 
 }

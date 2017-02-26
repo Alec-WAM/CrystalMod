@@ -73,10 +73,12 @@ public class BlockJar extends BlockContainer implements ICustomModel {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileJar.class, renderer);
 	}
 	
+	public static final AxisAlignedBB JAR_AABB = new AxisAlignedBB(0.19, 0.0, 0.19, 0.82, 0.8, 0.82);
+	
 	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
     {
-		return new AxisAlignedBB(0.19, 0.0, 0.19, 0.82, 0.8, 0.82);
+		return JAR_AABB;
     }
 	
 	@Override

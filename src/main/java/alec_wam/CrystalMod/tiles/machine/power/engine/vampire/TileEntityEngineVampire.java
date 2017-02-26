@@ -16,13 +16,13 @@ import net.minecraft.util.math.BlockPos;
 public class TileEntityEngineVampire extends TileEntityEngineBase {
 
 	@Override
-	public int drainCEnergy(EnumFacing from, int maxExtract, boolean simulate) {
-		return 0;
-	}
-
-	@Override
 	public CEnergyStorage createStorage(int multi) {
-		return new CEnergyStorage(120000*multi, 60*multi);
+		return new CEnergyStorage(120000*multi, 60*multi) {
+			@Override
+			public boolean canReceive(){
+				return false;
+			}
+		};
 	}
 
 	@Override

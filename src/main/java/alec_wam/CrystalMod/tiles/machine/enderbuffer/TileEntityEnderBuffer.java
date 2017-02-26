@@ -2,7 +2,8 @@ package alec_wam.CrystalMod.tiles.machine.enderbuffer;
 
 import java.util.UUID;
 
-import alec_wam.CrystalMod.api.energy.ICEnergyReceiver;
+import alec_wam.CrystalMod.api.energy.CapabilityCrystalEnergy;
+import alec_wam.CrystalMod.api.energy.ICEnergyStorage;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.IMessageHandler;
 import alec_wam.CrystalMod.network.packets.PacketTileMessage;
@@ -103,7 +104,7 @@ public class TileEntityEnderBuffer extends TileEntityMod implements IEnderBuffer
 		
 		if(getRedstone("CU")){
 			if(this.cuMode == Mode.BOTH || this.cuMode == Mode.RECIEVE){
-				for(int i = 0; (i < 6) && this.getCEnergyStored(null) > 0; i++){
+				for(int i = 0; (i < 6) && this.getBuffer().cuStorage.getCEnergyStored() > 0; i++){
 					transferCEnergy(i);
 				}
 			}
@@ -211,9 +212,9 @@ public class TileEntityEnderBuffer extends TileEntityMod implements IEnderBuffer
 		if(!hasBuffer())return;
 		EnumFacing face = EnumFacing.getFront(bSide);
 		TileEntity tile = getWorld().getTileEntity(getPos().offset(face));
-		if(tile !=null && tile instanceof ICEnergyReceiver){
-			ICEnergyReceiver rec = (ICEnergyReceiver)tile;
-			getBuffer().cuStorage.modifyEnergyStored(-rec.fillCEnergy(face, getBuffer().cuStorage.getCEnergyStored(), false));
+		if(tile !=null && tile.hasCapability(CapabilityCrystalEnergy.CENERGY, face.getOpposite())){
+			ICEnergyStorage rec = tile.getCapability(CapabilityCrystalEnergy.CENERGY, face.getOpposite());
+			if(rec !=null )getBuffer().cuStorage.modifyEnergyStored(-rec.fillCEnergy(getBuffer().cuStorage.getCEnergyStored(), false));
 		}
 	}
 	
@@ -222,8 +223,8 @@ public class TileEntityEnderBuffer extends TileEntityMod implements IEnderBuffer
 		if(!hasBuffer())return;
 		EnumFacing face = EnumFacing.getFront(bSide);
 		TileEntity tile = getWorld().getTileEntity(getPos().offset(face));
-		if(tile !=null && tile.hasCapability(CapabilityEnergy.ENERGY, face)){
-			IEnergyStorage rec = tile.getCapability(CapabilityEnergy.ENERGY, face);
+		if(tile !=null && tile.hasCapability(CapabilityEnergy.ENERGY, face.getOpposite())){
+			IEnergyStorage rec = tile.getCapability(CapabilityEnergy.ENERGY, face.getOpposite());
 			if(rec !=null)getBuffer().rfStorage.extractEnergy(rec.receiveEnergy(getBuffer().rfStorage.getEnergyStored(), false), false);
 		}
     }
@@ -277,33 +278,6 @@ public class TileEntityEnderBuffer extends TileEntityMod implements IEnderBuffer
     	RedstoneMode modeInv = RedstoneMode.values()[nbt.getByte("RSMode.Inv")];
     	this.invRSMode = modeInv;
     	}
-	}
-
-	@Override
-	public boolean canConnectCEnergy(EnumFacing from) {
-		return cuMode !=Mode.DISABLED;
-	}
-	
-    //CU
-	@Override
-	public int fillCEnergy(EnumFacing from, int maxReceive, boolean simulate) {
-		if(this.cuMode !=Mode.BOTH && this.cuMode !=Mode.SEND || !hasBuffer())return 0;
-		return getRedstone("CU") ? getBuffer().cuStorage.fillCEnergy(maxReceive, simulate) : 0;
-	}
-
-	@Override
-	public int drainCEnergy(EnumFacing from, int maxExtract, boolean simulate) {
-		return 0;
-	}
-
-	@Override
-	public int getCEnergyStored(EnumFacing from) {
-		return hasBuffer() ? getBuffer().cuStorage.getCEnergyStored() : 0;
-	}
-
-	@Override
-	public int getMaxCEnergyStored(EnumFacing from) {
-		return hasBuffer() ? getBuffer().cuStorage.getMaxCEnergyStored() : 0;
 	}
 	
 	public static enum Mode{
@@ -402,6 +376,9 @@ public class TileEntityEnderBuffer extends TileEntityMod implements IEnderBuffer
 		if(capability == CapabilityEnergy.ENERGY){
 			return this.rfMode !=Mode.DISABLED && hasBuffer();
 		}
+		if(capability == CapabilityCrystalEnergy.CENERGY){
+			return this.cuMode !=Mode.DISABLED && hasBuffer();
+		}
 		return super.hasCapability(capability, facingIn);
     }
 	
@@ -451,6 +428,50 @@ public class TileEntityEnderBuffer extends TileEntityMod implements IEnderBuffer
 				public boolean canReceive() {
 					if(TileEntityEnderBuffer.this.rfMode == Mode.BOTH || TileEntityEnderBuffer.this.rfMode == Mode.RECIEVE){
 						return getBuffer().rfStorage.canReceive() && TileEntityEnderBuffer.this.getRedstone("RF");
+					}
+					return false;
+				}
+        		
+        	};
+        }
+        if (capability == CapabilityCrystalEnergy.CENERGY){
+        	if(!hasBuffer() || this.cuMode ==Mode.DISABLED)return super.getCapability(capability, facing);
+        	return (T) new ICEnergyStorage(){
+
+				@Override
+				public int fillCEnergy(int maxReceive, boolean simulate) {
+					if(!canReceive())return 0;
+					return getBuffer().cuStorage.fillCEnergy(maxReceive, simulate);
+				}
+
+				@Override
+				public int drainCEnergy(int maxExtract, boolean simulate) {
+					if(!canExtract())return 0;
+					return getBuffer().cuStorage.drainCEnergy(maxExtract, simulate);
+				}
+
+				@Override
+				public int getCEnergyStored() {
+					return getBuffer().cuStorage.getCEnergyStored();
+				}
+
+				@Override
+				public int getMaxCEnergyStored() {
+					return getBuffer().cuStorage.getMaxCEnergyStored();
+				}
+
+				@Override
+				public boolean canExtract() {
+					if(TileEntityEnderBuffer.this.cuMode == Mode.BOTH || TileEntityEnderBuffer.this.cuMode == Mode.SEND){
+						return getBuffer().cuStorage.canExtract() && TileEntityEnderBuffer.this.getRedstone("CU");
+					}
+					return false;
+				}
+
+				@Override
+				public boolean canReceive() {
+					if(TileEntityEnderBuffer.this.cuMode == Mode.BOTH || TileEntityEnderBuffer.this.cuMode == Mode.RECIEVE){
+						return getBuffer().cuStorage.canReceive() && TileEntityEnderBuffer.this.getRedstone("CU");
 					}
 					return false;
 				}

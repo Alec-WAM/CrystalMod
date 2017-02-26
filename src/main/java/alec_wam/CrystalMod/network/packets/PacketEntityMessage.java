@@ -19,6 +19,7 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.network.NetHandlerPlayServer;
@@ -94,6 +95,23 @@ public class PacketEntityMessage extends AbstractPacketThreadsafe {
 			if(type.equalsIgnoreCase("DataSyncResponse")){
 				EntityUtil.getCustomEntityData(entity).removeTag("NeedsDataSyncServer");
 				ModLogger.info("Removed sync tag!");
+			}
+			if(type.equalsIgnoreCase("#Jump#")){
+				if(entity instanceof EntityPlayer){
+					EntityPlayer ePlayer = (EntityPlayer)entity;
+					ExtendedPlayer exPlayer = ExtendedPlayerProvider.getExtendedPlayer(ePlayer);
+					if(exPlayer !=null){
+						if(!exPlayer.hasJumped){
+							ePlayer.jump();
+							NBTTagCompound nbt = new NBTTagCompound();
+							nbt.setDouble("X", ePlayer.motionX);
+							nbt.setDouble("Y", ePlayer.motionY);
+							nbt.setDouble("Z", ePlayer.motionZ);
+							CrystalModNetwork.sendTo(new PacketEntityMessage(ePlayer, "AddMotion", nbt), (EntityPlayerMP)ePlayer);
+							exPlayer.hasJumped = true;
+						}
+					}
+				}
 			}
 			if(type.equalsIgnoreCase("SetSize")){
 				float width = data.getFloat("Width");

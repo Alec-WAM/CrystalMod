@@ -19,6 +19,9 @@ public class ExtendedPlayer {
 
 	public final static String EXT_PROP_NAME = CrystalMod.MODID+"PlayerProperties";
 	
+	/**Keeps track of jumps for Double Jump**/
+	public boolean hasJumped;
+	
 	private boolean hasFlag;
 	private int flagColor = Color.WHITE.getRGB();
 	

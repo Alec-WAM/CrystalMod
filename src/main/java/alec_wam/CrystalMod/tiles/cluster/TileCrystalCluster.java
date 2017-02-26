@@ -2,8 +2,8 @@ package alec_wam.CrystalMod.tiles.cluster;
 
 import java.util.Random;
 
-import alec_wam.CrystalMod.api.energy.ICEnergyProvider;
-import alec_wam.CrystalMod.api.energy.ICEnergyReceiver;
+import alec_wam.CrystalMod.api.energy.CapabilityCrystalEnergy;
+import alec_wam.CrystalMod.api.energy.ICEnergyStorage;
 import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.IMessageHandler;
@@ -23,7 +23,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.INBTSerializable;
 
-public class TileCrystalCluster extends TileEntityMod implements ICEnergyProvider, IMessageHandler, IFacingTile {
+public class TileCrystalCluster extends TileEntityMod implements IMessageHandler, IFacingTile {
 
 	public static class ClusterData implements INBTSerializable<NBTTagCompound>{
 		private int powerOutput, regenSpeed;
@@ -99,11 +99,11 @@ public class TileCrystalCluster extends TileEntityMod implements ICEnergyProvide
 		if(!getWorld().isRemote){
 			for(EnumFacing face : EnumFacing.VALUES){
 				TileEntity tile = getWorld().getTileEntity(getPos().offset(face));
-				if(tile !=null && tile instanceof ICEnergyReceiver){
-					ICEnergyReceiver rec = (ICEnergyReceiver)tile;
+				if(tile !=null && tile.hasCapability(CapabilityCrystalEnergy.CENERGY, face.getOpposite())){
+					ICEnergyStorage rec = tile.getCapability(CapabilityCrystalEnergy.CENERGY, face.getOpposite());
 					int multi = 25;
 					for(int i = 0; i < multi; i++){
-						if(rec.fillCEnergy(face.getOpposite(), getPowerOutput(), false) > 0){
+						if(rec.canReceive() && rec.fillCEnergy(getPowerOutput(), false) > 0){
 							health.subSafe(1);
 							drainDelay = 10;
 						}
@@ -142,31 +142,6 @@ public class TileCrystalCluster extends TileEntityMod implements ICEnergyProvide
 			return 1;
 		}
 		return calc;
-	}
-
-	@Override
-	public int getCEnergyStored(EnumFacing from) {
-		return clusterData.getPowerOutput() * health.getValue();
-	}
-
-	@Override
-	public int getMaxCEnergyStored(EnumFacing from) {
-		return clusterData.getPowerOutput() * TimeUtil.MINECRAFT_DAY_TICKS;
-	}
-
-	@Override
-	public boolean canConnectCEnergy(EnumFacing from) {
-		return true;
-	}
-
-	@Override
-	public int drainCEnergy(EnumFacing from, int maxExtract, boolean simulate) {
-		int drain = getPowerOutput();
-		if(!simulate){
-			health.subSafe(1);
-			drainDelay = 10;
-		}
-		return drain;
 	}
 
 	public ClusterData getClusterData() {
@@ -225,5 +200,58 @@ public class TileCrystalCluster extends TileEntityMod implements ICEnergyProvide
 	public boolean canRenderBreaking(){
 		return true;
 	}
+	
+	@Override
+	public boolean hasCapability(net.minecraftforge.common.capabilities.Capability<?> capability, net.minecraft.util.EnumFacing facing)
+    {
+		return capability == CapabilityCrystalEnergy.CENERGY || super.hasCapability(capability, facing);
+	}
+	
+	@SuppressWarnings("unchecked")
+    @Override
+    public <T> T getCapability(net.minecraftforge.common.capabilities.Capability<T> capability, net.minecraft.util.EnumFacing facing)
+    {
+        if (facing != null && capability == CapabilityCrystalEnergy.CENERGY){
+            return (T) new ICEnergyStorage(){
+
+				@Override
+				public int fillCEnergy(int maxReceive, boolean simulate) {
+					return 0;
+				}
+
+				@Override
+				public int drainCEnergy(int maxExtract, boolean simulate) {
+					int drain = getPowerOutput();
+					if(!simulate){
+						health.subSafe(1);
+						drainDelay = 10;
+					}
+					return drain;
+				}
+
+				@Override
+				public int getCEnergyStored() {
+					return clusterData.getPowerOutput() * health.getValue();
+				}
+
+				@Override
+				public int getMaxCEnergyStored() {
+					return clusterData.getPowerOutput() * TimeUtil.MINECRAFT_DAY_TICKS;
+				}
+
+				@Override
+				public boolean canExtract() {
+					return true;
+				}
+
+				@Override
+				public boolean canReceive() {
+					return false;
+				}
+            	
+            };
+        }
+        return super.getCapability(capability, facing);
+    }
 	
 }

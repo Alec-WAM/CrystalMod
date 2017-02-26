@@ -1,32 +1,20 @@
 package alec_wam.CrystalMod.tiles.pipes.power.cu;
 
-import alec_wam.CrystalMod.api.energy.ICEnergyConnection;
-import alec_wam.CrystalMod.api.energy.ICEnergyHandler;
-import alec_wam.CrystalMod.api.energy.ICEnergyReceiver;
+import alec_wam.CrystalMod.api.energy.ICEnergyStorage;
 import alec_wam.CrystalMod.tiles.pipes.power.IPowerInterface;
 import net.minecraft.util.EnumFacing;
 
 public class PowerInterfaceCU implements IPowerInterface {
 
-  
-
-  private final ICEnergyConnection con;
-  private ICEnergyHandler eh;
-  private ICEnergyReceiver er;
-
-  public PowerInterfaceCU(ICEnergyConnection con) {       
-    this.con = con;
-    if(con instanceof ICEnergyHandler) {
-      eh = (ICEnergyHandler)con;
-    }
-    if(con instanceof ICEnergyReceiver) {
-      er = (ICEnergyReceiver)con;
-    }       
+  private ICEnergyStorage storage;	
+	
+  public PowerInterfaceCU(ICEnergyStorage con) {       
+    this.storage = con;
   }
 
   @Override
   public Object getDelegate() {
-    return con;
+    return storage;
   }
 
   @Override
@@ -34,32 +22,32 @@ public class PowerInterfaceCU implements IPowerInterface {
     if(from != null) {
       from = from.getOpposite();
     }
-    return con.canConnectCEnergy(from);
+    return true;
   }
 
   @Override
   public int getEnergyStored(EnumFacing dir) {
-    if (eh == null) {
+    if (storage == null) {
     	return 0;
     }
-    return eh.getCEnergyStored(dir);
+    return storage.getCEnergyStored();
   }
 
   @Override
   public int getMaxEnergyStored(EnumFacing dir) {
-    if (eh == null) {
+    if (storage == null) {
       return 0;
     }
-    return eh.getMaxCEnergyStored(dir);
+    return storage.getMaxCEnergyStored();
 
   }
 
   @Override
   public int getPowerRequest(EnumFacing dir) {
-    if(er == null) {
+    if(storage == null) {
     	return 0;
     }
-    return er.fillCEnergy(dir, 9999999, true);
+    return storage.fillCEnergy(9999999, true);
   }
 
   @Override
@@ -69,15 +57,15 @@ public class PowerInterfaceCU implements IPowerInterface {
 
   @Override
   public int fillEnergy(EnumFacing dir, int canOffer) {
-    if(er == null) {
+    if(storage == null) {
     	return 0;
     }
-    return er.fillCEnergy(dir, canOffer, false);
+    return storage.fillCEnergy(canOffer, false);
   }
 
   @Override
   public boolean isOutputOnly() {
-    return er == null;
+    return !storage.canReceive();
   }
 
   @Override

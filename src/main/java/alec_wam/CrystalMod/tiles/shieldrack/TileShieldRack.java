@@ -19,6 +19,7 @@ public class TileShieldRack extends TileEntityModStatic implements IFacingTile {
 		if(ItemStackTools.isValid(leftStack))nbt.setTag("LeftStack", leftStack.writeToNBT(new NBTTagCompound()));
 		if(ItemStackTools.isValid(rightStack))nbt.setTag("RightStack", rightStack.writeToNBT(new NBTTagCompound()));
 		if(ItemStackTools.isValid(shieldStack))nbt.setTag("ShieldStack", shieldStack.writeToNBT(new NBTTagCompound()));
+		nbt.setInteger("Facing", getFacing());
 	}
 	
 	public void readCustomNBT(NBTTagCompound nbt){
@@ -38,6 +39,7 @@ public class TileShieldRack extends TileEntityModStatic implements IFacingTile {
 		} else {
 			shieldStack = ItemStackTools.getEmptyStack();
 		}
+		setFacing(nbt.getInteger("Facing"));
 	}
 	
 	/**

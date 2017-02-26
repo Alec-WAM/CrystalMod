@@ -74,16 +74,19 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityShulkerBullet;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.init.PotionTypes;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArrow;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.potion.PotionUtils;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -96,6 +99,7 @@ import net.minecraftforge.event.entity.living.EnderTeleportEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
+import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.living.LootingLevelEvent;
 import net.minecraftforge.event.entity.player.ArrowLooseEvent;
@@ -921,5 +925,70 @@ public class EventHandler {
                 }
             }
         }
+    }
+    
+    @SubscribeEvent
+    public void rightClickItem(PlayerInteractEvent.RightClickItem event){
+    	EntityPlayer player = event.getEntityPlayer();
+    	ItemStack stack = event.getItemStack();
+    	EnumHand hand = event.getHand();
+    	
+    	if(player.isInsideOfMaterial(Material.WATER)){
+    		if(ItemStackTools.isValid(stack) && stack.getItem() == Items.GLASS_BOTTLE){
+    			player.setActiveHand(hand);
+    			event.setCanceled(true);
+    		}
+    	}
+    }
+    
+    @SubscribeEvent
+    public void startUse(LivingEntityUseItemEvent.Start event){
+    	EntityLivingBase entity = event.getEntityLiving();
+    	ItemStack stack = event.getItem();
+    	
+    	if(entity.isInsideOfMaterial(Material.WATER)){
+    		if(ItemStackTools.isValid(stack) && stack.getItem() == Items.GLASS_BOTTLE){
+    			event.setDuration(32);
+    		}
+    	}
+    }
+    
+    @SubscribeEvent
+    public void monitorUse(LivingEntityUseItemEvent.Tick event){
+    	EntityLivingBase entity = event.getEntityLiving();
+    	ItemStack stack = event.getItem();
+    	
+    	if(!entity.isInsideOfMaterial(Material.WATER)){
+    		if(ItemStackTools.isValid(stack) && stack.getItem() == Items.GLASS_BOTTLE){
+    			event.setDuration(-1);
+    			event.setCanceled(true);
+    		}
+    	}
+    }
+    
+    @SubscribeEvent
+    public void finishUse(LivingEntityUseItemEvent.Finish event){
+    	EntityLivingBase entity = event.getEntityLiving();
+    	ItemStack stack = event.getItem();
+    	
+    	if(entity.isInsideOfMaterial(Material.WATER)){
+    		if(ItemStackTools.isValid(stack) && stack.getItem() == Items.GLASS_BOTTLE){
+    			//Restore to full air
+    			entity.setAir(300);
+    			ItemStack waterbottle = PotionUtils.addPotionToItemStack(new ItemStack(Items.POTIONITEM), PotionTypes.WATER);
+    			if(ItemStackTools.getStackSize(stack) > 1){
+	    			event.setResultStack(ItemUtil.consumeItem(stack));
+	    			if(entity instanceof EntityPlayer){
+	    				if(!((EntityPlayer)entity).inventory.addItemStackToInventory(waterbottle)){
+	    					ItemUtil.spawnItemInWorldWithoutMotion(entity.getEntityWorld(), waterbottle, new BlockPos(entity));
+	    				}
+	    			} else {
+	    				ItemUtil.spawnItemInWorldWithoutMotion(entity.getEntityWorld(), waterbottle, new BlockPos(entity));
+	    			}
+    			} else {
+    				event.setResultStack(waterbottle);
+    			}
+    		}
+    	}
     }
 }
