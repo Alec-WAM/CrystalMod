@@ -45,6 +45,7 @@ public class CrystalCraftingManager
     {
     	ItemStack toolRod = new ItemStack(ModItems.toolParts);
     	ItemNBTHelper.setString(toolRod, "Type", PartType.ROD.getName());
+    	this.addRecipe(new ShapedOreCrystalRecipe(toolRod, new Object[] {"  #", " X ", "#  ", '#', "ingotCrystal", 'X', "gemCrystal"}));
     	for(PartType part : PartType.values()){
         	if(part.colored){
         		for(String color : new String[]{"blue", "red", "green", "dark", "pure"}){
@@ -64,8 +65,7 @@ public class CrystalCraftingManager
         	}else{
         		ItemStack stack = new ItemStack(ModItems.toolParts);
             	ItemNBTHelper.setString(stack, "Type", part.getName());
-        		if(part == PartType.ROD)this.addRecipe(new ShapedOreCrystalRecipe(stack, new Object[] {"  #"," X ", "#  ", '#', "ingotCrystal", 'X', "gemCrystal"}));
-        		else if(part == PartType.COVER)this.addRecipe(new ShapedOreCrystalRecipe(stack, new Object[] {"#X#"," # ", '#', "ingotCrystal", 'X', "gemCrystal"}));
+        		if(part == PartType.COVER)this.addRecipe(new ShapedOreCrystalRecipe(stack, new Object[] {"#X#"," # ", '#', "ingotCrystal", 'X', "gemCrystal"}));
         	}
         }
     	
@@ -99,6 +99,11 @@ public class CrystalCraftingManager
         	
         	this.addRecipeNBT(shovel, new Object[]{"  #", " R ", "I  ", '#', shovelHead, 'R', toolRod, 'I', ingot});
         	
+        	ItemStack megashovel = new ItemStack(ModItems.megaCrystalShovel);
+        	ItemNBTHelper.setString(megashovel, "Color", color);
+        	
+        	this.addRecipeNBT(megashovel, new Object[]{" ##", " R#", "I  ", '#', shovelHead, 'R', toolRod, 'I', ingot});
+        	
         	ItemStack pickHead = new ItemStack(ModItems.toolParts);
         	ItemNBTHelper.setString(pickHead, "Type", PartType.PICK.getName()+("_head"));
         	ItemNBTHelper.setString(pickHead, "Color", color);
@@ -107,6 +112,11 @@ public class CrystalCraftingManager
         	ItemNBTHelper.setString(pick, "Color", color);
         	
         	this.addRecipeNBT(pick, new Object[]{"  #", " R ", "R  ", '#', pickHead, 'R', toolRod});
+        	
+        	ItemStack megapick = new ItemStack(ModItems.megaCrystalPickaxe);
+        	ItemNBTHelper.setString(megapick, "Color", color);
+        	
+        	this.addRecipeNBT(megapick, new Object[]{" ##", " R#", "R  ", '#', pickHead, 'R', toolRod});
         	
         	ItemStack swordHead = new ItemStack(ModItems.toolParts);
         	ItemNBTHelper.setString(swordHead, "Type", PartType.SWORD.getName()+("_head"));

@@ -26,6 +26,7 @@ import alec_wam.CrystalMod.util.ChatUtil.PacketNoSpamChat;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
@@ -129,5 +130,11 @@ public class CrystalModNetwork extends NetworkWrapper {
 	          CrystalModNetwork.sendTo(packet, playerMP);
 	        }
 	      }
+	  }
+	  
+	  public static void sendMCPacket(Entity player, Packet<?> packet) {
+		  if(player instanceof EntityPlayerMP && ((EntityPlayerMP) player).connection != null) {
+			  ((EntityPlayerMP) player).connection.sendPacket(packet);
+		  }
 	  }
 	}

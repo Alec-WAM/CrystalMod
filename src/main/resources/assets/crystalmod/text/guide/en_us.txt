@@ -204,6 +204,15 @@
   [text]Much like the old Tesseract from Thermal Expansion it sends CU, RF, items, and fluids wirelessly.<n>R-Click with a Lock to make the Ender Buffer Private.    
  }
 ]}
+//EnderTorch
+{[
+ [chapter]endertorch
+ [title]Ender Torch
+ [page:main]
+ {
+  [text]When placed down it will not allow players using an Ender Pearl or Enderman to teleport into or out of its range.
+ }
+]}
 //AdvDispenser
 {[
  [chapter]advdispenser
@@ -216,6 +225,47 @@
  {
   [title]Modes
   [text]Block: Normal Right or Left Click.<n>Place: Places a block if it is a block.<n>Use: Uses the item on facing block.<n>Activate: Right or Left clicks block once.<n>Use Air: Ignores facing block and activates item.<n>Entity: Left or Right clicks entity with item. 
+ }
+]}
+//EntityHopper
+{[
+ [chapter]entityhopper
+ [title]Entity Hopper
+ [page:main]
+ {
+  [text]Allows you to filter out different types of entities. Any Entity that matches the filter will be dropped through.
+ }
+ [page:types]
+ {
+  [title]Filters
+  [text]-Player: Only Players<n>-Undead: Zombies and Skeletons<n>-Arthropod: Spiders<n>-Monster: Hostile Mobs<n>-Animal: Only Animals<n>-Living: Anything that is alive<n>-Water: Squid and Guardian<n>-Baby<n>-Pet<n>-Slime<n>-Villager<n>-Item
+ }
+]}
+//Crates
+{[
+ [chapter]crate
+ [title]Crate
+ [page:main]
+ {
+  [text]Massive storage of a single item. Left click to drop one item. Shift Left click to drop a stack. Right click with an item to insert.
+ }
+]}
+//Jar
+{[
+ [chapter]jar
+ [title]Glass Jar
+ [page:main]
+ {
+  [text]Holds 3 full potions. When Right Clicked with an Item Frame it will add a label of the potion on that side. If you capture a Shulker Bullet it will act a lamp.
+ }
+]}
+//Shield Rack
+{[
+ [chapter]shieldrack
+ [title]Shield Rack
+ [page:main]
+ {
+  [text]Holds a shield and two melee weapons on either side.
  }
 ]}
 //ITEMS Begin

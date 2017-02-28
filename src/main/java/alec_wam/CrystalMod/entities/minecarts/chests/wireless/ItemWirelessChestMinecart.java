@@ -108,9 +108,7 @@ public class ItemWirelessChestMinecart extends Item implements ICustomModel
 
     public ItemWirelessChestMinecart()
     {
-    	this.setHasSubtypes(true);
-		this.setMaxDamage(0);
-        this.maxStackSize = 1;
+    	this.maxStackSize = 1;
         this.setCreativeTab(CreativeTabs.TRANSPORTATION);
         BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(this, CRYSTAL_MINECART_DISPENSER_BEHAVIOR);
         ModItems.registerItem(this, "minecart_wirelesschest");

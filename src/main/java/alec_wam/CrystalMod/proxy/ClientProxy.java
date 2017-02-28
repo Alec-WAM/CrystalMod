@@ -44,6 +44,7 @@ import alec_wam.CrystalMod.tiles.pipes.item.GhostItemHelper;
 import alec_wam.CrystalMod.tiles.pipes.render.BakedModelLoader;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemStackTools;
+import alec_wam.CrystalMod.util.client.RenderUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.block.model.IBakedModel;
@@ -51,10 +52,12 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderLivingBase;
 import net.minecraft.client.renderer.entity.RenderPlayer;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.resources.IReloadableResourceManager;
 import net.minecraft.client.resources.IResourceManager;
+import net.minecraft.client.resources.IResourceManagerReloadListener;
 import net.minecraft.entity.passive.AbstractHorse;
-import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.entity.passive.EntityWolf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -78,7 +81,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ClientProxy extends CommonProxy {
+public class ClientProxy extends CommonProxy implements IResourceManagerReloadListener {
     @Override
     public void preInit(FMLPreInitializationEvent e) {
         super.preInit(e);
@@ -88,6 +91,7 @@ public class ClientProxy extends CommonProxy {
         IResourceManager manager = FMLClientHandler.instance().getClient().getResourceManager();
         if(manager !=null && manager instanceof IReloadableResourceManager){
         	((IReloadableResourceManager)manager).registerReloadListener(new GuidePageLoader());
+        	((IReloadableResourceManager)manager).registerReloadListener(this);
         }
         MinecraftForge.EVENT_BUS.register(new ClientEventHandler());
         MinecraftForge.EVENT_BUS.register(new DisguiseClientHandler());
@@ -353,4 +357,14 @@ public class ClientProxy extends CommonProxy {
     public Object getForcedGuidePage(){
     	return forcedChapter;
     }
+    
+    public static final TextureAtlasSprite[] destroyBlockIcons = new TextureAtlasSprite[10];
+	@Override
+	public void onResourceManagerReload(IResourceManager resourceManager) {
+		if(Minecraft.getMinecraft().getTextureMapBlocks() !=null){
+			for(int i = 0; i < destroyBlockIcons.length; ++i) {
+				destroyBlockIcons[i] = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite("minecraft:blocks/destroy_stage_" + i);
+			}
+		}
+	}
 }

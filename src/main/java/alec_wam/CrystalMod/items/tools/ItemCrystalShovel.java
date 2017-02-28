@@ -24,9 +24,13 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class ItemCrystalShovel extends ItemSpade implements ICustomModel {
 
 	public ItemCrystalShovel(ToolMaterial material) {
+		this(material, "crystalshovel");
+	}
+	
+	public ItemCrystalShovel(ToolMaterial material, String name) {
 		super(material);
 		this.setCreativeTab(CrystalMod.tabTools);
-		ModItems.registerItem(this, "crystalshovel");
+		ModItems.registerItem(this, name);
 	}
 	
 	@SideOnly(Side.CLIENT)

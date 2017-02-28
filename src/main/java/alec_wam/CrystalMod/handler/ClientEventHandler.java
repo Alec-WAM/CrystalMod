@@ -5,10 +5,14 @@ import java.util.Collection;
 import java.util.ConcurrentModificationException;
 import java.util.List;
 
+import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.Project;
+
+import com.google.common.collect.ImmutableList;
 
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.api.CrystalModAPI;
+import alec_wam.CrystalMod.api.tools.IMegaTool;
 import alec_wam.CrystalMod.asm.ObfuscatedNames;
 import alec_wam.CrystalMod.blocks.crops.material.TileMaterialCrop;
 import alec_wam.CrystalMod.capability.ExtendedPlayer;
@@ -21,12 +25,19 @@ import alec_wam.CrystalMod.items.tools.grapple.GrappleControllerBase;
 import alec_wam.CrystalMod.items.tools.grapple.GrappleHandler;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.packets.PacketGuiMessage;
+import alec_wam.CrystalMod.proxy.ClientProxy;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ModLogger;
 import alec_wam.CrystalMod.util.ReflectionUtils;
 import alec_wam.CrystalMod.util.client.RenderUtil;
+import alec_wam.CrystalMod.util.tool.ToolUtil;
 import alec_wam.CrystalMod.world.game.tag.TagManager;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockChest;
+import net.minecraft.block.BlockEnderChest;
+import net.minecraft.block.BlockSign;
+import net.minecraft.block.BlockSkull;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -35,15 +46,23 @@ import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.inventory.GuiScreenHorseInventory;
 import net.minecraft.client.model.ModelBiped;
+import net.minecraft.client.multiplayer.PlayerControllerMP;
 import net.minecraft.client.renderer.ActiveRenderInfo;
+import net.minecraft.client.renderer.BlockRendererDispatcher;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderLivingBase;
 import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.client.renderer.entity.layers.LayerBipedArmor;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.passive.EntityHorse;
@@ -55,12 +74,15 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.client.event.MouseEvent;
 import net.minecraftforge.client.event.RenderHandEvent;
 import net.minecraftforge.client.event.RenderPlayerEvent;
+import net.minecraftforge.client.event.RenderWorldLastEvent;
+import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -428,5 +450,108 @@ public class ClientEventHandler {
     			}
     		}
     	}
+    }
+    
+    //Mega Tool Handling
+    @SubscribeEvent
+    public void renderExtraBlockBreak(RenderWorldLastEvent event) {
+    	PlayerControllerMP controllerMP = Minecraft.getMinecraft().playerController;
+    	EntityPlayer player = Minecraft.getMinecraft().player;
+    	World world = player.getEntityWorld();
+
+    	ItemStack tool = player.getHeldItemMainhand();
+
+    	// AOE preview
+    	if(ItemStackTools.isValid(tool)) {
+    		Entity renderEntity = Minecraft.getMinecraft().getRenderViewEntity();
+    		double distance = controllerMP.getBlockReachDistance();
+    		RayTraceResult mop = renderEntity.rayTrace(distance, event.getPartialTicks());
+    		if(mop != null) {
+    			if(tool.getItem() instanceof IMegaTool) {
+    				ImmutableList<BlockPos> extraBlocks = ((IMegaTool) tool.getItem()).getAOEBlocks(tool, world, player, mop.getBlockPos());
+    				for(BlockPos pos : extraBlocks) {
+    					event.getContext().drawSelectionBox(player, new RayTraceResult(new Vec3d(0, 0, 0), null, pos), 0, event.getPartialTicks());
+    				}
+    			}
+    		}
+    	}
+
+    	// extra-blockbreak animation
+    	if(controllerMP.getIsHittingBlock()) {
+    		BlockPos pos = ObfuscationReflectionHelper.getPrivateValue(PlayerControllerMP.class, controllerMP, 2);
+    		if(ItemStackTools.isValid(tool) && tool.getItem() instanceof IMegaTool) {
+    			drawBlockDamageTexture(Tessellator.getInstance(),
+    					Tessellator.getInstance().getBuffer(),
+    					player,
+    					event.getPartialTicks(),
+    					world,
+    					((IMegaTool) tool.getItem()).getAOEBlocks(tool, world, player, pos));
+    		}
+    	}
+    }
+
+    // RenderGlobal.drawBlockDamageTexture
+    public void drawBlockDamageTexture(Tessellator tessellatorIn, VertexBuffer vertexBuffer, Entity entityIn, float partialTicks, World world, List<BlockPos> blocks) {
+    	double d0 = entityIn.lastTickPosX + (entityIn.posX - entityIn.lastTickPosX) * (double) partialTicks;
+    	double d1 = entityIn.lastTickPosY + (entityIn.posY - entityIn.lastTickPosY) * (double) partialTicks;
+    	double d2 = entityIn.lastTickPosZ + (entityIn.posZ - entityIn.lastTickPosZ) * (double) partialTicks;
+
+    	TextureManager renderEngine = Minecraft.getMinecraft().renderEngine;
+    	float curBlockDamageMP = ObfuscationReflectionHelper.getPrivateValue(PlayerControllerMP.class, Minecraft.getMinecraft().playerController, 4);
+    	int progress = (int) (curBlockDamageMP * 10f) - 1; // 0-10
+
+    	if(progress < 0) {
+    		return;
+    	}
+
+    	renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+    	//preRenderDamagedBlocks BEGIN
+    	GlStateManager.tryBlendFuncSeparate(774, 768, 1, 0);
+    	GlStateManager.enableBlend();
+    	GlStateManager.color(1.0F, 1.0F, 1.0F, 0.5F);
+    	GlStateManager.doPolygonOffset(-3.0F, -3.0F);
+    	GlStateManager.enablePolygonOffset();
+    	GlStateManager.alphaFunc(516, 0.1F);
+    	GlStateManager.enableAlpha();
+    	GlStateManager.pushMatrix();
+    	//preRenderDamagedBlocks END
+
+    	vertexBuffer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
+    	vertexBuffer.setTranslation(-d0, -d1, -d2);
+    	vertexBuffer.noColor();
+
+    	for(BlockPos blockpos : blocks) {
+    		double d3 = (double) blockpos.getX() - d0;
+    		double d4 = (double) blockpos.getY() - d1;
+    		double d5 = (double) blockpos.getZ() - d2;
+    		Block block = world.getBlockState(blockpos).getBlock();
+    		TileEntity te = world.getTileEntity(blockpos);
+    		boolean hasBreak = block instanceof BlockChest || block instanceof BlockEnderChest
+    				|| block instanceof BlockSign || block instanceof BlockSkull;
+    		if(!hasBreak) {
+    			hasBreak = te != null && te.canRenderBreaking();
+    		}
+
+    		if(!hasBreak) {
+    			IBlockState iblockstate = world.getBlockState(blockpos);
+
+    			if(iblockstate.getBlock().getMaterial(iblockstate) != Material.AIR) {
+    				TextureAtlasSprite textureatlassprite = RenderUtil.getSprite("minecraft:blocks/destroy_stage_"+progress)/*ClientProxy.destroyBlockIcons[progress]*/;
+    				BlockRendererDispatcher blockrendererdispatcher = Minecraft.getMinecraft().getBlockRendererDispatcher();
+    				blockrendererdispatcher.renderBlockDamage(iblockstate, blockpos, textureatlassprite, world);
+    			}
+    		}
+    	}
+
+    	tessellatorIn.draw();
+    	vertexBuffer.setTranslation(0.0D, 0.0D, 0.0D);
+    	// postRenderDamagedBlocks BEGIN
+    	GlStateManager.disableAlpha();
+    	GlStateManager.doPolygonOffset(0.0F, 0.0F);
+    	GlStateManager.disablePolygonOffset();
+    	GlStateManager.enableAlpha();
+    	GlStateManager.depthMask(true);
+    	GlStateManager.popMatrix();
+    	// postRenderDamagedBlocks END
     }
 }

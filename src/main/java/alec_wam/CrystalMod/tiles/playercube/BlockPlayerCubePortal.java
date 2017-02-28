@@ -18,6 +18,7 @@ import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.tiles.machine.elevator.ItemMiscCard.CardType;
 import alec_wam.CrystalMod.util.ChatUtil;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.tool.ToolUtil;
 import alec_wam.CrystalMod.world.ModDimensions;
 
@@ -49,8 +50,10 @@ public class BlockPlayerCubePortal extends BlockContainer
         return false;
     }
 
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack held, EnumFacing side, float hitX, float hitY, float hitZ)
+    @Override
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ)
     {
+    	ItemStack held = playerIn.getHeldItem(hand);
         TileEntity tile = worldIn.getTileEntity(pos);
         if(tile !=null && tile instanceof TileEntityPlayerCubePortal){
         	TileEntityPlayerCubePortal portal = (TileEntityPlayerCubePortal)tile;
@@ -60,7 +63,7 @@ public class BlockPlayerCubePortal extends BlockContainer
         			portal.setOwner(playerIn);
         		}
         		
-        		if(held !=null && held.getItem() == ModItems.miscCard && CardType.byMetadata(held.getMetadata()) == CardType.CUBE){
+        		if(ItemStackTools.isValid(held) && held.getItem() == ModItems.miscCard && CardType.byMetadata(held.getMetadata()) == CardType.CUBE){
         			if(held.hasDisplayName()){
         				portal.cubeID = held.getDisplayName();
         				ChatUtil.sendNoSpam(playerIn, "Cube Name: "+portal.cubeID);
@@ -69,7 +72,7 @@ public class BlockPlayerCubePortal extends BlockContainer
         			}
         		}
         		
-        		if(held !=null && held.getItem() == Items.STICK){
+        		if(ItemStackTools.isValid(held) && held.getItem() == Items.STICK){
         			TileEntitiesMessage msg2 = new TileEntitiesMessage(portal.mobileChunk);
                     CrystalModNetwork.sendToAllAround(msg2, portal);
         			return true;

@@ -98,9 +98,7 @@ public class ItemEnderChestMinecart extends Item implements ICustomModel
 
     public ItemEnderChestMinecart()
     {
-    	this.setHasSubtypes(true);
-		this.setMaxDamage(0);
-        this.maxStackSize = 1;
+    	this.maxStackSize = 1;
         this.setCreativeTab(CreativeTabs.TRANSPORTATION);
         BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(this, CRYSTAL_MINECART_DISPENSER_BEHAVIOR);
         ModItems.registerItem(this, "minecart_enderchest");

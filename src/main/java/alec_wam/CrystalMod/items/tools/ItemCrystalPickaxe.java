@@ -24,9 +24,13 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class ItemCrystalPickaxe extends ItemPickaxe implements ICustomModel {
 
 	public ItemCrystalPickaxe(ToolMaterial material) {
+		this(material, "crystalpick");
+	}
+	
+	public ItemCrystalPickaxe(ToolMaterial material, String name) {
 		super(material);
 		this.setCreativeTab(CrystalMod.tabTools);
-		ModItems.registerItem(this, "crystalpick");
+		ModItems.registerItem(this, name);
 	}
 	
 	@SideOnly(Side.CLIENT)
@@ -62,7 +66,6 @@ public class ItemCrystalPickaxe extends ItemPickaxe implements ICustomModel {
 			subItems.add(stack);
 		}
     }
-	
 
 	
 	@Override

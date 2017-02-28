@@ -52,7 +52,9 @@ import alec_wam.CrystalMod.items.tools.backpack.ItemBackpackNormal.CrystalBackpa
 import alec_wam.CrystalMod.items.tools.backpack.upgrade.ItemBackpackUpgrade.BackpackUpgrade;
 import alec_wam.CrystalMod.tiles.chest.CrystalChestType;
 import alec_wam.CrystalMod.tiles.chest.wireless.WirelessChestHelper;
+import alec_wam.CrystalMod.tiles.crate.BlockCrate.CrateType;
 import alec_wam.CrystalMod.tiles.machine.enderbuffer.BlockEnderBuffer;
+import alec_wam.CrystalMod.tiles.shieldrack.BlockShieldRack.WoodType;
 import alec_wam.CrystalMod.tiles.spawner.ItemMobEssence;
 import alec_wam.CrystalMod.tiles.tank.BlockTank.TankType;
 import alec_wam.CrystalMod.tiles.workbench.BlockCrystalWorkbench.WorkbenchType;
@@ -176,8 +178,23 @@ public class GuidePages {
 		}
 		CrystalModAPI.BLOCKS.registerChapter(new GuideChapter("enderbuffer", new PageCrafting("main", enderBuffers)).setDisplayObject(enderBuffers));
 		
+		ItemStack endertorch = new ItemStack(ModBlocks.enderTorch);
+		CrystalModAPI.BLOCKS.registerChapter(new GuideChapter("endertorch", new PageCrafting("main", endertorch)).setDisplayObject(endertorch));
+
 		ItemStack advdispenser = new ItemStack(ModBlocks.advDispenser);
 		CrystalModAPI.BLOCKS.registerChapter(new GuideChapter("advdispenser", new PageCrafting("main", advdispenser), new PageText("modes")).setDisplayObject(advdispenser));
+		
+		ItemStack entityhopper = new ItemStack(ModBlocks.entityHopper);
+		CrystalModAPI.BLOCKS.registerChapter(new GuideChapter("entityhopper", new PageCrafting("main", entityhopper), new PageText("types")).setDisplayObject(entityhopper));
+				
+		NonNullList<ItemStack> crates = ItemUtil.getBlockSubtypes(ModBlocks.crates, CrateType.values());
+		CrystalModAPI.BLOCKS.registerChapter(new GuideChapter("crate", new PageCrafting("main", crates)).setDisplayObject(crates));
+		
+		ItemStack jar = new ItemStack(ModBlocks.jar);
+		CrystalModAPI.BLOCKS.registerChapter(new GuideChapter("jar", new PageCrafting("main", jar)).setDisplayObject(jar));
+		
+		NonNullList<ItemStack> shieldracks = ItemUtil.getBlockSubtypes(ModBlocks.shieldRack, WoodType.values());
+		CrystalModAPI.BLOCKS.registerChapter(new GuideChapter("shieldrack", new PageCrafting("main", shieldracks)).setDisplayObject(shieldracks));
 		
 		CrystalType[] nuggetArray = new CrystalType[]{CrystalType.BLUE_NUGGET, CrystalType.RED_NUGGET, CrystalType.GREEN_NUGGET, CrystalType.DARK_NUGGET};
 		CrystalType[] shardArray = new CrystalType[]{CrystalType.BLUE_SHARD, CrystalType.RED_SHARD, CrystalType.GREEN_SHARD, CrystalType.DARK_SHARD};

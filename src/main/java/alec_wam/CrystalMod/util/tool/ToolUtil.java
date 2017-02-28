@@ -3,7 +3,10 @@ package alec_wam.CrystalMod.util.tool;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.common.collect.ImmutableList;
+
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -19,6 +22,10 @@ import net.minecraft.item.ItemSword;
 import net.minecraft.item.ItemTool;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import net.minecraftforge.energy.CapabilityEnergy;
 import alec_wam.CrystalMod.CrystalMod;
@@ -379,5 +386,154 @@ public class ToolUtil {
 	  }
 
 	  return valid;
+  }
+  
+  public static boolean isToolEffective(ItemStack stack, IBlockState state) {
+	  // check material
+	  for(String type : stack.getItem().getToolClasses(stack)) {
+		  if(state.getBlock().isToolEffective(type, state)) {
+			  return true;
+		  }
+	  }
+
+	  return stack.getItem().canHarvestBlock(state, stack);
+  }
+  
+  //Item Raytrace method
+  public static RayTraceResult rayTrace(World worldIn, EntityPlayer playerIn, boolean useLiquids)
+  {
+      float f = playerIn.rotationPitch;
+      float f1 = playerIn.rotationYaw;
+      double d0 = playerIn.posX;
+      double d1 = playerIn.posY + (double)playerIn.getEyeHeight();
+      double d2 = playerIn.posZ;
+      Vec3d vec3d = new Vec3d(d0, d1, d2);
+      float f2 = MathHelper.cos(-f1 * 0.017453292F - (float)Math.PI);
+      float f3 = MathHelper.sin(-f1 * 0.017453292F - (float)Math.PI);
+      float f4 = -MathHelper.cos(-f * 0.017453292F);
+      float f5 = MathHelper.sin(-f * 0.017453292F);
+      float f6 = f3 * f4;
+      float f7 = f2 * f4;
+      double d3 = 5.0D;
+      if (playerIn instanceof net.minecraft.entity.player.EntityPlayerMP)
+      {
+          d3 = ((net.minecraft.entity.player.EntityPlayerMP)playerIn).interactionManager.getBlockReachDistance();
+      }
+      Vec3d vec3d1 = vec3d.addVector((double)f6 * d3, (double)f5 * d3, (double)f7 * d3);
+      return worldIn.rayTraceBlocks(vec3d, vec3d1, useLiquids, !useLiquids, false);
+  }
+  
+  //https://github.com/SlimeKnights/TinkersConstruct/blob/master/src/main/java/slimeknights/tconstruct/library/utils/ToolHelper.java
+  public static ImmutableList<BlockPos> calcAOEBlocks(ItemStack stack, World world, EntityPlayer player, BlockPos origin, int width, int height, int depth) {
+	  return calcAOEBlocks(stack, world, player, origin, width, height, depth, -1);
+  }
+
+  public static ImmutableList<BlockPos> calcAOEBlocks(ItemStack stack, World world, EntityPlayer player, BlockPos origin, int width, int height, int depth, int distance) {
+	  IBlockState state = world.getBlockState(origin);
+
+	  if(!isToolEffective(stack, state)) {
+		  return ImmutableList.of();
+	  }
+
+	  if(world.isAirBlock(origin) || state.getMaterial() == Material.AIR) {
+		  return ImmutableList.of();
+	  }
+
+	  RayTraceResult mop = rayTrace(world, player, true);
+	  if(mop == null || !origin.equals(mop.getBlockPos())) {
+		  mop = rayTrace(world, player, false);
+		  if(mop == null || !origin.equals(mop.getBlockPos())) {
+			  return ImmutableList.of();
+		  }
+	  }
+
+	  int x, y, z;
+	  BlockPos start = origin;
+	  switch(mop.sideHit) {
+	  case DOWN:
+	  case UP:
+		  // x y depends on the angle we look?
+		  Vec3i vec = player.getHorizontalFacing().getDirectionVec();
+		  x = vec.getX() * height + vec.getZ() * width;
+		  y = mop.sideHit.getAxisDirection().getOffset() * -depth;
+		  z = vec.getX() * width + vec.getZ() * height;
+		  start = start.add(-x / 2, 0, -z / 2);
+		  if(x % 2 == 0) {
+			  if(x > 0 && mop.hitVec.xCoord - mop.getBlockPos().getX() > 0.5d) {
+				  start = start.add(1, 0, 0);
+			  }
+			  else if(x < 0 && mop.hitVec.xCoord - mop.getBlockPos().getX() < 0.5d) {
+				  start = start.add(-1, 0, 0);
+			  }
+		  }
+		  if(z % 2 == 0) {
+			  if(z > 0 && mop.hitVec.zCoord - mop.getBlockPos().getZ() > 0.5d) {
+				  start = start.add(0, 0, 1);
+			  }
+			  else if(z < 0 && mop.hitVec.zCoord - mop.getBlockPos().getZ() < 0.5d) {
+				  start = start.add(0, 0, -1);
+			  }
+		  }
+		  break;
+	  case NORTH:
+	  case SOUTH:
+		  x = width;
+		  y = height;
+		  z = mop.sideHit.getAxisDirection().getOffset() * -depth;
+		  start = start.add(-x / 2, -y / 2, 0);
+		  if(x % 2 == 0 && mop.hitVec.xCoord - mop.getBlockPos().getX() > 0.5d) {
+			  start = start.add(1, 0, 0);
+		  }
+		  if(y % 2 == 0 && mop.hitVec.yCoord - mop.getBlockPos().getY() > 0.5d) {
+			  start = start.add(0, 1, 0);
+		  }
+		  break;
+	  case WEST:
+	  case EAST:
+		  x = mop.sideHit.getAxisDirection().getOffset() * -depth;
+		  y = height;
+		  z = width;
+		  start = start.add(-0, -y / 2, -z / 2);
+		  if(y % 2 == 0 && mop.hitVec.yCoord - mop.getBlockPos().getY() > 0.5d) {
+			  start = start.add(0, 1, 0);
+		  }
+		  if(z % 2 == 0 && mop.hitVec.zCoord - mop.getBlockPos().getZ() > 0.5d) {
+			  start = start.add(0, 0, 1);
+		  }
+		  break;
+	  default:
+		  x = y = z = 0;
+	  }
+
+	  ImmutableList.Builder<BlockPos> builder = ImmutableList.builder();
+	  for(int xp = start.getX(); xp != start.getX() + x; xp += x / MathHelper.abs(x)) {
+		  for(int yp = start.getY(); yp != start.getY() + y; yp += y / MathHelper.abs(y)) {
+			  for(int zp = start.getZ(); zp != start.getZ() + z; zp += z / MathHelper.abs(z)) {
+				  // don't add the origin block
+				  if(xp == origin.getX() && yp == origin.getY() && zp == origin.getZ()) {
+					  continue;
+				  }
+				  if(distance > 0 && MathHelper.abs(xp - origin.getX()) + MathHelper.abs(yp - origin.getY()) + MathHelper.abs(
+						  zp - origin.getZ()) > distance) {
+					  continue;
+				  }
+				  BlockPos pos = new BlockPos(xp, yp, zp);
+				  if(isToolEffective(stack, world.getBlockState(pos))) {
+					  builder.add(pos);
+				  }
+			  }
+		  }
+	  }
+
+	  return builder.build();
+  }
+
+  public static ItemStack getBestTool(EntityPlayer player, IBlockState blockState) {
+	  if(ItemStackTools.isValid(player.getHeldItemOffhand())){
+		  if(ToolUtil.isToolEffective(player.getHeldItemOffhand(), blockState)){
+			  return player.getHeldItemOffhand();
+		  }
+	  }
+	  return player.getHeldItemMainhand();
   }
 }

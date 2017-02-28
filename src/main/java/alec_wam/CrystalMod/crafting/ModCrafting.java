@@ -317,7 +317,7 @@ public class ModCrafting {
 		ModCrafting.addNBTRecipe(new ItemStack(ModBlocks.crystalTank, 1, TankType.DARK.getMeta()), copyListTank, new Object[]{"###", "#T#", "###", '#', darkPlate, 'T', new ItemStack(ModBlocks.crystalTank, 1, TankType.GREEN.getMeta())});
 		ModCrafting.addNBTRecipe(new ItemStack(ModBlocks.crystalTank, 1, TankType.PURE.getMeta()), copyListTank, new Object[]{"###", "#T#", "###", '#', purePlate, 'T', new ItemStack(ModBlocks.crystalTank, 1, TankType.DARK.getMeta())});
 
-		addShapedOreRecipe(new ItemStack(ModBlocks.jar, 1, 4), new Object[]{" S ", "P P", "PPP", 'S', "slabWood", 'P', "paneGlassColorless"});
+		addShapedOreRecipe(new ItemStack(ModBlocks.jar, 4), new Object[]{" S ", "P P", "PPP", 'S', "slabWood", 'P', "paneGlassColorless"});
 		
 		for(BlockPlanks.EnumType woodType : BlockPlanks.EnumType.values()){
 			addShapedOreRecipe(new ItemStack(ModBlocks.shieldRack, 1, woodType.getMetadata()), new Object[]{"HSH", "SHS", " S ", 'S', new ItemStack(Blocks.WOODEN_SLAB, 1, woodType.getMetadata()), 'H', Blocks.TRIPWIRE_HOOK});
@@ -907,7 +907,7 @@ public class ModCrafting {
 
 						addShapedRecipe(outCopy,
 								"B", "B",
-								'B', output.copy());
+								'B', ItemUtil.copy(output, 1));
 					}
 				}
 			}

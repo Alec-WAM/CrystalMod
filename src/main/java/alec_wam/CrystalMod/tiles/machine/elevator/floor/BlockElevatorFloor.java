@@ -17,6 +17,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.util.ItemStackTools;
 
 public class BlockElevatorFloor extends BlockContainer {
 
@@ -39,13 +40,15 @@ public class BlockElevatorFloor extends BlockContainer {
 		return new TileEntityElevatorFloor();
 	}
 	
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack held, EnumFacing side, float hitX, float hitY, float hitZ)
+	@Override
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ)
     {
+		ItemStack held = playerIn.getHeldItem(hand);
 		TileEntity te = worldIn.getTileEntity(pos);
         if (te instanceof TileEntityElevatorFloor) {
         	TileEntityElevatorFloor floor = (TileEntityElevatorFloor) te;
         	if(!worldIn.isRemote){
-        		if(held !=null && held.getItem() == Items.NAME_TAG && held.hasDisplayName()){
+        		if(ItemStackTools.isValid(held) && held.getItem() == Items.NAME_TAG && held.hasDisplayName()){
         			floor.setName(held.getDisplayName());
         			floor.markDirty();
         			return true;

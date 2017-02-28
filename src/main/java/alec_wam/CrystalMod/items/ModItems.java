@@ -33,6 +33,8 @@ import alec_wam.CrystalMod.items.tools.ItemCustomAxe;
 import alec_wam.CrystalMod.items.tools.ItemCustomPickaxe;
 import alec_wam.CrystalMod.items.tools.ItemDarkIronBow;
 import alec_wam.CrystalMod.items.tools.ItemLock;
+import alec_wam.CrystalMod.items.tools.ItemMegaCrystalPickaxe;
+import alec_wam.CrystalMod.items.tools.ItemMegaCrystalShovel;
 import alec_wam.CrystalMod.items.tools.ItemSuperTorch;
 import alec_wam.CrystalMod.items.tools.ItemToolParts;
 import alec_wam.CrystalMod.items.tools.backpack.ItemBackpackBase;
@@ -90,7 +92,9 @@ public class ModItems {
 	public static ItemCrystalAxe crystalAxe;
 	public static ItemCrystalHoe crystalHoe;
 	public static ItemCrystalShovel crystalShovel;
+	public static ItemMegaCrystalShovel megaCrystalShovel;
 	public static ItemCrystalPickaxe crystalPickaxe;
+	public static ItemMegaCrystalPickaxe megaCrystalPickaxe;
 	public static ItemCrystalSword crystalSword;
 	public static ItemCrystalShears shears;
 	
@@ -162,7 +166,9 @@ public class ModItems {
 		crystalAxe = new ItemCrystalAxe(ToolMaterialCrystal);
 		crystalHoe = new ItemCrystalHoe(ToolMaterialCrystal);
 		crystalShovel = new ItemCrystalShovel(ToolMaterialCrystal);
+		megaCrystalShovel = new ItemMegaCrystalShovel(ToolMaterialCrystal);
 		crystalPickaxe = new ItemCrystalPickaxe(ToolMaterialCrystal);
+		megaCrystalPickaxe = new ItemMegaCrystalPickaxe(ToolMaterialCrystal);
 		crystalSword = new ItemCrystalSword(ToolMaterialCrystal);
 		shears = new ItemCrystalShears();
 		

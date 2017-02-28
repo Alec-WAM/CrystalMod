@@ -1,11 +1,7 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "model": "cube_all",
-    "textures": {
-	  "particle":"crystalmod:blocks/playerCubeCore",
-	  "all":"crystalmod:blocks/playerCubeCore"
-    },
+    "model": "crystalmod:playercubeportal",
     "transform": "forge:default-block"
   },
   "variants": {

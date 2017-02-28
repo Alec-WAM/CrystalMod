@@ -106,23 +106,27 @@ public class ItemMiscCard extends Item implements ICustomModel {
 			}
 		}
 		if(!gotCoords){
+			boolean cleared = false;
 			if(type !=null && type == CardType.ELEVATOR){
 				nbt.removeTag("elevatorx");
 				nbt.removeTag("elevatory");
 				nbt.removeTag("elevatorz");
 				nbt.removeTag("elevatordim");
+				cleared = true;
 			}
 			if(type !=null && type == CardType.TELEPORT_PORTAL){
 				nbt.removeTag("PortalPos");
 				nbt.removeTag("PortalDim");
+				cleared = true;
 			}
 			if(type !=null && type == CardType.EPORTAL){
 				nbt.removeTag(BlockWirelessPipeWrapper.NBT_CON_X);
 				nbt.removeTag(BlockWirelessPipeWrapper.NBT_CON_Y);
 				nbt.removeTag(BlockWirelessPipeWrapper.NBT_CON_Z);
 				nbt.removeTag(BlockWirelessPipeWrapper.NBT_CON_D);
+				cleared = true;
 			}
-			if(!world.isRemote)ChatUtil.sendChat(player, "Card Cleared");
+			if(!world.isRemote && cleared)ChatUtil.sendChat(player, "Card Cleared");
 		}
 		stack.setTagCompound(nbt);
 		return EnumActionResult.SUCCESS;
