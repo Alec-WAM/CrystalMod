@@ -358,7 +358,7 @@ public class CrystalCraftingManager
             }
         }
 
-        return null;
+        return ItemStackTools.getEmptyStack();
     }
 
     public NonNullList<ItemStack> getRemainingItems(InventoryCrafting p_180303_1_, World worldIn)

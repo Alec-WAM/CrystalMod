@@ -60,16 +60,20 @@ public class BlockCrystalReed extends Block implements net.minecraftforge.common
 
                 if (i < 3)
                 {
-                    int j = ((Integer)state.getValue(AGE)).intValue();
-
-                    if (j == 15)
+                	if(net.minecraftforge.common.ForgeHooks.onCropsGrowPre(worldIn, pos, state, true))
                     {
-                        worldIn.setBlockState(pos.up(), this.getDefaultState());
-                        worldIn.setBlockState(pos, state.withProperty(AGE, Integer.valueOf(0)), 4);
-                    }
-                    else
-                    {
-                        worldIn.setBlockState(pos, state.withProperty(AGE, Integer.valueOf(j + 1)), 4);
+	                    int j = ((Integer)state.getValue(AGE)).intValue();
+	
+	                    if (j == 15)
+	                    {
+	                        worldIn.setBlockState(pos.up(), this.getDefaultState());
+	                        worldIn.setBlockState(pos, state.withProperty(AGE, Integer.valueOf(0)), 4);
+	                    }
+	                    else
+	                    {
+	                        worldIn.setBlockState(pos, state.withProperty(AGE, Integer.valueOf(j + 1)), 4);
+	                    }
+	                    net.minecraftforge.common.ForgeHooks.onCropsGrowPost(worldIn, pos, state, worldIn.getBlockState(pos));
                     }
                 }
             }
@@ -111,7 +115,8 @@ public class BlockCrystalReed extends Block implements net.minecraftforge.common
     /**
      * Called when a neighboring block changes.
      */
-    public void onNeighborBlockChange(World worldIn, BlockPos pos, IBlockState state, Block neighborBlock)
+    @Override
+    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos)
     {
         this.checkForDrop(worldIn, pos, state);
     }

@@ -173,9 +173,10 @@ public class BlockCrystalTreePlant extends BlockHorizontal implements IGrowable
      * Called by ItemBlocks just before a block is actually set in the world, to allow for adjustments to the
      * IBlockstate
      */
-    public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer)
+    @Override
+    public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer)
     {
-        if (!facing.getAxis().isHorizontal())
+    	if (!facing.getAxis().isHorizontal())
         {
             facing = EnumFacing.NORTH;
         }
@@ -188,7 +189,8 @@ public class BlockCrystalTreePlant extends BlockHorizontal implements IGrowable
      * change. Cases may include when redstone power is updated, cactus blocks popping off due to a neighboring solid
      * block, etc.
      */
-    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn)
+    @Override
+    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos from)
     {
         if (!this.canBlockStay(worldIn, pos, state))
         {
