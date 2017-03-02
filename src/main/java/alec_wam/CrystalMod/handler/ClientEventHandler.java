@@ -14,6 +14,7 @@ import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.api.CrystalModAPI;
 import alec_wam.CrystalMod.api.tools.IMegaTool;
 import alec_wam.CrystalMod.asm.ObfuscatedNames;
+import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.blocks.crops.material.TileMaterialCrop;
 import alec_wam.CrystalMod.capability.ExtendedPlayer;
 import alec_wam.CrystalMod.capability.ExtendedPlayerProvider;
@@ -452,9 +453,18 @@ public class ClientEventHandler {
     	}
     }
     
+    public static int lastRenderDistance;
+    
     //Mega Tool Handling
     @SubscribeEvent
     public void renderExtraBlockBreak(RenderWorldLastEvent event) {
+    	
+    	if(Minecraft.getMinecraft().gameSettings.renderDistanceChunks !=lastRenderDistance){
+    		lastRenderDistance = Minecraft.getMinecraft().gameSettings.renderDistanceChunks;
+    		//Update Leaves
+    		ModBlocks.crystalLeaves.setGraphicsLevel(Minecraft.getMinecraft().gameSettings.fancyGraphics);
+    	}
+    	
     	PlayerControllerMP controllerMP = Minecraft.getMinecraft().playerController;
     	EntityPlayer player = Minecraft.getMinecraft().player;
     	World world = player.getEntityWorld();
