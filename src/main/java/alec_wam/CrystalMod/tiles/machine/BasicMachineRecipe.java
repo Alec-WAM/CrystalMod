@@ -8,6 +8,7 @@ import alec_wam.CrystalMod.util.ItemUtil;
 import com.google.common.collect.Lists;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.oredict.OreDictionary;
 
 public class BasicMachineRecipe
@@ -42,15 +43,15 @@ public class BasicMachineRecipe
     	return inputSize;
     }
     
-    public List<ItemStack> getInputs()
+    public NonNullList<ItemStack> getInputs()
     {
     	if(this.input instanceof String){
     		return OreDictionary.getOres((String)input);
     	}
     	if(input instanceof ItemStack){
-    		return Lists.newArrayList((ItemStack)input);
+    		return NonNullList.withSize(1, (ItemStack)input);
     	}
-    	return Lists.newArrayList();
+    	return NonNullList.create();
     }
     
     public boolean matchesInput(ItemStack stack){

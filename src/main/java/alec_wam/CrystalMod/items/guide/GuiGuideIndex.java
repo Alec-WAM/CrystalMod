@@ -2,11 +2,17 @@ package alec_wam.CrystalMod.items.guide;
 
 import java.awt.Color;
 import java.io.IOException;
+import java.text.Collator;
 import java.util.List;
+import java.util.Locale;
 
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
+import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
+
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
@@ -144,6 +150,24 @@ public class GuiGuideIndex extends GuiGuideBase implements IGuiScreen {
 		}
 	}
 	
+	public List<GuideChapter> getFilteredChapters(int page){
+		return getFilteredChapters("", page);
+	}
+	
+	public List<GuideChapter> getFilteredChapters(String filter, int page){
+		if(Strings.isNullOrEmpty(filter)){
+			return indexes[page].getChapters();
+		}
+		List<GuideChapter> chapters = Lists.newArrayList();
+		for(GuideChapter chapter : indexes[page].getChapters()){
+			if(chapter.doesFilterMatch(filter)){
+				chapters.add(chapter);
+			}
+		}
+		return chapters;
+	}
+	
+	
 	@Override
 	protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException
     {
@@ -173,7 +197,7 @@ public class GuiGuideIndex extends GuiGuideBase implements IGuiScreen {
 			int x = xStart;
 			int y = guiTop+40;
 			int row = scrollbarLeft.getScrollPos();
-			List<GuideChapter> chapters = indexes[0].getChapters();
+			List<GuideChapter> chapters = getFilteredChapters(0);
 			for(int s = row; (s < row+6); s++){
 				
 				if(s < chapters.size()){
@@ -192,7 +216,7 @@ public class GuiGuideIndex extends GuiGuideBase implements IGuiScreen {
 			int x = xStart;
 			int y = guiTop+40;
 			int row = scrollbarRight.getScrollPos();
-			List<GuideChapter> chapters = indexes[1].getChapters();
+			List<GuideChapter> chapters = getFilteredChapters(1);
 			for(int s = row; (s < row+6); s++){
 				
 				if(s < chapters.size()){
@@ -205,8 +229,6 @@ public class GuiGuideIndex extends GuiGuideBase implements IGuiScreen {
 				y+=20;
 			}
 		}
-		
-		
     }
 	
 	@Override
@@ -240,10 +262,11 @@ public class GuiGuideIndex extends GuiGuideBase implements IGuiScreen {
 		GuiComponentSprite.renderSprite(mc, (int)GuiComponentBook.iconPageRight.getWidth(), 0, offsetX, offsetY, mouseX, mouseY, GuiComponentBook.iconPageRight, GuiComponentBook.texture, 1f, 1f, 1f);
 		
 		int middle = xSize;
-		GuiScreen.drawRect(guiLeft+middle-2, guiTop, guiLeft+middle+2, guiTop+ySize, Color.RED.getRGB());
+		//Used to test where the middle is
+		//GuiScreen.drawRect(guiLeft+middle-2, guiTop, guiLeft+middle+2, guiTop+ySize, Color.RED.getRGB());
 		
 		if(indexes[0] !=null){
-			List<GuideChapter> chapters = indexes[0].getChapters();
+			List<GuideChapter> chapters = getFilteredChapters(0);
 		    
 		    int max = chapters.size();
 			
@@ -251,7 +274,7 @@ public class GuiGuideIndex extends GuiGuideBase implements IGuiScreen {
 		    scrollbarLeft.drawScrollbar(par2, par3);
 		}
 		if(indexes[1] !=null){
-			List<GuideChapter> chapters = indexes[1].getChapters();
+			List<GuideChapter> chapters = getFilteredChapters(1);
 		    
 		    int max = chapters.size();
 			
@@ -272,7 +295,7 @@ public class GuiGuideIndex extends GuiGuideBase implements IGuiScreen {
 			int row = scrollbarLeft.getScrollPos();
 			String title = "-"+Lang.localize("guide.index."+indexes[0].getID())+"-";
 			this.fontRendererObj.drawString(title, guiLeft+((xSize-8)/2)-this.fontRendererObj.getStringWidth(title)/2, guiTop+20, 0);
-			List<GuideChapter> chapters = indexes[0].getChapters();
+			List<GuideChapter> chapters = getFilteredChapters(0);
 			for(int s = row; (s < row+6); s++){
 				
 				if(s < chapters.size()){
@@ -327,7 +350,7 @@ public class GuiGuideIndex extends GuiGuideBase implements IGuiScreen {
 			int row = scrollbarRight.getScrollPos();
 			String title = "-"+Lang.localize("guide.index."+indexes[1].getID())+"-";
 			this.fontRendererObj.drawString(title, middle+((xSize-8)/2)-this.fontRendererObj.getStringWidth(title)/2, guiTop+20, 0);
-			List<GuideChapter> chapters = indexes[1].getChapters();
+			List<GuideChapter> chapters = getFilteredChapters(1);
 			for(int s = row; (s < row+6); s++){
 				
 				if(s < chapters.size()){
@@ -385,6 +408,22 @@ public class GuiGuideIndex extends GuiGuideBase implements IGuiScreen {
 	@Override
 	public int getGuiTop() {
 		return guiTop;
+	}
+
+	private static Locale LOCALE;
+	public static Locale getLocale(){
+		String languageCode = Minecraft.getMinecraft().getLanguageManager().getCurrentLanguage().getLanguageCode();
+		if(LOCALE == null || LOCALE.getISO3Language() != languageCode){
+			int idx = languageCode.indexOf('_');
+		    if(idx > 0) {
+		      String lang = languageCode.substring(0, idx);
+		      String country = languageCode.substring(idx+1);
+		      LOCALE = new Locale(lang, country);
+		    } else {
+		      LOCALE = new Locale(languageCode);
+		    }
+		}
+		return LOCALE;
 	}
 
 }

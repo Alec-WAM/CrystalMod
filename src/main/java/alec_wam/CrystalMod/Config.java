@@ -88,6 +88,14 @@ public class Config {
 	
 	public static boolean backpackDeathUpgradeConsume = false;
 	public static boolean hardmode_MaterialCrops = false;
+	public static int playerCubePlayerLimit = 16;
+	
+	public static enum RegenType {
+		IDLE, EMPTY, NEVER;
+	}
+	
+	public static RegenType crystalClusterRegenType = RegenType.IDLE;
+	
 	
 	@SubscribeEvent
 	public void onConfigChanged(OnConfigChangedEvent event) {
@@ -147,6 +155,11 @@ public class Config {
         
         hardmode_MaterialCrops = cfg.get(CATEGORY_ITEM, "HardmodeMaterialCrops", hardmode_MaterialCrops, "Set to true if seeds must be crafted with fusion instead of normal crafting.").getBoolean();
 
+        playerCubePlayerLimit = cfg.get(CATEGORY_WORLD, "PlayerCubePlayerLimit", playerCubePlayerLimit, "The maximum amount of player cubes each player is allowed to create. (If this equals zero no cubes are allowed)").getInt(16);
+        if(playerCubePlayerLimit < 0){
+        	playerCubePlayerLimit = 0;
+        }
+        
         int headtype = cfg.get(CATEGORY_ENTITY, "mobHeadDrop", mobHeadType.ordinal(), "0 = Never Drop; 1 = Drop when killed; 2 = Drop only when killed by player;").getInt(mobHeadType.ordinal());
     	if(headtype < 0)headtype = 0;
     	if(headtype > 2)headtype = 2;
@@ -166,7 +179,8 @@ public class Config {
     	engine_vampire_maxattack = cfg.get(CATEGORY_MACHINE, "Engine_Vampire_AttackAmt", engine_vampire_maxattack, "Amount of entites the vampire engine can attack at once").getInt();
     	advDispenser_cooldown = cfg.get(CATEGORY_MACHINE, "advDispenser_cooldown", advDispenser_cooldown, "Amount of ticks inbetween each click on the Advanced Dispenser").getInt();
     	crates_leaveOneItem = cfg.get(CATEGORY_BLOCKS, "crates_leaveOneItem", crates_leaveOneItem, "Set to true to leave one item in a crate when it is clicked.").getBoolean();
-
+    	int regenIndex = cfg.get(CATEGORY_BLOCKS, "crystalClusterRegenType", crystalClusterRegenType.ordinal(), "0 = Idle (Cluster Regens when not in use) 1 = Empty (Once the cluster is completly drained it will regen until power is extracted again) 2 = Never (Clusters will never regen)").getInt(0);
+    	crystalClusterRegenType = RegenType.values()[regenIndex % RegenType.values().length];
     	//Client
     	vanillaMinecarts3d = cfg.get(CATEGORY_CLIENT, "3dMinecartItems", vanillaMinecarts3d, "Override Minecart Item Render to 3d items.").getBoolean();
     }

@@ -13,12 +13,16 @@ import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
+import alec_wam.CrystalMod.Config;
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.tiles.machine.elevator.ItemMiscCard.CardType;
 import alec_wam.CrystalMod.util.ChatUtil;
 import alec_wam.CrystalMod.util.ItemStackTools;
+import alec_wam.CrystalMod.util.ItemUtil;
+import alec_wam.CrystalMod.util.Lang;
+import alec_wam.CrystalMod.util.UUIDUtils;
 import alec_wam.CrystalMod.util.tool.ToolUtil;
 import alec_wam.CrystalMod.world.ModDimensions;
 
@@ -34,7 +38,7 @@ public class BlockPlayerCubePortal extends BlockContainer
     }
 
     public EnumBlockRenderType getRenderType(IBlockState state){
-    	return EnumBlockRenderType.INVISIBLE;
+    	return EnumBlockRenderType.MODEL;
     }
     
     /**
@@ -61,6 +65,19 @@ public class BlockPlayerCubePortal extends BlockContainer
         		CubeManager cubeManger;
         		if(portal.getOwner() == null){
         			portal.setOwner(playerIn);
+        		}
+        		
+        		if(portal.isLocked && !UUIDUtils.areEqual(EntityPlayer.getUUID(playerIn.getGameProfile()), portal.getOwner().getId())){
+        			return false;
+        		}
+        		
+        		if(ItemStackTools.isValid(held) && held.getItem() == ModItems.lock){
+        			portal.isLocked = true;
+        			if(!playerIn.capabilities.isCreativeMode){
+        				playerIn.setHeldItem(hand, ItemUtil.consumeItem(held));
+        			}
+        			portal.markDirty();
+    				return true;
         		}
         		
         		if(ItemStackTools.isValid(held) && held.getItem() == ModItems.miscCard && CardType.byMetadata(held.getMetadata()) == CardType.CUBE){
@@ -100,8 +117,13 @@ public class BlockPlayerCubePortal extends BlockContainer
     			{
     				if (worldIn.provider.getDimensionType().getId() != ModDimensions.CUBE_ID)
     				{
-    					if(!Strings.isNullOrEmpty(portal.cubeID))
-    					cubeManger.teleportPlayerToPlayerCube((EntityPlayerMP) playerIn, portal.getOwner(), portal.cubeID);
+    					if(!Strings.isNullOrEmpty(portal.cubeID)){
+    						String message = cubeManger.teleportPlayerToPlayerCube((EntityPlayerMP) playerIn, portal.getOwner(), portal.cubeID);
+    						if(message.equalsIgnoreCase("TooManyCubes")){
+    							ChatUtil.sendNoSpam(playerIn, Lang.localizeFormat("message.toomanyplayercubes", new Object[]{""+Config.playerCubePlayerLimit}));
+    							return true;
+    						}
+    					}
     				}
     				else
     				{

@@ -575,6 +575,8 @@ crystalmod.guistrings.block_side=Block Side
 crystalmod.guistrings.direction=Direction
 crystalmod.guistrings.inventory_accessed=Inventory
 
+crystalmod.message.toomanyplayercubes=You already have the maximum amount of Player Cubes created. (%s)
+
 #--Entity
 entity.crystalpigzombie.name=Crystal Zombie Pigman
 entity.crystalcow.name=Crystal Cow

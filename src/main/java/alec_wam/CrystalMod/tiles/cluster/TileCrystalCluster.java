@@ -2,6 +2,8 @@ package alec_wam.CrystalMod.tiles.cluster;
 
 import java.util.Random;
 
+import alec_wam.CrystalMod.Config;
+import alec_wam.CrystalMod.Config.RegenType;
 import alec_wam.CrystalMod.api.energy.CapabilityCrystalEnergy;
 import alec_wam.CrystalMod.api.energy.ICEnergyStorage;
 import alec_wam.CrystalMod.blocks.ModBlocks;
@@ -14,7 +16,6 @@ import alec_wam.CrystalMod.tiles.machine.IFacingTile;
 import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.TimeUtil;
 import alec_wam.CrystalMod.util.data.watchable.WatchableInteger;
-import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -68,6 +69,7 @@ public class TileCrystalCluster extends TileEntityMod implements IMessageHandler
 	private int drainDelay;
 	private ClusterData clusterData = new ClusterData(22, 1);
 	private EnumFacing facing = EnumFacing.UP;
+	private boolean canRegen;
 	
 	public TileCrystalCluster(){
 		health.setValue(TimeUtil.MINECRAFT_DAY_TICKS);
@@ -80,6 +82,7 @@ public class TileCrystalCluster extends TileEntityMod implements IMessageHandler
 		nbt.setInteger("DrainDelay", drainDelay);
 		if(clusterData !=null)nbt.setTag("ClusterData", clusterData.serializeNBT());
 		nbt.setInteger("Facing", facing.getIndex());
+		nbt.setBoolean("CanRegen", canRegen);
 	}
 	
 	@Override
@@ -90,6 +93,7 @@ public class TileCrystalCluster extends TileEntityMod implements IMessageHandler
 		clusterData = new ClusterData(22, 1);
 		if(nbt.hasKey("ClusterData"))clusterData.deserializeNBT(nbt.getCompoundTag("ClusterData"));
 		this.facing = nbt.hasKey("Facing") ? EnumFacing.getFront(nbt.getInteger("Facing")) : EnumFacing.UP;
+		this.canRegen = nbt.getBoolean("CanRegen");
 		updateAfterLoad();
 	}
 	
@@ -110,10 +114,29 @@ public class TileCrystalCluster extends TileEntityMod implements IMessageHandler
 					}
 				}
 			}
+			
+			RegenType type = Config.crystalClusterRegenType;
+			if(type == RegenType.IDLE){
+				canRegen = true;
+			} else if(type == RegenType.EMPTY){
+				if(canRegen == false){
+					if(this.health.getValue() <=0 && drainDelay <= 0){
+						canRegen = true;
+					}
+				}
+				
+				if(canRegen && drainDelay > 0){
+					canRegen = false;
+				}
+			} else if(type == RegenType.NEVER){
+				canRegen = false;
+			}
+			
 			if(drainDelay > 0){
 				drainDelay--;
 			}
-			if(getWorld().getBlockState(getPos().down()).getBlock() == Blocks.GLOWSTONE){
+			
+			if(canRegen){
 				if(health.getValue() < TimeUtil.MINECRAFT_DAY_TICKS && drainDelay <=0){
 					health.add(clusterData.getRegenSpeed());
 					if(health.getValue() > TimeUtil.MINECRAFT_DAY_TICKS){

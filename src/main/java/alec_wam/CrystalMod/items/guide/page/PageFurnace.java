@@ -17,6 +17,7 @@ import alec_wam.CrystalMod.client.util.SpriteData;
 import alec_wam.CrystalMod.client.util.comp.GuiComponentSprite;
 import alec_wam.CrystalMod.client.util.comp.GuiComponentSpriteButton;
 import alec_wam.CrystalMod.items.guide.GuiGuideChapter;
+import alec_wam.CrystalMod.items.guide.GuiGuideIndex;
 import alec_wam.CrystalMod.items.guide.GuidePages;
 import alec_wam.CrystalMod.items.guide.GuidePages.ManualChapter;
 import alec_wam.CrystalMod.items.guide.GuidePages.PageData;
@@ -37,6 +38,7 @@ import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.translation.I18n;
@@ -51,18 +53,18 @@ public class PageFurnace extends GuidePage {
 	private static final int CRAZY_3 = 0xF0100010;
 
 	protected static RenderItem itemRenderer = Minecraft.getMinecraft().getRenderItem();
-	private List<ItemStack> outputs;
+	private NonNullList<ItemStack> outputs;
 	private ItemStack output;
 	private ItemStack input;
 	
 	public PageFurnace(String id, ItemStack output) {
 		super(id);
-		this.outputs = Collections.singletonList(output);
+		this.outputs = NonNullList.withSize(1, output);
 		this.output = output;
 		this.input = getFirstRecipeForItem(output);
 	}
 	
-	public PageFurnace(String id, List<ItemStack> outputs) {
+	public PageFurnace(String id, NonNullList<ItemStack> outputs) {
 		super(id);
 		this.outputs = outputs;
 		this.output = outputs.get(0);
@@ -269,6 +271,16 @@ public class PageFurnace extends GuidePage {
 		itemRenderer.renderItemOverlayIntoGUI(font, par1ItemStack, par2, par3, par4Str);
 		GlStateManager.disableDepth();
 		itemRenderer.zLevel = 0.0F;
+	}
+
+	@Override
+	public boolean matchesFilter(String filter) {
+		for(ItemStack stack : outputs){
+			if(Lang.translateToLocal(stack.getUnlocalizedName()).toLowerCase(GuiGuideIndex.getLocale()).contains(filter)){
+				return true;
+			}
+		}
+		return false;
 	}
 	
 }

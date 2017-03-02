@@ -17,7 +17,7 @@
         "age=1,facing=west": [{ "model": "crystalmod:treeplant_1", "y": 90 }],
         "age=1,facing=north": [{ "model": "crystalmod:treeplant_1", "y": 180 }],
         "age=1,facing=east": [{ "model": "crystalmod:treeplant_1", "y": 270 }],
-        "age=2,facing=south": [{ "model": "crystalmod:treeplant_0"}],
+        "age=2,facing=south": [{ "model": "crystalmod:treeplant_2"}],
         "age=2,facing=west": [{ "model": "crystalmod:treeplant_2", "y": 90 }],
         "age=2,facing=north": [{ "model": "crystalmod:treeplant_2", "y": 180 }],
         "age=2,facing=east": [{ "model": "crystalmod:treeplant_2", "y": 270 }]

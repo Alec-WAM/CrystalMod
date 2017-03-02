@@ -14,6 +14,7 @@ import net.minecraft.world.WorldSavedData;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+import alec_wam.CrystalMod.Config;
 import alec_wam.CrystalMod.util.NBTUtil;
 import alec_wam.CrystalMod.util.PlayerUtil;
 import alec_wam.CrystalMod.util.UUIDUtils;
@@ -101,10 +102,10 @@ public class CubeManager extends WorldSavedData {
 		}
 	}
 	
-	public void teleportPlayerToPlayerCube(EntityPlayerMP player, GameProfile uuid, String ID)
+	public String teleportPlayerToPlayerCube(EntityPlayerMP player, GameProfile uuid, String ID)
 	{
 		// Save Old Position / Dimension
-		NBTTagCompound compound = player.getEntityData();
+		NBTTagCompound compound = PlayerUtil.getPersistantNBT(player);
 		compound.setDouble("playerCubePosX", player.posX);
 		compound.setDouble("playerCubePosY", player.posY);
 		compound.setDouble("playerCubePosZ", player.posZ);
@@ -112,10 +113,10 @@ public class CubeManager extends WorldSavedData {
 
 		PlayerCube playerCube = getCube(uuid, ID);
 		
-		if(playerCube == null)playerCube = generatePlayerCube(uuid, ID);
-
 		if(playerCube == null){
-			return;
+			PlayerCube gen = generatePlayerCube(uuid, ID);
+			if(gen == null) return "TooManyCubes";
+			playerCube = gen;
 		}
 		
 		BlockPos spawn = playerCube.getSpawnBlock();
@@ -125,13 +126,15 @@ public class CubeManager extends WorldSavedData {
 			PlayerUtil.teleportPlayerToDimension(player, ModDimensions.CUBE_ID);
 		}
 		player.connection.setPlayerLocation(spawn.getX() + 0.5, spawn.getY() + 1, spawn.getZ() + 0.5, player.rotationYaw, player.rotationPitch);
+		return "Passed";
 	}
 
 	private PlayerCube generatePlayerCube(GameProfile uuid, String ID)
 	{
+		if(Config.playerCubePlayerLimit == 0 || getCubes(uuid).size() >= Config.playerCubePlayerLimit){
+			return null;
+		}
 		PlayerCube cube = new PlayerCube(this, uuid, ID, getCubePos(uuid));
-
-		
 
 		cube.generate(worldObj);
 		getCubes(uuid).add(cube);
@@ -270,7 +273,7 @@ public class CubeManager extends WorldSavedData {
 	public void teleportPlayerBack(EntityPlayerMP player)
 	{
 		// Save Read Position / Dimension
-		NBTTagCompound compound = player.getEntityData();
+		NBTTagCompound compound = PlayerUtil.getPersistantNBT(player);
 		if (compound.hasKey("playerCubePosX"))
 		{
 			double spectrePosX = compound.getDouble("playerCubePosX");

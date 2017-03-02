@@ -204,6 +204,29 @@
   [text]Much like the old Tesseract from Thermal Expansion it sends CU, RF, items, and fluids wirelessly.<n>R-Click with a Lock to make the Ender Buffer Private.    
  }
 ]}
+//PlayerCube
+{[
+ [chapter]playercubeportal
+ [title]Player Cube
+ [page:main]
+ {
+  [text]Player Cubes are secure 14x14x14 cubes in a separate dimension. Every player is allowed 16 cubes (Configurable). If you place any blocks in your Player Cube it will show up on all your Portals linked to the cube.
+ }
+ [page:creation]
+ {
+  [text]Steps to create a Player Cube:<n> 1) Craft a Player Cube Portal and Player Cube Card.<n> 2) Rename the card in and anvil. This will be the name of the cube.<n> 3) Use the card on the portal and it will create a new cube for you if you have not created the maximum amount you are allowed.<n> 4) Right Click the portal and you will be teleported to your cube.<n>Just right click the core in the middle of the cube to return back to the Overworld.
+ }
+ [page:portalcrafting]
+ {
+  [title]Player Cube Portal
+  [text]This is your in and out of each of your Player Cubes. This block is also able to be locked with a Lock to prevent players from entering your cube through this portal. 
+ }
+ [page:cardcrafting]
+ {
+  [title]Player Cube Card
+  [text]Once renamed in an anvil it will allow you to create a new Player Cube with a Player Cube Portal. Keep this item after you create the cube if you want to link other Player Cube Portals to the same cube.
+ }
+]}
 //EnderTorch
 {[
  [chapter]endertorch

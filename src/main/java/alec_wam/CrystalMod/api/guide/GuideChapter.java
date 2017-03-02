@@ -115,6 +115,15 @@ public class GuideChapter {
 	public ItemStack getDisplayStack() {
 		return currentDisplay;
 	}
+
+	public boolean doesFilterMatch(String filter) {
+		for(GuidePage page : getPages()){
+			if(page.matchesFilter(filter)){
+				return true;
+			}
+		}
+		return false;
+	}
 	
 	public GuidePage[] getPages() {
 		return pages;

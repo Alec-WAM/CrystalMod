@@ -16,6 +16,7 @@ import alec_wam.CrystalMod.blocks.crops.material.ItemMaterialSeed;
 import alec_wam.CrystalMod.client.util.SpriteData;
 import alec_wam.CrystalMod.client.util.comp.GuiComponentSprite;
 import alec_wam.CrystalMod.items.guide.GuiGuideChapter;
+import alec_wam.CrystalMod.items.guide.GuiGuideIndex;
 import alec_wam.CrystalMod.items.guide.GuidePages;
 import alec_wam.CrystalMod.items.guide.GuidePages.ManualChapter;
 import alec_wam.CrystalMod.items.guide.GuidePages.PageData;
@@ -234,6 +235,24 @@ public class PageMaterialCropRecipe extends GuidePage {
 		itemRenderer.renderItemOverlayIntoGUI(font, par1ItemStack, par2, par3, par4Str);
 		GlStateManager.disableDepth();
 		itemRenderer.zLevel = 0.0F;
+	}
+
+	private static ItemStack cacheCropSeed = ItemStackTools.getEmptyStack();
+	
+	@Override
+	public boolean matchesFilter(String filter) {
+		if(recipe !=null && recipe.getOutput() !=null){
+			ItemStack stack = cacheCropSeed;
+			
+			if(ItemStackTools.isEmpty(stack)){
+				stack = cacheCropSeed = ItemMaterialSeed.getSeed(recipe.getOutput());
+			}
+			
+			if(Lang.translateToLocal(stack.getUnlocalizedName()).toLowerCase(GuiGuideIndex.getLocale()).contains(filter)){
+				return true;
+			}
+		}
+		return false;
 	}
 	
 }

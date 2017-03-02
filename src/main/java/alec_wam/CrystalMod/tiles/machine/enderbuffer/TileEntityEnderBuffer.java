@@ -387,11 +387,11 @@ public class TileEntityEnderBuffer extends TileEntityMod implements IEnderBuffer
     public <T> T getCapability(net.minecraftforge.common.capabilities.Capability<T> capability, net.minecraft.util.EnumFacing facing)
     {
         if (capability == net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY){
-        	if(!hasBuffer() || this.invMode ==Mode.DISABLED)return super.getCapability(capability, facing);
+        	if(!hasBuffer())return super.getCapability(capability, facing);
         	return (T) getBuffer().sendInv;
         }
         if (capability == CapabilityEnergy.ENERGY){
-        	if(!hasBuffer() || this.rfMode ==Mode.DISABLED)return super.getCapability(capability, facing);
+        	if(!hasBuffer())return super.getCapability(capability, facing);
         	return (T) new IEnergyStorage(){
 
 				@Override
@@ -435,7 +435,7 @@ public class TileEntityEnderBuffer extends TileEntityMod implements IEnderBuffer
         	};
         }
         if (capability == CapabilityCrystalEnergy.CENERGY){
-        	if(!hasBuffer() || this.cuMode ==Mode.DISABLED)return super.getCapability(capability, facing);
+        	if(!hasBuffer())return super.getCapability(capability, facing);
         	return (T) new ICEnergyStorage(){
 
 				@Override

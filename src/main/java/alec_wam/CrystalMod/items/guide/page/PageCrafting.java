@@ -14,6 +14,7 @@ import alec_wam.CrystalMod.api.guide.GuidePage;
 import alec_wam.CrystalMod.client.util.comp.GuiComponentSprite;
 import alec_wam.CrystalMod.client.util.comp.GuiComponentStandardRecipePage;
 import alec_wam.CrystalMod.items.guide.GuiGuideChapter;
+import alec_wam.CrystalMod.items.guide.GuiGuideIndex;
 import alec_wam.CrystalMod.items.guide.GuidePages;
 import alec_wam.CrystalMod.items.guide.GuidePages.ManualChapter;
 import alec_wam.CrystalMod.items.guide.GuidePages.PageData;
@@ -451,6 +452,16 @@ public class PageCrafting extends GuidePage {
 		itemRenderer.renderItemOverlayIntoGUI(font, par1ItemStack, par2, par3, par4Str);
 		GlStateManager.disableDepth();
 		itemRenderer.zLevel = 0.0F;
+	}
+
+	@Override
+	public boolean matchesFilter(String filter) {
+		for(ItemStack stack : stacks){
+			if(Lang.translateToLocal(stack.getUnlocalizedName()).toLowerCase(GuiGuideIndex.getLocale()).contains(filter)){
+				return true;
+			}
+		}
+		return false;
 	}
 	
 }

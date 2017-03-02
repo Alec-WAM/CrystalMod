@@ -30,6 +30,7 @@ public class TileEntityPlayerCubePortal extends TileEntityMod {
 	public FakeChunk mobileChunk;
 	public boolean firstInit = false;
 	public String cubeID;
+	public boolean isLocked;
 	
 	public void writeCustomNBT(NBTTagCompound nbt){
 		super.writeCustomNBT(nbt);
@@ -66,6 +67,7 @@ public class TileEntityPlayerCubePortal extends TileEntityMod {
 	        }
         }
         if(!Strings.isNullOrEmpty(cubeID))nbt.setString("CubeID", cubeID);
+        nbt.setBoolean("IsLocked", isLocked);
 	}
 	
 	@Override
@@ -125,6 +127,7 @@ public class TileEntityPlayerCubePortal extends TileEntityMod {
         if(mobileChunk !=null){
         	this.mobileChunk.setChunkModified();
         }
+        this.isLocked = nbt.getBoolean("IsLocked");
     }
 	
 	public PlayerCube getCube(){

@@ -53,6 +53,7 @@ import alec_wam.CrystalMod.items.tools.backpack.upgrade.ItemBackpackUpgrade.Back
 import alec_wam.CrystalMod.tiles.chest.CrystalChestType;
 import alec_wam.CrystalMod.tiles.chest.wireless.WirelessChestHelper;
 import alec_wam.CrystalMod.tiles.crate.BlockCrate.CrateType;
+import alec_wam.CrystalMod.tiles.machine.elevator.ItemMiscCard.CardType;
 import alec_wam.CrystalMod.tiles.machine.enderbuffer.BlockEnderBuffer;
 import alec_wam.CrystalMod.tiles.shieldrack.BlockShieldRack.WoodType;
 import alec_wam.CrystalMod.tiles.spawner.ItemMobEssence;
@@ -178,6 +179,9 @@ public class GuidePages {
 		}
 		CrystalModAPI.BLOCKS.registerChapter(new GuideChapter("enderbuffer", new PageCrafting("main", enderBuffers)).setDisplayObject(enderBuffers));
 		
+		ItemStack playercube = new ItemStack(ModBlocks.cubePortal);
+		CrystalModAPI.BLOCKS.registerChapter(new GuideChapter("playercubeportal", new PageText("main"), new PageText("creation"), new PageCrafting("portalcrafting", playercube), new PageCrafting("cardcrafting", new ItemStack(ModItems.miscCard, 1, CardType.CUBE.getMetadata()))).setDisplayObject(playercube));
+		
 		ItemStack endertorch = new ItemStack(ModBlocks.enderTorch);
 		CrystalModAPI.BLOCKS.registerChapter(new GuideChapter("endertorch", new PageCrafting("main", endertorch)).setDisplayObject(endertorch));
 
@@ -195,6 +199,8 @@ public class GuidePages {
 		
 		NonNullList<ItemStack> shieldracks = ItemUtil.getBlockSubtypes(ModBlocks.shieldRack, WoodType.values());
 		CrystalModAPI.BLOCKS.registerChapter(new GuideChapter("shieldrack", new PageCrafting("main", shieldracks)).setDisplayObject(shieldracks));
+		
+		
 		
 		CrystalType[] nuggetArray = new CrystalType[]{CrystalType.BLUE_NUGGET, CrystalType.RED_NUGGET, CrystalType.GREEN_NUGGET, CrystalType.DARK_NUGGET};
 		CrystalType[] shardArray = new CrystalType[]{CrystalType.BLUE_SHARD, CrystalType.RED_SHARD, CrystalType.GREEN_SHARD, CrystalType.DARK_SHARD};

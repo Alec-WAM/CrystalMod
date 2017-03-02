@@ -15,6 +15,7 @@ import alec_wam.CrystalMod.api.guide.GuidePage;
 import alec_wam.CrystalMod.client.util.SpriteData;
 import alec_wam.CrystalMod.client.util.comp.GuiComponentSprite;
 import alec_wam.CrystalMod.items.guide.GuiGuideChapter;
+import alec_wam.CrystalMod.items.guide.GuiGuideIndex;
 import alec_wam.CrystalMod.items.guide.GuidePages;
 import alec_wam.CrystalMod.items.guide.GuidePages.ManualChapter;
 import alec_wam.CrystalMod.items.guide.GuidePages.PageData;
@@ -32,6 +33,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.relauncher.Side;
@@ -45,29 +47,28 @@ public class PagePress extends GuidePage {
 	private static final int CRAZY_3 = 0xF0100010;
 
 	protected static RenderItem itemRenderer = Minecraft.getMinecraft().getRenderItem();
-	private List<ItemStack> inputs;
-	private List<ItemStack> outputs;
+	private NonNullList<ItemStack> inputs;
+	private NonNullList<ItemStack> outputs;
 	private ItemStack currentOutput;
 	private ItemStack currentInput;
 	
-	public PagePress(String id, List<ItemStack> outputs) {
+	public PagePress(String id, NonNullList<ItemStack> outputs) {
 		super(id);
 		this.outputs = outputs;
 		if(!outputs.isEmpty())this.inputs = getFirstRecipeForItem(outputs.get(0));
 		if(!inputs.isEmpty())currentInput = inputs.get(0);
 	}
 
-	private static List<ItemStack> getFirstRecipeForItem(ItemStack resultingItem) {
+	private static NonNullList<ItemStack> getFirstRecipeForItem(ItemStack resultingItem) {
 		for (BasicMachineRecipe recipe : PressRecipeManager.getRecipes()) {
 			if (recipe == null) continue;
 
 			ItemStack result = recipe.getOutput();
-			if (result == null || !ItemUtil.canCombine(result, resultingItem)) continue;
+			if (ItemStackTools.isEmpty(result) || !ItemUtil.canCombine(result, resultingItem)) continue;
 
 			return recipe.getInputs();
 		}
-		List<ItemStack> list = Lists.newArrayList();
-		Collections.fill(list, ItemStackTools.getEmptyStack());
+		NonNullList<ItemStack> list = NonNullList.withSize(1, ItemStackTools.getEmptyStack());
 		return list;
 	}
 	
@@ -250,6 +251,16 @@ public class PagePress extends GuidePage {
 		itemRenderer.renderItemOverlayIntoGUI(font, par1ItemStack, par2, par3, par4Str);
 		GlStateManager.disableDepth();
 		itemRenderer.zLevel = 0.0F;
+	}
+
+	@Override
+	public boolean matchesFilter(String filter) {
+		for(ItemStack stack : outputs){
+			if(Lang.translateToLocal(stack.getUnlocalizedName()).toLowerCase(GuiGuideIndex.getLocale()).contains(filter)){
+				return true;
+			}
+		}
+		return false;
 	}
 	
 }

@@ -12,6 +12,7 @@ import com.google.common.collect.Lists;
 
 import alec_wam.CrystalMod.api.guide.GuidePage;
 import alec_wam.CrystalMod.items.guide.GuiGuideChapter;
+import alec_wam.CrystalMod.items.guide.GuiGuideIndex;
 import alec_wam.CrystalMod.items.guide.GuidePages;
 import alec_wam.CrystalMod.items.guide.GuidePages.ManualChapter;
 import alec_wam.CrystalMod.items.guide.GuidePages.PageData;
@@ -207,6 +208,16 @@ public class PageIcon extends GuidePage {
 		GlStateManager.disableDepth();
 		itemRenderer.zLevel = 0.0F;
 		
+	}
+
+	@Override
+	public boolean matchesFilter(String filter) {
+		for(ItemStack stack : stacks){
+			if(Lang.translateToLocal(stack.getUnlocalizedName()).toLowerCase(GuiGuideIndex.getLocale()).contains(filter)){
+				return true;
+			}
+		}
+		return false;
 	}
 	
 }

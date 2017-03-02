@@ -91,5 +91,7 @@ public abstract class GuidePage {
 	public boolean isOnLeft(){
         return (this.chapter.getIndex(this)+1)%2 != 0;
 	}
+
+	public abstract boolean matchesFilter(String filter);
 	
 }
