@@ -53,7 +53,8 @@ public class BlockTank extends EnumBlock<BlockTank.TankType> implements ITileEnt
 		setDefaultState(this.blockState.getBaseState().withProperty(TYPE, TankType.BLUE));
 	}
 	
-	@SideOnly(Side.CLIENT)
+	@Override
+    @SideOnly(Side.CLIENT)
     public void initModel() {
 		ModelResourceLocation inv = new ModelResourceLocation(getRegistryName(), "inventory");
 		ClientProxy.registerCustomModel(inv, ModelTank.INSTANCE);
@@ -71,7 +72,8 @@ public class BlockTank extends EnumBlock<BlockTank.TankType> implements ITileEnt
 		}
 	}
 	
-	public IBlockState getExtendedState(final IBlockState state, final IBlockAccess world, final BlockPos pos) {
+	@Override
+    public IBlockState getExtendedState(final IBlockState state, final IBlockAccess world, final BlockPos pos) {
 		TileEntity tile = world.getTileEntity(pos);
         return (IBlockState)new FakeTankState(state, world, pos, (tile !=null && tile instanceof TileEntityTank) ? (TileEntityTank)tile : null);
     }
@@ -90,7 +92,8 @@ public class BlockTank extends EnumBlock<BlockTank.TankType> implements ITileEnt
 	    worldIn.setBlockToAir(pos);
 	}
 	
-	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune)
+	@Override
+    public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune)
     {
         List<ItemStack> ret = new java.util.ArrayList<ItemStack>();
         ItemStack tank = new ItemStack(ModBlocks.crystalTank, 1, state.getValue(TYPE).getMeta());
@@ -134,6 +137,7 @@ public class BlockTank extends EnumBlock<BlockTank.TankType> implements ITileEnt
         return true;
     }
     
+    @Override
     @SideOnly(Side.CLIENT)
     public boolean isTranslucent(IBlockState state) {
         return true;

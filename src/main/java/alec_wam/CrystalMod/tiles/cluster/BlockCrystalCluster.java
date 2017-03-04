@@ -86,6 +86,7 @@ public class BlockCrystalCluster extends EnumBlock<BlockCrystalCluster.EnumClust
         setSoundType(SoundType.GLASS);
 	}
 
+	@Override
 	@SideOnly(Side.CLIENT)
 	public void initModel(){
 		for(EnumClusterType type : EnumClusterType.values()){

@@ -37,6 +37,7 @@ public class BlockPlayerCubePortal extends BlockContainer
 		this.setCreativeTab(CrystalMod.tabBlocks);
     }
 
+    @Override
     public EnumBlockRenderType getRenderType(IBlockState state){
     	return EnumBlockRenderType.MODEL;
     }
@@ -44,11 +45,13 @@ public class BlockPlayerCubePortal extends BlockContainer
     /**
      * Used to determine ambient occlusion and culling when rebuilding chunks for render
      */
+    @Override
     public boolean isOpaqueCube(IBlockState state)
     {
         return false;
     }
 
+    @Override
     public boolean isFullCube(IBlockState state)
     {
         return false;

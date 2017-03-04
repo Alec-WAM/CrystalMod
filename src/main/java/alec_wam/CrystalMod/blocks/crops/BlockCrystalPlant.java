@@ -81,11 +81,13 @@ public class BlockCrystalPlant extends BlockBush
         this.setCreativeTab((CreativeTabs)null);
     }
     
+    @Override
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
     {
         return AGE_AABB[((Integer)state.getValue(AGE)).intValue()];
     }
 
+    @Override
     protected boolean canSustainBush(IBlockState state)
     {
     	return getTypeFromBlock(state) == TYPE;
@@ -115,6 +117,7 @@ public class BlockCrystalPlant extends BlockBush
     	return ItemStackTools.getEmptyStack();
     }
     
+    @Override
     public ItemStack getItem(World worldIn, BlockPos pos, IBlockState state)
     {
         return getSeeds();
@@ -148,6 +151,7 @@ public class BlockCrystalPlant extends BlockBush
     	return null;
     }
 
+    @Override
     public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand)
     {
         int i = ((Integer)state.getValue(AGE)).intValue();
@@ -164,6 +168,7 @@ public class BlockCrystalPlant extends BlockBush
     /**
      * Spawns this Block's drops into the World as EntityItems.
      */
+    @Override
     public void dropBlockAsItemWithChance(World worldIn, BlockPos pos, IBlockState state, float chance, int fortune)
     {
         super.dropBlockAsItemWithChance(worldIn, pos, state, chance, fortune);
@@ -172,6 +177,7 @@ public class BlockCrystalPlant extends BlockBush
     /**
      * Get the Item that this Block should drop when harvested.
      */
+    @Override
     public Item getItemDropped(IBlockState state, Random rand, int fortune)
     {
         return null;
@@ -180,6 +186,7 @@ public class BlockCrystalPlant extends BlockBush
     /**
      * Returns the quantity of items to drop on block destruction.
      */
+    @Override
     public int quantityDropped(Random random)
     {
         return 0;
@@ -188,6 +195,7 @@ public class BlockCrystalPlant extends BlockBush
     /**
      * Convert the given metadata into a BlockState for this Block
      */
+    @Override
     public IBlockState getStateFromMeta(int meta)
     {
         return this.getDefaultState().withProperty(AGE, Integer.valueOf(meta));
@@ -196,11 +204,13 @@ public class BlockCrystalPlant extends BlockBush
     /**
      * Convert the BlockState into the correct metadata value
      */
+    @Override
     public int getMetaFromState(IBlockState state)
     {
         return ((Integer)state.getValue(AGE)).intValue();
     }
 
+    @Override
     protected BlockStateContainer createBlockState()
     {
         return new BlockStateContainer(this, new IProperty[] {AGE});

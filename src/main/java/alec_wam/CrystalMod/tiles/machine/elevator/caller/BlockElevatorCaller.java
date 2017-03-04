@@ -233,7 +233,8 @@ public class BlockElevatorCaller extends BlockContainer {
 		this.bounds = new AxisAlignedBB(minX, minY, minZ, maxX, maxY, maxZ);
 	}
 	
-	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess world, BlockPos pos){
+	@Override
+    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess world, BlockPos pos){
 		return bounds;
 	}
 	

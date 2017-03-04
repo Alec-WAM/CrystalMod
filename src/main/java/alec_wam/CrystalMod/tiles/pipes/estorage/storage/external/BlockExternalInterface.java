@@ -49,7 +49,8 @@ public class BlockExternalInterface extends BlockContainer implements ICustomMod
         ModelLoader.setCustomStateMapper(this, ignorePower.build());
     }
 	
-	@SideOnly(Side.CLIENT)
+	@Override
+    @SideOnly(Side.CLIENT)
 	public EnumBlockRenderType getRenderType(IBlockState state)
     {
         return EnumBlockRenderType.MODEL;
@@ -66,7 +67,8 @@ public class BlockExternalInterface extends BlockContainer implements ICustomMod
         return state.withProperty(FACING, face);
     }
 	
-	public void onNeighborChange( final IBlockAccess worldIn, final BlockPos pos, final BlockPos neighbor )
+	@Override
+    public void onNeighborChange( final IBlockAccess worldIn, final BlockPos pos, final BlockPos neighbor )
 	{
 		TileEntity tile = worldIn.getTileEntity(pos);
 		if (tile !=null && tile instanceof TileEntityExternalInterface) {
@@ -75,7 +77,8 @@ public class BlockExternalInterface extends BlockContainer implements ICustomMod
 		}
 	}
 	
-	public void onNeighborBlockChange(World worldIn, BlockPos pos, IBlockState state, Block neighborBlock)
+	@Override
+    public void neighborChanged(IBlockState state,World worldIn, BlockPos pos, Block neighborBlock, BlockPos from)
     {
 		TileEntity tile = worldIn.getTileEntity(pos);
 		if (tile !=null && tile instanceof TileEntityExternalInterface) {
@@ -161,6 +164,7 @@ public class BlockExternalInterface extends BlockContainer implements ICustomMod
         return entityIn.getHorizontalFacing().getOpposite();
     }
     
+    @Override
     public boolean rotateBlock(World world, BlockPos pos, EnumFacing axis)
     {
 		TileEntity te = world.getTileEntity(pos);
@@ -176,6 +180,7 @@ public class BlockExternalInterface extends BlockContainer implements ICustomMod
         return false;
     }
     
+    @Override
     public EnumFacing[] getValidRotations(World world, BlockPos pos)
     {
         return EnumFacing.VALUES;

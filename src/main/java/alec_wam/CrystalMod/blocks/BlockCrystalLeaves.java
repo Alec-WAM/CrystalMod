@@ -47,6 +47,7 @@ public class BlockCrystalLeaves extends BlockLeaves implements ICustomModel
 	        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), type.getMeta(), new ModelResourceLocation(this.getRegistryName(), (""+type).toLowerCase()));
 	}
     
+    @Override
     @SideOnly(Side.CLIENT)
     public EnumBlockRenderType getRenderType(IBlockState state){
     	return EnumBlockRenderType.MODEL;
@@ -75,17 +76,20 @@ public class BlockCrystalLeaves extends BlockLeaves implements ICustomModel
 		}
 	}
 
-    protected void dropApple(World worldIn, BlockPos pos, IBlockState state, int chance)
+    @Override
+     protected void dropApple(World worldIn, BlockPos pos, IBlockState state, int chance)
     {
         
     }
 
+    @Override
     protected int getSaplingDropChance(IBlockState state)
     {
         return 25;
     }
 
     @Nullable
+    @Override
     public Item getItemDropped(IBlockState state, Random rand, int fortune)
     {
         return Item.getItemFromBlock(ModBlocks.crystalSapling);
@@ -103,7 +107,8 @@ public class BlockCrystalLeaves extends BlockLeaves implements ICustomModel
     	}
     }
 
-    protected ItemStack createStackedBlock(IBlockState state)
+    @Override
+    protected ItemStack getSilkTouchDrop(IBlockState state)
     {
         return new ItemStack(Item.getItemFromBlock(this), 1, ((BlockCrystalLog.WoodType)state.getValue(VARIANT)).getMeta());
     }
@@ -111,6 +116,7 @@ public class BlockCrystalLeaves extends BlockLeaves implements ICustomModel
     /**
      * Convert the given metadata into a BlockState for this Block
      */
+    @Override
     public IBlockState getStateFromMeta(int meta)
     {
     	int type = meta % 4;
@@ -120,6 +126,7 @@ public class BlockCrystalLeaves extends BlockLeaves implements ICustomModel
     /**
      * Convert the BlockState into the correct metadata value
      */
+    @Override
     public int getMetaFromState(IBlockState state)
     {
         int i = ((BlockCrystalLog.WoodType)state.getValue(VARIANT)).getMeta();
@@ -137,6 +144,7 @@ public class BlockCrystalLeaves extends BlockLeaves implements ICustomModel
         return i;
     }
 
+    @Override
     protected BlockStateContainer createBlockState()
     {
         return new BlockStateContainer(this, new IProperty[] {VARIANT, CHECK_DECAY, DECAYABLE});
@@ -146,6 +154,7 @@ public class BlockCrystalLeaves extends BlockLeaves implements ICustomModel
      * Gets the metadata of the item this Block can drop. This method is called when the block gets destroyed. It
      * returns the metadata of the dropped item based on the old metadata of the block.
      */
+    @Override
     public int damageDropped(IBlockState state)
     {
         return ((BlockCrystalLog.WoodType)state.getValue(VARIANT)).getMeta();
@@ -154,7 +163,7 @@ public class BlockCrystalLeaves extends BlockLeaves implements ICustomModel
     @Override
     public List<ItemStack> onSheared(ItemStack item, net.minecraft.world.IBlockAccess world, BlockPos pos, int fortune)
     {
-        return java.util.Arrays.asList(createStackedBlock(world.getBlockState(pos)));
+        return java.util.Arrays.asList(getSilkTouchDrop(world.getBlockState(pos)));
     }
 
 	@Override

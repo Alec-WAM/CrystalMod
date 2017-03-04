@@ -43,8 +43,7 @@ public class WorldTickHandler {
         		chunks = retrogenChunks.get(dim);
         		if(chunks == null || chunks.size()<= 0)
 					break;
-	            //System.out.println("[CrystalMod] Retrogen " + c.toString() + ".");
-        		ChunkPos loc = chunks.get(0);
+	            ChunkPos loc = chunks.get(0);
 	            long worldSeed = world.getSeed();
 	            Random rand = new Random(worldSeed);
 	            long xSeed = rand.nextLong() >> 2 + 1L;
@@ -53,7 +52,7 @@ public class WorldTickHandler {
 	            CrystalModWorldGenerator.instance.generateWorld(rand, loc.chunkXPos, loc.chunkZPos, world, false);
 	            chunks.remove(0);
 	            if(Config.retrogenInfo)
-	            	ModLogger.info("Retrogen was performed on "+loc.toString()+", "+Math.max(0,chunks.size())+" chunks remaining");
+	            	ModLogger.info("Retrogen was performed on "+loc.toString()+", "+Math.max(0,chunks.size())+" chunks remaining (Dimension "+world.provider.getDimensionType().getName()+")");
 			}
         }
     }

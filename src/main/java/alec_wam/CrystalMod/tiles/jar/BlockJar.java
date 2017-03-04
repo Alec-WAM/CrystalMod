@@ -309,7 +309,7 @@ public class BlockJar extends BlockContainer implements ICustomModel {
 	@Override
 	public void onBlockHarvested(World world, BlockPos pos, IBlockState state, EntityPlayer player)
     {
-		
+		super.onBlockHarvested(world, pos, state, player);
     }
 	
 	public static final String TILE_NBT_STACK = "TileData";

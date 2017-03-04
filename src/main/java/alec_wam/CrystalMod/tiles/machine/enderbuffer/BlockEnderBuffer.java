@@ -57,6 +57,7 @@ public class BlockEnderBuffer extends BlockMachine implements ICustomModel
     	ClientProxy.registerCustomModel(new ModelResourceLocation(getRegistryName(), "inventory"), ModelEnderBuffer.INSTANCE);
     }
 
+    @Override
     protected ItemStack getNBTDrop(IBlockAccess world, BlockPos pos, TileEntity tileEntity) {
 		ItemStack stack = new ItemStack(this, 1, damageDropped(world.getBlockState(pos)));
 		if(tileEntity !=null && tileEntity instanceof TileEntityEnderBuffer){
@@ -88,16 +89,19 @@ public class BlockEnderBuffer extends BlockMachine implements ICustomModel
         if(update)BlockUtil.markBlockForUpdate(world, pos);
     }
 	
-	public IBlockState getExtendedState(final IBlockState state, final IBlockAccess world, final BlockPos pos) {
+    @Override
+    public IBlockState getExtendedState(final IBlockState state, final IBlockAccess world, final BlockPos pos) {
 		TileEntity tile = world.getTileEntity(pos);
         return (IBlockState)new FakeTileState<TileEntityEnderBuffer>(state, world, pos, (tile !=null && tile instanceof TileEntityEnderBuffer) ? (TileEntityEnderBuffer)tile : null);
     }
     
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack stack, EnumFacing side, float hitX, float hitY, float hitZ)
+	@Override
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ)
     {
     	if(worldIn.isRemote){
     		return true;
     	}
+    	ItemStack stack = playerIn.getHeldItem(hand);
         TileEntity tile = worldIn.getTileEntity(pos);
         if(tile !=null && tile instanceof TileEntityEnderBuffer){
         	TileEntityEnderBuffer buffer = (TileEntityEnderBuffer)tile;
@@ -189,7 +193,8 @@ public class BlockEnderBuffer extends BlockMachine implements ICustomModel
 		return new TileEntityEnderBuffer();
 	}
 	
-	@SideOnly(Side.CLIENT)
+	@Override
+    @SideOnly(Side.CLIENT)
     public BlockRenderLayer getBlockLayer()
     {
         return BlockRenderLayer.SOLID;
@@ -198,6 +203,7 @@ public class BlockEnderBuffer extends BlockMachine implements ICustomModel
 	/**
      * Used to determine ambient occlusion and culling when rebuilding chunks for render
      */
+	@Override
     public boolean isOpaqueCube(IBlockState state)
     {
         return false;

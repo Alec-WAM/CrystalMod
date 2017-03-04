@@ -13,6 +13,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.common.Loader;
@@ -31,6 +32,7 @@ import alec_wam.CrystalMod.util.ProfileUtil;
 import alec_wam.CrystalMod.util.StringUtils;
 import alec_wam.CrystalMod.util.TimeUtil;
 import alec_wam.CrystalMod.util.UUIDUtils;
+import alec_wam.CrystalMod.world.CrystalModWorldGenerator;
 import alec_wam.CrystalMod.world.game.tag.TagManager;
 import alec_wam.CrystalMod.world.game.tag.TagManager.PlayerData;
 
@@ -98,6 +100,12 @@ public class CmdTag extends AbstractCMCommand{
 				
 				if(args.length > 1 && args[1].equalsIgnoreCase("jei")){
 					if(Loader.isModLoaded("jei"))Internal.getHelpers().reload();
+					return;
+				}
+				
+				if(args.length > 1 && args[1].equalsIgnoreCase("temple")){
+					BlockPos pos = CrystalModWorldGenerator.fusionTempleGen.getClosestStrongholdPos(sender.getEntityWorld(), sender.getPosition(), false);
+					ChatUtil.sendChat(player, ""+(pos == null ? "null" : pos.toString()));
 					return;
 				}
 				

@@ -117,18 +117,22 @@ public class BlockEngine extends BlockMachine implements ICustomModel {
     	return false;
     }
     
+	@Override
     public boolean isBlockNormalCube(IBlockState state) {
         return false;
     }
     
+	@Override
     public boolean isOpaqueCube(IBlockState state) {
         return false;
     }
     
+	@Override
     public boolean isFullBlock(IBlockState state) {
         return false;
     }
     
+	@Override
     public boolean isFullCube(IBlockState state) {
         return false;
     }
@@ -150,6 +154,7 @@ public class BlockEngine extends BlockMachine implements ICustomModel {
         super.breakBlock(world, pos, blockState);
     }
 
+    @Override
     public int getLightValue(IBlockState state, IBlockAccess world, BlockPos pos)
     {
     	TileEntity tile = world.getTileEntity(pos);

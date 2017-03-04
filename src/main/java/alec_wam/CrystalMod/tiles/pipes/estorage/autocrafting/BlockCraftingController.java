@@ -35,7 +35,8 @@ public class BlockCraftingController extends BlockContainer {
 		setCreativeTab(CrystalMod.tabBlocks);
 	}
 	
-	@SideOnly(Side.CLIENT)
+	@Override
+    @SideOnly(Side.CLIENT)
 	public EnumBlockRenderType getRenderType(IBlockState state)
     {
         return EnumBlockRenderType.MODEL;

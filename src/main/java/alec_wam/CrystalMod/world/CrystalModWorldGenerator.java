@@ -8,6 +8,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
@@ -26,6 +27,7 @@ import alec_wam.CrystalMod.tiles.cluster.TileCrystalCluster;
 import alec_wam.CrystalMod.blocks.BlockCrystalLog.WoodType;
 import alec_wam.CrystalMod.blocks.BlockCrystalOre.CrystalOreType;
 import alec_wam.CrystalMod.util.ModLogger;
+import alec_wam.CrystalMod.world.structures.MapGenFusionTemple;
 
 public class CrystalModWorldGenerator implements IWorldGenerator {
     public static CrystalModWorldGenerator instance = new CrystalModWorldGenerator();
@@ -34,9 +36,15 @@ public class CrystalModWorldGenerator implements IWorldGenerator {
     public static List<Integer> treeDimBlacklist = new ArrayList<Integer>();
     public static List<Integer> reedDimBlacklist = new ArrayList<Integer>();
     
+    public static MapGenFusionTemple fusionTempleGen = new MapGenFusionTemple();
+    
     @Override
     public void generate(Random random, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) {
         generateWorld(random, chunkX, chunkZ, world, true);
+        if(world.provider.getDimension() == 0){
+        	fusionTempleGen.generate(world, chunkX, chunkZ, null);
+        	fusionTempleGen.generateStructure(world, random, new ChunkPos(chunkX, chunkZ));
+        }
     }
 
     public void generateWorld(Random random, int chunkX, int chunkZ, World world, boolean newGen) {
@@ -52,21 +60,40 @@ public class CrystalModWorldGenerator implements IWorldGenerator {
     }
 
 	public boolean generateOres(Random random, int chunkX, int chunkZ, World world, boolean newGen){
-    	if(!oreDimBlacklist.contains(world.provider.getDimension())){
+		int dimension = world.provider.getDimension();
+    	if(!oreDimBlacklist.contains(dimension)){
 			if(newGen || Config.retrogenOres){
-				boolean debug = false;
-				if(debug){
-					IBlockState base = Blocks.AIR.getDefaultState();
-		            addOreSpawn(base, world, random, chunkX * 16, chunkZ * 16,
-		            		Config.oreMinimumVeinSize, Config.oreMaximumVeinSize, 
-		            		2,
-		            		0, 20);
-				} else {
+				if(dimension == -1 && Config.generateOreNether){
+					//Nether
+					IBlockState base = Blocks.NETHERRACK.getDefaultState();
+					addNetherOreSpawn(base, world, random, chunkX * 16, chunkZ * 16,
+							Config.oreNetherMinimumVeinSize, Config.oreNetherMaximumVeinSize, 
+							Config.oreNetherMaximumVeinCount,
+							Config.oreNetherMinimumHeight, Config.oreNetherMaximumHeight);
+				}
+				else if(dimension == 1 && Config.generateOreEnd){
+					//End
+					IBlockState base = Blocks.END_STONE.getDefaultState();
+					addEndOreSpawn(base, world, random, chunkX * 16, chunkZ * 16,
+							Config.oreEndMinimumVeinSize, Config.oreEndMaximumVeinSize, 
+							Config.oreEndMaximumVeinCount,
+							Config.oreEndMinimumHeight, Config.oreEndMaximumHeight);
+				}
+				else if(dimension == 0 && Config.generateOreOverworld){
+					//Overworld
 					IBlockState base = Blocks.STONE.getDefaultState();
-		            addOreSpawn(base, world, random, chunkX * 16, chunkZ * 16,
-		            		Config.oreMinimumVeinSize, Config.oreMaximumVeinSize, 
-		            		Config.oreMaximumVeinCount,
-		            		Config.oreMinimumHeight, Config.oreMaximumHeight);
+					addOverworldOreSpawn(base, world, random, chunkX * 16, chunkZ * 16,
+							Config.oreMinimumVeinSize, Config.oreMaximumVeinSize, 
+							Config.oreMaximumVeinCount,
+							Config.oreMinimumHeight, Config.oreMaximumHeight);
+				}
+				else if(Config.generateOreOther){
+					//Other Dims
+					IBlockState base = Blocks.STONE.getDefaultState();
+					addOverworldOreSpawn(base, world, random, chunkX * 16, chunkZ * 16,
+							Config.oreOtherMinimumVeinSize, Config.oreOtherMaximumVeinSize, 
+							Config.oreOtherMaximumVeinCount,
+							Config.oreOtherMinimumHeight, Config.oreOtherMaximumHeight);
 				}
 	            return true;
 			}
@@ -75,13 +102,39 @@ public class CrystalModWorldGenerator implements IWorldGenerator {
     }
 
 
-    public void addOreSpawn(IBlockState targetBlock, World world, Random random, int blockXPos, int blockZPos, int minVeinSize, int maxVeinSize, int chancesToSpawn, int minY, int maxY) {
+    public void addOverworldOreSpawn(IBlockState targetBlock, World world, Random random, int blockXPos, int blockZPos, int minVeinSize, int maxVeinSize, int chancesToSpawn, int minY, int maxY) {
     	for (int i = 0 ; i < chancesToSpawn ; i++) {
         	int posX = blockXPos + random.nextInt(16);
             int posY = minY + random.nextInt(maxY - minY);
             int posZ = blockZPos + random.nextInt(16);
             
             IBlockState[] ores = {ModBlocks.crystalOre.getStateFromMeta(CrystalOreType.BLUE.getMeta()), ModBlocks.crystalOre.getStateFromMeta(CrystalOreType.RED.getMeta()), ModBlocks.crystalOre.getStateFromMeta(CrystalOreType.GREEN.getMeta()), ModBlocks.crystalOre.getStateFromMeta(CrystalOreType.DARK.getMeta())};
+            
+        	WorldGenMinableRandom minable = new WorldGenMinableRandom(ores, (minVeinSize - random.nextInt(maxVeinSize - minVeinSize)), net.minecraft.block.state.pattern.BlockMatcher.forBlock(targetBlock.getBlock()));
+        	minable.generate(world, random, new BlockPos(posX, posY, posZ));
+        }
+    }
+    
+    public void addNetherOreSpawn(IBlockState targetBlock, World world, Random random, int blockXPos, int blockZPos, int minVeinSize, int maxVeinSize, int chancesToSpawn, int minY, int maxY) {
+    	for (int i = 0 ; i < chancesToSpawn ; i++) {
+        	int posX = blockXPos + random.nextInt(16);
+            int posY = minY + random.nextInt(maxY - minY);
+            int posZ = blockZPos + random.nextInt(16);
+            
+            IBlockState[] ores = {ModBlocks.crystalOre.getStateFromMeta(CrystalOreType.BLUE_NETHER.getMeta()), ModBlocks.crystalOre.getStateFromMeta(CrystalOreType.RED_NETHER.getMeta()), ModBlocks.crystalOre.getStateFromMeta(CrystalOreType.GREEN_NETHER.getMeta()), ModBlocks.crystalOre.getStateFromMeta(CrystalOreType.DARK_NETHER.getMeta())};
+            
+        	WorldGenMinableRandom minable = new WorldGenMinableRandom(ores, (minVeinSize - random.nextInt(maxVeinSize - minVeinSize)), net.minecraft.block.state.pattern.BlockMatcher.forBlock(targetBlock.getBlock()));
+        	minable.generate(world, random, new BlockPos(posX, posY, posZ));
+        }
+    }
+    
+    public void addEndOreSpawn(IBlockState targetBlock, World world, Random random, int blockXPos, int blockZPos, int minVeinSize, int maxVeinSize, int chancesToSpawn, int minY, int maxY) {
+    	for (int i = 0 ; i < chancesToSpawn ; i++) {
+        	int posX = blockXPos + random.nextInt(16);
+            int posY = minY + random.nextInt(maxY - minY);
+            int posZ = blockZPos + random.nextInt(16);
+            
+            IBlockState[] ores = {ModBlocks.crystalOre.getStateFromMeta(CrystalOreType.BLUE_END.getMeta()), ModBlocks.crystalOre.getStateFromMeta(CrystalOreType.RED_END.getMeta()), ModBlocks.crystalOre.getStateFromMeta(CrystalOreType.GREEN_END.getMeta()), ModBlocks.crystalOre.getStateFromMeta(CrystalOreType.DARK_END.getMeta())};
             
         	WorldGenMinableRandom minable = new WorldGenMinableRandom(ores, (minVeinSize - random.nextInt(maxVeinSize - minVeinSize)), net.minecraft.block.state.pattern.BlockMatcher.forBlock(targetBlock.getBlock()));
         	minable.generate(world, random, new BlockPos(posX, posY, posZ));
@@ -209,7 +262,7 @@ public class CrystalModWorldGenerator implements IWorldGenerator {
     public void handleChunkLoadEvent(ChunkDataEvent.Load event) {
         
     	int dimension = event.getWorld().provider.getDimension();
-		if((!event.getData().getCompoundTag(NBT_RETRO).hasKey(Config.retrogenID)) && (Config.retrogenOres || Config.retrogenTrees))
+		if((!event.getData().getCompoundTag(NBT_RETRO).hasKey(Config.retrogenID)) && (Config.retrogenOres || Config.retrogenTrees || Config.retrogenClusters || Config.retrogenReeds))
 		{
 			if(Config.retrogenInfo)
 				ModLogger.info("Chunk "+event.getChunk().getPos()+" has been flagged for RetroGen by CM.");

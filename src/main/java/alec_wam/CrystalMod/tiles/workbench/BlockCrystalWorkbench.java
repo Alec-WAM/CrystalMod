@@ -37,7 +37,8 @@ public class BlockCrystalWorkbench extends EnumBlock<BlockCrystalWorkbench.Workb
 		setHarvestLevel("pickaxe", 0);
 	}
 	
-	@SideOnly(Side.CLIENT)
+	@Override
+    @SideOnly(Side.CLIENT)
     public void initModel() {
 		for(WorkbenchType type : WorkbenchType.values())
 	        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), type.getMeta(), new ModelResourceLocation(this.getRegistryName(), "type="+type.getName()));

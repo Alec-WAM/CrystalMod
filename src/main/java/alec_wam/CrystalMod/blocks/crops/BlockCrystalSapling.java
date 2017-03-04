@@ -35,32 +35,32 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockCrystalSapling extends BlockSapling implements ICustomModel {
 
-  public static final PropertyEnum<BlockCrystalLog.WoodType> VARIANT = PropertyEnum.<BlockCrystalLog.WoodType>create("variant", BlockCrystalLog.WoodType.class);
+	public static final PropertyEnum<BlockCrystalLog.WoodType> VARIANT = PropertyEnum.<BlockCrystalLog.WoodType>create("variant", BlockCrystalLog.WoodType.class);
 
-  public BlockCrystalSapling() {
-    setCreativeTab(CrystalMod.tabCrops);
-    setDefaultState(this.blockState.getBaseState());
-    this.setSoundType(SoundType.PLANT);
-  }
+	public BlockCrystalSapling() {
+		setCreativeTab(CrystalMod.tabCrops);
+		setDefaultState(this.blockState.getBaseState());
+		this.setSoundType(SoundType.PLANT);
+	}
 
-  @Override
-  public void getSubBlocks(@Nonnull Item itemIn, CreativeTabs tab, NonNullList<ItemStack> list) {
-    for(WoodType type : WoodType.values()) {
-      list.add(new ItemStack(this, 1, getMetaFromState(getDefaultState().withProperty(VARIANT, type))));
-    }
-  }
-  
-  @SideOnly(Side.CLIENT)
-  public void initModel() {
-  		ModelLoader.setCustomStateMapper(this, new SaplingBlockStateMapper());
+	@Override
+	public void getSubBlocks(@Nonnull Item itemIn, CreativeTabs tab, NonNullList<ItemStack> list) {
+		for(WoodType type : WoodType.values()) {
+			list.add(new ItemStack(this, 1, getMetaFromState(getDefaultState().withProperty(VARIANT, type))));
+		}
+	}
+
+	@SideOnly(Side.CLIENT)
+	public void initModel() {
+		ModelLoader.setCustomStateMapper(this, new SaplingBlockStateMapper());
 		for(WoodType type : WoodType.values()){
 			String nameOverride = getRegistryName().getResourcePath() + "_" + type.getName();
 			ResourceLocation baseLocation = nameOverride == null ? getRegistryName() : new ResourceLocation("crystalmod", nameOverride);
 			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), type.getMeta(), new ModelResourceLocation(baseLocation, "inventory"));
 		}
-  }
-  
-  public static class SaplingBlockStateMapper extends StateMapperBase
+	}
+
+	public static class SaplingBlockStateMapper extends StateMapperBase
 	{
 		@Override
 		protected ModelResourceLocation getModelResourceLocation(IBlockState state)
@@ -68,11 +68,11 @@ public class BlockCrystalSapling extends BlockSapling implements ICustomModel {
 			WoodType type = state.getValue(VARIANT);
 			StringBuilder builder = new StringBuilder();
 			String nameOverride = null;
-			
+
 			builder.append(STAGE.getName());
 			builder.append("=");
 			builder.append(state.getValue(STAGE));
-			
+
 			nameOverride = state.getBlock().getRegistryName().getResourcePath() + "_" + type.getName();
 
 			if(builder.length() == 0)
@@ -81,76 +81,77 @@ public class BlockCrystalSapling extends BlockSapling implements ICustomModel {
 			}
 
 			ResourceLocation baseLocation = nameOverride == null ? state.getBlock().getRegistryName() : new ResourceLocation("crystalmod", nameOverride);
-			
+
 			return new ModelResourceLocation(baseLocation, builder.toString());
 		}
 	}
 
-  //Because Default is Weird
-  public String getLocalizedName()
-  {
-      return I18n.translateToLocal(this.getUnlocalizedName() + ".name");
-  }
+	//Because Default is Weird
+	@Override
+    public String getLocalizedName()
+	{
+		return I18n.translateToLocal(this.getUnlocalizedName() + ".name");
+	}
 
-  @Nonnull
-  @Override
-  protected BlockStateContainer createBlockState() {
-    // TYPE has to be included because of the BlockSapling constructor.. but it's never used.
-    return new BlockStateContainer(this, VARIANT, STAGE, TYPE);
-  }
+	@Nonnull
+	@Override
+	protected BlockStateContainer createBlockState() {
+		// TYPE has to be included because of the BlockSapling constructor.. but it's never used.
+		return new BlockStateContainer(this, VARIANT, STAGE, TYPE);
+	}
 
-  /**
-   * Convert the given metadata into a BlockState for this Block
-   */
-  @Nonnull
-  @Override
-  public IBlockState getStateFromMeta(int meta) {
-    if(meta < 0 || meta >= WoodType.values().length) {
-      meta = 0;
-    }
-    WoodType grass = WoodType.values()[meta];
-    return this.getDefaultState().withProperty(VARIANT, grass);
-  }
+	/**
+	 * Convert the given metadata into a BlockState for this Block
+	 */
+	@Nonnull
+	@Override
+	public IBlockState getStateFromMeta(int meta) {
+		if(meta < 0 || meta >= WoodType.values().length) {
+			meta = 0;
+		}
+		WoodType grass = WoodType.values()[meta];
+		return this.getDefaultState().withProperty(VARIANT, grass);
+	}
 
-  /**
-   * Convert the BlockState into the correct metadata value
-   */
-  @Override
-  public int getMetaFromState(IBlockState state) {
-    return state.getValue(VARIANT).ordinal();
-  }
+	/**
+	 * Convert the BlockState into the correct metadata value
+	 */
+	@Override
+	public int getMetaFromState(IBlockState state) {
+		return state.getValue(VARIANT).ordinal();
+	}
 
-  @Override
-  public int damageDropped(IBlockState state) {
-    return getMetaFromState(state);
-  }
+	@Override
+	public int damageDropped(IBlockState state) {
+		return getMetaFromState(state);
+	}
 
-  @Override
-  public boolean isReplaceable(IBlockAccess worldIn, @Nonnull BlockPos pos) {
-    return false;
-  }
+	@Override
+	public boolean isReplaceable(IBlockAccess worldIn, @Nonnull BlockPos pos) {
+		return false;
+	}
 
-  @Nonnull
-  @Override
-  public ItemStack getPickBlock(@Nonnull IBlockState state, RayTraceResult target, @Nonnull World world, @Nonnull BlockPos pos, EntityPlayer player) {
-    IBlockState iblockstate = world.getBlockState(pos);
-    int meta = iblockstate.getBlock().getMetaFromState(iblockstate);
-    return new ItemStack(Item.getItemFromBlock(this), 1, meta);
-  }
+	@Nonnull
+	@Override
+	public ItemStack getPickBlock(@Nonnull IBlockState state, RayTraceResult target, @Nonnull World world, @Nonnull BlockPos pos, EntityPlayer player) {
+		IBlockState iblockstate = world.getBlockState(pos);
+		int meta = iblockstate.getBlock().getMetaFromState(iblockstate);
+		return new ItemStack(Item.getItemFromBlock(this), 1, meta);
+	}
 
-  @Override
-  public void generateTree(@Nonnull World worldIn, @Nonnull BlockPos pos, @Nonnull IBlockState state, @Nonnull Random rand) {
-    if(!net.minecraftforge.event.terraingen.TerrainGen.saplingGrowTree(worldIn, rand, pos)) {
-      return;
-    }
-    WoodType type = (WoodType)state.getValue(VARIANT);
-    WorldGenerator gen = (WorldGenerator)(new WorldGenCrystalTree(true, MathHelper.getInt(rand, 4, 6), type, false));
+	@Override
+	public void generateTree(@Nonnull World worldIn, @Nonnull BlockPos pos, @Nonnull IBlockState state, @Nonnull Random rand) {
+		if(!net.minecraftforge.event.terraingen.TerrainGen.saplingGrowTree(worldIn, rand, pos)) {
+			return;
+		}
+		WoodType type = (WoodType)state.getValue(VARIANT);
+		WorldGenerator gen = (WorldGenerator)(new WorldGenCrystalTree(true, MathHelper.getInt(rand, 4, 6), type, false));
 
-    // replace sapling with air
-    worldIn.setBlockToAir(pos);
-    if (!gen.generate(worldIn, rand, pos))
-    {
-        worldIn.setBlockState(pos, state, 4);
-    }
-  }
+		// replace sapling with air
+		worldIn.setBlockToAir(pos);
+		if (!gen.generate(worldIn, rand, pos))
+		{
+			worldIn.setBlockState(pos, state, 4);
+		}
+	}
 }

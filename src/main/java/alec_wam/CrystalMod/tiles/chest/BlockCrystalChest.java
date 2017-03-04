@@ -54,6 +54,7 @@ public class BlockCrystalChest extends BlockContainer implements ICustomModel
         this.setCreativeTab(CrystalMod.tabBlocks);
     }
 
+    @Override
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess world, BlockPos pos){
     	return new AxisAlignedBB(0.0625F, 0F, 0.0625F, 0.9375F, 0.875F, 0.9375F);
     }
@@ -215,8 +216,6 @@ public class BlockCrystalChest extends BlockContainer implements ICustomModel
         }
         super.breakBlock(world, pos, blockState);
     }
-
-    
 
     @Override
     public float getExplosionResistance(World world, BlockPos pos, Entity exploder, Explosion explosion)

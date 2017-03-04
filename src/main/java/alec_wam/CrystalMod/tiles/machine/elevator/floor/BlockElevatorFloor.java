@@ -31,7 +31,8 @@ public class BlockElevatorFloor extends BlockContainer {
         setCreativeTab(CrystalMod.tabBlocks);
 	}
 
-	public EnumBlockRenderType getRenderType(IBlockState state){
+	@Override
+    public EnumBlockRenderType getRenderType(IBlockState state){
 		return EnumBlockRenderType.MODEL;
 	}
 	
@@ -94,7 +95,8 @@ public class BlockElevatorFloor extends BlockContainer {
         return EnumFacing.values()[meta+2];
     }
 	
-	public int getMetaFromState(IBlockState state) {
+	@Override
+    public int getMetaFromState(IBlockState state) {
         return state.getValue(FACING_HORIZ).getIndex()-2;
     }
 	

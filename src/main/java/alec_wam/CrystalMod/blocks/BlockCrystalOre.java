@@ -57,12 +57,17 @@ public class BlockCrystalOre extends EnumBlock<BlockCrystalOre.CrystalOreType> {
             count = 1;
         }
         
+        CrystalOreType type = (CrystalOreType) state.getValue(TYPE);
+        boolean blueOre = (type == CrystalOreType.BLUE || type == CrystalOreType.BLUE_NETHER || type == CrystalOreType.BLUE_END);
+        boolean redOre = (type == CrystalOreType.RED || type == CrystalOreType.RED_NETHER || type == CrystalOreType.RED_END);
+        boolean greenOre = (type == CrystalOreType.GREEN || type == CrystalOreType.GREEN_NETHER || type == CrystalOreType.GREEN_END);
+        boolean darkOre = (type == CrystalOreType.DARK || type == CrystalOreType.DARK_NETHER || type == CrystalOreType.DARK_END);
+        
         for(int i = 0; i < count; i++){
 	        Item item = ModItems.crystals;
 	        if (item != null)
 	        {
-	        	int meta = this.getMetaFromState(state);
-	            ret.add(new ItemStack(item, 1, meta == 0 ? CrystalType.BLUE.getMetadata() : meta == 1 ? CrystalType.RED.getMetadata() : meta == 2 ? CrystalType.GREEN.getMetadata() : CrystalType.DARK.getMetadata()));
+	        	ret.add(new ItemStack(item, 1, blueOre ? CrystalType.BLUE.getMetadata() : redOre ? CrystalType.RED.getMetadata() : greenOre ? CrystalType.GREEN.getMetadata() : CrystalType.DARK.getMetadata()));
 	        }
         }
         
@@ -70,8 +75,7 @@ public class BlockCrystalOre extends EnumBlock<BlockCrystalOre.CrystalOreType> {
         	Item item = ModItems.crystals;
 	        if (item != null)
 	        {
-	        	int meta = this.getMetaFromState(state);
-	            ret.add(new ItemStack(item, 1, meta == 0 ? CrystalType.BLUE_SHARD.getMetadata() : meta == 1 ? CrystalType.RED_SHARD.getMetadata() : meta == 2 ? CrystalType.GREEN_SHARD.getMetadata() : CrystalType.DARK_SHARD.getMetadata()));
+	        	ret.add(new ItemStack(item, 1, blueOre ? CrystalType.BLUE_SHARD.getMetadata() : redOre ? CrystalType.RED_SHARD.getMetadata() : greenOre ? CrystalType.GREEN_SHARD.getMetadata() : CrystalType.DARK_SHARD.getMetadata()));
 	        }
         }
         
@@ -90,7 +94,7 @@ public class BlockCrystalOre extends EnumBlock<BlockCrystalOre.CrystalOreType> {
     }
 	
 	public static enum CrystalOreType implements IStringSerializable, alec_wam.CrystalMod.blocks.EnumBlock.IEnumMeta{
-		BLUE, RED, GREEN, DARK;
+		BLUE, RED, GREEN, DARK, BLUE_NETHER, RED_NETHER, GREEN_NETHER, DARK_NETHER, BLUE_END, RED_END, GREEN_END, DARK_END;
 
 		final int meta;
 		

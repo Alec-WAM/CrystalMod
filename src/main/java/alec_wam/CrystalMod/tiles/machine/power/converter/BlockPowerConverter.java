@@ -39,6 +39,7 @@ public class BlockPowerConverter extends EnumBlock<BlockPowerConverter.Converter
 		this.setDefaultState(this.blockState.getBaseState().withProperty(TYPE, ConverterType.RF));
 	}
 	
+	@Override
 	@SideOnly(Side.CLIENT)
     public void initModel() {
 		for(ConverterType type : ConverterType.values())

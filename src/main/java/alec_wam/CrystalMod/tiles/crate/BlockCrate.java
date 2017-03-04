@@ -81,6 +81,7 @@ public class BlockCrate extends EnumBlock<BlockCrate.CrateType> implements ICust
 		this.setCreativeTab(CrystalMod.tabBlocks);
 	}
     
+	@Override
     @SideOnly(Side.CLIENT)
     public EnumBlockRenderType getRenderType(IBlockState state){
     	return EnumBlockRenderType.MODEL;

@@ -322,6 +322,14 @@ tile.crystalmod.crystalore.blue.name=Blue Crystal Ore
 tile.crystalmod.crystalore.red.name=Red Crystal Ore
 tile.crystalmod.crystalore.green.name=Green Crystal Ore
 tile.crystalmod.crystalore.dark.name=Dark Crystal Ore
+tile.crystalmod.crystalore.blue_nether.name=Blue Crystal Ore
+tile.crystalmod.crystalore.red_nether.name=Red Crystal Ore
+tile.crystalmod.crystalore.green_nether.name=Green Crystal Ore
+tile.crystalmod.crystalore.dark_nether.name=Dark Crystal Ore
+tile.crystalmod.crystalore.blue_end.name=Blue Crystal Ore
+tile.crystalmod.crystalore.red_end.name=Red Crystal Ore
+tile.crystalmod.crystalore.green_end.name=Green Crystal Ore
+tile.crystalmod.crystalore.dark_end.name=Dark Crystal Ore
 
 tile.crystalmod.crystalingotblock.blue.name=Block of Blue Crystal Ingots
 tile.crystalmod.crystalingotblock.red.name=Block of Red Crystal Ingots

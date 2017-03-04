@@ -94,6 +94,7 @@ public class BlockWirelessChest extends BlockContainer implements ICustomModel
         return false;
     }
 
+    @Override
     public void addInformation(ItemStack stack, EntityPlayer player, List<String> tooltip, boolean advanced)
     {
     	int code = ItemNBTHelper.getInteger(stack, WirelessChestHelper.NBT_CODE, 0);
@@ -347,8 +348,6 @@ public class BlockWirelessChest extends BlockContainer implements ICustomModel
     {
     	super.breakBlock(world, pos, blockState);
     }
-
-    
 
     @Override
     public float getExplosionResistance(World world, BlockPos pos, Entity exploder, Explosion explosion)

@@ -138,6 +138,7 @@ public class BlockBattery extends BlockContainer implements ICustomModel {
         return new BlockStateContainer(this, new IProperty[] { TYPE });
     }
 	
+    @Override
     public void addInformation(ItemStack stack, EntityPlayer player, List<String> tooltip, boolean advanced)
     {
     	BatteryType type = fromMeta(stack.getMetadata());
@@ -217,27 +218,33 @@ public class BlockBattery extends BlockContainer implements ICustomModel {
         return entityIn.getHorizontalFacing().getOpposite();
     }
 	
+    @Override
     public EnumBlockRenderType getRenderType(IBlockState state)
     {
         return EnumBlockRenderType.MODEL;
     }
     
+    @Override
     public boolean isBlockNormalCube(IBlockState state) {
         return false;
     }
     
+    @Override
     public boolean isOpaqueCube(IBlockState state) {
         return false;
     }
     
+    @Override
     public boolean isFullBlock(IBlockState state) {
         return false;
     }
     
+    @Override
     public boolean isFullCube(IBlockState state) {
         return false;
     }
     
+    @Override
     @SideOnly(Side.CLIENT)
     public BlockRenderLayer getBlockLayer() {
         return BlockRenderLayer.CUTOUT;
@@ -248,7 +255,8 @@ public class BlockBattery extends BlockContainer implements ICustomModel {
 		return new TileEntityBattery(meta);
 	}
 	
-	public boolean rotateBlock(World world, BlockPos pos, EnumFacing axis)
+	@Override
+    public boolean rotateBlock(World world, BlockPos pos, EnumFacing axis)
     {
 		TileEntity te = world.getTileEntity(pos);
         if(te !=null && te instanceof TileEntityBattery){
@@ -270,6 +278,7 @@ public class BlockBattery extends BlockContainer implements ICustomModel {
      * @param pos Block position in world
      * @return An array of valid axes to rotate around, or null for none or unknown
      */
+	@Override
     public EnumFacing[] getValidRotations(World world, BlockPos pos)
     {
         return EnumFacing.VALUES;

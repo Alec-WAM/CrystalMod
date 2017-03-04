@@ -102,6 +102,7 @@ public class BlockCrystalMachine extends BlockMachine implements ICustomModel  {
 		return false;
 	}
 
+	@Override
 	public int getLightValue(IBlockState state, IBlockAccess world, BlockPos pos)
     {
 		boolean bool = state.getValue(BlockStateMachine.activeProperty);

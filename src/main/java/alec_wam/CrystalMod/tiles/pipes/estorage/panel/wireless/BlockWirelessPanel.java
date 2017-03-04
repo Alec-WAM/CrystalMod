@@ -25,7 +25,8 @@ public class BlockWirelessPanel extends BlockContainer {
 		this.setCreativeTab(CrystalMod.tabBlocks);
 	}
 	
-	public EnumBlockRenderType getRenderType(IBlockState state){
+	@Override
+    public EnumBlockRenderType getRenderType(IBlockState state){
     	return EnumBlockRenderType.MODEL;
     }
 

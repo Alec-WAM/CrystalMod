@@ -43,6 +43,7 @@ public class BlockWeather extends BlockContainer {
         return getMoonPhaseByInt(phaseInt);
     }
 
+    @Override
     public EnumBlockRenderType getRenderType(IBlockState state){
     	return EnumBlockRenderType.MODEL;
     }

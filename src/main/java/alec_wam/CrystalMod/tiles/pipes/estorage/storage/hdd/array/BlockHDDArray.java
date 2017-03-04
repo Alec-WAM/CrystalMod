@@ -34,7 +34,8 @@ public class BlockHDDArray extends BlockContainer {
 		this.setCreativeTab(CrystalMod.tabBlocks);
 	}
 	
-	public EnumBlockRenderType getRenderType(IBlockState state)
+	@Override
+    public EnumBlockRenderType getRenderType(IBlockState state)
     {
         return EnumBlockRenderType.MODEL;
     }
@@ -118,6 +119,7 @@ public class BlockHDDArray extends BlockContainer {
         return entityIn.getHorizontalFacing().getOpposite();
     }
     
+    @Override
     public boolean rotateBlock(World world, BlockPos pos, EnumFacing axis)
     {
 		TileEntity te = world.getTileEntity(pos);
@@ -133,6 +135,7 @@ public class BlockHDDArray extends BlockContainer {
         return false;
     }
     
+    @Override
     public EnumFacing[] getValidRotations(World world, BlockPos pos)
     {
         return EnumFacing.VALUES;

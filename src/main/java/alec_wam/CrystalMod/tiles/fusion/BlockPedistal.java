@@ -177,7 +177,8 @@ public class BlockPedistal extends BlockContainer implements ICustomModel {
         if(update)BlockUtil.markBlockForUpdate(world, pos);*/
     }
     
-    public boolean rotateBlock(World world, BlockPos pos, EnumFacing axis)
+	@Override
+	public boolean rotateBlock(World world, BlockPos pos, EnumFacing axis)
     {
 		TileEntity te = world.getTileEntity(pos);
         if(te !=null && te instanceof IFacingTile){
@@ -192,7 +193,8 @@ public class BlockPedistal extends BlockContainer implements ICustomModel {
         return false;
     }
     
-    public EnumFacing[] getValidRotations(World world, BlockPos pos)
+    @Override
+	public EnumFacing[] getValidRotations(World world, BlockPos pos)
     {
     	TileEntity tile = world.getTileEntity(pos);
     	if(tile !=null && tile instanceof IFacingTile){
@@ -201,7 +203,8 @@ public class BlockPedistal extends BlockContainer implements ICustomModel {
         return new EnumFacing[0];
     }
 
-    public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
+    @Override
+	public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
     {
         TileEntity tile = worldIn.getTileEntity(pos);
         if(tile !=null && tile instanceof IInventory)ItemUtil.dropContent(0, (IInventory)tile, worldIn, pos);

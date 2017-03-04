@@ -55,9 +55,10 @@ public class BlockEnderTorch extends BlockContainer {
 	}
 	
 	@Nullable
-    public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, World worldIn, BlockPos pos)
+	@Override
+    public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos)
     {
-        return NULL_AABB;
+		return NULL_AABB;
     }
 
 	@Override
@@ -207,6 +208,7 @@ public class BlockEnderTorch extends BlockContainer {
         worldIn.spawnParticle(EnumParticleTypes.REDSTONE, d0, d1, d2, f * 0.9F, f * 0.3F, f, new int[0]);
     }
     
+    @Override
     @SideOnly(Side.CLIENT)
     public BlockRenderLayer getBlockLayer()
     {

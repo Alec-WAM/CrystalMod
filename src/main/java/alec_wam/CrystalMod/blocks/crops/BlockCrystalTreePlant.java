@@ -81,6 +81,7 @@ public class BlockCrystalTreePlant extends BlockHorizontal implements IGrowable
     	return null;
     }
     
+    @Override
     public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand)
     {
         if (!this.canBlockStay(worldIn, pos, state))
@@ -100,7 +101,7 @@ public class BlockCrystalTreePlant extends BlockHorizontal implements IGrowable
 
     public boolean canBlockStay(World worldIn, BlockPos pos, IBlockState state)
     {
-        pos = pos.offset((EnumFacing)state.getValue(FACING));
+    	pos = pos.offset((EnumFacing)state.getValue(FACING));
         IBlockState iblockstate = worldIn.getBlockState(pos);
         if(iblockstate.getBlock() != ModBlocks.crystalLog)return false;
         WoodType wood = iblockstate.getValue(BlockCrystalLog.VARIANT);
@@ -111,6 +112,7 @@ public class BlockCrystalTreePlant extends BlockHorizontal implements IGrowable
         return true;
     }
 
+    @Override
     public boolean isFullCube(IBlockState state)
     {
         return false;
@@ -119,11 +121,13 @@ public class BlockCrystalTreePlant extends BlockHorizontal implements IGrowable
     /**
      * Used to determine ambient occlusion and culling when rebuilding chunks for render
      */
+    @Override
     public boolean isOpaqueCube(IBlockState state)
     {
         return false;
     }
 
+    @Override
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
     {
         int i = ((Integer)state.getValue(AGE)).intValue();
@@ -146,6 +150,7 @@ public class BlockCrystalTreePlant extends BlockHorizontal implements IGrowable
      * Returns the blockstate with the given rotation from the passed blockstate. If inapplicable, returns the passed
      * blockstate.
      */
+    @Override
     public IBlockState withRotation(IBlockState state, Rotation rot)
     {
         return state.withProperty(FACING, rot.rotate((EnumFacing)state.getValue(FACING)));
@@ -155,6 +160,7 @@ public class BlockCrystalTreePlant extends BlockHorizontal implements IGrowable
      * Returns the blockstate with the given mirror of the passed blockstate. If inapplicable, returns the passed
      * blockstate.
      */
+    @Override
     public IBlockState withMirror(IBlockState state, Mirror mirrorIn)
     {
         return state.withRotation(mirrorIn.toRotation((EnumFacing)state.getValue(FACING)));
@@ -163,6 +169,7 @@ public class BlockCrystalTreePlant extends BlockHorizontal implements IGrowable
     /**
      * Called by ItemBlocks after a block is set in the world, to allow post-place logic
      */
+    @Override
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack)
     {
         EnumFacing enumfacing = EnumFacing.fromAngle((double)placer.rotationYaw);
@@ -207,6 +214,7 @@ public class BlockCrystalTreePlant extends BlockHorizontal implements IGrowable
     /**
      * Spawns this Block's drops into the World as EntityItems.
      */
+    @Override
     public void dropBlockAsItemWithChance(World worldIn, BlockPos pos, IBlockState state, float chance, int fortune)
     {
         super.dropBlockAsItemWithChance(worldIn, pos, state, chance, fortune);
@@ -242,6 +250,7 @@ public class BlockCrystalTreePlant extends BlockHorizontal implements IGrowable
         return dropped;
     }
 
+    @Override
     public ItemStack getItem(World worldIn, BlockPos pos, IBlockState state)
     {
         return getSeeds();
@@ -265,6 +274,7 @@ public class BlockCrystalTreePlant extends BlockHorizontal implements IGrowable
         worldIn.setBlockState(pos, state.withProperty(AGE, Integer.valueOf(((Integer)state.getValue(AGE)).intValue() + 1)), 2);
     }
 
+    @Override
     @SideOnly(Side.CLIENT)
     public BlockRenderLayer getBlockLayer()
     {
@@ -274,6 +284,7 @@ public class BlockCrystalTreePlant extends BlockHorizontal implements IGrowable
     /**
      * Convert the given metadata into a BlockState for this Block
      */
+    @Override
     public IBlockState getStateFromMeta(int meta)
     {
         return this.getDefaultState().withProperty(FACING, EnumFacing.getHorizontal(meta)).withProperty(AGE, Integer.valueOf((meta & 15) >> 2));
@@ -282,6 +293,7 @@ public class BlockCrystalTreePlant extends BlockHorizontal implements IGrowable
     /**
      * Convert the BlockState into the correct metadata value
      */
+    @Override
     public int getMetaFromState(IBlockState state)
     {
         int i = 0;
@@ -290,6 +302,7 @@ public class BlockCrystalTreePlant extends BlockHorizontal implements IGrowable
         return i;
     }
 
+    @Override
     protected BlockStateContainer createBlockState()
     {
         return new BlockStateContainer(this, new IProperty[] {FACING, AGE});

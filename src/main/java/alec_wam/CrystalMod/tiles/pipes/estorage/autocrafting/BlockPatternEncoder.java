@@ -51,7 +51,8 @@ public class BlockPatternEncoder extends EnumBlock<BlockPatternEncoder.EncoderTy
 		this.setCreativeTab(CrystalMod.tabBlocks);
 	}
 	
-	@SideOnly(Side.CLIENT)
+	@Override
+    @SideOnly(Side.CLIENT)
     public void initModel() {
 		for(EncoderType type : EncoderType.values())
         ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), type.getMeta(), new ModelResourceLocation(this.getRegistryName(), "type"+"="+type.getName()));
@@ -66,7 +67,8 @@ public class BlockPatternEncoder extends EnumBlock<BlockPatternEncoder.EncoderTy
 		return false;
 	}
 	
-	public boolean hasTileEntity(IBlockState state){
+	@Override
+    public boolean hasTileEntity(IBlockState state){
     	return true;
     }
     

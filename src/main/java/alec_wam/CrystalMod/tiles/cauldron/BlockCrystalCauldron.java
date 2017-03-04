@@ -42,6 +42,7 @@ public class BlockCrystalCauldron extends BlockContainer
     /**
      * The type of render function called. 3 for standard block models, 2 for TESR's, 1 for liquids, -1 is no render
      */
+    @Override
     public EnumBlockRenderType getRenderType(IBlockState state)
     {
         return EnumBlockRenderType.MODEL;
@@ -57,6 +58,7 @@ public class BlockCrystalCauldron extends BlockContainer
         addCollisionBoxToList(pos, entityBox, collidingBoxes, AABB_WALL_SOUTH);
     }
 
+    @Override
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
     {
         return FULL_BLOCK_AABB;
@@ -65,11 +67,13 @@ public class BlockCrystalCauldron extends BlockContainer
     /**
      * Used to determine ambient occlusion and culling when rebuilding chunks for render
      */
+    @Override
     public boolean isOpaqueCube(IBlockState state)
     {
         return false;
     }
 
+    @Override
     public boolean isFullCube(IBlockState state)
     {
         return false;

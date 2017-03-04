@@ -56,6 +56,7 @@ public class BlockCrystalLog extends BlockLog implements ICustomModel
         this.setDefaultState(this.blockState.getBaseState().withProperty(VARIANT, WoodType.BLUE).withProperty(LOG_AXIS, BlockLog.EnumAxis.Y));
     }
     
+    @Override
     @SideOnly(Side.CLIENT)
     public EnumBlockRenderType getRenderType(IBlockState state){
     	return EnumBlockRenderType.MODEL;
@@ -64,6 +65,7 @@ public class BlockCrystalLog extends BlockLog implements ICustomModel
     /**
      * Get the MapColor for this Block and the given BlockState
      */
+    @Override
     public MapColor getMapColor(IBlockState state)
     {
         return super.getMapColor(state);
@@ -120,6 +122,7 @@ public class BlockCrystalLog extends BlockLog implements ICustomModel
     /**
      * Convert the given metadata into a BlockState for this Block
      */
+    @Override
     public IBlockState getStateFromMeta(int meta)
     {
         IBlockState iblockstate = this.getDefaultState().withProperty(VARIANT, WoodType.byMetadata((meta & 3) % 4));
@@ -146,6 +149,7 @@ public class BlockCrystalLog extends BlockLog implements ICustomModel
      * Convert the BlockState into the correct metadata value
      */
     @SuppressWarnings("incomplete-switch")
+    @Override
     public int getMetaFromState(IBlockState state)
     {
         int i = 0;
@@ -166,20 +170,23 @@ public class BlockCrystalLog extends BlockLog implements ICustomModel
         return i;
     }
 
+    @Override
     protected BlockStateContainer createBlockState()
     {
         return new BlockStateContainer(this, new IProperty[] {VARIANT, LOG_AXIS});
     }
 
-    protected ItemStack createStackedBlock(IBlockState state)
+    @Override
+    protected ItemStack getSilkTouchDrop(IBlockState state)
     {
-        return new ItemStack(Item.getItemFromBlock(this), 1, ((WoodType)state.getValue(VARIANT)).getMeta());
+    	return new ItemStack(Item.getItemFromBlock(this), 1, ((WoodType)state.getValue(VARIANT)).getMeta());
     }
 
     /**
      * Gets the metadata of the item this Block can drop. This method is called when the block gets destroyed. It
      * returns the metadata of the dropped item based on the old metadata of the block.
      */
+    @Override
     public int damageDropped(IBlockState state)
     {
         return ((WoodType)state.getValue(VARIANT)).getMeta();

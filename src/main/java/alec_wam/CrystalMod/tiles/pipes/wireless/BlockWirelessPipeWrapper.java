@@ -39,7 +39,8 @@ public class BlockWirelessPipeWrapper extends BlockContainer implements ICustomM
 		this.setDefaultState(getDefaultState().withProperty(SENDER, Boolean.valueOf(false)));
 	}
 	
-	public EnumBlockRenderType getRenderType(IBlockState state){
+	@Override
+    public EnumBlockRenderType getRenderType(IBlockState state){
     	return EnumBlockRenderType.MODEL;
     }
 
@@ -96,7 +97,8 @@ public class BlockWirelessPipeWrapper extends BlockContainer implements ICustomM
 		return new TileEntityPipeWrapper();
 	}
 	
-	public IBlockState getStateFromMeta(int meta)
+	@Override
+    public IBlockState getStateFromMeta(int meta)
     {
         return this.getDefaultState().withProperty(SENDER, Boolean.valueOf((meta & 1) > 0));
     }
@@ -104,6 +106,7 @@ public class BlockWirelessPipeWrapper extends BlockContainer implements ICustomM
     /**
      * Convert the BlockState into the correct metadata value
      */
+	@Override
     public int getMetaFromState(IBlockState state)
     {
         int i = 0;
@@ -116,7 +119,8 @@ public class BlockWirelessPipeWrapper extends BlockContainer implements ICustomM
         return i;
     }
 	
-	protected BlockStateContainer createBlockState()
+	@Override
+    protected BlockStateContainer createBlockState()
     {
         return new BlockStateContainer(this, new IProperty[] {SENDER});
     }

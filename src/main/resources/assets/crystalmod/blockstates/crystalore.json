@@ -7,7 +7,15 @@
       "blue": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/ore_blue"} },
 	  "red": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/ore_red"} },
 	  "green": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/ore_green"} },
-	  "dark": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/ore_dark"} }
+	  "dark": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/ore_dark"} },
+	  "blue_nether": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/ore_blue_nether"} },
+	  "red_nether": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/ore_red_nether"} },
+	  "green_nether": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/ore_green_nether"} },
+	  "dark_nether": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/ore_dark_nether"} },
+	  "blue_end": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/ore_blue_end"} },
+	  "red_end": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/ore_red_end"} },
+	  "green_end": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/ore_green_end"} },
+	  "dark_end": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/ore_dark_end"} }
     }
   }
 }

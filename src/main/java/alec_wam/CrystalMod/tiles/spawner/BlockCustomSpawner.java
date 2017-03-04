@@ -232,11 +232,13 @@ public class BlockCustomSpawner extends BlockContainer {
 		return false;
 	}
 	
-	public EnumBlockRenderType getRenderType(IBlockState state){
+	@Override
+    public EnumBlockRenderType getRenderType(IBlockState state){
 		return EnumBlockRenderType.MODEL;
 	}
 	
-	@SideOnly(Side.CLIENT)
+	@Override
+    @SideOnly(Side.CLIENT)
     public BlockRenderLayer getBlockLayer()
     {
         return BlockRenderLayer.CUTOUT;

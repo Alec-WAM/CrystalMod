@@ -7,6 +7,7 @@ import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.item.Item;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
@@ -60,7 +61,8 @@ public class BlockReinforcedRail extends BlockRailBase implements ICustomModel {
     /**
      * Convert the given metadata into a BlockState for this Block
      */
-    public IBlockState getStateFromMeta(int meta)
+    @Override
+	public IBlockState getStateFromMeta(int meta)
     {
         return this.getDefaultState().withProperty(SHAPE, BlockRailBase.EnumRailDirection.byMetadata(meta));
     }
@@ -68,18 +70,21 @@ public class BlockReinforcedRail extends BlockRailBase implements ICustomModel {
     /**
      * Convert the BlockState into the correct metadata value
      */
-    public int getMetaFromState(IBlockState state)
+    @Override
+	public int getMetaFromState(IBlockState state)
     {
         return ((BlockRailBase.EnumRailDirection)state.getValue(SHAPE)).getMetadata();
     }
 
-    protected BlockStateContainer createBlockState()
+    @Override
+	protected BlockStateContainer createBlockState()
     {
         return new BlockStateContainer(this, new IProperty[] {SHAPE});
     }
 
     //OVERRIDES
-    public boolean canPlaceBlockAt(World worldIn, BlockPos pos)
+    @Override
+	public boolean canPlaceBlockAt(World worldIn, BlockPos pos)
     {
         return true;
     }

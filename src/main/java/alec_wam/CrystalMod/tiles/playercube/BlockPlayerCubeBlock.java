@@ -45,7 +45,8 @@ public class BlockPlayerCubeBlock extends Block implements IExplosionImmune {
 		return BlockRenderLayer.TRANSLUCENT;
 	}
 	
-	public EnumBlockRenderType getRenderType(IBlockState state){
+	@Override
+    public EnumBlockRenderType getRenderType(IBlockState state){
 		return EnumBlockRenderType.MODEL;
 	}
 

@@ -6,6 +6,8 @@ import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.EnumBlock.IEnumMeta;
 import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.tiles.BlockStateFacing;
+import alec_wam.CrystalMod.tiles.crate.BlockCrate.CrateType;
+import alec_wam.CrystalMod.tiles.crate.BlockCrate.CustomBlockStateMapper;
 import alec_wam.CrystalMod.util.BlockUtil;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -13,6 +15,7 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
@@ -22,6 +25,7 @@ import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
@@ -40,19 +44,15 @@ public class BlockInventoryCharger extends BlockContainer implements ICustomMode
 	
 	@SideOnly(Side.CLIENT)
     public void initModel() {
-		//TODO Investigate Inventory Rendering
-		ModelLoader.setCustomMeshDefinition(Item.getItemFromBlock(this), new ItemMeshDefinition() {
-			@Override
-			public ModelResourceLocation getModelLocation(ItemStack stack)
-			{
-				ChargerBlockType type = ChargerBlockType.values()[stack.getItemDamage()];
-				
-				return new ModelResourceLocation(BlockInventoryCharger.this.getRegistryName(), "facing=north,type="+type);
-			}
-		});
+		ModelLoader.setCustomStateMapper(this, new CustomBlockStateMapper());
+		for(ChargerBlockType type : ChargerBlockType.values()){
+			ResourceLocation baseLocation = new ResourceLocation(getRegistryName().getResourcePath() + "_" + type.getName());
+			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), type.getMeta(), new ModelResourceLocation(baseLocation, "inventory"));
+		}
     }
 	
-	public EnumBlockRenderType getRenderType(IBlockState state)
+	@Override
+    public EnumBlockRenderType getRenderType(IBlockState state)
     {
         return EnumBlockRenderType.MODEL;
     }
@@ -129,6 +129,7 @@ public class BlockInventoryCharger extends BlockContainer implements ICustomMode
         return entityIn.getHorizontalFacing().getOpposite();
     }
     
+    @Override
     public boolean rotateBlock(World world, BlockPos pos, EnumFacing axis)
     {
 		TileEntity te = world.getTileEntity(pos);
@@ -144,6 +145,7 @@ public class BlockInventoryCharger extends BlockContainer implements ICustomMode
         return false;
     }
     
+    @Override
     public EnumFacing[] getValidRotations(World world, BlockPos pos)
     {
         return EnumFacing.VALUES;
@@ -181,6 +183,7 @@ public class BlockInventoryCharger extends BlockContainer implements ICustomMode
     
 
 
+    @Override
     public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
     {
         super.breakBlock(worldIn, pos, state);
@@ -197,5 +200,31 @@ public class BlockInventoryCharger extends BlockContainer implements ICustomMode
         TileEntity tileentity = worldIn.getTileEntity(pos);
         return tileentity == null ? false : tileentity.receiveClientEvent(eventID, eventParam);
     }
+    
+    public static class CustomBlockStateMapper extends StateMapperBase
+	{
+		@Override
+		protected ModelResourceLocation getModelResourceLocation(IBlockState state)
+		{
+			ChargerBlockType type = state.getValue(BlockStateInventoryCharger.typeProperty);
+			StringBuilder builder = new StringBuilder();
+			String nameOverride = null;
+			
+			builder.append(BlockStateFacing.facingProperty.getName());
+			builder.append("=");
+			builder.append(state.getValue(BlockStateFacing.facingProperty));
+			
+			nameOverride = state.getBlock().getRegistryName().getResourcePath() + "_" + type.getName();
+
+			if(builder.length() == 0)
+			{
+				builder.append("normal");
+			}
+
+			ResourceLocation baseLocation = nameOverride == null ? state.getBlock().getRegistryName() : new ResourceLocation("crystalmod", nameOverride);
+			
+			return new ModelResourceLocation(baseLocation, builder.toString());
+		}
+	}
 
 }

@@ -4,7 +4,7 @@
  [title]Crystal Ore
  [page:0]
  {
-  [text]A rare ore found very close to bedrock. 
+  [text]The main way of obtaining Crystal in the CrystalMod. This ore is found in the Overworld, Nether, and End. 
  }
  [page:smelt]
  {

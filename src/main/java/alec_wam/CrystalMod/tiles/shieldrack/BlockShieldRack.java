@@ -102,6 +102,7 @@ public class BlockShieldRack extends EnumBlock<BlockShieldRack.WoodType> impleme
 		setCreativeTab(CreativeTabs.COMBAT);
 	}
 	
+	@Override
 	@SideOnly(Side.CLIENT)
 	public void initModel(){
 		ModelLoader.setCustomStateMapper(this, new CustomBlockStateMapper());
@@ -152,6 +153,7 @@ public class BlockShieldRack extends EnumBlock<BlockShieldRack.WoodType> impleme
         return false;
     }
 	
+	@Override
 	@SideOnly(Side.CLIENT)
     public BlockRenderLayer getBlockLayer() {
         return BlockRenderLayer.CUTOUT;

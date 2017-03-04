@@ -24,11 +24,34 @@ public class Config {
 	public static final String CATEGORY_MINIONS = "minions";
 	public static final String CATEGORY_MACHINE = "machines";
 	
+	public static boolean generateOreOverworld = true;
 	public static int oreMinimumVeinSize = 5;
     public static int oreMaximumVeinSize = 8;
     public static int oreMaximumVeinCount = 2;
     public static int oreMinimumHeight = 0;
     public static int oreMaximumHeight = 20;
+    
+    public static boolean generateOreNether = true;
+    public static int oreNetherMinimumVeinSize = 5;
+    public static int oreNetherMaximumVeinSize = 8;
+    public static int oreNetherMaximumVeinCount = 4;
+    public static int oreNetherMinimumHeight = 20;
+    public static int oreNetherMaximumHeight = 120;
+    
+    public static boolean generateOreEnd = true;
+    public static int oreEndMinimumVeinSize = 5;
+    public static int oreEndMaximumVeinSize = 8;
+    public static int oreEndMaximumVeinCount = 4;
+    public static int oreEndMinimumHeight = 0;
+    public static int oreEndMaximumHeight = 70;
+    
+    public static boolean generateOreOther = true;
+    public static int oreOtherMinimumVeinSize = 5;
+    public static int oreOtherMaximumVeinSize = 8;
+    public static int oreOtherMaximumVeinCount = 2;
+    public static int oreOtherMinimumHeight = 0;
+    public static int oreOtherMaximumHeight = 20;
+    
     public static boolean retrogenInfo = false;
     public static String retrogenID = "generated";
     public static boolean retrogenOres = false;
@@ -106,6 +129,7 @@ public class Config {
 	}
 	
     public static void init(Configuration cfg) {
+    	generateOreOverworld = cfg.get(CATEGORY_WORLD, "generateOreOverworld", generateOreOverworld, "Enable or disable Crystal Ore in the Overworld").getBoolean();
     	oreMinimumVeinSize = cfg.get(CATEGORY_WORLD, "oreMinimumVeinSize", oreMinimumVeinSize,
                                      "Minimum vein size of crystal ores").getInt();
         oreMaximumVeinSize = cfg.get(CATEGORY_WORLD, "oreMaximumVeinSize", oreMaximumVeinSize,
@@ -116,6 +140,44 @@ public class Config {
                                    "Minimum y level for crystal ores").getInt();
         oreMaximumHeight = cfg.get(CATEGORY_WORLD, "oreMaximumHeight", oreMaximumHeight,
                                    "Maximum y level for crystal ores").getInt();
+        
+        generateOreNether = cfg.get(CATEGORY_WORLD, "generateOreNether", generateOreNether, "Enable or disable Crystal Ore in the Nether").getBoolean();
+    	oreNetherMinimumVeinSize = cfg.get(CATEGORY_WORLD, "oreNetherMinimumVeinSize", oreNetherMinimumVeinSize,
+        		"Minimum vein size of crystal ores in the Nether.").getInt();
+        oreNetherMaximumVeinSize = cfg.get(CATEGORY_WORLD, "oreNetherMaximumVeinSize", oreNetherMaximumVeinSize,
+        		"Maximum vein size of crystal ores in the Nether.").getInt();
+        oreNetherMaximumVeinCount = cfg.get(CATEGORY_WORLD, "oreNetherMaximumVeinCount", oreNetherMaximumVeinCount,
+        		"Maximum number of veins for crystal ores in the Nether.").getInt();
+        oreNetherMinimumHeight = cfg.get(CATEGORY_WORLD, "oreNetherMinimumHeight", oreNetherMinimumHeight,
+        		"Minimum y level for crystal ores in the Nether.").getInt();
+        oreNetherMaximumHeight = cfg.get(CATEGORY_WORLD, "oreNetherMaximumHeight", oreNetherMaximumHeight,
+        		"Maximum y level for crystal ores in the Nether.").getInt();
+        
+        generateOreEnd = cfg.get(CATEGORY_WORLD, "generateOreEnd", generateOreEnd, "Enable or disable Crystal Ore in the End").getBoolean();
+    	oreEndMinimumVeinSize = cfg.get(CATEGORY_WORLD, "oreEndMinimumVeinSize", oreEndMinimumVeinSize,
+        		"Minimum vein size of crystal ores in the End.").getInt();
+        oreEndMaximumVeinSize = cfg.get(CATEGORY_WORLD, "oreEndMaximumVeinSize", oreEndMaximumVeinSize,
+        		"Maximum vein size of crystal ores in the End.").getInt();
+        oreEndMaximumVeinCount = cfg.get(CATEGORY_WORLD, "oreEndMaximumVeinCount", oreEndMaximumVeinCount,
+        		"Maximum number of veins for crystal ores in the End.").getInt();
+        oreEndMinimumHeight = cfg.get(CATEGORY_WORLD, "oreEndMinimumHeight", oreEndMinimumHeight,
+        		"Minimum y level for crystal ores in the End.").getInt();
+        oreEndMaximumHeight = cfg.get(CATEGORY_WORLD, "oreEndMaximumHeight", oreEndMaximumHeight,
+        		"Maximum y level for crystal ores in the End.").getInt();
+        
+        generateOreOther = cfg.get(CATEGORY_WORLD, "generateOreOther", generateOreOther, "Enable or disable Crystal Ore in modded dimensions").getBoolean();
+    	oreOtherMinimumVeinSize = cfg.get(CATEGORY_WORLD, "oreOtherMinimumVeinSize", oreOtherMinimumVeinSize,
+        		"Minimum vein size of crystal ores in modded dimensions.").getInt();
+        oreOtherMaximumVeinSize = cfg.get(CATEGORY_WORLD, "oreOtherMaximumVeinSize", oreOtherMaximumVeinSize,
+        		"Maximum vein size of crystal ores in modded dimensions.").getInt();
+        oreOtherMaximumVeinCount = cfg.get(CATEGORY_WORLD, "oreOtherMaximumVeinCount", oreOtherMaximumVeinCount,
+        		"Maximum number of veins for crystal ores in modded dimensions.").getInt();
+        oreOtherMinimumHeight = cfg.get(CATEGORY_WORLD, "oreOtherMinimumHeight", oreOtherMinimumHeight,
+        		"Minimum y level for crystal ores in modded dimensions.").getInt();
+        oreOtherMaximumHeight = cfg.get(CATEGORY_WORLD, "oreOtherMaximumHeight", oreOtherMaximumHeight,
+        		"Maximum y level for crystal ores in modded dimensions.").getInt();
+        
+        
         retrogenInfo = cfg.get(CATEGORY_WORLD, "retrogenInfo", retrogenInfo,
                 "Set to true if you want retro gen chunks logged.").getBoolean();
         retrogenID = cfg.get(CATEGORY_WORLD, "retrogenID", retrogenID,

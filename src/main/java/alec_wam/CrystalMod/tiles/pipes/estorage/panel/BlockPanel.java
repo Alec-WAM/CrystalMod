@@ -67,7 +67,8 @@ public class BlockPanel extends BlockContainer implements ICustomModel {
 	}
 	
 	@SuppressWarnings("deprecation")
-	public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos)
+	@Override
+    public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos)
     {
 		TileEntity tile = worldIn.getTileEntity(pos);
 		if(tile !=null && tile instanceof TileEntityPanel){
@@ -105,7 +106,8 @@ public class BlockPanel extends BlockContainer implements ICustomModel {
 	    return PanelType.values()[meta];
 	}
 	
-	public EnumBlockRenderType getRenderType(IBlockState state)
+	@Override
+    public EnumBlockRenderType getRenderType(IBlockState state)
     {
         return EnumBlockRenderType.MODEL;
     }
@@ -118,8 +120,6 @@ public class BlockPanel extends BlockContainer implements ICustomModel {
         }
     	return false;
     }
-	
-
 	
 	@Override
     public void breakBlock(World world, BlockPos pos, IBlockState blockState)
