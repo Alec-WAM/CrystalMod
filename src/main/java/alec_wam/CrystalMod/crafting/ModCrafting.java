@@ -149,6 +149,16 @@ public class ModCrafting {
 		GameRegistry.addSmelting(new ItemStack(ModBlocks.crystalOre, 1, CrystalOreType.GREEN.getMeta()), greenCrystal, 1.0F);
 		GameRegistry.addSmelting(new ItemStack(ModBlocks.crystalOre, 1, CrystalOreType.DARK.getMeta()), darkCrystal, 1.0F);
 		
+		GameRegistry.addSmelting(new ItemStack(ModBlocks.crystalOre, 1, CrystalOreType.BLUE_NETHER.getMeta()), blueCrystal, 1.0F);
+		GameRegistry.addSmelting(new ItemStack(ModBlocks.crystalOre, 1, CrystalOreType.RED_NETHER.getMeta()), redCrystal, 1.0F);
+		GameRegistry.addSmelting(new ItemStack(ModBlocks.crystalOre, 1, CrystalOreType.GREEN_NETHER.getMeta()), greenCrystal, 1.0F);
+		GameRegistry.addSmelting(new ItemStack(ModBlocks.crystalOre, 1, CrystalOreType.DARK_NETHER.getMeta()), darkCrystal, 1.0F);
+		
+		GameRegistry.addSmelting(new ItemStack(ModBlocks.crystalOre, 1, CrystalOreType.BLUE_END.getMeta()), blueCrystal, 1.0F);
+		GameRegistry.addSmelting(new ItemStack(ModBlocks.crystalOre, 1, CrystalOreType.RED_END.getMeta()), redCrystal, 1.0F);
+		GameRegistry.addSmelting(new ItemStack(ModBlocks.crystalOre, 1, CrystalOreType.GREEN_END.getMeta()), greenCrystal, 1.0F);
+		GameRegistry.addSmelting(new ItemStack(ModBlocks.crystalOre, 1, CrystalOreType.DARK_END.getMeta()), darkCrystal, 1.0F);
+		
 		GameRegistry.addSmelting(new ItemStack(ModItems.crystals, 1, CrystalType.BLUE_SHARD.getMetadata()), blueNugget, 0.1F);
 		GameRegistry.addSmelting(new ItemStack(ModItems.crystals, 1, CrystalType.RED_SHARD.getMetadata()), redNugget, 0.1F);
 		GameRegistry.addSmelting(new ItemStack(ModItems.crystals, 1, CrystalType.GREEN_SHARD.getMetadata()), greenNugget, 0.1F);

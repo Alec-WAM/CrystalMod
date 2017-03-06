@@ -64,6 +64,7 @@ public class ItemBackpackBase extends Item implements ICustomModel {
 		return backpack.rightClick(playerIn.getHeldItem(hand), worldIn, playerIn, hand);
     }
 	
+	@Override
 	@SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced)
     {

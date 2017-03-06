@@ -15,6 +15,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
@@ -90,7 +91,8 @@ public class ItemPipeCover extends Item implements ICustomModel {
         }
     }
     
-    public boolean doesSneakBypassUse(World world, BlockPos pos, EntityPlayer player)
+    @Override
+	public boolean doesSneakBypassUse(ItemStack stack, IBlockAccess world, BlockPos pos, EntityPlayer player)
     {
     	if(world.getTileEntity(pos) !=null && world.getTileEntity(pos) instanceof TileEntityPipe)return true;
         return false;

@@ -1,6 +1,9 @@
 package alec_wam.CrystalMod.tiles.pipes;
 
 import java.awt.Color;
+import java.lang.reflect.Method;
+import java.nio.ByteOrder;
+import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EnumSet;
@@ -10,6 +13,7 @@ import java.util.Map;
 
 import javax.annotation.Nullable;
 
+import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Vector3f;
 
 import com.google.common.base.Function;
@@ -23,12 +27,16 @@ import alec_wam.CrystalMod.tiles.pipes.covers.ModelUVReader;
 import alec_wam.CrystalMod.tiles.pipes.covers.ModelVertexRange;
 import alec_wam.CrystalMod.tiles.pipes.covers.UnpackedQuadBuilderWrapper;
 import alec_wam.CrystalMod.util.ModLogger;
+import alec_wam.CrystalMod.util.StringUtils;
 import alec_wam.CrystalMod.util.client.RenderUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLeaves;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockRendererDispatcher;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.VertexBuffer.State;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.BlockFaceUV;
 import net.minecraft.client.renderer.block.model.BlockPartFace;
@@ -38,6 +46,7 @@ import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ModelRotation;
 import net.minecraft.client.renderer.color.BlockColors;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.client.renderer.vertex.VertexFormatElement;
 import net.minecraft.init.Blocks;
@@ -47,8 +56,10 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.client.model.pipeline.UnpackedBakedQuad;
+import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 
 
 /**
@@ -144,7 +155,7 @@ class FacadeBuilder
 		//ModLogger.info(textures.toString());
 		
 		boolean test1 = false;
-		boolean test2 = true;
+		boolean test2 = false;
 		if(test1){
 			AxisAlignedBB box = getFacadeBox( side, thinFacades );
 			for(EnumFacing dir : EnumFacing.VALUES){
@@ -611,7 +622,7 @@ class FacadeBuilder
 		return false;
 	}
 
-	private static AxisAlignedBB getFacadeBox( EnumFacing side, boolean thinFacades )
+	public static AxisAlignedBB getFacadeBox( EnumFacing side, boolean thinFacades )
 	{
 		int thickness = thinFacades ? 1 : 2;
 
@@ -778,14 +789,14 @@ class FacadeBuilder
 		if(world !=null && pos !=null){
 			IBlockAccess worldWrapper = new PipeBlockAccessWrapper(world, pos, face);
 			state = state.getBlock().getActualState(state, worldWrapper, pos);
-			ModLogger.info("Actual State = "+state.toString());
+			//ModLogger.info("Actual State = "+state.toString());
 		}
 
 		IBakedModel model = Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelShapes().getModelForState( state );
 		if(world !=null && pos !=null){
 			IBlockAccess worldWrapper = new PipeBlockAccessWrapper(world, pos, face);
 			state = state.getBlock().getExtendedState(state, worldWrapper, pos);
-			ModLogger.info("Extended State = "+state.toString());
+			//ModLogger.info("Extended State = "+state.toString());
 		}
 
 		//IBlockState state = Block.getStateById( stateID );
@@ -1184,5 +1195,250 @@ class FacadeBuilder
 					}
 				}
 			}
+		}
+		
+		//TEST
+		//private static RenderBlocks facadeRenderBlocks = new RenderBlocks();
+		//public static RenderBlocks renderBlocks = new RenderBlocks();
+
+		public static int VERTEX_SIZE = 8;
+
+		public static final float size = 1 / 512F;
+
+		final static int[] sideOffsets = { 1, 1, 2, 2, 0, 0 };
+		final static float[] sideBound1 = { 0, 1 - size, 0, 1 - size, 0, 1 - size };
+		final static float[] sideBound2 = { size, 1, size, 1, size, 1 };
+
+		final static float[] sideSoftBounds = { 0, 1, 0, 1, 0, 1 };
+
+		private final static float FACADE_RENDER_OFFSET = ((float) (1.0D / 1024.0D)) * 2;
+		private final static float FACADE_RENDER_OFFSET2 = 1 - FACADE_RENDER_OFFSET;
+
+		//Copyied from COFH Thermal Dynamics
+		
+		public static boolean renderCover(IBlockAccess blockAccess, BlockPos pos, int side, IBlockState state, AxisAlignedBB bounds, boolean addNormals, boolean addTrans) {
+
+			//facadeRenderBlocks.blockAccess = CoverBlockAccess.getInstance(renderBlocks.blockAccess, x, y, z, side, block, meta);
+
+			Tessellator tess = Tessellator.getInstance();
+			VertexBuffer buffer = tess.getBuffer();
+			//int rawBufferIndex = tess.rawBufferIndex;
+
+			buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
+			boolean rendered = Minecraft.getMinecraft().getBlockRendererDispatcher().renderBlock(state, pos, blockAccess, buffer);
+			
+			
+			/*if (hollowCover != null) {
+				CoverHoleRender.holify(rawBufferIndex, x, y, z, side, hollowCover);
+			}*/
+
+			//int rawBufferIndex2 = tess.rawBufferIndex;
+
+			if (!rendered) {
+				int[] rb = buffer.getVertexState().getRawBuffer();
+				String data = "[";
+				for(int i = 0; i < rb.length; i++){
+					data+=""+rb[i]+", ";
+				}
+				data+="]";
+				//ModLogger.info(data);
+
+				boolean flag, flag2;
+
+				double buffetXOffset = ObfuscationReflectionHelper.getPrivateValue(VertexBuffer.class, buffer, 10);
+				double buffetYOffset = ObfuscationReflectionHelper.getPrivateValue(VertexBuffer.class, buffer, 11);
+				double buffetZOffset = ObfuscationReflectionHelper.getPrivateValue(VertexBuffer.class, buffer, 12);
+
+				float dx = (float) buffetXOffset;
+				float dy = (float) buffetYOffset;
+				float dz = (float) buffetZOffset;
+
+				float quad[][] = new float[4][3];
+				float vec[] = new float[3];
+				boolean flat[] = new boolean[3];
+
+				int intNormal = 0;
+
+				//IIcon icon = RenderDuct.coverBase;
+				TextureAtlasSprite sprite = RenderUtil.getTexture(Blocks.STONE.getDefaultState());
+				
+				final int vertexSize = buffer.getVertexFormat().getIntegerSize();
+				final int verticiesPerFace = 4, incrementAmt = vertexSize * verticiesPerFace;
+
+				for (int k = 0; k < 1; k += incrementAmt) {
+					flag = flag2 = false;
+					for (int i = 0; i < 3; i++) {
+						flat[i] = true;
+					}
+
+					for (int k2 = 0; k2 < verticiesPerFace; k2++) {
+						int i = k + k2 * vertexSize;
+						quad[k2][0] = Float.intBitsToFloat(rb[i]) - dx - pos.getX();
+						quad[k2][1] = Float.intBitsToFloat(rb[i + 1]) - dy - pos.getY();
+						quad[k2][2] = Float.intBitsToFloat(rb[i + 2]) - dz - pos.getZ();
+
+						flag = flag || quad[k2][sideOffsets[side]] != sideSoftBounds[side];
+						flag2 = flag2 || quad[k2][sideOffsets[side]] != (1 - sideSoftBounds[side]);
+
+						if (k2 == 0) {
+							System.arraycopy(quad[k2], 0, vec, 0, 3);
+						} else {
+							for (int vi = 0; vi < 3; vi++) {
+								flat[vi] = flat[vi] && quad[k2][vi] == vec[vi];
+							}
+						}
+					}
+
+					int s = -1;
+
+					if (flag && flag2) {
+						for (int vi = 0; vi < 3; vi++) {
+							if (flat[vi]) {
+								if (vi != sideOffsets[side]) {
+									s = vi;
+									break;
+								} else {
+									flag = false;
+								}
+							}
+						}
+					}
+
+					if (addNormals) {
+						intNormal = -64 << 8;
+					}
+
+					for (int k2 = 0; k2 < verticiesPerFace; k2++) {
+						boolean flag3 = quad[k2][sideOffsets[side]] != sideSoftBounds[side];
+						for (int j = 0; j < 3; j++) {
+							if (j == sideOffsets[side]) {
+								quad[k2][j] = clampF(quad[k2][j], bounds, j);
+							} else {
+								if (flag && flag2 && flag3) {
+									// TODO: only clamp here when covers[] != null && has a cover on the side this vertex is on
+									quad[k2][j] = MathHelper.clamp(quad[k2][j], FACADE_RENDER_OFFSET, FACADE_RENDER_OFFSET2);
+								}
+							}
+						}
+
+						int i = k + k2 * vertexSize;
+						rb[i] = Float.floatToRawIntBits(quad[k2][0] + dx + pos.getX());
+						rb[i + 1] = Float.floatToRawIntBits(quad[k2][1] + dy + pos.getY());
+						rb[i + 2] = Float.floatToRawIntBits(quad[k2][2] + dz + pos.getZ());
+
+						if (s != -1) {
+							float u, v;
+
+							if (s == 0) {
+								u = quad[k2][1];
+								v = quad[k2][2];
+							} else if (s == 1) {
+								u = quad[k2][0];
+								v = quad[k2][2];
+							} else {
+								u = quad[k2][0];
+								v = quad[k2][1];
+							}
+
+							u = MathHelper.clamp(u, 0, 1) * 16;
+							v = MathHelper.clamp(v, 0, 1) * 16;
+
+							u = sprite.getInterpolatedU(u);
+							v = sprite.getInterpolatedV(v);
+
+							rb[i + 3] = Float.floatToRawIntBits(u);
+							rb[i + 4] = Float.floatToRawIntBits(v);
+						}
+
+						if (addNormals) {
+
+							rb[i + 6] = intNormal;
+						}
+						if (addTrans) {
+							if (ByteOrder.nativeOrder() == ByteOrder.LITTLE_ENDIAN) {
+								rb[i + 5] = rb[i + 5] & 0x00FFFFFF | (((rb[i + 5] & 0xFF000000) >>> 1) & 0xFF000000);
+							} else {
+								rb[i + 5] = rb[i + 5] & 0xFFFFFF00 | (((rb[i + 5] & 0x000000FF) >>> 1) & 0x000000FF);
+							}
+						}
+					}
+				}
+				//buffer.setVertexState(new State(rb, buffer.getVertexFormat()));
+				
+				try {
+					IntBuffer rawIntBuffer = ObfuscationReflectionHelper.getPrivateValue(VertexBuffer.class, buffer, 2);
+					rawIntBuffer.clear();
+					Method grow = VertexBuffer.class.getDeclaredMethod("growBuffer", Integer.TYPE);
+					if(grow !=null){
+						grow.setAccessible(true);
+						grow.invoke(buffer, (rb.length * 4));
+					}
+					rawIntBuffer.put(rb);
+					ObfuscationReflectionHelper.setPrivateValue(VertexBuffer.class, buffer, (rb.length / buffer.getVertexFormat().getIntegerSize()), 5);
+				} catch(Exception e){
+					e.printStackTrace();
+				}
+				
+				
+			}
+			tess.draw();
+			//facadeRenderBlocks.blockAccess = null;
+				
+			return rendered;
+
+		}
+
+		private static float clampF(float x, AxisAlignedBB bounds, int j) {
+			float l = (float) getSide(sides[j][0], bounds);
+			float u = (float) getSide(sides[j][1], bounds);
+
+			if (x < l) {
+				return l - (l - x) * 0.001953125f;
+			} else if (x > u) {
+				return u + (x - u) * 0.001953125f;
+			} else {
+				return x;
+			}
+		}
+		
+		public static double getSide(int s, AxisAlignedBB bounds) {
+
+			switch (s) {
+			case 0:
+				return bounds.minY;
+			case 1:
+				return bounds.maxY;
+			case 2:
+				return bounds.minZ;
+			case 3:
+				return bounds.maxZ;
+			case 4:
+				return bounds.minX;
+			case 5:
+				return bounds.maxX;
+			}
+			throw new IndexOutOfBoundsException("Switch Falloff");
+		}
+
+		private final static int[][] sides = { { 4, 5 }, { 0, 1 }, { 2, 3 } };
+		
+
+		@SuppressWarnings("unused")
+		private static float clampF(float vec, int side) {
+
+			return MathHelper.clamp(sideSoftBounds[side] + (vec - sideSoftBounds[side]) * size, sideBound1[side], sideBound2[side]);
+		}
+
+		public static boolean noFacade(IBlockAccess world, BlockPos pos, int side) {
+
+			return !world.isSideSolid(pos, EnumFacing.values()[side], false);
+		}
+
+		public static boolean notSolid(IBlockAccess world, BlockPos pos, int side) {
+
+			EnumFacing dir = EnumFacing.values()[side];
+			IBlockState block2 = world.getBlockState(pos);
+
+			return block2.shouldSideBeRendered(world, pos.add(dir.getFrontOffsetX(), dir.getFrontOffsetY(), dir.getFrontOffsetZ()), dir);
 		}
 }

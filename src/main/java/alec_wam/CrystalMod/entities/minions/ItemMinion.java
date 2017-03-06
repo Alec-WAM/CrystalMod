@@ -67,10 +67,12 @@ public class ItemMinion extends Item implements ICustomModel {
 		list.add(createMinion(type));
 	}
 	
+	@Override
 	public String getUnlocalizedName(ItemStack stack){
 		return super.getUnlocalizedName(stack)+"."+getType(stack).name().toLowerCase();
 	}
 	
+	@Override
 	@SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced)
     {
@@ -94,8 +96,10 @@ public class ItemMinion extends Item implements ICustomModel {
 		}
     }
 	
-	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
+	@Override
+	public EnumActionResult onItemUse(EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
     {
+		ItemStack stack = playerIn.getHeldItem(hand);
         if (worldIn.isRemote)
         {
             return EnumActionResult.SUCCESS;

@@ -11,6 +11,8 @@ import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.EnumBlock;
 import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.items.ModItems;
+import alec_wam.CrystalMod.tiles.crate.RenderTileCrate;
+import alec_wam.CrystalMod.tiles.crate.TileCrate;
 import alec_wam.CrystalMod.tiles.pipes.TileEntityPipe.PipePart;
 import alec_wam.CrystalMod.tiles.pipes.attachments.AttachmentUtil.AttachmentData;
 import alec_wam.CrystalMod.tiles.pipes.covers.CoverUtil.CoverData;
@@ -59,6 +61,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -139,6 +142,7 @@ public class BlockPipe extends EnumBlock<BlockPipe.PipeType> implements ICustomM
 		// Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(Item.getItemFromBlock(this), type.getMeta(), itemModelResourceLocation);
 		for(PipeType type : PipeType.values())
 			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), type.getMeta(), itemModelResourceLocation);
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPipe.class, new TileEntityPipeRenderer());
 	}
 
 	@SideOnly(Side.CLIENT)

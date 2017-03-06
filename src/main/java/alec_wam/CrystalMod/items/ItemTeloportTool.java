@@ -106,6 +106,7 @@ public class ItemTeloportTool extends Item implements ICustomModel {
 		}
     }
 	
+	@Override
 	public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity entity){
 		World world = player.getEntityWorld();
 		if(getLocation(stack) !=null){

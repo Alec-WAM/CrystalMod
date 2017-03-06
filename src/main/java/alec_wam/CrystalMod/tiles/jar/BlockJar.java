@@ -143,7 +143,7 @@ public class BlockJar extends BlockContainer implements ICustomModel {
 		                	tooltip.add(TextFormatting.BLUE + s1);
 		                }
 		            }
-					tooltip.add(Lang.localizeFormat("tooltip.jar.contains", new String[]{""+tileNBT.getInteger("Count"), "3"}));
+					tooltip.add(Lang.localizeFormat("tooltip.jar.contains", new Object[]{""+tileNBT.getInteger("Count"), "3"}));
 				}
 			}
 		}

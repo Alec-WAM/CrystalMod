@@ -49,7 +49,7 @@ public class FusionTempleStructure extends StructureComponentTemplate {
 
     private void loadTemplate(TemplateManager p_191081_1_)
     {
-        Template template = p_191081_1_.getTemplate((MinecraftServer)null, CrystalMod.resourceL("fusiontemple_blue"));
+        Template template = p_191081_1_.getTemplate((MinecraftServer)null, CrystalMod.resourceL("fusiontemple"));
         PlacementSettings placementsettings = (new PlacementSettings()).setRotation(Rotation.NONE).setReplacedBlock(Blocks.STRUCTURE_VOID);
         this.setup(template, this.templatePosition, placementsettings);
     }
@@ -75,7 +75,7 @@ public class FusionTempleStructure extends StructureComponentTemplate {
 				difficultyChance = 1.0f;
 			}
 		}
-        ModLogger.info("Placeing Temple {Pos= "+this.templatePosition+", Type= "+templeType.getName()+"}");
+        //ModLogger.info("Placeing Temple {Pos= "+this.templatePosition+", Type= "+templeType.getName()+"}");
     }
 	
 	@Override

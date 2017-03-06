@@ -22,6 +22,7 @@ public class ItemMinionStaff extends Item {
 		ModItems.registerItem(this, "minionstaff");
 	}
 	
+	@Override
 	public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity entity)
     {
 		if ((!entity.isDead) && entity.getEntityWorld() !=null)

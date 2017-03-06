@@ -3,13 +3,9 @@ package alec_wam.CrystalMod.world.structures;
 import java.util.Random;
 
 import alec_wam.CrystalMod.CrystalMod;
-import alec_wam.CrystalMod.util.ModLogger;
-import net.minecraft.init.Biomes;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.gen.structure.ComponentScatteredFeaturePieces;
 import net.minecraft.world.gen.structure.MapGenStructure;
 import net.minecraft.world.gen.structure.StructureStart;
 
@@ -23,12 +19,12 @@ public class MapGenFusionTemple extends MapGenStructure {
 	@Override
 	public BlockPos getClosestStrongholdPos(World worldIn, BlockPos pos, boolean p_180706_3_) {
 		this.world = worldIn;
-        return findNearestStructurePosBySpacing(worldIn, this, pos, 16, 8, 14357617, false, 100, p_180706_3_);
+        return findNearestStructurePosBySpacing(worldIn, this, pos, 32, 8, 14357617, false, 100, p_180706_3_);
 	}
 
 	@Override
 	protected boolean canSpawnStructureAtCoords(int chunkX, int chunkZ) {
-		int distance = 16;
+		int distance = 32;
 		int i = chunkX;
         int j = chunkZ;
 

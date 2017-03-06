@@ -131,7 +131,8 @@ public class ItemWirelessChestMinecart extends Item implements ICustomModel
 	    }
     }
 
-    public void addInformation(ItemStack stack, EntityPlayer player, List<String> tooltip, boolean advanced)
+    @Override
+	public void addInformation(ItemStack stack, EntityPlayer player, List<String> tooltip, boolean advanced)
     {
     	int code = ItemNBTHelper.getInteger(stack, WirelessChestHelper.NBT_CODE, WirelessChestHelper.getDefaultCode(EnumDyeColor.WHITE));
     	
@@ -149,8 +150,10 @@ public class ItemWirelessChestMinecart extends Item implements ICustomModel
     /**
      * Called when a Block is right-clicked with this Item
      */
-    public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
+    @Override
+	public EnumActionResult onItemUse(EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
     {
+    	ItemStack stack = playerIn.getHeldItem(hand);
         IBlockState iblockstate = worldIn.getBlockState(pos);
 
         if (!BlockRailBase.isRailBlock(iblockstate))

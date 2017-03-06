@@ -55,6 +55,7 @@ public class ItemPipeAttachment extends Item implements ICustomModel {
 		return stack;
 	}
 	
+	@Override
 	public String getUnlocalizedName(ItemStack stack){
 		String id = getID(stack);
 		return super.getUnlocalizedName() + (!Strings.isNullOrEmpty(id) ? "." + getID(stack) : "");

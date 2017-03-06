@@ -48,7 +48,7 @@ public class BaublesIntegration {
   private static final BaublesIntegration instance = new BaublesIntegration();
   private static final boolean baublesLoaded;
   static {
-    baublesLoaded = Loader.isModLoaded("Baubles");
+    baublesLoaded = Loader.isModLoaded("baubles");
   }
 
   private BaublesIntegration() {

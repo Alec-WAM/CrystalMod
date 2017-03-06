@@ -80,7 +80,8 @@ public class ItemDarkIronBow extends ItemBow implements ICustomModel {
     /**
      * How long it takes to use or consume an item
      */
-    public int getMaxItemUseDuration(ItemStack stack)
+	@Override
+	public int getMaxItemUseDuration(ItemStack stack)
     {
         return 72000;
     }
@@ -88,7 +89,8 @@ public class ItemDarkIronBow extends ItemBow implements ICustomModel {
     /**
      * returns the action that specifies what animation to play when the items is being used
      */
-    public EnumAction getItemUseAction(ItemStack stack)
+	@Override
+	public EnumAction getItemUseAction(ItemStack stack)
     {
         return EnumAction.BOW;
     }

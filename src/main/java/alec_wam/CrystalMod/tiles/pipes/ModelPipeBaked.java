@@ -438,7 +438,7 @@ public class ModelPipeBaked implements IPerspectiveAwareModel
 		if(facadeBuilder !=null && renderState !=null){
 			List<BakedQuad> facadeQuads = Lists.newArrayList();
 			List<AxisAlignedBB> bbs = Lists.newArrayList();
-			boolean addFacade = true;
+			boolean addFacade = false;
 			if(addFacade){
 				facadeBuilder.addFacades(renderState, layer, 
 						renderState.pipe.covers,

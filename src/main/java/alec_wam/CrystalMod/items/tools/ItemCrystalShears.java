@@ -54,6 +54,7 @@ public class ItemCrystalShears extends ItemShears implements ICustomModel {
         });
     }
 	
+	@Override
 	public String getUnlocalizedName(ItemStack stack)
     {
         String color = getColor(stack);
@@ -71,6 +72,7 @@ public class ItemCrystalShears extends ItemShears implements ICustomModel {
 		}
     }
 	
+	@Override
 	public void setDamage(ItemStack stack, int damage)
     {
 		String color = getColor(stack);
@@ -80,6 +82,7 @@ public class ItemCrystalShears extends ItemShears implements ICustomModel {
 		super.setDamage(stack, damage);
     }
 	
+	@Override
 	public int getMaxDamage(ItemStack stack)
     {
 		int normal = 238;

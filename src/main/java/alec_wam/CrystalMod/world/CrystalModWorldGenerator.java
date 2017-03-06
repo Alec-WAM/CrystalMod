@@ -41,7 +41,7 @@ public class CrystalModWorldGenerator implements IWorldGenerator {
     @Override
     public void generate(Random random, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) {
         generateWorld(random, chunkX, chunkZ, world, true);
-        if(world.provider.getDimension() == 0){
+        if(world.provider.getDimension() == 0 && Config.generateFusionTemple){
         	fusionTempleGen.generate(world, chunkX, chunkZ, null);
         	fusionTempleGen.generateStructure(world, random, new ChunkPos(chunkX, chunkZ));
         }
@@ -61,7 +61,7 @@ public class CrystalModWorldGenerator implements IWorldGenerator {
 
 	public boolean generateOres(Random random, int chunkX, int chunkZ, World world, boolean newGen){
 		int dimension = world.provider.getDimension();
-    	if(!oreDimBlacklist.contains(dimension)){
+    	//if(!oreDimBlacklist.contains(dimension)){
 			if(newGen || Config.retrogenOres){
 				if(dimension == -1 && Config.generateOreNether){
 					//Nether
@@ -97,7 +97,7 @@ public class CrystalModWorldGenerator implements IWorldGenerator {
 				}
 	            return true;
 			}
-    	}
+    	//}
     	return false;
     }
 

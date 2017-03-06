@@ -52,6 +52,8 @@ public class Config {
     public static int oreOtherMinimumHeight = 0;
     public static int oreOtherMaximumHeight = 20;
     
+    public static boolean generateFusionTemple = true;
+    
     public static boolean retrogenInfo = false;
     public static String retrogenID = "generated";
     public static boolean retrogenOres = false;
@@ -177,6 +179,8 @@ public class Config {
         oreOtherMaximumHeight = cfg.get(CATEGORY_WORLD, "oreOtherMaximumHeight", oreOtherMaximumHeight,
         		"Maximum y level for crystal ores in modded dimensions.").getInt();
         
+        generateFusionTemple = cfg.get(CATEGORY_WORLD, "generateFusionTemple", generateFusionTemple, "Enable or disable Fusion Temple Generation in the Overworld.").getBoolean();
+
         
         retrogenInfo = cfg.get(CATEGORY_WORLD, "retrogenInfo", retrogenInfo,
                 "Set to true if you want retro gen chunks logged.").getBoolean();
@@ -193,7 +197,7 @@ public class Config {
         reedPlacementTrys = cfg.get(CATEGORY_WORLD, "reedPlacementTrys", reedPlacementTrys,
                 "Amount of reed stacks allowed to gen if able to be placed").getInt();
         
-        int[] oreBlacklist = cfg.get(CATEGORY_WORLD, "oreDimensionBlacklist", new int[] { -1, 1 },
+        int[] oreBlacklist = cfg.get(CATEGORY_WORLD, "oreDimensionBlacklist", new int[] { },
                                                        "Crystal ore dimension blacklist").getIntList();
         for (int i : oreBlacklist) {
             CrystalModWorldGenerator.oreDimBlacklist.add(i);

@@ -20,11 +20,13 @@ public class ItemBackpackNormal extends ItemBackpackBase implements ICustomModel
 		this.setMaxDamage(0);
 	}
 	
+	@Override
 	@SideOnly(Side.CLIENT)
     public void initModel() {
 		super.initModel();
     }
 	
+	@Override
 	public String getUnlocalizedName(ItemStack stack)
     {
         int i = stack.getMetadata();

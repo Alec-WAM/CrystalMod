@@ -113,9 +113,11 @@ public class ItemEnderChestMinecart extends Item implements ICustomModel
     /**
      * Called when a Block is right-clicked with this Item
      */
-    public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
+    @Override
+	public EnumActionResult onItemUse(EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
     {
-        IBlockState iblockstate = worldIn.getBlockState(pos);
+    	ItemStack stack = playerIn.getHeldItem(hand);
+    	IBlockState iblockstate = worldIn.getBlockState(pos);
 
         if (!BlockRailBase.isRailBlock(iblockstate))
         {

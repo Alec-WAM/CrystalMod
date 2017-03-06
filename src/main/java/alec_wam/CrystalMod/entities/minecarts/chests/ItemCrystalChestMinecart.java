@@ -119,7 +119,8 @@ public class ItemCrystalChestMinecart extends Item implements ICustomModel
     	ClientProxy.registerItemRenderCustom(getRegistryName().toString(), new ItemCrystalChestMinecartRender());
     }
     
-    public String getUnlocalizedName(ItemStack stack)
+    @Override
+	public String getUnlocalizedName(ItemStack stack)
     {
         int i = stack.getMetadata();
         return super.getUnlocalizedName() + "." + CrystalChestType.values()[CrystalChestType.validateMeta(i)].name().toLowerCase();
@@ -138,8 +139,10 @@ public class ItemCrystalChestMinecart extends Item implements ICustomModel
     /**
      * Called when a Block is right-clicked with this Item
      */
-    public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
+    @Override
+	public EnumActionResult onItemUse(EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
     {
+    	ItemStack stack = playerIn.getHeldItem(hand);
         IBlockState iblockstate = worldIn.getBlockState(pos);
 
         if (!BlockRailBase.isRailBlock(iblockstate))

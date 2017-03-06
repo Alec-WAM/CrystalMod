@@ -54,6 +54,7 @@ public class ItemHDD extends Item implements ICustomModel, IItemProvider {
 		return stack;
 	}
 	
+	@Override
 	public String getUnlocalizedName(ItemStack stack)
     {
 		String[] colors = new String[]{"blue", "red", "green", "dark", "pure"};
@@ -69,6 +70,7 @@ public class ItemHDD extends Item implements ICustomModel, IItemProvider {
 		}
     }
 	
+	@Override
 	public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean adv){
 		list.add("Items Stored: "+ItemHDD.getItemCount(stack)+"/"+getItemLimit(stack));
 		/*if(!GuiScreen.isShiftKeyDown()){
@@ -96,6 +98,7 @@ public class ItemHDD extends Item implements ICustomModel, IItemProvider {
 		}*/
 	}
 	
+	@Override
 	public boolean showDurabilityBar(ItemStack stack)
     {
         return getItemCount(stack) > 0;
@@ -107,7 +110,8 @@ public class ItemHDD extends Item implements ICustomModel, IItemProvider {
      * @param stack The current ItemStack
      * @return 1.0 for 100% 0 for 0%
      */
-    public double getDurabilityForDisplay(ItemStack stack)
+	@Override
+	public double getDurabilityForDisplay(ItemStack stack)
     {
     	return (double)(getItemLimit(stack)-getItemCount(stack)) / (double)getItemLimit(stack);
     }

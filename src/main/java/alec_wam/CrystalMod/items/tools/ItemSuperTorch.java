@@ -52,11 +52,13 @@ public class ItemSuperTorch extends Item implements ICustomModel {
         });
     }
 	
+	@Override
 	public boolean showDurabilityBar(ItemStack stack)
     {
         return true;
     }
 	
+	@Override
 	public double getDurabilityForDisplay(ItemStack stack){
 		return ((1.0D/Config.superTorchMaxCount))*(Config.superTorchMaxCount-ItemNBTHelper.getInteger(stack, NBT_TORCH_COUNT, 0));
 	}

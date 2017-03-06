@@ -5,6 +5,7 @@ import baubles.api.IBauble;
 import baubles.api.cap.IBaublesItemHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
 //https://github.com/Azanor/Baubles/blob/master/src/main/java/baubles/common/container/SlotBauble.java
@@ -14,7 +15,7 @@ public class SlotBauble extends SlotItemHandler
 	int baubleSlot;
 	EntityPlayer player;
 
-    public SlotBauble(EntityPlayer player, IBaublesItemHandler itemHandler, int slot, int par4, int par5)
+    public SlotBauble(EntityPlayer player, IItemHandler itemHandler, int slot, int par4, int par5)
     {
         super(itemHandler, slot, par4, par5);
         this.baubleSlot = slot;

@@ -64,7 +64,8 @@ public class ItemBat extends ItemSpecialSword implements ICustomModel {
         return BatHelper.onLeftClickEntity(stack, player, entity);
     }
 
-    public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot equipmentSlot, ItemStack stack)
+    @Override
+	public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot equipmentSlot, ItemStack stack)
     {
         Multimap<String, AttributeModifier> multimap = HashMultimap.<String, AttributeModifier>create();
 
