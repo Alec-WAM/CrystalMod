@@ -10,6 +10,7 @@ import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.proxy.ClientProxy;
 import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.ChatUtil;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.tool.ToolUtil;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.SoundType;
@@ -34,6 +35,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.fluids.FluidActionResult;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.FluidUtil;
@@ -152,11 +154,13 @@ public class BlockTank extends EnumBlock<BlockTank.TankType> implements ITileEnt
 
         if (tile instanceof TileEntityTank) {
         	TileEntityTank tank = (TileEntityTank) tile;
-        	if (current != null) {
+        	if (ItemStackTools.isValid(current)) {
             	if(ToolUtil.isToolEquipped(entityplayer, hand)){
             		return ToolUtil.breakBlockWithTool(this, world, pos, entityplayer, hand);
             	}
-                if(FluidUtil.interactWithFluidHandler(current, FluidUtil.getFluidHandler(world, pos, side), entityplayer).isSuccess()){
+            	FluidActionResult result = FluidUtil.interactWithFluidHandler(current, FluidUtil.getFluidHandler(world, pos, side), entityplayer);
+                if(result.isSuccess()){
+                	entityplayer.setHeldItem(hand, result.getResult());
                 	return true;
                 }
         	}
