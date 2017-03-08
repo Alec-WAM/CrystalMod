@@ -81,6 +81,12 @@ public class CrystalCraftingManager
         	
         	this.addRecipeNBT(axe, new Object[]{"  #", " R ", "R  ", '#', axeHead, 'R', toolRod});
         	
+        	ItemStack megaaxe = new ItemStack(ModItems.megaCrystalAxe);
+        	ItemNBTHelper.setString(megaaxe, "Color", color);
+        	
+        	this.addRecipeNBT(megaaxe, new Object[]{" ##", " R#", "R  ", '#', axeHead, 'R', toolRod});
+        	
+        	
         	ItemStack hoeHead = new ItemStack(ModItems.toolParts);
         	ItemNBTHelper.setString(hoeHead, "Type", PartType.HOE.getName()+("_head"));
         	ItemNBTHelper.setString(hoeHead, "Color", color);
