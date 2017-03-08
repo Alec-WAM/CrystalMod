@@ -49,8 +49,8 @@ public class PagePress extends GuidePage {
 	protected static RenderItem itemRenderer = Minecraft.getMinecraft().getRenderItem();
 	private NonNullList<ItemStack> inputs;
 	private NonNullList<ItemStack> outputs;
-	private ItemStack currentOutput;
-	private ItemStack currentInput;
+	private ItemStack currentOutput = ItemStackTools.getEmptyStack();
+	private ItemStack currentInput = ItemStackTools.getEmptyStack();
 	
 	public PagePress(String id, NonNullList<ItemStack> outputs) {
 		super(id);

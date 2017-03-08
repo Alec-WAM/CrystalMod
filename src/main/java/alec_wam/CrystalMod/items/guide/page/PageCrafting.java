@@ -55,7 +55,7 @@ public class PageCrafting extends GuidePage {
 	public Object[] ingred;
 	public NonNullList<ItemStack> items;
 	private IRecipe currentRecipe;
-	private ItemStack output;
+	private ItemStack output = ItemStackTools.getEmptyStack();
 	private NonNullList<ItemStack> stacks;
 	
 	public PageCrafting(String id, ItemStack item){

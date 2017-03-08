@@ -14,7 +14,6 @@ import com.google.common.collect.Maps;
 import alec_wam.CrystalMod.Config;
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.api.block.IExplosionImmune;
-import alec_wam.CrystalMod.api.estorage.INetworkTile;
 import alec_wam.CrystalMod.api.estorage.security.NetworkAbility;
 import alec_wam.CrystalMod.api.tools.UpgradeData;
 import alec_wam.CrystalMod.blocks.ModBlocks;
@@ -27,6 +26,7 @@ import alec_wam.CrystalMod.entities.accessories.WolfAccessories;
 import alec_wam.CrystalMod.entities.minions.warrior.EntityMinionWarrior;
 import alec_wam.CrystalMod.integration.baubles.BaublesIntegration;
 import alec_wam.CrystalMod.integration.baubles.ItemBaubleWings;
+import alec_wam.CrystalMod.items.ItemCursedBone.BoneType;
 import alec_wam.CrystalMod.items.ItemDragonWings;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.items.tools.backpack.BackpackUtil;
@@ -64,13 +64,16 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.boss.EntityDragon;
+import net.minecraft.entity.boss.EntityWither;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.monster.EntitySkeleton;
+import net.minecraft.entity.monster.EntityWitherSkeleton;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.passive.AbstractHorse;
 import net.minecraft.entity.passive.EntityWolf;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.projectile.EntityShulkerBullet;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -91,6 +94,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
@@ -113,9 +117,13 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent.EntityInteract
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickBlock;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.ExplosionEvent;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
+import net.minecraftforge.fml.relauncher.Side;
 
 public class EventHandler {
 
@@ -381,17 +389,44 @@ public class EventHandler {
     public void entityJoin(EntityJoinWorldEvent event){
     	Entity entity = event.getEntity();
     	if(EntityUtil.hasCustomData(entity)){
-    		ModLogger.info(""+entity+" data: "+EntityUtil.getCustomEntityData(entity)+" isRemote: "+event.getWorld().isRemote);
     		WolfAccessories.onEntityLoad(entity);
-    		EntityUtil.getCustomEntityData(entity).setBoolean("NeedsDataSyncServer", true);
     	}
-    	/*if(entity !=null && entity.getEntityWorld() !=null && !entity.getEntityWorld().isRemote){
-	    	if(EntityUtil.hasCustomData(entity)){
-	    		ModLogger.info("Loading Custom NBT "+entity);
-	    		WolfAccessories.onEntityLoad(entity);
-	    		EntityUtil.getCustomEntityData(entity).setBoolean("NEEDSDATASYNC", true);
-	    	}
+    }
+    
+    public static List<Entity> dirtyEntities = Lists.newArrayList();
+    public static String NBT_NBTDIRTY = "CustomDataDirty";
+    
+    @SubscribeEvent
+    public void sendData(PlayerEvent.StartTracking event){
+    	Entity entity = event.getTarget();
+    	if(EntityUtil.hasCustomData(entity) && event.getEntityPlayer() instanceof EntityPlayerMP){
+    		CrystalModNetwork.sendTo(new PacketEntityMessage(entity, "CustomDataSync", EntityUtil.getCustomEntityData(entity)), (EntityPlayerMP)event.getEntityPlayer());
+    	}
+    }
+    
+    @SubscribeEvent
+    public void postTick(TickEvent.WorldTickEvent event){
+    	/*if(event.phase == Phase.END && event.side == Side.SERVER){
+    		if(!(event.world instanceof WorldServer))return;
+    		WorldServer wldServer = (WorldServer)event.world;
+    		//We are on the server
+    		for(Entity entity : dirtyEntities){
+    			if(EntityUtil.hasCustomData(entity)){
+    				NBTTagCompound nbt = EntityUtil.getCustomEntityData(entity);
+    				for(EntityPlayerMP playerMP : wldServer.playerEntities){
+
+    				}
+    			}
+    		}
     	}*/
+    }
+    
+    public boolean canPlayerSee(Entity entity, EntityPlayerMP playerMP)
+    {
+        double d0 = playerMP.posX - (double)entity.posX / 4096.0D;
+        double d1 = playerMP.posZ - (double)entity.posZ / 4096.0D;
+        int i = 64;
+        return d0 >= (double)(-i) && d0 <= (double)i && d1 >= (double)(-i) && d1 <= (double)i && entity.isSpectatedByPlayer(playerMP);
     }
     
     @SubscribeEvent
@@ -500,6 +535,18 @@ public class EventHandler {
         
         if(Util.notNullAndInstanceOf(event.getEntityLiving(), EntityDragon.class)){
         	ItemStack stack = new ItemStack(ModItems.wings);
+        	EntityItem item = new EntityItem(event.getEntity().getEntityWorld(), event.getEntity().posX, event.getEntity().posY, event.getEntity().posZ, stack);
+        	event.getDrops().add(item);
+        }
+        
+        if(Util.notNullAndInstanceOf(event.getEntityLiving(), EntityWither.class)){
+        	ItemStack stack = new ItemStack(ModItems.cursedBone, MathHelper.getInt(EntityUtil.rand, 10, 20), BoneType.BONE.getMetadata());
+        	EntityItem item = new EntityItem(event.getEntity().getEntityWorld(), event.getEntity().posX, event.getEntity().posY, event.getEntity().posZ, stack);
+        	event.getDrops().add(item);
+        }
+        
+        if(Util.notNullAndInstanceOf(event.getEntityLiving(), EntityWitherSkeleton.class)){
+        	ItemStack stack = new ItemStack(ModItems.cursedBone, MathHelper.getInt(EntityUtil.rand, 1, 3), BoneType.BONE.getMetadata());
         	EntityItem item = new EntityItem(event.getEntity().getEntityWorld(), event.getEntity().posX, event.getEntity().posY, event.getEntity().posZ, stack);
         	event.getDrops().add(item);
         }

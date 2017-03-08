@@ -42,7 +42,7 @@ public class PageIcon extends GuidePage {
 
 	protected static RenderItem itemRenderer = Minecraft.getMinecraft().getRenderItem();
 	private NonNullList<ItemStack> stacks;
-	private ItemStack currentItem;
+	private ItemStack currentItem = ItemStackTools.getEmptyStack();
 	
 	public PageIcon(String id, ItemStack stack){
 		this(id, NonNullList.withSize(1, stack));
@@ -50,6 +50,7 @@ public class PageIcon extends GuidePage {
 	
 	public PageIcon(String id, NonNullList<ItemStack> resultingItem) {
 		super(id);
+		if(!resultingItem.isEmpty())currentItem = resultingItem.get(0);
 		stacks = resultingItem;
 	}
 	

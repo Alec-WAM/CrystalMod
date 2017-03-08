@@ -71,9 +71,6 @@ public class TileEntityTank extends TileEntityMod {
             getWorld().updateComparatorOutputLevel(pos, getBlockType());
             hasUpdate = false;
         }
-
-        
-	    
     }
     
     /* SAVING & LOADING */
@@ -94,9 +91,6 @@ public class TileEntityTank extends TileEntityMod {
     }
 
     /* ITANKCONTAINER */
-    
-    
-
     public int getFluidLightLevel() {
         FluidStack tankFluid = tank.getFluid();
         return tankFluid == null || tankFluid.amount == 0 ? 0 : tankFluid.getFluid().getLuminosity(tankFluid);

@@ -9,6 +9,7 @@ import com.google.common.base.Strings;
 
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.api.tools.IWolfArmor;
+import alec_wam.CrystalMod.handler.EventHandler;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.packets.PacketEntityMessage;
 import alec_wam.CrystalMod.util.EntityUtil;
@@ -63,6 +64,7 @@ public class WolfAccessories {
             {
             	entity.getEntityAttribute(SharedMonsterAttributes.ARMOR).applyModifier((new AttributeModifier(UUID_ARMOR_ATTRIBUTE, "Wolf armor bonus", (double)i, 0)).setSaved(false));
             }
+            //EntityUtil.getCustomEntityData(entity).setBoolean(EventHandler.NBT_NBTDIRTY, true);
             if(sendPacket){
             	CrystalModNetwork.sendToAllAround(new PacketEntityMessage(entity, "CustomDataSync", EntityUtil.getCustomEntityData(entity)), entity);
             }
@@ -72,7 +74,6 @@ public class WolfAccessories {
 
 	public static void onEntityLoad(Entity entity) {
 		if(entity instanceof EntityWolf){
-			ModLogger.info("Found "+getWolfArmorStack((EntityWolf)entity)+" on "+entity);
 			syncArmor((EntityWolf)entity, false);
 		}
 	}

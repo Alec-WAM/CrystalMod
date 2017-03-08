@@ -84,17 +84,7 @@ public class PacketEntityMessage extends AbstractPacketThreadsafe {
 		Entity entity = world.getEntityByID(id);
 		if(entity !=null){
 			if(type.equalsIgnoreCase("CustomDataSync")){
-				ModLogger.info("Syncing "+entity+" data from packet."+data);
 				EntityUtil.setCustomEntityData(entity, data);
-			}
-			if(type.equalsIgnoreCase("CustomDataSyncWithResponse")){
-				ModLogger.info("Syncing "+entity+" data from packet."+data);
-				EntityUtil.setCustomEntityData(entity, data);
-				CrystalModNetwork.sendToServer(new PacketEntityMessage(entity, "DataSyncResponse"));
-			}
-			if(type.equalsIgnoreCase("DataSyncResponse")){
-				EntityUtil.getCustomEntityData(entity).removeTag("NeedsDataSyncServer");
-				ModLogger.info("Removed sync tag!");
 			}
 			if(type.equalsIgnoreCase("#Jump#")){
 				if(entity instanceof EntityPlayer){

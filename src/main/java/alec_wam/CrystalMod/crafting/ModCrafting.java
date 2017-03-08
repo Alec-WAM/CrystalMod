@@ -1,18 +1,19 @@
 package alec_wam.CrystalMod.crafting;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
-import alec_wam.CrystalMod.blocks.BlockCrystalLog.WoodType;
-import alec_wam.CrystalMod.blocks.ModBlocks;
-import alec_wam.CrystalMod.blocks.crops.material.ModCrops;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+
 import alec_wam.CrystalMod.blocks.BlockCrystal.CrystalBlockType;
 import alec_wam.CrystalMod.blocks.BlockCrystalIngot.CrystalIngotBlockType;
+import alec_wam.CrystalMod.blocks.BlockCrystalLog.WoodType;
 import alec_wam.CrystalMod.blocks.BlockCrystalOre.CrystalOreType;
 import alec_wam.CrystalMod.blocks.BlockMetalBars.EnumMetalBarType;
+import alec_wam.CrystalMod.blocks.ModBlocks;
+import alec_wam.CrystalMod.blocks.crops.material.ModCrops;
 import alec_wam.CrystalMod.blocks.glass.BlockCrystalGlass.GlassType;
 import alec_wam.CrystalMod.crafting.recipes.RecipeSuperTorchAdd;
 import alec_wam.CrystalMod.crafting.recipes.ShapedNBTCopy;
@@ -25,15 +26,15 @@ import alec_wam.CrystalMod.entities.minecarts.chests.wireless.RecipeWirelessChes
 import alec_wam.CrystalMod.entities.minions.ItemMinion;
 import alec_wam.CrystalMod.entities.minions.MinionType;
 import alec_wam.CrystalMod.integration.baubles.BaublesIntegration;
-import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.items.ItemCrystal.CrystalType;
+import alec_wam.CrystalMod.items.ItemCursedBone.BoneType;
 import alec_wam.CrystalMod.items.ItemIngot.IngotType;
 import alec_wam.CrystalMod.items.ItemMachineFrame.FrameType;
 import alec_wam.CrystalMod.items.ItemMetalPlate.PlateType;
+import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.items.guide.ItemCrystalGuide.GuideType;
 import alec_wam.CrystalMod.items.tools.ItemToolParts.PartType;
 import alec_wam.CrystalMod.items.tools.backpack.BackpackUtil;
-import alec_wam.CrystalMod.items.tools.backpack.ItemBackpackNormal.CrystalBackpackType;
 import alec_wam.CrystalMod.items.tools.bat.BatHelper;
 import alec_wam.CrystalMod.items.tools.bat.RecipeBatUpgrade;
 import alec_wam.CrystalMod.tiles.cauldron.CauldronRecipeManager;
@@ -52,8 +53,8 @@ import alec_wam.CrystalMod.tiles.machine.enderbuffer.BlockEnderBuffer;
 import alec_wam.CrystalMod.tiles.machine.power.battery.BlockBattery.BatteryType;
 import alec_wam.CrystalMod.tiles.machine.power.converter.BlockPowerConverter.ConverterType;
 import alec_wam.CrystalMod.tiles.machine.power.engine.BlockEngine.EngineType;
-import alec_wam.CrystalMod.tiles.machine.worksite.WorksiteUpgrade;
 import alec_wam.CrystalMod.tiles.machine.worksite.BlockWorksite.WorksiteType;
+import alec_wam.CrystalMod.tiles.machine.worksite.WorksiteUpgrade;
 import alec_wam.CrystalMod.tiles.pipes.BlockPipe.PipeType;
 import alec_wam.CrystalMod.tiles.pipes.attachments.AttachmentUtil;
 import alec_wam.CrystalMod.tiles.pipes.attachments.ItemPipeAttachment;
@@ -67,16 +68,11 @@ import alec_wam.CrystalMod.tiles.workbench.BlockCrystalWorkbench.WorkbenchType;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
-import alec_wam.CrystalMod.util.UUIDUtils;
-
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockFlower.EnumFlowerType;
 import net.minecraft.block.BlockPlanks;
 import net.minecraft.block.BlockSlab;
 import net.minecraft.enchantment.EnchantmentData;
-import net.minecraft.block.BlockFlower.EnumFlowerType;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Enchantments;
 import net.minecraft.init.Items;
@@ -88,6 +84,7 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStack;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
@@ -175,6 +172,8 @@ public class ModCrafting {
 		addShapedRecipe(new ItemStack(ModItems.crystals, 1, CrystalType.RED_SHARD.getMetadata()), "RRR", 'R', ModItems.crystalReedsRed);
 		addShapedRecipe(new ItemStack(ModItems.crystals, 1, CrystalType.GREEN_SHARD.getMetadata()), "RRR", 'R', ModItems.crystalReedsGreen);
 		addShapedRecipe(new ItemStack(ModItems.crystals, 1, CrystalType.DARK_SHARD.getMetadata()), "RRR", 'R', ModItems.crystalReedsDark);
+		
+		addShapelessRecipe(new ItemStack(ModItems.cursedBone, 3, BoneType.BONEMEAL.getMetadata()), new Object[]{new ItemStack(ModItems.cursedBone, 1, BoneType.BONE.getMetadata())});
 		
 		create9x9Recipe(blueCrystal, new ItemStack(ModItems.crystals, 1, CrystalType.BLUE_SHARD.getMetadata()), 9);
 		create9x9Recipe(blueIngot, blueNugget, 9);
@@ -730,13 +729,27 @@ public class ModCrafting {
 		oredict(Items.BLAZE_ROD, "rodBlaze");
 		oredict(new ItemStack(Items.SKULL, 1, OreDictionary.WILDCARD_VALUE), "skull");
 
+		oredict(new ItemStack(ModItems.cursedBone, 1, BoneType.BONE.getMetadata()), "bone");
+		oredict(new ItemStack(ModItems.cursedBone, 1, BoneType.BONEMEAL.getMetadata()), "dyeBlack");
+
 		oredict(Blocks.PISTON, "piston");
 		oredict(Blocks.STICKY_PISTON, "pistonSticky");
 		
-		oredict(new ItemStack(ModBlocks.crystalOre, 1, CrystalOreType.BLUE.getMeta()),  "oreCrystal");
-		oredict(new ItemStack(ModBlocks.crystalOre, 1, CrystalOreType.RED.getMeta()),  "oreCrystal");
-		oredict(new ItemStack(ModBlocks.crystalOre, 1, CrystalOreType.GREEN.getMeta()),  "oreCrystal");
-		oredict(new ItemStack(ModBlocks.crystalOre, 1, CrystalOreType.DARK.getMeta()),  "oreCrystal");
+		oredict(new ItemStack(ModBlocks.crystalOre, 1, CrystalOreType.BLUE.getMeta()),  "oreCrystalBlue");
+		oredict(new ItemStack(ModBlocks.crystalOre, 1, CrystalOreType.BLUE_NETHER.getMeta()),  "oreCrystalBlue");
+		oredict(new ItemStack(ModBlocks.crystalOre, 1, CrystalOreType.BLUE_END.getMeta()),  "oreCrystalBlue");
+		
+		oredict(new ItemStack(ModBlocks.crystalOre, 1, CrystalOreType.RED.getMeta()),  "oreCrystalRed");
+		oredict(new ItemStack(ModBlocks.crystalOre, 1, CrystalOreType.RED_NETHER.getMeta()),  "oreCrystalRed");
+		oredict(new ItemStack(ModBlocks.crystalOre, 1, CrystalOreType.RED_END.getMeta()),  "oreCrystalRed");
+		
+		oredict(new ItemStack(ModBlocks.crystalOre, 1, CrystalOreType.GREEN.getMeta()),  "oreCrystalGreen");
+		oredict(new ItemStack(ModBlocks.crystalOre, 1, CrystalOreType.GREEN_NETHER.getMeta()),  "oreCrystalGreen");
+		oredict(new ItemStack(ModBlocks.crystalOre, 1, CrystalOreType.GREEN_END.getMeta()),  "oreCrystalGreen");
+		
+		oredict(new ItemStack(ModBlocks.crystalOre, 1, CrystalOreType.DARK.getMeta()),  "oreCrystalDark");
+		oredict(new ItemStack(ModBlocks.crystalOre, 1, CrystalOreType.DARK_NETHER.getMeta()),  "oreCrystalDark");
+		oredict(new ItemStack(ModBlocks.crystalOre, 1, CrystalOreType.DARK_END.getMeta()),  "oreCrystalDark");
 		
 		for(WoodType type : WoodType.values()){
 			oredict(new ItemStack(ModBlocks.crystalLog, 1, type.getMeta()), "logCrystal", "logWood");
@@ -774,7 +787,7 @@ public class ModCrafting {
 
 	public static String getBestOreID(String...names){
 		for(String ore : names){
-			List<ItemStack> ores = OreDictionary.getOres(ore);
+			NonNullList<ItemStack> ores = OreDictionary.getOres(ore);
 			if(!ores.isEmpty()){
 				return ore;
 			}

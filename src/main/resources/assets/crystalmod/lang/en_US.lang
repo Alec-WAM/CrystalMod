@@ -74,12 +74,19 @@ item.crystalmod.toolparts.sword_head.pure.name=Pure Crystal Sword Blade
 
 item.crystalmod.machineframe.basic.name=Machine Frame
 item.crystalmod.machineframe.ender.name=Endergenic Machine Frame
+item.crystalmod.cursedbone.bone.name=Cursed Bone
+item.crystalmod.cursedbone.bonemeal.name=Cursed Bonemeal
 
 item.crystalmod.crystalaxe.blue.name=Blue Crystal Axe
 item.crystalmod.crystalaxe.red.name=Red Crystal Axe
 item.crystalmod.crystalaxe.green.name=Green Crystal Axe
 item.crystalmod.crystalaxe.dark.name=Dark Crystal Axe
 item.crystalmod.crystalaxe.pure.name=Pure Crystal Axe
+item.crystalmod.megacrystalaxe.blue.name=Mega Blue Crystal Axe
+item.crystalmod.megacrystalaxe.red.name=Mega Red Crystal Axe
+item.crystalmod.crystmegacrystalaxealaxe.green.name=Mega Green Crystal Axe
+item.crystalmod.megacrystalaxe.dark.name=Mega Dark Crystal Axe
+item.crystalmod.megacrystalaxe.pure.name=Pure Crystal Axe
 item.crystalmod.crystalhoe.blue.name=Blue Crystal Hoe
 item.crystalmod.crystalhoe.red.name=Red Crystal Hoe
 item.crystalmod.crystalhoe.green.name=Green Crystal Hoe
@@ -556,6 +563,10 @@ crystalmod.gui.crafting_monitor.items_takeing=Taking Item
 crystalmod.gui.crafting_monitor.items_inserting=Inserting
 crystalmod.gui.crafting_monitor.fluids_takeing=Taking Fluid
 
+crystalmod.gui.conduit.ioMode.input=Extract
+crystalmod.gui.conduit.ioMode.output=Insert
+crystalmod.gui.conduit.ioMode.disabled=Disabled
+crystalmod.gui.conduit.ioMode.inOut=Insert/Extract
 
 crystalmod.guistrings.inventory.player=Player Inventory
 crystalmod.guistrings.inventory.setsides=Sides
