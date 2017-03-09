@@ -71,6 +71,9 @@ public class ItemRenderBackpack implements ICustomItemRenderer {
             if (enchanted) {
                 LayerArmorBase.renderEnchantedGlint(this.playerRenderer, entity, this.backpackModel, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch, scale);
             }*/
+            
+            type.renderExtras(stack);
+            
 			if(type instanceof IBackpackInventory){
 				IBackpackInventory inv = (IBackpackInventory)type;
 				InventoryBackpack inventory = inv.getInventory(stack);
