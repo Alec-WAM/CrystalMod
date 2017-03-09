@@ -1,6 +1,15 @@
 package alec_wam.CrystalMod.tiles.pipes.wireless;
 
 
+import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.blocks.ICustomModel;
+import alec_wam.CrystalMod.items.ModItems;
+import alec_wam.CrystalMod.tiles.machine.elevator.ItemMiscCard.CardType;
+import alec_wam.CrystalMod.tiles.pipes.IPipeWrapper;
+import alec_wam.CrystalMod.util.BlockUtil;
+import alec_wam.CrystalMod.util.ChatUtil;
+import alec_wam.CrystalMod.util.ItemNBTHelper;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -12,22 +21,15 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import alec_wam.CrystalMod.CrystalMod;
-import alec_wam.CrystalMod.blocks.ICustomModel;
-import alec_wam.CrystalMod.items.ModItems;
-import alec_wam.CrystalMod.tiles.machine.elevator.ItemMiscCard.CardType;
-import alec_wam.CrystalMod.util.BlockUtil;
-import alec_wam.CrystalMod.util.ChatUtil;
-import alec_wam.CrystalMod.util.ItemNBTHelper;
-import alec_wam.CrystalMod.util.ItemStackTools;
 
 public class BlockWirelessPipeWrapper extends BlockContainer implements ICustomModel {
 
@@ -84,7 +86,7 @@ public class BlockWirelessPipeWrapper extends BlockContainer implements ICustomM
         			ItemNBTHelper.setInteger(held, BlockWirelessPipeWrapper.NBT_CON_Y, pos.getY());
         			ItemNBTHelper.setInteger(held, BlockWirelessPipeWrapper.NBT_CON_Z, pos.getZ());
         			ItemNBTHelper.setInteger(held, BlockWirelessPipeWrapper.NBT_CON_D, world.provider.getDimension());
-    				if(!world.isRemote)ChatUtil.sendChat(player, "Card set to "+pos.getX()+" "+pos.getY()+" "+pos.getZ());
+    				if(!world.isRemote)ChatUtil.sendChat(player, "Card set to "+pos.getX()+" "+pos.getY()+" "+pos.getZ()+" Dimension: ");
     				return true;
         		}
         	}
@@ -100,7 +102,7 @@ public class BlockWirelessPipeWrapper extends BlockContainer implements ICustomM
 	@Override
     public IBlockState getStateFromMeta(int meta)
     {
-        return this.getDefaultState().withProperty(SENDER, Boolean.valueOf((meta & 1) > 0));
+        return getDefaultState();
     }
 
     /**
@@ -109,15 +111,17 @@ public class BlockWirelessPipeWrapper extends BlockContainer implements ICustomM
 	@Override
     public int getMetaFromState(IBlockState state)
     {
-        int i = 0;
-
-        if (((Boolean)state.getValue(SENDER)).booleanValue())
-        {
-            i |= 1;
-        }
-
-        return i;
+        return 0;
     }
+	
+	@Override
+	public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos){
+		TileEntity tile = world.getTileEntity(pos);
+		if(tile !=null && tile instanceof IPipeWrapper){
+			return state.withProperty(SENDER, !((IPipeWrapper)tile).isSender());
+		}
+		return state.withProperty(SENDER, true);
+	}
 	
 	@Override
     protected BlockStateContainer createBlockState()

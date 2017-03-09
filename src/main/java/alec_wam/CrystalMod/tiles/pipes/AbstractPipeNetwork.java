@@ -25,7 +25,20 @@ public abstract class AbstractPipeNetwork {
         network.destroyNetwork();
       }
     }
-    setNetwork(world, tile);
+    if(tile != null && tile.setNetwork(this)){
+    	addPipe(tile);
+    	for(TileEntityPipe pipe : connections){
+    		if(pipe !=null){
+    			if(pipe.getNetwork() == null){
+				      if(pipe.setNetwork(this))addPipe(pipe);
+    			} else if(pipe.getNetwork() !=null){
+    				pipe.getNetwork().destroyNetwork();
+    				if(pipe.setNetwork(this))addPipe(pipe);
+    			}
+    		}
+    	}
+    }
+    //setNetwork(world, tile);
     notifyNetworkOfUpdate();
   }
 

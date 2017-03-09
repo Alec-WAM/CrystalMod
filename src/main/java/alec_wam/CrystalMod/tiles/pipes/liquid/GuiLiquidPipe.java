@@ -120,7 +120,7 @@ public class GuiLiquidPipe extends GuiContainer {
 		this.buttonList.clear();
 		int sx = (width - xSize) / 2;
 		int sy = (height - ySize) / 2;
-		this.buttonList.add(new GuiButton(0, sx+40, sy+2, 100, 10, pipe.getConnectionMode(dir).getUnlocalisedName()));
+		this.buttonList.add(new GuiButton(0, sx+40, sy+2, 100, 10, Lang.localize(pipe.getConnectionMode(dir).getUnlocalisedName())));
 		if(isFilterVisible()){
 			FluidFilter filter = pipe.getFilter(dir, isInput());
 			this.buttonList.add(new GuiButton(1, sx+8, sy+35, 12, 12, inOutShowIn ? "I" : "O"));

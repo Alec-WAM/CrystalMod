@@ -1,13 +1,14 @@
 package alec_wam.CrystalMod.tiles.pipes;
 
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 public interface IPipeWrapper {
 
-	public TileEntityPipe getPipe();
-	
 	public boolean isSender();
 
-	public EnumFacing getPipeDir();
+	public World getOtherWorld();
+	
+	public BlockPos getOtherPos();
 	
 }

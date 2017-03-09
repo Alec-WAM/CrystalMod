@@ -42,6 +42,7 @@ import alec_wam.CrystalMod.items.tools.backpack.ItemBackpackBase;
 import alec_wam.CrystalMod.items.tools.backpack.ItemBackpackNormal;
 import alec_wam.CrystalMod.items.tools.backpack.types.BackpackCrafting;
 import alec_wam.CrystalMod.items.tools.backpack.types.BackpackNormal;
+import alec_wam.CrystalMod.items.tools.backpack.types.BackpackWireless;
 import alec_wam.CrystalMod.items.tools.backpack.upgrade.ItemBackpackUpgrade;
 import alec_wam.CrystalMod.items.tools.bat.ItemBat;
 import alec_wam.CrystalMod.tiles.machine.elevator.ItemMiscCard;
@@ -134,6 +135,7 @@ public class ModItems {
 	public static ItemPipeAttachment pipeAttachmant;
 	
 	public static ItemBackpackNormal normalBackpack;
+	public static ItemBackpackBase wirelessBackpack;
 	public static ItemBackpackBase craftingBackpack;
 	public static ItemBackpackUpgrade backpackupgrade;
 	public static ItemLock lock;
@@ -219,6 +221,7 @@ public class ModItems {
 		miscCard = new ItemMiscCard();
 		normalBackpack = new ItemBackpackNormal(new BackpackNormal());
 		craftingBackpack = new ItemBackpackBase(new BackpackCrafting());
+		wirelessBackpack = new ItemBackpackBase(new BackpackWireless());
 		backpackupgrade = new ItemBackpackUpgrade();
 		lock = new ItemLock();
 		telePearl = new ItemTeloportTool();

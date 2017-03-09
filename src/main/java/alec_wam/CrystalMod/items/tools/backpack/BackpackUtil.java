@@ -208,6 +208,9 @@ public class BackpackUtil {
 		ItemStack dIronPlate = new ItemStack(ModItems.plates, 1, PlateType.DARK_IRON.getMetadata());
 
 		ModCrafting.addShapedOreRecipe(new ItemStack(ModItems.craftingBackpack), new Object[]{"LTL", "SCS", "L#L", 'S', Items.LEAD, 'T', Blocks.TRIPWIRE_HOOK, 'C', "workbench", 'L', "leather", '#', "ingotCrystal"});
+		//EnderIO before default enderpearl
+		String ender = ModCrafting.getBestOreID("ingotPulsatingIron", "enderpearl");
+		ModCrafting.addShapedOreRecipe(new ItemStack(ModItems.wirelessBackpack), new Object[]{" E ", "EBE", " E ", 'E', ender, 'B', new ItemStack(ModItems.normalBackpack, 1, CrystalBackpackType.DARK_IRON.ordinal())});
 
 		ModCrafting.addShapedOreRecipe(new ItemStack(ModItems.normalBackpack, 1, CrystalBackpackType.NORMAL.ordinal()), new Object[]{"LTL", "SCS", "L#L", 'S', Items.LEAD, 'T', Blocks.TRIPWIRE_HOOK, 'C', "chestWood", 'L', "leather", '#', "ingotCrystal"});
 		ModCrafting.addShapedOreRecipe(new ItemStack(ModItems.normalBackpack, 1, CrystalBackpackType.DARK_IRON.ordinal()), new Object[]{"LTL", "SCS", "L#L", 'S', Items.LEAD, 'T', Blocks.TRIPWIRE_HOOK, 'C', new ItemStack(ModBlocks.crystalChest, 1, CrystalChestType.DARKIRON.ordinal()), 'L', "leather", '#', "ingotCrystal"});

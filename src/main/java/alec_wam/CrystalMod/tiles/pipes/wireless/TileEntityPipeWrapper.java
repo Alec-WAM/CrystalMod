@@ -1,5 +1,6 @@
 package alec_wam.CrystalMod.tiles.pipes.wireless;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -10,6 +11,7 @@ import alec_wam.CrystalMod.tiles.TileEntityMod;
 import alec_wam.CrystalMod.tiles.pipes.IPipeWrapper;
 import alec_wam.CrystalMod.tiles.pipes.TileEntityPipe;
 import alec_wam.CrystalMod.util.BlockUtil;
+import alec_wam.CrystalMod.util.ModLogger;
 
 public class TileEntityPipeWrapper extends TileEntityMod implements IPipeWrapper{
 
@@ -27,8 +29,7 @@ public class TileEntityPipeWrapper extends TileEntityMod implements IPipeWrapper
 			nbt.setInteger("ConZ", connectionPos.getZ());
 		}
 		nbt.setInteger("ConD", connectionDim);
-		if(pipeDir !=null)nbt.setInteger("PipeDir", pipeDir.ordinal());
-		nbt.setBoolean("Sender", isSender);
+		nbt.setBoolean("IsSender", isSender);
 	}
 	
 	public void readCustomNBT(NBTTagCompound nbt){
@@ -37,89 +38,43 @@ public class TileEntityPipeWrapper extends TileEntityMod implements IPipeWrapper
 			connectionPos = new BlockPos(nbt.getInteger("ConX"), nbt.getInteger("ConY"), nbt.getInteger("ConZ"));
 		}
 		connectionDim = nbt.getInteger("ConD");
-		if(nbt.hasKey("PipeDir")){
-			pipeDir = EnumFacing.getFront(nbt.getInteger("PipeDir"));
-		}
-		if(nbt.hasKey("Sender")){
-			isSender = nbt.getBoolean("Sender");
-		}
+		isSender = nbt.getBoolean("IsSender");
 	}
 	
-	@Override
-	public TileEntityPipe getPipe(){
-		if(getWorld() == null || getWorld().isRemote || DimensionManager.getWorld(connectionDim) == null){
-			return null;
-		}
-		World world = getWorld().provider.getDimensionType().getId() !=connectionDim ? DimensionManager.getWorld(connectionDim) : getWorld();
-		if(world !=null && connectionPos !=null && world.isBlockLoaded(connectionPos)){
-			
-			TileEntity tile = world.getTileEntity(connectionPos);
-			if(tile !=null && tile instanceof IPipeWrapper){
-				IPipeWrapper wrapper = (IPipeWrapper) tile;
-				if(wrapper.isSender() == false || wrapper == null || tile.getPos() == null || wrapper.getPipeDir() == null){
-					return null;
-				}
-				TileEntity tile2 = world.getTileEntity(tile.getPos().offset(wrapper.getPipeDir()));
-				if(tile2 !=null && tile2 instanceof TileEntityPipe){
-					TileEntityPipe pipe = (TileEntityPipe) tile2;
-					if(pipe.canConnectToExternal(wrapper.getPipeDir().getOpposite(), false))
-					return pipe;
-				}
-			}
-		}
+	public World getOtherWorld(){
+		try{
+			return DimensionManager.getWorld(connectionDim);
+		} catch(Exception e){}
 		return null;
+	}
+	
+	public BlockPos getOtherPos(){
+		return connectionPos;
 	}
 	
 	public boolean isSender(){
 		return isSender;
-	}
-	
-	public EnumFacing getPipeDir(){
-		return pipeDir;
 	}
 
 	@Override
 	public void update() {
 		super.update();
 		if(getWorld().isRemote)return;
-		this.isSender = this.connectionPos == null;
-		
-		/*if(((Boolean)getWorld().getBlockState(getPos()).getValue(BlockWirelessPipeWrapper.SENDER)).booleanValue() !=isSender){
-			getWorld().setBlockState(pos, getWorld().getBlockState(getPos()).withProperty(BlockWirelessPipeWrapper.SENDER, Boolean.valueOf(isSender)), 3);
-		}*/
-		
-		if(isSender){
-			if(pipeDir == null){
-				for(EnumFacing face : EnumFacing.VALUES){
-					TileEntity tile = getWorld().getTileEntity(getPos().offset(face));
-					if(tile !=null && tile instanceof TileEntityPipe){
-						TileEntityPipe pipe = (TileEntityPipe) tile;
-						
-						if(pipe.canConnectToExternal(face.getOpposite(), false)){
-							pipeDir = face;
-							if(this.getWorld().isBlockLoaded(getPos())){
-								BlockUtil.markBlockForUpdate(getWorld(), getPos());
-							}else markDirty();
-							break;
-						}
+		final boolean lastSender = isSender;
+		isSender = (getOtherWorld() != null && getOtherPos() != null && getOtherWorld().isBlockLoaded(getOtherPos()));
+		if(lastSender !=isSender){
+			/*if(isSender){
+				TileEntity tile = getOtherWorld().getTileEntity(getOtherPos());
+				if(tile !=null && tile instanceof TileEntityPipeWrapper){
+					TileEntityPipeWrapper otherWrapper = (TileEntityPipeWrapper)tile;
+					if(otherWrapper.connectionPos != getPos() || otherWrapper.connectionDim != getWorld().provider.getDimension()){
+						otherWrapper.connectionPos = getPos();
+						otherWrapper.connectionDim = getWorld().provider.getDimension();
+						BlockUtil.markBlockForUpdate(getOtherWorld(), getOtherPos());
 					}
 				}
-			}else{
-				TileEntity tile = getWorld().getTileEntity(getPos().offset(pipeDir));
-				if(tile == null || !(tile instanceof TileEntityPipe) || !((TileEntityPipe)tile).canConnectToExternal(pipeDir.getOpposite(), false)){
-					pipeDir = null;
-					if(this.getWorld().isBlockLoaded(getPos())){
-						BlockUtil.markBlockForUpdate(getWorld(), getPos());
-					}else markDirty();
-				}
-			}
-		}else{
-			if(pipeDir != null){
-				pipeDir = null;
-				if(this.getWorld().isBlockLoaded(getPos())){
-					BlockUtil.markBlockForUpdate(getWorld(), getPos());
-				}else markDirty();
-			}
+			}*/
+			BlockUtil.markBlockForUpdate(getWorld(), pos);
 		}
 	}
 

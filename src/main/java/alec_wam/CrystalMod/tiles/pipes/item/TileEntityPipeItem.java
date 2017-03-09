@@ -7,6 +7,7 @@ import java.util.Map.Entry;
 import alec_wam.CrystalMod.tiles.pipes.AbstractPipeNetwork;
 import alec_wam.CrystalMod.tiles.pipes.ConnectionMode;
 import alec_wam.CrystalMod.tiles.pipes.ContainerNormalPipe;
+import alec_wam.CrystalMod.tiles.pipes.IPipeWrapper;
 import alec_wam.CrystalMod.tiles.pipes.PipeUtil;
 import alec_wam.CrystalMod.tiles.pipes.TileEntityPipe;
 import alec_wam.CrystalMod.tiles.pipes.item.filters.CameraFilterInventory;
@@ -254,6 +255,15 @@ public class TileEntityPipeItem extends TileEntityPipe implements IInventoryChan
 	  }
 	
 	public boolean canConnectToExternal(EnumFacing direction, boolean ignoreDisabled) {
+		World world = getWorld();
+	    if(world == null) {
+	      return false;
+	    }
+	    BlockPos loc = getPos().offset(direction);
+	    TileEntity te = world.getTileEntity(loc);
+	    if(te !=null && te instanceof IPipeWrapper){
+	    	return true;
+	    }
 		return getExternalInventory(direction) != null;
 	}
 	
@@ -262,7 +272,7 @@ public class TileEntityPipeItem extends TileEntityPipe implements IInventoryChan
 	    super.externalConnectionAdded(direction);
 	    if(network != null && network instanceof ItemPipeNetwork) {
 	      BlockPos p = getPos().offset(direction);
-	      ((ItemPipeNetwork)network).inventoryAdded(this, direction, p.getX(), p.getY(), p.getZ(), getExternalInventory(direction));
+	      if(getExternalInventory(direction) !=null)((ItemPipeNetwork)network).inventoryAdded(this, direction, p.getX(), p.getY(), p.getZ(), getExternalInventory(direction));
 	    }
 	  }
 

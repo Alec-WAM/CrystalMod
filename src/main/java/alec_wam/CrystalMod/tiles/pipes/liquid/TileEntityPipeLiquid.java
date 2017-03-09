@@ -8,6 +8,7 @@ import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.network.IMessageHandler;
 import alec_wam.CrystalMod.tiles.pipes.AbstractPipeNetwork;
 import alec_wam.CrystalMod.tiles.pipes.ConnectionMode;
+import alec_wam.CrystalMod.tiles.pipes.IPipeWrapper;
 import alec_wam.CrystalMod.tiles.pipes.PipeUtil;
 import alec_wam.CrystalMod.tiles.pipes.TileEntityPipe;
 import alec_wam.CrystalMod.tiles.pipes.item.ItemPipeNetwork;
@@ -110,6 +111,15 @@ public class TileEntityPipeLiquid extends TileEntityPipe implements IInventoryCh
 	}
 	
 	public boolean canConnectToExternal(EnumFacing direction, boolean ignoreDisabled) {
+		World world = getWorld();
+	    if(world == null) {
+	      return false;
+	    }
+	    BlockPos loc = getPos().offset(direction);
+	    TileEntity te = world.getTileEntity(loc);
+	    if(te !=null && te instanceof IPipeWrapper){
+	    	return true;
+	    }
 		return getExternalHandler(direction) !=null;
 	  }
 
@@ -168,7 +178,7 @@ public class TileEntityPipeLiquid extends TileEntityPipe implements IInventoryCh
 	      return;
 	    }
 	    if(this.network instanceof LiquidPipeNetwork)
-	      ((LiquidPipeNetwork)this.network).connectionChanged(this, dir);
+	      if(getExternalHandler(dir) !=null)((LiquidPipeNetwork)this.network).connectionChanged(this, dir);
 	  }
 
 	  @Override

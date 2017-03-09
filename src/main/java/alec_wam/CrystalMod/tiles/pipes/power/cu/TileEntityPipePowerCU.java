@@ -11,6 +11,7 @@ import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.tiles.pipes.AbstractPipeNetwork;
 import alec_wam.CrystalMod.tiles.pipes.BlockPipe.PipeType;
 import alec_wam.CrystalMod.tiles.pipes.ConnectionMode;
+import alec_wam.CrystalMod.tiles.pipes.IPipeWrapper;
 import alec_wam.CrystalMod.tiles.pipes.TileEntityPipe;
 import alec_wam.CrystalMod.tiles.pipes.power.IPowerInterface;
 import alec_wam.CrystalMod.tiles.pipes.types.IPipeType;
@@ -22,6 +23,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.World;
 
 public class TileEntityPipePowerCU extends TileEntityPipe {
 
@@ -160,7 +162,16 @@ public class TileEntityPipePowerCU extends TileEntityPipe {
 	}
 
 	public boolean canConnectToExternal(EnumFacing direction, boolean ignoreDisabled) {
-	    IPowerInterface rec = getExternalPowerReceptor(direction);
+		World world = getWorld();
+	    if(world == null) {
+	      return false;
+	    }
+	    BlockPos loc = getPos().offset(direction);
+	    TileEntity te = world.getTileEntity(loc);
+	    if(te !=null && te instanceof IPipeWrapper){
+	    	return true;
+	    }
+		IPowerInterface rec = getExternalPowerReceptor(direction);
 	    
 	    return rec != null && rec.canPipeConnect(direction);
 	}
@@ -170,7 +181,7 @@ public class TileEntityPipePowerCU extends TileEntityPipe {
 	    if(!res) {
 	      return false;
 	    }
-	    if( !(conduit instanceof TileEntityPipePowerCU)) {
+	    if(!(conduit instanceof TileEntityPipePowerCU)) {
 	      return false;
 	    }
 	    return ((TileEntityPipePowerCU)conduit).getSubType() == getSubType();
@@ -183,7 +194,7 @@ public class TileEntityPipePowerCU extends TileEntityPipe {
 	    super.externalConnectionAdded(direction);
 	    if(network != null) {
 	      BlockPos p = getPos().offset(direction);
-	      network.powerReceptorAdded(this, direction, p.getX(), p.getY(), p.getZ(),getExternalPowerReceptor(direction));
+	      if(getExternalPowerReceptor(direction) !=null)network.powerReceptorAdded(this, direction, p.getX(), p.getY(), p.getZ(),getExternalPowerReceptor(direction));
 	    }
 	}
 

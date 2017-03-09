@@ -85,12 +85,10 @@ public class ModelPipeBaked implements IPerspectiveAwareModel
         final BlockPartFace face2 = new BlockPartFace((EnumFacing)null, 0, "", new BlockFaceUV(new float[] { max, max, max, 16.0f }, 0));
         final BlockPartFace face = new BlockPartFace((EnumFacing)null, 0, "", new BlockFaceUV(new float[] { min, max, max, 16.0f }, 0));
         
-        /*addBakedQuadRotated(list, min, max, max, 1.0F, 1f, glass, EnumFacing.UP, 0, false,
-                -1, new float[][]{{min, min}, {min, 0.8f}, {pixel*11.0F, 1}, {pixel*11.0F, min}});*/
         list.add(faceBakery.makeBakedQuad(new Vector3f(min, max, max), new Vector3f(max, max, 16.0f), face, glass, EnumFacing.UP, modelRot, (BlockPartRotation)null, scale, true));
         list.add(faceBakery.makeBakedQuad(new Vector3f(min, min, max), new Vector3f(max, min, 16.0f), face4, glass, EnumFacing.DOWN, modelRot, (BlockPartRotation)null, scale, true));
-        list.add(faceBakery.makeBakedQuad(new Vector3f(min, min, max), new Vector3f(min, max+1.5f, 16.0f), face3, glass, EnumFacing.WEST, modelRot, (BlockPartRotation)null, scale, true));
-        list.add(faceBakery.makeBakedQuad(new Vector3f(max, min, max), new Vector3f(max, max+1.5F, 16.0f), face2, glass, EnumFacing.EAST, modelRot, (BlockPartRotation)null, scale, true));
+        list.add(faceBakery.makeBakedQuad(new Vector3f(min, min, max), new Vector3f(min, max, 16.0f), face3, glass, EnumFacing.WEST, modelRot, (BlockPartRotation)null, scale, true));
+        list.add(faceBakery.makeBakedQuad(new Vector3f(max, min, max), new Vector3f(max, max, 16.0f), face2, glass, EnumFacing.EAST, modelRot, (BlockPartRotation)null, scale, true));
     }
     
     private void renderIronCap(final FakeState state, final int dir, final List<BakedQuad> list) {

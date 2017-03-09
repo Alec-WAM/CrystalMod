@@ -44,6 +44,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
@@ -151,8 +152,6 @@ public abstract class TileEntityPipe extends TileEntityMod implements ITickable,
 			}
 		}
 
-
-		
 		if (!getWorld().isRemote) {
 			if (getNetwork() == null && getWorld().isBlockLoaded(getPos())) {
 				PipeUtil.ensureValidNetwork(this);
@@ -381,6 +380,16 @@ public abstract class TileEntityPipe extends TileEntityMod implements ITickable,
 		clientStateDirty = true;
 		collidablesDirty = true;
 
+		TileEntity tile = getWorld().getTileEntity(getPos().offset(dir));
+		if(tile instanceof IPipeWrapper){
+			//Refresh Network on wrapper change
+			if(oldVal == ConnectionMode.DISABLED || mode == ConnectionMode.DISABLED){
+				AbstractPipeNetwork network = getNetwork();
+				if (network != null) {
+					network.destroyNetwork();
+				}
+			}
+		}
 		connectionsChanged();
 	}
 
