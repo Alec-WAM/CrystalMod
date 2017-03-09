@@ -66,4 +66,8 @@ public interface IBackpack {
 		return new InventoryBackpackUpgrades(player, stack, getUpgradeAmount(stack));
 	}
 
+	public default void renderExtras(ItemStack stack){
+		
+	}
+
 }

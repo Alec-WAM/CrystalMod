@@ -131,7 +131,7 @@ public class RenderTileWirelessChest extends TileEntitySpecialRenderer<TileWirel
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
     }
     
-    private static void renderButtons(int code, int rot, double lidAngle) {
+    public static void renderButtons(int code, int rot, double lidAngle) {
         Minecraft.getMinecraft().renderEngine.bindTexture(texture_Chest_Buttons);
 
         drawButton(0, WirelessChestHelper.getColor1(code), rot, lidAngle);
