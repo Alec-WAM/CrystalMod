@@ -33,6 +33,7 @@ import alec_wam.CrystalMod.items.tools.ItemCustomAxe;
 import alec_wam.CrystalMod.items.tools.ItemCustomPickaxe;
 import alec_wam.CrystalMod.items.tools.ItemDarkIronBow;
 import alec_wam.CrystalMod.items.tools.ItemLock;
+import alec_wam.CrystalMod.items.tools.ItemMegaCrystalAxe;
 import alec_wam.CrystalMod.items.tools.ItemMegaCrystalPickaxe;
 import alec_wam.CrystalMod.items.tools.ItemMegaCrystalShovel;
 import alec_wam.CrystalMod.items.tools.ItemSuperTorch;
@@ -83,6 +84,7 @@ public class ModItems {
 	public static ItemMetalPlate plates;
 	public static ItemToolParts toolParts;
 	public static ItemMachineFrame machineFrame;
+	public static ItemCursedBone cursedBone;
 	
 	public static ToolMaterial ToolMaterialCrystal = EnumHelper.addToolMaterial(CrystalMod.MODID.toLowerCase()+".crystal", 5, 2000, 20.0F, 6.0F, 22);
 	public static ToolMaterial ToolMaterialDarkIron = EnumHelper.addToolMaterial(CrystalMod.MODID.toLowerCase()+".darkIron", 2, 500/*250*/, 7.0F/*6.0F*/, 2.5F/*2.0F*/, 12/*14*/);
@@ -90,6 +92,7 @@ public class ModItems {
 	public static ArmorMaterial ArmorMaterialDarkIron = EnumHelper.addArmorMaterial(CrystalMod.MODID.toLowerCase()+".darkIron", "darkiron", 16, new int[]{2, 6, 7, 2}, 16, SoundEvents.ITEM_ARMOR_EQUIP_IRON, 0.0F);
 	
 	public static ItemCrystalAxe crystalAxe;
+	public static ItemMegaCrystalAxe megaCrystalAxe;
 	public static ItemCrystalHoe crystalHoe;
 	public static ItemCrystalShovel crystalShovel;
 	public static ItemMegaCrystalShovel megaCrystalShovel;
@@ -162,8 +165,10 @@ public class ModItems {
 		crystalReedsDark = registerItem(new ItemBlockSpecial(ModBlocks.crystalReedsDark).setCreativeTab(CrystalMod.tabCrops), "crystalreedsdark");
 		toolParts = new ItemToolParts();
 		machineFrame = new ItemMachineFrame();
+		cursedBone = new ItemCursedBone();
 		
 		crystalAxe = new ItemCrystalAxe(ToolMaterialCrystal);
+		megaCrystalAxe = new ItemMegaCrystalAxe(ToolMaterialCrystal);
 		crystalHoe = new ItemCrystalHoe(ToolMaterialCrystal);
 		crystalShovel = new ItemCrystalShovel(ToolMaterialCrystal);
 		megaCrystalShovel = new ItemMegaCrystalShovel(ToolMaterialCrystal);

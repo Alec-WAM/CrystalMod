@@ -1,5 +1,7 @@
 package alec_wam.CrystalMod.util.tool;
 
+import java.util.Stack;
+
 import alec_wam.CrystalMod.util.HarvestResult;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLeaves;
@@ -10,6 +12,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 public class TreeHarvestUtil {
@@ -19,6 +22,49 @@ public class TreeHarvestUtil {
   private BlockPos origin;
 
   public TreeHarvestUtil() {
+  }
+  
+  //TinkersConstruct LumberAxe
+  public static boolean isFullTree(World world, BlockPos origin, BaseHarvestTarget harvest) {
+	  BlockPos pos = null;
+	  Stack<BlockPos> candidates = new Stack<BlockPos>();
+	  candidates.add(origin);
+
+	  while(!candidates.isEmpty()) {
+		  BlockPos candidate = candidates.pop();
+		  if((pos == null || candidate.getY() > pos.getY()) && harvest.isTarget(world.getBlockState(candidate))) {
+			  pos = candidate.up();
+			  while(harvest.isTarget(world.getBlockState(pos))) {
+				  pos = pos.up();
+			  }
+			  candidates.add(pos.north());
+			  candidates.add(pos.east());
+			  candidates.add(pos.south());
+			  candidates.add(pos.west());
+		  }
+	  }
+
+	  if(pos == null) {
+		  return false;
+	  }
+
+	  int d = 3;
+	  int o = -1;
+	  int leaves = 0;
+	  for(int x = 0; x < d; x++) {
+		  for(int y = 0; y < d; y++) {
+			  for(int z = 0; z < d; z++) {
+				  BlockPos leaf = pos.add(o + x, o + y, o + z);
+				  IBlockState state = world.getBlockState(leaf);
+				  if(isLeaves(state, world, leaf)) {
+					  if(++leaves >= 5) {
+						  return true;
+					  }
+				  }
+			  }
+		  }
+	  }
+	  return false;
   }
 
   public void harvest(World world, BlockPos loc, int size, boolean ignoreMeta, BlockPos bc, HarvestResult res) {
@@ -51,7 +97,7 @@ public class TreeHarvestUtil {
       return;
     }
     IBlockState bs = world.getBlockState(bc);    
-    boolean isLeaves = isLeaves(bs);
+    boolean isLeaves = isLeaves(bs, world, bc);
     if (target.isTarget(bs) || isLeaves) {
       res.getHarvestedBlocks().add(bc);
       for (EnumFacing dir : EnumFacing.VALUES) {
@@ -68,7 +114,7 @@ public class TreeHarvestUtil {
       for(EnumFacing dir : EnumFacing.HORIZONTALS) {
         BlockPos loc = bc.offset(dir);
         IBlockState locBS = world.getBlockState(loc);        
-        if (isLeaves(locBS)) {
+        if (isLeaves(locBS, world, loc)) {
           harvestAdjacentWood(world, loc, res, target);
         }
       }
@@ -76,8 +122,8 @@ public class TreeHarvestUtil {
 
   }
 
-  public static boolean isLeaves(IBlockState bs) {
-    return bs.getMaterial() == Material.LEAVES || bs.getBlock() instanceof BlockLeaves;
+  public static boolean isLeaves(IBlockState bs, IBlockAccess world, BlockPos pos) {
+    return bs.getMaterial() == Material.LEAVES || bs.getBlock() instanceof BlockLeaves || bs.getBlock().isLeaves(bs, world, pos);
   }
 
   private void harvestAdjacentWood(World world, BlockPos bc, HarvestResult res, BaseHarvestTarget target) {    
@@ -141,11 +187,11 @@ public class TreeHarvestUtil {
     }
   }
 
-  private static class BaseHarvestTarget {
+  public static class BaseHarvestTarget {
 
     private final Block wood;
 
-    BaseHarvestTarget(Block wood) {
+    public BaseHarvestTarget(Block wood) {
       this.wood = wood;
     }
 

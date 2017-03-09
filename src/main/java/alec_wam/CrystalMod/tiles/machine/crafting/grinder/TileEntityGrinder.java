@@ -11,6 +11,7 @@ import alec_wam.CrystalMod.tiles.machine.TileEntityMachine;
 import alec_wam.CrystalMod.tiles.machine.crafting.grinder.GrinderManager.GrinderRecipe;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
+import alec_wam.CrystalMod.util.ModLogger;
 
 public class TileEntityGrinder extends TileEntityMachine implements ISidedInventory {
 
@@ -20,20 +21,55 @@ public class TileEntityGrinder extends TileEntityMachine implements ISidedInvent
 	
 	public boolean canStart() {
 		ItemStack stack = getStackInSlot(0);
-        if (ItemStackTools.isNullStack(stack)) {
+        if (ItemStackTools.isEmpty(stack)) {
             return false;
         }
         final GrinderRecipe recipe = GrinderManager.getRecipe(stack);
         if (recipe == null || eStorage.getCEnergyStored() < recipe.getEnergy()) {
             return false;
         }
-        final ItemStack output = recipe.getMainOutput();
-        ItemStack stack2 = getStackInSlot(1);
-        boolean passesMain = ItemStackTools.isValid(output) && (ItemStackTools.isEmpty(stack2) || (ItemUtil.canCombine(output, stack2) && ItemStackTools.getStackSize(stack2) + ItemStackTools.getStackSize(output) <= output.getMaxStackSize()));
-        final ItemStack outputSecond = recipe.getSecondaryOutput();
-        ItemStack stack3 = getStackInSlot(2);
-        boolean passesSecond = ItemStackTools.isValid(outputSecond) ? (ItemStackTools.isEmpty(stack3) || (ItemUtil.canCombine(outputSecond, stack3) && ItemStackTools.getStackSize(stack3) + ItemStackTools.getStackSize(outputSecond) <= outputSecond.getMaxStackSize())) : true;
-        return passesMain && passesSecond;
+        ItemStack recipeOutput = ItemStackTools.safeCopy(recipe.getMainOutput());
+        if(recipeOutput.getItemDamage() == OreDictionary.WILDCARD_VALUE){
+        	recipeOutput.setItemDamage(0);
+        }
+        ItemStack currentOutput = ItemStackTools.safeCopy(getStackInSlot(1));
+        if(currentOutput.getItemDamage() == OreDictionary.WILDCARD_VALUE){
+        	currentOutput.setItemDamage(0);
+        }
+        boolean firstOutputFits = true;        
+        if(ItemStackTools.isValid(recipeOutput)){
+        	if(ItemStackTools.isValid(currentOutput)){
+        		int outputSize = ItemStackTools.getStackSize(recipeOutput);
+        		int currentSize = ItemStackTools.getStackSize(currentOutput);
+        		if(!ItemUtil.canCombine(currentOutput, recipeOutput)){
+        			firstOutputFits = false;
+        		} else {
+        			firstOutputFits = (outputSize + currentSize) <= currentOutput.getMaxStackSize();
+        		}
+        	}
+        }
+        
+        ItemStack secondRecipeOutput = ItemStackTools.safeCopy(recipe.getSecondaryOutput());
+        if(secondRecipeOutput.getItemDamage() == OreDictionary.WILDCARD_VALUE){
+        	secondRecipeOutput.setItemDamage(0);
+        }
+        ItemStack currentSecondOutput = ItemStackTools.safeCopy(getStackInSlot(2));
+        if(currentSecondOutput.getItemDamage() == OreDictionary.WILDCARD_VALUE){
+        	currentSecondOutput.setItemDamage(0);
+        }
+        boolean soundOutputFits = true;        
+        if(ItemStackTools.isValid(secondRecipeOutput)){
+        	if(ItemStackTools.isValid(currentSecondOutput)){
+        		int outputSize = ItemStackTools.getStackSize(secondRecipeOutput);
+        		int currentSize = ItemStackTools.getStackSize(currentSecondOutput);
+        		if(!ItemUtil.canCombine(currentSecondOutput, secondRecipeOutput)){
+        			soundOutputFits = false;
+        		} else {
+        			soundOutputFits = (outputSize + currentSize) <= currentSecondOutput.getMaxStackSize();
+        		}
+        	}
+        }
+        return firstOutputFits && soundOutputFits;
 	}
 	
 	public boolean canFinish() {

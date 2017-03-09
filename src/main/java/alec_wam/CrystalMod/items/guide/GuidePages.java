@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -55,6 +56,9 @@ import alec_wam.CrystalMod.tiles.chest.wireless.WirelessChestHelper;
 import alec_wam.CrystalMod.tiles.crate.BlockCrate.CrateType;
 import alec_wam.CrystalMod.tiles.machine.elevator.ItemMiscCard.CardType;
 import alec_wam.CrystalMod.tiles.machine.enderbuffer.BlockEnderBuffer;
+import alec_wam.CrystalMod.tiles.machine.power.battery.BlockBattery.BatteryType;
+import alec_wam.CrystalMod.tiles.machine.power.engine.BlockEngine.EngineType;
+import alec_wam.CrystalMod.tiles.pipes.BlockPipe.PipeType;
 import alec_wam.CrystalMod.tiles.shieldrack.BlockShieldRack.WoodType;
 import alec_wam.CrystalMod.tiles.spawner.ItemMobEssence;
 import alec_wam.CrystalMod.tiles.tank.BlockTank.TankType;
@@ -119,9 +123,54 @@ public class GuidePages {
 		ItemStack cauldron = new ItemStack(ModBlocks.cauldron);
 		CrystalModAPI.BLOCKS.registerChapter(new GuideChapter("cauldron", new PageCrafting("main", cauldron)).setDisplayObject(cauldron));
 		
+		NonNullList<ItemStack> pedestals = NonNullList.create();
+		pedestals.add(new ItemStack(ModBlocks.pedistal));
+		pedestals.add(new ItemStack(ModBlocks.fusionPedistal));
+		CrystalModAPI.BLOCKS.registerChapter(new GuideChapter("pedestals", new PageCrafting("main", pedestals), new PageIcon("setup", new ItemStack(ModBlocks.fusionPedistal))).setDisplayObject(pedestals));
+		
 		NonNullList<ItemStack> chestList = getEnumSpecial(ModBlocks.crystalChest, new CrystalChestType[]{CrystalChestType.DARKIRON, CrystalChestType.BLUE, CrystalChestType.RED, CrystalChestType.GREEN, CrystalChestType.DARK, CrystalChestType.PURE});
 		CrystalModAPI.BLOCKS.registerChapter(new GuideChapter("crystalchest", new PageCrafting("main", chestList)).setDisplayObject(chestList));
 
+		NonNullList<ItemStack> pipes = ItemUtil.getBlockSubtypes(ModBlocks.crystalPipe, PipeType.values());
+		PageCrafting[] pipePages = new PageCrafting[PipeType.values().length];
+		for(PipeType pipeType : PipeType.values()){
+			NonNullList<ItemStack> list = NonNullList.create();
+			if(pipeType == PipeType.POWERCU || pipeType == PipeType.POWERRF){
+				for(int i = 0; i < 4; i++){
+					ItemStack stack = new ItemStack(ModBlocks.crystalPipe, 1, pipeType.getMeta());
+					ItemNBTHelper.setInteger(stack, "Tier", i);
+					list.add(stack);
+				}
+			} 
+			else {
+				ItemStack stack = new ItemStack(ModBlocks.crystalPipe, 1, pipeType.getMeta());
+				list.add(stack);
+			}
+			pipePages[pipeType.ordinal()] = new PageCrafting(pipeType.getName().toLowerCase(), list);
+		}
+		List<GuidePage> pipePageList = Lists.<GuidePage>newArrayList();
+		pipePageList.addAll(Arrays.asList(pipePages));
+		NonNullList<ItemStack> attachmentList = NonNullList.create();
+		ModItems.pipeAttachmant.getSubItems(null, null, attachmentList);
+		pipePageList.add(new PageCrafting("attachments", attachmentList));
+		pipePageList.add(new PageText("iomodes"));
+		CrystalModAPI.BLOCKS.registerChapter(new GuideChapter("pipes", pipePageList.toArray(new GuidePage[0])).setDisplayObject(pipes));
+
+		ItemStack engineFurnace = new ItemStack(ModBlocks.engine, 1, EngineType.FURNACE.getMeta());
+		ItemNBTHelper.setInteger(engineFurnace, "Tier", 0);
+		ItemStack engineLava = new ItemStack(ModBlocks.engine, 1, EngineType.LAVA.getMeta());
+		ItemNBTHelper.setInteger(engineLava, "Tier", 0);
+		ItemStack engineVampire = new ItemStack(ModBlocks.engine, 1, EngineType.VAMPIRE.getMeta());
+		ItemNBTHelper.setInteger(engineVampire, "Tier", 0);
+		NonNullList<ItemStack> engines = NonNullList.create();
+		engines.add(engineFurnace); engines.add(engineLava); engines.add(engineVampire);
+		CrystalModAPI.BLOCKS.registerChapter(new GuideChapter("engines", new PageCrafting("furnace", engineFurnace), new PageCrafting("lava", engineLava), new PageCrafting("vampire", engineVampire), new PageText("tiers")).setDisplayObject(engines));
+
+		NonNullList<ItemStack> batteries = ItemUtil.getBlockSubtypes(ModBlocks.battery, BatteryType.values());
+		CrystalModAPI.BLOCKS.registerChapter(new GuideChapter("battery", new PageCrafting("main", batteries)).setDisplayObject(batteries));
+				
+		//TODO Add Clusters and Bridge
+		
 		NonNullList<ItemStack> reedList = NonNullList.create();
 		reedList.add(new ItemStack(ModItems.crystalReedsBlue));
 		reedList.add(new ItemStack(ModItems.crystalReedsRed));

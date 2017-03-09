@@ -29,6 +29,7 @@ import alec_wam.CrystalMod.integration.baubles.BaublesIntegration;
 import alec_wam.CrystalMod.integration.baubles.ItemBaubleWings;
 import alec_wam.CrystalMod.items.ItemDragonWings;
 import alec_wam.CrystalMod.items.ModItems;
+import alec_wam.CrystalMod.items.ItemCursedBone.BoneType;
 import alec_wam.CrystalMod.items.tools.backpack.BackpackUtil;
 import alec_wam.CrystalMod.items.tools.backpack.IBackpack;
 import alec_wam.CrystalMod.items.tools.backpack.types.InventoryBackpack;
@@ -64,9 +65,11 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.boss.EntityDragon;
+import net.minecraft.entity.boss.EntityWither;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.monster.EntitySkeleton;
+import net.minecraft.entity.monster.EntityWitherSkeleton;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.passive.AbstractHorse;
 import net.minecraft.entity.passive.EntityWolf;
@@ -500,6 +503,18 @@ public class EventHandler {
         
         if(Util.notNullAndInstanceOf(event.getEntityLiving(), EntityDragon.class)){
         	ItemStack stack = new ItemStack(ModItems.wings);
+        	EntityItem item = new EntityItem(event.getEntity().getEntityWorld(), event.getEntity().posX, event.getEntity().posY, event.getEntity().posZ, stack);
+        	event.getDrops().add(item);
+        }
+        
+        if(Util.notNullAndInstanceOf(event.getEntityLiving(), EntityWither.class)){
+        	ItemStack stack = new ItemStack(ModItems.cursedBone, MathHelper.getInt(EntityUtil.rand, 10, 20), BoneType.BONE.getMetadata());
+        	EntityItem item = new EntityItem(event.getEntity().getEntityWorld(), event.getEntity().posX, event.getEntity().posY, event.getEntity().posZ, stack);
+        	event.getDrops().add(item);
+        }
+        
+        if(Util.notNullAndInstanceOf(event.getEntityLiving(), EntityWitherSkeleton.class)){
+        	ItemStack stack = new ItemStack(ModItems.cursedBone, MathHelper.getInt(EntityUtil.rand, 1, 3), BoneType.BONE.getMetadata());
         	EntityItem item = new EntityItem(event.getEntity().getEntityWorld(), event.getEntity().posX, event.getEntity().posY, event.getEntity().posZ, stack);
         	event.getDrops().add(item);
         }

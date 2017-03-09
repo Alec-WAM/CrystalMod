@@ -24,9 +24,13 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class ItemCrystalAxe extends ItemAxe implements ICustomModel {
 
 	public ItemCrystalAxe(ToolMaterial material) {
+		this(material, "crystalaxe");
+	}
+	
+	public ItemCrystalAxe(ToolMaterial material, String name) {
 		super(material, 8.0F, -3.0F);
 		this.setCreativeTab(CrystalMod.tabTools);
-		ModItems.registerItem(this, "crystalaxe");
+		ModItems.registerItem(this, name);
 	}
 	
 	@SideOnly(Side.CLIENT)

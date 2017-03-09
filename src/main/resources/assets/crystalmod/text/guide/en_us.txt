@@ -73,6 +73,19 @@
   [text]The starting point for Crystal Mod. Just drop a Crystal Shard into the Cauldron and it will turn into 100mb of the same color Liquid Crystal. Then drop your ingredient in and it will use up some of the Liquid Crystal in exchange for the output.  
  }
 ]}
+//Pedestals
+{[
+ [chapter]pedestals
+ [title]Pedestals
+ [page:main]
+ {
+  [text]Pedestals are a new way to display items. The Fusion pedestal is used to craft special things in the CrystalMod. 
+ }
+ [page:setup]
+ {
+  [text]To use the Fusion Pedestal first place it down in an open area. Then place as many pedestals as you need within 8 blocks of the Fusion pedestals. Once you have placed all the ingredients in the basic pedestals around the central Fusion Pedestal just sneak right click the Fusion Pedestal with a Wrench to activate the crafting. The Fusion pedestal will make a wirring sound once it has begun crafting.
+ }
+]}
 //Crystal Chests
 {[
  [chapter]crystalchest
@@ -80,6 +93,46 @@
  [page:main]
  {
   [text]Multi tier chests that are very similar to Iron Chests.   
+ }
+]}
+//Pipes
+{[
+ [chapter]pipes
+ [title]Pipes
+ [page:item]
+ {
+  [title]Item Pipes
+  [text]These pipes allow you to transport items to and from inventories. If you add a Filter to the pipe it will allow you to filter the items allowed. 
+ }
+ [page:fluid]
+ {
+  [title]Fluid Pipes
+  [text]These pipes allow you to transport fluid to and from tanks. If you add a Filter to the pipe it will allow you to filter the fluids allowed. 
+ }
+ [page:estorage]
+ {
+  [title]Electronic Network Pipes
+  [text]These pipes are the backbone to any EStorage Network. They allow you to connect all of your EStorage components together on one network. 
+ }
+ [page:powercu]
+ {
+  [title]CU Power Pipes
+  [text]These pipes allow you to transport CU to and from machines.
+ }
+ [page:powerrf]
+ {
+  [title]RF Power Pipes
+  [text]These pipes allow you to transport RF to and from machines.
+ }
+ [page:iomodes]
+ {
+  [title]IO Modes
+  [text]Almost all pipes have am interface. Inside that interface will be a button on the top to change the IO Mode. The IO modes are Insert, Extract, Both and Disabled. Extract will pull the resource into the pipe. Insert will push the resource out. Disabled doesn't connect and Both does both insert and extract.
+ }
+ [page:attachments]
+ {
+  [title]Pipe Attachments
+  [text]These attachments add more functionality to your pipes. The Import attachment allows you to import items and fluids into your EStorage network. Export pushes items and fluids out of your EStorage Network. The Sensor attachment allows you to keep track of items in your network. 
  }
 ]}
 //Crystal Reeds
@@ -141,6 +194,39 @@
  [page:main]
  {
   [text]Great for storing fluids.    
+ }
+]}
+//Engines
+{[
+ [chapter]engines
+ [title]Engines
+ [page:furnace]
+ {
+  [title]Furnace Engine
+  [text]This engine allows you to generate CU with furnace fuel. For every burning tick it will generate 30CU/tick.    
+ }
+ [page:lava]
+ {
+  [title]Lava Engine
+  [text]This engine allows you to generate CU with lava. For every 50mb of lava you will get 30 CU/t for 50 ticks.     
+ }
+ [page:vampire]
+ {
+  [title]Vampire Engine
+  [text]This engine will attack entities within 2 blocks of the engine and turn it into CU. Normal mobs will return 15CU/tick for 4 seconds. Undead mobs generate twice as much.   
+ }
+ [page:tiers]
+ {
+  [text]All engines have multiple tiers. Each tiers has a multiple, which speeds up the operation of the engine by that multiplier.
+ }
+]}
+//Battery
+{[
+ [chapter]battery
+ [title]Battery
+ [page:main]
+ {
+  [text]This block stores CU in large amounts. To edit the IO modes just open the interface and click the tab on the right. If you hold shift it will show the relative direction instead of the UDNESW direction. Red means out, Blue means in and Grey is blocked.   
  }
 ]}
 //Weather Forecaster

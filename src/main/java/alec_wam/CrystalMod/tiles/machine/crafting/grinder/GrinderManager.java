@@ -19,6 +19,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.oredict.OreDictionary;
 
 public class GrinderManager {
@@ -256,7 +257,7 @@ public class GrinderManager {
 		return false;
 	}
 	
-	public static boolean addRecipe(ItemStack input, ItemStack output, @Nullable ItemStack secondOutput, int chance, int power){
+	public static boolean addRecipe(ItemStack input, ItemStack output, ItemStack secondOutput, int chance, int power){
 		if(ItemStackTools.isValid(input) && getRecipe(input) == null){
 			if(ItemStackTools.isValid(output)){
 				recipes.add(new GrinderRecipe(input, output, secondOutput, chance, power));
@@ -267,22 +268,30 @@ public class GrinderManager {
 	}
 	
 	public static boolean addRecipeBothList(List<ItemStack> inputs, int inputAmount, List<ItemStack> outputs, int outputAmount, List<ItemStack> secondOutputs, int secondOutputAmount, int chance, int power){
+		boolean added = false;
 		for(ItemStack input : inputs){
 			if(ItemStackTools.isValid(input) && getRecipe(input) == null){
 				ItemStack inputCopy = ItemUtil.copy(input, inputAmount);
 				for(ItemStack output : outputs){
 					if(ItemStackTools.isValid(output)){
 						ItemStack outputCopy = ItemUtil.copy(output, outputAmount);
+						if(outputCopy.getItemDamage() == OreDictionary.WILDCARD_VALUE){
+							outputCopy.setItemDamage(0);
+						}
 						if(secondOutputs == null || secondOutputs.isEmpty()){
 							if(addRecipe(inputCopy, outputCopy, ItemStackTools.getEmptyStack(), 0, power)){
-								return true;
+								added = true;
 							}
 						} else {
-							for(ItemStack secondOutput : secondOutputs){
+							second : for(ItemStack secondOutput : secondOutputs){
 								if(ItemStackTools.isValid(secondOutput)){
 									ItemStack secondOutputCopy = ItemUtil.copy(secondOutput, secondOutputAmount);
+									if(secondOutputCopy.getItemDamage() == OreDictionary.WILDCARD_VALUE){
+										secondOutputCopy.setItemDamage(0);
+									}
 									if(addRecipe(inputCopy, outputCopy, secondOutputCopy, chance, power)){
-										return true;
+										added = true;
+										break second;
 									}
 								}
 							}
@@ -291,7 +300,7 @@ public class GrinderManager {
 				}
 			}
 		}
-		return false;
+		return added;
 	}
 	
 	public static List<GrinderRecipe> getRecipes(){

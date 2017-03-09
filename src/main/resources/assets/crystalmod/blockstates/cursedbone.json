@@ -1,0 +1,6 @@
+{
+    "variants": {
+        "bone": [{ "model": "crystalmod:item/3dtool", "textures": {"layer0": "crystalmod:items/dark_bone"}}],
+        "bonemeal": [{ "model": "crystalmod:item/fixedonelayer", "textures": { "icon0": "crystalmod:items/dark_bonemeal" }}]
+    }
+}

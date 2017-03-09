@@ -54,8 +54,8 @@ public class PageFurnace extends GuidePage {
 
 	protected static RenderItem itemRenderer = Minecraft.getMinecraft().getRenderItem();
 	private NonNullList<ItemStack> outputs;
-	private ItemStack output;
-	private ItemStack input;
+	private ItemStack output = ItemStackTools.getEmptyStack();
+	private ItemStack input = ItemStackTools.getEmptyStack();
 	
 	public PageFurnace(String id, ItemStack output) {
 		super(id);

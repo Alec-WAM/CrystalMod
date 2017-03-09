@@ -420,12 +420,12 @@ public class ItemUtil {
   
   public static boolean canCombine(ItemStack stack1, ItemStack stack2)
   {
-      if (ItemStackTools.isNullStack(stack1) || stack1.getItem() == null || (!ItemStackTools.isNullStack(stack2) && stack2.getItem() == null))
+      if (ItemStackTools.isEmpty(stack1) || stack1.getItem() == null || (ItemStackTools.isValid(stack2) && stack2.getItem() == null))
       {
           return false;
       }
 
-      if (ItemStackTools.isNullStack(stack2))
+      if (ItemStackTools.isEmpty(stack2))
       {
           return true;
       }
