@@ -168,7 +168,7 @@ public class PacketPipe extends AbstractPacketThreadsafe {
 				if(pipe instanceof TileEntityPipeItem){
 					TileEntityPipeItem item = (TileEntityPipeItem) pipe;
 					if(dir !=null){
-						item.setSelfFeedEnabled(dir, Boolean.getBoolean(data));
+						item.setSelfFeedEnabled(dir, data.equalsIgnoreCase("true") ? true : false);
 					}
 				}
 			}
@@ -176,7 +176,7 @@ public class PacketPipe extends AbstractPacketThreadsafe {
 				if(pipe instanceof TileEntityPipeItem){
 					TileEntityPipeItem item = (TileEntityPipeItem) pipe;
 					if(dir !=null){
-						item.setRoundRobinEnabled(dir, Boolean.getBoolean(data));
+						item.setRoundRobinEnabled(dir, data.equalsIgnoreCase("true") ? true : false);
 					}
 				}
 			}

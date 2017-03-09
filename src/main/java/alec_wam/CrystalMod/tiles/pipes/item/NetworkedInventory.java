@@ -66,7 +66,7 @@ public class NetworkedInventory {
   }
 
   boolean isSticky() {
-    return /*con.getOutputFilter(conDir) != null && con.getOutputFilter(conDir).isValid() && con.getOutputFilter(conDir).isSticky()*/false;
+    return false;
   }
 
   int getPriority() {

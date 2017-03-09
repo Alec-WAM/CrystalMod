@@ -563,6 +563,10 @@ crystalmod.gui.crafting_monitor.items_takeing=Taking Item
 crystalmod.gui.crafting_monitor.items_inserting=Inserting
 crystalmod.gui.crafting_monitor.fluids_takeing=Taking Fluid
 
+crystalmod.gui.conduit.ioMode.input=Extract
+crystalmod.gui.conduit.ioMode.output=Insert
+crystalmod.gui.conduit.ioMode.disabled=Disabled
+crystalmod.gui.conduit.ioMode.inOut=Insert/Extract
 
 crystalmod.guistrings.inventory.player=Player Inventory
 crystalmod.guistrings.inventory.setsides=Sides

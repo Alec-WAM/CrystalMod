@@ -26,6 +26,7 @@ import alec_wam.CrystalMod.tiles.pipes.item.filters.FilterInventory;
 import alec_wam.CrystalMod.tiles.pipes.item.filters.ItemPipeFilter.FilterType;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemStackTools;
+import alec_wam.CrystalMod.util.Lang;
 import alec_wam.CrystalMod.util.ModLogger;
 
 public class GuiItemPipe extends GuiContainer {
@@ -234,7 +235,7 @@ public class GuiItemPipe extends GuiContainer {
 		this.buttonList.clear();
 		int sx = (width - xSize) / 2;
 		int sy = (height - ySize) / 2;
-		if(!filter)this.buttonList.add(new GuiButton(0, sx+40, sy+2, 100, 10, pipe.getConnectionMode(dir).getUnlocalisedName()));
+		if(!filter)this.buttonList.add(new GuiButton(0, sx+40, sy+2, 100, 10, Lang.localize(pipe.getConnectionMode(dir).getUnlocalisedName())));
 		
 		if(this.pipe.getConnectionMode(dir) !=ConnectionMode.DISABLED){
 			if(filter == false){
