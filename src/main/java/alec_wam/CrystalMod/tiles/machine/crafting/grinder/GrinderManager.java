@@ -182,6 +182,7 @@ public class GrinderManager {
 	}
 	
 	public static void oreSearch(){
+		ModLogger.info("[Grinder Recipe Manager] Searching for OreDictionary recipes....");
 		final int sizePreSearch = recipes.size();
 		List<String> failedSearches = Lists.newArrayList();
 		for(String oreName : OreDictionary.getOreNames()){

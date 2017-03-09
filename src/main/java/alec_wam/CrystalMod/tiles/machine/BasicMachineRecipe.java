@@ -73,4 +73,14 @@ public class BasicMachineRecipe
     {
       return this.energy;
     }
+    
+    @Override
+    public boolean equals(Object obj){
+    	if(obj == null || !(obj instanceof BasicMachineRecipe)) return false;
+    	BasicMachineRecipe other = (BasicMachineRecipe)obj;
+    	
+    	if(getInput() != other.getInput()) return false;
+    	
+    	return ItemUtil.canCombine(getOutput(), other.getOutput());
+    }
 }

@@ -11,8 +11,11 @@ import alec_wam.CrystalMod.items.ItemMetalPlate.PlateType;
 import alec_wam.CrystalMod.tiles.machine.BasicMachineRecipe;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
+import alec_wam.CrystalMod.util.ModLogger;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
+import net.minecraftforge.oredict.OreDictionary;
 
 public class PressRecipeManager {
 
@@ -41,6 +44,7 @@ public class PressRecipeManager {
 	}
 	
 	public static BasicMachineRecipe addRecipe(BasicMachineRecipe recipe){
+		if(recipes.contains(recipe)) return null;
 		recipes.add(recipe);
 		return recipe;
 	}
@@ -54,6 +58,35 @@ public class PressRecipeManager {
 		addRecipe(new ItemStack(ModItems.ingots, 1, IngotType.PURE.getMetadata()), new ItemStack(ModItems.plates, 1, PlateType.PURE.getMetadata()), defaultPower);
 		addRecipe(new ItemStack(ModItems.ingots, 1, IngotType.DARK_IRON.getMetadata()), new ItemStack(ModItems.plates, 1, PlateType.DARK_IRON.getMetadata()), defaultPower);
 		addRecipe(new ItemStack(Items.BLAZE_POWDER, 2, 0), new ItemStack(Items.BLAZE_ROD), defaultPower);
+	}
+
+	public static void oreSearch() {
+		ModLogger.info("[Press Recipe Manager] Searching for metal plates....");
+		for(String name : OreDictionary.getOreNames()){
+			if(name.length() > 5 && name.substring(0, 5).equals("ingot")){
+				String type = name.substring(5);
+				NonNullList<ItemStack> plates = OreDictionary.getOres("plate"+type);
+				if(!plates.isEmpty()){
+					ModLogger.info("Found "+type+" plate adding recipe now.");
+					ItemStack plateCopy = ItemStackTools.safeCopy(plates.get(0));
+					if(plateCopy.getItemDamage() == OreDictionary.WILDCARD_VALUE){
+						plateCopy.setItemDamage(0);
+					}
+					NonNullList<ItemStack> ingots = OreDictionary.getOres(name);
+					for(ItemStack ingot : ingots){
+						ItemStack ingotCopy = ItemStackTools.safeCopy(ingot);
+						if(ingotCopy.getItemDamage() == OreDictionary.WILDCARD_VALUE){
+							ingotCopy.setItemDamage(0);
+						}
+						if(getRecipe(ingotCopy) == null){
+							if(addRecipe(ingotCopy, plateCopy, 1600) !=null){
+								ModLogger.info(ingotCopy+" -> "+plateCopy);
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 	
 }

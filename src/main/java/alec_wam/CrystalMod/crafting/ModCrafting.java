@@ -541,6 +541,7 @@ public class ModCrafting {
 	public static void postInit(){
 		addSlabToBlocks();
 		GrinderManager.oreSearch();
+		PressRecipeManager.oreSearch();
 	}
 	
 	public static void addShapedRecipe(Item result, Object... recipe){ addShapedRecipe(new ItemStack(result), recipe); }
