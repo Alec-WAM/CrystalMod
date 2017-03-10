@@ -10,6 +10,7 @@ import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.ChatUtil;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemStackTools;
+import alec_wam.CrystalMod.util.StringUtils;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -77,16 +78,16 @@ public class BlockWirelessPipeWrapper extends BlockContainer implements ICustomM
             				wrapper.connectionDim = dim;
             				BlockUtil.markBlockForUpdate(world, pos);
             			}
-            				ChatUtil.sendChat(player, ""+x+" "+y+" "+z);
+            			ChatUtil.sendChat(player, "Linked to "+x+" "+y+" "+z+" Dimension:"+StringUtils.getDimensionName(player.getUniqueID(), dim));
         			}
-            			
         			return true;
         		}else{
         			ItemNBTHelper.setInteger(held, BlockWirelessPipeWrapper.NBT_CON_X, pos.getX());
         			ItemNBTHelper.setInteger(held, BlockWirelessPipeWrapper.NBT_CON_Y, pos.getY());
         			ItemNBTHelper.setInteger(held, BlockWirelessPipeWrapper.NBT_CON_Z, pos.getZ());
-        			ItemNBTHelper.setInteger(held, BlockWirelessPipeWrapper.NBT_CON_D, world.provider.getDimension());
-    				if(!world.isRemote)ChatUtil.sendChat(player, "Card set to "+pos.getX()+" "+pos.getY()+" "+pos.getZ()+" Dimension: ");
+        			int dim = world.provider.getDimension();
+        			ItemNBTHelper.setInteger(held, BlockWirelessPipeWrapper.NBT_CON_D, dim);
+    				if(!world.isRemote)ChatUtil.sendChat(player, "Card set to "+pos.getX()+" "+pos.getY()+" "+pos.getZ()+" Dimension:"+StringUtils.getDimensionName(player.getUniqueID(), dim));
     				return true;
         		}
         	}

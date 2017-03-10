@@ -136,7 +136,6 @@ public class FusionRecipe implements IFusionRecipe {
 		}
 		ItemStack output = ItemUtil.copy(getOutput(), 1);
 		fpedistal.setStack(output);
-		//TODO Consume Energy
 	}
 
 	@Override

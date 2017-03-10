@@ -196,6 +196,7 @@ item.crystalmod.harddrivegreen.name=Item Hard-drive (Green)
 item.crystalmod.harddrivedark.name=Item Hard-drive (Dark)
 item.crystalmod.harddrivepure.name=Item Hard-drive (Pure)
 item.crystalmod.craftingcard.name=Crafting Recipe Card
+item.crystalmod.securitycard.name=Security Card
 item.crystalmod.wirelesspanelreceiver.name=Hand-held Network Panel
 
 item.crystalmod.craftingpattern.name=Crafting Recipe Pattern
@@ -221,7 +222,6 @@ item.crystalmod.worksiteupgrade.12.name=Quarry Silk-Touch Upgrade
 item.crystalmod.worksiteupgrade.13.name=Quarry Only Ore Upgrade
 
 item.crystalmod.telepearl.name=Teleporting Pearl
-item.crystalmod.backpack.name=Backpack
 item.crystalmod.backpack_normal.normal.name=Backpack
 item.crystalmod.backpack_normal.darkiron.name=Dark Iron Backpack
 item.crystalmod.backpack_normal.blue.name=Blue Crystal Backpack
@@ -230,6 +230,7 @@ item.crystalmod.backpack_normal.green.name=Green Crystal Backpack
 item.crystalmod.backpack_normal.dark.name=Dark Crystal Backpack
 item.crystalmod.backpack_normal.pure.name=Pure Crystal Backpack
 item.crystalmod.backpack_crafting.name=Crafting Backpack
+item.crystalmod.backpack_wireless.name=Wireless Backpack
 item.crystalmod.backpackupgrade.hopper.name=Hopper Upgrade
 item.crystalmod.backpackupgrade.ender.name=Ender Chest Upgrade
 item.crystalmod.backpackupgrade.restocking.name=Restocking Upgrade
@@ -497,6 +498,8 @@ tile.crystalmod.shieldrack.jungle.name=Jungle Shield Rack
 tile.crystalmod.shieldrack.acacia.name=Acacia Shield Rack
 tile.crystalmod.shieldrack.darkoak.name=Dark Oak Shield Rack
 
+tile.crystalmod.soundmuffler.name=Sound Muffler
+
 #--Fluids
 fluid.crystalmod.xpjuice=Liquid XP
 fluid.crystalmod.crystal.blue=Blue Liquid Crystal
@@ -593,6 +596,7 @@ crystalmod.guistrings.inventory.settargets=Set Work Targets
 crystalmod.guistrings.block_side=Block Side
 crystalmod.guistrings.direction=Direction
 crystalmod.guistrings.inventory_accessed=Inventory
+crystalmod.guistrings.inventory.alt_controls=Settings
 
 crystalmod.message.toomanyplayercubes=You already have the maximum amount of Player Cubes created. (%s)
 

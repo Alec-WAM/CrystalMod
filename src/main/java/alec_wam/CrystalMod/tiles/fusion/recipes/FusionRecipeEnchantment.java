@@ -174,7 +174,6 @@ public class FusionRecipeEnchantment implements IFusionRecipe {
 		}
 		EnchantmentHelper.setEnchantments(toolEnchantments, tool);
 		fpedistal.setStack(tool);
-		//TODO Consume Energy
 	}
 
 	@Override

@@ -1,7 +1,6 @@
 package alec_wam.CrystalMod.handler;
 
 import alec_wam.CrystalMod.CrystalMod;
-import alec_wam.CrystalMod.api.estorage.INetworkTile;
 import alec_wam.CrystalMod.api.estorage.security.NetworkAbility;
 import alec_wam.CrystalMod.capability.ContainerExtendedInventory;
 import alec_wam.CrystalMod.capability.ExtendedPlayer;
@@ -125,6 +124,8 @@ import alec_wam.CrystalMod.tiles.pipes.item.filters.ItemPipeFilter.FilterType;
 import alec_wam.CrystalMod.tiles.pipes.liquid.ContainerLiquidPipe;
 import alec_wam.CrystalMod.tiles.pipes.liquid.GuiLiquidPipe;
 import alec_wam.CrystalMod.tiles.pipes.liquid.TileEntityPipeLiquid;
+import alec_wam.CrystalMod.tiles.soundmuffler.GuiSoundMuffler;
+import alec_wam.CrystalMod.tiles.soundmuffler.TileSoundMuffler;
 import alec_wam.CrystalMod.tiles.weather.ContainerWeather;
 import alec_wam.CrystalMod.tiles.weather.GuiWeather;
 import alec_wam.CrystalMod.tiles.weather.TileEntityWeather;
@@ -320,6 +321,7 @@ public class GuiHandler implements IGuiHandler {
         	if(te instanceof TileEntityEnderBuffer) return new GuiEnderBuffer(player, (TileEntityEnderBuffer)te);
         	if(te instanceof TileEntityMobGrinder) return new GuiMobGrinder(player, (TileEntityMobGrinder)te);
         	if(te instanceof TileEntityBattery) return new GuiBattery(player, (TileEntityBattery)te);
+        	if(te instanceof TileSoundMuffler) return new GuiSoundMuffler((TileSoundMuffler)te);
         } 
         return null;
     }
@@ -464,6 +466,7 @@ public class GuiHandler implements IGuiHandler {
         	if(te instanceof TileEntityEnderBuffer) return new ContainerEnderBuffer(player, (TileEntityEnderBuffer)te);
         	if(te instanceof TileEntityMobGrinder) return new ContainerNull();
         	if(te instanceof TileEntityBattery) return new ContainerBattery(player, (TileEntityBattery)te);
+        	if(te instanceof TileSoundMuffler) return new ContainerNull();
         }
         return null;
     }

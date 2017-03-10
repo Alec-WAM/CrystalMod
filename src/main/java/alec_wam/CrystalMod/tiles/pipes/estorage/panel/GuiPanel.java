@@ -375,7 +375,6 @@ public class GuiPanel extends GuiContainer implements IGuiScreen, INetworkGui  {
 						}
 						
 						int amount = dis.getMaxStackSize();
-						//TODO Figure out why Shifting leaves one item behind
 						if(mouseButton == 1){
 							//HALF (Right Click)
 							amount = dis.getMaxStackSize()/2;

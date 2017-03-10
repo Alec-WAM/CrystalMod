@@ -11,6 +11,7 @@ import alec_wam.CrystalMod.tiles.pipes.wireless.TileEntityPipeWrapper;
 import alec_wam.CrystalMod.tiles.portal.TileTelePortal;
 import alec_wam.CrystalMod.util.ChatUtil;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
+import alec_wam.CrystalMod.util.StringUtils;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -51,14 +52,14 @@ public class ItemMiscCard extends Item implements ICustomModel {
 			int z = ItemNBTHelper.getInteger(stack, "elevatorz", 0);
 			int dim = ItemNBTHelper.getInteger(stack, "elevatordim", 0);
 			String displayName = new ItemStack(ModBlocks.elevator).getDisplayName();
-			tooltip.add("Bound to "+displayName+" at "+x+" "+y+" "+z+" in dimension "+dim);
+			tooltip.add("Bound to "+displayName+" at "+x+" "+y+" "+z+" Dimension:"+StringUtils.getDimensionName(playerIn.getUniqueID(), dim));
 		}
 		if(type == CardType.TELEPORT_PORTAL && ItemNBTHelper.verifyExistance(stack, "portalx")){
 			int x = ItemNBTHelper.getInteger(stack, "portalx", 0);
 			int y = ItemNBTHelper.getInteger(stack, "portaly", -1);
 			int z = ItemNBTHelper.getInteger(stack, "portalz", 0);
 			int dim = ItemNBTHelper.getInteger(stack, "portaldim", 0);
-			tooltip.add("Bound to a Portal at "+x+" "+y+" "+z+" in dimension "+dim);
+			tooltip.add("Bound to a Portal at "+x+" "+y+" "+z+" Dimension:"+StringUtils.getDimensionName(playerIn.getUniqueID(), dim));
 		}
 		if(type == CardType.EPORTAL && ItemNBTHelper.verifyExistance(stack, BlockWirelessPipeWrapper.NBT_CON_X)){
 			int x = ItemNBTHelper.getInteger(stack, BlockWirelessPipeWrapper.NBT_CON_X, 0);
@@ -66,7 +67,7 @@ public class ItemMiscCard extends Item implements ICustomModel {
 			int z = ItemNBTHelper.getInteger(stack, BlockWirelessPipeWrapper.NBT_CON_Z, 0);
 			int dim = ItemNBTHelper.getInteger(stack, BlockWirelessPipeWrapper.NBT_CON_D, 0);
 			String displayName = new ItemStack(ModBlocks.wirelessPipe).getDisplayName();
-			tooltip.add("Bound to "+displayName+" at "+x+" "+y+" "+z+" in dimension "+dim);
+			tooltip.add("Bound to "+displayName+" at "+x+" "+y+" "+z+" Dimension:"+StringUtils.getDimensionName(playerIn.getUniqueID(), dim));
 		}
     }
 	

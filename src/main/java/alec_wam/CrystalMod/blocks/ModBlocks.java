@@ -125,8 +125,9 @@ import alec_wam.CrystalMod.tiles.portal.BlockTelePortal;
 import alec_wam.CrystalMod.tiles.portal.TileTelePortal;
 import alec_wam.CrystalMod.tiles.shieldrack.BlockShieldRack;
 import alec_wam.CrystalMod.tiles.shieldrack.ItemBlockShieldRack;
-import alec_wam.CrystalMod.tiles.shieldrack.RenderTileShieldRack;
 import alec_wam.CrystalMod.tiles.shieldrack.TileShieldRack;
+import alec_wam.CrystalMod.tiles.soundmuffler.BlockSoundMuffler;
+import alec_wam.CrystalMod.tiles.soundmuffler.TileSoundMuffler;
 import alec_wam.CrystalMod.tiles.spawner.BlockCustomSpawner;
 import alec_wam.CrystalMod.tiles.spawner.RenderTileEntityCustomSpawner;
 import alec_wam.CrystalMod.tiles.spawner.TileEntityCustomSpawner;
@@ -223,6 +224,7 @@ public class ModBlocks {
 	public static BlockBridge bridge;
 	public static BlockJar jar;
 	public static BlockShieldRack shieldRack;
+	public static BlockSoundMuffler muffler;
 	
 	public static BlockPedistal pedistal;
 	public static BlockFusionPedistal fusionPedistal;
@@ -489,6 +491,10 @@ public class ModBlocks {
 		shieldRack = new BlockShieldRack();
 		registerEnumBlock(shieldRack, new ItemBlockShieldRack(shieldRack), "shieldrack");
 		registerTileEntity(TileShieldRack.class);
+		
+		muffler = new BlockSoundMuffler();
+		registerBlock(muffler, "soundmuffler");
+		registerTileEntity(TileSoundMuffler.class);
 		
 		pedistal = new BlockPedistal();
 		registerBlock(pedistal, new ItemBlockPedistal(pedistal), "pedistal");

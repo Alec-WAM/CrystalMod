@@ -270,18 +270,6 @@ public class EventHandler {
     @SubscribeEvent
     public void entityUpdate(LivingUpdateEvent event){
     	if(event.getEntityLiving() !=null){
-    		if(EntityUtil.hasCustomData(event.getEntityLiving())){
-	    		/*if(EntityUtil.getCustomEntityData(event.getEntityLiving()).hasKey("NEEDSDATASYNC")){
-	    			ModLogger.info("Sending Custom NBT "+event.getEntityLiving());
-	    			EntityUtil.getCustomEntityData(event.getEntityLiving()).removeTag("NEEDSDATASYNC");
-	    			CrystalModNetwork.sendToAllAround(new PacketEntityMessage(event.getEntityLiving(), "CustomDataSync", EntityUtil.getCustomEntityData(event.getEntityLiving())), event.getEntityLiving());
-	    		}*/
-    			//TODO Figure out nbt loading
-    			if(!event.getEntityLiving().getEntityWorld().isRemote && EntityUtil.getCustomEntityData(event.getEntityLiving()).hasKey("NeedsDataSyncServer")){
-    				EntityUtil.getCustomEntityData(event.getEntityLiving()).removeTag("NeedsDataSyncServer");
-    				CrystalModNetwork.sendToAllAround(new PacketEntityMessage(event.getEntityLiving(), "CustomDataSyncWithResponse", EntityUtil.getCustomEntityData(event.getEntityLiving())), event.getEntityLiving());
-    	    	}
-    		}
     		if(event.getEntityLiving() instanceof EntityPlayer){
     			EntityPlayer player = (EntityPlayer)event.getEntityLiving();
     			updateWings(player);

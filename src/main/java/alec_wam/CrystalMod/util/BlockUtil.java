@@ -1,5 +1,10 @@
 package alec_wam.CrystalMod.util;
 
+import java.util.List;
+import java.util.Map;
+
+import com.google.common.collect.Lists;
+
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.client.container.ContainerMessageBase;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
@@ -18,8 +23,11 @@ import net.minecraft.network.play.server.SPacketBlockChange;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.event.ForgeEventFactory;
 
@@ -173,5 +181,46 @@ public class BlockUtil {
 					.getMinecraft().objectMouseOver.sideHit));
 		}
 	}
+
+	public static <T extends TileEntity> T searchBoxForTile(final World world, final AxisAlignedBB area, final Class<T> tileClazz) {
+		final int x0 = (int)Math.floor(area.minX) >> 4;
+        final int x2 = (int)Math.ceil(area.maxX) >> 4;
+        final int z0 = (int)Math.floor(area.minZ) >> 4;
+        final int z2 = (int)Math.ceil(area.maxZ) >> 4;
+        for (int x3 = x0; x3 <= x2; ++x3) {
+            for (int z3 = z0; z3 <= z2; ++z3) {
+                final Chunk chunk = world.getChunkFromChunkCoords(x3, z3);
+                for (final Map.Entry<BlockPos, TileEntity> entry : chunk.getTileEntityMap().entrySet()) {
+                    final BlockPos pos = entry.getKey();
+                    if (tileClazz == entry.getValue().getClass() && area.isVecInside(new Vec3d(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5))) {
+                    	return (T)entry.getValue();
+                    }
+                }
+            }
+        }
+		return null;
+	}
+	
+	public static <T extends TileEntity> List<T> searchBoxForTiles(final World world, final AxisAlignedBB area, final Class<T> tileClazz, List<T> list) {
+        final int x0 = (int)Math.floor(area.minX) >> 4;
+        final int x2 = (int)Math.ceil(area.maxX) >> 4;
+        final int z0 = (int)Math.floor(area.minZ) >> 4;
+        final int z2 = (int)Math.ceil(area.maxZ) >> 4;
+        if (list == null) {
+            list = (List<T>)Lists.<T>newArrayList();
+        }
+        for (int x3 = x0; x3 <= x2; ++x3) {
+            for (int z3 = z0; z3 <= z2; ++z3) {
+                final Chunk chunk = world.getChunkFromChunkCoords(x3, z3);
+                for (final Map.Entry<BlockPos, TileEntity> entry : chunk.getTileEntityMap().entrySet()) {
+                    final BlockPos pos = entry.getKey();
+                    if (tileClazz == entry.getValue().getClass() && area.isVecInside(new Vec3d(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5))) {
+                        list.add((T)entry.getValue());
+                    }
+                }
+            }
+        }
+        return list;
+    }
 	
 }

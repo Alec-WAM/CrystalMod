@@ -253,7 +253,6 @@ public class ModItems {
 		}
 	}
 	
-	//TODO Add Forced Lowercase Registry name
 	public static <T extends Item> T registerItem(T item, String name){
 		String finalName = name;
 		String lowerCase = name.toLowerCase();

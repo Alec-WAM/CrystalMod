@@ -20,19 +20,20 @@ import alec_wam.CrystalMod.capability.ExtendedPlayer;
 import alec_wam.CrystalMod.capability.ExtendedPlayerProvider;
 import alec_wam.CrystalMod.entities.accessories.GuiHorseEnderChest;
 import alec_wam.CrystalMod.entities.accessories.HorseAccessories;
+import alec_wam.CrystalMod.handler.ClientEventHandler.WrappedSound;
 import alec_wam.CrystalMod.items.tools.backpack.BackpackUtil;
 import alec_wam.CrystalMod.items.tools.backpack.network.PacketToolSwap;
 import alec_wam.CrystalMod.items.tools.grapple.GrappleControllerBase;
 import alec_wam.CrystalMod.items.tools.grapple.GrappleHandler;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.packets.PacketGuiMessage;
-import alec_wam.CrystalMod.proxy.ClientProxy;
+import alec_wam.CrystalMod.tiles.soundmuffler.TileSoundMuffler;
+import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ModLogger;
 import alec_wam.CrystalMod.util.ReflectionUtils;
 import alec_wam.CrystalMod.util.client.RenderUtil;
-import alec_wam.CrystalMod.util.tool.ToolUtil;
 import alec_wam.CrystalMod.world.game.tag.TagManager;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockChest;
@@ -42,6 +43,12 @@ import net.minecraft.block.BlockSkull;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.ISound;
+import net.minecraft.client.audio.ISound.AttenuationType;
+import net.minecraft.client.audio.ITickableSound;
+import net.minecraft.client.audio.Sound;
+import net.minecraft.client.audio.SoundEventAccessor;
+import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.GuiScreen;
@@ -72,6 +79,9 @@ import net.minecraft.inventory.ContainerHorseChest;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
@@ -83,14 +93,14 @@ import net.minecraftforge.client.event.MouseEvent;
 import net.minecraftforge.client.event.RenderHandEvent;
 import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
+import net.minecraftforge.client.event.sound.PlaySoundEvent;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
 public class ClientEventHandler {
-    
-	//Invisible Armor
+    //Invisible Armor
     @SubscribeEvent
     public void onRender(final RenderPlayerEvent.Pre event){
     	if(event.getEntityPlayer() ==null)return;
@@ -564,4 +574,96 @@ public class ClientEventHandler {
     	GlStateManager.popMatrix();
     	// postRenderDamagedBlocks END
     }
+    
+    @SubscribeEvent
+    public void playSound(PlaySoundEvent event){
+    	World world = CrystalMod.proxy.getClientWorld();
+    	if(world == null)return;
+    	ISound sound = event.getSound();
+    	if(sound instanceof ITickableSound)return;
+    	AxisAlignedBB bb = new AxisAlignedBB((double)sound.getXPosF(), (double)sound.getYPosF(), (double)sound.getZPosF(), (double)sound.getXPosF(), (double)sound.getYPosF(), (double)sound.getZPosF()).expand(16, 16, 16);
+    	List<TileSoundMuffler> mufflers = BlockUtil.searchBoxForTiles(world, bb, TileSoundMuffler.class, null);
+    	for(TileSoundMuffler muffler : mufflers){
+    		if(muffler.isSoundInList(sound.getSoundLocation())){
+    			if(muffler.getVolume() <= 0.0f){
+    				event.setResultSound(null);
+    			} else {
+    				event.setResultSound(new WrappedSound(event.getSound(), muffler.getVolume()));
+    			}
+    			break;
+    		}
+    	}
+    }
+    
+    public class WrappedSound implements ISound {
+
+    	public ISound sound;
+    	public float volume; 
+    	
+    	public WrappedSound(ISound sound, float volume){
+    		this.sound = sound;
+    		this.volume = volume;
+    	}
+    	
+		@Override
+		public ResourceLocation getSoundLocation() {
+			return sound.getSoundLocation();
+		}
+
+		@Override
+		public SoundEventAccessor createAccessor(SoundHandler handler) {
+			return sound.createAccessor(handler);
+		}
+
+		@Override
+		public Sound getSound() {
+			return sound.getSound();
+		}
+
+		@Override
+		public SoundCategory getCategory() {
+			return sound.getCategory();
+		}
+
+		@Override
+		public boolean canRepeat() {
+			return sound.canRepeat();
+		}
+
+		@Override
+		public int getRepeatDelay() {
+			return sound.getRepeatDelay();
+		}
+
+		@Override
+		public float getVolume() {
+			return volume;
+		}
+
+		@Override
+		public float getPitch() {
+			return sound.getPitch();
+		}
+
+		@Override
+		public float getXPosF() {
+			return sound.getXPosF();
+		}
+
+		@Override
+		public float getYPosF() {
+			return sound.getYPosF();
+		}
+
+		@Override
+		public float getZPosF() {
+			return sound.getZPosF();
+		}
+
+		@Override
+		public AttenuationType getAttenuationType() {
+			return sound.getAttenuationType();
+		}
+
+	}
 }

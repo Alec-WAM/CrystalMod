@@ -9,6 +9,7 @@ import alec_wam.CrystalMod.blocks.EnumBlock.IEnumMeta;
 import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.proxy.ClientProxy;
+import alec_wam.CrystalMod.tiles.TileEntityIOSides.IOType;
 import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemUtil;
@@ -95,7 +96,16 @@ public class BlockBattery extends BlockContainer implements ICustomModel {
 	@Override
 	public void getSubBlocks(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> list) {
 		for(BatteryType type : BatteryType.values()) {
-			list.add(new ItemStack(this, 1, type.getMeta()));
+			ItemStack stack = new ItemStack(this, 1, type.getMeta());
+			if(type == BatteryType.CREATIVE){
+				NBTTagCompound stackNBT = ItemNBTHelper.getCompound(stack);
+				NBTTagCompound batteryNBT = new NBTTagCompound();
+				for(EnumFacing face : EnumFacing.VALUES){
+					batteryNBT.setByte("io."+face.name().toLowerCase(), (byte)IOType.OUT.ordinal());
+				}
+				stackNBT.setTag("BatteryData", batteryNBT);
+			}
+			list.add(stack);
 		}
 	}
 	

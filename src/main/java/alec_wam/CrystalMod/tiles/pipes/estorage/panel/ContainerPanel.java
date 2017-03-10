@@ -27,6 +27,7 @@ import alec_wam.CrystalMod.tiles.pipes.estorage.PacketEStorageItemList;
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.CraftingPattern;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.crafting.ContainerPanelCrafting;
 import alec_wam.CrystalMod.util.ItemStackTools;
+import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.ModLogger;
 
 import com.google.common.collect.Lists;
@@ -231,17 +232,18 @@ public class ContainerPanel extends Container implements INetworkContainer {
 	}
 	
 	public void grabItemStackFromNetwork(EntityPlayerMP player, int slot, int amount, ItemStackData data) {
-		//TODO Check into crafting items being stack size of 0
 		if(panel.getNetwork() !=null && data !=null && ItemStackTools.isValid(data.stack)){
 			int invSlot = -1;
+			ItemStack grabStack = ItemStackTools.safeCopy(data.stack);
 			int realAmount = amount;
 			if(slot < 0){
 				realAmount = Math.min(amount, player.inventory.getInventoryStackLimit()-ItemStackTools.getStackSize(player.inventory.getItemStack()));
 			}else{
 				invSlot = slot;
-				realAmount = Math.min(amount, player.inventory.getInventoryStackLimit()-ItemStackTools.getStackSize(player.inventory.getStackInSlot(invSlot)));
+				ItemStack testStack = ItemUtil.copy(grabStack, amount);
+				ItemStack remainder = ItemHandlerHelper.insertItem(player.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.UP), testStack, true);
+				realAmount = ItemStackTools.getStackSize(testStack)-ItemStackTools.getStackSize(remainder);
 			}
-			ItemStack grabStack = ItemHandlerHelper.copyStackWithSize(data.stack, 1);
 			ItemStack removed = panel.getNetwork().getItemStorage().removeItem(grabStack, realAmount, ItemStorage.NORMAL, false);
 			if(ItemStackTools.isValid(removed)){
 				if(invSlot > -1){
