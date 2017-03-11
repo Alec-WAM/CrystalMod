@@ -40,6 +40,7 @@ import alec_wam.CrystalMod.items.tools.bat.RecipeBatUpgrade;
 import alec_wam.CrystalMod.tiles.cauldron.CauldronRecipeManager;
 import alec_wam.CrystalMod.tiles.chest.CrystalChestType;
 import alec_wam.CrystalMod.tiles.chest.wireless.WirelessChestHelper;
+import alec_wam.CrystalMod.tiles.chest.wooden.WoodenCrystalChestType;
 import alec_wam.CrystalMod.tiles.crate.BlockCrate.CrateType;
 import alec_wam.CrystalMod.tiles.fusion.ModFusionRecipes;
 import alec_wam.CrystalMod.tiles.machine.crafting.BlockCrystalMachine.MachineType;
@@ -464,6 +465,7 @@ public class ModCrafting {
 		//EnderIO before default enderpearl
 		String ender = getBestOreID("ingotPulsatingIron", "enderpearl");
 		CrystalChestType.registerBlocksAndRecipes(ModBlocks.crystalChest);
+		WoodenCrystalChestType.registerBlocksAndRecipes(ModBlocks.crystalWoodenChest);
 		for(int i = 0; i < 16; i++){
 			int code = WirelessChestHelper.getDefaultCode(EnumDyeColor.byMetadata(i));
 			ItemStack wChest = new ItemStack(ModBlocks.wirelessChest);
@@ -718,6 +720,11 @@ public class ModCrafting {
 			ItemStack cStack = new ItemStack(ModBlocks.crystalChest, 1, chest.ordinal());
 			oredict(cStack, "chest");
 			oredict(cStack, "chestCrystal");
+		}
+		
+		for(WoodenCrystalChestType chest : WoodenCrystalChestType.values()){
+			ItemStack cStack = new ItemStack(ModBlocks.crystalWoodenChest, 1, chest.ordinal());
+			oredict(cStack, "chest", "chestWood", "chestWoodCrystal");
 		}
 		
 		oredict(Items.PAPER, "paper");

@@ -358,6 +358,11 @@ tile.crystalmod.crystalchest.DARK.name=Dark Crystal Chest
 tile.crystalmod.crystalchest.PURE.name=Pure Crystal Chest
 tile.crystalmod.crystalchest.DARKIRON.name=Dark Iron Chest
 
+tile.crystalmod.woodencrystalchest.BLUE.name=Blue Wooden Crystal Chest
+tile.crystalmod.woodencrystalchest.RED.name=Red Wooden Crystal Chest
+tile.crystalmod.woodencrystalchest.GREEN.name=Green Wooden Crystal Chest
+tile.crystalmod.woodencrystalchest.DARK.name=Dark Wooden Crystal Chest
+
 tile.crystalmod.crate.blue.name=Blue Crystal Crate
 tile.crystalmod.crate.red.name=Red Crystal Crate
 tile.crystalmod.crate.green.name=Green Crystal Crate

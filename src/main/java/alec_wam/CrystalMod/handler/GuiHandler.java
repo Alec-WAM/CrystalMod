@@ -35,6 +35,9 @@ import alec_wam.CrystalMod.tiles.chest.TileEntityBlueCrystalChest;
 import alec_wam.CrystalMod.tiles.chest.wireless.ContainerWirelessChest;
 import alec_wam.CrystalMod.tiles.chest.wireless.GuiWirelessChest;
 import alec_wam.CrystalMod.tiles.chest.wireless.TileWirelessChest;
+import alec_wam.CrystalMod.tiles.chest.wooden.ContainerWoodenCrystalChest;
+import alec_wam.CrystalMod.tiles.chest.wooden.GUIWoodenChest;
+import alec_wam.CrystalMod.tiles.chest.wooden.TileWoodenCrystalChest;
 import alec_wam.CrystalMod.tiles.machine.ContainerNull;
 import alec_wam.CrystalMod.tiles.machine.TileEntityMachine;
 import alec_wam.CrystalMod.tiles.machine.advDispenser.ContainerAdvDispenser;
@@ -299,6 +302,10 @@ public class GuiHandler implements IGuiHandler {
         		TileEntityBlueCrystalChest icte = (TileEntityBlueCrystalChest) te;
             	return GUIChest.GUI.buildGUI(icte.getType(), player.inventory, icte);
             }
+            if(te instanceof TileWoodenCrystalChest){
+            	TileWoodenCrystalChest icte = (TileWoodenCrystalChest) te;
+            	return GUIWoodenChest.GUI.buildGUI(icte.getType(), player.inventory, icte);
+            }
             if(te instanceof TileWirelessChest) return new GuiWirelessChest(player.inventory, (TileWirelessChest)te);
             if(te instanceof TileEntityCrystalWorkbench)return new GuiCrystalWorkbench(player.inventory, world, (TileEntityCrystalWorkbench) te);
             if(te instanceof TileAdvDispenser)return new GuiAdvDispenser(player.inventory, (TileAdvDispenser) te);
@@ -439,6 +446,10 @@ public class GuiHandler implements IGuiHandler {
         	if(te instanceof TileEntityBlueCrystalChest){
         		TileEntityBlueCrystalChest icte = (TileEntityBlueCrystalChest) te;
         		return new ContainerCrystalChest(player.inventory, icte, icte.getType(), 0, 0);
+        	}
+        	if(te instanceof TileWoodenCrystalChest){
+        		TileWoodenCrystalChest icte = (TileWoodenCrystalChest) te;
+        		return new ContainerWoodenCrystalChest(player.inventory, icte, icte.getType(), 0, 0);
         	}
         	if(te instanceof TileWirelessChest) return new ContainerWirelessChest(player.inventory, (TileWirelessChest)te);
         	if(te instanceof TileEntityCrystalWorkbench){

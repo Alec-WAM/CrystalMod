@@ -1,0 +1,38 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "crystalmod:chest",
+    "transform": "forge:default-block"
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{}],
+    "variant": {
+      "blue": { 
+		"textures":{
+			"particle": "crystalmod:blocks/planks_blue",
+			"texture": "crystalmod:model/chests/bluewoodenchest"
+		} 
+	  },
+	  "red": { 
+		"textures":{
+			"particle": "crystalmod:blocks/planks_red",
+			"texture": "crystalmod:model/chests/redwoodenchest"
+		} 
+	  },
+	  "green": { 
+		"textures":{
+			"particle": "crystalmod:blocks/planks_green",
+			"texture": "crystalmod:model/chests/greenwoodenchest"
+		} 
+	  },
+	  "dark": { 
+		"textures":{
+			"particle": "crystalmod:blocks/planks_dark",
+			"texture": "crystalmod:model/chests/darkwoodenchest"
+		} 
+	  },
+	  "wood": {}
+    }
+  }
+}

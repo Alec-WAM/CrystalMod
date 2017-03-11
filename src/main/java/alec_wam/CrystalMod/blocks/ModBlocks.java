@@ -29,6 +29,9 @@ import alec_wam.CrystalMod.tiles.chest.CrystalChestType;
 import alec_wam.CrystalMod.tiles.chest.ItemBlockCrystalChest;
 import alec_wam.CrystalMod.tiles.chest.wireless.BlockWirelessChest;
 import alec_wam.CrystalMod.tiles.chest.wireless.TileWirelessChest;
+import alec_wam.CrystalMod.tiles.chest.wooden.BlockWoodenCrystalChest;
+import alec_wam.CrystalMod.tiles.chest.wooden.ItemBlockWoodenCrystalChest;
+import alec_wam.CrystalMod.tiles.chest.wooden.WoodenCrystalChestType;
 import alec_wam.CrystalMod.tiles.cluster.BlockCrystalCluster;
 import alec_wam.CrystalMod.tiles.cluster.TileCrystalCluster;
 import alec_wam.CrystalMod.tiles.crate.BlockCrate;
@@ -170,6 +173,7 @@ public class ModBlocks {
 	public static BlockFlowerLilyPad flowerLilypad;
 	public static BlockCrystalWorkbench crystalWorkbench;
 	public static BlockCrystalChest crystalChest;
+	public static BlockWoodenCrystalChest crystalWoodenChest;
 	public static BlockWirelessChest wirelessChest;
 	public static BlockCrystalPlant crystalPlantBlue, crystalPlantRed, crystalPlantGreen, crystalPlantDark;
 	public static BlockCrystalTreePlant crystalTreePlantBlue, crystalTreePlantRed, crystalTreePlantGreen, crystalTreePlantDark;
@@ -266,6 +270,14 @@ public class ModBlocks {
 		registerBlock(crystalChest, new ItemBlockCrystalChest(crystalChest), "crystalchest");
 		
 		for (CrystalChestType typ : CrystalChestType.values())
+        {
+            GameRegistry.registerTileEntityWithAlternatives(typ.clazz, CrystalMod.MODID+"." + typ.name(), typ.name());
+        }
+		
+		crystalWoodenChest = new BlockWoodenCrystalChest();
+		registerBlock(crystalWoodenChest, new ItemBlockWoodenCrystalChest(crystalWoodenChest), "woodencrystalchest");
+		
+		for (WoodenCrystalChestType typ : WoodenCrystalChestType.values())
         {
             GameRegistry.registerTileEntityWithAlternatives(typ.clazz, CrystalMod.MODID+"." + typ.name(), typ.name());
         }
