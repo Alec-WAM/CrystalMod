@@ -36,8 +36,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.ICustomModel;
-import alec_wam.CrystalMod.tiles.chest.TileEntityBlueCrystalChest;
-import alec_wam.CrystalMod.tiles.chest.TileEntityBlueCrystalChestRenderer;
 import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.ItemUtil;
 
@@ -100,7 +98,7 @@ public class BlockWoodenCrystalChest extends BlockContainer implements ICustomMo
     {
         TileEntity te = world.getTileEntity(pos);
 
-        if (te == null || !(te instanceof TileEntityBlueCrystalChest))
+        if (te == null || !(te instanceof TileWoodenCrystalChest))
         {
             return true;
         }
@@ -194,9 +192,9 @@ public class BlockWoodenCrystalChest extends BlockContainer implements ICustomMo
             chestFacing = 4;
         }
         TileEntity te = world.getTileEntity(pos);
-        if (te != null && te instanceof TileEntityBlueCrystalChest)
+        if (te != null && te instanceof TileWoodenCrystalChest)
         {
-            TileEntityBlueCrystalChest teic = (TileEntityBlueCrystalChest) te;
+        	TileWoodenCrystalChest teic = (TileWoodenCrystalChest) te;
             teic.wasPlaced(entityliving, itemStack);
             teic.setFacing(chestFacing);
             BlockUtil.markBlockForUpdate(world, pos);
@@ -212,7 +210,7 @@ public class BlockWoodenCrystalChest extends BlockContainer implements ICustomMo
     @Override
     public void breakBlock(World world, BlockPos pos, IBlockState blockState)
     {
-        TileEntityBlueCrystalChest tileentitychest = (TileEntityBlueCrystalChest) world.getTileEntity(pos);
+        TileWoodenCrystalChest tileentitychest = (TileWoodenCrystalChest) world.getTileEntity(pos);
         if (tileentitychest != null)
         {
             tileentitychest.removeAdornments();
@@ -224,15 +222,6 @@ public class BlockWoodenCrystalChest extends BlockContainer implements ICustomMo
     @Override
     public float getExplosionResistance(World world, BlockPos pos, Entity exploder, Explosion explosion)
     {
-        TileEntity te = world.getTileEntity(pos);
-        if (te instanceof TileEntityBlueCrystalChest)
-        {
-            TileEntityBlueCrystalChest teic = (TileEntityBlueCrystalChest) te;
-            if (teic.getType().isExplosionResistant())
-            {
-                return 10000F;
-            }
-        }
         return super.getExplosionResistance(world, pos, exploder, explosion);
     }
 
@@ -271,9 +260,9 @@ public class BlockWoodenCrystalChest extends BlockContainer implements ICustomMo
         if (axis == EnumFacing.UP || axis == EnumFacing.DOWN)
         {
             TileEntity tileEntity = worldObj.getTileEntity(pos);
-            if (tileEntity instanceof TileEntityBlueCrystalChest)
+            if (tileEntity instanceof TileWoodenCrystalChest)
             {
-                TileEntityBlueCrystalChest icte = (TileEntityBlueCrystalChest) tileEntity;
+                TileWoodenCrystalChest icte = (TileWoodenCrystalChest) tileEntity;
                 icte.rotateAround();
             }
             return true;

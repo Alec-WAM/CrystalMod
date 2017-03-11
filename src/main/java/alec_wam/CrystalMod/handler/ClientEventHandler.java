@@ -580,7 +580,7 @@ public class ClientEventHandler {
     	World world = CrystalMod.proxy.getClientWorld();
     	if(world == null)return;
     	ISound sound = event.getSound();
-    	if(sound instanceof ITickableSound)return;
+    	//if(sound instanceof ITickableSound)return;
     	AxisAlignedBB bb = new AxisAlignedBB((double)sound.getXPosF(), (double)sound.getYPosF(), (double)sound.getZPosF(), (double)sound.getXPosF(), (double)sound.getYPosF(), (double)sound.getZPosF()).expand(16, 16, 16);
     	List<TileSoundMuffler> mufflers = BlockUtil.searchBoxForTiles(world, bb, TileSoundMuffler.class, null);
     	for(TileSoundMuffler muffler : mufflers){

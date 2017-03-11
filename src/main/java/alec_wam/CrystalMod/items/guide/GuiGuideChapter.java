@@ -172,16 +172,7 @@ public class GuiGuideChapter extends GuiGuideBase {
 		GuiComponentSprite.renderSprite(mc, (int)GuiComponentBook.iconPageRight.getWidth(), 0, offsetX, offsetY, mouseX, mouseY, GuiComponentBook.iconPageRight, GuiComponentBook.texture, 1f, 1f, 1f);
 		
 		int middle = xSize;
-		GuiScreen.drawRect(guiLeft+middle-2, guiTop, guiLeft+middle+2, guiTop+ySize, Color.RED.getRGB());
-		
-		//GuidePage first = this.currentPages[0];
-		/*if(first !=null){
-			GuideChapter chapter = first.getChapter();
-			if(chapter !=null){
-				String title = chapter.getLocalizedTitle();
-				this.fontRendererObj.drawString(title, guiLeft + 7, guiTop+7, 0);
-			}
-		}*/
+		//GuiScreen.drawRect(guiLeft+middle-2, guiTop, guiLeft+middle+2, guiTop+ySize, Color.RED.getRGB());
 		for(int i = 0; i < this.currentPages.length; i++){
 			GuidePage page = this.currentPages[i];
             if(page != null){

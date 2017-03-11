@@ -46,6 +46,7 @@ public class LayerExtendedPlayerInventory implements LayerRenderer<AbstractClien
     				res = TextureMap.LOCATION_MISSING_TEXTURE;
     			}
     			GlStateManager.pushMatrix();
+    			GlStateManager.color(1, 1, 1, 1);
     			playerRenderer.bindTexture(res);
     			this.backpackModel.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale, entity);
     			GlStateManager.pushMatrix();

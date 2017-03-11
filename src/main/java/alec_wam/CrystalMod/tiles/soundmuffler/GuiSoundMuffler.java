@@ -16,6 +16,9 @@ import alec_wam.CrystalMod.tiles.machine.ContainerNull;
 import alec_wam.CrystalMod.tiles.pipes.estorage.client.IGuiScreen;
 import alec_wam.CrystalMod.tiles.pipes.estorage.client.VScrollbar;
 import alec_wam.CrystalMod.util.client.Scrollbar;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.SoundHandler;
+import net.minecraft.client.audio.SoundRegistry;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
@@ -25,6 +28,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
+import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 
 public class GuiSoundMuffler extends GuiContainer implements IGuiScreen{
 
@@ -192,9 +196,17 @@ public class GuiSoundMuffler extends GuiContainer implements IGuiScreen{
 	public List<ResourceLocation> getSounds(String filter){
 		if(soundCache == null){
 			soundCache = Lists.newArrayList();
-			for(SoundEvent event : SoundEvent.REGISTRY){
-				if(event.getRegistryName().toString().toLowerCase().contains(filter)){
-					soundCache.add(event.getRegistryName());
+			
+			SoundRegistry reg = null;
+			try{
+				reg = ObfuscationReflectionHelper.getPrivateValue(SoundHandler.class, Minecraft.getMinecraft().getSoundHandler(), 4);
+			} catch(Exception e){}
+			
+			if(reg == null)return soundCache;
+			
+			for(ResourceLocation loc : reg.getKeys()){
+				if(loc.toString().toLowerCase().contains(filter)){
+					soundCache.add(loc);
 				}
 			}
 		}

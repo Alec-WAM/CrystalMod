@@ -18,6 +18,7 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Keyboard;
 
 import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.client.util.GuiButtonIcon;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.tiles.pipes.ConnectionMode;
 import alec_wam.CrystalMod.tiles.pipes.TileEntityPipe.RedstoneMode;
@@ -251,7 +252,15 @@ public class GuiItemPipe extends GuiContainer {
 					this.buttonList.add(new GuiButton(4, sx+90, y, 60, 12, this.pipe.isRoundRobinEnabled(dir) ? "Enabled" : "Disabled"));
 				}
 				RedstoneMode mode = pipe.redstoneSettings.containsKey(dir) ? pipe.redstoneSettings.get(dir) : RedstoneMode.ON;
-				this.buttonList.add(new GuiButton(6, sx+8+150, sy+5, 20, 8, mode.name()));
+				
+				
+				int[][] icons = new int[RedstoneMode.values().length][2];
+			    icons[RedstoneMode.NONE.ordinal()] = new int[]{0, 0};
+			    icons[RedstoneMode.IGNORE.ordinal()] = new int[]{0, 16};
+			    icons[RedstoneMode.OFF.ordinal()] = new int[]{0, 32};
+			    icons[RedstoneMode.ON.ordinal()] = new int[]{0, 48};
+				GuiButtonIcon redstoneButton = new GuiButtonIcon(6, sx+8+145, sy+5, 16, 16, icons[mode.ordinal()][0], icons[mode.ordinal()][1], new ResourceLocation("crystalmod:textures/gui/icons.png"), 0, 0);
+				this.buttonList.add(redstoneButton);
 			}
 			if(!filter)this.buttonList.add(new GuiButton(5, sx+8, sy+35, 12, 12, "F"));
 			if(filter)this.buttonList.add(new GuiButton(10, sx+8+130, sy+5, 12, 12, "X"));

@@ -41,6 +41,7 @@ import net.minecraftforge.items.IItemHandler;
 
 public class BlockPedistal extends BlockContainer implements ICustomModel {
 
+	//TODO Make custom hitboxes
 	public BlockPedistal() {
 		super(Material.ROCK);
 		this.setHardness(1f).setResistance(10F);

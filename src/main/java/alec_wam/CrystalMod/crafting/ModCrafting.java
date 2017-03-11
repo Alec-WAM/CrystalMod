@@ -328,7 +328,8 @@ public class ModCrafting {
 		ModCrafting.addNBTRecipe(new ItemStack(ModBlocks.crystalTank, 1, TankType.PURE.getMeta()), copyListTank, new Object[]{"###", "#T#", "###", '#', purePlate, 'T', new ItemStack(ModBlocks.crystalTank, 1, TankType.DARK.getMeta())});
 
 		addShapedOreRecipe(new ItemStack(ModBlocks.jar, 4), new Object[]{" S ", "P P", "PPP", 'S', "slabWood", 'P', "paneGlassColorless"});
-		
+		addShapedOreRecipe(new ItemStack(ModBlocks.bridge, 4), new Object[]{"S S", "WWW", 'W', "slabWood", 'S', "stick"});
+
 		for(BlockPlanks.EnumType woodType : BlockPlanks.EnumType.values()){
 			addShapedOreRecipe(new ItemStack(ModBlocks.shieldRack, 1, woodType.getMetadata()), new Object[]{"HSH", "SHS", " S ", 'S', new ItemStack(Blocks.WOODEN_SLAB, 1, woodType.getMetadata()), 'H', Blocks.TRIPWIRE_HOOK});
 		}
@@ -459,6 +460,7 @@ public class ModCrafting {
 		addShapedRecipe(new ItemStack(ModBlocks.crystalMachine, 1, MachineType.INFUSER.getMeta()), new Object[]{"ICI", "IFI", "IPI", 'I', dIronPlate, 'C', ModBlocks.cauldron, 'P', ItemUtil.copy(tier0CU, 1), 'F', machineFrame});
 
 		addShapedOreRecipe(new ItemStack(ModBlocks.advDispenser), new Object[]{"PPP", "PMP", "PDP", 'P', dIronPlate, 'M', "skull", 'D', Blocks.DISPENSER});
+		addShapedOreRecipe(new ItemStack(ModBlocks.muffler), new Object[]{"WWW", "NMN", "WWW", 'W', "wool", 'M', machineFrame, 'N', Blocks.NOTEBLOCK});
 
 		addShapedRecipe(new ItemStack(ModBlocks.converter, 1, ConverterType.CU.getMeta()), new Object[]{"III", "RFC", "III", 'I', dIronPlate, 'C', ItemUtil.copy(tier0CU, 1), 'R', ItemUtil.copy(tier0RF, 1), 'F', machineFrame});
 		addShapedRecipe(new ItemStack(ModBlocks.converter, 1, ConverterType.RF.getMeta()), new Object[]{"III", "CFR", "III", 'I', dIronPlate, 'C', ItemUtil.copy(tier0CU, 1), 'R', ItemUtil.copy(tier0RF, 1), 'F', machineFrame});
@@ -707,7 +709,7 @@ public class ModCrafting {
 	public static void initOreDic(){
 		oredict(Blocks.CRAFTING_TABLE, "workbench");
 
-		oredict(new ItemStack(Blocks.WOOL, 1, OreDictionary.WILDCARD_VALUE));
+		oredict(new ItemStack(Blocks.WOOL, 1, OreDictionary.WILDCARD_VALUE), "wool");
 		
         for(int i = 0; i < 16; i++)
         {
