@@ -11,6 +11,7 @@ import alec_wam.CrystalMod.tiles.machine.crafting.grinder.TileEntityGrinder;
 import alec_wam.CrystalMod.tiles.machine.crafting.infuser.TileEntityCrystalInfuser;
 import alec_wam.CrystalMod.tiles.machine.crafting.liquidizer.TileEntityLiquidizer;
 import alec_wam.CrystalMod.tiles.machine.crafting.press.TileEntityPress;
+import alec_wam.CrystalMod.util.ItemUtil;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
@@ -19,6 +20,7 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -101,6 +103,17 @@ public class BlockCrystalMachine extends BlockMachine implements ICustomModel  {
 		}
 		return false;
 	}
+	
+	@Override
+    public void breakBlock(World world, BlockPos pos, IBlockState blockState)
+    {
+        TileEntity tile = world.getTileEntity(pos);
+        if (tile != null && tile instanceof IInventory)
+        {
+            ItemUtil.dropContent(0, (IInventory)tile, world, tile.getPos());
+        }
+        super.breakBlock(world, pos, blockState);
+    }
 
 	@Override
 	public int getLightValue(IBlockState state, IBlockAccess world, BlockPos pos)

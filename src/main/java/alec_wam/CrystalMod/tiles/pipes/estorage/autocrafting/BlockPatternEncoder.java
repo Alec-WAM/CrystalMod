@@ -2,25 +2,27 @@ package alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting;
 
 import java.util.Locale;
 
+import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.blocks.EnumBlock;
+import alec_wam.CrystalMod.blocks.ICustomModel;
+import alec_wam.CrystalMod.util.ItemUtil;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import alec_wam.CrystalMod.CrystalMod;
-import alec_wam.CrystalMod.blocks.EnumBlock;
-import alec_wam.CrystalMod.blocks.ICustomModel;
+import net.minecraftforge.items.IItemHandler;
 
 public class BlockPatternEncoder extends EnumBlock<BlockPatternEncoder.EncoderType> implements ICustomModel  {
 
@@ -80,5 +82,20 @@ public class BlockPatternEncoder extends EnumBlock<BlockPatternEncoder.EncoderTy
 		}
 		return new TilePatternEncoder();
 	}
+	
+	@Override
+    public void breakBlock(World world, BlockPos pos, IBlockState blockState)
+    {
+        TileEntity tile = world.getTileEntity(pos);
+        if (tile != null && tile instanceof IInventory)
+        {
+            ItemUtil.dropContent(0, (IInventory)tile, world, tile.getPos());
+        }
+        IItemHandler handler = ItemUtil.getExternalItemHandler(world, pos, EnumFacing.UP);
+        if(handler !=null){
+        	ItemUtil.dropContent(0, handler, world, pos);
+        }
+        super.breakBlock(world, pos, blockState);
+    }
 
 }

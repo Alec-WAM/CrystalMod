@@ -3,6 +3,7 @@ package alec_wam.CrystalMod.tiles.pipes.estorage.security;
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.api.estorage.security.NetworkAbility;
 import alec_wam.CrystalMod.handler.GuiHandler;
+import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.UUIDUtils;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -12,6 +13,7 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
@@ -22,6 +24,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.items.IItemHandler;
 
 public class BlockSecurityController extends BlockContainer {
 
@@ -56,6 +59,21 @@ public class BlockSecurityController extends BlockContainer {
 		}
 		return false;
 	}
+	
+	@Override
+    public void breakBlock(World world, BlockPos pos, IBlockState blockState)
+    {
+        TileEntity tile = world.getTileEntity(pos);
+        if (tile != null && tile instanceof IInventory)
+        {
+            ItemUtil.dropContent(0, (IInventory)tile, world, tile.getPos());
+        }
+        IItemHandler handler = ItemUtil.getExternalItemHandler(world, pos, EnumFacing.UP);
+        if(handler !=null){
+        	ItemUtil.dropContent(0, handler, world, pos);
+        }
+        super.breakBlock(world, pos, blockState);
+    }
 	
 	@Override
 	public TileEntity createNewTileEntity(World worldIn, int meta) {
