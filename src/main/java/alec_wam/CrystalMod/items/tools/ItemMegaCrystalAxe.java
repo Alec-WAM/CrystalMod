@@ -39,7 +39,7 @@ public class ItemMegaCrystalAxe extends ItemCrystalAxe implements IMegaTool {
 	@Override
 	public boolean onBlockStartBreak(ItemStack itemstack, BlockPos pos, EntityPlayer player) {
 		Block block = player.getEntityWorld().getBlockState(pos).getBlock();
-		if(TreeHarvestUtil.isFullTree(player.getEntityWorld(), pos, new BaseHarvestTarget(block))){
+		if(TreeHarvestUtil.isFullTree(player.getEntityWorld(), pos, new BaseHarvestTarget(block)).isValid()){
 			//if(!player.getEntityWorld().isRemote){
 			TreeHarvestUtil harvester = new TreeHarvestUtil();
 			HarvestResult res = new HarvestResult();

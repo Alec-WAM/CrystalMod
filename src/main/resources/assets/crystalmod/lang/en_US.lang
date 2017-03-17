@@ -463,7 +463,7 @@ tile.crystalmod.crystalmachine.press.name=Metal Press
 tile.crystalmod.crystalmachine.liquidizer.name=Liquidizer
 tile.crystalmod.crystalmachine.grinder.name=Grinder
 tile.crystalmod.crystalmachine.infuser.name=Liquid Infuser
-tile.crystalmod.sapextractor.infuser.name=Sap Extractor
+tile.crystalmod.sapextractor.name=Sap Extractor
 
 tile.crystalmod.worksite.tree_farm.name=Minion Tree Farm
 tile.crystalmod.worksite.animal_farm.name=Minion Animal Farm

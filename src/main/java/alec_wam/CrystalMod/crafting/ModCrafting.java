@@ -218,10 +218,10 @@ public class ModCrafting {
 		create9x9Recipe(new ItemStack(ModBlocks.crystalIngot, 1, CrystalIngotBlockType.PURE.getMeta()), pureIngot, 9);
 		create9x9Recipe(new ItemStack(ModBlocks.crystalIngot, 1, CrystalIngotBlockType.DARKIRON.getMeta()), dIronIngot, 9);
 		
-		create9x9Recipe(new ItemStack(ModItems.crystals, 1, CrystalType.BLUE_SHARD.getMetadata()), new ItemStack(ModItems.crystalSap, 1, SapType.BLUE.getMetadata()), 9);
-		create9x9Recipe(new ItemStack(ModItems.crystals, 1, CrystalType.RED_SHARD.getMetadata()), new ItemStack(ModItems.crystalSap, 1, SapType.RED.getMetadata()), 9);
-		create9x9Recipe(new ItemStack(ModItems.crystals, 1, CrystalType.GREEN_SHARD.getMetadata()), new ItemStack(ModItems.crystalSap, 1, SapType.GREEN.getMetadata()), 9);
-		create9x9Recipe(new ItemStack(ModItems.crystals, 1, CrystalType.DARK_SHARD.getMetadata()), new ItemStack(ModItems.crystalSap, 1, SapType.DARK.getMetadata()), 9);
+		addShapedRecipe(new ItemStack(ModItems.crystals, 1, CrystalType.BLUE_SHARD.getMetadata()), new Object[] {"##", "##", '#', new ItemStack(ModItems.crystalSap, 1, SapType.BLUE.getMetadata())});
+		addShapedRecipe(new ItemStack(ModItems.crystals, 1, CrystalType.RED_SHARD.getMetadata()), new Object[] {"##", "##", '#', new ItemStack(ModItems.crystalSap, 1, SapType.RED.getMetadata())});
+		addShapedRecipe(new ItemStack(ModItems.crystals, 1, CrystalType.GREEN_SHARD.getMetadata()), new Object[] {"##", "##", '#', new ItemStack(ModItems.crystalSap, 1, SapType.GREEN.getMetadata())});
+		addShapedRecipe(new ItemStack(ModItems.crystals, 1, CrystalType.DARK_SHARD.getMetadata()), new Object[] {"##", "##", '#', new ItemStack(ModItems.crystalSap, 1, SapType.DARK.getMetadata())});
 		
 		
 		//Removed in favor of Fusion

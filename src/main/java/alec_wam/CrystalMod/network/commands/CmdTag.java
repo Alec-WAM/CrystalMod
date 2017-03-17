@@ -12,6 +12,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
@@ -25,6 +26,7 @@ import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.packets.PacketExtendedPlayer;
 import alec_wam.CrystalMod.tiles.spawner.ItemMobEssence;
 import alec_wam.CrystalMod.util.ChatUtil;
+import alec_wam.CrystalMod.util.EntityUtil;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ModLogger;
@@ -35,6 +37,7 @@ import alec_wam.CrystalMod.util.UUIDUtils;
 import alec_wam.CrystalMod.world.CrystalModWorldGenerator;
 import alec_wam.CrystalMod.world.game.tag.TagManager;
 import alec_wam.CrystalMod.world.game.tag.TagManager.PlayerData;
+import alec_wam.CrystalMod.world.structures.CrystalWell;
 
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
@@ -100,6 +103,31 @@ public class CmdTag extends AbstractCMCommand{
 				
 				if(args.length > 1 && args[1].equalsIgnoreCase("jei")){
 					if(Loader.isModLoaded("jei"))Internal.getHelpers().reload();
+					return;
+				}
+				
+				if(args.length > 1 && args[1].equalsIgnoreCase("well")){
+					BlockPos pos = new BlockPos(player).offset(EnumFacing.DOWN);
+					int type = 0;
+					if(args.length > 2){
+						if(args[2].equalsIgnoreCase("blue")){
+							type = 0;
+						}
+						else if(args[2].equalsIgnoreCase("red")){
+							type = 1;
+						}
+						else if(args[2].equalsIgnoreCase("green")){
+							type = 2;
+						}
+						else if(args[2].equalsIgnoreCase("dark")){
+							type = 3;
+						} else{
+							sender.sendMessage(new TextComponentString(args[2]+" is not a valid well type. Try [blue, red, green, or dark]"));
+							return;
+						}
+					}
+					
+					CrystalWell.generateOverworldWell(player.getEntityWorld(), pos, EntityUtil.rand, type);
 					return;
 				}
 				

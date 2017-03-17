@@ -21,15 +21,25 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 
 public class TileSapExtractor extends TileEntityMachine {
 
 	private boolean validTree;
 	private int leafCount;
 	private WoodType treeType;
-	
+	private boolean hasInitialized;
 	public TileSapExtractor() {
 		super("SapExtractor", 1);
+	}
+	
+	@Override
+	public void update(){
+		super.update();
+		if(!hasInitialized){
+			updateTreeInfo();
+			hasInitialized = true;
+		}
 	}
 	
 	public void updateTreeInfo(){
@@ -138,10 +148,14 @@ public class TileSapExtractor extends TileEntityMachine {
 			sap.setItemDamage(SapType.DARK.getMetadata());
 		}
 		
-		if(ItemStackTools.isEmpty(getStackInSlot(0))){
-			this.setInventorySlotContents(0, sap);
-		} else {
-			ItemStackTools.incStackSize(getStackInSlot(0), 1);
+		int chance = MathHelper.getInt(getWorld().rand, 20, 40);
+		
+		if(getWorld().rand.nextInt(100) <= chance){
+			if(ItemStackTools.isEmpty(getStackInSlot(0))){
+				this.setInventorySlotContents(0, sap);
+			} else {
+				ItemStackTools.incStackSize(getStackInSlot(0), 1);
+			}
 		}
 	}
 
