@@ -86,6 +86,7 @@ public class ModItems {
 	public static ItemToolParts toolParts;
 	public static ItemMachineFrame machineFrame;
 	public static ItemCursedBone cursedBone;
+	public static ItemCrystalSap crystalSap;
 	
 	public static ToolMaterial ToolMaterialCrystal = EnumHelper.addToolMaterial(CrystalMod.MODID.toLowerCase()+".crystal", 5, 2000, 20.0F, 6.0F, 22);
 	public static ToolMaterial ToolMaterialDarkIron = EnumHelper.addToolMaterial(CrystalMod.MODID.toLowerCase()+".darkIron", 2, 500/*250*/, 7.0F/*6.0F*/, 2.5F/*2.0F*/, 12/*14*/);
@@ -168,7 +169,8 @@ public class ModItems {
 		toolParts = new ItemToolParts();
 		machineFrame = new ItemMachineFrame();
 		cursedBone = new ItemCursedBone();
-		
+		crystalSap = new ItemCrystalSap();
+
 		crystalAxe = new ItemCrystalAxe(ToolMaterialCrystal);
 		megaCrystalAxe = new ItemMegaCrystalAxe(ToolMaterialCrystal);
 		crystalHoe = new ItemCrystalHoe(ToolMaterialCrystal);

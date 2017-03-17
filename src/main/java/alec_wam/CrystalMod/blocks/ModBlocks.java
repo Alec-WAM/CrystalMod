@@ -79,6 +79,8 @@ import alec_wam.CrystalMod.tiles.machine.power.converter.TileEnergyConverterRFto
 import alec_wam.CrystalMod.tiles.machine.power.engine.BlockEngine;
 import alec_wam.CrystalMod.tiles.machine.power.engine.BlockEngine.EngineType;
 import alec_wam.CrystalMod.tiles.machine.power.engine.ItemBlockEngine;
+import alec_wam.CrystalMod.tiles.machine.sap.BlockSapExtractor;
+import alec_wam.CrystalMod.tiles.machine.sap.TileSapExtractor;
 import alec_wam.CrystalMod.tiles.machine.worksite.BlockWorksite;
 import alec_wam.CrystalMod.tiles.machine.worksite.BlockWorksite.WorksiteType;
 import alec_wam.CrystalMod.tiles.machine.worksite.ItemBlockWorksite;
@@ -218,6 +220,7 @@ public class ModBlocks {
 	public static BlockElevatorCaller elevatorCaller;
 	public static BlockInventoryCharger invCharger;
 	public static BlockCrystalMachine crystalMachine;
+	public static BlockSapExtractor sapExtractor;
 	public static BlockEnderBuffer enderBuffer;
 	public static BlockWorksite worksite;
 	
@@ -271,7 +274,7 @@ public class ModBlocks {
 		
 		for (CrystalChestType typ : CrystalChestType.values())
         {
-            GameRegistry.registerTileEntityWithAlternatives(typ.clazz, CrystalMod.MODID+"." + typ.name(), typ.name());
+            GameRegistry.registerTileEntity(typ.clazz, CrystalMod.MODID+"." + typ.name());
         }
 		
 		crystalWoodenChest = new BlockWoodenCrystalChest();
@@ -279,7 +282,7 @@ public class ModBlocks {
 		
 		for (WoodenCrystalChestType typ : WoodenCrystalChestType.values())
         {
-            GameRegistry.registerTileEntityWithAlternatives(typ.clazz, CrystalMod.MODID+"." + typ.name(), typ.name());
+            GameRegistry.registerTileEntity(typ.clazz, CrystalMod.MODID+"." + typ.name());
         }
 		
 		wirelessChest = new BlockWirelessChest();
@@ -453,6 +456,10 @@ public class ModBlocks {
 		for(MachineType type : MachineType.values()){
 			registerTileEntity(type.clazz);
 		}
+		
+		sapExtractor = new BlockSapExtractor();
+		registerBlock(sapExtractor, "sapextractor");
+		registerTileEntity(TileSapExtractor.class);
 		
 		enderBuffer = new BlockEnderBuffer();
 		registerBlock(enderBuffer, "enderbuffer");

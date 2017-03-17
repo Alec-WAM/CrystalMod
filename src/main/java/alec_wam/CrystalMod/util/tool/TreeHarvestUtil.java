@@ -24,8 +24,26 @@ public class TreeHarvestUtil {
   public TreeHarvestUtil() {
   }
   
+  public static class TreeData {
+	  private int leaves;
+	  private boolean isValid;
+	  
+	  public TreeData(int leaves, boolean valid){
+		  this.leaves = leaves;
+		  this.isValid = valid;
+	  }
+
+	public int getLeaves() {
+		return leaves;
+	}
+
+	public boolean isValid() {
+		return isValid;
+	}
+  }
+  
   //TinkersConstruct LumberAxe
-  public static boolean isFullTree(World world, BlockPos origin, BaseHarvestTarget harvest) {
+  public static TreeData isFullTree(World world, BlockPos origin, BaseHarvestTarget harvest) {
 	  BlockPos pos = null;
 	  Stack<BlockPos> candidates = new Stack<BlockPos>();
 	  candidates.add(origin);
@@ -45,7 +63,7 @@ public class TreeHarvestUtil {
 	  }
 
 	  if(pos == null) {
-		  return false;
+		  return new TreeData(0, false);
 	  }
 
 	  int d = 3;
@@ -58,13 +76,13 @@ public class TreeHarvestUtil {
 				  IBlockState state = world.getBlockState(leaf);
 				  if(isLeaves(state, world, leaf)) {
 					  if(++leaves >= 5) {
-						  return true;
+						  return new TreeData(leaves, true);
 					  }
 				  }
 			  }
 		  }
 	  }
-	  return false;
+	  return new TreeData(0, false);
   }
 
   public void harvest(World world, BlockPos loc, int size, boolean ignoreMeta, BlockPos bc, HarvestResult res) {

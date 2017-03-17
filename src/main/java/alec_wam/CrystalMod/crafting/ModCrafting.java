@@ -27,6 +27,7 @@ import alec_wam.CrystalMod.entities.minions.ItemMinion;
 import alec_wam.CrystalMod.entities.minions.MinionType;
 import alec_wam.CrystalMod.integration.baubles.BaublesIntegration;
 import alec_wam.CrystalMod.items.ItemCrystal.CrystalType;
+import alec_wam.CrystalMod.items.ItemCrystalSap.SapType;
 import alec_wam.CrystalMod.items.ItemCursedBone.BoneType;
 import alec_wam.CrystalMod.items.ItemIngot.IngotType;
 import alec_wam.CrystalMod.items.ItemMachineFrame.FrameType;
@@ -216,6 +217,12 @@ public class ModCrafting {
 		create9x9Recipe(new ItemStack(ModBlocks.crystalIngot, 1, CrystalIngotBlockType.DARK.getMeta()), darkIngot, 9);
 		create9x9Recipe(new ItemStack(ModBlocks.crystalIngot, 1, CrystalIngotBlockType.PURE.getMeta()), pureIngot, 9);
 		create9x9Recipe(new ItemStack(ModBlocks.crystalIngot, 1, CrystalIngotBlockType.DARKIRON.getMeta()), dIronIngot, 9);
+		
+		create9x9Recipe(new ItemStack(ModItems.crystals, 1, CrystalType.BLUE_SHARD.getMetadata()), new ItemStack(ModItems.crystalSap, 1, SapType.BLUE.getMetadata()), 9);
+		create9x9Recipe(new ItemStack(ModItems.crystals, 1, CrystalType.RED_SHARD.getMetadata()), new ItemStack(ModItems.crystalSap, 1, SapType.RED.getMetadata()), 9);
+		create9x9Recipe(new ItemStack(ModItems.crystals, 1, CrystalType.GREEN_SHARD.getMetadata()), new ItemStack(ModItems.crystalSap, 1, SapType.GREEN.getMetadata()), 9);
+		create9x9Recipe(new ItemStack(ModItems.crystals, 1, CrystalType.DARK_SHARD.getMetadata()), new ItemStack(ModItems.crystalSap, 1, SapType.DARK.getMetadata()), 9);
+		
 		
 		//Removed in favor of Fusion
 		/*addShapedOreRecipe(new ItemStack(ModItems.crystals, 1, CrystalType.PURE_SHARD.getMetadata()), new Object[]{" B ", "RQG", " D ", 'Q', "gemQuartz", 
@@ -458,6 +465,7 @@ public class ModCrafting {
 		addShapedRecipe(new ItemStack(ModBlocks.crystalMachine, 1, MachineType.PRESS.getMeta()), new Object[]{"IPI", "I I", "ICI", 'I', dIronIngot, 'P', Blocks.PISTON, 'C', ItemUtil.copy(tier0CU, 1)});
 		addShapedRecipe(new ItemStack(ModBlocks.crystalMachine, 1, MachineType.LIQUIDIZER.getMeta()), new Object[]{"III", "PFB", "ICI", 'I', dIronPlate, 'P', Blocks.PISTON, 'B', Items.BUCKET, 'C', ItemUtil.copy(tier0CU, 1), 'F', machineFrame});
 		addShapedRecipe(new ItemStack(ModBlocks.crystalMachine, 1, MachineType.INFUSER.getMeta()), new Object[]{"ICI", "IFI", "IPI", 'I', dIronPlate, 'C', ModBlocks.cauldron, 'P', ItemUtil.copy(tier0CU, 1), 'F', machineFrame});
+		addShapedRecipe(new ItemStack(ModBlocks.sapExtractor), new Object[]{"#M#", "DFD", "#P#", 'D', dIronPlate, '#', purePlate, 'M', new ItemStack(ModBlocks.crystalMachine, 1, MachineType.LIQUIDIZER.getMeta()), 'P', ItemUtil.copy(fluidPipe, 1), 'F', machineFrame});
 
 		addShapedOreRecipe(new ItemStack(ModBlocks.advDispenser), new Object[]{"PPP", "PMP", "PDP", 'P', dIronPlate, 'M', "skull", 'D', Blocks.DISPENSER});
 		addShapedOreRecipe(new ItemStack(ModBlocks.muffler), new Object[]{"WWW", "NMN", "WWW", 'W', "wool", 'M', machineFrame, 'N', Blocks.NOTEBLOCK});
@@ -736,6 +744,9 @@ public class ModCrafting {
 		oredict(Items.STRING, "string");
 		oredict(Items.LEATHER, "leather");
 		oredict(Items.SLIME_BALL, "slimeball");
+		for(SapType type : SapType.values()){
+			oredict(new ItemStack(ModItems.crystalSap, 1, type.getMetadata()), "slimeball", "sap");
+		}
 		oredict(Items.BLAZE_ROD, "rodBlaze");
 		oredict(new ItemStack(Items.SKULL, 1, OreDictionary.WILDCARD_VALUE), "skull");
 

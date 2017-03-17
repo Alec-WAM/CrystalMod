@@ -262,6 +262,7 @@ public abstract class TileEntityMachine extends TileEntityInventory implements I
 	
 	@Override
 	public int[] getSlotsForFace(EnumFacing side) {
+		if(this.getSizeInventory() == 1)return new int[]{0};
 		if(side == EnumFacing.UP){
 			return new int[]{0};
 		}
@@ -270,6 +271,7 @@ public abstract class TileEntityMachine extends TileEntityInventory implements I
 	
 	@Override
 	public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
+		if(this.getSizeInventory() == 1)return true;
 		return direction !=EnumFacing.UP;
 	}
 	

@@ -39,7 +39,7 @@ public class TileEntityInventory extends TileEntityMod implements IInventory {
 	@Override
 	public ItemStack getStackInSlot(int slot) {
 		if(slot < 0 || slot >= inventory.size()) {
-			return null;
+			return ItemStackTools.getEmptyStack();
 		}
 
 		return inventory.get(slot);

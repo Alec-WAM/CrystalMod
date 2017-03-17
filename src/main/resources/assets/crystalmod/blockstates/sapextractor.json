@@ -1,0 +1,35 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "crystalmod:machine",
+    "textures": {
+	  "particle":"crystalmod:blocks/machine/sapextractor/sapextractor_bottom",
+	  "up":"crystalmod:blocks/machine/sapextractor/sapextractor_bottom",
+	  "down":"crystalmod:blocks/machine/sapextractor/sapextractor_bottom",
+	  "front":"crystalmod:blocks/machine/sapextractor/sapextractor_front_off",
+	  "side":"crystalmod:blocks/machine/sapextractor/side"
+    },
+    "transform": "forge:default-block"
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{}],
+    "facing": {
+      "north": {},
+      "south": {"y": 180},
+      "west": {"y": 270},
+      "east": {"y": 90},
+      "up": {"x": -90},
+      "down": {"x": 90}
+    },
+	"active": {
+		"false": {
+		},
+		"true": {
+			"textures": {
+				"front":"crystalmod:blocks/machine/sapextractor/sapextractor_front_on"
+			}
+		}
+	}
+  }
+}
