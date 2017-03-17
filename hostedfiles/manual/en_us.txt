@@ -1,0 +1,521 @@
+//Crystal Ore
+{[
+ [chapter]crystalore
+ [title]Crystal Ore
+ [page:0]
+ {
+  [text]The main way of obtaining Crystal in the CrystalMod. This ore is found in the Overworld, Nether, and End. 
+ }
+ [page:smelt]
+ {
+  [text]Smelt in a furnace to get the crystal of the same color.
+ }
+]}
+//Crystal Block
+{[
+ [chapter]crystalblock
+ [title]Crystal Blocks
+ [page:normal]
+ {
+  [title]Normal Crystal Blocks
+  [text]Used as both storage and decoration.  
+ }
+ [page:chiseled]
+ {
+  [title]Chiseled Crystal Blocks
+  [text]Exactly the same as chisled quartz.
+ }
+ [page:brick]
+ {
+  [title]Crystal Bricks
+  [text]Stone bricks infused with Crystal.
+ }
+]}
+//Crystal Ingot Block
+{[
+ [chapter]crystalingotblock
+ [title]Crystal Ingot Block
+ [page:main]
+ {
+  [text]Storage of Crystal Ingots.  
+ }
+]}
+//Crystal Glass
+{[
+ [chapter]crystalglass
+ [title]Crystal Glass
+ [page:main]
+ {
+  [title]Normal Glass
+  [text]Mostly clear glass with connected borders. Does not require silktouch to pickup.  
+ }
+ [page:pane]
+ {
+  [title]Glass Panes
+  [text]Same as its full block counterpart. Does not require silktouch to pickup.  
+ }
+]}
+//Crystal Workbench
+{[
+ [chapter]crystalworkbench
+ [title]Crystal Workbench
+ [page:main]
+ {
+  [text]The only way to craft Crystal Tools. Hold all of the items in its internal Inventory when you close the screen.  
+ }
+]}
+//Crystal Cauldron
+{[
+ [chapter]cauldron
+ [title]Crystal Cauldron
+ [page:main]
+ {
+  [text]The starting point for Crystal Mod. Just drop a Crystal Shard into the Cauldron and it will turn into 100mb of the same color Liquid Crystal. Then drop your ingredient in and it will use up some of the Liquid Crystal in exchange for the output.  
+ }
+]}
+//Pedestals
+{[
+ [chapter]pedestals
+ [title]Pedestals
+ [page:main]
+ {
+  [text]Pedestals are a new way to display items. The Fusion pedestal is used to craft special things in the CrystalMod. 
+ }
+ [page:setup]
+ {
+  [text]To use the Fusion Pedestal first place it down in an open area. Then place as many pedestals as you need within 8 blocks of the Fusion pedestals. Once you have placed all the ingredients in the basic pedestals around the central Fusion Pedestal just sneak right click the Fusion Pedestal with a Wrench to activate the crafting. The Fusion pedestal will make a wirring sound once it has begun crafting.
+ }
+]}
+//Crystal Chests
+{[
+ [chapter]crystalchest
+ [title]Crystal Chests
+ [page:main]
+ {
+  [text]Multi tier chests that are very similar to Iron Chests.   
+ }
+]}
+//Pipes
+{[
+ [chapter]pipes
+ [title]Pipes
+ [page:item]
+ {
+  [title]Item Pipes
+  [text]These pipes allow you to transport items to and from inventories. If you add a Filter to the pipe it will allow you to filter the items allowed. 
+ }
+ [page:fluid]
+ {
+  [title]Fluid Pipes
+  [text]These pipes allow you to transport fluid to and from tanks. If you add a Filter to the pipe it will allow you to filter the fluids allowed. 
+ }
+ [page:estorage]
+ {
+  [title]Electronic Network Pipes
+  [text]These pipes are the backbone to any EStorage Network. They allow you to connect all of your EStorage components together on one network. 
+ }
+ [page:powercu]
+ {
+  [title]CU Power Pipes
+  [text]These pipes allow you to transport CU to and from machines.
+ }
+ [page:powerrf]
+ {
+  [title]RF Power Pipes
+  [text]These pipes allow you to transport RF to and from machines.
+ }
+ [page:iomodes]
+ {
+  [title]IO Modes
+  [text]Almost all pipes have am interface. Inside that interface will be a button on the top to change the IO Mode. The IO modes are Insert, Extract, Both and Disabled. Extract will pull the resource into the pipe. Insert will push the resource out. Disabled doesn't connect and Both does both insert and extract.
+ }
+ [page:attachments]
+ {
+  [title]Pipe Attachments
+  [text]These attachments add more functionality to your pipes. The Import attachment allows you to import items and fluids into your EStorage network. Export pushes items and fluids out of your EStorage Network. The Sensor attachment allows you to keep track of items in your network. 
+ }
+]}
+//Crystal Reeds
+{[
+ [chapter]crystalreeds
+ [title]Crystal Reeds
+ [page:main]
+ {
+  [text]Generate around the world much like normal reeds. Used to make Crystal Shards.   
+ }
+]}
+//Flower Lillypad
+{[
+ [chapter]flowerlilypad
+ [title]Flower Lilypad
+ [page:main]
+ {
+  [text]Have you ever completly removed all of the lilypads from a swamp? Now you can grow more!   
+ }
+]}
+//Crystal Seeds
+{[
+ [chapter]crystalplant
+ [title]Crystal Plant
+ [page:main]
+ {
+  [text]Grows Crystal Shards much like nether-wart. Must be place on a Crystal Block.   
+ }
+]}
+//Crystal Trees
+{[
+ [chapter]crystaltrees
+ [title]Crystal Trees
+ [page:main]
+ {
+  [title]Saplings
+  [text]Just your average sapling. Grows an oak tree size Crystal Tree.   
+ }
+ [page:logs]
+ {
+  [title]Crystal Log
+  [text]A normal log. Used to craft Crystal Planks.  
+ }
+ [page:planks]
+ {
+  [title]Crystal Planks
+  [text]Can be used just like normal wood planks. 
+ }
+ [page:treeplant]
+ {
+  [title]Tree Plants
+  [text]Just like coco beans, but instead of Cocoa you grow Crystal Shards.<n>Must be planted on the same color Crystal Log.   
+ }
+]}
+//Crystal Tanks
+{[
+ [chapter]crystaltank
+ [title]Crystal Tank
+ [page:main]
+ {
+  [text]Great for storing fluids.    
+ }
+]}
+//Engines
+{[
+ [chapter]engines
+ [title]Engines
+ [page:furnace]
+ {
+  [title]Furnace Engine
+  [text]This engine allows you to generate CU with furnace fuel. For every burning tick it will generate 30CU/tick.    
+ }
+ [page:lava]
+ {
+  [title]Lava Engine
+  [text]This engine allows you to generate CU with lava. For every 50mb of lava you will get 30 CU/t for 50 ticks.     
+ }
+ [page:vampire]
+ {
+  [title]Vampire Engine
+  [text]This engine will attack entities within 2 blocks of the engine and turn it into CU. Normal mobs will return 15CU/tick for 4 seconds. Undead mobs generate twice as much.   
+ }
+ [page:tiers]
+ {
+  [text]All engines have multiple tiers. Each tiers has a multiple, which speeds up the operation of the engine by that multiplier.
+ }
+]}
+//Battery
+{[
+ [chapter]battery
+ [title]Battery
+ [page:main]
+ {
+  [text]This block stores CU in large amounts. To edit the IO modes just open the interface and click the tab on the right. If you hold shift it will show the relative direction instead of the UDNESW direction. Red means out, Blue means in and Grey is blocked.   
+ }
+]}
+//Weather Forecaster
+{[
+ [chapter]weatherforcaster
+ [title]Weather Forcaster
+ [page:main]
+ {
+  [text]Will tell you if it is raining or sunny.<n>Also tells you if it can snow in its current location.   
+ }
+]}
+//Advanced Mob Spawner
+{[
+ [chapter]spawner
+ [title]Advanced Mob Spawner
+ [page:main]
+ {
+  [text]When given a mob essence it will spawn that mob like a normal spawner.   
+ }
+ [page:upgrades]
+ {
+  [title]Upgrades
+  [text]Nether Star: No player needed to spawn.<n>Pure Crystal Block: Speed II<n>Pure Crystal Ingot Block: Speed III<n>Golden Apple: Ignore light level   
+ }
+]}
+//Mob Grinder
+{[
+ [chapter]mobgrinder
+ [title]Mob Grinder
+ [page:main]
+ {
+  [text]Automaticlly kills mobs in the 5x5 area. Vacuums up xp in the area and puts it in an internal tank.    
+ }
+]}
+//Elevator
+{[
+ [chapter]elevator
+ [title]Elevator
+ [page:elevator]
+ {
+  [title]Elevator
+  [text]Creates a elevator in a 3x3 area infront of the Elevator.  
+ }
+ [page:floor]
+ {
+  [title]Elevator Floor
+  [text]Marks a floor for the floor caller. Can be named.  
+ }
+ [page:caller]
+ {
+  [title]Elevator Caller
+  [text]Sends the elevator the the selected floor.  
+ }
+]}
+//EnderBuffer
+{[
+ [chapter]enderbuffer
+ [title]Ender Buffer
+ [page:main]
+ {
+  [text]Much like the old Tesseract from Thermal Expansion it sends CU, RF, items, and fluids wirelessly.<n>R-Click with a Lock to make the Ender Buffer Private.    
+ }
+]}
+//PlayerCube
+{[
+ [chapter]playercubeportal
+ [title]Player Cube
+ [page:main]
+ {
+  [text]Player Cubes are secure 14x14x14 cubes in a separate dimension. Every player is allowed 16 cubes (Configurable). If you place any blocks in your Player Cube it will show up on all your Portals linked to the cube.
+ }
+ [page:creation]
+ {
+  [text]Steps to create a Player Cube:<n> 1) Craft a Player Cube Portal and Player Cube Card.<n> 2) Rename the card in and anvil. This will be the name of the cube.<n> 3) Use the card on the portal and it will create a new cube for you if you have not created the maximum amount you are allowed.<n> 4) Right Click the portal and you will be teleported to your cube.<n>Just right click the core in the middle of the cube to return back to the Overworld.
+ }
+ [page:portalcrafting]
+ {
+  [title]Player Cube Portal
+  [text]This is your in and out of each of your Player Cubes. This block is also able to be locked with a Lock to prevent players from entering your cube through this portal. 
+ }
+ [page:cardcrafting]
+ {
+  [title]Player Cube Card
+  [text]Once renamed in an anvil it will allow you to create a new Player Cube with a Player Cube Portal. Keep this item after you create the cube if you want to link other Player Cube Portals to the same cube.
+ }
+]}
+//EnderTorch
+{[
+ [chapter]endertorch
+ [title]Ender Torch
+ [page:main]
+ {
+  [text]When placed down it will not allow players using an Ender Pearl or Enderman to teleport into or out of its range.
+ }
+]}
+//AdvDispenser
+{[
+ [chapter]advdispenser
+ [title]Advanced Dispenser
+ [page:main]
+ {
+  [text]Acts like a fake player. Does whatever you set it to do with the item in the upper left slot.
+ }
+ [page:modes]
+ {
+  [title]Modes
+  [text]Block: Normal Right or Left Click.<n>Place: Places a block if it is a block.<n>Use: Uses the item on facing block.<n>Activate: Right or Left clicks block once.<n>Use Air: Ignores facing block and activates item.<n>Entity: Left or Right clicks entity with item. 
+ }
+]}
+//EntityHopper
+{[
+ [chapter]entityhopper
+ [title]Entity Hopper
+ [page:main]
+ {
+  [text]Allows you to filter out different types of entities. Any Entity that matches the filter will be dropped through.
+ }
+ [page:types]
+ {
+  [title]Filters
+  [text]-Player: Only Players<n>-Undead: Zombies and Skeletons<n>-Arthropod: Spiders<n>-Monster: Hostile Mobs<n>-Animal: Only Animals<n>-Living: Anything that is alive<n>-Water: Squid and Guardian<n>-Baby<n>-Pet<n>-Slime<n>-Villager<n>-Item
+ }
+]}
+//Crates
+{[
+ [chapter]crate
+ [title]Crate
+ [page:main]
+ {
+  [text]Massive storage of a single item. Left click to drop one item. Shift Left click to drop a stack. Right click with an item to insert.
+ }
+]}
+//Jar
+{[
+ [chapter]jar
+ [title]Glass Jar
+ [page:main]
+ {
+  [text]Holds 3 full potions. When Right Clicked with an Item Frame it will add a label of the potion on that side. If you capture a Shulker Bullet it will act a lamp.
+ }
+]}
+//Shield Rack
+{[
+ [chapter]shieldrack
+ [title]Shield Rack
+ [page:main]
+ {
+  [text]Holds a shield and two melee weapons on either side.
+ }
+]}
+//ITEMS Begin
+//Crystal
+{[
+ [chapter]crystals
+ [title]Crystal
+ [page:shards]
+ {
+  [title]Crystal Shards
+  [text]The most common form of Crystals Grown in the World. 
+ }
+ [page:craftShard]
+ {
+  [title]Crafting
+  [text]Instead of paper Shards are crafted from 3 Crystal Reeds of the same color.
+ }
+ [page:nuggets]
+ {
+  [title]Crystal Nuggets
+  [text]Just your average nugget. Smelt a shard in a Furnace and you will get a nugget of the same color.
+ }
+ [page:smeltNugget]
+ {
+  [title]Smelting
+ }
+ [page:crystal]
+ {
+  [title]Crystals
+  [text]Main form of Crystals. Crafted with 9 shards of the same color.<n>When smelted in a Furnace you will get a Crystal Ingot of the same color.
+ }
+ [page:smeltCrystal]
+ {
+  [title]Smelting
+ }
+]}
+//Crystal Ingot
+{[
+ [chapter]crystalingots
+ [title]Crystal Ingots
+ [page:0]
+ {
+  [text]Used to craft many advanced things in Crystal Mod.
+ }
+ [page:smelt]
+ {
+  [title]Smelting
+ }
+]}
+//Crystal Plates
+{[
+ [chapter]metalplate
+ [title]Metal Plates
+ [page:main]
+ {
+  [text]Used to craft many advanced things in Crystal Mod.
+ }
+ [page:press]
+ {
+  [title]Press
+ }
+]}
+//Dark Iron Armor
+{[
+ [chapter]darkarmor
+ [title]Dark Iron Armor
+ [page:main]
+ {
+  [text]Slightly stronger than basic Iron Armor.
+ }
+]}
+//Dark Iron Tools
+{[
+ [chapter]darktools
+ [title]Dark Iron Tools
+ [page:main]
+ {
+  [text]Slightly stronger than basic Iron Tools.
+ }
+ [page:bow]
+ {
+  [title]Dark Iron Bow
+  [text]Fires arrows with more damage. When you have a Lead in your off-hand it will create a grappling hook. 
+ }
+]}
+//Normal Backpack
+{[
+ [chapter]backpacknormal
+ [title]Normal Backpack
+ [page:main]
+ {
+  [text]Useful for storing items if your inventory begins to fill up. Each tier of the backpack increases the amount of upgrades that are able to be equipped.<n>The Pure backpack is capablie of storing other backpacks inside of it.
+ }
+ [page:upgrades]
+ {
+  [title]Upgrades
+  [text]Hopper: Any pickedup Items will go into your backpack instead of your inventory.<n>Ender: Adds a Ender Chest tab to your backpack.<n>Restocking: Refills items in your hotbar with items in your backpack.<n>Void: WIP<n>Pockets: Adds a weapon and tool pocket to your backpack. Use the scroll wheel to take or insert your tool or weapon.<n>Bow: Allows normal bows to use arrows out of your backpack instead of your inventory.<n>Despawn: If added your backpack will never despawn.<n>Death: Allows the backpack to stay in your inventory on death.
+ }
+]}
+//Lock
+{[
+ [chapter]lock
+ [title]Lock
+ [page:main]
+ {
+  [text]Allows your to lock your backpack, Wireless Chest, or Ender Buffer.
+ }
+]}
+//TelePearl
+{[
+ [chapter]telepearl
+ [title]Teleporting Pearl
+ [page:main]
+ {
+  [text]When given a location, It will teleport you back to the location from any dimenison.
+ }
+]}
+//Super Torch
+{[
+ [chapter]supertorch
+ [title]Super Torch
+ [page:main]
+ {
+  [text]When given torches it will place them automaticlly for you. It can be refilled by just placing it in a Crafting Table with torches. 
+ }
+]}
+//Wings
+{[
+ [chapter]wings
+ [title]Dragon Wings
+ [page:main]
+ {
+  [text]Dropped from the EnderDragon. If you craft it with any chestplate it will attach wings to that armor piece and will allow you to fly just like creative. 
+ }
+]}
+//Mobessence
+{[
+ [chapter]mobessence
+ [title]Mob Essence
+ [page:main]
+ {
+  [text]When you hold a Mob Cage in your off-hand and kill a valid entity it will create a Mob Essence. Activate an Advanced Mob Spawner with a full essence to set its type.<n>Sneak and Use the item to place on of the killed entites back in the world. 
+ }
+]}
