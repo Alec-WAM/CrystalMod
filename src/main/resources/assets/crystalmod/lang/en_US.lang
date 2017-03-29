@@ -89,7 +89,7 @@ item.crystalmod.crystalaxe.dark.name=Dark Crystal Axe
 item.crystalmod.crystalaxe.pure.name=Pure Crystal Axe
 item.crystalmod.megacrystalaxe.blue.name=Mega Blue Crystal Axe
 item.crystalmod.megacrystalaxe.red.name=Mega Red Crystal Axe
-item.crystalmod.crystmegacrystalaxealaxe.green.name=Mega Green Crystal Axe
+item.crystalmod.megacrystalaxe.green.name=Mega Green Crystal Axe
 item.crystalmod.megacrystalaxe.dark.name=Mega Dark Crystal Axe
 item.crystalmod.megacrystalaxe.pure.name=Pure Crystal Axe
 item.crystalmod.crystalhoe.blue.name=Blue Crystal Hoe
@@ -510,7 +510,10 @@ tile.crystalmod.shieldrack.acacia.name=Acacia Shield Rack
 tile.crystalmod.shieldrack.darkoak.name=Dark Oak Shield Rack
 
 tile.crystalmod.soundmuffler.name=Sound Muffler
-
+tile.crystalmod.particlethrower.name=Particle Thrower
+tile.crystalmod.removerexplosion.redstone.name=Redstone Removing TNT
+tile.crystalmod.removerexplosion.water.name=Water Removing TNT
+tile.crystalmod.removerexplosion.xp.name=XP Removing TNT
 #--Fluids
 fluid.crystalmod.xpjuice=Liquid XP
 fluid.crystalmod.crystal.blue=Blue Liquid Crystal

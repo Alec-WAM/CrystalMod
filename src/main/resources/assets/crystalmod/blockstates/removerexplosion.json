@@ -1,0 +1,14 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "transform": "forge:default-block",
+        "model": "cube_column"
+    },
+    "variants": {
+		"type": {
+			"redstone": {"textures": {"end": "crystalmod:blocks/remover_redstone_top", "side": "crystalmod:blocks/remover_redstone_sides"}},
+			"water": {"textures": {"end": "crystalmod:blocks/remover_water_top", "side": "crystalmod:blocks/remover_water_sides"}},
+			"xp": {"textures": {"end": "crystalmod:blocks/remover_xp_top", "side": "crystalmod:blocks/remover_xp_sides"}}
+		}
+    }
+}

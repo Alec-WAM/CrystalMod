@@ -25,6 +25,8 @@ import alec_wam.CrystalMod.entities.minions.EntityMinionBase;
 import alec_wam.CrystalMod.entities.minions.RenderMinionBase;
 import alec_wam.CrystalMod.entities.minions.warrior.EntityMinionWarrior;
 import alec_wam.CrystalMod.entities.minions.worker.EntityMinionWorker;
+import alec_wam.CrystalMod.entities.misc.EntityCustomFallingBlock;
+import alec_wam.CrystalMod.entities.misc.RenderCustomFallingBlock;
 import alec_wam.CrystalMod.entities.mob.enderman.EntityCrystalEnderman;
 import alec_wam.CrystalMod.entities.mob.enderman.RenderCrystalEnderman;
 import alec_wam.CrystalMod.entities.mob.zombiePigmen.EntityCrystalPigZombie;
@@ -85,6 +87,8 @@ public class ModEntites {
 		addEntity(EntityWirelessChestMinecart.class, "minecart_wirelesschest", 64, 1, true);
 		addEntity(EntityEnderChestMinecart.class, "minecart_enderchest", 64, 1, true);
 		addEntity(EntityGrapplingHook.class, "grapplinghook", 900, 1, true);
+		
+		addEntity(EntityCustomFallingBlock.class, "customfallingblock", 160, 20, true);
 	}
 	
 	public static void postInit(){
@@ -111,6 +115,13 @@ public class ModEntites {
 			@Override
 			public Render<EntityGrapplingHook> createRenderFor(RenderManager manager) {
 				return new RenderEntityGrapplingHook<EntityGrapplingHook>(manager, Minecraft.getMinecraft().getRenderItem());
+			}
+		});
+        
+        RenderingRegistry.registerEntityRenderingHandler(EntityCustomFallingBlock.class, new IRenderFactory<EntityCustomFallingBlock>() {
+			@Override
+			public Render<EntityCustomFallingBlock> createRenderFor(RenderManager manager) {
+				return new RenderCustomFallingBlock(manager);
 			}
 		});
 	}

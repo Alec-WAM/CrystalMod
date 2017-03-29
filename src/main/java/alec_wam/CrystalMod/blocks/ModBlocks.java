@@ -41,6 +41,10 @@ import alec_wam.CrystalMod.tiles.endertorch.BlockEnderTorch;
 import alec_wam.CrystalMod.tiles.endertorch.TileEnderTorch;
 import alec_wam.CrystalMod.tiles.entityhopper.BlockEntityHopper;
 import alec_wam.CrystalMod.tiles.entityhopper.TileEntityEntityHopper;
+import alec_wam.CrystalMod.tiles.explosives.particle.BlockParticleThrower;
+import alec_wam.CrystalMod.tiles.explosives.particle.TileParticleThrower;
+import alec_wam.CrystalMod.tiles.explosives.remover.BlockRemoverExplosion;
+import alec_wam.CrystalMod.tiles.explosives.remover.TileRemoverExplosion;
 import alec_wam.CrystalMod.tiles.fusion.BlockFusionPedistal;
 import alec_wam.CrystalMod.tiles.fusion.BlockPedistal;
 import alec_wam.CrystalMod.tiles.fusion.ItemBlockPedistal;
@@ -232,6 +236,8 @@ public class ModBlocks {
 	public static BlockJar jar;
 	public static BlockShieldRack shieldRack;
 	public static BlockSoundMuffler muffler;
+	public static BlockParticleThrower particleThrower;
+	public static BlockRemoverExplosion remover;
 	
 	public static BlockPedistal pedistal;
 	public static BlockFusionPedistal fusionPedistal;
@@ -514,6 +520,14 @@ public class ModBlocks {
 		muffler = new BlockSoundMuffler();
 		registerBlock(muffler, "soundmuffler");
 		registerTileEntity(TileSoundMuffler.class);
+		
+		particleThrower = new BlockParticleThrower();
+		registerBlock(particleThrower, "particleThrower");
+		registerTileEntity(TileParticleThrower.class);
+		
+		remover = new BlockRemoverExplosion();
+		registerEnumBlock(remover, "removerexplosion");
+		registerTileEntity(TileRemoverExplosion.class);
 		
 		pedistal = new BlockPedistal();
 		registerBlock(pedistal, new ItemBlockPedistal(pedistal), "pedistal");

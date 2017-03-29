@@ -131,6 +131,18 @@ public class CmdTag extends AbstractCMCommand{
 					return;
 				}
 				
+				if(args.length > 1 && args[1].equalsIgnoreCase("endwell")){
+					BlockPos pos = new BlockPos(player).offset(EnumFacing.DOWN);
+					CrystalWell.generateEndWell(player.getEntityWorld(), pos, EntityUtil.rand);
+					return;
+				}
+				
+				if(args.length > 1 && args[1].equalsIgnoreCase("netherwell")){
+					BlockPos pos = new BlockPos(player).offset(EnumFacing.DOWN);
+					CrystalWell.generateNetherWell(player.getEntityWorld(), pos, EntityUtil.rand);
+					return;
+				}
+				
 				if(args.length > 1 && args[1].equalsIgnoreCase("temple")){
 					BlockPos pos = CrystalModWorldGenerator.fusionTempleGen.getClosestStrongholdPos(sender.getEntityWorld(), sender.getPosition(), false);
 					ChatUtil.sendChat(player, ""+(pos == null ? "null" : pos.toString()));

@@ -183,6 +183,17 @@ public class FluidUtil {
 	    return true;
 	}
 
+	public static boolean isFluidBlock(World world, BlockPos pos, IBlockState iblockstate) {
+		Block block = iblockstate.getBlock();
+		if(block instanceof IFluidBlock){
+			return true;
+		}
+		if(block instanceof BlockLiquid){
+			return true;
+		}
+		return false;
+	}
+	
 	public static boolean isFluidSource(World world, BlockPos pos, IBlockState iblockstate) {
 		Block block = iblockstate.getBlock();
 		if(block instanceof IFluidBlock){

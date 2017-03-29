@@ -3,6 +3,7 @@ package alec_wam.CrystalMod.util;
 import java.util.List;
 import java.util.Map;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
 import alec_wam.CrystalMod.CrystalMod;
@@ -25,6 +26,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
@@ -222,5 +224,23 @@ public class BlockUtil {
         }
         return list;
     }
+
+	public static ImmutableList<BlockPos> getBlocksInBB(BlockPos start, int width, int height, int depth) {
+		ImmutableList.Builder<BlockPos> builder = ImmutableList.builder();
+		int x = -width/2, y = -height/2, z = -depth/2;
+		for(int xp = x; xp <= width/2; xp++) {
+			for(int yp = y; yp <= height/2; yp++) {
+				for(int zp = z; zp <= depth/2; zp++) {
+					BlockPos pos = start.add(xp, yp, zp);
+					if(pos.getX() == start.getX() && pos.getY() == start.getY() && pos.getZ() == start.getZ()) {
+						continue;
+					}
+					builder.add(pos);
+				}
+			}
+		}
+
+		return builder.build();
+	}
 	
 }

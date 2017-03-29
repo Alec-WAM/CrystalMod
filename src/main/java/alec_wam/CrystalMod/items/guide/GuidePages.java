@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -63,12 +64,14 @@ import alec_wam.CrystalMod.tiles.shieldrack.BlockShieldRack.WoodType;
 import alec_wam.CrystalMod.tiles.spawner.ItemMobEssence;
 import alec_wam.CrystalMod.tiles.tank.BlockTank.TankType;
 import alec_wam.CrystalMod.tiles.workbench.BlockCrystalWorkbench.WorkbenchType;
+import alec_wam.CrystalMod.util.FileInfo;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.Lang;
 import alec_wam.CrystalMod.util.ModLogger;
 import alec_wam.CrystalMod.util.StringUtils;
+import alec_wam.CrystalMod.util.Util;
 import net.minecraft.block.Block;
 import net.minecraft.client.resources.IResource;
 import net.minecraft.entity.player.EntityPlayer;
@@ -80,6 +83,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fml.client.FMLClientHandler;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 
 public class GuidePages {
 
@@ -448,6 +452,19 @@ public class GuidePages {
 		try {
             IResource iresource = FMLClientHandler.instance().getClient().getResourceManager().getResource(CrystalMod.resourceL("text/guide/"+lang+".txt"));
             InputStream inputstream = iresource.getInputStream();
+            ModLogger.info("Attempting to connect to manual server....");
+            if(Util.isInternetAvailable()){
+            	try {
+	            	String branch = FileInfo.getValue("manual_branch_"+FMLClientHandler.instance().getClient().getVersion(), "master");
+	            	URL masterFile = new URL("https://raw.githubusercontent.com/Alec-WAM/CrystalMod/"+branch+"/hostedfiles/manual/"+lang+".txt");
+	            	inputstream = masterFile.openStream();
+	            	ModLogger.info("Online loading sucessful!");
+            	} catch(Exception e){
+            		e.printStackTrace();
+            	}
+            } else {
+            	ModLogger.info("Online loading failed! Falling back on the local guide file.");
+            }
             BufferedReader br = new BufferedReader(new InputStreamReader(inputstream, "UTF-8"));
             List<ManualChapter> chapters = new ArrayList<ManualChapter>();
             ManualChapter currentChapter = null;
@@ -517,6 +534,7 @@ public class GuidePages {
             for(ManualChapter chapter : chapters){
             	CHAPTERTEXT.put(chapter.id, chapter);
             }
+            inputstream.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {

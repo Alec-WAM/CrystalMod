@@ -308,7 +308,7 @@ public class ModCrops {
 			ModCrafting.addShapelessOreRecipe(ItemMaterialSeed.getSeed(DYE_CROPS.get(EnumDyeColor.BLUE.getDyeDamage())), new Object[]{Items.WHEAT_SEEDS, "dyeBlue"});
 			ModCrafting.addShapelessOreRecipe(ItemMaterialSeed.getSeed(DYE_CROPS.get(EnumDyeColor.GREEN.getDyeDamage())), new Object[]{Items.WHEAT_SEEDS, "dyeGreen"});
 			ModCrafting.addShapelessOreRecipe(ItemMaterialSeed.getSeed(DYE_CROPS.get(EnumDyeColor.RED.getDyeDamage())), new Object[]{Items.WHEAT_SEEDS, "dyeRed"});
-			ModCrafting.addShapelessOreRecipe(ItemMaterialSeed.getSeed(DYE_CROPS.get(EnumDyeColor.BLACK.getDyeDamage())), new Object[]{Items.WHEAT_SEEDS, "dyeBlack"});
+			ModCrafting.addShapelessOreRecipe(ItemMaterialSeed.getSeed(DYE_CROPS.get(EnumDyeColor.BLACK.getDyeDamage())), new Object[]{Items.WHEAT_SEEDS, new ItemStack(Items.DYE, 1, EnumDyeColor.BLACK.getDyeDamage())});
 			ModCrafting.addShapelessOreRecipe(ItemMaterialSeed.getSeed(STRING), new Object[]{Items.WHEAT_SEEDS, "woolWhite"});
 		}
 
