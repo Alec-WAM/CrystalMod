@@ -72,6 +72,10 @@ public class TileEntityGrinder extends TileEntityMachine implements ISidedInvent
         return firstOutputFits && soundOutputFits;
 	}
 	
+	public boolean canContinueRunning(){
+		return hasValidInput();
+	}
+	
 	public boolean canFinish() {
         return processRem <= 0 && this.hasValidInput();
     }

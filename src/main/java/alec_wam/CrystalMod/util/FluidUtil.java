@@ -46,20 +46,7 @@ public class FluidUtil {
 	
 	@Deprecated
 	private static IFluidHandler getLegacyHandler(ICapabilityProvider provider, EnumFacing side) {
-		//TODO Investigate
-	    /*if (provider instanceof ItemStack) {
-	      ItemStack stack = (ItemStack) provider;
-	      if (stack.getItem() instanceof IFluidContainerItem) {
-	        return new FluidContainerItemWrapper((IFluidContainerItem) stack.getItem(), stack);
-	      }
-	      if(FluidContainerRegistry.isContainer(stack)) {
-	        return new FluidContainerRegistryWrapper(stack);
-	      }
-	    }
-	    if (provider instanceof net.minecraftforge.fluids.IFluidHandler) {
-	      return new FluidHandlerWrapper((net.minecraftforge.fluids.IFluidHandler) provider, side);
-	    }*/
-	    return null;
+		return null;
 	}
 
 	public static IFluidHandler getFluidHandlerCapability(ItemStack stack) {

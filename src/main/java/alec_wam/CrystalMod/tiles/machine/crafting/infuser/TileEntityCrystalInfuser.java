@@ -79,6 +79,10 @@ public class TileEntityCrystalInfuser extends TileEntityMachine {
         return ItemStackTools.isValid(output) && (ItemStackTools.isEmpty(stack2) || (ItemUtil.canCombine(output, stack2) && ItemStackTools.getStackSize(stack2) + ItemStackTools.getStackSize(output) <= output.getMaxStackSize()));
     }
 	
+	public boolean canContinueRunning(){
+		return hasValidInput();
+	}
+	
 	public boolean canFinish() {
         return processRem <= 0 && this.hasValidInput();
     }

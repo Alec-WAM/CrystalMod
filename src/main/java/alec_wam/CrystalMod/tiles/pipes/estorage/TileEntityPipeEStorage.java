@@ -112,29 +112,6 @@ public class TileEntityPipeEStorage extends TileEntityPipe {
 
 	  public void update(){
 		  super.update();
-		  //TODO Re-add this if new algorithm doesn't work
-		  /*if(!getWorld().isRemote){
-			  if(getWorld().isBlockLoaded(getPos())){
-					AbstractPipeNetwork oNetwork = null;
-				    for(EnumFacing face : externalConnections){
-			    		TileEntity tile = getWorld().getTileEntity(getPos().offset(face));
-			    		if(tile !=null && tile instanceof IPipeWrapper){
-			    			IPipeWrapper wrapper = ((IPipeWrapper)tile);
-			    			if(!wrapper.isSender()){
-			    				if(wrapper.getPipe() !=null){
-			    					oNetwork = wrapper.getPipe().getNetwork();
-			    					break;
-			    				}
-			    			}
-			    		}
-				    }
-				    
-				    if(oNetwork !=null && oNetwork !=getNetwork()){
-				    	if(this.network !=null)network.destroyNetwork();
-				    	oNetwork.init(this, PipeUtil.getConnectedPipes(getWorld(), getPos(), getPipeType()), getWorld());
-				    }
-				}
-		  }*/
 	  }
 	  
 	  @Override
@@ -178,13 +155,6 @@ public class TileEntityPipeEStorage extends TileEntityPipe {
 		if(tile instanceof INetworkTile){
 			return ((INetworkTile)tile).getNetwork();
 		}
-		//TODO Investigate
-		/*if(tile instanceof IPipeWrapper){
-			if(((IPipeWrapper)tile).getPipe() !=null){
-				AbstractPipeNetwork network = ((IPipeWrapper)tile).getPipe().getNetwork();
-				return network !=null && network instanceof EStorageNetwork ? (EStorageNetwork)network : null;
-			}
-		}*/
 		return null;
 	}
 }

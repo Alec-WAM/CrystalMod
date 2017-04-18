@@ -198,7 +198,6 @@ public class CrystalModWorldGenerator implements IWorldGenerator {
     
     public boolean generateClusters(Random random, int chunkX, int chunkZ, World world, boolean newGen) {
     	if(newGen || Config.retrogenClusters){
-    		//TODO Edit values
     		boolean debug = false;
     		int spawnChance = debug ? 24 : Config.clusterSpawnChance;
     		if(random.nextInt(spawnChance) == 0){

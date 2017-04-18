@@ -69,6 +69,10 @@ public class TileEntityLiquidizer extends TileEntityMachine {
         return output != null && (tank.getFluid() == null || (tank.getFluid().isFluidEqual(output) && tank.getFluidAmount() + output.amount <= tank.getCapacity()));
     }
 	
+	public boolean canContinueRunning(){
+		return hasValidInput();
+	}
+	
 	public boolean canFinish() {
         return processRem <= 0 && hasValidInput();
     }

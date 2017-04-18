@@ -98,6 +98,14 @@ public abstract class TileEntityMachine extends TileEntityInventory implements I
 		
 		final boolean curActive = this.isActive;
         if (this.isActive) {
+        	
+        	if(!canContinueRunning()){
+        		this.isActive = false;
+                this.wasActive = true;
+                processRem = processMax = 0;
+                return;
+        	}
+        	
             if (this.processRem > 0) {
                 final int energy = calcEnergy();
                 this.eStorage.modifyEnergyStored(-energy);
@@ -108,6 +116,7 @@ public abstract class TileEntityMachine extends TileEntityInventory implements I
 	      	      	CrystalModNetwork.sendToAllAround(new PacketTileMessage(getPos(), "UpdateProgress", nbt), this);
                 }
             }
+            
             if (canFinish()) {
                 processFinish();
                 this.eStorage.modifyEnergyStored(-this.processRem);
@@ -156,6 +165,9 @@ public abstract class TileEntityMachine extends TileEntityInventory implements I
 	
 	public abstract boolean canStart();
 	public abstract void processStart();
+	
+	public abstract boolean canContinueRunning();
+	
 	
 	public abstract boolean canFinish();
 	public abstract void processFinish();
