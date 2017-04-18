@@ -468,7 +468,7 @@ public class ModCrafting {
 		addShapedRecipe(vampireEngineTier2, new Object[]{"EEE", "EPE", "EEE", 'E', vampireEngineTier1, 'P', ItemUtil.copy(tier3CU, 1)});
 		
 		addShapedRecipe(new ItemStack(ModBlocks.crystalMachine, 1, MachineType.FURNACE.getMeta()), new Object[]{"III", "IFI", "IPI", 'I', dIronPlate, 'F', Blocks.FURNACE, 'P', ItemUtil.copy(tier0CU, 1)});
-		addShapedRecipe(new ItemStack(ModBlocks.crystalMachine, 1, MachineType.PRESS.getMeta()), new Object[]{"IPI", "I I", "ICI", 'I', dIronIngot, 'P', Blocks.PISTON, 'C', machineFrame});
+		addShapedRecipe(new ItemStack(ModBlocks.crystalMachine, 1, MachineType.PRESS.getMeta()), new Object[]{"IPI", "ICI", "III", 'I', dIronIngot, 'P', Blocks.PISTON, 'C', Blocks.HEAVY_WEIGHTED_PRESSURE_PLATE});
 		addShapedRecipe(new ItemStack(ModBlocks.crystalMachine, 1, MachineType.LIQUIDIZER.getMeta()), new Object[]{"III", "PFB", "ICI", 'I', dIronPlate, 'P', Blocks.PISTON, 'B', Items.BUCKET, 'C', ItemUtil.copy(tier0CU, 1), 'F', machineFrame});
 		addShapedRecipe(new ItemStack(ModBlocks.crystalMachine, 1, MachineType.INFUSER.getMeta()), new Object[]{"ICI", "IFI", "IPI", 'I', dIronPlate, 'C', ModBlocks.cauldron, 'P', ItemUtil.copy(tier0CU, 1), 'F', machineFrame});
 		addShapedRecipe(new ItemStack(ModBlocks.crystalMachine, 1, MachineType.GRINDER.getMeta()), new Object[]{"III", "GFG", "IPI", 'I', dIronPlate, 'G', Items.FLINT, 'P', ItemUtil.copy(tier0CU, 1), 'F', machineFrame});
