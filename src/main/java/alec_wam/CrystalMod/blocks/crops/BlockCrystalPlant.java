@@ -254,11 +254,11 @@ public class BlockCrystalPlant extends BlockBush
     {
         java.util.List<ItemStack> ret = new java.util.ArrayList<ItemStack>();
         Random rand = world instanceof World ? ((World)world).rand : Util.rand;
-        int count = 1;
+        int count = 0;
 
         if (((Integer)state.getValue(AGE)) >= 3)
         {
-            count = 2 + rand.nextInt(3) + (fortune > 0 ? rand.nextInt(fortune + 1) : 0);
+            count = 3 + rand.nextInt(3) + (fortune > 0 ? rand.nextInt(fortune + 1) : 0);
         }
 
         ItemStack crop = getCrop();
