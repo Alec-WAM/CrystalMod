@@ -16,6 +16,9 @@ public class ModSounds {
 	public static final SoundEvent fusionCooldown;
 	public static final SoundEvent fusionDing;
 
+	public static final SoundEvent levelDown;
+	public static final SoundEvent unsplash;
+
 	static {
         if (!Bootstrap.isRegistered()) {
             throw new RuntimeException("Accessed Sounds before Bootstrap!");
@@ -24,6 +27,8 @@ public class ModSounds {
         	fusionRunning = getRegisteredSoundEvent(CrystalMod.resource("fusion_running"));
         	fusionCooldown = getRegisteredSoundEvent(CrystalMod.resource("fusion_cooldown"));
         	fusionDing = getRegisteredSoundEvent(CrystalMod.resource("fusion_ding"));
+        	levelDown = getRegisteredSoundEvent(CrystalMod.resource("leveldown"));
+        	unsplash = getRegisteredSoundEvent(CrystalMod.resource("unsplash"));
         }
     }
 

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import alec_wam.CrystalMod.fluids.ModFluids;
+import alec_wam.CrystalMod.fluids.XpUtil;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.items.ItemMachineFrame.FrameType;
 import alec_wam.CrystalMod.tiles.cauldron.CauldronRecipeManager;
@@ -14,6 +15,7 @@ import alec_wam.CrystalMod.util.ItemUtil;
 import com.google.common.collect.Lists;
 
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
@@ -106,6 +108,8 @@ public class CrystalInfusionManager {
 		}
 		
 		recipes.add(new InfusionMachineRecipe(new ItemStack(ModItems.machineFrame, 1, FrameType.BASIC.getMetadata()), new FluidStack(ModFluids.fluidEnder, 1000), new ItemStack(ModItems.machineFrame, 1, FrameType.ENDER.getMetadata()), 1600));
+
+		recipes.add(new InfusionMachineRecipe(new ItemStack(Items.GLASS_BOTTLE), new FluidStack(ModFluids.fluidXpJuice, XpUtil.LIQUID_PER_XP_BOTTLE), new ItemStack(Items.EXPERIENCE_BOTTLE), 800));
 
 		recipes.add(new InfusionMachineRecipe(new ItemStack(Blocks.COBBLESTONE), new FluidStack(FluidRegistry.WATER, 125), new ItemStack(Blocks.MOSSY_COBBLESTONE), 1600));
 		recipes.add(new InfusionMachineRecipe(new ItemStack(Blocks.COBBLESTONE), new FluidStack(FluidRegistry.LAVA, 125), new ItemStack(Blocks.NETHERRACK), 1600));

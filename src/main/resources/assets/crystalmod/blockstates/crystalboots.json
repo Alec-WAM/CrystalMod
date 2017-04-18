@@ -1,0 +1,16 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "transform": "forge:default-item",
+        "model": "forge:item-layer"
+    },
+    "variants": {
+        "color": {
+			"blue": { "textures": { "layer0": "crystalmod:items/armor/crystal_blue_boots"}},
+			"red": { "textures": { "layer0": "crystalmod:items/armor/crystal_red_boots" }},
+			"green": { "textures": { "layer0": "crystalmod:items/armor/crystal_green_boots" }},
+			"dark": { "textures": { "layer0": "crystalmod:items/armor/crystal_dark_boots" }},
+			"pure": { "textures": { "layer0": "crystalmod:items/armor/crystal_pure_boots" }}
+		}
+    }
+}

@@ -3,15 +3,15 @@
   "defaults": {
     "model": "crystalmod:directional",
     "textures": {
-	  "particle": "crystalmod:blocks/machine/invCharger/machine_side",
-      "front": "crystalmod:blocks/machine/invCharger/rf_front",
-	  "sides": "crystalmod:blocks/machine/invCharger/machine_side"
+	  "particle": "crystalmod:blocks/machine/invcharger/machine_side",
+      "front": "crystalmod:blocks/machine/invcharger/rf_front",
+	  "sides": "crystalmod:blocks/machine/invcharger/machine_side"
     },
     "transform": "forge:default-block"
   },
   "variants": {
-    "normal": [{}],
-    "inventory": [{}],
+    "normal": {},
+    "inventory": {},
     "facing": {
       "north": {},
       "south": {"y": 180},

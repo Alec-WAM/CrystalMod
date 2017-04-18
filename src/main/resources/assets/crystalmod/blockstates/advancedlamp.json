@@ -1,0 +1,11 @@
+{
+  "forge_marker": 1,
+  "variants": {
+    "normal": [{}],
+    "inventory": [{}],
+    "type": {
+      "pure": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/lamp_light"} },
+	  "dark": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/lamp_dark"} }
+    }
+  }
+}

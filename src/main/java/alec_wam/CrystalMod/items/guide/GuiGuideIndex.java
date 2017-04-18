@@ -120,6 +120,26 @@ public class GuiGuideIndex extends GuiGuideBase implements IGuiScreen {
 	public void updateScreen(){
 		super.updateScreen();
 		pageTimer++;
+		if(indexes[0] !=null){
+			int row = scrollbarLeft.getScrollPos();
+			List<GuideChapter> chapters = getFilteredChapters(0);
+			for(int s = row; (s < row+6); s++){
+				if(s < chapters.size()){
+					GuideChapter chapter = chapters.get(s);
+					chapter.update(pageTimer);
+				}
+			}
+		}
+		if(indexes[1] !=null){
+			int row = scrollbarRight.getScrollPos();
+			List<GuideChapter> chapters = getFilteredChapters(1);
+			for(int s = row; (s < row+6); s++){
+				if(s < chapters.size()){
+					GuideChapter chapter = chapters.get(s);
+					chapter.update(pageTimer);
+				}
+			}
+		}
 	}
 	
 	public void actionPerformed(GuiButton button){
@@ -310,7 +330,6 @@ public class GuiGuideIndex extends GuiGuideBase implements IGuiScreen {
 		                GlStateManager.enableDepth();
 					}
 					GuideChapter chapter = chapters.get(s);
-					chapter.update(pageTimer);
 					ItemStack dis = chapter.getDisplayStack();
 					if(!ItemStackTools.isNullStack(dis)){
 						GlStateManager.pushMatrix();
@@ -365,7 +384,6 @@ public class GuiGuideIndex extends GuiGuideBase implements IGuiScreen {
 		                GlStateManager.enableDepth();
 					}
 					GuideChapter chapter = chapters.get(s);
-					chapter.update(pageTimer);
 					ItemStack dis = chapter.getDisplayStack();
 					if(dis !=null){
 						GlStateManager.pushMatrix();

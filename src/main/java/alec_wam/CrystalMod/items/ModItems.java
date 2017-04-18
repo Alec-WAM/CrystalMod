@@ -19,6 +19,7 @@ import alec_wam.CrystalMod.entities.pet.bombomb.ItemBombomb;
 import alec_wam.CrystalMod.integration.baubles.BaublesIntegration;
 import alec_wam.CrystalMod.integration.baubles.ItemBaubleWings;
 import alec_wam.CrystalMod.items.ItemMetalPlate.PlateType;
+import alec_wam.CrystalMod.items.armor.ItemCrystalArmor;
 import alec_wam.CrystalMod.items.armor.ItemCustomArmor;
 import alec_wam.CrystalMod.items.armor.ItemWolfArmor;
 import alec_wam.CrystalMod.items.game.ItemFlag;
@@ -56,6 +57,7 @@ import alec_wam.CrystalMod.tiles.pipes.estorage.storage.hdd.ItemHDD;
 import alec_wam.CrystalMod.tiles.pipes.item.filters.ItemPipeFilter;
 import alec_wam.CrystalMod.tiles.spawner.ItemEmptyMobEssence;
 import alec_wam.CrystalMod.tiles.spawner.ItemMobEssence;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -92,7 +94,8 @@ public class ModItems {
 	public static ToolMaterial ToolMaterialDarkIron = EnumHelper.addToolMaterial(CrystalMod.MODID.toLowerCase()+".darkIron", 2, 500/*250*/, 7.0F/*6.0F*/, 2.5F/*2.0F*/, 12/*14*/);
 
 	public static ArmorMaterial ArmorMaterialDarkIron = EnumHelper.addArmorMaterial(CrystalMod.MODID.toLowerCase()+".darkIron", "darkiron", 16, new int[]{2, 6, 7, 2}, 16, SoundEvents.ITEM_ARMOR_EQUIP_IRON, 0.0F);
-	
+	public static ArmorMaterial ArmorMaterialCrystal = EnumHelper.addArmorMaterial(CrystalMod.MODID.toLowerCase()+".crystal", "crystal", 35, new int[]{3, 6, 8, 3}, 25, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 4.0F);
+
 	public static ItemCrystalAxe crystalAxe;
 	public static ItemMegaCrystalAxe megaCrystalAxe;
 	public static ItemCrystalHoe crystalHoe;
@@ -104,6 +107,7 @@ public class ModItems {
 	public static ItemCrystalShears shears;
 	
 	public static ItemArmor darkIronHelmet, darkIronChestplate, darkIronLeggings, darkIronBoots;
+	public static ItemArmor crystalHelmet, crystalChestplate, crystalLeggings, crystalBoots;
 	public static ItemWolfArmor wolfArmor;
 	
 	public static ItemAxe darkIronAxe;
@@ -186,6 +190,11 @@ public class ModItems {
 		darkIronChestplate = registerItem(new ItemCustomArmor(ArmorMaterialDarkIron, EntityEquipmentSlot.CHEST, "darkIron", darkIronPlate), "darkironchestplate");
 		darkIronLeggings = registerItem(new ItemCustomArmor(ArmorMaterialDarkIron, EntityEquipmentSlot.LEGS, "darkIron", darkIronPlate), "darkironleggings");
 		darkIronBoots = registerItem(new ItemCustomArmor(ArmorMaterialDarkIron, EntityEquipmentSlot.FEET, "darkIron", darkIronPlate), "darkironboots");
+		
+		crystalHelmet = registerItem(new ItemCrystalArmor(ArmorMaterialCrystal, EntityEquipmentSlot.HEAD, "helmet", ItemStackTools.getEmptyStack()), "crystalhelmet");
+		crystalChestplate = registerItem(new ItemCrystalArmor(ArmorMaterialCrystal, EntityEquipmentSlot.CHEST, "chest", ItemStackTools.getEmptyStack()), "crystalchestplate");
+		crystalLeggings = registerItem(new ItemCrystalArmor(ArmorMaterialCrystal, EntityEquipmentSlot.LEGS, "legs", ItemStackTools.getEmptyStack()), "crystalleggings");
+		crystalBoots = registerItem(new ItemCrystalArmor(ArmorMaterialCrystal, EntityEquipmentSlot.FEET, "boots", ItemStackTools.getEmptyStack()), "crystalboots");
 		
 		wolfArmor = new ItemWolfArmor();
 		

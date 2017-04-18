@@ -1,0 +1,12 @@
+{
+    "parent": "block/cube",
+    "textures": {
+        "particle": "#side",
+        "down": "#side",
+        "up": "#side",
+        "east": "#side",
+        "north": "crystalmod:blocks/explosives/opposite_fuser_port_pure",
+        "west": "#side",
+        "south": "crystalmod:blocks/explosives/opposite_fuser_port_dark"
+    }
+}

@@ -1,0 +1,16 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "transform": "forge:default-item",
+        "model": "forge:item-layer"
+    },
+    "variants": {
+        "color": {
+			"blue": { "textures": { "layer0": "crystalmod:items/armor/crystal_blue_chestplate"}},
+			"red": { "textures": { "layer0": "crystalmod:items/armor/crystal_red_chestplate" }},
+			"green": { "textures": { "layer0": "crystalmod:items/armor/crystal_green_chestplate" }},
+			"dark": { "textures": { "layer0": "crystalmod:items/armor/crystal_dark_chestplate" }},
+			"pure": { "textures": { "layer0": "crystalmod:items/armor/crystal_pure_chestplate" }}
+		}
+    }
+}

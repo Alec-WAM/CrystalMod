@@ -4,6 +4,7 @@ import alec_wam.CrystalMod.api.crafting.ICrystalRecipe;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.items.ItemCrystal.CrystalType;
 import alec_wam.CrystalMod.items.ItemIngot.IngotType;
+import alec_wam.CrystalMod.items.armor.ItemCrystalArmor;
 import alec_wam.CrystalMod.items.tools.ItemToolParts.PartType;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemStackTools;
@@ -139,6 +140,22 @@ public class CrystalCraftingManager
         	ItemStack cShears = new ItemStack(ModItems.shears);
     		ItemNBTHelper.setString(cShears, "Color", color);
     		addRecipe(cShears, new Object[] {" #", "# ", '#', ingot});
+    		
+    		ItemStack cHelmet = new ItemStack(ModItems.crystalHelmet);
+    		ItemNBTHelper.setString(cHelmet, ItemCrystalArmor.NBT_COLOR, color);
+    		addRecipe(cHelmet, new Object[] {"###", "# #", '#', ingot});
+    		
+    		ItemStack cChest = new ItemStack(ModItems.crystalChestplate);
+    		ItemNBTHelper.setString(cChest, ItemCrystalArmor.NBT_COLOR, color);
+    		addRecipe(cChest, new Object[] {"# #", "###", "###",  '#', ingot});
+    		
+    		ItemStack cLeg = new ItemStack(ModItems.crystalLeggings);
+    		ItemNBTHelper.setString(cLeg, ItemCrystalArmor.NBT_COLOR, color);
+    		addRecipe(cLeg, new Object[] {"###", "# #", "# #",  '#', ingot});
+    		
+    		ItemStack cBoots = new ItemStack(ModItems.crystalBoots);
+    		ItemNBTHelper.setString(cBoots, ItemCrystalArmor.NBT_COLOR, color);
+    		addRecipe(cBoots, new Object[] {"# #", "# #",  '#', ingot});
     	}
     	
     	this.addRecipe(new ShapedOreCrystalRecipe(toolRod, new Object[] {"#","I","#", 'I', "ingotCrystal", '#', "gemCrystal"}));

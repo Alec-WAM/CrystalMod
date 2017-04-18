@@ -187,6 +187,19 @@
   [text]Just like coco beans, but instead of Cocoa you grow Crystal Shards.<n>Must be planted on the same color Crystal Log.   
  }
 ]}
+//Crystal Sap
+{[
+ [chapter]sap
+ [title]Crystal Sap
+ [page:extractor]
+ {
+  [text]When placed with a crystal tree behind it this machine will extract sap.
+ }
+ [page:sap]
+ {
+  [text]When extracting a Crystal Tree, you will have a 20-40% chance of successfully extracting sap. These balls of Sap are just sticky enough to be used as slime balls.
+ }
+]}
 //Crystal Tanks
 {[
  [chapter]crystaltank
@@ -377,6 +390,24 @@
   [text]Holds a shield and two melee weapons on either side.
  }
 ]}
+//Particle Thrower
+{[
+ [chapter]particlethrower
+ [title]Particle Thrower
+ [page:main]
+ {
+  [text]When you interact with an empty hand this explosive will throw any blocks within a 3x3 around it into the air. Dont worry tileentities also are thrown but keep their data.
+ }
+]}
+//Removers
+{[
+ [chapter]removerexplosives
+ [title]Remover Explosives
+ [page:main]
+ {
+  [text]Each of these explosives when powered by redstone will count down from 10. Once they explode they will destroy what ever type of object they are. Nothing else.
+ }
+]}
 //ITEMS Begin
 //Crystal
 {[
@@ -517,5 +548,27 @@
  [page:main]
  {
   [text]When you hold a Mob Cage in your off-hand and kill a valid entity it will create a Mob Essence. Activate an Advanced Mob Spawner with a full essence to set its type.<n>Sneak and Use the item to place on of the killed entites back in the world. 
+ }
+]}
+//Wolf Armor
+{[
+ [chapter]wolfarmor
+ [title]Wolf Armor
+ [page:main]
+ {
+  [text]This item allows you to now put armor on your tamed dogs.
+ }
+]}
+//Cursed Bones
+{[
+ [chapter]cursedbones
+ [title]Cursed Bones
+ [page:bone]
+ {
+  [text]Dropped from Wither Skeletons and Wither Bosses.
+ }
+ [page:bonemeal]
+ {
+  [text]Allows you to grow nether wart like you were using bonemeal.
  }
 ]}

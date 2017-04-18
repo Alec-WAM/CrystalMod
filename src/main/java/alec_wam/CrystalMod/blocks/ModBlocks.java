@@ -19,6 +19,7 @@ import alec_wam.CrystalMod.blocks.decorative.bridge.BlockBridge;
 import alec_wam.CrystalMod.blocks.decorative.bridge.TileBridge;
 import alec_wam.CrystalMod.blocks.glass.BlockCrystalGlass;
 import alec_wam.CrystalMod.blocks.glass.BlockCrystalGlassPane;
+import alec_wam.CrystalMod.blocks.glass.BlockTintedCrystalGlass;
 import alec_wam.CrystalMod.blocks.rail.BlockReinforcedRail;
 import alec_wam.CrystalMod.handler.MissingItemHandler;
 import alec_wam.CrystalMod.tiles.cauldron.BlockCrystalCauldron;
@@ -37,10 +38,14 @@ import alec_wam.CrystalMod.tiles.cluster.TileCrystalCluster;
 import alec_wam.CrystalMod.tiles.crate.BlockCrate;
 import alec_wam.CrystalMod.tiles.crate.RenderTileCrate;
 import alec_wam.CrystalMod.tiles.crate.TileCrate;
+import alec_wam.CrystalMod.tiles.darkinfection.BlockDarkInfection;
+import alec_wam.CrystalMod.tiles.darkinfection.TileDarkInfection;
 import alec_wam.CrystalMod.tiles.endertorch.BlockEnderTorch;
 import alec_wam.CrystalMod.tiles.endertorch.TileEnderTorch;
 import alec_wam.CrystalMod.tiles.entityhopper.BlockEntityHopper;
 import alec_wam.CrystalMod.tiles.entityhopper.TileEntityEntityHopper;
+import alec_wam.CrystalMod.tiles.explosives.fuser.BlockOppositeFuser;
+import alec_wam.CrystalMod.tiles.explosives.fuser.TileOppositeFuser;
 import alec_wam.CrystalMod.tiles.explosives.particle.BlockParticleThrower;
 import alec_wam.CrystalMod.tiles.explosives.particle.TileParticleThrower;
 import alec_wam.CrystalMod.tiles.explosives.remover.BlockRemoverExplosion;
@@ -54,6 +59,9 @@ import alec_wam.CrystalMod.tiles.fusion.TileFusionPedistal;
 import alec_wam.CrystalMod.tiles.fusion.TilePedistal;
 import alec_wam.CrystalMod.tiles.jar.BlockJar;
 import alec_wam.CrystalMod.tiles.jar.TileJar;
+import alec_wam.CrystalMod.tiles.lamps.BlockAdvancedLamp;
+import alec_wam.CrystalMod.tiles.lamps.BlockFakeLight;
+import alec_wam.CrystalMod.tiles.lamps.TileAdvancedLamp;
 import alec_wam.CrystalMod.tiles.machine.advDispenser.BlockAdvDispenser;
 import alec_wam.CrystalMod.tiles.machine.advDispenser.TileAdvDispenser;
 import alec_wam.CrystalMod.tiles.machine.crafting.BlockCrystalMachine;
@@ -173,6 +181,7 @@ public class ModBlocks {
 	public static BlockCrystalOre crystalOre;
 	public static BlockCrystalIngot crystalIngot;
 	public static BlockCrystalGlass crystalGlass;
+	public static BlockTintedCrystalGlass crystalGlassTinted;
 	public static BlockCrystalGlassPane crystalGlassPane;
 	public static BlockMetalBars metalBars;
 	public static BlockCrystalReed crystalReedsBlue, crystalReedsRed, crystalReedsGreen, crystalReedsDark;
@@ -198,6 +207,8 @@ public class ModBlocks {
 	public static BlockMobGrinder mobGrinder;
 	public static BlockEntityHopper entityHopper;
 	public static BlockCrate crates;
+	public static BlockAdvancedLamp advancedLamp;
+	public static BlockFakeLight fakeLight;
 	
 	public static BlockHDDInterface hddInterface;
 	public static BlockHDDArray hddArray;
@@ -236,8 +247,11 @@ public class ModBlocks {
 	public static BlockJar jar;
 	public static BlockShieldRack shieldRack;
 	public static BlockSoundMuffler muffler;
+	
 	public static BlockParticleThrower particleThrower;
 	public static BlockRemoverExplosion remover;
+	public static BlockOppositeFuser oppositeFuser;
+	public static BlockDarkInfection darkInfection;
 	
 	public static BlockPedistal pedistal;
 	public static BlockFusionPedistal fusionPedistal;
@@ -254,6 +268,7 @@ public class ModBlocks {
 		crystalIngot = registerEnumBlock(new BlockCrystalIngot(), "crystalingotblock");
 		
 		crystalGlass = registerEnumBlock(new BlockCrystalGlass(), "crystalglass");
+		crystalGlassTinted = registerEnumBlock(new BlockTintedCrystalGlass(), "crystalglasstinted");
 		crystalGlassPane = new BlockCrystalGlassPane();
 		registerBlock(crystalGlassPane, new ItemBlockMeta(crystalGlassPane), "crystalglasspane");
 		ItemBlockMeta.setMappingProperty(crystalGlassPane, BlockCrystalGlass.TYPE);
@@ -492,6 +507,13 @@ public class ModBlocks {
 		enderTorch = registerBlock(new BlockEnderTorch(), "endertorch");
 		registerTileEntity(TileEnderTorch.class);
 		
+		advancedLamp = new BlockAdvancedLamp();
+		registerEnumBlock(advancedLamp, "advancedlamp");
+		registerTileEntity(TileAdvancedLamp.class);
+		
+		fakeLight = new BlockFakeLight();
+		registerEnumBlock(fakeLight, "fakelight");
+		
 		mobGrinder = registerBlock(new BlockMobGrinder(), "mobgrinder");
 		registerTileEntity(TileEntityMobGrinder.class);
 		
@@ -522,12 +544,20 @@ public class ModBlocks {
 		registerTileEntity(TileSoundMuffler.class);
 		
 		particleThrower = new BlockParticleThrower();
-		registerBlock(particleThrower, "particleThrower");
+		registerBlock(particleThrower, "particlethrower");
 		registerTileEntity(TileParticleThrower.class);
 		
 		remover = new BlockRemoverExplosion();
 		registerEnumBlock(remover, "removerexplosion");
 		registerTileEntity(TileRemoverExplosion.class);
+		
+		oppositeFuser = new BlockOppositeFuser();
+		registerBlock(oppositeFuser, "oppositefuser");
+		registerTileEntity(TileOppositeFuser.class);
+		
+		darkInfection = new BlockDarkInfection();
+		registerBlock(darkInfection, "darkinfection");
+		registerTileEntity(TileDarkInfection.class);
 		
 		pedistal = new BlockPedistal();
 		registerBlock(pedistal, new ItemBlockPedistal(pedistal), "pedistal");
@@ -608,9 +638,9 @@ public class ModBlocks {
 		}
 
 		block.setUnlocalizedName(CrystalMod.prefix(finalName));
-		block.setRegistryName(finalName);
+		block.setRegistryName(CrystalMod.resource(finalName));
 		GameRegistry.register(block);
-		GameRegistry.register(itemBlock.setRegistryName(finalName));
+		GameRegistry.register(itemBlock.setRegistryName(CrystalMod.resource(finalName)));
 		REGISTRY.put(finalName, block);
 		return block;
 	}

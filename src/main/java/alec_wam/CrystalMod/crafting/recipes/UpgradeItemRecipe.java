@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javax.annotation.Nonnull;
+
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
@@ -14,6 +16,7 @@ import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.inventory.InventoryCrafting;
@@ -45,7 +48,7 @@ public class UpgradeItemRecipe implements IRecipe {
     public boolean emptyExcept(InventoryCrafting inventoryCrafting, List<Integer> ignore){
     	for(int s = 0; s < inventoryCrafting.getSizeInventory(); s++){
     		ItemStack stack = inventoryCrafting.getStackInSlot(s);
-    		if(stack !=null){
+    		if(ItemStackTools.isValid(stack)){
     			if(ignore.contains(s))continue;
     			return false;
     		}
@@ -56,13 +59,26 @@ public class UpgradeItemRecipe implements IRecipe {
     public SlotStack findStack(ItemStack stack, InventoryCrafting inventoryCrafting, boolean ore){
     	for(int s = 0; s < inventoryCrafting.getSizeInventory(); s++){
     		ItemStack stackI = inventoryCrafting.getStackInSlot(s);
-    		if(stackI !=null){
+    		if(ItemStackTools.isValid(stackI)){
     			if(ore ? ItemUtil.stackMatchUseOre(stack, stackI) : ItemUtil.canCombine(stack, stackI)){
     				return new SlotStack(stackI, s);
     			}
     		}
     	}
     	return null;
+    }
+    
+    public List<SlotStack> findStacks(ItemStack stack, InventoryCrafting inventoryCrafting, boolean ore){
+    	List<SlotStack> stacks = Lists.newArrayList();
+    	for(int s = 0; s < inventoryCrafting.getSizeInventory(); s++){
+    		ItemStack stackI = inventoryCrafting.getStackInSlot(s);
+    		if(ItemStackTools.isValid(stackI)){
+    			if(ore ? ItemUtil.stackMatchUseOre(stack, stackI) : ItemUtil.canCombine(stack, stackI)){
+    				stacks.add(new SlotStack(stackI, s));
+    			}
+    		}
+    	}
+    	return stacks;
     }
 
     @Override
@@ -71,8 +87,23 @@ public class UpgradeItemRecipe implements IRecipe {
     	return modifiedItem;
     }
     
+    public static final String NBT_UPGRADE_WATERWALKING = "CrystalMod.WaterWalking";
+    
+    public static boolean isWaterWalking(ItemStack stack){
+    	if(ItemStackTools.isValid(stack)){
+    		if(stack.getItem() instanceof ItemArmor){
+    			ItemArmor armor = (ItemArmor)stack.getItem();
+    			if(armor.armorType == EntityEquipmentSlot.FEET){
+    				return ItemNBTHelper.verifyExistance(stack, NBT_UPGRADE_WATERWALKING);
+    			}
+    		}
+    	}
+    	return false;
+    }
+    
     public boolean updateRecipeData(InventoryCrafting inventoryCrafting, boolean justCheck){
 
+    	SlotStack boots = null;
     	SlotStack chestPlate = null;
     	SlotStack armorSlot = null;
     	
@@ -86,14 +117,15 @@ public class UpgradeItemRecipe implements IRecipe {
     					if(armor.armorType == EntityEquipmentSlot.CHEST){
     						chestPlate = new SlotStack(stack, s);
     					}
+    					if(armor.armorType == EntityEquipmentSlot.FEET){
+    						boots = new SlotStack(stack, s);
+    					}
     					armorSlot = new SlotStack(stack, s);
     					break;
     				}
     			}
     		}
     	}
-    	
-    	
     	
     	if(armorSlot !=null){
     		String NBT_INVISIBLE = "CrystalMod.InvisArmor";
@@ -164,6 +196,39 @@ public class UpgradeItemRecipe implements IRecipe {
     			}
     		}
     	}
+    	if(boots !=null){
+    		boolean waterwalking = isWaterWalking(boots.getStack());
+    		if(waterwalking){
+    			List<Integer> ignore = Lists.newArrayList();
+    			ignore.add(boots.getSlot());
+    			if(emptyExcept(inventoryCrafting, ignore)){
+    				if(!justCheck){
+	    				ItemStack copy = boots.getStack().copy();
+		    			ItemNBTHelper.getCompound(copy).removeTag(NBT_UPGRADE_WATERWALKING);
+		    			
+		    			modifiedItem = copy;
+    				}
+    				byproducts.put(0, new ItemStack(Blocks.WATERLILY, 2));
+	    			return true;
+    			}
+    		} else {
+    			List<SlotStack> slots = findStacks(new ItemStack(Blocks.WATERLILY), inventoryCrafting, false);
+    			if(!slots.isEmpty() && slots.size() == 2){
+    				List<Integer> ignore = Lists.newArrayList();
+    				ignore.add(boots.getSlot());
+        			ignore.add(slots.get(0).getSlot());
+        			ignore.add(slots.get(1).getSlot());
+        			if(emptyExcept(inventoryCrafting, ignore)){
+	        			if(!justCheck){
+	        				ItemStack copy = boots.getStack().copy();
+	        				ItemNBTHelper.setBoolean(copy, NBT_UPGRADE_WATERWALKING, true);
+	        				modifiedItem = copy;
+	        			}
+	        			return true;
+        			}
+    			}
+    		}
+    	}
     	return false;
     }
 
@@ -195,12 +260,12 @@ public class UpgradeItemRecipe implements IRecipe {
 		private ItemStack stack;
 		private int slot;
 		
-		public SlotStack(ItemStack stack, int slot){
+		public SlotStack(@Nonnull ItemStack stack, int slot){
 			this.stack = stack;
 			this.slot = slot;
 		}
 		
-		public ItemStack getStack(){
+		public @Nonnull ItemStack getStack(){
 			return stack;
 		}
 		

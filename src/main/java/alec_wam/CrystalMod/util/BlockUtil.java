@@ -243,4 +243,19 @@ public class BlockUtil {
 		return builder.build();
 	}
 	
+	public static void createOrb(World world, BlockPos pos, IBlockState state, int radius, boolean hollow, boolean onlyReplace){
+		for(int x = -radius; x <= radius; x++){
+			for(int y = -radius; y <= radius; y++){
+				for(int z = -radius; z <= radius; z++){
+					BlockPos pos2 = new BlockPos(x, y, z).add(pos.getX(), pos.getY(), pos.getZ());
+					int squareDistance = (x)*(x) + (y) * (y) + (z) * (z);
+					if((hollow ? squareDistance == radius : squareDistance <= radius)) {
+						if(onlyReplace ? !world.isAirBlock(pos2) : true){
+							world.setBlockState(pos2, state, 3);
+						}
+					}
+				}
+			}
+		}
+	}
 }

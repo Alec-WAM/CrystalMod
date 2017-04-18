@@ -34,5 +34,32 @@
         "stream": false
       }
     ], "subtitle": "crystalmod.subtitle.fusion_ding"
+  },
+  "leveldown": {
+    "category": "block",
+    "sounds": [
+      {
+        "name": "crystalmod:leveldown",
+        "stream": false
+      }
+    ], "subtitle": "crystalmod.subtitle.leveldown"
+  },
+  "unsplash": {
+    "category": "block",
+    "sounds": [
+      {
+        "name": "crystalmod:unsplash",
+        "stream": false
+      }
+    ], "subtitle": "crystalmod.subtitle.unsplash"
+  },
+  "redstone_removed": {
+    "category": "block",
+    "sounds": [
+      {
+        "name": "crystalmod:redstone_removed",
+        "stream": false
+      }
+    ], "subtitle": "crystalmod.subtitle.redstone_removed"
   }
 }

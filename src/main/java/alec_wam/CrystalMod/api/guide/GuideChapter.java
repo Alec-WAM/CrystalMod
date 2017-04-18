@@ -72,7 +72,7 @@ public class GuideChapter {
 		this.displayObject = displayObject;
 		
 		if(displayObject instanceof ItemStack){
-			stacks = new ItemStack[1];
+			stacks = new ItemStack[]{ItemStackTools.getEmptyStack()};
 			stacks[0] = ItemStackTools.safeCopy(((ItemStack)displayObject));
 			if(stacks[0].getItemDamage() == OreDictionary.WILDCARD_VALUE)stacks[0].setItemDamage(0);
 		}
@@ -87,12 +87,15 @@ public class GuideChapter {
 			@SuppressWarnings("unchecked")
 			List<ItemStack> list = (List<ItemStack>)displayObject;
 			if(!list.isEmpty()){
-				stacks = list.toArray(new ItemStack[list.size()]);
+				stacks = new ItemStack[list.size()];
+				for(int i = 0; i < list.size(); i++){
+					stacks[i] = list.get(i);
+				}
 			}
 		}
 		
 		if(stacks == null){
-			stacks = new ItemStack[1];
+			stacks = new ItemStack[]{ItemStackTools.getEmptyStack()};
 		}
 		stackIndex = 0;
 		currentDisplay = stacks[0];
@@ -107,7 +110,9 @@ public class GuideChapter {
 	public void update(int pageTimer) {
 		if(stacks !=null && Util.isMultipleOf(pageTimer, 40)){
 			stackIndex++;
-			stackIndex%=stacks.length;
+			if(stackIndex >= stacks.length){
+				stackIndex = 0;
+			}
 			currentDisplay = stacks[stackIndex];
 		}
 	}

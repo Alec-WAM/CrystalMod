@@ -23,6 +23,7 @@ import alec_wam.CrystalMod.client.model.LayerDragonWings;
 import alec_wam.CrystalMod.client.model.LayerHorseAccessories;
 import alec_wam.CrystalMod.client.model.LayerWolfAccessories;
 import alec_wam.CrystalMod.client.model.dynamic.ICustomItemRenderer;
+import alec_wam.CrystalMod.crafting.recipes.UpgradeItemRecipe;
 import alec_wam.CrystalMod.entities.ModEntites;
 import alec_wam.CrystalMod.entities.disguise.DisguiseClientHandler;
 import alec_wam.CrystalMod.fluids.FluidColored;
@@ -226,6 +227,10 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
         	event.getMap().registerSprite(new ResourceLocation("crystalmod:blocks/crystal_"+type.getName()+"_glass"));
         }
         
+        for(GlassType type : GlassType.values()){
+        	event.getMap().registerSprite(new ResourceLocation("crystalmod:blocks/crystal_"+type.getName()+"_glass_tinted"));
+        }
+        
         event.getMap().registerSprite(new ResourceLocation("crystalmod:blocks/pipe/attachment/import"));
         
         event.getMap().registerSprite(new ResourceLocation("crystalmod:blocks/pipe/iron_cap"));
@@ -309,6 +314,10 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
         
         if(ItemNBTHelper.verifyExistance(stack, "CrystalMod.InvisArmor")){
         	event.getToolTip().add(TextFormatting.WHITE+""+TextFormatting.UNDERLINE+"Invisible");
+        }
+        
+        if(ItemNBTHelper.verifyExistance(stack, UpgradeItemRecipe.NBT_UPGRADE_WATERWALKING)){
+        	event.getToolTip().add(TextFormatting.AQUA+""+TextFormatting.UNDERLINE+"Water Walking");
         }
     }
     

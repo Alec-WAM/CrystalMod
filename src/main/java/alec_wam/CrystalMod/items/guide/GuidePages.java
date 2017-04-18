@@ -38,7 +38,10 @@ import alec_wam.CrystalMod.blocks.glass.BlockCrystalGlass.GlassType;
 import alec_wam.CrystalMod.client.util.comp.GuiComponentBasicItemPage;
 import alec_wam.CrystalMod.client.util.comp.GuiComponentBook;
 import alec_wam.CrystalMod.client.util.comp.GuiComponentStandardRecipePage;
+import alec_wam.CrystalMod.entities.accessories.WolfAccessories.WolfArmor;
 import alec_wam.CrystalMod.items.ItemCrystal.CrystalType;
+import alec_wam.CrystalMod.items.ItemCrystalSap.SapType;
+import alec_wam.CrystalMod.items.ItemCursedBone.BoneType;
 import alec_wam.CrystalMod.items.ItemIngot.IngotType;
 import alec_wam.CrystalMod.items.ItemMetalPlate.PlateType;
 import alec_wam.CrystalMod.items.ModItems;
@@ -55,6 +58,7 @@ import alec_wam.CrystalMod.items.tools.backpack.upgrade.ItemBackpackUpgrade.Back
 import alec_wam.CrystalMod.tiles.chest.CrystalChestType;
 import alec_wam.CrystalMod.tiles.chest.wireless.WirelessChestHelper;
 import alec_wam.CrystalMod.tiles.crate.BlockCrate.CrateType;
+import alec_wam.CrystalMod.tiles.explosives.remover.BlockRemoverExplosion.RemoverType;
 import alec_wam.CrystalMod.tiles.machine.elevator.ItemMiscCard.CardType;
 import alec_wam.CrystalMod.tiles.machine.enderbuffer.BlockEnderBuffer;
 import alec_wam.CrystalMod.tiles.machine.power.battery.BlockBattery.BatteryType;
@@ -202,6 +206,9 @@ public class GuidePages {
 		NonNullList<ItemStack> plankList = ItemUtil.getBlockSubtypes(ModBlocks.crystalPlanks, BlockCrystalLog.WoodType.values());
 		CrystalModAPI.BLOCKS.registerChapter(new GuideChapter("crystaltrees", new PageIcon("main", listSaplings), new PageIcon("logs", listLogs), new PageCrafting("planks", plankList), new PageIcon("treeplant", treePlantList)).setDisplayObject(listSaplings));
 
+		ItemStack sapExtractor = new ItemStack(ModBlocks.sapExtractor);
+		CrystalModAPI.BLOCKS.registerChapter(new GuideChapter("sap", new PageCrafting("extractor", sapExtractor), new PageIcon("sap", ItemUtil.getItemSubtypes(ModItems.crystalSap, SapType.values()))).setDisplayObject(sapExtractor));
+		
 		NonNullList<ItemStack> listTanks = ItemUtil.getBlockSubtypes(ModBlocks.crystalTank, TankType.BLUE, TankType.RED, TankType.GREEN, TankType.DARK);
 		CrystalModAPI.BLOCKS.registerChapter(new GuideChapter("crystaltank", new PageCrafting("main", listTanks)).setDisplayObject(listTanks));
 
@@ -253,7 +260,11 @@ public class GuidePages {
 		NonNullList<ItemStack> shieldracks = ItemUtil.getBlockSubtypes(ModBlocks.shieldRack, WoodType.values());
 		CrystalModAPI.BLOCKS.registerChapter(new GuideChapter("shieldrack", new PageCrafting("main", shieldracks)).setDisplayObject(shieldracks));
 		
+		ItemStack particleThrower = new ItemStack(ModBlocks.particleThrower);
+		CrystalModAPI.BLOCKS.registerChapter(new GuideChapter("particlethrower", new PageCrafting("main", particleThrower)).setDisplayObject(particleThrower));
 		
+		NonNullList<ItemStack> explosives = ItemUtil.getBlockSubtypes(ModBlocks.remover, RemoverType.values());
+		CrystalModAPI.BLOCKS.registerChapter(new GuideChapter("removerexplosives", new PageCrafting("main", explosives)).setDisplayObject(explosives));
 		
 		CrystalType[] nuggetArray = new CrystalType[]{CrystalType.BLUE_NUGGET, CrystalType.RED_NUGGET, CrystalType.GREEN_NUGGET, CrystalType.DARK_NUGGET};
 		CrystalType[] shardArray = new CrystalType[]{CrystalType.BLUE_SHARD, CrystalType.RED_SHARD, CrystalType.GREEN_SHARD, CrystalType.DARK_SHARD};
@@ -311,6 +322,22 @@ public class GuidePages {
 		
 		NonNullList<ItemStack> essenceList = NonNullList.withSize(1, ItemMobEssence.createStack("Pig"));
 		CrystalModAPI.ITEMS.registerChapter(new GuideChapter("mobessence", new PageIcon("main", essenceList)).setDisplayObject(essenceList));
+		
+		NonNullList<ItemStack> wolfArmor = NonNullList.create();
+		for(WolfArmor armor : new WolfArmor[]{WolfArmor.LEATHER, WolfArmor.CHAIN, WolfArmor.IRON, WolfArmor.DIRON, WolfArmor.DIAMOND, WolfArmor.GOLD}){
+			ItemStack stack = new ItemStack(ModItems.wolfArmor);
+			ItemNBTHelper.setString(stack, "ArmorID", armor.name().toLowerCase());
+			wolfArmor.add(stack);
+		}
+		CrystalModAPI.ITEMS.registerChapter(new GuideChapter("wolfarmor", new PageCrafting("main", wolfArmor)).setDisplayObject(wolfArmor));
+		
+		ItemStack cursedBone = new ItemStack(ModItems.cursedBone, 1, BoneType.BONE.getMetadata());
+		ItemStack cursedBonemeal = new ItemStack(ModItems.cursedBone, 1, BoneType.BONEMEAL.getMetadata());
+		NonNullList<ItemStack> boneList = NonNullList.create();
+		boneList.add(cursedBone);
+		boneList.add(cursedBonemeal);
+		CrystalModAPI.ITEMS.registerChapter(new GuideChapter("cursedbones", new PageIcon("bone", cursedBone), new PageCrafting("bonemeal", cursedBonemeal)).setDisplayObject(boneList));
+		
 		
 		//Material Crops
 		for(Entry<String, IMaterialCrop> entry : CrystalModAPI.getCropMap().entrySet()){
@@ -448,22 +475,25 @@ public class GuidePages {
 	}
 	public static Map<String, ManualChapter> CHAPTERTEXT = Maps.newHashMap();
 	public static void loadGuideText(String lang){
+		boolean useHost = false;
 		CHAPTERTEXT.clear();
 		try {
             IResource iresource = FMLClientHandler.instance().getClient().getResourceManager().getResource(CrystalMod.resourceL("text/guide/"+lang+".txt"));
             InputStream inputstream = iresource.getInputStream();
-            ModLogger.info("Attempting to connect to manual server....");
-            if(Util.isInternetAvailable()){
-            	try {
-	            	String branch = FileInfo.getValue("manual_branch_"+FMLClientHandler.instance().getClient().getVersion(), "master");
-	            	URL masterFile = new URL("https://raw.githubusercontent.com/Alec-WAM/CrystalMod/"+branch+"/hostedfiles/manual/"+lang+".txt");
-	            	inputstream = masterFile.openStream();
-	            	ModLogger.info("Online loading sucessful!");
-            	} catch(Exception e){
-            		e.printStackTrace();
+            if(useHost){
+            	ModLogger.info("Attempting to connect to manual server....");
+            	if(Util.isInternetAvailable()){
+            		try {
+            			String branch = FileInfo.getValue("manual_branch_"+FMLClientHandler.instance().getClient().getVersion(), "master");
+            			URL masterFile = new URL("https://raw.githubusercontent.com/Alec-WAM/CrystalMod/"+branch+"/hostedfiles/manual/"+lang+".txt");
+            			inputstream = masterFile.openStream();
+            			ModLogger.info("Online loading sucessful!");
+            		} catch(Exception e){
+            			e.printStackTrace();
+            		}
+            	} else {
+            		ModLogger.info("Online loading failed! Falling back on the local guide file.");
             	}
-            } else {
-            	ModLogger.info("Online loading failed! Falling back on the local guide file.");
             }
             BufferedReader br = new BufferedReader(new InputStreamReader(inputstream, "UTF-8"));
             List<ManualChapter> chapters = new ArrayList<ManualChapter>();

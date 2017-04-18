@@ -93,7 +93,7 @@ public class BlockCrystalGlass extends EnumBlock<BlockCrystalGlass.GlassType> im
     @Override
     @SideOnly(Side.CLIENT)
     public BlockRenderLayer getBlockLayer() {
-      return BlockRenderLayer.CUTOUT;
+      return BlockRenderLayer.TRANSLUCENT;
     }
 
     @Override
@@ -106,6 +106,7 @@ public class BlockCrystalGlass extends EnumBlock<BlockCrystalGlass.GlassType> im
       return false;
     }
     
+    @Override
     @SideOnly(Side.CLIENT)
 	public void initModel() {
     	ModelLoader.setCustomStateMapper(this, new GlassBlockStateMapper());

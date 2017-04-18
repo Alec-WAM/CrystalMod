@@ -5,17 +5,21 @@ import java.util.List;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
+import alec_wam.CrystalMod.client.sound.ModSounds;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.IMessageHandler;
+import alec_wam.CrystalMod.network.packets.PacketEntityMessage;
 import alec_wam.CrystalMod.network.packets.PacketTileMessage;
 import alec_wam.CrystalMod.tiles.TileEntityMod;
 import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.FluidUtil;
+import alec_wam.CrystalMod.util.ModLogger;
 import alec_wam.CrystalMod.util.TimeUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.NBTTagCompound;
@@ -82,6 +86,7 @@ public class TileRemoverExplosion extends TileEntityMod implements IMessageHandl
 						list.add(otherPos);
 					}
 				}
+				world.playSound(null, pos, ModSounds.unsplash, SoundCategory.BLOCKS, 1.0F, 1.0F);
 				return list;
 			}
 		}, XP {
@@ -96,6 +101,22 @@ public class TileRemoverExplosion extends TileEntityMod implements IMessageHandl
 						orb.setDead();
 						if(!list.contains(orbPos)){
 							list.add(orbPos);
+						}
+					}
+				}
+				List<EntityPlayer> players = world.getEntitiesWithinAABB(EntityPlayer.class, bb);
+				ModLogger.info("Players: "+players.size());
+				for(EntityPlayer player : players){
+					if(!player.isDead && !player.capabilities.disableDamage){
+						final BlockPos playerPos = new BlockPos(player);
+						if(!list.contains(playerPos)){
+							list.add(playerPos);
+						}
+						player.removeExperienceLevel(Integer.MAX_VALUE);
+						if(!world.isRemote){
+							if(player instanceof EntityPlayerMP){
+								CrystalModNetwork.sendTo(new PacketEntityMessage(player, "#ClearXP#"), (EntityPlayerMP)player);
+							}
 						}
 					}
 				}
@@ -139,7 +160,7 @@ public class TileRemoverExplosion extends TileEntityMod implements IMessageHandl
 		if(!getWorld().isRemote){
 			if(timerRemaining <= 0){
 				if(getWorld().isBlockPowered(getPos())){
-					timerRemaining = 10 * TimeUtil.SECOND;
+					timerRemaining = 3 * TimeUtil.SECOND;
 				}
 			} else {
 				timerRemaining--;
@@ -147,7 +168,7 @@ public class TileRemoverExplosion extends TileEntityMod implements IMessageHandl
 					double explosionX = getPos().getX() + 0.5D;
 					double explosionY = getPos().getY() + 0.5D;
 					double explosionZ = getPos().getZ() + 0.5D;
-					getWorld().playSound((EntityPlayer)null, explosionX, explosionY, explosionZ, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.BLOCKS, 4.0F, (1.0F + (this.world.rand.nextFloat() - this.world.rand.nextFloat()) * 0.2F) * 0.7F);
+					//getWorld().playSound((EntityPlayer)null, explosionX, explosionY, explosionZ, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.BLOCKS, 4.0F, (1.0F + (this.world.rand.nextFloat() - this.world.rand.nextFloat()) * 0.2F) * 0.7F);
 			        getWorld().setBlockToAir(getPos());
 					List<BlockPos> particlePosList = type.onExplosion(getWorld(), getPos());
 					if(!particlePosList.isEmpty()){

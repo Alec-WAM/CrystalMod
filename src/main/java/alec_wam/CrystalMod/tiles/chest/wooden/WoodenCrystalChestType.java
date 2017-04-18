@@ -19,7 +19,7 @@ import net.minecraftforge.oredict.ShapedOreRecipe;
 
 public enum WoodenCrystalChestType implements IStringSerializable
 {
-    BLUE(54, 9, true, "Blue Wooden Crystal Chest", "bluewoodenchest.png", 0, Arrays.asList("plankBlue"), TileBlueWoodenCrystalChest.class, "mmmmCmmmm"),
+    BLUE(54, 9, false, "Blue Wooden Crystal Chest", "bluewoodenchest.png", 0, Arrays.asList("plankBlue"), TileBlueWoodenCrystalChest.class, "mmmmCmmmm"),
     RED(72, 9, true, "Red Wooden Crystal Chest", "redwoodenchest.png", 1, Arrays.asList("plankRed"), TileRedWoodenCrystalChest.class, "mmmm0mmmm"),
     GREEN(81, 9, true, "Green Wooden Crystal Chest", "greenwoodenchest.png", 2, Arrays.asList("plankGreen"), TileGreenWoodenCrystalChest.class, "mmmm1mmmm"),
     DARK(108, 12, true, "Dark Wooden Crystal Chest", "darkwoodenchest.png", 3, Arrays.asList("plankDark"), TileDarkWoodenCrystalChest.class, "mmmm2mmmm");

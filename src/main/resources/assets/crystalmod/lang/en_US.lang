@@ -181,6 +181,31 @@ item.crystalmod.darkironchestplate.name=Dark Iron Chestplate
 item.crystalmod.darkironleggings.name=Dark Iron Leggings
 item.crystalmod.darkironboots.name=Dark Iron Boots
 
+item.crystalmod.crystalhelmet.blue.name=Blue Crystal Helmet
+item.crystalmod.crystalchestplate.blue.name=Blue Crystal Chestplate
+item.crystalmod.crystalleggings.blue.name=Blue Crystal Leggings
+item.crystalmod.crystalboots.blue.name=Blue Crystal Boots
+
+item.crystalmod.crystalhelmet.red.name=Red Crystal Helmet
+item.crystalmod.crystalchestplate.red.name=Red Crystal Chestplate
+item.crystalmod.crystalleggings.red.name=Red Crystal Leggings
+item.crystalmod.crystalboots.red.name=Red Crystal Boots
+
+item.crystalmod.crystalhelmet.green.name=Green Crystal Helmet
+item.crystalmod.crystalchestplate.green.name=Green Crystal Chestplate
+item.crystalmod.crystalleggings.green.name=Green Crystal Leggings
+item.crystalmod.crystalboots.green.name=Green Crystal Boots
+
+item.crystalmod.crystalhelmet.dark.name=Dark Crystal Helmet
+item.crystalmod.crystalchestplate.dark.name=Dark Crystal Chestplate
+item.crystalmod.crystalleggings.dark.name=Dark Crystal Leggings
+item.crystalmod.crystalboots.dark.name=Dark Crystal Boots
+
+item.crystalmod.crystalhelmet.pure.name=Pure Crystal Helmet
+item.crystalmod.crystalchestplate.pure.name=Pure Crystal Chestplate
+item.crystalmod.crystalleggings.pure.name=Pure Crystal Leggings
+item.crystalmod.crystalboots.pure.name=Pure Crystal Boots
+
 item.crystalmod.pipecover.name=Crystal Pipe Cover
 item.crystalmod.pipeattachment.estorage.export.name=Network Export Attachment
 item.crystalmod.pipeattachment.estorage.import.name=Network Import Attachment
@@ -287,6 +312,11 @@ tile.crystalmod.crystalglass.red.name=Red Crystal Glass
 tile.crystalmod.crystalglass.green.name=Green Crystal Glass
 tile.crystalmod.crystalglass.dark.name=Dark Crystal Glass
 tile.crystalmod.crystalglass.pure.name=Pure Crystal Glass
+tile.crystalmod.crystalglasstinted.blue.name=Blue Crystal Tinted Glass
+tile.crystalmod.crystalglasstinted.red.name=Red Crystal Tinted Glass
+tile.crystalmod.crystalglasstinted.green.name=Green Crystal Tinted Glass
+tile.crystalmod.crystalglasstinted.dark.name=Dark Crystal Tinted Glass
+tile.crystalmod.crystalglasstinted.pure.name=Pure Crystal Tinted Glass
 tile.crystalmod.crystalglasspane.blue.name=Blue Crystal Glass Pane
 tile.crystalmod.crystalglasspane.red.name=Red Crystal Glass Pane
 tile.crystalmod.crystalglasspane.green.name=Green Crystal Glass Pane
@@ -514,6 +544,10 @@ tile.crystalmod.particlethrower.name=Particle Thrower
 tile.crystalmod.removerexplosion.redstone.name=Redstone Removing TNT
 tile.crystalmod.removerexplosion.water.name=Water Removing TNT
 tile.crystalmod.removerexplosion.xp.name=XP Removing TNT
+tile.crystalmod.oppositefuser.name=Opposite Fuser
+
+tile.crystalmod.advancedlamp.pure.name=Pure Lamp
+tile.crystalmod.advancedlamp.dark.name=Dark Lamp
 #--Fluids
 fluid.crystalmod.xpjuice=Liquid XP
 fluid.crystalmod.crystal.blue=Blue Liquid Crystal

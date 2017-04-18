@@ -1,0 +1,16 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "transform": "forge:default-item",
+        "model": "forge:item-layer"
+    },
+    "variants": {
+        "color": {
+			"blue": { "textures": { "layer0": "crystalmod:items/armor/crystal_blue_helmet"}},
+			"red": { "textures": { "layer0": "crystalmod:items/armor/crystal_red_helmet" }},
+			"green": { "textures": { "layer0": "crystalmod:items/armor/crystal_green_helmet" }},
+			"dark": { "textures": { "layer0": "crystalmod:items/armor/crystal_dark_helmet" }},
+			"pure": { "textures": { "layer0": "crystalmod:items/armor/crystal_pure_helmet" }}
+		}
+    }
+}

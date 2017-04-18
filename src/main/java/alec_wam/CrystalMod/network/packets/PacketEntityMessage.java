@@ -5,6 +5,7 @@ import java.io.IOException;
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.capability.ExtendedPlayer;
 import alec_wam.CrystalMod.capability.ExtendedPlayerProvider;
+import alec_wam.CrystalMod.client.sound.ModSounds;
 import alec_wam.CrystalMod.entities.disguise.DisguiseType;
 import alec_wam.CrystalMod.items.tools.grapple.EntityGrapplingHook;
 import alec_wam.CrystalMod.items.tools.grapple.GrappleControllerBase;
@@ -24,6 +25,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.network.NetHandlerPlayServer;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -85,6 +87,15 @@ public class PacketEntityMessage extends AbstractPacketThreadsafe {
 		if(entity !=null){
 			if(type.equalsIgnoreCase("CustomDataSync")){
 				EntityUtil.setCustomEntityData(entity, data);
+			}
+			if(type.equalsIgnoreCase("#ClearXP#")){
+				if(entity instanceof EntityPlayer){
+					EntityPlayer ePlayer = (EntityPlayer)entity;
+					ePlayer.removeExperienceLevel(Integer.MAX_VALUE);
+					if(client){
+						CrystalMod.proxy.getClientWorld().playSound(ePlayer.posX, ePlayer.posY, ePlayer.posZ, ModSounds.levelDown, SoundCategory.BLOCKS, 1.0F, 1.0F, false);
+					}
+				}
 			}
 			if(type.equalsIgnoreCase("#Jump#")){
 				if(entity instanceof EntityPlayer){

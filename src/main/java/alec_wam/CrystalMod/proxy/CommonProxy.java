@@ -17,6 +17,7 @@ import alec_wam.CrystalMod.enchantment.ModEnchantments;
 import alec_wam.CrystalMod.entities.ModEntites;
 import alec_wam.CrystalMod.entities.disguise.DisguiseHandler;
 import alec_wam.CrystalMod.fluids.ModFluids;
+import alec_wam.CrystalMod.handler.ArmorEventHandler;
 import alec_wam.CrystalMod.handler.EventHandler;
 import alec_wam.CrystalMod.handler.KeyHandler;
 import alec_wam.CrystalMod.handler.MissingItemHandler;
@@ -121,6 +122,7 @@ public class CommonProxy {
 		MinecraftForge.EVENT_BUS.register(new EventHandler());
 		MinecraftForge.EVENT_BUS.register(WorldTickHandler.instance);
 		new TagManager();
+		MinecraftForge.EVENT_BUS.register(new ArmorEventHandler());
 		
 		ModCrafting.init();
 		ModBanners.init();
