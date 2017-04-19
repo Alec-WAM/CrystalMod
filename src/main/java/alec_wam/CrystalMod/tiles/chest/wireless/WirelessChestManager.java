@@ -221,7 +221,7 @@ public class WirelessChestManager extends WorldSavedData implements IWirelessChe
 		@Override
 	    protected void onContentsChanged(int slot)
 	    {
-	        super.onContentsChanged(slot);
+			super.onContentsChanged(slot);
 	        list.setDirty();
 	    }
 	}

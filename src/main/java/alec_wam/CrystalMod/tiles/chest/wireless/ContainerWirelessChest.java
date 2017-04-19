@@ -74,11 +74,13 @@ public class ContainerWirelessChest extends Container {
 
     protected void layoutContainer(IInventory playerInventory, WirelessInventory chestInventory, CrystalChestType type, int xSize, int ySize)
     {
+    	int index = 0;
         for (int chestRow = 0; chestRow < 5; chestRow++)
         {
             for (int chestCol = 0; chestCol < 9; chestCol++)
             {
-                addSlotToContainer(new SlotItemHandler(chestInventory, chestCol + chestRow * 5, 12 + chestCol * 18, 18 + chestRow * 18));
+                addSlotToContainer(new SlotItemHandler(chestInventory, index, 12 + chestCol * 18, 18 + chestRow * 18));
+                index++;
             }
         }
 
