@@ -544,7 +544,7 @@ tile.crystalmod.particlethrower.name=Particle Thrower
 tile.crystalmod.removerexplosion.redstone.name=Redstone Removing TNT
 tile.crystalmod.removerexplosion.water.name=Water Removing TNT
 tile.crystalmod.removerexplosion.xp.name=XP Removing TNT
-tile.crystalmod.oppositefuser.name=Opposite Fuser
+tile.crystalmod.oppositefuser.name=Opposite Fuzer
 
 tile.crystalmod.advancedlamp.pure.name=Pure Lamp
 tile.crystalmod.advancedlamp.dark.name=Dark Lamp

@@ -31,6 +31,7 @@ public class ItemCrystalSword extends ItemSword implements ICustomModel {
 		super(material);
 		toolMaterial = material;
 		this.setCreativeTab(CrystalMod.tabTools);
+		setNoRepair();
 		ModItems.registerItem(this, "crystalsword");
 	}
 	

@@ -66,7 +66,7 @@ public class BlockOppositeFuser extends BlockContainer implements ICustomModel {
 		TileEntity te = world.getTileEntity(pos);
 		if(te !=null && te instanceof TileOppositeFuser){
 			TileOppositeFuser fuser = (TileOppositeFuser)te;
-			return state.withProperty(ACTIVE, false).withProperty(NORTH_SOUTH, false);
+			return state.withProperty(ACTIVE, fuser.fuseTime > 0).withProperty(NORTH_SOUTH, fuser.facingNS);
 		}
 		return state;
 	}
@@ -144,7 +144,7 @@ public class BlockOppositeFuser extends BlockContainer implements ICustomModel {
 	
 	@SideOnly(Side.CLIENT)
     public void initModel() {
-    	//ModelLoader.setCustomStateMapper(this, new CustomStateMapper());
+    	ModelLoader.setCustomStateMapper(this, new CustomStateMapper());
     	ModBlocks.initBasicModel(this);
 	}
 	

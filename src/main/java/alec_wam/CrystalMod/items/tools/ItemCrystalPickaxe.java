@@ -25,6 +25,7 @@ public class ItemCrystalPickaxe extends ItemPickaxe implements ICustomModel {
 
 	public ItemCrystalPickaxe(ToolMaterial material) {
 		this(material, "crystalpick");
+		setNoRepair();
 	}
 	
 	public ItemCrystalPickaxe(ToolMaterial material, String name) {

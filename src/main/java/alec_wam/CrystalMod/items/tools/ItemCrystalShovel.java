@@ -25,6 +25,7 @@ public class ItemCrystalShovel extends ItemSpade implements ICustomModel {
 
 	public ItemCrystalShovel(ToolMaterial material) {
 		this(material, "crystalshovel");
+		setNoRepair();
 	}
 	
 	public ItemCrystalShovel(ToolMaterial material, String name) {

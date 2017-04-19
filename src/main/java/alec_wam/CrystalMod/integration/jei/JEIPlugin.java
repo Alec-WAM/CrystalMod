@@ -13,6 +13,7 @@ import alec_wam.CrystalMod.integration.jei.machine.InfuserRecipeCategory;
 import alec_wam.CrystalMod.integration.jei.machine.LiquidizerRecipeCategory;
 import alec_wam.CrystalMod.integration.jei.machine.PressRecipeCategory;
 import alec_wam.CrystalMod.items.ModItems;
+import alec_wam.CrystalMod.tiles.lamps.BlockFakeLight.LightType;
 import alec_wam.CrystalMod.tiles.machine.crafting.BlockCrystalMachine.MachineType;
 import alec_wam.CrystalMod.tiles.machine.crafting.furnace.ContainerCrystalFurnace;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.BlockPanel.PanelType;
@@ -81,6 +82,8 @@ public class JEIPlugin  extends BlankModPlugin {
 		jeiHelpers.getIngredientBlacklist().addIngredientToBlacklist(new ItemStack(ModBlocks.crystalTreePlantDark));
 		jeiHelpers.getIngredientBlacklist().addIngredientToBlacklist(new ItemStack(ModBlocks.cubeBlock));
 		jeiHelpers.getIngredientBlacklist().addIngredientToBlacklist(new ItemStack(ModBlocks.cubeCore));
+		jeiHelpers.getIngredientBlacklist().addIngredientToBlacklist(new ItemStack(ModBlocks.fakeLight, 1, LightType.LIGHT.getMeta()));
+		jeiHelpers.getIngredientBlacklist().addIngredientToBlacklist(new ItemStack(ModBlocks.fakeLight, 1, LightType.DARK.getMeta()));
 
 		String desc = "Dropped upon killing an Ender Dragon.";
 		//Lang.localize("jei.desc.wings");

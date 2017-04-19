@@ -1,6 +1,7 @@
 package alec_wam.CrystalMod.tiles.explosives.fuser;
 
 import alec_wam.CrystalMod.tiles.TileEntityMod;
+import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.TimeUtil;
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -32,6 +33,7 @@ public class TileOppositeFuser extends TileEntityMod {
 	
 	public void triggerExplosion(){
 		this.fuseTime = 30 * TimeUtil.SECOND;
+		BlockUtil.markBlockForUpdate(getWorld(), getPos());
 	}
 	
 	@Override

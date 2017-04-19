@@ -14,6 +14,7 @@ public class ItemCustomArmor extends ItemArmor {
 	public ItemCustomArmor(ArmorMaterial materialIn, EntityEquipmentSlot equipmentSlotIn, String name, ItemStack repair) {
 		super(materialIn, 0, equipmentSlotIn);
 		setCreativeTab(CrystalMod.tabTools);
+		setNoRepair();
 		textureName = name;
 		this.repair = repair;
 	}

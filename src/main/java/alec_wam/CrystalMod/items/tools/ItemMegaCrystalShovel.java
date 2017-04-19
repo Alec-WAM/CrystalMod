@@ -27,6 +27,7 @@ public class ItemMegaCrystalShovel extends ItemCrystalShovel implements IMegaToo
 
 	public ItemMegaCrystalShovel(ToolMaterial material) {
 		super(material, "megacrystalshovel");
+		setNoRepair();
 	}
 	
 	@Override

@@ -32,6 +32,7 @@ public class ItemMegaCrystalAxe extends ItemCrystalAxe implements IMegaTool {
 
 	public ItemMegaCrystalAxe(ToolMaterial material) {
 		super(material, "megacrystalaxe");
+		setNoRepair();
 	}
 	
 	private static final MultiHarvestComparator harvestComparator = new MultiHarvestComparator();

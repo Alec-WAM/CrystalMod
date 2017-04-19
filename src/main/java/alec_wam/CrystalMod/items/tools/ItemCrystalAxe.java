@@ -25,6 +25,7 @@ public class ItemCrystalAxe extends ItemAxe implements ICustomModel {
 
 	public ItemCrystalAxe(ToolMaterial material) {
 		this(material, "crystalaxe");
+		setNoRepair();
 	}
 	
 	public ItemCrystalAxe(ToolMaterial material, String name) {

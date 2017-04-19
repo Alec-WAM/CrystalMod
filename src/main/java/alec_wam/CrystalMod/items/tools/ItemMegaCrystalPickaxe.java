@@ -27,6 +27,7 @@ public class ItemMegaCrystalPickaxe extends ItemCrystalPickaxe implements IMegaT
 
 	public ItemMegaCrystalPickaxe(ToolMaterial material) {
 		super(material, "megacrystalpick");
+		setNoRepair();
 	}
 	
 	@Override

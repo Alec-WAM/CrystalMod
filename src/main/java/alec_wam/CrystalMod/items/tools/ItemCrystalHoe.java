@@ -25,6 +25,7 @@ public class ItemCrystalHoe extends ItemHoe implements ICustomModel {
 
 	public ItemCrystalHoe(ToolMaterial material) {
 		super(material);
+		setNoRepair();
 		this.setCreativeTab(CrystalMod.tabTools);
 		ModItems.registerItem(this, "crystalhoe");
 	}
