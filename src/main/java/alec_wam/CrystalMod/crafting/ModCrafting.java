@@ -477,9 +477,9 @@ public class ModCrafting {
 		addShapedOreRecipe(new ItemStack(ModBlocks.advDispenser), new Object[]{"PPP", "PMP", "PDP", 'P', dIronPlate, 'M', "skull", 'D', Blocks.DISPENSER});
 		addShapedOreRecipe(new ItemStack(ModBlocks.muffler), new Object[]{"WWW", "NMN", "WWW", 'W', "wool", 'M', machineFrame, 'N', Blocks.NOTEBLOCK});
 
-		addShapedOreRecipe(new ItemStack(ModBlocks.remover, 1, RemoverType.REDSTONE.getMeta()), new Object[]{" R ", "RTR", " R ", 'R', "dustRedstone", 'T', Blocks.TNT});
-		addShapedOreRecipe(new ItemStack(ModBlocks.remover, 1, RemoverType.WATER.getMeta()), new Object[]{" W ", " T ", " W ", 'W', Items.WATER_BUCKET, 'T', Blocks.TNT});
-		addShapedOreRecipe(new ItemStack(ModBlocks.remover, 1, RemoverType.XP.getMeta()), new Object[]{" X ", "XTX", " X ", 'X', Items.EXPERIENCE_BOTTLE, 'T', Blocks.TNT});
+		addShapedOreRecipe(new ItemStack(ModBlocks.remover, 1, RemoverType.REDSTONE.getMeta()), new Object[]{"CRC", "RTR", "CRC", 'R', "dustRedstone", 'T', Blocks.TNT, 'C', redCrystal});
+		addShapedOreRecipe(new ItemStack(ModBlocks.remover, 1, RemoverType.WATER.getMeta()), new Object[]{"CW ", " T ", "CWC", 'W', Items.WATER_BUCKET, 'T', Blocks.TNT, 'C', blueCrystal});
+		addShapedOreRecipe(new ItemStack(ModBlocks.remover, 1, RemoverType.XP.getMeta()), new Object[]{"CXC", "XTX", "CXC", 'X', Items.EXPERIENCE_BOTTLE, 'T', Blocks.TNT, 'C', greenCrystal});
 		
 		addShapedOreRecipe(new ItemStack(ModBlocks.particleThrower), new Object[]{" E ", "BTB", " C ", 'E', "enderpearl", 'T', Blocks.TNT, 'C', Items.END_CRYSTAL, 'B', ModFluids.bucketList.get(ModFluids.fluidEnder)});
 		
