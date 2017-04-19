@@ -1,5 +1,6 @@
 package alec_wam.CrystalMod.handler;
 
+import java.lang.reflect.Method;
 import java.util.Iterator;
 
 import alec_wam.CrystalMod.crafting.recipes.UpgradeItemRecipe;
@@ -61,8 +62,13 @@ public class ArmorEventHandler {
 
 					if(effect.getPotion().isBadEffect()){
 						try {
-							ReflectionHelper.findMethod(EntityLivingBase.class, "onFinishedPotionEffect", "func_70688_c", PotionEffect.class).invoke(player, effect);
-							iterator.remove();
+							Method method = ReflectionHelper.findMethod(EntityLivingBase.class, "onFinishedPotionEffect", "func_70688_c", PotionEffect.class);
+							if(method !=null){
+								method.invoke(player, effect);
+								iterator.remove();
+							} else {
+								clearPotionError = true;
+							}
 						} catch (Exception e) {
 							e.printStackTrace();
 							ModLogger.warning("An error occured when trying to clear your bad potions!");
