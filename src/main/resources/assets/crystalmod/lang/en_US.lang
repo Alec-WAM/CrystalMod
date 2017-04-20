@@ -546,8 +546,8 @@ tile.crystalmod.removerexplosion.water.name=Water Removing TNT
 tile.crystalmod.removerexplosion.xp.name=XP Removing TNT
 tile.crystalmod.oppositefuser.name=Opposite Fuzer
 
-tile.crystalmod.advancedlamp.pure.name=Pure Lamp
-tile.crystalmod.advancedlamp.dark.name=Dark Lamp
+tile.crystalmod.advancedlamp.pure.name=Pure Light Lamp
+tile.crystalmod.advancedlamp.dark.name=Darkness Lamp
 #--Fluids
 fluid.crystalmod.xpjuice=Liquid XP
 fluid.crystalmod.crystal.blue=Blue Liquid Crystal
