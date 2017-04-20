@@ -15,6 +15,7 @@ import alec_wam.CrystalMod.blocks.BlockMetalBars.EnumMetalBarType;
 import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.blocks.crops.material.ModCrops;
 import alec_wam.CrystalMod.blocks.glass.BlockCrystalGlass.GlassType;
+import alec_wam.CrystalMod.crafting.recipes.CustomToolRepairRecipe;
 import alec_wam.CrystalMod.crafting.recipes.RecipeSuperTorchAdd;
 import alec_wam.CrystalMod.crafting.recipes.ShapedNBTCopy;
 import alec_wam.CrystalMod.crafting.recipes.ShapedOreRecipeNBT;
@@ -107,6 +108,7 @@ public class ModCrafting {
 		GameRegistry.addRecipe(new RecipeBatUpgrade());
 		GameRegistry.addRecipe(new RecipeSuperTorchAdd());
 		GameRegistry.addRecipe(new RecipeWirelessChestMinecart());
+		GameRegistry.addRecipe(new CustomToolRepairRecipe());
 		BatHelper.addBatCrafting();
 		
 		ItemStack blueCrystal = new ItemStack(ModItems.crystals, 1, CrystalType.BLUE.getMetadata());

@@ -29,6 +29,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.oredict.RecipeSorter;
 
 public class RecipeBatUpgrade implements IRecipe {
@@ -167,6 +168,6 @@ public class RecipeBatUpgrade implements IRecipe {
 
 	@Override
 	public NonNullList<ItemStack> getRemainingItems(InventoryCrafting inv) {
-		return NonNullList.create();
+		return ForgeHooks.defaultRecipeGetRemainingItems(inv);
 	}
 }

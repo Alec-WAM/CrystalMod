@@ -18,6 +18,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.oredict.RecipeSorter;
 
 public class RecipeWirelessChestMinecart implements IRecipe {
@@ -65,8 +66,9 @@ public class RecipeWirelessChestMinecart implements IRecipe {
             return false;
         
         //Only on top of each other
-        if(chestSlot != minecartSlot-3)return false;
-        
+        if(inventoryCrafting.getSizeInventory() == 9 && chestSlot != minecartSlot-3)return false;
+        if(inventoryCrafting.getSizeInventory() == 4 && chestSlot != minecartSlot-2)return false;
+
         ItemStack minecart = new ItemStack(ModItems.wirelessChestMinecart);
         
         int code = ItemNBTHelper.getInteger(chest, WirelessChestHelper.NBT_CODE, 0);
@@ -98,6 +100,6 @@ public class RecipeWirelessChestMinecart implements IRecipe {
 
 	@Override
 	public NonNullList<ItemStack> getRemainingItems(InventoryCrafting inv) {
-		return NonNullList.create();
+		return ForgeHooks.defaultRecipeGetRemainingItems(inv);
 	}
 }
