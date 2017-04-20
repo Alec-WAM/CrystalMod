@@ -757,6 +757,8 @@ crystalmod.fusion.message.invalid=%s is not usable in this recipe.
 crystalmod.subtitle.fusion_startup=Starting Fusion
 crystalmod.subtitle.fusion_running=Fusing Items
 crystalmod.subtitle.fusion_cooldown=Ending Fusion
+#--Enchantments
+enchantment.doubleJump=Double Jump
 #--Keys
 key.categories.crystalmod=Crystal Mod
 keybind.crystalmodbackpack=Open Backpack
