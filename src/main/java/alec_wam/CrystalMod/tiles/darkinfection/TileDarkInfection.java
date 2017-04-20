@@ -33,9 +33,9 @@ public class TileDarkInfection extends TileEntityMod {
 			
 			if(delay <= 0){
 				if(currentRadius < 64){
-					delay = TimeUtil.SECOND * 3;
+					delay = TimeUtil.SECOND * 1;
 					currentRadius++;
-					BlockUtil.createOrb(getWorld(), getPos(), Blocks.STONE.getDefaultState(), currentRadius, true, false);
+					BlockUtil.createOrb(getWorld(), getPos(), Blocks.STONE.getDefaultState(), currentRadius, true, true);
 				}
 			}
 		}

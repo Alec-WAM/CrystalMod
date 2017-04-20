@@ -4,7 +4,7 @@
 	"model": "crystalmod:fixedOneTexture"
   },
   "variants": {
-    "normal": { "model": "crystalmod:fixedOneTexture", "textures": { "all": "crystalmod:blocks/darkinfection_off" } },
-	"inventory": { "model": "crystalmod:fixedOneTexture", "textures": { "all": "crystalmod:blocks/darkinfection_off" } }
+    "normal": { "model": "crystalmod:fixedOneTexture", "textures": { "all": "crystalmod:blocks/darkinfection_on" } },
+	"inventory": { "model": "crystalmod:fixedOneTexture", "textures": { "all": "crystalmod:blocks/darkinfection_on" } }
   }
 }
