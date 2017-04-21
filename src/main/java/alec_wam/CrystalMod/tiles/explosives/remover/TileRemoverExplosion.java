@@ -40,7 +40,7 @@ public class TileRemoverExplosion extends TileEntityMod implements IMessageHandl
 			@Override
 			public List<BlockPos> onExplosion(World world, BlockPos pos) {
 				List<BlockPos> list = Lists.newArrayList();
-				ImmutableList<BlockPos> posList = BlockUtil.getBlocksInBB(pos, 5, 5, 5);
+				ImmutableList<BlockPos> posList = BlockUtil.getBlocksInBB(pos, 8, 8, 8);
 				for(BlockPos otherPos : posList){
 					IBlockState state = world.getBlockState(otherPos);
 					if(isRedstoneComp(state)){
@@ -78,7 +78,7 @@ public class TileRemoverExplosion extends TileEntityMod implements IMessageHandl
 			@Override
 			public List<BlockPos> onExplosion(World world, BlockPos pos) {
 				List<BlockPos> list = Lists.newArrayList();
-				ImmutableList<BlockPos> posList = BlockUtil.getBlocksInBB(pos, 5, 5, 5);
+				ImmutableList<BlockPos> posList = BlockUtil.getBlocksInBB(pos, 8, 8, 8);
 				for(BlockPos otherPos : posList){
 					IBlockState state = world.getBlockState(otherPos);
 					if(FluidUtil.isFluidBlock(world, otherPos, state)){
@@ -93,7 +93,7 @@ public class TileRemoverExplosion extends TileEntityMod implements IMessageHandl
 			@Override
 			public List<BlockPos> onExplosion(World world, BlockPos pos) {
 				List<BlockPos> list = Lists.newArrayList();
-				AxisAlignedBB bb = new AxisAlignedBB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1.0D, pos.getY() + 1.0D, pos.getZ() + 1.0D).expandXyz(5.0D);
+				AxisAlignedBB bb = new AxisAlignedBB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1.0D, pos.getY() + 1.0D, pos.getZ() + 1.0D).expandXyz(8.0D);
 				List<EntityXPOrb> orbs = world.getEntitiesWithinAABB(EntityXPOrb.class, bb);
 				for(EntityXPOrb orb : orbs){
 					if(!orb.isDead && orb.isEntityAlive()){
@@ -105,7 +105,6 @@ public class TileRemoverExplosion extends TileEntityMod implements IMessageHandl
 					}
 				}
 				List<EntityPlayer> players = world.getEntitiesWithinAABB(EntityPlayer.class, bb);
-				ModLogger.info("Players: "+players.size());
 				for(EntityPlayer player : players){
 					if(!player.isDead && !player.capabilities.disableDamage){
 						final BlockPos playerPos = new BlockPos(player);
