@@ -83,6 +83,7 @@ public class ArmorEventHandler {
 	
 	@SubscribeEvent
 	public void addMoreMobXP(LivingExperienceDropEvent event){
+		if(event.getAttackingPlayer() == null)return;
 		EntityPlayer player = event.getAttackingPlayer();
 		if(getArmorCount(player, "green") == 4 || getArmorCount(player, "pure") == 4){
 			final int oldXP = event.getDroppedExperience();
@@ -191,6 +192,7 @@ public class ArmorEventHandler {
 	}
 	
 	public static int getArmorCount(EntityLivingBase entity, String type){
+		if(entity == null)return 0;
 		ItemStack head = entity.getItemStackFromSlot(EntityEquipmentSlot.HEAD);
 		ItemStack chest = entity.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
 		ItemStack legs = entity.getItemStackFromSlot(EntityEquipmentSlot.LEGS);
