@@ -31,7 +31,7 @@ public class BlockParticleThrower extends BlockContainer {
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
     {
 		if(!player.isSneaking() && ItemStackTools.isEmpty(player.getHeldItem(hand))){
-			TileParticleThrower.throwBlocks(world, pos, 5);
+			TileParticleThrower.throwBlocks(world, pos, 8);
 			world.setBlockToAir(pos);
 			return true;
 		}
