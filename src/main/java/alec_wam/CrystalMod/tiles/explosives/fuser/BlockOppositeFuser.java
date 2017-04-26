@@ -5,17 +5,23 @@ import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.items.ItemCrystal.CrystalType;
 import alec_wam.CrystalMod.items.ModItems;
+import alec_wam.CrystalMod.network.CrystalModNetwork;
+import alec_wam.CrystalMod.network.packets.PacketEntityMessage;
 import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
+import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
@@ -33,6 +39,7 @@ public class BlockOppositeFuser extends BlockContainer implements ICustomModel {
 
 	public static final PropertyBool NORTH_SOUTH = PropertyBool.create("northsouth");
 	public static final PropertyBool ACTIVE = PropertyBool.create("active");
+	public static final PropertyInteger TIER = PropertyInteger.create("tier", 0, 2);
 	
 	public BlockOppositeFuser() {
 		super(Material.IRON);
@@ -48,17 +55,17 @@ public class BlockOppositeFuser extends BlockContainer implements ICustomModel {
 	
 	@Override
 	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, NORTH_SOUTH, ACTIVE);
+		return new BlockStateContainer(this, NORTH_SOUTH, ACTIVE, TIER);
 	}
 	
 	@Override
 	public IBlockState getStateFromMeta(int meta){
-		return getDefaultState();
+		return getDefaultState().withProperty(TIER, meta);
 	}
 	
 	@Override
 	public int getMetaFromState(IBlockState state){
-		return 0;
+		return state.getValue(TIER);
 	}
 
 	@Override
@@ -90,6 +97,12 @@ public class BlockOppositeFuser extends BlockContainer implements ICustomModel {
 		if(te !=null && te instanceof TileOppositeFuser){
 			TileOppositeFuser fuser = (TileOppositeFuser)te;
 			if(ItemStackTools.isValid(held)){
+				if(held.getItem() == Items.STICK){
+					if(!world.isRemote){
+						CrystalModNetwork.sendTo(new PacketEntityMessage(player, "#FusorFlash#"), (EntityPlayerMP)player);
+					}
+					return true;
+				}
 				if(held.getItem() == ModItems.crystals){
 					if(held.getMetadata() == CrystalType.PURE.getMetadata() && !fuser.hasPure){
 						//PURE
@@ -139,20 +152,29 @@ public class BlockOppositeFuser extends BlockContainer implements ICustomModel {
 	
 	@Override
 	public TileEntity createNewTileEntity(World worldIn, int meta) {
+		if(meta == 2){
+			return new TileOppositeFuserTier3();
+		}
+		if(meta == 1){
+			return new TileOppositeFuserTier2();
+		}
 		return new TileOppositeFuser();
 	}
 	
 	@SideOnly(Side.CLIENT)
     public void initModel() {
     	ModelLoader.setCustomStateMapper(this, new CustomStateMapper());
-    	ModBlocks.initBasicModel(this);
-	}
+    	ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(getRegistryName()+"_tier0", "inventory"));
+    	ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 1, new ModelResourceLocation(getRegistryName()+"_tier1", "inventory"));
+    	ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 2, new ModelResourceLocation(getRegistryName()+"_tier2", "inventory"));
+}
 	
 	public static class CustomStateMapper extends StateMapperBase
 	{
 		@Override
 		protected ModelResourceLocation getModelResourceLocation(IBlockState state)
 		{
+			int tier = state.getValue(TIER);
 			boolean active = state.getValue(ACTIVE);
 			boolean ns = state.getValue(NORTH_SOUTH);
 			StringBuilder builder = new StringBuilder();
@@ -165,7 +187,7 @@ public class BlockOppositeFuser extends BlockContainer implements ICustomModel {
 			builder.append("=");
 			builder.append(""+ns);
 			
-			nameOverride = state.getBlock().getRegistryName().getResourcePath();
+			nameOverride = state.getBlock().getRegistryName().getResourcePath()+"_tier"+tier;
 
 			if(builder.length() == 0)
 			{

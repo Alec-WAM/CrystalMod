@@ -46,6 +46,8 @@ import alec_wam.CrystalMod.tiles.entityhopper.BlockEntityHopper;
 import alec_wam.CrystalMod.tiles.entityhopper.TileEntityEntityHopper;
 import alec_wam.CrystalMod.tiles.explosives.fuser.BlockOppositeFuser;
 import alec_wam.CrystalMod.tiles.explosives.fuser.TileOppositeFuser;
+import alec_wam.CrystalMod.tiles.explosives.fuser.TileOppositeFuserTier2;
+import alec_wam.CrystalMod.tiles.explosives.fuser.TileOppositeFuserTier3;
 import alec_wam.CrystalMod.tiles.explosives.particle.BlockParticleThrower;
 import alec_wam.CrystalMod.tiles.explosives.particle.TileParticleThrower;
 import alec_wam.CrystalMod.tiles.explosives.remover.BlockRemoverExplosion;
@@ -552,8 +554,9 @@ public class ModBlocks {
 		registerTileEntity(TileRemoverExplosion.class);
 		
 		oppositeFuser = new BlockOppositeFuser();
-		registerBlock(oppositeFuser, "oppositefuser");
-		registerTileEntity(TileOppositeFuser.class);
+		registerBlock(oppositeFuser, new ItemBlockMeta(oppositeFuser), "oppositefuser");
+		ItemBlockMeta.setMappingProperty(oppositeFuser, BlockOppositeFuser.TIER);
+		registerTileEntity(TileOppositeFuser.class, TileOppositeFuserTier2.class, TileOppositeFuserTier3.class);
 		
 		darkInfection = new BlockDarkInfection();
 		registerBlock(darkInfection, "darkinfection");

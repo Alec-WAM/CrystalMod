@@ -3,7 +3,7 @@
   "defaults": {
     "model": "crystalmod:oppositefuser",
     "textures": {
-	  "sides":"crystalmod:blocks/explosives/opposite_fuser_side_off",
+	  "sides":"crystalmod:blocks/explosives/opposite_fuser_side_off_tier2",
 	  "north":"crystalmod:blocks/explosives/opposite_fuser_port_pure", 
 	  "south":"crystalmod:blocks/explosives/opposite_fuser_port_dark"
     },
@@ -19,7 +19,7 @@
 	  }
     },
 	"active": {
-		"true": {"textures": {"sides":"crystalmod:blocks/explosives/opposite_fuser_side_on"}},
+		"true": {"textures": {"sides":"crystalmod:blocks/explosives/opposite_fuser_side_on_tier2"}},
 		"false": {}
 	}
   }

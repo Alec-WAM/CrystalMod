@@ -39,6 +39,10 @@ public class ExtendedPlayer {
 	private UUID lastPlayerDisguiseUUID;
 	private UUID playerDisguiseUUID;
 	
+	/**Explosives**/
+	private int screenFlashTime;
+	private int maxFlashTime;
+	
 	public ExtendedPlayer() {
 	}
     
@@ -147,5 +151,21 @@ public class ExtendedPlayer {
 	public void setPlayerDisguiseUUID(UUID uuid) {
 		lastPlayerDisguiseUUID = playerDisguiseUUID;
 		playerDisguiseUUID = uuid;
+	}
+
+	public int getScreenFlashTime() {
+		return screenFlashTime;
+	}
+	
+	public int getMaxScreenFlashTime() {
+		return maxFlashTime;
+	}
+
+	public void setScreenFlashTime(int screenFlashTime) {
+		maxFlashTime = this.screenFlashTime = screenFlashTime;
+	}
+	
+	public void subtractFlashTime(){
+		this.screenFlashTime--;
 	}
 }

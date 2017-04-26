@@ -1,0 +1,26 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "crystalmod:oppositefuser",
+    "textures": {
+	  "sides":"crystalmod:blocks/explosives/opposite_fuser_side_off_tier0",
+	  "north":"crystalmod:blocks/explosives/opposite_fuser_port_pure", 
+	  "south":"crystalmod:blocks/explosives/opposite_fuser_port_dark"
+    },
+    "transform": "forge:default-block"
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{}],
+    "northsouth": {
+      "false": {y:90},
+      "true": {
+		y:180
+	  }
+    },
+	"active": {
+		"true": {"textures": {"sides":"crystalmod:blocks/explosives/opposite_fuser_side_on_tier0"}},
+		"false": {}
+	}
+  }
+}

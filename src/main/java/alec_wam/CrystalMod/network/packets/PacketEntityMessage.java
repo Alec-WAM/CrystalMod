@@ -16,6 +16,7 @@ import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.IMessageHandler;
 import alec_wam.CrystalMod.util.EntityUtil;
 import alec_wam.CrystalMod.util.ModLogger;
+import alec_wam.CrystalMod.util.TimeUtil;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.entity.Entity;
@@ -94,6 +95,15 @@ public class PacketEntityMessage extends AbstractPacketThreadsafe {
 					ePlayer.removeExperienceLevel(Integer.MAX_VALUE);
 					if(client){
 						CrystalMod.proxy.getClientWorld().playSound(ePlayer.posX, ePlayer.posY, ePlayer.posZ, ModSounds.levelDown, SoundCategory.BLOCKS, 1.0F, 1.0F, false);
+					}
+				}
+			}
+			if(type.equalsIgnoreCase("#FusorFlash#")){
+				if(entity instanceof EntityPlayer){
+					EntityPlayer ePlayer = (EntityPlayer)entity;
+					ExtendedPlayer exPlayer = ExtendedPlayerProvider.getExtendedPlayer(ePlayer);
+					if(exPlayer !=null){
+						exPlayer.setScreenFlashTime(TimeUtil.SECOND * 5);
 					}
 				}
 			}

@@ -130,11 +130,13 @@ public class ModCrafting {
 		ItemStack darkIngot = new ItemStack(ModItems.ingots, 1, IngotType.DARK.getMetadata());
 		ItemStack darkNugget = new ItemStack(ModItems.crystals, 1, CrystalType.DARK_NUGGET.getMetadata());
 		ItemStack darkPlate = new ItemStack(ModItems.plates, 1, PlateType.DARK.getMetadata());
+		ItemStack darkBlock = new ItemStack(ModBlocks.crystal, 1, CrystalBlockType.DARK.getMeta());
 		
 		ItemStack pureCrystal = new ItemStack(ModItems.crystals, 1, CrystalType.PURE.getMetadata());
 		ItemStack pureIngot = new ItemStack(ModItems.ingots, 1, IngotType.PURE.getMetadata());
 		ItemStack pureNugget = new ItemStack(ModItems.crystals, 1, CrystalType.PURE_NUGGET.getMetadata());
 		ItemStack purePlate = new ItemStack(ModItems.plates, 1, PlateType.PURE.getMetadata());
+		ItemStack pureBlock = new ItemStack(ModBlocks.crystal, 1, CrystalBlockType.PURE.getMeta());
 		
 		ItemStack dIronIngot = new ItemStack(ModItems.ingots, 1, IngotType.DARK_IRON.getMetadata());
 		ItemStack dIronNugget = new ItemStack(ModItems.crystals, 1, CrystalType.DIRON_NUGGET.getMetadata());
@@ -485,6 +487,10 @@ public class ModCrafting {
 		
 		addShapedOreRecipe(new ItemStack(ModBlocks.particleThrower), new Object[]{" E ", "BTB", " C ", 'E', "enderpearl", 'T', Blocks.TNT, 'C', Items.END_CRYSTAL, 'B', ModFluids.bucketList.get(ModFluids.fluidEnder)});
 		
+		addShapedRecipe(new ItemStack(ModBlocks.oppositeFuser, 1, 0), new Object[]{"DSP", "#T#", "PWD", '#', dIronPlate, 'D', darkCrystal, 'P', pureCrystal, 'S', new ItemStack(Items.SKULL, 1, 0), 'W', new ItemStack(Items.SKULL, 1, 1), 'T', Blocks.TNT});
+		addShapedRecipe(new ItemStack(ModBlocks.oppositeFuser, 1, 1), new Object[]{"DTP", "SFW", "PND", 'F', new ItemStack(ModBlocks.oppositeFuser, 1, 0), 'D', darkIngot, 'P', pureIngot, 'S', new ItemStack(Items.SKULL, 1, 0), 'W', new ItemStack(Items.SKULL, 1, 1), 'T', Blocks.TNT, 'N', Items.NETHER_STAR});
+		addShapedRecipe(new ItemStack(ModBlocks.oppositeFuser, 1, 2), new Object[]{"DTP", "NFS", "PTD", 'F', new ItemStack(ModBlocks.oppositeFuser, 1, 1), 'D', darkBlock, 'P', pureBlock, 'S', new ItemStack(Items.SKULL, 1, 5), 'T', Blocks.TNT, 'N', Items.NETHER_STAR});
+
 		addShapedOreRecipe(new ItemStack(ModBlocks.advancedLamp, 1, LampType.PURE.getMeta()), new Object[]{"CGC", "PLP", "CGC", 'C', pureCrystal, 'G', Items.PRISMARINE_CRYSTALS, 'P', purePlate, 'L', Blocks.SEA_LANTERN});
 		addShapedOreRecipe(new ItemStack(ModBlocks.advancedLamp, 1, LampType.DARK.getMeta()), new Object[]{"CSC", "PLP", "CSC", 'C', darkCrystal, 'S', new ItemStack(Items.SKULL, 1, 1), 'P', darkPlate, 'L', Blocks.SOUL_SAND});
 

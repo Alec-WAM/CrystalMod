@@ -1,5 +1,6 @@
 package alec_wam.CrystalMod.handler;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.ConcurrentModificationException;
@@ -48,7 +49,9 @@ import net.minecraft.client.audio.SoundEventAccessor;
 import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.gui.inventory.GuiScreenHorseInventory;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.multiplayer.PlayerControllerMP;
@@ -86,7 +89,10 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 import net.minecraftforge.client.event.GuiOpenEvent;
+import net.minecraftforge.client.event.GuiScreenEvent.DrawScreenEvent;
+import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.client.event.MouseEvent;
+import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderHandEvent;
 import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
@@ -346,12 +352,19 @@ public class ClientEventHandler {
     
     @SubscribeEvent
 	public void onClientTick(TickEvent.ClientTickEvent event) {
-    	
+    	EntityPlayer player = CrystalMod.proxy.getClientPlayer();
     	if (event.phase == TickEvent.Phase.END && event.type == TickEvent.Type.CLIENT && event.side == Side.CLIENT) {
     		elapsedTicks++;
+    		if (player != null) {
+    			ExtendedPlayer exPlayer = ExtendedPlayerProvider.getExtendedPlayer(player);
+				if(exPlayer !=null){
+					if(exPlayer.getScreenFlashTime() > 0){
+						exPlayer.subtractFlashTime();
+					}
+				}
+    		}
         }
-    	
-		EntityPlayer player = CrystalMod.proxy.getClientPlayer();
+		
 		if (player != null) {
 			if (!Minecraft.getMinecraft().isGamePaused() || !Minecraft.getMinecraft().isSingleplayer()) {
 				try {
@@ -362,34 +375,6 @@ public class ClientEventHandler {
 				} catch (ConcurrentModificationException e) {
 					ModLogger.warning("ConcurrentModificationException caught during grapple update");
 				}
-				
-				/*leftclick = (GameSettings.isKeyDown(Minecraft.getMinecraft().gameSettings.keyBindAttack) && Minecraft.getMinecraft().currentScreen == null);
-				if (prevleftclick != leftclick) {
-					if (player != null) {
-						ItemStack stack = player.getHeldItemMainhand();
-						if (stack != null) {
-							Item item = stack.getItem();
-							if (item instanceof clickitem) {
-								if (leftclick) {
-									((clickitem)item).onLeftClick(stack, player);
-								} else {
-									((clickitem)item).onLeftClickRelease(stack, player);
-								}
-							}
-						}
-					}
-				}
-				
-				prevleftclick = leftclick;
-				
-				if (player.onGround) {
-					if (enderlaunchtimer.containsKey(player.getEntityId())) {
-						long timer = player.worldObj.getTotalWorldTime() - enderlaunchtimer.get(player.getEntityId());
-						if (timer > 10) {
-							this.resetlaunchertime(player.getEntityId());
-						}
-					}
-				}*/
 			}
 		}
 	}
@@ -663,4 +648,56 @@ public class ClientEventHandler {
 		}
 
 	}
+    
+    @SubscribeEvent
+    public void renderScreen(RenderGameOverlayEvent event){
+    	EntityPlayer player = CrystalMod.proxy.getClientPlayer();
+    	if(player == null)return;
+    	
+    	ExtendedPlayer extPlayer = ExtendedPlayerProvider.getExtendedPlayer(player);
+    	if(extPlayer == null)return;
+    	
+    	ScaledResolution sr = event.getResolution();
+    	if(extPlayer.getScreenFlashTime() > 0){
+    		
+    		if(event.getType() == ElementType.HOTBAR){
+    			event.setCanceled(true);
+    		}
+    		
+    		GlStateManager.pushMatrix();
+    		
+    		int left = 0;
+    		int top = 0;
+    		int right = sr.getScaledWidth();
+    		int bottom = sr.getScaledHeight();
+    		
+    		float f3 = 0.0f;//(((float)extPlayer.getMaxScreenFlashTime() - extPlayer.getScreenFlashTime()) / (float)extPlayer.getMaxScreenFlashTime());
+    		
+    		if(extPlayer.getScreenFlashTime() > extPlayer.getMaxScreenFlashTime() / 2){
+    			f3 = (((float)extPlayer.getMaxScreenFlashTime() - extPlayer.getScreenFlashTime()) / (float)extPlayer.getMaxScreenFlashTime());
+    		} else {
+    			f3 = 1.0F - (((float)extPlayer.getMaxScreenFlashTime() - extPlayer.getScreenFlashTime()) / (float)extPlayer.getMaxScreenFlashTime());
+    		}
+    		
+            float f = 255;
+            float f1 = 255;
+            float f2 = 255;
+            Tessellator tessellator = Tessellator.getInstance();
+            VertexBuffer vertexbuffer = tessellator.getBuffer();
+            GlStateManager.enableBlend();
+            GlStateManager.disableTexture2D();
+            GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+            GlStateManager.color(f, f1, f2, f3);
+            vertexbuffer.begin(7, DefaultVertexFormats.POSITION);
+            vertexbuffer.pos((double)left, (double)bottom, 0.0D).endVertex();
+            vertexbuffer.pos((double)right, (double)bottom, 0.0D).endVertex();
+            vertexbuffer.pos((double)right, (double)top, 0.0D).endVertex();
+            vertexbuffer.pos((double)left, (double)top, 0.0D).endVertex();
+            tessellator.draw();
+            GlStateManager.enableTexture2D();
+            GlStateManager.disableBlend();
+            
+    		GlStateManager.popMatrix();
+    	}
+    }
 }
