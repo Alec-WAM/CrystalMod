@@ -8,6 +8,7 @@ import java.util.Set;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
+import alec_wam.CrystalMod.client.sound.ModSounds;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.packets.PacketEntityMessage;
 import alec_wam.CrystalMod.tiles.TileEntityMod;
@@ -25,6 +26,7 @@ import net.minecraft.network.play.server.SPacketBlockChange;
 import net.minecraft.network.play.server.SPacketChunkData;
 import net.minecraft.server.management.PlayerChunkMap;
 import net.minecraft.server.management.PlayerChunkMapEntry;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.Explosion;
@@ -83,6 +85,7 @@ public class TileOppositeFuser extends TileEntityMod {
 	public void explode() {
 		if(!getWorld().isRemote && getWorld() instanceof WorldServer){
 			createExplosion((WorldServer)getWorld(), getPos(), 20);
+			getWorld().playSound(null, getPos(), ModSounds.explosion_fusor_tier0, SoundCategory.BLOCKS, 4F, 1F);
 			Chunk chunk = getWorld().getChunkFromBlockCoords(pos);
 			for (EntityPlayer player : world.playerEntities) {
 				// only send to relevant players

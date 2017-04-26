@@ -19,6 +19,11 @@ public class ModSounds {
 	public static final SoundEvent levelDown;
 	public static final SoundEvent unsplash;
 	public static final SoundEvent explosion_ringing;
+	
+
+	public static final SoundEvent explosion_fusor_tier0;
+	public static final SoundEvent explosion_fusor_tier1;
+	public static final SoundEvent explosion_fusor_tier2;
 
 	static {
         if (!Bootstrap.isRegistered()) {
@@ -31,6 +36,11 @@ public class ModSounds {
         	levelDown = getRegisteredSoundEvent(CrystalMod.resource("leveldown"));
         	unsplash = getRegisteredSoundEvent(CrystalMod.resource("unsplash"));
         	explosion_ringing = getRegisteredSoundEvent(CrystalMod.resource("explosion_ringing"));
+        	
+
+        	explosion_fusor_tier0 = getRegisteredSoundEvent(CrystalMod.resource("explosion_fusor_tier0"));
+        	explosion_fusor_tier1 = getRegisteredSoundEvent(CrystalMod.resource("explosion_fusor_tier1"));
+        	explosion_fusor_tier2 = getRegisteredSoundEvent(CrystalMod.resource("explosion_fusor_tier2"));
         }
     }
 

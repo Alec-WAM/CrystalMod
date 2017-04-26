@@ -70,5 +70,32 @@
         "stream": false
       }
     ], "subtitle": "crystalmod.subtitle.explosion_ringing"
+  },
+  "explosion_fusor_tier0": {
+    "category": "block",
+    "sounds": [
+      {
+        "name": "crystalmod:explosion_fusor_tier0",
+        "stream": false
+      }
+    ], "subtitle": "crystalmod.subtitle.explosion_fusor_tier0"
+  },
+  "explosion_fusor_tier1": {
+    "category": "block",
+    "sounds": [
+      {
+        "name": "crystalmod:explosion_fusor_tier1",
+        "stream": false
+      }
+    ], "subtitle": "crystalmod.subtitle.explosion_fusor_tier1"
+  },
+  "explosion_fusor_tier2": {
+    "category": "block",
+    "sounds": [
+      {
+        "name": "crystalmod:explosion_fusor_tier2",
+        "stream": false
+      }
+    ], "subtitle": "crystalmod.subtitle.explosion_fusor_tier2"
   }
 }
