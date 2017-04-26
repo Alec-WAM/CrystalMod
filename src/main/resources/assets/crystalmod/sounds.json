@@ -61,5 +61,14 @@
         "stream": false
       }
     ], "subtitle": "crystalmod.subtitle.redstone_removed"
+  },
+  "explosion_ringing": {
+    "category": "ambient",
+    "sounds": [
+      {
+        "name": "crystalmod:explosion_ringing",
+        "stream": false
+      }
+    ], "subtitle": "crystalmod.subtitle.explosion_ringing"
   }
 }

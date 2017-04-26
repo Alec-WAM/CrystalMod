@@ -104,6 +104,7 @@ public class PacketEntityMessage extends AbstractPacketThreadsafe {
 					ExtendedPlayer exPlayer = ExtendedPlayerProvider.getExtendedPlayer(ePlayer);
 					if(exPlayer !=null){
 						exPlayer.setScreenFlashTime(TimeUtil.SECOND * 5);
+						CrystalMod.proxy.getClientWorld().playSound(ePlayer.posX, ePlayer.posY, ePlayer.posZ, ModSounds.explosion_ringing, SoundCategory.AMBIENT, 1F, 1.0F, false);
 					}
 				}
 			}
