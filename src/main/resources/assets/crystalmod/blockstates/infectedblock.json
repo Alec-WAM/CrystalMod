@@ -1,0 +1,13 @@
+{
+  "forge_marker": 1,
+  defaults:{
+	"model": "crystalmod:fixedOneTexture"
+  },
+  "variants": {
+    "type": {
+		"normal": {"model": "crystalmod:fixedOneTexture", "textures": { "all": "crystalmod:blocks/infection/normal"}},
+		"chisled": {"model": "crystalmod:fixedOneTexture", "textures": { "all": "crystalmod:blocks/infection/chisled" }},
+		"casing": {"model": "crystalmod:fixedOneTexture", "textures": { "all": "crystalmod:blocks/infection/casing" }}
+	}
+  }
+}

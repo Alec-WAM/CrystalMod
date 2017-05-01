@@ -5,6 +5,17 @@
   },
   "variants": {
     "normal": { "model": "crystalmod:fixedOneTexture", "textures": { "all": "crystalmod:blocks/darkinfection_on" } },
-	"inventory": { "model": "crystalmod:fixedOneTexture", "textures": { "all": "crystalmod:blocks/darkinfection_on" } }
+	"inventory": { "model": "crystalmod:fixedOneTexture", "textures": { "all": "crystalmod:blocks/darkinfection_off" } },
+	"opening": {
+		"0": {"model": "crystalmod:fixedOneTexture", "textures": { "all": "crystalmod:blocks/infection/darkinfection_open_0"}},
+		"1": {"model": "crystalmod:fixedOneTexture", "textures": { "all": "crystalmod:blocks/infection/darkinfection_open_1" }},
+		"2": {"model": "crystalmod:fixedOneTexture", "textures": { "all": "crystalmod:blocks/infection/darkinfection_open_2" }},
+		"3": {"model": "crystalmod:fixedOneTexture", "textures": { "all": "crystalmod:blocks/infection/darkinfection_open_3" }},
+		"4": {"model": "crystalmod:fixedOneTexture", "textures": { "all": "crystalmod:blocks/infection/darkinfection_open_4" }},
+		"5": {"model": "crystalmod:fixedOneTexture", "textures": { "all": "crystalmod:blocks/infection/darkinfection_open_5" }},
+		"6": {"model": "crystalmod:fixedOneTexture", "textures": { "all": "crystalmod:blocks/infection/darkinfection_open_6" }},
+		"7": {"model": "crystalmod:fixedOneTexture", "textures": { "all": "crystalmod:blocks/infection/darkinfection_open_7" }},
+		"8": {"model": "crystalmod:fixedOneTexture", "textures": { "all": "crystalmod:blocks/infection/darkinfection_open_8" }}
+	}
   }
 }

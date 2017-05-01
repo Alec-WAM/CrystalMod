@@ -39,6 +39,7 @@ import alec_wam.CrystalMod.tiles.crate.BlockCrate;
 import alec_wam.CrystalMod.tiles.crate.RenderTileCrate;
 import alec_wam.CrystalMod.tiles.crate.TileCrate;
 import alec_wam.CrystalMod.tiles.darkinfection.BlockDarkInfection;
+import alec_wam.CrystalMod.tiles.darkinfection.BlockInfected;
 import alec_wam.CrystalMod.tiles.darkinfection.TileDarkInfection;
 import alec_wam.CrystalMod.tiles.endertorch.BlockEnderTorch;
 import alec_wam.CrystalMod.tiles.endertorch.TileEnderTorch;
@@ -254,6 +255,7 @@ public class ModBlocks {
 	public static BlockRemoverExplosion remover;
 	public static BlockOppositeFuser oppositeFuser;
 	public static BlockDarkInfection darkInfection;
+	public static BlockInfected infectedBlock;
 	
 	public static BlockPedistal pedistal;
 	public static BlockFusionPedistal fusionPedistal;
@@ -561,6 +563,8 @@ public class ModBlocks {
 		darkInfection = new BlockDarkInfection();
 		registerBlock(darkInfection, "darkinfection");
 		registerTileEntity(TileDarkInfection.class);
+		
+		infectedBlock = registerEnumBlock(new BlockInfected(), "infectedblock");
 		
 		pedistal = new BlockPedistal();
 		registerBlock(pedistal, new ItemBlockPedistal(pedistal), "pedistal");

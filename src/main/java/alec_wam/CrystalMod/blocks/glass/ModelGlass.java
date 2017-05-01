@@ -235,14 +235,18 @@ public class ModelGlass extends DynamicItemAndBlockModel {
 			
 			final BlockPartFace faceU = new BlockPartFace(EnumFacing.NORTH, 0, "", new BlockFaceUV(new float[]{min, min, max, max}, 0));
 			if(renderCenter()){
-				list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(min, min, 0f), new Vector3f(max, max, 0f), faceU, sprite, EnumFacing.NORTH, rot, (BlockPartRotation)null, true));
+				//list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(min, min, 0f), new Vector3f(max, max, 0f), faceU, sprite, EnumFacing.NORTH, rot, (BlockPartRotation)null, true));
 			}
+			
+			if(renderCenter())list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(0, 15, 0), new Vector3f(16f, 16F, 0), faceU, sprite, EnumFacing.NORTH, rot, (BlockPartRotation)null, true));
+			
 			
 			if(showU){
 				face.blockFaceUV.uvs = top;
 				list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(0, 15, 0), new Vector3f(16f, 16F, 0), face, sprite, EnumFacing.NORTH, rot, (BlockPartRotation)null, true));
 			} else{
-				if(renderCenter())list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(0, 15, 0), new Vector3f(16f, 16F, 0), faceU, sprite, EnumFacing.NORTH, rot, (BlockPartRotation)null, true));
+				//if(renderCenter())list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(0, 15, 0), new Vector3f(16f, 16F, 0), faceU, sprite, EnumFacing.NORTH, rot, (BlockPartRotation)null, true));
+				
 				face.blockFaceUV.uvs = top;
 				BlockPos posUW = state.pos.offset(EnumFacing.UP).offset(EnumFacing.WEST);
 				BlockPos posUE = state.pos.offset(EnumFacing.UP).offset(EnumFacing.EAST);

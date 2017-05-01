@@ -1,43 +1,140 @@
 package alec_wam.CrystalMod.tiles.darkinfection;
 
+import java.util.List;
+
+import com.google.common.collect.Lists;
+
+import alec_wam.CrystalMod.blocks.ModBlocks;
+import alec_wam.CrystalMod.network.CrystalModNetwork;
+import alec_wam.CrystalMod.network.IMessageHandler;
+import alec_wam.CrystalMod.network.packets.PacketTileMessage;
 import alec_wam.CrystalMod.tiles.TileEntityMod;
+import alec_wam.CrystalMod.tiles.darkinfection.BlockInfected.InfectedBlockType;
 import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.TimeUtil;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 
-public class TileDarkInfection extends TileEntityMod {
+public class TileDarkInfection extends TileEntityMod implements IMessageHandler {
 
 	private int currentRadius;
+	private int currentOrb;
 	private int delay;
+	private int delayOrb;
+	private List<BlockPos> toPlace = Lists.newArrayList(); 
+	private List<BlockPos> toPlace2 = Lists.newArrayList(); 
+	public boolean activated;
+	public int openingPhase;
 	
 	@Override
 	public void writeCustomNBT(NBTTagCompound nbt){
 		super.writeCustomNBT(nbt);
+		nbt.setBoolean("Activated", activated);
+		nbt.setInteger("OpeningPhase", openingPhase);
 		nbt.setInteger("Radius", currentRadius);
+		nbt.setInteger("OrbSize", currentOrb);
 	}
 	
 	@Override
 	public void readCustomNBT(NBTTagCompound nbt){
 		super.readCustomNBT(nbt);
+		this.activated = nbt.getBoolean("Activated");
+		this.openingPhase = nbt.getInteger("OpeningPhase");
 		this.currentRadius = nbt.getInteger("Radius");
+		this.currentOrb = nbt.getInteger("OrbSize");
 	}
 	
 	@Override
 	public void update(){
 		super.update();
+		
 		if(!getWorld().isRemote){
-			if(delay > 0){
-				if(!getWorld().isBlockPowered(getPos()))delay--;
-			}
-			
-			if(delay <= 0){
-				if(currentRadius < 64){
-					delay = TimeUtil.SECOND * 1;
-					currentRadius++;
-					BlockUtil.createOrb(getWorld(), getPos(), Blocks.STONE.getDefaultState(), currentRadius, true, true);
+			if(this.activated){
+				if(this.activated){
+					if(openingPhase < 8){
+						if(this.shouldDoWorkThisTick(20)){
+							openingPhase++;
+							NBTTagCompound nbt = new NBTTagCompound();
+							nbt.setInteger("Value", openingPhase);
+							CrystalModNetwork.sendToAllAround(new PacketTileMessage(getPos(), "OpeningPhase", nbt),  this);
+						}
+					}
+				}
+				if(openingPhase == 8){
+					if(delay > 0){
+						if(!getWorld().isBlockPowered(getPos()))delay--;
+					}
+					if(delayOrb > 0){
+						if(!getWorld().isBlockPowered(getPos()))delayOrb--;
+					}
+					if(!toPlace.isEmpty()){
+						if(delay <= 0){
+							final int index = MathHelper.getInt(getWorld().rand, 0, toPlace.size()-1);
+							final BlockPos toPlacePos = toPlace.get(index);
+							toPlace.remove(index);
+							IBlockState stone = ModBlocks.infectedBlock.getStateFromMeta(InfectedBlockType.NORMAL.getMeta());
+							IBlockState cobble = ModBlocks.infectedBlock.getStateFromMeta(InfectedBlockType.CHISLED.getMeta());
+							int type = MathHelper.getInt(getWorld().rand, 0, 1);
+							
+							IBlockState currentState = getWorld().getBlockState(toPlacePos);
+							boolean okayToPlace = currentState.isFullBlock() && currentState.getBlockHardness(getWorld(), toPlacePos) > 0.0f;
+							if(okayToPlace){
+								world.setBlockState(toPlacePos, type == 0 ? stone : cobble);
+							}
+							delay = 20;
+						}
+					} else {
+						if(currentRadius < 30){
+							calcNextBorder();
+						}
+					}
+					
+					if(currentRadius >= 30){
+						if(!toPlace2.isEmpty()){
+							if(delayOrb <= 0){
+								final int index = MathHelper.getInt(getWorld().rand, 0, toPlace2.size()-1);
+								final BlockPos toPlacePos = toPlace2.get(index);
+								toPlace2.remove(index);
+								IBlockState casing = ModBlocks.infectedBlock.getStateFromMeta(InfectedBlockType.CASING.getMeta());
+								IBlockState currentState = getWorld().getBlockState(toPlacePos);
+								boolean okayToPlace = getWorld().isAirBlock(toPlacePos) || currentState.getBlockHardness(getWorld(), toPlacePos) > 0.0f;
+								if(okayToPlace){
+									world.setBlockState(toPlacePos, casing);
+								}
+								delayOrb = 10;
+							}
+						} else {
+							if(currentOrb < 5){
+								calcNextOrb();
+							}
+						}
+					}
 				}
 			}
+		}
+	}
+	
+	public void calcNextBorder(){
+		currentRadius++;
+		toPlace = BlockUtil.createCircle(world, pos, currentRadius);
+	}
+	
+	public void calcNextOrb(){
+		currentOrb++;
+		toPlace2 = BlockUtil.createOrb(world, pos, currentOrb);
+	}
+
+	public int getOpeningPhase() {
+		return openingPhase;
+	}
+
+	@Override
+	public void handleMessage(String messageId, NBTTagCompound messageData, boolean client) {
+		if(messageId.equalsIgnoreCase("OpeningPhase")){
+			this.openingPhase = messageData.getInteger("Value");
+			BlockUtil.markBlockForUpdate(getWorld(), getPos());
 		}
 	}
 	

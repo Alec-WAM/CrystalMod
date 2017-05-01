@@ -17,6 +17,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.PlayerControllerMP;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.play.client.CPacketPlayerDigging;
@@ -257,5 +258,37 @@ public class BlockUtil {
 				}
 			}
 		}
+	}
+	
+	public static List<BlockPos> createCircle(World world, BlockPos center, int size){
+		List<BlockPos> list = Lists.newArrayList();
+		double circleSize = size-0.5;
+		for(int x = -size; x <= size; x++){
+			for(int z = -size; z <= size; z++){
+				BlockPos pos2 = center.add(x, 0, z);
+				double dis = pos2.getDistance(center.getX(), center.getY(), center.getZ());
+				if(dis >= circleSize && dis < circleSize+1){
+					list.add(pos2);
+				}
+			}
+		}
+		return list;
+	}
+	
+	public static List<BlockPos> createOrb(World world, BlockPos center, int size){
+		List<BlockPos> list = Lists.newArrayList();
+		double circleSize = size-0.5;
+		for(int x = -size; x <= size; x++){
+			for(int y = -size; y <= size; y++){
+				for(int z = -size; z <= size; z++){
+					BlockPos pos2 = center.add(x, y, z);
+					double dis = pos2.getDistance(center.getX(), center.getY(), center.getZ());
+					if(dis >= circleSize && dis < circleSize+1){
+						list.add(pos2);
+					}
+				}
+			}
+		}
+		return list;
 	}
 }
