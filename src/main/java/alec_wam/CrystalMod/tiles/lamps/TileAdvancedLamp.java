@@ -4,6 +4,7 @@ import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.tiles.TileEntityMod;
 import alec_wam.CrystalMod.tiles.lamps.BlockAdvancedLamp.LampType;
 import alec_wam.CrystalMod.tiles.lamps.BlockFakeLight.LightType;
+import alec_wam.CrystalMod.util.ModLogger;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
@@ -17,7 +18,7 @@ public class TileAdvancedLamp extends TileEntityMod {
 	@Override
     public void update() {
 		super.update();
-        if (!getWorld().isRemote) {
+        //if (!getWorld().isRemote) {
             if (!init) {
                 init = true;
                 updateLightBlocks(init);
@@ -29,11 +30,16 @@ public class TileAdvancedLamp extends TileEntityMod {
                     updateLightBlocks(init);
                 }
             }
-        }
+        //}
     }
+	
+	public int getRadius(){
+		return 10;
+	}
 
     private void updateLightBlocks(boolean lit) {
-        int radius = 10;
+        int radius = getRadius();
+        int count = 0;
         //TODO Make radius bigger for dark lamp
 		for(int x = -radius; x <= radius; x++){
 			for(int y = -radius; y <= radius; y++){
@@ -44,15 +50,26 @@ public class TileAdvancedLamp extends TileEntityMod {
 						if(lit){
 							if(!isInvisibleLight(pos2) && getWorld().isAirBlock(pos2)){
 								setInvisibleBlock(pos2);
+								getWorld().checkLight(pos2);
+								count++;
 							}
 						} else {
 							if(isInvisibleLight(pos2)){
-								getWorld().setBlockToAir(pos2);
+								getWorld().setBlockState(pos2, Blocks.AIR.getDefaultState(), 3);
+								getWorld().checkLight(pos2);
+								count++;
 							}
 						}
 					}
 				}
 			}
+		}
+		
+		if(lit && count > 0){
+			ModLogger.info("Placed "+count+" light blocks");
+		}
+		if(!lit && count > 0){
+			ModLogger.info("Removed "+count+" light blocks");
 		}
     }
 

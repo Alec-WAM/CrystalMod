@@ -65,6 +65,7 @@ import alec_wam.CrystalMod.tiles.jar.TileJar;
 import alec_wam.CrystalMod.tiles.lamps.BlockAdvancedLamp;
 import alec_wam.CrystalMod.tiles.lamps.BlockFakeLight;
 import alec_wam.CrystalMod.tiles.lamps.TileAdvancedLamp;
+import alec_wam.CrystalMod.tiles.lamps.TileAdvancedLampDark;
 import alec_wam.CrystalMod.tiles.machine.advDispenser.BlockAdvDispenser;
 import alec_wam.CrystalMod.tiles.machine.advDispenser.TileAdvDispenser;
 import alec_wam.CrystalMod.tiles.machine.crafting.BlockCrystalMachine;
@@ -513,7 +514,7 @@ public class ModBlocks {
 		
 		advancedLamp = new BlockAdvancedLamp();
 		registerEnumBlock(advancedLamp, "advancedlamp");
-		registerTileEntity(TileAdvancedLamp.class);
+		registerTileEntity(TileAdvancedLamp.class, TileAdvancedLampDark.class);
 		
 		fakeLight = new BlockFakeLight();
 		registerEnumBlock(fakeLight, "fakelight");

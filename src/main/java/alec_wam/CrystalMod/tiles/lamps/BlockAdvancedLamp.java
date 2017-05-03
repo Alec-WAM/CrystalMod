@@ -27,6 +27,7 @@ public class BlockAdvancedLamp extends EnumBlock<BlockAdvancedLamp.LampType> imp
 
 	@Override
 	public TileEntity createNewTileEntity(World worldIn, int meta) {
+		if(meta == 1)return new TileAdvancedLampDark();
 		return new TileAdvancedLamp();
 	}
 	
