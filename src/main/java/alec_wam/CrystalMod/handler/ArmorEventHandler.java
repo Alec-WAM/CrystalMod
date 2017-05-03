@@ -10,6 +10,7 @@ import alec_wam.CrystalMod.util.EntityUtil;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ModLogger;
+import mezz.jei.util.MathUtil;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -18,6 +19,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
@@ -175,6 +177,12 @@ public class ArmorEventHandler {
 			if(source.getSourceOfDamage() !=null){
 				Entity toAttack = source.getSourceOfDamage();
 				toAttack.attackEntityFrom(DamageSource.causeThornsDamage(attacked), (float)EnchantmentThorns.getDamage(5, EntityUtil.rand));
+				if(toAttack instanceof EntityLivingBase){
+					EntityLivingBase living = (EntityLivingBase)toAttack;
+					if(EntityUtil.rand.nextInt(10) == 0){
+						living.addPotionEffect(new PotionEffect(MobEffects.WITHER, MathHelper.getInt(EntityUtil.rand, 20*3, 20*6), 0));
+					}
+				}
 			}
 		}
 		
