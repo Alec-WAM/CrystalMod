@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
+import alec_wam.CrystalMod.Config;
 import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.IMessageHandler;
@@ -86,12 +87,12 @@ public class TileDarkInfection extends TileEntityMod implements IMessageHandler 
 							delay = 20;
 						}
 					} else {
-						if(currentRadius < 30){
+						if(Config.infectionRange <= 0 || currentRadius < Config.infectionRange){
 							calcNextBorder();
 						}
 					}
 					
-					if(currentRadius >= 30){
+					if(Config.infectionEncasingRange > 0 && currentRadius >= Config.infectionEncasingRange){
 						if(!toPlace2.isEmpty()){
 							if(delayOrb <= 0){
 								final int index = MathHelper.getInt(getWorld().rand, 0, toPlace2.size()-1);
@@ -106,7 +107,7 @@ public class TileDarkInfection extends TileEntityMod implements IMessageHandler 
 								delayOrb = 10;
 							}
 						} else {
-							if(currentOrb < 5){
+							if(currentOrb < Config.infectionEncasingSize){
 								calcNextOrb();
 							}
 						}

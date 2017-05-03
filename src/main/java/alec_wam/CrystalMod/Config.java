@@ -121,7 +121,10 @@ public class Config {
 	
 	public static RegenType crystalClusterRegenType = RegenType.IDLE;
 	
-	
+	public static int infectionRange = 30;
+	public static int infectionEncasingRange = 30;
+	public static int infectionEncasingSize = 5;
+
 	@SubscribeEvent
 	public void onConfigChanged(OnConfigChangedEvent event) {
 		if(event.getModID().equals(CrystalMod.MODID)) {
@@ -247,6 +250,11 @@ public class Config {
     	crates_leaveOneItem = cfg.get(CATEGORY_BLOCKS, "crates_leaveOneItem", crates_leaveOneItem, "Set to true to leave one item in a crate when it is clicked.").getBoolean();
     	int regenIndex = cfg.get(CATEGORY_BLOCKS, "crystalClusterRegenType", crystalClusterRegenType.ordinal(), "0 = Idle (Cluster Regens when not in use) 1 = Empty (Once the cluster is completly drained it will regen until power is extracted again) 2 = Never (Clusters will never regen)").getInt(0);
     	crystalClusterRegenType = RegenType.values()[regenIndex % RegenType.values().length];
+    	
+    	infectionRange = cfg.get(CATEGORY_BLOCKS, "darkInfectionRange", infectionRange, "Maximum Radius allowed for the Dark Infection to spread. Set to 0 for infinite").getInt(30);
+    	infectionEncasingRange = cfg.get(CATEGORY_BLOCKS, "darkInfectionEncasingRange", infectionEncasingRange, "When does the Dark Infection begin encasing itself. Set to 0 to disable").getInt(30);
+    	infectionEncasingSize = cfg.get(CATEGORY_BLOCKS, "darkInfectionEncasingSize", infectionEncasingSize, "Size of the orb that encases the Dark Infection Source.").getInt(5);
+
     	//Client
     	vanillaMinecarts3d = cfg.get(CATEGORY_CLIENT, "3dMinecartItems", vanillaMinecarts3d, "Override Minecart Item Render to 3d items.").getBoolean();
     }

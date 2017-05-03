@@ -84,6 +84,8 @@ public class FusionTempleStructure extends StructureComponentTemplate {
 			setupVariables(worldIn, randomIn);
 			hasSetupDetails = true;
 		}
+		if(templatePosition == null || worldIn == null || template == null)return false;
+		
 		BlockPos blockpos = templatePosition;
 		this.placeSettings.setBoundingBox(structureBoundingBoxIn);
 		this.template.addBlocksToWorld(worldIn, this.templatePosition, new ITemplateProcessor(){
