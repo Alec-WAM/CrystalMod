@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import alec_wam.CrystalMod.blocks.ModBlocks;
+import alec_wam.CrystalMod.blocks.glass.BlockCrystalGlass.GlassType;
 import alec_wam.CrystalMod.blocks.BlockCrystal.CrystalBlockType;
 import alec_wam.CrystalMod.blocks.BlockCrystalIngot.CrystalIngotBlockType;
 import alec_wam.CrystalMod.fluids.ModFluids;
@@ -140,6 +141,12 @@ public class CauldronRecipeManager {
 		addRecipe("gemQuartz", new FluidStack(ModFluids.fluidGreenCrystal, 6 * bucket), new ItemStack(ModItems.crystals, 1, CrystalType.GREEN.getMetadata()));
 		addRecipe("gemQuartz", new FluidStack(ModFluids.fluidDarkCrystal, 6 * bucket), new ItemStack(ModItems.crystals, 1, CrystalType.DARK.getMetadata()));
 		
+		addRecipe(new ItemStack(ModBlocks.crystalGlass, 1, GlassType.BLUE.getMeta()), new FluidStack(ModFluids.fluidBlueCrystal, 10), new ItemStack(ModBlocks.crystalGlassTinted, 1, GlassType.BLUE.getMeta()));
+		addRecipe(new ItemStack(ModBlocks.crystalGlass, 1, GlassType.RED.getMeta()), new FluidStack(ModFluids.fluidRedCrystal, 10), new ItemStack(ModBlocks.crystalGlassTinted, 1, GlassType.RED.getMeta()));
+		addRecipe(new ItemStack(ModBlocks.crystalGlass, 1, GlassType.GREEN.getMeta()), new FluidStack(ModFluids.fluidGreenCrystal, 10), new ItemStack(ModBlocks.crystalGlassTinted, 1, GlassType.GREEN.getMeta()));
+		addRecipe(new ItemStack(ModBlocks.crystalGlass, 1, GlassType.DARK.getMeta()), new FluidStack(ModFluids.fluidDarkCrystal, 10), new ItemStack(ModBlocks.crystalGlassTinted, 1, GlassType.DARK.getMeta()));
+		addRecipe(new ItemStack(ModBlocks.crystalGlass, 1, GlassType.PURE.getMeta()), new FluidStack(ModFluids.fluidPureCrystal, 10), new ItemStack(ModBlocks.crystalGlassTinted, 1, GlassType.PURE.getMeta()));
+
 		addRecipe(new ItemStack(Blocks.QUARTZ_BLOCK, 1, 1), new FluidStack(ModFluids.fluidBlueCrystal, 400), new ItemStack(ModBlocks.crystal, 1, CrystalBlockType.BLUE_CHISELED.getMeta()));
 		addRecipe(new ItemStack(Blocks.QUARTZ_BLOCK, 1, 1), new FluidStack(ModFluids.fluidRedCrystal, 400), new ItemStack(ModBlocks.crystal, 1, CrystalBlockType.RED_CHISELED.getMeta()));
 		addRecipe(new ItemStack(Blocks.QUARTZ_BLOCK, 1, 1), new FluidStack(ModFluids.fluidGreenCrystal, 400), new ItemStack(ModBlocks.crystal, 1, CrystalBlockType.GREEN_CHISELED.getMeta()));

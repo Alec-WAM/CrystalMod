@@ -25,6 +25,7 @@ import net.minecraft.block.BlockContainer;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityShulkerBullet;
@@ -61,7 +62,7 @@ public class BlockJar extends BlockContainer implements ICustomModel {
 		super(Material.GLASS);
 		setHardness(0.8F);
 		setResistance(0.5F);
-		setCreativeTab(CrystalMod.tabBlocks);
+		setCreativeTab(CreativeTabs.BREWING);
 		setSoundType(SoundType.GLASS);
 	}
 

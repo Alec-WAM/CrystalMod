@@ -11,6 +11,7 @@ import javax.annotation.Nonnull;
 
 import alec_wam.CrystalMod.crafting.ShapedCrystalRecipe;
 import alec_wam.CrystalMod.integration.jei.CrystalModRecipeUids;
+import alec_wam.CrystalMod.util.ItemStackTools;
 
 public class ShapedCrystalRecipeHandler implements IRecipeHandler<ShapedCrystalRecipe> {
 	@Nonnull
@@ -34,14 +35,14 @@ public class ShapedCrystalRecipeHandler implements IRecipeHandler<ShapedCrystalR
 
 	@Override
 	public boolean isRecipeValid(@Nonnull ShapedCrystalRecipe recipe) {
-		if (recipe.getRecipeOutput() == null) {
+		if (ItemStackTools.isEmpty(recipe.getRecipeOutput())) {
 			String recipeInfo = ErrorUtil.getInfoFromRecipe(recipe, this);
 			Log.error("Recipe has no outputs. {}", recipeInfo);
 			return false;
 		}
 		int inputCount = 0;
 		for (ItemStack input : recipe.recipeItems) {
-			if (input != null) {
+			if (ItemStackTools.isValid(input)) {
 				inputCount++;
 			}
 		}

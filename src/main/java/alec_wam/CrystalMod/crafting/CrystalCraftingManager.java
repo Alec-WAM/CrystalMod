@@ -158,9 +158,6 @@ public class CrystalCraftingManager
     		addRecipe(cBoots, new Object[] {"# #", "# #",  '#', ingot});
     	}
     	
-    	this.addRecipe(new ShapedOreCrystalRecipe(toolRod, new Object[] {"#","I","#", 'I', "ingotCrystal", '#', "gemCrystal"}));
-    	this.addRecipe(new ShapedOreCrystalRecipe(new ItemStack(ModItems.wrench), new Object[] {"# #"," R "," R ", '#', "ingotCrystal", 'R', "gemCrystal"}));
-    	
         Collections.sort(this.recipes, new Comparator<ICrystalRecipe>()
         {
             public int compare(ICrystalRecipe p_compare_1_, ICrystalRecipe p_compare_2_)

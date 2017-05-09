@@ -60,9 +60,9 @@ public class ShapedNBTRecipe extends ShapedCrystalRecipe {
 
                 ItemStack itemstack1 = p_77573_1_.getStackInRowAndColumn(i, j);
 
-                if (itemstack1 != null || itemstack != null)
+                if (ItemStackTools.isValid(itemstack1) || ItemStackTools.isValid(itemstack))
                 {
-                    if (itemstack1 == null && itemstack != null || itemstack1 != null && itemstack == null)
+                    if (ItemStackTools.isEmpty(itemstack1) && ItemStackTools.isValid(itemstack) || ItemStackTools.isValid(itemstack1) && ItemStackTools.isEmpty(itemstack))
                     {
                         return false;
                     }

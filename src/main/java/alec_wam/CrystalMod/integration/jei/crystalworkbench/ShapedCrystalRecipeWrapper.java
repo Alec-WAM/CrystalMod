@@ -24,7 +24,7 @@ public class ShapedCrystalRecipeWrapper extends BlankRecipeWrapper implements IS
 		this.jeiHelpers = jeiHelpers;
 		this.recipe = recipe;
 		for (ItemStack itemStack : this.recipe.recipeItems) {
-			if (itemStack !=null && ItemStackTools.isValid(itemStack) && ItemStackTools.getStackSize(itemStack) !=1) {
+			if (ItemStackTools.isValid(itemStack) && ItemStackTools.getStackSize(itemStack) !=1) {
 				ItemStackTools.setStackSize(itemStack, 1);
 			}
 		}
@@ -53,8 +53,10 @@ public class ShapedCrystalRecipeWrapper extends BlankRecipeWrapper implements IS
 		List<ItemStack> recipeItems = Arrays.asList(recipe.recipeItems);
 		ingredients.setInputs(ItemStack.class, recipeItems);
 
+		
+		
 		ItemStack recipeOutput = recipe.getRecipeOutput();
-		if (recipeOutput != null) {
+		if (ItemStackTools.isValid(recipeOutput)) {
 			ingredients.setOutput(ItemStack.class, recipeOutput);
 		}
 	}

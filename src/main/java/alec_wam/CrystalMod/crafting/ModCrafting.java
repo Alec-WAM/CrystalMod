@@ -44,7 +44,9 @@ import alec_wam.CrystalMod.tiles.cauldron.CauldronRecipeManager;
 import alec_wam.CrystalMod.tiles.chest.CrystalChestType;
 import alec_wam.CrystalMod.tiles.chest.wireless.WirelessChestHelper;
 import alec_wam.CrystalMod.tiles.chest.wooden.WoodenCrystalChestType;
+import alec_wam.CrystalMod.tiles.cluster.BlockCrystalCluster;
 import alec_wam.CrystalMod.tiles.cluster.BlockCrystalCluster.EnumClusterType;
+import alec_wam.CrystalMod.tiles.cluster.TileCrystalCluster.ClusterData;
 import alec_wam.CrystalMod.tiles.crate.BlockCrate.CrateType;
 import alec_wam.CrystalMod.tiles.explosives.remover.BlockRemoverExplosion.RemoverType;
 import alec_wam.CrystalMod.tiles.fusion.ModFusionRecipes;
@@ -75,6 +77,7 @@ import alec_wam.CrystalMod.tiles.workbench.BlockCrystalWorkbench.WorkbenchType;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
+import alec_wam.CrystalMod.util.TimeUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFlower.EnumFlowerType;
 import net.minecraft.block.BlockPlanks;
@@ -204,7 +207,8 @@ public class ModCrafting {
 		create9x9Recipe(new ItemStack(ModBlocks.crystal, 1, CrystalBlockType.PURE.getMeta()), pureCrystal, 9);
 		
 		//More Expensive than using the Liguidizer and Infuser
-		addShapedOreRecipe(dIronIngot, " N ", "NIN", " N ", 'N', darkNugget, 'I', "ingotIron");
+		//TODO REMOVE CRAFTING OF DARK IRON
+		//addShapedOreRecipe(dIronIngot, " N ", "NIN", " N ", 'N', darkNugget, 'I', "ingotIron");
 		
 		addShapedRecipe(new ItemStack(ModItems.wrench), new Object[] { "N N", " I ", " I ", 'N', dIronNugget, 'I', dIronIngot });
 		addShapelessOreRecipe(new ItemStack(ModItems.guide, 1, GuideType.CRYSTAL.getMetadata()), new Object[] {Items.BOOK, "gemCrystal"});
@@ -488,7 +492,9 @@ public class ModCrafting {
 		
 		addShapedOreRecipe(new ItemStack(ModBlocks.particleThrower), new Object[]{" E ", "BTB", " C ", 'E', "enderpearl", 'T', Blocks.TNT, 'C', Items.END_CRYSTAL, 'B', ModFluids.bucketList.get(ModFluids.fluidEnder)});
 		
-		addShapedOreRecipe(new ItemStack(ModBlocks.darkInfection), new Object[]{"BSB", "SCS", "BNB", 'S', new ItemStack(Items.SKULL, 1, 1), 'B', new ItemStack(ModBlocks.crystalIngot, 1, CrystalIngotBlockType.DARK.getMeta()), 'C', new ItemStack(ModBlocks.crystalCluster, 1, EnumClusterType.DARK.getMeta()), 'N', Items.NETHER_STAR});
+		ItemStack darkCluster = BlockCrystalCluster.createCluster(new ClusterData(22, 1), TimeUtil.MINECRAFT_DAY_TICKS);
+		darkCluster.setItemDamage(EnumClusterType.DARK.getMeta());		
+		addShapedOreRecipe(new ItemStack(ModBlocks.darkInfection), new Object[]{"BSB", "SCS", "BNB", 'S', new ItemStack(Items.SKULL, 1, 1), 'B', new ItemStack(ModBlocks.crystalIngot, 1, CrystalIngotBlockType.DARK.getMeta()), 'C', darkCluster, 'N', Items.NETHER_STAR});
 		
 		addShapedRecipe(new ItemStack(ModBlocks.oppositeFuser, 1, 0), new Object[]{"DSP", "#T#", "PWD", '#', dIronPlate, 'D', darkCrystal, 'P', pureCrystal, 'S', new ItemStack(Items.SKULL, 1, 0), 'W', new ItemStack(Items.SKULL, 1, 1), 'T', Blocks.TNT});
 		addShapedRecipe(new ItemStack(ModBlocks.oppositeFuser, 1, 1), new Object[]{"DTP", "SFW", "PND", 'F', new ItemStack(ModBlocks.oppositeFuser, 1, 0), 'D', darkIngot, 'P', pureIngot, 'S', new ItemStack(Items.SKULL, 1, 0), 'W', new ItemStack(Items.SKULL, 1, 1), 'T', Blocks.TNT, 'N', Items.NETHER_STAR});

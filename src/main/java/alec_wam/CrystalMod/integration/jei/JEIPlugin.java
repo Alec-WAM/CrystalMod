@@ -6,6 +6,7 @@ import net.minecraft.item.ItemStack;
 import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.crafting.CrystalCraftingManager;
 import alec_wam.CrystalMod.integration.jei.crystalworkbench.CrystalWorkbenchCategory;
+import alec_wam.CrystalMod.integration.jei.crystalworkbench.ShapedCrystalOreRecipeHandler;
 import alec_wam.CrystalMod.integration.jei.crystalworkbench.ShapedCrystalRecipeHandler;
 import alec_wam.CrystalMod.integration.jei.crystalworkbench.ShapelessCrystalRecipeHandler;
 import alec_wam.CrystalMod.integration.jei.machine.GrinderRecipeCategory;
@@ -26,6 +27,7 @@ import mezz.jei.api.IJeiRuntime;
 import mezz.jei.api.IModRegistry;
 import mezz.jei.api.recipe.VanillaRecipeCategoryUid;
 import mezz.jei.api.recipe.transfer.IRecipeTransferRegistry;
+import mezz.jei.plugins.vanilla.crafting.ShapedOreRecipeHandler;
 
 @mezz.jei.api.JEIPlugin
 public class JEIPlugin  extends BlankModPlugin {
@@ -45,6 +47,7 @@ public class JEIPlugin  extends BlankModPlugin {
 		
 		registry.addRecipeHandlers(
 				new ShapedCrystalRecipeHandler(jeiHelpers),
+				new ShapedCrystalOreRecipeHandler(jeiHelpers),
 				new ShapelessCrystalRecipeHandler(jeiHelpers)
 		);
 

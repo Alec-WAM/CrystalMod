@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import alec_wam.CrystalMod.api.crafting.ICrystalRecipe;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import net.minecraft.block.Block;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
@@ -23,7 +24,7 @@ public class ShapedOreCrystalRecipe implements ICrystalRecipe
     public static final int MAX_CRAFT_GRID_WIDTH = 3;
     public static final int MAX_CRAFT_GRID_HEIGHT = 3;
 
-    protected ItemStack output = null;
+    protected ItemStack output = ItemStackTools.getEmptyStack();
     protected Object[] input = null;
     protected int width = 0;
     protected int height = 0;
@@ -140,7 +141,7 @@ public class ShapedOreCrystalRecipe implements ICrystalRecipe
         {
             ItemStack ingred = recipe.recipeItems[i];
 
-            if(ingred == null) continue;
+            if(ItemStackTools.isEmpty(ingred)) continue;
 
             input[i] = recipe.recipeItems[i];
 
@@ -242,7 +243,7 @@ public class ShapedOreCrystalRecipe implements ICrystalRecipe
                         return false;
                     }
                 }
-                else if (target == null && slot != null)
+                else if (target == null && ItemStackTools.isValid(slot))
                 {
                     return false;
                 }
@@ -272,5 +273,15 @@ public class ShapedOreCrystalRecipe implements ICrystalRecipe
     public NonNullList<ItemStack> getRemainingItems(InventoryCrafting inv) //getRecipeLeftovers
     {
         return ForgeHooks.defaultRecipeGetRemainingItems(inv);
+    }
+    
+    public int getWidth()
+    {
+        return width;
+    }
+
+    public int getHeight()
+    {
+        return height;
     }
 }
