@@ -18,6 +18,7 @@ public class ModSounds {
 
 	public static final SoundEvent levelDown;
 	public static final SoundEvent unsplash;
+	public static final SoundEvent redstone_removed;
 	public static final SoundEvent explosion_ringing;
 	
 
@@ -35,6 +36,7 @@ public class ModSounds {
         	fusionDing = getRegisteredSoundEvent(CrystalMod.resource("fusion_ding"));
         	levelDown = getRegisteredSoundEvent(CrystalMod.resource("leveldown"));
         	unsplash = getRegisteredSoundEvent(CrystalMod.resource("unsplash"));
+        	redstone_removed = getRegisteredSoundEvent(CrystalMod.resource("redstone_removed"));
         	explosion_ringing = getRegisteredSoundEvent(CrystalMod.resource("explosion_ringing"));
         	
 

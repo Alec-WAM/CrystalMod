@@ -168,6 +168,7 @@ public class ExplosionMaker {
                     state.getBlock().updateTick(serverWorld, pos, state, serverWorld.rand);
                 }
                 state.neighborChanged(serverWorld, pos, Blocks.AIR, pos);
+                serverWorld.notifyNeighborsOfStateChange(pos, state.getBlock(), true);
             }
         }
         catch (Throwable e) {

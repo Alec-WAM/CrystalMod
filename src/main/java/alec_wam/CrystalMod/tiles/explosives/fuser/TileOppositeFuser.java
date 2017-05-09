@@ -76,6 +76,8 @@ public class TileOppositeFuser extends TileEntityMod {
 				if(fuseTime <= 0){
 					//if(!getWorld().isRemote){
 						explode();
+
+						getWorld().setBlockToAir(getPos());
 					//}
 				}
 			}
@@ -118,7 +120,7 @@ public class TileOppositeFuser extends TileEntityMod {
                         double dz = pos.getZ() - blockpos.getZ();
                 		double dis = Math.sqrt(dx * dx + dy * dy + dz * dz);
                 		
-                		float f = (float) ((size-dis) * (0.7F + this.world.rand.nextFloat() * 0.6F));
+                		float f = (float) ((size-dis) * (0.7F + this.world.rand.nextFloat() * 0.8F));
                 		//f = Math.abs(f);
                 		IBlockState iblockstate = world.getBlockState(blockpos);
 	
@@ -130,23 +132,21 @@ public class TileOppositeFuser extends TileEntityMod {
 	
 	                    if(f > 0.0F)
 	                    {
-	                    	//ModLogger.info(""+blockpos);
-	                        //world.setBlockState(blockpos, Blocks.AIR.getDefaultState(), 4);
-	                        set.add(blockpos);
+	                    	set.add(blockpos);
 	                    }
                 	}
                 }
             }
         }
         LinkedList<BlockPos> list = new LinkedList<BlockPos>(set);
-        ModLogger.info("Blowing up "+list.size());
+        //ModLogger.info("Blowing up "+list.size());
         ExplosionMaker helper = new ExplosionMaker(world);
         helper.setBlocksForRemoval(list);
         helper.addBlocksForUpdate(set);
         
         long time = System.currentTimeMillis();
         helper.finish();
-        ModLogger.info("Explosion took "+(System.currentTimeMillis() - time)+"ms");
+        //ModLogger.info("Explosion took "+(System.currentTimeMillis() - time)+"ms");
         
         /*for(BlockPos blPos : set){
         	world.setBlockToAir(blPos);

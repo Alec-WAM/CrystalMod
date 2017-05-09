@@ -55,30 +55,8 @@ public class ArmorEventHandler {
 		int pureCount = getArmorCount(player, "pure");
 		
 		if(pureCount == 4){
-			if(!clearPotionError){
-				Iterator<PotionEffect> iterator = player.getActivePotionEffects().iterator();
-
-				while (iterator.hasNext() && !clearPotionError)
-				{
-					PotionEffect effect = (PotionEffect)iterator.next();
-
-					if(effect.getPotion().isBadEffect()){
-						try {
-							Method method = ReflectionHelper.findMethod(EntityLivingBase.class, "onFinishedPotionEffect", "func_70688_c", PotionEffect.class);
-							if(method !=null){
-								method.invoke(player, effect);
-								iterator.remove();
-							} else {
-								clearPotionError = true;
-							}
-						} catch (Exception e) {
-							e.printStackTrace();
-							ModLogger.warning("An error occured when trying to clear your bad potions!");
-							clearPotionError = true;
-							break;
-						} 
-					}
-				}
+			if(!player.getEntityWorld().isRemote){
+				player.clearActivePotions();
 			}
 		}
 	}
@@ -91,7 +69,7 @@ public class ArmorEventHandler {
 			final int oldXP = event.getDroppedExperience();
 			float dev = (float)((float)EntityUtil.rand.nextInt(50) / (float)50);
 			int add = (int) (oldXP * dev);
-			ModLogger.info("Added Mob XP: "+add+" / "+dev+" "+oldXP);
+			//ModLogger.info("Added Mob XP: "+add+" / "+dev+" "+oldXP);
 			event.setDroppedExperience(add + oldXP);
 		}
 	}

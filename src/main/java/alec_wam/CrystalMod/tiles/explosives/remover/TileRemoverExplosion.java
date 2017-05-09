@@ -48,6 +48,7 @@ public class TileRemoverExplosion extends TileEntityMod implements IMessageHandl
 						list.add(otherPos);
 					}
 				}
+				world.playSound(null, pos, ModSounds.redstone_removed, SoundCategory.BLOCKS, 1.0F, 1.0F);
 				return list;
 			}
 			
