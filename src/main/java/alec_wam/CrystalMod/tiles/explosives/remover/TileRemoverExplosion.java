@@ -75,6 +75,8 @@ public class TileRemoverExplosion extends TileEntityMod implements IMessageHandl
 				
 				if(block == Blocks.LEVER || block == Blocks.STONE_BUTTON || block == Blocks.WOODEN_BUTTON) return true;
 				
+				if(block == Blocks.TRIPWIRE || block == Blocks.TRIPWIRE_HOOK) return true;
+				
 				if(block == Blocks.DISPENSER || block == Blocks.DROPPER || block == Blocks.OBSERVER || block == Blocks.HOPPER || block == Blocks.DAYLIGHT_DETECTOR || block == Blocks.DAYLIGHT_DETECTOR_INVERTED) return true;
 				
 				return false;
