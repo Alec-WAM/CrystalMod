@@ -54,25 +54,29 @@ public class TileRemoverExplosion extends TileEntityMod implements IMessageHandl
 			
 			public boolean isRedstoneComp(IBlockState state){
 				Block block = state.getBlock();
-				if(block == Blocks.REDSTONE_BLOCK || block == Blocks.REDSTONE_TORCH || block == Blocks.REDSTONE_WIRE){
+				if(block == Blocks.REDSTONE_BLOCK || block == Blocks.REDSTONE_TORCH || block == Blocks.REDSTONE_WIRE || block == Blocks.REDSTONE_ORE){
 					return true;
 				}
+				
+				if(block == Blocks.REDSTONE_LAMP || block == Blocks.LIT_REDSTONE_LAMP) return true;
+				
+				if(block == Blocks.NOTEBLOCK || block == Blocks.JUKEBOX) return true;
+				
 				if(block == Blocks.UNPOWERED_REPEATER || block == Blocks.POWERED_REPEATER){
 					return true;
 				}
 				if(block == Blocks.UNPOWERED_COMPARATOR || block == Blocks.POWERED_COMPARATOR){
 					return true;
 				}
-				if(block == Blocks.HEAVY_WEIGHTED_PRESSURE_PLATE || block == Blocks.LIGHT_WEIGHTED_PRESSURE_PLATE){
+				
+				if(block == Blocks.STONE_PRESSURE_PLATE || block == Blocks.WOODEN_PRESSURE_PLATE || block == Blocks.HEAVY_WEIGHTED_PRESSURE_PLATE || block == Blocks.LIGHT_WEIGHTED_PRESSURE_PLATE){
 					return true;
 				}
-				if(block == Blocks.STONE_PRESSURE_PLATE || block == Blocks.WOODEN_PRESSURE_PLATE){
-					return true;
-				}
-				if(block == Blocks.STONE_BUTTON || block == Blocks.WOODEN_BUTTON){
-					return true;
-				}
-				if(block == Blocks.LEVER) return true;
+				
+				if(block == Blocks.LEVER || block == Blocks.STONE_BUTTON || block == Blocks.WOODEN_BUTTON) return true;
+				
+				if(block == Blocks.DISPENSER || block == Blocks.DROPPER || block == Blocks.OBSERVER || block == Blocks.HOPPER || block == Blocks.DAYLIGHT_DETECTOR || block == Blocks.DAYLIGHT_DETECTOR_INVERTED) return true;
+				
 				return false;
 			}
 		}, WATER {
