@@ -57,7 +57,9 @@ public class TileParticleThrower extends TileEntity {
 				blockEntity.motionY +=motionY;
 				blockEntity.motionZ +=motionZ;
 				if(!world.isRemote){
+					world.setBlockToAir(blockPos);
 					world.spawnEntity(blockEntity);
+					blockEntity.setPositionAndUpdate(explosionX, explosionY + 1.5D, explosionZ);
 					NBTTagCompound data = new NBTTagCompound();
 					data.setInteger("BlockID", Block.getStateId(state));
 					if(tileNBT !=null){
