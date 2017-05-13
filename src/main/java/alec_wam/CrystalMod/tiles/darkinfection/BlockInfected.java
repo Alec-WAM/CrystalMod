@@ -16,6 +16,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
@@ -46,10 +47,10 @@ public class BlockInfected extends EnumBlock<BlockInfected.InfectedBlockType> {
     {
 		IBlockState state = worldIn.getBlockState(pos);
 		if(state.getValue(TYPE) != InfectedBlockType.CASING){
-			if(entityIn !=null && entityIn instanceof EntityPlayer){
-				EntityPlayer player = (EntityPlayer)entityIn;
+			if(entityIn !=null && entityIn instanceof EntityLivingBase){
+				EntityLivingBase living = (EntityLivingBase)entityIn;
 				if(EntityUtil.rand.nextInt(16) == 0){
-					if(!player.isPotionActive(MobEffects.WITHER))player.addPotionEffect(new PotionEffect(MobEffects.WITHER, 20*4, 0));
+					if(!living.isPotionActive(MobEffects.WITHER))living.addPotionEffect(new PotionEffect(MobEffects.WITHER, 20*4, 0));
 				}
 			}
 		}
