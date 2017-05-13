@@ -120,19 +120,15 @@ public class TileOppositeFuser extends TileEntityMod {
                         double dz = pos.getZ() - blockpos.getZ();
                 		double dis = Math.sqrt(dx * dx + dy * dy + dz * dz);
                 		
-                		float f = (float) ((size-dis) * (0.7F + this.world.rand.nextFloat() * 0.8F));
-                		//f = Math.abs(f);
+
                 		IBlockState iblockstate = world.getBlockState(blockpos);
+                		float resistance = (float) (size - dis);
+                		
+                		resistance-=iblockstate.getBlock().getExplosionResistance(null);
 	
-	                    if (iblockstate.getMaterial() != Material.AIR)
+	                    if(resistance > 0.0F)
 	                    {
-	                        float f2 = iblockstate.getBlock().getExplosionResistance((Entity)null);
-	                        f -= (f2 + 0.3F) * 0.3F;
-	                    }
-	
-	                    if(f > 0.0F)
-	                    {
-	                    	set.add(blockpos);
+	                    	if(!world.isAirBlock(blockpos))set.add(blockpos);
 	                    }
                 	}
                 }
