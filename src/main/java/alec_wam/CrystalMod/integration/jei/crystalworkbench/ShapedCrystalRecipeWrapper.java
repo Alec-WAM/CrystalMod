@@ -51,9 +51,7 @@ public class ShapedCrystalRecipeWrapper extends BlankRecipeWrapper implements IS
 	@Override
 	public void getIngredients(IIngredients ingredients) {
 		List<ItemStack> recipeItems = Arrays.asList(recipe.recipeItems);
-		ingredients.setInputs(ItemStack.class, recipeItems);
-
-		
+		ingredients.setInputs(ItemStack.class, recipeItems);		
 		
 		ItemStack recipeOutput = recipe.getRecipeOutput();
 		if (ItemStackTools.isValid(recipeOutput)) {

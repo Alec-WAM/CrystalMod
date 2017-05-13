@@ -70,7 +70,7 @@ public class ItemStackTools {
      * Check if this is a valid stack. Tests for null on 1.10.
      */
     public static boolean isValid(@Nullable ItemStack stack) {
-        if (stack.isEmpty()) {
+        if (stack == null || stack.isEmpty()) {
             return false;
         }
         return stack.getCount() > 0;
