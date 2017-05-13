@@ -12,11 +12,15 @@ import alec_wam.CrystalMod.network.packets.PacketTileMessage;
 import alec_wam.CrystalMod.tiles.TileEntityMod;
 import alec_wam.CrystalMod.tiles.darkinfection.BlockInfected.InfectedBlockType;
 import alec_wam.CrystalMod.util.BlockUtil;
+import alec_wam.CrystalMod.util.BlockUtil.BlockFilter;
 import alec_wam.CrystalMod.util.TimeUtil;
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.World;
 
 public class TileDarkInfection extends TileEntityMod implements IMessageHandler {
 
@@ -119,7 +123,22 @@ public class TileDarkInfection extends TileEntityMod implements IMessageHandler 
 	
 	public void calcNextBorder(){
 		currentRadius++;
-		toPlace = BlockUtil.createCircle(world, pos, currentRadius);
+		toPlace = BlockUtil.createSpecialOrb(world, pos, currentRadius, new BlockFilter(){
+
+			@Override
+			public boolean isValid(World world, BlockPos pos, IBlockState state) {
+				if(!world.isAirBlock(pos)){
+					Block block = state.getBlock();
+					if(state.getMaterial() != Material.PLANTS){
+						if(block.isFullBlock(state) && block.getBlockHardness(state, world, pos) >= 0.0F){
+							return true;
+						}
+					}
+				}
+				return false;
+			}
+			
+		});
 	}
 	
 	public void calcNextOrb(){

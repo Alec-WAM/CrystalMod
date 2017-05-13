@@ -3,6 +3,8 @@ package alec_wam.CrystalMod.util;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Nonnull;
+
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
@@ -290,5 +292,29 @@ public class BlockUtil {
 			}
 		}
 		return list;
+	}
+	
+	public static List<BlockPos> createSpecialOrb(World world, BlockPos center, int size, @Nonnull BlockFilter filter){
+		List<BlockPos> list = Lists.newArrayList();
+		double circleSize = size-0.5;
+		for(int x = -size; x <= size; x++){
+			for(int y = -size; y <= size; y++){
+				for(int z = -size; z <= size; z++){
+					BlockPos pos2 = center.add(x, y, z);
+					IBlockState state = world.getBlockState(pos2);
+					double dis = pos2.getDistance(center.getX(), center.getY(), center.getZ());
+					if(dis >= circleSize && dis < circleSize+1 && filter.isValid(world, pos2, state)){
+						list.add(pos2);
+					}
+				}
+			}
+		}
+		return list;
+	}
+	
+	public static abstract class BlockFilter {
+		
+		public abstract boolean isValid(World world, BlockPos pos, IBlockState state);
+		
 	}
 }

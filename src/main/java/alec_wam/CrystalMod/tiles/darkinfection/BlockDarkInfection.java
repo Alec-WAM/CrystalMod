@@ -21,6 +21,7 @@ import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
@@ -60,6 +61,17 @@ public class BlockDarkInfection extends BlockContainer implements ICustomModel {
 			return state.withProperty(OPENING, infection.getOpeningPhase());
 		}
 		return state;
+	}
+	
+	@Override
+	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune)
+    {
+		TileEntity te = world.getTileEntity(pos);
+		if(te !=null && te instanceof TileDarkInfection){
+			TileDarkInfection infection = (TileDarkInfection)te;
+			if(infection.activated) return Lists.newArrayList();
+		}
+		return super.getDrops(world, pos, state, fortune);
 	}
 	
 	@Override
