@@ -27,6 +27,10 @@ import alec_wam.CrystalMod.entities.minions.warrior.EntityMinionWarrior;
 import alec_wam.CrystalMod.entities.minions.worker.EntityMinionWorker;
 import alec_wam.CrystalMod.entities.misc.EntityCustomFallingBlock;
 import alec_wam.CrystalMod.entities.misc.RenderCustomFallingBlock;
+import alec_wam.CrystalMod.entities.mob.angel.EntityAngel;
+import alec_wam.CrystalMod.entities.mob.angel.RenderAngel;
+import alec_wam.CrystalMod.entities.mob.devil.EntityDevil;
+import alec_wam.CrystalMod.entities.mob.devil.RenderDevil;
 import alec_wam.CrystalMod.entities.mob.enderman.EntityCrystalEnderman;
 import alec_wam.CrystalMod.entities.mob.enderman.RenderCrystalEnderman;
 import alec_wam.CrystalMod.entities.mob.zombiePigmen.EntityCrystalPigZombie;
@@ -89,6 +93,12 @@ public class ModEntites {
 		addEntity(EntityGrapplingHook.class, "grapplinghook", 900, 1, true);
 		
 		addEntity(EntityCustomFallingBlock.class, "customfallingblock", 160, 20, true);
+		
+		ResourceLocation angel = addEntity(EntityAngel.class, "pureangel");
+		EntityRegistry.registerEgg(angel, 0xFFFFFF, 0xFFFF00);
+		
+		ResourceLocation devil = addEntity(EntityDevil.class, "darkdevil");
+		EntityRegistry.registerEgg(devil, 0, 0xFFFF00);
 	}
 	
 	public static void postInit(){
@@ -122,6 +132,20 @@ public class ModEntites {
 			@Override
 			public Render<EntityCustomFallingBlock> createRenderFor(RenderManager manager) {
 				return new RenderCustomFallingBlock(manager);
+			}
+		});
+        
+        RenderingRegistry.registerEntityRenderingHandler(EntityAngel.class, new IRenderFactory<EntityAngel>() {
+			@Override
+			public Render<EntityAngel> createRenderFor(RenderManager manager) {
+				return new RenderAngel(manager);
+			}
+		});
+        
+        RenderingRegistry.registerEntityRenderingHandler(EntityDevil.class, new IRenderFactory<EntityDevil>() {
+			@Override
+			public Render<EntityDevil> createRenderFor(RenderManager manager) {
+				return new RenderDevil(manager);
 			}
 		});
 	}
