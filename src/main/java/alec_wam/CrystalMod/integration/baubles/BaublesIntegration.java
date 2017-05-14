@@ -97,6 +97,6 @@ public class BaublesIntegration {
                   return stack;
           }
       
-      return null;
+      return ItemStackTools.getEmptyStack();
   }
 }
