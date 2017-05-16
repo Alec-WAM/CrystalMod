@@ -286,6 +286,7 @@ item.crystalmod.minion.worker.name=Worker Minion
 item.crystalmod.minion.warrior.name=Warrior Minion
 item.crystalmod.minionstaff.name=Minion Staff
 item.crystalmod.bombomb.name=Bombomb
+item.crystalmod.darkarang.name=Darkarang
 
 #--Baubles
 item.crystalmod.dragonwingbauble.name=Dragon Wings Bauble
@@ -327,6 +328,11 @@ tile.crystalmod.crystalglasspane.red.name=Red Crystal Glass Pane
 tile.crystalmod.crystalglasspane.green.name=Green Crystal Glass Pane
 tile.crystalmod.crystalglasspane.dark.name=Dark Crystal Glass Pane
 tile.crystalmod.crystalglasspane.pure.name=Pure Crystal Glass Pane
+
+tile.crystalmod.compressedblock.flint.name=Block of Flint
+tile.crystalmod.compressedblock.gunpowder.name=Block of Gunpowder
+tile.crystalmod.compressedblock.charcoal.name=Block of Charcoal
+tile.crystalmod.compressedblock.blazerod.name=Block of Blaze Rods
 
 tile.crystalmod.metalbars.dark_iron.name=Dark Iron Bars
 tile.crystalmod.metalbars.blue.name=Blue Crystal Bars
@@ -668,6 +674,8 @@ entity.crystalenderman.name=Crystal Enderman
 entity.minionwarrior.name=Warrior Minion
 entity.minionworker.name=Minion Worker
 entity.bombomb.name=Bombomb
+entity.pureangel.name=Pure Angel
+entity.darkdevil.name=Dark Devil
 
 entity.minecart_blue.name=Minecart with Blue Crystal Chest
 entity.minecart_red.name=Minecart with Red Crystal Chest

@@ -225,10 +225,8 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
         
         for(GlassType type : GlassType.values()){
         	event.getMap().registerSprite(new ResourceLocation("crystalmod:blocks/crystal_"+type.getName()+"_glass"));
-        }
-        
-        for(GlassType type : GlassType.values()){
         	event.getMap().registerSprite(new ResourceLocation("crystalmod:blocks/crystal_"+type.getName()+"_glass_tinted"));
+        	event.getMap().registerSprite(new ResourceLocation("crystalmod:blocks/crystal_"+type.getName()+"_glass_painted"));
         }
         
         event.getMap().registerSprite(new ResourceLocation("crystalmod:blocks/pipe/attachment/import"));

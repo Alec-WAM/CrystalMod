@@ -5,6 +5,7 @@ import java.util.Map;
 import com.google.common.collect.Maps;
 
 import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.blocks.BlockCompressed.CompressedBlockType;
 import alec_wam.CrystalMod.blocks.crops.BlockCrystalPlant;
 import alec_wam.CrystalMod.blocks.crops.BlockCrystalPlant.PlantType;
 import alec_wam.CrystalMod.blocks.crops.BlockCrystalReed;
@@ -165,12 +166,14 @@ import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.EnumPlantType;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.FMLContainer;
+import net.minecraftforge.fml.common.IFuelHandler;
 import net.minecraftforge.fml.common.InjectedModContainer;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
@@ -215,6 +218,7 @@ public class ModBlocks {
 	public static BlockCrate crates;
 	public static BlockAdvancedLamp advancedLamp;
 	public static BlockFakeLight fakeLight;
+	public static BlockCompressed compressed;
 	
 	public static BlockHDDInterface hddInterface;
 	public static BlockHDDArray hddArray;
@@ -376,6 +380,26 @@ public class ModBlocks {
 		ItemBlockMeta.setMappingProperty(crystalTank, BlockTank.TYPE);
 	    registerTileEntity(TileEntityTank.class);
 		
+	    compressed = registerEnumBlock(new BlockCompressed(), "compressedblock");
+	    GameRegistry.registerFuelHandler(new IFuelHandler(){
+
+			@Override
+			public int getBurnTime(ItemStack fuel) {
+				if(fuel.getItem() == Item.getItemFromBlock(ModBlocks.compressed)){
+					int meta = fuel.getMetadata();
+					if(meta == CompressedBlockType.CHARCOAL.getMeta()){
+						return 16000;
+					}
+					if(meta == CompressedBlockType.BLAZEROD.getMeta()){
+						return 2400*9;
+					}
+				}
+				return 0;
+			}
+	    	
+	    });
+	    
+	    
 		engine = new BlockEngine();
 		registerBlock(engine, new ItemBlockEngine(engine), "engine");
 		for(EngineType type : EngineType.values()){

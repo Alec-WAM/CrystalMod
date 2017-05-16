@@ -13,6 +13,7 @@ import alec_wam.CrystalMod.blocks.BlockCrystalLog.WoodType;
 import alec_wam.CrystalMod.blocks.BlockCrystalOre.CrystalOreType;
 import alec_wam.CrystalMod.blocks.BlockMetalBars.EnumMetalBarType;
 import alec_wam.CrystalMod.blocks.ModBlocks;
+import alec_wam.CrystalMod.blocks.BlockCompressed.CompressedBlockType;
 import alec_wam.CrystalMod.blocks.crops.material.ModCrops;
 import alec_wam.CrystalMod.blocks.glass.BlockCrystalGlass.GlassType;
 import alec_wam.CrystalMod.crafting.recipes.CustomToolRepairRecipe;
@@ -205,6 +206,12 @@ public class ModCrafting {
 		create9x9Recipe(new ItemStack(ModBlocks.crystal, 1, CrystalBlockType.GREEN.getMeta()), greenCrystal, 9);
 		create9x9Recipe(new ItemStack(ModBlocks.crystal, 1, CrystalBlockType.DARK.getMeta()), darkCrystal, 9);
 		create9x9Recipe(new ItemStack(ModBlocks.crystal, 1, CrystalBlockType.PURE.getMeta()), pureCrystal, 9);
+		
+		create9x9Recipe(new ItemStack(ModBlocks.compressed, 1, CompressedBlockType.FLINT.getMeta()), new ItemStack(Items.FLINT), 9);
+		create9x9Recipe(new ItemStack(ModBlocks.compressed, 1, CompressedBlockType.GUNPOWDER.getMeta()), new ItemStack(Items.GUNPOWDER), 9);
+		create9x9Recipe(new ItemStack(ModBlocks.compressed, 1, CompressedBlockType.CHARCOAL.getMeta()), new ItemStack(Items.COAL, 1, 1), 9);
+		create9x9Recipe(new ItemStack(ModBlocks.compressed, 1, CompressedBlockType.BLAZEROD.getMeta()), new ItemStack(Items.BLAZE_ROD), 9);
+
 		
 		//More Expensive than using the Liguidizer and Infuser
 		//TODO REMOVE CRAFTING OF DARK IRON
@@ -834,6 +841,11 @@ public class ModCrafting {
 		oredict(new ItemStack(ModItems.plates, 1, PlateType.PURE.getMetadata()), "plateCrystal", "plateCrystalPure");
 
 		oredict(new ItemStack(ModItems.plates, 1, PlateType.DARK_IRON.getMetadata()), "plateIronDark");
+		
+		oredict(new ItemStack(ModBlocks.compressed, 1, CompressedBlockType.FLINT.getMeta()), "blockFlint");
+		oredict(new ItemStack(ModBlocks.compressed, 1, CompressedBlockType.GUNPOWDER.getMeta()), "blockGunpowder");
+		oredict(new ItemStack(ModBlocks.compressed, 1, CompressedBlockType.CHARCOAL.getMeta()), "blockCharcoal");
+		oredict(new ItemStack(ModBlocks.compressed, 1, CompressedBlockType.BLAZEROD.getMeta()), "blockBlaze");
 	}
 	
 	private static void oredictCrystal(int shard, int nugget, int crystal, int ingot, int block, int ingotBlock) {

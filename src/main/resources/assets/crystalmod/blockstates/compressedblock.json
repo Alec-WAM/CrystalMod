@@ -1,0 +1,13 @@
+{
+  "forge_marker": 1,
+  "variants": {
+    "normal": [{}],
+    "inventory": [{}],
+    "type": {
+      "flint": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/compressed/flint"} },
+	  "gunpowder": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/compressed/gunpowder"} },
+	  "charcoal": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/compressed/charcoal"} },
+	  "blazerod": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/compressed/blazerod"} }
+    }
+  }
+}
