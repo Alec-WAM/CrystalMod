@@ -6,6 +6,7 @@ import com.google.common.collect.Lists;
 
 import alec_wam.CrystalMod.Config;
 import alec_wam.CrystalMod.blocks.ModBlocks;
+import alec_wam.CrystalMod.client.sound.ModSounds;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.IMessageHandler;
 import alec_wam.CrystalMod.network.packets.PacketTileMessage;
