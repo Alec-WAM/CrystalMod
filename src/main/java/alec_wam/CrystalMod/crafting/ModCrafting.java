@@ -250,6 +250,11 @@ public class ModCrafting {
 		addShapedOreRecipe(new ItemStack(ModBlocks.crystalGlass, 8, GlassType.DARK.getMeta()), new Object[]{"GGG", "GCG", "GGG", 'G', "blockGlass", 'C', darkIngot});
 		addShapedOreRecipe(new ItemStack(ModBlocks.crystalGlass, 8, GlassType.PURE.getMeta()), new Object[]{"GGG", "GCG", "GGG", 'G', "blockGlass", 'C', pureIngot});
 		
+		addShapedRecipe(new ItemStack(ModBlocks.crystalGlassPainted, 8, GlassType.BLUE.getMeta()), new Object[]{"GGG", "GSG", "GGG", 'G', new ItemStack(ModBlocks.crystalGlass, 1, GlassType.BLUE.getMeta()), 'S', new ItemStack(ModItems.crystalSap, 1, SapType.BLUE.getMetadata())});
+		addShapedRecipe(new ItemStack(ModBlocks.crystalGlassPainted, 8, GlassType.RED.getMeta()), new Object[]{"GGG", "GSG", "GGG", 'G', new ItemStack(ModBlocks.crystalGlass, 1, GlassType.RED.getMeta()), 'S', new ItemStack(ModItems.crystalSap, 1, SapType.RED.getMetadata())});
+		addShapedRecipe(new ItemStack(ModBlocks.crystalGlassPainted, 8, GlassType.GREEN.getMeta()), new Object[]{"GGG", "GSG", "GGG", 'G', new ItemStack(ModBlocks.crystalGlass, 1, GlassType.GREEN.getMeta()), 'S', new ItemStack(ModItems.crystalSap, 1, SapType.GREEN.getMetadata())});
+		addShapedRecipe(new ItemStack(ModBlocks.crystalGlassPainted, 8, GlassType.DARK.getMeta()), new Object[]{"GGG", "GSG", "GGG", 'G', new ItemStack(ModBlocks.crystalGlass, 1, GlassType.DARK.getMeta()), 'S', new ItemStack(ModItems.crystalSap, 1, SapType.DARK.getMetadata())});
+		
 		addShapedRecipe(new ItemStack(ModBlocks.metalBars, 16, EnumMetalBarType.DARK_IRON.getMeta()), new Object[]{"###", "###", '#', dIronIngot});
 		addShapedRecipe(new ItemStack(ModBlocks.metalBars, 16, EnumMetalBarType.BLUE.getMeta()), new Object[]{"###", "###", '#', blueIngot});
 		addShapedRecipe(new ItemStack(ModBlocks.metalBars, 16, EnumMetalBarType.RED.getMeta()), new Object[]{"###", "###", '#', redIngot});
