@@ -19,6 +19,7 @@ import alec_wam.CrystalMod.blocks.decorative.bridge.BlockBridge;
 import alec_wam.CrystalMod.blocks.decorative.bridge.TileBridge;
 import alec_wam.CrystalMod.blocks.glass.BlockCrystalGlass;
 import alec_wam.CrystalMod.blocks.glass.BlockCrystalGlassPane;
+import alec_wam.CrystalMod.blocks.glass.BlockPaintedCrystalGlass;
 import alec_wam.CrystalMod.blocks.glass.BlockTintedCrystalGlass;
 import alec_wam.CrystalMod.blocks.rail.BlockReinforcedRail;
 import alec_wam.CrystalMod.handler.MissingItemHandler;
@@ -186,6 +187,7 @@ public class ModBlocks {
 	public static BlockCrystalIngot crystalIngot;
 	public static BlockCrystalGlass crystalGlass;
 	public static BlockTintedCrystalGlass crystalGlassTinted;
+	public static BlockPaintedCrystalGlass crystalGlassPainted;
 	public static BlockCrystalGlassPane crystalGlassPane;
 	public static BlockMetalBars metalBars;
 	public static BlockCrystalReed crystalReedsBlue, crystalReedsRed, crystalReedsGreen, crystalReedsDark;
@@ -274,6 +276,8 @@ public class ModBlocks {
 		
 		crystalGlass = registerEnumBlock(new BlockCrystalGlass(), "crystalglass");
 		crystalGlassTinted = registerEnumBlock(new BlockTintedCrystalGlass(), "crystalglasstinted");
+		crystalGlassPainted = registerEnumBlock(new BlockPaintedCrystalGlass(), "crystalglasspainted");
+		
 		crystalGlassPane = new BlockCrystalGlassPane();
 		registerBlock(crystalGlassPane, new ItemBlockMeta(crystalGlassPane), "crystalglasspane");
 		ItemBlockMeta.setMappingProperty(crystalGlassPane, BlockCrystalGlass.TYPE);
