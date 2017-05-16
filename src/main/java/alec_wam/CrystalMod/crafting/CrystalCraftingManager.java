@@ -202,7 +202,7 @@ public class CrystalCraftingManager
         for (map = Maps.<Character, ItemStack>newHashMap(); i < recipeComponents.length; i += 2)
         {
             Character character = (Character)recipeComponents[i];
-            ItemStack itemstack = null;
+            ItemStack itemstack = ItemStackTools.getEmptyStack();
 
             if (recipeComponents[i + 1] instanceof Item)
             {
@@ -232,7 +232,7 @@ public class CrystalCraftingManager
             }
             else
             {
-                aitemstack[i1] = null;
+                aitemstack[i1] = ItemStackTools.getEmptyStack();
             }
         }
 

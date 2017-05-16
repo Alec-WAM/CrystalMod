@@ -89,8 +89,8 @@ public class ItemStackTools {
     /**
      * Check if this is an empty stack. Tests for null on 1.10.
      */
-    public static boolean isEmpty(@Nullable ItemStack stack) {
-        return stack.isEmpty();
+    public static boolean isEmpty(ItemStack stack) {
+        return isNullStack(stack);
     }
 
     public static void makeEmpty(@Nonnull ItemStack stack) {
