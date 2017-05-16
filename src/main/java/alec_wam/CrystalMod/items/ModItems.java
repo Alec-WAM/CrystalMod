@@ -46,6 +46,7 @@ import alec_wam.CrystalMod.items.tools.backpack.types.BackpackNormal;
 import alec_wam.CrystalMod.items.tools.backpack.types.BackpackWireless;
 import alec_wam.CrystalMod.items.tools.backpack.upgrade.ItemBackpackUpgrade;
 import alec_wam.CrystalMod.items.tools.bat.ItemBat;
+import alec_wam.CrystalMod.items.tools.projectiles.ItemDarkarang;
 import alec_wam.CrystalMod.tiles.machine.elevator.ItemMiscCard;
 import alec_wam.CrystalMod.tiles.machine.worksite.ItemWorksiteUpgrade;
 import alec_wam.CrystalMod.tiles.pipes.attachments.ItemPipeAttachment;
@@ -158,6 +159,7 @@ public class ModItems {
 	public static ItemMinionStaff minionStaff;
 	public static ItemWorksiteUpgrade worksiteUpgrade;
 	public static ItemBombomb bombomb;
+	public static ItemDarkarang darkarang;
 	
 	//Baubles
 	public static ItemBaubleWings dragonWingsBauble;
@@ -246,6 +248,7 @@ public class ModItems {
 		minionStaff = new ItemMinionStaff();
 		worksiteUpgrade = new ItemWorksiteUpgrade();
 		bombomb = new ItemBombomb();
+		darkarang = new ItemDarkarang();
 		
 		//Baubles
 		if(BaublesIntegration.instance().hasBaubles()){

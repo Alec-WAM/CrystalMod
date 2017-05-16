@@ -300,7 +300,7 @@ public class ModBlocks {
 		
 		for (CrystalChestType typ : CrystalChestType.values())
         {
-            GameRegistry.registerTileEntity(typ.clazz, CrystalMod.MODID+"." + typ.name());
+			registerTileEntity(typ.clazz);
         }
 		
 		crystalWoodenChest = new BlockWoodenCrystalChest();
@@ -308,7 +308,7 @@ public class ModBlocks {
 		
 		for (WoodenCrystalChestType typ : WoodenCrystalChestType.values())
         {
-            GameRegistry.registerTileEntity(typ.clazz, CrystalMod.MODID+"." + typ.name());
+			registerTileEntity(typ.clazz);
         }
 		
 		wirelessChest = new BlockWirelessChest();

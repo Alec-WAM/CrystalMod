@@ -97,5 +97,23 @@
         "stream": false
       }
     ], "subtitle": "crystalmod.subtitle.explosion_fusor_tier2"
+  },
+  "dark_infection_start": {
+    "category": "block",
+    "sounds": [
+      {
+        "name": "crystalmod:dark_infection_start",
+        "stream": false
+      }
+    ], "subtitle": "crystalmod.subtitle.dark_infection_start"
+  },
+  "dark_infection_looping": {
+    "category": "block",
+    "sounds": [
+      {
+        "name": "crystalmod:dark_infection_looping",
+        "stream": false
+      }
+    ], "subtitle": "crystalmod.subtitle.dark_infection_looping"
   }
 }

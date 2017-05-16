@@ -18,6 +18,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -89,6 +90,7 @@ public class TileDarkInfection extends TileEntityMod implements IMessageHandler 
 								world.setBlockState(toPlacePos, type == 0 ? stone : cobble);
 							}
 							delay = 20;
+							getWorld().playSound(null, getPos(), ModSounds.dark_infection_looping, SoundCategory.BLOCKS, 1.0f, 1.0f);
 						}
 					} else {
 						if(Config.infectionRange <= 0 || currentRadius < Config.infectionRange){

@@ -7,6 +7,7 @@ import com.google.common.collect.Lists;
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.blocks.ModBlocks;
+import alec_wam.CrystalMod.client.sound.ModSounds;
 import alec_wam.CrystalMod.tiles.explosives.fuser.TileOppositeFuser;
 import alec_wam.CrystalMod.tiles.explosives.fuser.BlockOppositeFuser.CustomStateMapper;
 import alec_wam.CrystalMod.util.BlockUtil;
@@ -27,6 +28,7 @@ import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -82,6 +84,7 @@ public class BlockDarkInfection extends BlockContainer implements ICustomModel {
 			if(te !=null && te instanceof TileDarkInfection){
 				TileDarkInfection infection = (TileDarkInfection)te;
 				infection.activated = true;
+				world.playSound(null, pos, ModSounds.dark_infection_start, SoundCategory.BLOCKS, 1.0f, 1.0f);
 				BlockUtil.markBlockForUpdate(world, pos);
 			}
 			

@@ -3,6 +3,9 @@ package alec_wam.CrystalMod.entities.mob.devil;
 import javax.annotation.Nullable;
 
 import alec_wam.CrystalMod.entities.mob.angel.EntityAngel;
+import alec_wam.CrystalMod.items.ModItems;
+import alec_wam.CrystalMod.items.tools.projectiles.EntityDarkarang;
+import alec_wam.CrystalMod.util.ModLogger;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
@@ -159,13 +162,15 @@ public class EntityDevil extends EntityMob
      */
     protected void setEquipmentBasedOnDifficulty(DifficultyInstance difficulty)
     {
-        this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.IRON_SWORD));
+        this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(ModItems.darkarang));
         this.setDropChance(EntityEquipmentSlot.MAINHAND, 0.0F);
     }
 
     class AIChargeAttack extends EntityAIBase
     {
-        public AIChargeAttack()
+    	private int attackTime;
+    	private int seeTime;
+    	public AIChargeAttack()
         {
             this.setMutexBits(1);
         }
@@ -175,7 +180,7 @@ public class EntityDevil extends EntityMob
          */
         public boolean shouldExecute()
         {
-            return EntityDevil.this.getAttackTarget() != null && !EntityDevil.this.getMoveHelper().isUpdating() && EntityDevil.this.rand.nextInt(7) == 0 ? EntityDevil.this.getDistanceSqToEntity(EntityDevil.this.getAttackTarget()) > 4.0D : false;
+            return EntityDevil.this.getAttackTarget() != null;
         }
 
         /**
@@ -183,7 +188,7 @@ public class EntityDevil extends EntityMob
          */
         public boolean continueExecuting()
         {
-            return EntityDevil.this.getMoveHelper().isUpdating() /*&& EntityAngel.this.isCharging()*/ && EntityDevil.this.getAttackTarget() != null && EntityDevil.this.getAttackTarget().isEntityAlive();
+            return EntityDevil.this.getAttackTarget() != null && EntityDevil.this.getAttackTarget().isEntityAlive();
         }
 
         /**
@@ -191,10 +196,7 @@ public class EntityDevil extends EntityMob
          */
         public void startExecuting()
         {
-            EntityLivingBase entitylivingbase = EntityDevil.this.getAttackTarget();
-            Vec3d vec3d = entitylivingbase.getPositionEyes(1.0F);
-            EntityDevil.this.moveHelper.setMoveTo(vec3d.xCoord, vec3d.yCoord, vec3d.zCoord, 1.0D);
-            //EntityAngel.this.setIsCharging(true);
+            attackTime = 20;
             EntityDevil.this.playSound(SoundEvents.ENTITY_VEX_CHARGE, 1.0F, 1.0F);
         }
 
@@ -203,7 +205,7 @@ public class EntityDevil extends EntityMob
          */
         public void resetTask()
         {
-            //EntityAngel.this.setIsCharging(false);
+            this.seeTime = 0;
         }
 
         /**
@@ -211,21 +213,33 @@ public class EntityDevil extends EntityMob
          */
         public void updateTask()
         {
-            EntityLivingBase entitylivingbase = EntityDevil.this.getAttackTarget();
-
-            if (EntityDevil.this.getEntityBoundingBox().expand(0.15, 0.15, 0.15).intersectsWith(entitylivingbase.getEntityBoundingBox()))
-            {
-                EntityDevil.this.attackEntityAsMob(entitylivingbase);
+        	if(attackTime > 0)--this.attackTime;
+            
+        	EntityLivingBase entitylivingbase = EntityDevil.this.getAttackTarget();
+            EntityDevil devil = EntityDevil.this;
+            boolean canSee = devil.getEntitySenses().canSee(entitylivingbase);
+            double d0 = EntityDevil.this.getDistanceSqToEntity(entitylivingbase);
+            
+            if(d0 > 8.0D){
+            	Vec3d vec3d = entitylivingbase.getPositionEyes(1.0F);
+                EntityDevil.this.moveHelper.setMoveTo(vec3d.xCoord, vec3d.yCoord-(entitylivingbase.getEyeHeight()/2), vec3d.zCoord, 1.0D);
             }
-            else
+            
+            devil.getLookHelper().setLookPositionWithEntity(entitylivingbase, 30.0F, 30.0F);
+            	
+            if (this.attackTime <= 0 && canSee)
             {
-                double d0 = EntityDevil.this.getDistanceSqToEntity(entitylivingbase);
+            	attackTime = 40 + devil.rand.nextInt(10);
+            	EntityDarkarang darkarang = new EntityDarkarang(world);
+            	darkarang.shootingEntity = devil;
+            	darkarang.setLocationAndAngles(devil.posX, devil.posY + (double) devil.getEyeHeight(), devil.posZ, devil.rotationYaw, devil.rotationPitch);
 
-                if (d0 < 9.0D)
-                {
-                    Vec3d vec3d = entitylivingbase.getPositionEyes(1.0F);
-                    EntityDevil.this.moveHelper.setMoveTo(vec3d.xCoord, vec3d.yCoord, vec3d.zCoord, 1.0D);
-                }
+            	darkarang.setPosition(darkarang.posX, darkarang.posY, darkarang.posZ);
+            	darkarang.motionX = -MathHelper.sin(darkarang.rotationYaw / 180.0F * (float) Math.PI) * MathHelper.cos(darkarang.rotationPitch / 180.0F * (float) Math.PI);
+            	darkarang.motionZ = +MathHelper.cos(darkarang.rotationYaw / 180.0F * (float) Math.PI) * MathHelper.cos(darkarang.rotationPitch / 180.0F * (float) Math.PI);
+            	darkarang.motionY = -MathHelper.sin(darkarang.rotationPitch / 180.0F * (float) Math.PI);
+            	darkarang.setThrowableHeading(darkarang.motionX, darkarang.motionY, darkarang.motionZ, 2.0f, 14.0f - (4.0f * world.getDifficulty().getDifficultyId()));
+            	devil.getEntityWorld().spawnEntity(darkarang);
             }
         }
     }

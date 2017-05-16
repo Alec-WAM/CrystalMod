@@ -39,6 +39,8 @@ import alec_wam.CrystalMod.entities.pet.bombomb.EntityBombomb;
 import alec_wam.CrystalMod.entities.pet.bombomb.RenderEntityBombomb;
 import alec_wam.CrystalMod.items.tools.grapple.EntityGrapplingHook;
 import alec_wam.CrystalMod.items.tools.grapple.RenderEntityGrapplingHook;
+import alec_wam.CrystalMod.items.tools.projectiles.EntityDarkarang;
+import alec_wam.CrystalMod.items.tools.projectiles.RenderDarkarang;
 import alec_wam.CrystalMod.tiles.chest.CrystalChestType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.Render;
@@ -99,6 +101,8 @@ public class ModEntites {
 		
 		ResourceLocation devil = addEntity(EntityDevil.class, "darkdevil");
 		EntityRegistry.registerEgg(devil, 0, 0xFFFF00);
+		
+		addEntity(EntityDarkarang.class, "darkarang", 160, 20, true);
 	}
 	
 	public static void postInit(){
@@ -146,6 +150,13 @@ public class ModEntites {
 			@Override
 			public Render<EntityDevil> createRenderFor(RenderManager manager) {
 				return new RenderDevil(manager);
+			}
+		});
+        
+        RenderingRegistry.registerEntityRenderingHandler(EntityDarkarang.class, new IRenderFactory<EntityDarkarang>() {
+			@Override
+			public Render<EntityDarkarang> createRenderFor(RenderManager manager) {
+				return new RenderDarkarang(manager);
 			}
 		});
 	}

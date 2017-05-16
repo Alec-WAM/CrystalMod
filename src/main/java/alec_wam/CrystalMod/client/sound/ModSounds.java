@@ -25,7 +25,10 @@ public class ModSounds {
 	public static final SoundEvent explosion_fusor_tier0;
 	public static final SoundEvent explosion_fusor_tier1;
 	public static final SoundEvent explosion_fusor_tier2;
-
+	
+	public static final SoundEvent dark_infection_start;
+	public static final SoundEvent dark_infection_looping;
+	
 	static {
         if (!Bootstrap.isRegistered()) {
             throw new RuntimeException("Accessed Sounds before Bootstrap!");
@@ -43,6 +46,9 @@ public class ModSounds {
         	explosion_fusor_tier0 = getRegisteredSoundEvent(CrystalMod.resource("explosion_fusor_tier0"));
         	explosion_fusor_tier1 = getRegisteredSoundEvent(CrystalMod.resource("explosion_fusor_tier1"));
         	explosion_fusor_tier2 = getRegisteredSoundEvent(CrystalMod.resource("explosion_fusor_tier2"));
+        	
+        	dark_infection_start = getRegisteredSoundEvent(CrystalMod.resource("dark_infection_start"));
+        	dark_infection_looping = getRegisteredSoundEvent(CrystalMod.resource("dark_infection_looping"));
         }
     }
 

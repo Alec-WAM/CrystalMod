@@ -14,6 +14,7 @@ import javax.annotation.Nonnull;
 import alec_wam.CrystalMod.blocks.EnumBlock.IEnumMeta;
 import alec_wam.CrystalMod.items.IEnumMetaItem;
 import alec_wam.CrystalMod.items.ModItems;
+import alec_wam.CrystalMod.tiles.chest.TileEntityBlueCrystalChest;
 import alec_wam.CrystalMod.tiles.machine.worksite.InventorySided;
 import alec_wam.CrystalMod.tiles.pipes.item.GhostItemHelper;
 import alec_wam.CrystalMod.tiles.pipes.item.filters.CameraFilterInventory;
@@ -1431,6 +1432,17 @@ public class ItemUtil {
 			}
 			return count;
 		}
+	}
+	
+	public static int getRandomEmptySlot(IItemHandler handler, int tries){
+		if(handler == null)return -1;
+		for(int i = 0; i < tries; i++){
+			int slot = MathHelper.getInt(rand, 0, handler.getSlots());
+			if(ItemStackTools.isEmpty(handler.getStackInSlot(slot))){
+				return slot;
+			}
+		}
+		return -1;
 	}
 	
 	/**Returns stacks that correspond to the provided IEnumMeta enum array**/

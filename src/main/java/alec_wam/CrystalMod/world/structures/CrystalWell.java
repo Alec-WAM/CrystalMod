@@ -1,6 +1,9 @@
 package alec_wam.CrystalMod.world.structures;
 
+import java.util.List;
 import java.util.Random;
+
+import com.google.common.collect.Lists;
 
 import alec_wam.CrystalMod.blocks.BlockCrystal;
 import alec_wam.CrystalMod.blocks.BlockCrystal.CrystalBlockType;
@@ -11,9 +14,17 @@ import alec_wam.CrystalMod.blocks.BlockMetalBars.EnumMetalBarType;
 import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.blocks.glass.BlockCrystalGlass;
 import alec_wam.CrystalMod.fluids.ModFluids;
+import alec_wam.CrystalMod.items.ItemCrystal.CrystalType;
+import alec_wam.CrystalMod.items.ItemCrystalSap.SapType;
+import alec_wam.CrystalMod.items.ItemIngot.IngotType;
+import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.tiles.chest.BlockCrystalChest;
 import alec_wam.CrystalMod.tiles.chest.CrystalChestType;
+import alec_wam.CrystalMod.tiles.chest.TileEntityBlueCrystalChest;
 import alec_wam.CrystalMod.tiles.cluster.BlockCrystalCluster.EnumClusterType;
+import alec_wam.CrystalMod.util.ItemNBTHelper;
+import alec_wam.CrystalMod.util.ItemStackTools;
+import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.tiles.cluster.TileCrystalCluster;
 import net.minecraft.block.BlockDirectional;
 import net.minecraft.block.BlockLog;
@@ -24,8 +35,11 @@ import net.minecraft.block.BlockStairs;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.monster.EntityShulker;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
 
@@ -158,13 +172,116 @@ public class CrystalWell {
 		setBlockAndNotifyAdequately(world, pos.offset(EnumFacing.EAST, 2).offset(EnumFacing.SOUTH, 1).offset(EnumFacing.DOWN, depth), bricks, false);
 		
 		//TODO Random Loot
-		setBlockAndNotifyAdequately(world, pos.offset(EnumFacing.EAST, 2).offset(EnumFacing.SOUTH, 2).offset(EnumFacing.DOWN, depth), chest, true);
+		BlockPos chestPos = pos.offset(EnumFacing.EAST, 2).offset(EnumFacing.SOUTH, 2).offset(EnumFacing.DOWN, depth);
+		setBlockAndNotifyAdequately(world, chestPos, chest, true);
+		TileEntity tile = world.getTileEntity(chestPos);
+		if(tile !=null && tile instanceof TileEntityBlueCrystalChest){
+			createCrystalLootChest((TileEntityBlueCrystalChest)tile, rand, type);
+		}
 		
 		setBlockAndNotifyAdequately(world, pos.offset(EnumFacing.EAST, 3).offset(EnumFacing.SOUTH, 2).offset(EnumFacing.DOWN, depth), bricks, false);
 		setBlockAndNotifyAdequately(world, pos.offset(EnumFacing.EAST, 2).offset(EnumFacing.SOUTH, 3).offset(EnumFacing.DOWN, depth), bricks, false);
 		
 		setBlockAndNotifyAdequately(world, pos.offset(EnumFacing.EAST, 2).offset(EnumFacing.SOUTH, 2).offset(EnumFacing.DOWN, depth+1), bricks, false);
 
+	}
+	
+	public static void createCrystalLootChest(TileEntityBlueCrystalChest chest, Random rand, int color){
+		int maxItems = MathHelper.getInt(rand, 5, 15);
+		List<ItemStack> lootList = Lists.newArrayList();
+		for(int i = 0; i < maxItems; i++){
+			lootList.add(getRandomLootItem(rand, color));
+		}
+		
+		for(ItemStack loot : lootList){
+			int slot = ItemUtil.getRandomEmptySlot(ItemUtil.getItemHandler(chest, EnumFacing.UP), 3);
+			if(slot >= 0){
+				chest.setInventorySlotContents(slot, loot);
+			}
+		}
+	}
+	
+	public static ItemStack getRandomLootItem(Random rand, int color){
+		List<ItemStack> stacks = Lists.newArrayList();
+		
+		if(color == 0){
+			stacks.add(new ItemStack(ModItems.crystals, 1, CrystalType.BLUE.getMetadata()));
+			stacks.add(new ItemStack(ModItems.crystals, 1, CrystalType.BLUE_SHARD.getMetadata()));
+			stacks.add(new ItemStack(ModItems.crystals, 1, CrystalType.BLUE_NUGGET.getMetadata()));
+			stacks.add(new ItemStack(ModItems.ingots, 1, IngotType.BLUE.getMetadata()));
+			stacks.add(new ItemStack(ModItems.crystalSap, 1, SapType.BLUE.getMetadata()));
+			stacks.add(new ItemStack(ModItems.crystalTreeSeedsBlue));
+			stacks.add(new ItemStack(ModItems.crystalReedsBlue));
+			stacks.add(new ItemStack(ModItems.crystalSeedsBlue));
+			stacks.add(new ItemStack(ModBlocks.crystalSapling, 1, WoodType.BLUE.getMeta()));
+			
+			for(String type : new String[]{"axe", "hoe", "pick", "shovel", "sword"}){
+				ItemStack stack = new ItemStack(ModItems.toolParts);
+				ItemNBTHelper.setString(stack, "Type", type);
+            	ItemNBTHelper.setString(stack, "Color", "blue");
+				stacks.add(stack);
+			}
+		}
+		if(color == 1){
+			stacks.add(new ItemStack(ModItems.crystals, 1, CrystalType.RED.getMetadata()));
+			stacks.add(new ItemStack(ModItems.crystals, 1, CrystalType.RED_SHARD.getMetadata()));
+			stacks.add(new ItemStack(ModItems.crystals, 1, CrystalType.RED_NUGGET.getMetadata()));
+			stacks.add(new ItemStack(ModItems.ingots, 1, IngotType.RED.getMetadata()));
+			stacks.add(new ItemStack(ModItems.crystalSap, 1, SapType.RED.getMetadata()));
+			stacks.add(new ItemStack(ModItems.crystalTreeSeedsRed));
+			stacks.add(new ItemStack(ModItems.crystalReedsRed));
+			stacks.add(new ItemStack(ModItems.crystalSeedsRed));
+			stacks.add(new ItemStack(ModBlocks.crystalSapling, 1, WoodType.RED.getMeta()));
+			
+			for(String type : new String[]{"axe", "hoe", "pick", "shovel", "sword"}){
+				ItemStack stack = new ItemStack(ModItems.toolParts);
+				ItemNBTHelper.setString(stack, "Type", type);
+            	ItemNBTHelper.setString(stack, "Color", "red");
+				stacks.add(stack);
+			}
+		}
+		if(color == 2){
+			stacks.add(new ItemStack(ModItems.crystals, 1, CrystalType.GREEN.getMetadata()));
+			stacks.add(new ItemStack(ModItems.crystals, 1, CrystalType.GREEN_SHARD.getMetadata()));
+			stacks.add(new ItemStack(ModItems.crystals, 1, CrystalType.GREEN_NUGGET.getMetadata()));
+			stacks.add(new ItemStack(ModItems.ingots, 1, IngotType.GREEN.getMetadata()));
+			stacks.add(new ItemStack(ModItems.crystalSap, 1, SapType.GREEN.getMetadata()));
+			stacks.add(new ItemStack(ModItems.crystalTreeSeedsGreen));
+			stacks.add(new ItemStack(ModItems.crystalReedsGreen));
+			stacks.add(new ItemStack(ModItems.crystalSeedsGreen));
+			stacks.add(new ItemStack(ModBlocks.crystalSapling, 1, WoodType.GREEN.getMeta()));
+			
+			for(String type : new String[]{"axe", "hoe", "pick", "shovel", "sword"}){
+				ItemStack stack = new ItemStack(ModItems.toolParts);
+				ItemNBTHelper.setString(stack, "Type", type);
+            	ItemNBTHelper.setString(stack, "Color", "green");
+				stacks.add(stack);
+			}
+		}
+		if(color == 3){
+			stacks.add(new ItemStack(ModItems.crystals, 1, CrystalType.DARK.getMetadata()));
+			stacks.add(new ItemStack(ModItems.crystals, 1, CrystalType.DARK_SHARD.getMetadata()));
+			stacks.add(new ItemStack(ModItems.crystals, 1, CrystalType.DARK_NUGGET.getMetadata()));
+			stacks.add(new ItemStack(ModItems.ingots, 1, IngotType.DARK.getMetadata()));
+			stacks.add(new ItemStack(ModItems.crystalSap, 1, SapType.DARK.getMetadata()));
+			stacks.add(new ItemStack(ModItems.crystalTreeSeedsDark));
+			stacks.add(new ItemStack(ModItems.crystalReedsDark));
+			stacks.add(new ItemStack(ModItems.crystalSeedsDark));
+			stacks.add(new ItemStack(ModBlocks.crystalSapling, 1, WoodType.DARK.getMeta()));
+			
+			for(String type : new String[]{"axe", "hoe", "pick", "shovel", "sword"}){
+				ItemStack stack = new ItemStack(ModItems.toolParts);
+				ItemNBTHelper.setString(stack, "Type", type);
+            	ItemNBTHelper.setString(stack, "Color", "dark");
+				stacks.add(stack);
+			}
+		}
+		
+		stacks.add(new ItemStack(ModItems.guide));
+		
+		ItemStack stack = ItemStackTools.getEmptyStack();
+		stack = stacks.get(MathHelper.getInt(rand, 0, stacks.size()-1));
+		return stack;
 	}
 	
 	public static void generateNetherWell(World world, BlockPos pos, Random rand){

@@ -687,6 +687,9 @@ crystalmod.ai.combat.target.passive=Passive Mobs
 crystalmod.ai.combat.target.hostile=Hostile Mobs
 crystalmod.ai.combat.target.either=Any Mob
 
+death.attack.darkarang=%1$s was slain by %2$s
+death.attack.darkarang.item=%1$s was slain by %2$s using %3$s
+
 #--Crops
 item.crystalmod.materialseed.name=Material Seed
 
