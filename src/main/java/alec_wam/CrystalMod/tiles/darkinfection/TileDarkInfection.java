@@ -83,12 +83,18 @@ public class TileDarkInfection extends TileEntityMod implements IMessageHandler 
 							toPlace.remove(index);
 							IBlockState stone = ModBlocks.infectedBlock.getStateFromMeta(InfectedBlockType.NORMAL.getMeta());
 							IBlockState cobble = ModBlocks.infectedBlock.getStateFromMeta(InfectedBlockType.CHISLED.getMeta());
+							IBlockState leaves = ModBlocks.infectedBlock.getStateFromMeta(InfectedBlockType.LEAVES.getMeta());
 							int type = MathHelper.getInt(getWorld().rand, 0, 1);
 							
 							IBlockState currentState = getWorld().getBlockState(toPlacePos);
-							boolean okayToPlace = currentState.isFullBlock() && currentState.getBlockHardness(getWorld(), toPlacePos) > 0.0f;
-							if(okayToPlace){
-								world.setBlockState(toPlacePos, type == 0 ? stone : cobble);
+							
+							if(currentState.getBlock().isLeaves(currentState, getWorld(), toPlacePos)){
+								world.setBlockState(toPlacePos, leaves);
+							} else {							
+								boolean okayToPlace = currentState.isFullBlock() && currentState.getBlockHardness(getWorld(), toPlacePos) > 0.0f;
+								if(okayToPlace){
+									world.setBlockState(toPlacePos, type == 0 ? stone : cobble);
+								}
 							}
 							delay = 20;
 							getWorld().playSound(null, getPos(), ModSounds.dark_infection_looping, SoundCategory.BLOCKS, 1.0f, 1.0f);

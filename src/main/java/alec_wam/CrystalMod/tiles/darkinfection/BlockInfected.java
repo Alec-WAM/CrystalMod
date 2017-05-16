@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
+import javax.annotation.Nullable;
+
 import com.google.common.collect.Lists;
 
 import alec_wam.CrystalMod.CrystalMod;
@@ -12,6 +14,7 @@ import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.util.EntityUtil;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemStackTools;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.IBlockState;
@@ -22,6 +25,7 @@ import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
@@ -130,9 +134,49 @@ public class BlockInfected extends EnumBlock<BlockInfected.InfectedBlockType> {
     @Override
     public void randomDisplayTick(IBlockState state, World worldIn, BlockPos pos, Random rand)
     {
-		if(state.getValue(TYPE) != InfectedBlockType.CASING){
+		if(state.getValue(TYPE) != InfectedBlockType.CASING && state.getValue(TYPE) != InfectedBlockType.LEAVES){
 			spawnParticles(worldIn, pos);
 		}
+    }
+	
+	@Override
+	public Material getMaterial(IBlockState state){
+		if(state.getValue(TYPE) == InfectedBlockType.LEAVES){
+			return Material.LEAVES;
+		}
+		return super.getMaterial(state);
+	}
+	
+	@Override
+	public SoundType getSoundType(IBlockState state, World world, BlockPos pos, @Nullable Entity entity)
+    {
+		if(state.getValue(TYPE) == InfectedBlockType.LEAVES){
+			return SoundType.PLANT;
+		}
+		return super.getSoundType(state, world, pos, entity);
+	}
+	
+	@Override
+	public boolean isLeaves(IBlockState state, IBlockAccess world, BlockPos pos) {
+		if(state.getValue(TYPE) == InfectedBlockType.LEAVES){
+			return true;
+		}
+		return false;
+	}
+	
+	@Override
+	public boolean isOpaqueCube(IBlockState state)
+    {
+		return state.getValue(TYPE) != InfectedBlockType.LEAVES;
+    }
+	
+	@Override
+	public boolean canRenderInLayer(IBlockState state, BlockRenderLayer layer)
+    {
+		if(state.getValue(TYPE) == InfectedBlockType.LEAVES){
+			return layer == BlockRenderLayer.CUTOUT_MIPPED;
+		}
+        return getBlockLayer() == layer;
     }
 	
 	private void spawnParticles(World worldIn, BlockPos pos)
@@ -157,7 +201,7 @@ public class BlockInfected extends EnumBlock<BlockInfected.InfectedBlockType> {
     }
 	
 	public static enum InfectedBlockType implements IStringSerializable, alec_wam.CrystalMod.blocks.EnumBlock.IEnumMeta {
-		NORMAL, CHISLED, CASING;
+		NORMAL, CHISLED, CASING, LEAVES;
 
 		final int meta;
 		

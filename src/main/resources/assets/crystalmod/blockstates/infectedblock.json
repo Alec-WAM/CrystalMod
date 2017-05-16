@@ -7,7 +7,8 @@
     "type": {
 		"normal": {"model": "crystalmod:fixedOneTexture", "textures": { "all": "crystalmod:blocks/infection/normal"}},
 		"chisled": {"model": "crystalmod:fixedOneTexture", "textures": { "all": "crystalmod:blocks/infection/chisled" }},
-		"casing": {"model": "crystalmod:fixedOneTexture", "textures": { "all": "crystalmod:blocks/infection/casing" }}
+		"casing": {"model": "crystalmod:fixedOneTexture", "textures": { "all": "crystalmod:blocks/infection/casing" }},
+		"leaves": {"model": "crystalmod:fixedOneTexture", "textures": { "all": "crystalmod:blocks/infection/leaves" }}
 	}
   }
 }

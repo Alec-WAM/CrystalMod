@@ -552,6 +552,7 @@ tile.crystalmod.darkinfection.name=Dark Infection
 tile.crystalmod.infectedblock.normal.name=Infected Block
 tile.crystalmod.infectedblock.chisled.name=Infected Block
 tile.crystalmod.infectedblock.casing.name=Reinforced Infected Block
+tile.crystalmod.infectedblock.leaves.name=Infected Leaves
 
 tile.crystalmod.advancedlamp.pure.name=Pure Light Lamp
 tile.crystalmod.advancedlamp.dark.name=Darkness Lamp
