@@ -69,7 +69,7 @@ public class RenderDarkarang extends Render<EntityDarkarang> {
 
 		GlStateManager.rotate(-90f, 0f, 1f, 0f);
 
-		GlStateManager.rotate(-45, 0f, 0f, 1f);
+		GlStateManager.rotate(-90, 1f, 0f, 0f);
 		
 		if(!entity.getInGround()) {
 			entity.spin += 20 * partialTicks;

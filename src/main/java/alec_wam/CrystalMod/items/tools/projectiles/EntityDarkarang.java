@@ -17,6 +17,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -59,7 +60,8 @@ public class EntityDarkarang extends EntityArrow implements IEntityAdditionalSpa
 	}
 
 	protected void playHitBlockSound(float speed, IBlockState state) {
-		this.playSound(state.getBlock().getSoundType().getStepSound(), 0.8f, 1.0f);
+		this.getEntityWorld().playSound(null, getPosition(), state.getBlock().getSoundType().getStepSound(), SoundCategory.BLOCKS, 5.0f, 1.0f);
+		//this.playSound(state.getBlock().getSoundType().getStepSound(), 0.8f, 1.0f);
 	}
 
 	protected void playHitEntitySound() {
