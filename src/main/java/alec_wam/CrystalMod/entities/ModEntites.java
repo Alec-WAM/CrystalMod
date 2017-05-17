@@ -56,6 +56,7 @@ import net.minecraft.entity.passive.EntityCow;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biome.SpawnListEntry;
+import net.minecraft.world.storage.loot.LootTableList;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
@@ -64,6 +65,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ModEntites {
 	
+	public static final ResourceLocation LOOTTABLE_DEVIL = LootTableList.register(CrystalMod.resourceL("entities/devil"));
+
 	public static void init(){
 		ResourceLocation pigzombie = addEntity(EntityCrystalPigZombie.class, "crystalpigzombie");
 		EntityRegistry.registerEgg(pigzombie, /*PINK*/ 15373203, 0x6CE5F8);

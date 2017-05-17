@@ -115,5 +115,76 @@
         "stream": false
       }
     ], "subtitle": "crystalmod.subtitle.dark_infection_looping"
+  },
+  "devil_ambient": {
+    "category": "hostile",
+    "sounds": [
+      {
+        "name": "crystalmod:devil/devil_ambient1",
+        "stream": false
+      },
+	  {
+        "name": "crystalmod:devil/devil_ambient2",
+        "stream": false
+      },
+	  {
+        "name": "crystalmod:devil/devil_ambient3",
+        "stream": false
+      },
+	  {
+        "name": "crystalmod:devil/devil_ambient4",
+        "stream": false
+      },
+	  {
+        "name": "crystalmod:devil/devil_ambient5",
+        "stream": false
+      },
+	  {
+        "name": "crystalmod:devil/devil_ambient6",
+        "stream": false
+      },
+	  {
+        "name": "crystalmod:devil/devil_ambient7",
+        "stream": false
+      },
+	  {
+        "name": "crystalmod:devil/devil_ambient8",
+        "stream": false
+      }
+    ], "subtitle": "crystalmod.subtitle.devil_ambient"
+  },
+  "devil_death": {
+    "category": "hostile",
+    "sounds": [
+      {
+        "name": "crystalmod:devil/devil_death1",
+        "stream": false
+      },
+	  {
+        "name": "crystalmod:devil/devil_death2",
+        "stream": false
+      }
+    ], "subtitle": "crystalmod.subtitle.devil_death"
+  },
+  "devil_hurt": {
+    "category": "hostile",
+    "sounds": [
+      {
+        "name": "crystalmod:devil/devil_hurt1",
+        "stream": false
+      },
+	  {
+        "name": "crystalmod:devil/devil_hurt2",
+        "stream": false
+      },
+	  {
+        "name": "crystalmod:devil/devil_hurt3",
+        "stream": false
+      },
+	  {
+        "name": "crystalmod:devil/devil_hurt4",
+        "stream": false
+      }
+    ], "subtitle": "crystalmod.subtitle.devil_hurt"
   }
 }

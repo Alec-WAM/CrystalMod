@@ -28,6 +28,10 @@ public class ModSounds {
 	
 	public static final SoundEvent dark_infection_start;
 	public static final SoundEvent dark_infection_looping;
+
+	public static SoundEvent devil_ambient;
+	public static SoundEvent devil_death;
+	public static SoundEvent devil_hurt;
 	
 	static {
         if (!Bootstrap.isRegistered()) {
@@ -49,6 +53,10 @@ public class ModSounds {
         	
         	dark_infection_start = getRegisteredSoundEvent(CrystalMod.resource("dark_infection_start"));
         	dark_infection_looping = getRegisteredSoundEvent(CrystalMod.resource("dark_infection_looping"));
+        	
+        	devil_ambient = getRegisteredSoundEvent(CrystalMod.resource("devil_ambient"));
+        	devil_death = getRegisteredSoundEvent(CrystalMod.resource("devil_death"));
+        	devil_hurt = getRegisteredSoundEvent(CrystalMod.resource("devil_hurt"));
         }
     }
 

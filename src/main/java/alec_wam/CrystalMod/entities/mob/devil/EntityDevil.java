@@ -2,6 +2,8 @@ package alec_wam.CrystalMod.entities.mob.devil;
 
 import javax.annotation.Nullable;
 
+import alec_wam.CrystalMod.client.sound.ModSounds;
+import alec_wam.CrystalMod.entities.ModEntites;
 import alec_wam.CrystalMod.entities.mob.angel.EntityAngel;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.items.tools.projectiles.EntityDarkarang;
@@ -112,23 +114,23 @@ public class EntityDevil extends EntityMob
 
     protected SoundEvent getAmbientSound()
     {
-        return SoundEvents.ENTITY_VEX_AMBIENT;
+        return ModSounds.devil_ambient;
     }
 
     protected SoundEvent getDeathSound()
     {
-        return SoundEvents.ENTITY_VEX_DEATH;
+        return ModSounds.devil_death;
     }
 
     protected SoundEvent getHurtSound()
     {
-        return SoundEvents.ENTITY_VEX_HURT;
+        return ModSounds.devil_hurt;
     }
 
     @Nullable
     protected ResourceLocation getLootTable()
     {
-        return LootTableList.ENTITIES_VEX;
+        return ModEntites.LOOTTABLE_DEVIL;
     }
 
     @SideOnly(Side.CLIENT)
@@ -197,7 +199,6 @@ public class EntityDevil extends EntityMob
         public void startExecuting()
         {
             attackTime = 20;
-            EntityDevil.this.playSound(SoundEvents.ENTITY_VEX_CHARGE, 1.0F, 1.0F);
         }
 
         /**
