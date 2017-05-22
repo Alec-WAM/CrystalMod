@@ -23,7 +23,7 @@ import net.minecraft.util.text.TextComponentTranslation;
 public class InventoryBackpack implements IInventory {
 
 	protected EntityPlayer player;
-	protected ItemStack backpack;
+	protected ItemStack backpack = ItemStackTools.getEmptyStack();
 	protected NonNullList<ItemStack> slots;
 	protected int size;
 	protected final String tagName;
