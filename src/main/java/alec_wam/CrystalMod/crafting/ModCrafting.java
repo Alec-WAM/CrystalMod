@@ -207,11 +207,10 @@ public class ModCrafting {
 		create9x9Recipe(new ItemStack(ModBlocks.crystal, 1, CrystalBlockType.DARK.getMeta()), darkCrystal, 9);
 		create9x9Recipe(new ItemStack(ModBlocks.crystal, 1, CrystalBlockType.PURE.getMeta()), pureCrystal, 9);
 		
-		//Re-add
-		/*create9x9Recipe(new ItemStack(ModBlocks.compressed, 1, CompressedBlockType.FLINT.getMeta()), new ItemStack(Items.FLINT), 9);
+		create9x9Recipe(new ItemStack(ModBlocks.compressed, 1, CompressedBlockType.FLINT.getMeta()), new ItemStack(Items.FLINT), 9);
 		create9x9Recipe(new ItemStack(ModBlocks.compressed, 1, CompressedBlockType.GUNPOWDER.getMeta()), new ItemStack(Items.GUNPOWDER), 9);
 		create9x9Recipe(new ItemStack(ModBlocks.compressed, 1, CompressedBlockType.CHARCOAL.getMeta()), new ItemStack(Items.COAL, 1, 1), 9);
-		create9x9Recipe(new ItemStack(ModBlocks.compressed, 1, CompressedBlockType.BLAZEROD.getMeta()), new ItemStack(Items.BLAZE_ROD), 9);*/
+		create9x9Recipe(new ItemStack(ModBlocks.blazeRodBlock), new ItemStack(Items.BLAZE_ROD), 9);
 
 		
 		//More Expensive than using the Liguidizer and Infuser
@@ -843,11 +842,10 @@ public class ModCrafting {
 
 		oredict(new ItemStack(ModItems.plates, 1, PlateType.DARK_IRON.getMetadata()), "plateIronDark");
 		
-		//TODO Re-add
-		/*oredict(new ItemStack(ModBlocks.compressed, 1, CompressedBlockType.FLINT.getMeta()), "blockFlint");
+		oredict(new ItemStack(ModBlocks.compressed, 1, CompressedBlockType.FLINT.getMeta()), "blockFlint");
 		oredict(new ItemStack(ModBlocks.compressed, 1, CompressedBlockType.GUNPOWDER.getMeta()), "blockGunpowder");
 		oredict(new ItemStack(ModBlocks.compressed, 1, CompressedBlockType.CHARCOAL.getMeta()), "blockCharcoal");
-		oredict(new ItemStack(ModBlocks.compressed, 1, CompressedBlockType.BLAZEROD.getMeta()), "blockBlaze");*/
+		oredict(new ItemStack(ModBlocks.blazeRodBlock), "blockBlazeRod");
 	}
 	
 	private static void oredictCrystal(int shard, int nugget, int crystal, int ingot, int block, int ingotBlock) {

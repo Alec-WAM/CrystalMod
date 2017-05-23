@@ -99,14 +99,13 @@ public class ModEntites {
 		
 		addEntity(EntityCustomFallingBlock.class, "customfallingblock", 160, 20, true);
 		
-		//TODO Re-add
-		/*ResourceLocation angel = addEntity(EntityAngel.class, "pureangel");
+		ResourceLocation angel = addEntity(EntityAngel.class, "pureangel");
 		EntityRegistry.registerEgg(angel, 0xFFFFFF, 0xFFFF00);
 		
 		ResourceLocation devil = addEntity(EntityDevil.class, "darkdevil");
 		EntityRegistry.registerEgg(devil, 0, 0xFFFF00);
 		
-		addEntity(EntityDarkarang.class, "darkarang", 160, 20, true);*/
+		addEntity(EntityDarkarang.class, "darkarang", 160, 20, true);
 	}
 	
 	public static void postInit(){

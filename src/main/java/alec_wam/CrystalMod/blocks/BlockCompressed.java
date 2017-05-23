@@ -11,9 +11,11 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.Explosion;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
@@ -48,9 +50,6 @@ public class BlockCompressed extends EnumBlock<BlockCompressed.CompressedBlockTy
 		if(type == CompressedBlockType.CHARCOAL){
 			return Material.ROCK;
 		}
-		if(type == CompressedBlockType.BLAZEROD){
-			return Material.IRON;
-		}
 		return super.getMaterial(state);
 	}
     
@@ -67,9 +66,6 @@ public class BlockCompressed extends EnumBlock<BlockCompressed.CompressedBlockTy
 		if(type == CompressedBlockType.CHARCOAL){
 			return 5.0F;
 		}
-		if(type == CompressedBlockType.BLAZEROD){
-			return 5.0F;
-		}
 		return super.getBlockHardness(blockState, worldIn, pos);
     }
 	
@@ -82,9 +78,6 @@ public class BlockCompressed extends EnumBlock<BlockCompressed.CompressedBlockTy
 			return 6.0F;
 		}
 		if(type == CompressedBlockType.CHARCOAL){
-			return 6.0F;
-		}
-		if(type == CompressedBlockType.BLAZEROD){
 			return 6.0F;
 		}
 		return super.getExplosionResistance(world, pos, exploder, explosion);
@@ -103,17 +96,41 @@ public class BlockCompressed extends EnumBlock<BlockCompressed.CompressedBlockTy
 		if(type == CompressedBlockType.CHARCOAL){
 			return SoundType.STONE;
 		}
-		if(type == CompressedBlockType.BLAZEROD){
-			return SoundType.METAL;
-		}
 		return super.getSoundType(state, world, pos, entity);
+    }
+	
+	@Override
+	public int getFlammability(IBlockAccess world, BlockPos pos, EnumFacing face)
+    {
+		IBlockState state = world.getBlockState(pos);
+		CompressedBlockType type = state.getValue(TYPE);
+		if(type == CompressedBlockType.GUNPOWDER){
+			return 60;
+		}
+        return net.minecraft.init.Blocks.FIRE.getFlammability(this);
+    }
+
+	@Override
+	public boolean isFlammable(IBlockAccess world, BlockPos pos, EnumFacing face)
+    {
+        return getFlammability(world, pos, face) > 0;
+    }
+
+	@Override
+	public int getFireSpreadSpeed(IBlockAccess world, BlockPos pos, EnumFacing face)
+    {
+		IBlockState state = world.getBlockState(pos);
+		CompressedBlockType type = state.getValue(TYPE);
+		if(type == CompressedBlockType.GUNPOWDER){
+			return 30;
+		}
+        return net.minecraft.init.Blocks.FIRE.getEncouragement(this);
     }
 	
     public static enum CompressedBlockType implements IStringSerializable, IEnumMeta {
 		FLINT("flint"),
 		GUNPOWDER("gunpowder"),
-		CHARCOAL("charcoal"),
-		BLAZEROD("blazerod");
+		CHARCOAL("charcoal");
 
 		private final String unlocalizedName;
 		public final int meta;

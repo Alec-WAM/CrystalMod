@@ -159,8 +159,7 @@ public class ModItems {
 	public static ItemMinionStaff minionStaff;
 	public static ItemWorksiteUpgrade worksiteUpgrade;
 	public static ItemBombomb bombomb;
-	//TODO Re-add
-	//public static ItemDarkarang darkarang;
+	public static ItemDarkarang darkarang;
 	
 	//Baubles
 	public static ItemBaubleWings dragonWingsBauble;
@@ -249,7 +248,7 @@ public class ModItems {
 		minionStaff = new ItemMinionStaff();
 		worksiteUpgrade = new ItemWorksiteUpgrade();
 		bombomb = new ItemBombomb();
-		//darkarang = new ItemDarkarang();
+		darkarang = new ItemDarkarang();
 		
 		//Baubles
 		if(BaublesIntegration.instance().hasBaubles()){

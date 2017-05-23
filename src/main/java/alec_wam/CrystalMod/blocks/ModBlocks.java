@@ -218,7 +218,8 @@ public class ModBlocks {
 	public static BlockCrate crates;
 	public static BlockAdvancedLamp advancedLamp;
 	public static BlockFakeLight fakeLight;
-	// TODO Re-add public static BlockCompressed compressed;
+	public static BlockCompressed compressed;
+	public static BlockBlazeRod blazeRodBlock;
 	
 	public static BlockHDDInterface hddInterface;
 	public static BlockHDDArray hddArray;
@@ -380,7 +381,8 @@ public class ModBlocks {
 		ItemBlockMeta.setMappingProperty(crystalTank, BlockTank.TYPE);
 	    registerTileEntity(TileEntityTank.class);
 		
-	    /*compressed = registerEnumBlock(new BlockCompressed(), "compressedblock");
+	    compressed = registerEnumBlock(new BlockCompressed(), "compressedblock");
+	    blazeRodBlock = registerBlock(new BlockBlazeRod(), "blazerodblock");
 	    GameRegistry.registerFuelHandler(new IFuelHandler(){
 
 			@Override
@@ -390,14 +392,12 @@ public class ModBlocks {
 					if(meta == CompressedBlockType.CHARCOAL.getMeta()){
 						return 16000;
 					}
-					if(meta == CompressedBlockType.BLAZEROD.getMeta()){
-						return 2400*9;
-					}
 				}
+				if(fuel.getItem() == Item.getItemFromBlock(ModBlocks.blazeRodBlock)) return 2400*9;
 				return 0;
 			}
 	    	
-	    });*/
+	    });
 	    
 	    
 		engine = new BlockEngine();

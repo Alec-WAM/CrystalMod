@@ -332,7 +332,7 @@ tile.crystalmod.crystalglasspane.pure.name=Pure Crystal Glass Pane
 tile.crystalmod.compressedblock.flint.name=Block of Flint
 tile.crystalmod.compressedblock.gunpowder.name=Block of Gunpowder
 tile.crystalmod.compressedblock.charcoal.name=Block of Charcoal
-tile.crystalmod.compressedblock.blazerod.name=Block of Blaze Rods
+tile.crystalmod.blazerodblock.name=Block of Blaze Rods
 
 tile.crystalmod.metalbars.dark_iron.name=Dark Iron Bars
 tile.crystalmod.metalbars.blue.name=Blue Crystal Bars
