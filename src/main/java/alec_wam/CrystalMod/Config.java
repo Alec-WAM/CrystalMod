@@ -54,6 +54,9 @@ public class Config {
     
     public static boolean generateFusionTemple = true;
     
+    public static boolean generateEndWell = true;
+    public static int endWellChance = 100;
+    
     public static boolean retrogenInfo = false;
     public static String retrogenID = "generated";
     public static boolean retrogenOres = false;
@@ -183,6 +186,8 @@ public class Config {
         		"Maximum y level for crystal ores in modded dimensions.").getInt();
         
         generateFusionTemple = cfg.get(CATEGORY_WORLD, "generateFusionTemple", generateFusionTemple, "Enable or disable Fusion Temple Generation in the Overworld.").getBoolean();
+        generateEndWell = cfg.get(CATEGORY_WORLD, "generateEndWell", generateEndWell, "Enable or disable Ender Well Generation in the End.").getBoolean();
+        endWellChance = cfg.get(CATEGORY_WORLD, "endWellChance", endWellChance, "Chance of the End Well generating. The higer the number the lower the chance. If the number is less than 0 it will not generate.").getInt(100);
 
         
         retrogenInfo = cfg.get(CATEGORY_WORLD, "retrogenInfo", retrogenInfo,

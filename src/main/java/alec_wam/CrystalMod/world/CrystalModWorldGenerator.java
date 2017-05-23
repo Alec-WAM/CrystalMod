@@ -10,11 +10,13 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeForest;
 import net.minecraft.world.chunk.IChunkGenerator;
 import net.minecraft.world.chunk.IChunkProvider;
+import net.minecraft.world.gen.ChunkProviderEnd;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.event.world.ChunkDataEvent;
 import net.minecraftforge.fml.common.IWorldGenerator;
@@ -26,7 +28,9 @@ import alec_wam.CrystalMod.tiles.cluster.BlockCrystalCluster.EnumClusterType;
 import alec_wam.CrystalMod.tiles.cluster.TileCrystalCluster;
 import alec_wam.CrystalMod.blocks.BlockCrystalLog.WoodType;
 import alec_wam.CrystalMod.blocks.BlockCrystalOre.CrystalOreType;
+import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.ModLogger;
+import alec_wam.CrystalMod.world.structures.CrystalWell;
 import alec_wam.CrystalMod.world.structures.MapGenFusionTemple;
 
 public class CrystalModWorldGenerator implements IWorldGenerator {
@@ -44,6 +48,34 @@ public class CrystalModWorldGenerator implements IWorldGenerator {
         if(world.provider.getDimension() == 0 && Config.generateFusionTemple){
         	fusionTempleGen.generate(world, chunkX, chunkZ, null);
         	fusionTempleGen.generateStructure(world, random, new ChunkPos(chunkX, chunkZ));
+        }
+        if(world.provider.getDimensionType() == DimensionType.THE_END && Config.generateEndWell){
+        	if((long)chunkX * (long)chunkX + (long)chunkZ * (long)chunkZ > 4096L){
+        		if(Config.endWellChance > 0 && random.nextInt(Config.endWellChance) == 0){
+        			int i = random.nextInt(16) + 8;
+                    int j = random.nextInt(16) + 8;
+        			BlockPos pos = new BlockPos((chunkX * 16) + i, 0, (chunkZ * 16) + j);
+                    BlockPos blockpos = world.getHeight(pos).up();
+                    while (world.isAirBlock(blockpos) && blockpos.getY() > 7)
+                    {
+                    	blockpos = blockpos.down();
+                    }
+                    
+                    BlockPos bottom = blockpos.down(7);
+                    List<BlockPos> posList = BlockUtil.getBlocksInBB(bottom, 7, 1, 7);
+                    boolean pass = true;
+                    check : for(BlockPos pos2 : posList){
+                    	if(world.isAirBlock(pos2)){
+                    		pass = false;
+                    		break check;
+                    	}
+                    }
+                    if(pass){
+                    	if(Config.retrogenInfo)ModLogger.info("End Well: "+blockpos);
+                    	CrystalWell.generateEndWell(world, blockpos, random);
+                    }
+        		}
+        	}
         }
     }
 
