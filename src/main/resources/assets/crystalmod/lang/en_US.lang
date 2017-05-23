@@ -287,6 +287,7 @@ item.crystalmod.minion.warrior.name=Warrior Minion
 item.crystalmod.minionstaff.name=Minion Staff
 item.crystalmod.bombomb.name=Bombomb
 item.crystalmod.darkarang.name=Darkarang
+item.crystalmod.dagger.name=Curved Dagger
 
 #--Baubles
 item.crystalmod.dragonwingbauble.name=Dragon Wings Bauble
@@ -703,6 +704,8 @@ crystalmod.ai.combat.target.either=Any Mob
 
 death.attack.darkarang=%1$s was slain by %2$s
 death.attack.darkarang.item=%1$s was slain by %2$s using %3$s
+death.attack.dagger=%1$s was slain by %2$s
+death.attack.dagger.item=%1$s was slain by %2$s using %3$s
 
 #--Crops
 item.crystalmod.materialseed.name=Material Seed

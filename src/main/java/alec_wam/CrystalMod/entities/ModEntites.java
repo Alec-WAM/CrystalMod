@@ -39,7 +39,9 @@ import alec_wam.CrystalMod.entities.pet.bombomb.EntityBombomb;
 import alec_wam.CrystalMod.entities.pet.bombomb.RenderEntityBombomb;
 import alec_wam.CrystalMod.items.tools.grapple.EntityGrapplingHook;
 import alec_wam.CrystalMod.items.tools.grapple.RenderEntityGrapplingHook;
+import alec_wam.CrystalMod.items.tools.projectiles.EntityDagger;
 import alec_wam.CrystalMod.items.tools.projectiles.EntityDarkarang;
+import alec_wam.CrystalMod.items.tools.projectiles.RenderDagger;
 import alec_wam.CrystalMod.items.tools.projectiles.RenderDarkarang;
 import alec_wam.CrystalMod.tiles.chest.CrystalChestType;
 import net.minecraft.client.Minecraft;
@@ -65,6 +67,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ModEntites {
 	
+	public static final ResourceLocation LOOTTABLE_ANGEL = LootTableList.register(CrystalMod.resourceL("entities/angel"));
 	public static final ResourceLocation LOOTTABLE_DEVIL = LootTableList.register(CrystalMod.resourceL("entities/devil"));
 
 	public static void init(){
@@ -106,6 +109,7 @@ public class ModEntites {
 		EntityRegistry.registerEgg(devil, 0, 0xFFFF00);
 		
 		addEntity(EntityDarkarang.class, "darkarang", 160, 20, true);
+		addEntity(EntityDagger.class, "dagger", 160, 20, true);
 	}
 	
 	public static void postInit(){
@@ -160,6 +164,13 @@ public class ModEntites {
 			@Override
 			public Render<EntityDarkarang> createRenderFor(RenderManager manager) {
 				return new RenderDarkarang(manager);
+			}
+		});
+        
+        RenderingRegistry.registerEntityRenderingHandler(EntityDagger.class, new IRenderFactory<EntityDagger>() {
+			@Override
+			public Render<EntityDagger> createRenderFor(RenderManager manager) {
+				return new RenderDagger(manager);
 			}
 		});
 	}

@@ -186,5 +186,76 @@
         "stream": false
       }
     ], "subtitle": "crystalmod.subtitle.devil_hurt"
+  },
+  "angel_ambient": {
+    "category": "hostile",
+    "sounds": [
+      {
+        "name": "crystalmod:angel/angel_ambient1",
+        "stream": false
+      },
+	  {
+        "name": "crystalmod:angel/angel_ambient2",
+        "stream": false
+      },
+	  {
+        "name": "crystalmod:angel/angel_ambient3",
+        "stream": false
+      },
+	  {
+        "name": "crystalmod:angel/angel_ambient4",
+        "stream": false
+      },
+	  {
+        "name": "crystalmod:angel/angel_ambient5",
+        "stream": false
+      },
+	  {
+        "name": "crystalmod:angel/angel_ambient6",
+        "stream": false
+      },
+	  {
+        "name": "crystalmod:angel/angel_ambient7",
+        "stream": false
+      },
+	  {
+        "name": "crystalmod:angel/angel_ambient8",
+        "stream": false
+      }
+    ], "subtitle": "crystalmod.subtitle.angel_ambient"
+  },
+  "angel_death": {
+    "category": "hostile",
+    "sounds": [
+      {
+        "name": "crystalmod:angel/angel_death1",
+        "stream": false
+      },
+	  {
+        "name": "crystalmod:angel/angel_death2",
+        "stream": false
+      }
+    ], "subtitle": "crystalmod.subtitle.angel_death"
+  },
+  "angel_hurt": {
+    "category": "hostile",
+    "sounds": [
+      {
+        "name": "crystalmod:angel/angel_hurt1",
+        "stream": false
+      },
+	  {
+        "name": "crystalmod:angel/angel_hurt2",
+        "stream": false
+      },
+	  {
+        "name": "crystalmod:angel/angel_hurt3",
+        "stream": false
+      },
+	  {
+        "name": "crystalmod:angel/angel_hurt4",
+        "stream": false
+      }
+    ], "subtitle": "crystalmod.subtitle.angel_hurt"
   }
 }

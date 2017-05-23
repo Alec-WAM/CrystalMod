@@ -2,7 +2,11 @@ package alec_wam.CrystalMod.entities.mob.angel;
 
 import javax.annotation.Nullable;
 
+import alec_wam.CrystalMod.client.sound.ModSounds;
+import alec_wam.CrystalMod.entities.ModEntites;
 import alec_wam.CrystalMod.entities.mob.devil.EntityDevil;
+import alec_wam.CrystalMod.items.ModItems;
+import alec_wam.CrystalMod.items.tools.projectiles.EntityDagger;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
@@ -17,7 +21,6 @@ import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.ai.EntityMoveHelper;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
@@ -109,23 +112,23 @@ public class EntityAngel extends EntityMob
 
     protected SoundEvent getAmbientSound()
     {
-        return SoundEvents.ENTITY_VEX_AMBIENT;
+        return ModSounds.angel_ambient;
     }
 
     protected SoundEvent getDeathSound()
     {
-        return SoundEvents.ENTITY_VEX_DEATH;
+        return ModSounds.angel_death;
     }
 
     protected SoundEvent getHurtSound()
     {
-        return SoundEvents.ENTITY_VEX_HURT;
+        return ModSounds.angel_hurt;
     }
 
     @Nullable
     protected ResourceLocation getLootTable()
     {
-        return LootTableList.ENTITIES_VEX;
+        return ModEntites.LOOTTABLE_ANGEL;
     }
 
     @SideOnly(Side.CLIENT)
@@ -159,13 +162,15 @@ public class EntityAngel extends EntityMob
      */
     protected void setEquipmentBasedOnDifficulty(DifficultyInstance difficulty)
     {
-        this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.IRON_SWORD));
+        this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(ModItems.dagger));
         this.setDropChance(EntityEquipmentSlot.MAINHAND, 0.0F);
     }
 
     class AIChargeAttack extends EntityAIBase
     {
-        public AIChargeAttack()
+    	private int attackTime;
+    	private int seeTime;
+    	public AIChargeAttack()
         {
             this.setMutexBits(1);
         }
@@ -175,7 +180,7 @@ public class EntityAngel extends EntityMob
          */
         public boolean shouldExecute()
         {
-            return EntityAngel.this.getAttackTarget() != null && !EntityAngel.this.getMoveHelper().isUpdating() && EntityAngel.this.rand.nextInt(7) == 0 ? EntityAngel.this.getDistanceSqToEntity(EntityAngel.this.getAttackTarget()) > 4.0D : false;
+            return EntityAngel.this.getAttackTarget() != null;
         }
 
         /**
@@ -183,7 +188,7 @@ public class EntityAngel extends EntityMob
          */
         public boolean continueExecuting()
         {
-            return EntityAngel.this.getMoveHelper().isUpdating() /*&& EntityAngel.this.isCharging()*/ && EntityAngel.this.getAttackTarget() != null && EntityAngel.this.getAttackTarget().isEntityAlive();
+            return EntityAngel.this.getAttackTarget() != null && EntityAngel.this.getAttackTarget().isEntityAlive();
         }
 
         /**
@@ -191,11 +196,7 @@ public class EntityAngel extends EntityMob
          */
         public void startExecuting()
         {
-            EntityLivingBase entitylivingbase = EntityAngel.this.getAttackTarget();
-            Vec3d vec3d = entitylivingbase.getPositionEyes(1.0F);
-            EntityAngel.this.moveHelper.setMoveTo(vec3d.xCoord, vec3d.yCoord, vec3d.zCoord, 1.0D);
-            //EntityAngel.this.setIsCharging(true);
-            EntityAngel.this.playSound(SoundEvents.ENTITY_VEX_CHARGE, 1.0F, 1.0F);
+            attackTime = 20;
         }
 
         /**
@@ -203,7 +204,7 @@ public class EntityAngel extends EntityMob
          */
         public void resetTask()
         {
-            //EntityAngel.this.setIsCharging(false);
+            this.seeTime = 0;
         }
 
         /**
@@ -211,21 +212,33 @@ public class EntityAngel extends EntityMob
          */
         public void updateTask()
         {
-            EntityLivingBase entitylivingbase = EntityAngel.this.getAttackTarget();
-
-            if (EntityAngel.this.getEntityBoundingBox().expand(0.15, 0.15, 0.15).intersectsWith(entitylivingbase.getEntityBoundingBox()))
-            {
-                EntityAngel.this.attackEntityAsMob(entitylivingbase);
+        	if(attackTime > 0)--this.attackTime;
+            
+        	EntityLivingBase entitylivingbase = EntityAngel.this.getAttackTarget();
+        	EntityAngel angel = EntityAngel.this;
+            boolean canSee = angel.getEntitySenses().canSee(entitylivingbase);
+            double d0 = angel.getDistanceSqToEntity(entitylivingbase);
+            
+            if(d0 > 8.0D){
+            	Vec3d vec3d = entitylivingbase.getPositionEyes(1.0F);
+            	angel.moveHelper.setMoveTo(vec3d.xCoord, vec3d.yCoord-(entitylivingbase.getEyeHeight()/2), vec3d.zCoord, 1.0D);
             }
-            else
+            
+            angel.getLookHelper().setLookPositionWithEntity(entitylivingbase, 30.0F, 30.0F);
+            	
+            if (this.attackTime <= 0 && canSee)
             {
-                double d0 = EntityAngel.this.getDistanceSqToEntity(entitylivingbase);
+            	attackTime = 40 + angel.rand.nextInt(10);
+            	EntityDagger dagger = new EntityDagger(world);
+            	dagger.shootingEntity = angel;
+            	dagger.setLocationAndAngles(angel.posX, angel.posY + (double) angel.getEyeHeight(), angel.posZ, angel.rotationYaw, angel.rotationPitch);
 
-                if (d0 < 9.0D)
-                {
-                    Vec3d vec3d = entitylivingbase.getPositionEyes(1.0F);
-                    EntityAngel.this.moveHelper.setMoveTo(vec3d.xCoord, vec3d.yCoord, vec3d.zCoord, 1.0D);
-                }
+            	dagger.setPosition(dagger.posX, dagger.posY, dagger.posZ);
+            	dagger.motionX = -MathHelper.sin(dagger.rotationYaw / 180.0F * (float) Math.PI) * MathHelper.cos(dagger.rotationPitch / 180.0F * (float) Math.PI);
+            	dagger.motionZ = +MathHelper.cos(dagger.rotationYaw / 180.0F * (float) Math.PI) * MathHelper.cos(dagger.rotationPitch / 180.0F * (float) Math.PI);
+            	dagger.motionY = -MathHelper.sin(dagger.rotationPitch / 180.0F * (float) Math.PI);
+            	dagger.setThrowableHeading(dagger.motionX, dagger.motionY, dagger.motionZ, 2.0f, 14.0f - (4.0f * world.getDifficulty().getDifficultyId()));
+            	angel.getEntityWorld().spawnEntity(dagger);
             }
         }
     }
