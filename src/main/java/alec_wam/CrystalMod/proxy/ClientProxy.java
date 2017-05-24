@@ -12,6 +12,8 @@ import com.mojang.authlib.GameProfile;
 
 import alec_wam.CrystalMod.Config;
 import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.api.enhancements.EnhancementManager;
+import alec_wam.CrystalMod.api.enhancements.IEnhancement;
 import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.blocks.crops.material.CropOverlays;
 import alec_wam.CrystalMod.blocks.crops.material.ModelSeed;
@@ -23,7 +25,6 @@ import alec_wam.CrystalMod.client.model.LayerDragonWings;
 import alec_wam.CrystalMod.client.model.LayerHorseAccessories;
 import alec_wam.CrystalMod.client.model.LayerWolfAccessories;
 import alec_wam.CrystalMod.client.model.dynamic.ICustomItemRenderer;
-import alec_wam.CrystalMod.crafting.recipes.UpgradeItemRecipe;
 import alec_wam.CrystalMod.entities.ModEntites;
 import alec_wam.CrystalMod.entities.disguise.DisguiseClientHandler;
 import alec_wam.CrystalMod.fluids.FluidColored;
@@ -31,7 +32,6 @@ import alec_wam.CrystalMod.fluids.ModFluids;
 import alec_wam.CrystalMod.handler.ClientEventHandler;
 import alec_wam.CrystalMod.handler.KeyHandler;
 import alec_wam.CrystalMod.integration.minecraft.ItemMinecartRender;
-import alec_wam.CrystalMod.items.ItemDragonWings;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.items.guide.GuiGuideBase;
 import alec_wam.CrystalMod.items.guide.GuiGuideChapter;
@@ -45,7 +45,7 @@ import alec_wam.CrystalMod.tiles.pipes.item.GhostItemHelper;
 import alec_wam.CrystalMod.tiles.pipes.render.BakedModelLoader;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemStackTools;
-import alec_wam.CrystalMod.util.client.RenderUtil;
+import alec_wam.CrystalMod.util.Lang;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.block.model.IBakedModel;
@@ -54,7 +54,6 @@ import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderLivingBase;
 import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.resources.IReloadableResourceManager;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.client.resources.IResourceManagerReloadListener;
@@ -66,7 +65,6 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
@@ -306,16 +304,14 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
             }
         }
         
-        if(ItemNBTHelper.verifyExistance(stack, ItemDragonWings.UPGRADE_NBT)){
-        	event.getToolTip().add(TextFormatting.DARK_PURPLE+""+TextFormatting.UNDERLINE+"Dragon Wings");
-        }
-        
-        if(ItemNBTHelper.verifyExistance(stack, "CrystalMod.InvisArmor")){
-        	event.getToolTip().add(TextFormatting.WHITE+""+TextFormatting.UNDERLINE+"Invisible");
-        }
-        
-        if(ItemNBTHelper.verifyExistance(stack, UpgradeItemRecipe.NBT_UPGRADE_WATERWALKING)){
-        	event.getToolTip().add(TextFormatting.AQUA+""+TextFormatting.UNDERLINE+"Water Walking");
+        List<IEnhancement> enhancementList = EnhancementManager.getAppliedEnhancements(stack);
+        if(!enhancementList.isEmpty()){
+        	
+        	if(!GuiScreen.isShiftKeyDown()){
+        		event.getToolTip().add(Lang.localize("gui.enhancement.holdshift"));
+        	}else{
+        		for(IEnhancement enhancement : enhancementList)enhancement.addToolTip(stack, event.getToolTip());
+        	}
         }
     }
     

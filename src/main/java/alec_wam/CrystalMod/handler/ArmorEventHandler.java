@@ -1,16 +1,11 @@
 package alec_wam.CrystalMod.handler;
 
-import java.lang.reflect.Method;
-import java.util.Iterator;
-
-import alec_wam.CrystalMod.crafting.recipes.UpgradeItemRecipe;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.items.armor.ItemCrystalArmor;
+import alec_wam.CrystalMod.items.enchancements.ModEnhancements;
 import alec_wam.CrystalMod.util.EntityUtil;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemStackTools;
-import alec_wam.CrystalMod.util.ModLogger;
-import mezz.jei.util.MathUtil;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -18,14 +13,11 @@ import net.minecraft.enchantment.EnchantmentThorns;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.MobEffects;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -37,7 +29,6 @@ import net.minecraftforge.event.world.GetCollisionBoxesEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 
 public class ArmorEventHandler {
@@ -103,7 +94,7 @@ public class ArmorEventHandler {
 		int redCount = getArmorCount(living, "red");
 		int pureCount = getArmorCount(living, "pure");
 		
-		if(blueCount == 4 || pureCount == 4 || (UpgradeItemRecipe.isWaterWalking(living.getItemStackFromSlot(EntityEquipmentSlot.FEET)))){
+		if(blueCount == 4 || pureCount == 4 || (ModEnhancements.WATER_WALKING.isApplied(living.getItemStackFromSlot(EntityEquipmentSlot.FEET)))){
 			World world = event.getWorld();
 			BlockPos pos = new BlockPos(living).down();
 			IBlockState state = world.getBlockState(pos);

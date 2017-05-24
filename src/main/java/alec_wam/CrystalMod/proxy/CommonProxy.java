@@ -24,6 +24,7 @@ import alec_wam.CrystalMod.handler.MissingItemHandler;
 import alec_wam.CrystalMod.integration.ModIntegration;
 import alec_wam.CrystalMod.integration.minecraft.ModBanners;
 import alec_wam.CrystalMod.items.ModItems;
+import alec_wam.CrystalMod.items.enchancements.ModEnhancements;
 import alec_wam.CrystalMod.items.guide.GuidePages.LookupResult;
 import alec_wam.CrystalMod.items.tools.bat.ModBats;
 import alec_wam.CrystalMod.tiles.machine.worksite.WorksiteChunkLoader;
@@ -124,6 +125,7 @@ public class CommonProxy {
 		new TagManager();
 		MinecraftForge.EVENT_BUS.register(new ArmorEventHandler());
 		
+		ModEnhancements.init();
 		ModCrafting.init();
 		ModBanners.init();
 		ModIntegration.init();

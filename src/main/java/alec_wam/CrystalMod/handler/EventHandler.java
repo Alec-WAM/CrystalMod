@@ -29,6 +29,7 @@ import alec_wam.CrystalMod.integration.baubles.ItemBaubleWings;
 import alec_wam.CrystalMod.items.ItemCursedBone.BoneType;
 import alec_wam.CrystalMod.items.ItemDragonWings;
 import alec_wam.CrystalMod.items.ModItems;
+import alec_wam.CrystalMod.items.enchancements.ModEnhancements;
 import alec_wam.CrystalMod.items.ItemCursedBone.BoneType;
 import alec_wam.CrystalMod.items.tools.backpack.BackpackUtil;
 import alec_wam.CrystalMod.items.tools.backpack.IBackpack;
@@ -287,7 +288,7 @@ public class EventHandler {
     
     public static boolean hasDragonWings(EntityPlayer player){
     	ItemStack chest = player.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
-		if(ItemStackTools.isValid(chest) && ItemNBTHelper.verifyExistance(chest, ItemDragonWings.UPGRADE_NBT)){
+		if(ItemStackTools.isValid(chest) && ModEnhancements.DRAGON_WINGS.isApplied(chest)){
 			return true;
 		}
 		

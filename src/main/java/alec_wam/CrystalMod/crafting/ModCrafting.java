@@ -22,7 +22,6 @@ import alec_wam.CrystalMod.crafting.recipes.ShapedNBTCopy;
 import alec_wam.CrystalMod.crafting.recipes.ShapedOreRecipeNBT;
 import alec_wam.CrystalMod.crafting.recipes.ShapedRecipeNBT;
 import alec_wam.CrystalMod.crafting.recipes.ShapelessRecipeNBT;
-import alec_wam.CrystalMod.crafting.recipes.UpgradeItemRecipe;
 import alec_wam.CrystalMod.entities.accessories.WolfAccessories.WolfArmor;
 import alec_wam.CrystalMod.entities.minecarts.chests.wireless.RecipeWirelessChestMinecart;
 import alec_wam.CrystalMod.entities.minions.ItemMinion;
@@ -109,7 +108,6 @@ public class ModCrafting {
 	}
 	
 	public static void init() {
-		GameRegistry.addRecipe(new UpgradeItemRecipe());
 		GameRegistry.addRecipe(new RecipeBatUpgrade());
 		GameRegistry.addRecipe(new RecipeSuperTorchAdd());
 		GameRegistry.addRecipe(new RecipeWirelessChestMinecart());

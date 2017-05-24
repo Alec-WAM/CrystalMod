@@ -157,6 +157,8 @@ import alec_wam.CrystalMod.tiles.spawner.TileEntityCustomSpawner;
 import alec_wam.CrystalMod.tiles.tank.BlockTank;
 import alec_wam.CrystalMod.tiles.tank.ItemBlockTank;
 import alec_wam.CrystalMod.tiles.tank.TileEntityTank;
+import alec_wam.CrystalMod.tiles.tooltable.BlockEnhancementTable;
+import alec_wam.CrystalMod.tiles.tooltable.TileEnhancementTable;
 import alec_wam.CrystalMod.tiles.weather.BlockWeather;
 import alec_wam.CrystalMod.tiles.weather.TileEntityWeather;
 import alec_wam.CrystalMod.tiles.workbench.BlockCrystalWorkbench;
@@ -196,6 +198,7 @@ public class ModBlocks {
 	public static BlockCrystalReed crystalReedsBlue, crystalReedsRed, crystalReedsGreen, crystalReedsDark;
 	public static BlockFlowerLilyPad flowerLilypad;
 	public static BlockCrystalWorkbench crystalWorkbench;
+	public static BlockEnhancementTable enhancementTable;
 	public static BlockCrystalChest crystalChest;
 	public static BlockWoodenCrystalChest crystalWoodenChest;
 	public static BlockWirelessChest wirelessChest;
@@ -303,6 +306,10 @@ public class ModBlocks {
 		crystalWorkbench = new BlockCrystalWorkbench();
 		registerEnumBlock(crystalWorkbench, "crystalworkbench");
 		registerTileEntity(TileEntityCrystalWorkbench.class);
+		
+		enhancementTable = new BlockEnhancementTable();
+		registerBlock(enhancementTable, "enhancementtable");
+		registerTileEntity(TileEnhancementTable.class);
 		
 		crystalChest = new BlockCrystalChest();
 		registerBlock(crystalChest, new ItemBlockCrystalChest(crystalChest), "crystalchest");

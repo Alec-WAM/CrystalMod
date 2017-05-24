@@ -1,6 +1,5 @@
 package alec_wam.CrystalMod.handler;
 
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.ConcurrentModificationException;
@@ -21,6 +20,7 @@ import alec_wam.CrystalMod.capability.ExtendedPlayer;
 import alec_wam.CrystalMod.capability.ExtendedPlayerProvider;
 import alec_wam.CrystalMod.entities.accessories.GuiHorseEnderChest;
 import alec_wam.CrystalMod.entities.accessories.HorseAccessories;
+import alec_wam.CrystalMod.items.enchancements.ModEnhancements;
 import alec_wam.CrystalMod.items.tools.backpack.BackpackUtil;
 import alec_wam.CrystalMod.items.tools.backpack.network.PacketToolSwap;
 import alec_wam.CrystalMod.items.tools.grapple.GrappleControllerBase;
@@ -29,7 +29,6 @@ import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.packets.PacketGuiMessage;
 import alec_wam.CrystalMod.tiles.soundmuffler.TileSoundMuffler;
 import alec_wam.CrystalMod.util.BlockUtil;
-import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ModLogger;
 import alec_wam.CrystalMod.util.ReflectionUtils;
@@ -49,7 +48,6 @@ import net.minecraft.client.audio.SoundEventAccessor;
 import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.gui.inventory.GuiScreenHorseInventory;
@@ -89,10 +87,9 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 import net.minecraftforge.client.event.GuiOpenEvent;
-import net.minecraftforge.client.event.GuiScreenEvent.DrawScreenEvent;
-import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.client.event.MouseEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.client.event.RenderHandEvent;
 import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
@@ -122,27 +119,27 @@ public class ClientEventHandler {
 					ItemStack boots = event.getEntityPlayer().getItemStackFromSlot(EntityEquipmentSlot.FEET);
 					ModelBiped modelBoots = armor.getModelFromSlot(EntityEquipmentSlot.FEET);
 					if(modelHelmet !=null){
-						if(!ItemStackTools.isNullStack(helmet) && ItemNBTHelper.verifyExistance(helmet, "CrystalMod.InvisArmor")){
+						if(ItemStackTools.isValid(helmet) && ModEnhancements.INVIS_ARMOR.isApplied(helmet)){
 							modelHelmet.bipedHead.isHidden = true;
 							modelHelmet.bipedHeadwear.isHidden = true;
 						}
 					}
 					if(modelChest !=null){
-						if(!ItemStackTools.isNullStack(chest) && ItemNBTHelper.verifyExistance(chest, "CrystalMod.InvisArmor")){
+						if(ItemStackTools.isValid(chest) && ModEnhancements.INVIS_ARMOR.isApplied(chest)){
 							modelChest.bipedBody.isHidden = true;
 							modelChest.bipedRightArm.isHidden = true;
 							modelChest.bipedLeftArm.isHidden = true;
 						}
 					}
 					if(modelLegs !=null){
-						if(!ItemStackTools.isNullStack(legs) && ItemNBTHelper.verifyExistance(legs, "CrystalMod.InvisArmor")){
+						if(ItemStackTools.isValid(legs) && ModEnhancements.INVIS_ARMOR.isApplied(legs)){
 							modelLegs.bipedBody.isHidden = true;
 							modelLegs.bipedLeftLeg.isHidden = true;
 							modelLegs.bipedRightLeg.isHidden = true;
 						}
 					}
 					if(modelBoots !=null){
-						if(!ItemStackTools.isNullStack(boots) && ItemNBTHelper.verifyExistance(boots, "CrystalMod.InvisArmor")){
+						if(ItemStackTools.isValid(boots) && ModEnhancements.INVIS_ARMOR.isApplied(boots)){
 							modelBoots.bipedLeftLeg.isHidden = true;
 							modelBoots.bipedRightLeg.isHidden = true;
 						}
@@ -172,27 +169,27 @@ public class ClientEventHandler {
 					ItemStack boots = event.getEntityPlayer().getItemStackFromSlot(EntityEquipmentSlot.FEET);
 					ModelBiped modelBoots = armor.getModelFromSlot(EntityEquipmentSlot.FEET);
 					if(modelHelmet !=null){
-						if(!ItemStackTools.isNullStack(helmet) && ItemNBTHelper.verifyExistance(helmet, "CrystalMod.InvisArmor")){
+						if(ItemStackTools.isValid(helmet) && ModEnhancements.INVIS_ARMOR.isApplied(helmet)){
 							modelHelmet.bipedHead.isHidden = false;
 							modelHelmet.bipedHeadwear.isHidden = false;
 						}
 					}
 					if(modelChest !=null){
-						if(!ItemStackTools.isNullStack(chest) && ItemNBTHelper.verifyExistance(chest, "CrystalMod.InvisArmor")){
+						if(ItemStackTools.isValid(chest) && ModEnhancements.INVIS_ARMOR.isApplied(chest)){
 							modelChest.bipedBody.isHidden = false;
 							modelChest.bipedRightArm.isHidden = false;
 							modelChest.bipedLeftArm.isHidden = false;
 						}
 					}
 					if(modelLegs !=null){
-						if(!ItemStackTools.isNullStack(legs) && ItemNBTHelper.verifyExistance(legs, "CrystalMod.InvisArmor")){
+						if(ItemStackTools.isValid(legs) && ModEnhancements.INVIS_ARMOR.isApplied(legs)){
 							modelLegs.bipedBody.isHidden = false;
 							modelLegs.bipedLeftLeg.isHidden = false;
 							modelLegs.bipedRightLeg.isHidden = false;
 						}
 					}
 					if(modelBoots !=null){
-						if(!ItemStackTools.isNullStack(boots) && ItemNBTHelper.verifyExistance(boots, "CrystalMod.InvisArmor")){
+						if(ItemStackTools.isValid(boots) && ModEnhancements.INVIS_ARMOR.isApplied(boots)){
 							modelBoots.bipedLeftLeg.isHidden = false;
 							modelBoots.bipedRightLeg.isHidden = false;
 						}

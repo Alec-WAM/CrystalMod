@@ -398,6 +398,8 @@ tile.crystalmod.crystalworkbench.red.name=Red Crystal Workbench
 tile.crystalmod.crystalworkbench.green.name=Green Crystal Workbench
 tile.crystalmod.crystalworkbench.dark.name=Dark Crystal Workbench
 
+tile.crystalmod.enhancementtable.name=Enhancement Table
+
 tile.crystalmod.crystalchest.BLUE.name=Blue Crystal Chest
 tile.crystalmod.crystalchest.RED.name=Red Crystal Chest
 tile.crystalmod.crystalchest.GREEN.name=Green Crystal Chest
@@ -667,6 +669,8 @@ crystalmod.guistrings.inventory_accessed=Inventory
 crystalmod.guistrings.inventory.alt_controls=Settings
 
 crystalmod.message.toomanyplayercubes=You already have the maximum amount of Player Cubes created. (%s)
+
+crystalmod.gui.enhancement.holdshift=<Hold Shift for Enhancement Data>
 
 #--Entity
 entity.crystalpigzombie.name=Crystal Zombie Pigman

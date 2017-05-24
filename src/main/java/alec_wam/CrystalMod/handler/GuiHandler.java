@@ -129,6 +129,9 @@ import alec_wam.CrystalMod.tiles.pipes.liquid.GuiLiquidPipe;
 import alec_wam.CrystalMod.tiles.pipes.liquid.TileEntityPipeLiquid;
 import alec_wam.CrystalMod.tiles.soundmuffler.GuiSoundMuffler;
 import alec_wam.CrystalMod.tiles.soundmuffler.TileSoundMuffler;
+import alec_wam.CrystalMod.tiles.tooltable.ContainerEnhancementTable;
+import alec_wam.CrystalMod.tiles.tooltable.GuiEnhancementTable;
+import alec_wam.CrystalMod.tiles.tooltable.TileEnhancementTable;
 import alec_wam.CrystalMod.tiles.weather.ContainerWeather;
 import alec_wam.CrystalMod.tiles.weather.GuiWeather;
 import alec_wam.CrystalMod.tiles.weather.TileEntityWeather;
@@ -329,6 +332,7 @@ public class GuiHandler implements IGuiHandler {
         	if(te instanceof TileEntityMobGrinder) return new GuiMobGrinder(player, (TileEntityMobGrinder)te);
         	if(te instanceof TileEntityBattery) return new GuiBattery(player, (TileEntityBattery)te);
         	if(te instanceof TileSoundMuffler) return new GuiSoundMuffler((TileSoundMuffler)te);
+        	if(te instanceof TileEnhancementTable) return new GuiEnhancementTable(player.inventory, (TileEnhancementTable)te);
         } 
         return null;
     }
@@ -478,6 +482,7 @@ public class GuiHandler implements IGuiHandler {
         	if(te instanceof TileEntityMobGrinder) return new ContainerNull();
         	if(te instanceof TileEntityBattery) return new ContainerBattery(player, (TileEntityBattery)te);
         	if(te instanceof TileSoundMuffler) return new ContainerNull();
+        	if(te instanceof TileEnhancementTable) return new ContainerEnhancementTable(player.inventory, (TileEnhancementTable)te);
         }
         return null;
     }
