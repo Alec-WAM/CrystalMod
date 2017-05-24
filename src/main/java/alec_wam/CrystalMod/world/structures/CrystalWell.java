@@ -95,6 +95,12 @@ public class CrystalWell {
 		IBlockState bars = ModBlocks.metalBars.getDefaultState().withProperty(BlockMetalBars.TYPE, barType);
 
 		//Top
+		for(int x = 0; x < 5; x++){
+			for(int z = 0; z < 5; z++){
+				setBlockAndNotifyAdequately(world, pos.add(x, 0, z), Blocks.AIR.getDefaultState(), false);
+			}
+		}
+		
 		setBlockAndNotifyAdequately(world, pos.offset(EnumFacing.UP, 1), bars, false);
 		setBlockAndNotifyAdequately(world, pos.offset(EnumFacing.UP, 1).offset(EnumFacing.SOUTH, 4), bars, false);
 		setBlockAndNotifyAdequately(world, pos.offset(EnumFacing.UP, 1).offset(EnumFacing.EAST, 4), bars, false);

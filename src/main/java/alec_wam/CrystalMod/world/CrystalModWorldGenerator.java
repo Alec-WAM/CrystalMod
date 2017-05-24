@@ -50,6 +50,56 @@ public class CrystalModWorldGenerator implements IWorldGenerator {
         	fusionTempleGen.generateStructure(world, random, new ChunkPos(chunkX, chunkZ));
         }
         
+        if(world.provider.getDimensionType() == DimensionType.OVERWORLD && Config.generateOverworldWell){
+        	if(Config.overworldWellChance > 0 && random.nextInt(Config.overworldWellChance) == 0){
+        		int i = random.nextInt(16) + 8;
+        		int j = random.nextInt(16) + 8;
+        		int bX = (chunkX * 16) + i;
+        		int bZ = (chunkZ * 16) + j;
+        		int height = world.getHeight(bX, bZ);
+        		BlockPos pos = new BlockPos(bX, height, bZ);
+        		BlockPos blockpos = null;
+        		
+        		int y = pos.getY();
+        		while(blockpos == null && y >= 16){
+        			BlockPos testPos = new BlockPos(bX, y, bZ);
+        			List<BlockPos> posList = BlockUtil.getBlocksInBB(testPos.north().west(), 7, 1, 7);
+        			int groundNeeded = posList.size();
+        			for(BlockPos pos2 : posList){
+        				IBlockState state = world.getBlockState(pos2);
+        				if(state.getBlock() == Blocks.GRASS || state.getBlock() == Blocks.STONE || state.getBlock() == Blocks.DIRT){
+        					groundNeeded--;
+        				}
+        			}
+        			if(groundNeeded <=0){
+        				int airNeeded = 75;
+        				for(int x = 0; x < 5; x++){
+        					for(int y2 = 0; y2 < 3; y2++){
+        						for(int z = 0; z < 5; z++){
+        							BlockPos pos3 = testPos.up().add(x, y2, z);
+        							if(world.isAirBlock(pos3) || world.getBlockState(pos3).getBlock().isReplaceable(world, pos3)){
+        								airNeeded--;
+        							}
+        						}
+        					}
+        				}
+        				if(airNeeded <= 0){
+        					blockpos = testPos;
+        				} else {
+        					y--;
+        				}
+        			}else {
+        				y--;
+        			}
+        		}
+        		if(blockpos !=null){
+        			int color = MathHelper.getInt(random, 0, 3);
+        			if(Config.retrogenInfo)ModLogger.info("Overworld Well: "+blockpos+" Type: "+color);
+        			CrystalWell.generateOverworldWell(world, blockpos, random, color);
+        		}
+        	}
+        }
+        
         if(world.provider.getDimensionType() == DimensionType.NETHER && Config.generateNetherWell){
         	if(Config.netherWellChance > 0 && random.nextInt(Config.netherWellChance) == 0){
         		int i = random.nextInt(16) + 8;

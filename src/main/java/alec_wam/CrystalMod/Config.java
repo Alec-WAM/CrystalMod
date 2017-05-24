@@ -54,6 +54,8 @@ public class Config {
     
     public static boolean generateFusionTemple = true;
     
+    public static boolean generateOverworldWell = true;
+    public static int overworldWellChance = 250;
     public static boolean generateNetherWell = true;
     public static int netherWellChance = 500;
     public static boolean generateEndWell = true;
@@ -189,6 +191,8 @@ public class Config {
         
         generateFusionTemple = cfg.get(CATEGORY_WORLD, "generateFusionTemple", generateFusionTemple, "Enable or disable Fusion Temple Generation in the Overworld.").getBoolean();
         
+        generateOverworldWell = cfg.get(CATEGORY_WORLD, "generateOverworldWell", generateOverworldWell, "Enable or disable Crystal Well Generation in the Overworld.").getBoolean();
+        overworldWellChance = cfg.get(CATEGORY_WORLD, "overworldWellChance", overworldWellChance, "Chance of the Overworld Well generating. The higher the number the lower the chance. If the number is less than 0 it will not generate.").getInt(250);
         generateNetherWell = cfg.get(CATEGORY_WORLD, "generateNetherWell", generateNetherWell, "Enable or disable Nether Well Generation in the Nether.").getBoolean();
         netherWellChance = cfg.get(CATEGORY_WORLD, "netherWellChance", netherWellChance, "Chance of the Nether Well generating. The higher the number the lower the chance. If the number is less than 0 it will not generate.").getInt(500);
         generateEndWell = cfg.get(CATEGORY_WORLD, "generateEndWell", generateEndWell, "Enable or disable Ender Well Generation in the End.").getBoolean();
