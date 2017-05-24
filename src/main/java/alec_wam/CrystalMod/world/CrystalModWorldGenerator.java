@@ -49,7 +49,53 @@ public class CrystalModWorldGenerator implements IWorldGenerator {
         	fusionTempleGen.generate(world, chunkX, chunkZ, null);
         	fusionTempleGen.generateStructure(world, random, new ChunkPos(chunkX, chunkZ));
         }
+        
+        if(world.provider.getDimensionType() == DimensionType.NETHER && Config.generateNetherWell){
+        	if(Config.netherWellChance > 0 && random.nextInt(Config.netherWellChance) == 0){
+        		int i = random.nextInt(16) + 8;
+        		int j = random.nextInt(16) + 8;
+        		BlockPos pos = new BlockPos((chunkX * 16) + i, 0, (chunkZ * 16) + j);
+        		BlockPos blockpos = null;
+        		
+        		int y = 11;
+        		while(blockpos == null && y < 120){
+        			BlockPos testPos = pos.up(y);
+        			List<BlockPos> posList = BlockUtil.getBlocksInBB(testPos.north().west(), 7, 1, 7);
+        			int rackNeeded = posList.size();
+        			for(BlockPos pos2 : posList){
+        				if(world.getBlockState(pos2) == Blocks.NETHERRACK.getDefaultState()){
+        					rackNeeded--;
+        				}
+        			}
+        			if(rackNeeded <=0){
+        				int airNeeded = 75;
+        				for(int x = 0; x < 5; x++){
+        					for(int y2 = 0; y2 < 3; y2++){
+        						for(int z = 0; z < 5; z++){
+        							if(world.isAirBlock(testPos.up().add(x, y2, z))){
+        								airNeeded--;
+        							}
+        						}
+        					}
+        				}
+        				if(airNeeded <= 0){
+        					blockpos = testPos;
+        				} else {
+        					y++;
+        				}
+        			}else {
+        				y++;
+        			}
+        		}
+        		if(blockpos !=null){
+        			if(Config.retrogenInfo)ModLogger.info("Nether Well: "+blockpos);
+                	CrystalWell.generateNetherWell(world, blockpos, random);
+        		}
+        	}
+        }
+        
         if(world.provider.getDimensionType() == DimensionType.THE_END && Config.generateEndWell){
+        	//Outside of Main Island Range
         	if((long)chunkX * (long)chunkX + (long)chunkZ * (long)chunkZ > 4096L){
         		if(Config.endWellChance > 0 && random.nextInt(Config.endWellChance) == 0){
         			int i = random.nextInt(16) + 8;

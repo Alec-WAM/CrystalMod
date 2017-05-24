@@ -352,6 +352,12 @@ public class CrystalWell {
 			}
 		}
 		
+		setBlockAndNotifyAdequately(world, pos.offset(EnumFacing.SOUTH, 2).offset(EnumFacing.EAST, 2), Blocks.AIR.getDefaultState(), false);
+		setBlockAndNotifyAdequately(world, pos.offset(EnumFacing.SOUTH, 2).offset(EnumFacing.EAST), Blocks.AIR.getDefaultState(), false);
+		setBlockAndNotifyAdequately(world, pos.offset(EnumFacing.EAST, 2).offset(EnumFacing.SOUTH), Blocks.AIR.getDefaultState(), false);
+		setBlockAndNotifyAdequately(world, pos.offset(EnumFacing.SOUTH, 2).offset(EnumFacing.EAST, 3), Blocks.AIR.getDefaultState(), false);
+		setBlockAndNotifyAdequately(world, pos.offset(EnumFacing.EAST, 2).offset(EnumFacing.SOUTH, 3), Blocks.AIR.getDefaultState(), false);
+		
 		setBlockAndNotifyAdequately(world, pos.offset(EnumFacing.SOUTH, 2), liquid, false);
 		setBlockAndNotifyAdequately(world, pos.offset(EnumFacing.SOUTH, 2).offset(EnumFacing.EAST, 4), liquid, false);
 		setBlockAndNotifyAdequately(world, pos.offset(EnumFacing.SOUTH, 4).offset(EnumFacing.EAST, 2), liquid, false);
