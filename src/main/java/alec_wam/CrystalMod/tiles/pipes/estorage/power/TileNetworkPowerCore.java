@@ -30,7 +30,6 @@ import net.minecraftforge.fml.common.network.ByteBufUtils;
 
 public class TileNetworkPowerCore extends TileEntityMod implements INetworkTile, ISynchronizedContainer {
 
-	//TODO Finish up Energy
 	private EStorageNetwork network;
 	public boolean connected;
 	public NetworkPowerInfo info;

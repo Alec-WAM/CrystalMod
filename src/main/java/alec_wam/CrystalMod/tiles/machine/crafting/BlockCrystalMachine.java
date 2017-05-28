@@ -108,10 +108,10 @@ public class BlockCrystalMachine extends BlockMachine implements ICustomModel  {
     public void breakBlock(World world, BlockPos pos, IBlockState blockState)
     {
         TileEntity tile = world.getTileEntity(pos);
-        if (tile != null && tile instanceof IInventory)
+        /*if (tile != null && tile instanceof IInventory)
         {
             ItemUtil.dropContent(0, (IInventory)tile, world, tile.getPos());
-        }
+        }*/
         super.breakBlock(world, pos, blockState);
     }
 

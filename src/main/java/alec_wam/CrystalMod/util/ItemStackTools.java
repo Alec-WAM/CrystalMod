@@ -82,7 +82,7 @@ public class ItemStackTools {
     		//This is not supposed to happen
     		return true;
     	}
-        return stack == ItemStack.EMPTY ? true : (stack.getItem() == Item.getItemFromBlock(Blocks.AIR)) ? true : false;
+        return stack.isEmpty();
     }
     
 

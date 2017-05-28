@@ -9,6 +9,7 @@ import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.packets.PacketEntityMessage;
 import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.ItemStackTools;
+import alec_wam.CrystalMod.util.ItemUtil;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
@@ -170,13 +171,29 @@ public class BlockOppositeFuser extends BlockContainer implements ICustomModel {
 		return new TileOppositeFuser();
 	}
 	
+	@Override
+    public void breakBlock(World world, BlockPos pos, IBlockState blockState)
+    {
+		TileEntity tile = world.getTileEntity(pos);
+		if(tile !=null && tile instanceof TileOppositeFuser){
+			TileOppositeFuser fuser = (TileOppositeFuser)tile;
+			if(fuser.hasDark){
+				ItemUtil.spawnItemInWorldWithRandomMotion(world, new ItemStack(ModItems.crystals, 1, CrystalType.DARK.getMetadata()), pos);
+			}
+			if(fuser.hasPure){
+				ItemUtil.spawnItemInWorldWithRandomMotion(world, new ItemStack(ModItems.crystals, 1, CrystalType.PURE.getMetadata()), pos);
+			}
+		}
+		super.breakBlock(world, pos, blockState);
+    }
+	
 	@SideOnly(Side.CLIENT)
     public void initModel() {
     	ModelLoader.setCustomStateMapper(this, new CustomStateMapper());
     	ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(getRegistryName()+"_tier0", "inventory"));
     	ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 1, new ModelResourceLocation(getRegistryName()+"_tier1", "inventory"));
     	ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 2, new ModelResourceLocation(getRegistryName()+"_tier2", "inventory"));
-}
+	}
 	
 	public static class CustomStateMapper extends StateMapperBase
 	{

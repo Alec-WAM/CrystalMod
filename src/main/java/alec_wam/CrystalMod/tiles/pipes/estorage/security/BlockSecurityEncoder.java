@@ -50,13 +50,9 @@ public class BlockSecurityEncoder extends BlockContainer  {
     public void breakBlock(World world, BlockPos pos, IBlockState blockState)
     {
         TileEntity tile = world.getTileEntity(pos);
-        if (tile != null && tile instanceof IInventory)
+        if (tile != null && tile instanceof TileSecurityEncoder)
         {
-            ItemUtil.dropContent(0, (IInventory)tile, world, tile.getPos());
-        }
-        IItemHandler handler = ItemUtil.getExternalItemHandler(world, pos, EnumFacing.UP);
-        if(handler !=null){
-        	ItemUtil.dropContent(0, handler, world, pos);
+            ItemUtil.dropContent(0, ((TileSecurityEncoder)tile), world, tile.getPos());
         }
         super.breakBlock(world, pos, blockState);
     }

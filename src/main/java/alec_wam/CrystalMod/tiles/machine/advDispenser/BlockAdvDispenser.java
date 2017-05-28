@@ -6,6 +6,7 @@ import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.tiles.chest.TileEntityBlueCrystalChest;
 import alec_wam.CrystalMod.tiles.machine.BlockMachine;
 import alec_wam.CrystalMod.tiles.machine.BlockStateMachine;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -47,9 +48,15 @@ public class BlockAdvDispenser extends BlockMachine implements ICustomModel {
     public void breakBlock(World world, BlockPos pos, IBlockState blockState)
     {
         TileEntity tile = world.getTileEntity(pos);
-        if (tile != null && tile instanceof IInventory)
+        if (tile != null && tile instanceof TileAdvDispenser)
         {
-            ItemUtil.dropContent(0, (IInventory)tile, world, tile.getPos());
+        	TileAdvDispenser dis = (TileAdvDispenser)tile;
+            for(int i = 0; i < dis.getSizeInventory(); i++){
+            	ItemStack stack = dis.getStackInSlot(i);
+            	if(ItemStackTools.isValid(stack)){
+            		ItemUtil.spawnItemInWorldWithRandomMotion(world, stack, pos);
+            	}
+            }
         }
         super.breakBlock(world, pos, blockState);
     }

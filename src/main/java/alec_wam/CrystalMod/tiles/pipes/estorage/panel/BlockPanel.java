@@ -129,6 +129,11 @@ public class BlockPanel extends BlockContainer implements ICustomModel {
         {
         	ItemUtil.dropContent(0, (IInventory)tileentitychest, world, tileentitychest.getPos());
         }
+        if (tileentitychest != null && tileentitychest instanceof TileEntityPanelCrafting)
+        {
+        	TileEntityPanelCrafting panel = (TileEntityPanelCrafting)tileentitychest;
+        	ItemUtil.dropContent(0, panel.getMatrix(), world, tileentitychest.getPos());
+        }
         super.breakBlock(world, pos, blockState);
     }
 	

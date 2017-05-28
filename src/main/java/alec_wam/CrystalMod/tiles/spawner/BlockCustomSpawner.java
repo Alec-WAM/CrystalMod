@@ -211,18 +211,6 @@ public class BlockCustomSpawner extends BlockContainer {
 				item.motionZ = (-0.5F + world.rand.nextFloat()) * multiplyer;
 				world.spawnEntity(item);
 			}
-			
-			//TODO Dont drop essence. Maybe full essence?
-			/*boolean dropEssence = !Strings.isNullOrEmpty(spawner.getBaseLogic().getEntityNameToSpawn());
-			if(dropEssence){
-				ItemStack mobEssence = new ItemStack(ModItems.mobEssence);
-				ItemNBTHelper.setString(mobEssence, ItemMobEssence.NBT_ENTITYNAME, spawner.getBaseLogic().getEntityNameToSpawn());
-				EntityItem item = new EntityItem(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, new ItemStack(Items.GOLDEN_APPLE, 1, 1));
-				item.motionX = (-0.5F + world.rand.nextFloat()) * multiplyer;
-				item.motionY = (4 + world.rand.nextFloat()) * multiplyer;
-				item.motionZ = (-0.5F + world.rand.nextFloat()) * multiplyer;
-				world.spawnEntity(item);
-			}*/
 		}
 		super.breakBlock(world, pos, state);
 	}

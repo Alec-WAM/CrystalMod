@@ -175,7 +175,7 @@ public class TileSapExtractor extends TileEntityMachine {
 
 	@Override
 	public boolean canContinueRunning() {
-		return treeType  == null || !validTree;
+		return treeType != null && validTree;
 	}
 
 }

@@ -40,8 +40,7 @@ public class TileAdvancedLamp extends TileEntityMod {
     private void updateLightBlocks(boolean lit) {
         int radius = getRadius();
         int count = 0;
-        //TODO Make radius bigger for dark lamp
-		for(int x = -radius; x <= radius; x++){
+        for(int x = -radius; x <= radius; x++){
 			for(int y = -radius; y <= radius; y++){
 				for(int z = -radius; z <= radius; z++){
 					BlockPos pos2 = new BlockPos(x, y, z).add(pos.getX(), pos.getY(), pos.getZ());

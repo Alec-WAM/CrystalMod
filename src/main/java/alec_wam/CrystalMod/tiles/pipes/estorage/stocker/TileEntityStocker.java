@@ -152,7 +152,6 @@ public class TileEntityStocker extends TileEntityInventory implements INetworkTi
 
 	@Override
 	public void handleMessage(String messageId, NBTTagCompound messageData, boolean client) {
-		//TODO Not allow settings changes
 		if(network !=null){
 			if(messageData.hasKey("UUID")){
 				UUID uuid = UUIDUtils.fromString(messageData.getString("UUID"));

@@ -61,12 +61,12 @@ public class ContainerAdvDispenser extends Container
             {
                 if (!this.mergeItemStack(itemstack1, 10, 46, true))
                 {
-                    return null;
+                    return ItemStackTools.getEmptyStack();
                 }
             }
             else if (!this.mergeItemStack(itemstack1, 0, 9, false))
             {
-                return null;
+                return ItemStackTools.getEmptyStack();
             }
 
             if (ItemStackTools.isEmpty(itemstack1))

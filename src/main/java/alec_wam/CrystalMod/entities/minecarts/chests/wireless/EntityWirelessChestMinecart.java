@@ -280,10 +280,11 @@ public class EntityWirelessChestMinecart extends EntityMinecartChest implements 
 		return getOwner() == null;
 	}
 	
-	public boolean processInitialInteract(EntityPlayer player, @Nullable ItemStack stack, EnumHand hand)
+	@Override
+	public boolean processInitialInteract(EntityPlayer player, EnumHand hand)
     {
         if(net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.event.entity.minecart.MinecartInteractEvent(this, player, hand))) return true;
-        
+        ItemStack stack = player.getHeldItem(hand);
         if(isOwner(player.getUniqueID())){
         	if(ItemStackTools.isValid(stack) && ItemUtil.itemStackMatchesOredict(stack, "gemDiamond")){
         		if(!isBoundToPlayer()){

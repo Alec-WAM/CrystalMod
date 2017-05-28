@@ -2,6 +2,7 @@ package alec_wam.CrystalMod.blocks.rail;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRailBase;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
@@ -25,8 +26,10 @@ public class BlockReinforcedRail extends BlockRailBase implements ICustomModel {
 
 	public BlockReinforcedRail() {
 		super(false);
-		this.setCreativeTab(CreativeTabs.TRANSPORTATION);
-		this.setDefaultState(this.blockState.getBaseState().withProperty(SHAPE, BlockRailBase.EnumRailDirection.NORTH_SOUTH));
+		setHardness(0.7F);
+		setSoundType(SoundType.METAL);
+		setCreativeTab(CreativeTabs.TRANSPORTATION);
+		setDefaultState(this.blockState.getBaseState().withProperty(SHAPE, BlockRailBase.EnumRailDirection.NORTH_SOUTH));
 	}
 
 	@SuppressWarnings("deprecation")
