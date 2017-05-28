@@ -212,7 +212,6 @@ public class ModCrafting {
 
 		
 		//More Expensive than using the Liguidizer and Infuser
-		//TODO REMOVE CRAFTING OF DARK IRON
 		//addShapedOreRecipe(dIronIngot, " N ", "NIN", " N ", 'N', darkNugget, 'I', "ingotIron");
 		
 		addShapedRecipe(new ItemStack(ModItems.wrench), new Object[] { "N N", " I ", " I ", 'N', dIronNugget, 'I', dIronIngot });
@@ -315,6 +314,8 @@ public class ModCrafting {
 		addShapedOreRecipe(new ItemStack(ModBlocks.crystalWorkbench, 1, WorkbenchType.GREEN.getMeta()), new Object[]{"###", "#W#", "###", '#', greenIngot, 'W', "workbench"});
 		addShapedOreRecipe(new ItemStack(ModBlocks.crystalWorkbench, 1, WorkbenchType.DARK.getMeta()), new Object[]{"###", "#W#", "###", '#', darkIngot, 'W', "workbench"});
 
+		addShapedOreRecipe(new ItemStack(ModBlocks.enhancementTable), new Object[]{"#A#", "IWI", "#I#", '#', dIronPlate, 'I', "ingotIron", 'W', "workbench", 'A', Blocks.ANVIL});
+		
 		ItemStack pipeEStorage = new ItemStack(ModBlocks.crystalPipe, 1, PipeType.ESTORAGE.getMeta());
 		
 		addShapedOreRecipe(new ItemStack(ModBlocks.crystalPipe, 8, PipeType.ITEM.getMeta()), new Object[]{"###", "NHN", "###", '#', dIronPlate, 'N', dIronNugget, 'H', "chestWood" });

@@ -1,6 +1,7 @@
 package alec_wam.CrystalMod.tiles.tooltable;
 
 import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -16,7 +17,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class BlockEnhancementTable extends BlockContainer{
+public class BlockEnhancementTable extends BlockContainer {
 
 	public BlockEnhancementTable() {
 		super(Material.IRON);
@@ -45,6 +46,8 @@ public class BlockEnhancementTable extends BlockContainer{
         {
             return true;
         }
+        
+        if(player.isSneaking()) return false;
 
         player.openGui(CrystalMod.instance, 0, world, pos.getX(), pos.getY(), pos.getZ());
         return true;
@@ -59,9 +62,9 @@ public class BlockEnhancementTable extends BlockContainer{
     public void breakBlock(World world, BlockPos pos, IBlockState blockState)
     {
 		TileEntity tileentitychest = world.getTileEntity(pos);
-        if (tileentitychest != null && tileentitychest instanceof IInventory)
+        if (tileentitychest != null && tileentitychest instanceof TileEnhancementTable)
         {
-        	ItemUtil.dropContent(0, (IInventory)tileentitychest, world, tileentitychest.getPos());
+        	if(ItemStackTools.isValid(((TileEnhancementTable)tileentitychest).getStackInSlot(0)))ItemUtil.spawnItemInWorldWithRandomMotion(world, ((TileEnhancementTable)tileentitychest).getStackInSlot(0), pos);;
         }
         super.breakBlock(world, pos, blockState);
     }

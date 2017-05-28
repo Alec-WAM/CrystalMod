@@ -33,6 +33,7 @@ import alec_wam.CrystalMod.items.tools.ItemCrystalSword;
 import alec_wam.CrystalMod.items.tools.ItemCustomAxe;
 import alec_wam.CrystalMod.items.tools.ItemCustomPickaxe;
 import alec_wam.CrystalMod.items.tools.ItemDarkIronBow;
+import alec_wam.CrystalMod.items.tools.ItemEnhancementKnowledge;
 import alec_wam.CrystalMod.items.tools.ItemLock;
 import alec_wam.CrystalMod.items.tools.ItemMegaCrystalAxe;
 import alec_wam.CrystalMod.items.tools.ItemMegaCrystalPickaxe;
@@ -126,6 +127,7 @@ public class ModItems {
 	
 	public static ItemCrystalWrench wrench;
 	public static ItemCrystalGuide guide;
+	public static ItemEnhancementKnowledge enhancementKnowledge;
 	
 	public static ItemCrystalSeeds crystalSeedsBlue, crystalSeedsRed, crystalSeedsGreen, crystalSeedsDark;
 	public static ItemCrystalSeedTree crystalTreeSeedsBlue, crystalTreeSeedsRed, crystalTreeSeedsGreen, crystalTreeSeedsDark;
@@ -228,6 +230,7 @@ public class ModItems {
 		pipeFilter = new ItemPipeFilter();
 		wrench = new ItemCrystalWrench();
 		guide = new ItemCrystalGuide();
+		enhancementKnowledge = new ItemEnhancementKnowledge();
 		harddrive = new ItemHDD();
 		craftingPattern = new ItemPattern();
 		securityCard = new ItemSecurityCard();

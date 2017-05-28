@@ -23,6 +23,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
+import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
 import net.minecraftforge.event.entity.living.LivingExperienceDropEvent;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import net.minecraftforge.event.world.GetCollisionBoxesEvent;
@@ -188,6 +189,17 @@ public class ArmorEventHandler {
 			count++;
 		}
 		return count;
+	}
+	
+	@SubscribeEvent
+	public void jumpHeight(LivingJumpEvent event){
+		if(event.getEntityLiving() == null) return;
+		ItemStack legs = event.getEntityLiving().getItemStackFromSlot(EntityEquipmentSlot.LEGS);
+		if(ItemStackTools.isValid(legs)){
+			if(ModEnhancements.JUMP_BOOST.isApplied(legs)){
+				event.getEntityLiving().motionY +=0.21;
+			}
+		}
 	}
 	
 }

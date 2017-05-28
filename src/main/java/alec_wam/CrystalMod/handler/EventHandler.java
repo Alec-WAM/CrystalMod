@@ -2,14 +2,18 @@ package alec_wam.CrystalMod.handler;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonSerializationContext;
 
 import alec_wam.CrystalMod.Config;
 import alec_wam.CrystalMod.CrystalMod;
@@ -97,8 +101,16 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+import net.minecraft.world.storage.loot.LootContext;
+import net.minecraft.world.storage.loot.LootEntry;
+import net.minecraft.world.storage.loot.LootEntryItem;
+import net.minecraft.world.storage.loot.LootPool;
+import net.minecraft.world.storage.loot.LootTableList;
+import net.minecraft.world.storage.loot.conditions.LootCondition;
+import net.minecraft.world.storage.loot.functions.LootFunction;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
+import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.item.ItemExpireEvent;
 import net.minecraftforge.event.entity.living.EnderTeleportEvent;
@@ -1027,5 +1039,36 @@ public class EventHandler {
     			}
     		}
     	}
+    }
+    
+    @SubscribeEvent
+    public void onLootLoad(LootTableLoadEvent event) {
+        if (event.getName().equals(LootTableList.CHESTS_ABANDONED_MINESHAFT) ||
+                event.getName().equals(LootTableList.CHESTS_IGLOO_CHEST) ||
+                event.getName().equals(LootTableList.CHESTS_DESERT_PYRAMID) ||
+                event.getName().equals(LootTableList.CHESTS_JUNGLE_TEMPLE) ||
+                event.getName().equals(LootTableList.CHESTS_NETHER_BRIDGE) ||
+                event.getName().equals(LootTableList.CHESTS_SIMPLE_DUNGEON) ||
+                event.getName().equals(LootTableList.CHESTS_VILLAGE_BLACKSMITH)) {
+            LootPool main = event.getTable().getPool("main");
+            // Safety, check if the main lootpool is still present
+            /*if (main != null) {
+                main.addEntry(new LootEntry(Config.enhancementBookRarity, 0, new LootCondition[0], CrystalMod.resource("enhancementbook")){
+
+					@Override
+					public void addLoot(Collection<ItemStack> stacks, Random rand, LootContext context) {
+						// TODO Auto-generated method stub
+						
+					}
+
+					@Override
+					protected void serialize(JsonObject json, JsonSerializationContext context) {
+						// TODO Auto-generated method stub
+						
+					}
+                	
+                });
+            }*/
+        }
     }
 }

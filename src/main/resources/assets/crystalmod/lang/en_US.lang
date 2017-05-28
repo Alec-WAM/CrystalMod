@@ -219,6 +219,7 @@ item.crystalmod.pipefilter.fluid.name=Pipe Filter (Fluid)
 item.crystalmod.wrench.name=Crystal Wrench
 item.crystalmod.guide.crystal.name=Crystal Guide
 item.crystalmod.guide.estorage.name=Network Storage Guide
+item.crystalmod.enhancementknowledge.name=Knowledge Book
 
 item.crystalmod.harddriveblue.name=Item Hard-drive (Blue)
 item.crystalmod.harddrivered.name=Item Hard-drive (Red)
@@ -671,6 +672,11 @@ crystalmod.guistrings.inventory.alt_controls=Settings
 crystalmod.message.toomanyplayercubes=You already have the maximum amount of Player Cubes created. (%s)
 
 crystalmod.gui.enhancement.holdshift=<Hold Shift for Enhancement Data>
+crystalmod.enhancement.unlocked=Discovered %s enhancement!
+enhancement.crystalmod.dragonwings.name=Dragon Wings
+enhancement.crystalmod.invisiblearmor.name=Invisible Armor
+enhancement.crystalmod.jumpboost.name=Jump Boost
+enhancement.crystalmod.waterwalking.name=Water Walking
 
 #--Entity
 entity.crystalpigzombie.name=Crystal Zombie Pigman
@@ -682,12 +688,12 @@ entity.bombomb.name=Bombomb
 entity.pureangel.name=Pure Angel
 entity.darkdevil.name=Dark Devil
 
-entity.minecart_blue.name=Minecart with Blue Crystal Chest
-entity.minecart_red.name=Minecart with Red Crystal Chest
-entity.minecart_green.name=Minecart with Green Crystal Chest
-entity.minecart_dark.name=Minecart with Dark Crystal Chest
-entity.minecart_pure.name=Minecart with Pure Crystal Chest
-entity.minecart_darkiron.name=Minecart with Dark Iron Chest
+entity.minecart_chest_blue.name=Minecart with Blue Crystal Chest
+entity.minecart_chest_red.name=Minecart with Red Crystal Chest
+entity.minecart_chest_green.name=Minecart with Green Crystal Chest
+entity.minecart_chest_dark.name=Minecart with Dark Crystal Chest
+entity.minecart_chest_pure.name=Minecart with Pure Crystal Chest
+entity.minecart_chest_darkiron.name=Minecart with Dark Iron Chest
 
 entity.minecart_wirelesschest.name=Minecart with Super Chest
 entity.minecart_enderchest.name=Minecart with Ender Chest

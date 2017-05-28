@@ -45,7 +45,12 @@ public class TileEnhancementTable extends TileEntityInventory implements IMessag
 		if(ItemStackTools.isValid(currentTool)){
 			if(enhancement.isApplied(currentTool)){
 				if(enhancement.returnItemsToPlayer(player)){
-					setInventorySlotContents(0, enhancement.remove(currentTool));
+					ItemStack returnStack = enhancement.remove(currentTool);
+					//Clean NBT
+					if(returnStack.getTagCompound().hasNoTags()){
+						returnStack.setTagCompound(null);
+					}
+					setInventorySlotContents(0, returnStack);
 				}
 			}
 		}

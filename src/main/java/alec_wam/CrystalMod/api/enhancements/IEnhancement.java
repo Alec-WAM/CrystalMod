@@ -33,4 +33,8 @@ public interface IEnhancement {
 	@SideOnly(Side.CLIENT)
 	public void addToolTip(ItemStack stack, List<String> list);
 	
+	public default boolean requiresKnowledge(){
+		return true;
+	}
+	
 }

@@ -1,5 +1,6 @@
 package alec_wam.CrystalMod.api.enhancements;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -22,6 +23,10 @@ public class EnhancementManager {
 	
 	public static IEnhancement getEnhancement(ResourceLocation id){
 		return ENHANCEMENT_REGISTRY.get(id);
+	}
+	
+	public static Collection<IEnhancement> getEnhancements(){
+		return ENHANCEMENT_REGISTRY.values();
 	}
 	
 	public static List<IEnhancement> findValidEnhancements(ItemStack stack){

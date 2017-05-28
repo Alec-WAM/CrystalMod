@@ -2,9 +2,12 @@ package alec_wam.CrystalMod.tiles.tooltable;
 
 import javax.annotation.Nullable;
 
+import alec_wam.CrystalMod.api.enhancements.KnowledgeManager;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.Container;
+import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
@@ -17,7 +20,7 @@ public class ContainerEnhancementTable extends Container
     {
         this.table = table;
 
-        this.addSlotToContainer(new Slot(table, 0, 8, 20));
+        this.addSlotToContainer(new Slot(table, 0, 80, 20));
         
         for (int k = 0; k < 3; ++k)
         {
@@ -33,6 +36,14 @@ public class ContainerEnhancementTable extends Container
         }
     }
 
+    @Override
+	public void addListener(IContainerListener crafter){
+		super.addListener(crafter);
+		if(crafter !=null && crafter instanceof EntityPlayerMP){
+			KnowledgeManager.syncData((EntityPlayerMP)crafter);
+		}
+	}
+    
     public boolean canInteractWith(EntityPlayer playerIn)
     {
         return this.table.isUsableByPlayer(playerIn);
@@ -54,14 +65,14 @@ public class ContainerEnhancementTable extends Container
 
             if (index == 0)
             {
-                if (!this.mergeItemStack(itemstack1, 1, 46, true))
+                if (!this.mergeItemStack(itemstack1, 1, 37, false))
                 {
-                    return null;
+                    return ItemStackTools.getEmptyStack();
                 }
             }
             else if (!this.mergeItemStack(itemstack1, 0, 1, false))
             {
-                return null;
+                return ItemStackTools.getEmptyStack();
             }
 
             if (ItemStackTools.isEmpty(itemstack1))

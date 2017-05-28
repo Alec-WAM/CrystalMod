@@ -8,18 +8,23 @@ import com.google.common.collect.Lists;
 
 import alec_wam.CrystalMod.api.enhancements.EnhancementManager;
 import alec_wam.CrystalMod.api.enhancements.IEnhancement;
+import alec_wam.CrystalMod.api.enhancements.KnowledgeManager;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
-import alec_wam.CrystalMod.tiles.machine.advDispenser.TileAdvDispenser;
 import alec_wam.CrystalMod.util.ItemStackTools;
+import alec_wam.CrystalMod.util.ItemUtil;
+import alec_wam.CrystalMod.util.Util;
+import alec_wam.CrystalMod.util.client.RenderUtil;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.items.wrapper.InvWrapper;
 
 public class GuiEnhancementTable extends GuiContainer {
 
@@ -36,14 +41,24 @@ public class GuiEnhancementTable extends GuiContainer {
 	public void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
 		List<IEnhancement> displayList = getEnhancements();
 		if(!displayList.isEmpty()){
-			for(int i = 0; i < displayList.size(); i++){
-				IEnhancement enhancement = displayList.get(i);
-				int x = 30 + (18*i);
-				int y = 19;
+			int x = 44;
+			int y = 61;
+			int offset = 0;
+			for(int i = 0; i < 5; i++){
+				if(i+offset >= displayList.size())continue;
+				IEnhancement enhancement = displayList.get(i+offset);
+				
 				if(isPointInRegion(x, y, 16, 16, mouseX, mouseY)){
 					applyOrRemove(enhancement, mouseButton == 0 ? 0 : mouseButton == 1 ? 1 : -1);
 					return;
 				}
+				
+				x+=18;
+				
+				/*if(i > 0 && Util.isMultipleOf(i, 6)){
+					x = 30;
+					y+=18;
+				}*/
 			}
 		}
 		
@@ -67,11 +82,18 @@ public class GuiEnhancementTable extends GuiContainer {
     {
 		IEnhancement hoverEnhancement = null;
 		List<IEnhancement> displayList = getEnhancements();
+		ItemStack tool = table.getStackInSlot(0);
+		//drawRect(80, 20, 98, 38, Color.GRAY.getRGB());
+		
+		//drawRect(44, 60, 44+(18*5), 78, Color.GRAY.getRGB());
+		
 		if(!displayList.isEmpty()){
-			for(int i = 0; i < displayList.size(); i++){
-				IEnhancement enhancement = displayList.get(i);
-				int x = 30 + (18*i);
-				int y = 19;
+			int x = 44;
+			int y = 61;
+			int offset = 0;
+			for(int i = 0; i < 5; i++){
+				if(i+offset >= displayList.size())continue;
+				IEnhancement enhancement = displayList.get(i+offset);
 				if(isPointInRegion(x, y, 16, 16, mouseX, mouseY)){
 					hoverEnhancement = enhancement;
 					GlStateManager.disableLighting();
@@ -94,7 +116,6 @@ public class GuiEnhancementTable extends GuiContainer {
 			        this.itemRender.renderItemOverlayIntoGUI(font, stack, x, y, "");
 			        this.zLevel = 0.0F;
 			        this.itemRender.zLevel = 0.0F;
-			        ItemStack tool = table.getStackInSlot(0);
 			        if(ItemStackTools.isValid(tool)){
 			        	if(enhancement.isApplied(tool)){
 			        		//Green Tint
@@ -123,6 +144,13 @@ public class GuiEnhancementTable extends GuiContainer {
 			        
 			        GlStateManager.popMatrix();
 				}
+				
+				x+=18;
+				
+				/*if(i > 0 && Util.isMultipleOf(i, 6)){
+					x = 30;
+					y+=18;
+				}*/
 			}
 		}
 		
@@ -133,6 +161,7 @@ public class GuiEnhancementTable extends GuiContainer {
 			for(int i = 0; i < stacks.size(); i++){
 				ItemStack stack = stacks.get(i);
 				if(ItemStackTools.isValid(stack)){
+					
 					GlStateManager.pushMatrix();
 					GlStateManager.translate(mouseX-guiLeft, mouseY-guiTop, 32.0F);
 			        this.zLevel = 200.0F;
@@ -140,13 +169,24 @@ public class GuiEnhancementTable extends GuiContainer {
 			        net.minecraft.client.gui.FontRenderer font = stack.getItem().getFontRenderer(stack);
 			        if (font == null) font = fontRendererObj;
 			        this.itemRender.renderItemAndEffectIntoGUI(stack, x, y);
-			        this.itemRender.renderItemOverlayIntoGUI(font, stack, x, y, ""+ItemStackTools.getStackSize(stack));
+			        
+			        if(ItemStackTools.isValid(tool)){
+			        	if(!hoverEnhancement.isApplied(tool)){
+			        		int needed = ItemStackTools.getStackSize(stack);
+							needed-=ItemUtil.countItems(new InvWrapper(mc.player.inventory), stack, false);
+			        		TextFormatting chat = needed <= 0 ? TextFormatting.GREEN : TextFormatting.RED;
+			        		this.itemRender.renderItemOverlayIntoGUI(font, stack, x, y, chat+""+ItemStackTools.getStackSize(stack));
+			        	} else {
+			        		this.itemRender.renderItemOverlayIntoGUI(font, stack, x, y, ""+ItemStackTools.getStackSize(stack));
+			        	}
+			        }
+			        
 			        this.zLevel = 0.0F;
 			        this.itemRender.zLevel = 0.0F;
 			        GlStateManager.popMatrix();
 					
 					x+=18;
-					if(i % 4 == 0){
+					if(i > 0 && Util.isMultipleOf(i, 4)){
 						y+=18;
 						x = 8;
 					}
@@ -158,7 +198,14 @@ public class GuiEnhancementTable extends GuiContainer {
 	public List<IEnhancement> getEnhancements(){
 		ItemStack tool = table.getStackInSlot(0);
 		if(ItemStackTools.isEmpty(tool)) return Lists.newArrayList();
-		return EnhancementManager.findValidEnhancements(tool);
+		List<IEnhancement> validList = EnhancementManager.findValidEnhancements(tool);
+		List<IEnhancement> list = Lists.newArrayList();
+		for(IEnhancement e : validList){
+			if(KnowledgeManager.hasClientKnowledge(e)){
+				list.add(e);
+			}
+		}
+		return list;
 	}
 
 	@Override

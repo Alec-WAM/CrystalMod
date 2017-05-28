@@ -1,15 +1,18 @@
 {
-	"forge_marker": 1,
-    "defaults": {
-		"model": "crystalmod:crystalworkbench", 
-		"textures": {
-			"side": "crystalmod:blocks/enhancementtable_side", 
-			"top": "crystalmod:blocks/enhancementtable_top", 
-			"down": "crystalmod:blocks/enhancementtable_bottom"
-		}
-	},
-	"variants": {
-		"inventory": { },
-		"normal": { }
-	}
+  "forge_marker": 1,
+  "defaults": {
+    "model": "crystalmod:machine",
+    "textures": {
+	  "particle":"crystalmod:blocks/enhancementtable_bottom",
+	  "up":"crystalmod:blocks/enhancementtable_top",
+	  "down":"crystalmod:blocks/enhancementtable_bottom",
+	  "side":"crystalmod:blocks/enhancementtable_side",
+	  "front":"crystalmod:blocks/enhancementtable_side"
+    },
+    "transform": "forge:default-block"
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{}]
+  }
 }
