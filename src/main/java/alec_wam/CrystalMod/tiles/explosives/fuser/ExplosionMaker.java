@@ -21,7 +21,6 @@ import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.Chunk.EnumCreateEntityType;
 import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
-import net.minecraftforge.fml.common.network.NetworkRegistry;
 
 public class ExplosionMaker {
 	private final WorldServer serverWorld;
@@ -151,7 +150,7 @@ public class ExplosionMaker {
             chunk.generateSkylightMap(); //This is where this falls short. It can calculate basic sky lighting for blocks exposed to the sky but thats it.
 
             PlayerChunkMapEntry watcher = playerChunkMap.getEntry(chunk.xPosition, chunk.zPosition);
-            if (watcher != null) {//TODO Change chunk mask to only the sub chunks changed.
+            if (watcher != null) {
                 watcher.sendPacket(new SPacketChunkData(chunk, 65535));
             }
         }

@@ -33,7 +33,7 @@ public class GuiEngineLava extends GuiElementContainer{
 		ElementEnergy energyElement = new ElementEnergy(this, 8+100, 24, this.tileEngine.energyStorage);
 		addElement(energyElement);
 		FluidStack fluid = tileEngine.renderFluid;
-		progressFluid = ((ElementFluidScaled)addElement(new ElementFluidScaled(this, 76, 34).setFluid(fluid).setSize(24, 16)));;
+		progressFluid = ((ElementFluidScaled)addElement(new ElementFluidScaled(this, 76, 34).setFluid(fluid).setSize(24, 16).setTexture("crystalmod:textures/gui/elements/progress_fluid_right.png", 34, 16)));;
 		//this.speed = ((ElementDualScaled)addElement(new ElementDualScaled(this, 56+24, 44).setSize(16, 16).setTexture("crystalmod:textures/gui/elements/Scale_Flame.png", 32, 16)));
 	    
 	}

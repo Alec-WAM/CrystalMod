@@ -81,6 +81,7 @@ public class ModelGlass extends DynamicItemAndBlockModel {
 			//ModLogger.info("MODELGLASS: U "+renderUp);
 		}
 		TextureAtlasSprite sprite = getTexture(type);
+		TextureAtlasSprite centersprite = getCenterTexture(type);
 		float[] top = new float[] { 0.0f, 0.0f, 16.0f, 1.0f };
 		float[] bottom = new float[] { 0.0f, 15.0f, 16.0f, 16.0f };
 		float[] left = new float[] { 0.0f, 0.0f, 1.0f, 16.0f };
@@ -135,7 +136,7 @@ public class ModelGlass extends DynamicItemAndBlockModel {
 				
 				if(renderCenter()){
 					final BlockPartFace faceU = new BlockPartFace(EnumFacing.UP, 0, "", new BlockFaceUV(new float[]{min, min, max, max}, 0));
-					list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(1, 16, 0), new Vector3f(15f, 16, 1), faceU, sprite, EnumFacing.UP, rot, (BlockPartRotation)null, true));
+					list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(1, 16, 0), new Vector3f(15f, 16, 1), faceU, centersprite, EnumFacing.UP, rot, (BlockPartRotation)null, true));
 				}
 				
 				face.blockFaceUV.uvs = top;
@@ -153,7 +154,7 @@ public class ModelGlass extends DynamicItemAndBlockModel {
 			} else {
 				if(renderCenter()){
 					final BlockPartFace faceU = new BlockPartFace(EnumFacing.UP, 0, "", new BlockFaceUV(new float[]{min, min, max, max}, 0));
-					list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(1, 16, 15f), new Vector3f(15f, 16, 16F), faceU, sprite, EnumFacing.UP, rot, (BlockPartRotation)null, true));
+					list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(1, 16, 15f), new Vector3f(15f, 16, 16F), faceU, centersprite, EnumFacing.UP, rot, (BlockPartRotation)null, true));
 				}
 				face.blockFaceUV.uvs = bottom;
 				BlockPos posDW = state.pos.offset(EnumFacing.SOUTH).offset(EnumFacing.WEST);
@@ -168,7 +169,7 @@ public class ModelGlass extends DynamicItemAndBlockModel {
 			} else {
 				if(renderCenter()){
 					final BlockPartFace faceU = new BlockPartFace(EnumFacing.UP, 0, "", new BlockFaceUV(new float[]{min, min, max, max}, 0));
-					list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(0, 16, 1), new Vector3f(1f, 16, 15f), faceU, sprite, EnumFacing.UP, rot, (BlockPartRotation)null, true));
+					list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(0, 16, 1), new Vector3f(1f, 16, 15f), faceU, centersprite, EnumFacing.UP, rot, (BlockPartRotation)null, true));
 				}
 			}
 			
@@ -178,16 +179,16 @@ public class ModelGlass extends DynamicItemAndBlockModel {
 			}else {
 				if(renderCenter()){
 					final BlockPartFace faceU = new BlockPartFace(EnumFacing.UP, 0, "", new BlockFaceUV(new float[]{min, min, max, max}, 0));
-					list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(15F, 16, 1), new Vector3f(16f, 16, 15f), faceU, sprite, EnumFacing.UP, rot, (BlockPartRotation)null, true));
+					list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(15F, 16, 1), new Vector3f(16f, 16, 15f), faceU, centersprite, EnumFacing.UP, rot, (BlockPartRotation)null, true));
 				}
 			}
 			
 			if(renderCenter()){
 				final BlockPartFace faceU = new BlockPartFace(EnumFacing.UP, 0, "", new BlockFaceUV(new float[]{min, min, max, max}, 0));
-				if(!showN && !showW)list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(0, 16, 0), new Vector3f(1f, 16, 1), faceU, sprite, EnumFacing.UP, rot, (BlockPartRotation)null, true));
-				if(!showN && !showE)list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(15, 16, 0), new Vector3f(16f, 16, 1), faceU, sprite, EnumFacing.UP, rot, (BlockPartRotation)null, true));
-				if(!showS && !showW)list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(0, 16, 15), new Vector3f(1f, 16, 16), faceU, sprite, EnumFacing.UP, rot, (BlockPartRotation)null, true));
-				if(!showS && !showE)list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(15, 16, 15), new Vector3f(16f, 16, 16), faceU, sprite, EnumFacing.UP, rot, (BlockPartRotation)null, true));
+				if(!showN && !showW)list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(0, 16, 0), new Vector3f(1f, 16, 1), faceU, centersprite, EnumFacing.UP, rot, (BlockPartRotation)null, true));
+				if(!showN && !showE)list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(15, 16, 0), new Vector3f(16f, 16, 1), faceU, centersprite, EnumFacing.UP, rot, (BlockPartRotation)null, true));
+				if(!showS && !showW)list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(0, 16, 15), new Vector3f(1f, 16, 16), faceU, centersprite, EnumFacing.UP, rot, (BlockPartRotation)null, true));
+				if(!showS && !showE)list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(15, 16, 15), new Vector3f(16f, 16, 16), faceU, centersprite, EnumFacing.UP, rot, (BlockPartRotation)null, true));
 			}
 		}
 		
@@ -210,7 +211,7 @@ public class ModelGlass extends DynamicItemAndBlockModel {
 				list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(0, 0, 0), new Vector3f(16f, 0, 1), face, sprite, EnumFacing.DOWN, rot, (BlockPartRotation)null, true));
 			}else{
 				if(renderCenter()){
-					list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(1, 0, 0), new Vector3f(15f, 0, 1), faceU, sprite, EnumFacing.DOWN, rot, (BlockPartRotation)null, true));
+					list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(1, 0, 0), new Vector3f(15f, 0, 1), faceU, centersprite, EnumFacing.DOWN, rot, (BlockPartRotation)null, true));
 				}
 				face.blockFaceUV.uvs = top;
 				BlockPos posUW = state.pos.offset(EnumFacing.NORTH).offset(EnumFacing.WEST);
@@ -223,7 +224,7 @@ public class ModelGlass extends DynamicItemAndBlockModel {
 				list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(0, 0, 15f), new Vector3f(16f, 0, 16f), face, sprite, EnumFacing.DOWN, rot, (BlockPartRotation)null, true));
 			} else {
 				if(renderCenter()){
-					list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(1, 0, 15f), new Vector3f(15f, 0, 16f), faceU, sprite, EnumFacing.DOWN, rot, (BlockPartRotation)null, true));
+					list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(1, 0, 15f), new Vector3f(15f, 0, 16f), faceU, centersprite, EnumFacing.DOWN, rot, (BlockPartRotation)null, true));
 				}
 				face.blockFaceUV.uvs = bottom;
 				BlockPos posDW = state.pos.offset(EnumFacing.SOUTH).offset(EnumFacing.WEST);
@@ -237,7 +238,7 @@ public class ModelGlass extends DynamicItemAndBlockModel {
 				list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(0, 0, 0), new Vector3f(1f, 0, 16f), face, sprite, EnumFacing.DOWN, rot, (BlockPartRotation)null, true));
 			} else{
 				if(renderCenter()){
-					list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(0, 0, 1), new Vector3f(1f, 0, 15f), faceU, sprite, EnumFacing.DOWN, rot, (BlockPartRotation)null, true));
+					list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(0, 0, 1), new Vector3f(1f, 0, 15f), faceU, centersprite, EnumFacing.DOWN, rot, (BlockPartRotation)null, true));
 				}
 			}
 			
@@ -246,15 +247,15 @@ public class ModelGlass extends DynamicItemAndBlockModel {
 				list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(15f, 0, 0), new Vector3f(16f, 0, 16f), face, sprite, EnumFacing.DOWN, rot, (BlockPartRotation)null, true));
 			}else{
 				if(renderCenter()){
-					list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(15f, 0, 1), new Vector3f(16f, 0, 15f), faceU, sprite, EnumFacing.DOWN, rot, (BlockPartRotation)null, true));
+					list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(15f, 0, 1), new Vector3f(16f, 0, 15f), faceU, centersprite, EnumFacing.DOWN, rot, (BlockPartRotation)null, true));
 				}
 			}
 			
 			if(renderCenter()){
-				if(!showN && !showW)list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(0, 0, 0), new Vector3f(1f, 0, 1), faceU, sprite, EnumFacing.DOWN, rot, (BlockPartRotation)null, true));
-				if(!showN && !showE)list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(15, 0, 0), new Vector3f(16f, 0, 1), faceU, sprite, EnumFacing.DOWN, rot, (BlockPartRotation)null, true));
-				if(!showS && !showW)list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(0, 0, 15), new Vector3f(1f, 0, 16), faceU, sprite, EnumFacing.DOWN, rot, (BlockPartRotation)null, true));
-				if(!showS && !showE)list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(15, 0, 15), new Vector3f(16f, 0, 16), faceU, sprite, EnumFacing.DOWN, rot, (BlockPartRotation)null, true));
+				if(!showN && !showW)list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(0, 0, 0), new Vector3f(1f, 0, 1), faceU, centersprite, EnumFacing.DOWN, rot, (BlockPartRotation)null, true));
+				if(!showN && !showE)list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(15, 0, 0), new Vector3f(16f, 0, 1), faceU, centersprite, EnumFacing.DOWN, rot, (BlockPartRotation)null, true));
+				if(!showS && !showW)list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(0, 0, 15), new Vector3f(1f, 0, 16), faceU, centersprite, EnumFacing.DOWN, rot, (BlockPartRotation)null, true));
+				if(!showS && !showE)list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(15, 0, 15), new Vector3f(16f, 0, 16), faceU, centersprite, EnumFacing.DOWN, rot, (BlockPartRotation)null, true));
 			}
 		}
 		
@@ -277,7 +278,7 @@ public class ModelGlass extends DynamicItemAndBlockModel {
 				list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(0, 15, 0), new Vector3f(16f, 16F, 0), face, sprite, EnumFacing.NORTH, rot, (BlockPartRotation)null, true));
 			} else{
 				if(renderCenter()){
-					list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(1, 15, 0), new Vector3f(15f, 16F, 0), faceU, sprite, EnumFacing.NORTH, rot, (BlockPartRotation)null, true));
+					list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(1, 15, 0), new Vector3f(15f, 16F, 0), faceU, centersprite, EnumFacing.NORTH, rot, (BlockPartRotation)null, true));
 				}
 				face.blockFaceUV.uvs = top;
 				BlockPos posUW = state.pos.offset(EnumFacing.UP).offset(EnumFacing.WEST);
@@ -291,7 +292,7 @@ public class ModelGlass extends DynamicItemAndBlockModel {
 				list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(0, 0, 0), new Vector3f(16f, 1F, 0), face, sprite, EnumFacing.NORTH, rot, (BlockPartRotation)null, true));
 			} else {
 				if(renderCenter()){
-					list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(1, 0, 0), new Vector3f(15f, 1F, 0), faceU, sprite, EnumFacing.NORTH, rot, (BlockPartRotation)null, true));
+					list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(1, 0, 0), new Vector3f(15f, 1F, 0), faceU, centersprite, EnumFacing.NORTH, rot, (BlockPartRotation)null, true));
 				}
 				face.blockFaceUV.uvs = bottom;
 				BlockPos posDW = state.pos.offset(EnumFacing.DOWN).offset(EnumFacing.WEST);
@@ -305,7 +306,7 @@ public class ModelGlass extends DynamicItemAndBlockModel {
 				list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(15f, 0, 0), new Vector3f(16f, 16F, 0), face, sprite, EnumFacing.NORTH, rot, (BlockPartRotation)null, true));
 			} else {
 				if(renderCenter()){
-					list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(15f, 1, 0), new Vector3f(16f, 15F, 0), faceU, sprite, EnumFacing.NORTH, rot, (BlockPartRotation)null, true));
+					list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(15f, 1, 0), new Vector3f(16f, 15F, 0), faceU, centersprite, EnumFacing.NORTH, rot, (BlockPartRotation)null, true));
 				}
 			}
 			
@@ -314,15 +315,15 @@ public class ModelGlass extends DynamicItemAndBlockModel {
 				list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(0, 0, 0), new Vector3f(1f, 16F, 0), face, sprite, EnumFacing.NORTH, rot, (BlockPartRotation)null, true));
 			}else {
 				if(renderCenter()){
-					list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(0f, 1, 0), new Vector3f(1f, 15F, 0), faceU, sprite, EnumFacing.NORTH, rot, (BlockPartRotation)null, true));
+					list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(0f, 1, 0), new Vector3f(1f, 15F, 0), faceU, centersprite, EnumFacing.NORTH, rot, (BlockPartRotation)null, true));
 				}
 			}
 			
 			if(renderCenter()){
-				if(!showR && !showU)list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(0f, 15, 0), new Vector3f(1f, 16F, 0), faceU, sprite, EnumFacing.NORTH, rot, (BlockPartRotation)null, true));
-				if(!showL && !showU)list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(15f, 15, 0), new Vector3f(16f, 16F, 0), faceU, sprite, EnumFacing.NORTH, rot, (BlockPartRotation)null, true));
-				if(!showR && !showD)list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(0f, 0, 0), new Vector3f(1f, 1F, 0), faceU, sprite, EnumFacing.NORTH, rot, (BlockPartRotation)null, true));
-				if(!showL && !showD)list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(15f, 0, 0), new Vector3f(16f, 1F, 0), faceU, sprite, EnumFacing.NORTH, rot, (BlockPartRotation)null, true));
+				if(!showR && !showU)list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(0f, 15, 0), new Vector3f(1f, 16F, 0), faceU, centersprite, EnumFacing.NORTH, rot, (BlockPartRotation)null, true));
+				if(!showL && !showU)list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(15f, 15, 0), new Vector3f(16f, 16F, 0), faceU, centersprite, EnumFacing.NORTH, rot, (BlockPartRotation)null, true));
+				if(!showR && !showD)list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(0f, 0, 0), new Vector3f(1f, 1F, 0), faceU, centersprite, EnumFacing.NORTH, rot, (BlockPartRotation)null, true));
+				if(!showL && !showD)list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(15f, 0, 0), new Vector3f(16f, 1F, 0), faceU, centersprite, EnumFacing.NORTH, rot, (BlockPartRotation)null, true));
 			}
 		}
 		
@@ -345,7 +346,7 @@ public class ModelGlass extends DynamicItemAndBlockModel {
 				list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(0, 15, 16f), new Vector3f(16f, 16F, 16f), face, sprite, EnumFacing.SOUTH, rot, (BlockPartRotation)null, true));
 			} else {
 				if(renderCenter()){
-					list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(1, 15, 16f), new Vector3f(15f, 16F, 16f), faceU, sprite, EnumFacing.SOUTH, rot, (BlockPartRotation)null, true));
+					list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(1, 15, 16f), new Vector3f(15f, 16F, 16f), faceU, centersprite, EnumFacing.SOUTH, rot, (BlockPartRotation)null, true));
 				}
 				face.blockFaceUV.uvs = top;
 				BlockPos posUW = state.pos.offset(EnumFacing.UP).offset(EnumFacing.WEST);
@@ -359,7 +360,7 @@ public class ModelGlass extends DynamicItemAndBlockModel {
 				list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(0, 0, 16f), new Vector3f(16f, 1F, 16f), face, sprite, EnumFacing.SOUTH, rot, (BlockPartRotation)null, true));
 			} else {
 				if(renderCenter()){
-					list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(1, 0, 16f), new Vector3f(15f, 1F, 16f), faceU, sprite, EnumFacing.SOUTH, rot, (BlockPartRotation)null, true));
+					list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(1, 0, 16f), new Vector3f(15f, 1F, 16f), faceU, centersprite, EnumFacing.SOUTH, rot, (BlockPartRotation)null, true));
 				}
 				face.blockFaceUV.uvs = bottom;
 				BlockPos posDW = state.pos.offset(EnumFacing.DOWN).offset(EnumFacing.WEST);
@@ -373,7 +374,7 @@ public class ModelGlass extends DynamicItemAndBlockModel {
 				list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(0, 0, 16f), new Vector3f(1f, 16F, 16f), face, sprite, EnumFacing.SOUTH, rot, (BlockPartRotation)null, true));
 			} else {
 				if(renderCenter()){
-					list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(0, 1, 16f), new Vector3f(1f, 15F, 16f), faceU, sprite, EnumFacing.SOUTH, rot, (BlockPartRotation)null, true));
+					list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(0, 1, 16f), new Vector3f(1f, 15F, 16f), faceU, centersprite, EnumFacing.SOUTH, rot, (BlockPartRotation)null, true));
 				}
 			}
 			
@@ -382,15 +383,15 @@ public class ModelGlass extends DynamicItemAndBlockModel {
 				list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(15f, 0, 16f), new Vector3f(16f, 16F, 16f), face, sprite, EnumFacing.SOUTH, rot, (BlockPartRotation)null, true));
 			}else {
 				if(renderCenter()){
-					list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(15f, 1, 16f), new Vector3f(16f, 15F, 16f), faceU, sprite, EnumFacing.SOUTH, rot, (BlockPartRotation)null, true));
+					list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(15f, 1, 16f), new Vector3f(16f, 15F, 16f), faceU, centersprite, EnumFacing.SOUTH, rot, (BlockPartRotation)null, true));
 				}
 			}
 			
 			if(renderCenter()){
-				if(!showR && !showU)list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(15f, 15, 16f), new Vector3f(16f, 16F, 16), faceU, sprite, EnumFacing.SOUTH, rot, (BlockPartRotation)null, true));
-				if(!showL && !showU)list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(0f, 15, 16f), new Vector3f(1f, 16F, 16), faceU, sprite, EnumFacing.SOUTH, rot, (BlockPartRotation)null, true));
-				if(!showR && !showD)list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(15f, 0, 16f), new Vector3f(16f, 1F, 16), faceU, sprite, EnumFacing.SOUTH, rot, (BlockPartRotation)null, true));
-				if(!showL && !showD)list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(0f, 0, 16f), new Vector3f(1f, 1F, 16), faceU, sprite, EnumFacing.SOUTH, rot, (BlockPartRotation)null, true));
+				if(!showR && !showU)list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(15f, 15, 16f), new Vector3f(16f, 16F, 16), faceU, centersprite, EnumFacing.SOUTH, rot, (BlockPartRotation)null, true));
+				if(!showL && !showU)list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(0f, 15, 16f), new Vector3f(1f, 16F, 16), faceU, centersprite, EnumFacing.SOUTH, rot, (BlockPartRotation)null, true));
+				if(!showR && !showD)list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(15f, 0, 16f), new Vector3f(16f, 1F, 16), faceU, centersprite, EnumFacing.SOUTH, rot, (BlockPartRotation)null, true));
+				if(!showL && !showD)list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(0f, 0, 16f), new Vector3f(1f, 1F, 16), faceU, centersprite, EnumFacing.SOUTH, rot, (BlockPartRotation)null, true));
 			}
 		}
 		
@@ -413,7 +414,7 @@ public class ModelGlass extends DynamicItemAndBlockModel {
 				list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(0, 15, 0), new Vector3f(0, 16F, 16f), face, sprite, EnumFacing.WEST, rot, (BlockPartRotation)null, true));
 			} else {
 				if(renderCenter()){
-					list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(0, 15, 1), new Vector3f(0, 16F, 15f), faceU, sprite, EnumFacing.WEST, rot, (BlockPartRotation)null, true));
+					list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(0, 15, 1), new Vector3f(0, 16F, 15f), faceU, centersprite, EnumFacing.WEST, rot, (BlockPartRotation)null, true));
 				}
 				face.blockFaceUV.uvs = top;
 				BlockPos posUN = state.pos.offset(EnumFacing.UP).offset(EnumFacing.NORTH);
@@ -427,7 +428,7 @@ public class ModelGlass extends DynamicItemAndBlockModel {
 				list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(0, 0, 0), new Vector3f(0, 1F, 16f), face, sprite, EnumFacing.WEST, rot, (BlockPartRotation)null, true));
 			} else {
 				if(renderCenter()){
-					list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(0, 0, 1), new Vector3f(0, 1F, 15f), faceU, sprite, EnumFacing.WEST, rot, (BlockPartRotation)null, true));
+					list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(0, 0, 1), new Vector3f(0, 1F, 15f), faceU, centersprite, EnumFacing.WEST, rot, (BlockPartRotation)null, true));
 				}
 				face.blockFaceUV.uvs = bottom;
 				BlockPos posDN = state.pos.offset(EnumFacing.DOWN).offset(EnumFacing.NORTH);
@@ -441,7 +442,7 @@ public class ModelGlass extends DynamicItemAndBlockModel {
 				list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(0, 0, 0f), new Vector3f(0, 16F, 1f), face, sprite, EnumFacing.WEST, rot, (BlockPartRotation)null, true));
 			} else {
 				if(renderCenter()){
-					list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(0, 1, 0), new Vector3f(0, 15F, 1f), faceU, sprite, EnumFacing.WEST, rot, (BlockPartRotation)null, true));
+					list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(0, 1, 0), new Vector3f(0, 15F, 1f), faceU, centersprite, EnumFacing.WEST, rot, (BlockPartRotation)null, true));
 				}
 			}
 			
@@ -450,15 +451,15 @@ public class ModelGlass extends DynamicItemAndBlockModel {
 				list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(0, 0, 15f), new Vector3f(0, 16F, 16f), face, sprite, EnumFacing.WEST, rot, (BlockPartRotation)null, true));
 			} else {
 				if(renderCenter()){
-					list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(0, 1, 15F), new Vector3f(0, 15F, 16f), faceU, sprite, EnumFacing.WEST, rot, (BlockPartRotation)null, true));
+					list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(0, 1, 15F), new Vector3f(0, 15F, 16f), faceU, centersprite, EnumFacing.WEST, rot, (BlockPartRotation)null, true));
 				}
 			}
 			
 			if(renderCenter()){
-				if(!showL && !showU)list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(0, 15, 0), new Vector3f(0, 16F, 1f), faceU, sprite, EnumFacing.WEST, rot, (BlockPartRotation)null, true));
-				if(!showR && !showU)list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(0, 15, 15), new Vector3f(0, 16F, 16f), faceU, sprite, EnumFacing.WEST, rot, (BlockPartRotation)null, true));
-				if(!showL && !showD)list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(0, 0, 0), new Vector3f(0, 1F, 1f), faceU, sprite, EnumFacing.WEST, rot, (BlockPartRotation)null, true));
-				if(!showR && !showD)list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(0, 0, 15), new Vector3f(0, 1F, 16f), faceU, sprite, EnumFacing.WEST, rot, (BlockPartRotation)null, true));
+				if(!showL && !showU)list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(0, 15, 0), new Vector3f(0, 16F, 1f), faceU, centersprite, EnumFacing.WEST, rot, (BlockPartRotation)null, true));
+				if(!showR && !showU)list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(0, 15, 15), new Vector3f(0, 16F, 16f), faceU, centersprite, EnumFacing.WEST, rot, (BlockPartRotation)null, true));
+				if(!showL && !showD)list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(0, 0, 0), new Vector3f(0, 1F, 1f), faceU, centersprite, EnumFacing.WEST, rot, (BlockPartRotation)null, true));
+				if(!showR && !showD)list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(0, 0, 15), new Vector3f(0, 1F, 16f), faceU, centersprite, EnumFacing.WEST, rot, (BlockPartRotation)null, true));
 			}
 		}
 		
@@ -481,7 +482,7 @@ public class ModelGlass extends DynamicItemAndBlockModel {
 				list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(16f, 15, 0), new Vector3f(16f, 16F, 16f), face, sprite, EnumFacing.EAST, rot, (BlockPartRotation)null, true));
 			} else {
 				if(renderCenter()){
-					list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(16f, 15, 1), new Vector3f(16f, 16F, 15f), faceU, sprite, EnumFacing.EAST, rot, (BlockPartRotation)null, true));
+					list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(16f, 15, 1), new Vector3f(16f, 16F, 15f), faceU, centersprite, EnumFacing.EAST, rot, (BlockPartRotation)null, true));
 				}
 				face.blockFaceUV.uvs = top;
 				BlockPos posUN = state.pos.offset(EnumFacing.UP).offset(EnumFacing.NORTH);
@@ -495,7 +496,7 @@ public class ModelGlass extends DynamicItemAndBlockModel {
 				list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(16f, 0, 0), new Vector3f(16f, 1F, 16f), face, sprite, EnumFacing.EAST, rot, (BlockPartRotation)null, true));
 			} else {
 				if(renderCenter()){
-					list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(16f, 0, 1), new Vector3f(16f, 1F, 15f), faceU, sprite, EnumFacing.EAST, rot, (BlockPartRotation)null, true));
+					list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(16f, 0, 1), new Vector3f(16f, 1F, 15f), faceU, centersprite, EnumFacing.EAST, rot, (BlockPartRotation)null, true));
 				}
 				face.blockFaceUV.uvs = bottom;
 				BlockPos posDN = state.pos.offset(EnumFacing.DOWN).offset(EnumFacing.NORTH);
@@ -509,7 +510,7 @@ public class ModelGlass extends DynamicItemAndBlockModel {
 				list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(16f, 0, 15f), new Vector3f(16f, 16F, 16f), face, sprite, EnumFacing.EAST, rot, (BlockPartRotation)null, true));
 			} else {
 				if(renderCenter()){
-					list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(16f, 1, 15f), new Vector3f(16f, 15F, 16f), faceU, sprite, EnumFacing.EAST, rot, (BlockPartRotation)null, true));
+					list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(16f, 1, 15f), new Vector3f(16f, 15F, 16f), faceU, centersprite, EnumFacing.EAST, rot, (BlockPartRotation)null, true));
 				}
 			}
 			
@@ -518,21 +519,21 @@ public class ModelGlass extends DynamicItemAndBlockModel {
 				list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(16f, 0, 0f), new Vector3f(16f, 16F, 1f), face, sprite, EnumFacing.EAST, rot, (BlockPartRotation)null, true));
 			} else {
 				if(renderCenter()){
-					list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(16f, 1, 0f), new Vector3f(16f, 15F, 1f), faceU, sprite, EnumFacing.EAST, rot, (BlockPartRotation)null, true));
+					list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(16f, 1, 0f), new Vector3f(16f, 15F, 1f), faceU, centersprite, EnumFacing.EAST, rot, (BlockPartRotation)null, true));
 				}
 			}
 			
 			if(renderCenter()){
-				if(!showL && !showU)list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(16f, 15, 15), new Vector3f(16f, 16F, 16f), faceU, sprite, EnumFacing.EAST, rot, (BlockPartRotation)null, true));
-				if(!showR && !showU)list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(16f, 15, 0), new Vector3f(16f, 16F, 1f), faceU, sprite, EnumFacing.EAST, rot, (BlockPartRotation)null, true));
-				if(!showL && !showD)list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(16f, 0, 15), new Vector3f(16f, 1F, 16f), faceU, sprite, EnumFacing.EAST, rot, (BlockPartRotation)null, true));
-				if(!showR && !showD)list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(16f, 0, 0), new Vector3f(16f, 1F, 1f), faceU, sprite, EnumFacing.EAST, rot, (BlockPartRotation)null, true));
+				if(!showL && !showU)list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(16f, 15, 15), new Vector3f(16f, 16F, 16f), faceU, centersprite, EnumFacing.EAST, rot, (BlockPartRotation)null, true));
+				if(!showR && !showU)list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(16f, 15, 0), new Vector3f(16f, 16F, 1f), faceU, centersprite, EnumFacing.EAST, rot, (BlockPartRotation)null, true));
+				if(!showL && !showD)list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(16f, 0, 15), new Vector3f(16f, 1F, 16f), faceU, centersprite, EnumFacing.EAST, rot, (BlockPartRotation)null, true));
+				if(!showR && !showD)list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(16f, 0, 0), new Vector3f(16f, 1F, 1f), faceU, centersprite, EnumFacing.EAST, rot, (BlockPartRotation)null, true));
 			}
 		}
 		
 		return list;
 	}
-
+	
 	@Override
 	public boolean isAmbientOcclusion() {
 		return false;
@@ -562,6 +563,10 @@ public class ModelGlass extends DynamicItemAndBlockModel {
 	}
 	
 	public TextureAtlasSprite getTexture(GlassType type){
+		return RenderUtil.getSprite("crystalmod:blocks/crystal_"+type.getName()+"_glass");
+	}
+
+	public TextureAtlasSprite getCenterTexture(GlassType type) {
 		return RenderUtil.getSprite("crystalmod:blocks/crystal_"+type.getName()+"_glass");
 	}
 	

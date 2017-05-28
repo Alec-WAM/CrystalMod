@@ -24,7 +24,7 @@ public class CrystalFurnaceManager {
 				return recipeMap.get(stack);
 			}
 		}
-		if(FurnaceRecipes.instance().getSmeltingResult(input) !=null){
+		if(ItemStackTools.isValid(FurnaceRecipes.instance().getSmeltingResult(input))){
 			ItemStack output = FurnaceRecipes.instance().getSmeltingResult(input).copy();
 	    	int i = 1600;
 	    	if ((output.getItem() instanceof ItemFood)) {

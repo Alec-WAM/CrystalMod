@@ -3,6 +3,7 @@ package alec_wam.CrystalMod.network.packets;
 import java.io.IOException;
 
 import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.api.enhancements.KnowledgeManager;
 import alec_wam.CrystalMod.capability.ExtendedPlayer;
 import alec_wam.CrystalMod.capability.ExtendedPlayerProvider;
 import alec_wam.CrystalMod.client.sound.ModSounds;
@@ -206,6 +207,9 @@ public class PacketEntityMessage extends AbstractPacketThreadsafe {
 			}
 			if(type.equalsIgnoreCase("GrappleDisconnect")){
 				GrappleHandler.receiveGrappleEnd(id, world, data.getInteger("HookID"));
+			}
+			if(type.equalsIgnoreCase("SyncKnowledge")){
+				KnowledgeManager.loadData(data);
 			}
 			if(entity instanceof IMessageHandler){
 				((IMessageHandler)entity).handleMessage(type, data, client);

@@ -63,7 +63,8 @@ public class EntityEnderChestMinecart extends EntityMinecart {
         return Blocks.ENDER_CHEST.getDefaultState();
     }
 	
-	public boolean processInitialInteract(EntityPlayer player, @Nullable ItemStack stack, EnumHand hand)
+	@Override
+	public boolean processInitialInteract(EntityPlayer player, EnumHand hand)
     {
         if(net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.event.entity.minecart.MinecartInteractEvent(this, player, hand))) return true;
         
@@ -72,7 +73,6 @@ public class EntityEnderChestMinecart extends EntityMinecart {
     		player.displayGUIChest(chest);
     		return true;
     	}
-        
         return true;
     }
 	

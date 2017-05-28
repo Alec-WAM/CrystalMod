@@ -37,6 +37,10 @@ public class ModelTintedGlass extends ModelGlass {
 		return RenderUtil.getSprite("crystalmod:blocks/crystal_"+type.getName()+"_glass_tinted");
 	}
 	
+	public TextureAtlasSprite getCenterTexture(GlassType type){
+		return RenderUtil.getSprite("crystalmod:blocks/crystal_"+type.getName()+"_glass_tinted");
+	}
+	
 	@Override
 	public net.minecraft.client.renderer.block.model.IBakedModel handleBlockState(IBlockState state, EnumFacing side, long rand) {
 		return (state !=null && state instanceof GlassBlockState) ? new ModelTintedGlass((GlassBlockState)state) : null;

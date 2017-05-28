@@ -71,6 +71,8 @@ public class Config {
     public static boolean retrogenClusters = false;
     public static int clusterSpawnChance = 24;
     public static int clusterSpawnTries = 8;
+
+	public static int enhancementBookRarity = 20;
     
 	public static ItemDropType mobHeadType = ItemDropType.KILLED;
 	public static int mobHeadDropChance = 200;
@@ -255,6 +257,9 @@ public class Config {
     	playerHeadType = ItemDropType.values()[pheadtype];
     	playerHeadDropChance = cfg.get(CATEGORY_ENTITY, "playerHeadDropChance", playerHeadDropChance, "1 in this chance of dropping  (-1 = no heads)").getInt(playerHeadDropChance);
     
+    	enhancementBookRarity = cfg.get(CATEGORY_WORLD, "enhancementBookRarity", enhancementBookRarity,
+                "Rarity of Enhancement Books in chest loot").getInt(20);
+    	
     	hoeStrings = cfg.get(CATEGORY_MINIONS, "Hoes", hoeStrings, "Use this to specify items that are hoes. Use the registry name (eg. modid:name).").getStringList();
     
     	//Machines

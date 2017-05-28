@@ -151,7 +151,8 @@ public abstract class EntityCrystalChestMinecartBase extends EntityMinecartChest
         }
     }
 	
-	public boolean processInitialInteract(EntityPlayer player, @Nullable ItemStack stack, EnumHand hand)
+	@Override
+	public boolean processInitialInteract(EntityPlayer player, EnumHand hand)
     {
         if(net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.event.entity.minecart.MinecartInteractEvent(this, player, hand))) return true;
         if (!this.getEntityWorld().isRemote)

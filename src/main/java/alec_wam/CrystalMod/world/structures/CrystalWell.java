@@ -18,6 +18,7 @@ import alec_wam.CrystalMod.items.ItemCrystal.CrystalType;
 import alec_wam.CrystalMod.items.ItemCrystalSap.SapType;
 import alec_wam.CrystalMod.items.ItemIngot.IngotType;
 import alec_wam.CrystalMod.items.ModItems;
+import alec_wam.CrystalMod.items.tools.ItemEnhancementKnowledge;
 import alec_wam.CrystalMod.tiles.chest.BlockCrystalChest;
 import alec_wam.CrystalMod.tiles.chest.CrystalChestType;
 import alec_wam.CrystalMod.tiles.chest.TileEntityBlueCrystalChest;
@@ -177,7 +178,6 @@ public class CrystalWell {
 		setBlockAndNotifyAdequately(world, pos.offset(EnumFacing.EAST, 1).offset(EnumFacing.SOUTH, 2).offset(EnumFacing.DOWN, depth), bricks, false);
 		setBlockAndNotifyAdequately(world, pos.offset(EnumFacing.EAST, 2).offset(EnumFacing.SOUTH, 1).offset(EnumFacing.DOWN, depth), bricks, false);
 		
-		//TODO Random Loot
 		BlockPos chestPos = pos.offset(EnumFacing.EAST, 2).offset(EnumFacing.SOUTH, 2).offset(EnumFacing.DOWN, depth);
 		setBlockAndNotifyAdequately(world, chestPos, chest, true);
 		TileEntity tile = world.getTileEntity(chestPos);
@@ -284,6 +284,7 @@ public class CrystalWell {
 		}
 		
 		stacks.add(new ItemStack(ModItems.guide));
+		stacks.add(ItemEnhancementKnowledge.createRandomBook(rand));
 		
 		ItemStack stack = ItemStackTools.getEmptyStack();
 		stack = stacks.get(MathHelper.getInt(rand, 0, stacks.size()-1));

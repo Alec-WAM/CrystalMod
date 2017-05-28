@@ -94,7 +94,6 @@ public class NetworkInventoryHDDInterface implements INetworkInventory {
 		return -1;
 	}
 
-	//TODO Add Fluid HDD
 	@Override
 	public FluidStackList getFluids() {
 		return null;

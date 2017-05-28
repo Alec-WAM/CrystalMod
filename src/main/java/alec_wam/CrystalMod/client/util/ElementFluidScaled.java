@@ -74,7 +74,7 @@ public void drawBackground(int x, int y, float f)
 }
 
 public void drawForeground(int x, int y) {
-
+	if(texture == null)return;
     GlStateManager.color(1, 1, 1, 1);
     Minecraft.getMinecraft().renderEngine.bindTexture(texture);
     drawTexturedModalRect(posX, posY, 24, 0, sizeX, sizeY);
