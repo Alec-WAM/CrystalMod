@@ -1,28 +1,30 @@
 package alec_wam.CrystalMod.tiles.tooltable;
 
-import java.awt.Color;
 import java.io.IOException;
 import java.util.List;
+
+import org.lwjgl.opengl.GL11;
 
 import com.google.common.collect.Lists;
 
 import alec_wam.CrystalMod.api.enhancements.EnhancementManager;
 import alec_wam.CrystalMod.api.enhancements.IEnhancement;
 import alec_wam.CrystalMod.api.enhancements.KnowledgeManager;
+import alec_wam.CrystalMod.handler.ClientEventHandler;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.Util;
-import alec_wam.CrystalMod.util.client.RenderUtil;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.items.wrapper.InvWrapper;
 
@@ -54,11 +56,6 @@ public class GuiEnhancementTable extends GuiContainer {
 				}
 				
 				x+=18;
-				
-				/*if(i > 0 && Util.isMultipleOf(i, 6)){
-					x = 30;
-					y+=18;
-				}*/
 			}
 		}
 		
@@ -77,10 +74,19 @@ public class GuiEnhancementTable extends GuiContainer {
 		}
 	}
 	
+	public int beamTick;
+	
+	@Override
+	public void updateScreen(){
+		super.updateScreen();
+		this.beamTick++;
+	}
+	
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY)
     {
 		IEnhancement hoverEnhancement = null;
+		int hoverSlot = -1;
 		List<IEnhancement> displayList = getEnhancements();
 		ItemStack tool = table.getStackInSlot(0);
 		//drawRect(80, 20, 98, 38, Color.GRAY.getRGB());
@@ -95,7 +101,9 @@ public class GuiEnhancementTable extends GuiContainer {
 				if(i+offset >= displayList.size())continue;
 				IEnhancement enhancement = displayList.get(i+offset);
 				if(isPointInRegion(x, y, 16, 16, mouseX, mouseY)){
+					hoverSlot = i;
 					hoverEnhancement = enhancement;
+					/*GlStateManager.pushMatrix();
 					GlStateManager.disableLighting();
 	                GlStateManager.disableDepth();
 	                GlStateManager.colorMask(true, true, true, false);
@@ -103,6 +111,7 @@ public class GuiEnhancementTable extends GuiContainer {
 	                GlStateManager.colorMask(true, true, true, true);
 	                GlStateManager.enableLighting();
 	                GlStateManager.enableDepth();
+	                GlStateManager.popMatrix();*/
 				}
 				ItemStack stack = enhancement.getDisplayItem();
 				if(ItemStackTools.isValid(stack)){
@@ -119,7 +128,8 @@ public class GuiEnhancementTable extends GuiContainer {
 			        if(ItemStackTools.isValid(tool)){
 			        	if(enhancement.isApplied(tool)){
 			        		//Green Tint
-			        		GlStateManager.disableLighting();
+			        		GlStateManager.pushMatrix();
+							GlStateManager.disableLighting();
 			                GlStateManager.disableDepth();
 			                GlStateManager.colorMask(true, true, true, false);
 			                Tessellator tessellator = Tessellator.getInstance();
@@ -139,6 +149,7 @@ public class GuiEnhancementTable extends GuiContainer {
 			                GlStateManager.colorMask(true, true, true, true);
 			                GlStateManager.enableLighting();
 			                GlStateManager.enableDepth();
+			                GlStateManager.popMatrix();							
 			        	}
 			        }
 			        
@@ -146,11 +157,6 @@ public class GuiEnhancementTable extends GuiContainer {
 				}
 				
 				x+=18;
-				
-				/*if(i > 0 && Util.isMultipleOf(i, 6)){
-					x = 30;
-					y+=18;
-				}*/
 			}
 		}
 		
@@ -192,6 +198,73 @@ public class GuiEnhancementTable extends GuiContainer {
 					}
 				}
 			}
+		}
+		
+
+		
+		if(hoverSlot > -1){
+			GlStateManager.pushMatrix();
+			GlStateManager.pushAttrib();
+			
+			GlStateManager.disableTexture2D();
+	        GlStateManager.disableLighting();
+	        
+	        //GlStateManager.enableBlend();
+	        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 200, 200);
+	        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);
+	        
+	        VertexBuffer renderer =Tessellator.getInstance().getBuffer();
+
+			double size = 1.0;
+			boolean rev = false;
+			if(hoverSlot == 0){
+				GlStateManager.translate(76, 30, 0);
+				GlStateManager.rotate(45, 0, 0, 1);
+				size=2.5;
+			}
+			if(hoverSlot == 1){
+				GlStateManager.translate(82, 38, 0);
+				GlStateManager.rotate(35, 0, 0, 1);
+				size=1.5;
+			}
+			if(hoverSlot == 2){
+				GlStateManager.translate(88, 36, 0);
+				size=1.5;
+			}
+			if(hoverSlot == 3){
+				rev = true;
+				GlStateManager.translate(95, 38, 0);
+				GlStateManager.rotate(-30, 0, 0, 1);
+				size=1.5;
+			}
+			if(hoverSlot == 4){
+				rev = true;
+				GlStateManager.translate(98, 33, 0);
+				GlStateManager.rotate(-45, 0, 0, 1);
+				size=2.3;
+			}
+			
+			GlStateManager.scale(0.5, 0.5, 0.5);
+			renderer.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION_COLOR);
+			double offset = 10.0d;
+			double accuracy = 0.0001;
+			
+			double time = beamTick * 0.35;
+			
+			for(double i = 0; i < (Math.PI*size); i+=accuracy){
+				double x = i*offset;
+				double y = rev ? (MathHelper.cos(((float)i)+(float)time)*offset) : (MathHelper.sin(((float)i)+(float)time)*offset);
+				renderer.pos(y, x, 0).color(1F, 0.65F, 1F, 0.3F).endVertex();
+			}
+			
+			Tessellator.getInstance().draw();
+
+			//GlStateManager.disableBlend();
+	        GlStateManager.enableLighting();
+	        GlStateManager.enableTexture2D();
+			
+			GlStateManager.popMatrix();
+			GlStateManager.popAttrib();
 		}
     }
 	

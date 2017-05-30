@@ -314,7 +314,7 @@ public class ModCrafting {
 		addShapedOreRecipe(new ItemStack(ModBlocks.crystalWorkbench, 1, WorkbenchType.GREEN.getMeta()), new Object[]{"###", "#W#", "###", '#', greenIngot, 'W', "workbench"});
 		addShapedOreRecipe(new ItemStack(ModBlocks.crystalWorkbench, 1, WorkbenchType.DARK.getMeta()), new Object[]{"###", "#W#", "###", '#', darkIngot, 'W', "workbench"});
 
-		addShapedOreRecipe(new ItemStack(ModBlocks.enhancementTable), new Object[]{"#A#", "IWI", "#I#", '#', dIronPlate, 'I', "ingotIron", 'W', "workbench", 'A', Blocks.ANVIL});
+		addShapedOreRecipe(new ItemStack(ModBlocks.enhancementTable), new Object[]{"#I#", "IWI", "#I#", '#', Items.ENCHANTED_BOOK, 'I', purePlate, 'W', new ItemStack(ModBlocks.crystalWorkbench, 1, WorkbenchType.DARK.getMeta())});
 		
 		ItemStack pipeEStorage = new ItemStack(ModBlocks.crystalPipe, 1, PipeType.ESTORAGE.getMeta());
 		
