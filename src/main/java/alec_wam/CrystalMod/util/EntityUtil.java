@@ -66,6 +66,10 @@ public class EntityUtil {
 	    return new Vector3d(lv.xCoord, lv.yCoord, lv.zCoord);
 	}
 	
+	public static RayTraceResult getPlayerLookedObject(EntityPlayer entity){
+        return getEntityLookedObject(entity, (float)(CrystalMod.proxy.getReachDistanceForPlayer(entity)));
+    }
+	
 	public static RayTraceResult getEntityLookedObject(EntityLivingBase entity){
         return getEntityLookedObject(entity, (float)(4.5));
     }

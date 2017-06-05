@@ -16,6 +16,7 @@ import alec_wam.CrystalMod.proxy.ClientProxy;
 import alec_wam.CrystalMod.tiles.cluster.RenderTileCrystalCluster;
 import alec_wam.CrystalMod.tiles.machine.INBTDrop;
 import alec_wam.CrystalMod.util.BlockUtil;
+import alec_wam.CrystalMod.util.EntityUtil;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
@@ -312,6 +313,27 @@ public class BlockJar extends BlockContainer implements ICustomModel {
     {
 		super.onBlockHarvested(world, pos, state, player);
     }
+	
+	@Override
+	public void onBlockClicked(World worldIn, BlockPos pos, EntityPlayer playerIn)
+    {
+		TileEntity tile = worldIn.getTileEntity(pos);
+		if(tile == null || !(tile instanceof TileJar)) return;
+		TileJar jar = (TileJar)tile;
+		ItemStack held = playerIn.getHeldItemMainhand();
+		if(ItemStackTools.isValid(held) && held.getItem() == Items.ITEM_FRAME){
+			RayTraceResult ray = EntityUtil.getPlayerLookedObject(playerIn);
+			if(ray.sideHit !=null){
+				if(jar.hasLabel(ray.sideHit)){
+					jar.setHasLabel(ray.sideHit, false);
+					if(!playerIn.capabilities.isCreativeMode){
+						ItemUtil.dropItemOnSide(worldIn, pos, new ItemStack(Items.ITEM_FRAME), ray.sideHit);
+					}
+					BlockUtil.markBlockForUpdate(worldIn, pos);
+				}
+			}
+		}
+    }	
 	
 	public static final String TILE_NBT_STACK = "TileData";
 	

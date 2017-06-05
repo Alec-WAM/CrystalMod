@@ -1413,4 +1413,33 @@ public class ItemUtil {
 		return list;
 	}
 
+	public static void dropItemOnSide(World worldIn, BlockPos pos, ItemStack itemStack, EnumFacing sideHit) {
+		double x = pos.getX() + 0.5;
+		double y = pos.getY() + 0.5;
+		double z = pos.getZ() + 0.5;
+		
+		switch(sideHit){
+			case UP : {
+				y+=0.75D;
+			}
+			case DOWN : {
+				y-=0.75D;
+			}
+			default : case NORTH : {
+				z-=0.75D;
+			}
+			case SOUTH : {
+				z+=0.75D;
+			}
+			case WEST : {
+				x-=0.75D;
+			}
+			case EAST : {
+				x+=0.75D;
+			}
+		}
+		
+		spawnItemInWorldWithoutMotion(new EntityItem(worldIn, x, y, z, itemStack));
+	}
+
 }
