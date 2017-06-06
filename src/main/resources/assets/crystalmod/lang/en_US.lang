@@ -299,16 +299,22 @@ tile.crystalmod.crystalblock.red.name=Block of Red Crystal
 tile.crystalmod.crystalblock.green.name=Block of Green Crystal
 tile.crystalmod.crystalblock.dark.name=Block of Dark Crystal
 tile.crystalmod.crystalblock.pure.name=Block of Pure Crystal
-tile.crystalmod.crystalblock.blue_chiseled.name=Blue Crystal Chiseled Block
-tile.crystalmod.crystalblock.red_chiseled.name=Red Crystal Chiseled Block
-tile.crystalmod.crystalblock.green_chiseled.name=Green Crystal Chiseled Block
-tile.crystalmod.crystalblock.dark_chiseled.name=Dark Crystal Chiseled Block
-tile.crystalmod.crystalblock.pure_chiseled.name=Pure Crystal Chiseled Block
+tile.crystalmod.crystalblock.blue_chiseled.name=Chiseled Blue Crystal Block
+tile.crystalmod.crystalblock.red_chiseled.name=Chiseled Red CrystalBlock
+tile.crystalmod.crystalblock.green_chiseled.name=Chiseled Green CrystalBlock
+tile.crystalmod.crystalblock.dark_chiseled.name=Chiseled Dark CrystalBlock
+tile.crystalmod.crystalblock.pure_chiseled.name=Chiseled Pure Crystal Block
 tile.crystalmod.crystalblock.blue_brick.name=Blue Crystal Bricks
 tile.crystalmod.crystalblock.red_brick.name=Red Crystal Bricks
 tile.crystalmod.crystalblock.green_brick.name=Green Crystal Bricks
 tile.crystalmod.crystalblock.dark_brick.name=Dark Crystal Bricks
 tile.crystalmod.crystalblock.pure_brick.name=Pure Crystal Bricks
+tile.crystalmod.etchedcrystalblock.blue.name=Etched Blue Crystal Block
+tile.crystalmod.etchedcrystalblock.red.name=Etched Red Crystal Block
+tile.crystalmod.etchedcrystalblock.green.name=Etched Green Crystal Block
+tile.crystalmod.etchedcrystalblock.dark.name=Etched Dark Crystal Block
+tile.crystalmod.etchedcrystalblock.pure.name=Etched Pure Crystal Block
+
 
 tile.crystalmod.crystalglass.blue.name=Blue Crystal Glass
 tile.crystalmod.crystalglass.red.name=Red Crystal Glass

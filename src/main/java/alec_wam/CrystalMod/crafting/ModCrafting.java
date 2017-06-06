@@ -16,6 +16,7 @@ import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.blocks.BlockCompressed.CompressedBlockType;
 import alec_wam.CrystalMod.blocks.crops.material.ModCrops;
 import alec_wam.CrystalMod.blocks.glass.BlockCrystalGlass.GlassType;
+import alec_wam.CrystalMod.crafting.recipes.ChisledBlockRecipe;
 import alec_wam.CrystalMod.crafting.recipes.CustomToolRepairRecipe;
 import alec_wam.CrystalMod.crafting.recipes.RecipeSuperTorchAdd;
 import alec_wam.CrystalMod.crafting.recipes.ShapedNBTCopy;
@@ -112,6 +113,7 @@ public class ModCrafting {
 		GameRegistry.addRecipe(new RecipeSuperTorchAdd());
 		GameRegistry.addRecipe(new RecipeWirelessChestMinecart());
 		GameRegistry.addRecipe(new CustomToolRepairRecipe());
+		GameRegistry.addRecipe(new ChisledBlockRecipe());
 		BatHelper.addBatCrafting();
 		
 		ItemStack blueCrystal = new ItemStack(ModItems.crystals, 1, CrystalType.BLUE.getMetadata());

@@ -190,6 +190,7 @@ public class ModBlocks {
 	public static BlockCrystal crystal;
 	public static BlockCrystalOre crystalOre;
 	public static BlockCrystalIngot crystalIngot;
+	public static BlockEtchedCrystal crystalEtched;
 	public static BlockCrystalGlass crystalGlass;
 	public static BlockTintedCrystalGlass crystalGlassTinted;
 	public static BlockPaintedCrystalGlass crystalGlassPainted;
@@ -277,10 +278,9 @@ public class ModBlocks {
 	
 	public static void init() {
 		crystal = registerEnumBlock(new BlockCrystal(), "crystalblock");
-		
-		crystalOre = registerEnumBlock(new BlockCrystalOre(), "crystalore");
-		
-		crystalIngot = registerEnumBlock(new BlockCrystalIngot(), "crystalingotblock");
+		crystalOre = registerEnumBlock(new BlockCrystalOre(), "crystalore");		
+		crystalIngot = registerEnumBlock(new BlockCrystalIngot(), "crystalingotblock");		
+		crystalEtched = registerEnumBlock(new BlockEtchedCrystal(), "etchedcrystalblock");
 		
 		crystalGlass = registerEnumBlock(new BlockCrystalGlass(), "crystalglass");
 		crystalGlassTinted = registerEnumBlock(new BlockTintedCrystalGlass(), "crystalglasstinted");

@@ -149,12 +149,6 @@ public class CauldronRecipeManager {
 
 		addRecipe(new ItemStack(ModBlocks.crystalGlassTinted, 1, GlassType.PURE.getMeta()), new FluidStack(ModFluids.fluidPureCrystal, 10), new ItemStack(ModBlocks.crystalGlassPainted, 1, GlassType.PURE.getMeta()));
 
-		addRecipe(new ItemStack(Blocks.QUARTZ_BLOCK, 1, 1), new FluidStack(ModFluids.fluidBlueCrystal, 400), new ItemStack(ModBlocks.crystal, 1, CrystalBlockType.BLUE_CHISELED.getMeta()));
-		addRecipe(new ItemStack(Blocks.QUARTZ_BLOCK, 1, 1), new FluidStack(ModFluids.fluidRedCrystal, 400), new ItemStack(ModBlocks.crystal, 1, CrystalBlockType.RED_CHISELED.getMeta()));
-		addRecipe(new ItemStack(Blocks.QUARTZ_BLOCK, 1, 1), new FluidStack(ModFluids.fluidGreenCrystal, 400), new ItemStack(ModBlocks.crystal, 1, CrystalBlockType.GREEN_CHISELED.getMeta()));
-		addRecipe(new ItemStack(Blocks.QUARTZ_BLOCK, 1, 1), new FluidStack(ModFluids.fluidDarkCrystal, 400), new ItemStack(ModBlocks.crystal, 1, CrystalBlockType.DARK_CHISELED.getMeta()));
-		addRecipe(new ItemStack(Blocks.QUARTZ_BLOCK, 1, 1), new FluidStack(ModFluids.fluidPureCrystal, 400), new ItemStack(ModBlocks.crystal, 1, CrystalBlockType.PURE_CHISELED.getMeta()));
-
 		addRecipe(new ItemStack(Blocks.STONEBRICK), new FluidStack(ModFluids.fluidBlueCrystal, 100), new ItemStack(ModBlocks.crystal, 1, CrystalBlockType.BLUE_BRICK.getMeta()));
 		addRecipe(new ItemStack(Blocks.STONEBRICK), new FluidStack(ModFluids.fluidRedCrystal, 100), new ItemStack(ModBlocks.crystal, 1, CrystalBlockType.RED_BRICK.getMeta()));
 		addRecipe(new ItemStack(Blocks.STONEBRICK), new FluidStack(ModFluids.fluidGreenCrystal, 100), new ItemStack(ModBlocks.crystal, 1, CrystalBlockType.GREEN_BRICK.getMeta()));
