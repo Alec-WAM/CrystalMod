@@ -165,7 +165,7 @@ public class BlockJar extends BlockContainer implements ICustomModel {
 				BlockUtil.markBlockForUpdate(world, pos);
 				return true;
 			}
-			else if(held.getItem() == Items.ITEM_FRAME){
+			else if(held.getItem() == Items.ITEM_FRAME && facing.getAxis().isHorizontal()){
 				if(!jar.hasLabel(facing)){
 					jar.setHasLabel(facing, true);
 					if(!player.capabilities.isCreativeMode){

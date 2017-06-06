@@ -15,6 +15,7 @@ public class ItemRenderDragonWings implements ICustomItemRenderer {
     
 	@Override
 	public void render(ItemStack stack) {
+		//TODO Fix Item Frame Rendering
 		GlStateManager.pushMatrix();
     	Minecraft.getMinecraft().getTextureManager().bindTexture(enderDragonTextures);
     	GlStateManager.pushMatrix();

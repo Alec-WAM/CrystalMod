@@ -168,6 +168,9 @@ public class RenderTileCrystalCluster extends TileEntitySpecialRenderer<TileCrys
 					GlStateManager.scale(1.2, 1.2, 1.2);
 					GlStateManager.translate(0, -0.4, 0);
 				}
+				if(lastTransform == TransformType.FIXED){
+					GlStateManager.translate(0, -0.8, 0);
+				}
 				EnumClusterType type = EnumClusterType.values()[stack.getMetadata()];
 				Vector3d color = getColor(type);
 				renderCluster(data, health, color, type !=EnumClusterType.DARK);

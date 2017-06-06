@@ -65,71 +65,81 @@ public class RenderTileJar<T extends TileJar> extends TileEntitySpecialRenderer<
 			Minecraft.getMinecraft().getRenderManager().doRenderEntity(bullet, 0.0D, 0.0D, 0.0D, 0.0F, 0.0f, true);
 			GlStateManager.popMatrix();
 		}
-		else if(potion !=PotionTypes.EMPTY && potionCount > 0){
-			Vector3f color = getColorFromPotion(potion);
-			if(color !=null && pass == 1){
-				Tessellator tessy = Tessellator.getInstance();
-				VertexBuffer render = tessy.getBuffer();
-				GlStateManager.pushMatrix();
-
-				GlStateManager.translate(x, y, z);
-				GlStateManager.enableCull();
-				GlStateManager.enableBlend();
-				GlStateManager.disableLighting();
-				GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+		else {
+			if(potion !=PotionTypes.EMPTY && potionCount > 0){
+				Vector3f color = getColorFromPotion(potion);
+				if(color !=null && pass == 1){
+					Tessellator tessy = Tessellator.getInstance();
+					VertexBuffer render = tessy.getBuffer();
+					GlStateManager.pushMatrix();
+	
+					GlStateManager.translate(x, y, z);
+					GlStateManager.enableCull();
+					GlStateManager.enableBlend();
+					GlStateManager.disableLighting();
+					GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+					
+					GlStateManager.disableTexture2D();
+					float red = color.x / 255f, green = color.y / 255f, blue = color.z / 255f;
+					float alpha = 0.65f;
+					GlStateManager.color(red, green, blue, alpha);
+					render.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+					final int MAX_LIGHT_X = 0xF000F0;
+					final int MAX_LIGHT_Y = 0xF000F0;
+	
+					
+					
+					float height = (0.8f/3.0f)*potionCount;
+					
+					render.pos(0.2, height, 0.2).tex(0, 0)/*.lightmap(MAX_LIGHT_X, MAX_LIGHT_Y)*/.endVertex();
+					render.pos(0.2, height, 0.8).tex(0, 0).endVertex();
+					render.pos(0.8, height, 0.8).tex(0, 0).endVertex();
+					render.pos(0.8, height, 0.2).tex(0, 0).endVertex();
+					
+					render.pos(0.8, 0.01, 0.2).tex(0, 0).endVertex();
+					render.pos(0.8, 0.01, 0.8).tex(0, 0).endVertex();
+					render.pos(0.2, 0.01, 0.8).tex(0, 0).endVertex();
+					render.pos(0.2, 0.01, 0.2).tex(0, 0).endVertex();
+					
+					render.pos(0.2, 0.01, 0.8).tex(0, 0).endVertex();
+					render.pos(0.8, 0.01, 0.8).tex(0, 0).endVertex();
+					render.pos(0.8, height, 0.8).tex(0, 0).endVertex();
+					render.pos(0.2, height, 0.8).tex(0, 0).endVertex();
+					
+					render.pos(0.2, 0.01, 0.2).tex(0, 0).endVertex();
+					render.pos(0.2, height, 0.2).tex(0, 0).endVertex();
+					render.pos(0.8, height, 0.2).tex(0, 0).endVertex();
+					render.pos(0.8, 0.01, 0.2).tex(0, 0).endVertex();
+					
+					render.pos(0.8, 0.01, 0.2).tex(0, 0).endVertex();
+					render.pos(0.8, height, 0.2).tex(0, 0).endVertex();
+					render.pos(0.8, height, 0.8).tex(0, 0).endVertex();
+					render.pos(0.8, 0.01, 0.8).tex(0, 0).endVertex();
+					
+					render.pos(0.2, 0.01, 0.2).tex(0, 0).endVertex();
+					render.pos(0.2, 0.01, 0.8).tex(0, 0).endVertex();
+					render.pos(0.2, height, 0.8).tex(0, 0).endVertex();
+					render.pos(0.2, height, 0.2).tex(0, 0).endVertex();
+					tessy.draw();
+	
+					GlStateManager.enableTexture2D();
+					GlStateManager.popMatrix();
+				}
 				
-				GlStateManager.disableTexture2D();
-				float red = color.x / 255f, green = color.y / 255f, blue = color.z / 255f;
-				float alpha = 0.65f;
-				GlStateManager.color(red, green, blue, alpha);
-				render.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-				final int MAX_LIGHT_X = 0xF000F0;
-				final int MAX_LIGHT_Y = 0xF000F0;
-
-				
-				
-				float height = (0.8f/3.0f)*potionCount;
-				
-				render.pos(0.2, height, 0.2).tex(0, 0)/*.lightmap(MAX_LIGHT_X, MAX_LIGHT_Y)*/.endVertex();
-				render.pos(0.2, height, 0.8).tex(0, 0).endVertex();
-				render.pos(0.8, height, 0.8).tex(0, 0).endVertex();
-				render.pos(0.8, height, 0.2).tex(0, 0).endVertex();
-				
-				render.pos(0.8, 0.01, 0.2).tex(0, 0).endVertex();
-				render.pos(0.8, 0.01, 0.8).tex(0, 0).endVertex();
-				render.pos(0.2, 0.01, 0.8).tex(0, 0).endVertex();
-				render.pos(0.2, 0.01, 0.2).tex(0, 0).endVertex();
-				
-				render.pos(0.2, 0.01, 0.8).tex(0, 0).endVertex();
-				render.pos(0.8, 0.01, 0.8).tex(0, 0).endVertex();
-				render.pos(0.8, height, 0.8).tex(0, 0).endVertex();
-				render.pos(0.2, height, 0.8).tex(0, 0).endVertex();
-				
-				render.pos(0.2, 0.01, 0.2).tex(0, 0).endVertex();
-				render.pos(0.2, height, 0.2).tex(0, 0).endVertex();
-				render.pos(0.8, height, 0.2).tex(0, 0).endVertex();
-				render.pos(0.8, 0.01, 0.2).tex(0, 0).endVertex();
-				
-				render.pos(0.8, 0.01, 0.2).tex(0, 0).endVertex();
-				render.pos(0.8, height, 0.2).tex(0, 0).endVertex();
-				render.pos(0.8, height, 0.8).tex(0, 0).endVertex();
-				render.pos(0.8, 0.01, 0.8).tex(0, 0).endVertex();
-				
-				render.pos(0.2, 0.01, 0.2).tex(0, 0).endVertex();
-				render.pos(0.2, 0.01, 0.8).tex(0, 0).endVertex();
-				render.pos(0.2, height, 0.8).tex(0, 0).endVertex();
-				render.pos(0.2, height, 0.2).tex(0, 0).endVertex();
-				tessy.draw();
-
-				GlStateManager.enableTexture2D();
-				GlStateManager.popMatrix();
-			}
-			
-			PotionEffect effect = potion.getEffects().isEmpty() ? null : potion.getEffects().get(0);
-			if(effect !=null && pass == 0){
-				for(EnumFacing face : EnumFacing.HORIZONTALS){
-					if(label.getOrDefault(face, false)){
-						renderPotionLabel(effect, x, y, z, face);
+				PotionEffect effect = potion.getEffects().isEmpty() ? null : potion.getEffects().get(0);
+				if(effect !=null && pass == 0){
+					for(EnumFacing face : EnumFacing.HORIZONTALS){
+						if(label.getOrDefault(face, false)){
+							renderPotionLabel(effect, x, y, z, face);
+						}
+					}
+				}
+			} else {
+				if(pass == 0){
+					for(EnumFacing face : EnumFacing.HORIZONTALS){
+						if(label.getOrDefault(face, false)){
+							renderPotionLabel(null, x, y, z, face);
+						}
 					}
 				}
 			}
@@ -182,7 +192,6 @@ public class RenderTileJar<T extends TileJar> extends TileEntitySpecialRenderer<
 	}
 	
 	public static void renderPotionLabel(PotionEffect effect, double x, double y, double z, EnumFacing side){
-		Potion potion = effect.getPotion();
 		GlStateManager.pushMatrix();
 		GlStateManager.translate(x, y, z);
 		if(side == EnumFacing.NORTH){
@@ -215,111 +224,116 @@ public class RenderTileJar<T extends TileJar> extends TileEntitySpecialRenderer<
 		render.pos(0.3, 0.6, potionZ).tex(itemframe.getMinU(), itemframe.getMinV()).endVertex();
 		render.pos(0.7, 0.6, potionZ).tex(itemframe.getMaxU(), itemframe.getMinV()).endVertex();
 		tessy.draw();
-        Minecraft.getMinecraft().getTextureManager().bindTexture(GuiContainer.INVENTORY_BACKGROUND);
-        boolean useIcons = true;
-		if (useIcons && potion.hasStatusIcon())
-        {
-            int i1 = potion.getStatusIconIndex();
-            double textureX = 0 + i1 % 8 * 18;
-			double textureY = 198 + i1 / 8 * 18;
-			Minecraft.getMinecraft().getTextureManager().bindTexture(GuiContainer.INVENTORY_BACKGROUND);
-			render.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-			render.pos(0.32, 0.22, potionZ+0.001).tex((double)((float)(textureX + 0) * 0.00390625F), (double)((float)(textureY + 18) * 0.00390625F)).endVertex();
-			render.pos(0.68, 0.22, potionZ+0.001).tex((double)((float)(textureX + 18) * 0.00390625F), (double)((float)(textureY + 18) * 0.00390625F)).endVertex();
-			render.pos(0.68, 0.58, potionZ+0.001).tex((double)((float)(textureX + 18) * 0.00390625F), (double)((float)(textureY + 0) * 0.00390625F)).endVertex();
-			render.pos(0.32, 0.58, potionZ+0.001).tex((double)((float)(textureX + 0) * 0.00390625F), (double)((float)(textureY + 0) * 0.00390625F)).endVertex();
-			tessy.draw();
+		
+		if(effect !=null){
+			Potion potion = effect.getPotion();
 			
-			String numeral = "";
-			if (effect.getAmplifier() == 1)
-            {
-				numeral = I18n.format("enchantment.level.2", new Object[0]);
-            }
-            else if (effect.getAmplifier() == 2)
-            {
-            	numeral = I18n.format("enchantment.level.3", new Object[0]);
-            }
-            else if (effect.getAmplifier() == 3)
-            {
-            	numeral = I18n.format("enchantment.level.4", new Object[0]);
-            }
-			if(!numeral.isEmpty()){
-				GlStateManager.pushMatrix();
-				GlStateManager.translate(0.6, 0.3, potionZ+0.002);
-				GlStateManager.rotate(180, 1, 0, 0);
-				double scale = 1.0/90;
-                GlStateManager.scale(scale, scale, 1);
-                Minecraft.getMinecraft().fontRendererObj.drawString(numeral, 0, 0, 0xFFF700);
-                GlStateManager.popMatrix();
-			}
-        } else {
-        	GlStateManager.pushMatrix();
-        	GlStateManager.translate(0.3+0.2, 0.6, potionZ+0.001);
-        	GlStateManager.rotate(180, 1, 0, 0);
-        	String s1 = I18n.format(potion.getName(), new Object[0]);
-        	int startY = 5;
-        	List<String> lines = Lists.newArrayList();
-        	List<String> nameList = Arrays.<String>asList(s1.split(" "));
-        	lines.addAll(nameList);
-        	if(!potion.isInstant()){
-        		lines.add(Potion.getPotionDurationString(effect, 1.0F));
-        	} 
-        	double scale = 1.0/90;
-            if(lines.size() > 3){
-            	scale = 1.0/100;
-            	startY = 3;
-            } else {
-            	startY+=(3-lines.size())*5;
-            }
-        	GlStateManager.scale(scale, scale, 1);
-        	
-        	int index = 0;
-        	for(String line : lines){
-        		GlStateManager.pushMatrix();
-        		int stringWidth = Minecraft.getMinecraft().fontRendererObj.getStringWidth(line);
-                scale = Math.min(30F / (float) (stringWidth+10), 0.8F);
-                double renderY = startY+(index*(Minecraft.getMinecraft().fontRendererObj.FONT_HEIGHT*(1.0-scale)));
-                GlStateManager.translate(0, renderY, 0);
-                GlStateManager.scale(scale, scale, 1);
-                GlStateManager.translate(-stringWidth/2, 0, 0);
-                Minecraft.getMinecraft().fontRendererObj.drawString(line, 0, index*Minecraft.getMinecraft().fontRendererObj.FONT_HEIGHT, 0);
-                GlStateManager.popMatrix();
-                index++;
-        	}
-        	
-        	//this.getFontRenderer().drawSplitString(s1, 3, 3, 40, 0);
-        	GlStateManager.popMatrix();
-        	
-        	String numeral = "";
-			if (effect.getAmplifier() == 1)
-            {
-				numeral = I18n.format("enchantment.level.2", new Object[0]);
-            }
-            else if (effect.getAmplifier() == 2)
-            {
-            	numeral = I18n.format("enchantment.level.3", new Object[0]);
-            }
-            else if (effect.getAmplifier() == 3)
-            {
-            	numeral = I18n.format("enchantment.level.4", new Object[0]);
-            }
-			if(!numeral.isEmpty()){
-				GlStateManager.pushMatrix();
-				GlStateManager.translate(0.6, 0.3, potionZ+0.002);
-				GlStateManager.rotate(180, 1, 0, 0);
-				scale = 1.0/90;
-                GlStateManager.scale(scale, scale, 1);
-                Minecraft.getMinecraft().fontRendererObj.drawString(numeral, 0, 0, 0xFFF700);
-                GlStateManager.popMatrix();
-			}
-        }
-
-		GlStateManager.pushMatrix();
-		GlStateManager.translate(0.6, 0.3, potionZ+0.001);
-		double scale = 1.0/90;
-        GlStateManager.scale(scale, scale, 1);
-        potion.renderInventoryEffect(0, 0, effect, Minecraft.getMinecraft());
-        GlStateManager.popMatrix();
+	        Minecraft.getMinecraft().getTextureManager().bindTexture(GuiContainer.INVENTORY_BACKGROUND);
+	        boolean useIcons = true;
+			if (useIcons && potion.hasStatusIcon())
+	        {
+	            int i1 = potion.getStatusIconIndex();
+	            double textureX = 0 + i1 % 8 * 18;
+				double textureY = 198 + i1 / 8 * 18;
+				Minecraft.getMinecraft().getTextureManager().bindTexture(GuiContainer.INVENTORY_BACKGROUND);
+				render.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+				render.pos(0.32, 0.22, potionZ+0.001).tex((double)((float)(textureX + 0) * 0.00390625F), (double)((float)(textureY + 18) * 0.00390625F)).endVertex();
+				render.pos(0.68, 0.22, potionZ+0.001).tex((double)((float)(textureX + 18) * 0.00390625F), (double)((float)(textureY + 18) * 0.00390625F)).endVertex();
+				render.pos(0.68, 0.58, potionZ+0.001).tex((double)((float)(textureX + 18) * 0.00390625F), (double)((float)(textureY + 0) * 0.00390625F)).endVertex();
+				render.pos(0.32, 0.58, potionZ+0.001).tex((double)((float)(textureX + 0) * 0.00390625F), (double)((float)(textureY + 0) * 0.00390625F)).endVertex();
+				tessy.draw();
+				
+				String numeral = "";
+				if (effect.getAmplifier() == 1)
+	            {
+					numeral = I18n.format("enchantment.level.2", new Object[0]);
+	            }
+	            else if (effect.getAmplifier() == 2)
+	            {
+	            	numeral = I18n.format("enchantment.level.3", new Object[0]);
+	            }
+	            else if (effect.getAmplifier() == 3)
+	            {
+	            	numeral = I18n.format("enchantment.level.4", new Object[0]);
+	            }
+				if(!numeral.isEmpty()){
+					GlStateManager.pushMatrix();
+					GlStateManager.translate(0.6, 0.3, potionZ+0.002);
+					GlStateManager.rotate(180, 1, 0, 0);
+					double scale = 1.0/90;
+	                GlStateManager.scale(scale, scale, 1);
+	                Minecraft.getMinecraft().fontRendererObj.drawString(numeral, 0, 0, 0xFFF700);
+	                GlStateManager.popMatrix();
+				}
+	        } else {
+	        	GlStateManager.pushMatrix();
+	        	GlStateManager.translate(0.3+0.2, 0.6, potionZ+0.001);
+	        	GlStateManager.rotate(180, 1, 0, 0);
+	        	String s1 = I18n.format(potion.getName(), new Object[0]);
+	        	int startY = 5;
+	        	List<String> lines = Lists.newArrayList();
+	        	List<String> nameList = Arrays.<String>asList(s1.split(" "));
+	        	lines.addAll(nameList);
+	        	if(!potion.isInstant()){
+	        		lines.add(Potion.getPotionDurationString(effect, 1.0F));
+	        	} 
+	        	double scale = 1.0/90;
+	            if(lines.size() > 3){
+	            	scale = 1.0/100;
+	            	startY = 3;
+	            } else {
+	            	startY+=(3-lines.size())*5;
+	            }
+	        	GlStateManager.scale(scale, scale, 1);
+	        	
+	        	int index = 0;
+	        	for(String line : lines){
+	        		GlStateManager.pushMatrix();
+	        		int stringWidth = Minecraft.getMinecraft().fontRendererObj.getStringWidth(line);
+	                scale = Math.min(30F / (float) (stringWidth+10), 0.8F);
+	                double renderY = startY+(index*(Minecraft.getMinecraft().fontRendererObj.FONT_HEIGHT*(1.0-scale)));
+	                GlStateManager.translate(0, renderY, 0);
+	                GlStateManager.scale(scale, scale, 1);
+	                GlStateManager.translate(-stringWidth/2, 0, 0);
+	                Minecraft.getMinecraft().fontRendererObj.drawString(line, 0, index*Minecraft.getMinecraft().fontRendererObj.FONT_HEIGHT, 0);
+	                GlStateManager.popMatrix();
+	                index++;
+	        	}
+	        	
+	        	//this.getFontRenderer().drawSplitString(s1, 3, 3, 40, 0);
+	        	GlStateManager.popMatrix();
+	        	
+	        	String numeral = "";
+				if (effect.getAmplifier() == 1)
+	            {
+					numeral = I18n.format("enchantment.level.2", new Object[0]);
+	            }
+	            else if (effect.getAmplifier() == 2)
+	            {
+	            	numeral = I18n.format("enchantment.level.3", new Object[0]);
+	            }
+	            else if (effect.getAmplifier() == 3)
+	            {
+	            	numeral = I18n.format("enchantment.level.4", new Object[0]);
+	            }
+				if(!numeral.isEmpty()){
+					GlStateManager.pushMatrix();
+					GlStateManager.translate(0.6, 0.3, potionZ+0.002);
+					GlStateManager.rotate(180, 1, 0, 0);
+					scale = 1.0/90;
+	                GlStateManager.scale(scale, scale, 1);
+	                Minecraft.getMinecraft().fontRendererObj.drawString(numeral, 0, 0, 0xFFF700);
+	                GlStateManager.popMatrix();
+				}
+	        }
+	
+			GlStateManager.pushMatrix();
+			GlStateManager.translate(0.6, 0.3, potionZ+0.001);
+			double scale = 1.0/90;
+	        GlStateManager.scale(scale, scale, 1);
+	        potion.renderInventoryEffect(0, 0, effect, Minecraft.getMinecraft());
+	        GlStateManager.popMatrix();
+		}
         
 		GlStateManager.popMatrix();
 	}
@@ -373,6 +387,11 @@ public class RenderTileJar<T extends TileJar> extends TileEntitySpecialRenderer<
 		if(lastTransform == TransformType.HEAD){
 			GlStateManager.translate(0.9, -0.5, 0.9);
 			GlStateManager.scale(1.8, 1.8, 1.8);
+			GlStateManager.rotate(180, 0, 1, 0);
+		}
+		if(lastTransform == TransformType.FIXED){
+			GlStateManager.translate(0.75, -0.7, 0.8);
+			GlStateManager.scale(1.5, 1.5, 1.5);
 			GlStateManager.rotate(180, 0, 1, 0);
 		}
 		
