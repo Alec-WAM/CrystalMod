@@ -21,6 +21,7 @@ import alec_wam.CrystalMod.items.tools.backpack.types.NormalInventoryBackpack;
 import alec_wam.CrystalMod.items.tools.backpack.upgrade.InventoryBackpackUpgrades;
 import alec_wam.CrystalMod.items.tools.backpack.upgrade.ItemBackpackUpgrade.BackpackUpgrade;
 import alec_wam.CrystalMod.tiles.chest.CrystalChestType;
+import alec_wam.CrystalMod.tiles.pipes.item.filters.ItemPipeFilter;
 import alec_wam.CrystalMod.util.ChatUtil;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemStackTools;
@@ -337,10 +338,17 @@ public class BackpackUtil {
 			InventoryBackpackUpgrades upgradeInv = getUpgradeInventory(backpack);
 			if(inv !=null){
 				if(upgradeInv !=null && upgradeInv.hasUpgrade(BackpackUpgrade.RESTOCKING)){
+					ItemStack filterStack = upgradeInv.getUpgradeStack(InventoryBackpackUpgrades.SLOT_FILTER_HOPPER);
+					
 					boolean changed = false;
 					for(int i = 0; i < 9; i++){
 						ItemStack invStack = player.inventory.getStackInSlot(i);
 						if(ItemStackTools.isValid(invStack)){
+							if(ItemStackTools.isValid(filterStack) && filterStack.getItem() instanceof ItemPipeFilter){
+								if(!ItemUtil.passesFilter(invStack, filterStack)){
+									continue;
+								}
+							}
 							int needed = invStack.getMaxStackSize() - ItemStackTools.getStackSize(invStack);
 							if(needed > 0){
 								search: for(int s = 0; s < inv.getSize(); s++){

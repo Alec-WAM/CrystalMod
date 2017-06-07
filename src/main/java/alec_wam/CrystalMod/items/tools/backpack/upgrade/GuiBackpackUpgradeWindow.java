@@ -14,6 +14,7 @@ import alec_wam.CrystalMod.items.tools.backpack.upgrade.InventoryBackpackUpgrade
 import alec_wam.CrystalMod.items.tools.backpack.upgrade.ItemBackpackUpgrade.BackpackUpgrade;
 import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.ItemStackTools;
+import alec_wam.CrystalMod.util.Lang;
 import alec_wam.CrystalMod.util.ModLogger;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
@@ -75,6 +76,7 @@ public class GuiBackpackUpgradeWindow extends GuiContainer {
     			GlStateManager.popMatrix();
     		}
     	}*/
+    	this.fontRendererObj.drawString(Lang.translateToLocal("item.crystalmod.backpackupgrade."+upgrade.getName()+".name"), 8+offsetLeft, 6+offsetTop, 4210752);
     	this.fontRendererObj.drawString(I18n.format("container.inventory", new Object[0]), 8+offsetLeft, 16+(18*3)+5+offsetTop, 4210752);
     }
 
@@ -134,7 +136,13 @@ public class GuiBackpackUpgradeWindow extends GuiContainer {
         if(true){
 	        int tabStart = this.guiLeft+offsetLeft;
 	        BackpackUpgrade[] tabs = upgrades.getTabs();
-	        int guiTab = 1;
+	        int guiTab = 0;
+	        for(int i = 0; i < tabs.length; i++){
+	        	if(tabs[i] == this.upgrade){
+	        		guiTab = i+1;
+	        		break;
+	        	}
+	        }
 	        
 	        for(int t = 0; t < tabs.length+1; t++){
 		        int index = t;
@@ -227,7 +235,6 @@ public class GuiBackpackUpgradeWindow extends GuiContainer {
             int j = mouseY - this.guiTop;
 
             if(this.isMouseOverTab(0, i, j)){
-            	ModLogger.info("Tab: "+0);
             	return;
             }
             
@@ -236,8 +243,7 @@ public class GuiBackpackUpgradeWindow extends GuiContainer {
             {
                 if (upgrade[u] !=null && this.isMouseOverTab(u+1, i, j))
                 {
-                	ModLogger.info("Tab: "+(u+1));
-                    return;
+                	return;
                 }
             }
         }

@@ -6,6 +6,7 @@ import alec_wam.CrystalMod.integration.baubles.BaublesIntegration;
 import alec_wam.CrystalMod.items.tools.backpack.BackpackUtil;
 import alec_wam.CrystalMod.items.tools.backpack.types.InventoryBackpack;
 import alec_wam.CrystalMod.items.tools.backpack.upgrade.ItemBackpackUpgrade.BackpackUpgrade;
+import alec_wam.CrystalMod.tiles.pipes.item.filters.ItemPipeFilter;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.inventory.SlotBauble;
 import alec_wam.CrystalMod.util.inventory.SlotOffhand;
@@ -61,6 +62,36 @@ public class ContainerBackpackUpgradeWindow extends Container {
                     this.addSlotToContainer(new Slot(playerInventory.player.getInventoryEnderChest(), l + k * 9, (8+offsetLeft) + l * 18, offsetTabs+17 + k * 18));
                 }
             }
+        }
+        if(upgrade == BackpackUpgrade.VOID){
+        	this.addSlotToContainer(new Slot(upgradeInventory, upgradeInventory.getSize() + InventoryBackpackUpgrades.SLOT_FILTER_VOID, (8+offsetLeft), offsetTabs+17){
+        		
+        		@Override
+        		public boolean isItemValid(ItemStack stack){
+        			return ItemStackTools.isValid(stack) && stack.getItem() instanceof ItemPipeFilter;
+        		}
+        		
+        	});
+        }
+        if(upgrade == BackpackUpgrade.HOPPER){
+        	this.addSlotToContainer(new Slot(upgradeInventory, upgradeInventory.getSize() + InventoryBackpackUpgrades.SLOT_FILTER_HOPPER, (8+offsetLeft), offsetTabs+17){
+        		
+        		@Override
+        		public boolean isItemValid(ItemStack stack){
+        			return ItemStackTools.isValid(stack) && stack.getItem() instanceof ItemPipeFilter;
+        		}
+        		
+        	});
+        }
+        if(upgrade == BackpackUpgrade.RESTOCKING){
+        	this.addSlotToContainer(new Slot(upgradeInventory, upgradeInventory.getSize() + InventoryBackpackUpgrades.SLOT_FILTER_RESTOCKING, (8+offsetLeft), offsetTabs+17){
+        		
+        		@Override
+        		public boolean isItemValid(ItemStack stack){
+        			return ItemStackTools.isValid(stack) && stack.getItem() instanceof ItemPipeFilter;
+        		}
+        		
+        	});
         }
         
         if(hasPockets && backpackInventory !=null){

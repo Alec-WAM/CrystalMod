@@ -231,8 +231,7 @@ public class GuiBackpackNormal extends GuiContainer {
             {
                 if (upgrade[u] !=null && this.isMouseOverTab(u+1, i, j))
                 {
-                	ModLogger.info("Tab: "+u);
-                    return;
+                	return;
                 }
             }
         }

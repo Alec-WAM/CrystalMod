@@ -2,14 +2,18 @@ package alec_wam.CrystalMod.items.tools.backpack.upgrade;
 
 import java.util.List;
 
+import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 
 import alec_wam.CrystalMod.items.tools.backpack.types.InventoryBackpack;
 import alec_wam.CrystalMod.items.tools.backpack.upgrade.ItemBackpackUpgrade.BackpackUpgrade;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemStackTools;
+import alec_wam.CrystalMod.util.ItemUtil;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
 import scala.actors.threadpool.Arrays;
 
@@ -122,5 +126,72 @@ public class InventoryBackpackUpgrades extends InventoryBackpack{
 		}
 		return tabs.toArray(new BackpackUpgrade[0]);
 	}
+	
+	@Override
+	public void writeToNBT(NBTTagCompound nbt){
+    	if(player == null || !player.getEntityWorld().isRemote) {
+    		ItemStack found = player == null ? ItemStackTools.getEmptyStack() : findRealStack(player);
+    		ItemStack backpackToUse = (ItemStackTools.isValid(found) ? found : backpack);
+    		backpack = backpackToUse;
+    		nbt = backpackToUse.getTagCompound();
+    		if(!Strings.isNullOrEmpty(tagName)){
+    			NBTTagCompound nbtInv = new NBTTagCompound();
+    			ItemStackHelper.saveAllItems(nbtInv, slots);
+    			if(upgradeItems !=null){
+	    			NBTTagCompound nbtUpgrades = new NBTTagCompound();
+	    			ItemStackHelper.saveAllItems(nbtUpgrades, upgradeItems);
+	    			nbtInv.setTag("UpgradeItems", nbtUpgrades);
+    			}
+    			nbt.setTag(tagName, nbtInv);
+    		} else {
+    			ItemUtil.writeInventoryToNBT(slots, nbt);
+    			if(upgradeItems !=null){
+	    			NBTTagCompound nbtUpgrades = new NBTTagCompound();
+	    			ItemStackHelper.saveAllItems(nbtUpgrades, upgradeItems);
+	    			nbt.setTag("UpgradeItems", nbtUpgrades);
+    			}
+    		}
+    	}
+    }
+    
+	@Override
+	public void readFromNBT(NBTTagCompound nbt){
+    	if(!player.getEntityWorld().isRemote){
+    		ItemStack found = findRealStack(player);
+    		backpack = (!ItemStackTools.isValid(found) ? backpack : found);
+    		if(ItemStackTools.isValid(backpack)){
+    			nbt = backpack.getTagCompound();
+    			if(!Strings.isNullOrEmpty(tagName)){
+    				nbt = backpack.getTagCompound().getCompoundTag(tagName);
+    			}
+    			if(nbt !=null){
+    				//Clear inventory before load
+    				clear();
+    				ItemStackHelper.loadAllItems(nbt, slots);
+    				if(nbt.hasKey("UpgradeItems") && upgradeItems !=null){
+    					ItemStackHelper.loadAllItems(nbt.getCompoundTag("UpgradeItems"), upgradeItems);
+    				}
+    			}
+    		}
+    	}
+    }
+    
+	@Override
+	public void readFromNBTNoPlayer(NBTTagCompound nbt){
+    	if(ItemStackTools.isValid(backpack)){
+			nbt = backpack.getTagCompound();
+			if(!Strings.isNullOrEmpty(tagName)){
+				nbt = backpack.getTagCompound().getCompoundTag(tagName);
+			}
+			if(nbt !=null){
+				//Clear inventory before load
+				clear();
+				ItemStackHelper.loadAllItems(nbt, slots);
+				if(nbt.hasKey("UpgradeItems") && upgradeItems !=null){
+					ItemStackHelper.loadAllItems(nbt.getCompoundTag("UpgradeItems"), upgradeItems);
+				}
+			}
+		}
+    }
     
 }

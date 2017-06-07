@@ -1,17 +1,12 @@
 package alec_wam.CrystalMod.crafting.recipes;
 
-import alec_wam.CrystalMod.Config;
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.BlockCrystal.CrystalBlockType;
 import alec_wam.CrystalMod.blocks.BlockEtchedCrystal.EtchedCrystalBlockType;
 import alec_wam.CrystalMod.blocks.ModBlocks;
-import alec_wam.CrystalMod.items.tools.ItemSuperTorch;
-import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
-import alec_wam.CrystalMod.util.ModLogger;
 import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
@@ -150,7 +145,6 @@ public class ChisledBlockRecipe implements IRecipe {
         for (int i = 0; i < ret.size(); i++)
         {
         	if(i == pickSlot){
-        		ModLogger.info("Pick Remaining "+pickSlot);
         		ItemStack pick = inv.getStackInSlot(i);
         		int current = pick.getItemDamage();
         		int count = ItemStackTools.getStackSize(output);

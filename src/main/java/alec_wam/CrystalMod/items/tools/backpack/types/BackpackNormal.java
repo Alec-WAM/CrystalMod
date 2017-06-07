@@ -37,6 +37,7 @@ import alec_wam.CrystalMod.items.tools.backpack.gui.ContainerBackpackNormal;
 import alec_wam.CrystalMod.items.tools.backpack.gui.GuiBackpackNormal;
 import alec_wam.CrystalMod.items.tools.backpack.upgrade.InventoryBackpackUpgrades;
 import alec_wam.CrystalMod.items.tools.backpack.upgrade.ItemBackpackUpgrade.BackpackUpgrade;
+import alec_wam.CrystalMod.tiles.pipes.item.filters.ItemPipeFilter;
 import alec_wam.CrystalMod.util.EntityUtil;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
@@ -117,6 +118,23 @@ public class BackpackNormal implements IBackpackInventory {
 			EntityItem itemEntity = event.getItem();
 			if(ItemStackTools.isValid(itemEntity.getEntityItem()) && inventory !=null){
 				ItemStack item = itemEntity.getEntityItem();
+				
+				ItemStack filterStack = upgradeInv.getUpgradeStack(InventoryBackpackUpgrades.SLOT_FILTER_HOPPER);
+				if(ItemStackTools.isValid(filterStack) && filterStack.getItem() instanceof ItemPipeFilter){
+					if(!ItemUtil.passesFilter(item, filterStack)){
+						return false;
+					}
+				}
+				
+				ItemStack filterStack2 = upgradeInv.getUpgradeStack(InventoryBackpackUpgrades.SLOT_FILTER_VOID);
+				if(ItemStackTools.isValid(filterStack2) && filterStack2.getItem() instanceof ItemPipeFilter){
+					if(ItemUtil.passesFilter(item, filterStack2)){
+						itemEntity.setDead();
+						event.setResult(Result.ALLOW);
+						return false;
+					}
+				}
+				
 				int insert = 0;
 				
 				fill : for(int i = 0; i < inventory.getSize(); i++){
