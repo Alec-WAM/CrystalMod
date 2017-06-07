@@ -50,7 +50,9 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityList.EntityEggInfo;
+import net.minecraft.entity.EntityLiving.SpawnPlacementType;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntitySpawnPlacementRegistry;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.monster.EntityEnderman;
 import net.minecraft.entity.monster.EntityPigZombie;
@@ -73,12 +75,15 @@ public class ModEntites {
 	public static void init(){
 		ResourceLocation pigzombie = addEntity(EntityCrystalPigZombie.class, "crystalpigzombie");
 		EntityRegistry.registerEgg(pigzombie, /*PINK*/ 15373203, 0x6CE5F8);
+		EntitySpawnPlacementRegistry.setPlacementType(EntityCrystalPigZombie.class, SpawnPlacementType.ON_GROUND);
 		
 		ResourceLocation cow = addEntity(EntityCrystalCow.class, "crystalcow");
 		EntityRegistry.registerEgg(cow, /*BROWN*/ 4470310, 0x6CE5F8);
+		EntitySpawnPlacementRegistry.setPlacementType(EntityCrystalCow.class, SpawnPlacementType.ON_GROUND);
 		
 		ResourceLocation enderman = addEntity(EntityCrystalEnderman.class, "crystalenderman");
 		EntityRegistry.registerEgg(enderman, /*BLACK*/ 0, 0x6CE5F8);
+		EntitySpawnPlacementRegistry.setPlacementType(EntityCrystalEnderman.class, SpawnPlacementType.ON_GROUND);
 		
 		addEntity(EntityMinionWorker.class, "minionworker");
 		
@@ -104,9 +109,11 @@ public class ModEntites {
 		
 		ResourceLocation angel = addEntity(EntityAngel.class, "pureangel");
 		EntityRegistry.registerEgg(angel, 0xFFFFFF, 0xFFFF00);
+		EntitySpawnPlacementRegistry.setPlacementType(EntityAngel.class, SpawnPlacementType.IN_AIR);
 		
 		ResourceLocation devil = addEntity(EntityDevil.class, "darkdevil");
 		EntityRegistry.registerEgg(devil, 0, 0xFFFF00);
+		EntitySpawnPlacementRegistry.setPlacementType(EntityDevil.class, SpawnPlacementType.IN_AIR);
 		
 		addEntity(EntityDarkarang.class, "darkarang", 160, 20, true);
 		addEntity(EntityDagger.class, "dagger", 160, 20, true);
@@ -116,6 +123,18 @@ public class ModEntites {
 		addToBiomes(EntityCrystalPigZombie.class, 50, 1, 4, EnumCreatureType.MONSTER, getBiomesThatCanSpawn(EntityPigZombie.class, EnumCreatureType.MONSTER));
 		addToBiomes(EntityCrystalCow.class, 6, 1, 4, EnumCreatureType.CREATURE, getBiomesThatCanSpawn(EntityCow.class, EnumCreatureType.CREATURE));
 		addToBiomes(EntityCrystalEnderman.class, 8, 1, 4, EnumCreatureType.MONSTER, getBiomesThatCanSpawn(EntityEnderman.class, EnumCreatureType.MONSTER));
+		
+		List<Biome> angelBiomeList = getBiomesThatCanSpawn(EntityEnderman.class, EnumCreatureType.MONSTER);
+		Biome hell = Biome.REGISTRY.getObject(new ResourceLocation("hell"));
+		if(hell !=null){
+			angelBiomeList.remove(hell);
+			List<Biome> listHell = Lists.newArrayList(hell);
+			addToBiomes(EntityAngel.class, 50, 4, 4, EnumCreatureType.MONSTER, listHell);
+			addToBiomes(EntityDevil.class, 50, 4, 4, EnumCreatureType.MONSTER, listHell);
+		}
+		
+		addToBiomes(EntityAngel.class, 8, 1, 4, EnumCreatureType.MONSTER, angelBiomeList);
+		addToBiomes(EntityDevil.class, 8, 1, 4, EnumCreatureType.MONSTER, angelBiomeList);
 	}
 	
 	@SideOnly(Side.CLIENT)
