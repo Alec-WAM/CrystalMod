@@ -18,6 +18,7 @@ import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
+import alec_wam.CrystalMod.Config;
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.api.CrystalModAPI;
 import alec_wam.CrystalMod.api.crop.CropRecipe;
@@ -475,7 +476,7 @@ public class GuidePages {
 	}
 	public static Map<String, ManualChapter> CHAPTERTEXT = Maps.newHashMap();
 	public static void loadGuideText(String lang){
-		boolean useHost = false;
+		boolean useHost = Config.useRemoteManualFile;
 		CHAPTERTEXT.clear();
 		try {
             IResource iresource = FMLClientHandler.instance().getClient().getResourceManager().getResource(CrystalMod.resourceL("text/guide/"+lang+".txt"));

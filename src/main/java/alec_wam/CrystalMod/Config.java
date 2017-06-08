@@ -133,6 +133,8 @@ public class Config {
 	public static int infectionRange = 30;
 	public static int infectionEncasingRange = 30;
 	public static int infectionEncasingSize = 5;
+	
+	public static boolean useRemoteManualFile = true;
 
 	@SubscribeEvent
 	public void onConfigChanged(OnConfigChangedEvent event) {
@@ -276,6 +278,7 @@ public class Config {
 
     	//Client
     	vanillaMinecarts3d = cfg.get(CATEGORY_CLIENT, "3dMinecartItems", vanillaMinecarts3d, "Override Minecart Item Render to 3d items.").getBoolean();
+    	useRemoteManualFile = cfg.get(CATEGORY_CLIENT, "useRemoteManualFile", useRemoteManualFile, "Disable to only use local manual file.").getBoolean();
     }
     
     public static void postInit() {
