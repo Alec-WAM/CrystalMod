@@ -71,7 +71,8 @@ public class EntityAngel extends EntityMob
         this.tasks.addTask(0, new EntityAISwimming(this));
         this.tasks.addTask(4, new EntityAngel.AIChargeAttack());
         this.tasks.addTask(8, new EntityAngel.AIMoveRandom());
-        this.tasks.addTask(9, new EntityAIWatchClosest(this, EntityPlayer.class, 3.0F, 1.0F));
+        this.tasks.addTask(9, new EntityAIWatchClosest(this, EntityAngel.class, 3.0F, 1.0F));
+        this.tasks.addTask(10, new EntityAIWatchClosest(this, EntityPlayer.class, 3.0F, 1.0F));
         this.tasks.addTask(10, new EntityAIWatchClosest(this, EntityLiving.class, 8.0F));
         this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, false, new Class[] {EntityAngel.class}));
         this.targetTasks.addTask(3, new EntityAINearestAttackableTarget<EntityDevil>(this, EntityDevil.class, true));
@@ -273,18 +274,18 @@ public class EntityAngel extends EntityMob
                     EntityAngel.this.motionY += d1 / d3 * 0.05D * this.speed;
                     EntityAngel.this.motionZ += d2 / d3 * 0.05D * this.speed;
 
-                    if (EntityAngel.this.getAttackTarget() == null)
-                    {
+                    //if (EntityAngel.this.getAttackTarget() == null)
+                    //{
                         EntityAngel.this.rotationYaw = -((float)MathHelper.atan2(EntityAngel.this.motionX, EntityAngel.this.motionZ)) * (180F / (float)Math.PI);
                         EntityAngel.this.renderYawOffset = EntityAngel.this.rotationYaw;
-                    }
+                    /*}
                     else
                     {
                         double d4 = EntityAngel.this.getAttackTarget().posX - EntityAngel.this.posX;
                         double d5 = EntityAngel.this.getAttackTarget().posZ - EntityAngel.this.posZ;
                         EntityAngel.this.rotationYaw = -((float)MathHelper.atan2(d4, d5)) * (180F / (float)Math.PI);
                         EntityAngel.this.renderYawOffset = EntityAngel.this.rotationYaw;
-                    }
+                    }*/
                 }
             }
         }
