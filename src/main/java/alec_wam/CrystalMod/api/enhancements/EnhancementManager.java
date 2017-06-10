@@ -8,6 +8,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import alec_wam.CrystalMod.util.ItemStackTools;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
@@ -29,11 +30,11 @@ public class EnhancementManager {
 		return ENHANCEMENT_REGISTRY.values();
 	}
 	
-	public static List<IEnhancement> findValidEnhancements(ItemStack stack){
+	public static List<IEnhancement> findValidEnhancements(ItemStack stack, EntityPlayer player){
 		List<IEnhancement> list = Lists.newArrayList();
 		if(ItemStackTools.isValid(stack)){
 			for(IEnhancement enhancement : ENHANCEMENT_REGISTRY.values()){
-				if(enhancement.canApply(stack)){
+				if(enhancement.canApply(stack, player)){
 					list.add(enhancement);
 				}
 			}

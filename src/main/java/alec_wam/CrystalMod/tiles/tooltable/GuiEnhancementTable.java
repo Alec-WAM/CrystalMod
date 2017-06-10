@@ -7,6 +7,7 @@ import org.lwjgl.opengl.GL11;
 
 import com.google.common.collect.Lists;
 
+import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.api.enhancements.EnhancementManager;
 import alec_wam.CrystalMod.api.enhancements.IEnhancement;
 import alec_wam.CrystalMod.api.enhancements.KnowledgeManager;
@@ -271,7 +272,7 @@ public class GuiEnhancementTable extends GuiContainer {
 	public List<IEnhancement> getEnhancements(){
 		ItemStack tool = table.getStackInSlot(0);
 		if(ItemStackTools.isEmpty(tool)) return Lists.newArrayList();
-		List<IEnhancement> validList = EnhancementManager.findValidEnhancements(tool);
+		List<IEnhancement> validList = EnhancementManager.findValidEnhancements(tool, CrystalMod.proxy.getClientPlayer());
 		List<IEnhancement> list = Lists.newArrayList();
 		for(IEnhancement e : validList){
 			if(KnowledgeManager.hasClientKnowledge(e)){

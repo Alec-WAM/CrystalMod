@@ -33,7 +33,7 @@ public class EnhancementDragonWings implements IEnhancement {
 	}
 	
 	@Override
-	public boolean canApply(ItemStack stack) {
+	public boolean canApply(ItemStack stack, EntityPlayer player) {
 		if(ItemStackTools.isValid(stack)){
     		if(stack.getItem() instanceof ItemArmor){
     			ItemArmor armor = (ItemArmor)stack.getItem();
@@ -57,14 +57,14 @@ public class EnhancementDragonWings implements IEnhancement {
 	}
 
 	@Override
-	public ItemStack apply(ItemStack stack) {
+	public ItemStack apply(ItemStack stack, EntityPlayer player) {
 		ItemStack copy = stack.copy();
 		ItemNBTHelper.setBoolean(copy, getNBTID(), true);
 		return copy;
 	}
 
 	@Override
-	public ItemStack remove(ItemStack stack) {
+	public ItemStack remove(ItemStack stack, EntityPlayer player) {
 		ItemStack copy = stack.copy();
 		ItemNBTHelper.getCompound(copy).removeTag(getNBTID());
 		return copy;

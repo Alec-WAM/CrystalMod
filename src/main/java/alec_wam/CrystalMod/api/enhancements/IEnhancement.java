@@ -15,13 +15,13 @@ public interface IEnhancement {
 	
 	public ItemStack getDisplayItem();
 	
-	public boolean canApply(ItemStack stack);
+	public boolean canApply(ItemStack stack, EntityPlayer player);
 	
 	public boolean isApplied(ItemStack stack);
 	
-	public ItemStack apply(ItemStack stack);
+	public ItemStack apply(ItemStack stack, EntityPlayer player);
 	
-	public ItemStack remove(ItemStack stack);
+	public ItemStack remove(ItemStack stack, EntityPlayer player);
 	
 	public String getNBTID();
 	

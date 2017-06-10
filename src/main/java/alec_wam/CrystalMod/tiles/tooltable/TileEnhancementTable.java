@@ -32,9 +32,9 @@ public class TileEnhancementTable extends TileEntityInventory implements IMessag
 	public void applyEnhancement(EntityPlayer player, IEnhancement enhancement){
 		ItemStack currentTool = getStackInSlot(0);
 		if(ItemStackTools.isValid(currentTool)){
-			if(enhancement.canApply(currentTool)){
+			if(enhancement.canApply(currentTool, player)){
 				if(enhancement.removeItemsFromPlayer(player)){
-					setInventorySlotContents(0, enhancement.apply(currentTool));
+					setInventorySlotContents(0, enhancement.apply(currentTool, player));
 				}
 			}
 		}
@@ -45,7 +45,7 @@ public class TileEnhancementTable extends TileEntityInventory implements IMessag
 		if(ItemStackTools.isValid(currentTool)){
 			if(enhancement.isApplied(currentTool)){
 				if(enhancement.returnItemsToPlayer(player)){
-					ItemStack returnStack = enhancement.remove(currentTool);
+					ItemStack returnStack = enhancement.remove(currentTool, player);
 					//Clean NBT
 					if(returnStack.getTagCompound().hasNoTags()){
 						returnStack.setTagCompound(null);

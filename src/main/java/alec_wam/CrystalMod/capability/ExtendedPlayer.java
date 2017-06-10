@@ -39,6 +39,8 @@ public class ExtendedPlayer {
 	private UUID lastPlayerDisguiseUUID;
 	private UUID playerDisguiseUUID;
 	
+	private int enhancementXP;
+	
 	/**Explosives**/
 	private int screenFlashTime;
 	private int maxFlashTime;
@@ -54,6 +56,7 @@ public class ExtendedPlayer {
 			properties.setTag("OpenBackpack", openBackpack.serializeNBT());
 		}
 		
+		properties.setInteger("EnhancementXP", enhancementXP);		
 		return properties;
 	}
 
@@ -68,6 +71,7 @@ public class ExtendedPlayer {
 		} else {
 			setOpenBackpack(ItemStackTools.getEmptyStack());
 		}
+		enhancementXP = properties.getInteger("EnhancementXP");		
 	}
 
 	/**
@@ -167,5 +171,13 @@ public class ExtendedPlayer {
 	
 	public void subtractFlashTime(){
 		this.screenFlashTime--;
+	}
+
+	public int getEnhancementXP() {
+		return enhancementXP;
+	}
+
+	public void setEnhancementXP(int enhancementXP) {
+		this.enhancementXP = enhancementXP;
 	}
 }
