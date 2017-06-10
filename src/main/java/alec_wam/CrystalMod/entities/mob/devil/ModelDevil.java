@@ -2,6 +2,7 @@ package alec_wam.CrystalMod.entities.mob.devil;
 
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.monster.EntityVex;
 import net.minecraft.util.EnumHandSide;
@@ -14,6 +15,8 @@ public class ModelDevil extends ModelBiped
 {
     protected ModelRenderer leftWing;
     protected ModelRenderer rightWing;
+    protected ModelRenderer leftHorn;
+    protected ModelRenderer rightHorn;
 
     public ModelDevil()
     {
@@ -33,6 +36,12 @@ public class ModelDevil extends ModelBiped
         this.leftWing = new ModelRenderer(this, 0, 32);
         this.leftWing.mirror = true;
         this.leftWing.addBox(0.0F, 0.0F, 0.0F, 20, 12, 1);
+        
+        this.rightHorn = new ModelRenderer(this, 0, 9).setTextureSize(128, 128);
+        this.rightHorn.addBox(0.0F, -16.0F, 0.0F, 8, 7, 0);
+        this.leftHorn = new ModelRenderer(this, 0, 9).setTextureSize(128, 128);
+        this.leftHorn.mirror = true;
+        this.leftHorn.addBox(-8.0F, -16.0F, 0.0F, 8, 7, 0);
     }
 
     /**
@@ -43,6 +52,12 @@ public class ModelDevil extends ModelBiped
         super.render(entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
         this.rightWing.render(scale);
         this.leftWing.render(scale);
+        
+        GlStateManager.pushMatrix();
+        GlStateManager.scale(0.8, 0.8, 0.8);
+        this.rightHorn.render(scale);
+        this.leftHorn.render(scale);
+        GlStateManager.popMatrix();        
     }
 
     /**
@@ -78,6 +93,9 @@ public class ModelDevil extends ModelBiped
         this.leftWing.rotateAngleX = 0.47123894F;
         this.rightWing.rotateAngleX = 0.47123894F;
         this.rightWing.rotateAngleZ = 0.47123894F;
+        
+        copyModelAngles(this.bipedHead, this.rightHorn);
+        copyModelAngles(this.bipedHead, this.leftHorn);
     }
 
     public int getModelVersion()
