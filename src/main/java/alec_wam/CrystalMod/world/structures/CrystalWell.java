@@ -297,21 +297,22 @@ public class CrystalWell {
 		IBlockState bars = ModBlocks.metalBars.getDefaultState().withProperty(BlockMetalBars.TYPE, BlockMetalBars.EnumMetalBarType.PURE);
 		IBlockState glass = ModBlocks.crystalGlass.getDefaultState().withProperty(BlockCrystalGlass.TYPE, BlockCrystalGlass.GlassType.PURE);
 		IBlockState liquid = ModFluids.fluidPureCrystal.getBlock().getDefaultState();
-
+		IBlockState pureBlock = ModBlocks.crystal.getDefaultState().withProperty(BlockCrystal.TYPE, CrystalBlockType.PURE);
+		
 		setBlockAndNotifyAdequately(world, pos, chisled, false);
 		setBlockAndNotifyAdequately(world, pos.offset(EnumFacing.SOUTH, 4), chisled, false);
 		setBlockAndNotifyAdequately(world, pos.offset(EnumFacing.SOUTH, 4).offset(EnumFacing.EAST, 4), chisled, false);
 		setBlockAndNotifyAdequately(world, pos.offset(EnumFacing.EAST, 4), chisled, false);
 		
-		setBlockAndNotifyAdequately(world, pos.offset(EnumFacing.SOUTH), quartz, false);
-		setBlockAndNotifyAdequately(world, pos.offset(EnumFacing.EAST), quartz, false);
-		setBlockAndNotifyAdequately(world, pos.offset(EnumFacing.SOUTH, 3), quartz, false);
-		setBlockAndNotifyAdequately(world, pos.offset(EnumFacing.SOUTH, 4).offset(EnumFacing.EAST), quartz, false);
+		setBlockAndNotifyAdequately(world, pos.offset(EnumFacing.SOUTH), pureBlock, false);
+		setBlockAndNotifyAdequately(world, pos.offset(EnumFacing.EAST), pureBlock, false);
+		setBlockAndNotifyAdequately(world, pos.offset(EnumFacing.SOUTH, 3), pureBlock, false);
+		setBlockAndNotifyAdequately(world, pos.offset(EnumFacing.SOUTH, 4).offset(EnumFacing.EAST), pureBlock, false);
 		
-		setBlockAndNotifyAdequately(world, pos.offset(EnumFacing.SOUTH).offset(EnumFacing.EAST, 4), quartz, false);
+		setBlockAndNotifyAdequately(world, pos.offset(EnumFacing.SOUTH).offset(EnumFacing.EAST, 4), pureBlock, false);
 		setBlockAndNotifyAdequately(world, pos.offset(EnumFacing.EAST, 3), quartz, false);
-		setBlockAndNotifyAdequately(world, pos.offset(EnumFacing.SOUTH, 3).offset(EnumFacing.EAST, 4), quartz, false);
-		setBlockAndNotifyAdequately(world, pos.offset(EnumFacing.SOUTH, 4).offset(EnumFacing.EAST, 3), quartz, false);
+		setBlockAndNotifyAdequately(world, pos.offset(EnumFacing.SOUTH, 3).offset(EnumFacing.EAST, 4), pureBlock, false);
+		setBlockAndNotifyAdequately(world, pos.offset(EnumFacing.SOUTH, 4).offset(EnumFacing.EAST, 3), pureBlock, false);
 		
 		
 		setBlockAndNotifyAdequately(world, pos.offset(EnumFacing.SOUTH).offset(EnumFacing.EAST), bars, false);
