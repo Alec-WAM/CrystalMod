@@ -90,7 +90,7 @@ public class ModelGlassPane extends DynamicItemAndBlockModel {
 				final BlockFaceUV uv = new BlockFaceUV(top, 0);
 				final BlockPartFace face = new BlockPartFace(EnumFacing.UP, 0, "", uv);
 				face.blockFaceUV.uvs = new float[]{0f, 0f, 1f, 1f};
-				if(!BlockCrystalGlass.isSideConnectable(state.blockAccess, state.pos, EnumFacing.UP))list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(7, 16, 7), new Vector3f(9, 16, 9), face, sprite, EnumFacing.UP, ModelRotation.X0_Y0, (BlockPartRotation)null, true));
+				if(!BlockCrystalGlassPane.isSideConnectable(state.blockAccess, state.pos, EnumFacing.UP))list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(7, 16, 7), new Vector3f(9, 16, 9), face, sprite, EnumFacing.UP, ModelRotation.X0_Y0, (BlockPartRotation)null, true));
 				
 				face.blockFaceUV.uvs = new float[]{1f, 0f, 8f, 1f};
 				
@@ -99,10 +99,10 @@ public class ModelGlassPane extends DynamicItemAndBlockModel {
 				if(valid){
 					stateUp = stateUp.getActualState(state.blockAccess, posU);
 				}
-				boolean matchN = valid && BlockCrystalGlass.isSideConnectable(state.blockAccess, posU, EnumFacing.NORTH);
-				boolean matchS = valid && BlockCrystalGlass.isSideConnectable(state.blockAccess, posU, EnumFacing.SOUTH);
-				boolean matchE = valid && BlockCrystalGlass.isSideConnectable(state.blockAccess, posU, EnumFacing.EAST);
-				boolean matchW = valid && BlockCrystalGlass.isSideConnectable(state.blockAccess, posU, EnumFacing.WEST);
+				boolean matchN = valid && BlockCrystalGlassPane.isSideConnectable(state.blockAccess, posU, EnumFacing.NORTH);
+				boolean matchS = valid && BlockCrystalGlassPane.isSideConnectable(state.blockAccess, posU, EnumFacing.SOUTH);
+				boolean matchE = valid && BlockCrystalGlassPane.isSideConnectable(state.blockAccess, posU, EnumFacing.EAST);
+				boolean matchW = valid && BlockCrystalGlassPane.isSideConnectable(state.blockAccess, posU, EnumFacing.WEST);
 
 				boolean offsetE = valid && stateUp.getValue(BlockPane.EAST);
 				boolean offsetW = valid && stateUp.getValue(BlockPane.WEST);
@@ -118,17 +118,17 @@ public class ModelGlassPane extends DynamicItemAndBlockModel {
 				final BlockFaceUV uv = new BlockFaceUV(top, 0);
 				final BlockPartFace face = new BlockPartFace(EnumFacing.UP, 0, "", uv);
 				face.blockFaceUV.uvs = new float[]{0f, 0f, 1f, 1f};
-				if(!BlockCrystalGlass.isSideConnectable(state.blockAccess, state.pos, EnumFacing.DOWN))list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(7, 0, 7), new Vector3f(9, 0, 9), face, sprite, EnumFacing.DOWN, ModelRotation.X0_Y0, (BlockPartRotation)null, true));
+				if(!BlockCrystalGlassPane.isSideConnectable(state.blockAccess, state.pos, EnumFacing.DOWN))list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(7, 0, 7), new Vector3f(9, 0, 9), face, sprite, EnumFacing.DOWN, ModelRotation.X0_Y0, (BlockPartRotation)null, true));
 				
 				IBlockState stateDown = state.blockAccess.getBlockState(posD);
 				boolean valid = stateDown.getBlock() == state.getBlock();
 				if(valid){
 					stateDown = stateDown.getActualState(state.blockAccess, posD);
 				}
-				boolean matchN = valid && BlockCrystalGlass.isSideConnectable(state.blockAccess, posD, EnumFacing.NORTH);
-				boolean matchS = valid && BlockCrystalGlass.isSideConnectable(state.blockAccess, posD, EnumFacing.SOUTH);
-				boolean matchE = valid && BlockCrystalGlass.isSideConnectable(state.blockAccess, posD, EnumFacing.EAST);
-				boolean matchW = valid && BlockCrystalGlass.isSideConnectable(state.blockAccess, posD, EnumFacing.WEST);
+				boolean matchN = valid && BlockCrystalGlassPane.isSideConnectable(state.blockAccess, posD, EnumFacing.NORTH);
+				boolean matchS = valid && BlockCrystalGlassPane.isSideConnectable(state.blockAccess, posD, EnumFacing.SOUTH);
+				boolean matchE = valid && BlockCrystalGlassPane.isSideConnectable(state.blockAccess, posD, EnumFacing.EAST);
+				boolean matchW = valid && BlockCrystalGlassPane.isSideConnectable(state.blockAccess, posD, EnumFacing.WEST);
 				
 				boolean offsetE = valid && stateDown.getValue(BlockPane.EAST);
 				boolean offsetW = valid && stateDown.getValue(BlockPane.WEST);
@@ -273,41 +273,41 @@ public class ModelGlassPane extends DynamicItemAndBlockModel {
 		//Corners
 		boolean bRC = false, bLC = false, tRC = false, tLC = false;
 
-		lineR = connectedW && !BlockCrystalGlass.isSideConnectable(state.blockAccess, state.pos, rightFacing);
-		lineL = connectedE && !BlockCrystalGlass.isSideConnectable(state.blockAccess, state.pos, leftFacing);
+		lineR = connectedW && !BlockCrystalGlassPane.isSideConnectable(state.blockAccess, state.pos, rightFacing);
+		lineL = connectedE && !BlockCrystalGlassPane.isSideConnectable(state.blockAccess, state.pos, leftFacing);
 
-		if(!BlockCrystalGlass.isSideConnectable(state.blockAccess, state.pos, EnumFacing.UP)) {
+		if(!BlockCrystalGlassPane.isSideConnectable(state.blockAccess, state.pos, EnumFacing.UP)) {
 			mT2 = !connectedE && connectedW;
 			//mT = !(connectedE && connectedW) && !mT2;
 			tLineL = connectedE;
 			tLineR = connectedW;
 		}
 
-		if(!BlockCrystalGlass.isSideConnectable(state.blockAccess, state.pos, EnumFacing.DOWN)) {
+		if(!BlockCrystalGlassPane.isSideConnectable(state.blockAccess, state.pos, EnumFacing.DOWN)) {
 			mB2 = !connectedE && connectedW;
 			mB = !(connectedE && connectedW) && !mB2;
 			bLineL = connectedE;
 			bLineR = connectedW;
 		}
 
-		//tLineR = connectedW && BlockCrystalGlass.isSideConnectable(state.blockAccess, state.pos, rightFacing) && validU ?  : true;
+		//tLineR = connectedW && BlockCrystalGlassPane.isSideConnectable(state.blockAccess, state.pos, rightFacing) && validU ?  : true;
 		if(lineR){
 			mT = mB = false;
 			//Connected but not glass
-			rT = connectedW && !BlockCrystalGlass.isSideConnectable(state.blockAccess, state.pos, rightFacing);
-			rB = connectedW && !BlockCrystalGlass.isSideConnectable(state.blockAccess, state.pos, rightFacing);
+			rT = connectedW && !BlockCrystalGlassPane.isSideConnectable(state.blockAccess, state.pos, rightFacing);
+			rB = connectedW && !BlockCrystalGlassPane.isSideConnectable(state.blockAccess, state.pos, rightFacing);
 		}
 
-		if(connectedW && BlockCrystalGlass.isSideConnectable(state.blockAccess, state.pos, rightFacing)){
-			if(!(validU && BlockCrystalGlass.isSideConnectable(state.blockAccess, state.pos, EnumFacing.UP) && upConnectedRight)){
+		if(connectedW && BlockCrystalGlassPane.isSideConnectable(state.blockAccess, state.pos, rightFacing)){
+			if(!(validU && BlockCrystalGlassPane.isSideConnectable(state.blockAccess, state.pos, EnumFacing.UP) && upConnectedRight)){
 				tLineR = true;
 			} 
-			if(!(validD && BlockCrystalGlass.isSideConnectable(state.blockAccess, state.pos, EnumFacing.DOWN) && downConnectedRight)){
+			if(!(validD && BlockCrystalGlassPane.isSideConnectable(state.blockAccess, state.pos, EnumFacing.DOWN) && downConnectedRight)){
 				bLineR = true;
 			}
 		}
 
-		if(connectedW && !BlockCrystalGlass.isSideConnectable(state.blockAccess, state.pos, rightFacing)){
+		if(connectedW && !BlockCrystalGlassPane.isSideConnectable(state.blockAccess, state.pos, rightFacing)){
 			if(!(validU && upConnectedRight)){
 				tLineR = true;
 			} 
@@ -319,20 +319,20 @@ public class ModelGlassPane extends DynamicItemAndBlockModel {
 		if(lineL){
 			mT = mB = false;
 			//Connected but not glass
-			lT = connectedE && !BlockCrystalGlass.isSideConnectable(state.blockAccess, state.pos, leftFacing);
-			lB = connectedE && !BlockCrystalGlass.isSideConnectable(state.blockAccess, state.pos, leftFacing);
+			lT = connectedE && !BlockCrystalGlassPane.isSideConnectable(state.blockAccess, state.pos, leftFacing);
+			lB = connectedE && !BlockCrystalGlassPane.isSideConnectable(state.blockAccess, state.pos, leftFacing);
 		}
 
-		if(connectedE && BlockCrystalGlass.isSideConnectable(state.blockAccess, state.pos, leftFacing)){
-			if(!(validU && BlockCrystalGlass.isSideConnectable(state.blockAccess, state.pos, EnumFacing.UP) && upConnectedLeft)){
+		if(connectedE && BlockCrystalGlassPane.isSideConnectable(state.blockAccess, state.pos, leftFacing)){
+			if(!(validU && BlockCrystalGlassPane.isSideConnectable(state.blockAccess, state.pos, EnumFacing.UP) && upConnectedLeft)){
 				tLineL = true;
 			}
-			if(!(validD && BlockCrystalGlass.isSideConnectable(state.blockAccess, state.pos, EnumFacing.DOWN) && downConnectedLeft)){
+			if(!(validD && BlockCrystalGlassPane.isSideConnectable(state.blockAccess, state.pos, EnumFacing.DOWN) && downConnectedLeft)){
 				bLineL = true;
 			}
 		}
 
-		if(connectedE && !BlockCrystalGlass.isSideConnectable(state.blockAccess, state.pos, leftFacing)){
+		if(connectedE && !BlockCrystalGlassPane.isSideConnectable(state.blockAccess, state.pos, leftFacing)){
 			if(!(validU && upConnectedLeft)){
 				tLineL = true;
 			}
@@ -342,26 +342,26 @@ public class ModelGlassPane extends DynamicItemAndBlockModel {
 		}
 
 		if(connectedE && !connectedW){
-			mT = lineM = mB = !BlockCrystalGlass.isSideConnectable(state.blockAccess, state.pos, rightFacing);
+			mT = lineM = mB = !BlockCrystalGlassPane.isSideConnectable(state.blockAccess, state.pos, rightFacing);
 		}
 		if(connectedW && !connectedE){
-			mT2 = lineM2 = mB2 = !BlockCrystalGlass.isSideConnectable(state.blockAccess, state.pos, leftFacing);
+			mT2 = lineM2 = mB2 = !BlockCrystalGlassPane.isSideConnectable(state.blockAccess, state.pos, leftFacing);
 		}
 
 		if(connectedW){
-			if(validU && BlockCrystalGlass.isSideConnectable(state.blockAccess, state.pos, EnumFacing.UP)){
-				tRC = upConnectedRight && !BlockCrystalGlass.isSideConnectable(state.blockAccess, posU, rightFacing);
+			if(validU && BlockCrystalGlassPane.isSideConnectable(state.blockAccess, state.pos, EnumFacing.UP)){
+				tRC = upConnectedRight && !BlockCrystalGlassPane.isSideConnectable(state.blockAccess, posU, rightFacing);
 			}
-			if(validD && BlockCrystalGlass.isSideConnectable(state.blockAccess, state.pos, EnumFacing.DOWN)){
-				bRC = downConnectedRight && !BlockCrystalGlass.isSideConnectable(state.blockAccess, posD, rightFacing);
+			if(validD && BlockCrystalGlassPane.isSideConnectable(state.blockAccess, state.pos, EnumFacing.DOWN)){
+				bRC = downConnectedRight && !BlockCrystalGlassPane.isSideConnectable(state.blockAccess, posD, rightFacing);
 			}
 		}
 		if(connectedE){
-			if(validU && BlockCrystalGlass.isSideConnectable(state.blockAccess, state.pos, EnumFacing.UP)){
-				tLC = upConnectedLeft && !BlockCrystalGlass.isSideConnectable(state.blockAccess, posU, leftFacing);
+			if(validU && BlockCrystalGlassPane.isSideConnectable(state.blockAccess, state.pos, EnumFacing.UP)){
+				tLC = upConnectedLeft && !BlockCrystalGlassPane.isSideConnectable(state.blockAccess, posU, leftFacing);
 			}
-			if(validD && BlockCrystalGlass.isSideConnectable(state.blockAccess, state.pos, EnumFacing.DOWN)){
-				bLC = downConnectedLeft && !BlockCrystalGlass.isSideConnectable(state.blockAccess, posD, leftFacing);
+			if(validD && BlockCrystalGlassPane.isSideConnectable(state.blockAccess, state.pos, EnumFacing.DOWN)){
+				bLC = downConnectedLeft && !BlockCrystalGlassPane.isSideConnectable(state.blockAccess, posD, leftFacing);
 			}
 		}
 		
@@ -478,41 +478,41 @@ public class ModelGlassPane extends DynamicItemAndBlockModel {
 		//Corners
 		boolean bRC = false, bLC = false, tRC = false, tLC = false;
 
-		lineR = connectedR && !BlockCrystalGlass.isSideConnectable(state.blockAccess, state.pos, rightFacing);
-		lineL = connectedL && !BlockCrystalGlass.isSideConnectable(state.blockAccess, state.pos, leftFacing);
+		lineR = connectedR && !BlockCrystalGlassPane.isSideConnectable(state.blockAccess, state.pos, rightFacing);
+		lineL = connectedL && !BlockCrystalGlassPane.isSideConnectable(state.blockAccess, state.pos, leftFacing);
 
-		if(!BlockCrystalGlass.isSideConnectable(state.blockAccess, state.pos, EnumFacing.UP)) {
+		if(!BlockCrystalGlassPane.isSideConnectable(state.blockAccess, state.pos, EnumFacing.UP)) {
 			mT2 = !connectedL && connectedR;
 			//mT = !(connectedL && connectedR) && !mT2;
 			tLineL = connectedL;
 			tLineR = connectedR;
 		}
 
-		if(!BlockCrystalGlass.isSideConnectable(state.blockAccess, state.pos, EnumFacing.DOWN)) {
+		if(!BlockCrystalGlassPane.isSideConnectable(state.blockAccess, state.pos, EnumFacing.DOWN)) {
 			mB2 = !connectedL && connectedR;
 			mB = !(connectedL && connectedR) && !mB2;
 			bLineL = connectedL;
 			bLineR = connectedR;
 		}
 
-		//tLineR = connectedR && BlockCrystalGlass.isSideConnectable(state.blockAccess, state.pos, rightFacing) && validU ?  : true;
+		//tLineR = connectedR && BlockCrystalGlassPane.isSideConnectable(state.blockAccess, state.pos, rightFacing) && validU ?  : true;
 		if(lineR){
 			mT = mB = false;
 			//Connected but not glass
-			rT = connectedR && !BlockCrystalGlass.isSideConnectable(state.blockAccess, state.pos, rightFacing);
-			rB = connectedR && !BlockCrystalGlass.isSideConnectable(state.blockAccess, state.pos, rightFacing);
+			rT = connectedR && !BlockCrystalGlassPane.isSideConnectable(state.blockAccess, state.pos, rightFacing);
+			rB = connectedR && !BlockCrystalGlassPane.isSideConnectable(state.blockAccess, state.pos, rightFacing);
 		}
 
-		if(connectedR && BlockCrystalGlass.isSideConnectable(state.blockAccess, state.pos, rightFacing)){
-			if(!(validU && BlockCrystalGlass.isSideConnectable(state.blockAccess, state.pos, EnumFacing.UP) && upConnectedRight)){
+		if(connectedR && BlockCrystalGlassPane.isSideConnectable(state.blockAccess, state.pos, rightFacing)){
+			if(!(validU && BlockCrystalGlassPane.isSideConnectable(state.blockAccess, state.pos, EnumFacing.UP) && upConnectedRight)){
 				tLineR = true;
 			} 
-			if(!(validD && BlockCrystalGlass.isSideConnectable(state.blockAccess, state.pos, EnumFacing.DOWN) && downConnectedRight)){
+			if(!(validD && BlockCrystalGlassPane.isSideConnectable(state.blockAccess, state.pos, EnumFacing.DOWN) && downConnectedRight)){
 				bLineR = true;
 			}
 		}
 
-		if(connectedR && !BlockCrystalGlass.isSideConnectable(state.blockAccess, state.pos, rightFacing)){
+		if(connectedR && !BlockCrystalGlassPane.isSideConnectable(state.blockAccess, state.pos, rightFacing)){
 			if(!(validU && upConnectedRight)){
 				tLineR = true;
 			} 
@@ -524,20 +524,20 @@ public class ModelGlassPane extends DynamicItemAndBlockModel {
 		if(lineL){
 			mT = mB = false;
 			//Connected but not glass
-			lT = connectedL && !BlockCrystalGlass.isSideConnectable(state.blockAccess, state.pos, leftFacing);
-			lB = connectedL && !BlockCrystalGlass.isSideConnectable(state.blockAccess, state.pos, leftFacing);
+			lT = connectedL && !BlockCrystalGlassPane.isSideConnectable(state.blockAccess, state.pos, leftFacing);
+			lB = connectedL && !BlockCrystalGlassPane.isSideConnectable(state.blockAccess, state.pos, leftFacing);
 		}
 
-		if(connectedL && BlockCrystalGlass.isSideConnectable(state.blockAccess, state.pos, leftFacing)){
-			if(!(validU && BlockCrystalGlass.isSideConnectable(state.blockAccess, state.pos, EnumFacing.UP) && upConnectedLeft)){
+		if(connectedL && BlockCrystalGlassPane.isSideConnectable(state.blockAccess, state.pos, leftFacing)){
+			if(!(validU && BlockCrystalGlassPane.isSideConnectable(state.blockAccess, state.pos, EnumFacing.UP) && upConnectedLeft)){
 				tLineL = true;
 			}
-			if(!(validD && BlockCrystalGlass.isSideConnectable(state.blockAccess, state.pos, EnumFacing.DOWN) && downConnectedLeft)){
+			if(!(validD && BlockCrystalGlassPane.isSideConnectable(state.blockAccess, state.pos, EnumFacing.DOWN) && downConnectedLeft)){
 				bLineL = true;
 			}
 		}
 
-		if(connectedL && !BlockCrystalGlass.isSideConnectable(state.blockAccess, state.pos, leftFacing)){
+		if(connectedL && !BlockCrystalGlassPane.isSideConnectable(state.blockAccess, state.pos, leftFacing)){
 			if(!(validU && upConnectedLeft)){
 				tLineL = true;
 			}
@@ -547,26 +547,26 @@ public class ModelGlassPane extends DynamicItemAndBlockModel {
 		}
 
 		if(connectedL && !connectedR){
-			mT = lineM = mB = !BlockCrystalGlass.isSideConnectable(state.blockAccess, state.pos, rightFacing);
+			mT = lineM = mB = !BlockCrystalGlassPane.isSideConnectable(state.blockAccess, state.pos, rightFacing);
 		}
 		if(connectedR && !connectedL){
-			mT2 = lineM2 = mB2 = !BlockCrystalGlass.isSideConnectable(state.blockAccess, state.pos, leftFacing);
+			mT2 = lineM2 = mB2 = !BlockCrystalGlassPane.isSideConnectable(state.blockAccess, state.pos, leftFacing);
 		}
 
 		if(connectedR){
-			if(validU && BlockCrystalGlass.isSideConnectable(state.blockAccess, state.pos, EnumFacing.UP)){
-				tRC = upConnectedRight && !BlockCrystalGlass.isSideConnectable(state.blockAccess, posU, rightFacing);
+			if(validU && BlockCrystalGlassPane.isSideConnectable(state.blockAccess, state.pos, EnumFacing.UP)){
+				tRC = upConnectedRight && !BlockCrystalGlassPane.isSideConnectable(state.blockAccess, posU, rightFacing);
 			}
-			if(validD && BlockCrystalGlass.isSideConnectable(state.blockAccess, state.pos, EnumFacing.DOWN)){
-				bRC = downConnectedRight && !BlockCrystalGlass.isSideConnectable(state.blockAccess, posD, rightFacing);
+			if(validD && BlockCrystalGlassPane.isSideConnectable(state.blockAccess, state.pos, EnumFacing.DOWN)){
+				bRC = downConnectedRight && !BlockCrystalGlassPane.isSideConnectable(state.blockAccess, posD, rightFacing);
 			}
 		}
 		if(connectedL){
-			if(validU && BlockCrystalGlass.isSideConnectable(state.blockAccess, state.pos, EnumFacing.UP)){
-				tLC = upConnectedLeft && !BlockCrystalGlass.isSideConnectable(state.blockAccess, posU, leftFacing);
+			if(validU && BlockCrystalGlassPane.isSideConnectable(state.blockAccess, state.pos, EnumFacing.UP)){
+				tLC = upConnectedLeft && !BlockCrystalGlassPane.isSideConnectable(state.blockAccess, posU, leftFacing);
 			}
-			if(validD && BlockCrystalGlass.isSideConnectable(state.blockAccess, state.pos, EnumFacing.DOWN)){
-				bLC = downConnectedLeft && !BlockCrystalGlass.isSideConnectable(state.blockAccess, posD, leftFacing);
+			if(validD && BlockCrystalGlassPane.isSideConnectable(state.blockAccess, state.pos, EnumFacing.DOWN)){
+				bLC = downConnectedLeft && !BlockCrystalGlassPane.isSideConnectable(state.blockAccess, posD, leftFacing);
 			}
 		}
 		

@@ -192,10 +192,10 @@ public class ModItems {
 		shears = new ItemCrystalShears();
 		
 		ItemStack darkIronPlate = new ItemStack(plates, 1, PlateType.DARK_IRON.getMetadata());
-		darkIronHelmet = registerItem(new ItemCustomArmor(ArmorMaterialDarkIron, EntityEquipmentSlot.HEAD, "darkIron", darkIronPlate), "darkironhelmet");
-		darkIronChestplate = registerItem(new ItemCustomArmor(ArmorMaterialDarkIron, EntityEquipmentSlot.CHEST, "darkIron", darkIronPlate), "darkironchestplate");
-		darkIronLeggings = registerItem(new ItemCustomArmor(ArmorMaterialDarkIron, EntityEquipmentSlot.LEGS, "darkIron", darkIronPlate), "darkironleggings");
-		darkIronBoots = registerItem(new ItemCustomArmor(ArmorMaterialDarkIron, EntityEquipmentSlot.FEET, "darkIron", darkIronPlate), "darkironboots");
+		darkIronHelmet = registerItem(new ItemCustomArmor(ArmorMaterialDarkIron, EntityEquipmentSlot.HEAD, "darkiron", darkIronPlate), "darkironhelmet");
+		darkIronChestplate = registerItem(new ItemCustomArmor(ArmorMaterialDarkIron, EntityEquipmentSlot.CHEST, "darkiron", darkIronPlate), "darkironchestplate");
+		darkIronLeggings = registerItem(new ItemCustomArmor(ArmorMaterialDarkIron, EntityEquipmentSlot.LEGS, "darkiron", darkIronPlate), "darkironleggings");
+		darkIronBoots = registerItem(new ItemCustomArmor(ArmorMaterialDarkIron, EntityEquipmentSlot.FEET, "darkiron", darkIronPlate), "darkironboots");
 		
 		crystalHelmet = registerItem(new ItemCrystalArmor(ArmorMaterialCrystal, EntityEquipmentSlot.HEAD, "helmet", ItemStackTools.getEmptyStack()), "crystalhelmet");
 		crystalChestplate = registerItem(new ItemCrystalArmor(ArmorMaterialCrystal, EntityEquipmentSlot.CHEST, "chest", ItemStackTools.getEmptyStack()), "crystalchestplate");

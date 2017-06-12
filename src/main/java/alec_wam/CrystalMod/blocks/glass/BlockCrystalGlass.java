@@ -151,7 +151,7 @@ public class BlockCrystalGlass extends EnumBlock<BlockCrystalGlass.GlassType> im
      * @param side The side of the block to check.
      * @return Whether or not the side is connectable.
      */
-    public static boolean isSideConnectable(IBlockAccess world, BlockPos pos, EnumFacing side) {
+    public boolean isSideConnectable(IBlockAccess world, BlockPos pos, EnumFacing side) {
       final IBlockState original = world.getBlockState(pos);
       final IBlockState connected = world.getBlockState(pos.offset(side));
 
@@ -163,7 +163,7 @@ public class BlockCrystalGlass extends EnumBlock<BlockCrystalGlass.GlassType> im
      * @param state BlockState to check
      * @return True if the block is valid to connect
      */
-    public static boolean canConnect(@Nonnull IBlockState original, @Nonnull IBlockState connected) {
+    public boolean canConnect(@Nonnull IBlockState original, @Nonnull IBlockState connected) {
     	if(original.getBlock() == connected.getBlock()){
     		GlassType typeO = original.getValue(TYPE);
     		GlassType typeC = connected.getValue(TYPE);

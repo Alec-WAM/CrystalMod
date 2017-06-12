@@ -19,6 +19,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumBlockRenderType;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
@@ -142,6 +143,36 @@ public class BlockCrystalGlassPane extends BlockPane implements ICustomModel {
     @Override
     public IBlockState getExtendedState(final IBlockState state, final IBlockAccess world, final BlockPos pos) {
 		return (IBlockState)new GlassBlockState(state, world, pos);
+    }
+    
+    /**
+     * Checks if a specific side of a block can connect to this block. For this example, a side
+     * is connectable if the block is the same block as this one.
+     * 
+     * @param world The world to run the check in.
+     * @param pos The position of the block to check for.
+     * @param side The side of the block to check.
+     * @return Whether or not the side is connectable.
+     */
+    public static boolean isSideConnectable(IBlockAccess world, BlockPos pos, EnumFacing side) {
+      final IBlockState original = world.getBlockState(pos);
+      final IBlockState connected = world.getBlockState(pos.offset(side));
+
+      return original != null && connected != null && canConnect(original, connected);
+    }
+    
+    /**
+     * Checks if this block should connect to another block
+     * @param state BlockState to check
+     * @return True if the block is valid to connect
+     */
+    public static boolean canConnect(@Nonnull IBlockState original, @Nonnull IBlockState connected) {
+    	if(original.getBlock() == connected.getBlock()){
+    		GlassType typeO = original.getValue(BlockCrystalGlass.TYPE);
+    		GlassType typeC = connected.getValue(BlockCrystalGlass.TYPE);
+    		return typeO == typeC;
+    	}
+    	return false;
     }
 
 }
