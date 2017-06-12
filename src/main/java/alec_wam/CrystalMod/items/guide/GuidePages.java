@@ -23,11 +23,14 @@ import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.api.CrystalModAPI;
 import alec_wam.CrystalMod.api.crop.CropRecipe;
 import alec_wam.CrystalMod.api.crop.SpecialCropRecipe;
+import alec_wam.CrystalMod.api.enhancements.EnhancementManager;
+import alec_wam.CrystalMod.api.enhancements.IEnhancement;
 import alec_wam.CrystalMod.api.guide.GuideChapter;
 import alec_wam.CrystalMod.api.guide.GuideIndex;
 import alec_wam.CrystalMod.api.guide.GuidePage;
 import alec_wam.CrystalMod.api.guide.ITextEditor;
 import alec_wam.CrystalMod.api.guide.TranslationHandler;
+import alec_wam.CrystalMod.blocks.BlockCompressed.CompressedBlockType;
 import alec_wam.CrystalMod.blocks.BlockCrystal.CrystalBlockType;
 import alec_wam.CrystalMod.blocks.BlockCrystalIngot.CrystalIngotBlockType;
 import alec_wam.CrystalMod.blocks.BlockCrystalLog;
@@ -54,12 +57,14 @@ import alec_wam.CrystalMod.items.guide.page.PageIcon;
 import alec_wam.CrystalMod.items.guide.page.PageMaterialCropRecipe;
 import alec_wam.CrystalMod.items.guide.page.PagePress;
 import alec_wam.CrystalMod.items.guide.page.PageText;
+import alec_wam.CrystalMod.items.tools.ItemEnhancementKnowledge;
 import alec_wam.CrystalMod.items.tools.backpack.ItemBackpackNormal.CrystalBackpackType;
 import alec_wam.CrystalMod.items.tools.backpack.upgrade.ItemBackpackUpgrade.BackpackUpgrade;
 import alec_wam.CrystalMod.tiles.chest.CrystalChestType;
 import alec_wam.CrystalMod.tiles.chest.wireless.WirelessChestHelper;
 import alec_wam.CrystalMod.tiles.crate.BlockCrate.CrateType;
 import alec_wam.CrystalMod.tiles.explosives.remover.BlockRemoverExplosion.RemoverType;
+import alec_wam.CrystalMod.tiles.lamps.BlockAdvancedLamp.LampType;
 import alec_wam.CrystalMod.tiles.machine.elevator.ItemMiscCard.CardType;
 import alec_wam.CrystalMod.tiles.machine.enderbuffer.BlockEnderBuffer;
 import alec_wam.CrystalMod.tiles.machine.power.battery.BlockBattery.BatteryType;
@@ -122,12 +127,30 @@ public class GuidePages {
 		
 		NonNullList<ItemStack> glassList = ItemUtil.getBlockSubtypes(ModBlocks.crystalGlass, GlassType.BLUE, GlassType.RED, GlassType.GREEN, GlassType.DARK);
 		NonNullList<ItemStack> paneList = ItemUtil.getBlockSubtypes(ModBlocks.crystalGlassPane, GlassType.BLUE, GlassType.RED, GlassType.GREEN, GlassType.DARK);
+		NonNullList<ItemStack> tintedList = ItemUtil.getBlockSubtypes(ModBlocks.crystalGlassTinted, GlassType.BLUE, GlassType.RED, GlassType.GREEN, GlassType.DARK);
+		NonNullList<ItemStack> paintedList = ItemUtil.getBlockSubtypes(ModBlocks.crystalGlassPainted, GlassType.BLUE, GlassType.RED, GlassType.GREEN, GlassType.DARK);
+
 		NonNullList<ItemStack> glassDisplayList = NonNullList.create();
 		glassDisplayList.addAll(glassList); glassDisplayList.addAll(paneList);
-		CrystalModAPI.BLOCKS.registerChapter(new GuideChapter("crystalglass", new PageCrafting("main", glassList), new PageCrafting("pane", paneList)).setDisplayObject(glassDisplayList));
+		glassDisplayList.addAll(tintedList); glassDisplayList.addAll(paintedList);
+		CrystalModAPI.BLOCKS.registerChapter(new GuideChapter("crystalglass", new PageCrafting("main", glassList), new PageCrafting("pane", paneList), new PageIcon("tinted", tintedList), new PageCrafting("painted", paintedList)).setDisplayObject(glassDisplayList));
 		
+		ItemStack charcoalBlock = new ItemStack(ModBlocks.compressed, 1, CompressedBlockType.CHARCOAL.getMeta());
+		ItemStack flintBlock = new ItemStack(ModBlocks.compressed, 1, CompressedBlockType.FLINT.getMeta());
+		ItemStack gunpowderBlock = new ItemStack(ModBlocks.compressed, 1, CompressedBlockType.GUNPOWDER.getMeta());
+		ItemStack blazeRodBlock = new ItemStack(ModBlocks.blazeRodBlock);
+		NonNullList<ItemStack> compressedList = NonNullList.create();
+		compressedList.add(charcoalBlock);
+		compressedList.add(flintBlock);
+		compressedList.add(gunpowderBlock);
+		compressedList.add(blazeRodBlock);
+		CrystalModAPI.BLOCKS.registerChapter(new GuideChapter("compressedblocks", new PageCrafting("blazerod", blazeRodBlock), new PageCrafting("charcoal", charcoalBlock), new PageCrafting("flint", flintBlock), new PageCrafting("gunpowder", gunpowderBlock)).setDisplayObject(compressedList));
+
 		NonNullList<ItemStack> workbenchList = ItemUtil.getBlockSubtypes(ModBlocks.crystalWorkbench, WorkbenchType.values());
 		CrystalModAPI.BLOCKS.registerChapter(new GuideChapter("crystalworkbench", new PageCrafting("main", workbenchList)).setDisplayObject(workbenchList));
+		
+		ItemStack enhancementtable = new ItemStack(ModBlocks.enhancementTable);
+		CrystalModAPI.BLOCKS.registerChapter(new GuideChapter("enhancementtable", new PageCrafting("main", enhancementtable)).setDisplayObject(enhancementtable));
 		
 		ItemStack cauldron = new ItemStack(ModBlocks.cauldron);
 		CrystalModAPI.BLOCKS.registerChapter(new GuideChapter("cauldron", new PageCrafting("main", cauldron)).setDisplayObject(cauldron));
@@ -219,6 +242,16 @@ public class GuidePages {
 		ItemStack spawner = new ItemStack(ModBlocks.customSpawner);
 		CrystalModAPI.BLOCKS.registerChapter(new GuideChapter("spawner", new PageCrafting("main", spawner), new PageText("upgrades")).setDisplayObject(spawner));
 
+		ItemStack darkinfection = new ItemStack(ModBlocks.darkInfection);
+		CrystalModAPI.BLOCKS.registerChapter(new GuideChapter("darkinfection", new PageCrafting("main", darkinfection)).setDisplayObject(darkinfection));
+		
+		ItemStack fusor0 = new ItemStack(ModBlocks.oppositeFuser, 1, 0);
+		ItemStack fusor1 = new ItemStack(ModBlocks.oppositeFuser, 1, 1);
+		ItemStack fusor2 = new ItemStack(ModBlocks.oppositeFuser, 1, 2);
+		NonNullList<ItemStack> fusorList = NonNullList.create();
+		fusorList.add(fusor0); fusorList.add(fusor1); fusorList.add(fusor2);
+		CrystalModAPI.BLOCKS.registerChapter(new GuideChapter("oppositefusor", new PageCrafting("normal", fusor0), new PageCrafting("advanced", fusor1), new PageCrafting("super", fusor2)).setDisplayObject(fusorList));
+				
 		ItemStack mobgrinder = new ItemStack(ModBlocks.mobGrinder);
 		CrystalModAPI.BLOCKS.registerChapter(new GuideChapter("mobgrinder", new PageCrafting("main", mobgrinder)).setDisplayObject(mobgrinder));
 
@@ -245,6 +278,12 @@ public class GuidePages {
 		
 		ItemStack endertorch = new ItemStack(ModBlocks.enderTorch);
 		CrystalModAPI.BLOCKS.registerChapter(new GuideChapter("endertorch", new PageCrafting("main", endertorch)).setDisplayObject(endertorch));
+
+		ItemStack purelamp = new ItemStack(ModBlocks.advancedLamp, 1, LampType.PURE.getMeta());
+		CrystalModAPI.BLOCKS.registerChapter(new GuideChapter("purelamp", new PageCrafting("main", purelamp)).setDisplayObject(purelamp));
+		
+		ItemStack darklamp = new ItemStack(ModBlocks.advancedLamp, 1, LampType.DARK.getMeta());
+		CrystalModAPI.BLOCKS.registerChapter(new GuideChapter("darklamp", new PageCrafting("main", darklamp)).setDisplayObject(darklamp));
 
 		ItemStack advdispenser = new ItemStack(ModBlocks.advDispenser);
 		CrystalModAPI.BLOCKS.registerChapter(new GuideChapter("advdispenser", new PageCrafting("main", advdispenser), new PageText("modes")).setDisplayObject(advdispenser));
@@ -312,12 +351,24 @@ public class GuidePages {
 		ItemStack lock = new ItemStack(ModItems.lock);
 		CrystalModAPI.ITEMS.registerChapter(new GuideChapter("lock", new PageCrafting("main", lock)).setDisplayObject(lock));
 
+		ItemStack curveddagger = new ItemStack(ModItems.dagger);
+		CrystalModAPI.ITEMS.registerChapter(new GuideChapter("dagger", new PageIcon("main", curveddagger)).setDisplayObject(curveddagger));
+		
+		ItemStack darkarang = new ItemStack(ModItems.darkarang);
+		CrystalModAPI.ITEMS.registerChapter(new GuideChapter("darkarang", new PageIcon("main", darkarang)).setDisplayObject(darkarang));
+				
 		ItemStack telePearl = new ItemStack(ModItems.telePearl);
 		CrystalModAPI.ITEMS.registerChapter(new GuideChapter("telepearl", new PageIcon("main", NonNullList.withSize(1, telePearl))).setDisplayObject(telePearl));
 		
 		ItemStack superTorch = new ItemStack(ModItems.superTorch);
 		CrystalModAPI.ITEMS.registerChapter(new GuideChapter("supertorch", new PageCrafting("main", superTorch)).setDisplayObject(superTorch));
 		
+		NonNullList<ItemStack> knowledgeBookList = NonNullList.create();
+		for(IEnhancement enhancement : EnhancementManager.getEnhancements()){
+        	if(enhancement.requiresKnowledge())knowledgeBookList.add(ItemEnhancementKnowledge.createItem(enhancement));
+        }
+		CrystalModAPI.ITEMS.registerChapter(new GuideChapter("enhancementknowledge", new PageIcon("main", knowledgeBookList), new PageText("info")).setDisplayObject(knowledgeBookList));
+				
 		ItemStack wings = new ItemStack(ModItems.wings);
 		CrystalModAPI.ITEMS.registerChapter(new GuideChapter("wings", new PageIcon("main", NonNullList.withSize(1, wings))).setDisplayObject(wings));
 		

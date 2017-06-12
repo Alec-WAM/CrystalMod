@@ -54,6 +54,41 @@
   [title]Glass Panes
   [text]Same as its full block counterpart. Does not require silktouch to pickup.  
  }
+ [page:tinted]
+ {
+  [title]Tinted Glass
+  [text]Tinted version of normal crystal glass. Made my glazing normal glass with Crystal in either a Cauldron or Liquid Infusor.
+ }
+ [page:painted]
+ {
+  [title]Painted Glass
+  [text]Tinted crystal glass, but with a shape that symbolizes a property of each type of crystal.
+ }
+]}
+//Compressed Blocks
+{[
+ [chapter]compressedblocks
+ [title]Compressed Blocks
+ [page:blazerod]
+ {
+  [title]Blaze Rod Block
+  [text]Can be used as fuel.  
+ }
+ [page:charcoal]
+ {
+  [title]Charcoal Block
+  [text]Can be used as fuel.  
+ }
+ [page:flint]
+ {
+  [title]Flint Block
+  [text]Can be used as storage.  
+ }
+ [page:gunpowder]
+ {
+  [title]Compressed Gunpowder
+  [text]Burns quickly. Explodes if too many of them in an area are lit on fire.
+ }
 ]}
 //Crystal Workbench
 {[
@@ -62,6 +97,15 @@
  [page:main]
  {
   [text]The only way to craft Crystal Tools. Hold all of the items in its internal Inventory when you close the screen.  
+ }
+]}
+//Enhancement Table
+{[
+ [chapter]enhancementtable
+ [title]Enhancement Table
+ [page:main]
+ {
+  [text]The enhancement table is a table that you use to enhance your armor with abilities that are like enchantments. You learn the enhancements by finding Knowledge Books around your world. Once you discover an enhancement it will show up in the list of possible enhancements that you can apply to the piece of armor. Just left click to apply the enhancement and right click to remove it.
  }
 ]}
 //Crystal Cauldron
@@ -265,6 +309,35 @@
   [text]Nether Star: No player needed to spawn.<n>Pure Crystal Block: Speed II<n>Pure Crystal Ingot Block: Speed III<n>Golden Apple: Ignore light level   
  }
 ]}
+//Dark Infection
+{[
+ [chapter]darkinfection
+ [title]Dark Infection
+ [page:main]
+ {
+  [text]The Dark Infection is an explosive that infects your world with darkness which will spread slowly and ruin your world. No one would ever dare to step on the infection because you will start to wither away. The Dark Infection is always spewing out darkness, the only way to stop it is to break it, but over time it encases itself in blocks denser than obsidian that you must find a way to break through.    
+ }
+]}
+//Opposite Fusor
+{[
+ [chapter]oppositefusor
+ [title]Opposite Fusor
+ [page:normal]
+ {
+  [title]Opposite Fusor
+  [text]The Opposite Fusors fuse the two completely opposite crystals together to create an enormous explosion as if a fusion reactor blew up. This one is tier 1 which takes 10 seconds to go off and has the smallest explosion radius.    
+ }
+ [page:advanced]
+ {
+  [title]Advanced Opposite Fusor
+  [text]This one is tier 2 which takes 20 seconds to go off and has a medium explosion radius.
+ }
+ [page:super]
+ {
+  [title]Super Opposite Fusor
+  [text]This one is tier 3 which takes 30 seconds to go off and has the biggest explosion radius.
+ }
+]}
 //Mob Grinder
 {[
  [chapter]mobgrinder
@@ -333,6 +406,24 @@
  [page:main]
  {
   [text]When placed down it will not allow players using an Ender Pearl or Enderman to teleport into or out of its range.
+ }
+]}
+//Pure Lamp
+{[
+ [chapter]purelamp
+ [title]Pure Light Lamp
+ [page:main]
+ {
+  [text]The Pure Light Lamp is a light source that is always on and is brighter than lava. It has a huge radius of light.
+ }
+]}
+//Dark Lamp
+{[
+ [chapter]darklamp
+ [title]Darkness Lamp
+ [page:main]
+ {
+  [text]The Darkness Lamp is a lamp that is always on and causes darkness in a huge radius. You could use this for mob farms to ensure that mobs spawn or you can make a glass mob grinder so that you see the mobs spawning.
  }
 ]}
 //AdvDispenser
@@ -514,6 +605,24 @@
   [text]Allows your to lock your backpack, Wireless Chest, or Ender Buffer.
  }
 ]}
+//Dagger
+{[
+ [chapter]dagger
+ [title]Curved Dagger
+ [page:main]
+ {
+  [text]Thrown at an enemy by a Pure Angel. Can also be thrown by a player. This weapon gets its name from the ominous corkscrew-like curve of its blade which makes it spin when thrown to do more damage. 
+ }
+]}
+//Darkarang
+{[
+ [chapter]darkarang
+ [title]Darkarang
+ [page:main]
+ {
+  [text]Item thrown by Dark Devil at opponents. Can be used by a player. It has a mysterious story behind its existence.
+ }
+]}
 //TelePearl
 {[
  [chapter]telepearl
@@ -530,6 +639,19 @@
  [page:main]
  {
   [text]When given torches it will place them automaticlly for you. It can be refilled by just placing it in a Crafting Table with torches. 
+ }
+]}
+//Enhancement Knowledge
+{[
+ [chapter]enhancementknowledge
+ [title]Knowledge Books
+ [page:main]
+ {
+  [text]The knowledge book is a type of book that gives you the knowledge of the Crystal Ancients(coming soon) which lets you know how to enhance your armor with an enhancement table when you right-click it. 
+ }
+ [page:info]
+ {
+  [text]Invisible Armor: This knowledge book gives you the knowledge of how to make your armor invisible(not the player itself). [Any Armor]<n><n>Jump Boost: This knowledge book gives you the knowledge of how to jump higher. [Only Boots]<n><n>Water-Walking: This knowledge book gives you the knowledge of how to walk on water. [Only Boots]<n><n>Dragon Wings: This knowledge book gives you the knowledge of how to fly with the Ender Dragon's wings. [Only Chestplates]
  }
 ]}
 //Wings
