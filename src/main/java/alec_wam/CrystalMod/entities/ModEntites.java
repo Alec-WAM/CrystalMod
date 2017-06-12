@@ -126,6 +126,12 @@ public class ModEntites {
 		
 		List<Biome> angelBiomeList = getBiomesThatCanSpawn(EntityEnderman.class, EnumCreatureType.MONSTER);
 		Biome hell = Biome.REGISTRY.getObject(new ResourceLocation("hell"));
+		Biome sky = Biome.REGISTRY.getObject(new ResourceLocation("sky"));
+		
+		if(sky !=null){
+			angelBiomeList.remove(sky);
+		}
+		
 		if(hell !=null){
 			angelBiomeList.remove(hell);
 			List<Biome> listHell = Lists.newArrayList(hell);

@@ -20,6 +20,7 @@ import alec_wam.CrystalMod.capability.ExtendedPlayer;
 import alec_wam.CrystalMod.capability.ExtendedPlayerProvider;
 import alec_wam.CrystalMod.entities.accessories.GuiHorseEnderChest;
 import alec_wam.CrystalMod.entities.accessories.HorseAccessories;
+import alec_wam.CrystalMod.fluids.ModFluids;
 import alec_wam.CrystalMod.items.enchancements.ModEnhancements;
 import alec_wam.CrystalMod.items.tools.backpack.BackpackUtil;
 import alec_wam.CrystalMod.items.tools.backpack.network.PacketToolSwap;
@@ -88,12 +89,16 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.client.event.MouseEvent;
+import net.minecraftforge.client.event.RenderBlockOverlayEvent;
+import net.minecraftforge.client.event.RenderBlockOverlayEvent.OverlayType;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.client.event.RenderHandEvent;
 import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.client.event.sound.PlaySoundEvent;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.IFluidBlock;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -696,5 +701,52 @@ public class ClientEventHandler {
             
     		GlStateManager.popMatrix();
     	}
+    }
+    
+    @SubscribeEvent
+    public void waterOverlay(RenderBlockOverlayEvent event){
+    	if(event.getOverlayType() == OverlayType.WATER){
+	    	EntityPlayer player = event.getPlayer();
+	    	IBlockState state = player.getEntityWorld().getBlockState(event.getBlockPos());
+	    	if(state.getBlock() instanceof IFluidBlock){
+	    		Fluid fluid = ((IFluidBlock)state.getBlock()).getFluid();
+	    		if(fluid !=null){
+	    			ResourceLocation res = ModFluids.getOverlayTexture(fluid);
+	    			if(res !=null){
+	    				event.setCanceled(true);
+	    				renderWaterOverlayTexture(event.getRenderPartialTicks(), res);
+	    			}
+	    		}
+	    	}
+    	}
+    }
+    
+    private void renderWaterOverlayTexture(float partialTicks, ResourceLocation res)
+    {
+    	Minecraft.getMinecraft().getTextureManager().bindTexture(res);
+        Tessellator tessellator = Tessellator.getInstance();
+        VertexBuffer vertexbuffer = tessellator.getBuffer();
+        float f = Minecraft.getMinecraft().player.getBrightness(partialTicks);
+        GlStateManager.color(f, f, f, 0.5F);
+        GlStateManager.enableBlend();
+        GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+        GlStateManager.pushMatrix();
+        float f1 = 4.0F;
+        float f2 = -1.0F;
+        float f3 = 1.0F;
+        float f4 = -1.0F;
+        float f5 = 1.0F;
+        float f6 = -0.5F;
+        float f7 = -Minecraft.getMinecraft().player.rotationYaw / 64.0F;
+        float f8 = Minecraft.getMinecraft().player.rotationPitch / 64.0F;
+        vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
+        vertexbuffer.pos(-1.0D, -1.0D, -0.5D).tex((double)(4.0F + f7), (double)(4.0F + f8)).endVertex();
+        vertexbuffer.pos(1.0D, -1.0D, -0.5D).tex((double)(0.0F + f7), (double)(4.0F + f8)).endVertex();
+        vertexbuffer.pos(1.0D, 1.0D, -0.5D).tex((double)(0.0F + f7), (double)(0.0F + f8)).endVertex();
+        vertexbuffer.pos(-1.0D, 1.0D, -0.5D).tex((double)(4.0F + f7), (double)(0.0F + f8)).endVertex();
+        tessellator.draw();
+        GlStateManager.popMatrix();
+        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+        GlStateManager.disableBlend();
     }
 }

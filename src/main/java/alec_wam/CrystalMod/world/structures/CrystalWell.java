@@ -298,11 +298,12 @@ public class CrystalWell {
 		IBlockState glass = ModBlocks.crystalGlass.getDefaultState().withProperty(BlockCrystalGlass.TYPE, BlockCrystalGlass.GlassType.PURE);
 		IBlockState liquid = ModFluids.fluidPureCrystal.getBlock().getDefaultState();
 		IBlockState pureBlock = ModBlocks.crystal.getDefaultState().withProperty(BlockCrystal.TYPE, CrystalBlockType.PURE);
+		IBlockState pureChiseled = ModBlocks.crystal.getDefaultState().withProperty(BlockCrystal.TYPE, CrystalBlockType.PURE_CHISELED);
 		
-		setBlockAndNotifyAdequately(world, pos, chisled, false);
-		setBlockAndNotifyAdequately(world, pos.offset(EnumFacing.SOUTH, 4), chisled, false);
-		setBlockAndNotifyAdequately(world, pos.offset(EnumFacing.SOUTH, 4).offset(EnumFacing.EAST, 4), chisled, false);
-		setBlockAndNotifyAdequately(world, pos.offset(EnumFacing.EAST, 4), chisled, false);
+		setBlockAndNotifyAdequately(world, pos, pureChiseled, false);
+		setBlockAndNotifyAdequately(world, pos.offset(EnumFacing.SOUTH, 4), pureChiseled, false);
+		setBlockAndNotifyAdequately(world, pos.offset(EnumFacing.SOUTH, 4).offset(EnumFacing.EAST, 4), pureChiseled, false);
+		setBlockAndNotifyAdequately(world, pos.offset(EnumFacing.EAST, 4), pureChiseled, false);
 		
 		setBlockAndNotifyAdequately(world, pos.offset(EnumFacing.SOUTH), pureBlock, false);
 		setBlockAndNotifyAdequately(world, pos.offset(EnumFacing.EAST), pureBlock, false);
@@ -310,7 +311,7 @@ public class CrystalWell {
 		setBlockAndNotifyAdequately(world, pos.offset(EnumFacing.SOUTH, 4).offset(EnumFacing.EAST), pureBlock, false);
 		
 		setBlockAndNotifyAdequately(world, pos.offset(EnumFacing.SOUTH).offset(EnumFacing.EAST, 4), pureBlock, false);
-		setBlockAndNotifyAdequately(world, pos.offset(EnumFacing.EAST, 3), quartz, false);
+		setBlockAndNotifyAdequately(world, pos.offset(EnumFacing.EAST, 3), pureBlock, false);
 		setBlockAndNotifyAdequately(world, pos.offset(EnumFacing.SOUTH, 3).offset(EnumFacing.EAST, 4), pureBlock, false);
 		setBlockAndNotifyAdequately(world, pos.offset(EnumFacing.SOUTH, 4).offset(EnumFacing.EAST, 3), pureBlock, false);
 		

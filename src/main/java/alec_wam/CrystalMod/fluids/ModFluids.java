@@ -194,24 +194,62 @@ public class ModFluids {
 	@SideOnly(Side.CLIENT)
 	public static class FluidStateMapper extends StateMapperBase implements ItemMeshDefinition {
 
-	    public final Fluid fluid;
-	    public final ModelResourceLocation location;
+		public final Fluid fluid;
+		public final ModelResourceLocation location;
 
-	    public FluidStateMapper(Fluid fluid) {
-	      this.fluid = fluid;
-	      this.location = new ModelResourceLocation(CrystalMod.resource("fluid_block"), fluid.getName());
-	    }
+		public FluidStateMapper(Fluid fluid) {
+			this.fluid = fluid;
+			this.location = new ModelResourceLocation(CrystalMod.resource("fluid_block"), fluid.getName());
+		}
 
-	    @Nonnull
-	    @Override
-	    protected ModelResourceLocation getModelResourceLocation(@Nonnull IBlockState state) {
-	      return location;
-	    }
+		@Nonnull
+		@Override
+		protected ModelResourceLocation getModelResourceLocation(@Nonnull IBlockState state) {
+			return location;
+		}
 
-	    @Nonnull
-	    @Override
-	    public ModelResourceLocation getModelLocation(@Nonnull ItemStack stack) {
-	      return location;
-	    }
-	  }
+		@Nonnull
+		@Override
+		public ModelResourceLocation getModelLocation(@Nonnull ItemStack stack) {
+			return location;
+		}
+	}
+	
+	private static final ResourceLocation RES_UNDERWATER_XP = new ResourceLocation("crystalmod:textures/gui/overlay/underwater/underwater_xpjuice.png");
+	private static final ResourceLocation RES_UNDERWATER_BLUE = new ResourceLocation("crystalmod:textures/gui/overlay/underwater/underwater_blue.png");
+	private static final ResourceLocation RES_UNDERWATER_RED = new ResourceLocation("crystalmod:textures/gui/overlay/underwater/underwater_red.png");
+	private static final ResourceLocation RES_UNDERWATER_GREEN = new ResourceLocation("crystalmod:textures/gui/overlay/underwater/underwater_green.png");
+	private static final ResourceLocation RES_UNDERWATER_DARK = new ResourceLocation("crystalmod:textures/gui/overlay/underwater/underwater_dark.png");
+	private static final ResourceLocation RES_UNDERWATER_PURE = new ResourceLocation("crystalmod:textures/gui/overlay/underwater/underwater_pure.png");
+	private static final ResourceLocation RES_UNDERWATER_DIRON = new ResourceLocation("crystalmod:textures/gui/overlay/underwater/underwater_diron.png");
+	private static final ResourceLocation RES_UNDERWATER_ENDER = new ResourceLocation("crystalmod:textures/gui/overlay/underwater/underwater_ender.png");
+	
+	public static ResourceLocation getOverlayTexture(Fluid fluid){
+		if(fluid == fluidBlueCrystal){
+			return RES_UNDERWATER_BLUE;
+		}
+		if(fluid == fluidRedCrystal){
+			return RES_UNDERWATER_RED;
+		}
+		if(fluid == fluidGreenCrystal){
+			return RES_UNDERWATER_GREEN;
+		}
+		if(fluid == fluidDarkCrystal){
+			return RES_UNDERWATER_DARK;
+		}
+		if(fluid == fluidPureCrystal){
+			return RES_UNDERWATER_PURE;
+		}
+		if(fluid == fluidDarkIron){
+			return RES_UNDERWATER_DIRON;
+		}
+		if(fluidXpJuice !=null && fluid == fluidXpJuice){
+			return RES_UNDERWATER_XP;
+		}
+		if(fluid == fluidEnder){
+			return RES_UNDERWATER_ENDER;
+		}
+		return null;
+	}
+
 }
