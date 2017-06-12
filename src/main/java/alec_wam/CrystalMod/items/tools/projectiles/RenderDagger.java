@@ -51,6 +51,7 @@ public class RenderDagger extends Render<EntityDagger> {
 
         float min = -0.5f;
         float max = 0.5f;
+        
         vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
         vertexbuffer.pos(min, min, 0).tex(0, 0).endVertex();
         vertexbuffer.pos(max, min, 0).tex(1, 0).endVertex();
@@ -67,6 +68,29 @@ public class RenderDagger extends Render<EntityDagger> {
         vertexbuffer.pos(min, max, 0).tex(1, 1).endVertex();
         tessellator.draw();
         GlStateManager.popMatrix();
+        
+        GlStateManager.pushMatrix();
+        GlStateManager.rotate(90, 1, 0, 0);
+        
+        vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
+        vertexbuffer.pos(min, min, 0).tex(0, 0).endVertex();
+        vertexbuffer.pos(max, min, 0).tex(1, 0).endVertex();
+        vertexbuffer.pos(max, max, 0).tex(1, 1).endVertex();
+        vertexbuffer.pos(min, max, 0).tex(0, 1).endVertex();
+        tessellator.draw();
+        
+        GlStateManager.pushMatrix();
+        GlStateManager.rotate(180, 0, 1, 0);
+        vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
+        vertexbuffer.pos(min, min, 0).tex(1, 0).endVertex();
+        vertexbuffer.pos(max, min, 0).tex(0, 0).endVertex();
+        vertexbuffer.pos(max, max, 0).tex(0, 1).endVertex();
+        vertexbuffer.pos(min, max, 0).tex(1, 1).endVertex();
+        tessellator.draw();
+        GlStateManager.popMatrix();
+
+        GlStateManager.popMatrix();
+        
         GlStateManager.popMatrix();
         
 		//GlStateManager.disableRescaleNormal();
