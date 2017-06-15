@@ -37,7 +37,7 @@ import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.event.ForgeEventFactory;
 
 public class BlockUtil {
-
+	
 	public static BlockPos getMin(BlockPos pos1, BlockPos pos2)
 	{
 		BlockPos pos = new BlockPos(Math.min(pos1.getX(), pos2.getX()), Math.min(pos1.getY(), pos2.getY()), Math.min(pos1.getZ(), pos2.getZ()));

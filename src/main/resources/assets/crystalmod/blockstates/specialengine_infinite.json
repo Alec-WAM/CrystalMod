@@ -1,0 +1,22 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "crystalmod:fixedonetexture",
+    "textures": {
+      "all": "crystalmod:blocks/specialengine_infinite_idle"
+    },
+    "transform": "forge:default-block"
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{}],
+    "active": {
+		"true":{
+			"textures": {
+				"all": "crystalmod:blocks/specialengine_infinite"
+			}
+		},
+		"false": {}
+    }
+  }
+}

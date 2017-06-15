@@ -1,0 +1,11 @@
+{
+  "forge_marker": 1,
+  "variants": {
+    "normal": [{}],
+    "inventory": [{}],
+    "type": {
+      "redstone_bricks": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/decorative/redstonebrick"} },
+	  "square_turn": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/decorative/square_turn"} }
+    }
+  }
+}

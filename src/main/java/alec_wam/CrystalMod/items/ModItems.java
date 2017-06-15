@@ -50,6 +50,9 @@ import alec_wam.CrystalMod.items.tools.bat.ItemBat;
 import alec_wam.CrystalMod.items.tools.projectiles.ItemDagger;
 import alec_wam.CrystalMod.items.tools.projectiles.ItemDarkarang;
 import alec_wam.CrystalMod.tiles.machine.elevator.ItemMiscCard;
+import alec_wam.CrystalMod.tiles.machine.power.redstonereactor.ItemCongealedRedstone;
+import alec_wam.CrystalMod.tiles.machine.power.redstonereactor.ItemReactorUpgrade;
+import alec_wam.CrystalMod.tiles.machine.specialengines.ItemEngineCore;
 import alec_wam.CrystalMod.tiles.machine.worksite.ItemWorksiteUpgrade;
 import alec_wam.CrystalMod.tiles.pipes.attachments.ItemPipeAttachment;
 import alec_wam.CrystalMod.tiles.pipes.covers.ItemPipeCover;
@@ -92,6 +95,8 @@ public class ModItems {
 	public static ItemMachineFrame machineFrame;
 	public static ItemCursedBone cursedBone;
 	public static ItemCrystalSap crystalSap;
+	public static ItemCongealedRedstone congealedRedstone;
+	public static ItemCrystex crystexItems;
 	
 	public static ToolMaterial ToolMaterialCrystal = EnumHelper.addToolMaterial(CrystalMod.MODID.toLowerCase()+".crystal", 5, 2000, 20.0F, 6.0F, 22);
 	public static ToolMaterial ToolMaterialDarkIron = EnumHelper.addToolMaterial(CrystalMod.MODID.toLowerCase()+".darkIron", 2, 500/*250*/, 7.0F/*6.0F*/, 2.5F/*2.0F*/, 12/*14*/);
@@ -153,6 +158,8 @@ public class ModItems {
 	public static ItemTeloportTool telePearl;
 	public static ItemSuperTorch superTorch;
 	public static ItemDisguise disguise;
+	public static ItemReactorUpgrade reactorUpgrade;
+	public static ItemEngineCore engineCore;
 	
 	public static ItemFlag flag;
 	public static ItemDragonWings wings;
@@ -180,6 +187,8 @@ public class ModItems {
 		machineFrame = new ItemMachineFrame();
 		cursedBone = new ItemCursedBone();
 		crystalSap = new ItemCrystalSap();
+		congealedRedstone = new ItemCongealedRedstone();
+		crystexItems = new ItemCrystex();
 
 		crystalAxe = new ItemCrystalAxe(ToolMaterialCrystal);
 		megaCrystalAxe = new ItemMegaCrystalAxe(ToolMaterialCrystal);
@@ -192,10 +201,10 @@ public class ModItems {
 		shears = new ItemCrystalShears();
 		
 		ItemStack darkIronPlate = new ItemStack(plates, 1, PlateType.DARK_IRON.getMetadata());
-		darkIronHelmet = registerItem(new ItemCustomArmor(ArmorMaterialDarkIron, EntityEquipmentSlot.HEAD, "darkiron", darkIronPlate), "darkironhelmet");
-		darkIronChestplate = registerItem(new ItemCustomArmor(ArmorMaterialDarkIron, EntityEquipmentSlot.CHEST, "darkiron", darkIronPlate), "darkironchestplate");
-		darkIronLeggings = registerItem(new ItemCustomArmor(ArmorMaterialDarkIron, EntityEquipmentSlot.LEGS, "darkiron", darkIronPlate), "darkironleggings");
-		darkIronBoots = registerItem(new ItemCustomArmor(ArmorMaterialDarkIron, EntityEquipmentSlot.FEET, "darkiron", darkIronPlate), "darkironboots");
+		darkIronHelmet = registerItem(new ItemCustomArmor(ArmorMaterialDarkIron, EntityEquipmentSlot.HEAD, "diron", darkIronPlate), "darkironhelmet");
+		darkIronChestplate = registerItem(new ItemCustomArmor(ArmorMaterialDarkIron, EntityEquipmentSlot.CHEST, "diron", darkIronPlate), "darkironchestplate");
+		darkIronLeggings = registerItem(new ItemCustomArmor(ArmorMaterialDarkIron, EntityEquipmentSlot.LEGS, "diron", darkIronPlate), "darkironleggings");
+		darkIronBoots = registerItem(new ItemCustomArmor(ArmorMaterialDarkIron, EntityEquipmentSlot.FEET, "diron", darkIronPlate), "darkironboots");
 		
 		crystalHelmet = registerItem(new ItemCrystalArmor(ArmorMaterialCrystal, EntityEquipmentSlot.HEAD, "helmet", ItemStackTools.getEmptyStack()), "crystalhelmet");
 		crystalChestplate = registerItem(new ItemCrystalArmor(ArmorMaterialCrystal, EntityEquipmentSlot.CHEST, "chest", ItemStackTools.getEmptyStack()), "crystalchestplate");
@@ -245,6 +254,8 @@ public class ModItems {
 		telePearl = new ItemTeloportTool();
 		superTorch = new ItemSuperTorch();
 		disguise = new ItemDisguise();
+		reactorUpgrade = new ItemReactorUpgrade();
+		engineCore = new ItemEngineCore();
 		flag = new ItemFlag();
 		wings = new ItemDragonWings();
 		mobEssence = new ItemMobEssence();

@@ -53,6 +53,7 @@ import alec_wam.CrystalMod.tiles.playercube.PlayerCube;
 import alec_wam.CrystalMod.tiles.playercube.TileEntityPlayerCubePortal;
 import alec_wam.CrystalMod.tiles.spawner.EntityEssenceInstance;
 import alec_wam.CrystalMod.tiles.spawner.ItemMobEssence;
+import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.ChatUtil;
 import alec_wam.CrystalMod.util.EntityUtil;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
@@ -130,9 +131,11 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.EntityInteract;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickBlock;
 import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.event.world.BlockEvent.CreateFluidSourceEvent;
 import net.minecraftforge.event.world.ExplosionEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.Event;
+import net.minecraftforge.fml.common.eventhandler.Event.Result;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -1070,5 +1073,78 @@ public class EventHandler {
                 });
             }*/
         }
+    }
+    
+    public static final Map<Integer, List<BlockPos>> ACTIVE_INFINITE_ENGINES = Maps.newHashMap();
+    
+    public static void addInfiniteEngine(int dim, BlockPos pos){
+    	List<BlockPos> posList = ACTIVE_INFINITE_ENGINES.getOrDefault(dim, Lists.newArrayList());
+    	if(!posList.contains(pos)){
+    		posList.add(pos);
+    		ACTIVE_INFINITE_ENGINES.put(dim, posList);
+    	}
+    }
+    
+    public static void removeInfiniteEngine(int dim, BlockPos pos){
+    	if(!ACTIVE_INFINITE_ENGINES.containsKey(dim)) return;
+    	List<BlockPos> posList = ACTIVE_INFINITE_ENGINES.getOrDefault(dim, Lists.newArrayList());
+    	if(posList.contains(pos)){
+    		posList.remove(pos);
+    		ACTIVE_INFINITE_ENGINES.put(dim, posList);
+    	}
+    }
+    
+    public static final Map<Integer, List<BlockPos>> ACTIVE_FINITE_ENGINES = Maps.newHashMap();
+    
+    public static void addFiniteEngine(int dim, BlockPos pos){
+    	List<BlockPos> posList = ACTIVE_FINITE_ENGINES.getOrDefault(dim, Lists.newArrayList());
+    	if(!posList.contains(pos)){
+    		posList.add(pos);
+    		ACTIVE_FINITE_ENGINES.put(dim, posList);
+    	}
+    }
+    
+    public static void removeFiniteEngine(int dim, BlockPos pos){
+    	if(!ACTIVE_FINITE_ENGINES.containsKey(dim)) return;
+    	List<BlockPos> posList = ACTIVE_FINITE_ENGINES.getOrDefault(dim, Lists.newArrayList());
+    	if(posList.contains(pos)){
+    		posList.remove(pos);
+    		ACTIVE_FINITE_ENGINES.put(dim, posList);
+    	}
+    }
+    
+    @SubscribeEvent
+    public void engineHandle(CreateFluidSourceEvent event){
+    	World world = event.getWorld();
+    	BlockPos pos = event.getPos();
+    	IBlockState state = event.getState();
+    	if(world !=null && world.provider !=null){
+    		int dimension = world.provider.getDimension();
+    		if(state.getBlock() == Blocks.LAVA || state.getBlock() == Blocks.FLOWING_LAVA){
+	    		List<BlockPos> activeInfiniteEngines = ACTIVE_INFINITE_ENGINES.get(dimension);
+	    		if(activeInfiniteEngines !=null && !activeInfiniteEngines.isEmpty()){
+	    			for(BlockPos engine : activeInfiniteEngines){
+	    				if(inRangeOfEngine(engine, pos)){
+	    					event.setResult(Result.ALLOW);
+	    				}
+	    			}
+	    		}
+    		}
+    		if(state.getBlock() == Blocks.WATER || state.getBlock() == Blocks.FLOWING_WATER){
+	    		List<BlockPos> activeFiniteEngines = ACTIVE_FINITE_ENGINES.get(dimension);
+	    		if(activeFiniteEngines !=null && !activeFiniteEngines.isEmpty()){
+	    			for(BlockPos engine : activeFiniteEngines){
+	    				if(inRangeOfEngine(engine, pos)){
+	    					event.setResult(Result.DENY);
+	    				}
+	    			}
+	    		}
+    		}
+    	}
+    }
+    
+    public static boolean inRangeOfEngine(BlockPos engine, BlockPos pos){
+    	List<BlockPos> checkList = BlockUtil.getBlocksInBB(engine, 10, 10, 10);
+    	return checkList.contains(pos);
     }
 }

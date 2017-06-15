@@ -55,6 +55,7 @@ public class JEIPlugin  extends BlankModPlugin {
 
 		registry.addRecipes(CrystalCraftingManager.getInstance().getRecipeList());
 
+		//TODO Add Crystal Furnace Recipe Handler
 		PressRecipeCategory.register(jeiHelpers, registry, guiHelper);
 		CauldronRecipeCategory.register(jeiHelpers, registry, guiHelper);
 		LiquidizerRecipeCategory.register(jeiHelpers, registry, guiHelper);

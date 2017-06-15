@@ -48,6 +48,27 @@ item.crystalmod.crystalsap.red.name=Red Crystal Sap
 item.crystalmod.crystalsap.green.name=Green Crystal Sap
 item.crystalmod.crystalsap.dark.name=Dark Crystal Sap
 
+item.crystalmod.congealedredstone.name=Crystal Congealed Redstone
+item.crystalmod.reactorupgrade.basic.name=Basic Redstone Reactor Upgrade
+item.crystalmod.reactorupgrade.advanced.name=Advanced Redstone Reactor Upgrade
+item.crystalmod.reactorupgrade.super.name=Super Redstone Reactor Upgrade
+
+item.crystalmod.enginecore.finite.name=Finite Engine Core
+item.crystalmod.enginecore.infinite.name=Infinite Engine Core
+
+item.crystalmod.crystexitem.crystexus.name=Crystexus
+item.crystalmod.crystexitem.crystexium_essence.name=Crystexium Essence
+item.crystalmod.crystexitem.crystexium_essence_blue.name=Blue Crystexium Essence
+item.crystalmod.crystexitem.crystexium_essence_red.name=Red Crystexium Essence
+item.crystalmod.crystexitem.crystexium_essence_green.name=Green Crystexium Essence
+item.crystalmod.crystexitem.crystexium_essence_dark.name=Dark Crystexium Essence
+item.crystalmod.crystexitem.crystexium_essence_pure.name=Pure Crystexium Essence
+item.crystalmod.crystexitem.crystexium_brick.name=Crystexium Brick
+item.crystalmod.crystexitem.crystexium_brick_blue.name=Blue Crystexium Brick
+item.crystalmod.crystexitem.crystexium_brick_red.name=Red Crystexium Brick
+item.crystalmod.crystexitem.crystexium_brick_green.name=Green Crystexium Brick
+item.crystalmod.crystexitem.crystexium_brick_dark.name=Dark Crystexium Brick
+item.crystalmod.crystexitem.crystexium_brick_pure.name=Pure Crystexium Brick
 
 item.crystalmod.toolparts.rod.name=Crystal Tool Rod
 item.crystalmod.toolparts.cover.name=Crystal Sword Hilt
@@ -315,6 +336,8 @@ tile.crystalmod.etchedcrystalblock.green.name=Etched Green Crystal Block
 tile.crystalmod.etchedcrystalblock.dark.name=Etched Dark Crystal Block
 tile.crystalmod.etchedcrystalblock.pure.name=Etched Pure Crystal Block
 
+tile.crystalmod.decorativeblock.redstone_bricks.name=Congealed Redstone Brick
+tile.crystalmod.decorativeblock.square_turn.name=Square Turn Block
 
 tile.crystalmod.crystalglass.blue.name=Blue Crystal Glass
 tile.crystalmod.crystalglass.red.name=Red Crystal Glass
@@ -452,6 +475,13 @@ tile.crystalmod.engine.furnace.name=Furnace Engine
 tile.crystalmod.engine.lava.name=Lava Engine
 tile.crystalmod.engine.vampire.name=Vampiric Crystal Engine
 
+tile.crystalmod.redstonereactor.name=Redstone Reactor
+tile.crystalmod.redstonecore.name=Redstone Core
+tile.crystalmod.congealedredstonesponge.name=Heated Crystal Sponge
+
+tile.crystalmod.specialengine.infinite.name=Infinite Engine
+tile.crystalmod.specialengine.finite.name=Finite Engine
+
 tile.crystalmod.weather.name=Weather Forecaster
 tile.crystalmod.playercubeportal.name=Player Cube Portal
 tile.crystalmod.playercubewall.name=Player Cube Wall
@@ -577,6 +607,26 @@ tile.crystalmod.infectedblock.leaves.name=Infected Leaves
 
 tile.crystalmod.advancedlamp.pure.name=Pure Light Lamp
 tile.crystalmod.advancedlamp.dark.name=Darkness Lamp
+
+tile.crystalmod.crystexiumblock.normal.name=Crytexium Block
+tile.crystalmod.crystexiumblock.brick.name=Crytexium Brick
+tile.crystalmod.crystexiumblock.square_brick.name=Crytexium Square Block
+
+tile.crystalmod.bluecrystexiumblock.normal.name=Blue Crystexium Block
+tile.crystalmod.bluecrystexiumblock.brick.name=Blue Crystexium Bricks
+tile.crystalmod.bluecrystexiumblock.square_brick.name=Blue Crystexium Square Bricks
+tile.crystalmod.redcrystexiumblock.normal.name=Red Crystexium Block
+tile.crystalmod.redcrystexiumblock.brick.name=Red Crystexium Bricks
+tile.crystalmod.redcrystexiumblock.square_brick.name=Red Crystexium Square Bricks
+tile.crystalmod.greencrystexiumblock.normal.name=Green Crystexium Block
+tile.crystalmod.greencrystexiumblock.brick.name=Green Crystexium Bricks
+tile.crystalmod.greencrystexiumblock.square_brick.name=Green Crystexium Square Bricks
+tile.crystalmod.darkcrystexiumblock.normal.name=Dark Crystexium Block
+tile.crystalmod.darkcrystexiumblock.brick.name=Dark Crystexium Bricks
+tile.crystalmod.darkcrystexiumblock.square_brick.name=Dark Crystexium Square Bricks
+tile.crystalmod.purecrystexiumblock.normal.name=Pure Crystexium Block
+tile.crystalmod.purecrystexiumblock.brick.name=Pure Crystexium Bricks
+tile.crystalmod.purecrystexiumblock.square_brick.name=Pure Crystexium Square Bricks
 #--Fluids
 fluid.crystalmod.xpjuice=Liquid XP
 fluid.crystalmod.crystal.blue=Blue Liquid Crystal

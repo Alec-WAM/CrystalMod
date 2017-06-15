@@ -19,7 +19,7 @@ public class EnumBlock<E extends Enum<E> & EnumBlock.IEnumMeta & IStringSerializ
   public final PropertyEnum<E> prop;
   private final E[] values;
 
-  private static PropertyEnum<?> tmp;
+  public static PropertyEnum<?> tmp;
   
   public EnumBlock(Material material, PropertyEnum<E> prop, Class<E> clazz) {
     super(preInit(material, prop));

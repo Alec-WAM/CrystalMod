@@ -30,6 +30,7 @@ import alec_wam.CrystalMod.blocks.BlockCrystalLog.WoodType;
 import alec_wam.CrystalMod.blocks.BlockCrystalOre.CrystalOreType;
 import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.ModLogger;
+import alec_wam.CrystalMod.world.crystex.MapGenCrystexiumSpike;
 import alec_wam.CrystalMod.world.structures.CrystalWell;
 import alec_wam.CrystalMod.world.structures.MapGenFusionTemple;
 
@@ -41,13 +42,19 @@ public class CrystalModWorldGenerator implements IWorldGenerator {
     public static List<Integer> reedDimBlacklist = new ArrayList<Integer>();
     
     public static MapGenFusionTemple fusionTempleGen = new MapGenFusionTemple();
-    
+    public static MapGenCrystexiumSpike crystexiumSpikeGen = new MapGenCrystexiumSpike();
+
     @Override
     public void generate(Random random, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) {
         generateWorld(random, chunkX, chunkZ, world, true);
         if(world.provider.getDimension() == 0 && Config.generateFusionTemple){
         	fusionTempleGen.generate(world, chunkX, chunkZ, null);
         	fusionTempleGen.generateStructure(world, random, new ChunkPos(chunkX, chunkZ));
+        }
+        boolean genSpikes = false;
+        if(world.provider.getDimension() == 0 && genSpikes){
+        	crystexiumSpikeGen.generate(world, chunkX, chunkZ, null);
+        	crystexiumSpikeGen.generateStructure(world, random, new ChunkPos(chunkX, chunkZ));
         }
         
         if(world.provider.getDimensionType() == DimensionType.OVERWORLD && Config.generateOverworldWell){

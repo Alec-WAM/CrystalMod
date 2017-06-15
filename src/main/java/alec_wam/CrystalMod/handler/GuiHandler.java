@@ -60,6 +60,15 @@ import alec_wam.CrystalMod.tiles.machine.power.engine.lava.TileEntityEngineLava;
 import alec_wam.CrystalMod.tiles.machine.power.engine.vampire.ContainerEngineVampire;
 import alec_wam.CrystalMod.tiles.machine.power.engine.vampire.GuiEngineVampire;
 import alec_wam.CrystalMod.tiles.machine.power.engine.vampire.TileEntityEngineVampire;
+import alec_wam.CrystalMod.tiles.machine.power.redstonereactor.ContainerRedstoneReactor;
+import alec_wam.CrystalMod.tiles.machine.power.redstonereactor.GuiRedstoneReactor;
+import alec_wam.CrystalMod.tiles.machine.power.redstonereactor.TileRedstoneReactor;
+import alec_wam.CrystalMod.tiles.machine.specialengines.ContainerFiniteEngine;
+import alec_wam.CrystalMod.tiles.machine.specialengines.ContainerInfiniteEngine;
+import alec_wam.CrystalMod.tiles.machine.specialengines.GuiFiniteEngine;
+import alec_wam.CrystalMod.tiles.machine.specialengines.GuiInfiniteEngine;
+import alec_wam.CrystalMod.tiles.machine.specialengines.TileFiniteEngine;
+import alec_wam.CrystalMod.tiles.machine.specialengines.TileInfiniteEngine;
 import alec_wam.CrystalMod.tiles.machine.worksite.TileWorksiteBase;
 import alec_wam.CrystalMod.tiles.machine.worksite.TileWorksiteBoundedInventory;
 import alec_wam.CrystalMod.tiles.machine.worksite.gui.ContainerWorksiteAnimalControl;
@@ -333,6 +342,9 @@ public class GuiHandler implements IGuiHandler {
         	if(te instanceof TileEntityBattery) return new GuiBattery(player, (TileEntityBattery)te);
         	if(te instanceof TileSoundMuffler) return new GuiSoundMuffler((TileSoundMuffler)te);
         	if(te instanceof TileEnhancementTable) return new GuiEnhancementTable(player.inventory, (TileEnhancementTable)te);
+        	if(te instanceof TileRedstoneReactor) return new GuiRedstoneReactor(player, (TileRedstoneReactor)te);
+        	if(te instanceof TileInfiniteEngine) return new GuiInfiniteEngine(player, (TileInfiniteEngine)te);
+        	if(te instanceof TileFiniteEngine) return new GuiFiniteEngine(player, (TileFiniteEngine)te);
         } 
         return null;
     }
@@ -483,6 +495,9 @@ public class GuiHandler implements IGuiHandler {
         	if(te instanceof TileEntityBattery) return new ContainerBattery(player, (TileEntityBattery)te);
         	if(te instanceof TileSoundMuffler) return new ContainerNull();
         	if(te instanceof TileEnhancementTable) return new ContainerEnhancementTable(player.inventory, (TileEnhancementTable)te);
+        	if(te instanceof TileRedstoneReactor) return new ContainerRedstoneReactor(player.inventory, (TileRedstoneReactor)te);
+        	if(te instanceof TileInfiniteEngine) return new ContainerInfiniteEngine(player.inventory, (TileInfiniteEngine)te);
+        	if(te instanceof TileFiniteEngine) return new ContainerFiniteEngine(player.inventory, (TileFiniteEngine)te);
         }
         return null;
     }

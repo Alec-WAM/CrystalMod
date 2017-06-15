@@ -1,0 +1,15 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "crystalmod:miniblock",
+	"textures": {
+	    "particle": "crystalmod:blocks/redstonecore",
+		"all": "crystalmod:blocks/redstonecore"
+	},
+    "transform": "forge:default-block"
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{}]
+  }
+}

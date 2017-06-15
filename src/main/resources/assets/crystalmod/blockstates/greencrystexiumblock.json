@@ -1,0 +1,12 @@
+{
+  "forge_marker": 1,
+  "variants": {
+    "normal": [{}],
+    "inventory": [{}],
+    "type": {
+      "normal": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/crystexium/green_crystexium"} },
+	  "brick": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/crystexium/green_crystexium_bricks"} },
+	  "square_brick": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/crystexium/green_crystexium_bricks_square"} }
+    }
+  }
+}

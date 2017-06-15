@@ -1,0 +1,22 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "transform": "forge:default-item",
+        "model": "forge:item-layer"
+    },
+    "variants": {
+        "crystexus": [{ "textures": { "layer0": "crystalmod:items/crystex/crystexus" }}],
+		"crystexium_essence": [{ "textures": { "layer0": "crystalmod:items/crystex/crystexium_essence" }}],
+		"crystexium_essence_blue": [{ "textures": { "layer0": "crystalmod:items/crystex/crystexium_essence_blue" }}],
+		"crystexium_essence_red": [{ "textures": { "layer0": "crystalmod:items/crystex/crystexium_essence_red" }}],
+		"crystexium_essence_green": [{ "textures": { "layer0": "crystalmod:items/crystex/crystexium_essence_green" }}],
+		"crystexium_essence_dark": [{ "textures": { "layer0": "crystalmod:items/crystex/crystexium_essence_dark" }}],
+		"crystexium_essence_pure": [{ "textures": { "layer0": "crystalmod:items/crystex/crystexium_essence_pure" }}],
+		"crystexium_brick": [{ "textures": { "layer0": "crystalmod:items/crystex/crystexium_brick" }}],
+		"crystexium_brick_blue": [{ "textures": { "layer0": "crystalmod:items/crystex/crystexium_brick_blue" }}],
+		"crystexium_brick_red": [{ "textures": { "layer0": "crystalmod:items/crystex/crystexium_brick_red" }}],
+		"crystexium_brick_green": [{ "textures": { "layer0": "crystalmod:items/crystex/crystexium_brick_green" }}],
+		"crystexium_brick_dark": [{ "textures": { "layer0": "crystalmod:items/crystex/crystexium_brick_dark" }}],
+		"crystexium_brick_pure": [{ "textures": { "layer0": "crystalmod:items/crystex/crystexium_brick_pure" }}]
+    }
+}

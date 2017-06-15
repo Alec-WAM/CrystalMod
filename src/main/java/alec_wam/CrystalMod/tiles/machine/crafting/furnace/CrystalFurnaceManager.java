@@ -3,6 +3,10 @@ package alec_wam.CrystalMod.tiles.machine.crafting.furnace;
 import java.util.HashMap;
 import java.util.Map;
 
+import alec_wam.CrystalMod.blocks.ModBlocks;
+import alec_wam.CrystalMod.blocks.crystexium.CrystexiumBlock.CrystexiumBlockType;
+import alec_wam.CrystalMod.items.ModItems;
+import alec_wam.CrystalMod.items.ItemCrystex.CrystexItemType;
 import alec_wam.CrystalMod.tiles.machine.BasicMachineRecipe;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
@@ -43,6 +47,38 @@ public class CrystalFurnaceManager {
 
 
 	public static void initRecipes() {
+		
+		ItemStack crystexiumBlock = new ItemStack(ModBlocks.crystexiumBlock, 1, CrystexiumBlockType.NORMAL.getMeta());
+		ItemStack crystexiumBlockBlue = new ItemStack(ModBlocks.blueCrystexiumBlock, 1, CrystexiumBlockType.NORMAL.getMeta());
+		ItemStack crystexiumBlockRed = new ItemStack(ModBlocks.redCrystexiumBlock, 1, CrystexiumBlockType.NORMAL.getMeta());
+		ItemStack crystexiumBlockGreen = new ItemStack(ModBlocks.greenCrystexiumBlock, 1, CrystexiumBlockType.NORMAL.getMeta());
+		ItemStack crystexiumBlockDark = new ItemStack(ModBlocks.darkCrystexiumBlock, 1, CrystexiumBlockType.NORMAL.getMeta());
+		ItemStack crystexiumBlockPure = new ItemStack(ModBlocks.pureCrystexiumBlock, 1, CrystexiumBlockType.NORMAL.getMeta());
+		
+		ItemStack crystexiumEssence = new ItemStack(ModItems.crystexItems, 1, CrystexItemType.CRYSTEXIUM_ESSENCE.getMetadata());
+		ItemStack crystexiumEssenceBlue = new ItemStack(ModItems.crystexItems, 1, CrystexItemType.CRYSTEXIUM_ESSENCE_BLUE.getMetadata());
+		ItemStack crystexiumEssenceRed = new ItemStack(ModItems.crystexItems, 1, CrystexItemType.CRYSTEXIUM_ESSENCE_RED.getMetadata());
+		ItemStack crystexiumEssenceGreen = new ItemStack(ModItems.crystexItems, 1, CrystexItemType.CRYSTEXIUM_ESSENCE_GREEN.getMetadata());
+		ItemStack crystexiumEssenceDark = new ItemStack(ModItems.crystexItems, 1, CrystexItemType.CRYSTEXIUM_ESSENCE_DARK.getMetadata());
+		ItemStack crystexiumEssencePure = new ItemStack(ModItems.crystexItems, 1, CrystexItemType.CRYSTEXIUM_ESSENCE_PURE.getMetadata());
+		
+		addRecipe(crystexiumBlock, crystexiumEssence, 1600);
+		addRecipe(crystexiumBlockBlue, crystexiumEssenceBlue, 1600);
+		addRecipe(crystexiumBlockRed, crystexiumEssenceRed, 1600);
+		addRecipe(crystexiumBlockGreen, crystexiumEssenceGreen, 1600);
+		addRecipe(crystexiumBlockDark, crystexiumEssenceDark, 1600);
+		addRecipe(crystexiumBlockPure, crystexiumEssencePure, 1600);
+	}
+	
+	public static BasicMachineRecipe addRecipe(ItemStack input, ItemStack output, int energy){
+		BasicMachineRecipe recipe = new BasicMachineRecipe(input, output, energy);
+		return addRecipe(input, recipe);
+	}
+	
+	public static BasicMachineRecipe addRecipe(ItemStack input, BasicMachineRecipe recipe){
+		if(recipeMap.containsKey(input)) return null;
+		recipeMap.put(input, recipe);
+		return recipe;
 	}
 	
 }

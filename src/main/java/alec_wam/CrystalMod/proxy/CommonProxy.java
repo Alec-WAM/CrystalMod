@@ -39,6 +39,8 @@ import alec_wam.CrystalMod.world.CrystalModWorldGenerator;
 import alec_wam.CrystalMod.world.DropCapture;
 import alec_wam.CrystalMod.world.ModDimensions;
 import alec_wam.CrystalMod.world.WorldTickHandler;
+import alec_wam.CrystalMod.world.crystex.CrystexiumSpikeStructure;
+import alec_wam.CrystalMod.world.crystex.MapGenCrystexiumSpike;
 import alec_wam.CrystalMod.world.game.tag.TagManager;
 import alec_wam.CrystalMod.world.structures.FusionTempleStructure;
 import alec_wam.CrystalMod.world.structures.MapGenFusionTemple;
@@ -92,8 +94,12 @@ public class CommonProxy {
         
         CrystalModWorldGenerator generator = CrystalModWorldGenerator.instance;
         GameRegistry.registerWorldGenerator(generator, 5);
+        
         MapGenStructureIO.registerStructure(MapGenFusionTemple.Start.class, CrystalMod.resource("fusiontemplestart"));
         MapGenStructureIO.registerStructureComponent(FusionTempleStructure.class, CrystalMod.resource("fusiontemple"));
+        MapGenStructureIO.registerStructure(MapGenCrystexiumSpike.Start.class, CrystalMod.resource("crystexiumspikestart"));
+        MapGenStructureIO.registerStructureComponent(CrystexiumSpikeStructure.class, CrystalMod.resource("crystexiumspike"));
+       
         MinecraftForge.EVENT_BUS.register(generator);
         
         MinecraftForge.EVENT_BUS.register(DropCapture.instance);
