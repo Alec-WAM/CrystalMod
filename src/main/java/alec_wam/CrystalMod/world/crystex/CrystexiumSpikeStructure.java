@@ -63,7 +63,8 @@ public class CrystexiumSpikeStructure extends StructureComponentTemplate {
 				//Warning this ignores integrity
 				//TODO Add Integrity Randomness
 				IBlockState currentState = blockInfoIn.blockState;
-				if(currentState.getBlock() == ModBlocks.crystexiumBlock){
+				//TODO Re-add Crystexium
+				/*if(currentState.getBlock() == ModBlocks.crystexiumBlock){
 					if(type == SpikeType.BLUE){
 						return new BlockInfo(blockInfoIn.pos, ModBlocks.blueCrystexiumBlock.getDefaultState().withProperty(CrystexiumBlock.TYPE, CrystexiumBlockType.NORMAL), blockInfoIn.tileentityData);
 					} 
@@ -79,7 +80,7 @@ public class CrystexiumSpikeStructure extends StructureComponentTemplate {
 					if(type == SpikeType.PURE){
 						return new BlockInfo(blockInfoIn.pos, ModBlocks.pureCrystexiumBlock.getDefaultState().withProperty(CrystexiumBlock.TYPE, CrystexiumBlockType.NORMAL), blockInfoIn.tileentityData);
 					} 
-				}
+				}*/
 				return blockInfoIn;
 			}
 

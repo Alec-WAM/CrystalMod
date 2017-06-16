@@ -46,9 +46,9 @@ public class CrystalFurnaceManager {
 	}
 
 
-	public static void initRecipes() {
-		
-		ItemStack crystexiumBlock = new ItemStack(ModBlocks.crystexiumBlock, 1, CrystexiumBlockType.NORMAL.getMeta());
+	public static void initRecipes() {		
+		//TODO Re-add Crystexium
+		/*ItemStack crystexiumBlock = new ItemStack(ModBlocks.crystexiumBlock, 1, CrystexiumBlockType.NORMAL.getMeta());
 		ItemStack crystexiumBlockBlue = new ItemStack(ModBlocks.blueCrystexiumBlock, 1, CrystexiumBlockType.NORMAL.getMeta());
 		ItemStack crystexiumBlockRed = new ItemStack(ModBlocks.redCrystexiumBlock, 1, CrystexiumBlockType.NORMAL.getMeta());
 		ItemStack crystexiumBlockGreen = new ItemStack(ModBlocks.greenCrystexiumBlock, 1, CrystexiumBlockType.NORMAL.getMeta());
@@ -67,7 +67,7 @@ public class CrystalFurnaceManager {
 		addRecipe(crystexiumBlockRed, crystexiumEssenceRed, 1600);
 		addRecipe(crystexiumBlockGreen, crystexiumEssenceGreen, 1600);
 		addRecipe(crystexiumBlockDark, crystexiumEssenceDark, 1600);
-		addRecipe(crystexiumBlockPure, crystexiumEssencePure, 1600);
+		addRecipe(crystexiumBlockPure, crystexiumEssencePure, 1600);*/
 	}
 	
 	public static BasicMachineRecipe addRecipe(ItemStack input, ItemStack output, int energy){

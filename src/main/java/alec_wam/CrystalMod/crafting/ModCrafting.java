@@ -615,6 +615,8 @@ public class ModCrafting {
 		addShapedRecipe(new ItemStack(ModBlocks.specialengine, 1, SpecialEngineType.INFINITE.getMeta()), new Object[]{"PCP", "DMD", "PDP", 'P', dIronPlate, 'C', new ItemStack(ModItems.engineCore, 1, EngineCoreType.INFINITE.getMetadata()), 'D', darkBlock, 'M', machineFrameEnder});
 		
 		//Crystex Recipes
+		//TODO Re-add Crystexium
+		/*
 		addShapedRecipe(new ItemStack(ModItems.crystexItems, 6, CrystexItemType.CRYSTEXUS.getMetadata()), new Object[]{"GEG", "CLC", "GEG", 'G', Blocks.GLOWSTONE, 'E', Items.END_CRYSTAL, 'C', Items.PRISMARINE_CRYSTALS, 'L', new ItemStack(ModBlocks.advancedLamp, 1, LampType.PURE.getMeta())});
 		ItemStack crystexus = new ItemStack(ModItems.crystexItems, 1, CrystexItemType.CRYSTEXUS.getMetadata());
 		ItemStack crystexiumEssence = new ItemStack(ModItems.crystexItems, 1, CrystexItemType.CRYSTEXIUM_ESSENCE.getMetadata());
@@ -664,7 +666,7 @@ public class ModCrafting {
 		addShapedRecipe(new ItemStack(ModBlocks.greenCrystexiumBlock, 4, CrystexiumBlockType.SQUARE_BRICK.getMeta()), new Object[]{"XX", "XX", 'X', crystexiumBlockGreen});
 		addShapedRecipe(new ItemStack(ModBlocks.darkCrystexiumBlock, 4, CrystexiumBlockType.SQUARE_BRICK.getMeta()), new Object[]{"XX", "XX", 'X', crystexiumBlockDark});
 		addShapedRecipe(new ItemStack(ModBlocks.pureCrystexiumBlock, 4, CrystexiumBlockType.SQUARE_BRICK.getMeta()), new Object[]{"XX", "XX", 'X', crystexiumBlockPure});
-
+		 */
 		CauldronRecipeManager.initRecipes();
 		
 		CrystalFurnaceManager.initRecipes();

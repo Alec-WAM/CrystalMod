@@ -288,12 +288,14 @@ public class ModBlocks {
 
 	public static BlockCrystalCluster crystalCluster;
 
-	public static CrystexiumBlock crystexiumBlock;
+	
+	//TODO Re-add Crystexium
+	/*public static CrystexiumBlock crystexiumBlock;
 	public static CrystexiumBlock blueCrystexiumBlock;
 	public static CrystexiumBlock redCrystexiumBlock;
 	public static CrystexiumBlock greenCrystexiumBlock;
 	public static CrystexiumBlock darkCrystexiumBlock;
-	public static CrystexiumBlock pureCrystexiumBlock;
+	public static CrystexiumBlock pureCrystexiumBlock;*/
 
 	public static final EnumPlantType crystalPlantType = EnumPlantType.getPlantType("crystal");
 
@@ -649,9 +651,9 @@ public class ModBlocks {
 		registerEnumBlock(crystalCluster, new ItemBlockFacing(crystalCluster), "crystalcluster");
 		registerTileEntity(TileCrystalCluster.class);
 
-		crystexiumBlock = new CrystexiumBlock();
+		//TODO Re-add Crystexium
+		/*crystexiumBlock = new CrystexiumBlock();
 		registerEnumBlock(crystexiumBlock, "crystexiumblock");
-
 		blueCrystexiumBlock = new CrystexiumBlock();
 		registerEnumBlock(blueCrystexiumBlock, "bluecrystexiumblock");
 		redCrystexiumBlock = new CrystexiumBlock();
@@ -661,7 +663,7 @@ public class ModBlocks {
 		darkCrystexiumBlock = new CrystexiumBlock();
 		registerEnumBlock(darkCrystexiumBlock, "darkcrystexiumblock");
 		pureCrystexiumBlock = new CrystexiumBlock();
-		registerEnumBlock(pureCrystexiumBlock, "purecrystexiumblock");
+		registerEnumBlock(pureCrystexiumBlock, "purecrystexiumblock");*/
 	}
 
 	@SideOnly(Side.CLIENT)
