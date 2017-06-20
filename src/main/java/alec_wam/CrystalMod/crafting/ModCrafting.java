@@ -9,6 +9,7 @@ import com.google.common.collect.Maps;
 
 import alec_wam.CrystalMod.blocks.BlockCrystal.CrystalBlockType;
 import alec_wam.CrystalMod.blocks.BlockCrystalIngot.CrystalIngotBlockType;
+import alec_wam.CrystalMod.blocks.BlockCrystalLight.LightBlockType;
 import alec_wam.CrystalMod.blocks.BlockCrystalLog.WoodType;
 import alec_wam.CrystalMod.blocks.BlockCrystalOre.CrystalOreType;
 import alec_wam.CrystalMod.blocks.BlockDecorative.DecorativeBlockType;
@@ -217,9 +218,18 @@ public class ModCrafting {
 		create9x9Recipe(new ItemStack(ModBlocks.compressed, 1, CompressedBlockType.FLINT.getMeta()), new ItemStack(Items.FLINT), 9);
 		create9x9Recipe(new ItemStack(ModBlocks.compressed, 1, CompressedBlockType.GUNPOWDER.getMeta()), new ItemStack(Items.GUNPOWDER), 9);
 		create9x9Recipe(new ItemStack(ModBlocks.compressed, 1, CompressedBlockType.CHARCOAL.getMeta()), new ItemStack(Items.COAL, 1, 1), 9);
+		create9x9Recipe(new ItemStack(ModBlocks.compressed, 1, CompressedBlockType.SUGAR.getMeta()), new ItemStack(Items.SUGAR), 9);
 		create9x9Recipe(new ItemStack(ModBlocks.blazeRodBlock), new ItemStack(Items.BLAZE_ROD), 9);
 
-		
+		addShapedRecipe(new ItemStack(ModBlocks.crystalLight, 4, LightBlockType.BLUE.getMeta()), new Object[] { "N N", "CIC", "N N", 'N', pureNugget, 'I', dIronBlock, 'C', blueIngot});
+		addShapedRecipe(new ItemStack(ModBlocks.crystalLight, 4, LightBlockType.RED.getMeta()), new Object[] { "N N", "CIC", "N N", 'N', pureNugget, 'I', dIronBlock, 'C', redIngot});
+		addShapedRecipe(new ItemStack(ModBlocks.crystalLight, 4, LightBlockType.GREEN.getMeta()), new Object[] { "N N", "CIC", "N N", 'N', pureNugget, 'I', dIronBlock, 'C', greenIngot});
+		addShapedRecipe(new ItemStack(ModBlocks.crystalLight, 4, LightBlockType.DARK.getMeta()), new Object[] { "N N", "CIC", "N N", 'N', pureNugget, 'I', dIronBlock, 'C', darkIngot});
+		addShapedRecipe(new ItemStack(ModBlocks.crystalLight, 4, LightBlockType.PURE.getMeta()), new Object[] { "N N", "CIC", "N N", 'N', pureNugget, 'I', dIronBlock, 'C', pureIngot});
+		addShapedRecipe(new ItemStack(ModBlocks.crystalLight, 8, LightBlockType.INFINITE.getMeta()), new Object[] { "II", "IB", 'I', pureIngot, 'B', new ItemStack(ModBlocks.crystal, 1, CrystalBlockType.PURE_BRICK.getMeta())});
+		addShapedRecipe(new ItemStack(ModBlocks.crystalLight, 8, LightBlockType.SPIRAL_DARK.getMeta()), new Object[] { "NN ", "NBD", " DD", 'N', darkNugget, 'B', new ItemStack(ModBlocks.crystal, 1, CrystalBlockType.DARK_BRICK.getMeta()), 'D', dIronNugget});
+		addShapedRecipe(new ItemStack(ModBlocks.crystalLight, 8, LightBlockType.SPIRAL_PURE.getMeta()), new Object[] { "NN ", "NBD", " DD", 'N', pureNugget, 'B', new ItemStack(ModBlocks.crystal, 1, CrystalBlockType.PURE_BRICK.getMeta()), 'D', dIronNugget});
+
 		//More Expensive than using the Liguidizer and Infuser
 		//addShapedOreRecipe(dIronIngot, " N ", "NIN", " N ", 'N', darkNugget, 'I', "ingotIron");
 		

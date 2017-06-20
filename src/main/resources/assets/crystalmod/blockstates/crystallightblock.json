@@ -1,0 +1,17 @@
+{
+  "forge_marker": 1,
+  "variants": {
+    "normal": [{}],
+    "inventory": [{}],
+    "type": {
+      "blue": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/decorative/light/blue"} },
+	  "red": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/decorative/light/red"} },
+	  "green": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/decorative/light/green"} },
+	  "dark": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/decorative/light/dark"} },
+	  "pure": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/decorative/light/pure"} },
+	  "infinite": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/decorative/light/infinite"} },
+	  "spiral_dark": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/decorative/light/doublespiral_dark"} },
+	  "spiral_pure": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/decorative/light/doublespiral_pure"} }
+    }
+  }
+}

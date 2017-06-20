@@ -376,7 +376,8 @@ public class BlockCompressed extends EnumBlock<BlockCompressed.CompressedBlockTy
     public static enum CompressedBlockType implements IStringSerializable, IEnumMeta {
 		FLINT("flint"),
 		GUNPOWDER("gunpowder"),
-		CHARCOAL("charcoal");
+		CHARCOAL("charcoal"),
+		SUGAR("sugar");
 
 		private final String unlocalizedName;
 		public final int meta;

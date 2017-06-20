@@ -1,0 +1,19 @@
+{
+  "forge_marker": 1,
+  "variants": {
+    "normal": [{}],
+    "inventory": [{}],
+    "type": {
+      "ingot_blue": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/decorative/tiles/crystal/ingot_blue"} },
+	  "ingot_red": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/decorative/tiles/crystal/ingot_red"} },
+	  "ingot_green": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/decorative/tiles/crystal/ingot_green"} },
+	  "ingot_dark": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/decorative/tiles/crystal/ingot_dark"} },
+	  "ingot_pure": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/decorative/tiles/crystal/ingot_pure"} },
+	  "ingot_diron": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/decorative/tiles/crystal/ingot_diron"} },
+	  "log_blue": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/decorative/tiles/crystal/log_blue"} },
+	  "log_red": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/decorative/tiles/crystal/log_red"} },
+	  "log_green": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/decorative/tiles/crystal/log_green"} },
+	  "log_dark": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/decorative/tiles/crystal/log_dark"} }
+    }
+  }
+}

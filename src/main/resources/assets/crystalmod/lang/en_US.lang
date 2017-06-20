@@ -339,6 +339,54 @@ tile.crystalmod.etchedcrystalblock.pure.name=Etched Pure Crystal Block
 tile.crystalmod.decorativeblock.redstone_bricks.name=Congealed Redstone Brick
 tile.crystalmod.decorativeblock.square_turn.name=Square Turn Block
 
+tile.crystalmod.tiles_basic.stone_stone.name=Stone Slab Tiles
+tile.crystalmod.tiles_basic.stone_carved.name=Chiseled Stonebrick Tiles
+tile.crystalmod.tiles_basic.stone_granite.name=Smooth Granite Tiles
+tile.crystalmod.tiles_basic.stone_diorite.name=Smooth Diorite Tiles
+tile.crystalmod.tiles_basic.stone_andesite.name=Smooth Andesite Tiles
+tile.crystalmod.tiles_basic.compressed_redstone.name=Redstone Tiles
+tile.crystalmod.tiles_basic.compressed_lapis.name=Lapis Lazuli Tiles
+tile.crystalmod.tiles_basic.compressed_quartz.name=Quartz Tiles
+tile.crystalmod.tiles_basic.compressed_flint.name=Flint Tiles
+tile.crystalmod.tiles_basic.metal_iron.name=Iron Tiles
+tile.crystalmod.tiles_basic.metal_gold.name=Gold Tiles
+tile.crystalmod.tiles_basic.metal_diamond.name=Diamond Tiles
+tile.crystalmod.tiles_basic.metal_emerald.name=Emerald Tiles
+
+tile.crystalmod.tiles_basic2.log_oak.name=Oak Wood Tiles
+tile.crystalmod.tiles_basic2.log_spruce.name=Spruce Wood Tiles
+tile.crystalmod.tiles_basic2.log_birch.name=Birch Wood Tiles
+tile.crystalmod.tiles_basic2.log_jungle.name=Jungle Wood Tiles
+tile.crystalmod.tiles_basic2.log_acacia.name=Acacia Wood Tiles
+tile.crystalmod.tiles_basic2.log_dark_oak.name=Dark Oak Wood Tiles
+tile.crystalmod.tiles_basic2.noteblock.name=Noteblock Tiles
+tile.crystalmod.tiles_basic2.piston.name=Piston Tiles
+tile.crystalmod.tiles_basic2.piston_sticky.name=Sticky Piston Tiles
+tile.crystalmod.tiles_basic2.sealantern.name=Sea Lantern Tiles
+tile.crystalmod.tiles_basic2.furnace.name=Furnace Tiles
+tile.crystalmod.tiles_basic2.lamp_off.name=Redstone Lamp Tiles
+tile.crystalmod.tiles_basic2.lamp_on.name=Lit Redstone Lamp Tiles
+
+tile.crystalmod.tiles_crystal.ingot_blue.name=Blue Crystal Ingot Tiles
+tile.crystalmod.tiles_crystal.ingot_red.name=Red Crystal Ingot Tiles
+tile.crystalmod.tiles_crystal.ingot_green.name=Green Crystal Ingot Tiles
+tile.crystalmod.tiles_crystal.ingot_dark.name=Dark Crystal Ingot Tiles
+tile.crystalmod.tiles_crystal.ingot_pure.name=Pure Crystal Ingot Tiles
+tile.crystalmod.tiles_crystal.ingot_diron.name=Dark Iron Tiles
+tile.crystalmod.tiles_crystal.log_blue.name=Blue Crystal Wood Tiles
+tile.crystalmod.tiles_crystal.log_red.name=Red Crystal Wood Tiles
+tile.crystalmod.tiles_crystal.log_green.name=Green Crystal Wood Tiles
+tile.crystalmod.tiles_crystal.log_dark.name=Dark Crystal Wood Tiles
+
+tile.crystalmod.crystallightblock.blue.name=Blue Crystal Light
+tile.crystalmod.crystallightblock.red.name=Red Crystal Light
+tile.crystalmod.crystallightblock.green.name=Green Crystal Light
+tile.crystalmod.crystallightblock.dark.name=Dark Crystal Light
+tile.crystalmod.crystallightblock.pure.name=Pure Crystal Light
+tile.crystalmod.crystallightblock.infinite.name=Infinity Block
+tile.crystalmod.crystallightblock.spiral_dark.name=Dark Crystal Double Spiral
+tile.crystalmod.crystallightblock.spiral_pure.name=Pure Crystal Double Spiral
+
 tile.crystalmod.crystalglass.blue.name=Blue Crystal Glass
 tile.crystalmod.crystalglass.red.name=Red Crystal Glass
 tile.crystalmod.crystalglass.green.name=Green Crystal Glass
@@ -363,6 +411,7 @@ tile.crystalmod.crystalglasspane.pure.name=Pure Crystal Glass Pane
 tile.crystalmod.compressedblock.flint.name=Flint Block
 tile.crystalmod.compressedblock.gunpowder.name=Compressed Gunpowder
 tile.crystalmod.compressedblock.charcoal.name=Charcoal Block
+tile.crystalmod.compressedblock.sugar.name=Sugar Cube
 tile.crystalmod.blazerodblock.name=Blaze Rod Block
 
 tile.crystalmod.metalbars.dark_iron.name=Dark Iron Bars

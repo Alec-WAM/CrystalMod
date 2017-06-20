@@ -1,0 +1,22 @@
+{
+  "forge_marker": 1,
+  "variants": {
+    "normal": [{}],
+    "inventory": [{}],
+    "type": {
+      "stone_stone": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/decorative/tiles/basic/stone"} },
+	  "stone_carved": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/decorative/tiles/basic/carved"} },
+	  "stone_granite": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/decorative/tiles/basic/granite"} },
+	  "stone_diorite": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/decorative/tiles/basic/diorite"} },
+	  "stone_andesite": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/decorative/tiles/basic/andesite"} },
+	  "compressed_redstone": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/decorative/tiles/basic/redstone"} },
+	  "compressed_lapis": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/decorative/tiles/basic/lapis"} },
+	  "compressed_quartz": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/decorative/tiles/basic/quartz"} },
+	  "compressed_flint": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/decorative/tiles/basic/flint"} },
+	  "metal_iron": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/decorative/tiles/basic/iron"} },
+	  "metal_gold": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/decorative/tiles/basic/gold"} },
+	  "metal_diamond": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/decorative/tiles/basic/diamond"} },
+	  "metal_emerald": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/decorative/tiles/basic/emerald"} }
+    }
+  }
+}

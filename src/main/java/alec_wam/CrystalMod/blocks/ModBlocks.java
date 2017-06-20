@@ -19,6 +19,9 @@ import alec_wam.CrystalMod.blocks.crops.material.TileMaterialCrop;
 import alec_wam.CrystalMod.blocks.crystexium.CrystexiumBlock;
 import alec_wam.CrystalMod.blocks.decorative.bridge.BlockBridge;
 import alec_wam.CrystalMod.blocks.decorative.bridge.TileBridge;
+import alec_wam.CrystalMod.blocks.decorative.tiles.BlockBasicTiles;
+import alec_wam.CrystalMod.blocks.decorative.tiles.BlockBasicTiles2;
+import alec_wam.CrystalMod.blocks.decorative.tiles.BlockCrystalTiles;
 import alec_wam.CrystalMod.blocks.glass.BlockCrystalGlass;
 import alec_wam.CrystalMod.blocks.glass.BlockCrystalGlassPane;
 import alec_wam.CrystalMod.blocks.glass.BlockPaintedCrystalGlass;
@@ -233,7 +236,12 @@ public class ModBlocks {
 	public static BlockAdvancedLamp advancedLamp;
 	public static BlockFakeLight fakeLight;
 	public static BlockCompressed compressed;
-	public static BlockBlazeRod blazeRodBlock;
+	public static BlockBlazeRod blazeRodBlock;	
+
+	public static BlockBasicTiles tileBasic;
+	public static BlockBasicTiles2 tileBasic2;
+	public static BlockCrystalTiles tileCrystal;	
+	public static BlockCrystalLight crystalLight;
 
 	public static BlockRedstoneReactor redstoneReactor;
 	public static BlockRedstoneCore redstoneCore;
@@ -427,6 +435,12 @@ public class ModBlocks {
 			}
 
 		});
+
+		tileBasic = registerEnumBlock(new BlockBasicTiles(), "tiles_basic");		
+		tileBasic2 = registerEnumBlock(new BlockBasicTiles2(), "tiles_basic2");		
+		tileCrystal = registerEnumBlock(new BlockCrystalTiles(), "tiles_crystal");		
+		//TODO Add Tile Recipes and Burn time for wood tiles
+		crystalLight = registerEnumBlock(new BlockCrystalLight(), "crystallightblock");		
 
 		engine = new BlockEngine();
 		registerBlock(engine, new ItemBlockEngine(engine), "engine");

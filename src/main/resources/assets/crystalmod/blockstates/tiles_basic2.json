@@ -1,0 +1,22 @@
+{
+  "forge_marker": 1,
+  "variants": {
+    "normal": [{}],
+    "inventory": [{}],
+    "type": {
+      "log_oak": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/decorative/tiles/basic/oak"} },
+	  "log_birch": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/decorative/tiles/basic/birch"} },
+	  "log_spruce": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/decorative/tiles/basic/spruce"} },
+	  "log_jungle": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/decorative/tiles/basic/jungle"} },
+	  "log_acacia": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/decorative/tiles/basic/acacia"} },
+	  "log_dark_oak": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/decorative/tiles/basic/dark_oak"} },
+	  "noteblock": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/decorative/tiles/basic/noteblock"} },
+	  "piston": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/decorative/tiles/basic/piston"} },
+	  "piston_sticky": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/decorative/tiles/basic/piston_sticky"} },
+	  "sealantern": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/decorative/tiles/basic/sealantern"} },
+	  "furnace": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/decorative/tiles/basic/furnace"} },
+	  "lamp_off": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/decorative/tiles/basic/lamp_off"} },
+	  "lamp_on": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/decorative/tiles/basic/lamp_on"} }
+    }
+  }
+}

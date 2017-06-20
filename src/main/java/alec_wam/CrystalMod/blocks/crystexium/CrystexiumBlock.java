@@ -7,6 +7,7 @@ import javax.annotation.Nonnull;
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.EnumBlock;
 import alec_wam.CrystalMod.blocks.ModBlocks;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.IBlockState;
@@ -27,8 +28,10 @@ public class CrystexiumBlock extends EnumBlock<CrystexiumBlock.CrystexiumBlockTy
 		//Normal Iron
 		//Bricks Iron+2
 		//Must be at least diamond
-		setHardness(3.0F).setResistance(5.0F);
+		setSoundType(SoundType.GLASS);
+		setHardness(5.0F).setResistance(10.0F);
 		this.setCreativeTab(CrystalMod.tabBlocks);
+		this.setHarvestLevel("pickaxe", 3);
 	}
 	
 	@Nonnull

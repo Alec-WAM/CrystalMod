@@ -6,7 +6,8 @@
     "type": {
       "flint": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/compressed/flint"} },
 	  "gunpowder": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/compressed/gunpowder"} },
-	  "charcoal": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/compressed/charcoal"} }
+	  "charcoal": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/compressed/charcoal"} },
+	  "sugar": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/compressed/sugar"} }
     }
   }
 }
