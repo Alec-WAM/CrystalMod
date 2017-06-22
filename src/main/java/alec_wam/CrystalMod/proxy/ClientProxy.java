@@ -227,8 +227,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
         	event.getMap().registerSprite(new ResourceLocation("crystalmod:blocks/crystal_"+type.getName()+"_glass_painted"));
         }
         
-        event.getMap().registerSprite(new ResourceLocation("crystalmod:blocks/decorative/metal/blue_crystal_plate_block"));
-        event.getMap().registerSprite(new ResourceLocation("crystalmod:blocks/decorative/metal/blue_crystal_plated_block1"));
+        event.getMap().registerSprite(new ResourceLocation("crystalmod:blocks/decorative/dense_darkness"));
     	
         
         event.getMap().registerSprite(new ResourceLocation("crystalmod:blocks/pipe/attachment/import"));
@@ -258,6 +257,11 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
             event.getMap().registerSprite(ModFluids.fluidXpJuice.getStill());
             event.getMap().registerSprite(ModFluids.fluidXpJuice.getFlowing());
         }
+        event.getMap().registerSprite(ModFluids.fluidInk.getStill());
+        event.getMap().registerSprite(ModFluids.fluidInk.getFlowing());
+        event.getMap().registerSprite(ModFluids.fluidTears.getStill());
+        event.getMap().registerSprite(ModFluids.fluidTears.getFlowing());
+        
         event.getMap().registerSprite(new ResourceLocation("crystalmod:blocks/crystalcluster"));
         
         event.getMap().registerSprite(FluidColored.LiquidStill);

@@ -16,7 +16,6 @@ import alec_wam.CrystalMod.blocks.crops.ItemBlockWater;
 import alec_wam.CrystalMod.blocks.crops.material.BlockMaterialCrop;
 import alec_wam.CrystalMod.blocks.crops.material.RenderTileMaterialCrop;
 import alec_wam.CrystalMod.blocks.crops.material.TileMaterialCrop;
-import alec_wam.CrystalMod.blocks.crystexium.CrystexiumBlock;
 import alec_wam.CrystalMod.blocks.decorative.bridge.BlockBridge;
 import alec_wam.CrystalMod.blocks.decorative.bridge.TileBridge;
 import alec_wam.CrystalMod.blocks.decorative.tiles.BlockBasicTiles;
@@ -28,6 +27,8 @@ import alec_wam.CrystalMod.blocks.glass.BlockPaintedCrystalGlass;
 import alec_wam.CrystalMod.blocks.glass.BlockTintedCrystalGlass;
 import alec_wam.CrystalMod.blocks.rail.BlockReinforcedRail;
 import alec_wam.CrystalMod.handler.MissingItemHandler;
+import alec_wam.CrystalMod.tiles.cases.BlockCase;
+import alec_wam.CrystalMod.tiles.cases.TileEntityCaseNoteblock;
 import alec_wam.CrystalMod.tiles.cauldron.BlockCrystalCauldron;
 import alec_wam.CrystalMod.tiles.cauldron.RenderTileCrystalCauldron;
 import alec_wam.CrystalMod.tiles.cauldron.TileEntityCrystalCauldron;
@@ -45,6 +46,7 @@ import alec_wam.CrystalMod.tiles.crate.BlockCrate;
 import alec_wam.CrystalMod.tiles.crate.RenderTileCrate;
 import alec_wam.CrystalMod.tiles.crate.TileCrate;
 import alec_wam.CrystalMod.tiles.darkinfection.BlockDarkInfection;
+import alec_wam.CrystalMod.tiles.darkinfection.BlockDenseDarkness;
 import alec_wam.CrystalMod.tiles.darkinfection.BlockInfected;
 import alec_wam.CrystalMod.tiles.darkinfection.TileDarkInfection;
 import alec_wam.CrystalMod.tiles.endertorch.BlockEnderTorch;
@@ -214,6 +216,7 @@ public class ModBlocks {
 	public static BlockCrystalChest crystalChest;
 	public static BlockWoodenCrystalChest crystalWoodenChest;
 	public static BlockWirelessChest wirelessChest;
+	public static BlockCase storageCase;
 	public static BlockCrystalPlant crystalPlantBlue, crystalPlantRed, crystalPlantGreen, crystalPlantDark;
 	public static BlockCrystalTreePlant crystalTreePlantBlue, crystalTreePlantRed, crystalTreePlantGreen,
 			crystalTreePlantDark;
@@ -290,6 +293,7 @@ public class ModBlocks {
 	public static BlockOppositeFuser oppositeFuser;
 	public static BlockDarkInfection darkInfection;
 	public static BlockInfected infectedBlock;
+	public static BlockDenseDarkness denseDarkness;
 
 	public static BlockPedistal pedistal;
 	public static BlockFusionPedistal fusionPedistal;
@@ -359,6 +363,10 @@ public class ModBlocks {
 		wirelessChest = new BlockWirelessChest();
 		registerBlock(wirelessChest, "wirelesschest");
 		registerTileEntity(TileWirelessChest.class);
+		
+		storageCase = new BlockCase();
+		registerEnumBlock(storageCase, "storagecase");
+		registerTileEntity(TileEntityCaseNoteblock.class);
 
 		crystalPlantBlue = new BlockCrystalPlant(PlantType.BLUE);
 		registerBlock(crystalPlantBlue, "bluecrystalplant");
@@ -652,6 +660,7 @@ public class ModBlocks {
 		registerTileEntity(TileDarkInfection.class);
 
 		infectedBlock = registerEnumBlock(new BlockInfected(), "infectedblock");
+		denseDarkness = registerBlock(new BlockDenseDarkness(), "densedarkness");
 
 		pedistal = new BlockPedistal();
 		registerBlock(pedistal, new ItemBlockPedistal(pedistal), "pedistal");

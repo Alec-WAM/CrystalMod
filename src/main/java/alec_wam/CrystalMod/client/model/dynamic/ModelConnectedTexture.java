@@ -1,4 +1,4 @@
-package alec_wam.CrystalMod.blocks.glass;
+package alec_wam.CrystalMod.client.model.dynamic;
 
 import java.util.List;
 import java.util.Map;
@@ -7,47 +7,43 @@ import javax.annotation.Nullable;
 
 import org.lwjgl.util.vector.Vector3f;
 
-import alec_wam.CrystalMod.blocks.glass.BlockCrystalGlass.GlassType;
-import alec_wam.CrystalMod.client.model.dynamic.DynamicItemAndBlockModel;
-import alec_wam.CrystalMod.util.ItemStackTools;
-import alec_wam.CrystalMod.util.ModLogger;
-import alec_wam.CrystalMod.util.client.CustomModelUtil;
-import alec_wam.CrystalMod.util.client.RenderUtil;
-
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-import net.minecraft.block.BlockGlass;
+import alec_wam.CrystalMod.blocks.connected.BlockConnectedTexture;
+import alec_wam.CrystalMod.blocks.connected.ConnectedBlockState;
+import alec_wam.CrystalMod.util.ItemStackTools;
+import alec_wam.CrystalMod.util.client.CustomModelUtil;
+import alec_wam.CrystalMod.util.client.RenderUtil;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.BlockFaceUV;
 import net.minecraft.client.renderer.block.model.BlockPartFace;
 import net.minecraft.client.renderer.block.model.BlockPartRotation;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.block.model.ModelRotation;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class ModelGlass extends DynamicItemAndBlockModel {
+public abstract class ModelConnectedTexture extends DynamicItemAndBlockModel {
 
-	public static final ModelGlass INSTANCE = new ModelGlass();
-	private final GlassBlockState state;
+	private final ConnectedBlockState state;
 	private final ItemStack stack;
-	public ModelGlass(){
+	public ModelConnectedTexture(){
 		super(true, false);
 		state = null;
 		stack = null;
 	}
-	public ModelGlass(ItemStack stack){
+	public ModelConnectedTexture(ItemStack stack){
 		super(false, true);
 		state = null;
 		this.stack = stack;
 	}
-	public ModelGlass(GlassBlockState state){
+	public ModelConnectedTexture(ConnectedBlockState state){
 		super(false, false);
 		this.state = state;
 		this.stack = ItemStackTools.getEmptyStack();
@@ -66,22 +62,16 @@ public class ModelGlass extends DynamicItemAndBlockModel {
 		List<BakedQuad> list = Lists.newArrayList();
 		boolean renderUp = true, renderD = true, renderN = true, renderS = true, renderW = true, renderE = true;
 		ModelRotation rot = ModelRotation.X0_Y0;
-		GlassType type = GlassType.BLUE;
-		if(ItemStackTools.isValid(stack)){
-			type = GlassType.values()[stack.getMetadata() % (GlassType.values().length)];
-		}else if(state !=null){
-			
-			type = state.getValue(BlockCrystalGlass.TYPE);
-			renderUp = !state.getValue(BlockCrystalGlass.CONNECTED_UP);
-			renderD = !state.getValue(BlockCrystalGlass.CONNECTED_DOWN);
-			renderN = !state.getValue(BlockCrystalGlass.CONNECTED_NORTH);
-			renderS = !state.getValue(BlockCrystalGlass.CONNECTED_SOUTH);
-			renderW = !state.getValue(BlockCrystalGlass.CONNECTED_WEST);
-			renderE = !state.getValue(BlockCrystalGlass.CONNECTED_EAST);
-			//ModLogger.info("MODELGLASS: U "+renderUp);
+		if(state !=null){
+			renderUp = !state.getValue(BlockConnectedTexture.CONNECTED_UP);
+			renderD = !state.getValue(BlockConnectedTexture.CONNECTED_DOWN);
+			renderN = !state.getValue(BlockConnectedTexture.CONNECTED_NORTH);
+			renderS = !state.getValue(BlockConnectedTexture.CONNECTED_SOUTH);
+			renderW = !state.getValue(BlockConnectedTexture.CONNECTED_WEST);
+			renderE = !state.getValue(BlockConnectedTexture.CONNECTED_EAST);
 		}
-		TextureAtlasSprite sprite = getTexture(type);
-		TextureAtlasSprite centersprite = getCenterTexture(type);
+		TextureAtlasSprite sprite = state !=null ? getTexture(state.state) : ItemStackTools.isValid(stack) ? getTexture(stack) : getClear();
+		TextureAtlasSprite centersprite = state !=null ? getCenterTexture(state.state) : ItemStackTools.isValid(stack) ? getCenterTexture(stack) : getClear();
 		float[] top = new float[] { 0.0f, 0.0f, 16.0f, 1.0f };
 		float[] bottom = new float[] { 0.0f, 15.0f, 16.0f, 16.0f };
 		float[] left = new float[] { 0.0f, 0.0f, 1.0f, 16.0f };
@@ -122,10 +112,10 @@ public class ModelGlass extends DynamicItemAndBlockModel {
 		if(renderUp){
 			final BlockFaceUV uv = new BlockFaceUV(top, 0);
 			final BlockPartFace face = new BlockPartFace(EnumFacing.NORTH, 0, "", uv);
-			boolean showN = !state.getValue(BlockCrystalGlass.CONNECTED_NORTH);
-			boolean showS = !state.getValue(BlockCrystalGlass.CONNECTED_SOUTH);
-			boolean showE = !state.getValue(BlockCrystalGlass.CONNECTED_EAST);
-			boolean showW = !state.getValue(BlockCrystalGlass.CONNECTED_WEST);
+			boolean showN = !state.getValue(BlockConnectedTexture.CONNECTED_NORTH);
+			boolean showS = !state.getValue(BlockConnectedTexture.CONNECTED_SOUTH);
+			boolean showE = !state.getValue(BlockConnectedTexture.CONNECTED_EAST);
+			boolean showW = !state.getValue(BlockConnectedTexture.CONNECTED_WEST);
 			
 			if(renderCenter()){
 				float centerMinX = 1.0f;
@@ -171,10 +161,10 @@ public class ModelGlass extends DynamicItemAndBlockModel {
 				face.blockFaceUV.uvs = top;
 				BlockPos posUW = state.pos.offset(EnumFacing.NORTH).offset(EnumFacing.WEST);
 				BlockPos posUE = state.pos.offset(EnumFacing.NORTH).offset(EnumFacing.EAST);
-				if(!((BlockCrystalGlass)state.getBlock()).canConnect(state, state.blockAccess.getBlockState(posUW))){
+				if(!((BlockConnectedTexture)state.getBlock()).canConnect(state, state.blockAccess.getBlockState(posUW))){
 					list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(0, 16, 0), new Vector3f(1f, 16, 1), face, sprite, EnumFacing.UP, rot, (BlockPartRotation)null, uvLocked));
 				} 
-				if(!((BlockCrystalGlass)state.getBlock()).canConnect(state, state.blockAccess.getBlockState(posUE))){
+				if(!((BlockConnectedTexture)state.getBlock()).canConnect(state, state.blockAccess.getBlockState(posUE))){
 					list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(15f, 16, 0), new Vector3f(16f, 16, 1), face, sprite, EnumFacing.UP, rot, (BlockPartRotation)null, uvLocked));
 				}
 			}
@@ -191,8 +181,8 @@ public class ModelGlass extends DynamicItemAndBlockModel {
 				face.blockFaceUV.uvs = bottom;
 				BlockPos posDW = state.pos.offset(EnumFacing.SOUTH).offset(EnumFacing.WEST);
 				BlockPos posDE = state.pos.offset(EnumFacing.SOUTH).offset(EnumFacing.EAST);
-				if(!((BlockCrystalGlass)state.getBlock()).canConnect(state, state.blockAccess.getBlockState(posDW)))list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(0, 16, 15), new Vector3f(1f, 16, 16), face, sprite, EnumFacing.UP, rot, (BlockPartRotation)null, uvLocked));
-				if(!((BlockCrystalGlass)state.getBlock()).canConnect(state, state.blockAccess.getBlockState(posDE)))list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(15f, 16, 15), new Vector3f(16f, 16, 16), face, sprite, EnumFacing.UP, rot, (BlockPartRotation)null, uvLocked));
+				if(!((BlockConnectedTexture)state.getBlock()).canConnect(state, state.blockAccess.getBlockState(posDW)))list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(0, 16, 15), new Vector3f(1f, 16, 16), face, sprite, EnumFacing.UP, rot, (BlockPartRotation)null, uvLocked));
+				if(!((BlockConnectedTexture)state.getBlock()).canConnect(state, state.blockAccess.getBlockState(posDE)))list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(15f, 16, 15), new Vector3f(16f, 16, 16), face, sprite, EnumFacing.UP, rot, (BlockPartRotation)null, uvLocked));
 			}
 			
 			if(showW){
@@ -254,10 +244,10 @@ public class ModelGlass extends DynamicItemAndBlockModel {
 			final BlockFaceUV uv = new BlockFaceUV(top, 0);
 			final BlockPartFace face = new BlockPartFace(EnumFacing.DOWN, 0, "", uv);
 			
-			boolean showN = !state.getValue(BlockCrystalGlass.CONNECTED_NORTH);
-			boolean showS = !state.getValue(BlockCrystalGlass.CONNECTED_SOUTH);
-			boolean showE = !state.getValue(BlockCrystalGlass.CONNECTED_EAST);
-			boolean showW = !state.getValue(BlockCrystalGlass.CONNECTED_WEST);
+			boolean showN = !state.getValue(BlockConnectedTexture.CONNECTED_NORTH);
+			boolean showS = !state.getValue(BlockConnectedTexture.CONNECTED_SOUTH);
+			boolean showE = !state.getValue(BlockConnectedTexture.CONNECTED_EAST);
+			boolean showW = !state.getValue(BlockConnectedTexture.CONNECTED_WEST);
 			
 			final BlockPartFace faceU = new BlockPartFace(EnumFacing.DOWN, 0, "", new BlockFaceUV(new float[]{min, min, max, max}, 0));
 			if(renderCenter()){
@@ -300,8 +290,8 @@ public class ModelGlass extends DynamicItemAndBlockModel {
 				face.blockFaceUV.uvs = top;
 				BlockPos posUW = state.pos.offset(EnumFacing.NORTH).offset(EnumFacing.WEST);
 				BlockPos posUE = state.pos.offset(EnumFacing.NORTH).offset(EnumFacing.EAST);
-				if(!((BlockCrystalGlass)state.getBlock()).canConnect(state, state.blockAccess.getBlockState(posUW)))list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(0, 0, 0), new Vector3f(1f, 0, 1), face, sprite, EnumFacing.DOWN, rot, (BlockPartRotation)null, true));
-				if(!((BlockCrystalGlass)state.getBlock()).canConnect(state, state.blockAccess.getBlockState(posUE)))list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(15f, 0, 0), new Vector3f(16f, 0, 1), face, sprite, EnumFacing.DOWN, rot, (BlockPartRotation)null, true));
+				if(!((BlockConnectedTexture)state.getBlock()).canConnect(state, state.blockAccess.getBlockState(posUW)))list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(0, 0, 0), new Vector3f(1f, 0, 1), face, sprite, EnumFacing.DOWN, rot, (BlockPartRotation)null, true));
+				if(!((BlockConnectedTexture)state.getBlock()).canConnect(state, state.blockAccess.getBlockState(posUE)))list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(15f, 0, 0), new Vector3f(16f, 0, 1), face, sprite, EnumFacing.DOWN, rot, (BlockPartRotation)null, true));
 			}
 			if(showS){
 				face.blockFaceUV.uvs = bottom;
@@ -313,8 +303,8 @@ public class ModelGlass extends DynamicItemAndBlockModel {
 				face.blockFaceUV.uvs = bottom;
 				BlockPos posDW = state.pos.offset(EnumFacing.SOUTH).offset(EnumFacing.WEST);
 				BlockPos posDE = state.pos.offset(EnumFacing.SOUTH).offset(EnumFacing.EAST);
-				if(!((BlockCrystalGlass)state.getBlock()).canConnect(state, state.blockAccess.getBlockState(posDW)))list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(0, 0, 15), new Vector3f(1f, 0, 16), face, sprite, EnumFacing.DOWN, rot, (BlockPartRotation)null, true));
-				if(!((BlockCrystalGlass)state.getBlock()).canConnect(state, state.blockAccess.getBlockState(posDE)))list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(15f, 0, 15), new Vector3f(16f, 0, 16), face, sprite, EnumFacing.DOWN, rot, (BlockPartRotation)null, true));
+				if(!((BlockConnectedTexture)state.getBlock()).canConnect(state, state.blockAccess.getBlockState(posDW)))list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(0, 0, 15), new Vector3f(1f, 0, 16), face, sprite, EnumFacing.DOWN, rot, (BlockPartRotation)null, true));
+				if(!((BlockConnectedTexture)state.getBlock()).canConnect(state, state.blockAccess.getBlockState(posDE)))list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(15f, 0, 15), new Vector3f(16f, 0, 16), face, sprite, EnumFacing.DOWN, rot, (BlockPartRotation)null, true));
 			}
 			
 			if(showW){
@@ -367,10 +357,10 @@ public class ModelGlass extends DynamicItemAndBlockModel {
 			final BlockFaceUV uv = new BlockFaceUV(top, 0);
 			final BlockPartFace face = new BlockPartFace(EnumFacing.NORTH, 0, "", uv);
 			
-			boolean showU = !state.getValue(BlockCrystalGlass.CONNECTED_UP);
-			boolean showD = !state.getValue(BlockCrystalGlass.CONNECTED_DOWN);
-			boolean showL = !state.getValue(BlockCrystalGlass.CONNECTED_EAST);
-			boolean showR = !state.getValue(BlockCrystalGlass.CONNECTED_WEST);
+			boolean showU = !state.getValue(BlockConnectedTexture.CONNECTED_UP);
+			boolean showD = !state.getValue(BlockConnectedTexture.CONNECTED_DOWN);
+			boolean showL = !state.getValue(BlockConnectedTexture.CONNECTED_EAST);
+			boolean showR = !state.getValue(BlockConnectedTexture.CONNECTED_WEST);
 			
 			final BlockPartFace faceU = new BlockPartFace(EnumFacing.NORTH, 0, "", new BlockFaceUV(new float[]{min, min, max, max}, 0));
 			if(renderCenter()){
@@ -413,8 +403,8 @@ public class ModelGlass extends DynamicItemAndBlockModel {
 				face.blockFaceUV.uvs = top;
 				BlockPos posUW = state.pos.offset(EnumFacing.UP).offset(EnumFacing.WEST);
 				BlockPos posUE = state.pos.offset(EnumFacing.UP).offset(EnumFacing.EAST);
-				if(!((BlockCrystalGlass)state.getBlock()).canConnect(state, state.blockAccess.getBlockState(posUW)))list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(0, 15, 0), new Vector3f(1f, 16, 0), face, sprite, EnumFacing.NORTH, rot, (BlockPartRotation)null, true));
-				if(!((BlockCrystalGlass)state.getBlock()).canConnect(state, state.blockAccess.getBlockState(posUE)))list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(15f, 15, 0), new Vector3f(16f, 16, 0), face, sprite, EnumFacing.NORTH, rot, (BlockPartRotation)null, true));
+				if(!((BlockConnectedTexture)state.getBlock()).canConnect(state, state.blockAccess.getBlockState(posUW)))list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(0, 15, 0), new Vector3f(1f, 16, 0), face, sprite, EnumFacing.NORTH, rot, (BlockPartRotation)null, true));
+				if(!((BlockConnectedTexture)state.getBlock()).canConnect(state, state.blockAccess.getBlockState(posUE)))list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(15f, 15, 0), new Vector3f(16f, 16, 0), face, sprite, EnumFacing.NORTH, rot, (BlockPartRotation)null, true));
 			}
 			
 			if(showD){
@@ -427,8 +417,8 @@ public class ModelGlass extends DynamicItemAndBlockModel {
 				face.blockFaceUV.uvs = bottom;
 				BlockPos posDW = state.pos.offset(EnumFacing.DOWN).offset(EnumFacing.WEST);
 				BlockPos posDE = state.pos.offset(EnumFacing.DOWN).offset(EnumFacing.EAST);
-				if(!((BlockCrystalGlass)state.getBlock()).canConnect(state, state.blockAccess.getBlockState(posDW)))list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(0, 0, 0), new Vector3f(1f, 1, 0), face, sprite, EnumFacing.NORTH, rot, (BlockPartRotation)null, true));
-				if(!((BlockCrystalGlass)state.getBlock()).canConnect(state, state.blockAccess.getBlockState(posDE)))list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(15f, 0, 0), new Vector3f(16f, 1, 0), face, sprite, EnumFacing.NORTH, rot, (BlockPartRotation)null, true));
+				if(!((BlockConnectedTexture)state.getBlock()).canConnect(state, state.blockAccess.getBlockState(posDW)))list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(0, 0, 0), new Vector3f(1f, 1, 0), face, sprite, EnumFacing.NORTH, rot, (BlockPartRotation)null, true));
+				if(!((BlockConnectedTexture)state.getBlock()).canConnect(state, state.blockAccess.getBlockState(posDE)))list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(15f, 0, 0), new Vector3f(16f, 1, 0), face, sprite, EnumFacing.NORTH, rot, (BlockPartRotation)null, true));
 			}
 			
 			if(showL){
@@ -485,10 +475,10 @@ public class ModelGlass extends DynamicItemAndBlockModel {
 			final BlockFaceUV uv = new BlockFaceUV(new float[] { 0.0f, 0.0F, 16.0f, 16.0f }, 0);
 			final BlockPartFace face = new BlockPartFace(EnumFacing.SOUTH, 0, "", uv);
 			
-			boolean showU = !state.getValue(BlockCrystalGlass.CONNECTED_UP);
-			boolean showD = !state.getValue(BlockCrystalGlass.CONNECTED_DOWN);
-			boolean showL = !state.getValue(BlockCrystalGlass.CONNECTED_WEST);
-			boolean showR = !state.getValue(BlockCrystalGlass.CONNECTED_EAST);
+			boolean showU = !state.getValue(BlockConnectedTexture.CONNECTED_UP);
+			boolean showD = !state.getValue(BlockConnectedTexture.CONNECTED_DOWN);
+			boolean showL = !state.getValue(BlockConnectedTexture.CONNECTED_WEST);
+			boolean showR = !state.getValue(BlockConnectedTexture.CONNECTED_EAST);
 			
 			final BlockPartFace faceU = new BlockPartFace(EnumFacing.SOUTH, 0, "", new BlockFaceUV(new float[]{min, min, max, max}, 0));
 			if(renderCenter()){
@@ -531,8 +521,8 @@ public class ModelGlass extends DynamicItemAndBlockModel {
 				face.blockFaceUV.uvs = top;
 				BlockPos posUW = state.pos.offset(EnumFacing.UP).offset(EnumFacing.WEST);
 				BlockPos posUE = state.pos.offset(EnumFacing.UP).offset(EnumFacing.EAST);
-				if(!((BlockCrystalGlass)state.getBlock()).canConnect(state, state.blockAccess.getBlockState(posUW)))list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(0, 15, 16f), new Vector3f(1f, 16, 16f), face, sprite, EnumFacing.SOUTH, rot, (BlockPartRotation)null, true));
-				if(!((BlockCrystalGlass)state.getBlock()).canConnect(state, state.blockAccess.getBlockState(posUE)))list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(15f, 15, 16f), new Vector3f(16f, 16, 16f), face, sprite, EnumFacing.SOUTH, rot, (BlockPartRotation)null, true));
+				if(!((BlockConnectedTexture)state.getBlock()).canConnect(state, state.blockAccess.getBlockState(posUW)))list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(0, 15, 16f), new Vector3f(1f, 16, 16f), face, sprite, EnumFacing.SOUTH, rot, (BlockPartRotation)null, true));
+				if(!((BlockConnectedTexture)state.getBlock()).canConnect(state, state.blockAccess.getBlockState(posUE)))list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(15f, 15, 16f), new Vector3f(16f, 16, 16f), face, sprite, EnumFacing.SOUTH, rot, (BlockPartRotation)null, true));
 			}
 			
 			if(showD){
@@ -545,8 +535,8 @@ public class ModelGlass extends DynamicItemAndBlockModel {
 				face.blockFaceUV.uvs = bottom;
 				BlockPos posDW = state.pos.offset(EnumFacing.DOWN).offset(EnumFacing.WEST);
 				BlockPos posDE = state.pos.offset(EnumFacing.DOWN).offset(EnumFacing.EAST);
-				if(!((BlockCrystalGlass)state.getBlock()).canConnect(state, state.blockAccess.getBlockState(posDW)))list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(0, 0, 16f), new Vector3f(1f, 1, 16f), face, sprite, EnumFacing.SOUTH, rot, (BlockPartRotation)null, true));
-				if(!((BlockCrystalGlass)state.getBlock()).canConnect(state, state.blockAccess.getBlockState(posDE)))list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(15f, 0, 16f), new Vector3f(16f, 1, 16f), face, sprite, EnumFacing.SOUTH, rot, (BlockPartRotation)null, true));
+				if(!((BlockConnectedTexture)state.getBlock()).canConnect(state, state.blockAccess.getBlockState(posDW)))list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(0, 0, 16f), new Vector3f(1f, 1, 16f), face, sprite, EnumFacing.SOUTH, rot, (BlockPartRotation)null, true));
+				if(!((BlockConnectedTexture)state.getBlock()).canConnect(state, state.blockAccess.getBlockState(posDE)))list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(15f, 0, 16f), new Vector3f(16f, 1, 16f), face, sprite, EnumFacing.SOUTH, rot, (BlockPartRotation)null, true));
 			}
 			
 			if(showL){
@@ -603,10 +593,10 @@ public class ModelGlass extends DynamicItemAndBlockModel {
 			final BlockFaceUV uv = new BlockFaceUV(new float[] { 0.0f, 0.0F, 16.0f, 16.0f }, 0);
 			final BlockPartFace face = new BlockPartFace(EnumFacing.WEST, 0, "", uv);
 			
-			boolean showU = !state.getValue(BlockCrystalGlass.CONNECTED_UP);
-			boolean showD = !state.getValue(BlockCrystalGlass.CONNECTED_DOWN);
-			boolean showL = !state.getValue(BlockCrystalGlass.CONNECTED_NORTH);
-			boolean showR = !state.getValue(BlockCrystalGlass.CONNECTED_SOUTH);
+			boolean showU = !state.getValue(BlockConnectedTexture.CONNECTED_UP);
+			boolean showD = !state.getValue(BlockConnectedTexture.CONNECTED_DOWN);
+			boolean showL = !state.getValue(BlockConnectedTexture.CONNECTED_NORTH);
+			boolean showR = !state.getValue(BlockConnectedTexture.CONNECTED_SOUTH);
 			
 			final BlockPartFace faceU = new BlockPartFace(EnumFacing.WEST, 0, "", new BlockFaceUV(new float[]{min, min, max, max}, 0));
 			if(renderCenter()){
@@ -649,8 +639,8 @@ public class ModelGlass extends DynamicItemAndBlockModel {
 				face.blockFaceUV.uvs = top;
 				BlockPos posUN = state.pos.offset(EnumFacing.UP).offset(EnumFacing.NORTH);
 				BlockPos posUS = state.pos.offset(EnumFacing.UP).offset(EnumFacing.SOUTH);
-				if(!((BlockCrystalGlass)state.getBlock()).canConnect(state, state.blockAccess.getBlockState(posUN)))list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(0f, 15, 0), new Vector3f(0, 16, 1), face, sprite, EnumFacing.WEST, rot, (BlockPartRotation)null, true));
-				if(!((BlockCrystalGlass)state.getBlock()).canConnect(state, state.blockAccess.getBlockState(posUS)))list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(0, 15, 15f), new Vector3f(0, 16F, 16f), face, sprite, EnumFacing.WEST, rot, (BlockPartRotation)null, true));
+				if(!((BlockConnectedTexture)state.getBlock()).canConnect(state, state.blockAccess.getBlockState(posUN)))list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(0f, 15, 0), new Vector3f(0, 16, 1), face, sprite, EnumFacing.WEST, rot, (BlockPartRotation)null, true));
+				if(!((BlockConnectedTexture)state.getBlock()).canConnect(state, state.blockAccess.getBlockState(posUS)))list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(0, 15, 15f), new Vector3f(0, 16F, 16f), face, sprite, EnumFacing.WEST, rot, (BlockPartRotation)null, true));
 			}
 			
 			if(showD){
@@ -663,8 +653,8 @@ public class ModelGlass extends DynamicItemAndBlockModel {
 				face.blockFaceUV.uvs = bottom;
 				BlockPos posDN = state.pos.offset(EnumFacing.DOWN).offset(EnumFacing.NORTH);
 				BlockPos posDS = state.pos.offset(EnumFacing.DOWN).offset(EnumFacing.SOUTH);
-				if(!((BlockCrystalGlass)state.getBlock()).canConnect(state, state.blockAccess.getBlockState(posDN)))list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(0, 0, 0), new Vector3f(0, 1, 1), face, sprite, EnumFacing.WEST, rot, (BlockPartRotation)null, true));
-				if(!((BlockCrystalGlass)state.getBlock()).canConnect(state, state.blockAccess.getBlockState(posDS)))list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(0, 0, 15), new Vector3f(0, 1, 16), face, sprite, EnumFacing.WEST, rot, (BlockPartRotation)null, true));
+				if(!((BlockConnectedTexture)state.getBlock()).canConnect(state, state.blockAccess.getBlockState(posDN)))list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(0, 0, 0), new Vector3f(0, 1, 1), face, sprite, EnumFacing.WEST, rot, (BlockPartRotation)null, true));
+				if(!((BlockConnectedTexture)state.getBlock()).canConnect(state, state.blockAccess.getBlockState(posDS)))list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(0, 0, 15), new Vector3f(0, 1, 16), face, sprite, EnumFacing.WEST, rot, (BlockPartRotation)null, true));
 			}
 			
 			if(showL){
@@ -721,10 +711,10 @@ public class ModelGlass extends DynamicItemAndBlockModel {
 			final BlockFaceUV uv = new BlockFaceUV(new float[] { 0.0f, 0.0F, 16.0f, 16.0f }, 0);
 			final BlockPartFace face = new BlockPartFace(EnumFacing.EAST, 0, "", uv);
 			
-			boolean showU = !state.getValue(BlockCrystalGlass.CONNECTED_UP);
-			boolean showD = !state.getValue(BlockCrystalGlass.CONNECTED_DOWN);
-			boolean showL = !state.getValue(BlockCrystalGlass.CONNECTED_SOUTH);
-			boolean showR = !state.getValue(BlockCrystalGlass.CONNECTED_NORTH);
+			boolean showU = !state.getValue(BlockConnectedTexture.CONNECTED_UP);
+			boolean showD = !state.getValue(BlockConnectedTexture.CONNECTED_DOWN);
+			boolean showL = !state.getValue(BlockConnectedTexture.CONNECTED_SOUTH);
+			boolean showR = !state.getValue(BlockConnectedTexture.CONNECTED_NORTH);
 			
 			final BlockPartFace faceU = new BlockPartFace(EnumFacing.EAST, 0, "", new BlockFaceUV(new float[]{min, min, max, max}, 0));
 			if(renderCenter()){
@@ -767,8 +757,8 @@ public class ModelGlass extends DynamicItemAndBlockModel {
 				face.blockFaceUV.uvs = top;
 				BlockPos posUN = state.pos.offset(EnumFacing.UP).offset(EnumFacing.NORTH);
 				BlockPos posUS = state.pos.offset(EnumFacing.UP).offset(EnumFacing.SOUTH);
-				if(!((BlockCrystalGlass)state.getBlock()).canConnect(state, state.blockAccess.getBlockState(posUN)))list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(16, 15, 0), new Vector3f(16, 16, 1), face, sprite, EnumFacing.EAST, rot, (BlockPartRotation)null, true));
-				if(!((BlockCrystalGlass)state.getBlock()).canConnect(state, state.blockAccess.getBlockState(posUS)))list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(16, 15, 15f), new Vector3f(16, 16F, 16f), face, sprite, EnumFacing.EAST, rot, (BlockPartRotation)null, true));
+				if(!((BlockConnectedTexture)state.getBlock()).canConnect(state, state.blockAccess.getBlockState(posUN)))list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(16, 15, 0), new Vector3f(16, 16, 1), face, sprite, EnumFacing.EAST, rot, (BlockPartRotation)null, true));
+				if(!((BlockConnectedTexture)state.getBlock()).canConnect(state, state.blockAccess.getBlockState(posUS)))list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(16, 15, 15f), new Vector3f(16, 16F, 16f), face, sprite, EnumFacing.EAST, rot, (BlockPartRotation)null, true));
 			}
 			
 			if(showD){
@@ -781,8 +771,8 @@ public class ModelGlass extends DynamicItemAndBlockModel {
 				face.blockFaceUV.uvs = bottom;
 				BlockPos posDN = state.pos.offset(EnumFacing.DOWN).offset(EnumFacing.NORTH);
 				BlockPos posDS = state.pos.offset(EnumFacing.DOWN).offset(EnumFacing.SOUTH);
-				if(!((BlockCrystalGlass)state.getBlock()).canConnect(state, state.blockAccess.getBlockState(posDN)))list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(16, 0, 0), new Vector3f(16, 1, 1), face, sprite, EnumFacing.EAST, rot, (BlockPartRotation)null, true));
-				if(!((BlockCrystalGlass)state.getBlock()).canConnect(state, state.blockAccess.getBlockState(posDS)))list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(16, 0, 15), new Vector3f(16, 1, 16), face, sprite, EnumFacing.EAST, rot, (BlockPartRotation)null, true));
+				if(!((BlockConnectedTexture)state.getBlock()).canConnect(state, state.blockAccess.getBlockState(posDN)))list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(16, 0, 0), new Vector3f(16, 1, 1), face, sprite, EnumFacing.EAST, rot, (BlockPartRotation)null, true));
+				if(!((BlockConnectedTexture)state.getBlock()).canConnect(state, state.blockAccess.getBlockState(posDS)))list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(16, 0, 15), new Vector3f(16, 1, 16), face, sprite, EnumFacing.EAST, rot, (BlockPartRotation)null, true));
 			}
 			
 			if(showL){
@@ -855,10 +845,6 @@ public class ModelGlass extends DynamicItemAndBlockModel {
 
 	@Override
 	public TextureAtlasSprite getParticleTexture() {
-		if(state !=null){
-			GlassType type = state.getValue(BlockCrystalGlass.TYPE);
-			if(type !=null)return getTexture(type);
-		}
 		return getClear();
 	}
 
@@ -866,13 +852,14 @@ public class ModelGlass extends DynamicItemAndBlockModel {
 		return RenderUtil.getSprite("crystalmod:blocks/blank");
 	}
 	
-	public TextureAtlasSprite getTexture(GlassType type){
-		return RenderUtil.getSprite("crystalmod:blocks/crystal_"+type.getName()+"_glass");
-	}
+	public abstract TextureAtlasSprite getTexture(IBlockState state);
 
-	public TextureAtlasSprite getCenterTexture(GlassType type) {
-		return RenderUtil.getSprite("crystalmod:blocks/crystal_"+type.getName()+"_glass");
-	}
+	public abstract TextureAtlasSprite getCenterTexture(IBlockState state);
+	
+	public abstract TextureAtlasSprite getTexture(ItemStack stack);
+
+	public abstract TextureAtlasSprite getCenterTexture(ItemStack stack);
+	
 	
 	@Override
 	public ItemCameraTransforms getItemCameraTransforms() {
@@ -881,16 +868,20 @@ public class ModelGlass extends DynamicItemAndBlockModel {
 	
 	@Override
 	public net.minecraft.client.renderer.block.model.IBakedModel handleBlockState(IBlockState state, EnumFacing side, long rand) {
-		return (state !=null && state instanceof GlassBlockState) ? new ModelGlass((GlassBlockState)state) : null;
+		return (state !=null && state instanceof ConnectedBlockState) ? createNewModel((ConnectedBlockState)state) : null;
 	}
 	
-	public Map<Integer, ModelGlass> itemModels = Maps.newHashMap();
+	public Map<Integer, ModelConnectedTexture> itemModels = Maps.newHashMap();
 	
 	@Override
 	public net.minecraft.client.renderer.block.model.IBakedModel handleItemState(ItemStack stack, World world, EntityLivingBase entity) {
 		if(!itemModels.containsKey(stack.getMetadata())){
-			itemModels.put(stack.getMetadata(),	new ModelGlass(stack));
+			itemModels.put(stack.getMetadata(),	createNewModel(stack));
 		}
 		return itemModels.get(stack.getMetadata());
 	}
+	
+	public abstract ModelConnectedTexture createNewModel(ItemStack stack);
+	public abstract ModelConnectedTexture createNewModel(ConnectedBlockState state);
+	public abstract ModelConnectedTexture createNewModel();
 }

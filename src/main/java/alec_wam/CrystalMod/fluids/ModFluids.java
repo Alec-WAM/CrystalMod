@@ -1,5 +1,6 @@
 package alec_wam.CrystalMod.fluids;
 
+import java.awt.Color;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
@@ -47,6 +48,9 @@ public class ModFluids {
 	
 	public static Fluid fluidEnder;
 	
+	public static Fluid fluidInk;
+	public static Fluid fluidTears;
+	
 	public static void registerFluids(){
 		if (!Loader.isModLoaded("EnderIO")) {
 	      ModLogger.info("XP Juice registered by Crystal Mod.");
@@ -85,6 +89,14 @@ public class ModFluids {
 		fluidEnder = new FluidColored("ender", 0x063931).setUnlocalizedName("crystalmod.ender");
 		registerFluid(fluidEnder);
 		ModBlocks.registerBlock(new BlockFluidEnder(fluidEnder, net.minecraft.block.material.Material.WATER), fluidEnder.getName());
+		
+		fluidInk = new Fluid("ink", CrystalMod.resourceL("blocks/fluid/ink_still"), CrystalMod.resourceL("blocks/fluid/ink_flowing")).setUnlocalizedName("crystalmod.ink");
+		registerFluid(fluidInk);
+		registerClassicBlock(fluidInk);
+		
+		fluidTears = new Fluid("tears", CrystalMod.resourceL("blocks/fluid/tears_still"), CrystalMod.resourceL("blocks/fluid/tears_flowing")).setUnlocalizedName("crystalmod.tears");
+		registerFluid(fluidTears);
+		registerClassicBlock(fluidTears);
 		
 		createBuckets();
 	}
@@ -223,6 +235,8 @@ public class ModFluids {
 	private static final ResourceLocation RES_UNDERWATER_PURE = new ResourceLocation("crystalmod:textures/gui/overlay/underwater/underwater_pure.png");
 	private static final ResourceLocation RES_UNDERWATER_DIRON = new ResourceLocation("crystalmod:textures/gui/overlay/underwater/underwater_diron.png");
 	private static final ResourceLocation RES_UNDERWATER_ENDER = new ResourceLocation("crystalmod:textures/gui/overlay/underwater/underwater_ender.png");
+	private static final ResourceLocation RES_UNDERWATER_INK = new ResourceLocation("crystalmod:textures/gui/overlay/underwater/underwater_ink.png");
+	private static final ResourceLocation RES_UNDERWATER_TEARS = new ResourceLocation("crystalmod:textures/gui/overlay/underwater/underwater_tears.png");
 	
 	public static ResourceLocation getOverlayTexture(Fluid fluid){
 		if(fluid == fluidBlueCrystal){
@@ -248,6 +262,12 @@ public class ModFluids {
 		}
 		if(fluid == fluidEnder){
 			return RES_UNDERWATER_ENDER;
+		}
+		if(fluid == fluidInk){
+			return RES_UNDERWATER_INK;
+		}
+		if(fluid == fluidTears){
+			return RES_UNDERWATER_TEARS;
 		}
 		return null;
 	}

@@ -499,6 +499,8 @@ tile.crystalmod.crate.dark.name=Dark Crystal Crate
 tile.crystalmod.wirelesschest.name=Super Chest
 tile.crystalmod.advdispenser.name=Advanced Dispenser
 
+tile.crystalmod.storagecase.note.name=Noteblock Storage Case
+
 tile.crystalmod.crystalpipe.item.name=Crystal Pipe (Item)
 tile.crystalmod.crystalpipe.fluid.name=Crystal Pipe (Fluid)
 tile.crystalmod.crystalpipe.estorage.name=Crystal Pipe (Storage)
@@ -685,6 +687,8 @@ fluid.crystalmod.crystal.dark=Dark Liquid Crystal
 fluid.crystalmod.crystal.pure=Pure Liquid Crystal
 fluid.crystalmod.darkiron=Liquid Dark Iron
 fluid.crystalmod.ender=Liquid Ender
+fluid.crystalmod.ink=Ink
+fluid.crystalmod.tears=Tears
 
 fluid.moltenCrystalBlue=Molten Blue Crystal
 fluid.moltenCrystalRed=Molten Red Crystal

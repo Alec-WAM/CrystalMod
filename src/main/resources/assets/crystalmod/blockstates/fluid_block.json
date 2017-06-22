@@ -45,6 +45,12 @@
         }],
 		"ender": [{
             "custom": { "fluid": "ender" }
+        }],
+		"ink": [{
+            "custom": { "fluid": "ink" }
+        }],
+		"tears": [{
+            "custom": { "fluid": "tears" }
         }]
     }
 }
