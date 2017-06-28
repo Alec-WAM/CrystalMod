@@ -12,7 +12,7 @@ import net.minecraft.util.NonNullList;
 public class TileEntityInventory extends TileEntityMod implements IInventory {
 
 	private String name;
-	private NonNullList<ItemStack> inventory;
+	protected NonNullList<ItemStack> inventory;
 	
 	public TileEntityInventory(String name, int size){
 		this.name = name;

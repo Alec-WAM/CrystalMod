@@ -86,7 +86,7 @@ public class TileEntityElevatorRenderer extends TileEntitySpecialRenderer<TileEn
 	}
 	
     @SuppressWarnings("deprecation")
-	private static boolean renderBlock(BlockRendererDispatcher dispatcher, IBlockState state, BlockPos pos, IBlockAccess blockAccess, VertexBuffer worldRendererIn) {
+	public static boolean renderBlock(BlockRendererDispatcher dispatcher, IBlockState state, BlockPos pos, IBlockAccess blockAccess, VertexBuffer worldRendererIn) {
     	 try {
              EnumBlockRenderType enumblockrendertype = state.getRenderType();
 

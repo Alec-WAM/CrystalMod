@@ -28,7 +28,9 @@ import alec_wam.CrystalMod.blocks.glass.BlockTintedCrystalGlass;
 import alec_wam.CrystalMod.blocks.rail.BlockReinforcedRail;
 import alec_wam.CrystalMod.handler.MissingItemHandler;
 import alec_wam.CrystalMod.tiles.cases.BlockCase;
+import alec_wam.CrystalMod.tiles.cases.RenderTileEntityCasePiston;
 import alec_wam.CrystalMod.tiles.cases.TileEntityCaseNoteblock;
+import alec_wam.CrystalMod.tiles.cases.TileEntityCasePiston;
 import alec_wam.CrystalMod.tiles.cauldron.BlockCrystalCauldron;
 import alec_wam.CrystalMod.tiles.cauldron.RenderTileCrystalCauldron;
 import alec_wam.CrystalMod.tiles.cauldron.TileEntityCrystalCauldron;
@@ -366,7 +368,7 @@ public class ModBlocks {
 		
 		storageCase = new BlockCase();
 		registerEnumBlock(storageCase, "storagecase");
-		registerTileEntity(TileEntityCaseNoteblock.class);
+		registerTileEntity(TileEntityCaseNoteblock.class, TileEntityCasePiston.class);
 
 		crystalPlantBlue = new BlockCrystalPlant(PlantType.BLUE);
 		registerBlock(crystalPlantBlue, "bluecrystalplant");
@@ -721,6 +723,7 @@ public class ModBlocks {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileFusionPedistal.class,
 				new RenderTileFusionPedistal<TileFusionPedistal>());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileCrate.class, new RenderTileCrate<TileCrate>());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCasePiston.class, new RenderTileEntityCasePiston());
 	}
 
 	@SideOnly(Side.CLIENT)

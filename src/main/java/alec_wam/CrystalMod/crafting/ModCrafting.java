@@ -7,6 +7,7 @@ import java.util.Map;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
+import alec_wam.CrystalMod.blocks.BlockCompressed.CompressedBlockType;
 import alec_wam.CrystalMod.blocks.BlockCrystal.CrystalBlockType;
 import alec_wam.CrystalMod.blocks.BlockCrystalIngot.CrystalIngotBlockType;
 import alec_wam.CrystalMod.blocks.BlockCrystalLight.LightBlockType;
@@ -15,9 +16,7 @@ import alec_wam.CrystalMod.blocks.BlockCrystalOre.CrystalOreType;
 import alec_wam.CrystalMod.blocks.BlockDecorative.DecorativeBlockType;
 import alec_wam.CrystalMod.blocks.BlockMetalBars.EnumMetalBarType;
 import alec_wam.CrystalMod.blocks.ModBlocks;
-import alec_wam.CrystalMod.blocks.BlockCompressed.CompressedBlockType;
 import alec_wam.CrystalMod.blocks.crops.material.ModCrops;
-import alec_wam.CrystalMod.blocks.crystexium.CrystexiumBlock.CrystexiumBlockType;
 import alec_wam.CrystalMod.blocks.glass.BlockCrystalGlass.GlassType;
 import alec_wam.CrystalMod.crafting.recipes.ChisledBlockRecipe;
 import alec_wam.CrystalMod.crafting.recipes.CustomToolRepairRecipe;
@@ -34,7 +33,6 @@ import alec_wam.CrystalMod.fluids.ModFluids;
 import alec_wam.CrystalMod.integration.baubles.BaublesIntegration;
 import alec_wam.CrystalMod.items.ItemCrystal.CrystalType;
 import alec_wam.CrystalMod.items.ItemCrystalSap.SapType;
-import alec_wam.CrystalMod.items.ItemCrystex.CrystexItemType;
 import alec_wam.CrystalMod.items.ItemCursedBone.BoneType;
 import alec_wam.CrystalMod.items.ItemIngot.IngotType;
 import alec_wam.CrystalMod.items.ItemMachineFrame.FrameType;
@@ -45,6 +43,7 @@ import alec_wam.CrystalMod.items.tools.ItemToolParts.PartType;
 import alec_wam.CrystalMod.items.tools.backpack.BackpackUtil;
 import alec_wam.CrystalMod.items.tools.bat.BatHelper;
 import alec_wam.CrystalMod.items.tools.bat.RecipeBatUpgrade;
+import alec_wam.CrystalMod.tiles.cases.BlockCase.EnumCaseType;
 import alec_wam.CrystalMod.tiles.cauldron.CauldronRecipeManager;
 import alec_wam.CrystalMod.tiles.chest.CrystalChestType;
 import alec_wam.CrystalMod.tiles.chest.wireless.WirelessChestHelper;
@@ -296,7 +295,23 @@ public class ModCrafting {
 		addShapedOreRecipe(new ItemStack(ModBlocks.crates, 1, CrateType.RED.getMeta()), new Object[] {"XXX", "#C#", "XXX", 'X', new ItemStack(ModBlocks.crystalPlanks, 1, WoodType.RED.getMeta()), '#', "chestWood", 'C', new ItemStack(ModBlocks.crates, 1, CrateType.BLUE.getMeta())});
 		addShapedOreRecipe(new ItemStack(ModBlocks.crates, 1, CrateType.GREEN.getMeta()), new Object[] {"XXX", "#C#", "XXX", 'X', new ItemStack(ModBlocks.crystalPlanks, 1, WoodType.GREEN.getMeta()), '#', "chestWood", 'C', new ItemStack(ModBlocks.crates, 1, CrateType.RED.getMeta())});
 		addShapedOreRecipe(new ItemStack(ModBlocks.crates, 1, CrateType.DARK.getMeta()), new Object[] {"XXX", "#C#", "XXX", 'X', new ItemStack(ModBlocks.crystalPlanks, 1, WoodType.DARK.getMeta()), '#', "chestWood", 'C', new ItemStack(ModBlocks.crates, 1, CrateType.GREEN.getMeta())});
+		
+		addShapedOreRecipe(new ItemStack(ModBlocks.storageCase, 4, EnumCaseType.NOTE.getMeta()), new Object[]{"WNW", "NCN", "WNW", 'W', "plankWood", 'N', Blocks.NOTEBLOCK, 'C', "chestTrapped"});
+		addShapedOreRecipe(new ItemStack(ModBlocks.storageCase, 2, EnumCaseType.PISTON.getMeta()), new Object[]{"WNW", "NCN", "WNW", 'W', "cobblestone", 'N', Blocks.PISTON, 'C', "chestTrapped"});
+		
 		addShapelessRecipe(new ItemStack(ModBlocks.flowerLilypad), new Object[]{Blocks.WATERLILY, new ItemStack(Blocks.RED_FLOWER, 1, EnumFlowerType.BLUE_ORCHID.getMeta())});
+		
+		addShapelessRecipe(ModFluids.bucketList.get(ModFluids.fluidInk), new Object[]{Items.BUCKET, 
+				new ItemStack(Items.DYE, 1, EnumDyeColor.BLACK.getDyeDamage()), new ItemStack(Items.DYE, 1, EnumDyeColor.BLACK.getDyeDamage()), 
+				new ItemStack(Items.DYE, 1, EnumDyeColor.BLACK.getDyeDamage()), new ItemStack(Items.DYE, 1, EnumDyeColor.BLACK.getDyeDamage()), 
+				new ItemStack(Items.DYE, 1, EnumDyeColor.BLACK.getDyeDamage()), new ItemStack(Items.DYE, 1, EnumDyeColor.BLACK.getDyeDamage()), 
+				new ItemStack(Items.DYE, 1, EnumDyeColor.BLACK.getDyeDamage()), new ItemStack(Items.DYE, 1, EnumDyeColor.BLACK.getDyeDamage())});		
+		addShapelessRecipe(new ItemStack(Items.DYE, 8, EnumDyeColor.BLACK.getDyeDamage()), new Object[]{ModFluids.bucketList.get(ModFluids.fluidInk)});
+		
+		addShapelessRecipe(ModFluids.bucketList.get(ModFluids.fluidTears), new Object[]{Items.BUCKET, 
+				Items.GHAST_TEAR, Items.GHAST_TEAR, Items.GHAST_TEAR, Items.GHAST_TEAR, 
+				Items.GHAST_TEAR, Items.GHAST_TEAR, Items.GHAST_TEAR, Items.GHAST_TEAR});		
+		addShapelessRecipe(new ItemStack(Items.GHAST_TEAR, 8), new Object[]{ModFluids.bucketList.get(ModFluids.fluidTears)});
 		
 		//TOOLS
 		addShapedRecipe(ModItems.lock, new Object[]{" N ", "NPN", "NNN", 'N', dIronNugget, 'P', dIronPlate});

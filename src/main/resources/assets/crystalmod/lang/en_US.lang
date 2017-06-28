@@ -341,9 +341,9 @@ tile.crystalmod.decorativeblock.square_turn.name=Square Turn Block
 
 tile.crystalmod.tiles_basic.stone_stone.name=Stone Slab Tiles
 tile.crystalmod.tiles_basic.stone_carved.name=Chiseled Stonebrick Tiles
-tile.crystalmod.tiles_basic.stone_granite.name=Smooth Granite Tiles
-tile.crystalmod.tiles_basic.stone_diorite.name=Smooth Diorite Tiles
-tile.crystalmod.tiles_basic.stone_andesite.name=Smooth Andesite Tiles
+tile.crystalmod.tiles_basic.stone_granite.name=Polished Granite Tiles
+tile.crystalmod.tiles_basic.stone_diorite.name=Polished Diorite Tiles
+tile.crystalmod.tiles_basic.stone_andesite.name=Polished Andesite Tiles
 tile.crystalmod.tiles_basic.compressed_redstone.name=Redstone Tiles
 tile.crystalmod.tiles_basic.compressed_lapis.name=Lapis Lazuli Tiles
 tile.crystalmod.tiles_basic.compressed_quartz.name=Quartz Tiles

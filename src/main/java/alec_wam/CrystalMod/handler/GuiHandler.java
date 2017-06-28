@@ -29,6 +29,9 @@ import alec_wam.CrystalMod.items.tools.backpack.upgrade.GuiBackpackUpgradeWindow
 import alec_wam.CrystalMod.items.tools.backpack.upgrade.GuiBackpackUpgrades;
 import alec_wam.CrystalMod.items.tools.backpack.upgrade.InventoryBackpackUpgrades;
 import alec_wam.CrystalMod.items.tools.backpack.upgrade.ItemBackpackUpgrade.BackpackUpgrade;
+import alec_wam.CrystalMod.tiles.cases.ContainerCase;
+import alec_wam.CrystalMod.tiles.cases.GuiCase;
+import alec_wam.CrystalMod.tiles.cases.TileEntityCaseBase;
 import alec_wam.CrystalMod.tiles.chest.ContainerCrystalChest;
 import alec_wam.CrystalMod.tiles.chest.GUIChest;
 import alec_wam.CrystalMod.tiles.chest.TileEntityBlueCrystalChest;
@@ -345,6 +348,7 @@ public class GuiHandler implements IGuiHandler {
         	if(te instanceof TileRedstoneReactor) return new GuiRedstoneReactor(player, (TileRedstoneReactor)te);
         	if(te instanceof TileInfiniteEngine) return new GuiInfiniteEngine(player, (TileInfiniteEngine)te);
         	if(te instanceof TileFiniteEngine) return new GuiFiniteEngine(player, (TileFiniteEngine)te);
+        	if(te instanceof TileEntityCaseBase) return new GuiCase(player, (TileEntityCaseBase)te);
         } 
         return null;
     }
@@ -498,6 +502,7 @@ public class GuiHandler implements IGuiHandler {
         	if(te instanceof TileRedstoneReactor) return new ContainerRedstoneReactor(player.inventory, (TileRedstoneReactor)te);
         	if(te instanceof TileInfiniteEngine) return new ContainerInfiniteEngine(player.inventory, (TileInfiniteEngine)te);
         	if(te instanceof TileFiniteEngine) return new ContainerFiniteEngine(player.inventory, (TileFiniteEngine)te);
+        	if(te instanceof TileEntityCaseBase) return new ContainerCase(player.inventory, (TileEntityCaseBase)te);
         }
         return null;
     }

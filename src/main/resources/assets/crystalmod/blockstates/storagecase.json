@@ -1,0 +1,12 @@
+{
+  "forge_marker": 1,
+  "variants": {
+    "normal": [{}],
+    "inventory": [{}],
+    "type": {
+      "note": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/case_noteblock"} },
+	  "piston": { "model": "crystalmod:case_piston" },
+	  "piston_inventory": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/case_piston_head"} }	  
+    }
+  }
+}
