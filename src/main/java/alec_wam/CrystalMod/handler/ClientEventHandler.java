@@ -49,6 +49,7 @@ import net.minecraft.client.audio.SoundEventAccessor;
 import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.gui.inventory.GuiScreenHorseInventory;
@@ -651,6 +652,8 @@ public class ClientEventHandler {
 
 	}
     
+    public static final ResourceLocation OVERLAY_REDSTONERADIATION = CrystalMod.resourceL("textures/gui/overlay/redstone_radiation.png");
+    
     @SubscribeEvent
     public void renderScreen(RenderGameOverlayEvent event){
     	EntityPlayer player = CrystalMod.proxy.getClientPlayer();
@@ -660,6 +663,50 @@ public class ClientEventHandler {
     	if(extPlayer == null)return;
     	
     	ScaledResolution sr = event.getResolution();
+    	if(event.getType() == ElementType.ALL){
+			if(extPlayer.getRadiation() > 0){
+				
+				int phase = extPlayer.getRadiation() / 600;
+				Minecraft.getMinecraft().renderEngine.bindTexture(OVERLAY_REDSTONERADIATION);
+				GlStateManager.pushMatrix();
+	    		
+	    		int left = 0;
+	    		int top = 0;
+	    		int right = sr.getScaledWidth();
+	    		int bottom = sr.getScaledHeight();
+
+	            double uD = 1.0f / 1280;
+	            double vD = 1.0f / 8460;
+	            
+	            double offset = 0;
+	            
+	            if(phase > 0 && phase <= 7){
+	            	offset = 1055 * phase;
+	            }
+	            
+	            double z = 1000;
+	            
+	    		double u = 0 * uD;
+	            double v = offset * vD;
+	            double maxU = 1280 * uD;
+	            double maxV = (offset + 1080) * vD;
+	            Tessellator tessellator = Tessellator.getInstance();
+	            VertexBuffer vertexbuffer = tessellator.getBuffer();
+	            GlStateManager.enableBlend();
+	            GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+	            float alpha = 0.8f;
+	            vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
+	            vertexbuffer.pos((double)left, (double)bottom, z).tex(u, maxV).color(1, 1, 1, alpha).endVertex();
+	            vertexbuffer.pos((double)right, (double)bottom, z).tex(maxU, maxV).color(1, 1, 1, alpha).endVertex();
+	            vertexbuffer.pos((double)right, (double)top, z).tex(maxU, v).color(1, 1, 1, alpha).endVertex();
+	            vertexbuffer.pos((double)left, (double)top, z).tex(u, v).color(1, 1, 1, alpha).endVertex();
+	            tessellator.draw();
+	            GlStateManager.disableBlend();
+	            
+	    		GlStateManager.popMatrix();
+			}
+		}
+    	
     	if(extPlayer.getScreenFlashTime() > 0){
     		
     		if(event.getType() == ElementType.HOTBAR){

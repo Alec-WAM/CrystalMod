@@ -16,6 +16,10 @@ import alec_wam.CrystalMod.blocks.crops.ItemBlockWater;
 import alec_wam.CrystalMod.blocks.crops.material.BlockMaterialCrop;
 import alec_wam.CrystalMod.blocks.crops.material.RenderTileMaterialCrop;
 import alec_wam.CrystalMod.blocks.crops.material.TileMaterialCrop;
+import alec_wam.CrystalMod.blocks.crystexium.BlockCrysidian;
+import alec_wam.CrystalMod.blocks.crystexium.CrystexiumBlock;
+import alec_wam.CrystalMod.blocks.crystexium.CrystexiumBlock.CrystexiumBlockType;
+import alec_wam.CrystalMod.blocks.crystexium.CrystexiumSlab;
 import alec_wam.CrystalMod.blocks.decorative.bridge.BlockBridge;
 import alec_wam.CrystalMod.blocks.decorative.bridge.TileBridge;
 import alec_wam.CrystalMod.blocks.decorative.tiles.BlockBasicTiles;
@@ -179,6 +183,7 @@ import alec_wam.CrystalMod.tiles.workbench.BlockCrystalWorkbench;
 import alec_wam.CrystalMod.tiles.workbench.TileEntityCrystalWorkbench;
 import alec_wam.CrystalMod.util.ModLogger;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockStairs;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
@@ -304,12 +309,22 @@ public class ModBlocks {
 
 	
 	//TODO Re-add Crystexium
-	/*public static CrystexiumBlock crystexiumBlock;
+	public static CrystexiumBlock crystexiumBlock;
 	public static CrystexiumBlock blueCrystexiumBlock;
 	public static CrystexiumBlock redCrystexiumBlock;
 	public static CrystexiumBlock greenCrystexiumBlock;
 	public static CrystexiumBlock darkCrystexiumBlock;
-	public static CrystexiumBlock pureCrystexiumBlock;*/
+	public static CrystexiumBlock pureCrystexiumBlock;
+	
+	public static CrystexiumSlab crystexiumSlab;
+	public static BlockCrysidian crysidian;
+	
+	public static BlockStairs crystexiumStairs;
+	public static BlockStairs blueCrystexiumStairs;
+	public static BlockStairs redCrystexiumStairs;
+	public static BlockStairs greenCrystexiumStairs;
+	public static BlockStairs darkCrystexiumStairs;
+	public static BlockStairs pureCrystexiumStairs;
 
 	public static final EnumPlantType crystalPlantType = EnumPlantType.getPlantType("crystal");
 
@@ -677,7 +692,7 @@ public class ModBlocks {
 		registerTileEntity(TileCrystalCluster.class);
 
 		//TODO Re-add Crystexium
-		/*crystexiumBlock = new CrystexiumBlock();
+		crystexiumBlock = new CrystexiumBlock();
 		registerEnumBlock(crystexiumBlock, "crystexiumblock");
 		blueCrystexiumBlock = new CrystexiumBlock();
 		registerEnumBlock(blueCrystexiumBlock, "bluecrystexiumblock");
@@ -688,7 +703,27 @@ public class ModBlocks {
 		darkCrystexiumBlock = new CrystexiumBlock();
 		registerEnumBlock(darkCrystexiumBlock, "darkcrystexiumblock");
 		pureCrystexiumBlock = new CrystexiumBlock();
-		registerEnumBlock(pureCrystexiumBlock, "purecrystexiumblock");*/
+		registerEnumBlock(pureCrystexiumBlock, "purecrystexiumblock");
+		
+		crystexiumSlab = new CrystexiumSlab();
+		registerBlock(crystexiumSlab, new ItemBlockMeta(crystexiumSlab), "crystexiumslab");
+		ItemBlockMeta.setMappingProperty(crystexiumSlab, CrystexiumSlab.VARIANT);
+		
+		crysidian = registerBlock(new BlockCrysidian(), "crysidian");
+		
+		
+		crystexiumStairs = new BlockCustomStairs(crystexiumBlock.getDefaultState().withProperty(CrystexiumBlock.TYPE, CrystexiumBlockType.BRICK));
+		registerBlock(crystexiumStairs, "crystexiumstairs");
+		blueCrystexiumStairs = new BlockCustomStairs(blueCrystexiumBlock.getDefaultState().withProperty(CrystexiumBlock.TYPE, CrystexiumBlockType.BRICK));
+		registerBlock(blueCrystexiumStairs, "bluecrystexiumstairs");
+		redCrystexiumStairs = new BlockCustomStairs(redCrystexiumBlock.getDefaultState().withProperty(CrystexiumBlock.TYPE, CrystexiumBlockType.BRICK));
+		registerBlock(redCrystexiumStairs, "redcrystexiumstairs");
+		greenCrystexiumStairs = new BlockCustomStairs(greenCrystexiumBlock.getDefaultState().withProperty(CrystexiumBlock.TYPE, CrystexiumBlockType.BRICK));
+		registerBlock(greenCrystexiumStairs, "greencrystexiumstairs");
+		darkCrystexiumStairs = new BlockCustomStairs(darkCrystexiumBlock.getDefaultState().withProperty(CrystexiumBlock.TYPE, CrystexiumBlockType.BRICK));
+		registerBlock(darkCrystexiumStairs, "darkcrystexiumstairs");
+		pureCrystexiumStairs = new BlockCustomStairs(pureCrystexiumBlock.getDefaultState().withProperty(CrystexiumBlock.TYPE, CrystexiumBlockType.BRICK));
+		registerBlock(pureCrystexiumStairs, "purecrystexiumstairs");
 	}
 
 	@SideOnly(Side.CLIENT)

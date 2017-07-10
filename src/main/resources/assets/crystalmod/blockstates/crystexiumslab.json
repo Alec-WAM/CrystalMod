@@ -1,0 +1,24 @@
+{
+    "forge_marker": 1,
+	"defaults": {
+		"textures": {
+			"bottom": "crystalmod:blocks/crystexium/crystexium_bricks",
+			"top": "crystalmod:blocks/crystexium/crystexium_bricks",
+			"side": "crystalmod:blocks/crystexium/crystexium_bricks"
+		}
+	},
+	"variants": {
+        "half=bottom,type=normal":  { "model": "half_slab", "textures": {"bottom": "crystalmod:blocks/crystexium/crystexium_bricks", "top": "crystalmod:blocks/crystexium/crystexium_bricks", "side": "crystalmod:blocks/crystexium/crystexium_bricks"} },
+        "half=top,type=normal":  { "model": "upper_slab", "textures": {"bottom": "crystalmod:blocks/crystexium/crystexium_bricks", "top": "crystalmod:blocks/crystexium/crystexium_bricks", "side": "crystalmod:blocks/crystexium/crystexium_bricks"} },
+		"half=bottom,type=blue":  { "model": "half_slab", "textures": {"bottom": "crystalmod:blocks/crystexium/blue_crystexium_bricks", "top": "crystalmod:blocks/crystexium/blue_crystexium_bricks", "side": "crystalmod:blocks/crystexium/blue_crystexium_bricks"} },
+        "half=top,type=blue":  { "model": "upper_slab", "textures": {"bottom": "crystalmod:blocks/crystexium/blue_crystexium_bricks", "top": "crystalmod:blocks/crystexium/blue_crystexium_bricks", "side": "crystalmod:blocks/crystexium/blue_crystexium_bricks"} },
+		"half=bottom,type=red":  { "model": "half_slab", "textures": {"bottom": "crystalmod:blocks/crystexium/red_crystexium_bricks", "top": "crystalmod:blocks/crystexium/red_crystexium_bricks", "side": "crystalmod:blocks/crystexium/red_crystexium_bricks"} },
+        "half=top,type=red":  { "model": "upper_slab", "textures": {"bottom": "crystalmod:blocks/crystexium/red_crystexium_bricks", "top": "crystalmod:blocks/crystexium/red_crystexium_bricks", "side": "crystalmod:blocks/crystexium/red_crystexium_bricks"} },
+		"half=bottom,type=green":  { "model": "half_slab", "textures": {"bottom": "crystalmod:blocks/crystexium/green_crystexium_bricks", "top": "crystalmod:blocks/crystexium/green_crystexium_bricks", "side": "crystalmod:blocks/crystexium/green_crystexium_bricks"} },
+        "half=top,type=green":  { "model": "upper_slab", "textures": {"bottom": "crystalmod:blocks/crystexium/green_crystexium_bricks", "top": "crystalmod:blocks/crystexium/green_crystexium_bricks", "side": "crystalmod:blocks/crystexium/green_crystexium_bricks"} },
+		"half=bottom,type=dark":  { "model": "half_slab", "textures": {"bottom": "crystalmod:blocks/crystexium/dark_crystexium_bricks", "top": "crystalmod:blocks/crystexium/dark_crystexium_bricks", "side": "crystalmod:blocks/crystexium/dark_crystexium_bricks"} },
+        "half=top,type=dark":  { "model": "upper_slab", "textures": {"bottom": "crystalmod:blocks/crystexium/dark_crystexium_bricks", "top": "crystalmod:blocks/crystexium/dark_crystexium_bricks", "side": "crystalmod:blocks/crystexium/dark_crystexium_bricks"} },
+		"half=bottom,type=pure":  { "model": "half_slab", "textures": {"bottom": "crystalmod:blocks/crystexium/pure_crystexium_bricks", "top": "crystalmod:blocks/crystexium/pure_crystexium_bricks", "side": "crystalmod:blocks/crystexium/pure_crystexium_bricks"} },
+        "half=top,type=pure":  { "model": "upper_slab", "textures": {"bottom": "crystalmod:blocks/crystexium/pure_crystexium_bricks", "top": "crystalmod:blocks/crystexium/pure_crystexium_bricks", "side": "crystalmod:blocks/crystexium/pure_crystexium_bricks"} }
+	}
+}

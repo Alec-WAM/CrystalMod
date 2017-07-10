@@ -109,6 +109,15 @@ public class PacketEntityMessage extends AbstractPacketThreadsafe {
 					}
 				}
 			}
+			if(type.equalsIgnoreCase("#UpdateRadiation#")){
+				if(entity instanceof EntityPlayer){
+					EntityPlayer ePlayer = (EntityPlayer)entity;
+					ExtendedPlayer exPlayer = ExtendedPlayerProvider.getExtendedPlayer(ePlayer);
+					if(exPlayer !=null){
+						exPlayer.setRadiation(data.getInteger("Time"));
+					}
+				}
+			}
 			if(type.equalsIgnoreCase("#Jump#")){
 				if(entity instanceof EntityPlayer){
 					EntityPlayer ePlayer = (EntityPlayer)entity;

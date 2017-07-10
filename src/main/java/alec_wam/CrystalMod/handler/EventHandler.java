@@ -42,6 +42,7 @@ import alec_wam.CrystalMod.items.tools.backpack.upgrade.InventoryBackpackUpgrade
 import alec_wam.CrystalMod.items.tools.backpack.upgrade.ItemBackpackUpgrade.BackpackUpgrade;
 import alec_wam.CrystalMod.items.tools.bat.BatHelper;
 import alec_wam.CrystalMod.items.tools.bat.ModBats;
+import alec_wam.CrystalMod.items.tools.projectiles.DamageSourceDarkarang;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.packets.PacketEntityMessage;
 import alec_wam.CrystalMod.tiles.endertorch.TileEnderTorch;
@@ -62,6 +63,7 @@ import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.Lang;
 import alec_wam.CrystalMod.util.ModLogger;
 import alec_wam.CrystalMod.util.PlayerUtil;
+import alec_wam.CrystalMod.util.TimeUtil;
 import alec_wam.CrystalMod.util.Util;
 import alec_wam.CrystalMod.world.ModDimensions;
 import baubles.api.BaubleType;
@@ -832,6 +834,36 @@ public class EventHandler {
 		if (event.getEntity() instanceof EntityPlayer) {			
 			EntityPlayer player = (EntityPlayer) event.getEntity();
 			ExtendedPlayer ePlayer = ExtendedPlayerProvider.getExtendedPlayer(player);
+			
+			if(ePlayer !=null){
+				boolean redstoneCore = player.inventory.hasItemStack(new ItemStack(ModBlocks.redstoneCore));
+				
+				if(redstoneCore){
+					if(ePlayer.getRadiation() < TimeUtil.MINUTE * 4){
+						ePlayer.setRadiation(ePlayer.getRadiation()+1);
+					} 
+					if(ePlayer.getRadiation() >= (TimeUtil.MINUTE * 4) - 600){
+						if(player.isEntityAlive()){
+							player.attackEntityFrom(new DamageSource("crystalmod.radiation").setDamageBypassesArmor(), 5.0F);
+						} else {
+							ePlayer.setRadiation(0);
+						}
+					}
+				} else {
+					if(ePlayer.getRadiation() > 0){
+						ePlayer.setRadiation(ePlayer.getRadiation()-1);
+					}
+				}
+				
+				boolean dirtyValue = ePlayer.getLastRadiation() != ePlayer.getRadiation() && player.getEntityWorld().getTotalWorldTime() % 20 == 0;
+				if(dirtyValue && player instanceof EntityPlayerMP){
+					NBTTagCompound nbt = new NBTTagCompound();
+					nbt.setInteger("Time", ePlayer.getRadiation());
+					ePlayer.setLastRadiation(ePlayer.getRadiation());
+					CrystalModNetwork.sendTo(new PacketEntityMessage(player, "#UpdateRadiation#", nbt), (EntityPlayerMP)player);
+				}
+			}
+			
 			ExtendedPlayerInventory inventory = ePlayer.getInventory();
 			String[] hashOld = syncCheck.get(player.getCachedUniqueIdString());
 			

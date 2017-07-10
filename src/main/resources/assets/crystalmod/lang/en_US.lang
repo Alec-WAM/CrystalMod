@@ -678,6 +678,22 @@ tile.crystalmod.darkcrystexiumblock.square_brick.name=Dark Crystexium Square Bri
 tile.crystalmod.purecrystexiumblock.normal.name=Pure Crystexium Block
 tile.crystalmod.purecrystexiumblock.brick.name=Pure Crystexium Bricks
 tile.crystalmod.purecrystexiumblock.square_brick.name=Pure Crystexium Square Bricks
+
+tile.crystalmod.crystexiumstairs.name=Crystexium Brick Stairs
+tile.crystalmod.bluecrystexiumstairs.name=Blue Crystexium Brick Stairs
+tile.crystalmod.redcrystexiumstairs.name=Red Crystexium Brick Stairs
+tile.crystalmod.greencrystexiumstairs.name=Green Crystexium Brick Stairs
+tile.crystalmod.darkcrystexiumstairs.name=Dark Crystexium Brick Stairs
+tile.crystalmod.purecrystexiumstairs.name=Pure Crystexium Brick Stairs
+
+tile.crystalmod.crystexiumslab.normal.name=Crystexium Brick Slab
+tile.crystalmod.crystexiumslab.blue.name=Blue Crystexium Brick Slab
+tile.crystalmod.crystexiumslab.red.name=Red Crystexium Brick Slab
+tile.crystalmod.crystexiumslab.green.name=Green Crystexium Brick Slab
+tile.crystalmod.crystexiumslab.dark.name=Dark Crystexium Brick Slab
+tile.crystalmod.crystexiumslab.pure.name=Pure Crystexium Brick Slab
+
+tile.crystalmod.crysidian.name=Crysidian
 #--Fluids
 fluid.crystalmod.xpjuice=Liquid XP
 fluid.crystalmod.crystal.blue=Blue Liquid Crystal

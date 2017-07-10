@@ -9,6 +9,7 @@ import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.entities.disguise.DisguiseType;
 import alec_wam.CrystalMod.items.guide.GuiGuideBase;
 import alec_wam.CrystalMod.util.ItemStackTools;
+import alec_wam.CrystalMod.util.data.watchable.WatchableInteger;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -45,6 +46,8 @@ public class ExtendedPlayer {
 	private int screenFlashTime;
 	private int maxFlashTime;
 	
+	private WatchableInteger radiationTime = new WatchableInteger();
+	
 	public ExtendedPlayer() {
 	}
     
@@ -57,6 +60,7 @@ public class ExtendedPlayer {
 		}
 		
 		properties.setInteger("EnhancementXP", enhancementXP);		
+		properties.setInteger("RadiationTime", radiationTime.getValue());		
 		return properties;
 	}
 
@@ -71,7 +75,8 @@ public class ExtendedPlayer {
 		} else {
 			setOpenBackpack(ItemStackTools.getEmptyStack());
 		}
-		enhancementXP = properties.getInteger("EnhancementXP");		
+		enhancementXP = properties.getInteger("EnhancementXP");				
+		radiationTime.setValue(properties.getInteger("RadiationTime"));	
 	}
 
 	/**
@@ -179,5 +184,21 @@ public class ExtendedPlayer {
 
 	public void setEnhancementXP(int enhancementXP) {
 		this.enhancementXP = enhancementXP;
+	}
+	
+	public int getRadiation() {
+		return radiationTime.getValue();
+	}
+	
+	public int getLastRadiation() {
+		return radiationTime.getLastValue();
+	}
+
+	public void setRadiation(int value) {
+		this.radiationTime.setValue(value);
+	}
+	
+	public void setLastRadiation(int value) {
+		this.radiationTime.setLastValue(value);
 	}
 }
