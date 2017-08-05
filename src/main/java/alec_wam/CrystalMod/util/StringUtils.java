@@ -1,9 +1,11 @@
 package alec_wam.CrystalMod.util;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import alec_wam.CrystalMod.network.CrystalModNetwork;
@@ -33,6 +35,14 @@ public class StringUtils {
 		}
 		
 		return ""+dimension;
+	}
+	
+	public static String makeListReadable(Collection<?> list){
+		List<String> strings = Lists.newArrayList();
+		for(Object obj : list){
+			strings.add(""+obj.toString());
+		}
+		return CommandBase.joinNiceStringFromCollection(strings);
 	}
 	
 	public static String makeReadable(Collection<String> list){

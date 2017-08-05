@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
+import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.tiles.pipes.estorage.client.IGuiScreen;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.monitor.TileEntityPanelMonitor;
 import alec_wam.CrystalMod.tiles.pipes.estorage.power.TileNetworkPowerCore.ClientPowerTileInfo;
@@ -69,7 +70,8 @@ public class GuiPowerCore extends GuiContainer implements IGuiScreen {
     @Override
     public void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
     	GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-    	if(core !=null){
+    	this.fontRendererObj.drawString(ModBlocks.powerCore.getLocalizedName(), 8, 8, 4210752);
+		if(core !=null){
     		if(core.info !=null){
     			this.fontRendererObj.drawString("Power: "+core.info.storedEnergy+"/"+core.info.maxEnergy+" "+Lang.localize("power.cu"), 10, 115, 0);
     			this.fontRendererObj.drawString("Usage: "+core.info.energyUsage+" "+Lang.localize("power.cu"), 10, 115+this.fontRendererObj.FONT_HEIGHT+5, 0);
@@ -98,7 +100,7 @@ public class GuiPowerCore extends GuiContainer implements IGuiScreen {
         	                GlStateManager.pushMatrix();
         	                GlStateManager.scale(scale, scale, 1);
         	                int textX = GuiUtil.calculateOffsetOnScale(x + 20, scale);
-        	                fontRendererObj.drawString(powertile.stack.getDisplayName(), textX, GuiUtil.calculateOffsetOnScale(y + 4, scale), 4210752);
+        	                fontRendererObj.drawSplitString(powertile.stack.getDisplayName(), textX, GuiUtil.calculateOffsetOnScale(y + 4, scale), 100, 4210752);
         	                fontRendererObj.drawString("x"+powertile.count, textX, GuiUtil.calculateOffsetOnScale(y + 14, scale), 4210752);
 
         	                GlStateManager.popMatrix();

@@ -89,6 +89,20 @@
   [title]Compressed Gunpowder
   [text]Burns quickly. Explodes if too many of them in an area are lit on fire.
  }
+ [page:sugar]
+ {
+  [title]Sugar Cube
+  [text]Can be used as storage or decoration.  
+ }
+]}
+//Tiles
+{[
+ [chapter]tiles
+ [title]Decorative Tiles
+ [page:main]
+ {
+  [text]Another decorative option that allows you to create tiles that are useful for walls or floors.   
+ }
 ]}
 //Crystal Workbench
 {[
@@ -277,6 +291,20 @@
   [text]All engines have multiple tiers. Each tiers has a multiple, which speeds up the operation of the engine by that multiplier.
  }
 ]}
+//Special Engines
+{[
+ [chapter]advancedengines
+ [title]Special Engines
+ [page:engines]
+ {
+  [text]The two engines that change how the two main liquids of Minecraft work.<n>The Finity Engine: This engine makes water finite for as long as it is powered with enough RF or CU.<n>The Infinity Engine: This engine makes lava infinite for as long as it is powered with enough RF or CU.    
+ }
+ [page:cores]
+ {
+  [title]Engine Cores
+  [text]The cores that are crafted into the Finity and Infinity Engines.
+ }
+]}
 //Battery
 {[
  [chapter]battery
@@ -284,6 +312,15 @@
  [page:main]
  {
   [text]This block stores CU in large amounts. To edit the IO modes just open the interface and click the tab on the right. If you hold shift it will show the relative direction instead of the UDNESW direction. Red means out, Blue means in and Grey is blocked.   
+ }
+]}
+//Storage Cases
+{[
+ [chapter]storagecases
+ [title]Storage Cases
+ [page:main]
+ {
+  [text]The three types of cases that pay homage to how people used to make decorative crates in vanilla, but with actual uses. Once broken these cases will hold there items much like Shulker Boxes.
  }
 ]}
 //Weather Forecaster
@@ -499,6 +536,40 @@
   [text]Each of these explosives when powered by redstone will count down from 10. Once they explode they will destroy what ever type of object they are. Nothing else.
  }
 ]}
+//Redstone Reactor
+{[
+ [chapter]redstonereactor
+ [title]Redstone Reactor
+ [page:core]
+ {
+  [title]Redstone Core
+  [text]The core of a Redstone Reactor that is redstone-radioactive. If you hold onto it for too long, you'll get redstone-radiation poisoning which will kill you soon after, and you can't cure it.
+ }
+ [page:reactor]
+ {
+  [title]Redstone Reactor
+  [text]Crafted with a Redstone Core, it is a very powerful reactor that uses Crystal Congealed Redstone to output tons of Redstone Flux. It has three core upgrades.
+ }
+ [page:congealedredstone]
+ {
+  [title]Crystal Congealed Redstone
+  [text]Used to fuel a Redstone Reactor. Can also be crafted into Crystal Congealed Redstone Bricks.
+ }
+ [page:upgrades]
+ {
+  [title]Redstone Core Upgrades
+  [text]The core upgrades for a Redstone Reactor that make it output more RF/t.
+ }
+]}
+//Heated Sponge
+{[
+ [chapter]heatedsponge
+ [title]Heated Crystal Sponge
+ [page:main]
+ {
+  [text]This sponge is heated by the red hot powers of the red crystals. It dries itself instantly after absorbing the water around it. However, you shouldn't step on it, because since it is hot enough to vaporize water, it is hot enough to burn your feet.
+ }
+]}
 //ITEMS Begin
 //Crystal
 {[
@@ -647,7 +718,7 @@
  [title]Knowledge Books
  [page:main]
  {
-  [text]The knowledge book is a type of book that gives you the knowledge of the Crystal Ancients(coming soon) which lets you know how to enhance your armor with an enhancement table when you right-click it. 
+  [text]The knowledge book is a type of book that gives you the knowledge of the Crystallized Ancients(coming soon) which lets you know how to enhance your armor with an enhancement table when you right-click it. 
  }
  [page:info]
  {

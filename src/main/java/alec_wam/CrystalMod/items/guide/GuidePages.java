@@ -34,9 +34,13 @@ import alec_wam.CrystalMod.blocks.BlockCrystal.CrystalBlockType;
 import alec_wam.CrystalMod.blocks.BlockCrystalIngot.CrystalIngotBlockType;
 import alec_wam.CrystalMod.blocks.BlockCrystalLog;
 import alec_wam.CrystalMod.blocks.BlockCrystalOre.CrystalOreType;
+import alec_wam.CrystalMod.blocks.BlockDecorative.DecorativeBlockType;
 import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.blocks.crops.material.IMaterialCrop;
 import alec_wam.CrystalMod.blocks.crops.material.ItemMaterialSeed;
+import alec_wam.CrystalMod.blocks.decorative.tiles.BlockBasicTiles.BasicTileType;
+import alec_wam.CrystalMod.blocks.decorative.tiles.BlockBasicTiles2.BasicTileType2;
+import alec_wam.CrystalMod.blocks.decorative.tiles.BlockCrystalTiles.CrystalTileType;
 import alec_wam.CrystalMod.blocks.glass.BlockCrystalGlass.GlassType;
 import alec_wam.CrystalMod.client.util.comp.GuiComponentBasicItemPage;
 import alec_wam.CrystalMod.client.util.comp.GuiComponentBook;
@@ -57,6 +61,7 @@ import alec_wam.CrystalMod.items.guide.page.PageText;
 import alec_wam.CrystalMod.items.tools.ItemEnhancementKnowledge;
 import alec_wam.CrystalMod.items.tools.backpack.ItemBackpackNormal.CrystalBackpackType;
 import alec_wam.CrystalMod.items.tools.backpack.upgrade.ItemBackpackUpgrade.BackpackUpgrade;
+import alec_wam.CrystalMod.tiles.cases.BlockCase.EnumCaseType;
 import alec_wam.CrystalMod.tiles.chest.CrystalChestType;
 import alec_wam.CrystalMod.tiles.chest.wireless.WirelessChestHelper;
 import alec_wam.CrystalMod.tiles.crate.BlockCrate.CrateType;
@@ -66,6 +71,9 @@ import alec_wam.CrystalMod.tiles.machine.elevator.ItemMiscCard.CardType;
 import alec_wam.CrystalMod.tiles.machine.enderbuffer.BlockEnderBuffer;
 import alec_wam.CrystalMod.tiles.machine.power.battery.BlockBattery.BatteryType;
 import alec_wam.CrystalMod.tiles.machine.power.engine.BlockEngine.EngineType;
+import alec_wam.CrystalMod.tiles.machine.power.redstonereactor.ItemReactorUpgrade.UpgradeType;
+import alec_wam.CrystalMod.tiles.machine.specialengines.BlockSpecialEngine.SpecialEngineType;
+import alec_wam.CrystalMod.tiles.machine.specialengines.ItemEngineCore.EngineCoreType;
 import alec_wam.CrystalMod.tiles.pipes.BlockPipe.PipeType;
 import alec_wam.CrystalMod.tiles.shieldrack.BlockShieldRack.WoodType;
 import alec_wam.CrystalMod.tiles.spawner.ItemMobEssence;
@@ -132,14 +140,22 @@ public class GuidePages {
 		ItemStack charcoalBlock = new ItemStack(ModBlocks.compressed, 1, CompressedBlockType.CHARCOAL.getMeta());
 		ItemStack flintBlock = new ItemStack(ModBlocks.compressed, 1, CompressedBlockType.FLINT.getMeta());
 		ItemStack gunpowderBlock = new ItemStack(ModBlocks.compressed, 1, CompressedBlockType.GUNPOWDER.getMeta());
+		ItemStack sugarBlock = new ItemStack(ModBlocks.compressed, 1, CompressedBlockType.SUGAR.getMeta());
 		ItemStack blazeRodBlock = new ItemStack(ModBlocks.blazeRodBlock);
 		NonNullList<ItemStack> compressedList = NonNullList.create();
 		compressedList.add(charcoalBlock);
 		compressedList.add(flintBlock);
 		compressedList.add(gunpowderBlock);
+		compressedList.add(sugarBlock);
 		compressedList.add(blazeRodBlock);
-		CrystalModAPI.BLOCKS.registerChapter(new GuideChapter("compressedblocks", new PageCrafting("blazerod", blazeRodBlock), new PageCrafting("charcoal", charcoalBlock), new PageCrafting("flint", flintBlock), new PageCrafting("gunpowder", gunpowderBlock)).setDisplayObject(compressedList));
+		CrystalModAPI.BLOCKS.registerChapter(new GuideChapter("compressedblocks", new PageCrafting("blazerod", blazeRodBlock), new PageCrafting("charcoal", charcoalBlock), new PageCrafting("flint", flintBlock), new PageCrafting("gunpowder", gunpowderBlock), new PageCrafting("sugar", sugarBlock)).setDisplayObject(compressedList));
 
+		NonNullList<ItemStack> tiles = NonNullList.create();
+		tiles.addAll(ItemUtil.getBlockSubtypes(ModBlocks.tileBasic, BasicTileType.values()));
+		tiles.addAll(ItemUtil.getBlockSubtypes(ModBlocks.tileBasic2, BasicTileType2.values()));
+		tiles.addAll(ItemUtil.getBlockSubtypes(ModBlocks.tileCrystal, CrystalTileType.values()));
+		CrystalModAPI.BLOCKS.registerChapter(new GuideChapter("tiles", new PageCrafting("main", tiles)).setDisplayObject(tiles));
+		
 		NonNullList<ItemStack> workbenchList = ItemUtil.getBlockSubtypes(ModBlocks.crystalWorkbench, WorkbenchType.values());
 		CrystalModAPI.BLOCKS.registerChapter(new GuideChapter("crystalworkbench", new PageCrafting("main", workbenchList)).setDisplayObject(workbenchList));
 		
@@ -192,9 +208,23 @@ public class GuidePages {
 		engines.add(engineFurnace); engines.add(engineLava); engines.add(engineVampire);
 		CrystalModAPI.BLOCKS.registerChapter(new GuideChapter("engines", new PageCrafting("furnace", engineFurnace), new PageCrafting("lava", engineLava), new PageCrafting("vampire", engineVampire), new PageText("tiers")).setDisplayObject(engines));
 
+		NonNullList<ItemStack> advEngines = NonNullList.create();
+		NonNullList<ItemStack> specialEngines = NonNullList.create();
+		specialEngines.add(new ItemStack(ModBlocks.specialengine, 1, SpecialEngineType.FINITE.getMeta()));
+		specialEngines.add(new ItemStack(ModBlocks.specialengine, 1, SpecialEngineType.INFINITE.getMeta()));
+		advEngines.addAll(specialEngines);		
+		NonNullList<ItemStack> enginecores = NonNullList.create();
+		enginecores.add(new ItemStack(ModItems.engineCore, 1, EngineCoreType.FINITE.getMetadata()));
+		enginecores.add(new ItemStack(ModItems.engineCore, 1, EngineCoreType.INFINITE.getMetadata()));
+		advEngines.addAll(enginecores);
+		CrystalModAPI.BLOCKS.registerChapter(new GuideChapter("advancedengines", new PageCrafting("engines", specialEngines), new PageCrafting("cores", enginecores)).setDisplayObject(advEngines));
+		
 		NonNullList<ItemStack> batteries = ItemUtil.getBlockSubtypes(ModBlocks.battery, BatteryType.values());
 		CrystalModAPI.BLOCKS.registerChapter(new GuideChapter("battery", new PageCrafting("main", batteries)).setDisplayObject(batteries));
-				
+		
+		NonNullList<ItemStack> storagecases = ItemUtil.getBlockSubtypes(ModBlocks.storageCase, EnumCaseType.values());
+		CrystalModAPI.BLOCKS.registerChapter(new GuideChapter("storagecases", new PageCrafting("main", storagecases)).setDisplayObject(storagecases));
+			
 		//TODO Add Clusters and Bridge
 		
 		NonNullList<ItemStack> reedList = NonNullList.create();
@@ -300,6 +330,23 @@ public class GuidePages {
 		NonNullList<ItemStack> explosives = ItemUtil.getBlockSubtypes(ModBlocks.remover, RemoverType.values());
 		CrystalModAPI.BLOCKS.registerChapter(new GuideChapter("removerexplosives", new PageCrafting("main", explosives)).setDisplayObject(explosives));
 		
+		NonNullList<ItemStack> reactorList = NonNullList.create();
+		ItemStack redstoneCore = new ItemStack(ModBlocks.redstoneCore);
+		reactorList.add(redstoneCore);
+		ItemStack reactor = new ItemStack(ModBlocks.redstoneReactor);
+		reactorList.add(reactor);
+		NonNullList<ItemStack> congealedredstone = NonNullList.create();
+		congealedredstone.add(new ItemStack(ModItems.congealedRedstone));
+		ItemStack redstoneBrick = new ItemStack(ModBlocks.decorativeBlock, 1, DecorativeBlockType.REDSTONE_BRICKS.getMeta());
+		congealedredstone.add(redstoneBrick);
+		reactorList.addAll(congealedredstone);
+		NonNullList<ItemStack> reactorUpgrades = ItemUtil.getItemSubtypes(ModItems.reactorUpgrade, UpgradeType.values());
+		reactorList.addAll(reactorUpgrades);
+		CrystalModAPI.BLOCKS.registerChapter(new GuideChapter("redstonereactor", new PageCrafting("core", redstoneCore), new PageCrafting("reactor", reactor), new PageCrafting("congealedredstone", congealedredstone), new PageCrafting("upgrades", reactorUpgrades)).setDisplayObject(reactorList));
+		
+		ItemStack heatedsponge = new ItemStack(ModBlocks.redstoneSponge);
+		CrystalModAPI.BLOCKS.registerChapter(new GuideChapter("heatedsponge", new PageCrafting("main", heatedsponge)).setDisplayObject(heatedsponge));
+
 		CrystalType[] nuggetArray = new CrystalType[]{CrystalType.BLUE_NUGGET, CrystalType.RED_NUGGET, CrystalType.GREEN_NUGGET, CrystalType.DARK_NUGGET};
 		CrystalType[] shardArray = new CrystalType[]{CrystalType.BLUE_SHARD, CrystalType.RED_SHARD, CrystalType.GREEN_SHARD, CrystalType.DARK_SHARD};
 

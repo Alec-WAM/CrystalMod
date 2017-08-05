@@ -6,6 +6,7 @@ import java.awt.Color;
 import org.lwjgl.opengl.GL11;
 
 import alec_wam.CrystalMod.items.ItemIngot;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.client.RenderUtil;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
@@ -48,19 +49,18 @@ public class TileEntityHDDInterfaceRenderer extends TileEntitySpecialRenderer<Ti
     	VertexBuffer worldrenderer = tessellator.getBuffer();
     	GlStateManager.disableTexture2D();
     	{
-    		boolean drawBar = true;
+    		boolean drawBar = ItemStackTools.isValid(te.getStackInSlot(0));
     		if(drawBar){
 	    		worldrenderer.begin(7, DefaultVertexFormats.POSITION_COLOR);
 		        double minX = 0.565;
-		        double minY = -0.48;
 		        double minZ = 0.0-0.0001;
 		        double xPos = 0.15;
-		        double hddHealth = (te.getStackInSlot(0) == null ? 0.0D : te.getStackInSlot(0).getItem().getDurabilityForDisplay(te.getStackInSlot(0)));
-		        double j = 0.7D - hddHealth * 0.7D;
-		        double yOff = j;
-		        double yPos = 0.15+yOff;
-		        double width = 0.13;
-		        double height = 0.7-yOff;
+		        double hddHealth = (te.getStackInSlot(0).getItem().getDurabilityForDisplay(te.getStackInSlot(0)));
+		        double width = 0.13;		        
+		        double minY = 0.0;
+		        double height = 0.7 * (1.0 - hddHealth);
+		        double yPos = 0.15;
+		        
 		        int i = (int)Math.round(255.0D - hddHealth * 255.0D);
 		        float r = i;
 		        float g = 255-i;

@@ -2,6 +2,7 @@ package alec_wam.CrystalMod.tiles.pipes.estorage.security;
 
 import org.lwjgl.opengl.GL11;
 
+import alec_wam.CrystalMod.blocks.ModBlocks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
@@ -27,6 +28,7 @@ public class GuiSecurityController extends GuiContainer {
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY)
     {
 		super.drawGuiContainerForegroundLayer(mouseX, mouseY);
+		this.fontRendererObj.drawString(ModBlocks.securityController.getLocalizedName(), 8, 8, 4210752);	
     }
 	
 	public final ResourceLocation TEXTURE = new ResourceLocation("crystalmod:textures/gui/eStorage_security.png");

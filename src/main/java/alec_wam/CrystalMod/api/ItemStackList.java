@@ -25,7 +25,7 @@ public class ItemStackList{
     	}
     	
         for (ItemStack otherStack : stacks.get(stack.getItem())) {
-            if (ItemUtil.canCombine(otherStack, stack)) {
+            if (ItemUtil.canCombine(stack, otherStack)) {
             	ItemStackTools.incStackSize(otherStack, ItemStackTools.getStackSize(stack));
                 return;
             }
@@ -40,11 +40,11 @@ public class ItemStackList{
     }
     
     public boolean remove(@Nonnull ItemStack stack, int size, boolean removeIfReachedZero) {
-        for (ItemStack otherStack : stacks.get(stack.getItem())) {
-            if (ItemUtil.canCombine(otherStack, stack)) {
+    	for (ItemStack otherStack : stacks.get(stack.getItem())) {
+            if (ItemUtil.canCombine(stack, otherStack)) {
             	ItemStackTools.incStackSize(otherStack, -size);
 
-                if (ItemStackTools.isEmpty(otherStack) && removeIfReachedZero) {
+                if ((ItemStackTools.isEmpty(otherStack) || !ItemStackTools.isValid(otherStack)) && removeIfReachedZero) {
                     stacks.remove(otherStack.getItem(), otherStack);
                 }
 
@@ -76,7 +76,7 @@ public class ItemStackList{
     	Iterator<ItemStack> ii = stacks.values().iterator();
     	while(ii.hasNext()){
     		ItemStack stack = ii.next();
-    		if(!ItemStackTools.isValid(stack)){
+    		if(!ItemStackTools.isValid(stack) || ItemStackTools.isEmpty(stack)){
     			stacks.remove(stack.getItem(), stack);
     		}
     	}

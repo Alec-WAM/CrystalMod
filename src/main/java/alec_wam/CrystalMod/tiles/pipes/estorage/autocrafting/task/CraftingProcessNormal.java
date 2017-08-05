@@ -26,6 +26,7 @@ import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.CraftingPattern;
 import alec_wam.CrystalMod.util.FluidUtil;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ModLogger;
+import alec_wam.CrystalMod.util.StringUtils;
 
 public class CraftingProcessNormal extends CraftingProcessBase {
 	
@@ -36,11 +37,10 @@ public class CraftingProcessNormal extends CraftingProcessBase {
 	
 	public CraftingProcessNormal(EStorageNetwork network, CraftingPattern pattern, List<ItemStack> toInsert) {
 		super(network, pattern);
-		this.toInsert = NonNullList.create();
-		for(ItemStack stack : toInsert){
-			if(!ItemStackTools.isNullStack(stack)){
-				this.toInsert.add(stack.copy());
-			}
+		this.toInsert = NonNullList.withSize(9, ItemStackTools.getEmptyStack());
+		for(int i = 0; i < toInsert.size(); i++){
+			ItemStack stack = toInsert.get(i);
+			this.toInsert.set(i, ItemStackTools.safeCopy(stack));
 		}
 	}
 	
@@ -77,8 +77,11 @@ public class CraftingProcessNormal extends CraftingProcessBase {
 
 	@Override
 	public void update(Deque<ItemStack> toInsertItems, Deque<FluidStack> toInsertFluids) {
+		boolean debugData = false;
 		ItemStackList actualInputs = new ItemStackList();
+		if(debugData) ModLogger.info("Update Process with "+getToInsert().size()+" items");
 		for (ItemStack insertStack : getToInsert()) {
+			if(ItemStackTools.isNullStack(insertStack))continue;
             FluidStack fluidInItem = FluidUtil.getFluidTypeFromItem(insertStack);
             if (fluidInItem != null) {
             	ItemStack empty = FluidUtil.getEmptyContainer(insertStack);
@@ -87,11 +90,12 @@ public class CraftingProcessNormal extends CraftingProcessBase {
                 actualInputs.add(insertStack.copy());
             } else {
             	ItemStack extract = network.getItemStorage().removeItem(insertStack, ItemStorage.getExtractFilter(pattern.isOredict()), false);
-            	if(!ItemStackTools.isNullStack(extract)){
+            	if(ItemStackTools.isValid(extract)){
             		actualInputs.add(extract);
             	} else {
             		toInsertItems.addAll(actualInputs.getStacks());
             		started = false;
+            		ModLogger.info("Returned Process Missing "+insertStack + " / "+extract);
             		return;
             	}
             }
@@ -100,14 +104,25 @@ public class CraftingProcessNormal extends CraftingProcessBase {
 		NonNullList<ItemStack> took = NonNullList.withSize(9, ItemStackTools.getEmptyStack());
         for (int i = 0; i < getToInsert().size(); i++) {
             ItemStack input = getToInsert().get(i);
-            if (!ItemStackTools.isNullStack(input)) {
+            if (ItemStackTools.isValid(input)) {
                 ItemStack actualInput = actualInputs.get(input, pattern.isOredict());
-                ItemStack taken = ItemHandlerHelper.copyStackWithSize(actualInput, ItemStackTools.getStackSize(input));
+                ItemStack taken = ItemHandlerHelper.copyStackWithSize(actualInput, Math.max(1, ItemStackTools.getStackSize(input)));
+                if(debugData) ModLogger.info("Took2 "+taken+" "+input+" "+actualInput);
                 took.set(i, taken);
-                if(!ItemStackTools.isNullStack(taken))actualInputs.remove(taken, true);
+                if(ItemStackTools.isValid(taken))actualInputs.remove(taken, true);
+            } else {
+            	took.set(i, ItemStackTools.getEmptyStack());
             }
         }
 
+        if(debugData) ModLogger.info("List: "+StringUtils.makeListReadable(took));
+        
+        if(debugData){
+	        for(ItemStack t : took){
+	        	ModLogger.info("Using: "+t);
+	        }
+        }
+        
         for (ItemStack byproduct : (pattern.isOredict()? pattern.getByproducts(took) : pattern.getByproducts())) {
             if(!ItemStackTools.isNullStack(byproduct)){
             	toInsertItems.add(byproduct.copy());
@@ -115,6 +130,7 @@ public class CraftingProcessNormal extends CraftingProcessBase {
         }
 
         for (ItemStack output : (pattern.isOredict() ? pattern.getOutputs(took) : pattern.getOutputs())) {
+        	if(debugData) ModLogger.info("Output: "+output);
             if(!ItemStackTools.isNullStack(output)){
             	toInsertItems.add(output.copy());
             }

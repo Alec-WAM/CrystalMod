@@ -12,7 +12,9 @@ public class CountComp extends NameComp {
 
   @Override
   public int compare(ItemStackData a, ItemStackData b) {
-	  int res = (b.getAmount()) - (a.getAmount());
+	  int bCount = b.isCrafting ? 0 : b.getAmount();
+	  int aCount = a.isCrafting ? 0 : a.getAmount();
+	  int res = (bCount) - (aCount);
 	  if(res == 0) {
 	      res = super.compare(a, b);
 	  }

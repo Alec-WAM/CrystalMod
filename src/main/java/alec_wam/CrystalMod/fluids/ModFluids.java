@@ -1,6 +1,5 @@
 package alec_wam.CrystalMod.fluids;
 
-import java.awt.Color;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
@@ -86,9 +85,11 @@ public class ModFluids {
 		registerFluid(fluidDarkIron);
 		registerClassicBlock(fluidDarkIron);
 		
-		fluidEnder = new FluidColored("ender", 0x063931).setUnlocalizedName("crystalmod.ender");
-		registerFluid(fluidEnder);
-		ModBlocks.registerBlock(new BlockFluidEnder(fluidEnder, net.minecraft.block.material.Material.WATER), fluidEnder.getName());
+		FluidRegistryResult enderResult = registerFluid(new FluidColored("ender", 0x063931).setUnlocalizedName("crystalmod.ender"));
+		fluidEnder = enderResult.getFluid();
+		if(enderResult.wasRegistered()){
+			ModBlocks.registerBlock(new BlockFluidEnder(fluidEnder, net.minecraft.block.material.Material.WATER), fluidEnder.getName());
+		}
 		
 		fluidInk = new Fluid("ink", CrystalMod.resourceL("blocks/fluid/ink_still"), CrystalMod.resourceL("blocks/fluid/ink_flowing")).setUnlocalizedName("crystalmod.ink");
 		registerFluid(fluidInk);
@@ -111,12 +112,34 @@ public class ModFluids {
 	    return ModBlocks.registerBlock(block, fluid.getName());
 	}
 	
-	public static void registerFluid(Fluid fluid){
-		registerFluid(fluid, true);
+	public static class FluidRegistryResult {
+		private Fluid fluid;
+		private boolean wasRegistered;
+		public FluidRegistryResult(Fluid fluid, boolean wasRegistered){
+			this.fluid = fluid;
+			this.wasRegistered = wasRegistered;
+		}
+		
+		public Fluid getFluid() {
+			return fluid;
+		}
+
+		public boolean wasRegistered() {
+			return wasRegistered;
+		}
 	}
-	public static void registerFluid(Fluid fluid, boolean addBucket){
-		FluidRegistry.registerFluid(fluid);
-		if(addBucket)bucketFluids.add(fluid);
+	
+	public static FluidRegistryResult registerFluid(Fluid fluid){
+		return registerFluid(fluid, true);
+	}
+	
+	public static FluidRegistryResult registerFluid(Fluid fluid, boolean addBucket){
+		boolean reg = FluidRegistry.registerFluid(fluid);
+		Fluid ret = reg ? fluid : FluidRegistry.getFluid(fluid.getName());
+		if(addBucket){
+			bucketFluids.add(ret);
+		}		
+		return new FluidRegistryResult(ret, reg);
 	}
 	
 	public static void forgeRegisterXPJuice() {

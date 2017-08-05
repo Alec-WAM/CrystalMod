@@ -548,7 +548,7 @@ public class EStorageNetwork extends AbstractPipeNetwork {
 
 		for (int i = 0; i < patterns.size(); ++i) {
 			for (ItemStack input : patterns.get(i).getInputs()) {
-				if(!ItemStackTools.isNullStack(input)){
+				if(ItemStackTools.isValid(input)){
 					ItemStackData stored = getItemStorage().getItemData(input);
 					
 					if(stored == null && ore){

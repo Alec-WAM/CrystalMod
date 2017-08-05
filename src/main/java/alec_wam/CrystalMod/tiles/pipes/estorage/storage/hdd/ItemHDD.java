@@ -113,7 +113,7 @@ public class ItemHDD extends Item implements ICustomModel, IItemProvider {
 	@Override
 	public double getDurabilityForDisplay(ItemStack stack)
     {
-    	return (double)(getItemLimit(stack)-getItemCount(stack)) / (double)getItemLimit(stack);
+    	return (double)(getItemCount(stack)) / (double)getItemLimit(stack);
     }
 	
 	public static int getItemLimit(ItemStack hddStack){

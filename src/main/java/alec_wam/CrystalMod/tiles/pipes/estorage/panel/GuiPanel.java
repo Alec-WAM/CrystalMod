@@ -220,6 +220,7 @@ public class GuiPanel extends GuiContainer implements IGuiScreen, INetworkGui  {
 		try {
 			CrystalModNetwork.sendToServer(new PacketEStorageAddItem(type, slot, amount, EStorageNetwork.compressItem(data)));
 		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 	

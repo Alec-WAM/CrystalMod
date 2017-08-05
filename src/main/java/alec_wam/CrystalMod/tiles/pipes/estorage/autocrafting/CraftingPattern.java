@@ -105,7 +105,12 @@ public class CraftingPattern {
                             }
                             else {
 	                            if (input instanceof ItemStack) {
-	                                oreInputs.add(NonNullList.withSize(1, fixItemStack((ItemStack) input)));
+	                            	ItemStack in = (ItemStack)input;
+	                            	if(ItemStackTools.isEmpty(in)){
+	                            		oreInputs.add(NonNullList.create());
+	                            	} else {
+	                            		oreInputs.add(NonNullList.withSize(1, fixItemStack(in)));
+	                            	}
 	                            } else if(input instanceof List){
 	                            	NonNullList<ItemStack> cleaned = NonNullList.create();
 	                            	for (ItemStack in : (List<ItemStack>) input) {
@@ -184,10 +189,14 @@ public class CraftingPattern {
         }, 3, 3);
 
         for (int i = 0; i < 9; ++i) {
-            if(i < took.size())inv.setInventorySlotContents(i, took.get(i));
+            if(i < took.size()){
+            	ItemStack stack = took.get(i);
+            	inv.setInventorySlotContents(i, stack);
+            }
         }
-
-        outputs.add(fixItemStack(recipe.getCraftingResult(inv)));
+        
+        ItemStack output = CraftingManager.getInstance().findMatchingRecipe(inv, crafter.getWorld());
+        outputs.add(output);
 
         return outputs;
     }
@@ -210,7 +219,7 @@ public class CraftingPattern {
         	if(i < took.size())inv.setInventorySlotContents(i, took.get(i));
         }
 
-        for (ItemStack remaining : recipe.getRemainingItems(inv)) {
+        for (ItemStack remaining : CraftingManager.getInstance().getRemainingItems(inv, crafter.getWorld())) {
             if (ItemStackTools.isValid(remaining)) {
                 byproducts.add(fixItemStack(remaining));
             }
@@ -246,7 +255,7 @@ public class CraftingPattern {
             }
         }
 
-        return null;
+        return ItemStackTools.getEmptyStack();
     }
     
    public ItemStack fixItemStack(ItemStack output){
@@ -260,4 +269,14 @@ public class CraftingPattern {
     	}
     	return out;
     }
+   
+   @Override
+   public boolean equals(Object obj){
+	   if(obj == null || !(obj instanceof CraftingPattern))return false;
+	   CraftingPattern other = ((CraftingPattern)obj);
+	   if(!ItemUtil.canCombine(other.getPatternStack(), getPatternStack())) return false;
+	   if(!other.getInputs().equals(getInputs()))return false;
+	   if(!other.getOutputs().equals(getOutputs()))return false;
+	   return true;
+   }
 }

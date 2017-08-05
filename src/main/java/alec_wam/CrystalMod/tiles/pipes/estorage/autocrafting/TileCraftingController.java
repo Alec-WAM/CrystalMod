@@ -111,13 +111,17 @@ public class TileCraftingController extends TileEntityMod implements INetworkPow
 					craftingTasks.add(0, task);
 				}
 				craftingTasksToAddAsLast.clear();
-				if(network.getEnergy() > 0){
-					if (!craftingTasks.empty()) {
-						ICraftingTask top = craftingTasks.peek();
-						if (ticks % top.getPattern().getCrafter().getSpeed() == 0 && top.update(network)) {
-							craftingTasks.pop();
+				try{ 
+					if(network.getEnergy() > 0){
+						if (!craftingTasks.empty()) {
+							ICraftingTask top = craftingTasks.peek();
+							if (ticks % top.getPattern().getCrafter().getSpeed() == 0 && top.update(network)) {
+								craftingTasks.pop();
+							}
 						}
 					}
+				}catch(Exception e){
+					e.printStackTrace();
 				}
 			}
 		}
@@ -170,7 +174,11 @@ public class TileCraftingController extends TileEntityMod implements INetworkPow
 		int craftAmount = toSchedule - alreadyScheduled;
 		if (pattern != null && craftAmount > 0) {
 			ICraftingTask task = createCraftingTask(stack, pattern, craftAmount);
-			task.calculate(network);
+			try{
+				task.calculate(network);
+			}catch (Exception e){
+				e.printStackTrace();
+			}
 			addCraftingTaskAsLast(task);
 		}
 	}
@@ -193,7 +201,11 @@ public class TileCraftingController extends TileEntityMod implements INetworkPow
     			try{
     				ICraftingTask task = createCraftingTask(requested, pattern, quantity);
     				if(task !=null && task instanceof BasicCraftingTask){
-    					task.calculate(network);
+    					try{
+    						task.calculate(network);
+    					}catch (Exception e){
+    						e.printStackTrace();
+    					}
     					CrystalModNetwork.sendTo(new PacketCraftingInfo((BasicCraftingTask)task, requested, quantity), player);
     				}
     			} catch(Exception e){
@@ -206,6 +218,7 @@ public class TileCraftingController extends TileEntityMod implements INetworkPow
 	}
 	
 	public void handleCraftingRequest(ItemStackData data, int quantity) {
+		ModLogger.info("handleCraftingRequest "+data.stack);
 		if (network !=null && data != null && quantity > 0 && quantity <= 500) {
 			ItemStack requested = data.stack;
 
@@ -214,7 +227,11 @@ public class TileCraftingController extends TileEntityMod implements INetworkPow
 			if (pattern != null) {
 				ICraftingTask task = createCraftingTask(requested, pattern, quantity);
 				if(task !=null){
-					task.calculate(network);
+					try{
+						task.calculate(network);
+					}catch (Exception e){
+						e.printStackTrace();
+					}
 					addCraftingTaskAsLast(task);
 				}
 			}
