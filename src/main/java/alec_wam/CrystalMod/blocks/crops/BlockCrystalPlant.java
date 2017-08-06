@@ -258,7 +258,7 @@ public class BlockCrystalPlant extends BlockBush
 
         if (((Integer)state.getValue(AGE)) >= 3)
         {
-            count = 3 + rand.nextInt(3) + (fortune > 0 ? rand.nextInt(fortune + 1) : 0);
+            count = 1 + rand.nextInt(2) + (fortune > 0 ? rand.nextInt(fortune + 1) : 0);
         }
 
         ItemStack crop = getCrop();

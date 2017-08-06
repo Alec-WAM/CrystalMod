@@ -6,6 +6,7 @@ import com.google.common.collect.Maps;
 
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.BlockCompressed.CompressedBlockType;
+import alec_wam.CrystalMod.blocks.crops.BlockCrystalBerryBush;
 import alec_wam.CrystalMod.blocks.crops.BlockCrystalPlant;
 import alec_wam.CrystalMod.blocks.crops.BlockCrystalPlant.PlantType;
 import alec_wam.CrystalMod.blocks.crops.BlockCrystalReed;
@@ -125,6 +126,8 @@ import alec_wam.CrystalMod.tiles.machine.worksite.TileWorksiteRenderer;
 import alec_wam.CrystalMod.tiles.pipes.BlockPipe;
 import alec_wam.CrystalMod.tiles.pipes.BlockPipe.PipeType;
 import alec_wam.CrystalMod.tiles.pipes.ItemBlockPipe;
+import alec_wam.CrystalMod.tiles.pipes.TileEntityPipe;
+import alec_wam.CrystalMod.tiles.pipes.TileEntityPipeRenderer;
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.BlockCrafter;
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.BlockCraftingController;
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.BlockPatternEncoder;
@@ -227,6 +230,7 @@ public class ModBlocks {
 	public static BlockCrystalPlant crystalPlantBlue, crystalPlantRed, crystalPlantGreen, crystalPlantDark;
 	public static BlockCrystalTreePlant crystalTreePlantBlue, crystalTreePlantRed, crystalTreePlantGreen,
 			crystalTreePlantDark;
+	public static BlockCrystalBerryBush crystalBushBlue, crystalBushRed, crystalBushGreen, crystalBushDark;	
 	public static BlockCrystalLog crystalLog;
 	public static BlockCrystalLeaves crystalLeaves;
 	public static BlockCrystalSapling crystalSapling;
@@ -408,6 +412,18 @@ public class ModBlocks {
 
 		crystalTreePlantDark = new BlockCrystalTreePlant(PlantType.DARK);
 		registerBlock(crystalTreePlantDark, "darkcrystaltreeplant");
+		
+		crystalBushBlue = new BlockCrystalBerryBush(PlantType.BLUE);
+		registerBlock(crystalBushBlue, "bluecrystalbush");
+
+		crystalBushRed = new BlockCrystalBerryBush(PlantType.RED);
+		registerBlock(crystalBushRed, "redcrystalbush");
+
+		crystalBushGreen = new BlockCrystalBerryBush(PlantType.GREEN);
+		registerBlock(crystalBushGreen, "greencrystalbush");
+
+		crystalBushDark = new BlockCrystalBerryBush(PlantType.DARK);
+		registerBlock(crystalBushDark, "darkcrystalbush");
 
 		crystalLog = new BlockCrystalLog();
 		registerBlock(crystalLog, new ItemBlockMeta(crystalLog), "crystallog");
@@ -736,6 +752,7 @@ public class ModBlocks {
 			}
 		}
 
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPipe.class, new TileEntityPipeRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCrystalCauldron.class, new RenderTileCrystalCauldron());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityHDDInterface.class,
 				new TileEntityHDDInterfaceRenderer());

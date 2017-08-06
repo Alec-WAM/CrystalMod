@@ -1,6 +1,15 @@
 package alec_wam.CrystalMod.world;
 
-import gnu.trove.map.hash.TIntObjectHashMap;
+import java.util.List;
+import java.util.Random;
+
+import org.apache.commons.lang3.tuple.Pair;
+
+import com.google.common.collect.ArrayListMultimap;
+
+import alec_wam.CrystalMod.Config;
+import alec_wam.CrystalMod.api.world.IGenerationFeature;
+import alec_wam.CrystalMod.util.ModLogger;
 import gnu.trove.set.hash.THashSet;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.math.ChunkPos;
@@ -9,18 +18,6 @@ import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
-
-import org.apache.commons.lang3.tuple.Pair;
-
-import alec_wam.CrystalMod.Config;
-import alec_wam.CrystalMod.util.ModLogger;
-
-import com.google.common.collect.ArrayListMultimap;
-
-import java.util.ArrayDeque;
-import java.util.Deque;
-import java.util.List;
-import java.util.Random;
 
 public class WorldTickHandler {
 
@@ -49,7 +46,13 @@ public class WorldTickHandler {
 	            long xSeed = rand.nextLong() >> 2 + 1L;
 	            long zSeed = rand.nextLong() >> 2 + 1L;
 	            rand.setSeed(xSeed * loc.chunkXPos + zSeed * loc.chunkZPos ^ worldSeed);
-	            CrystalModWorldGenerator.instance.generateWorld(rand, loc.chunkXPos, loc.chunkZPos, world, false);
+	            
+	            for(IGenerationFeature feature : CrystalModWorldGenerator.featureList){
+	            	if (feature.isRetroGenAllowed() && feature.generateFeature(world, rand, loc.chunkXPos, loc.chunkZPos, false)) {
+	                    world.getChunkFromChunkCoords(loc.chunkXPos, loc.chunkZPos).setChunkModified();
+	                }
+	            }	 
+	            
 	            chunks.remove(0);
 	            if(Config.retrogenInfo)
 	            	ModLogger.info("Retrogen was performed on "+loc.toString()+", "+Math.max(0,chunks.size())+" chunks remaining (Dimension "+world.provider.getDimensionType().getName()+")");

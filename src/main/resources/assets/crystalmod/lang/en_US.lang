@@ -47,6 +47,10 @@ item.crystalmod.crystalsap.blue.name=Blue Crystal Sap
 item.crystalmod.crystalsap.red.name=Red Crystal Sap
 item.crystalmod.crystalsap.green.name=Green Crystal Sap
 item.crystalmod.crystalsap.dark.name=Dark Crystal Sap
+item.crystalmod.crystalberry.blue.name=Blue Crystal Berry
+item.crystalmod.crystalberry.red.name=Red Crystal Berry
+item.crystalmod.crystalberry.green.name=Green Crystal Berry
+item.crystalmod.crystalberry.dark.name=Dark Crystal Berry
 
 item.crystalmod.congealedredstone.name=Crystal Congealed Redstone
 item.crystalmod.reactorupgrade.basic.name=Basic Redstone Reactor Upgrade
@@ -433,6 +437,10 @@ tile.crystalmod.bluecrystalreedblock.name=Blue Crystal Reeds
 tile.crystalmod.redcrystalreedblock.name=Red Crystal Reeds
 tile.crystalmod.greencrystalreedblock.name=Green Crystal Reeds
 tile.crystalmod.darkcrystalreedblock.name=Dark Crystal Reeds
+tile.crystalmod.bluecrystalbush.name=Blue Crystal Berry Bush
+tile.crystalmod.redcrystalbush.name=Red Crystal Berry Bush
+tile.crystalmod.greencrystalbush.name=Green Crystal Berry Bush
+tile.crystalmod.darkcrystalbush.name=Dark Crystal Berry Bush
 tile.crystalmod.flowerlilypad.name=Flower Lily-pad
 
 tile.crystalmod.crystallog.blue.name=Blue Crystal Wood

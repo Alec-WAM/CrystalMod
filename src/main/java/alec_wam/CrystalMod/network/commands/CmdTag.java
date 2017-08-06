@@ -6,6 +6,28 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.UUID;
 
+import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
+
+import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.capability.ExtendedPlayer;
+import alec_wam.CrystalMod.capability.ExtendedPlayerProvider;
+import alec_wam.CrystalMod.handler.MissingItemHandler;
+import alec_wam.CrystalMod.network.CrystalModNetwork;
+import alec_wam.CrystalMod.network.packets.PacketExtendedPlayer;
+import alec_wam.CrystalMod.tiles.spawner.ItemMobEssence;
+import alec_wam.CrystalMod.util.ChatUtil;
+import alec_wam.CrystalMod.util.EntityUtil;
+import alec_wam.CrystalMod.util.ItemStackTools;
+import alec_wam.CrystalMod.util.ModLogger;
+import alec_wam.CrystalMod.util.ProfileUtil;
+import alec_wam.CrystalMod.util.StringUtils;
+import alec_wam.CrystalMod.util.TimeUtil;
+import alec_wam.CrystalMod.util.UUIDUtils;
+import alec_wam.CrystalMod.world.game.tag.TagManager;
+import alec_wam.CrystalMod.world.game.tag.TagManager.PlayerData;
+import alec_wam.CrystalMod.world.generation.FusionTempleFeature;
+import alec_wam.CrystalMod.world.structures.CrystalWell;
 import mezz.jei.Internal;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
@@ -18,29 +40,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.common.Loader;
-import alec_wam.CrystalMod.CrystalMod;
-import alec_wam.CrystalMod.capability.ExtendedPlayer;
-import alec_wam.CrystalMod.capability.ExtendedPlayerProvider;
-import alec_wam.CrystalMod.handler.MissingItemHandler;
-import alec_wam.CrystalMod.network.CrystalModNetwork;
-import alec_wam.CrystalMod.network.packets.PacketExtendedPlayer;
-import alec_wam.CrystalMod.tiles.spawner.ItemMobEssence;
-import alec_wam.CrystalMod.util.ChatUtil;
-import alec_wam.CrystalMod.util.EntityUtil;
-import alec_wam.CrystalMod.util.ItemNBTHelper;
-import alec_wam.CrystalMod.util.ItemStackTools;
-import alec_wam.CrystalMod.util.ModLogger;
-import alec_wam.CrystalMod.util.ProfileUtil;
-import alec_wam.CrystalMod.util.StringUtils;
-import alec_wam.CrystalMod.util.TimeUtil;
-import alec_wam.CrystalMod.util.UUIDUtils;
-import alec_wam.CrystalMod.world.CrystalModWorldGenerator;
-import alec_wam.CrystalMod.world.game.tag.TagManager;
-import alec_wam.CrystalMod.world.game.tag.TagManager.PlayerData;
-import alec_wam.CrystalMod.world.structures.CrystalWell;
-
-import com.google.common.base.Strings;
-import com.google.common.collect.Lists;
 
 public class CmdTag extends AbstractCMCommand{
 
@@ -144,7 +143,7 @@ public class CmdTag extends AbstractCMCommand{
 				}
 				
 				if(args.length > 1 && args[1].equalsIgnoreCase("temple")){
-					BlockPos pos = CrystalModWorldGenerator.fusionTempleGen.getClosestStrongholdPos(sender.getEntityWorld(), sender.getPosition(), false);
+					BlockPos pos = FusionTempleFeature.fusionTempleGen.getClosestStrongholdPos(sender.getEntityWorld(), sender.getPosition(), false);
 					ChatUtil.sendChat(player, ""+(pos == null ? "null" : pos.toString()));
 					return;
 				}

@@ -7,7 +7,9 @@ import alec_wam.CrystalMod.handler.EventHandler.ItemDropType;
 import alec_wam.CrystalMod.tiles.machine.power.converter.PowerUnits;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ModLogger;
-import alec_wam.CrystalMod.world.CrystalModWorldGenerator;
+import alec_wam.CrystalMod.world.generation.CrystalOreFeature;
+import alec_wam.CrystalMod.world.generation.CrystalReedsFeature;
+import alec_wam.CrystalMod.world.generation.CrystalTreeFeature;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent.OnConfigChangedEvent;
@@ -221,13 +223,19 @@ public class Config {
         int[] oreBlacklist = cfg.get(CATEGORY_WORLD, "oreDimensionBlacklist", new int[] { },
                                                        "Crystal ore dimension blacklist").getIntList();
         for (int i : oreBlacklist) {
-            CrystalModWorldGenerator.oreDimBlacklist.add(i);
+            CrystalOreFeature.oreDimBlacklist.add(i);
         }
         
         int[] treeBlacklist = cfg.get(CATEGORY_WORLD, "treeDimensionBlacklist", new int[] { -1, 1 },
                 "Crystal Tree dimension blacklist").getIntList();
         for (int i : treeBlacklist) {
-        	CrystalModWorldGenerator.treeDimBlacklist.add(i);
+        	CrystalTreeFeature.treeDimBlacklist.add(i);
+        }
+        
+        int[] reedBlacklist = cfg.get(CATEGORY_WORLD, "reedDimensionBlacklist", new int[] { -1, 1 },
+                "Crystal Reeds dimension blacklist").getIntList();
+        for (int i : reedBlacklist) {
+        	CrystalReedsFeature.reedDimBlacklist.add(i);
         }
         
         superTorchMaxCount = cfg.get(CATEGORY_ITEM, "superTorchCapacity", superTorchMaxCount, "Maximum amount of torches allowed to be stored in a Super Torch.").getInt();
@@ -300,5 +308,9 @@ public class Config {
         }
         stack.setItemDamage(meta);
         return stack;
+    }
+    
+    public static boolean needRetroGen(){
+    	return Config.retrogenOres || Config.retrogenTrees || Config.retrogenClusters || Config.retrogenReeds;
     }
 }

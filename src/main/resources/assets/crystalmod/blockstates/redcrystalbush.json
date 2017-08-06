@@ -1,0 +1,18 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "crystalmod:bush",
+		"textures": {
+			"particle": "crystalmod:blocks/plant/bush_red"
+		},
+		"transform": "forge:default-block"
+    },
+    "variants": {
+		"normal": [{}],
+		"inventory": [{}],
+        "age=0": [{ "textures": {"all": "crystalmod:blocks/plant/bush_red"}}],
+        "age=1": [{ "textures": {"all": "crystalmod:blocks/plant/bush_red"}}],
+        "age=2": [{ "textures": {"all": "crystalmod:blocks/plant/bush_red"}}],
+        "age=3": [{ "textures": {"all": "crystalmod:blocks/plant/bush_red_grown"}}]
+    }
+}
