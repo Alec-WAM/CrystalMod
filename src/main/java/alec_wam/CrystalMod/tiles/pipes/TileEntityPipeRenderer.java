@@ -1,13 +1,24 @@
 package alec_wam.CrystalMod.tiles.pipes;
 
 
+import org.lwjgl.opengl.GL11;
+
+import alec_wam.CrystalMod.tiles.pipes.covers.CoverCutter;
+import alec_wam.CrystalMod.tiles.pipes.covers.CoverRender;
+import alec_wam.CrystalMod.tiles.pipes.covers.CoverUtil;
 import alec_wam.CrystalMod.tiles.pipes.covers.CoverUtil.CoverData;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.client.MinecraftForgeClient;
 
 public class TileEntityPipeRenderer extends TileEntitySpecialRenderer<TileEntityPipe> {
@@ -15,25 +26,26 @@ public class TileEntityPipeRenderer extends TileEntitySpecialRenderer<TileEntity
 	@Override
     public void renderTileEntityAt(TileEntityPipe te, double x, double y, double z, float partialTicks, int destroyStage) {
 		GlStateManager.pushMatrix();
-    	/*GlStateManager.translate(x, y, z);
-    	int pass = MinecraftForgeClient.getRenderPass();
+		BlockPos pos = te.getPos();
     	Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-    	for(EnumFacing faceing : EnumFacing.VALUES){
-    		if(te.getCoverData(faceing) !=null){
-    			CoverData data = te.getCoverData(faceing);
-    			AxisAlignedBB bounds = new AxisAlignedBB(0, 0, 0, 1, 1, 1);//FacadeBuilder.getFacadeBox(faceing, true);
-    	    	boolean worked = FacadeBuilder.renderCover(new PipeBlockAccessWrapper(te.getWorld(), te.getPos(), faceing), te.getPos(), faceing.getIndex(), data.getBlockState(), bounds, false, false);
-    	    	//ModLogger.info("Worked: "+worked);
+    	for(EnumFacing side : EnumFacing.VALUES){
+    		if(te.getCoverData(side) !=null){
+    			CoverData data = te.getCoverData(side);
+    			IBlockAccess world = te.getWorld();
+    			IBlockState state = data.getBlockState();
+    			Tessellator tess = Tessellator.getInstance();
+    			VertexBuffer buffer = tess.getBuffer();
+    			buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
+    			AxisAlignedBB bounds = CoverUtil.getCoverBoundingBox(side, false);
+    			buffer.setTranslation(x-pos.getX(), y-pos.getY(), z-pos.getZ());
+    			CoverCutter.ITransformer[] cutType = null;
+    			if(te.containsExternalConnection(side))cutType = CoverCutter.hollowPipeTile;
+    			if(te.containsPipeConnection(side))cutType = CoverCutter.hollowPipeLarge;
+    			CoverRender.renderBakedCoverQuads(buffer, world, pos, state, side.getIndex(), bounds, cutType);
+    			buffer.setTranslation(0, 0, 0);
+    			tess.draw();
     		}
-    	}*/
-    	//boolean worked = FacadeBuilder.renderCover(getWorld(), te.getPos(), 0, Blocks.COBBLESTONE.getDefaultState(), FacadeBuilder.getFacadeBox(EnumFacing.UP, true), false, false);
-    	
-    	//ModLogger.info("Worked: "+worked);
-    	
-    	//GlStateManager.scale(1, -1, -1);
-    	//GlStateManager.translate(-1, 0, -1);
-    	//Tessellator tessellator = Tessellator.getInstance();
-    	//WorldRenderer worldrenderer = tessellator.getWorldRenderer();
+    	}
         GlStateManager.popMatrix();
     }
 }

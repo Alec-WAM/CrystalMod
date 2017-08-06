@@ -21,6 +21,7 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -209,6 +210,29 @@ public class CoverUtil {
 
 		// try to not crash...
 		return Collections.emptyList();
+	}
+
+	public static AxisAlignedBB getCoverBoundingBox( EnumFacing side, boolean thinFacades )
+	{
+		int thickness = thinFacades ? 1 : 2;
+
+		switch( side )
+		{
+			case DOWN:
+				return new AxisAlignedBB( 0.0, 0.0, 0.0, 1.0, ( thickness ) / 16.0, 1.0 );
+			case EAST:
+				return new AxisAlignedBB( ( 16.0 - thickness ) / 16.0, 0.0, 0.0, 1.0, 1.0, 1.0 );
+			case NORTH:
+				return new AxisAlignedBB( 0.0, 0.0, 0.0, 1.0, 1.0, ( thickness ) / 16.0 );
+			case SOUTH:
+				return new AxisAlignedBB( 0.0, 0.0, ( 16.0 - thickness ) / 16.0, 1.0, 1.0, 1.0 );
+			case UP:
+				return new AxisAlignedBB( 0.0, ( 16.0 - thickness ) / 16.0, 0.0, 1.0, 1.0, 1.0 );
+			case WEST:
+				return new AxisAlignedBB( 0.0, 0.0, 0.0, ( thickness ) / 16.0, 1.0, 1.0 );
+			default:
+				throw new IllegalArgumentException( "Unsupported face: " + side );
+		}
 	}
 
 }

@@ -1090,4 +1090,11 @@ public abstract class TileEntityPipe extends TileEntityMod implements ITickable,
 		}
 	}
 
+	@Override
+	@SideOnly(Side.CLIENT)
+    public net.minecraft.util.math.AxisAlignedBB getRenderBoundingBox()
+    {
+        return new net.minecraft.util.math.AxisAlignedBB(pos, pos.add(1, 1, 1));
+    }
+	
 }

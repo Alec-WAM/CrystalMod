@@ -1,11 +1,9 @@
 package alec_wam.CrystalMod.tiles.pipes;
 
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.vecmath.Matrix4f;
 
@@ -13,20 +11,13 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.lwjgl.util.vector.Vector3f;
 
 import com.google.common.base.Strings;
-import com.google.common.collect.Lists;
 
 import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.client.model.dynamic.DynamicBaseModel;
-import alec_wam.CrystalMod.tiles.pipes.covers.CoverUtil;
-import alec_wam.CrystalMod.tiles.pipes.covers.CoverUtil.CoverData;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemStackTools;
-import alec_wam.CrystalMod.util.ModLogger;
-import alec_wam.CrystalMod.util.client.CustomModelUtil;
 import alec_wam.CrystalMod.util.client.RenderUtil;
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.BlockFaceUV;
 import net.minecraft.client.renderer.block.model.BlockPartFace;
@@ -44,34 +35,24 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.client.model.IPerspectiveAwareModel;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 
 public class ModelPipeBaked implements IPerspectiveAwareModel 
 {
 	public static final ModelResourceLocation BAKED_MODEL = new ModelResourceLocation("crystalmod:crystalpipe");
 	public static FaceBakery faceBakery;
-    
-    private final FacadeBuilder facadeBuilder;
-
     private final ItemStack renderStack;
     
-	public ModelPipeBaked( FacadeBuilder facadeBuilder )
+	public ModelPipeBaked()
 	{
 		this.renderStack = ItemStackTools.getEmptyStack();
-		this.facadeBuilder = facadeBuilder;
 	}
 	
 	public ModelPipeBaked( ItemStack stack )
 	{
 		this.renderStack = stack;
-		this.facadeBuilder = null;
 	}
     
     private void drawGlassStump(final ModelRotation modelRot, final List<BakedQuad> list) {
@@ -171,254 +152,6 @@ public class ModelPipeBaked implements IPerspectiveAwareModel
         }
     }
     
-    public void addCover(final FakeState state, final CoverData data, final EnumFacing dir, final List<BakedQuad> list){
-    	ModelRotation coverModelRot = ModelRotation.X0_Y0;
-        final BlockFaceUV uvCover = new BlockFaceUV(new float[] { 0.0f, 0.0f, 16.0f, 16.0f }, 0);
-        final BlockPartFace faceCover = new BlockPartFace(dir, 0, "", uvCover);
-        switch (dir.ordinal()) {
-            case 0: {
-            	coverModelRot = ModelRotation.X270_Y0;
-                break;
-            }
-            case 1: {
-            	coverModelRot = ModelRotation.X90_Y0;
-                break;
-            }
-            case 2: {
-            	coverModelRot = ModelRotation.X0_Y180;
-                break;
-            }
-            case 3: {
-            	coverModelRot = ModelRotation.X0_Y0;
-                break;
-            }
-            case 4: {
-            	coverModelRot = ModelRotation.X0_Y90;
-                break;
-            }
-            case 5: {
-            	coverModelRot = ModelRotation.X0_Y270;
-                break;
-            }
-        }
-        IBlockState coverState = data.getBlockState();
-        IBakedModel model = Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelShapes().getModelForState(coverState);
-        final boolean scale = false;
-        //if(test)return;
-        int id = Block.getStateId(coverState);
-        final TextureAtlasSprite blockTextureUp = CoverUtil.findTexture(id, model, EnumFacing.UP);
-        final TextureAtlasSprite blockTextureDown = CoverUtil.findTexture(id, model, EnumFacing.DOWN);
-        final TextureAtlasSprite blockTextureNorth = CoverUtil.findTexture(id, model, EnumFacing.NORTH);
-        final TextureAtlasSprite blockTextureSouth = CoverUtil.findTexture(id, model, EnumFacing.SOUTH);
-        final TextureAtlasSprite blockTextureWest = CoverUtil.findTexture(id, model, EnumFacing.WEST);
-        final TextureAtlasSprite blockTextureEast = CoverUtil.findTexture(id, model, EnumFacing.EAST);
-        boolean safe = (state !=null && state.pipe !=null);
-        //boolean attachment = /*safe ? state.pipe.getAttachmentData(dir) !=null :*/ true;
-        TextureAtlasSprite textureUp = blockTextureUp;
-    	TextureAtlasSprite textureDown = blockTextureDown;
-    	TextureAtlasSprite textureNorth = blockTextureNorth;
-    	TextureAtlasSprite textureSouth = blockTextureSouth;
-    	TextureAtlasSprite textureWest = blockTextureWest;
-    	TextureAtlasSprite textureEast = blockTextureEast;
-    	boolean shrinkUp = false;
-    	boolean shrinkDown = false;
-    	boolean shrinkLeft = false;
-    	boolean shrinkRight = false;
-    	
-        if(dir == EnumFacing.UP){
-        	shrinkUp = !(safe && state.pipe.getCoverData(EnumFacing.NORTH) == null);
-        	shrinkDown = !(safe && state.pipe.getCoverData(EnumFacing.SOUTH) == null);
-        	shrinkLeft = !(safe && state.pipe.getCoverData(EnumFacing.WEST) == null);
-        	shrinkRight = !(safe && state.pipe.getCoverData(EnumFacing.EAST) == null);
-        	textureUp = blockTextureWest;
-        	textureDown = blockTextureEast;
-        	textureNorth = blockTextureDown;
-        	textureSouth = blockTextureUp;
-        	textureWest = blockTextureNorth;
-        	textureEast = blockTextureSouth;
-        }
-        if(dir == EnumFacing.DOWN){
-        	shrinkUp = !(safe && state.pipe.getCoverData(EnumFacing.SOUTH) == null);
-        	shrinkDown = !(safe && state.pipe.getCoverData(EnumFacing.NORTH) == null);
-        	shrinkLeft = !(safe && state.pipe.getCoverData(EnumFacing.WEST) == null);
-        	shrinkRight = !(safe && state.pipe.getCoverData(EnumFacing.EAST) == null);
-        	textureUp = blockTextureEast;
-        	textureDown = blockTextureWest;
-        	textureNorth = blockTextureUp;
-        	textureSouth = blockTextureDown;
-        	textureWest = blockTextureNorth;
-        	textureEast = blockTextureSouth;
-        }
-        if(dir == EnumFacing.NORTH){
-        	//REALLY UP
-        	shrinkDown = !(safe && state.pipe.getCoverData(EnumFacing.DOWN) == null);
-        	shrinkUp = !(safe && state.pipe.getCoverData(EnumFacing.UP) == null);
-        	shrinkLeft = !(safe && state.pipe.getCoverData(EnumFacing.EAST) == null);
-        	shrinkRight = !(safe && state.pipe.getCoverData(EnumFacing.WEST) == null);
-        	textureUp = blockTextureUp;
-        	textureDown = blockTextureDown;
-        	textureNorth = blockTextureSouth;
-        	textureSouth = blockTextureNorth;
-        	textureWest = blockTextureEast;
-        	textureEast = blockTextureWest;
-        }
-        if(dir == EnumFacing.SOUTH){
-        	shrinkUp = !(safe && state.pipe.getCoverData(EnumFacing.UP) == null);
-        	shrinkDown = !(safe && state.pipe.getCoverData(EnumFacing.DOWN) == null);
-        	shrinkLeft = !(safe && state.pipe.getCoverData(EnumFacing.WEST) == null);
-        	shrinkRight = !(safe && state.pipe.getCoverData(EnumFacing.EAST) == null);
-        }
-        if(dir == EnumFacing.WEST){
-        	shrinkUp = !(safe && state.pipe.getCoverData(EnumFacing.UP) == null);
-        	shrinkDown = !(safe && state.pipe.getCoverData(EnumFacing.DOWN) == null);
-        	shrinkLeft = !(safe && state.pipe.getCoverData(EnumFacing.NORTH) == null);
-        	shrinkRight = !(safe && state.pipe.getCoverData(EnumFacing.SOUTH) == null);
-        	textureNorth = blockTextureEast;
-        	textureSouth = blockTextureWest;
-        	textureWest = blockTextureSouth;
-        	textureEast = blockTextureSouth;
-        }
-        if(dir == EnumFacing.EAST){
-        	shrinkUp = !(safe && state.pipe.getCoverData(EnumFacing.UP) == null);
-        	shrinkDown = !(safe && state.pipe.getCoverData(EnumFacing.DOWN) == null);
-        	shrinkLeft = !(safe && state.pipe.getCoverData(EnumFacing.SOUTH) == null);
-        	shrinkRight = !(safe && state.pipe.getCoverData(EnumFacing.NORTH) == null);
-        	textureNorth = blockTextureWest;
-        	textureSouth = blockTextureEast;
-        	textureWest = blockTextureSouth;
-        	textureEast = blockTextureNorth;
-        }	
-        
-        	
-        	
-        	boolean cut = false;
-        	
-        	float attchmentSize = 8;
-        	if(safe && state.pipe.getAttachmentData(dir) !=null){
-        		attchmentSize = 1.8f;
-        	}
-        	if(safe && state.pipe.isConnectedTo(dir)){
-        		attchmentSize = 4.8f;
-        	}
-        	float minZ = 14f;
-        	float minX = shrinkLeft ? 2f : 0.0f;
-			float maxX = shrinkRight ? 14f : 16.0f;
-			
-        	float UpLeftOffsetHollow = 16f-attchmentSize;
-        	float DownRightOffsetHollow = attchmentSize;
-        	
-        	
-        	int color =	Color.BLUE.getRGB();
-        	IBlockAccess world = (state !=null) ? state.blockAccess : null;
-        	BlockPos pos = (state !=null) ? state.pos : null;
-            int color2 = Minecraft.getMinecraft().getBlockColors().colorMultiplier(coverState, world, pos, 0);
-            
-            Color test = new Color(color2);
-            Color real = new Color(test.getBlue(), test.getGreen(), test.getRed());
-            color = real.getRGB();
-            if(color == -1){
-            	 
-            	float f = 1.0f;
-                int i = MathHelper.clamp((int)(f * 255.0F), 0, 255);
-                color = -16777216 | i << 16 | i << 8 | i;
-            }
-        	
-        	//UP
-        	boolean uvLocked = false;
-			float upMaxZ = shrinkUp ? 14f : 16f;
-			BlockFaceUV uv = new BlockFaceUV(new float[] { minX, minZ, maxX, 16f }, 0);
-			BlockPartFace face = new BlockPartFace(EnumFacing.UP, 0, "", uv);
-			list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(minX, upMaxZ, minZ), new Vector3f(maxX, upMaxZ, 16f), face, textureUp, EnumFacing.UP, coverModelRot, (BlockPartRotation)null, uvLocked, color));
-				
-			BlockFaceUV uvD = new BlockFaceUV(new float[] { minX, minZ, maxX, 16f }, 180);
-			BlockPartFace faceD = new BlockPartFace(EnumFacing.DOWN, 0, "", uvD);
-			list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(minX, UpLeftOffsetHollow, minZ), new Vector3f(maxX, UpLeftOffsetHollow, 16f), faceD, textureDown, EnumFacing.DOWN, coverModelRot, (BlockPartRotation)null, uvLocked, color));
-    			
-				
-			faceCover.blockFaceUV.uvs = new float[]{16f-maxX, 16f-upMaxZ, 16f-minX, DownRightOffsetHollow};
-			list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(minX, UpLeftOffsetHollow, minZ), new Vector3f(maxX, upMaxZ, 16.0f), faceCover, textureNorth, EnumFacing.NORTH, coverModelRot, (BlockPartRotation)null, uvLocked, color));
-			faceCover.blockFaceUV.uvs = new float[]{0.0f, 0.0f, 16f, 16F};
-    			
-			faceCover.blockFaceUV.uvs = new float[]{0.0f, 0.0f, 16f, DownRightOffsetHollow};
-			list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(0.0f, UpLeftOffsetHollow, minZ), new Vector3f(16f, 16f, 16.0f), faceCover, textureSouth, EnumFacing.SOUTH, coverModelRot, (BlockPartRotation)null, uvLocked, color));
-			faceCover.blockFaceUV.uvs = new float[]{0.0f, 0.0f, 16f, 16F};
-			
-			faceCover.blockFaceUV.uvs = new float[]{minZ, 16-upMaxZ, 16f, DownRightOffsetHollow};
-	        list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(minX, UpLeftOffsetHollow, minZ), new Vector3f(minX, upMaxZ, 16.0f), faceCover, textureWest, EnumFacing.WEST, coverModelRot, (BlockPartRotation)null, uvLocked, color));
-	        faceCover.blockFaceUV.uvs = new float[]{0.0f, 0.0f, 16f, 16F};
-    	       
-	        faceCover.blockFaceUV.uvs = new float[]{0.0f, 16f-upMaxZ, 16f-minZ, DownRightOffsetHollow};
-	        list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(maxX, UpLeftOffsetHollow, minZ), new Vector3f(maxX, upMaxZ, 16.0f), faceCover, textureEast, EnumFacing.EAST, coverModelRot, null, uvLocked, color));
-	        faceCover.blockFaceUV.uvs = new float[]{0.0f, 0.0f, 16f, 16F};
-	        
-        	//DOWN
-    		float downMinZ = shrinkDown ? 2.0F : 0.0f;	
-			uv = new BlockFaceUV(new float[] { minX, minZ, maxX, 16.0f }, 0);
-			face = new BlockPartFace(EnumFacing.UP, 0, "", uv);
-			list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(minX, DownRightOffsetHollow, minZ), new Vector3f(maxX, DownRightOffsetHollow, 16f), face, textureUp, EnumFacing.UP, coverModelRot, (BlockPartRotation)null, uvLocked, color));
-				
-			uvD = new BlockFaceUV(new float[] { minX, minZ, maxX, 16f }, 180);
-			faceD = new BlockPartFace(EnumFacing.DOWN, 0, "", uvD);
-			list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(minX, downMinZ, minZ), new Vector3f(maxX, downMinZ, 16f), faceD, textureDown, EnumFacing.DOWN, coverModelRot, (BlockPartRotation)null, uvLocked, color));
-			
-			
-			faceCover.blockFaceUV.uvs = new float[]{16.0f-maxX, UpLeftOffsetHollow, 16f-minX, 16f-downMinZ};
-			list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(minX, downMinZ, minZ), new Vector3f(maxX, DownRightOffsetHollow, 16.0f), faceCover, textureNorth, EnumFacing.NORTH, coverModelRot, (BlockPartRotation)null, uvLocked, color));
-			faceCover.blockFaceUV.uvs = new float[]{0.0f, 0.0f, 16f, 16F};
-			
-			faceCover.blockFaceUV.uvs = new float[]{0.0f, UpLeftOffsetHollow, 16f, 16f};
-			list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(0.0f, 0.0f, minZ), new Vector3f(16f, DownRightOffsetHollow, 16.0f), faceCover, textureSouth, EnumFacing.SOUTH, coverModelRot, (BlockPartRotation)null, uvLocked, color));
-			faceCover.blockFaceUV.uvs = new float[]{0.0f, 0.0f, 16f, 16F};
-			
-			faceCover.blockFaceUV.uvs = new float[]{minZ, UpLeftOffsetHollow, 16f, 16f-downMinZ};
-	        list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(minX, downMinZ, minZ), new Vector3f(minX, DownRightOffsetHollow, 16.0f), faceCover, textureWest, EnumFacing.WEST, coverModelRot, (BlockPartRotation)null, uvLocked, color));
-	        faceCover.blockFaceUV.uvs = new float[]{0.0f, 0.0f, 16f, 16F};
-	        
-	        faceCover.blockFaceUV.uvs = new float[]{0.0f, UpLeftOffsetHollow, 16f-minZ, 16f-downMinZ};
-	        list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(maxX, downMinZ, minZ), new Vector3f(maxX, DownRightOffsetHollow, 16.0f), faceCover, textureEast, EnumFacing.EAST, coverModelRot, (BlockPartRotation)null, uvLocked, color));
-	        faceCover.blockFaceUV.uvs = new float[]{0.0f, 0.0f, 16f, 16F};
-        	
-	        //if(cut)return;
-        	//if(test)return;
-        	
-    		float maxPole = UpLeftOffsetHollow;
-    		float minPole = DownRightOffsetHollow;
-    		//LEFT
-			faceCover.blockFaceUV.uvs = new float[]{UpLeftOffsetHollow, minPole, 16f-minX, maxPole};
-			list.add(faceBakery.makeBakedQuad(new Vector3f(minX, minPole, minZ), new Vector3f(DownRightOffsetHollow, maxPole, 16.0f), faceCover, textureNorth, EnumFacing.NORTH, coverModelRot, (BlockPartRotation)null, scale, true));
-			faceCover.blockFaceUV.uvs = new float[]{0.0f, 0.0f, 16f, 16F};
-			
-			faceCover.blockFaceUV.uvs = new float[]{0.0f, minPole, DownRightOffsetHollow, maxPole};
-			list.add(faceBakery.makeBakedQuad(new Vector3f(0.0f, minPole, minZ), new Vector3f(DownRightOffsetHollow, maxPole, 16.0f), faceCover, textureSouth, EnumFacing.SOUTH, coverModelRot, (BlockPartRotation)null, scale, true));
-			faceCover.blockFaceUV.uvs = new float[]{0.0f, 0.0f, 16f, 16F};
-			
-			faceCover.blockFaceUV.uvs = new float[]{minZ, minPole, 16f, maxPole};
-	        list.add(faceBakery.makeBakedQuad(new Vector3f(minX, minPole, minZ), new Vector3f(DownRightOffsetHollow, maxPole, 16.0f), faceCover, textureWest, EnumFacing.WEST, coverModelRot, (BlockPartRotation)null, scale, true));
-	        faceCover.blockFaceUV.uvs = new float[]{0.0f, 0.0f, 16f, 16F};
-	        
-	        faceCover.blockFaceUV.uvs = new float[]{0.0f, minPole, 16f-minZ, maxPole};
-	        list.add(faceBakery.makeBakedQuad(new Vector3f(0.0f, minPole, minZ), new Vector3f(DownRightOffsetHollow, maxPole, 16.0f), faceCover, textureEast, EnumFacing.EAST, coverModelRot, (BlockPartRotation)null, scale, true));
-	        faceCover.blockFaceUV.uvs = new float[]{0.0f, 0.0f, 16f, 16F};
-    		
-			//RIGHT
-			faceCover.blockFaceUV.uvs = new float[]{16-maxX, minPole, DownRightOffsetHollow, maxPole};
-			list.add(faceBakery.makeBakedQuad(new Vector3f(UpLeftOffsetHollow, minPole, minZ), new Vector3f(maxX, maxPole, 16.0f), faceCover, textureNorth, EnumFacing.NORTH, coverModelRot, (BlockPartRotation)null, scale, true));
-			faceCover.blockFaceUV.uvs = new float[]{0.0f, 0.0f, 16f, 16F};
-    			
-			faceCover.blockFaceUV.uvs = new float[]{UpLeftOffsetHollow, minPole, 16f, maxPole};
-			list.add(faceBakery.makeBakedQuad(new Vector3f(UpLeftOffsetHollow, minPole, minZ), new Vector3f(16f, maxPole, 16.0f), faceCover, textureSouth, EnumFacing.SOUTH, coverModelRot, (BlockPartRotation)null, scale, true));
-			faceCover.blockFaceUV.uvs = new float[]{0.0f, 0.0f, 16f, 16F};
-				
-			faceCover.blockFaceUV.uvs = new float[]{minZ, minPole, 16f, maxPole};
-	        list.add(faceBakery.makeBakedQuad(new Vector3f(UpLeftOffsetHollow, minPole, minZ), new Vector3f(16f, maxPole, 16.0f), faceCover, textureWest, EnumFacing.WEST, coverModelRot, (BlockPartRotation)null, scale, true));
-	        faceCover.blockFaceUV.uvs = new float[]{0.0f, 0.0f, 16f, 16F};
-	        
-	        
-	        faceCover.blockFaceUV.uvs = new float[]{0.0f, minPole, 16f-minZ, maxPole};
-	        list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(UpLeftOffsetHollow, minPole, minZ), new Vector3f(maxX, maxPole, 16.0f), faceCover, textureEast, EnumFacing.EAST, coverModelRot, (BlockPartRotation)null, true));
-	        faceCover.blockFaceUV.uvs = new float[]{0.0f, 0.0f, 16f, 16F};
-    }
-    
     @Override
 	public List<BakedQuad> getQuads( @Nullable IBlockState state, @Nullable EnumFacing side, long rand )
 	{
@@ -432,61 +165,6 @@ public class ModelPipeBaked implements IPerspectiveAwareModel
 		List<BakedQuad> quads = new ArrayList<BakedQuad>();
 		
 		if(layer == BlockRenderLayer.CUTOUT || layer == BlockRenderLayer.TRANSLUCENT || renderStack !=null)addPipeQuads( renderState, quads );
-		
-		if(facadeBuilder !=null && renderState !=null){
-			List<BakedQuad> facadeQuads = Lists.newArrayList();
-			List<AxisAlignedBB> bbs = Lists.newArrayList();
-			boolean addFacade = false;
-			if(addFacade){
-				facadeBuilder.addFacades(renderState, layer, 
-						renderState.pipe.covers,
-						bbs,
-						rand,
-						facadeQuads
-				);
-			
-				quads.addAll(facadeQuads);
-			}
-		}
-		
-		if(renderState !=null){
-			/*@Nonnull
-		    QuadCollector paintQuads = new QuadCollector();
-		    boolean hasPaintRendered = false;
-		    String cacheResult;
-
-		    EnumFacing face = EnumFacing.SOUTH;
-		    CoverData data = renderState.pipe.getCoverData(face);
-		    if(data !=null){
-		    	ModelWrangler.wrangleBakedModel(renderState.blockAccess, renderState.pos, data.getBlockState(), face, paintQuads);
-		    }
-		    quads.addAll(paintQuads.getQuads(side, layer));*/
-			/*for(EnumFacing facing : EnumFacing.VALUES){
-				CoverData facadeState = renderState.pipe.covers.get( facing );
-				if(facadeState != null){
-					IBlockState blockState = facadeState.getBlockState();
-					
-					if(renderState !=null && renderState.blockAccess !=null && renderState.pos !=null){
-						IBlockAccess world = new PipeBlockAccessWrapper(renderState.blockAccess, renderState.pos, facing);
-						blockState = facadeState.getBlockState().getBlock().getActualState(blockState, world, renderState.pos);
-					}
-					if(blockState.getBlock().canRenderInLayer(blockState, layer)){
-						IBakedModel blockModel = Minecraft.getMinecraft().getBlockRendererDispatcher().getModelForState( blockState );
-						if(renderState !=null && renderState.blockAccess !=null && renderState.pos !=null){
-							IBlockAccess world = new PipeBlockAccessWrapper(renderState.blockAccess, renderState.pos, facing);
-							blockState = blockState.getBlock().getExtendedState(blockState, world, renderState.pos);
-						}
-						List<BakedQuad> modelQuads = blockModel.getQuads(blockState, facing, rand);
-						for(BakedQuad quad : modelQuads){
-							if(quad.getFace() == facing){
-								quads.add(quad);
-							}
-						}
-					}
-				}
-			}*/
-		}
-
 		return quads;
 	}
     
@@ -569,6 +247,9 @@ public class ModelPipeBaked implements IPerspectiveAwareModel
             	this.renderIronCap(state, n, list);
             }
             if (safe && state.pipe.getCoverData(dir) !=null) {
+            	//CoverData data = state.pipe.getCoverData(dir);
+            	//List<BakedQuad> q = CoverRender.getBakedCoverQuads(state.blockAccess, state.pos, data.getBlockState(), n, FacadeBuilder.getFacadeBox(dir, false));
+            	//list.addAll(q);
                 //this.addCover(state, state.pipe.getCoverData(dir), dir, list);
             }
             if (safe && state.pipe.getAttachmentData(dir) !=null) {

@@ -186,7 +186,7 @@ public class PipeUtil {
 					if(type == null || pipe.getPipeType() !=null && pipe.getPipeType() == type){
 						pipes.add(pipe);
 						//Continue Searching
-						buildNetwork(pipes, world, offsetPos, facing.getOpposite(), type);
+						if(pos != offsetPos && (from == null || from.getIndex() != facing.getOpposite().getIndex()))buildNetwork(pipes, world, offsetPos, facing.getOpposite(), type);
 					}
 				}
 				if(tile instanceof IPipeWrapper){

@@ -20,6 +20,12 @@ public class Vector3d {
     this.y = y;
     this.z = z;
   }
+  
+  public Vector3d(float[] array) {
+	  this.x = array[0];
+	  this.y = array[1];
+	  this.z = array[2];
+  }
 
   public Vector3d(Vector3d other) {
     this(other.x, other.y, other.z);
@@ -33,6 +39,12 @@ public class Vector3d {
     this.x = x;
     this.y = y;
     this.z = z;
+  }
+  
+  public void set(float[] array) {
+	  this.x = array[0];
+	  this.y = array[1];
+	  this.z = array[2];
   }
 
   public void set(Vector3d vec) {
@@ -60,6 +72,13 @@ public class Vector3d {
     y -= vec.y;
     z -= vec.z;
   }
+  
+  public Vector3d subtract(Vector3d vec) {
+	  x -= vec.x;
+	  y -= vec.y;
+	  z -= vec.z;
+	  return this;
+  }
 
   public Vector3d negate() {
     x = -x;
@@ -84,6 +103,12 @@ public class Vector3d {
     double scale = 1.0 / Math.sqrt(x * x + y * y + z * z);
     scale(scale);
   }
+  
+  public Vector3d normal() {
+    double scale = 1.0 / Math.sqrt(x * x + y * y + z * z);
+    scale(scale);
+    return this;
+  }
 
   public double dot(Vector3d other) {
     return x * other.x + y * other.y + z * other.z;
@@ -93,6 +118,16 @@ public class Vector3d {
     x = v1.y * v2.z - v1.z * v2.y;
     y = v2.x * v1.z - v2.z * v1.x;
     z = v1.x * v2.y - v1.y * v2.x;
+  }
+  
+  public Vector3d crossProduct(Vector3d vec) {
+      double d = y * vec.z - z * vec.y;
+      double d1 = z * vec.x - x * vec.z;
+      double d2 = x * vec.y - y * vec.x;
+      x = d;
+      y = d1;
+      z = d2;
+      return this;
   }
 
   public double lengthSquared() {

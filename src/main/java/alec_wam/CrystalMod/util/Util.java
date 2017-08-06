@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
+import java.util.function.Function;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -27,6 +29,7 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
 import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.client.util.VertexUV;
 
 public class Util {
 	  
@@ -135,6 +138,35 @@ public class Util {
 	public static boolean isMultipleOf(int input, int mult) {
 		return input % mult == 0;
 	}
+
+	/**
+     * Counts the elements in the array that are not null.
+     *
+     * @param array The array to check.
+     * @param <T>   What we are dealing with.
+     * @return The count of non-null objects in the array.
+     */
+    public static <T> int countNoNull(T[] array) {
+        return count(array, Objects::nonNull);
+    }
+
+    /**
+     * Counts elements in the array that conform to the Function check.
+     *
+     * @param array The array to check.
+     * @param check The Function to apply to each element.
+     * @param <T>   What we are dealing with.
+     * @return The count.
+     */
+    public static <T> int count(T[] array, Function<T, Boolean> check) {
+        int counter = 0;
+        for (T value : array) {
+            if (check.apply(value)) {
+                counter++;
+            }
+        }
+        return counter;
+    }
 	
 	
 }

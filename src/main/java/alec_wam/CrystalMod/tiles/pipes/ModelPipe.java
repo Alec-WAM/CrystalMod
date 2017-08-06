@@ -35,8 +35,7 @@ public class ModelPipe implements IModel
 	@Override
 	public IBakedModel bake( IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter )
 	{
-		FacadeBuilder facadeBuilder = new FacadeBuilder( format, bakedTextureGetter );
-		return new ModelPipeBaked( facadeBuilder );
+		return new ModelPipeBaked();
 	}
 
 	@Override
