@@ -54,6 +54,7 @@ public class BlockCase extends EnumBlock<BlockCase.EnumCaseType> implements ITil
 		ModelLoader.setCustomStateMapper(this, new CustomBlockStateMapper());
     	ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), EnumCaseType.NOTE.getMeta(), new ModelResourceLocation(this.getRegistryName(), prop.getName()+"="+EnumCaseType.NOTE.getName()));
     	ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), EnumCaseType.PISTON.getMeta(), new ModelResourceLocation(this.getRegistryName(), prop.getName()+"="+EnumCaseType.PISTON.getName()+"_inventory"));
+    	ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), EnumCaseType.STICKY_PISTON.getMeta(), new ModelResourceLocation(this.getRegistryName(), prop.getName()+"="+EnumCaseType.STICKY_PISTON.getName()+"_inventory"));
 	}
 	
 	public static class CustomBlockStateMapper extends StateMapperBase
@@ -108,6 +109,7 @@ public class BlockCase extends EnumBlock<BlockCase.EnumCaseType> implements ITil
         return false;
     }
 	
+	@SuppressWarnings("deprecation")
 	@Override
 	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn, boolean p_185477_7_)
     {
@@ -205,11 +207,14 @@ public class BlockCase extends EnumBlock<BlockCase.EnumCaseType> implements ITil
 		if(type == EnumCaseType.PISTON){
 			return new TileEntityCasePiston();
 		}
+		if(type == EnumCaseType.STICKY_PISTON){
+			return new TileEntityCasePiston();
+		}
 		return null;
 	}
 	
 	public static enum EnumCaseType implements IStringSerializable, alec_wam.CrystalMod.blocks.EnumBlock.IEnumMeta {
-		NOTE, PISTON;
+		NOTE, PISTON, STICKY_PISTON;
 
 		final int meta;
 		

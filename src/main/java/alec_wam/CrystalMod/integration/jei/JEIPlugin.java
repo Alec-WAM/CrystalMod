@@ -10,6 +10,7 @@ import alec_wam.CrystalMod.integration.jei.crystalworkbench.ShapedCrystalOreReci
 import alec_wam.CrystalMod.integration.jei.crystalworkbench.ShapedCrystalRecipeHandler;
 import alec_wam.CrystalMod.integration.jei.crystalworkbench.ShapedNBTCrystalRecipeHandler;
 import alec_wam.CrystalMod.integration.jei.crystalworkbench.ShapelessCrystalRecipeHandler;
+import alec_wam.CrystalMod.integration.jei.customrecipe.PipeCoverCategory;
 import alec_wam.CrystalMod.integration.jei.machine.GrinderRecipeCategory;
 import alec_wam.CrystalMod.integration.jei.machine.InfuserRecipeCategory;
 import alec_wam.CrystalMod.integration.jei.machine.LiquidizerRecipeCategory;
@@ -62,6 +63,7 @@ public class JEIPlugin  extends BlankModPlugin {
 		GrinderRecipeCategory.register(jeiHelpers, registry, guiHelper);
 		InfuserRecipeCategory.register(jeiHelpers, registry, guiHelper);
 		FusionRecipeCategory.register(jeiHelpers, registry, guiHelper);
+		PipeCoverCategory.register(jeiHelpers, registry, guiHelper);
 		
 		registry.addRecipeCategoryCraftingItem(new ItemStack(ModBlocks.crystalWorkbench), CrystalModRecipeUids.WORKBENCH);
 		registry.addRecipeCategoryCraftingItem(new ItemStack(ModBlocks.crystalWorkbench), VanillaRecipeCategoryUid.CRAFTING);

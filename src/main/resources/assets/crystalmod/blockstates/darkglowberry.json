@@ -1,0 +1,16 @@
+{
+	"forge_marker":1,
+    "defaults":{
+        "textures":{
+            "particle":"crystalmod:blocks/plant/glowberry_dark",
+            "texture": "crystalmod:blocks/plant/glowberry_dark"
+        }
+    },
+	"variants": {
+        "facing=down": [{ "model": "crystalmod:glowberry_top"}],
+        "facing=south": [{ "model": "crystalmod:glowberry_side", "y": 180}],
+        "facing=west": [{ "model": "crystalmod:glowberry_side", "y": 270 }],
+        "facing=north": [{ "model": "crystalmod:glowberry_side"}],
+        "facing=east": [{ "model": "crystalmod:glowberry_side", "y": 90}]
+    }
+}

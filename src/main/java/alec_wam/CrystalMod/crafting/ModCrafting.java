@@ -16,6 +16,7 @@ import alec_wam.CrystalMod.blocks.BlockCrystalOre.CrystalOreType;
 import alec_wam.CrystalMod.blocks.BlockDecorative.DecorativeBlockType;
 import alec_wam.CrystalMod.blocks.BlockMetalBars.EnumMetalBarType;
 import alec_wam.CrystalMod.blocks.ModBlocks;
+import alec_wam.CrystalMod.blocks.crops.BlockCrystalPlant.PlantType;
 import alec_wam.CrystalMod.blocks.crops.material.ModCrops;
 import alec_wam.CrystalMod.blocks.decorative.tiles.BlockBasicTiles.BasicTileType;
 import alec_wam.CrystalMod.blocks.decorative.tiles.BlockBasicTiles2.BasicTileType2;
@@ -77,7 +78,7 @@ import alec_wam.CrystalMod.tiles.machine.worksite.WorksiteUpgrade;
 import alec_wam.CrystalMod.tiles.pipes.BlockPipe.PipeType;
 import alec_wam.CrystalMod.tiles.pipes.attachments.AttachmentUtil;
 import alec_wam.CrystalMod.tiles.pipes.attachments.ItemPipeAttachment;
-import alec_wam.CrystalMod.tiles.pipes.covers.ItemPipeCover;
+import alec_wam.CrystalMod.tiles.pipes.covers.RecipePipeCover;
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.BlockPatternEncoder.EncoderType;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.BlockPanel.PanelType;
 import alec_wam.CrystalMod.tiles.pipes.estorage.storage.hdd.ItemHDD;
@@ -124,6 +125,7 @@ public class ModCrafting {
 		GameRegistry.addRecipe(new RecipeWirelessChestMinecart());
 		GameRegistry.addRecipe(new CustomToolRepairRecipe());
 		GameRegistry.addRecipe(new ChisledBlockRecipe());
+		GameRegistry.addRecipe(new RecipePipeCover());
 		BatHelper.addBatCrafting();
 		
 		ItemStack blueCrystal = new ItemStack(ModItems.crystals, 1, CrystalType.BLUE.getMetadata());
@@ -261,6 +263,7 @@ public class ModCrafting {
 		addShapedRecipe(new ItemStack(ModItems.crystals, 1, CrystalType.GREEN_SHARD.getMetadata()), new Object[] {"##", "##", '#', new ItemStack(ModItems.crystalSap, 1, SapType.GREEN.getMetadata())});
 		addShapedRecipe(new ItemStack(ModItems.crystals, 1, CrystalType.DARK_SHARD.getMetadata()), new Object[] {"##", "##", '#', new ItemStack(ModItems.crystalSap, 1, SapType.DARK.getMetadata())});
 		
+		for(PlantType type : PlantType.values())addShapelessOreRecipe(new ItemStack(ModItems.glowBerry, 1, type.getMeta()), new Object[]{new ItemStack(ModItems.crystalBerry, 1, type.getMeta()), "dustGlowstone"});
 		
 		//Removed in favor of Fusion
 		/*addShapedOreRecipe(new ItemStack(ModItems.crystals, 1, CrystalType.PURE_SHARD.getMetadata()), new Object[]{" B ", "RQG", " D ", 'Q', "gemQuartz", 
@@ -302,6 +305,7 @@ public class ModCrafting {
 		
 		addShapedOreRecipe(new ItemStack(ModBlocks.storageCase, 4, EnumCaseType.NOTE.getMeta()), new Object[]{"WNW", "NCN", "WNW", 'W', "plankWood", 'N', Blocks.NOTEBLOCK, 'C', "chestTrapped"});
 		addShapedOreRecipe(new ItemStack(ModBlocks.storageCase, 2, EnumCaseType.PISTON.getMeta()), new Object[]{"WNW", "NCN", "WNW", 'W', "cobblestone", 'N', Blocks.PISTON, 'C', "chestTrapped"});
+		addShapedOreRecipe(new ItemStack(ModBlocks.storageCase, 2, EnumCaseType.STICKY_PISTON.getMeta()), new Object[]{"WNW", "NCN", "WNW", 'W', "cobblestone", 'N', Blocks.STICKY_PISTON, 'C', "chestTrapped"});
 		
 		addShapelessRecipe(new ItemStack(ModBlocks.flowerLilypad), new Object[]{Blocks.WATERLILY, new ItemStack(Blocks.RED_FLOWER, 1, EnumFlowerType.BLUE_ORCHID.getMeta())});
 		
@@ -470,11 +474,6 @@ public class ModCrafting {
 		addShapedOreRecipe(new ItemStack(ModItems.craftingPattern), new Object[]{" # ", "#P#", " # ", '#', dIronNugget, 'P', "paper"});
 		addShapelessRecipe(new ItemStack(ModItems.securityCard), new Object[]{ModItems.lock, ModItems.craftingPattern});
 
-		for(ItemStack cover : ItemPipeCover.coverRecipes.keySet()){
-			ItemStack cover6 = ItemStackTools.safeCopy(cover);
-			ItemStackTools.setStackSize(cover6, 6);
-			addShapedOreRecipe(cover6, "s", "cn", 'c', ItemPipeCover.coverRecipes.get(cover), 's', "slimeball", 'n', "nuggetCrystal");
-		}
 		addShapedRecipe(attachment_import, new Object[]{"DHD", " E ", 'D', dIronPlate, 'E', pipeEStorage, 'H', Blocks.HOPPER});
 		addShapelessRecipe(attachment_export, new Object[]{ItemPipeAttachment.getAttachmentStack(AttachmentUtil.eStorage_Import.getID()), Blocks.PISTON});
 		addShapedRecipe(ItemPipeAttachment.getAttachmentStack(AttachmentUtil.eStorage_Sensor.getID()), new Object[]{"DCD", " E ", 'D', dIronPlate, 'E', pipeEStorage, 'C', Items.COMPARATOR});

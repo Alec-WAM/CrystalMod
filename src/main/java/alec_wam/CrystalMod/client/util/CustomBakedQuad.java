@@ -1,5 +1,11 @@
 package alec_wam.CrystalMod.client.util;
 
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+
+import alec_wam.CrystalMod.util.Util;
+import alec_wam.CrystalMod.util.Vector3d;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -9,15 +15,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraftforge.client.model.pipeline.IVertexConsumer;
 import net.minecraftforge.client.model.pipeline.IVertexProducer;
 import net.minecraftforge.client.model.pipeline.UnpackedBakedQuad;
-import scala.actors.threadpool.Arrays;
-
-import java.awt.Color;
-import java.util.LinkedList;
-import java.util.List;
-
-import alec_wam.CrystalMod.util.ModLogger;
-import alec_wam.CrystalMod.util.Util;
-import alec_wam.CrystalMod.util.Vector3d;
 
 /**
  * Created by covers1624 on 8/20/2016.

@@ -30,11 +30,9 @@ import alec_wam.CrystalMod.items.tools.bat.ModBats;
 import alec_wam.CrystalMod.tiles.machine.worksite.WorksiteChunkLoader;
 import alec_wam.CrystalMod.tiles.pipes.PipeNetworkTickHandler;
 import alec_wam.CrystalMod.tiles.pipes.attachments.AttachmentUtil;
-import alec_wam.CrystalMod.tiles.pipes.covers.ItemPipeCover;
 import alec_wam.CrystalMod.tiles.playercube.PlayerCubeChunkLoaderManager;
 import alec_wam.CrystalMod.tiles.spawner.ItemMobEssence;
 import alec_wam.CrystalMod.util.FarmUtil;
-import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.world.CrystalModWorldGenerator;
 import alec_wam.CrystalMod.world.DropCapture;
 import alec_wam.CrystalMod.world.ModDimensions;
@@ -46,9 +44,7 @@ import alec_wam.CrystalMod.world.structures.FusionTempleStructure;
 import alec_wam.CrystalMod.world.structures.MapGenFusionTemple;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-import net.minecraft.world.gen.structure.ComponentScatteredFeaturePieces;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.ForgeChunkManager;
@@ -60,7 +56,6 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.oredict.ShapedOreRecipe;
 
 public class CommonProxy {
 
@@ -139,10 +134,6 @@ public class CommonProxy {
 	
 	public void postInit(FMLPostInitializationEvent event) {
 		ModItems.pipeCover.initialize();
-		for(ItemStack cover : ItemPipeCover.coverRecipes.keySet()){
-			ItemStack cover6 = ItemUtil.copy(cover, 6);
-			GameRegistry.addRecipe(new ShapedOreRecipe(cover6, new Object[] { "S ", "CN", 'C', ItemPipeCover.coverRecipes.get(cover), 'S', "slimeball", 'N', "nuggetCrystal" }));
-		}
 		if(ModFluids.fluidXpJuice == null) { //should have been registered by enderio
 	      ModFluids.forgeRegisterXPJuice();      
 	    }

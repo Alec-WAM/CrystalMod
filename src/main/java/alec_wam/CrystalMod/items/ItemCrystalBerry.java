@@ -16,12 +16,16 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class ItemCrystalBerry extends ItemFood implements ICustomModel {
 
 	public ItemCrystalBerry() {
+		this("crystalberry");
+	}
+	
+	public ItemCrystalBerry(String name) {
 		//Apple Food Value
 		super(4, 0.3F, false);
 		this.setHasSubtypes(true);
 		this.setMaxDamage(0);
 		this.setCreativeTab(CrystalMod.tabCrops);
-		ModItems.registerItem(this, "crystalberry");
+		ModItems.registerItem(this, name);
 	}
 	
 	@SideOnly(Side.CLIENT)

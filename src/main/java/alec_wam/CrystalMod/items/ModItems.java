@@ -96,6 +96,7 @@ public class ModItems {
 	public static ItemCursedBone cursedBone;
 	public static ItemCrystalSap crystalSap;
 	public static ItemCrystalBerry crystalBerry;
+	public static ItemGlowBerry glowBerry;
 	public static ItemCongealedRedstone congealedRedstone;
 	
 	//TODO Re-add Crystexium
@@ -191,6 +192,7 @@ public class ModItems {
 		cursedBone = new ItemCursedBone();
 		crystalSap = new ItemCrystalSap();
 		crystalBerry = new ItemCrystalBerry();
+		glowBerry = new ItemGlowBerry();
 		congealedRedstone = new ItemCongealedRedstone();
 		
 		//TODO Re-add Crystexium

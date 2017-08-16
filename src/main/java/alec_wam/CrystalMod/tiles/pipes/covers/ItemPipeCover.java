@@ -2,24 +2,9 @@ package alec_wam.CrystalMod.tiles.pipes.covers;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import com.google.common.base.Strings;
+
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.client.model.CustomBakedModel;
@@ -29,17 +14,30 @@ import alec_wam.CrystalMod.tiles.pipes.TileEntityPipe;
 import alec_wam.CrystalMod.tiles.pipes.covers.CoverUtil.CoverData;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemStackTools;
+import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.Util;
-
-import com.google.common.base.Strings;
-import com.google.common.collect.Maps;
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
+import net.minecraftforge.common.IShearable;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemPipeCover extends Item implements ICustomModel {
 	public static final ArrayList<ItemStack> allCovers = new ArrayList<ItemStack>();
     public static final ArrayList<String> allCoverIDs = new ArrayList<String>();
     public static final ArrayList<String> blacklistedCovers = new ArrayList<String>();
-    
-    public static final Map<ItemStack, ItemStack> coverRecipes = Maps.newHashMap();
 
     public ItemPipeCover(){
     	super();
@@ -120,7 +118,8 @@ public class ItemPipeCover extends Item implements ICustomModel {
         }
     }
 
-    private void registerValidCovers(Block block, Item item) {
+    @SuppressWarnings("deprecation")
+	private void registerValidCovers(Block block, Item item) {
         NonNullList<ItemStack> stacks = NonNullList.create();
         try {
             if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
@@ -137,17 +136,13 @@ public class ItemPipeCover extends Item implements ICustomModel {
         }
         for (ItemStack stack : stacks) {
             try {
-                if (block.hasTileEntity(block.getDefaultState())) continue;
-
-                // Check if all of these functions work correctly.
-                // If an exception is fired, or null is returned, this generally means that
-                // this block is invalid.
+            	IBlockState state = block.getStateFromMeta(stack.getMetadata());
+                if(!isValidForCover(state))continue;
                 try {
                     if (stack.getDisplayName() == null || Strings.isNullOrEmpty(stack.getUnlocalizedName())) continue;
                 } catch (Throwable t) {
                     continue;
-                }
-
+                }                
                 addCover(stack);
             } catch (IndexOutOfBoundsException e) {
 
@@ -157,6 +152,23 @@ public class ItemPipeCover extends Item implements ICustomModel {
         }
     }
 
+    @SuppressWarnings("deprecation")
+	public static boolean isItemValidForCover(ItemStack stack){
+    	Item item = stack.getItem();
+    	if(item instanceof ItemBlock){
+    		ItemBlock iblock = (ItemBlock)stack.getItem();
+    		Block block = iblock.getBlock();
+    		return isValidForCover(block.getStateFromMeta(iblock.getMetadata(stack)));
+    	}
+    	return false;
+    }
+    
+    public static boolean isValidForCover(IBlockState state){
+    	if (state.getBlock().hasTileEntity() || state.getBlock().hasTileEntity(state)) return false;
+        if(!state.isFullCube()) return false;        
+    	return true;
+    }
+    
     public void addCover(ItemStack itemStack) {
         if (ItemStackTools.isEmpty(itemStack)) ItemStackTools.setStackSize(itemStack, 1);
 
@@ -171,8 +183,16 @@ public class ItemPipeCover extends Item implements ICustomModel {
         if (!allCoverIDs.contains(recipeId)) {
         	allCoverIDs.add(recipeId);
             allCovers.add(cover);
-            coverRecipes.put(cover, itemStack);
         }
+    }
+    
+    public static ItemStack getCoverFromItem(ItemStack stack){
+    	Item item = stack.getItem();
+    	if(item instanceof ItemBlock){
+    		ItemBlock iblock = (ItemBlock)stack.getItem();
+    		return getCoverForBlock(iblock.getBlock().getStateFromMeta(iblock.getMetadata(stack)));
+    	}
+    	return ItemStackTools.getEmptyStack();
     }
     
     public static ItemStack getCoverForBlock(IBlockState state) {
@@ -212,9 +232,10 @@ public class ItemPipeCover extends Item implements ICustomModel {
     @SuppressWarnings("deprecation")
 	private static boolean isBlockValidForCover(Block block) {
         try {
+        	if(block == Blocks.AIR || block instanceof IShearable)return false;
         	IBlockState state = block.getDefaultState();
-        	if((!block.isFullCube(state) && block.getMaterial(state) == Material.GLASS))return true;
-            if (/*!block.isFullBlock(state) ||*/ (!block.isFullCube(state)) || block.hasTileEntity(block.getDefaultState())) return false;
+        	if (block.hasTileEntity() || block.hasTileEntity(block.getDefaultState())) return false;
+            if(!state.isFullCube())return false;
             return true;
         } catch (Throwable ignored) {
             return false;
@@ -225,6 +246,16 @@ public class ItemPipeCover extends Item implements ICustomModel {
         if (!stack.hasTagCompound() || !ItemNBTHelper.verifyExistance(stack, "cover")) return null;
         NBTTagCompound nbt = ItemNBTHelper.getCompound(stack).getCompoundTag("cover");
         return CoverData.readFromNBT(nbt);
+    }
+    
+    public static ItemStack getItemFromCover(ItemStack cover){
+    	ItemStack stack = ItemStackTools.getEmptyStack();
+    	CoverData data = getCoverData(cover);
+    	if(data !=null){
+    		IBlockState state = data.getBlockState();
+    		return new ItemStack(state.getBlock(), 1, state.getBlock().getMetaFromState(state));
+    	}
+    	return stack;
     }
     
 }

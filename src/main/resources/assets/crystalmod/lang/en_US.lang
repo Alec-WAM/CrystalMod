@@ -46,11 +46,15 @@ item.crystalmod.darkcrystaltreeseeds.name=Dark Tree-Plant Seed
 item.crystalmod.crystalsap.blue.name=Blue Crystal Sap
 item.crystalmod.crystalsap.red.name=Red Crystal Sap
 item.crystalmod.crystalsap.green.name=Green Crystal Sap
-item.crystalmod.crystalsap.dark.name=Dark Crystal Sap
+item.crystalmod.crystalsap.dark.name=Dark Crystal 
 item.crystalmod.crystalberry.blue.name=Blue Crystal Berry
 item.crystalmod.crystalberry.red.name=Red Crystal Berry
 item.crystalmod.crystalberry.green.name=Green Crystal Berry
 item.crystalmod.crystalberry.dark.name=Dark Crystal Berry
+item.crystalmod.glowberry.blue.name=Glowing Blue Crystal Berry
+item.crystalmod.glowberry.red.name=Glowing Red Crystal Berry
+item.crystalmod.glowberry.green.name=Glowing Green Crystal Berry
+item.crystalmod.glowberry.dark.name=Glowing Dark Crystal Berry
 
 item.crystalmod.congealedredstone.name=Crystal Congealed Redstone
 item.crystalmod.reactorupgrade.basic.name=Basic Redstone Reactor Upgrade
@@ -390,6 +394,7 @@ tile.crystalmod.crystallightblock.pure.name=Pure Crystal Light
 tile.crystalmod.crystallightblock.infinite.name=Infinity Block
 tile.crystalmod.crystallightblock.spiral_dark.name=Dark Crystal Double Spiral
 tile.crystalmod.crystallightblock.spiral_pure.name=Pure Crystal Double Spiral
+tile.crystalmod.failureblock.name=Failure Block
 
 tile.crystalmod.crystalglass.blue.name=Blue Crystal Glass
 tile.crystalmod.crystalglass.red.name=Red Crystal Glass
@@ -441,6 +446,10 @@ tile.crystalmod.bluecrystalbush.name=Blue Crystal Berry Bush
 tile.crystalmod.redcrystalbush.name=Red Crystal Berry Bush
 tile.crystalmod.greencrystalbush.name=Green Crystal Berry Bush
 tile.crystalmod.darkcrystalbush.name=Dark Crystal Berry Bush
+tile.crystalmod.blueglowberry.name=Blue Glow Berry
+tile.crystalmod.redglowberry.name=Red Glow Berry
+tile.crystalmod.greenglowberry.name=Green Glow Berry
+tile.crystalmod.darkglowberry.name=Dark Glow Berry
 tile.crystalmod.flowerlilypad.name=Flower Lily-pad
 
 tile.crystalmod.crystallog.blue.name=Blue Crystal Wood
@@ -508,6 +517,8 @@ tile.crystalmod.wirelesschest.name=Super Chest
 tile.crystalmod.advdispenser.name=Advanced Dispenser
 
 tile.crystalmod.storagecase.note.name=Noteblock Storage Case
+tile.crystalmod.storagecase.piston.name=Piston Storage Case
+tile.crystalmod.storagecase.sticky_piston.name=Sticky Piston Storage Case
 
 tile.crystalmod.crystalpipe.item.name=Crystal Pipe (Item)
 tile.crystalmod.crystalpipe.fluid.name=Crystal Pipe (Fluid)
@@ -536,10 +547,10 @@ tile.crystalmod.engine.vampire.name=Vampiric Crystal Engine
 
 tile.crystalmod.redstonereactor.name=Redstone Reactor
 tile.crystalmod.redstonecore.name=Redstone Core
-tile.crystalmod.congealedredstonesponge.name=Heated Crystal Sponge
+tile.crystalmod.congealedredstonesponge.name=Crystal Heated Sponge
 
-tile.crystalmod.specialengine.infinite.name=Infinite Engine
-tile.crystalmod.specialengine.finite.name=Finite Engine
+tile.crystalmod.specialengine.infinite.name=Infinity Engine
+tile.crystalmod.specialengine.finite.name=Finity Engine
 
 tile.crystalmod.weather.name=Weather Forecaster
 tile.crystalmod.playercubeportal.name=Player Cube Portal
@@ -663,6 +674,7 @@ tile.crystalmod.infectedblock.normal.name=Infected Block
 tile.crystalmod.infectedblock.chisled.name=Infected Block
 tile.crystalmod.infectedblock.casing.name=Reinforced Infected Block
 tile.crystalmod.infectedblock.leaves.name=Infected Leaves
+tile.crystalmod.darkinfection.name=Dense Infected Block
 
 tile.crystalmod.advancedlamp.pure.name=Pure Light Lamp
 tile.crystalmod.advancedlamp.dark.name=Darkness Lamp
@@ -810,6 +822,8 @@ enhancement.crystalmod.dragonwings.name=Dragon Wings
 enhancement.crystalmod.invisiblearmor.name=Invisible Armor
 enhancement.crystalmod.jumpboost.name=Jump Boost
 enhancement.crystalmod.waterwalking.name=Water Walking
+
+crystalmod.jei.pipecover.category=Pipe Cover
 
 #--Entity
 entity.crystalpigzombie.name=Crystal Zombie Pigman

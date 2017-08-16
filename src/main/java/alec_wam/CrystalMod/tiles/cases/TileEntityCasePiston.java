@@ -6,9 +6,7 @@ import com.google.common.collect.Lists;
 
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.packets.PacketTileMessage;
-import alec_wam.CrystalMod.util.ModLogger;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockPistonBase;
 import net.minecraft.block.BlockPistonExtension;
 import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.block.state.IBlockState;
@@ -56,7 +54,7 @@ public class TileEntityCasePiston extends TileEntityCaseBase {
     @Override
     public void update(){
     	super.update();
-    	this.opening = getWorld().isBlockPowered(getPos());
+    	//this.opening = getWorld().isBlockPowered(getPos());
     	if(opening){
     		
     		if(validFaces.isEmpty()){
@@ -184,7 +182,7 @@ public class TileEntityCasePiston extends TileEntityCaseBase {
         List<AxisAlignedBB> list = Lists.<AxisAlignedBB>newArrayList();
         this.getCollisionRelatedBlockState(side).addCollisionBoxToList(this.world, BlockPos.ORIGIN, new AxisAlignedBB(BlockPos.ORIGIN), list, (Entity)null, true);
 
-        if (!((List)list).isEmpty())
+        if (!list.isEmpty())
         {
             AxisAlignedBB axisalignedbb = this.moveByPositionAndProgress(getHeadBB(list), side);
             List<Entity> list1 = this.world.getEntitiesWithinAABBExcludingEntity((Entity)null, this.getMovementArea(axisalignedbb, enumfacing, d0).union(axisalignedbb));
@@ -199,7 +197,7 @@ public class TileEntityCasePiston extends TileEntityCaseBase {
                     {
                         double d1 = 0.0D;
 
-                        for (int j = 0; j < ((List)list).size(); ++j)
+                        for (int j = 0; j < list.size(); ++j)
                         {
                             AxisAlignedBB axisalignedbb1 = this.getMovementArea(this.moveByPositionAndProgress((AxisAlignedBB)list.get(j), side), enumfacing, d0);
                             AxisAlignedBB axisalignedbb2 = entity.getEntityBoundingBox();

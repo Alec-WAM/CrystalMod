@@ -6,7 +6,9 @@
     "type": {
       "note": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/case_noteblock"} },
 	  "piston": { "model": "crystalmod:case_piston" },
-	  "piston_inventory": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/case_piston_head"} }	  
+	  "piston_inventory": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/case_piston_head"} },
+	  "sticky_piston": { "model": "crystalmod:case_piston" },
+	  "sticky_piston_inventory": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/case_piston_sticky_head"} }	  
     }
   }
 }

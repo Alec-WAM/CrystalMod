@@ -21,6 +21,7 @@ import alec_wam.CrystalMod.blocks.crystexium.BlockCrysidian;
 import alec_wam.CrystalMod.blocks.crystexium.CrystexiumBlock;
 import alec_wam.CrystalMod.blocks.crystexium.CrystexiumBlock.CrystexiumBlockType;
 import alec_wam.CrystalMod.blocks.crystexium.CrystexiumSlab;
+import alec_wam.CrystalMod.blocks.decorative.BlockFailure;
 import alec_wam.CrystalMod.blocks.decorative.bridge.BlockBridge;
 import alec_wam.CrystalMod.blocks.decorative.bridge.TileBridge;
 import alec_wam.CrystalMod.blocks.decorative.tiles.BlockBasicTiles;
@@ -228,9 +229,9 @@ public class ModBlocks {
 	public static BlockWirelessChest wirelessChest;
 	public static BlockCase storageCase;
 	public static BlockCrystalPlant crystalPlantBlue, crystalPlantRed, crystalPlantGreen, crystalPlantDark;
-	public static BlockCrystalTreePlant crystalTreePlantBlue, crystalTreePlantRed, crystalTreePlantGreen,
-			crystalTreePlantDark;
+	public static BlockCrystalTreePlant crystalTreePlantBlue, crystalTreePlantRed, crystalTreePlantGreen, crystalTreePlantDark;
 	public static BlockCrystalBerryBush crystalBushBlue, crystalBushRed, crystalBushGreen, crystalBushDark;	
+	public static BlockGlowBerry glowBerryBlue, glowBerryRed, glowBerryGreen, glowBerryDark;	
 	public static BlockCrystalLog crystalLog;
 	public static BlockCrystalLeaves crystalLeaves;
 	public static BlockCrystalSapling crystalSapling;
@@ -256,6 +257,7 @@ public class ModBlocks {
 	public static BlockBasicTiles2 tileBasic2;
 	public static BlockCrystalTiles tileCrystal;	
 	public static BlockCrystalLight crystalLight;
+	public static BlockFailure failureBlock;
 
 	public static BlockRedstoneReactor redstoneReactor;
 	public static BlockRedstoneCore redstoneCore;
@@ -415,15 +417,21 @@ public class ModBlocks {
 		
 		crystalBushBlue = new BlockCrystalBerryBush(PlantType.BLUE);
 		registerBlock(crystalBushBlue, "bluecrystalbush");
-
 		crystalBushRed = new BlockCrystalBerryBush(PlantType.RED);
 		registerBlock(crystalBushRed, "redcrystalbush");
-
 		crystalBushGreen = new BlockCrystalBerryBush(PlantType.GREEN);
 		registerBlock(crystalBushGreen, "greencrystalbush");
-
 		crystalBushDark = new BlockCrystalBerryBush(PlantType.DARK);
 		registerBlock(crystalBushDark, "darkcrystalbush");
+		
+		glowBerryBlue = new BlockGlowBerry(PlantType.BLUE);
+		registerBlock(glowBerryBlue, "blueglowberry");
+		glowBerryRed = new BlockGlowBerry(PlantType.RED);
+		registerBlock(glowBerryRed, "redglowberry");
+		glowBerryGreen = new BlockGlowBerry(PlantType.GREEN);
+		registerBlock(glowBerryGreen, "greenglowberry");
+		glowBerryDark = new BlockGlowBerry(PlantType.DARK);
+		registerBlock(glowBerryDark, "darkglowberry");
 
 		crystalLog = new BlockCrystalLog();
 		registerBlock(crystalLog, new ItemBlockMeta(crystalLog), "crystallog");
@@ -482,6 +490,7 @@ public class ModBlocks {
 		tileCrystal = registerEnumBlock(new BlockCrystalTiles(), "tiles_crystal");		
 		//TODO Add Tile Recipes and Burn time for wood tiles
 		crystalLight = registerEnumBlock(new BlockCrystalLight(), "crystallightblock");		
+		failureBlock = registerBlock(new BlockFailure(), "failureblock");		
 
 		engine = new BlockEngine();
 		registerBlock(engine, new ItemBlockEngine(engine), "engine");

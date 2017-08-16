@@ -1,10 +1,8 @@
 package alec_wam.CrystalMod.tiles.soundmuffler;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-
-import com.google.common.collect.Lists;
 
 import alec_wam.CrystalMod.network.IMessageHandler;
 import alec_wam.CrystalMod.tiles.TileEntityModStatic;
@@ -13,7 +11,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.Constants;
-import scala.actors.threadpool.Arrays;
 
 public class TileSoundMuffler extends TileEntityModStatic implements IMessageHandler {
 
