@@ -1,5 +1,13 @@
 package alec_wam.CrystalMod.tiles.pipes.estorage;
 
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.opengl.GL11;
+
+import alec_wam.CrystalMod.blocks.ModBlocks;
+import alec_wam.CrystalMod.network.CrystalModNetwork;
+import alec_wam.CrystalMod.tiles.pipes.ContainerNormalPipe;
+import alec_wam.CrystalMod.tiles.pipes.item.PacketPipe;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -9,16 +17,6 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
-
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.opengl.GL11;
-
-import alec_wam.CrystalMod.CrystalMod;
-import alec_wam.CrystalMod.blocks.ModBlocks;
-import alec_wam.CrystalMod.network.CrystalModNetwork;
-import alec_wam.CrystalMod.tiles.pipes.ContainerNormalPipe;
-import alec_wam.CrystalMod.tiles.pipes.item.PacketPipe;
-import alec_wam.CrystalMod.util.ItemStackTools;
 
 public class GuiEStoragePipe extends GuiContainer {
 
@@ -46,6 +44,7 @@ public class GuiEStoragePipe extends GuiContainer {
 		refreshButtons();
 	}
 	
+	@Override
 	public void actionPerformed(GuiButton button){
 		if(button.id == 0){
 			pipe.setConnectionMode(dir, !Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) ? pipe.getNextConnectionMode(dir) : pipe.getPreviousConnectionMode(dir));
@@ -77,6 +76,7 @@ public class GuiEStoragePipe extends GuiContainer {
 		}
 	}
 	
+	@Override
 	public void updateScreen(){
 		super.updateScreen();
 	}
@@ -90,6 +90,7 @@ public class GuiEStoragePipe extends GuiContainer {
 		this.buttonList.add(new GuiButton(2, sx+45+45+45+18, sy+40, 10, 10, "-"));
 	}
 
+	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY)
     {
 		boolean safe = pipe.network !=null && pipe.network instanceof EStorageNetwork;

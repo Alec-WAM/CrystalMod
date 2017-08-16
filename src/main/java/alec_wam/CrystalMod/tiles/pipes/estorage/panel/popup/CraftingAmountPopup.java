@@ -4,16 +4,17 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
+import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage.ItemStackData;
+import alec_wam.CrystalMod.tiles.pipes.estorage.panel.GuiPanel;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage.ItemStackData;
-import alec_wam.CrystalMod.tiles.pipes.estorage.panel.GuiPanel;
-import alec_wam.CrystalMod.util.ItemStackTools;
 
 public class CraftingAmountPopup extends Popup {
 
@@ -94,7 +95,7 @@ public class CraftingAmountPopup extends Popup {
             GlStateManager.translate(guiPanel.getCraftBoxX()+26, guiPanel.getCraftBoxY()+10, 0);
             String string = dis.getDisplayName();
             int stringWidth = Minecraft.getMinecraft().fontRendererObj.getStringWidth(string);
-            float scale = Math.min(60F / (float) (stringWidth+10), 1F);
+            float scale = Math.min(60F / (stringWidth+10), 1F);
             GlStateManager.scale(scale, scale, 1);
             GlStateManager.translate(0, Minecraft.getMinecraft().fontRendererObj.FONT_HEIGHT*(1.0f-scale), 0);
             Minecraft.getMinecraft().fontRendererObj.drawString(""+string, 0, 0, 0x404040);
@@ -132,7 +133,7 @@ public class CraftingAmountPopup extends Popup {
                 j = 16777120;
                 color = java.awt.Color.GRAY.brighter().getRGB();
             }
-            GuiPanel.drawRect(48, 41, 78, 52, color);
+            Gui.drawRect(48, 41, 78, 52, color);
             Minecraft.getMinecraft().fontRendererObj.drawString("Start", 50, 43, j);
             GlStateManager.enableDepth();
             GlStateManager.disableLighting();

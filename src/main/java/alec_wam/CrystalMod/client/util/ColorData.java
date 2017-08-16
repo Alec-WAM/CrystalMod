@@ -1,12 +1,8 @@
 package alec_wam.CrystalMod.client.util;
 
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public abstract class ColorData {
 

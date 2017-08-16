@@ -5,7 +5,6 @@ import alec_wam.CrystalMod.api.estorage.security.NetworkAbility;
 import alec_wam.CrystalMod.tiles.pipes.AbstractPipeNetwork;
 import alec_wam.CrystalMod.tiles.pipes.ConnectionMode;
 import alec_wam.CrystalMod.tiles.pipes.IPipeWrapper;
-import alec_wam.CrystalMod.tiles.pipes.PipeUtil;
 import alec_wam.CrystalMod.tiles.pipes.TileEntityPipe;
 import alec_wam.CrystalMod.tiles.pipes.types.IPipeType;
 import net.minecraft.entity.player.EntityPlayer;
@@ -19,10 +18,12 @@ public class TileEntityPipeEStorage extends TileEntityPipe {
 	
 	public TileEntityPipeEStorage(){}
 	
+	@Override
 	public void writeCustomNBT(NBTTagCompound nbt){
 		super.writeCustomNBT(nbt);
 	}
 	
+	@Override
 	public void readCustomNBT(NBTTagCompound nbt){
 		super.readCustomNBT(nbt);
 	}
@@ -37,10 +38,12 @@ public class TileEntityPipeEStorage extends TileEntityPipe {
 		return new EStorageNetwork();
 	}
 	
+	@Override
 	public boolean canConnectToPipe(EnumFacing faceHit, TileEntityPipe neighbour) {
 		return super.canConnectToPipe(faceHit, neighbour);
 	}
 	
+	@Override
 	public boolean canConnectToExternal(EnumFacing direction, boolean ignoreDisabled) {
 	    TileEntity tile = getExternalTile(direction);
 	    if (tile==null || this.getAttachmentData(direction) !=null) {
@@ -54,10 +57,12 @@ public class TileEntityPipeEStorage extends TileEntityPipe {
 	    return ignoreDisabled || getConnectionMode(direction) !=ConnectionMode.DISABLED;
 	}
 	
+	@Override
 	protected ConnectionMode getDefaultConnectionMode() {
 		return ConnectionMode.INPUT;
 	}
 	
+	@Override
 	public ConnectionMode getNextConnectionMode(EnumFacing dir) {
 		ConnectionMode curMode = getConnectionMode(dir);
 		if (curMode == ConnectionMode.NOT_SET) {
@@ -66,6 +71,7 @@ public class TileEntityPipeEStorage extends TileEntityPipe {
 		return curMode == ConnectionMode.INPUT ? ConnectionMode.DISABLED : ConnectionMode.INPUT;
 	}
 
+	@Override
 	public ConnectionMode getPreviousConnectionMode(EnumFacing dir) {
 		ConnectionMode curMode = getConnectionMode(dir);
 		if (curMode == ConnectionMode.NOT_SET) {
@@ -110,7 +116,8 @@ public class TileEntityPipeEStorage extends TileEntityPipe {
 	    }*/
 	  }
 
-	  public void update(){
+	  @Override
+	public void update(){
 		  super.update();
 	  }
 	  
@@ -136,6 +143,7 @@ public class TileEntityPipeEStorage extends TileEntityPipe {
 		}
 	  }
 	  
+	@Override
 	public boolean canEditAttachments(EntityPlayer player){
 		if(network != null && network instanceof EStorageNetwork) {
 			return ((EStorageNetwork)network).hasAbility(player, NetworkAbility.BUILD);

@@ -1,5 +1,7 @@
 package alec_wam.CrystalMod.util;
 
+import alec_wam.CrystalMod.network.AbstractPacketThreadsafe;
+import alec_wam.CrystalMod.network.CrystalModNetwork;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiNewChat;
@@ -7,12 +9,10 @@ import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.NetHandlerPlayServer;
-import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
-import alec_wam.CrystalMod.network.AbstractPacketThreadsafe;
-import alec_wam.CrystalMod.network.CrystalModNetwork;
 
 /*Utilities to mess with the chat. adapted from Blood Magic: https://github.com/WayofTime/BloodMagic/blob/698358df237d2c894afb20a3312203c8c2bf8e65/src/main/java/WayofTime/bloodmagic/util/ChatUtil.java
  * by WayOfTime, licensed under Creative Commons Attribution 4.0 International Public License

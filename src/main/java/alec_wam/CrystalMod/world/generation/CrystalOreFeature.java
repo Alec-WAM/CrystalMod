@@ -6,8 +6,8 @@ import java.util.Random;
 
 import alec_wam.CrystalMod.Config;
 import alec_wam.CrystalMod.api.world.IGenerationFeature;
-import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.blocks.BlockCrystalOre.CrystalOreType;
+import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.world.WorldGenMinableRandom;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;

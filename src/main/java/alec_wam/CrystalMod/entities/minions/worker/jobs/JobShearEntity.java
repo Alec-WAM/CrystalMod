@@ -2,6 +2,14 @@ package alec_wam.CrystalMod.entities.minions.worker.jobs;
 
 import java.util.List;
 
+import alec_wam.CrystalMod.entities.minions.MinionConstants;
+import alec_wam.CrystalMod.entities.minions.worker.EntityMinionWorker;
+import alec_wam.CrystalMod.entities.minions.worker.WorkerJob;
+import alec_wam.CrystalMod.tiles.machine.worksite.InventorySided.RelativeSide;
+import alec_wam.CrystalMod.tiles.machine.worksite.TileWorksiteBase;
+import alec_wam.CrystalMod.tiles.machine.worksite.WorksiteUpgrade;
+import alec_wam.CrystalMod.tiles.machine.worksite.imp.WorksiteAnimalFarm;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Enchantments;
@@ -11,15 +19,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.IShearable;
-import alec_wam.CrystalMod.entities.minions.MinionConstants;
-import alec_wam.CrystalMod.entities.minions.worker.EntityMinionWorker;
-import alec_wam.CrystalMod.entities.minions.worker.WorkerJob;
-import alec_wam.CrystalMod.tiles.machine.worksite.TileWorksiteBase;
-import alec_wam.CrystalMod.tiles.machine.worksite.WorksiteUpgrade;
-import alec_wam.CrystalMod.tiles.machine.worksite.InventorySided.RelativeSide;
-import alec_wam.CrystalMod.tiles.machine.worksite.imp.WorksiteAnimalFarm;
-import alec_wam.CrystalMod.util.ItemStackTools;
-import alec_wam.CrystalMod.util.ModLogger;
 
 public class JobShearEntity extends WorkerJob {
 	

@@ -22,11 +22,13 @@ public class ItemMetalPlate extends Item implements ICustomModel {
 		ModItems.registerItem(this, "metalplate");
 	}
 	
+	@Override
 	@SideOnly(Side.CLIENT)
 	public boolean hasEffect(ItemStack stack){
 		return stack.getItemDamage() !=PlateType.DARK_IRON.getMetadata();
 	}
 	
+	@Override
 	@SideOnly(Side.CLIENT)
     public void initModel() {
         for(PlateType type : PlateType.values()){
@@ -34,6 +36,7 @@ public class ItemMetalPlate extends Item implements ICustomModel {
         }
     }
 	
+	@Override
 	public String getUnlocalizedName(ItemStack stack)
     {
         int i = stack.getMetadata();
@@ -69,7 +72,8 @@ public class ItemMetalPlate extends Item implements ICustomModel {
             this.unlocalizedName = name;
         }
 
-        public int getMetadata()
+        @Override
+		public int getMetadata()
         {
             return this.metadata;
         }
@@ -79,7 +83,8 @@ public class ItemMetalPlate extends Item implements ICustomModel {
             return this.unlocalizedName;
         }
 
-        public String toString()
+        @Override
+		public String toString()
         {
             return this.unlocalizedName;
         }
@@ -94,7 +99,8 @@ public class ItemMetalPlate extends Item implements ICustomModel {
             return METADATA_LOOKUP[metadata];
         }
 
-        public String getName()
+        @Override
+		public String getName()
         {
             return this.unlocalizedName;
         }

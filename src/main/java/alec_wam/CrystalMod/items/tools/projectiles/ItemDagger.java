@@ -4,7 +4,6 @@ import javax.annotation.Nonnull;
 
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.items.ModItems;
-import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;

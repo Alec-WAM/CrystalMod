@@ -18,6 +18,7 @@ public class GuiGrinder extends GuiElementContainer{
         this.name = "Grinder";
     }
 	
+	@Override
 	public void initGui(){
 		super.initGui();
 		
@@ -26,6 +27,7 @@ public class GuiGrinder extends GuiElementContainer{
 		this.progress = ((ElementDualScaled)addElement(new ElementDualScaled(this, 79, 34).setMode(1).setSize(24, 16).setTexture("crystalmod:textures/gui/elements/Progress_Arrow_Right.png", 48, 16)));
 	}
 	
+	@Override
 	protected void updateElementInformation()
 	{
 		super.updateElementInformation();

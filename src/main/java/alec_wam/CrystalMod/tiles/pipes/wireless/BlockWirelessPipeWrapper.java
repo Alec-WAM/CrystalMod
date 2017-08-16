@@ -52,6 +52,7 @@ public class BlockWirelessPipeWrapper extends BlockContainer implements ICustomM
 	public static final String NBT_CON_Z = "CrystalMod.PipeWrapper.ConZ";
 	public static final String NBT_CON_D = "CrystalMod.PipeWrapper.ConD";
 	
+	@Override
 	@SideOnly(Side.CLIENT)
     public void initModel() {
 		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), this.getMetaFromState(getDefaultState().withProperty(SENDER, Boolean.valueOf(false))), new ModelResourceLocation(this.getRegistryName(), "sender=false"));

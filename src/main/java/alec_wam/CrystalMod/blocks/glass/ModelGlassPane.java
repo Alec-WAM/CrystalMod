@@ -51,6 +51,7 @@ public class ModelGlassPane extends DynamicItemAndBlockModel {
 		this.stack = ItemStackTools.getEmptyStack();
 	}
 
+	@Override
 	public List<BakedQuad> getQuads(@Nullable IBlockState state, @Nullable EnumFacing side, long rand){
 		return super.getQuads(state, side, rand);
 	}
@@ -66,9 +67,7 @@ public class ModelGlassPane extends DynamicItemAndBlockModel {
 		}
 		TextureAtlasSprite sprite = getTexture(type);
 		float[] top = new float[] { 0.0f, 0.0f, 16.0f, 1.0f };
-		float[] bottom = new float[] { 0.0f, 15.0f, 16.0f, 16.0f };
 		float[] left = new float[] { 0.0f, 0.0f, 1.0f, 16.0f };
-		float[] right = new float[] { 15.0f, 0.0f, 16.0f, 16.0f };
 		if(state == null){
 			final BlockFaceUV uv = new BlockFaceUV(top, 0);
 			final BlockPartFace faceS = new BlockPartFace(EnumFacing.SOUTH, 0, "", uv);
@@ -81,10 +80,10 @@ public class ModelGlassPane extends DynamicItemAndBlockModel {
 			boolean renderUp = true;
 			boolean renderDown = true;
 			boolean renderNorth = true, renderSouth = true, renderEast = true, renderWest = true;
-			boolean connectedN = state.getValue(BlockCrystalGlassPane.NORTH);
-			boolean connectedS = state.getValue(BlockCrystalGlassPane.SOUTH);
-			boolean connectedE = state.getValue(BlockCrystalGlassPane.EAST);
-			boolean connectedW = state.getValue(BlockCrystalGlassPane.WEST);
+			boolean connectedN = state.getValue(BlockPane.NORTH);
+			boolean connectedS = state.getValue(BlockPane.SOUTH);
+			boolean connectedE = state.getValue(BlockPane.EAST);
+			boolean connectedW = state.getValue(BlockPane.WEST);
 
 			if(renderUp){
 				final BlockFaceUV uv = new BlockFaceUV(top, 0);
@@ -247,8 +246,8 @@ public class ModelGlassPane extends DynamicItemAndBlockModel {
 		boolean downConnectedLeft = validD && stateDown.getValue(BlockPane.EAST);
 		boolean downConnectedRight = validD && stateDown.getValue(BlockPane.WEST);
 		
-		boolean connectedE = state.getValue(BlockCrystalGlassPane.EAST);
-		boolean connectedW = state.getValue(BlockCrystalGlassPane.WEST);
+		boolean connectedE = state.getValue(BlockPane.EAST);
+		boolean connectedW = state.getValue(BlockPane.WEST);
 		EnumFacing renderFace = glassFace;
 		
 		boolean mT = false;
@@ -452,8 +451,8 @@ public class ModelGlassPane extends DynamicItemAndBlockModel {
 		boolean downConnectedLeft = validD && stateDown.getValue(BlockPane.SOUTH);
 		boolean downConnectedRight = validD && stateDown.getValue(BlockPane.NORTH);
 		
-		boolean connectedL = state.getValue(BlockCrystalGlassPane.SOUTH);
-		boolean connectedR = state.getValue(BlockCrystalGlassPane.NORTH);
+		boolean connectedL = state.getValue(BlockPane.SOUTH);
+		boolean connectedR = state.getValue(BlockPane.NORTH);
 		EnumFacing renderFace = glassFace;
 		
 		boolean mT = false;

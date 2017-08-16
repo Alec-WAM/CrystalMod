@@ -1,5 +1,12 @@
 package alec_wam.CrystalMod.tiles.machine.elevator.caller;
 
+import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.tiles.machine.elevator.TileEntityElevator;
+import alec_wam.CrystalMod.tiles.machine.elevator.caller.TileEntityElevatorCaller.ElevatorButton;
+import alec_wam.CrystalMod.util.BlockUtil;
+import alec_wam.CrystalMod.util.ChatUtil;
+import alec_wam.CrystalMod.util.EntityUtil;
+import alec_wam.CrystalMod.util.ModLogger;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -10,22 +17,15 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import alec_wam.CrystalMod.CrystalMod;
-import alec_wam.CrystalMod.tiles.machine.elevator.TileEntityElevator;
-import alec_wam.CrystalMod.tiles.machine.elevator.caller.TileEntityElevatorCaller.ElevatorButton;
-import alec_wam.CrystalMod.util.BlockUtil;
-import alec_wam.CrystalMod.util.ChatUtil;
-import alec_wam.CrystalMod.util.EntityUtil;
-import alec_wam.CrystalMod.util.ModLogger;
 
 public class BlockElevatorCaller extends BlockContainer {
 

@@ -1,16 +1,15 @@
 package alec_wam.CrystalMod.integration.jei.crystalworkbench;
 
+import javax.annotation.Nonnull;
+
+import alec_wam.CrystalMod.crafting.ShapelessCrystalRecipe;
+import alec_wam.CrystalMod.integration.jei.CrystalModRecipeUids;
 import mezz.jei.api.IJeiHelpers;
 import mezz.jei.api.recipe.IRecipeHandler;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import mezz.jei.util.ErrorUtil;
 import mezz.jei.util.Log;
 import net.minecraft.item.ItemStack;
-
-import javax.annotation.Nonnull;
-
-import alec_wam.CrystalMod.crafting.ShapelessCrystalRecipe;
-import alec_wam.CrystalMod.integration.jei.CrystalModRecipeUids;
 
 public class ShapelessCrystalRecipeHandler implements IRecipeHandler<ShapelessCrystalRecipe> {
 	@Nonnull

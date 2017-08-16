@@ -1,5 +1,14 @@
 package alec_wam.CrystalMod.client.model.dynamic;
 
+import java.util.Collections;
+import java.util.List;
+
+import javax.vecmath.Matrix4f;
+import javax.vecmath.Vector3f;
+
+import org.apache.commons.lang3.tuple.Pair;
+import org.lwjgl.util.Color;
+
 import com.google.common.collect.ImmutableMap;
 import com.google.common.primitives.Ints;
 
@@ -15,15 +24,6 @@ import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.client.model.Attributes;
 import net.minecraftforge.client.model.IPerspectiveAwareModel;
 import net.minecraftforge.common.model.TRSRTransformation;
-
-import org.apache.commons.lang3.tuple.Pair;
-import org.lwjgl.util.Color;
-
-import javax.vecmath.Matrix4f;
-import javax.vecmath.Vector3f;
-
-import java.util.Collections;
-import java.util.List;
 
 /**
  * A model that can be used as a basis for flexible baked models.

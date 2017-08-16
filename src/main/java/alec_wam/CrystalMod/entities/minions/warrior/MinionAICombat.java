@@ -160,7 +160,7 @@ public class MinionAICombat extends AIBase<EntityMinionWarrior>
 			        {
 			            if (!attackTarget.hitByEntity(minion))
 			            {
-			            	damage+=EnchantmentHelper.getModifierForCreature(heldItem, ((EntityLivingBase)attackTarget).getCreatureAttribute());
+			            	damage+=EnchantmentHelper.getModifierForCreature(heldItem, attackTarget.getCreatureAttribute());
 			            
 			            	int j = EnchantmentHelper.getFireAspectModifier(minion);
 
@@ -175,7 +175,7 @@ public class MinionAICombat extends AIBase<EntityMinionWarrior>
 		                    boolean flag2 = attackTarget.attackEntityFrom(DamageSource.causeMobDamage(minion), damage);
 		                    if(flag2){
 		                    	minion.attackEntityAsMob(attackTarget);
-		                    	EnchantmentHelper.applyThornEnchantments((EntityLivingBase)attackTarget, minion);
+		                    	EnchantmentHelper.applyThornEnchantments(attackTarget, minion);
 		                    	EnchantmentHelper.applyArthropodEnchantments(minion, attackTarget);
 		                    	
 		                    	if(ItemStackTools.isValid(heldItem)){
@@ -203,7 +203,7 @@ public class MinionAICombat extends AIBase<EntityMinionWarrior>
 					(getMethodBehavior() == EnumCombatBehaviors.METHOD_MELEE_AND_RANGED &&
 					distanceToTarget >= 5.0F))
 			{
-				minion.getLookHelper().setLookPosition(attackTarget.posX, attackTarget.posY + (double)attackTarget.getEyeHeight(), attackTarget.posZ, 10.0F, minion.getVerticalFaceSpeed());
+				minion.getLookHelper().setLookPosition(attackTarget.posX, attackTarget.posY + attackTarget.getEyeHeight(), attackTarget.posZ, 10.0F, minion.getVerticalFaceSpeed());
 				
 				if (rangedAttackTime <= 0)
 				{
@@ -216,12 +216,12 @@ public class MinionAICombat extends AIBase<EntityMinionWarrior>
 					if(!ItemStackTools.isNullStack(held) && EntityMinionWarrior.isBow(held)){
 						EntityTippedArrow arrow = new EntityTippedArrow(minion.getEntityWorld(), minion);
 				        double dX = attackTarget.posX - minion.posX;
-				        double dY = attackTarget.getEntityBoundingBox().minY + (double)(attackTarget.height / 3.0F) - arrow.posY;
+				        double dY = attackTarget.getEntityBoundingBox().minY + attackTarget.height / 3.0F - arrow.posY;
 				        double dZ = attackTarget.posZ - minion.posZ;
-				        double d3 = (double)MathHelper.sqrt(dX * dX + dZ * dZ);
+				        double d3 = MathHelper.sqrt(dX * dX + dZ * dZ);
 				        
-				        arrow.setThrowableHeading(dX, dY + d3 * 0.20000000298023224D, dZ, 1.6F, (float)(14 - minion.getEntityWorld().getDifficulty().getDifficultyId() * 4));
-				        arrow.setDamage((double)(5.0F) + minion.getRNG().nextGaussian() * 0.25D + (double)((float)minion.getEntityWorld().getDifficulty().getDifficultyId() * 0.11F));
+				        arrow.setThrowableHeading(dX, dY + d3 * 0.20000000298023224D, dZ, 1.6F, 14 - minion.getEntityWorld().getDifficulty().getDifficultyId() * 4);
+				        arrow.setDamage((5.0F) + minion.getRNG().nextGaussian() * 0.25D + minion.getEntityWorld().getDifficulty().getDifficultyId() * 0.11F);
 				        minion.playSound(SoundEvents.ENTITY_SKELETON_SHOOT, 1.0F, 1.0F / (minion.getRNG().nextFloat() * 0.4F + 0.8F));
 				        minion.getEntityWorld().spawnEntity(arrow);
 						rangedAttackTime = 60;

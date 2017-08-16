@@ -1,15 +1,14 @@
 package alec_wam.CrystalMod.tiles.playercube;
 
-import io.netty.buffer.ByteBuf;
-
 import java.io.IOException;
 import java.util.Collection;
 
+import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.network.packets.PacketTileMessage;
+import io.netty.buffer.ByteBuf;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import alec_wam.CrystalMod.CrystalMod;
-import alec_wam.CrystalMod.network.packets.PacketTileMessage;
 
 public class ChunkBlockUpdateMessage extends PacketTileMessage {
 

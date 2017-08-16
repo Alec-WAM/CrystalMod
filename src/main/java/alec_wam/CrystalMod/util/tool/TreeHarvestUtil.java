@@ -172,12 +172,10 @@ public class TreeHarvestUtil {
 
   private static final class HarvestTarget extends BaseHarvestTarget {
 
-    IBlockState bs;
     EnumType variant;
 
     HarvestTarget(IBlockState bs) {
       super(bs.getBlock());
-      this.bs = bs;
       variant = getVariant(bs);
     }
 

@@ -480,6 +480,7 @@ public class WorksiteAnimalFarm extends TileWorksiteBoundedInventory {
 		}
 
 		EntityMinionWorker worker = getRandomWorker(new WorkerFilter(){
+			@Override
 			public boolean matches(EntityMinionWorker worker){
 				ItemStack held = worker.getHeldItemMainhand();
 				return !ItemStackTools.isNullStack(held) && held.getItem() instanceof ItemShears;
@@ -526,6 +527,7 @@ public class WorksiteAnimalFarm extends TileWorksiteBoundedInventory {
 		EntityAnimal animal;
 
 		EntityMinionWorker worker = getRandomWorker(new WorkerFilter(){
+			@Override
 			public boolean matches(EntityMinionWorker worker){
 				ItemStack held = worker.getHeldItemMainhand();
 				return !ItemStackTools.isNullStack(held) && held.getItem() instanceof ItemSword;

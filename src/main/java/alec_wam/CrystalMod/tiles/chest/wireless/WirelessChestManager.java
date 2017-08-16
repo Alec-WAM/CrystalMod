@@ -4,6 +4,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import com.google.common.collect.Maps;
+
+import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.tiles.chest.CrystalChestType;
+import alec_wam.CrystalMod.util.PlayerUtil;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -13,12 +18,6 @@ import net.minecraft.world.storage.MapStorage;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.items.ItemStackHandler;
-import alec_wam.CrystalMod.CrystalMod;
-import alec_wam.CrystalMod.tiles.chest.CrystalChestType;
-import alec_wam.CrystalMod.util.ModLogger;
-import alec_wam.CrystalMod.util.PlayerUtil;
-
-import com.google.common.collect.Maps;
 
 public class WirelessChestManager extends WorldSavedData implements IWirelessChestList {
 	
@@ -50,12 +49,14 @@ public class WirelessChestManager extends WorldSavedData implements IWirelessChe
         return instance;
     }
 
-    public void setDirty()
+    @Override
+	public void setDirty()
     {
         markDirty();
     }
 
-    public WirelessInventory getInventory(int code)
+    @Override
+	public WirelessInventory getInventory(int code)
     {
         return global.getInventory(code);
     }
@@ -132,7 +133,8 @@ public class WirelessChestManager extends WorldSavedData implements IWirelessChe
     {
         private Map<Integer, WirelessInventory> inventories = new HashMap<Integer, WirelessInventory>();
 
-        public WirelessInventory getInventory(int code)
+        @Override
+		public WirelessInventory getInventory(int code)
         {
         	WirelessInventory inventory = inventories.get(code);
 
@@ -205,7 +207,8 @@ public class WirelessChestManager extends WorldSavedData implements IWirelessChe
             }
         }
 
-        public void setDirty()
+        @Override
+		public void setDirty()
         {
             markDirty();
         }

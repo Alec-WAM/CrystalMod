@@ -1,6 +1,5 @@
 package alec_wam.CrystalMod.client.util.comp;
 
-import java.lang.reflect.Field;
 import java.util.List;
 
 import alec_wam.CrystalMod.CrystalMod;
@@ -10,7 +9,10 @@ import alec_wam.CrystalMod.util.Lang;
 import alec_wam.CrystalMod.util.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.*;
+import net.minecraft.item.crafting.CraftingManager;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.ShapedRecipes;
+import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
@@ -59,6 +61,7 @@ public class GuiComponentStandardRecipePage extends BaseComponent {
 	
 	public int tick = 0;
 	public int listIndex = 0;
+	@Override
 	public void updateComp(){
 		super.updateComp();
 		tick++;
@@ -75,7 +78,7 @@ public class GuiComponentStandardRecipePage extends BaseComponent {
 	
 	private static Object[] getFirstRecipeForItem(ItemStack resultingItem) {
 		Object[] recipeItems = new Object[9];
-		for (IRecipe recipe : (List<IRecipe>)CraftingManager.getInstance().getRecipeList()) {
+		for (IRecipe recipe : CraftingManager.getInstance().getRecipeList()) {
 			if (recipe == null) continue;
 
 			ItemStack result = recipe.getRecipeOutput();

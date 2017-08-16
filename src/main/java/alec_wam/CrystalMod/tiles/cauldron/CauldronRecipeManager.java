@@ -1,33 +1,22 @@
 package alec_wam.CrystalMod.tiles.cauldron;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-import alec_wam.CrystalMod.blocks.ModBlocks;
-import alec_wam.CrystalMod.blocks.glass.BlockCrystalGlass.GlassType;
-import alec_wam.CrystalMod.blocks.BlockCrystal.CrystalBlockType;
-import alec_wam.CrystalMod.blocks.BlockCrystalIngot.CrystalIngotBlockType;
-import alec_wam.CrystalMod.fluids.ModFluids;
-import alec_wam.CrystalMod.items.ItemMachineFrame.FrameType;
-import alec_wam.CrystalMod.items.ModItems;
-import alec_wam.CrystalMod.items.ItemCrystal.CrystalType;
-import alec_wam.CrystalMod.items.ItemIngot.IngotType;
-import alec_wam.CrystalMod.tiles.cauldron.TileEntityCrystalCauldron.LiquidCrystalColor;
-import alec_wam.CrystalMod.tiles.machine.BasicMachineRecipe;
-import alec_wam.CrystalMod.tiles.machine.crafting.infuser.CrystalInfusionManager.InfusionMachineRecipe;
-import alec_wam.CrystalMod.util.ItemUtil;
-import alec_wam.CrystalMod.util.ModLogger;
 
 import com.google.common.collect.Lists;
 
+import alec_wam.CrystalMod.blocks.BlockCrystal.CrystalBlockType;
+import alec_wam.CrystalMod.blocks.BlockCrystalIngot.CrystalIngotBlockType;
+import alec_wam.CrystalMod.blocks.ModBlocks;
+import alec_wam.CrystalMod.blocks.glass.BlockCrystalGlass.GlassType;
+import alec_wam.CrystalMod.fluids.ModFluids;
+import alec_wam.CrystalMod.items.ItemCrystal.CrystalType;
+import alec_wam.CrystalMod.items.ItemIngot.IngotType;
+import alec_wam.CrystalMod.items.ModItems;
+import alec_wam.CrystalMod.util.ItemUtil;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.FurnaceRecipes;
-import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 

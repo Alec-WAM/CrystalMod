@@ -5,17 +5,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ResourceLocation;
-
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
@@ -31,6 +20,16 @@ import alec_wam.CrystalMod.tiles.machine.worksite.gui.elements.IWidgetSelection;
 import alec_wam.CrystalMod.tiles.machine.worksite.gui.elements.Listener;
 import alec_wam.CrystalMod.tiles.machine.worksite.gui.elements.Tooltip;
 import alec_wam.CrystalMod.util.client.RenderUtil;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ResourceLocation;
 
 public abstract class GuiContainerWorksiteBase extends GuiContainer implements IContainerGuiCallback, ITooltipRenderer, IWidgetSelection {
 
@@ -68,7 +67,7 @@ public abstract class GuiContainerWorksiteBase extends GuiContainer implements I
 			this.backgroundTexture = new ResourceLocation("crystalmod",
 					"textures/gui/machine/worksite/" + backgroundTextureName);
 		}
-		this.player = ((ContainerMessageBase) container).player;
+		this.player = container.player;
 	}
 
 	public GuiContainerWorksiteBase(ContainerMessageBase container) {
@@ -228,7 +227,7 @@ public abstract class GuiContainerWorksiteBase extends GuiContainer implements I
 			RenderUtil.renderQuarteredTexture(256, 256, 0, 0, 256, 240, width / 2 - xSize / 2, (height / 2) - (ySize / 2), xSize, ySize);
 		}
 		Minecraft.getMinecraft().renderEngine.bindTexture(GuiElement.widgetTexture1);
-		for (Slot slot : (List<Slot>) this.inventorySlots.inventorySlots) {
+		for (Slot slot : this.inventorySlots.inventorySlots) {
 			drawTexturedModalRect(slot.xPos - 1 + guiLeft,	slot.yPos - 1 + guiTop, 152, 120, 18, 18);
 		}
 	}
@@ -248,6 +247,7 @@ public abstract class GuiContainerWorksiteBase extends GuiContainer implements I
 		}
 	}
 
+	@Override
 	protected void drawGuiContainerForegroundLayer(int par1, int par2) {
 		GlStateManager.disableLighting();
 		GlStateManager.pushMatrix();

@@ -3,16 +3,15 @@ package alec_wam.CrystalMod.client.util.comp;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.common.collect.Lists;
+
+import alec_wam.CrystalMod.client.util.SpriteData;
+import alec_wam.CrystalMod.util.Lang;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import alec_wam.CrystalMod.client.util.SpriteData;
-import alec_wam.CrystalMod.util.Lang;
-
-import com.google.common.collect.Lists;
 
 public class GuiComponentBook extends BaseComponent implements IComponentListener {
 
@@ -228,7 +227,7 @@ public class GuiComponentBook extends BaseComponent implements IComponentListene
 			}
 		}
 		if (oldIndex != index) {
-			Minecraft mc = Minecraft.getMinecraft();
+			Minecraft.getMinecraft();
 		}
 		enablePages();
 	}

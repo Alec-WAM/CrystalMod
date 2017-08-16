@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import alec_wam.CrystalMod.api.estorage.ICraftingTask;
+import alec_wam.CrystalMod.tiles.ISynchronizedContainer;
+import alec_wam.CrystalMod.tiles.pipes.estorage.panel.TileEntityPanel;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
-import alec_wam.CrystalMod.api.estorage.ICraftingTask;
-import alec_wam.CrystalMod.tiles.ISynchronizedContainer;
-import alec_wam.CrystalMod.tiles.pipes.estorage.panel.TileEntityPanel;
 
 public class TileEntityPanelMonitor extends TileEntityPanel implements ISynchronizedContainer {
 	private List<ClientSideCraftingTask> tasks = new ArrayList<ClientSideCraftingTask>();

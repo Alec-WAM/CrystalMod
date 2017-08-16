@@ -3,7 +3,6 @@ package alec_wam.CrystalMod.integration.jei;
 import java.util.List;
 import java.util.Map;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import alec_wam.CrystalMod.network.CrystalModNetwork;
@@ -11,18 +10,15 @@ import alec_wam.CrystalMod.network.packets.PacketRecipeTransfer;
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.ContainerPatternEncoder;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import mezz.jei.api.IModRegistry;
+import mezz.jei.api.gui.IGuiIngredient;
 import mezz.jei.api.gui.IGuiItemStackGroup;
 import mezz.jei.api.gui.IRecipeLayout;
-import mezz.jei.api.recipe.VanillaRecipeCategoryUid;
 import mezz.jei.api.recipe.transfer.IRecipeTransferError;
 import mezz.jei.api.recipe.transfer.IRecipeTransferHandler;
-import mezz.jei.api.gui.IGuiIngredient;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.util.math.MathHelper;
 
 public class RecipeTransferEncoder implements IRecipeTransferHandler<ContainerPatternEncoder> {
 
@@ -47,7 +43,7 @@ public class RecipeTransferEncoder implements IRecipeTransferHandler<ContainerPa
 		      return registry.getJeiHelpers().recipeTransferHandlerHelper().createInternalError();
 	    }
 		
-		ContainerPatternEncoder encoderContainer = (ContainerPatternEncoder) container;
+		ContainerPatternEncoder encoderContainer = container;
 	    if(doTransfer) {
 	    	IGuiItemStackGroup itemStacks = recipeLayout.getItemStacks();
 

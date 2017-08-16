@@ -2,6 +2,20 @@ package alec_wam.CrystalMod.tiles.machine.enderbuffer;
 
 import java.util.UUID;
 
+import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.blocks.ICustomModel;
+import alec_wam.CrystalMod.items.ModItems;
+import alec_wam.CrystalMod.network.CrystalModNetwork;
+import alec_wam.CrystalMod.network.packets.PacketTileMessage;
+import alec_wam.CrystalMod.proxy.ClientProxy;
+import alec_wam.CrystalMod.tiles.machine.BlockMachine;
+import alec_wam.CrystalMod.tiles.machine.FakeTileState;
+import alec_wam.CrystalMod.util.BlockUtil;
+import alec_wam.CrystalMod.util.ItemNBTHelper;
+import alec_wam.CrystalMod.util.ItemStackTools;
+import alec_wam.CrystalMod.util.ItemUtil;
+import alec_wam.CrystalMod.util.UUIDUtils;
+import alec_wam.CrystalMod.util.tool.ToolUtil;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -21,20 +35,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import alec_wam.CrystalMod.CrystalMod;
-import alec_wam.CrystalMod.blocks.ICustomModel;
-import alec_wam.CrystalMod.items.ModItems;
-import alec_wam.CrystalMod.network.CrystalModNetwork;
-import alec_wam.CrystalMod.network.packets.PacketTileMessage;
-import alec_wam.CrystalMod.proxy.ClientProxy;
-import alec_wam.CrystalMod.tiles.machine.BlockMachine;
-import alec_wam.CrystalMod.tiles.machine.FakeTileState;
-import alec_wam.CrystalMod.util.BlockUtil;
-import alec_wam.CrystalMod.util.ItemNBTHelper;
-import alec_wam.CrystalMod.util.ItemStackTools;
-import alec_wam.CrystalMod.util.ItemUtil;
-import alec_wam.CrystalMod.util.UUIDUtils;
-import alec_wam.CrystalMod.util.tool.ToolUtil;
 
 public class BlockEnderBuffer extends BlockMachine implements ICustomModel
 {
@@ -92,7 +92,7 @@ public class BlockEnderBuffer extends BlockMachine implements ICustomModel
     @Override
     public IBlockState getExtendedState(final IBlockState state, final IBlockAccess world, final BlockPos pos) {
 		TileEntity tile = world.getTileEntity(pos);
-        return (IBlockState)new FakeTileState<TileEntityEnderBuffer>(state, world, pos, (tile !=null && tile instanceof TileEntityEnderBuffer) ? (TileEntityEnderBuffer)tile : null);
+        return new FakeTileState<TileEntityEnderBuffer>(state, world, pos, (tile !=null && tile instanceof TileEntityEnderBuffer) ? (TileEntityEnderBuffer)tile : null);
     }
     
 	@Override

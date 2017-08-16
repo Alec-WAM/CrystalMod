@@ -33,6 +33,7 @@ public class TileEntityPanelCrafting extends TileEntityPanel {
     private InventoryCrafting matrix = new InventoryCrafting(craftingContainer, 3, 3);
     private InventoryCraftResult result = new InventoryCraftResult();
 	
+	@Override
 	public void writeCustomNBT(NBTTagCompound nbt){
 		super.writeCustomNBT(nbt);
 		NBTTagCompound nbtMatrix = new NBTTagCompound();
@@ -43,6 +44,7 @@ public class TileEntityPanelCrafting extends TileEntityPanel {
 		nbt.setTag("InvResult", nbtResult);
 	}
 	
+	@Override
 	public void readCustomNBT(NBTTagCompound nbt){
 		super.readCustomNBT(nbt);
 		if(nbt.hasKey("InvMatrix"))ItemUtil.readInventoryFromNBT(matrix, nbt.getCompoundTag("InvMatrix"));

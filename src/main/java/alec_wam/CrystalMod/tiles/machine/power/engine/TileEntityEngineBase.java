@@ -42,6 +42,7 @@ public abstract class TileEntityEngineBase extends TileEntityMod implements IMes
 	
 	public abstract CEnergyStorage createStorage(int multi);
 	
+	@Override
 	public void writeCustomNBT(NBTTagCompound nbt){
 		super.writeCustomNBT(nbt);
 	    nbt.setInteger("Fuel", fuel.getValue());
@@ -51,6 +52,7 @@ public abstract class TileEntityEngineBase extends TileEntityMod implements IMes
 	    this.energyStorage.writeToNBT(nbt);
 	}
 	
+	@Override
 	public void readCustomNBT(NBTTagCompound nbt)
 	{
 	    super.readCustomNBT(nbt);
@@ -63,6 +65,7 @@ public abstract class TileEntityEngineBase extends TileEntityMod implements IMes
 	
 	protected float lastSyncPowerStored = -1;
 	
+	@Override
 	public void update(){
 		super.update();
 		if(!getWorld().isRemote){
@@ -148,14 +151,17 @@ public abstract class TileEntityEngineBase extends TileEntityMod implements IMes
 		return scale * (this.maxFuel.getValue() - this.fuel.getValue()) / this.maxFuel.getValue();
 	}
 	
+	@Override
 	public void setFacing(int facing){
 		this.facing = facing;
 	}
 	
+	@Override
 	public int getFacing(){
 		return facing;
 	}
 	
+	@Override
 	public boolean isActive(){
 		return active.getValue();
 	}

@@ -7,21 +7,15 @@ import alec_wam.CrystalMod.api.tools.IBatUpgrade;
 import alec_wam.CrystalMod.api.tools.UpgradeData;
 import alec_wam.CrystalMod.client.model.dynamic.DynamicBaseModel;
 import alec_wam.CrystalMod.client.model.dynamic.ICustomItemRenderer;
-import alec_wam.CrystalMod.util.ModLogger;
 import alec_wam.CrystalMod.util.client.RenderUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.client.renderer.texture.TextureUtil;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.model.TRSRTransformation;
 
 public class ItemBatRenderer implements ICustomItemRenderer {
@@ -118,14 +112,14 @@ public class ItemBatRenderer implements ICustomItemRenderer {
         GlStateManager.matrixMode(5890);
         GlStateManager.pushMatrix();
         GlStateManager.scale(8.0F, 8.0F, 8.0F);
-        float f = (float)(Minecraft.getSystemTime() % 3000L) / 3000.0F / 8.0F;
+        float f = Minecraft.getSystemTime() % 3000L / 3000.0F / 8.0F;
         GlStateManager.translate(f, 0.0F, 0.0F);
         GlStateManager.rotate(-50.0F, 0.0F, 0.0F, 1.0F);
         renderBat(item, false);
         GlStateManager.popMatrix();
         GlStateManager.pushMatrix();
         GlStateManager.scale(8.0F, 8.0F, 8.0F);
-        float f1 = (float)(Minecraft.getSystemTime() % 4873L) / 4873.0F / 8.0F;
+        float f1 = Minecraft.getSystemTime() % 4873L / 4873.0F / 8.0F;
         GlStateManager.translate(-f1, 0.0F, 0.0F);
         GlStateManager.rotate(10.0F, 0.0F, 0.0F, 1.0F);
         renderBat(item, false);
@@ -244,11 +238,6 @@ public class ItemBatRenderer implements ICustomItemRenderer {
 			
 			
 			
-			double minU = 0;//icon.getMinU();
-			double maxU = 1;//icon.getMaxU();
-			double minV = 0;//icon.getMinV();
-			double maxV = 1;//icon.getMaxU();
-			
 			RenderUtil.startDrawing(buffer);
 			RenderUtil.addVertexWithUV(buffer, min, minY, min, icon.getMinU(), icon.getMinV());
 			RenderUtil.addVertexWithUV(buffer, minTop, maxY, minTop, icon.getMinU(), icon.getMaxV());
@@ -295,10 +284,10 @@ public class ItemBatRenderer implements ICustomItemRenderer {
 			RenderUtil.addVertexWithUV(buffer, min, minY, max, icon.getMaxU(), icon.getMinV());
 			tess.draw();
 			
-			minU = icon.getMinU();
-			maxU = icon.getMaxU();
-			minV = icon.getMinV();
-			maxV = icon.getMaxU();
+			icon.getMinU();
+			icon.getMaxU();
+			icon.getMinV();
+			icon.getMaxU();
 			
 			RenderUtil.startDrawing(buffer);
 			RenderUtil.addVertexWithUV(buffer, minTop, maxY, maxTop, icon.getMinU(), icon.getMinV());

@@ -26,9 +26,9 @@ public class TileEntityPlayerCubePortalRenderer<T extends TileEntityPlayerCubePo
         	if(tile.getCube() !=null){
         		BlockPos pos = tile.getCube().minBlock;
         		if(pos.getX() > 0)
-        		GlStateManager.translate((float) -pos.getX()/16, (float) 0, (float)0);
+        		GlStateManager.translate((float) -pos.getX()/16, 0, 0);
         		if(pos.getZ() > 0)
-            	GlStateManager.translate((float) 0, (float) 0, (float)-pos.getZ()/16);
+            	GlStateManager.translate(0, 0, (float)-pos.getZ()/16);
         	}
         	
         	GlStateManager.scale(1f/16, 1f/16, 1f/16);
@@ -103,7 +103,8 @@ public class TileEntityPlayerCubePortalRenderer<T extends TileEntityPlayerCubePo
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);*/
     }
 
-    public void renderTileEntityAt(TileEntityPlayerCubePortal tileentity, double x, double y, double z, float partialTick, int breakStage)
+    @Override
+	public void renderTileEntityAt(TileEntityPlayerCubePortal tileentity, double x, double y, double z, float partialTick, int breakStage)
     {
         render(tileentity, x, y, z, partialTick, breakStage);
     }

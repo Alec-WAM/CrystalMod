@@ -2,16 +2,16 @@ package alec_wam.CrystalMod.items.game;
 
 import java.awt.Color;
 
+import alec_wam.CrystalMod.client.model.dynamic.DynamicBaseModel;
+import alec_wam.CrystalMod.client.model.dynamic.ICustomItemRenderer;
+import alec_wam.CrystalMod.util.ItemNBTHelper;
+import alec_wam.CrystalMod.world.game.tag.TagManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.model.TRSRTransformation;
-import alec_wam.CrystalMod.client.model.dynamic.DynamicBaseModel;
-import alec_wam.CrystalMod.client.model.dynamic.ICustomItemRenderer;
-import alec_wam.CrystalMod.util.ItemNBTHelper;
-import alec_wam.CrystalMod.world.game.tag.TagManager;
 
 public class ItemRenderFlag implements ICustomItemRenderer {
 

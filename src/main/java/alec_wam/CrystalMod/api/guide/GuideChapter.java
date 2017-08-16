@@ -18,7 +18,6 @@ import net.minecraftforge.oredict.OreDictionary;
 public class GuideChapter {
 
 	private final String unlocalizedName;
-	private Object displayObject;
 	private final GuidePage[] pages;
 	private Map<String, List<?>> lookUpData = Maps.newHashMap();
 	private GuideIndex index;
@@ -69,8 +68,6 @@ public class GuideChapter {
 	}
 
 	public GuideChapter setDisplayObject(Object displayObject) {
-		this.displayObject = displayObject;
-		
 		if(displayObject instanceof ItemStack){
 			stacks = new ItemStack[]{ItemStackTools.getEmptyStack()};
 			stacks[0] = ItemStackTools.safeCopy(((ItemStack)displayObject));

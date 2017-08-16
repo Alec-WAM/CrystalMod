@@ -1,10 +1,10 @@
 package alec_wam.CrystalMod.tiles.pipes.estorage.panel;
 
-import net.minecraft.util.math.BlockPos;
 import alec_wam.CrystalMod.api.estorage.IPanelSource;
 import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetwork;
 import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetworkClient.SortType;
 import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetworkClient.ViewType;
+import net.minecraft.util.math.BlockPos;
 
 public class PanelSourceNormal implements IPanelSource {
 

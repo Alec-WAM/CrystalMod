@@ -14,6 +14,7 @@ public class TileShieldRack extends TileEntityModStatic implements IFacingTile {
 	private ItemStack shieldStack = ItemStackTools.getEmptyStack();
 	private EnumFacing facing = EnumFacing.NORTH;
 	
+	@Override
 	public void writeCustomNBT(NBTTagCompound nbt){
 		super.writeCustomNBT(nbt);
 		if(ItemStackTools.isValid(leftStack))nbt.setTag("LeftStack", leftStack.writeToNBT(new NBTTagCompound()));
@@ -22,6 +23,7 @@ public class TileShieldRack extends TileEntityModStatic implements IFacingTile {
 		nbt.setInteger("Facing", getFacing());
 	}
 	
+	@Override
 	public void readCustomNBT(NBTTagCompound nbt){
 		super.readCustomNBT(nbt);
 		if(nbt.hasKey("LeftStack")){

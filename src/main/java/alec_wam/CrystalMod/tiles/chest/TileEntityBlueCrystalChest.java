@@ -22,7 +22,6 @@ public class TileEntityBlueCrystalChest extends TileEntityInventory
     private CrystalChestType type;
     private byte facing;
     private boolean inventoryTouched;
-    private boolean hadStuff;
     private String customName;
 
     public TileEntityBlueCrystalChest()

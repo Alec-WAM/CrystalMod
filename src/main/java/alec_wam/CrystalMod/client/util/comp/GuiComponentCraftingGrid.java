@@ -2,8 +2,17 @@ package alec_wam.CrystalMod.client.util.comp;
 
 import java.util.Iterator;
 import java.util.List;
-import java.util.Random;
 
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
+
+import com.google.common.base.Objects;
+import com.google.common.collect.Lists;
+
+import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.client.util.SpriteData;
+import alec_wam.CrystalMod.util.ModLogger;
+import alec_wam.CrystalMod.util.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.GlStateManager;
@@ -13,17 +22,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.oredict.OreDictionary;
-
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
-
-import alec_wam.CrystalMod.CrystalMod;
-import alec_wam.CrystalMod.client.util.SpriteData;
-import alec_wam.CrystalMod.util.ModLogger;
-import alec_wam.CrystalMod.util.Util;
-
-import com.google.common.base.Objects;
-import com.google.common.collect.Lists;
 
 public class GuiComponentCraftingGrid extends GuiComponentSprite {
 
@@ -75,6 +73,7 @@ public class GuiComponentCraftingGrid extends GuiComponentSprite {
 	}
 
 	public int tick = (int)System.currentTimeMillis();
+	@Override
 	public void updateComp(){
 		super.updateComp();
 		tick++;

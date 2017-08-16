@@ -1,10 +1,9 @@
 package alec_wam.CrystalMod.items.guide.old;
 
-import net.minecraft.item.ItemStack;
 import alec_wam.CrystalMod.client.util.comp.BaseComponent;
 import alec_wam.CrystalMod.client.util.comp.GuiComponentLabel;
 import alec_wam.CrystalMod.client.util.comp.book.BlankPage;
-import alec_wam.CrystalMod.client.util.comp.book.SectionPage;
+import net.minecraft.item.ItemStack;
 
 
 public class GuiCrystalGuide extends GuiGuideBase {
@@ -15,6 +14,7 @@ public class GuiCrystalGuide extends GuiGuideBase {
 		super(hand);
 	}
 	
+	@Override
 	public void addCompsToFront(BlankPage contentsPage){
 		GuiComponentLabel lblBlocks = new GuiComponentLabel(27, 90, "Blocks");
 		lblBlocks.addListener(this);
@@ -32,6 +32,7 @@ public class GuiCrystalGuide extends GuiGuideBase {
 		contentsPage.addComponent(lblWorkbench);
 	}
 	
+	@Override
 	public void addBookPages(){
 		/*blocksIndex = book.getNumberOfPages();
 		

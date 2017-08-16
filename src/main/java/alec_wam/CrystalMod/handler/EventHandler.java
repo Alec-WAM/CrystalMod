@@ -2,7 +2,6 @@ package alec_wam.CrystalMod.handler;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -12,8 +11,6 @@ import java.util.Random;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonSerializationContext;
 
 import alec_wam.CrystalMod.Config;
 import alec_wam.CrystalMod.CrystalMod;
@@ -31,10 +28,9 @@ import alec_wam.CrystalMod.entities.minions.warrior.EntityMinionWarrior;
 import alec_wam.CrystalMod.integration.baubles.BaublesIntegration;
 import alec_wam.CrystalMod.integration.baubles.ItemBaubleWings;
 import alec_wam.CrystalMod.items.ItemCursedBone.BoneType;
-import alec_wam.CrystalMod.items.ItemDragonWings;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.items.enchancements.ModEnhancements;
-import alec_wam.CrystalMod.items.ItemCursedBone.BoneType;
+import alec_wam.CrystalMod.items.tools.ItemEnhancementKnowledge;
 import alec_wam.CrystalMod.items.tools.backpack.BackpackUtil;
 import alec_wam.CrystalMod.items.tools.backpack.IBackpack;
 import alec_wam.CrystalMod.items.tools.backpack.types.InventoryBackpack;
@@ -42,7 +38,6 @@ import alec_wam.CrystalMod.items.tools.backpack.upgrade.InventoryBackpackUpgrade
 import alec_wam.CrystalMod.items.tools.backpack.upgrade.ItemBackpackUpgrade.BackpackUpgrade;
 import alec_wam.CrystalMod.items.tools.bat.BatHelper;
 import alec_wam.CrystalMod.items.tools.bat.ModBats;
-import alec_wam.CrystalMod.items.tools.projectiles.DamageSourceDarkarang;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.packets.PacketEntityMessage;
 import alec_wam.CrystalMod.tiles.endertorch.TileEnderTorch;
@@ -61,10 +56,10 @@ import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.Lang;
-import alec_wam.CrystalMod.util.ModLogger;
 import alec_wam.CrystalMod.util.PlayerUtil;
 import alec_wam.CrystalMod.util.TimeUtil;
 import alec_wam.CrystalMod.util.Util;
+import alec_wam.CrystalMod.util.loot.LootHelper;
 import alec_wam.CrystalMod.world.ModDimensions;
 import baubles.api.BaubleType;
 import net.minecraft.block.Block;
@@ -103,13 +98,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootEntry;
-import net.minecraft.world.storage.loot.LootEntryItem;
 import net.minecraft.world.storage.loot.LootPool;
-import net.minecraft.world.storage.loot.LootTableList;
-import net.minecraft.world.storage.loot.conditions.LootCondition;
 import net.minecraft.world.storage.loot.functions.LootFunction;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
@@ -128,93 +119,18 @@ import net.minecraftforge.event.entity.player.ArrowNockEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.entity.player.PlayerDropsEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent.BreakSpeed;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.EntityInteract;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickBlock;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.BlockEvent.CreateFluidSourceEvent;
 import net.minecraftforge.event.world.ExplosionEvent;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.Event.Result;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
-import net.minecraftforge.fml.relauncher.Side;
 
 public class EventHandler {
-
-	@SubscribeEvent
-    public void coverWrap(final PlayerInteractEvent event){
-		/*BlockPos pos = event.pos;
-		EnumFacing face = event.face;
-		Vec3 hitVec = null;
-		if(pos == null){
-			if(event.entityPlayer !=null){
-				float f = event.entityPlayer.rotationPitch;
-		        float f1 = event.entityPlayer.rotationYaw;
-		        double d0 = event.entityPlayer.posX;
-		        double d1 = event.entityPlayer.posY + (double)event.entityPlayer.getEyeHeight();
-		        double d2 = event.entityPlayer.posZ;
-		        Vec3 vec3 = new Vec3(d0, d1, d2);
-		        float f2 = MathHelper.cos(-f1 * 0.017453292F - (float)Math.PI);
-		        float f3 = MathHelper.sin(-f1 * 0.017453292F - (float)Math.PI);
-		        float f4 = -MathHelper.cos(-f * 0.017453292F);
-		        float f5 = MathHelper.sin(-f * 0.017453292F);
-		        float f6 = f3 * f4;
-		        float f7 = f2 * f4;
-		        double d3 = 5.0D;
-		        if (event.entityPlayer instanceof net.minecraft.entity.player.EntityPlayerMP)
-		        {
-		            d3 = ((net.minecraft.entity.player.EntityPlayerMP)event.entityPlayer).theItemInWorldManager.getBlockReachDistance();
-		        }
-		        Vec3 vec31 = vec3.addVector((double)f6 * d3, (double)f5 * d3, (double)f7 * d3);
-		        if(event.getWorld() !=null){
-		        	MovingObjectPosition mop = event.getWorld().rayTraceBlocks(vec3, vec31, false, true, false);
-		        	if(mop !=null){
-		        		pos = mop.getBlockPos();
-		        		if(face == null){
-		        			face = mop.sideHit;
-		        		}
-		        		if(hitVec == null){
-		        			hitVec = mop.hitVec;
-		        		}
-		        	}
-		        }
-			}
-			if(pos == null){
-				return;
-			}
-		}
-		World world = event.getWorld();
-		TileEntity tile = world.getTileEntity(pos);
-		if(tile !=null && tile instanceof TileEntityPipe){
-			TileEntityPipe pipe = (TileEntityPipe)tile;
-			CoverData data = pipe.getCoverData(face);
-			if(data !=null && data.getBlockState() !=null){
-				if (event.entityPlayer.getCurrentEquippedItem() != null && !(event.useItem != net.minecraftforge.fml.common.eventhandler.Event.Result.ALLOW) && event.useItem != net.minecraftforge.fml.common.eventhandler.Event.Result.DENY)
-	            {
-					ItemStack stack = event.entityPlayer.getCurrentEquippedItem();
-	                int meta = stack.getMetadata();
-	                int size = stack.stackSize;
-	                boolean result = stack.onItemUse(event.entityPlayer, new PipeWorldWrapper(world, pos, face), pos, face, (float)hitVec.xCoord, (float)hitVec.yCoord, (float)hitVec.zCoord);
-	                if (event.entityPlayer.capabilities.isCreativeMode)
-	                {
-	                    stack.setItemDamage(meta);
-	                    stack.stackSize = size;
-	                }
-	                if (stack.stackSize <= 0 && event.entityPlayer instanceof EntityPlayerMP) net.minecraftforge.event.ForgeEventFactory.onPlayerDestroyItem((EntityPlayerMP)event.entityPlayer, stack);
-	            }
-				event.setCanceled(true);
-			}
-		}*/
-	}
-	
-	@SubscribeEvent
-	public void onBreakSpeed(BreakSpeed event) {
-	}
 	
 	@SubscribeEvent
 	public void explosionDetonate(ExplosionEvent.Detonate event)
@@ -411,29 +327,12 @@ public class EventHandler {
     	}
     }
     
-    @SubscribeEvent
-    public void postTick(TickEvent.WorldTickEvent event){
-    	/*if(event.phase == Phase.END && event.side == Side.SERVER){
-    		if(!(event.world instanceof WorldServer))return;
-    		WorldServer wldServer = (WorldServer)event.world;
-    		//We are on the server
-    		for(Entity entity : dirtyEntities){
-    			if(EntityUtil.hasCustomData(entity)){
-    				NBTTagCompound nbt = EntityUtil.getCustomEntityData(entity);
-    				for(EntityPlayerMP playerMP : wldServer.playerEntities){
-
-    				}
-    			}
-    		}
-    	}*/
-    }
-    
     public boolean canPlayerSee(Entity entity, EntityPlayerMP playerMP)
     {
-        double d0 = playerMP.posX - (double)entity.posX / 4096.0D;
-        double d1 = playerMP.posZ - (double)entity.posZ / 4096.0D;
+        double d0 = playerMP.posX - entity.posX / 4096.0D;
+        double d1 = playerMP.posZ - entity.posZ / 4096.0D;
         int i = 64;
-        return d0 >= (double)(-i) && d0 <= (double)i && d1 >= (double)(-i) && d1 <= (double)i && entity.isSpectatedByPlayer(playerMP);
+        return d0 >= (-i) && d0 <= i && d1 >= (-i) && d1 <= i && entity.isSpectatedByPlayer(playerMP);
     }
     
     @SubscribeEvent
@@ -774,6 +673,7 @@ public class EventHandler {
  		}
  	}
 	
+	@SuppressWarnings("deprecation")
 	@SubscribeEvent
     public void addEntityCapabilities(AttachCapabilitiesEvent.Entity event) {
         if(event.getEntity() instanceof EntityPlayer) {
@@ -839,17 +739,22 @@ public class EventHandler {
 				boolean redstoneCore = player.inventory.hasItemStack(new ItemStack(ModBlocks.redstoneCore));
 				
 				if(redstoneCore){
-					if(ePlayer.getRadiation() < TimeUtil.MINUTE * 4){
-						ePlayer.setRadiation(ePlayer.getRadiation()+1);
-					} 
-					if(ePlayer.getRadiation() >= (TimeUtil.MINUTE * 4) - 600){
-						if(player.isEntityAlive()){
-							player.attackEntityFrom(new DamageSource("crystalmod.radiation").setDamageBypassesArmor(), 5.0F);
-						} else {
-							ePlayer.setRadiation(0);
+					if(ePlayer.redstoneCoreDelay < 30 * TimeUtil.SECOND){
+						ePlayer.redstoneCoreDelay++;
+					} else {
+						if(ePlayer.getRadiation() < TimeUtil.MINUTE * 4){
+							ePlayer.setRadiation(ePlayer.getRadiation()+1);
+						} 
+						if(ePlayer.getRadiation() >= (TimeUtil.MINUTE * 4) - 600){
+							if(player.isEntityAlive()){
+								player.attackEntityFrom(new DamageSource("crystalmod.radiation").setDamageBypassesArmor(), 5.0F);
+							} else {
+								ePlayer.setRadiation(0);
+							}
 						}
 					}
 				} else {
+					if(ePlayer.redstoneCoreDelay > 0)ePlayer.redstoneCoreDelay = 0;
 					if(ePlayer.getRadiation() > 0){
 						ePlayer.setRadiation(ePlayer.getRadiation()-1);
 					}
@@ -1076,34 +981,24 @@ public class EventHandler {
     	}
     }
     
+    private static LootEntry customLootEnhancementBook;
+    static{
+    	customLootEnhancementBook = LootHelper.createLootEntryItem(ModItems.enhancementKnowledge, Config.enhancementBookRarity, 0, new LootFunction[]{
+    			new LootFunction(null){
+					@Override
+					public ItemStack apply(ItemStack stack, Random rand, LootContext context) {
+						return ItemEnhancementKnowledge.createRandomBook(rand);
+					}    				
+    			}
+    	});
+    }
     @SubscribeEvent
     public void onLootLoad(LootTableLoadEvent event) {
-        if (event.getName().equals(LootTableList.CHESTS_ABANDONED_MINESHAFT) ||
-                event.getName().equals(LootTableList.CHESTS_IGLOO_CHEST) ||
-                event.getName().equals(LootTableList.CHESTS_DESERT_PYRAMID) ||
-                event.getName().equals(LootTableList.CHESTS_JUNGLE_TEMPLE) ||
-                event.getName().equals(LootTableList.CHESTS_NETHER_BRIDGE) ||
-                event.getName().equals(LootTableList.CHESTS_SIMPLE_DUNGEON) ||
-                event.getName().equals(LootTableList.CHESTS_VILLAGE_BLACKSMITH)) {
-            LootPool main = event.getTable().getPool("main");
-            // Safety, check if the main lootpool is still present
-            /*if (main != null) {
-                main.addEntry(new LootEntry(Config.enhancementBookRarity, 0, new LootCondition[0], CrystalMod.resource("enhancementbook")){
-
-					@Override
-					public void addLoot(Collection<ItemStack> stacks, Random rand, LootContext context) {
-						// TODO Auto-generated method stub
-						
-					}
-
-					@Override
-					protected void serialize(JsonObject json, JsonSerializationContext context) {
-						// TODO Auto-generated method stub
-						
-					}
-                	
-                });
-            }*/
+        if (Config.enhancementBookLootLocationList.contains(event.getName())) {
+        	String lootPoolId = LootHelper.VANILLA_LOOT_POOL_ID;        	
+            LootHelper.createPoolIfNotExists(event.getTable(), lootPoolId);
+            final LootPool lootPool = event.getTable().getPool(lootPoolId);
+            lootPool.addEntry(customLootEnhancementBook);
         }
     }
     

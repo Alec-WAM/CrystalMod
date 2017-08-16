@@ -1,36 +1,21 @@
 package alec_wam.CrystalMod.integration.jei.machine;
 
-import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nonnull;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
+import com.google.common.collect.Lists;
+
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.integration.jei.RecipeHandler;
 import alec_wam.CrystalMod.tiles.machine.crafting.BlockCrystalMachine.MachineType;
 import alec_wam.CrystalMod.tiles.machine.crafting.infuser.ContainerCrystalInfuser;
 import alec_wam.CrystalMod.tiles.machine.crafting.infuser.CrystalInfusionManager;
-import alec_wam.CrystalMod.tiles.machine.crafting.infuser.GuiCrystalInfuser;
 import alec_wam.CrystalMod.tiles.machine.crafting.infuser.CrystalInfusionManager.InfusionMachineRecipe;
-import alec_wam.CrystalMod.tiles.machine.crafting.liquidizer.ContainerLiquidizer;
-import alec_wam.CrystalMod.tiles.machine.crafting.liquidizer.GuiLiquidizer;
-import alec_wam.CrystalMod.tiles.machine.crafting.liquidizer.LiquidizerRecipeManager;
-import alec_wam.CrystalMod.tiles.machine.crafting.liquidizer.TileEntityLiquidizer;
-import alec_wam.CrystalMod.tiles.machine.crafting.liquidizer.LiquidizerRecipeManager.LiquidizerRecipe;
-import alec_wam.CrystalMod.tiles.machine.crafting.press.GuiPress;
+import alec_wam.CrystalMod.tiles.machine.crafting.infuser.GuiCrystalInfuser;
 import alec_wam.CrystalMod.util.Lang;
-import alec_wam.CrystalMod.util.client.RenderUtil;
-
-import com.google.common.collect.Lists;
-
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.IJeiHelpers;
 import mezz.jei.api.IModRegistry;
@@ -44,7 +29,12 @@ import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.BlankRecipeCategory;
 import mezz.jei.api.recipe.BlankRecipeWrapper;
 import mezz.jei.api.recipe.IStackHelper;
-import mezz.jei.api.recipe.wrapper.IShapedCraftingRecipeWrapper;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
 
 public class InfuserRecipeCategory extends BlankRecipeCategory<InfuserRecipeCategory.InfuserJEIRecipe>  {
 
@@ -138,9 +128,7 @@ public class InfuserRecipeCategory extends BlankRecipeCategory<InfuserRecipeCate
 	@Nonnull
 	protected final IDrawableAnimated arrow2;
 	  
-	private InfuserJEIRecipe currentRecipe;
-
-  	public InfuserRecipeCategory(IGuiHelper guiHelper) {
+	public InfuserRecipeCategory(IGuiHelper guiHelper) {
 	    ResourceLocation backgroundLocation = new ResourceLocation("crystalmod", "textures/gui/machine/infuser.png");
 	    background = guiHelper.createDrawable(backgroundLocation, xOff, yOff, 125, 50);
 
@@ -176,7 +164,6 @@ public class InfuserRecipeCategory extends BlankRecipeCategory<InfuserRecipeCate
 
 	@Override
 	public void setRecipe(IRecipeLayout recipeLayout, InfuserJEIRecipe recipeWrapper, IIngredients ingredients) {
-		currentRecipe = recipeWrapper;
 		IGuiItemStackGroup guiItemStacks = recipeLayout.getItemStacks();
 
 		guiItemStacks.init(0, true, 132 - xOff-1, 34 - yOff-1);

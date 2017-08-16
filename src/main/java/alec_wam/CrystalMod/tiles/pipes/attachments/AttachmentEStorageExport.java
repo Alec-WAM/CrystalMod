@@ -2,35 +2,12 @@ package alec_wam.CrystalMod.tiles.pipes.attachments;
 
 import java.util.List;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.block.model.BlockFaceUV;
-import net.minecraft.client.renderer.block.model.BlockPartFace;
-import net.minecraft.client.renderer.block.model.BlockPartRotation;
-import net.minecraft.client.renderer.block.model.FaceBakery;
-import net.minecraft.client.renderer.block.model.ModelRotation;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.EnumFacing;
-import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.items.IItemHandler;
-
 import org.lwjgl.util.vector.Vector3f;
+
+import com.google.common.collect.Lists;
 
 import alec_wam.CrystalMod.tiles.BasicItemHandler;
 import alec_wam.CrystalMod.tiles.IItemValidator;
-import alec_wam.CrystalMod.tiles.pipes.ModelPipe;
 import alec_wam.CrystalMod.tiles.pipes.ModelPipeBaked;
 import alec_wam.CrystalMod.tiles.pipes.TileEntityPipe;
 import alec_wam.CrystalMod.tiles.pipes.TileEntityPipe.RedstoneMode;
@@ -43,8 +20,27 @@ import alec_wam.CrystalMod.util.FluidUtil;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.client.RenderUtil;
-
-import com.google.common.collect.Lists;
+import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.renderer.block.model.BlockFaceUV;
+import net.minecraft.client.renderer.block.model.BlockPartFace;
+import net.minecraft.client.renderer.block.model.BlockPartRotation;
+import net.minecraft.client.renderer.block.model.FaceBakery;
+import net.minecraft.client.renderer.block.model.ModelRotation;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.items.IItemHandler;
 
 public class AttachmentEStorageExport extends AttachmentData {
 
@@ -58,15 +54,18 @@ public class AttachmentEStorageExport extends AttachmentData {
 		return "estorage.export";
 	}
 
+	@Override
 	@SideOnly(Side.CLIENT)
 	public Object getGui(EntityPlayer player, TileEntityPipeEStorage pipe, EnumFacing dir){
 		return new GuiAttachmentExport(player, pipe, dir);
 	}
 	
+	@Override
 	public Object getContainer(EntityPlayer player, TileEntityPipeEStorage pipe, EnumFacing dir){
 		return new ContainerAttachmentExport(player, pipe, dir);
 	}
 	
+	@Override
 	public void writeToNBT(NBTTagCompound nbt){
 		super.writeToNBT(nbt);
 		NBTTagList tagList = new NBTTagList();
@@ -88,6 +87,7 @@ public class AttachmentEStorageExport extends AttachmentData {
         nbt.setInteger("IOType", ioType.ordinal());
 	}
 	
+	@Override
 	public void loadFromNBT(NBTTagCompound nbt){
 		super.loadFromNBT(nbt);
     	NBTTagList tagList = nbt.getTagList("Inventory", Constants.NBT.TAG_COMPOUND);
@@ -111,6 +111,7 @@ public class AttachmentEStorageExport extends AttachmentData {
         }
     }
 	
+	@Override
 	public void update(TileEntityPipe pipe, EnumFacing face){
 		if(pipe == null || !(pipe instanceof TileEntityPipeEStorage))return;
 		TileEntityPipeEStorage epipe = (TileEntityPipeEStorage) pipe;
@@ -316,6 +317,7 @@ public class AttachmentEStorageExport extends AttachmentData {
 		return list;
 	}
 	
+	@Override
 	public boolean isPipeValid(TileEntityPipe pipe, EnumFacing side, ItemStack stack){
 		return pipe instanceof TileEntityPipeEStorage;
 	}

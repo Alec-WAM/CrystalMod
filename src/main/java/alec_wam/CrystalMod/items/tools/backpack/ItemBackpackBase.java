@@ -5,16 +5,13 @@ import java.util.UUID;
 
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.ICustomModel;
-import alec_wam.CrystalMod.client.model.dynamic.ItemRenderDragonWings;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.proxy.ClientProxy;
-import alec_wam.CrystalMod.util.Lang;
 import alec_wam.CrystalMod.util.ProfileUtil;
 import alec_wam.CrystalMod.util.UUIDUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBucket;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
@@ -40,6 +37,7 @@ public class ItemBackpackBase extends Item implements ICustomModel {
 		return backpack;
 	}
 	
+	@Override
 	@SideOnly(Side.CLIENT)
 	public void initModel(){
 		backpack.initModel(this);

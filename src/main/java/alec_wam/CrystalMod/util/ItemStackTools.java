@@ -1,14 +1,10 @@
 package alec_wam.CrystalMod.util;
 
-import net.minecraft.init.Blocks;
-import net.minecraft.inventory.ItemStackHelper;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.items.ItemHandlerHelper;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 
 //https://github.com/McJty/compatlayer/blob/1.10/src/main/java/mcjty/lib/tools/ItemStackTools.java
 public class ItemStackTools {

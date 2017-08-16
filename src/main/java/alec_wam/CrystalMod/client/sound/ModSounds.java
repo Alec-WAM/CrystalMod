@@ -69,12 +69,8 @@ public class ModSounds {
     private static SoundEvent getRegisteredSoundEvent(String id) {
         SoundEvent soundevent = new SoundEvent(new ResourceLocation(id));
 
-        if (soundevent == null) {
-            throw new IllegalStateException("Invalid Sound requested: " + id);
-        } else {
-            SOUND_EVENTS.put(id, soundevent);
-            return soundevent;
-        }
+        SOUND_EVENTS.put(id, soundevent);
+		return soundevent;
     }
 
     public static SoundEvent getSound(String id) {

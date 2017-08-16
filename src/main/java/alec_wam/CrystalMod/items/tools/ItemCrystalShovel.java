@@ -34,6 +34,7 @@ public class ItemCrystalShovel extends ItemSpade implements ICustomModel {
 		ModItems.registerItem(this, name);
 	}
 	
+	@Override
 	@SideOnly(Side.CLIENT)
     public void initModel() {
 		final Map<String, ModelResourceLocation> models = Maps.newHashMap();
@@ -51,6 +52,7 @@ public class ItemCrystalShovel extends ItemSpade implements ICustomModel {
         });
     }
 	
+	@Override
 	public String getUnlocalizedName(ItemStack stack)
     {
         String color = ItemNBTHelper.getString(stack, "Color", "");

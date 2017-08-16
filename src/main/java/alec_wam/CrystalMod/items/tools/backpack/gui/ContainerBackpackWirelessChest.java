@@ -1,14 +1,12 @@
 package alec_wam.CrystalMod.items.tools.backpack.gui;
 
 import alec_wam.CrystalMod.items.tools.backpack.BackpackUtil;
-import alec_wam.CrystalMod.items.tools.backpack.types.BackpackWireless;
 import alec_wam.CrystalMod.items.tools.backpack.types.InventoryBackpack;
 import alec_wam.CrystalMod.tiles.chest.CrystalChestType;
 import alec_wam.CrystalMod.tiles.chest.wireless.WirelessChestManager.WirelessInventory;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.UUIDUtils;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
@@ -45,7 +43,7 @@ public class ContainerBackpackWirelessChest extends Container {
     public ItemStack transferStackInSlot(EntityPlayer p, int i)
     {
         ItemStack itemstack = ItemStackTools.getEmptyStack();
-        Slot slot = (Slot) inventorySlots.get(i);
+        Slot slot = inventorySlots.get(i);
         if (slot != null && slot.getHasStack())
         {
             ItemStack itemstack1 = slot.getStack();

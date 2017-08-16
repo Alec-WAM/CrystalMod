@@ -2,22 +2,6 @@ package alec_wam.CrystalMod.tiles.pipes.item;
 
 import java.awt.Color;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
-
-import org.lwjgl.input.Keyboard;
-
-import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.client.util.GuiButtonIcon;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.tiles.pipes.ConnectionMode;
@@ -28,7 +12,18 @@ import alec_wam.CrystalMod.tiles.pipes.item.filters.ItemPipeFilter.FilterType;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.Lang;
-import alec_wam.CrystalMod.util.ModLogger;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextFormatting;
 
 public class GuiItemPipe extends GuiContainer {
 
@@ -61,6 +56,7 @@ public class GuiItemPipe extends GuiContainer {
 		refreshButtons();
 	}
 	
+	@Override
 	public void actionPerformed(GuiButton button){
 		if(button.id == 0){
 			pipe.setConnectionMode(dir, !GuiScreen.isShiftKeyDown() ? pipe.getNextConnectionMode(dir) : pipe.getPreviousConnectionMode(dir));
@@ -299,6 +295,7 @@ public class GuiItemPipe extends GuiContainer {
 		}
 	}
 
+	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY)
     {
 		int sx = (width - xSize) / 2;

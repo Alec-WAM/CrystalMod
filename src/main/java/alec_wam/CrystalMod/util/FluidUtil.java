@@ -121,7 +121,6 @@ public class FluidUtil {
     	return getFluidHandler(te, face);
 	}
 	
-	@SuppressWarnings("deprecation")
 	public static IFluidHandler getFluidHandler(TileEntity tile, EnumFacing side) {
         if (tile == null) {
             return null;
@@ -187,7 +186,7 @@ public class FluidUtil {
 			return ((IFluidBlock)block).getFilledPercentage(world, pos) == 1.0f;
 		}
 		if(block instanceof BlockLiquid){
-			return ((Integer)iblockstate.getValue(BlockLiquid.LEVEL)).intValue() == 0;
+			return iblockstate.getValue(BlockLiquid.LEVEL).intValue() == 0;
 		}
 		return false;
 	}

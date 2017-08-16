@@ -35,6 +35,7 @@ public class ItemCrystalSword extends ItemSword implements ICustomModel {
 		ModItems.registerItem(this, "crystalsword");
 	}
 	
+	@Override
 	@SideOnly(Side.CLIENT)
     public void initModel() {
 		final Map<String, ModelResourceLocation> models = Maps.newHashMap();
@@ -52,6 +53,7 @@ public class ItemCrystalSword extends ItemSword implements ICustomModel {
         });
     }
 	
+	@Override
 	public String getUnlocalizedName(ItemStack stack)
     {
         String color = ItemNBTHelper.getString(stack, "Color", "");

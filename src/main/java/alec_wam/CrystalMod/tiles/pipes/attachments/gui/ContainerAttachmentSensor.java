@@ -1,18 +1,13 @@
 package alec_wam.CrystalMod.tiles.pipes.attachments.gui;
 
-import net.minecraft.client.gui.GuiScreen;
+import alec_wam.CrystalMod.tiles.pipes.estorage.TileEntityPipeEStorage;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ClickType;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
-import alec_wam.CrystalMod.tiles.pipes.attachments.AttachmentEStorageSensor;
-import alec_wam.CrystalMod.tiles.pipes.estorage.TileEntityPipeEStorage;
-import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.slot.SlotDisabled;
-import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.slot.SlotSpecimen;
-import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.slot.SlotSpecimenLegacy;
-import alec_wam.CrystalMod.util.ItemStackTools;
 
 public class ContainerAttachmentSensor extends Container {
 
@@ -46,6 +41,7 @@ public class ContainerAttachmentSensor extends Container {
 		return super.slotClick(id, clickedButton, clickType, player);
     }
 
+	@Override
 	public ItemStack transferStackInSlot(EntityPlayer player, int slot){
 		return ItemStackTools.getEmptyStack();
 	}

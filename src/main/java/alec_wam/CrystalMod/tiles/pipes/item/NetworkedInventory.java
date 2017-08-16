@@ -14,8 +14,8 @@ import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.Lang;
 import alec_wam.CrystalMod.util.ModLogger;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.items.IItemHandler;
 
@@ -264,7 +264,7 @@ public class NetworkedInventory {
 
     ArrayList<BlockPos> nextSteps = new ArrayList<BlockPos>();
     for (BlockPos bc : steps) {
-      TileEntityPipeItem con = (TileEntityPipeItem) network.pipMap.get(bc);
+      TileEntityPipeItem con = network.pipMap.get(bc);
       if(con != null) {
         for (EnumFacing dir : con.getExternalConnections()) {
           Target target = getTarget(targets, con, dir);

@@ -151,7 +151,7 @@ public class ContainerExtendedInventory extends Container
     public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int par2)
     {
         ItemStack itemstack = ItemStackTools.getEmptyStack();
-        Slot slot = (Slot)this.inventorySlots.get(par2);
+        Slot slot = this.inventorySlots.get(par2);
 
         if (slot != null && slot.getHasStack())
         {
@@ -196,7 +196,7 @@ public class ContainerExtendedInventory extends Container
             }
             
             // inv -> armor
-            else if (entityequipmentslot.getSlotType() == EntityEquipmentSlot.Type.ARMOR && !((Slot)this.inventorySlots.get(8 - entityequipmentslot.getIndex())).getHasStack())
+            else if (entityequipmentslot.getSlotType() == EntityEquipmentSlot.Type.ARMOR && !this.inventorySlots.get(8 - entityequipmentslot.getIndex()).getHasStack())
             {
                 int i = 8 - entityequipmentslot.getIndex();
 
@@ -207,7 +207,7 @@ public class ContainerExtendedInventory extends Container
             }
             
             // inv -> offhand
-            else if (entityequipmentslot == EntityEquipmentSlot.OFFHAND && !((Slot)this.inventorySlots.get(45+ slotShift)).getHasStack())
+            else if (entityequipmentslot == EntityEquipmentSlot.OFFHAND && !this.inventorySlots.get(45+ slotShift).getHasStack())
             {
                 if (!this.mergeItemStack(itemstack1, 45+ slotShift, 46+ slotShift, false))
                 {
@@ -219,7 +219,7 @@ public class ContainerExtendedInventory extends Container
             else if (itemstack.getItem() instanceof ItemBackpackBase)
             {
             	int slotNum = ExtendedPlayerInventory.BACKPACK_SLOT_ID;
-            	if (!((Slot)this.inventorySlots.get(slotNum+9)).getHasStack() &&	                		
+            	if (!this.inventorySlots.get(slotNum+9).getHasStack() &&	                		
 	                		!this.mergeItemStack(itemstack1, slotNum+9, slotNum + 10, false))
                 {
                     return ItemStackTools.getEmptyStack();

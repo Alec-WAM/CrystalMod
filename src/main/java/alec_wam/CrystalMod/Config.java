@@ -3,14 +3,19 @@ package alec_wam.CrystalMod;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.common.collect.Lists;
+
 import alec_wam.CrystalMod.handler.EventHandler.ItemDropType;
 import alec_wam.CrystalMod.tiles.machine.power.converter.PowerUnits;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ModLogger;
+import alec_wam.CrystalMod.util.StringUtils;
 import alec_wam.CrystalMod.world.generation.CrystalOreFeature;
 import alec_wam.CrystalMod.world.generation.CrystalReedsFeature;
 import alec_wam.CrystalMod.world.generation.CrystalTreeFeature;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.storage.loot.LootTableList;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent.OnConfigChangedEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -74,7 +79,17 @@ public class Config {
     public static int clusterSpawnChance = 24;
     public static int clusterSpawnTries = 8;
 
-	public static int enhancementBookRarity = 20;
+    public static final ResourceLocation[] defaultEnhancementBookLootList = new ResourceLocation[]{
+    		LootTableList.CHESTS_ABANDONED_MINESHAFT,
+    		LootTableList.CHESTS_IGLOO_CHEST,
+    		LootTableList.CHESTS_DESERT_PYRAMID,
+    		LootTableList.CHESTS_JUNGLE_TEMPLE,
+    		LootTableList.CHESTS_NETHER_BRIDGE,
+    		LootTableList.CHESTS_SIMPLE_DUNGEON,
+    		LootTableList.CHESTS_VILLAGE_BLACKSMITH
+    };
+    public static List<ResourceLocation> enhancementBookLootLocationList = Lists.newArrayList();
+	public static int enhancementBookRarity = 10;
     
 	public static ItemDropType mobHeadType = ItemDropType.KILLED;
 	public static int mobHeadDropChance = 200;
@@ -238,6 +253,17 @@ public class Config {
         	CrystalReedsFeature.reedDimBlacklist.add(i);
         }
         
+        //Loot
+    	String[] defaultLocations = StringUtils.makeStringArray(defaultEnhancementBookLootList);
+    	String[] configLocations = cfg.getStringList("enhancementBookLocations", CATEGORY_WORLD, defaultLocations, "Loot Tables that CrystalMod is allowed to place the Enhancement Books in");
+    	ResourceLocation[] bookLocations = new ResourceLocation[configLocations.length];
+    	for(int i = 0; i < bookLocations.length; i++){
+    		bookLocations[i] = new ResourceLocation(configLocations[i]);
+    	}
+    	enhancementBookLootLocationList = Lists.newArrayList(bookLocations);
+    	enhancementBookRarity = cfg.get(CATEGORY_WORLD, "enhancementBookRarity", enhancementBookRarity,
+                "Rarity of Enhancement Books in chest loot").setRequiresMcRestart(true).getInt(10);
+        
         superTorchMaxCount = cfg.get(CATEGORY_ITEM, "superTorchCapacity", superTorchMaxCount, "Maximum amount of torches allowed to be stored in a Super Torch.").getInt();
         
         if(superTorchMaxCount < 0){
@@ -266,10 +292,7 @@ public class Config {
     	if(pheadtype > 2)pheadtype = 2;
     	playerHeadType = ItemDropType.values()[pheadtype];
     	playerHeadDropChance = cfg.get(CATEGORY_ENTITY, "playerHeadDropChance", playerHeadDropChance, "1 in this chance of dropping  (-1 = no heads)").getInt(playerHeadDropChance);
-    
-    	enhancementBookRarity = cfg.get(CATEGORY_WORLD, "enhancementBookRarity", enhancementBookRarity,
-                "Rarity of Enhancement Books in chest loot").getInt(20);
-    	
+        	    	
     	hoeStrings = cfg.get(CATEGORY_MINIONS, "Hoes", hoeStrings, "Use this to specify items that are hoes. Use the registry name (eg. modid:name).").getStringList();
     
     	//Machines

@@ -13,7 +13,7 @@ public class ContainerEngineVampire extends Container
 
     public ContainerEngineVampire(EntityPlayer player, TileEntityEngineVampire tileEntity)
     {
-    	this.tileEngine = ((TileEntityEngineVampire) tileEntity);
+    	this.tileEngine = (tileEntity);
     	this.addPlayerInventory(player.inventory);
     }
 
@@ -41,7 +41,7 @@ public class ContainerEngineVampire extends Container
     {
     	ItemStack itemstack = ItemStackTools.getEmptyStack();
     	int par2 = i;
-		Slot slot = (Slot)this.inventorySlots.get(par2);
+		Slot slot = this.inventorySlots.get(par2);
 
 		if (slot != null && slot.getHasStack())
 		{

@@ -4,7 +4,6 @@ import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.network.AbstractPacketThreadsafe;
 import alec_wam.CrystalMod.tiles.ISynchronizedContainer;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.network.NetHandlerPlayServer;
 import net.minecraft.tileentity.TileEntity;

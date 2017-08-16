@@ -1,32 +1,21 @@
 package alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
+
+import com.google.common.collect.Lists;
 
 import alec_wam.CrystalMod.api.estorage.IAutoCrafter;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
-import alec_wam.CrystalMod.util.ModLogger;
-
-import com.google.common.collect.Lists;
-
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.inventory.Container;
+import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
@@ -44,7 +33,8 @@ public class CraftingPattern {
     private boolean mekanism;
 
     
-    public CraftingPattern(World world, IAutoCrafter crafter, ItemStack pattern){
+    @SuppressWarnings("unchecked")
+	public CraftingPattern(World world, IAutoCrafter crafter, ItemStack pattern){
     	this.crafter = crafter;
     	this.pattern = pattern;
         this.inputs = NonNullList.create();

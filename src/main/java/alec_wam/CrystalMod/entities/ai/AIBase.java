@@ -1,6 +1,5 @@
 package alec_wam.CrystalMod.entities.ai;
 
-import alec_wam.CrystalMod.entities.minions.EntityMinionBase;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.nbt.NBTTagCompound;
 

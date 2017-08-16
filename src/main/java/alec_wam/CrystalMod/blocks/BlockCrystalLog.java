@@ -65,13 +65,15 @@ public class BlockCrystalLog extends BlockLog implements ICustomModel
     /**
      * Get the MapColor for this Block and the given BlockState
      */
-    @Override
+    @SuppressWarnings("deprecation")
+	@Override
     public MapColor getMapColor(IBlockState state)
     {
         return super.getMapColor(state);
     }
 
-    @SideOnly(Side.CLIENT)
+    @Override
+	@SideOnly(Side.CLIENT)
     public void initModel() {
     	ModelLoader.setCustomStateMapper(this, new LogBlockStateMapper());
 		for(WoodType type : WoodType.values()){
@@ -153,9 +155,9 @@ public class BlockCrystalLog extends BlockLog implements ICustomModel
     public int getMetaFromState(IBlockState state)
     {
         int i = 0;
-        i = i | ((WoodType)state.getValue(VARIANT)).getMeta();
+        i = i | state.getValue(VARIANT).getMeta();
 
-        switch ((BlockLog.EnumAxis)state.getValue(LOG_AXIS))
+        switch (state.getValue(LOG_AXIS))
         {
             case X:
                 i |= 4;
@@ -179,7 +181,7 @@ public class BlockCrystalLog extends BlockLog implements ICustomModel
     @Override
     protected ItemStack getSilkTouchDrop(IBlockState state)
     {
-    	return new ItemStack(Item.getItemFromBlock(this), 1, ((WoodType)state.getValue(VARIANT)).getMeta());
+    	return new ItemStack(Item.getItemFromBlock(this), 1, state.getValue(VARIANT).getMeta());
     }
 
     /**
@@ -189,6 +191,6 @@ public class BlockCrystalLog extends BlockLog implements ICustomModel
     @Override
     public int damageDropped(IBlockState state)
     {
-        return ((WoodType)state.getValue(VARIANT)).getMeta();
+        return state.getValue(VARIANT).getMeta();
     }
 }

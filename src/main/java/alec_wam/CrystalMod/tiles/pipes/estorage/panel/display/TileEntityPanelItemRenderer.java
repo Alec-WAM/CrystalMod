@@ -104,7 +104,7 @@ public class TileEntityPanelItemRenderer<T extends TileEntityPanelItem> extends 
         }
         
         int stringWidth = font.getStringWidth(string);
-        float scale = Math.min(40F / (float) (stringWidth+10), 0.8F);
+        float scale = Math.min(40F / (stringWidth+10), 0.8F);
         GlStateManager.scale(scale, scale, 1);
         GlStateManager.translate(0, font.FONT_HEIGHT*(1.0f-scale), 0);
         String begin = TextFormatting.BLACK+"";

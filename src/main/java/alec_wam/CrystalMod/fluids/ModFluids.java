@@ -6,20 +6,20 @@ import java.util.Map;
 
 import javax.annotation.Nonnull;
 
-import alec_wam.CrystalMod.CrystalMod;
-import alec_wam.CrystalMod.blocks.BlockCrystalFluid;
-import alec_wam.CrystalMod.blocks.ModBlocks;
-import alec_wam.CrystalMod.items.ItemIngot;
-import alec_wam.CrystalMod.items.ModItems;
-import alec_wam.CrystalMod.items.ItemCrystal.CrystalType;
-import alec_wam.CrystalMod.util.ModLogger;
-
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
+import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.blocks.BlockCrystalFluid;
+import alec_wam.CrystalMod.blocks.ModBlocks;
+import alec_wam.CrystalMod.items.ItemCrystal.CrystalType;
+import alec_wam.CrystalMod.items.ItemIngot;
+import alec_wam.CrystalMod.items.ModItems;
+import alec_wam.CrystalMod.util.ModLogger;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.ItemMeshDefinition;
+import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.item.Item;
@@ -218,7 +218,7 @@ public class ModFluids {
 
 	      // item-model
 	      if(item != null) {
-	        ModelLoader.registerItemVariants(item);
+	        ModelBakery.registerItemVariants(item);
 	        ModelLoader.setCustomMeshDefinition(item, mapper);
 	      }
 	      // block-model

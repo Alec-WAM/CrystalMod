@@ -46,6 +46,7 @@ public class ContainerPanelCrafting extends ContainerPanel {
         }
 	}
 	
+	@Override
 	public void onContainerClosed(EntityPlayer player) {
 	    super.onContainerClosed(player);
 	}
@@ -64,10 +65,11 @@ public class ContainerPanelCrafting extends ContainerPanel {
 	    return !(slot instanceof SlotCraftingPanelResult) && super.canMergeSlot(par1, slot);
 	}
 	
+	@Override
 	public ItemStack transferStackInSlot(EntityPlayer playerIn, int index)
     {
 		ItemStack itemstack = ItemStackTools.getEmptyStack();
-        Slot slot = (Slot)this.inventorySlots.get(index);
+        Slot slot = this.inventorySlots.get(index);
 
         if (slot != null && slot.getHasStack())
         {

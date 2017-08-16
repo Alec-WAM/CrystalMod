@@ -91,7 +91,7 @@ public class ItemMegaCrystalAxe extends ItemCrystalAxe implements IMegaTool {
 	
 	@Override
 	public ImmutableList<BlockPos> getAOEBlocks(ItemStack tool, World world, EntityPlayer player, BlockPos pos) {
-		Block block = world.getBlockState(pos).getBlock();
+		world.getBlockState(pos).getBlock();
 		
 		return ToolUtil.calcAOEBlocks(tool, world, player, pos, 3, 3, 1);
 	}

@@ -1,7 +1,5 @@
 package alec_wam.CrystalMod.tiles.pipes.estorage.stocker;
 
-import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.slot.SlotSpecimen;
-import alec_wam.CrystalMod.tiles.pipes.item.ContainerItemPipe.SlotGhostItem;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import net.minecraft.entity.player.EntityPlayer;

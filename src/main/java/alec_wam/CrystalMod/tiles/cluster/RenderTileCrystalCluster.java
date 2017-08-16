@@ -97,8 +97,8 @@ public class RenderTileCrystalCluster extends TileEntitySpecialRenderer<TileCrys
         GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
         GlStateManager.shadeModel(7425);
         
-        float brightness = (float)((float)health / (float)TimeUtil.MINECRAFT_DAY_TICKS);
-		if(!darkToLight)brightness = (float)((float)(TimeUtil.MINECRAFT_DAY_TICKS-health) / (float)TimeUtil.MINECRAFT_DAY_TICKS);
+        float brightness = (float)health / (float)TimeUtil.MINECRAFT_DAY_TICKS;
+		if(!darkToLight)brightness = (float)(TimeUtil.MINECRAFT_DAY_TICKS-health) / (float)TimeUtil.MINECRAFT_DAY_TICKS;
         float red = (float) colorVec.x;
         float green = (float) colorVec.y;
         float blue = (float) colorVec.z;
@@ -111,14 +111,14 @@ public class RenderTileCrystalCluster extends TileEntitySpecialRenderer<TileCrys
 
         for (int j = listQuads.size(); i < j; ++i)
         {
-            BakedQuad bakedquad = (BakedQuad)listQuads.get(i);
+            BakedQuad bakedquad = listQuads.get(i);
             vertexbuffer.begin(7, DefaultVertexFormats.ITEM);
             vertexbuffer.addVertexData(bakedquad.getVertexData());
 
             vertexbuffer.putColorRGB_F4(red * brightness, green * brightness, blue * brightness);
 
             Vec3i vec3i = bakedquad.getFace().getDirectionVec();
-            vertexbuffer.putNormal((float)vec3i.getX(), (float)vec3i.getY(), (float)vec3i.getZ());
+            vertexbuffer.putNormal(vec3i.getX(), vec3i.getY(), vec3i.getZ());
             tessellator.draw();
         }
         
@@ -137,7 +137,8 @@ public class RenderTileCrystalCluster extends TileEntitySpecialRenderer<TileCrys
 				Function<ResourceLocation, TextureAtlasSprite> textureGetter;
 		        textureGetter = new Function<ResourceLocation, TextureAtlasSprite>()
 		        {
-		            public TextureAtlasSprite apply(ResourceLocation location)
+		            @Override
+					public TextureAtlasSprite apply(ResourceLocation location)
 		            {
 		                return RenderUtil.getSprite(location);
 		            }

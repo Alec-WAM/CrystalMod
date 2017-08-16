@@ -2,10 +2,16 @@ package alec_wam.CrystalMod.items.tools.bat.upgrades;
 
 import java.util.List;
 
-import net.minecraft.client.renderer.GlStateManager;
+import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.api.tools.AttackData;
+import alec_wam.CrystalMod.api.tools.UpgradeData;
+import alec_wam.CrystalMod.items.tools.bat.BatHelper;
+import alec_wam.CrystalMod.items.tools.bat.BatUpgrade;
+import alec_wam.CrystalMod.util.ItemStackTools;
+import alec_wam.CrystalMod.util.ItemUtil;
+import alec_wam.CrystalMod.util.client.RenderUtil;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -19,15 +25,6 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.oredict.OreDictionary;
-import alec_wam.CrystalMod.CrystalMod;
-import alec_wam.CrystalMod.api.tools.AttackData;
-import alec_wam.CrystalMod.api.tools.UpgradeData;
-import alec_wam.CrystalMod.items.tools.bat.BatHelper;
-import alec_wam.CrystalMod.items.tools.bat.BatUpgrade;
-import alec_wam.CrystalMod.util.ItemStackTools;
-import alec_wam.CrystalMod.util.ItemUtil;
-import alec_wam.CrystalMod.util.client.RenderUtil;
 
 public class LapisBatUpgrade extends BatUpgrade {
 

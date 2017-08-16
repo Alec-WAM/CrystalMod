@@ -34,6 +34,7 @@ public class TileEntityBattery extends TileEntityIOSides implements IMessageHand
 		energyStorage = new CEnergyStorage(MAX_ENERGY[meta], MAX_RECEIVE[meta], MAX_SEND[meta]);
 	}
 	
+	@Override
 	public void writeCustomNBT(NBTTagCompound nbt){
 		super.writeCustomNBT(nbt);
 		nbt.setInteger("Type", getBlockMetadata());
@@ -41,6 +42,7 @@ public class TileEntityBattery extends TileEntityIOSides implements IMessageHand
 		this.energyStorage.writeToNBT(nbt);
 	}
 	
+	@Override
 	public void readCustomNBT(NBTTagCompound nbt){
 		super.readCustomNBT(nbt);
 		facing = nbt.getInteger("Facing");
@@ -63,6 +65,7 @@ public class TileEntityBattery extends TileEntityIOSides implements IMessageHand
 		}
 	}
 
+	@Override
 	public void update(){
 		if(!getWorld().isRemote){
 			for(EnumFacing face : EnumFacing.VALUES){
@@ -89,6 +92,7 @@ public class TileEntityBattery extends TileEntityIOSides implements IMessageHand
 		}
 	}
 
+	@Override
 	public EnumFacing fixFace(EnumFacing side){
 		EnumFacing fixedDir = side;
 		

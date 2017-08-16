@@ -4,14 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.SoundEvents;
-import net.minecraft.item.EnumDyeColor;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraftforge.common.capabilities.Capability;
 import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.network.IMessageHandler;
 import alec_wam.CrystalMod.tiles.TileEntityMod;
@@ -20,6 +12,14 @@ import alec_wam.CrystalMod.tiles.pipes.CollidableComponent;
 import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.PlayerUtil;
 import alec_wam.CrystalMod.util.Vector3d;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.SoundEvents;
+import net.minecraft.item.EnumDyeColor;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraftforge.common.capabilities.Capability;
 
 public class TileWirelessChest extends TileEntityMod implements IMessageHandler {
 
@@ -117,6 +117,7 @@ public class TileWirelessChest extends TileEntityMod implements IMessageHandler 
         return true;
     }
 	
+	@Override
 	public void writeCustomNBT(NBTTagCompound nbt){
 		super.writeCustomNBT(nbt);
 		nbt.setInteger("Code", code);
@@ -124,7 +125,8 @@ public class TileWirelessChest extends TileEntityMod implements IMessageHandler 
 		if(boundToPlayer !=null)PlayerUtil.uuidToNBT(nbt, boundToPlayer);
 	}
 	
-    public void readCustomNBT(NBTTagCompound nbt){
+    @Override
+	public void readCustomNBT(NBTTagCompound nbt){
     	super.readCustomNBT(nbt);
     	facing = nbt.getByte("Facing");
     	if(nbt.hasKey("Code"))this.code = nbt.getInteger("Code");

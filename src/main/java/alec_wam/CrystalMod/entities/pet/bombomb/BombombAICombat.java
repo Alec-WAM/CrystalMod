@@ -11,9 +11,6 @@ import alec_wam.CrystalMod.entities.minions.warrior.EnumCombatBehaviors;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.packets.PacketEntityMessage;
 import alec_wam.CrystalMod.util.EntityUtil;
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentProtection;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
@@ -22,15 +19,12 @@ import net.minecraft.entity.ai.EntityAITarget;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.play.server.SPacketEntityVelocity;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 
@@ -168,39 +162,39 @@ public class BombombAICombat extends AIBase<EntityBombomb>
 		double explosionY = bombomb.posY;
 		double explosionZ = bombomb.posZ;
 		float f3 = explosionSize * 2.0F;
-        int k1 = MathHelper.floor(explosionX - (double)f3 - 1.0D);
-        int l1 = MathHelper.floor(explosionX + (double)f3 + 1.0D);
-        int i2 = MathHelper.floor(explosionY - (double)f3 - 1.0D);
-        int i1 = MathHelper.floor(explosionY + (double)f3 + 1.0D);
-        int j2 = MathHelper.floor(explosionZ - (double)f3 - 1.0D);
-        int j1 = MathHelper.floor(explosionZ + (double)f3 + 1.0D);
-        List<Entity> list = bombomb.getEntityWorld().getEntitiesWithinAABBExcludingEntity(bombomb, new AxisAlignedBB((double)k1, (double)i2, (double)j2, (double)l1, (double)i1, (double)j1));
+        int k1 = MathHelper.floor(explosionX - f3 - 1.0D);
+        int l1 = MathHelper.floor(explosionX + f3 + 1.0D);
+        int i2 = MathHelper.floor(explosionY - f3 - 1.0D);
+        int i1 = MathHelper.floor(explosionY + f3 + 1.0D);
+        int j2 = MathHelper.floor(explosionZ - f3 - 1.0D);
+        int j1 = MathHelper.floor(explosionZ + f3 + 1.0D);
+        List<Entity> list = bombomb.getEntityWorld().getEntitiesWithinAABBExcludingEntity(bombomb, new AxisAlignedBB(k1, i2, j2, l1, i1, j1));
         //net.minecraftforge.event.ForgeEventFactory.onExplosionDetonate(this.getEntityWorld(), this, list, f3);
         Vec3d vec3d = new Vec3d(explosionX, explosionY, explosionZ);
 
         for (int k2 = 0; k2 < list.size(); ++k2)
         {
-            Entity entity = (Entity)list.get(k2);
+            Entity entity = list.get(k2);
 
             if (!entity.isImmuneToExplosions() && entity instanceof EntityLivingBase && isEntityValidToAttack(bombomb, (EntityLivingBase)entity))
             {
-                double d12 = entity.getDistance(explosionX, explosionY, explosionZ) / (double)f3;
+                double d12 = entity.getDistance(explosionX, explosionY, explosionZ) / f3;
 
                 if (d12 <= 1.0D)
                 {
                     double d5 = entity.posX - explosionX;
-                    double d7 = entity.posY + (double)entity.getEyeHeight() - explosionY;
+                    double d7 = entity.posY + entity.getEyeHeight() - explosionY;
                     double d9 = entity.posZ - explosionZ;
-                    double d13 = (double)MathHelper.sqrt(d5 * d5 + d7 * d7 + d9 * d9);
+                    double d13 = MathHelper.sqrt(d5 * d5 + d7 * d7 + d9 * d9);
 
                     if (d13 != 0.0D)
                     {
                         d5 = d5 / d13;
                         d7 = d7 / d13;
                         d9 = d9 / d13;
-                        double d14 = (double)bombomb.getEntityWorld().getBlockDensity(vec3d, entity.getEntityBoundingBox());
+                        double d14 = bombomb.getEntityWorld().getBlockDensity(vec3d, entity.getEntityBoundingBox());
                         double d10 = (1.0D - d12) * d14;
-                        entity.attackEntityFrom(DamageSource.causeExplosionDamage(bombomb), (float)((int)((d10 * d10 + d10) / 2.0D * 7.0D * (double)f3 + 1.0D)));
+                        entity.attackEntityFrom(DamageSource.causeExplosionDamage(bombomb), ((int)((d10 * d10 + d10) / 2.0D * 7.0D * f3 + 1.0D)));
                         double d11 = 1.0D;
 
                         if (entity instanceof EntityLivingBase)

@@ -4,10 +4,9 @@ import java.util.UUID;
 
 import javax.annotation.Nullable;
 
-import alec_wam.CrystalMod.entities.ai.EntityAISit;
-
 import com.google.common.base.Optional;
 
+import alec_wam.CrystalMod.entities.ai.EntityAISit;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityOwnable;
@@ -37,7 +36,8 @@ public abstract class EntityOwnable extends EntityLiving implements IEntityOwnab
         this.setupTamedAI();
     }
 
-    protected void entityInit()
+    @Override
+	protected void entityInit()
     {
         super.entityInit();
         this.dataManager.register(TAMED, Byte.valueOf((byte)0));
@@ -47,7 +47,8 @@ public abstract class EntityOwnable extends EntityLiving implements IEntityOwnab
     /**
      * (abstract) Protected helper method to write subclass entity data to NBT.
      */
-    public void writeEntityToNBT(NBTTagCompound tagCompound)
+    @Override
+	public void writeEntityToNBT(NBTTagCompound tagCompound)
     {
         super.writeEntityToNBT(tagCompound);
 
@@ -66,7 +67,8 @@ public abstract class EntityOwnable extends EntityLiving implements IEntityOwnab
     /**
      * (abstract) Protected helper method to read subclass entity data from NBT.
      */
-    public void readEntityFromNBT(NBTTagCompound tagCompund)
+    @Override
+	public void readEntityFromNBT(NBTTagCompound tagCompund)
     {
         super.readEntityFromNBT(tagCompund);
         String s = "";
@@ -115,11 +117,12 @@ public abstract class EntityOwnable extends EntityLiving implements IEntityOwnab
             double d0 = this.rand.nextGaussian() * 0.02D;
             double d1 = this.rand.nextGaussian() * 0.02D;
             double d2 = this.rand.nextGaussian() * 0.02D;
-            this.getEntityWorld().spawnParticle(enumparticletypes, this.posX + (double)(this.rand.nextFloat() * this.width * 2.0F) - (double)this.width, this.posY + 0.5D + (double)(this.rand.nextFloat() * this.height), this.posZ + (double)(this.rand.nextFloat() * this.width * 2.0F) - (double)this.width, d0, d1, d2, new int[0]);
+            this.getEntityWorld().spawnParticle(enumparticletypes, this.posX + this.rand.nextFloat() * this.width * 2.0F - this.width, this.posY + 0.5D + this.rand.nextFloat() * this.height, this.posZ + this.rand.nextFloat() * this.width * 2.0F - this.width, d0, d1, d2, new int[0]);
         }
     }
 
-    @SideOnly(Side.CLIENT)
+    @Override
+	@SideOnly(Side.CLIENT)
     public void handleStatusUpdate(byte id)
     {
         if (id == 7)
@@ -136,19 +139,20 @@ public abstract class EntityOwnable extends EntityLiving implements IEntityOwnab
         }
     }
     
-    public boolean canBeLeashedTo(EntityPlayer player)
+    @Override
+	public boolean canBeLeashedTo(EntityPlayer player)
     {
         return this.isTamed() && this.isOwner(player);
     }
 
     public boolean isTamed()
     {
-        return (((Byte)this.dataManager.get(TAMED)).byteValue() & 4) != 0;
+        return (this.dataManager.get(TAMED).byteValue() & 4) != 0;
     }
 
     public void setTamed(boolean tamed)
     {
-    	byte b0 = ((Byte)this.dataManager.get(TAMED)).byteValue();
+    	byte b0 = this.dataManager.get(TAMED).byteValue();
 
         if (tamed)
         {
@@ -168,12 +172,12 @@ public abstract class EntityOwnable extends EntityLiving implements IEntityOwnab
 
     public boolean isSitting()
     {
-        return (((Byte)this.dataManager.get(TAMED)).byteValue() & 1) != 0;
+        return (this.dataManager.get(TAMED).byteValue() & 1) != 0;
     }
 
     public void setSitting(boolean sitting)
     {
-        byte b0 = ((Byte)this.dataManager.get(TAMED)).byteValue();
+        byte b0 = this.dataManager.get(TAMED).byteValue();
 
         if (sitting)
         {
@@ -185,10 +189,11 @@ public abstract class EntityOwnable extends EntityLiving implements IEntityOwnab
         }
     }
 
-    @Nullable
+    @Override
+	@Nullable
     public UUID getOwnerId()
     {
-        return (UUID)((Optional<UUID>)this.dataManager.get(OWNER_UNIQUE_ID)).orNull();
+        return this.dataManager.get(OWNER_UNIQUE_ID).orNull();
     }
 
     public void setOwnerId(@Nullable UUID p_184754_1_)
@@ -196,7 +201,8 @@ public abstract class EntityOwnable extends EntityLiving implements IEntityOwnab
         this.dataManager.set(OWNER_UNIQUE_ID, Optional.fromNullable(p_184754_1_));
     }
 
-    @Nullable
+    @Override
+	@Nullable
     public EntityLivingBase getOwner()
     {
         try
@@ -228,7 +234,8 @@ public abstract class EntityOwnable extends EntityLiving implements IEntityOwnab
         return true;
     }
 
-    public Team getTeam()
+    @Override
+	public Team getTeam()
     {
         if (this.isTamed())
         {
@@ -266,7 +273,8 @@ public abstract class EntityOwnable extends EntityLiving implements IEntityOwnab
     /**
      * Called when the mob's health reaches 0.
      */
-    public void onDeath(DamageSource cause)
+    @Override
+	public void onDeath(DamageSource cause)
     {
         if (!this.getEntityWorld().isRemote && this.getEntityWorld().getGameRules().getBoolean("showDeathMessages") && this.hasCustomName() && this.getOwner() instanceof EntityPlayerMP)
         {

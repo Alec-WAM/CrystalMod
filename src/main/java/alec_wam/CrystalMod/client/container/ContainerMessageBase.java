@@ -1,20 +1,16 @@
 package alec_wam.CrystalMod.client.container;
 
-import java.util.List;
-
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.IMessageHandler;
 import alec_wam.CrystalMod.network.packets.PacketGuiMessage;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
-import alec_wam.CrystalMod.util.ModLogger;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.math.BlockPos;
 
 public class ContainerMessageBase extends Container implements IMessageHandler {
 
@@ -164,7 +160,7 @@ public class ContainerMessageBase extends Container implements IMessageHandler {
 	 * them
 	 */
 	public void removeSlots() {
-		for (Slot s : ((List<Slot>) this.inventorySlots)) {
+		for (Slot s : (this.inventorySlots)) {
 			if (s.yPos >= 0) {
 				s.yPos -= 10000;
 			}
@@ -175,7 +171,7 @@ public class ContainerMessageBase extends Container implements IMessageHandler {
 	 * add any removed from screen slots back into view
 	 */
 	public void addSlots() {
-		for (Slot s : ((List<Slot>) this.inventorySlots)) {
+		for (Slot s : (this.inventorySlots)) {
 			if (s.yPos < 0) {
 				s.yPos += 10000;
 			}
@@ -206,7 +202,7 @@ public class ContainerMessageBase extends Container implements IMessageHandler {
 		if (incomingStack.isStackable()) {
 			for (currentIndex = start; !ItemStackTools.isEmpty(incomingStack)
 					&& currentIndex != stop; currentIndex += iterator) {
-				slotFromContainer = (Slot) this.inventorySlots
+				slotFromContainer = this.inventorySlots
 						.get(currentIndex);
 				if (!slotFromContainer.isItemValid(incomingStack)) {
 					continue;
@@ -231,7 +227,7 @@ public class ContainerMessageBase extends Container implements IMessageHandler {
 		if (!ItemStackTools.isEmpty(incomingStack)) {
 			for (currentIndex = start; !ItemStackTools.isEmpty(incomingStack)
 					&& currentIndex != stop; currentIndex += iterator) {
-				slotFromContainer = (Slot) this.inventorySlots
+				slotFromContainer = this.inventorySlots
 						.get(currentIndex);
 				if (!slotFromContainer.isItemValid(incomingStack)) {
 					continue;

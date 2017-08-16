@@ -120,7 +120,7 @@ public class BlockCrystalGlass extends EnumBlock<BlockCrystalGlass.GlassType> im
     
     @Override
     public IBlockState getExtendedState(final IBlockState state, final IBlockAccess world, final BlockPos pos) {
-		return (IBlockState)new GlassBlockState(state, world, pos);
+		return new GlassBlockState(state, world, pos);
     }
     
     @Override

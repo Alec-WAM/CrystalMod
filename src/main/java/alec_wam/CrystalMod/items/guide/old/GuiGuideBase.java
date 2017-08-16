@@ -2,11 +2,6 @@ package alec_wam.CrystalMod.items.guide.old;
 
 import java.io.IOException;
 
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.item.ItemStack;
-
 import org.lwjgl.input.Keyboard;
 
 import alec_wam.CrystalMod.CrystalMod;
@@ -16,6 +11,10 @@ import alec_wam.CrystalMod.client.util.comp.IComponentListener;
 import alec_wam.CrystalMod.client.util.comp.book.BlankPage;
 import alec_wam.CrystalMod.client.util.comp.book.TitledPage;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.item.ItemStack;
 
 
 public class GuiGuideBase extends GuiScreen implements IComponentListener {
@@ -26,6 +25,7 @@ public class GuiGuideBase extends GuiScreen implements IComponentListener {
 
 	public GuiComponentBook book;
 	
+	@Override
 	public void updateScreen(){
 		if(this.book !=null){
 			
@@ -69,6 +69,7 @@ public class GuiGuideBase extends GuiScreen implements IComponentListener {
 		
 	}
 	
+	@Override
 	public void initGui(){
 		super.initGui();
 		initBook();
@@ -79,6 +80,7 @@ public class GuiGuideBase extends GuiScreen implements IComponentListener {
 		}
 	}
 	
+	@Override
 	public void onGuiClosed(){
 		super.onGuiClosed();
 		if(stack !=null){

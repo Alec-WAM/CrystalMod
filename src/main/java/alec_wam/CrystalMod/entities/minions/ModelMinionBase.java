@@ -77,7 +77,8 @@ public class ModelMinionBase extends ModelBiped
     /**
      * Sets the models various rotation angles then renders the model.
      */
-    public void render(Entity entityIn, float p_78088_2_, float p_78088_3_, float p_78088_4_, float p_78088_5_, float p_78088_6_, float scale)
+    @Override
+	public void render(Entity entityIn, float p_78088_2_, float p_78088_3_, float p_78088_4_, float p_78088_5_, float p_78088_6_, float scale)
     {
         super.render(entityIn, p_78088_2_, p_78088_3_, p_78088_4_, p_78088_5_, p_78088_6_, scale);
         GlStateManager.pushMatrix();
@@ -128,7 +129,8 @@ public class ModelMinionBase extends ModelBiped
      * and legs, where par1 represents the time(so that arms and legs swing back and forth) and par2 represents how
      * "far" arms and legs can swing at most.
      */
-    public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Entity entityIn)
+    @Override
+	public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Entity entityIn)
     {
     	boolean flag = entityIn instanceof EntityLivingBase && ((EntityLivingBase)entityIn).getTicksElytraFlying() > 4;
         this.bipedHead.rotateAngleY = netHeadYaw * 0.017453292F;
@@ -256,7 +258,7 @@ public class ModelMinionBase extends ModelBiped
             f1 = 1.0F - f1;
             float f2 = MathHelper.sin(f1 * (float)Math.PI);
             float f3 = MathHelper.sin(this.swingProgress * (float)Math.PI) * -(this.bipedHead.rotateAngleX - 0.7F) * 0.75F;
-            modelrenderer.rotateAngleX = (float)((double)modelrenderer.rotateAngleX - ((double)f2 * 1.2D + (double)f3));
+            modelrenderer.rotateAngleX = (float)(modelrenderer.rotateAngleX - (f2 * 1.2D + f3));
             modelrenderer.rotateAngleY += this.bipedBody.rotateAngleY * 2.0F;
             modelrenderer.rotateAngleZ += MathHelper.sin(this.swingProgress * (float)Math.PI) * -0.4F;
         }
@@ -335,7 +337,8 @@ public class ModelMinionBase extends ModelBiped
         this.bipedLeftArmwear.render(0.0625F);
     }
 
-    public void setInvisible(boolean invisible)
+    @Override
+	public void setInvisible(boolean invisible)
     {
         super.setInvisible(invisible);
         this.bipedLeftArmwear.showModel = invisible;

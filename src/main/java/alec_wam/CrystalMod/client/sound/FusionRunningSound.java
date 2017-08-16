@@ -34,9 +34,9 @@ public class FusionRunningSound extends PositionedSound implements ITickableSoun
 			donePlaying = true;
 			return;
 		}
-		this.xPosF = (float)(pedistal.getPos().getX() + 0.5f);
-		this.yPosF = (float)(pedistal.getPos().getY() + 0.5f);
-		this.zPosF = (float)(pedistal.getPos().getZ() + 0.5f);
+		this.xPosF = pedistal.getPos().getX() + 0.5f;
+		this.yPosF = pedistal.getPos().getY() + 0.5f;
+		this.zPosF = pedistal.getPos().getZ() + 0.5f;
 		int time = 200;
 		if(pedistal.craftingProgress.getValue() > 30){
 			float progressPitch = (1.0f * (pedistal.craftingProgress.getValue() / time));

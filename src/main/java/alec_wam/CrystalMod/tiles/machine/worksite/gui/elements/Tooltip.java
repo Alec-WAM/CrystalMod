@@ -3,14 +3,13 @@ package alec_wam.CrystalMod.tiles.machine.worksite.gui.elements;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.lwjgl.opengl.GL11;
+
+import alec_wam.CrystalMod.util.client.RenderUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
-
-import org.lwjgl.opengl.GL11;
-
-import alec_wam.CrystalMod.util.client.RenderUtil;
 
 public class Tooltip {
 

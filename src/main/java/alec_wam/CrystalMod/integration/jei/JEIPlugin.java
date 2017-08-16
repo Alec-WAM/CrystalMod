@@ -2,7 +2,6 @@ package alec_wam.CrystalMod.integration.jei;
 
 import javax.annotation.Nonnull;
 
-import net.minecraft.item.ItemStack;
 import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.crafting.CrystalCraftingManager;
 import alec_wam.CrystalMod.integration.jei.crystalworkbench.CrystalWorkbenchCategory;
@@ -29,7 +28,7 @@ import mezz.jei.api.IJeiRuntime;
 import mezz.jei.api.IModRegistry;
 import mezz.jei.api.recipe.VanillaRecipeCategoryUid;
 import mezz.jei.api.recipe.transfer.IRecipeTransferRegistry;
-import mezz.jei.plugins.vanilla.crafting.ShapedOreRecipeHandler;
+import net.minecraft.item.ItemStack;
 
 @mezz.jei.api.JEIPlugin
 public class JEIPlugin  extends BlankModPlugin {

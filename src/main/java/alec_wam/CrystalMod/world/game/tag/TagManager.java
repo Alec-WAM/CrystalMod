@@ -7,6 +7,19 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
+import org.lwjgl.opengl.GL11;
+
+import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
+
+import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.network.CompressedDataInput;
+import alec_wam.CrystalMod.network.CompressedDataOutput;
+import alec_wam.CrystalMod.network.CrystalModNetwork;
+import alec_wam.CrystalMod.util.ChatUtil;
+import alec_wam.CrystalMod.util.ModLogger;
+import alec_wam.CrystalMod.util.ProfileUtil;
+import alec_wam.CrystalMod.util.client.DownloadedTextures;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
@@ -32,20 +45,6 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ServerTickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import org.lwjgl.opengl.GL11;
-
-import alec_wam.CrystalMod.CrystalMod;
-import alec_wam.CrystalMod.network.CompressedDataInput;
-import alec_wam.CrystalMod.network.CompressedDataOutput;
-import alec_wam.CrystalMod.network.CrystalModNetwork;
-import alec_wam.CrystalMod.util.ChatUtil;
-import alec_wam.CrystalMod.util.ModLogger;
-import alec_wam.CrystalMod.util.ProfileUtil;
-import alec_wam.CrystalMod.util.client.DownloadedTextures;
-
-import com.google.common.base.Strings;
-import com.google.common.collect.Lists;
 
 public class TagManager {
 
@@ -393,12 +392,14 @@ public class TagManager {
 			return playeruuid;
 		}
 		
+		@Override
 		public boolean equals(Object obj){
 			if(obj !=null && obj instanceof PlayerData){
 				return this.playerName.equals(((PlayerData)obj).playerName);
 			}
 			return false;
 		}
+		@Override
 		public int compareTo(PlayerData data)
 	    {
 			if(this.score < data.score || this.timesIT < data.timesIT || this.timeIt < data.timeIt){
@@ -574,10 +575,10 @@ public class TagManager {
 		        VertexBuffer worldrenderer = tessellator.getBuffer();
 		        
 				worldrenderer.begin(7, DefaultVertexFormats.POSITION_TEX);
-		        worldrenderer.pos((double)i / 2 - 43, (double)27D, (double)-90D).tex(85D / 256D, 27D / 256D).endVertex();
-		        worldrenderer.pos((double)i / 2 + 43, (double)27D, (double)-90D).tex(171D / 256D, 27D / 256D).endVertex();
-		        worldrenderer.pos((double)i / 2 + 43, (double)0, (double)-90D).tex(171D / 256D, 0D / 256D).endVertex();
-		        worldrenderer.pos((double)i / 2 - 43, (double)0, (double)-90D).tex(85D / 256D, 0D / 256D).endVertex();
+		        worldrenderer.pos((double)i / 2 - 43, 27D, -90D).tex(85D / 256D, 27D / 256D).endVertex();
+		        worldrenderer.pos((double)i / 2 + 43, 27D, -90D).tex(171D / 256D, 27D / 256D).endVertex();
+		        worldrenderer.pos((double)i / 2 + 43, 0, -90D).tex(171D / 256D, 0D / 256D).endVertex();
+		        worldrenderer.pos((double)i / 2 - 43, 0, -90D).tex(85D / 256D, 0D / 256D).endVertex();
 		        tessellator.draw();
 				
 				
@@ -593,10 +594,10 @@ public class TagManager {
 			        float r = ((colour >> 16) & 0xff) / 256F;
 			        float g = ((colour >> 8) & 0xff) / 256F;
 			        float b = (colour & 0xff) / 256F;
-			        worldrenderer.pos((double)i / 2 - 43, (double)27D, (double)-90D).tex(0D / 256D, 125D / 256D).color(r, g, b, 1.0F).endVertex();
-			        worldrenderer.pos((double)i / 2 - 19, (double)27D, (double)-90D).tex(24D / 256D, 125D / 256D).color(r, g, b, 1.0F).endVertex();
-			        worldrenderer.pos((double)i / 2 - 19, (double)0, (double)-90D).tex(24D / 256D, 98D / 256D).color(r, g, b, 1.0F).endVertex();
-			        worldrenderer.pos((double)i / 2 - 43, (double)0, (double)-90D).tex(0D / 256D, 98D / 256D).color(r, g, b, 1.0F).endVertex();
+			        worldrenderer.pos((double)i / 2 - 43, 27D, -90D).tex(0D / 256D, 125D / 256D).color(r, g, b, 1.0F).endVertex();
+			        worldrenderer.pos((double)i / 2 - 19, 27D, -90D).tex(24D / 256D, 125D / 256D).color(r, g, b, 1.0F).endVertex();
+			        worldrenderer.pos((double)i / 2 - 19, 0, -90D).tex(24D / 256D, 98D / 256D).color(r, g, b, 1.0F).endVertex();
+			        worldrenderer.pos((double)i / 2 - 43, 0, -90D).tex(0D / 256D, 98D / 256D).color(r, g, b, 1.0F).endVertex();
 			        tessellator.draw();
 					
 					//Draw team 2 colour bit
@@ -614,16 +615,16 @@ public class TagManager {
 			        float f1 = ((colour >> 16) & 0xff) / 256F;
 			        float f2 = ((colour >> 8) & 0xff) / 256F;
 			        float f3 = (colour & 0xff) / 256F;
-			        worldrenderer.pos((double)i / 2 + 19, (double)27D, (double)-90D).tex(62D / 256D, 125D / 256D).color(f1, f2, f3, 1.0F).endVertex();
-			        worldrenderer.pos((double)i / 2 + 43, (double)27D, (double)-90D).tex(86D / 256D, 125D / 256D).color(f1, f2, f3, 1.0F).endVertex();
+			        worldrenderer.pos((double)i / 2 + 19, 27D, -90D).tex(62D / 256D, 125D / 256D).color(f1, f2, f3, 1.0F).endVertex();
+			        worldrenderer.pos((double)i / 2 + 43, 27D, -90D).tex(86D / 256D, 125D / 256D).color(f1, f2, f3, 1.0F).endVertex();
 			        
 			        if(isTagger(playerData))colour = taggerColor;
 			        
 			        float f5 = ((colour >> 16) & 0xff) / 256F;
 			        float f6 = ((colour >> 8) & 0xff) / 256F;
 			        float f7 = (colour & 0xff) / 256F;
-			        worldrenderer.pos((double)i / 2 + 43, (double)0, (double)-90D).tex(86D / 256D, 98D / 256D).color(f5, f6, f7, 1.0F).endVertex();
-			        worldrenderer.pos((double)i / 2 + 19, (double)0, (double)-90D).tex(62D / 256D, 98D / 256D).color(f5, f6, f7, 1.0F).endVertex();
+			        worldrenderer.pos((double)i / 2 + 43, 0, -90D).tex(86D / 256D, 98D / 256D).color(f5, f6, f7, 1.0F).endVertex();
+			        worldrenderer.pos((double)i / 2 + 19, 0, -90D).tex(62D / 256D, 98D / 256D).color(f5, f6, f7, 1.0F).endVertex();
 			        tessellator.draw();
 					
 					GlStateManager.shadeModel(GL11.GL_FLAT);

@@ -2,14 +2,14 @@ package alec_wam.CrystalMod.crafting;
 
 import java.util.List;
 
+import com.google.common.collect.Lists;
+
+import alec_wam.CrystalMod.api.crafting.ICrystalRecipe;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
-import alec_wam.CrystalMod.api.crafting.ICrystalRecipe;
-
-import com.google.common.collect.Lists;
 
 public class ShapelessCrystalRecipe implements ICrystalRecipe {
 
@@ -23,12 +23,14 @@ public class ShapelessCrystalRecipe implements ICrystalRecipe {
         this.recipeItems = inputList;
     }
 
-    public ItemStack getRecipeOutput()
+    @Override
+	public ItemStack getRecipeOutput()
     {
         return this.recipeOutput;
     }
 
-    public NonNullList<ItemStack> getRemainingItems(InventoryCrafting inv)
+    @Override
+	public NonNullList<ItemStack> getRemainingItems(InventoryCrafting inv)
     {
         return ForgeHooks.defaultRecipeGetRemainingItems(inv);
     }
@@ -36,7 +38,8 @@ public class ShapelessCrystalRecipe implements ICrystalRecipe {
     /**
      * Used to check if a recipe matches current crafting inventory
      */
-    public boolean matches(InventoryCrafting inv, World worldIn)
+    @Override
+	public boolean matches(InventoryCrafting inv, World worldIn)
     {
         List<ItemStack> list = Lists.newArrayList(this.recipeItems);
 
@@ -74,7 +77,8 @@ public class ShapelessCrystalRecipe implements ICrystalRecipe {
     /**
      * Returns an Item that is the result of this recipe
      */
-    public ItemStack getCraftingResult(InventoryCrafting inv)
+    @Override
+	public ItemStack getCraftingResult(InventoryCrafting inv)
     {
         return this.recipeOutput.copy();
     }
@@ -82,7 +86,8 @@ public class ShapelessCrystalRecipe implements ICrystalRecipe {
     /**
      * Returns the size of the recipe area
      */
-    public int getRecipeSize()
+    @Override
+	public int getRecipeSize()
     {
         return this.recipeItems.size();
     }

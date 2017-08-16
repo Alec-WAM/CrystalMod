@@ -2,7 +2,6 @@ package alec_wam.CrystalMod.integration.jei.crystalworkbench;
 
 import javax.annotation.Nonnull;
 
-import alec_wam.CrystalMod.crafting.ShapedCrystalRecipe;
 import alec_wam.CrystalMod.crafting.ShapedNBTRecipe;
 import alec_wam.CrystalMod.integration.jei.CrystalModRecipeUids;
 import alec_wam.CrystalMod.util.ItemStackTools;

@@ -18,6 +18,7 @@ public class GuiEngineFurnace extends GuiElementContainer{
         this.name = "Furnace Engine";
     }
 	
+	@Override
 	public void initGui(){
 		super.initGui();
 		
@@ -27,6 +28,7 @@ public class GuiEngineFurnace extends GuiElementContainer{
 	    
 	}
 	
+	@Override
 	protected void updateElementInformation()
 	{
 		super.updateElementInformation();

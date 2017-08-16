@@ -2,8 +2,8 @@ package alec_wam.CrystalMod.entities.animals;
 
 import java.util.List;
 
-import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.items.ItemCrystal.CrystalType;
+import alec_wam.CrystalMod.items.ModItems;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.passive.EntityCow;
@@ -27,14 +27,16 @@ public class EntityCrystalCow extends EntityCow implements net.minecraftforge.co
 		super(worldIn);
 	}
 
-    protected void entityInit()
+    @Override
+	protected void entityInit()
     {
         super.entityInit();
         this.dataManager.register(DELAY, Integer.valueOf(0));
         this.dataManager.register(COLOR, new Byte((byte)0));
     }
 
-    public EntityCrystalCow createChild(EntityAgeable ageable)
+    @Override
+	public EntityCrystalCow createChild(EntityAgeable ageable)
     {
     	EntityCrystalCow cow = new EntityCrystalCow(this.getEntityWorld());
     	if(ageable instanceof EntityCrystalCow){
@@ -62,14 +64,16 @@ public class EntityCrystalCow extends EntityCow implements net.minecraftforge.co
     	this.dataManager.set(COLOR, Byte.valueOf((byte)color));
     }
 	
-    public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, IEntityLivingData livingdata)
+    @Override
+	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, IEntityLivingData livingdata)
     {
         super.onInitialSpawn(difficulty, livingdata);
         setColor(rand.nextInt(4));
         return livingdata;
     }
     
-    public void writeEntityToNBT(NBTTagCompound tagCompound)
+    @Override
+	public void writeEntityToNBT(NBTTagCompound tagCompound)
     {
         super.writeEntityToNBT(tagCompound);
         tagCompound.setInteger("CrystalDelay", this.getDelay());
@@ -79,14 +83,16 @@ public class EntityCrystalCow extends EntityCow implements net.minecraftforge.co
     /**
      * (abstract) Protected helper method to read subclass entity data from NBT.
      */
-    public void readEntityFromNBT(NBTTagCompound tagCompund)
+    @Override
+	public void readEntityFromNBT(NBTTagCompound tagCompund)
     {
         super.readEntityFromNBT(tagCompund);
         this.setDelay(tagCompund.getInteger("CrystalDelay"));
         this.setColor(tagCompund.getByte("Color"));
     }
     
-    public void onLivingUpdate()
+    @Override
+	public void onLivingUpdate()
     {
         super.onLivingUpdate();
         if(!getEntityWorld().isRemote){

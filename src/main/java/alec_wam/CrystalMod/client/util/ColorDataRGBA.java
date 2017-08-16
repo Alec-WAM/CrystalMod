@@ -22,11 +22,13 @@ public class ColorDataRGBA extends ColorData {
         super(colour);
     }
 
-    public int pack() {
+    @Override
+	public int pack() {
         return pack(this);
     }
 
-    public float[] packArray() {
+    @Override
+	public float[] packArray() {
         return new float[] { (r & 0xFF) / 255, (g & 0xFF) / 255, (b & 0xFF) / 255, (a & 0xFF) / 255 };
     }
 

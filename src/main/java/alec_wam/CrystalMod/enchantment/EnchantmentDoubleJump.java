@@ -8,7 +8,6 @@ import alec_wam.CrystalMod.capability.ExtendedPlayerProvider;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.packets.PacketEntityMessage;
 import alec_wam.CrystalMod.util.ItemStackTools;
-import alec_wam.CrystalMod.util.ModLogger;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.EnumEnchantmentType;
@@ -31,16 +30,19 @@ public class EnchantmentDoubleJump extends Enchantment {
 		setRegistryName(CrystalMod.resourceL(NAME));
 	}
 	
+	@Override
 	public int getMinEnchantability(int enchantmentLevel)
     {
         return enchantmentLevel * 10;
     }
 
-    public int getMaxEnchantability(int enchantmentLevel)
+    @Override
+	public int getMaxEnchantability(int enchantmentLevel)
     {
         return this.getMinEnchantability(enchantmentLevel) + 15;
     }
 	
+	@Override
 	public int getMaxLevel()
     {
         return 1;

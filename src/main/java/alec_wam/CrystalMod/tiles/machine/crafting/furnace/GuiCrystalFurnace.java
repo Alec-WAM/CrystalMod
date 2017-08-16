@@ -19,6 +19,7 @@ public class GuiCrystalFurnace extends GuiElementContainer{
         this.name = "Crystal Furnace";
     }
 	
+	@Override
 	public void initGui(){
 		super.initGui();
 		
@@ -29,6 +30,7 @@ public class GuiCrystalFurnace extends GuiElementContainer{
 	    
 	}
 	
+	@Override
 	protected void updateElementInformation()
 	{
 		super.updateElementInformation();

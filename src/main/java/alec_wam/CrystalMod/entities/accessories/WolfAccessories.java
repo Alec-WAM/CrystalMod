@@ -9,23 +9,19 @@ import com.google.common.base.Strings;
 
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.api.tools.IWolfArmor;
-import alec_wam.CrystalMod.handler.EventHandler;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.packets.PacketEntityMessage;
 import alec_wam.CrystalMod.util.EntityUtil;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
-import alec_wam.CrystalMod.util.ModLogger;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.passive.EntityWolf;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.math.BlockPos;
 
 public class WolfAccessories {
 
@@ -62,7 +58,7 @@ public class WolfAccessories {
 
             if (i != 0)
             {
-            	entity.getEntityAttribute(SharedMonsterAttributes.ARMOR).applyModifier((new AttributeModifier(UUID_ARMOR_ATTRIBUTE, "Wolf armor bonus", (double)i, 0)).setSaved(false));
+            	entity.getEntityAttribute(SharedMonsterAttributes.ARMOR).applyModifier((new AttributeModifier(UUID_ARMOR_ATTRIBUTE, "Wolf armor bonus", i, 0)).setSaved(false));
             }
             //EntityUtil.getCustomEntityData(entity).setBoolean(EventHandler.NBT_NBTDIRTY, true);
             if(sendPacket){

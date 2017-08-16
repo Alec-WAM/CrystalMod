@@ -44,6 +44,7 @@ public class ItemCrystalArmor extends ItemCustomArmor implements ICustomModel {
 		return ItemUtil.stackMatchUseOre(par2ItemStack, repair) ? true : super.getIsRepairable(par1ItemStack, par2ItemStack);
 	}
 	
+	@Override
 	@SideOnly(Side.CLIENT)
     public void initModel() {
 		final Map<String, ModelResourceLocation> models = Maps.newHashMap();
@@ -61,6 +62,7 @@ public class ItemCrystalArmor extends ItemCustomArmor implements ICustomModel {
         });
     }
 	
+	@Override
 	public String getUnlocalizedName(ItemStack stack)
     {
         String color = ItemNBTHelper.getString(stack, NBT_COLOR, "");

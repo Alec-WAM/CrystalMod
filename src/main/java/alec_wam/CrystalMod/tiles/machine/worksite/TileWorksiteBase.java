@@ -257,11 +257,13 @@ public abstract class TileWorksiteBase extends TileEntityMod implements IWorkSit
 	  return pass==1;
 	}
 	
+	@Override
 	public final EnumFacing getPrimaryFacing()
 	{
 	  return orientation;
 	}
 
+	@Override
 	public final void setPrimaryFacing(EnumFacing face)
 	{
 	  orientation = face;
@@ -381,6 +383,7 @@ public abstract class TileWorksiteBase extends TileEntityMod implements IWorkSit
 	  setupInitialTicket();  
 	}	
 	
+	@Override
 	public Vector4f boundsColor(){
 		return new Vector4f(1, 1, 1, 1);
 	}

@@ -29,7 +29,8 @@ public class ItemPipeAttachment extends Item implements ICustomModel {
     public void initModel(){
     	ModItems.initBasicModel(this);
     	ClientProxy.registerCustomModel(new CustomBakedModel(new ModelResourceLocation(getRegistryName(), "inventory"), ModelAttachment.INSTANCE){
-    		public void preModelRegister(){
+    		@Override
+			public void preModelRegister(){
     			ModelAttachment.map.clear();
     		}
     	});

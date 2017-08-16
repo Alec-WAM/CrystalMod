@@ -4,7 +4,6 @@ import alec_wam.CrystalMod.api.crafting.ICrystalRecipe;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
@@ -34,12 +33,14 @@ public class ShapedCrystalRecipe implements ICrystalRecipe {
     	return this;
     }
 
-    public ItemStack getRecipeOutput()
+    @Override
+	public ItemStack getRecipeOutput()
     {
         return this.recipeOutput;
     }
 
-    public NonNullList<ItemStack> getRemainingItems(InventoryCrafting inv)
+    @Override
+	public NonNullList<ItemStack> getRemainingItems(InventoryCrafting inv)
     {
         return ForgeHooks.defaultRecipeGetRemainingItems(inv);
     }
@@ -47,7 +48,8 @@ public class ShapedCrystalRecipe implements ICrystalRecipe {
     /**
      * Used to check if a recipe matches current crafting inventory
      */
-    public boolean matches(InventoryCrafting inv, World worldIn)
+    @Override
+	public boolean matches(InventoryCrafting inv, World worldIn)
     {
         for (int i = 0; i <= 3 - this.recipeWidth; ++i)
         {
@@ -123,7 +125,8 @@ public class ShapedCrystalRecipe implements ICrystalRecipe {
     /**
      * Returns an Item that is the result of this recipe
      */
-    public ItemStack getCraftingResult(InventoryCrafting inv)
+    @Override
+	public ItemStack getCraftingResult(InventoryCrafting inv)
     {
         ItemStack itemstack = this.getRecipeOutput().copy();
 
@@ -135,7 +138,7 @@ public class ShapedCrystalRecipe implements ICrystalRecipe {
 
                 if (itemstack1 != null && itemstack1.hasTagCompound())
                 {
-                    itemstack.setTagCompound((NBTTagCompound)itemstack1.getTagCompound().copy());
+                    itemstack.setTagCompound(itemstack1.getTagCompound().copy());
                 }
             }
         }
@@ -146,7 +149,8 @@ public class ShapedCrystalRecipe implements ICrystalRecipe {
     /**
      * Returns the size of the recipe area
      */
-    public int getRecipeSize()
+    @Override
+	public int getRecipeSize()
     {
         return this.recipeWidth * this.recipeHeight;
     }

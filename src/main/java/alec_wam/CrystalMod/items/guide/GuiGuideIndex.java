@@ -2,7 +2,6 @@ package alec_wam.CrystalMod.items.guide;
 
 import java.awt.Color;
 import java.io.IOException;
-import java.text.Collator;
 import java.util.List;
 import java.util.Locale;
 
@@ -12,12 +11,6 @@ import org.lwjgl.opengl.GL11;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.item.ItemStack;
 import alec_wam.CrystalMod.api.CrystalModAPI;
 import alec_wam.CrystalMod.api.guide.GuideChapter;
 import alec_wam.CrystalMod.api.guide.GuideIndex;
@@ -27,7 +20,12 @@ import alec_wam.CrystalMod.tiles.pipes.estorage.client.IGuiScreen;
 import alec_wam.CrystalMod.tiles.pipes.estorage.client.VScrollbar;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.Lang;
-import alec_wam.CrystalMod.util.ModLogger;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.item.ItemStack;
 
 public class GuiGuideIndex extends GuiGuideBase implements IGuiScreen {
 
@@ -104,6 +102,7 @@ public class GuiGuideIndex extends GuiGuideBase implements IGuiScreen {
         return new GuideIndex[] {index1, index2};
 	}
 	
+	@Override
 	public void handleMouseInput() throws IOException
     {
         super.handleMouseInput();
@@ -117,6 +116,7 @@ public class GuiGuideIndex extends GuiGuideBase implements IGuiScreen {
         }
     }
 	
+	@Override
 	public void updateScreen(){
 		super.updateScreen();
 		pageTimer++;
@@ -142,6 +142,7 @@ public class GuiGuideIndex extends GuiGuideBase implements IGuiScreen {
 		}
 	}
 	
+	@Override
 	public void actionPerformed(GuiButton button){
 		if(button.id == 0){
 			GuideIndex index = this.indexes[0];
@@ -281,10 +282,6 @@ public class GuiGuideIndex extends GuiGuideBase implements IGuiScreen {
 		GuiComponentSprite.renderSprite(mc, 0, 0, offsetX, offsetY, mouseX, mouseY, GuiComponentBook.iconPageLeft, GuiComponentBook.texture, 1f, 1f, 1f);
 		GuiComponentSprite.renderSprite(mc, (int)GuiComponentBook.iconPageRight.getWidth(), 0, offsetX, offsetY, mouseX, mouseY, GuiComponentBook.iconPageRight, GuiComponentBook.texture, 1f, 1f, 1f);
 		
-		int middle = xSize;
-		//Used to test where the middle is
-		//GuiScreen.drawRect(guiLeft+middle-2, guiTop, guiLeft+middle+2, guiTop+ySize, Color.RED.getRGB());
-		
 		if(indexes[0] !=null){
 			List<GuideChapter> chapters = getFilteredChapters(0);
 		    
@@ -353,7 +350,7 @@ public class GuiGuideIndex extends GuiGuideBase implements IGuiScreen {
 					String chapterTitle = chapter.getLocalizedTitle();
 					int width = this.fontRendererObj.getStringWidth(chapterTitle);
 					GlStateManager.translate(x+20, y+6, 0f );
-					float scale2 = Math.min(164F / (float) (width+10), 1.0F);
+					float scale2 = Math.min(164F / (width+10), 1.0F);
 			        GlStateManager.scale(scale2, scale2, 1);
 			        this.fontRendererObj.drawString(chapterTitle, 0, 0, 0);
 					GlStateManager.popMatrix();
@@ -408,7 +405,7 @@ public class GuiGuideIndex extends GuiGuideBase implements IGuiScreen {
 					String chapterTitle = chapter.getLocalizedTitle();
 					int width = this.fontRendererObj.getStringWidth(chapterTitle);
 					GlStateManager.translate(x+20, y+6, 0f );
-					float scale2 = Math.min(164F / (float) (width+10), 1.0F);
+					float scale2 = Math.min(164F / (width+10), 1.0F);
 			        GlStateManager.scale(scale2, scale2, 1);
 			        this.fontRendererObj.drawString(chapterTitle, 0, 0, 0);
 					GlStateManager.popMatrix();

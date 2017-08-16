@@ -2,6 +2,10 @@ package alec_wam.CrystalMod.network.packets;
 
 import java.io.IOException;
 
+import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.network.AbstractPacketThreadsafe;
+import alec_wam.CrystalMod.network.IMessageHandler;
+import alec_wam.CrystalMod.util.BlockUtil;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.entity.player.EntityPlayer;
@@ -9,11 +13,6 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetHandlerPlayServer;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.math.BlockPos;
-import alec_wam.CrystalMod.CrystalMod;
-import alec_wam.CrystalMod.network.AbstractPacketThreadsafe;
-import alec_wam.CrystalMod.network.IMessageHandler;
-import alec_wam.CrystalMod.util.BlockUtil;
 
 public class PacketGuiMessage extends AbstractPacketThreadsafe {
 

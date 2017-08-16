@@ -1,6 +1,7 @@
 package alec_wam.CrystalMod.crafting.recipes;
 
 import static net.minecraftforge.oredict.RecipeSorter.Category.SHAPED;
+
 import alec_wam.CrystalMod.CrystalMod;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
@@ -18,6 +19,7 @@ public class ShapedRecipeNBT extends ShapedRecipes {
 		super(width, height, p_i1917_3_, output);
 	}
 	
+	@Override
 	public boolean matches(InventoryCrafting inv, World worldIn)
     {
         for (int i = 0; i <= 3 - this.recipeWidth; ++i)

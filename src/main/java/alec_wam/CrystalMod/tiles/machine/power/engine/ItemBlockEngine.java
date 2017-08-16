@@ -11,8 +11,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -25,7 +25,8 @@ public class ItemBlockEngine extends ItemBlock {
     this.setHasSubtypes(true);
   }
   
-  public int getMetadata(int damage)
+  @Override
+public int getMetadata(int damage)
   {
       return damage;
   }
@@ -45,7 +46,8 @@ public class ItemBlockEngine extends ItemBlock {
     return true;
   }
   
-  @SideOnly(Side.CLIENT)
+  @Override
+@SideOnly(Side.CLIENT)
   public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced)
   {
       super.addInformation(stack, playerIn, tooltip, advanced);

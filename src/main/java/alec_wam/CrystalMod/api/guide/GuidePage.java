@@ -1,7 +1,5 @@
 package alec_wam.CrystalMod.api.guide;
 
-import java.util.List;
-
 import alec_wam.CrystalMod.items.guide.GuiGuideChapter;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraftforge.fml.relauncher.Side;

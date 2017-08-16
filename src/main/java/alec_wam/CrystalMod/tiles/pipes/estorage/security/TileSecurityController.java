@@ -35,6 +35,7 @@ public class TileSecurityController extends TileEntityMod implements INetworkPow
 	    }
     };
 	
+	@Override
 	public void writeCustomNBT(NBTTagCompound nbt){
 		super.writeCustomNBT(nbt);
 		if(owner !=null)nbt.setString("Owner", UUIDUtils.fromUUID(owner));
@@ -43,6 +44,7 @@ public class TileSecurityController extends TileEntityMod implements INetworkPow
         nbt.setBoolean("Connected", connected);
 	}
 	
+	@Override
 	public void readCustomNBT(NBTTagCompound nbt){
 		super.readCustomNBT(nbt);
 		if(nbt.hasKey("Owner")){

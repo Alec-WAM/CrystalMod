@@ -33,6 +33,7 @@ public class ItemBat extends ItemSpecialSword implements ICustomModel {
 		ModItems.registerItem(this, "baseballbat");
 	}
 	
+	@Override
 	@SideOnly(Side.CLIENT)
 	public void initModel(){
 		ModItems.initBasicModel(this);
@@ -44,6 +45,7 @@ public class ItemBat extends ItemSpecialSword implements ICustomModel {
 		list.addAll(BatHelper.getCreativeListBats(item));
 	}
 	
+	@Override
 	@SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced)
     {
@@ -72,7 +74,7 @@ public class ItemBat extends ItemSpecialSword implements ICustomModel {
         if (equipmentSlot == EntityEquipmentSlot.MAINHAND)
         {
         	IBatType type = BatHelper.getBat(stack);
-            multimap.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(), new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", (double)type.getBaseDamage(), 0));
+            multimap.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(), new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", type.getBaseDamage(), 0));
             multimap.put(SharedMonsterAttributes.ATTACK_SPEED.getName(), new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier", -2.4000000953674316D, 0));
         }
 

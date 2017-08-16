@@ -55,15 +55,18 @@ public class AttachmentEStorageSensor extends AttachmentData {
 		return "estorage.sensor";
 	}
 
+	@Override
 	@SideOnly(Side.CLIENT)
 	public Object getGui(EntityPlayer player, TileEntityPipeEStorage pipe, EnumFacing dir){
 		return new GuiAttachmentSensor(player, pipe, dir);
 	}
 	
+	@Override
 	public Object getContainer(EntityPlayer player, TileEntityPipeEStorage pipe, EnumFacing dir){
 		return new ContainerAttachmentSensor(player, pipe, dir);
 	}
 	
+	@Override
 	public void writeToNBT(NBTTagCompound nbt){
 		super.writeToNBT(nbt);
 		if(filterStack !=null){
@@ -77,6 +80,7 @@ public class AttachmentEStorageSensor extends AttachmentData {
 		nbt.setBoolean("Ore", useOre);
 	}
 	
+	@Override
 	public void loadFromNBT(NBTTagCompound nbt){
 		super.loadFromNBT(nbt);
 		if(nbt.hasKey("FilterStack")){
@@ -119,6 +123,7 @@ public class AttachmentEStorageSensor extends AttachmentData {
 		}
 	}
 	
+	@Override
 	public void update(TileEntityPipe pipe, EnumFacing face){
 		super.update(pipe, face);
 		if(pipe == null || !(pipe instanceof TileEntityPipeEStorage)){
@@ -347,14 +352,17 @@ public class AttachmentEStorageSensor extends AttachmentData {
 		return list;
 	}
 	
+	@Override
 	public boolean isPipeValid(TileEntityPipe pipe, EnumFacing side, ItemStack stack){
 		return pipe instanceof TileEntityPipeEStorage;
 	}
 	
+	@Override
 	public int getRedstonePower(TileEntityPipe pipe, EnumFacing face, boolean strong){
 		return (strong == strongPower) ? outRedstonePower : 0;
 	}
 	
+	@Override
 	public boolean canConnectRedstone(TileEntityPipe pipe, EnumFacing dir){
 		return true;
 	}

@@ -3,18 +3,13 @@ package alec_wam.CrystalMod.entities.minions;
 import alec_wam.CrystalMod.entities.EntityOwnable;
 import alec_wam.CrystalMod.entities.ai.AIManager;
 import alec_wam.CrystalMod.network.IMessageHandler;
-import alec_wam.CrystalMod.util.ChatUtil;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemStackTools;
-import alec_wam.CrystalMod.util.UUIDUtils;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAISwimming;
-import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
@@ -50,12 +45,14 @@ public class EntityMinionBase extends EntityOwnable implements IMessageHandler {
 		aiManager.onUpdate();
 	}
 	
+	@Override
 	public void onLivingUpdate()
     {
 		super.onLivingUpdate();
 		this.updateArmSwingProgress();
     }
 	
+	@Override
 	protected void applyEntityAttributes()
     {
         super.applyEntityAttributes();
@@ -98,6 +95,7 @@ public class EntityMinionBase extends EntityOwnable implements IMessageHandler {
 		return super.isChild();
 	}
 	
+	@Override
 	public float getRenderSizeModifier(){
 		return 0.5F;
 	}
@@ -124,7 +122,7 @@ public class EntityMinionBase extends EntityOwnable implements IMessageHandler {
         }
         else
         {
-            double d0 = this.posY - 0.30000001192092896D + (double)this.getEyeHeight();
+            double d0 = this.posY - 0.30000001192092896D + this.getEyeHeight();
             EntityItem entityitem = new EntityItem(this.getEntityWorld(), this.posX, d0, this.posZ, droppedItem);
             entityitem.setPickupDelay(40);
 
@@ -137,21 +135,21 @@ public class EntityMinionBase extends EntityOwnable implements IMessageHandler {
             {
                 float f = this.rand.nextFloat() * 0.5F;
                 float f1 = this.rand.nextFloat() * (float)Math.PI * 2.0F;
-                entityitem.motionX = (double)(-MathHelper.sin(f1) * f);
-                entityitem.motionZ = (double)(MathHelper.cos(f1) * f);
+                entityitem.motionX = -MathHelper.sin(f1) * f;
+                entityitem.motionZ = MathHelper.cos(f1) * f;
                 entityitem.motionY = 0.20000000298023224D;
             }
             else
             {
                 float f2 = 0.3F;
-                entityitem.motionX = (double)(-MathHelper.sin(this.rotationYaw / 180.0F * (float)Math.PI) * MathHelper.cos(this.rotationPitch / 180.0F * (float)Math.PI) * f2);
-                entityitem.motionZ = (double)(MathHelper.cos(this.rotationYaw / 180.0F * (float)Math.PI) * MathHelper.cos(this.rotationPitch / 180.0F * (float)Math.PI) * f2);
-                entityitem.motionY = (double)(-MathHelper.sin(this.rotationPitch / 180.0F * (float)Math.PI) * f2 + 0.1F);
+                entityitem.motionX = -MathHelper.sin(this.rotationYaw / 180.0F * (float)Math.PI) * MathHelper.cos(this.rotationPitch / 180.0F * (float)Math.PI) * f2;
+                entityitem.motionZ = MathHelper.cos(this.rotationYaw / 180.0F * (float)Math.PI) * MathHelper.cos(this.rotationPitch / 180.0F * (float)Math.PI) * f2;
+                entityitem.motionY = -MathHelper.sin(this.rotationPitch / 180.0F * (float)Math.PI) * f2 + 0.1F;
                 float f3 = this.rand.nextFloat() * (float)Math.PI * 2.0F;
                 f2 = 0.02F * this.rand.nextFloat();
-                entityitem.motionX += Math.cos((double)f3) * (double)f2;
-                entityitem.motionY += (double)((this.rand.nextFloat() - this.rand.nextFloat()) * 0.1F);
-                entityitem.motionZ += Math.sin((double)f3) * (double)f2;
+                entityitem.motionX += Math.cos(f3) * f2;
+                entityitem.motionY += (this.rand.nextFloat() - this.rand.nextFloat()) * 0.1F;
+                entityitem.motionZ += Math.sin(f3) * f2;
             }
 
             if(!this.getEntityWorld().isRemote)

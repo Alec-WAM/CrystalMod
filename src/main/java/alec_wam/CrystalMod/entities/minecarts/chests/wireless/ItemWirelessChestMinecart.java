@@ -40,13 +40,14 @@ public class ItemWirelessChestMinecart extends Item implements ICustomModel
         /**
          * Dispense the specified stack, play the dispense sound and spawn particles.
          */
-        public ItemStack dispenseStack(IBlockSource source, ItemStack stack)
+        @Override
+		public ItemStack dispenseStack(IBlockSource source, ItemStack stack)
         {
-            EnumFacing enumfacing = (EnumFacing)source.getBlockState().getValue(BlockDispenser.FACING);
+            EnumFacing enumfacing = source.getBlockState().getValue(BlockDispenser.FACING);
             World world = source.getWorld();
-            double d0 = source.getX() + (double)enumfacing.getFrontOffsetX() * 1.125D;
-            double d1 = Math.floor(source.getY()) + (double)enumfacing.getFrontOffsetY();
-            double d2 = source.getZ() + (double)enumfacing.getFrontOffsetZ() * 1.125D;
+            double d0 = source.getX() + enumfacing.getFrontOffsetX() * 1.125D;
+            double d1 = Math.floor(source.getY()) + enumfacing.getFrontOffsetY();
+            double d2 = source.getZ() + enumfacing.getFrontOffsetZ() * 1.125D;
             BlockPos blockpos = source.getBlockPos().offset(enumfacing);
             IBlockState iblockstate = world.getBlockState(blockpos);
             BlockRailBase.EnumRailDirection blockrailbase$enumraildirection = iblockstate.getBlock() instanceof BlockRailBase ? (BlockRailBase.EnumRailDirection)iblockstate.getValue(((BlockRailBase)iblockstate.getBlock()).getShapeProperty()) : BlockRailBase.EnumRailDirection.NORTH_SOUTH;
@@ -100,7 +101,8 @@ public class ItemWirelessChestMinecart extends Item implements ICustomModel
         /**
          * Play the dispense sound from the specified block.
          */
-        protected void playDispenseSound(IBlockSource source)
+        @Override
+		protected void playDispenseSound(IBlockSource source)
         {
             source.getWorld().playEvent(1000, source.getBlockPos(), 0);
         }
@@ -114,7 +116,8 @@ public class ItemWirelessChestMinecart extends Item implements ICustomModel
         ModItems.registerItem(this, "minecart_wirelesschest");
     }
     
-    @SideOnly(Side.CLIENT)
+    @Override
+	@SideOnly(Side.CLIENT)
     public void initModel() {
     	ModItems.initBasicModel(this);
     	ClientProxy.registerItemRenderCustom(getRegistryName().toString(), new ItemWirelessMinecartRender());
@@ -172,7 +175,7 @@ public class ItemWirelessChestMinecart extends Item implements ICustomModel
                     d0 = 0.5D;
                 }
                 
-                EntityWirelessChestMinecart entityminecart = new EntityWirelessChestMinecart(worldIn, (double)pos.getX() + 0.5D, (double)pos.getY() + 0.0625D + d0, (double)pos.getZ() + 0.5D);
+                EntityWirelessChestMinecart entityminecart = new EntityWirelessChestMinecart(worldIn, pos.getX() + 0.5D, pos.getY() + 0.0625D + d0, pos.getZ() + 0.5D);
                 entityminecart.setCode(ItemNBTHelper.getInteger(stack, WirelessChestHelper.NBT_CODE, 0));
                 String owner = ItemNBTHelper.getString(stack, WirelessChestHelper.NBT_OWNER, "");
                 if(UUIDUtils.isUUID(owner))entityminecart.setOwner(UUIDUtils.fromString(owner));

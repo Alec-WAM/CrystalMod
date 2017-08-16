@@ -13,7 +13,7 @@ public class ContainerEngineFurnace extends Container
 
     public ContainerEngineFurnace(EntityPlayer player, TileEntityEngineFurnace tileEntity)
     {
-    	this.tileFurnace = ((TileEntityEngineFurnace) tileEntity);
+    	this.tileFurnace = (tileEntity);
 
         this.addSlotToContainer(new Slot(tileFurnace, 0, 54, 45));
     	this.addPlayerInventory(player.inventory);
@@ -43,7 +43,7 @@ public class ContainerEngineFurnace extends Container
     {
     	ItemStack itemstack = ItemStackTools.getEmptyStack();
     	int par2 = i;
-		Slot slot = (Slot)this.inventorySlots.get(par2);
+		Slot slot = this.inventorySlots.get(par2);
 
 		if (slot != null && slot.getHasStack())
 		{

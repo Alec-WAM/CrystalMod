@@ -1,5 +1,9 @@
 package alec_wam.CrystalMod.entities.minions.warrior;
 
+import alec_wam.CrystalMod.entities.ai.AIBase;
+import alec_wam.CrystalMod.entities.minions.EnumMovementState;
+import alec_wam.CrystalMod.entities.minions.MinionConstants;
+import alec_wam.CrystalMod.util.EntityUtil;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
@@ -8,10 +12,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
-import alec_wam.CrystalMod.entities.ai.AIBase;
-import alec_wam.CrystalMod.entities.minions.EnumMovementState;
-import alec_wam.CrystalMod.entities.minions.MinionConstants;
-import alec_wam.CrystalMod.util.EntityUtil;
 
 public class MinionAIFollow extends AIBase<EntityMinionWarrior> {
 

@@ -13,7 +13,6 @@ import alec_wam.CrystalMod.network.packets.PacketTileMessage;
 import alec_wam.CrystalMod.tiles.TileEntityMod;
 import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.FluidUtil;
-import alec_wam.CrystalMod.util.ModLogger;
 import alec_wam.CrystalMod.util.TimeUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -21,7 +20,6 @@ import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTUtil;
@@ -171,9 +169,9 @@ public class TileRemoverExplosion extends TileEntityMod implements IMessageHandl
 			} else {
 				timerRemaining--;
 				if(timerRemaining <= 0){
-					double explosionX = getPos().getX() + 0.5D;
-					double explosionY = getPos().getY() + 0.5D;
-					double explosionZ = getPos().getZ() + 0.5D;
+					getPos().getX();
+					getPos().getY();
+					getPos().getZ();
 					//getWorld().playSound((EntityPlayer)null, explosionX, explosionY, explosionZ, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.BLOCKS, 4.0F, (1.0F + (this.world.rand.nextFloat() - this.world.rand.nextFloat()) * 0.2F) * 0.7F);
 			        getWorld().setBlockToAir(getPos());
 					List<BlockPos> particlePosList = type.onExplosion(getWorld(), getPos());
@@ -210,18 +208,18 @@ public class TileRemoverExplosion extends TileEntityMod implements IMessageHandl
 			getWorld().spawnParticle(EnumParticleTypes.EXPLOSION_HUGE, explosionX, explosionY, explosionZ, 1.0D, 0.0D, 0.0D, new int[0]);
 			for (BlockPos blockpos : particlePosList)
             {
-	        	double d0 = (double)((float)blockpos.getX() + this.world.rand.nextFloat());
-	        	double d1 = (double)((float)blockpos.getY() + this.world.rand.nextFloat());
-	        	double d2 = (double)((float)blockpos.getZ() + this.world.rand.nextFloat());
+	        	double d0 = blockpos.getX() + this.world.rand.nextFloat();
+	        	double d1 = blockpos.getY() + this.world.rand.nextFloat();
+	        	double d2 = blockpos.getZ() + this.world.rand.nextFloat();
 	        	double d3 = d0 - explosionX;
 	        	double d4 = d1 - explosionY;
 	        	double d5 = d2 - explosionZ;
-	        	double d6 = (double)MathHelper.sqrt(d3 * d3 + d4 * d4 + d5 * d5);
+	        	double d6 = MathHelper.sqrt(d3 * d3 + d4 * d4 + d5 * d5);
 	        	d3 = d3 / d6;
 	        	d4 = d4 / d6;
 	        	d5 = d5 / d6;
-	        	double d7 = 0.5D / (d6 / (double)5.0D + 0.1D);
-	        	d7 = d7 * (double)(this.world.rand.nextFloat() * this.world.rand.nextFloat() + 0.3F);
+	        	double d7 = 0.5D / (d6 / 5.0D + 0.1D);
+	        	d7 = d7 * (this.world.rand.nextFloat() * this.world.rand.nextFloat() + 0.3F);
 	        	d3 = d3 * d7;
 	        	d4 = d4 * d7;
 	        	d5 = d5 * d7;

@@ -84,6 +84,7 @@ public class TileEntityFluidManager extends TileEntityIOSides {
 		markDirty();
 	}
 	
+	@Override
 	public void update(){
 		super.update();
 		if(!getWorld().isRemote){
@@ -198,15 +199,18 @@ public class TileEntityFluidManager extends TileEntityIOSides {
             		return tank;
             	}
             	
-            	public int fill(FluidStack resource, boolean doFill) {
+            	@Override
+				public int fill(FluidStack resource, boolean doFill) {
                     return getTank().fill(resource, doFill);
                 }
 
-                public FluidStack drain(int maxEmpty, boolean doDrain) {
+                @Override
+				public FluidStack drain(int maxEmpty, boolean doDrain) {
                 	return null;
                 }
 
-                public FluidStack drain(FluidStack resource, boolean doDrain) {
+                @Override
+				public FluidStack drain(FluidStack resource, boolean doDrain) {
                     return drain(resource.amount, doDrain);
                 }
 

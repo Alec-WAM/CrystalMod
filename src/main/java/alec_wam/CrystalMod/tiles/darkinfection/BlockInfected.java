@@ -23,7 +23,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumParticleTypes;
@@ -78,6 +77,7 @@ public class BlockInfected extends EnumBlock<BlockInfected.InfectedBlockType> {
 		return super.canSilkHarvest(world, pos, state, player);
     }
 	
+	@SuppressWarnings("deprecation")
 	@Override
 	public float getPlayerRelativeBlockHardness(IBlockState state, EntityPlayer player, World worldIn, BlockPos pos)
     {
@@ -139,6 +139,7 @@ public class BlockInfected extends EnumBlock<BlockInfected.InfectedBlockType> {
 		}
     }
 	
+	@SuppressWarnings("deprecation")
 	@Override
 	public Material getMaterial(IBlockState state){
 		if(state.getValue(TYPE) == InfectedBlockType.LEAVES){
@@ -182,18 +183,16 @@ public class BlockInfected extends EnumBlock<BlockInfected.InfectedBlockType> {
 	private void spawnParticles(World worldIn, BlockPos pos)
     {
         Random random = worldIn.rand;
-        double d0 = 0.0625D;
-
-       double d1 = (double)((float)pos.getX() + random.nextFloat());
-       double d2 = (double)((float)pos.getY() + random.nextFloat());
-       double d3 = (double)((float)pos.getZ() + random.nextFloat());
+        double d1 = pos.getX() + random.nextFloat();
+       double d2 = pos.getY() + random.nextFloat();
+       double d3 = pos.getZ() + random.nextFloat();
 
        if (!worldIn.getBlockState(pos.up()).isOpaqueCube())
        {
-    	   d2 = (double)pos.getY() + 0.0625D + 1.0D;
+    	   d2 = pos.getY() + 0.0625D + 1.0D;
        }
 
-       if (d1 < (double)pos.getX() || d1 > (double)(pos.getX() + 1) || d2 < 0.0D || d2 > (double)(pos.getY() + 1) || d3 < (double)pos.getZ() || d3 > (double)(pos.getZ() + 1))
+       if (d1 < pos.getX() || d1 > pos.getX() + 1 || d2 < 0.0D || d2 > pos.getY() + 1 || d3 < pos.getZ() || d3 > pos.getZ() + 1)
        {
     	   float f = random.nextFloat() * 0.6F + 0.4F;
     	   worldIn.spawnParticle(EnumParticleTypes.REDSTONE, d1, d2, d3, f * 0.2, f * 0.2, f * 0.2, new int[0]);

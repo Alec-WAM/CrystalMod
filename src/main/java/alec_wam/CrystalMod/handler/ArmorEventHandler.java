@@ -59,7 +59,7 @@ public class ArmorEventHandler {
 		EntityPlayer player = event.getAttackingPlayer();
 		if(getArmorCount(player, "green") == 4 || getArmorCount(player, "pure") == 4){
 			final int oldXP = event.getDroppedExperience();
-			float dev = (float)((float)EntityUtil.rand.nextInt(50) / (float)50);
+			float dev = (float)EntityUtil.rand.nextInt(50) / (float)50;
 			int add = (int) (oldXP * dev);
 			//ModLogger.info("Added Mob XP: "+add+" / "+dev+" "+oldXP);
 			event.setDroppedExperience(add + oldXP);
@@ -79,13 +79,14 @@ public class ArmorEventHandler {
 				return;
 			}
 			
-			float dev = (float)((float)EntityUtil.rand.nextInt(50) / (float)50);
+			float dev = (float)EntityUtil.rand.nextInt(50) / (float)50;
 			int add = (int) (oldXP * dev);
 			//ModLogger.info("Added Block XP: "+add+" / "+dev+" "+oldXP);
 			event.setExpToDrop(add + oldXP);
 		}
 	}
 	
+	@SuppressWarnings("deprecation")
 	@SubscribeEvent
 	public void addWaterBounds(GetCollisionBoxesEvent event){
 		Entity entity = event.getEntity();
@@ -134,7 +135,7 @@ public class ArmorEventHandler {
 	
 	@SubscribeEvent
 	public void onPlayerDamaged(LivingAttackEvent event){
-		World world = event.getEntityLiving().getEntityWorld();
+		event.getEntityLiving().getEntityWorld();
 		EntityLivingBase attacked = event.getEntityLiving();
 		DamageSource source = event.getSource();
 		int pureCount = getArmorCount(attacked, "pure");
@@ -146,7 +147,7 @@ public class ArmorEventHandler {
 		if(getArmorCount(attacked, "dark") == 4 || pureCount == 4){
 			if(source.getSourceOfDamage() !=null){
 				Entity toAttack = source.getSourceOfDamage();
-				toAttack.attackEntityFrom(DamageSource.causeThornsDamage(attacked), (float)EnchantmentThorns.getDamage(5, EntityUtil.rand));
+				toAttack.attackEntityFrom(DamageSource.causeThornsDamage(attacked), EnchantmentThorns.getDamage(5, EntityUtil.rand));
 				if(toAttack instanceof EntityLivingBase){
 					EntityLivingBase living = (EntityLivingBase)toAttack;
 					if(EntityUtil.rand.nextInt(10) == 0){

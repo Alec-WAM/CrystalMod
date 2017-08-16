@@ -17,7 +17,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
 
 public class RenderTileMaterialCrop<T extends TileMaterialCrop> extends TileEntitySpecialRenderer<T> {
 
@@ -56,9 +55,9 @@ public class RenderTileMaterialCrop<T extends TileMaterialCrop> extends TileEnti
         } else this.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 		GlStateManager.pushMatrix();
 		int l = 0;
-        float f = (float)(l >> 16 & 255) / 255.0F;
-        float f1 = (float)(l >> 8 & 255) / 255.0F;
-        float f2 = (float)(l & 255) / 255.0F;
+        float f = (l >> 16 & 255) / 255.0F;
+        float f1 = (l >> 8 & 255) / 255.0F;
+        float f2 = (l & 255) / 255.0F;
 
         if (EntityRenderer.anaglyphEnable)
         {
@@ -83,10 +82,10 @@ public class RenderTileMaterialCrop<T extends TileMaterialCrop> extends TileEnti
         double d10 = 0.5D - d7;
         double d11 = 0.5D + d7;*/
         
-        double d3 = (double)spriteRoots.getMinU();
-        double d4 = (double)spriteRoots.getMinV();
-        double d5 = (double)spriteRoots.getMaxU();
-        double d6 = (double)spriteRoots.getMaxV();
+        double d3 = spriteRoots.getMinU();
+        double d4 = spriteRoots.getMinV();
+        double d5 = spriteRoots.getMaxU();
+        double d6 = spriteRoots.getMaxV();
         
         Tessellator tessellator = Tessellator.getInstance();
         VertexBuffer buffer = tessellator.getBuffer();
@@ -118,15 +117,15 @@ public class RenderTileMaterialCrop<T extends TileMaterialCrop> extends TileEnti
         for(ResourceLocation res : plant.getSpites()){
         	TextureAtlasSprite sprite = RenderUtil.getSprite(res);
         	int colorVec = crop.getPlantColor(world, pos, pass);
-	        f = (float)(colorVec >> 16 & 255) / 255.0F;
-	        f1 = (float)(colorVec >> 8 & 255) / 255.0F;
-	        f2 = (float)(colorVec & 255) / 255.0F;
-            float alpha = (float)1;
+	        f = (colorVec >> 16 & 255) / 255.0F;
+	        f1 = (colorVec >> 8 & 255) / 255.0F;
+	        f2 = (colorVec & 255) / 255.0F;
+            float alpha = 1;
             
-            d3 = (double)sprite.getMinU();
-            d4 = (double)sprite.getMinV();
-            d5 = (double)sprite.getMaxU();
-            d6 = (double)sprite.getMaxV();
+            d3 = sprite.getMinU();
+            d4 = sprite.getMinV();
+            d5 = sprite.getMaxU();
+            d6 = sprite.getMaxV();
             if (EntityRenderer.anaglyphEnable)
             {
                 float f3 = (f * 30.0F + f1 * 59.0F + f2 * 11.0F) / 100.0F;

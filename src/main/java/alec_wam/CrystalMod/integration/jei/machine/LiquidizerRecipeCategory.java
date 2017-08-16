@@ -6,12 +6,6 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.integration.jei.RecipeHandler;
@@ -19,14 +13,8 @@ import alec_wam.CrystalMod.tiles.machine.crafting.BlockCrystalMachine.MachineTyp
 import alec_wam.CrystalMod.tiles.machine.crafting.liquidizer.ContainerLiquidizer;
 import alec_wam.CrystalMod.tiles.machine.crafting.liquidizer.GuiLiquidizer;
 import alec_wam.CrystalMod.tiles.machine.crafting.liquidizer.LiquidizerRecipeManager;
-import alec_wam.CrystalMod.tiles.machine.crafting.liquidizer.TileEntityLiquidizer;
 import alec_wam.CrystalMod.tiles.machine.crafting.liquidizer.LiquidizerRecipeManager.LiquidizerRecipe;
-import alec_wam.CrystalMod.tiles.machine.crafting.press.GuiPress;
 import alec_wam.CrystalMod.util.Lang;
-import alec_wam.CrystalMod.util.client.RenderUtil;
-
-import com.google.common.collect.Lists;
-
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.IJeiHelpers;
 import mezz.jei.api.IModRegistry;
@@ -40,6 +28,12 @@ import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.BlankRecipeCategory;
 import mezz.jei.api.recipe.BlankRecipeWrapper;
 import mezz.jei.api.recipe.IStackHelper;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
 
 public class LiquidizerRecipeCategory extends BlankRecipeCategory<LiquidizerRecipeCategory.LiquidizerJEIRecipe>  {
 
@@ -125,9 +119,7 @@ public class LiquidizerRecipeCategory extends BlankRecipeCategory<LiquidizerReci
 	@Nonnull
 	protected final IDrawableAnimated arrow;
 	  
-	private LiquidizerJEIRecipe currentRecipe;
-
-  	public LiquidizerRecipeCategory(IGuiHelper guiHelper) {
+	public LiquidizerRecipeCategory(IGuiHelper guiHelper) {
 	    ResourceLocation backgroundLocation = new ResourceLocation("crystalmod", "textures/gui/machine/liquidizer.png");
 	    background = guiHelper.createDrawable(backgroundLocation, xOff, yOff, 125, 50);
 
@@ -160,7 +152,6 @@ public class LiquidizerRecipeCategory extends BlankRecipeCategory<LiquidizerReci
 
 	@Override
 	public void setRecipe(IRecipeLayout recipeLayout, LiquidizerJEIRecipe recipeWrapper, IIngredients ingredients) {
-		currentRecipe = recipeWrapper;
 		IGuiItemStackGroup guiItemStacks = recipeLayout.getItemStacks();
 		guiItemStacks.init(0, true, 56 - xOff-1, 35 - yOff-1);
 		guiItemStacks.set(ingredients);

@@ -12,7 +12,6 @@ import alec_wam.CrystalMod.api.recipe.IFusionRecipe;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.Lang;
-import alec_wam.CrystalMod.util.ModLogger;
 import alec_wam.CrystalMod.util.StringUtils;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -75,8 +74,8 @@ public class FusionRecipeEnchantment implements IFusionRecipe {
 					Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(stack);
 					List<String> names = Lists.newArrayList();
 					for(Enchantment enchantment : enchantments.keySet()){
-						int currentLvl = toolEnchantments.containsKey(enchantment) ? ((Integer)toolEnchantments.get(enchantment)).intValue() : 0;
-						int bookLvl = ((Integer)enchantments.get(enchantment)).intValue();
+						int currentLvl = toolEnchantments.containsKey(enchantment) ? toolEnchantments.get(enchantment).intValue() : 0;
+						int bookLvl = enchantments.get(enchantment).intValue();
 						int newLevel = currentLvl == bookLvl ? currentLvl + 1 : currentLvl + bookLvl;
 						String name = Lang.translateToLocal(enchantment.getName());
 						names.add(name);
@@ -134,8 +133,8 @@ public class FusionRecipeEnchantment implements IFusionRecipe {
                 {
                     if (enchantment1 != null)
                     {
-                    	int i3 = toolEnchantments.containsKey(enchantment1) ? ((Integer)toolEnchantments.get(enchantment1)).intValue() : 0;
-                        int j3 = ((Integer)enchantments.get(enchantment1)).intValue();
+                    	int i3 = toolEnchantments.containsKey(enchantment1) ? toolEnchantments.get(enchantment1).intValue() : 0;
+                        int j3 = enchantments.get(enchantment1).intValue();
                         j3 = i3 == j3 ? j3 + 1 : Math.max(j3, i3);
                         boolean flag1 = enchantment1.canApply(tool);
 

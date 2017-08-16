@@ -1,13 +1,12 @@
 package alec_wam.CrystalMod.tiles.chest.wireless;
 
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.util.ResourceLocation;
-
 import org.lwjgl.opengl.GL11;
 
 import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.util.ProfileUtil;
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.util.ResourceLocation;
 
 public class GuiWirelessChest extends GuiContainer {
 

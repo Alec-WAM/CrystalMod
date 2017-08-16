@@ -19,6 +19,7 @@ public class GuiEngineVampire extends GuiElementContainer{
         this.name = "Vampiric Engine";
     }
 	
+	@Override
 	public void initGui(){
 		super.initGui();
 		
@@ -26,11 +27,13 @@ public class GuiEngineVampire extends GuiElementContainer{
 		addElement(energyElement);
 	}
 	
+	@Override
 	protected void updateElementInformation()
 	{
 		super.updateElementInformation();
 	}
 	
+	@Override
 	public void drawGuiContainerForegroundLayer(int par1, int par2){
 		super.drawGuiContainerForegroundLayer(par1, par2);
 		int maxFuel = tileEngine.maxFuel.getValue();
@@ -39,7 +42,7 @@ public class GuiEngineVampire extends GuiElementContainer{
 			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 			GlStateManager.pushMatrix();
 			bindTexture(TEXTURE);
-			int offset = (int)((fuel * 21) / maxFuel);
+			int offset = (fuel * 21) / maxFuel;
 			drawModalRectWithCustomSizedTexture(49, 36+offset, 176, offset, 21, 21, 256, 256);
 			GlStateManager.popMatrix();
 		}

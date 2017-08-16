@@ -3,6 +3,7 @@ package alec_wam.CrystalMod.tiles.machine.crafting;
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.EnumBlock.IEnumMeta;
 import alec_wam.CrystalMod.blocks.ICustomModel;
+import alec_wam.CrystalMod.tiles.BlockStateFacing;
 import alec_wam.CrystalMod.tiles.machine.BlockMachine;
 import alec_wam.CrystalMod.tiles.machine.BlockStateMachine;
 import alec_wam.CrystalMod.tiles.machine.TileEntityMachine;
@@ -11,7 +12,6 @@ import alec_wam.CrystalMod.tiles.machine.crafting.grinder.TileEntityGrinder;
 import alec_wam.CrystalMod.tiles.machine.crafting.infuser.TileEntityCrystalInfuser;
 import alec_wam.CrystalMod.tiles.machine.crafting.liquidizer.TileEntityLiquidizer;
 import alec_wam.CrystalMod.tiles.machine.crafting.press.TileEntityPress;
-import alec_wam.CrystalMod.util.ItemUtil;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
@@ -20,7 +20,6 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -54,6 +53,7 @@ public class BlockCrystalMachine extends BlockMachine implements ICustomModel  {
 	    }
 	}
 	
+	@Override
 	@SideOnly(Side.CLIENT)
 	public void initModel() {
 		ModelLoader.setCustomStateMapper(this, new MachineBlockStateMapper());
@@ -76,7 +76,7 @@ public class BlockCrystalMachine extends BlockMachine implements ICustomModel  {
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
-	    return ((MachineType) state.getValue(MACHINE_TYPE)).getMeta();
+	    return state.getValue(MACHINE_TYPE).getMeta();
 	}
 
 	@Override
@@ -107,7 +107,7 @@ public class BlockCrystalMachine extends BlockMachine implements ICustomModel  {
 	@Override
     public void breakBlock(World world, BlockPos pos, IBlockState blockState)
     {
-        TileEntity tile = world.getTileEntity(pos);
+        world.getTileEntity(pos);
         /*if (tile != null && tile instanceof IInventory)
         {
             ItemUtil.dropContent(0, (IInventory)tile, world, tile.getPos());
@@ -180,9 +180,9 @@ public class BlockCrystalMachine extends BlockMachine implements ICustomModel  {
 			
 			builder.append(",");
 			
-			builder.append(BlockStateMachine.facingProperty.getName());
+			builder.append(BlockStateFacing.facingProperty.getName());
 			builder.append("=");
-			builder.append(state.getValue(BlockStateMachine.facingProperty));
+			builder.append(state.getValue(BlockStateFacing.facingProperty));
 			
 			nameOverride = block.getRegistryName().getResourcePath() + "_" + type.getName();
 

@@ -20,6 +20,7 @@ public class RenderCrystalEnderman extends RenderEnderman
 		super(rendermanagerIn);
 	}
 
+	@Override
 	protected ResourceLocation getEntityTexture(EntityEnderman entity)
     {
 		if(entity instanceof EntityCrystalEnderman){

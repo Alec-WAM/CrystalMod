@@ -1,11 +1,10 @@
 package alec_wam.CrystalMod.util.client;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
-
 import org.lwjgl.input.Mouse;
 
 import alec_wam.CrystalMod.tiles.pipes.estorage.client.IGuiScreen;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiScreen;
 
 public class Scrollbar {
     private boolean canScroll = true;

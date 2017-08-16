@@ -42,6 +42,7 @@ public class ItemMiscCard extends Item implements ICustomModel {
 		ModItems.registerItem(this, "misccard");
 	}
 	
+	@Override
 	@SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced)
     {
@@ -133,6 +134,7 @@ public class ItemMiscCard extends Item implements ICustomModel {
 		return EnumActionResult.SUCCESS;
 	}
 	
+	@Override
 	@SideOnly(Side.CLIENT)
     public void initModel() {
         for(CardType type : CardType.values()){
@@ -140,6 +142,7 @@ public class ItemMiscCard extends Item implements ICustomModel {
         }
     }
 	
+	@Override
 	public String getUnlocalizedName(ItemStack stack)
     {
         int i = stack.getMetadata();
@@ -183,7 +186,8 @@ public class ItemMiscCard extends Item implements ICustomModel {
             return this.unlocalizedName;
         }
 
-        public String toString()
+        @Override
+		public String toString()
         {
             return this.unlocalizedName;
         }
@@ -198,7 +202,8 @@ public class ItemMiscCard extends Item implements ICustomModel {
             return METADATA_LOOKUP[metadata];
         }
 
-        public String getName()
+        @Override
+		public String getName()
         {
             return this.unlocalizedName;
         }

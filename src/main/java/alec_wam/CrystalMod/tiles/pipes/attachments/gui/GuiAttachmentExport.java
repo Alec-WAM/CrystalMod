@@ -1,13 +1,5 @@
 package alec_wam.CrystalMod.tiles.pipes.attachments.gui;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
-import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.tiles.pipes.TileEntityPipe.RedstoneMode;
 import alec_wam.CrystalMod.tiles.pipes.attachments.AttachmentEStorageExport;
@@ -15,6 +7,13 @@ import alec_wam.CrystalMod.tiles.pipes.attachments.AttachmentIOType;
 import alec_wam.CrystalMod.tiles.pipes.attachments.AttachmentUtil.AttachmentData;
 import alec_wam.CrystalMod.tiles.pipes.estorage.TileEntityPipeEStorage;
 import alec_wam.CrystalMod.tiles.pipes.item.PacketPipe;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
 
 public class GuiAttachmentExport extends GuiContainer {
 
@@ -52,6 +51,7 @@ public class GuiAttachmentExport extends GuiContainer {
 		this.buttonList.add(new GuiButton(1, sx+8+140, sy+40, 20, 20, ioType.name()));
 	}
 	
+	@Override
 	public void actionPerformed(GuiButton button){
 		if(button.id == 0){
 			final RedstoneMode next = RedstoneMode.getNextRedstoneMode(getPart().rMode);

@@ -1,14 +1,14 @@
 package alec_wam.CrystalMod.tiles.pipes;
 
+import alec_wam.CrystalMod.tiles.pipes.covers.CoverUtil.CoverData;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.biome.Biome;
-import alec_wam.CrystalMod.tiles.pipes.covers.CoverUtil.CoverData;
 
 public class PipeBlockAccessWrapper implements IBlockAccess {
 

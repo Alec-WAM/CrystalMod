@@ -4,8 +4,6 @@ import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.tiles.BlockStateFacing;
-import alec_wam.CrystalMod.tiles.crate.BlockCrate.CrateType;
-import alec_wam.CrystalMod.tiles.crate.BlockCrate.CustomBlockStateMapper;
 import alec_wam.CrystalMod.tiles.machine.BlockMachine;
 import alec_wam.CrystalMod.tiles.machine.IFacingTile;
 import alec_wam.CrystalMod.tiles.machine.elevator.ItemMiscCard.CardType;
@@ -62,6 +60,7 @@ public class BlockTelePortal extends BlockContainer implements ICustomModel {
 		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(baseLocation, "inventory"));
     }
 	
+	@Override
 	@SideOnly(Side.CLIENT)
     public EnumBlockRenderType getRenderType(IBlockState state){
     	return EnumBlockRenderType.MODEL;

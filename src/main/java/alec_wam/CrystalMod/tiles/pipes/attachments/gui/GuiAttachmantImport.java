@@ -1,15 +1,5 @@
 package alec_wam.CrystalMod.tiles.pipes.attachments.gui;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
-import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.tiles.pipes.TileEntityPipe.RedstoneMode;
 import alec_wam.CrystalMod.tiles.pipes.attachments.AttachmentEStorageImport;
@@ -20,6 +10,15 @@ import alec_wam.CrystalMod.tiles.pipes.item.PacketPipe;
 import alec_wam.CrystalMod.tiles.pipes.item.filters.ItemPipeFilter.FilterType;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemStackTools;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextFormatting;
 
 public class GuiAttachmantImport extends GuiContainer {
 
@@ -40,6 +39,7 @@ public class GuiAttachmantImport extends GuiContainer {
 		return (AttachmentEStorageImport)getData();
 	}
 	
+	@Override
 	public void actionPerformed(GuiButton button){
 		if(button.id == BUTTON_RED){
 			final RedstoneMode next = RedstoneMode.getNextRedstoneMode(getImport().rMode);

@@ -1,15 +1,15 @@
 package alec_wam.CrystalMod.api;
 
-import alec_wam.CrystalMod.util.FluidUtil;
-import com.google.common.collect.ArrayListMultimap;
-
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
+import java.util.Collection;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import java.util.Collection;
+import com.google.common.collect.ArrayListMultimap;
+
+import alec_wam.CrystalMod.util.FluidUtil;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
 
 public class FluidStackList{
     private ArrayListMultimap<Fluid, FluidStack> stacks = ArrayListMultimap.create();

@@ -6,17 +6,17 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
+import alec_wam.CrystalMod.tiles.pipes.TileEntityPipe;
+import alec_wam.CrystalMod.tiles.pipes.estorage.TileEntityPipeEStorage;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.FaceBakery;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import alec_wam.CrystalMod.tiles.pipes.TileEntityPipe;
-import alec_wam.CrystalMod.tiles.pipes.estorage.TileEntityPipeEStorage;
 
 public class AttachmentUtil {
 

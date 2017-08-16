@@ -38,7 +38,8 @@ public class ContainerAdvDispenser extends Container
         }
     }
 
-    public boolean canInteractWith(EntityPlayer playerIn)
+    @Override
+	public boolean canInteractWith(EntityPlayer playerIn)
     {
         return this.dispenser.isUsableByPlayer(playerIn);
     }
@@ -46,11 +47,12 @@ public class ContainerAdvDispenser extends Container
     /**
      * Take a stack from the specified inventory slot.
      */
-    @Nullable
+    @Override
+	@Nullable
     public ItemStack transferStackInSlot(EntityPlayer playerIn, int index)
     {
         ItemStack itemstack = ItemStackTools.getEmptyStack();
-        Slot slot = (Slot)this.inventorySlots.get(index);
+        Slot slot = this.inventorySlots.get(index);
 
         if (slot != null && slot.getHasStack())
         {

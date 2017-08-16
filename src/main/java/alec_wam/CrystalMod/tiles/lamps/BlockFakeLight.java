@@ -5,8 +5,6 @@ import java.util.Locale;
 import javax.annotation.Nullable;
 
 import alec_wam.CrystalMod.blocks.EnumBlock;
-import alec_wam.CrystalMod.tiles.explosives.remover.BlockRemoverExplosion.RemoverType;
-import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.IBlockState;

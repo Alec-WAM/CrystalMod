@@ -23,6 +23,7 @@ public class ItemReactorUpgrade extends Item implements ICustomModel {
 		ModItems.registerItem(this, "reactorupgrade");
 	}
 	
+	@Override
 	@SideOnly(Side.CLIENT)
     public void initModel() {
         for(UpgradeType type : UpgradeType.values()){
@@ -30,6 +31,7 @@ public class ItemReactorUpgrade extends Item implements ICustomModel {
         }
     }
 	
+	@Override
 	public String getUnlocalizedName(ItemStack stack)
     {
         int i = stack.getMetadata();
@@ -62,7 +64,8 @@ public class ItemReactorUpgrade extends Item implements ICustomModel {
             this.unlocalizedName = name;
         }
 
-        public int getMetadata()
+        @Override
+		public int getMetadata()
         {
             return this.metadata;
         }
@@ -72,7 +75,8 @@ public class ItemReactorUpgrade extends Item implements ICustomModel {
             return this.unlocalizedName;
         }
 
-        public String toString()
+        @Override
+		public String toString()
         {
             return this.unlocalizedName;
         }
@@ -87,7 +91,8 @@ public class ItemReactorUpgrade extends Item implements ICustomModel {
             return METADATA_LOOKUP[metadata];
         }
 
-        public String getName()
+        @Override
+		public String getName()
         {
             return this.unlocalizedName;
         }

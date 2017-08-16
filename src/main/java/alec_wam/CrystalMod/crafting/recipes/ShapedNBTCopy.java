@@ -2,13 +2,13 @@ package alec_wam.CrystalMod.crafting.recipes;
 
 import java.util.List;
 
+import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.util.ItemNBTHelper;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.oredict.RecipeSorter;
-import alec_wam.CrystalMod.CrystalMod;
-import alec_wam.CrystalMod.util.ItemNBTHelper;
 
 public class ShapedNBTCopy extends ShapedRecipes {
 
@@ -24,6 +24,7 @@ public class ShapedNBTCopy extends ShapedRecipes {
 		this.tags = tags;
 	}
 	
+	@Override
 	public ItemStack getCraftingResult(InventoryCrafting inv)
     {
         ItemStack itemstack = this.getRecipeOutput().copy();
@@ -37,7 +38,7 @@ public class ShapedNBTCopy extends ShapedRecipes {
             		itemstack.setTagCompound(itemstack1.getTagCompound().copy());
             		return itemstack;
             	}
-            	NBTTagCompound nbt = (NBTTagCompound)itemstack1.getTagCompound().copy();
+            	NBTTagCompound nbt = itemstack1.getTagCompound().copy();
                 for(String tag : this.tags){
                 	if(nbt.hasKey(tag))
                 	ItemNBTHelper.getCompound(itemstack).setTag(tag, nbt.getTag(tag));

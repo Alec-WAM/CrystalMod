@@ -1,5 +1,11 @@
 package alec_wam.CrystalMod.tiles.machine.inventory.charger;
 
+import alec_wam.CrystalMod.network.CrystalModNetwork;
+import alec_wam.CrystalMod.network.IMessageHandler;
+import alec_wam.CrystalMod.network.packets.PacketTileMessage;
+import alec_wam.CrystalMod.tiles.TileEntityMod;
+import alec_wam.CrystalMod.tiles.pipes.item.InventoryWrapper;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
@@ -7,12 +13,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
-import alec_wam.CrystalMod.network.CrystalModNetwork;
-import alec_wam.CrystalMod.network.IMessageHandler;
-import alec_wam.CrystalMod.network.packets.PacketTileMessage;
-import alec_wam.CrystalMod.tiles.TileEntityMod;
-import alec_wam.CrystalMod.tiles.pipes.item.InventoryWrapper;
-import alec_wam.CrystalMod.util.ItemStackTools;
 
 public abstract class TileEntityInventoryCharger extends TileEntityMod implements ITickable, IMessageHandler {
 
@@ -21,17 +21,20 @@ public abstract class TileEntityInventoryCharger extends TileEntityMod implement
 	
 	protected float lastSyncPowerStored = -1;
 	
+	@Override
 	public void writeCustomNBT(NBTTagCompound nbt){
 		super.writeCustomNBT(nbt);
 		nbt.setInteger("Facing", facing);
 	}
 	
+	@Override
 	public void readCustomNBT(NBTTagCompound nbt){
 		super.readCustomNBT(nbt);
 		facing = nbt.getInteger("Facing");
 		updateAfterLoad();
 	}
 	
+	@Override
 	public void update(){
 		super.update();
 		if(!getWorld().isRemote){

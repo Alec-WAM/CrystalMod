@@ -1,5 +1,11 @@
 package alec_wam.CrystalMod.tiles.machine.crafting.liquidizer;
 
+import alec_wam.CrystalMod.network.CrystalModNetwork;
+import alec_wam.CrystalMod.network.packets.PacketTileMessage;
+import alec_wam.CrystalMod.tiles.machine.TileEntityMachine;
+import alec_wam.CrystalMod.tiles.machine.crafting.liquidizer.LiquidizerRecipeManager.LiquidizerRecipe;
+import alec_wam.CrystalMod.tiles.tank.Tank;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -13,12 +19,6 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import alec_wam.CrystalMod.network.CrystalModNetwork;
-import alec_wam.CrystalMod.network.packets.PacketTileMessage;
-import alec_wam.CrystalMod.tiles.machine.TileEntityMachine;
-import alec_wam.CrystalMod.tiles.machine.crafting.liquidizer.LiquidizerRecipeManager.LiquidizerRecipe;
-import alec_wam.CrystalMod.tiles.tank.Tank;
-import alec_wam.CrystalMod.util.ItemStackTools;
 
 public class TileEntityLiquidizer extends TileEntityMachine {
 
@@ -32,11 +32,13 @@ public class TileEntityLiquidizer extends TileEntityMachine {
 		tank = new Tank("Tank", CAPACITY, null);
 	}
 	
+	@Override
 	public void writeCustomNBT(NBTTagCompound nbt){
 		super.writeCustomNBT(nbt);
 		tank.writeToNBT(nbt);
 	}
 	
+	@Override
 	public void readCustomNBT(NBTTagCompound nbt){
 		super.readCustomNBT(nbt);
 		tank.readFromNBT(nbt);
@@ -56,6 +58,7 @@ public class TileEntityLiquidizer extends TileEntityMachine {
 		}
 	}
 	
+	@Override
 	public boolean canStart() {
 		ItemStack stack = getStackInSlot(0);
         if (ItemStackTools.isEmpty(stack)) {
@@ -69,10 +72,12 @@ public class TileEntityLiquidizer extends TileEntityMachine {
         return output != null && (tank.getFluid() == null || (tank.getFluid().isFluidEqual(output) && tank.getFluidAmount() + output.amount <= tank.getCapacity()));
     }
 	
+	@Override
 	public boolean canContinueRunning(){
 		return hasValidInput();
 	}
 	
+	@Override
 	public boolean canFinish() {
         return processRem <= 0 && hasValidInput();
     }
@@ -83,13 +88,15 @@ public class TileEntityLiquidizer extends TileEntityMachine {
         return recipe != null && recipe.getInputSize() <= ItemStackTools.getStackSize(stack);
     }
     
-    public void processStart() {
+    @Override
+	public void processStart() {
     	this.processMax = LiquidizerRecipeManager.getRecipe(getStackInSlot(0)).getEnergy();
         this.processRem = this.processMax;
         syncProcessValues();
     }
     
-    public void processFinish() {
+    @Override
+	public void processFinish() {
     	LiquidizerRecipe recipe = LiquidizerRecipeManager.getRecipe(getStackInSlot(0));
     	final FluidStack output = recipe.getOutput();
         if (this.tank.getFluid() == null) {
@@ -146,15 +153,18 @@ public class TileEntityLiquidizer extends TileEntityMachine {
             		return tank;
             	}
             	
-            	public int fill(FluidStack resource, boolean doFill) {
+            	@Override
+				public int fill(FluidStack resource, boolean doFill) {
             		return 0;
                 }
 
-                public FluidStack drain(int maxEmpty, boolean doDrain) {
+                @Override
+				public FluidStack drain(int maxEmpty, boolean doDrain) {
                 	return tank.drain(maxEmpty, doDrain);
                 }
 
-                public FluidStack drain(FluidStack resource, boolean doDrain) {
+                @Override
+				public FluidStack drain(FluidStack resource, boolean doDrain) {
                 	return tank.drain(resource, doDrain);
                 }
 

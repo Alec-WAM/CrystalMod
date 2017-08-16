@@ -5,7 +5,6 @@ import java.util.Arrays;
 import alec_wam.CrystalMod.Config;
 import alec_wam.CrystalMod.proxy.ClientProxy;
 import alec_wam.CrystalMod.util.ItemStackTools;
-import alec_wam.CrystalMod.util.ModLogger;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;

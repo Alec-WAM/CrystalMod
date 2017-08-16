@@ -2,13 +2,11 @@ package alec_wam.CrystalMod.items.tools.backpack;
 
 import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.items.IEnumMetaItem;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.NonNullList;
-import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -63,7 +61,8 @@ public class ItemBackpackNormal extends ItemBackpackBase implements ICustomModel
             this.unlocalizedName = name;
         }
 
-        public int getMetadata()
+        @Override
+		public int getMetadata()
         {
             return this.metadata;
         }
@@ -73,7 +72,8 @@ public class ItemBackpackNormal extends ItemBackpackBase implements ICustomModel
             return this.unlocalizedName;
         }
 
-        public String toString()
+        @Override
+		public String toString()
         {
             return this.unlocalizedName;
         }
@@ -88,7 +88,8 @@ public class ItemBackpackNormal extends ItemBackpackBase implements ICustomModel
             return METADATA_LOOKUP[metadata];
         }
 
-        public String getName()
+        @Override
+		public String getName()
         {
             return this.unlocalizedName;
         }

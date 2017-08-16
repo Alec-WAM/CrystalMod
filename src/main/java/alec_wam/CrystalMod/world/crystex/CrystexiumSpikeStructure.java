@@ -3,11 +3,7 @@ package alec_wam.CrystalMod.world.crystex;
 import java.util.Random;
 
 import alec_wam.CrystalMod.CrystalMod;
-import alec_wam.CrystalMod.blocks.ModBlocks;
-import alec_wam.CrystalMod.blocks.crystexium.CrystexiumBlock;
-import alec_wam.CrystalMod.blocks.crystexium.CrystexiumBlock.CrystexiumBlockType;
 import alec_wam.CrystalMod.util.ModLogger;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.Rotation;
@@ -60,9 +56,6 @@ public class CrystexiumSpikeStructure extends StructureComponentTemplate {
 
 			@Override
 			public BlockInfo processBlock(World worldIn, BlockPos pos, BlockInfo blockInfoIn) {
-				//Warning this ignores integrity
-				//TODO Add Integrity Randomness
-				IBlockState currentState = blockInfoIn.blockState;
 				//TODO Re-add Crystexium
 				/*if(currentState.getBlock() == ModBlocks.crystexiumBlock){
 					if(type == SpikeType.BLUE){

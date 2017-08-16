@@ -5,12 +5,10 @@ import javax.annotation.Nullable;
 import alec_wam.CrystalMod.items.tools.backpack.BackpackUtil;
 import alec_wam.CrystalMod.items.tools.backpack.IBackpack;
 import alec_wam.CrystalMod.items.tools.backpack.IBackpackInventory;
-import alec_wam.CrystalMod.items.tools.backpack.ItemBackpackBase;
 import alec_wam.CrystalMod.items.tools.backpack.types.InventoryBackpack;
 import alec_wam.CrystalMod.items.tools.backpack.types.NormalInventoryBackpack;
 import alec_wam.CrystalMod.items.tools.backpack.upgrade.ItemBackpackUpgrade.BackpackUpgrade;
 import alec_wam.CrystalMod.util.ItemStackTools;
-import alec_wam.CrystalMod.util.ModLogger;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ClickType;
@@ -25,8 +23,6 @@ public class ContainerBackpackUpgrades extends Container
     public ContainerBackpackUpgrades(InventoryPlayer playerInventory, InventoryBackpackUpgrades upgradeInventory)
     {
         this.upgradeInventory = upgradeInventory;
-        int i = 51;
-
         int slotPos = 44+(9*(5-upgradeInventory.getSize()));
         for (int j = 0; j < upgradeInventory.getSize(); ++j)
         {
@@ -47,7 +43,8 @@ public class ContainerBackpackUpgrades extends Container
         }
     }
 
-    public boolean canInteractWith(EntityPlayer playerIn)
+    @Override
+	public boolean canInteractWith(EntityPlayer playerIn)
     {
         return this.upgradeInventory.isUsableByPlayer(playerIn);
     }
@@ -55,11 +52,12 @@ public class ContainerBackpackUpgrades extends Container
     /**
      * Take a stack from the specified inventory slot.
      */
-    @Nullable
+    @Override
+	@Nullable
     public ItemStack transferStackInSlot(EntityPlayer playerIn, int index)
     {
         ItemStack itemstack = ItemStackTools.getEmptyStack();
-        Slot slot = (Slot)this.inventorySlots.get(index);
+        Slot slot = this.inventorySlots.get(index);
 
         if (slot != null && slot.getHasStack())
         {
@@ -124,7 +122,8 @@ public class ContainerBackpackUpgrades extends Container
     /**
      * Called when the container is closed.
      */
-    public void onContainerClosed(EntityPlayer playerIn)
+    @Override
+	public void onContainerClosed(EntityPlayer playerIn)
     {
         super.onContainerClosed(playerIn);
         upgradeInventory.guiSaveSafe(playerIn);

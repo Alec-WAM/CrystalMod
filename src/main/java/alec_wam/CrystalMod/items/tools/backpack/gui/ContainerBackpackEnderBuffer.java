@@ -1,10 +1,7 @@
 package alec_wam.CrystalMod.items.tools.backpack.gui;
 
 import alec_wam.CrystalMod.items.tools.backpack.types.InventoryBackpack;
-import alec_wam.CrystalMod.tiles.machine.enderbuffer.EnderBufferManager;
 import alec_wam.CrystalMod.tiles.machine.enderbuffer.EnderBufferManager.EnderBuffer;
-import alec_wam.CrystalMod.tiles.machine.enderbuffer.IEnderBufferList;
-import alec_wam.CrystalMod.tiles.machine.enderbuffer.TileEntityEnderBuffer;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;

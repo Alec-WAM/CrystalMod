@@ -14,7 +14,6 @@ import alec_wam.CrystalMod.tiles.TileEntityMod;
 import alec_wam.CrystalMod.tiles.darkinfection.BlockInfected.InfectedBlockType;
 import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.BlockUtil.BlockFilter;
-import alec_wam.CrystalMod.util.TimeUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -134,6 +133,7 @@ public class TileDarkInfection extends TileEntityMod implements IMessageHandler 
 		currentRadius++;
 		toPlace = BlockUtil.createSpecialOrb(world, pos, currentRadius, new BlockFilter(){
 
+			@SuppressWarnings("deprecation")
 			@Override
 			public boolean isValid(World world, BlockPos pos, IBlockState state) {
 				if(!world.isAirBlock(pos)){

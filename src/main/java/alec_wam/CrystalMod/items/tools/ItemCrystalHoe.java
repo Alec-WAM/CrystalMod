@@ -30,6 +30,7 @@ public class ItemCrystalHoe extends ItemHoe implements ICustomModel {
 		ModItems.registerItem(this, "crystalhoe");
 	}
 	
+	@Override
 	@SideOnly(Side.CLIENT)
     public void initModel() {
 		final Map<String, ModelResourceLocation> models = Maps.newHashMap();
@@ -47,6 +48,7 @@ public class ItemCrystalHoe extends ItemHoe implements ICustomModel {
         });
     }
 	
+	@Override
 	public String getUnlocalizedName(ItemStack stack)
     {
         String color = ItemNBTHelper.getString(stack, "Color", "");

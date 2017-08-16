@@ -6,7 +6,6 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.NetHandlerPlayServer;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 
 public class PacketToolSwap extends AbstractPacketThreadsafe {
 

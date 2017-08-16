@@ -1,10 +1,10 @@
 package alec_wam.CrystalMod.network.packets;
 
 import alec_wam.CrystalMod.network.AbstractPacketThreadsafe;
+import io.netty.buffer.ByteBuf;
 import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.inventory.Container;
 import net.minecraft.network.NetHandlerPlayServer;
-import io.netty.buffer.ByteBuf;
 
 public class InventoryCraftingSyncPacket extends AbstractPacketThreadsafe {
 

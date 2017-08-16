@@ -2,12 +2,6 @@ package alec_wam.CrystalMod.tiles.pipes.estorage;
 
 import java.io.IOException;
 
-import io.netty.buffer.ByteBuf;
-import net.minecraft.client.network.NetHandlerPlayClient;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.NetHandlerPlayServer;
 import alec_wam.CrystalMod.api.estorage.INetworkContainer;
 import alec_wam.CrystalMod.api.estorage.security.NetworkAbility;
 import alec_wam.CrystalMod.network.AbstractPacketThreadsafe;
@@ -15,7 +9,12 @@ import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage.ItemStackData;
 import alec_wam.CrystalMod.util.ChatUtil;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.Lang;
-import alec_wam.CrystalMod.util.ModLogger;
+import io.netty.buffer.ByteBuf;
+import net.minecraft.client.network.NetHandlerPlayClient;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
+import net.minecraft.network.NetHandlerPlayServer;
 
 public class PacketEStorageAddItem extends AbstractPacketThreadsafe {
 

@@ -323,7 +323,7 @@ public class ItemQuantityMap {
 			}
 			this.damage = item.getItemDamage();
 			if (item.hasTagCompound()) {
-				this.itemTag = (NBTTagCompound) item.getTagCompound().copy();
+				this.itemTag = item.getTagCompound().copy();
 			} else {
 				this.itemTag = null;
 			}
@@ -338,7 +338,7 @@ public class ItemQuantityMap {
 		}
 
 		public NBTTagCompound getTag() {
-			return (NBTTagCompound) (itemTag == null ? null : itemTag.copy());
+			return itemTag == null ? null : itemTag.copy();
 		}
 
 		/**
@@ -354,7 +354,7 @@ public class ItemQuantityMap {
 			}
 			this.item = item;
 			this.damage = damage;
-			this.itemTag = (NBTTagCompound) (tag == null ? null : tag.copy());
+			this.itemTag = tag == null ? null : tag.copy();
 		}
 
 		@Override
@@ -407,7 +407,7 @@ public class ItemQuantityMap {
 			} else {
 				ItemStack stack = new ItemStack(item, 1, damage);
 				if (itemTag != null) {
-					stack.setTagCompound((NBTTagCompound) itemTag.copy());
+					stack.setTagCompound(itemTag.copy());
 				}
 				cacheStack = stack;
 				return cacheStack;
@@ -428,7 +428,7 @@ public class ItemQuantityMap {
 		}
 
 		public static ItemHashEntry readFromNBT(NBTTagCompound tag) {
-			Item item = (Item) Item.REGISTRY.getObject(new ResourceLocation(tag.getString("itemName")));
+			Item item = Item.REGISTRY.getObject(new ResourceLocation(tag.getString("itemName")));
 			int dmg = tag.getInteger("damage");
 			NBTTagCompound itemTag = tag.hasKey("itemTag") ? tag
 					.getCompoundTag("itemTag") : null;

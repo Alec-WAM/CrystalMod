@@ -7,6 +7,7 @@ import com.google.common.collect.Lists;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.packets.PacketTileMessage;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockDirectional;
 import net.minecraft.block.BlockPistonExtension;
 import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.block.state.IBlockState;
@@ -81,12 +82,12 @@ public class TileEntityCasePiston extends TileEntityCaseBase {
 	                {
 	                    for (int e = 0; e < list1.size(); ++e)
 	                    {
-	                        Entity entity = (Entity)list1.get(e);
+	                        Entity entity = list1.get(e);
 
 	                        if (entity.getPushReaction() != EnumPushReaction.IGNORE)
 	                        {
 	                        	double move = push + 0.001;
-	                        	entity.move(MoverType.PISTON, move * (double)side.getFrontOffsetX(), move * (double)side.getFrontOffsetY(), move * (double)side.getFrontOffsetZ());
+	                        	entity.move(MoverType.PISTON, move * side.getFrontOffsetX(), move * side.getFrontOffsetY(), move * side.getFrontOffsetZ());
                         		this.fixEntityWithinPistonBase(entity, side, push);
 	                        }
 	                    }
@@ -167,18 +168,18 @@ public class TileEntityCasePiston extends TileEntityCaseBase {
     {
     	progress = getExtendedProgress(progress, side);
         IBlockState iblockstate = this.getCollisionRelatedBlockState(side);
-        return iblockstate.getBoundingBox(world, pos).offset((double)(progress * (float)side.getFrontOffsetX()), (double)(progress * (float)side.getFrontOffsetY()), (double)(progress * (float)side.getFrontOffsetZ()));
+        return iblockstate.getBoundingBox(world, pos).offset(progress * side.getFrontOffsetX(), progress * side.getFrontOffsetY(), progress * side.getFrontOffsetZ());
     }
 
     private IBlockState getCollisionRelatedBlockState(EnumFacing side)
     {
-        return !isExtending[side.getIndex()] ? Blocks.PISTON_HEAD.getDefaultState().withProperty(BlockPistonExtension.TYPE, BlockPistonExtension.EnumPistonType.DEFAULT).withProperty(BlockPistonExtension.FACING, side) : getWorld().getBlockState(getPos());
+        return !isExtending[side.getIndex()] ? Blocks.PISTON_HEAD.getDefaultState().withProperty(BlockPistonExtension.TYPE, BlockPistonExtension.EnumPistonType.DEFAULT).withProperty(BlockDirectional.FACING, side) : getWorld().getBlockState(getPos());
     }
 
     public void moveCollidedEntities(float power, EnumFacing side)
     {
         EnumFacing enumfacing = isExtending[side.getIndex()] ? side : side.getOpposite();
-        double d0 = (double)(power - progress[side.getIndex()]);
+        double d0 = power - progress[side.getIndex()];
         List<AxisAlignedBB> list = Lists.<AxisAlignedBB>newArrayList();
         this.getCollisionRelatedBlockState(side).addCollisionBoxToList(this.world, BlockPos.ORIGIN, new AxisAlignedBB(BlockPos.ORIGIN), list, (Entity)null, true);
 
@@ -191,7 +192,7 @@ public class TileEntityCasePiston extends TileEntityCaseBase {
             {
                 for (int i = 0; i < list1.size(); ++i)
                 {
-                    Entity entity = (Entity)list1.get(i);
+                    Entity entity = list1.get(i);
 
                     if (entity.getPushReaction() != EnumPushReaction.IGNORE)
                     {
@@ -199,7 +200,7 @@ public class TileEntityCasePiston extends TileEntityCaseBase {
 
                         for (int j = 0; j < list.size(); ++j)
                         {
-                            AxisAlignedBB axisalignedbb1 = this.getMovementArea(this.moveByPositionAndProgress((AxisAlignedBB)list.get(j), side), enumfacing, d0);
+                            AxisAlignedBB axisalignedbb1 = this.getMovementArea(this.moveByPositionAndProgress(list.get(j), side), enumfacing, d0);
                             AxisAlignedBB axisalignedbb2 = entity.getEntityBoundingBox();
 
                             if (axisalignedbb1.intersectsWith(axisalignedbb2))
@@ -217,7 +218,7 @@ public class TileEntityCasePiston extends TileEntityCaseBase {
                         {
                             d1 = Math.min(d1, d0) + 0.01D;
                             //MOVING_ENTITY.set(enumfacing);
-                            entity.move(MoverType.PISTON, d1 * (double)enumfacing.getFrontOffsetX(), d1 * (double)enumfacing.getFrontOffsetY(), d1 * (double)enumfacing.getFrontOffsetZ());
+                            entity.move(MoverType.PISTON, d1 * enumfacing.getFrontOffsetX(), d1 * enumfacing.getFrontOffsetY(), d1 * enumfacing.getFrontOffsetZ());
                             //MOVING_ENTITY.set((EnumFacing)null);
 
                             if (!isExtending[side.getIndex()])
@@ -269,14 +270,14 @@ public class TileEntityCasePiston extends TileEntityCaseBase {
 
     public AxisAlignedBB moveByPositionAndProgress(AxisAlignedBB bb, EnumFacing side)
     {
-        double d0 = (double)getExtendedProgress(progress[side.getIndex()], side);
+        double d0 = getExtendedProgress(progress[side.getIndex()], side);
         BlockPos pos = getPos();
-        return bb.offset((double)pos.getX() + d0 * (double)side.getFrontOffsetX(), (double)pos.getY() + d0 * (double)side.getFrontOffsetY(), (double)pos.getZ() + d0 * (double)side.getFrontOffsetZ());
+        return bb.offset(pos.getX() + d0 * side.getFrontOffsetX(), pos.getY() + d0 * side.getFrontOffsetY(), pos.getZ() + d0 * side.getFrontOffsetZ());
     }
 
     public AxisAlignedBB getMovementArea(AxisAlignedBB bb, EnumFacing side, double power)
     {
-        double d0 = power * (double)side.getAxisDirection().getOffset();
+        double d0 = power * side.getAxisDirection().getOffset();
         double d1 = Math.min(d0, 0.0D);
         double d2 = Math.max(d0, 0.0D);
 
@@ -314,7 +315,7 @@ public class TileEntityCasePiston extends TileEntityCaseBase {
             {
                 d0 = Math.min(d0, p_190605_3_) + 0.1D;
                 //MOVING_ENTITY.set(p_190605_2_);
-                entity.move(MoverType.PISTON, d0 * (double)enumfacing.getFrontOffsetX(), d0 * (double)enumfacing.getFrontOffsetY(), d0 * (double)enumfacing.getFrontOffsetZ());
+                entity.move(MoverType.PISTON, d0 * enumfacing.getFrontOffsetX(), d0 * enumfacing.getFrontOffsetY(), d0 * enumfacing.getFrontOffsetZ());
                 //MOVING_ENTITY.set((EnumFacing)null);
             }
         }

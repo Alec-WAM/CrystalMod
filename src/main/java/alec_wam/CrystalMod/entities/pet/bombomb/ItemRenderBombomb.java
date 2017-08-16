@@ -4,6 +4,11 @@ import java.util.UUID;
 
 import org.lwjgl.opengl.GL11;
 
+import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.client.model.dynamic.DynamicBaseModel;
+import alec_wam.CrystalMod.client.model.dynamic.ICustomItemRenderer;
+import alec_wam.CrystalMod.util.ItemNBTHelper;
+import alec_wam.CrystalMod.util.UUIDUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -12,11 +17,6 @@ import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.model.TRSRTransformation;
-import alec_wam.CrystalMod.CrystalMod;
-import alec_wam.CrystalMod.client.model.dynamic.DynamicBaseModel;
-import alec_wam.CrystalMod.client.model.dynamic.ICustomItemRenderer;
-import alec_wam.CrystalMod.util.ItemNBTHelper;
-import alec_wam.CrystalMod.util.UUIDUtils;
 
 public class ItemRenderBombomb implements ICustomItemRenderer {
     

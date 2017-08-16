@@ -46,7 +46,7 @@ public class ContainerPress extends Container
     {
     	ItemStack itemstack = ItemStackTools.getEmptyStack();
     	int par2 = i;
-		Slot slot = (Slot)this.inventorySlots.get(par2);
+		Slot slot = this.inventorySlots.get(par2);
 
 		if (slot != null && slot.getHasStack())
 		{

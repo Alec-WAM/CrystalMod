@@ -1,17 +1,12 @@
 package alec_wam.CrystalMod.util;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Random;
 
-import javax.annotation.Nullable;
-
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
-import com.google.common.base.Predicate;
-import com.google.common.base.Predicates;
 import com.google.common.collect.Lists;
 
 import alec_wam.CrystalMod.CrystalMod;
@@ -23,7 +18,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.item.EntityItemFrame;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -37,8 +31,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.stats.StatList;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EntitySelectors;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -46,7 +38,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
 public class EntityUtil {
@@ -180,7 +171,7 @@ public class EntityUtil {
 	
 	public static boolean randomTeleport(Entity entityIn, double range) {
 		double d0 = entityIn.posX + (rand.nextDouble() - 0.5D) * range;
-        double d1 = entityIn.posY + (double)(rand.nextInt((int)range) - ((int)range)/2);
+        double d1 = entityIn.posY + (rand.nextInt((int)range) - ((int)range)/2);
         double d2 = entityIn.posZ + (rand.nextDouble() - 0.5D) * range;
         return teleportTo(entityIn, d0, d1, d2);
 	}
@@ -258,18 +249,16 @@ public class EntityUtil {
         }
         else
         {
-            int i = 128;
-
             for (int j = 0; j < 128; ++j)
             {
-                double d6 = (double)j / 127.0D;
+                double d6 = j / 127.0D;
                 float f = (random.nextFloat() - 0.5F) * 0.2F;
                 float f1 = (random.nextFloat() - 0.5F) * 0.2F;
                 float f2 = (random.nextFloat() - 0.5F) * 0.2F;
-                double d3 = d0 + (entity.posX - d0) * d6 + (random.nextDouble() - 0.5D) * (double)entity.width * 2.0D;
-                double d4 = d1 + (entity.posY - d1) * d6 + random.nextDouble() * (double)entity.height;
-                double d5 = d2 + (entity.posZ - d2) * d6 + (random.nextDouble() - 0.5D) * (double)entity.width * 2.0D;
-                world.spawnParticle(EnumParticleTypes.PORTAL, d3, d4, d5, (double)f, (double)f1, (double)f2, new int[0]);
+                double d3 = d0 + (entity.posX - d0) * d6 + (random.nextDouble() - 0.5D) * entity.width * 2.0D;
+                double d4 = d1 + (entity.posY - d1) * d6 + random.nextDouble() * entity.height;
+                double d5 = d2 + (entity.posZ - d2) * d6 + (random.nextDouble() - 0.5D) * entity.width * 2.0D;
+                world.spawnParticle(EnumParticleTypes.PORTAL, d3, d4, d5, f, f1, f2, new int[0]);
             }
 
             if (entity instanceof EntityCreature)
@@ -391,7 +380,6 @@ public class EntityUtil {
 		Entity pointedEntity = null;
 		Vec3d hit = null;
 		AxisAlignedBB bb = entity.getEntityBoundingBox().addCoord(look.xCoord * range, look.yCoord * range, look.zCoord * range).expand(1, 1, 1);
-		@SuppressWarnings("unchecked")
 		List<Entity> entitiesInArea = entity.getEntityWorld().getEntitiesWithinAABBExcludingEntity(entity, bb);
 		double range2 = range; // range to the current candidate. Used to find the closest entity.
 
@@ -454,6 +442,7 @@ public class EntityUtil {
 	}
 	
 	private static Method methodEntitySetSize;
+	@SuppressWarnings("deprecation")
 	public static void setEntitySize(Entity entity, float width, float height)
 	{
 		try
@@ -480,13 +469,13 @@ public class EntityUtil {
 
             float f = ItemBow.getArrowVelocity(i);
 
-            if ((double)f >= 0.1D)
+            if (f >= 0.1D)
             {
                 boolean flag1 = entityplayer.capabilities.isCreativeMode || (itemstack.getItem() instanceof ItemArrow ? ((ItemArrow)itemstack.getItem()).isInfinite(itemstack, bow, entityplayer) : false);
 
                 if (!world.isRemote)
                 {
-                    ItemArrow itemarrow = (ItemArrow)((ItemArrow)(itemstack.getItem() instanceof ItemArrow ? itemstack.getItem() : Items.ARROW));
+                    ItemArrow itemarrow = ((ItemArrow)(itemstack.getItem() instanceof ItemArrow ? itemstack.getItem() : Items.ARROW));
                     EntityArrow entityarrow = itemarrow.createArrow(world, itemstack, entityplayer);
                     entityarrow.setAim(entityplayer, entityplayer.rotationPitch, entityplayer.rotationYaw, 0.0F, f * 3.0F, 1.0F);
 
@@ -499,7 +488,7 @@ public class EntityUtil {
 
                     if (j > 0)
                     {
-                        entityarrow.setDamage(entityarrow.getDamage() + (double)j * 0.5D + 0.5D);
+                        entityarrow.setDamage(entityarrow.getDamage() + j * 0.5D + 0.5D);
                     }
 
                     int k = EnchantmentHelper.getEnchantmentLevel(Enchantments.PUNCH, bow);

@@ -33,6 +33,7 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SuppressWarnings("deprecation")
 public class BlockCrystalSapling extends BlockSapling implements ICustomModel {
 
 	public static final PropertyEnum<BlockCrystalLog.WoodType> VARIANT = PropertyEnum.<BlockCrystalLog.WoodType>create("variant", BlockCrystalLog.WoodType.class);
@@ -50,6 +51,7 @@ public class BlockCrystalSapling extends BlockSapling implements ICustomModel {
 		}
 	}
 
+	@Override
 	@SideOnly(Side.CLIENT)
 	public void initModel() {
 		ModelLoader.setCustomStateMapper(this, new SaplingBlockStateMapper());
@@ -144,8 +146,8 @@ public class BlockCrystalSapling extends BlockSapling implements ICustomModel {
 		if(!net.minecraftforge.event.terraingen.TerrainGen.saplingGrowTree(worldIn, rand, pos)) {
 			return;
 		}
-		WoodType type = (WoodType)state.getValue(VARIANT);
-		WorldGenerator gen = (WorldGenerator)(new WorldGenCrystalTree(true, MathHelper.getInt(rand, 4, 6), type, false));
+		WoodType type = state.getValue(VARIANT);
+		WorldGenerator gen = (new WorldGenCrystalTree(true, MathHelper.getInt(rand, 4, 6), type, false));
 
 		// replace sapling with air
 		worldIn.setBlockToAir(pos);

@@ -67,8 +67,8 @@ import alec_wam.CrystalMod.tiles.chest.wireless.WirelessChestHelper;
 import alec_wam.CrystalMod.tiles.crate.BlockCrate.CrateType;
 import alec_wam.CrystalMod.tiles.explosives.remover.BlockRemoverExplosion.RemoverType;
 import alec_wam.CrystalMod.tiles.lamps.BlockAdvancedLamp.LampType;
+import alec_wam.CrystalMod.tiles.machine.BlockMachine;
 import alec_wam.CrystalMod.tiles.machine.elevator.ItemMiscCard.CardType;
-import alec_wam.CrystalMod.tiles.machine.enderbuffer.BlockEnderBuffer;
 import alec_wam.CrystalMod.tiles.machine.power.battery.BlockBattery.BatteryType;
 import alec_wam.CrystalMod.tiles.machine.power.engine.BlockEngine.EngineType;
 import alec_wam.CrystalMod.tiles.machine.power.redstonereactor.ItemReactorUpgrade.UpgradeType;
@@ -97,6 +97,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fml.client.FMLClientHandler;
 
+@SuppressWarnings("deprecation")
 public class GuidePages {
 
 	public static void createPages(){
@@ -292,7 +293,7 @@ public class GuidePages {
 			ItemStack enderbuffer = new ItemStack(ModBlocks.enderBuffer);
 			NBTTagCompound nbt = new NBTTagCompound();
 			nbt.setInteger("Code", code);
-			ItemNBTHelper.getCompound(enderbuffer).setTag(BlockEnderBuffer.TILE_NBT_STACK, nbt);
+			ItemNBTHelper.getCompound(enderbuffer).setTag(BlockMachine.TILE_NBT_STACK, nbt);
 			enderBuffers.add(enderbuffer);
 		}
 		CrystalModAPI.BLOCKS.registerChapter(new GuideChapter("enderbuffer", new PageCrafting("main", enderBuffers)).setDisplayObject(enderBuffers));

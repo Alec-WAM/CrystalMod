@@ -1,7 +1,5 @@
 package alec_wam.CrystalMod.tiles.pipes.estorage.panel.wireless;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
 import alec_wam.CrystalMod.api.estorage.IPanelSource;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.packets.PacketItemNBT;
@@ -10,6 +8,8 @@ import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetworkClient.SortType;
 import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetworkClient.ViewType;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemStackTools;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
 
 public class PanelSourceWireless implements IPanelSource {
 

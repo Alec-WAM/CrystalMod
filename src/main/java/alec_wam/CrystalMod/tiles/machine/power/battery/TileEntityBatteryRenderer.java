@@ -1,5 +1,7 @@
 package alec_wam.CrystalMod.tiles.machine.power.battery;
 
+import org.lwjgl.util.vector.Vector3f;
+
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
@@ -7,8 +9,6 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
-
-import org.lwjgl.util.vector.Vector3f;
 
 public class TileEntityBatteryRenderer extends TileEntitySpecialRenderer<TileEntityBattery> {
 

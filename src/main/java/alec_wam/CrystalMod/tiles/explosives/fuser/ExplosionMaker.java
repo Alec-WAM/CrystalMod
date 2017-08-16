@@ -14,12 +14,10 @@ import net.minecraft.network.play.server.SPacketChunkData;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.PlayerChunkMap;
 import net.minecraft.server.management.PlayerChunkMapEntry;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
-import net.minecraft.world.chunk.Chunk.EnumCreateEntityType;
 import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
 
 public class ExplosionMaker {
@@ -84,35 +82,17 @@ public class ExplosionMaker {
         return chunkCache.get(cp);
     }
 
-    private boolean hasBlockStorage(BlockPos pos) {
-        Chunk chunk = getChunk(pos);
-        return chunk.getBlockStorageArray()[pos.getY() >> 4] != null;
-    }
-
     private ExtendedBlockStorage getBlockStorage(BlockPos pos) {
         Chunk chunk = getChunk(pos);
         int index = pos.getY() >> 4;
         return chunk.getBlockStorageArray()[index];
     }
 
-    private void fireBlockBreak(BlockPos pos, IBlockState oldState) {
-        oldState.getBlock().breakBlock(serverWorld, pos, oldState);
-    }
-
-    private void removeTileEntity(BlockPos pos) {
-        Chunk chunk = getChunk(pos);
-        TileEntity tileEntity = chunk.getTileEntity(pos, EnumCreateEntityType.CHECK);
-        if (tileEntity != null) {
-            serverWorld.removeTileEntity(pos);
-        }
-    }
-
-
     /**
      * Call when finished removing blocks to calculate lighting and send chunk updates to the client.
      */
     public void finish() {
-    	MinecraftServer server = serverWorld.getMinecraftServer();
+    	serverWorld.getMinecraftServer();
         long currentTime = MinecraftServer.getCurrentTimeMillis();
         while (MinecraftServer.getCurrentTimeMillis() - currentTime < 50 && toRemove.size() > 0) {
             BlockPos pos = toRemove.removeFirst();

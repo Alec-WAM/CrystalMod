@@ -23,6 +23,7 @@ public class ExtendedPlayerProvider implements ICapabilitySerializable<NBTTagCom
 		return Capabilities.EXTENDED_PLAYER != null && capability == Capabilities.EXTENDED_PLAYER;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
 		return hasCapability(capability, facing) ? (T) extendedPlayer : null;

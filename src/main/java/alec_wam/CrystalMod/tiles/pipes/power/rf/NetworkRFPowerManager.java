@@ -6,12 +6,12 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Set;
 
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.World;
 import alec_wam.CrystalMod.tiles.pipes.TileEntityPipe;
 import alec_wam.CrystalMod.tiles.pipes.power.IPowerInterface;
 import alec_wam.CrystalMod.tiles.pipes.power.rf.RFPowerPipeNetwork.ReceptorEntry;
 import alec_wam.CrystalMod.util.ModLogger;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.World;
 
 public class NetworkRFPowerManager {
 
@@ -202,15 +202,6 @@ public class NetworkRFPowerManager {
   }
 
   void onNetworkDestroyed() {
-  }
-
-  @SuppressWarnings("unused")
-  private int minAbs(int amount, int limit) {
-    if(amount < 0) {
-      return Math.max(amount, -limit);
-    } else {
-      return Math.min(amount, limit);
-    }
   }
   
 }

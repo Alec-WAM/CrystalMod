@@ -1,7 +1,7 @@
 package alec_wam.CrystalMod.tiles.cauldron;
 
-import net.minecraft.nbt.NBTTagCompound;
 import alec_wam.CrystalMod.tiles.cauldron.TileEntityCrystalCauldron.LiquidCrystalColor;
+import net.minecraft.nbt.NBTTagCompound;
 
 public class LiquidCrystalStack {
 

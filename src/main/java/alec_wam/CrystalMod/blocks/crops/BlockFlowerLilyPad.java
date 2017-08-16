@@ -57,7 +57,8 @@ public class BlockFlowerLilyPad extends BlockBush implements IGrowable, ICustomM
         return net.minecraftforge.common.EnumPlantType.Water;
     }
     
-    public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand)
+    @Override
+	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand)
     {
     	if (canBlockStay(worldIn, pos, state))
         {
@@ -72,7 +73,7 @@ public class BlockFlowerLilyPad extends BlockBush implements IGrowable, ICustomM
         	
             if (!validPos.isEmpty())
             {
-                int j = ((Integer)state.getValue(AGE)).intValue();
+                int j = state.getValue(AGE).intValue();
                 if (j == 15)
                 {
                 	BlockPos lilyPos = validPos.get(0);
@@ -98,7 +99,8 @@ public class BlockFlowerLilyPad extends BlockBush implements IGrowable, ICustomM
     /**
      * Called When an Entity Collided with the Block
      */
-    public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entityIn)
+    @Override
+	public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entityIn)
     {
         super.onEntityCollidedWithBlock(worldIn, pos, state, entityIn);
 
@@ -108,7 +110,8 @@ public class BlockFlowerLilyPad extends BlockBush implements IGrowable, ICustomM
         }
     }
 
-    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
+    @Override
+	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
     {
         return LILY_PAD_AABB;
     }
@@ -116,17 +119,20 @@ public class BlockFlowerLilyPad extends BlockBush implements IGrowable, ICustomM
     /**
      * Return true if the block can sustain a Bush
      */
-    protected boolean canSustainBush(IBlockState state)
+    @Override
+	protected boolean canSustainBush(IBlockState state)
     {
         return true;
     }
 
-    public boolean canBlockStay(World worldIn, BlockPos pos, IBlockState state)
+    @Override
+	public boolean canBlockStay(World worldIn, BlockPos pos, IBlockState state)
     {
         return canPlaceBlockAt(worldIn, pos);
     }
     
-    public boolean canPlaceBlockAt(World worldIn, BlockPos pos)
+    @Override
+	public boolean canPlaceBlockAt(World worldIn, BlockPos pos)
     {
     	if (pos.getY() >= 0 && pos.getY() < 256)
         {
@@ -140,24 +146,27 @@ public class BlockFlowerLilyPad extends BlockBush implements IGrowable, ICustomM
         }
     }
     
-    protected BlockStateContainer createBlockState()
+    @Override
+	protected BlockStateContainer createBlockState()
     {
         return new BlockStateContainer(this, new IProperty[] {AGE});
     }
     
-    public int getMetaFromState(IBlockState state)
+    @Override
+	public int getMetaFromState(IBlockState state)
     {
-        return ((Integer)state.getValue(AGE)).intValue();
+        return state.getValue(AGE).intValue();
     }
     
-    public IBlockState getStateFromMeta(int meta)
+    @Override
+	public IBlockState getStateFromMeta(int meta)
     {
         return this.getDefaultState().withProperty(AGE, Integer.valueOf(meta));
     }
 
 	@Override
 	public boolean canGrow(World worldIn, BlockPos pos, IBlockState state, boolean isClient) {
-		int age = ((Integer)state.getValue(AGE)).intValue();
+		int age = state.getValue(AGE).intValue();
 		return age < 15;
 	}
 
@@ -168,7 +177,7 @@ public class BlockFlowerLilyPad extends BlockBush implements IGrowable, ICustomM
 
 	@Override
 	public void grow(World worldIn, Random rand, BlockPos pos, IBlockState state) {
-		int age = ((Integer)state.getValue(AGE)).intValue();
+		int age = state.getValue(AGE).intValue();
 		int incr = MathHelper.getInt(worldIn.rand, 2, 5);
 		int newAge = Integer.valueOf(age + incr);
 		if(newAge > 15){

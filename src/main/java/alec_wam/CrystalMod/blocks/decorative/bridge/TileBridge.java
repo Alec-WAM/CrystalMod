@@ -1,6 +1,5 @@
 package alec_wam.CrystalMod.blocks.decorative.bridge;
 
-import java.util.Arrays;
 import java.util.EnumMap;
 
 import com.google.common.collect.Maps;
@@ -8,7 +7,6 @@ import com.google.common.collect.Maps;
 import alec_wam.CrystalMod.tiles.TileEntityModStatic;
 import net.minecraft.block.BlockPlanks;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EnumFacing;
 
 public class TileBridge extends TileEntityModStatic {
@@ -16,6 +14,7 @@ public class TileBridge extends TileEntityModStatic {
 	private final EnumMap<EnumFacing, Boolean[]> poles = Maps.newEnumMap(EnumFacing.class);
 	private final EnumMap<EnumFacing, BlockPlanks.EnumType> bases = Maps.newEnumMap(EnumFacing.class);
 
+	@Override
 	public void writeCustomNBT(NBTTagCompound nbt){
 		super.writeCustomNBT(nbt);
 		for(EnumFacing facing : EnumFacing.HORIZONTALS){
@@ -28,6 +27,7 @@ public class TileBridge extends TileEntityModStatic {
 		}
 	}
 	
+	@Override
 	public void readCustomNBT(NBTTagCompound nbt){
 		super.readCustomNBT(nbt);
 		for(EnumFacing facing : EnumFacing.HORIZONTALS){

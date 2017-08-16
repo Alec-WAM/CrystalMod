@@ -2,7 +2,6 @@ package alec_wam.CrystalMod.tiles.pipes.estorage.storage.hdd;
 
 import alec_wam.CrystalMod.api.estorage.INetworkInventory;
 import alec_wam.CrystalMod.api.estorage.INetworkItemProvider;
-import alec_wam.CrystalMod.api.estorage.INetworkInventory.EnumUpdateType;
 import alec_wam.CrystalMod.api.estorage.storage.IItemProvider;
 import alec_wam.CrystalMod.network.IMessageHandler;
 import alec_wam.CrystalMod.tiles.TileEntityInventory;
@@ -30,6 +29,7 @@ public class TileEntityHDDInterface extends TileEntityInventory implements ITick
 	private int priority = 0;
 	public int facing = EnumFacing.NORTH.ordinal();
 	
+	@Override
 	public void writeCustomNBT(NBTTagCompound nbt){
 		super.writeCustomNBT(nbt);
 		nbt.setInteger("DumpIndex", dumpIndex);
@@ -37,6 +37,7 @@ public class TileEntityHDDInterface extends TileEntityInventory implements ITick
 		nbt.setInteger("Facing", facing);
 	}
 	
+	@Override
 	public void readCustomNBT(NBTTagCompound nbt){
 		super.readCustomNBT(nbt);
 		dumpIndex = nbt.getInteger("DumpIndex");

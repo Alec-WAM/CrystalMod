@@ -17,6 +17,7 @@ public class TileSoundMuffler extends TileEntityModStatic implements IMessageHan
 	private LinkedList<String> soundList = new LinkedList<String>();
 	private float volume;
 	
+	@Override
 	public void writeCustomNBT(NBTTagCompound nbt){
 		super.writeCustomNBT(nbt);
 		NBTTagList listSound = new NBTTagList();
@@ -30,6 +31,7 @@ public class TileSoundMuffler extends TileEntityModStatic implements IMessageHan
 		nbt.setFloat("Volume", volume);
 	}
 	
+	@Override
 	public void readCustomNBT(NBTTagCompound nbt){
 		super.readCustomNBT(nbt);
 		NBTTagList listSound = nbt.getTagList("SoundList", Constants.NBT.TAG_COMPOUND);

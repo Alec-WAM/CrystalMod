@@ -1,17 +1,11 @@
 package alec_wam.CrystalMod.tiles.pipes.estorage;
 
-import io.netty.handler.codec.EncoderException;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
-import net.minecraft.nbt.CompressedStreamTools;
-import net.minecraft.nbt.NBTSizeTracker;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.fluids.FluidStack;
 import alec_wam.CrystalMod.api.FluidStackList;
 import alec_wam.CrystalMod.api.estorage.INetworkContainer;
 import alec_wam.CrystalMod.api.estorage.INetworkInventory.FluidExtractFilter;
@@ -19,6 +13,11 @@ import alec_wam.CrystalMod.network.CompressedDataInput;
 import alec_wam.CrystalMod.network.CompressedDataOutput;
 import alec_wam.CrystalMod.util.FluidUtil;
 import alec_wam.CrystalMod.util.Lang;
+import io.netty.handler.codec.EncoderException;
+import net.minecraft.nbt.CompressedStreamTools;
+import net.minecraft.nbt.NBTSizeTracker;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.fluids.FluidStack;
 
 public class FluidStorage {
 	

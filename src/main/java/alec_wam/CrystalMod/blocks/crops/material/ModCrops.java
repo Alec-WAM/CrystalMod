@@ -102,8 +102,9 @@ public class ModCrops {
 	}
 	
 	public static void init(){
-		//TODO FISH? SUGER COOKIE MAGMACREAM PRISMARINE CHORUS
-		//TODO Drop Crops: BONE SPIDEREYE ENDERPEARL GHASTTEAR
+		//TODO Add more crop types
+		//FISH? SUGER COOKIE MAGMACREAM PRISMARINE CHORUS
+		//Drop Crops: BONE SPIDEREYE ENDERPEARL GHASTTEAR
 		DIRT = CrystalModAPI.createCrop("dirt", CrystalModAPI.createSeed(1, 0x603913, 0xa67c52, CropOverlays.STRIPE_LR), 2, true, CropOverlays.PLANT_SPRUCE, 30*SECOND, new ItemStack(Blocks.DIRT)); 
 		CrystalModAPI.registerCrop(DIRT);
 		COBBLESTONE = CrystalModAPI.createCrop("cobblestone", CrystalModAPI.createSeed(1, 0x808080, 0xc8c8c8, CropOverlays.LINES_LR_2), 2, true, CropOverlays.PLANT_SPRUCE, 30*SECOND, new ItemStack(Blocks.COBBLESTONE));

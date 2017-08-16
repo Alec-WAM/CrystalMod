@@ -1,8 +1,6 @@
 package alec_wam.CrystalMod.entities.animals;
 
 import alec_wam.CrystalMod.blocks.ModBlocks;
-import alec_wam.CrystalMod.blocks.crops.BlockCrystalPlant;
-import alec_wam.CrystalMod.blocks.crops.BlockCrystalPlant.PlantType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelQuadruped;
@@ -24,7 +22,8 @@ public class LayerCrystalCowCrystals implements LayerRenderer<EntityCrystalCow>
         this.mooshroomRenderer = mooshroomRendererIn;
     }
 
-    public void doRenderLayer(EntityCrystalCow entitylivingbaseIn, float p_177141_2_, float p_177141_3_, float partialTicks, float p_177141_5_, float p_177141_6_, float p_177141_7_, float scale)
+    @Override
+	public void doRenderLayer(EntityCrystalCow entitylivingbaseIn, float p_177141_2_, float p_177141_3_, float partialTicks, float p_177141_5_, float p_177141_6_, float p_177141_7_, float scale)
     {
         if (!entitylivingbaseIn.isChild() && !entitylivingbaseIn.isInvisible() && entitylivingbaseIn.isCrystalGrown())
         {
@@ -87,7 +86,8 @@ public class LayerCrystalCowCrystals implements LayerRenderer<EntityCrystalCow>
         }
     }
 
-    public boolean shouldCombineTextures()
+    @Override
+	public boolean shouldCombineTextures()
     {
         return true;
     }

@@ -53,6 +53,7 @@ public class TileEntityPipeItem extends TileEntityPipe implements IInventoryChan
 		return filters.get(dir);
 	}
 	
+	@Override
 	public void writeCustomNBT(NBTTagCompound nbt){
 		super.writeCustomNBT(nbt);
 		for (Entry<EnumFacing, Boolean> entry : selfFeed.entrySet()) {
@@ -84,6 +85,7 @@ public class TileEntityPipeItem extends TileEntityPipe implements IInventoryChan
 		    }
 	}
 	
+	@Override
 	public void readCustomNBT(NBTTagCompound nbt){
 		super.readCustomNBT(nbt);
 		for (EnumFacing dir : EnumFacing.VALUES) {
@@ -254,6 +256,7 @@ public class TileEntityPipeItem extends TileEntityPipe implements IInventoryChan
 		  return RedstoneMode.getNextRedstoneMode(res);
 	  }
 	
+	@Override
 	public boolean canConnectToExternal(EnumFacing direction, boolean ignoreDisabled) {
 		World world = getWorld();
 	    if(world == null) {
@@ -319,6 +322,7 @@ public class TileEntityPipeItem extends TileEntityPipe implements IInventoryChan
 		this.markDirty();
 	}
 	
+	@Override
 	public List<ItemStack> getDrops(){
 		List<ItemStack> list = super.getDrops();
 		for(EnumFacing dir : EnumFacing.VALUES){
@@ -333,10 +337,12 @@ public class TileEntityPipeItem extends TileEntityPipe implements IInventoryChan
 		return list;
 	}
 	
+	@Override
 	public Object getContainer(int iD, EntityPlayer player) {
 		return new ContainerNormalPipe();
 	}
 	
+	@Override
 	@SideOnly(Side.CLIENT)
 	public Object getGui(int iD, EntityPlayer player) {
 		return new GuiItemPipe(null, null, null);

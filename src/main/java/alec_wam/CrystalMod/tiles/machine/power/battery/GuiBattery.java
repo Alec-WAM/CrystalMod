@@ -4,23 +4,11 @@ import java.awt.Color;
 import java.util.List;
 import java.util.Map;
 
-import javax.vecmath.Point2d;
 import javax.vecmath.Point2i;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.entity.passive.EntitySheep;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.client.util.GuiContainerTabbed;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
@@ -29,6 +17,14 @@ import alec_wam.CrystalMod.tiles.TileEntityIOSides.IOType;
 import alec_wam.CrystalMod.tiles.machine.power.battery.BlockBattery.BatteryType;
 import alec_wam.CrystalMod.util.Lang;
 import alec_wam.CrystalMod.util.client.RenderUtil;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
 
 public class GuiBattery extends GuiContainerTabbed {
 
@@ -72,6 +68,7 @@ public class GuiBattery extends GuiContainerTabbed {
 		}
 	}
 	
+	@Override
 	public void drawGuiContainerBackgroundLayer(float var1, int var2,int var3) {
 		BatteryType type = BlockBattery.fromMeta(battery.getBlockMetadata());
 		if(type == BatteryType.BLUE){
@@ -106,15 +103,14 @@ public class GuiBattery extends GuiContainerTabbed {
 	private class IOTab extends Tab {
 
 		int headerColour = 0xe1c92f;
-		TileEntityBattery bat;
 		GuiBattery gui;
 		public IOTab(GuiBattery gui, TileEntityBattery bat) {
 			maxHeight = 94;
 			maxWidth = 100;
 			overlayColor = 0xd46c1f;
-			this.bat = bat;
 			this.gui = gui;
 		}
+		@Override
 		public boolean handleMouseClicked(int x, int y, int mouseButton)
 		  {
 		    if (!isFullyOpened()) {

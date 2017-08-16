@@ -48,5 +48,13 @@ public class StringUtils {
 	public static String makeReadable(Collection<String> list){
 		return CommandBase.joinNiceStringFromCollection(list);
 	}
+
+	public static String[] makeStringArray(Object[] objs) {
+		String[] array = new String[objs.length];
+		for(int i = 0; i < objs.length; i++){
+			array[i] = objs[i].toString();
+		}
+		return array;
+	}
 	
 }

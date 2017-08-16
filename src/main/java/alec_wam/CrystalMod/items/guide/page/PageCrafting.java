@@ -16,8 +16,6 @@ import alec_wam.CrystalMod.client.util.comp.GuiComponentStandardRecipePage;
 import alec_wam.CrystalMod.items.guide.GuiGuideChapter;
 import alec_wam.CrystalMod.items.guide.GuiGuideIndex;
 import alec_wam.CrystalMod.items.guide.GuidePages;
-import alec_wam.CrystalMod.items.guide.GuidePages.ManualChapter;
-import alec_wam.CrystalMod.items.guide.GuidePages.PageData;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.Lang;
@@ -36,7 +34,6 @@ import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -54,7 +51,6 @@ public class PageCrafting extends GuidePage {
 	protected static RenderItem itemRenderer = Minecraft.getMinecraft().getRenderItem();
 	public Object[] ingred;
 	public NonNullList<ItemStack> items;
-	private IRecipe currentRecipe;
 	private ItemStack output = ItemStackTools.getEmptyStack();
 	private NonNullList<ItemStack> stacks;
 	
@@ -69,7 +65,7 @@ public class PageCrafting extends GuidePage {
 	}
 
 	public static IRecipe getFirstRecipeForItem(ItemStack resultingItem) {
-		for (IRecipe recipe : (List<IRecipe>)CraftingManager.getInstance().getRecipeList()) {
+		for (IRecipe recipe : CraftingManager.getInstance().getRecipeList()) {
 			if (recipe == null) continue;
 
 			ItemStack result = recipe.getRecipeOutput();
@@ -81,19 +77,13 @@ public class PageCrafting extends GuidePage {
 		return null;
 	}
 
-	private static Object[] getRecipeInput(IRecipe recipe) {
-		if (recipe instanceof ShapelessOreRecipe) return ((ShapelessOreRecipe)recipe).getInput().toArray();
-		else if (recipe instanceof ShapedOreRecipe) return ((ShapedOreRecipe)recipe).getInput();
-		else if (recipe instanceof ShapedRecipes) return ((ShapedRecipes)recipe).recipeItems;
-		else if (recipe instanceof ShapelessRecipes) return ((ShapelessRecipes)recipe).recipeItems.toArray();
-		return null;
-	}
-	
+	@Override
 	@SideOnly(Side.CLIENT)
     public void initGui(GuiGuideChapter gui, int startX, int startY){
 		this.listIndex = 0;
     }
 
+	@SuppressWarnings("unchecked")
 	public void updateItem(ItemStack out){
 		/*IRecipe recipe = getFirstRecipeForItem(out);
 		this.ingred = recipe !=null ? getRecipeInput(recipe) : new ItemStack[9];
@@ -134,8 +124,6 @@ public class PageCrafting extends GuidePage {
 		IRecipe recipe = getFirstRecipeForItem(out);
 		this.ingred = new Object[9];
 		this.items = NonNullList.withSize(9, ItemStackTools.getEmptyStack());
-		this.currentRecipe = recipe;
-		
 		this.output = recipe !=null ? recipe.getRecipeOutput() : out;
 		NonNullList<ItemStack> stacks = NonNullList.withSize(9, ItemStackTools.getEmptyStack());
         int width = 3;
@@ -240,6 +228,7 @@ public class PageCrafting extends GuidePage {
 	}
 	
 	public int listIndex = 0;
+	@Override
 	@SideOnly(Side.CLIENT)
     public void updateScreen(GuiGuideChapter gui, int startX, int startY, int timer){
 		boolean shift = GuiScreen.isShiftKeyDown();
@@ -299,6 +288,7 @@ public class PageCrafting extends GuidePage {
 
 	}
 	
+	@Override
 	@SideOnly(Side.CLIENT)
     public void drawForeground(GuiGuideChapter gui, int startX, int startY, int mouseX, int mouseY, float partialTicks){
 		int x = 20;

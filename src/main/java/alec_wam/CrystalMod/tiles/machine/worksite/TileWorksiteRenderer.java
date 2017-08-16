@@ -2,19 +2,12 @@ package alec_wam.CrystalMod.tiles.machine.worksite;
 
 import org.lwjgl.opengl.GL11;
 
-import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import alec_wam.CrystalMod.tiles.machine.elevator.TileEntityElevator;
-import alec_wam.CrystalMod.tiles.machine.worksite.TileWorksiteBase;
-import alec_wam.CrystalMod.util.client.RenderUtil;
 
 public class TileWorksiteRenderer<T extends TileWorksiteBase> extends TileEntitySpecialRenderer<T> {
 
@@ -123,16 +116,6 @@ public class TileWorksiteRenderer<T extends TileWorksiteBase> extends TileEntity
 	@Override
 	public boolean isGlobalRenderer(TileWorksiteBase te) {
     	return true;
-	}
-	
-	
-	private void renderBoundingBox(BlockPos te, BlockPos min, BlockPos max, double r, double g, double b, double alpha,	float expansion) {
-		//GlStateManager.disableLighting();
-		//GlStateManager.color((float)r, (float)g, (float)b, (float)alpha);
-		AxisAlignedBB bb = new AxisAlignedBB(min.subtract(te), max.subtract(te).add(1, 1, 1));
-		//bb.offset(-te.getX(), -te.getY(), -te.getZ());
-		RenderUtil.drawOutlinedBoundingBox(bb, (float) r, (float) g, (float) b, /*0.0625f*/2.0f);
-		//GlStateManager.enableLighting();
 	}
 
 }

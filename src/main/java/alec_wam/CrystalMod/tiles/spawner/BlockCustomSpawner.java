@@ -3,21 +3,18 @@ package alec_wam.CrystalMod.tiles.spawner;
 import java.util.List;
 import java.util.Random;
 
+import com.google.common.collect.Lists;
+
 import alec_wam.CrystalMod.CrystalMod;
-import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.blocks.BlockCrystal.CrystalBlockType;
 import alec_wam.CrystalMod.blocks.BlockCrystalIngot.CrystalIngotBlockType;
-import alec_wam.CrystalMod.items.ModItems;
+import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.ChatUtil;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.Lang;
-
-import com.google.common.base.Strings;
-import com.google.common.collect.Lists;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;

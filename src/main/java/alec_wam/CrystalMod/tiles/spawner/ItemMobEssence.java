@@ -1,6 +1,5 @@
 package alec_wam.CrystalMod.tiles.spawner;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -14,9 +13,7 @@ import alec_wam.CrystalMod.entities.mob.zombiePigmen.EntityCrystalPigZombie;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.proxy.ClientProxy;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
-import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.Lang;
-import alec_wam.CrystalMod.util.ModLogger;
 import net.minecraft.block.BlockFence;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
@@ -209,10 +206,12 @@ public class ItemMobEssence extends Item implements ICustomModel{
 		addEntity(new EntityEssenceInstance<EntitySkeleton>("Skeleton", EntitySkeleton.class, 16));
 		addEntity(new EntityEssenceInstance<EntityWitherSkeleton>("WitherSkeleton", EntityWitherSkeleton.class, 32){
 			
+			@Override
 			public float getRenderScale(TransformType type){
 				return (type == TransformType.GUI || type == TransformType.FIXED) ? 1.4F : super.getRenderScale(type);
 			}
 			
+			@Override
 			public Vec3d getRenderOffset(TransformType type){
 				return new Vec3d(0, -1.2, 0);
 			}
@@ -242,16 +241,19 @@ public class ItemMobEssence extends Item implements ICustomModel{
 			}
 		});
 		addEntity(new EntityEssenceInstance<EntityWitch>("Witch", EntityWitch.class, 16){
+			@Override
 			public Vec3d getRenderOffset(TransformType type){
 				return new Vec3d(0, -1.2, 0);
 			}
 			
+			@Override
 			public float getRenderScale(TransformType type){
 				return 1.4F;
 			}
 		});
 		
 		addEntity(new EntityEssenceInstance<EntitySlime>("Slime", EntitySlime.class, 16){
+			@Override
 			public EntitySlime createRenderEntity(World world){
 				EntitySlime slime = super.createRenderEntity(world);
 				NBTTagCompound nbt = new NBTTagCompound();
@@ -261,12 +263,14 @@ public class ItemMobEssence extends Item implements ICustomModel{
 				return slime;
 			}
 			
+			@Override
 			public float getRenderScale(TransformType type){
 				return 1.4F;
 			}
 		});
 		addEntity(new EntityEssenceInstance<EntitySilverfish>("Silverfish", EntitySilverfish.class, 20));
 		addEntity(new EntityEssenceInstance<EntityBat>("Bat", EntityBat.class, 8){
+			@Override
 			public EntityBat createRenderEntity(World world){
 				EntityBat bat = super.createRenderEntity(world);
 				bat.setIsBatHanging(false);
@@ -274,6 +278,7 @@ public class ItemMobEssence extends Item implements ICustomModel{
 			}
 		});
 		addEntity(new EntityEssenceInstance<EntitySquid>("Squid", EntitySquid.class, 8){
+			@Override
 			public Vec3d getRenderOffset(TransformType type){
 				return new Vec3d(0, 0, 0);
 			}
@@ -282,10 +287,12 @@ public class ItemMobEssence extends Item implements ICustomModel{
 		addEntity(new EntityEssenceInstance<EntityWolf>("Wolf", EntityWolf.class, 10));
 		addEntity(new EntityEssenceInstance<EntityOcelot>("Ocelot", EntityOcelot.class, 10));
 		addEntity(new EntityEssenceInstance<EntityRabbit>("Rabbit", EntityRabbit.class, 8){
+			@Override
 			public Vec3d getRenderOffset(TransformType type){
 				return new Vec3d(0, -0.5, 0);
 			}
 			
+			@Override
 			public float getRenderScale(TransformType type){
 				return super.getRenderScale(type)*2F;
 			}
@@ -295,6 +302,7 @@ public class ItemMobEssence extends Item implements ICustomModel{
 		addEntity(new EntityEssenceInstance<EntityVillager>("Villager", EntityVillager.class, 8));
 		addEntity(new EntityEssenceInstance<EntityVindicator>("Vindicator", EntityVindicator.class, 8));
 		addEntity(new EntityEssenceInstance<EntityIronGolem>("IronGolem", EntityIronGolem.class, 8){
+			@Override
 			public float getRenderScale(TransformType type){
 				return type == TransformType.GUI ? 1.2f : super.getRenderScale(type);
 			}
@@ -314,10 +322,12 @@ public class ItemMobEssence extends Item implements ICustomModel{
 		addEntity(new EntityEssenceInstance<EntityLlama>("Llama", EntityLlama.class, 4));
 		//NETHER
 		addEntity(new EntityEssenceInstance<EntityGhast>("Ghast", EntityGhast.class, 8){
+			@Override
 			public Vec3d getRenderOffset(TransformType type){
 				return new Vec3d(0, -0.5, 0);
 			}
 			
+			@Override
 			public float getRenderScale(TransformType type){
 				return super.getRenderScale(type)/3F;
 			}
@@ -325,10 +335,12 @@ public class ItemMobEssence extends Item implements ICustomModel{
 		addEntity(new EntityEssenceInstance<EntityBlaze>("Blaze", EntityBlaze.class, 16));
 		addEntity(new EntityEssenceInstance<EntityPigZombie>("PigZombie", EntityPigZombie.class, 16));
 		addEntity(new EntityEssenceInstance<EntityPigZombie>("PigZombie.Child", EntityPigZombie.class, 8){
+			@Override
 			public void preSpawn(EntityPigZombie zombie){
 				zombie.setChild(true);
 			}
 			
+			@Override
 			public void addInfo(List<String> list){
 				super.addInfo(list);
 				list.add("Child");
@@ -344,6 +356,7 @@ public class ItemMobEssence extends Item implements ICustomModel{
 		});
 		addEntity(new EntityEssenceInstance<EntityCrystalPigZombie>("CrystalPigZombie", EntityCrystalPigZombie.class, 16));
 		addEntity(new EntityEssenceInstance<EntityMagmaCube>("MagmaCube", EntityMagmaCube.class, 16){
+			@Override
 			public EntityMagmaCube createRenderEntity(World world){
 				EntityMagmaCube cube = super.createRenderEntity(world);
 				NBTTagCompound nbt = new NBTTagCompound();
@@ -353,6 +366,7 @@ public class ItemMobEssence extends Item implements ICustomModel{
 				return cube;
 			}
 			
+			@Override
 			public float getRenderScale(TransformType type){
 				return 1.4F;
 			}
@@ -360,19 +374,23 @@ public class ItemMobEssence extends Item implements ICustomModel{
 		
 		//END
 		addEntity(new EntityEssenceInstance<EntityEnderman>("Enderman", EntityEnderman.class, 20){
+			@Override
 			public float getRenderScale(TransformType type){
 				return 1.2F;
 			}
 			
+			@Override
 			public Vec3d getRenderOffset(TransformType type){
 				return new Vec3d(0, -1.2, 0);
 			}
 		});
 		addEntity(new EntityEssenceInstance<EntityCrystalEnderman>("CrystalEnderman", EntityCrystalEnderman.class, 30){
+			@Override
 			public float getRenderScale(TransformType type){
 				return 1.2F;
 			}
 			
+			@Override
 			public Vec3d getRenderOffset(TransformType type){
 				return new Vec3d(0, -1.2, 0);
 			}
@@ -414,7 +432,7 @@ public class ItemMobEssence extends Item implements ICustomModel{
 				entity.rotationYawHead = entity.rotationYaw;
 				entity.renderYawOffset = entity.rotationYaw;
 				if (!world.isRemote) {
-					if(instance.useInitialSpawn() && entity instanceof EntityLiving)((EntityLiving)entity).onInitialSpawn(world.getDifficultyForLocation(new BlockPos(((EntityLiving)entity))), (IEntityLivingData)null);
+					if(instance.useInitialSpawn() && entity instanceof EntityLiving)((EntityLiving)entity).onInitialSpawn(world.getDifficultyForLocation(new BlockPos((entity))), (IEntityLivingData)null);
 	                world.spawnEntity(entity);
 	                if(entity instanceof EntityLiving)((EntityLiving)entity).playLivingSound();
 					if (!player.capabilities.isCreativeMode)

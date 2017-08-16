@@ -183,7 +183,7 @@ public class BatHelper {
 		}
 		
 		if(shift && ctrl){
-    		String str = Strings.repeat("~", ((String)list.get(list.size()-1)).length());
+    		String str = Strings.repeat("~", list.get(list.size()-1).length());
     		list.add(str);
     	}
 		
@@ -531,7 +531,7 @@ public class BatHelper {
 
                  if(player.getEntityWorld() instanceof WorldServer && damageDealt > 2f) {
                    int k = (int) (damageDealt * 0.5);
-                   ((WorldServer) player.getEntityWorld()).spawnParticle(EnumParticleTypes.DAMAGE_INDICATOR, target.posX, target.posY + (double) (target.height * 0.5F), target.posZ, k, 0.1D, 0.0D, 0.1D, 0.2D);
+                   ((WorldServer) player.getEntityWorld()).spawnParticle(EnumParticleTypes.DAMAGE_INDICATOR, target.posX, target.posY + target.height * 0.5F, target.posZ, k, 0.1D, 0.0D, 0.1D, 0.2D);
                  }
 
                  //if(applyCooldown) {
@@ -542,67 +542,7 @@ public class BatHelper {
         return true;
 	}
 	
-	private static boolean handleAttackWithoutDamage(ItemStack stack, EntityLivingBase attacker, EntityLivingBase target, AttackData data){
-		Map<IBatUpgrade, UpgradeData> upgrades = getBatUpgrades(stack);
-		EntityPlayer player = null;
-		if(attacker instanceof EntityPlayer){
-			player = (EntityPlayer)attacker;
-		}
-		if(target != null) {
-			
-			double oldVelX = target.motionX;
-	        double oldVelY = target.motionY;
-	        double oldVelZ = target.motionZ;
-			
-	        float baseKnockBack = attacker.isSprinting() ? 1 : 0;
-	        float knockback = baseKnockBack+data.knockback;
-        	// apply knockback
-            if(knockback > 0f) {
-              double velX = -MathHelper.sin(attacker.rotationYaw * (float) Math.PI / 180.0F) * knockback * 0.5F;
-              double velZ = MathHelper.cos(attacker.rotationYaw * (float) Math.PI / 180.0F) * knockback * 0.5F;
-              target.addVelocity(velX, 0.1d, velZ);
-
-              // slow down player
-              attacker.motionX *= 0.6f;
-              attacker.motionZ *= 0.6f;
-              attacker.setSprinting(false);
-            }
-
-            if(target instanceof EntityPlayerMP && target.velocityChanged) {
-            	if(player !=null && player instanceof EntityPlayerMP && ((EntityPlayerMP) player).connection != null) {
-        	      ((EntityPlayerMP) player).connection.sendPacket(new SPacketEntityVelocity(target));
-        	    }
-            	target.velocityChanged = false;
-            	target.motionX = oldVelX;
-            	target.motionY = oldVelY;
-            	target.motionZ = oldVelZ;
-            }
-            List<EntityLivingBase> attackedEntities = Lists.newArrayList();
-            attackedEntities.add(target);
-            double range = data.rangeBoost;
-        	if(range > 0){
-                AxisAlignedBB bb = new AxisAlignedBB(target.posX, target.posY, target.posZ, target.posX+1, target.posY+1, target.posZ+1).expand(range, 1.0D, range);
-            	List<EntityLivingBase> list = attacker.getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, bb);                    
-                list.remove(target);
-                list.remove(attacker);
-                if(attacker.getRidingEntity() !=null)list.remove(attacker.getRidingEntity());
-                
-                List<EntityLivingBase> attacked = EntityUtil.attackEntitiesInArea(attacker.getEntityWorld(), list, null, 0.0f, (target instanceof IMob));
-                attackedEntities.addAll(attacked);
-        	}
-            
-        	for(Entry<IBatUpgrade, UpgradeData> entry : upgrades.entrySet()){
-    			entry.getKey().afterAttack(attacker, attackedEntities, 0.0f, stack, data, entry.getValue());
-    		}
-        	
-            if(player !=null){
-            	 player.resetCooldown();
-            }
-        }
-		return false;
-	}
-	
-    public static void damageTool(ItemStack stack, int dam, EntityLivingBase entity)
+	public static void damageTool(ItemStack stack, int dam, EntityLivingBase entity)
     {
         if (entity !=null && entity instanceof EntityPlayer && ((EntityPlayer) entity).capabilities.isCreativeMode)
             return;

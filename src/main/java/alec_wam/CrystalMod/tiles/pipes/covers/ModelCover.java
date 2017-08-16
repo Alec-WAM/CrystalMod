@@ -52,7 +52,7 @@ public class ModelCover extends DynamicItemAndBlockModel
     	IBakedModel model = Minecraft.getMinecraft().getRenderItem().getItemModelWithOverrides(stack, (World)null, (EntityLivingBase)null);
     	bakedQuads.addAll(model.getQuads((IBlockState)null, (EnumFacing)null, 0L));
     	for (final EnumFacing face2 : EnumFacing.VALUES) {
-    		bakedQuads.addAll(model.getQuads((IBlockState)null, (EnumFacing)face2, 0L));
+    		bakedQuads.addAll(model.getQuads((IBlockState)null, face2, 0L));
     	}
     	List<CustomBakedQuad> quads = CustomBakedQuad.fromArray(bakedQuads);
     	quads = CoverRender.sliceQuads(quads, 3, CoverUtil.getCoverBoundingBox(EnumFacing.SOUTH, true));
@@ -69,7 +69,7 @@ public class ModelCover extends DynamicItemAndBlockModel
     			color |= 0xFF000000;
     		}
     		final CustomBakedQuad copyQuad = quad.copy();
-    		final ColorData c = (ColorData)new ColorDataARGB(color);
+    		final ColorData c = new ColorDataARGB(color);
     		for (final ColorData qC : copyQuad.colours) {
     			qC.multiply(c);
     		}
@@ -77,7 +77,8 @@ public class ModelCover extends DynamicItemAndBlockModel
     	}
     }
     
-    public List<BakedQuad> getGeneralQuads() {
+    @Override
+	public List<BakedQuad> getGeneralQuads() {
         final List<BakedQuad> list = new ArrayList<BakedQuad>();
         if(this.data !=null){
         	addCover(data, EnumFacing.SOUTH, list);
@@ -85,11 +86,13 @@ public class ModelCover extends DynamicItemAndBlockModel
         return list;
     }
     
-    public boolean isGui3d() {
+    @Override
+	public boolean isGui3d() {
         return true;
     }
     
-    public ItemCameraTransforms getItemCameraTransforms() {
+    @Override
+	public ItemCameraTransforms getItemCameraTransforms() {
         return ItemCameraTransforms.DEFAULT;
     }
     

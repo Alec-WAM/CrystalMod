@@ -2,6 +2,11 @@ package alec_wam.CrystalMod.tiles.entityhopper;
 
 import java.util.List;
 
+import alec_wam.CrystalMod.tiles.TileEntityMod;
+import alec_wam.CrystalMod.util.BlockUtil;
+import alec_wam.CrystalMod.util.ItemStackTools;
+import alec_wam.CrystalMod.util.ItemUtil;
+import alec_wam.CrystalMod.util.Vector3d;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
@@ -12,7 +17,6 @@ import net.minecraft.entity.monster.EntityGuardian;
 import net.minecraft.entity.monster.EntitySlime;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityAnimal;
-import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.passive.EntityWaterMob;
 import net.minecraft.entity.player.EntityPlayer;
@@ -21,15 +25,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
-import alec_wam.CrystalMod.tiles.TileEntityMod;
-import alec_wam.CrystalMod.util.BlockUtil;
-import alec_wam.CrystalMod.util.ItemStackTools;
-import alec_wam.CrystalMod.util.ItemUtil;
-import alec_wam.CrystalMod.util.ModLogger;
-import alec_wam.CrystalMod.util.Vector3d;
 
 public class TileEntityEntityHopper extends TileEntityMod {
 
@@ -75,7 +72,7 @@ public class TileEntityEntityHopper extends TileEntityMod {
 		BlockPos abovePos = getPos().offset(EnumFacing.UP);
 		AxisAlignedBB above = new AxisAlignedBB(abovePos, abovePos.add(1, 1, 1));
 		BlockPos belowPos = getPos().offset(EnumFacing.DOWN);
-		AxisAlignedBB below = new AxisAlignedBB(belowPos, getPos().add(1, 0, 1));
+		new AxisAlignedBB(belowPos, getPos().add(1, 0, 1));
 		List<Entity> entities = getWorld().getEntitiesWithinAABB(Entity.class, above);
 		for(Entity entity : entities){
 			if(entity !=null && entity.isEntityAlive()){

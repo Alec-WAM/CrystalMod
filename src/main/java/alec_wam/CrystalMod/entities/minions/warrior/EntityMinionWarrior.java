@@ -57,15 +57,17 @@ public class EntityMinionWarrior extends EntityMinionBase {
 	
 	public boolean isWithinWanderBounds(BlockPos pos){
 		if(wanderHome == null)return true;
-		return wanderHome.distanceSq(pos) < (double)(getMaximumWanderDistance() * getMaximumWanderDistance());
+		return wanderHome.distanceSq(pos) < getMaximumWanderDistance() * getMaximumWanderDistance();
 	}
 	
+	@Override
 	protected void applyEntityAttributes()
     {
         super.applyEntityAttributes();
         this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(20.0D);
     }
 	
+	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt){
 		super.writeToNBT(nbt);
 		NBTTagCompound invList = new NBTTagCompound();
@@ -83,6 +85,7 @@ public class EntityMinionWarrior extends EntityMinionBase {
 		return nbt;
 	}
 	
+	@Override
 	public void readFromNBT(NBTTagCompound nbt){
 		super.readFromNBT(nbt);
 		this.movementState = EnumMovementState.fromId(nbt.hasKey("MovementState") ? nbt.getInteger("MovementState") : 0);

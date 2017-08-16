@@ -2,6 +2,12 @@ package alec_wam.CrystalMod.items;
 
 import java.util.List;
 
+import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.blocks.ICustomModel;
+import alec_wam.CrystalMod.util.ChatUtil;
+import alec_wam.CrystalMod.util.ItemNBTHelper;
+import alec_wam.CrystalMod.util.ItemStackTools;
+import alec_wam.CrystalMod.util.ModLogger;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.ItemMeshDefinition;
@@ -20,13 +26,13 @@ import net.minecraft.network.play.server.SPacketEntityEffect;
 import net.minecraft.network.play.server.SPacketRespawn;
 import net.minecraft.network.play.server.SPacketSetExperience;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
@@ -36,16 +42,6 @@ import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import alec_wam.CrystalMod.CrystalMod;
-import alec_wam.CrystalMod.blocks.ICustomModel;
-import alec_wam.CrystalMod.items.tools.grapple.EntityGrapplingHook;
-import alec_wam.CrystalMod.items.tools.grapple.GrappleHandler;
-import alec_wam.CrystalMod.network.CrystalModNetwork;
-import alec_wam.CrystalMod.network.packets.PacketEntityMessage;
-import alec_wam.CrystalMod.util.ChatUtil;
-import alec_wam.CrystalMod.util.ItemNBTHelper;
-import alec_wam.CrystalMod.util.ItemStackTools;
-import alec_wam.CrystalMod.util.ModLogger;
 
 public class ItemTeloportTool extends Item implements ICustomModel {
 
@@ -56,6 +52,7 @@ public class ItemTeloportTool extends Item implements ICustomModel {
 		ModItems.registerItem(this, "telepearl");
 	}
 	
+	@Override
 	@SideOnly(Side.CLIENT)
     public void initModel() {
 		final ModelResourceLocation locUnBound = new ModelResourceLocation("crystalmod:telepearl", "bound=false");
@@ -134,7 +131,7 @@ public class ItemTeloportTool extends Item implements ICustomModel {
     protected boolean teleportRandomly(Entity ent)
     {
         double d0 = ent.posX + (ent.getEntityWorld().rand.nextDouble() - 0.5D) * 32.0D;
-        double d1 = ent.posY + (double)(ent.getEntityWorld().rand.nextInt(64) - 32);
+        double d1 = ent.posY + (ent.getEntityWorld().rand.nextInt(64) - 32);
         double d2 = ent.posZ + (ent.getEntityWorld().rand.nextDouble() - 0.5D) * 32.0D;
         return this.teleportTo(ent, d0, d1, d2);
     }
@@ -201,14 +198,14 @@ public class ItemTeloportTool extends Item implements ICustomModel {
 
             for (int l = 0; l < short1; ++l)
             {
-                double d6 = (double)l / ((double)short1 - 1.0D);
+                double d6 = l / (short1 - 1.0D);
                 float f = (ent.getEntityWorld().rand.nextFloat() - 0.5F) * 0.2F;
                 float f1 = (ent.getEntityWorld().rand.nextFloat() - 0.5F) * 0.2F;
                 float f2 = (ent.getEntityWorld().rand.nextFloat() - 0.5F) * 0.2F;
-                double d7 = d3 + (ent.posX - d3) * d6 + (ent.getEntityWorld().rand.nextDouble() - 0.5D) * (double)ent.width * 2.0D;
-                double d8 = d4 + (ent.posY - d4) * d6 + ent.getEntityWorld().rand.nextDouble() * (double)ent.height;
-                double d9 = d5 + (ent.posZ - d5) * d6 + (ent.getEntityWorld().rand.nextDouble() - 0.5D) * (double)ent.width * 2.0D;
-                ent.getEntityWorld().spawnParticle(EnumParticleTypes.PORTAL, d7, d8, d9, (double)f, (double)f1, (double)f2);
+                double d7 = d3 + (ent.posX - d3) * d6 + (ent.getEntityWorld().rand.nextDouble() - 0.5D) * ent.width * 2.0D;
+                double d8 = d4 + (ent.posY - d4) * d6 + ent.getEntityWorld().rand.nextDouble() * ent.height;
+                double d9 = d5 + (ent.posZ - d5) * d6 + (ent.getEntityWorld().rand.nextDouble() - 0.5D) * ent.width * 2.0D;
+                ent.getEntityWorld().spawnParticle(EnumParticleTypes.PORTAL, d7, d8, d9, f, f1, f2);
             }
 
             ent.getEntityWorld().playSound(null, d3, d4, d5, SoundEvents.ENTITY_ENDERMEN_TELEPORT, SoundCategory.PLAYERS, 1.0F, 1.0F);

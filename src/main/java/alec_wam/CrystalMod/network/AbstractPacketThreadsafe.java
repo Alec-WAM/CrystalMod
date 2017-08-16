@@ -1,6 +1,5 @@
 package alec_wam.CrystalMod.network;
 
-import alec_wam.CrystalMod.util.ModLogger;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.network.NetHandlerPlayServer;

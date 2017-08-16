@@ -18,6 +18,7 @@ public class GuiPress extends GuiElementContainer{
         this.name = "Crystal Press";
     }
 	
+	@Override
 	public void initGui(){
 		super.initGui();
 		
@@ -27,6 +28,7 @@ public class GuiPress extends GuiElementContainer{
 	    
 	}
 	
+	@Override
 	protected void updateElementInformation()
 	{
 		super.updateElementInformation();

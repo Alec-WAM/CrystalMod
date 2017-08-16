@@ -3,7 +3,6 @@ package alec_wam.CrystalMod.tiles.machine.worksite.gui;
 import alec_wam.CrystalMod.tiles.machine.worksite.imp.WorksiteAnimalFarm;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 
 public class ContainerWorksiteAnimalControl extends ContainerWorksite {
 

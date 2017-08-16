@@ -16,6 +16,7 @@ public class ContainerHDDArray extends Container {
             for (int j = 0; j < 2; j++)
             {
 				this.addSlotToContainer(new Slot(array, j+(i*2), 71+(j*18), 7+(i*18)){
+					@Override
 					public boolean isItemValid(ItemStack stack)
 				    {
 				        return !ItemStackTools.isNullStack(stack) && stack.getItem() instanceof ItemHDD;
@@ -43,10 +44,11 @@ public class ContainerHDDArray extends Container {
 		return true;
 	}
 	
+	@Override
 	public ItemStack transferStackInSlot(EntityPlayer playerIn, int index)
     {
         ItemStack itemstack = ItemStackTools.getEmptyStack();
-        Slot slot = (Slot)this.inventorySlots.get(index);
+        Slot slot = this.inventorySlots.get(index);
 
         if (slot != null && slot.getHasStack())
         {

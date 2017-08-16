@@ -1,7 +1,7 @@
 package alec_wam.CrystalMod.tiles.pipes;
 
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.AxisAlignedBB;
 
 public class CollidableComponent {
 

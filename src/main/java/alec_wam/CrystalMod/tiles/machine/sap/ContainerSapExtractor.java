@@ -1,6 +1,5 @@
 package alec_wam.CrystalMod.tiles.machine.sap;
 
-import alec_wam.CrystalMod.tiles.machine.crafting.furnace.CrystalFurnaceManager;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -16,7 +15,7 @@ public class ContainerSapExtractor extends Container
     {
         this.addPlayerInventory(player.inventory);
         
-        this.tileMachine = ((TileSapExtractor) tileEntity);
+        this.tileMachine = (tileEntity);
 
         this.addSlotToContainer(new Slot(tileMachine, 0, 80, 54) {
         	@Override
@@ -57,7 +56,7 @@ public class ContainerSapExtractor extends Container
     {
     	ItemStack itemstack = ItemStackTools.getEmptyStack();
     	int par2 = i;
-		Slot slot = (Slot)this.inventorySlots.get(par2);
+		Slot slot = this.inventorySlots.get(par2);
 
 		if (slot != null && slot.getHasStack())
 		{

@@ -2,7 +2,6 @@ package alec_wam.CrystalMod.tiles.darkinfection;
 
 import alec_wam.CrystalMod.blocks.connected.ConnectedBlockState;
 import alec_wam.CrystalMod.client.model.dynamic.ModelConnectedTexture;
-import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.client.RenderUtil;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -58,6 +57,7 @@ public class ModelDenseDarkness extends ModelConnectedTexture {
 		return new ModelDenseDarkness();
 	}
 	
+	@Override
 	public boolean renderCenter(){
 		return true;
 	}

@@ -9,18 +9,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.handler.GuiHandler;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.network.IMessageHandler;
-import alec_wam.CrystalMod.proxy.CommonProxy;
 import alec_wam.CrystalMod.tiles.TileEntityMod;
 import alec_wam.CrystalMod.tiles.pipes.attachments.AttachmentUtil;
-import alec_wam.CrystalMod.tiles.pipes.attachments.ItemPipeAttachment;
 import alec_wam.CrystalMod.tiles.pipes.attachments.AttachmentUtil.AttachmentData;
-import alec_wam.CrystalMod.tiles.pipes.covers.ItemPipeCover;
+import alec_wam.CrystalMod.tiles.pipes.attachments.ItemPipeAttachment;
 import alec_wam.CrystalMod.tiles.pipes.covers.CoverUtil.CoverData;
+import alec_wam.CrystalMod.tiles.pipes.covers.ItemPipeCover;
 import alec_wam.CrystalMod.tiles.pipes.power.rf.RFPowerPipeNetwork;
 import alec_wam.CrystalMod.tiles.pipes.power.rf.TileEntityPipePowerRF;
 import alec_wam.CrystalMod.tiles.pipes.types.IPipeType;
@@ -31,10 +33,6 @@ import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.ModLogger;
 import alec_wam.CrystalMod.util.tool.ToolUtil;
-
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
@@ -45,15 +43,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -136,6 +133,7 @@ public abstract class TileEntityPipe extends TileEntityMod implements ITickable,
 	protected boolean clientDirty = false;
 	protected boolean serverDirty = true;
 
+	@Override
 	public void onChunkUnload() {
 		super.onChunkUnload();
 		if (this.network != null) {
@@ -471,6 +469,7 @@ public abstract class TileEntityPipe extends TileEntityMod implements ITickable,
 		return dir == null ? null : attachments.get(dir);
 	}
 
+	@Override
 	public void writeCustomNBT(NBTTagCompound nbtRoot) {
 		super.writeCustomNBT(nbtRoot);
 		int[] dirs = new int[pipeConnections.size()];
@@ -1078,6 +1077,7 @@ public abstract class TileEntityPipe extends TileEntityMod implements ITickable,
 		return null;
 	}
 	
+	@Override
 	public void handleMessage(String messageId, NBTTagCompound messageData, boolean client){
 		if(messageId.equalsIgnoreCase("Attachment")){
 			EnumFacing dir = messageData.hasKey("Dir") ? EnumFacing.getFront(messageData.getInteger("Dir")) : null;

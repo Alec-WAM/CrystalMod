@@ -1,20 +1,17 @@
 package alec_wam.CrystalMod.api;
 
-import alec_wam.CrystalMod.util.ItemStackTools;
-import alec_wam.CrystalMod.util.ItemUtil;
-
-import com.google.common.collect.ArrayListMultimap;
-
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import java.util.Collection;
+import java.util.Iterator;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.stream.Collectors;
+import com.google.common.collect.ArrayListMultimap;
+
+import alec_wam.CrystalMod.util.ItemStackTools;
+import alec_wam.CrystalMod.util.ItemUtil;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 
 public class ItemStackList{
     private ArrayListMultimap<Item, ItemStack> stacks = ArrayListMultimap.create();

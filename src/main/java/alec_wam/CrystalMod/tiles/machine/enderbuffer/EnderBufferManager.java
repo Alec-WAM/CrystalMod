@@ -4,6 +4,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import com.google.common.collect.Maps;
+
+import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.api.energy.CEnergyStorage;
+import alec_wam.CrystalMod.tiles.machine.power.CustomEnergyStorage;
+import alec_wam.CrystalMod.tiles.tank.Tank;
+import alec_wam.CrystalMod.util.PlayerUtil;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -14,14 +21,6 @@ import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
-import alec_wam.CrystalMod.CrystalMod;
-import alec_wam.CrystalMod.api.energy.CEnergyStorage;
-import alec_wam.CrystalMod.tiles.machine.power.CustomEnergyStorage;
-import alec_wam.CrystalMod.tiles.tank.Tank;
-import alec_wam.CrystalMod.util.ModLogger;
-import alec_wam.CrystalMod.util.PlayerUtil;
-
-import com.google.common.collect.Maps;
 
 public class EnderBufferManager extends WorldSavedData implements IEnderBufferList {
 	
@@ -53,12 +52,14 @@ public class EnderBufferManager extends WorldSavedData implements IEnderBufferLi
         return instance;
     }
 
-    public void setDirty()
+    @Override
+	public void setDirty()
     {
         markDirty();
     }
 
-    public EnderBuffer getBuffer(int id)
+    @Override
+	public EnderBuffer getBuffer(int id)
     {
         return global.getBuffer(id);
     }
@@ -135,7 +136,8 @@ public class EnderBufferManager extends WorldSavedData implements IEnderBufferLi
     {
         private Map<Integer, EnderBuffer> inventories = new HashMap<Integer, EnderBuffer>();
 
-        public EnderBuffer getBuffer(int id)
+        @Override
+		public EnderBuffer getBuffer(int id)
         {
             EnderBuffer inventory = inventories.get(id);
 
@@ -207,7 +209,8 @@ public class EnderBufferManager extends WorldSavedData implements IEnderBufferLi
             }
         }
 
-        public void setDirty()
+        @Override
+		public void setDirty()
         {
             markDirty();
         }

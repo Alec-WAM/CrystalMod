@@ -3,6 +3,21 @@ package alec_wam.CrystalMod.tiles.pipes.estorage.panel;
 import java.io.IOException;
 import java.util.List;
 
+import com.google.common.collect.Lists;
+
+import alec_wam.CrystalMod.api.estorage.INetworkContainer;
+import alec_wam.CrystalMod.api.estorage.IPanelSource;
+import alec_wam.CrystalMod.network.CrystalModNetwork;
+import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetwork;
+import alec_wam.CrystalMod.tiles.pipes.estorage.FluidStorage.FluidStackData;
+import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage;
+import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage.ItemStackData;
+import alec_wam.CrystalMod.tiles.pipes.estorage.PacketEStorageItemList;
+import alec_wam.CrystalMod.tiles.pipes.estorage.PacketEStorageItemList.EnumListType;
+import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.CraftingPattern;
+import alec_wam.CrystalMod.tiles.pipes.estorage.panel.crafting.ContainerPanelCrafting;
+import alec_wam.CrystalMod.util.ItemStackTools;
+import alec_wam.CrystalMod.util.ItemUtil;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -12,25 +27,8 @@ import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
-import alec_wam.CrystalMod.api.estorage.INetworkContainer;
-import alec_wam.CrystalMod.api.estorage.IPanelSource;
-import alec_wam.CrystalMod.network.CrystalModNetwork;
-import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetwork;
-import alec_wam.CrystalMod.tiles.pipes.estorage.FluidStorage.FluidStackData;
-import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage;
-import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage.ItemStackData;
-import alec_wam.CrystalMod.tiles.pipes.estorage.PacketEStorageItemList.EnumListType;
-import alec_wam.CrystalMod.tiles.pipes.estorage.PacketEStorageItemList;
-import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.CraftingPattern;
-import alec_wam.CrystalMod.tiles.pipes.estorage.panel.crafting.ContainerPanelCrafting;
-import alec_wam.CrystalMod.util.ItemStackTools;
-import alec_wam.CrystalMod.util.ItemUtil;
-import alec_wam.CrystalMod.util.ModLogger;
-
-import com.google.common.collect.Lists;
 
 public class ContainerPanel extends Container implements INetworkContainer {
 
@@ -94,7 +92,7 @@ public class ContainerPanel extends Container implements INetworkContainer {
                 return ItemStackTools.getEmptyStack();
             }
 
-            Slot slot6 = (Slot)this.inventorySlots.get(slotId);
+            Slot slot6 = this.inventorySlots.get(slotId);
 
             if (slot6 != null && slot6.canTakeStack(playerIn))
             {
@@ -131,6 +129,7 @@ public class ContainerPanel extends Container implements INetworkContainer {
 		return super.slotClick(slotId, clickedButton, mode, playerIn);
 	}
 	
+	@Override
 	public void sendItemsToAll(){
 		if(panel.getNetwork() !=null){
 			try {
@@ -161,6 +160,7 @@ public class ContainerPanel extends Container implements INetworkContainer {
 		}
 	}
 	
+	@Override
 	public void sendItemsToAll(List<ItemStackData> dataList){
 		if(panel.getNetwork() !=null){
 			try {
@@ -176,6 +176,7 @@ public class ContainerPanel extends Container implements INetworkContainer {
 		}
 	}
 	
+	@Override
 	public void sendItemsTo(EntityPlayerMP player){
 		if(panel.getNetwork() !=null){
 			try {
@@ -209,6 +210,7 @@ public class ContainerPanel extends Container implements INetworkContainer {
 		}
 	}
 
+	@Override
 	public void sendItemStackToNetwork(EntityPlayerMP player, int slot, ItemStackData data) {
 		if(panel.getNetwork() !=null && ItemStackTools.isValid(data.stack)){
 			ItemStack insertStack = data.stack.copy();
@@ -231,6 +233,7 @@ public class ContainerPanel extends Container implements INetworkContainer {
 		}
 	}
 	
+	@Override
 	public void grabItemStackFromNetwork(EntityPlayerMP player, int slot, int amount, ItemStackData data) {
 		if(panel.getNetwork() !=null && data !=null && ItemStackTools.isValid(data.stack)){
 			int invSlot = -1;
@@ -266,6 +269,7 @@ public class ContainerPanel extends Container implements INetworkContainer {
 		}
 	}
 
+	@Override
 	public void sendCraftingItemsToAll(List<ItemStackData> dataList){
 		if(panel.getNetwork() !=null){
 			try {

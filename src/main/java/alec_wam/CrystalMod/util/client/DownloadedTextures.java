@@ -9,26 +9,6 @@ import javax.annotation.Nullable;
 import org.apache.commons.codec.Charsets;
 import org.apache.commons.codec.binary.Base64;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.network.NetworkPlayerInfo;
-import net.minecraft.client.renderer.IImageBuffer;
-import net.minecraft.client.renderer.ImageBufferDownload;
-import net.minecraft.client.renderer.ThreadDownloadImageData;
-import net.minecraft.client.renderer.texture.ITextureObject;
-import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.client.resources.DefaultPlayerSkin;
-import net.minecraft.client.resources.SkinManager;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.tileentity.TileEntitySkull;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StringUtils;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import alec_wam.CrystalMod.util.ModLogger;
-import alec_wam.CrystalMod.util.ProfileUtil;
-import alec_wam.CrystalMod.util.UUIDUtils;
-import alec_wam.CrystalMod.util.Util;
-
 import com.google.common.base.Objects;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
@@ -40,9 +20,23 @@ import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture.Type;
 import com.mojang.authlib.properties.Property;
 import com.mojang.authlib.properties.PropertyMap;
-import com.mojang.authlib.yggdrasil.response.MinecraftProfilePropertiesResponse;
 import com.mojang.authlib.yggdrasil.response.MinecraftTexturesPayload;
 import com.mojang.util.UUIDTypeAdapter;
+
+import alec_wam.CrystalMod.util.ModLogger;
+import alec_wam.CrystalMod.util.ProfileUtil;
+import alec_wam.CrystalMod.util.UUIDUtils;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.IImageBuffer;
+import net.minecraft.client.renderer.ThreadDownloadImageData;
+import net.minecraft.client.renderer.texture.ITextureObject;
+import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.client.resources.DefaultPlayerSkin;
+import net.minecraft.client.resources.SkinManager;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.StringUtils;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class DownloadedTextures {
 
@@ -282,13 +276,13 @@ public class DownloadedTextures {
 
 	    public ResourceLocation getLocationSkin()
 	    {
-	        return (ResourceLocation)Objects.firstNonNull(this.playerTextures.get(Type.SKIN), DefaultPlayerSkin.getDefaultSkin(this.profile.getId()));
+	        return Objects.firstNonNull(this.playerTextures.get(Type.SKIN), DefaultPlayerSkin.getDefaultSkin(this.profile.getId()));
 	    }
 
 	    @Nullable
 	    public ResourceLocation getLocationCape()
 	    {
-	        return (ResourceLocation)this.playerTextures.get(Type.CAPE);
+	        return this.playerTextures.get(Type.CAPE);
 	    }
 	    
 	    public Map<Type, ResourceLocation> getPlayerTextures(){

@@ -1,18 +1,15 @@
 package alec_wam.CrystalMod.client.model;
 
+import alec_wam.CrystalMod.capability.ExtendedPlayer;
+import alec_wam.CrystalMod.capability.ExtendedPlayerProvider;
+import alec_wam.CrystalMod.handler.EventHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import alec_wam.CrystalMod.capability.ExtendedPlayer;
-import alec_wam.CrystalMod.capability.ExtendedPlayerProvider;
-import alec_wam.CrystalMod.handler.EventHandler;
-import alec_wam.CrystalMod.items.ItemDragonWings;
-import alec_wam.CrystalMod.util.ItemNBTHelper;
 
 @SideOnly(Side.CLIENT)
 public class LayerDragonWings implements LayerRenderer<AbstractClientPlayer> {
@@ -52,11 +49,11 @@ public class LayerDragonWings implements LayerRenderer<AbstractClientPlayer> {
         {
     		GlStateManager.enableCull();
             float f11 = f * (float)Math.PI * 2.0F;
-            dragonModel.wing.rotateAngleX = 0.125F - (float)Math.cos((double)f11) * 0.2f;
+            dragonModel.wing.rotateAngleX = 0.125F - (float)Math.cos(f11) * 0.2f;
             dragonModel.wing.rotateAngleY = 0.25F;
-            if(!entity.onGround)dragonModel.wing.rotateAngleZ = 0.45f+(float)(Math.sin((double)f11) + 0.125D) * 0.8F;
-            else dragonModel.wing.rotateAngleZ = 0.25f+(float)(Math.sin((double)f11) + 0.125D) * 0.4F;
-            dragonModel.wingTip.rotateAngleZ = -((float)(Math.sin((double)(f11 + 2.0F)) + 0.5D)) * 0.75F;
+            if(!entity.onGround)dragonModel.wing.rotateAngleZ = 0.45f+(float)(Math.sin(f11) + 0.125D) * 0.8F;
+            else dragonModel.wing.rotateAngleZ = 0.25f+(float)(Math.sin(f11) + 0.125D) * 0.4F;
+            dragonModel.wingTip.rotateAngleZ = -((float)(Math.sin(f11 + 2.0F) + 0.5D)) * 0.75F;
             GlStateManager.pushMatrix();
             GlStateManager.translate(0.4, 0, 0);
             dragonModel.wing.render(0.0625F);

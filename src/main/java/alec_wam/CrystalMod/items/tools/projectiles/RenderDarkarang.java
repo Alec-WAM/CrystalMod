@@ -31,7 +31,7 @@ public class RenderDarkarang extends Render<EntityDarkarang> {
 
 		customRendering(entity, x, y, z, entityYaw, partialTicks);
 
-		float f11 = (float) entity.arrowShake - partialTicks;
+		float f11 = entity.arrowShake - partialTicks;
 		if(f11 > 0.0F) {
 			float f12 = -MathHelper.sin(f11 * 3.0F) * f11;
 			GlStateManager.rotate(f12, 0.0F, 0.0F, 1.0F);

@@ -7,10 +7,7 @@ import net.minecraft.inventory.Slot;
 
 public class ContainerLiquidPipe extends Container {
 
-	private final TileEntityPipeLiquid pipe;
-	
 	public ContainerLiquidPipe(InventoryPlayer inventoryPlayer, TileEntityPipeLiquid pipe){
-		this.pipe = pipe;
 		for (int i = 0; i < 3; i++)
         {
             for (int j = 0; j < 9; j++)

@@ -1,12 +1,12 @@
 package alec_wam.CrystalMod.client.util.comp;
 
+import alec_wam.CrystalMod.client.util.SpriteData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
-import alec_wam.CrystalMod.client.util.SpriteData;
 
 public class GuiComponentSprite extends BaseComponent {
 
@@ -77,12 +77,12 @@ public class GuiComponentSprite extends BaseComponent {
         Tessellator tessellator = Tessellator.getInstance();
         VertexBuffer vertexbuffer = tessellator.getBuffer();
         vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
-        double minU = ((double)(u * f));
-        double maxU = ((double)((u + (float)width) * f));
-        vertexbuffer.pos((double)xCoord, (double)(yCoord + height), 0.0D).tex(minU, (double)((v + (float)height) * f1)).endVertex();
-        vertexbuffer.pos((double)(xCoord + width), (double)(yCoord + height), 0.0D).tex(maxU, (double)((v + (float)height) * f1)).endVertex();
-        vertexbuffer.pos((double)(xCoord + width), (double)yCoord, 0.0D).tex(maxU, (double)(v * f1)).endVertex();
-        vertexbuffer.pos((double)xCoord, (double)yCoord, 0.0D).tex(minU, (double)(v * f1)).endVertex();
+        double minU = (u * f);
+        double maxU = ((u + (float)width) * f);
+        vertexbuffer.pos(xCoord, yCoord + height, 0.0D).tex(minU, (v + (float)height) * f1).endVertex();
+        vertexbuffer.pos(xCoord + width, yCoord + height, 0.0D).tex(maxU, (v + (float)height) * f1).endVertex();
+        vertexbuffer.pos(xCoord + width, yCoord, 0.0D).tex(maxU, v * f1).endVertex();
+        vertexbuffer.pos(xCoord, yCoord, 0.0D).tex(minU, v * f1).endVertex();
         tessellator.draw();
 	}
 

@@ -50,13 +50,14 @@ public class ItemEnhancementKnowledge extends Item {
 					KnowledgeManager.setHasKnowledge(uuid, enhancement, true);
 					String id = enhancement.getID().getResourceDomain()+"."+enhancement.getID().getResourcePath();
 					ChatUtil.sendChat(playerIn, Lang.localizeFormat("enhancement.unlocked", new Object[]{Lang.translateToLocal("enhancement."+id+".name")}));
-					return new ActionResult(EnumActionResult.SUCCESS, ItemUtil.consumeItem(stack));
+					return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, ItemUtil.consumeItem(stack));
 				}
 			}
 		}
-        return new ActionResult(EnumActionResult.PASS, stack);
+        return new ActionResult<ItemStack>(EnumActionResult.PASS, stack);
     }
 	
+	@Override
 	@SideOnly(Side.CLIENT)
     public void getSubItems(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> subItems)
     {
@@ -66,6 +67,7 @@ public class ItemEnhancementKnowledge extends Item {
         }
     }
 	
+	@Override
 	@SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced)
     {

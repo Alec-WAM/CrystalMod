@@ -1,26 +1,10 @@
 package alec_wam.CrystalMod.asm;
 
-import static org.objectweb.asm.Opcodes.ACONST_NULL;
 import static org.objectweb.asm.Opcodes.ALOAD;
-import static org.objectweb.asm.Opcodes.ARETURN;
-import static org.objectweb.asm.Opcodes.DUP;
 import static org.objectweb.asm.Opcodes.GETSTATIC;
-import static org.objectweb.asm.Opcodes.GOTO;
-import static org.objectweb.asm.Opcodes.ICONST_0;
-import static org.objectweb.asm.Opcodes.IFEQ;
 import static org.objectweb.asm.Opcodes.IFGT;
-import static org.objectweb.asm.Opcodes.IF_ACMPEQ;
-import static org.objectweb.asm.Opcodes.IF_ICMPEQ;
-import static org.objectweb.asm.Opcodes.ILOAD;
-import static org.objectweb.asm.Opcodes.INVOKESTATIC;
 import static org.objectweb.asm.Opcodes.INVOKEVIRTUAL;
-import static org.objectweb.asm.Opcodes.IRETURN;
-import static org.objectweb.asm.Opcodes.POP;
-import static org.objectweb.asm.Opcodes.PUTSTATIC;
 import static org.objectweb.asm.Opcodes.RETURN;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraft.launchwrapper.IClassTransformer;
 
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -28,26 +12,20 @@ import org.apache.logging.log4j.Logger;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Label;
-import org.objectweb.asm.Opcodes;
-import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.FieldInsnNode;
 import org.objectweb.asm.tree.InsnList;
 import org.objectweb.asm.tree.InsnNode;
 import org.objectweb.asm.tree.JumpInsnNode;
 import org.objectweb.asm.tree.LabelNode;
-import org.objectweb.asm.tree.LdcInsnNode;
-import org.objectweb.asm.tree.LineNumberNode;
-import org.objectweb.asm.tree.LocalVariableNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 import org.objectweb.asm.tree.VarInsnNode;
 
-import alec_wam.CrystalMod.client.model.dynamic.CustomItemRendererHandler;
-
 import com.google.common.collect.Sets;
 
-@SuppressWarnings("unused")
+import net.minecraft.launchwrapper.IClassTransformer;
+
 public class ClassTransformer implements IClassTransformer
 {
 	Logger logger = LogManager.getLogger("CrystalModCore");
@@ -96,8 +74,6 @@ public class ClassTransformer implements IClassTransformer
 			logger.log(Level.INFO, "- Found renderItem (1/2) (" + renderItem.desc + ")");
 			logger.log(Level.INFO, "- Inserting Custom Item Renderer in renderItem");
 			boolean patched = false;
-			boolean patched2 = false;
-			
 			LabelNode l = new LabelNode(new Label());
 			InsnList toInsert = new InsnList();
 
@@ -180,19 +156,6 @@ public class ClassTransformer implements IClassTransformer
 		} else {
 			throw new RuntimeException("Unable to find Render Model");
 		}
-
-		ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_MAXS);
-		classNode.accept(writer);
-
-		return writer.toByteArray();
-	}
-
-	private byte[] patchDummyClass(byte[] basicClass)
-	{
-		ClassNode classNode = new ClassNode();
-		ClassReader classReader = new ClassReader(basicClass);
-		classReader.accept(classNode, 0);
-		logger.log(Level.DEBUG, "Found Dummy Class: " + classNode.name);
 
 		ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_MAXS);
 		classNode.accept(writer);

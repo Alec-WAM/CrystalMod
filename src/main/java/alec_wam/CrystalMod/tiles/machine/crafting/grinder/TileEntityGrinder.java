@@ -1,5 +1,9 @@
 package alec_wam.CrystalMod.tiles.machine.crafting.grinder;
 
+import alec_wam.CrystalMod.tiles.machine.TileEntityMachine;
+import alec_wam.CrystalMod.tiles.machine.crafting.grinder.GrinderManager.GrinderRecipe;
+import alec_wam.CrystalMod.util.ItemStackTools;
+import alec_wam.CrystalMod.util.ItemUtil;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
@@ -7,11 +11,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
-import alec_wam.CrystalMod.tiles.machine.TileEntityMachine;
-import alec_wam.CrystalMod.tiles.machine.crafting.grinder.GrinderManager.GrinderRecipe;
-import alec_wam.CrystalMod.util.ItemStackTools;
-import alec_wam.CrystalMod.util.ItemUtil;
-import alec_wam.CrystalMod.util.ModLogger;
 
 public class TileEntityGrinder extends TileEntityMachine implements ISidedInventory {
 
@@ -19,6 +18,7 @@ public class TileEntityGrinder extends TileEntityMachine implements ISidedInvent
 		super("Grinder", 3);
 	}
 	
+	@Override
 	public boolean canStart() {
 		ItemStack stack = getStackInSlot(0);
         if (ItemStackTools.isEmpty(stack)) {
@@ -72,10 +72,12 @@ public class TileEntityGrinder extends TileEntityMachine implements ISidedInvent
         return firstOutputFits && soundOutputFits;
 	}
 	
+	@Override
 	public boolean canContinueRunning(){
 		return hasValidInput();
 	}
 	
+	@Override
 	public boolean canFinish() {
         return processRem <= 0 && this.hasValidInput();
     }
@@ -85,13 +87,15 @@ public class TileEntityGrinder extends TileEntityMachine implements ISidedInvent
         return recipe != null && recipe.getInputSize() <= ItemStackTools.getStackSize(getStackInSlot(0));
     }
     
-    public void processStart() {
+    @Override
+	public void processStart() {
     	this.processMax = GrinderManager.getRecipe(getStackInSlot(0)).getEnergy();
         this.processRem = this.processMax;
         syncProcessValues();
     }
     
-    public void processFinish() {
+    @Override
+	public void processFinish() {
     	ItemStack stack = getStackInSlot(0);
     	ItemStack stack2 = getStackInSlot(1);
     	ItemStack stack3 = getStackInSlot(2);

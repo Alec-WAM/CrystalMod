@@ -7,14 +7,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import net.minecraft.client.audio.SoundHandler;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.Slot;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.client.FMLClientHandler;
-
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
@@ -22,6 +14,13 @@ import org.lwjgl.opengl.GL12;
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.Lang;
+import net.minecraft.client.audio.SoundHandler;
+import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.Slot;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.client.FMLClientHandler;
 
 /**
  * Base class for a modular GUIs. Works with Elements {@link ElementBase} and Tabs {@link TabBase} which are both modular elements.
@@ -219,7 +218,7 @@ public abstract class GuiElementContainer extends GuiContainer {
 	public Slot getSlotAtPosition(int xCoord, int yCoord) {
 
 		for (int k = 0; k < this.inventorySlots.inventorySlots.size(); ++k) {
-			Slot slot = (Slot) this.inventorySlots.inventorySlots.get(k);
+			Slot slot = this.inventorySlots.inventorySlots.get(k);
 
 			if (this.isMouseOverSlot(slot, xCoord, yCoord)) {
 				return slot;
@@ -415,11 +414,13 @@ public abstract class GuiElementContainer extends GuiContainer {
 		return (xWidth - fontRendererObj.getStringWidth(string)) / 2;
 	}
 
+	@Override
 	public int getGuiLeft() {
 
 		return guiLeft;
 	}
 
+	@Override
 	public int getGuiTop() {
 
 		return guiTop;

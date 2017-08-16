@@ -3,7 +3,6 @@ package alec_wam.CrystalMod.tiles.pipes.attachments.gui;
 import java.io.IOException;
 
 import alec_wam.CrystalMod.CrystalMod;
-import alec_wam.CrystalMod.client.util.GuiSlider;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.packets.PacketTileMessage;
 import alec_wam.CrystalMod.tiles.pipes.attachments.AttachmentEStorageSensor;
@@ -26,7 +25,6 @@ public class GuiAttachmentSensor extends GuiContainer {
 
 	private TileEntityPipeEStorage pipe;
 	private EnumFacing dir;
-	private GuiSlider redstoneSlider;
 	private GuiTextField filterAmountField;
 	public GuiAttachmentSensor(EntityPlayer player, TileEntityPipeEStorage pipe, EnumFacing dir) {
 		super(new ContainerAttachmentSensor(player, pipe, dir));
@@ -43,6 +41,7 @@ public class GuiAttachmentSensor extends GuiContainer {
 		return (AttachmentEStorageSensor)getData();
 	}
 	
+	@Override
 	public void updateScreen(){
 		super.updateScreen();
 		filterAmountField.updateCursorCounter();
@@ -72,6 +71,7 @@ public class GuiAttachmentSensor extends GuiContainer {
 		refreshButtons();
 	}
 	
+	@Override
 	protected void keyTyped(char typedChar, int keyCode) throws IOException
     {
         if (this.filterAmountField.isFocused())
@@ -120,10 +120,9 @@ public class GuiAttachmentSensor extends GuiContainer {
         this.filterAmountField.setText(""+getPart().filterAmount);
 	}
 	
+	@Override
 	protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException
     {
-		int sx = (width - xSize) / 2;
-	    int sy = (height - ySize) / 2;
 		if(this.isPointInRegion(50, 20, 16, 16, mouseX, mouseY)){
 			NBTTagCompound nbt = new NBTTagCompound();
 			nbt.setInteger("Dir", dir.getIndex());
@@ -134,6 +133,7 @@ public class GuiAttachmentSensor extends GuiContainer {
 		super.mouseClicked(mouseX, mouseY, mouseButton);
 	}
 	
+	@Override
 	public void actionPerformed(GuiButton button){
 		if(button.id == 0){
 			int current = getPart().compare.ordinal();
@@ -206,10 +206,9 @@ public class GuiAttachmentSensor extends GuiContainer {
 	    this.filterAmountField.drawTextBox();
 	}
 	
+	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY)
     {
-		int sx = (width - xSize) / 2;
-	    int sy = (height - ySize) / 2;
 		if(getPart() == null)return;
 	    String power = ""+getPart().redstonePower;
 	    this.fontRendererObj.drawString(power, 20+(getPart().redstonePower >= 10 ? 0 : this.fontRendererObj.getStringWidth(power)), 56, 0);

@@ -5,12 +5,14 @@ import java.util.List;
 
 import com.google.common.collect.ImmutableList;
 
+import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.items.ModItems;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemFishingRod;
 import net.minecraft.item.ItemFlintAndSteel;
@@ -28,9 +30,6 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import net.minecraftforge.energy.CapabilityEnergy;
-import alec_wam.CrystalMod.CrystalMod;
-import alec_wam.CrystalMod.items.ModItems;
-import alec_wam.CrystalMod.util.ItemStackTools;
 
 public class ToolUtil {
 
@@ -226,7 +225,6 @@ public class ToolUtil {
 		  // Just for extra compatibility and/or security and/or less annoyance
 		  for (String toolName : validWeaponNames)
 		  {
-			  String a = toolName;
 			  if (name.contains(toolName)) return true;
 		  }
 		  //And also this because I'm awesome
@@ -283,7 +281,6 @@ public class ToolUtil {
 		  // Just for extra compatibility and/or security and/or less annoyance
 		  for (String toolName : validWeaponNames)
 		  {
-			  String a = toolName;
 			  if (name.contains(toolName)) return true;
 		  }
 	  }
@@ -315,13 +312,11 @@ public class ToolUtil {
 		  // Just for extra compatibility and/or security and/or less annoyance
 		  for (String toolName : validToolNames)
 		  {
-			  String a = toolName;
 			  if (name.contains(toolName)) return true;
 		  }
 
 		  for (String toolName : invalidToolNames)
 		  {
-			  String a = toolName;
 			  if (name.contains(toolName)) return false;
 		  }
 
@@ -405,7 +400,7 @@ public class ToolUtil {
       float f = playerIn.rotationPitch;
       float f1 = playerIn.rotationYaw;
       double d0 = playerIn.posX;
-      double d1 = playerIn.posY + (double)playerIn.getEyeHeight();
+      double d1 = playerIn.posY + playerIn.getEyeHeight();
       double d2 = playerIn.posZ;
       Vec3d vec3d = new Vec3d(d0, d1, d2);
       float f2 = MathHelper.cos(-f1 * 0.017453292F - (float)Math.PI);
@@ -419,7 +414,7 @@ public class ToolUtil {
       {
           d3 = ((net.minecraft.entity.player.EntityPlayerMP)playerIn).interactionManager.getBlockReachDistance();
       }
-      Vec3d vec3d1 = vec3d.addVector((double)f6 * d3, (double)f5 * d3, (double)f7 * d3);
+      Vec3d vec3d1 = vec3d.addVector(f6 * d3, f5 * d3, f7 * d3);
       return worldIn.rayTraceBlocks(vec3d, vec3d1, useLiquids, !useLiquids, false);
   }
   

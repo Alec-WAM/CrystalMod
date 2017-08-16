@@ -63,6 +63,7 @@ public class TileEntityStocker extends TileEntityInventory implements INetworkTi
 		updateAfterLoad();
 	}
 	
+	@Override
 	public void update(){
 		super.update();
 		if(getWorld().isRemote || network == null || network.craftingController == null)return;

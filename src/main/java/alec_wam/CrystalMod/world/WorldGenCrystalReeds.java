@@ -13,6 +13,7 @@ import net.minecraft.world.gen.feature.WorldGenerator;
 
 public class WorldGenCrystalReeds extends WorldGenerator
 {
+	@Override
 	public boolean generate(World worldIn, Random rand, BlockPos position)
     {
         for (int i = 0; i < Config.reedPlacementTrys; ++i)

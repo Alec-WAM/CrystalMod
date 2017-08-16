@@ -1,17 +1,11 @@
 package alec_wam.CrystalMod.tiles.machine.power.redstonereactor;
 
-import alec_wam.CrystalMod.api.energy.CapabilityCrystalEnergy;
-import alec_wam.CrystalMod.api.energy.ICEnergyStorage;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.IMessageHandler;
 import alec_wam.CrystalMod.network.packets.PacketTileMessage;
 import alec_wam.CrystalMod.tiles.TileEntityInventory;
-import alec_wam.CrystalMod.tiles.TileEntityIOSides.IOType;
 import alec_wam.CrystalMod.tiles.machine.power.CustomEnergyStorage;
-import alec_wam.CrystalMod.tiles.machine.power.battery.BlockBattery;
-import alec_wam.CrystalMod.tiles.machine.power.battery.TileEntityBattery;
-import alec_wam.CrystalMod.tiles.machine.power.battery.BlockBattery.BatteryType;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.TimeUtil;

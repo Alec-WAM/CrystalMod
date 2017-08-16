@@ -1,7 +1,5 @@
 package alec_wam.CrystalMod.entities.minecarts.chests;
 
-import java.util.List;
-
 import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.proxy.ClientProxy;
@@ -33,13 +31,14 @@ public class ItemEnderChestMinecart extends Item implements ICustomModel
         /**
          * Dispense the specified stack, play the dispense sound and spawn particles.
          */
-        public ItemStack dispenseStack(IBlockSource source, ItemStack stack)
+        @Override
+		public ItemStack dispenseStack(IBlockSource source, ItemStack stack)
         {
-            EnumFacing enumfacing = (EnumFacing)source.getBlockState().getValue(BlockDispenser.FACING);
+            EnumFacing enumfacing = source.getBlockState().getValue(BlockDispenser.FACING);
             World world = source.getWorld();
-            double d0 = source.getX() + (double)enumfacing.getFrontOffsetX() * 1.125D;
-            double d1 = Math.floor(source.getY()) + (double)enumfacing.getFrontOffsetY();
-            double d2 = source.getZ() + (double)enumfacing.getFrontOffsetZ() * 1.125D;
+            double d0 = source.getX() + enumfacing.getFrontOffsetX() * 1.125D;
+            double d1 = Math.floor(source.getY()) + enumfacing.getFrontOffsetY();
+            double d2 = source.getZ() + enumfacing.getFrontOffsetZ() * 1.125D;
             BlockPos blockpos = source.getBlockPos().offset(enumfacing);
             IBlockState iblockstate = world.getBlockState(blockpos);
             BlockRailBase.EnumRailDirection blockrailbase$enumraildirection = iblockstate.getBlock() instanceof BlockRailBase ? (BlockRailBase.EnumRailDirection)iblockstate.getValue(((BlockRailBase)iblockstate.getBlock()).getShapeProperty()) : BlockRailBase.EnumRailDirection.NORTH_SOUTH;
@@ -90,7 +89,8 @@ public class ItemEnderChestMinecart extends Item implements ICustomModel
         /**
          * Play the dispense sound from the specified block.
          */
-        protected void playDispenseSound(IBlockSource source)
+        @Override
+		protected void playDispenseSound(IBlockSource source)
         {
             source.getWorld().playEvent(1000, source.getBlockPos(), 0);
         }
@@ -104,7 +104,8 @@ public class ItemEnderChestMinecart extends Item implements ICustomModel
         ModItems.registerItem(this, "minecart_enderchest");
     }
     
-    @SideOnly(Side.CLIENT)
+    @Override
+	@SideOnly(Side.CLIENT)
     public void initModel() {
     	ModItems.initBasicModel(this);
     	ClientProxy.registerItemRenderCustom(getRegistryName().toString(), new ItemEnderMinecartRender());
@@ -135,7 +136,7 @@ public class ItemEnderChestMinecart extends Item implements ICustomModel
                     d0 = 0.5D;
                 }
                 
-                EntityEnderChestMinecart entityminecart = new EntityEnderChestMinecart(worldIn, (double)pos.getX() + 0.5D, (double)pos.getY() + 0.0625D + d0, (double)pos.getZ() + 0.5D);
+                EntityEnderChestMinecart entityminecart = new EntityEnderChestMinecart(worldIn, pos.getX() + 0.5D, pos.getY() + 0.0625D + d0, pos.getZ() + 0.5D);
                 
                 if (stack.hasDisplayName())
                 {

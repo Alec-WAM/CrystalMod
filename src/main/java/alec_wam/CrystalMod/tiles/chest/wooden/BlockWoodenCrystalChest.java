@@ -1,8 +1,13 @@
 package alec_wam.CrystalMod.tiles.chest.wooden;
 
 import java.util.ArrayList;
-import java.util.List;
 
+import com.google.common.collect.Lists;
+
+import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.blocks.ICustomModel;
+import alec_wam.CrystalMod.util.BlockUtil;
+import alec_wam.CrystalMod.util.ItemUtil;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -20,12 +25,12 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
@@ -34,12 +39,6 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import alec_wam.CrystalMod.CrystalMod;
-import alec_wam.CrystalMod.blocks.ICustomModel;
-import alec_wam.CrystalMod.util.BlockUtil;
-import alec_wam.CrystalMod.util.ItemUtil;
-
-import com.google.common.collect.Lists;
 
 public class BlockWoodenCrystalChest extends BlockContainer implements ICustomModel 
 {
@@ -61,7 +60,8 @@ public class BlockWoodenCrystalChest extends BlockContainer implements ICustomMo
     	return new AxisAlignedBB(0.0625F, 0F, 0.0625F, 0.9375F, 0.875F, 0.9375F);
     }
     
-    @SideOnly(Side.CLIENT)
+    @Override
+	@SideOnly(Side.CLIENT)
     public void initModel(){
     	for(WoodenCrystalChestType type : WoodenCrystalChestType.values()){
     		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), type.ordinal(), new ModelResourceLocation(getRegistryName(), "variant="+type.getName().toLowerCase()));
@@ -145,7 +145,7 @@ public class BlockWoodenCrystalChest extends BlockContainer implements ICustomMo
     @Override
     public int getMetaFromState(IBlockState blockState)
     {
-        return ((WoodenCrystalChestType) blockState.getValue(VARIANT_PROP)).ordinal();
+        return blockState.getValue(VARIANT_PROP).ordinal();
     }
 
     @Override
@@ -204,7 +204,7 @@ public class BlockWoodenCrystalChest extends BlockContainer implements ICustomMo
     @Override
     public int damageDropped(IBlockState state)
     {
-        return WoodenCrystalChestType.validateMeta(((WoodenCrystalChestType) state.getValue(VARIANT_PROP)).ordinal());
+        return WoodenCrystalChestType.validateMeta(state.getValue(VARIANT_PROP).ordinal());
     }
 
     @Override

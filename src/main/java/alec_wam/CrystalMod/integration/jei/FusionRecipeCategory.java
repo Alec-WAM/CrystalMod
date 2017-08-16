@@ -24,7 +24,6 @@ import mezz.jei.api.recipe.BlankRecipeWrapper;
 import mezz.jei.api.recipe.IStackHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 
 public class FusionRecipeCategory extends BlankRecipeCategory<FusionRecipeCategory.FusionJEIRecipe>  {
 

@@ -18,7 +18,8 @@ public class RenderWirelessChestMinecart extends RenderMinecart<EntityWirelessCh
         super(renderManagerIn);
     }
 
-    protected void renderCartContents(EntityWirelessChestMinecart cart, float partialTicks, IBlockState p_188319_3_)
+    @Override
+	protected void renderCartContents(EntityWirelessChestMinecart cart, float partialTicks, IBlockState p_188319_3_)
     {
     	GlStateManager.pushMatrix();
     	GlStateManager.rotate(180, 0, 1, 0);

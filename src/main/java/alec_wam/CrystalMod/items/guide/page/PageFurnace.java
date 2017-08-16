@@ -1,7 +1,5 @@
 package alec_wam.CrystalMod.items.guide.page;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
@@ -15,12 +13,9 @@ import com.google.common.collect.Lists;
 import alec_wam.CrystalMod.api.guide.GuidePage;
 import alec_wam.CrystalMod.client.util.SpriteData;
 import alec_wam.CrystalMod.client.util.comp.GuiComponentSprite;
-import alec_wam.CrystalMod.client.util.comp.GuiComponentSpriteButton;
 import alec_wam.CrystalMod.items.guide.GuiGuideChapter;
 import alec_wam.CrystalMod.items.guide.GuiGuideIndex;
 import alec_wam.CrystalMod.items.guide.GuidePages;
-import alec_wam.CrystalMod.items.guide.GuidePages.ManualChapter;
-import alec_wam.CrystalMod.items.guide.GuidePages.PageData;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.Lang;
@@ -30,18 +25,13 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.RenderItem;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -83,6 +73,7 @@ public class PageFurnace extends GuidePage {
 		return null;
 	}
 	
+	@Override
 	@SideOnly(Side.CLIENT)
     public void initGui(GuiGuideChapter gui, int startX, int startY){
 		outputIndex = 0;
@@ -91,6 +82,7 @@ public class PageFurnace extends GuidePage {
 	private int outputIndex;
 	private int arrowTimer;
 	private int flameTimer;
+	@Override
 	@SideOnly(Side.CLIENT)
     public void updateScreen(GuiGuideChapter gui, int startX, int startY, int timer){
 		
@@ -161,6 +153,7 @@ public class PageFurnace extends GuidePage {
 
 	}
 	
+	@Override
 	@SideOnly(Side.CLIENT)
     public void drawForeground(GuiGuideChapter gui, int startX, int startY, int mouseX, int mouseY, float partialTicks){
 		int itemBoxSize = 34;

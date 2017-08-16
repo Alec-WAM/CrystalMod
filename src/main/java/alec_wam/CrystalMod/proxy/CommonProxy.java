@@ -102,7 +102,7 @@ public class CommonProxy {
         MinecraftForge.EVENT_BUS.register(new DisguiseHandler());
         
         PlayerCubeChunkLoaderManager.init();
-        ForgeChunkManager.setForcedChunkLoadingCallback((Object)CrystalMod.instance, (ForgeChunkManager.LoadingCallback)new WorksiteChunkLoader());
+        ForgeChunkManager.setForcedChunkLoadingCallback(CrystalMod.instance, new WorksiteChunkLoader());
         
         ModIntegration.register();
         ModIntegration.preInit();

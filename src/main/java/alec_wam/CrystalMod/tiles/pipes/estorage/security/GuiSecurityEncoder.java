@@ -4,7 +4,6 @@ import alec_wam.CrystalMod.api.estorage.security.NetworkAbility;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.packets.PacketTileMessage;
 import alec_wam.CrystalMod.util.ItemStackTools;
-import alec_wam.CrystalMod.util.Lang;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
@@ -24,6 +23,7 @@ public class GuiSecurityEncoder extends GuiContainer {
 		ySize+=6;
 	}
 	
+	@Override
 	public void initGui(){
 		super.initGui();
 		int x = 10;
@@ -49,6 +49,7 @@ public class GuiSecurityEncoder extends GuiContainer {
 		}
 	}
 	
+	@Override
 	public void actionPerformed(GuiButton button){
 		for(int i = 0; i < checkboxes.length; i++){
 			if(button == checkboxes[i]){
@@ -63,7 +64,6 @@ public class GuiSecurityEncoder extends GuiContainer {
 	
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
-		boolean showClearButton = true;
 		mc.getTextureManager().bindTexture(new ResourceLocation("crystalmod:textures/gui/estorage_security_encoder.png"));
 		drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
 	}

@@ -8,7 +8,6 @@ import alec_wam.CrystalMod.tiles.machine.worksite.gui.elements.Listener;
 import alec_wam.CrystalMod.tiles.machine.worksite.gui.elements.Rectangle;
 import alec_wam.CrystalMod.util.BlockUtil;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 
 public class GuiWorksiteBoundsAdjust extends GuiContainerWorksiteBase {

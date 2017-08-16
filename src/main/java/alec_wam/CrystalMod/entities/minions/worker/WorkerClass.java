@@ -2,14 +2,14 @@ package alec_wam.CrystalMod.entities.minions.worker;
 
 import java.util.List;
 
+import com.google.common.collect.Lists;
+
+import alec_wam.CrystalMod.Config;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import net.minecraft.item.ItemShears;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraftforge.common.IPlantable;
-import alec_wam.CrystalMod.Config;
-import alec_wam.CrystalMod.util.ItemStackTools;
-
-import com.google.common.collect.Lists;
 
 public enum WorkerClass{
     NONE{

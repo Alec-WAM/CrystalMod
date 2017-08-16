@@ -2,28 +2,22 @@ package alec_wam.CrystalMod.tiles.cauldron;
 
 import java.util.List;
 
+import alec_wam.CrystalMod.fluids.ModFluids;
+import alec_wam.CrystalMod.items.ModItems;
+import alec_wam.CrystalMod.tiles.TileEntityMod;
+import alec_wam.CrystalMod.tiles.cauldron.CauldronRecipeManager.InfusionRecipe;
+import alec_wam.CrystalMod.util.BlockUtil;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
-import alec_wam.CrystalMod.blocks.ModBlocks;
-import alec_wam.CrystalMod.blocks.BlockCrystalIngot.CrystalIngotBlockType;
-import alec_wam.CrystalMod.fluids.ModFluids;
-import alec_wam.CrystalMod.items.ModItems;
-import alec_wam.CrystalMod.items.ItemCrystal.CrystalType;
-import alec_wam.CrystalMod.items.ItemIngot.IngotType;
-import alec_wam.CrystalMod.tiles.TileEntityMod;
-import alec_wam.CrystalMod.tiles.cauldron.CauldronRecipeManager.InfusionRecipe;
-import alec_wam.CrystalMod.tiles.cauldron.TileEntityCrystalCauldron.LiquidCrystalColor;
-import alec_wam.CrystalMod.util.BlockUtil;
-import alec_wam.CrystalMod.util.ItemStackTools;
-import alec_wam.CrystalMod.util.ItemUtil;
 
 public class TileEntityCrystalCauldron extends TileEntityMod {
 
@@ -33,20 +27,23 @@ public class TileEntityCrystalCauldron extends TileEntityMod {
 	
 	public FluidStack crystalStack;
 	
+	@Override
 	public void writeCustomNBT(NBTTagCompound nbt){
 		super.writeCustomNBT(nbt);
 		if(crystalStack !=null)nbt.setTag("CrystalStack", crystalStack.writeToNBT(new NBTTagCompound()));
 	}
 	
+	@Override
 	public void readCustomNBT(NBTTagCompound nbt){
 		super.readCustomNBT(nbt);
 		crystalStack = FluidStack.loadFluidStackFromNBT(nbt.getCompoundTag("CrystalStack"));
 	}
 	
+	@Override
 	public void update(){
 		super.update();
 		
-		List<EntityItem> items = getWorld().getEntitiesWithinAABB(EntityItem.class, new AxisAlignedBB((float)getPos().getX(), (float)getPos().getY(), (float)getPos().getZ(), (float)getPos().getX()+1f, (float)getPos().getY()+1f, (float)getPos().getZ()+1f));
+		List<EntityItem> items = getWorld().getEntitiesWithinAABB(EntityItem.class, new AxisAlignedBB(getPos().getX(), getPos().getY(), getPos().getZ(), getPos().getX()+1f, getPos().getY()+1f, getPos().getZ()+1f));
 		for(EntityItem item : items){
 			if(item !=null && ItemStackTools.isValid(item.getEntityItem())){
 				ItemStack stack = item.getEntityItem();
@@ -71,7 +68,7 @@ public class TileEntityCrystalCauldron extends TileEntityMod {
 						if(ItemStackTools.isEmpty(item.getEntityItem())){
 							item.setDead();
 						}
-						EntityItem entItem = new EntityItem(getWorld(), (double)(getPos().getX() + 0.5), (double)(getPos().getY() + 0.5), (double)(getPos().getZ() + 0.5), spawn);
+						EntityItem entItem = new EntityItem(getWorld(), getPos().getX() + 0.5, getPos().getY() + 0.5, getPos().getZ() + 0.5, spawn);
 						entItem.motionX = entItem.motionY = entItem.motionZ = 0;
 						entItem.motionY = 0.3D;
 						entItem.setDefaultPickupDelay();

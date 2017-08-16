@@ -11,7 +11,6 @@ import alec_wam.CrystalMod.api.energy.CEnergyStorage;
 import alec_wam.CrystalMod.api.energy.CapabilityCrystalEnergy;
 import alec_wam.CrystalMod.fluids.XpUtil;
 import alec_wam.CrystalMod.fluids.xp.ExperienceContainer;
-import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.IMessageHandler;
 import alec_wam.CrystalMod.network.packets.PacketTileMessage;
@@ -87,11 +86,6 @@ public class TileEntityMobGrinder extends TileEntityMod implements IMessageHandl
 	
 	public FakePlayer fakePlayer;
 	private static final GameProfile GRINDER = new GameProfile(UUID.nameUUIDFromBytes("[CrystalMod-Grinder]".getBytes()), "[CrystalMod-Grinder]");
-	private static final ItemStack genericSword;
-	private ItemStack attackTool;
-	static {
-		genericSword = new ItemStack(ModItems.crystalSword, 0);
-    }
 	
 	public TileEntityMobGrinder(){
 		xpCon = new ExperienceContainer(XpUtil.getExperienceForLevel(30));
@@ -103,6 +97,7 @@ public class TileEntityMobGrinder extends TileEntityMod implements IMessageHandl
 	    }
 	}
 	
+	@Override
 	public void writeCustomNBT(NBTTagCompound nbt){
 		super.writeCustomNBT(nbt);
 		nbt.setInteger("Facing", facing);
@@ -111,6 +106,7 @@ public class TileEntityMobGrinder extends TileEntityMod implements IMessageHandl
 		nbt.setTag("XPStorage", xpCon.writeToNBT(new NBTTagCompound()));
 	}
 	
+	@Override
 	public void readCustomNBT(NBTTagCompound nbt){
 		super.readCustomNBT(nbt);
 		facing = nbt.getInteger("Facing");
@@ -119,6 +115,7 @@ public class TileEntityMobGrinder extends TileEntityMod implements IMessageHandl
 		xpCon.readFromNBT(nbt.getCompoundTag("XPStorage"));
 	}
 	
+	@Override
 	public void update(){
 		super.update();
 		updateCenterPos();
@@ -260,21 +257,6 @@ public class TileEntityMobGrinder extends TileEntityMod implements IMessageHandl
       this.fakePlayer.inventory.clear();
 	}
 	
-	private void pickupItem(ItemStack item)
-	{
-	  EnumFacing face = EnumFacing.getHorizontal(facing);
-	  IItemHandler inv = ItemUtil.getExternalItemHandler(getWorld(), getPos().offset(face.getOpposite()), face);
-	  if(inv == null || item == null){
-		  return;	
-	  }
-	  int added = ItemUtil.doInsertItem(inv, item, face);
-	  ItemStackTools.incStackSize(item, -added);
-	  if(ItemStackTools.isEmpty(item)){
-		  ItemStackTools.makeEmpty(item);
-	  }
-	}
-	
-	
 	private void pickupXP() {
 
 	    double maxDist = 4.5*2;
@@ -406,15 +388,18 @@ public class TileEntityMobGrinder extends TileEntityMod implements IMessageHandl
             		return xpCon;
             	}
             	
-            	public int fill(FluidStack resource, boolean doFill) {
+            	@Override
+				public int fill(FluidStack resource, boolean doFill) {
                    return 0;
                 }
 
-                public FluidStack drain(int maxEmpty, boolean doDrain) {
+                @Override
+				public FluidStack drain(int maxEmpty, boolean doDrain) {
                 	return getTank().drain(maxEmpty, doDrain);
                 }
 
-                public FluidStack drain(FluidStack resource, boolean doDrain) {
+                @Override
+				public FluidStack drain(FluidStack resource, boolean doDrain) {
                     if (resource == null) {
                         return null;
                     }

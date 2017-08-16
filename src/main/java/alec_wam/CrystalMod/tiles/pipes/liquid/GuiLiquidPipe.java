@@ -35,7 +35,6 @@ public class GuiLiquidPipe extends GuiContainer {
 	final TileEntityPipeLiquid pipe;
 	private final EnumFacing dir;
 	
-	private GuiButton blackList;
 	private boolean inOutShowIn = true;
 	
 	public GuiLiquidPipe(InventoryPlayer player, TileEntityPipeLiquid pipe, EnumFacing dir) {
@@ -56,6 +55,7 @@ public class GuiLiquidPipe extends GuiContainer {
 		refreshButtons();
 	}
 	
+	@Override
 	public void actionPerformed(GuiButton button){
 		if(button.id == 0){
 			pipe.setConnectionMode(dir, !Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) ? pipe.getNextConnectionMode(dir) : pipe.getPreviousConnectionMode(dir));
@@ -125,7 +125,7 @@ public class GuiLiquidPipe extends GuiContainer {
 			FluidFilter filter = pipe.getFilter(dir, isInput());
 			this.buttonList.add(new GuiButton(1, sx+8, sy+35, 12, 12, inOutShowIn ? "I" : "O"));
 			if(filter !=null){
-				this.buttonList.add(blackList = new GuiButton(2, sx+8+15, sy+35, 12, 12, filter.isBlacklist() ? "B" : "W"));
+				this.buttonList.add(new GuiButton(2, sx+8+15, sy+35, 12, 12, filter.isBlacklist() ? "B" : "W"));
 			}
 		}
 	}
@@ -166,6 +166,7 @@ public class GuiLiquidPipe extends GuiContainer {
 	    }
 	}
 	
+	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY)
     {
 		super.drawGuiContainerForegroundLayer(mouseX, mouseY);

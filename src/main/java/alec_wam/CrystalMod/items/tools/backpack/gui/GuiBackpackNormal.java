@@ -6,20 +6,15 @@ import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.handler.GuiHandler;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.items.tools.backpack.BackpackUtil;
-import alec_wam.CrystalMod.items.tools.backpack.IBackpack;
-import alec_wam.CrystalMod.items.tools.backpack.ItemBackpackBase;
 import alec_wam.CrystalMod.items.tools.backpack.types.NormalInventoryBackpack;
 import alec_wam.CrystalMod.items.tools.backpack.upgrade.InventoryBackpackUpgrades;
 import alec_wam.CrystalMod.items.tools.backpack.upgrade.ItemBackpackUpgrade.BackpackUpgrade;
 import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.ItemStackTools;
-import alec_wam.CrystalMod.util.ModLogger;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
@@ -63,7 +58,8 @@ public class GuiBackpackNormal extends GuiContainer {
     	if(upgrades.getSize() > 0)this.buttonList.add(new GuiButton(0, guiLeft+offsetLeft+156, guiTop+offsetTop+5, 10, 10, "S"));
     }
     
-    public void actionPerformed(GuiButton button){
+    @Override
+	public void actionPerformed(GuiButton button){
     	if(button.id == 0){
     		BlockUtil.openWorksiteGui(CrystalMod.proxy.getClientPlayer(), GuiHandler.GUI_ID_BACKPACK, 0, 0, 1);
     		return;
@@ -96,7 +92,6 @@ public class GuiBackpackNormal extends GuiContainer {
 
         this.mc.getTextureManager().bindTexture(RES_LOC);
         
-        int offsetTop = hasTabs ? 0 : 0;
         int tabOffset = hasTabs ? 32 : 0;
         int topSpace = 16;
         int gap = 18*3;
@@ -171,8 +166,6 @@ public class GuiBackpackNormal extends GuiContainer {
         int k = flag ? 32 : 0;
         int l = x + 28 * i;
         int i1 = this.guiTop+y-28;
-        int j1 = 32;
-
         if (i > 0)
         {
             l += i;
@@ -219,7 +212,8 @@ public class GuiBackpackNormal extends GuiContainer {
         return mouseX >= j && mouseX <= j + 28 && mouseY >= k && mouseY <= k + 32;
     }
     
-    protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException
+    @Override
+	protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException
     {
         if (mouseButton == 0)
         {
@@ -242,7 +236,8 @@ public class GuiBackpackNormal extends GuiContainer {
     /**
      * Called when a mouse button is released.
      */
-    protected void mouseReleased(int mouseX, int mouseY, int state)
+    @Override
+	protected void mouseReleased(int mouseX, int mouseY, int state)
     {
         if (state == 0)
         {

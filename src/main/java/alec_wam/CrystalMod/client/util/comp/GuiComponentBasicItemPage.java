@@ -1,20 +1,12 @@
 package alec_wam.CrystalMod.client.util.comp;
 
-import java.lang.reflect.Field;
 import java.util.List;
-import java.util.Random;
 
 import alec_wam.CrystalMod.CrystalMod;
-import alec_wam.CrystalMod.client.util.SpriteData;
 import alec_wam.CrystalMod.util.Lang;
 import alec_wam.CrystalMod.util.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.*;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.oredict.OreDictionary;
-import net.minecraftforge.oredict.ShapedOreRecipe;
-import net.minecraftforge.oredict.ShapelessOreRecipe;
 
 
 public class GuiComponentBasicItemPage extends BaseComponent {
@@ -52,6 +44,7 @@ public class GuiComponentBasicItemPage extends BaseComponent {
 	
 	public int tick = 0;
 	public int listIndex = 0;
+	@Override
 	public void updateComp(){
 		super.updateComp();
 		tick++;

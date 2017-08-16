@@ -22,7 +22,8 @@ public class RenderCrystalPigZombie extends RenderBiped<EntityCrystalPigZombie>
         this.addLayer(new LayerHeldItem(this));
         this.addLayer(new LayerBipedArmor(this)
         {
-            protected void initArmor()
+            @Override
+			protected void initArmor()
             {
                 this.modelLeggings = new ModelZombie(0.5F, true);
                 this.modelArmor = new ModelZombie(1.0F, true);
@@ -33,7 +34,8 @@ public class RenderCrystalPigZombie extends RenderBiped<EntityCrystalPigZombie>
     /**
      * Returns the location of an entity's texture. Doesn't seem to be called unless you call Render.bindEntityTexture.
      */
-    protected ResourceLocation getEntityTexture(EntityCrystalPigZombie entity)
+    @Override
+	protected ResourceLocation getEntityTexture(EntityCrystalPigZombie entity)
     {
         return ZOMBIE_PIGMAN_TEXTURE[entity.getColor()];
     }

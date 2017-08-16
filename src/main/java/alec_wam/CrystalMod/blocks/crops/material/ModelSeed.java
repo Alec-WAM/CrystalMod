@@ -39,7 +39,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ICustomModelLoader;
 import net.minecraftforge.client.model.IModel;
@@ -51,6 +50,7 @@ import net.minecraftforge.common.model.IModelPart;
 import net.minecraftforge.common.model.IModelState;
 import net.minecraftforge.common.model.TRSRTransformation;
 
+@SuppressWarnings("deprecation")
 public final class ModelSeed implements IModel, IModelCustomData
 {
     public static final ModelResourceLocation LOCATION = new ModelResourceLocation(new ResourceLocation("crystalmod", "materialseed"), "inventory");
@@ -389,7 +389,7 @@ public final class ModelSeed implements IModel, IModelCustomData
                 break;
             }
             case NORMAL:
-                builder.put(e, (float)side.getFrontOffsetX(), (float)side.getFrontOffsetY(), (float)side.getFrontOffsetZ(), 0f);
+                builder.put(e, side.getFrontOffsetX(), side.getFrontOffsetY(), side.getFrontOffsetZ(), 0f);
                 break;
             default:
                 builder.put(e);
@@ -467,7 +467,8 @@ public final class ModelSeed implements IModel, IModelCustomData
                 Function<ResourceLocation, TextureAtlasSprite> textureGetter;
                 textureGetter = new Function<ResourceLocation, TextureAtlasSprite>()
                 {
-                    public TextureAtlasSprite apply(ResourceLocation location)
+                    @Override
+					public TextureAtlasSprite apply(ResourceLocation location)
                     {
                         return RenderUtil.getSprite(location);
                     }
@@ -486,21 +487,14 @@ public final class ModelSeed implements IModel, IModelCustomData
     public static final class BakedSeed implements IPerspectiveAwareModel
     {
 
-        private final ModelSeed parent;
-        private final Map<String, IBakedModel> cache; // contains all the baked models since they'll never change
         private final ImmutableMap<TransformType, TRSRTransformation> transforms;
         private final ImmutableList<BakedQuad> quads;
-        private final VertexFormat format;
-
         public BakedSeed(ModelSeed parent,
                               ImmutableList<BakedQuad> quads, VertexFormat format, ImmutableMap<ItemCameraTransforms.TransformType, TRSRTransformation> transforms,
                               Map<String, IBakedModel> cache)
         {
             this.quads = quads;
-            this.format = format;
-            this.parent = parent;
             this.transforms = transforms;
-            this.cache = cache;
         }
 
         @Override
@@ -522,11 +516,16 @@ public final class ModelSeed implements IModel, IModelCustomData
             return ImmutableList.of();
         }
 
-        public boolean isAmbientOcclusion() { return true;  }
-        public boolean isGui3d() { return false; }
-        public boolean isBuiltInRenderer() { return false; }
-        public TextureAtlasSprite getParticleTexture() { return RenderUtil.getMissingSprite(); }
-        public ItemCameraTransforms getItemCameraTransforms() { return ItemCameraTransforms.DEFAULT; }
+        @Override
+		public boolean isAmbientOcclusion() { return true;  }
+        @Override
+		public boolean isGui3d() { return false; }
+        @Override
+		public boolean isBuiltInRenderer() { return false; }
+        @Override
+		public TextureAtlasSprite getParticleTexture() { return RenderUtil.getMissingSprite(); }
+        @Override
+		public ItemCameraTransforms getItemCameraTransforms() { return ItemCameraTransforms.DEFAULT; }
     }
     
     private static final class BakedItemModel implements IPerspectiveAwareModel
@@ -568,19 +567,27 @@ public final class ModelSeed implements IModel, IModelCustomData
             }
         }
 
-        public boolean isAmbientOcclusion() { return true; }
-        public boolean isGui3d() { return false; }
-        public boolean isBuiltInRenderer() { return false; }
-        public TextureAtlasSprite getParticleTexture() { return particle; }
-        public ItemCameraTransforms getItemCameraTransforms() { return ItemCameraTransforms.DEFAULT; }
-        public ItemOverrideList getOverrides() { return overrides; }
-        public List<BakedQuad> getQuads(IBlockState state, EnumFacing side, long rand)
+        @Override
+		public boolean isAmbientOcclusion() { return true; }
+        @Override
+		public boolean isGui3d() { return false; }
+        @Override
+		public boolean isBuiltInRenderer() { return false; }
+        @Override
+		public TextureAtlasSprite getParticleTexture() { return particle; }
+        @Override
+		public ItemCameraTransforms getItemCameraTransforms() { return ItemCameraTransforms.DEFAULT; }
+        @Override
+		public ItemOverrideList getOverrides() { return overrides; }
+        @Override
+		public List<BakedQuad> getQuads(IBlockState state, EnumFacing side, long rand)
         {
             if(side == null) return quads;
             return ImmutableList.of();
         }
 
-        public Pair<? extends IBakedModel, Matrix4f> handlePerspective(TransformType type)
+        @Override
+		public Pair<? extends IBakedModel, Matrix4f> handlePerspective(TransformType type)
         {
             Pair<? extends IBakedModel, Matrix4f> pair = IPerspectiveAwareModel.MapWrapper.handlePerspective(this, transforms, type);
             if(type == TransformType.GUI && !isCulled && pair.getRight() == null)

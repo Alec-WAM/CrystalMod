@@ -1,33 +1,5 @@
 package alec_wam.CrystalMod.integration;
 
-import java.util.Map;
-import java.util.Map.Entry;
-
-//import slimeknights.tconstruct.library.TinkerRegistry;
-//import slimeknights.tconstruct.library.fluid.FluidMolten;
-import alec_wam.CrystalMod.blocks.ModBlocks;
-import alec_wam.CrystalMod.blocks.BlockCrystalIngot.CrystalIngotBlockType;
-import alec_wam.CrystalMod.crafting.ModCrafting;
-import alec_wam.CrystalMod.entities.animals.EntityCrystalCow;
-import alec_wam.CrystalMod.fluids.ModFluids;
-import alec_wam.CrystalMod.integration.ModIntegration.IModIntegration;
-import alec_wam.CrystalMod.items.ItemIngot;
-import alec_wam.CrystalMod.items.ModItems;
-import alec_wam.CrystalMod.items.ItemCrystal.CrystalType;
-import alec_wam.CrystalMod.items.ItemIngot.IngotType;
-
-import com.google.common.collect.Maps;
-
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fml.common.Loader;
-import net.minecraftforge.fml.common.event.FMLInterModComms;
-
 //TODO Add when TiC Updates
 public class TConstructIntegration{/* implements IModIntegration {
 

@@ -54,7 +54,8 @@ public class BlockCrystalBerryBush extends BlockBush implements IGrowable, ICust
         this.setCreativeTab(CrystalMod.tabCrops);
     }
     
-    @SideOnly(Side.CLIENT)
+    @Override
+	@SideOnly(Side.CLIENT)
 	public void initModel() {
 		ModelLoader.setCustomStateMapper(this, new CustomBlockStateMapper());
 		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(getRegistryName(), "age=3"));
@@ -113,7 +114,7 @@ public class BlockCrystalBerryBush extends BlockBush implements IGrowable, ICust
     @Override
     public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand)
     {
-        int i = ((Integer)state.getValue(AGE)).intValue();
+        int i = state.getValue(AGE).intValue();
 
         if (i < 3 && rand.nextInt(4) == 0)
         {
@@ -148,7 +149,7 @@ public class BlockCrystalBerryBush extends BlockBush implements IGrowable, ICust
     @Override
     public int getMetaFromState(IBlockState state)
     {
-        return ((Integer)state.getValue(AGE)).intValue();
+        return state.getValue(AGE).intValue();
     }
 
     @Override
@@ -160,13 +161,13 @@ public class BlockCrystalBerryBush extends BlockBush implements IGrowable, ICust
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ)
     {
-    	if(((Integer)state.getValue(AGE)) < 3)return false;
+    	if((state.getValue(AGE)) < 3)return false;
     	
     	if(worldIn.isRemote){
     		return true;
     	}
     	
-    	Random rand = worldIn instanceof World ? ((World)worldIn).rand : Util.rand;
+    	Random rand = worldIn instanceof World ? worldIn.rand : Util.rand;
     	int fortune = EnchantmentHelper.getMaxEnchantmentLevel(Enchantments.FORTUNE, playerIn);
     	int count = 1 + rand.nextInt(2) + (fortune > 0 ? rand.nextInt(fortune + 1) : 0);
     	ItemStack crop = getCrop();
@@ -191,7 +192,7 @@ public class BlockCrystalBerryBush extends BlockBush implements IGrowable, ICust
         Random rand = world instanceof World ? ((World)world).rand : Util.rand;
         int count = 0;
 
-        if (((Integer)state.getValue(AGE)) >= 3)
+        if ((state.getValue(AGE)) >= 3)
         {
             count = 1 + rand.nextInt(2) + (fortune > 0 ? rand.nextInt(fortune + 1) : 0);
         }
@@ -214,7 +215,7 @@ public class BlockCrystalBerryBush extends BlockBush implements IGrowable, ICust
 
 	@Override
 	public boolean canUseBonemeal(World worldIn, Random rand, BlockPos pos, IBlockState state) {
-		return (double)worldIn.rand.nextFloat() < 0.45D;
+		return worldIn.rand.nextFloat() < 0.45D;
 	}
 
 	@Override

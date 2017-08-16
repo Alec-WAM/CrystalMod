@@ -2,10 +2,10 @@ package alec_wam.CrystalMod.items.guide;
 
 import java.io.IOException;
 
-import net.minecraft.client.gui.GuiScreen;
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.capability.ExtendedPlayer;
 import alec_wam.CrystalMod.capability.ExtendedPlayerProvider;
+import net.minecraft.client.gui.GuiScreen;
 
 public class GuiGuideBase extends GuiScreen {
 
@@ -58,6 +58,7 @@ public class GuiGuideBase extends GuiScreen {
     public int guiLeft;
     public int guiTop;
 	
+	@Override
 	public void drawScreen(int mouseX, int mouseY, float partialTicks)
     {
 		guiLeft = (width / 2) - xSize;

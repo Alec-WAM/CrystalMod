@@ -14,16 +14,13 @@ import net.minecraft.client.renderer.BlockRendererDispatcher;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.IBlockAccess;
-import net.minecraftforge.client.model.pipeline.IVertexConsumer;
 import net.minecraftforge.client.model.pipeline.VertexBufferConsumer;
 import net.minecraftforge.client.model.pipeline.VertexLighterFlat;
 import net.minecraftforge.client.model.pipeline.VertexLighterSmoothAo;
@@ -49,7 +46,7 @@ public class CoverRender {
         final boolean renderAO = Minecraft.isAmbientOcclusionEnabled() && state.getLightValue(access, pos) == 0 && (model == null ? false : model.isAmbientOcclusion());
         final VertexLighterFlat lighter = renderAO ? lighterSmooth.get() : lighterFlat.get();
         VertexBufferConsumer consumer = new VertexBufferConsumer(buffer);
-        lighter.setParent((IVertexConsumer)consumer);
+        lighter.setParent(consumer);
         consumer.setOffset(pos);
         return lighter;
     }
@@ -61,7 +58,7 @@ public class CoverRender {
             lighter.setBlockPos(pos);
             for (final CustomBakedQuad quad : quads) {
                 lighter.updateBlockInfo();
-                quad.pipe((IVertexConsumer)lighter);
+                quad.pipe(lighter);
             }
             return true;
         }
@@ -70,7 +67,7 @@ public class CoverRender {
     
 	public static List<CustomBakedQuad> buildCoverQuads(IBlockAccess world, BlockPos pos, IBlockState state, int side, AxisAlignedBB bounds, final CoverCutter.ITransformer[] cutType){
 		final EnumFacing face = EnumFacing.getFront(side);
-        final IBlockAccess coverAccess = (IBlockAccess)new PipeBlockAccessWrapper(world, pos, face);
+        final IBlockAccess coverAccess = new PipeBlockAccessWrapper(world, pos, face);
         final BlockRendererDispatcher dispatcher = Minecraft.getMinecraft().getBlockRendererDispatcher();
         try {
             state = state.getActualState(coverAccess, pos);
@@ -82,7 +79,7 @@ public class CoverRender {
         }
         catch (Exception ex2) {}
         final List<BakedQuad> bakedQuads = new LinkedList<BakedQuad>();
-        final long posRand = MathHelper.getPositionRandom((Vec3i)pos);
+        final long posRand = MathHelper.getPositionRandom(pos);
         bakedQuads.addAll(model.getQuads(state, (EnumFacing)null, posRand));
         for (final EnumFacing face2 : EnumFacing.VALUES) {
             bakedQuads.addAll(model.getQuads(state, face2, posRand));
@@ -104,7 +101,7 @@ public class CoverRender {
 	
 	public static boolean renderBakedCoverQuads(VertexBuffer buffer, IBlockAccess world, BlockPos pos, IBlockState state, int side, AxisAlignedBB bounds, final CoverCutter.ITransformer[] cutType){
 		final EnumFacing face = EnumFacing.getFront(side);
-        final IBlockAccess coverAccess = (IBlockAccess)new PipeBlockAccessWrapper(world, pos, face);
+        final IBlockAccess coverAccess = new PipeBlockAccessWrapper(world, pos, face);
         final BlockRendererDispatcher dispatcher = Minecraft.getMinecraft().getBlockRendererDispatcher();
         try {
             state = state.getActualState(coverAccess, pos);
@@ -116,7 +113,7 @@ public class CoverRender {
         }
         catch (Exception ex2) {}
         final List<BakedQuad> bakedQuads = new LinkedList<BakedQuad>();
-        final long posRand = MathHelper.getPositionRandom((Vec3i)pos);
+        final long posRand = MathHelper.getPositionRandom(pos);
         bakedQuads.addAll(model.getQuads(state, (EnumFacing)null, posRand));
         for (final EnumFacing face2 : EnumFacing.VALUES) {
             bakedQuads.addAll(model.getQuads(state, face2, posRand));
@@ -137,8 +134,7 @@ public class CoverRender {
         final float[][] quadPos = new float[4][3];
         final float[] vecPos = new float[3];
         final boolean[] flat = new boolean[3];
-        final TextureAtlasSprite icon = RenderUtil.getTexture(Blocks.IRON_BLOCK.getDefaultState())/*TDTextures.COVER_SIDE*/;
-        final int verticesPerFace = 4;
+        RenderUtil.getTexture(Blocks.IRON_BLOCK.getDefaultState())/*TDTextures.COVER_SIDE*/;
         final List<CustomBakedQuad> finalQuads = new LinkedList<CustomBakedQuad>();
         for (final CustomBakedQuad quad : quads) {
             boolean flag3;
@@ -200,9 +196,9 @@ public class CoverRender {
                     }
                     u = MathHelper.clamp(u, 0.0f, 1.0f) * 16.0f;
                     v2 = MathHelper.clamp(v2, 0.0f, 1.0f) * 16.0f;
-                    u = quad.sprite.getInterpolatedU((double)u);
-                    v2 = quad.sprite.getInterpolatedV((double)v2);
-                    quad.vertices[k2].uv.set((double)u, (double)v2);
+                    u = quad.sprite.getInterpolatedU(u);
+                    v2 = quad.sprite.getInterpolatedV(v2);
+                    quad.vertices[k2].uv.set(u, v2);
                     //quad.tintIndex = -1;
                 }
                 quad.vertices[k2].vec.set(quadPos[k2]);

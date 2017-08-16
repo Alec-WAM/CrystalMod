@@ -22,6 +22,7 @@ public class TileEntityInventoryChargerCU extends TileEntityInventoryCharger {
 		};
 	}
 	
+	@Override
 	public void writeCustomNBT(NBTTagCompound nbt){
 		super.writeCustomNBT(nbt);
 		NBTTagCompound eNBT = new NBTTagCompound();
@@ -29,6 +30,7 @@ public class TileEntityInventoryChargerCU extends TileEntityInventoryCharger {
 		nbt.setTag("EnergyStorage", eNBT);
 	}
 	
+	@Override
 	public void readCustomNBT(NBTTagCompound nbt){
 		super.readCustomNBT(nbt);
 		if(nbt.hasKey("EnergyStorage"))this.energyStorage.readFromNBT(nbt.getCompoundTag("EnergyStorage"));

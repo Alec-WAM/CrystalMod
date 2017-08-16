@@ -439,6 +439,7 @@ public class ModBlocks {
 
 		crystalLeaves = new BlockCrystalLeaves();
 		registerBlock(crystalLeaves, new ItemBlockMeta(crystalLeaves) {
+			@Override
 			public int getMetadata(int m) {
 				return m | 4;
 			}

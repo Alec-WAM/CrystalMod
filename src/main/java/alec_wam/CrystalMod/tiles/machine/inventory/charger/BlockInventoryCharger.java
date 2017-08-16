@@ -6,14 +6,11 @@ import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.EnumBlock.IEnumMeta;
 import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.tiles.BlockStateFacing;
-import alec_wam.CrystalMod.tiles.crate.BlockCrate.CrateType;
-import alec_wam.CrystalMod.tiles.crate.BlockCrate.CustomBlockStateMapper;
 import alec_wam.CrystalMod.util.BlockUtil;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.creativetab.CreativeTabs;
@@ -42,6 +39,7 @@ public class BlockInventoryCharger extends BlockContainer implements ICustomMode
 		this.setCreativeTab(CrystalMod.tabBlocks);
 	}
 	
+	@Override
 	@SideOnly(Side.CLIENT)
     public void initModel() {
 		ModelLoader.setCustomStateMapper(this, new CustomBlockStateMapper());
@@ -81,8 +79,9 @@ public class BlockInventoryCharger extends BlockContainer implements ICustomMode
         return new BlockStateInventoryCharger(this);
     }
     
-    public int getMetaFromState(IBlockState state){
-    	return ((ChargerBlockType) state.getValue(BlockStateInventoryCharger.typeProperty)).getMeta();
+    @Override
+	public int getMetaFromState(IBlockState state){
+    	return state.getValue(BlockStateInventoryCharger.typeProperty).getMeta();
     }
     
     @Override

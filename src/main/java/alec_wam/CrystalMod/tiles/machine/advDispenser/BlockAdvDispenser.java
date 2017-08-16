@@ -3,7 +3,7 @@ package alec_wam.CrystalMod.tiles.machine.advDispenser;
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.blocks.ModBlocks;
-import alec_wam.CrystalMod.tiles.chest.TileEntityBlueCrystalChest;
+import alec_wam.CrystalMod.tiles.BlockStateFacing;
 import alec_wam.CrystalMod.tiles.machine.BlockMachine;
 import alec_wam.CrystalMod.tiles.machine.BlockStateMachine;
 import alec_wam.CrystalMod.util.ItemStackTools;
@@ -13,7 +13,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -33,6 +32,7 @@ public class BlockAdvDispenser extends BlockMachine implements ICustomModel {
 		this.setCreativeTab(CrystalMod.tabBlocks);
 	}
 	
+	@Override
 	@SideOnly(Side.CLIENT)
 	public void initModel() {
 		ModelLoader.setCustomStateMapper(this, new MachineBlockStateMapper());
@@ -88,9 +88,9 @@ public class BlockAdvDispenser extends BlockMachine implements ICustomModel {
 			
 			builder.append(",");
 			
-			builder.append(BlockStateMachine.facingProperty.getName());
+			builder.append(BlockStateFacing.facingProperty.getName());
 			builder.append("=");
-			builder.append(state.getValue(BlockStateMachine.facingProperty));
+			builder.append(state.getValue(BlockStateFacing.facingProperty));
 			
 			nameOverride = block.getRegistryName().getResourcePath();
 

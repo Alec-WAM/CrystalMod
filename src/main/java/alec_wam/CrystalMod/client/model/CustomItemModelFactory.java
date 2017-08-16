@@ -4,9 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import alec_wam.CrystalMod.client.model.dynamic.ICustomItemRenderer;
-
-import com.google.common.collect.Lists;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;

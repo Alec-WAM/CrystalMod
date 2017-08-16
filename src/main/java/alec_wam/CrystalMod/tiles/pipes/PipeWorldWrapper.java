@@ -1,14 +1,14 @@
 package alec_wam.CrystalMod.tiles.pipes;
 
+import alec_wam.CrystalMod.tiles.pipes.covers.CoverUtil.CoverData;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.ChunkProviderServer;
-import alec_wam.CrystalMod.tiles.pipes.covers.CoverUtil.CoverData;
 
 public class PipeWorldWrapper extends World {
 
@@ -24,6 +24,7 @@ public class PipeWorldWrapper extends World {
 		this.chunkProvider = world.getChunkProvider();
 	}
 	
+	@Override
 	public void tick()
     {
 		
@@ -34,6 +35,7 @@ public class PipeWorldWrapper extends World {
 		return world.getTileEntity(pos);
 	}
 
+	@Override
 	public boolean setBlockState(BlockPos pos, IBlockState newState, int flags)
     {
         if (!pos.equals(loc))

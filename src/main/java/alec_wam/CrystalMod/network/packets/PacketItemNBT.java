@@ -1,18 +1,17 @@
 package alec_wam.CrystalMod.network.packets;
 
-import io.netty.buffer.ByteBuf;
-
 import java.io.IOException;
 
+import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.network.AbstractPacketThreadsafe;
+import alec_wam.CrystalMod.util.ItemStackTools;
+import io.netty.buffer.ByteBuf;
 import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetHandlerPlayServer;
 import net.minecraft.network.PacketBuffer;
-import alec_wam.CrystalMod.CrystalMod;
-import alec_wam.CrystalMod.network.AbstractPacketThreadsafe;
-import alec_wam.CrystalMod.util.ItemStackTools;
 
 public class PacketItemNBT extends AbstractPacketThreadsafe {
 

@@ -38,6 +38,7 @@ public class ItemSuperTorch extends Item implements ICustomModel {
 		ModItems.registerItem(this, "supertorch");
 	}
 	
+	@Override
 	@SideOnly(Side.CLIENT)
     public void initModel() {
 		final ModelResourceLocation off = new ModelResourceLocation(getRegistryName(), "on=false");

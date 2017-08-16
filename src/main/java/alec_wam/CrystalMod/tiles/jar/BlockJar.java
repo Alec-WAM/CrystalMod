@@ -7,13 +7,11 @@ import javax.annotation.Nullable;
 
 import com.google.common.collect.Lists;
 
-import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.packets.PacketTileMessage;
 import alec_wam.CrystalMod.proxy.ClientProxy;
-import alec_wam.CrystalMod.tiles.cluster.RenderTileCrystalCluster;
 import alec_wam.CrystalMod.tiles.machine.INBTDrop;
 import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.EntityUtil;
@@ -21,7 +19,6 @@ import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.Lang;
-import alec_wam.CrystalMod.util.ModLogger;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -57,6 +54,7 @@ import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SuppressWarnings("deprecation")
 public class BlockJar extends BlockContainer implements ICustomModel {
 
 	public BlockJar() {
@@ -67,6 +65,7 @@ public class BlockJar extends BlockContainer implements ICustomModel {
 		setSoundType(SoundType.GLASS);
 	}
 
+	@Override
 	@SideOnly(Side.CLIENT)
 	public void initModel(){
 		ModBlocks.initBasicModel(this);
@@ -104,6 +103,7 @@ public class BlockJar extends BlockContainer implements ICustomModel {
         return false;
     }
 	
+	@Override
 	@SideOnly(Side.CLIENT)
     public BlockRenderLayer getBlockLayer() {
         return BlockRenderLayer.CUTOUT;

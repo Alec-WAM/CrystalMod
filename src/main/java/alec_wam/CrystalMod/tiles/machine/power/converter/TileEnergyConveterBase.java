@@ -1,10 +1,10 @@
 package alec_wam.CrystalMod.tiles.machine.power.converter;
 
-import net.minecraft.nbt.NBTTagCompound;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.IMessageHandler;
 import alec_wam.CrystalMod.network.packets.PacketTileMessage;
 import alec_wam.CrystalMod.tiles.TileEntityMod;
+import net.minecraft.nbt.NBTTagCompound;
 
 public abstract class TileEnergyConveterBase extends TileEntityMod implements IMessageHandler {
 

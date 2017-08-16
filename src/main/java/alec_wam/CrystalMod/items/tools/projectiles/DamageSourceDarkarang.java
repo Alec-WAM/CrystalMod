@@ -9,7 +9,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraft.util.text.translation.I18n;
 
 public class DamageSourceDarkarang extends EntityDamageSource
 {
@@ -21,13 +20,15 @@ public class DamageSourceDarkarang extends EntityDamageSource
         this.indirectEntity = indirectEntityIn;
     }
 
-    @Nullable
+    @Override
+	@Nullable
     public Entity getSourceOfDamage()
     {
         return this.damageSourceEntity;
     }
 
-    @Nullable
+    @Override
+	@Nullable
     public Entity getEntity()
     {
         return this.indirectEntity;
@@ -35,7 +36,8 @@ public class DamageSourceDarkarang extends EntityDamageSource
 
     public static final ItemStack DAMAGESTACK = new ItemStack(ModItems.darkarang);
     
-    public ITextComponent getDeathMessage(EntityLivingBase entityLivingBaseIn)
+    @Override
+	public ITextComponent getDeathMessage(EntityLivingBase entityLivingBaseIn)
     {
         ITextComponent itextcomponent = this.indirectEntity == null ? this.damageSourceEntity.getDisplayName() : this.indirectEntity.getDisplayName();
         ItemStack itemstack = DAMAGESTACK;

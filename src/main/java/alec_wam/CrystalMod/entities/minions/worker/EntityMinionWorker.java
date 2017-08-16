@@ -44,6 +44,7 @@ public class EntityMinionWorker extends EntityMinionBase {
 		storedObjects = Maps.newHashMap();
 	}
 	
+	@Override
 	public String getOccupationName(){
 		return "Worker";
 	}
@@ -64,6 +65,7 @@ public class EntityMinionWorker extends EntityMinionBase {
 		return true;
 	}
 	
+	@Override
 	public void onUpdate(){
 		super.onUpdate();
 		if(!commands.isEmpty()){
@@ -145,6 +147,7 @@ public class EntityMinionWorker extends EntityMinionBase {
 		return !commands.isEmpty();
 	}
 	
+	@Override
 	public void writeEntityToNBT(NBTTagCompound nbt){
 		super.writeEntityToNBT(nbt);
 		if(wStation !=null){
@@ -157,6 +160,7 @@ public class EntityMinionWorker extends EntityMinionBase {
 		}
 	}
 	
+	@Override
 	public void readEntityFromNBT(NBTTagCompound nbt){
 		super.readEntityFromNBT(nbt);
 		if(nbt.hasKey("WorksitePos")){

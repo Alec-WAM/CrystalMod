@@ -4,19 +4,19 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
+import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.items.ItemCrystal.CrystalType;
+import alec_wam.CrystalMod.items.ModItems;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import alec_wam.CrystalMod.CrystalMod;
-import alec_wam.CrystalMod.items.ModItems;
-import alec_wam.CrystalMod.items.ItemCrystal.CrystalType;
 
 public class BlockCrystalOre extends EnumBlock<BlockCrystalOre.CrystalOreType> {
 
@@ -34,6 +34,7 @@ public class BlockCrystalOre extends EnumBlock<BlockCrystalOre.CrystalOreType> {
         return true;
     }
 	
+	@Override
 	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune)
     {
         List<ItemStack> ret = new java.util.ArrayList<ItemStack>();
@@ -57,12 +58,10 @@ public class BlockCrystalOre extends EnumBlock<BlockCrystalOre.CrystalOreType> {
             count = 1;
         }
         
-        CrystalOreType type = (CrystalOreType) state.getValue(TYPE);
+        CrystalOreType type = state.getValue(TYPE);
         boolean blueOre = (type == CrystalOreType.BLUE || type == CrystalOreType.BLUE_NETHER || type == CrystalOreType.BLUE_END);
         boolean redOre = (type == CrystalOreType.RED || type == CrystalOreType.RED_NETHER || type == CrystalOreType.RED_END);
         boolean greenOre = (type == CrystalOreType.GREEN || type == CrystalOreType.GREEN_NETHER || type == CrystalOreType.GREEN_END);
-        boolean darkOre = (type == CrystalOreType.DARK || type == CrystalOreType.DARK_NETHER || type == CrystalOreType.DARK_END);
-        
         for(int i = 0; i < count; i++){
 	        Item item = ModItems.crystals;
 	        if (item != null)

@@ -1,7 +1,5 @@
 package alec_wam.CrystalMod.tiles.fusion;
 
-import javax.annotation.Nullable;
-
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.api.pedistals.IFusionPedistal;
 import alec_wam.CrystalMod.api.pedistals.IPedistal;
@@ -57,6 +55,7 @@ public class BlockPedistal extends BlockContainer implements ICustomModel {
 		this.setCreativeTab(CrystalMod.tabBlocks);
 	}
 	
+	@Override
 	@SideOnly(Side.CLIENT)
 	public void initModel() {
 		ModelLoader.setCustomStateMapper(this, new PedistalBlockStateMapper());
@@ -74,7 +73,8 @@ public class BlockPedistal extends BlockContainer implements ICustomModel {
         return EnumBlockRenderType.MODEL;
     }
 
-    @SideOnly(Side.CLIENT)
+    @Override
+	@SideOnly(Side.CLIENT)
     public BlockRenderLayer getBlockLayer()
     {
         return BlockRenderLayer.CUTOUT;
@@ -168,14 +168,6 @@ public class BlockPedistal extends BlockContainer implements ICustomModel {
 	@Override
     public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
 		
-        TileEntity tile = world.getTileEntity(pos);
-        /*boolean update = false;
-        if(tile !=null && tile instanceof IFacingTile){
-        	
-        	EnumFacing face = BlockPistonBase.getFacingFromEntity(pos, placer);
-        	((IFacingTile)tile).setFacing(face.getIndex());
-        }
-        if(update)BlockUtil.markBlockForUpdate(world, pos);*/
     }
     
 	@Override

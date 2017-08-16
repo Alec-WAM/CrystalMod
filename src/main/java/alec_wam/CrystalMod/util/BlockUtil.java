@@ -16,10 +16,8 @@ import alec_wam.CrystalMod.util.tool.ToolUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.PlayerControllerMP;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.play.client.CPacketPlayerDigging;
@@ -29,7 +27,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
@@ -170,7 +167,7 @@ public class BlockUtil {
 			CrystalModNetwork.sendMCPacket(player, new SPacketBlockChange(world, pos));
 		}
 		else {
-			PlayerControllerMP pcmp = Minecraft.getMinecraft().playerController;
+			Minecraft.getMinecraft();
 			world.playBroadcastSound(2001, pos, Block.getStateId(state));
 			if(block.removedByPlayer(state, world, pos, player, true)) {
 				block.onBlockDestroyedByPlayer(world, pos, state);
@@ -187,6 +184,7 @@ public class BlockUtil {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	public static <T extends TileEntity> T searchBoxForTile(final World world, final AxisAlignedBB area, final Class<T> tileClazz) {
 		final int x0 = (int)Math.floor(area.minX) >> 4;
         final int x2 = (int)Math.ceil(area.maxX) >> 4;
@@ -206,13 +204,14 @@ public class BlockUtil {
 		return null;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public static <T extends TileEntity> List<T> searchBoxForTiles(final World world, final AxisAlignedBB area, final Class<T> tileClazz, List<T> list) {
         final int x0 = (int)Math.floor(area.minX) >> 4;
         final int x2 = (int)Math.ceil(area.maxX) >> 4;
         final int z0 = (int)Math.floor(area.minZ) >> 4;
         final int z2 = (int)Math.ceil(area.maxZ) >> 4;
         if (list == null) {
-            list = (List<T>)Lists.<T>newArrayList();
+            list = Lists.<T>newArrayList();
         }
         for (int x3 = x0; x3 <= x2; ++x3) {
             for (int z3 = z0; z3 <= z2; ++z3) {

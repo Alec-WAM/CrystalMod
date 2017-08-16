@@ -1,29 +1,14 @@
 package alec_wam.CrystalMod.tiles.pipes.estorage.storage.hdd;
 
-import java.util.Iterator;
-import java.util.List;
-
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.items.ItemHandlerHelper;
 import alec_wam.CrystalMod.api.FluidStackList;
 import alec_wam.CrystalMod.api.ItemStackList;
-import alec_wam.CrystalMod.api.estorage.IInsertListener;
-import alec_wam.CrystalMod.api.estorage.INetworkContainer;
 import alec_wam.CrystalMod.api.estorage.INetworkInventory;
-import alec_wam.CrystalMod.api.estorage.INetworkInventory.ExtractFilter;
-import alec_wam.CrystalMod.api.estorage.INetworkInventory.FluidExtractFilter;
 import alec_wam.CrystalMod.api.estorage.storage.IItemProvider;
 import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetwork;
-import alec_wam.CrystalMod.tiles.pipes.estorage.FluidStorage;
-import alec_wam.CrystalMod.tiles.pipes.estorage.FluidStorage.FluidStackData;
-import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage;
-import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage.ItemStackData;
 import alec_wam.CrystalMod.util.ItemStackTools;
-import alec_wam.CrystalMod.util.ItemUtil;
-
-import com.google.common.collect.Lists;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.items.ItemHandlerHelper;
 
 public class NetworkInventoryHDDInterface implements INetworkInventory {
 

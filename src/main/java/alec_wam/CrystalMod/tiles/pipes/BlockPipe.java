@@ -11,8 +11,6 @@ import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.EnumBlock;
 import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.items.ModItems;
-import alec_wam.CrystalMod.tiles.crate.RenderTileCrate;
-import alec_wam.CrystalMod.tiles.crate.TileCrate;
 import alec_wam.CrystalMod.tiles.pipes.TileEntityPipe.PipePart;
 import alec_wam.CrystalMod.tiles.pipes.attachments.AttachmentUtil.AttachmentData;
 import alec_wam.CrystalMod.tiles.pipes.covers.CoverUtil.CoverData;
@@ -59,7 +57,6 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.relauncher.Side;
@@ -196,7 +193,7 @@ public class BlockPipe extends EnumBlock<BlockPipe.PipeType> implements ICustomM
 	@Override
 	public IBlockState getExtendedState(final IBlockState state, final IBlockAccess world, final BlockPos pos) {
 		TileEntity tile = world.getTileEntity(pos);
-		return (IBlockState)new FakeState(state, world, pos, (tile !=null && tile instanceof TileEntityPipe) ? (TileEntityPipe)tile : null);
+		return new FakeState(state, world, pos, (tile !=null && tile instanceof TileEntityPipe) ? (TileEntityPipe)tile : null);
 	}
 
 	@Override
@@ -260,7 +257,7 @@ public class BlockPipe extends EnumBlock<BlockPipe.PipeType> implements ICustomM
 			}
 		}
 
-		((WorldServer)worldObj).spawnParticle(EnumParticleTypes.BLOCK_DUST, entity.posX, entity.posY, entity.posZ, numberOfParticles, 0.0D, 0.0D, 0.0D, 0.15000000596046448D, new int[] {Block.getStateId(coverState)});
+		worldObj.spawnParticle(EnumParticleTypes.BLOCK_DUST, entity.posX, entity.posY, entity.posZ, numberOfParticles, 0.0D, 0.0D, 0.0D, 0.15000000596046448D, new int[] {Block.getStateId(coverState)});
 		return true;
 	}
 
@@ -303,38 +300,38 @@ public class BlockPipe extends EnumBlock<BlockPipe.PipeType> implements ICustomM
 			int j = pos.getY();
 			int k = pos.getZ();
 			float f = 0.1F;
-			double d0 = (double)i + this.rand.nextDouble() * (blockBounds.maxX - blockBounds.minX - (double)(f * 2.0F)) + (double)f + blockBounds.minX;
-			double d1 = (double)j + this.rand.nextDouble() * (blockBounds.maxY - blockBounds.minY - (double)(f * 2.0F)) + (double)f + blockBounds.minY;
-			double d2 = (double)k + this.rand.nextDouble() * (blockBounds.maxZ - blockBounds.minZ - (double)(f * 2.0F)) + (double)f + blockBounds.minZ;
+			double d0 = i + this.rand.nextDouble() * (blockBounds.maxX - blockBounds.minX - f * 2.0F) + f + blockBounds.minX;
+			double d1 = j + this.rand.nextDouble() * (blockBounds.maxY - blockBounds.minY - f * 2.0F) + f + blockBounds.minY;
+			double d2 = k + this.rand.nextDouble() * (blockBounds.maxZ - blockBounds.minZ - f * 2.0F) + f + blockBounds.minZ;
 
 			if (side == EnumFacing.DOWN)
 			{
-				d1 = (double)j + blockBounds.minY - (double)f;
+				d1 = j + blockBounds.minY - f;
 			}
 
 			if (side == EnumFacing.UP)
 			{
-				d1 = (double)j + blockBounds.maxY + (double)f;
+				d1 = j + blockBounds.maxY + f;
 			}
 
 			if (side == EnumFacing.NORTH)
 			{
-				d2 = (double)k + blockBounds.minZ - (double)f;
+				d2 = k + blockBounds.minZ - f;
 			}
 
 			if (side == EnumFacing.SOUTH)
 			{
-				d2 = (double)k + blockBounds.maxZ + (double)f;
+				d2 = k + blockBounds.maxZ + f;
 			}
 
 			if (side == EnumFacing.WEST)
 			{
-				d0 = (double)i + blockBounds.minX - (double)f;
+				d0 = i + blockBounds.minX - f;
 			}
 
 			if (side == EnumFacing.EAST)
 			{
-				d0 = (double)i + blockBounds.maxX + (double)f;
+				d0 = i + blockBounds.maxX + f;
 			}
 			ParticleDigging fx = (ParticleDigging) Minecraft.getMinecraft().effectRenderer.spawnEffectParticle(EnumParticleTypes.BLOCK_CRACK.getParticleID(), d0, d1,
 					d2, 0, 0, 0, 0);

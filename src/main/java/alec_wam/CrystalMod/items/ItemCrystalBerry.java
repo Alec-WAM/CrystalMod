@@ -28,6 +28,7 @@ public class ItemCrystalBerry extends ItemFood implements ICustomModel {
 		ModItems.registerItem(this, name);
 	}
 	
+	@Override
 	@SideOnly(Side.CLIENT)
     public void initModel() {
         for(PlantType type : PlantType.values()){

@@ -50,6 +50,7 @@ public class TileCraftingController extends TileEntityMod implements INetworkPow
 	
 	protected int ticks;
 	
+	@Override
 	public void writeCustomNBT(NBTTagCompound nbt){
 		super.writeCustomNBT(nbt);
 		
@@ -64,6 +65,7 @@ public class TileCraftingController extends TileEntityMod implements INetworkPow
         nbt.setBoolean("Connected", connected);
 	}
 	
+	@Override
 	public void readCustomNBT(NBTTagCompound nbt){
 		super.readCustomNBT(nbt);
 		 if (nbt.hasKey("CraftingTasks")) {
@@ -77,6 +79,7 @@ public class TileCraftingController extends TileEntityMod implements INetworkPow
 	}
 	
 	
+	@Override
 	public void update(){
 		super.update();
 		if(!getWorld().isRemote){
@@ -196,7 +199,8 @@ public class TileCraftingController extends TileEntityMod implements INetworkPow
 		final ItemStack requested = data.stack.copy();
 		final CraftingPattern pattern = network.getPatternWithBestScore(requested);
 		Thread calculationThread = new Thread(requested.getUnlocalizedName()+"x"+quantity+" Calculate Thread"){
-    		public void run()
+    		@Override
+			public void run()
             {
     			try{
     				ICraftingTask task = createCraftingTask(requested, pattern, quantity);
@@ -283,17 +287,17 @@ public class TileCraftingController extends TileEntityMod implements INetworkPow
 	}
 	
 	public static ICraftingTask readCraftingTask(EStorageNetwork network, NBTTagCompound tag) {
-        ItemStack stack = ItemStackTools.loadFromNBT(tag.getCompoundTag(BasicCraftingTask.NBT_PATTERN));
+        ItemStack stack = ItemStackTools.loadFromNBT(tag.getCompoundTag(ICraftingTask.NBT_PATTERN));
 
         if (!ItemStackTools.isNullStack(stack) && stack.getItem() instanceof ItemPattern) {
-        	NBTTagCompound posTag = tag.getCompoundTag(BasicCraftingTask.NBT_CRAFTER);
+        	NBTTagCompound posTag = tag.getCompoundTag(ICraftingTask.NBT_CRAFTER);
         	World world = FMLCommonHandler.instance().getMinecraftServerInstance().worldServerForDimension(posTag.getInteger("Dim"));
             TileEntity container = world.getTileEntity(BlockUtil.loadBlockPos(posTag));
 
             if (container instanceof IAutoCrafter) {
                 CraftingPattern pattern = ((IAutoCrafter)container).createPattern(stack);
 
-                return create(network, world, tag.hasKey(BasicCraftingTask.NBT_REQUESTED) ? ItemStackTools.loadFromNBT(tag.getCompoundTag(BasicCraftingTask.NBT_REQUESTED)) : null, pattern, tag.getInteger(BasicCraftingTask.NBT_QUANTITY), tag);
+                return create(network, world, tag.hasKey(ICraftingTask.NBT_REQUESTED) ? ItemStackTools.loadFromNBT(tag.getCompoundTag(ICraftingTask.NBT_REQUESTED)) : null, pattern, tag.getInteger(ICraftingTask.NBT_QUANTITY), tag);
             }
         }
 

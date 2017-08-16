@@ -1,16 +1,14 @@
 package alec_wam.CrystalMod.tiles;
 
 import java.util.EnumMap;
-import java.util.Map;
 
+import com.google.common.collect.Maps;
+
+import alec_wam.CrystalMod.network.IMessageHandler;
+import alec_wam.CrystalMod.util.BlockUtil;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IStringSerializable;
-import alec_wam.CrystalMod.network.IMessageHandler;
-import alec_wam.CrystalMod.util.BlockUtil;
-import alec_wam.CrystalMod.util.ModLogger;
-
-import com.google.common.collect.Maps;
 
 public class TileEntityIOSides extends TileEntityMod implements IMessageHandler {
 
@@ -54,6 +52,7 @@ public class TileEntityIOSides extends TileEntityMod implements IMessageHandler 
 		return io;
 	}
 	
+	@Override
 	public void writeCustomNBT(NBTTagCompound nbt){
 		super.writeCustomNBT(nbt);
 
@@ -65,6 +64,7 @@ public class TileEntityIOSides extends TileEntityMod implements IMessageHandler 
 		}
 	}
 	
+	@Override
 	public void readCustomNBT(NBTTagCompound nbt){
 		super.readCustomNBT(nbt);
 		for(EnumFacing face : EnumFacing.VALUES){

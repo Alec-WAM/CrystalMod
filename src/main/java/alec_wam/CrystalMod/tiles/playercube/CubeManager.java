@@ -5,6 +5,14 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.UUID;
 
+import com.google.common.collect.Lists;
+import com.mojang.authlib.GameProfile;
+
+import alec_wam.CrystalMod.Config;
+import alec_wam.CrystalMod.util.NBTUtil;
+import alec_wam.CrystalMod.util.PlayerUtil;
+import alec_wam.CrystalMod.util.UUIDUtils;
+import alec_wam.CrystalMod.world.ModDimensions;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -14,14 +22,6 @@ import net.minecraft.world.WorldSavedData;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.fml.common.FMLCommonHandler;
-import alec_wam.CrystalMod.Config;
-import alec_wam.CrystalMod.util.NBTUtil;
-import alec_wam.CrystalMod.util.PlayerUtil;
-import alec_wam.CrystalMod.util.UUIDUtils;
-import alec_wam.CrystalMod.world.ModDimensions;
-
-import com.google.common.collect.Lists;
-import com.mojang.authlib.GameProfile;
 
 public class CubeManager extends WorldSavedData {
 

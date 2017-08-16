@@ -11,10 +11,9 @@ import com.google.common.collect.Lists;
 
 import alec_wam.CrystalMod.tiles.pipes.types.IPipeType;
 import alec_wam.CrystalMod.util.BlockUtil;
-import alec_wam.CrystalMod.util.ModLogger;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -184,11 +183,16 @@ public class PipeUtil {
 						}
 					}
 					if(type == null || pipe.getPipeType() !=null && pipe.getPipeType() == type){
-						pipes.add(pipe);
-						//Continue Searching
-						if(pos != offsetPos && (from == null || from.getIndex() != facing.getOpposite().getIndex()))buildNetwork(pipes, world, offsetPos, facing.getOpposite(), type);
+						if(!containsPipe(pipes, pipe)){
+							pipes.add(pipe);
+							//Continue Searching
+							if(pos != offsetPos && (from == null || from.getIndex() != facing.getOpposite().getIndex())){
+								buildNetwork(pipes, world, offsetPos, facing.getOpposite(), type);
+							}
+						}
 					}
 				}
+				
 				if(tile instanceof IPipeWrapper){
 					if(sourcePipe !=null){
 						if(sourcePipe.getConnectionMode(facing) == ConnectionMode.DISABLED){
@@ -214,9 +218,11 @@ public class PipeUtil {
 									}
 								}
 								if(type == null || pipe.getPipeType() !=null && pipe.getPipeType() == type){
-									pipes.add(pipe);
-									//Continue Searching
-									buildNetwork(pipes, otherWorld, offsetOtherPos, otherFacing.getOpposite(), type);
+									if(!containsPipe(pipes, pipe)){
+										pipes.add(pipe);
+										//Continue Searching
+										buildNetwork(pipes, otherWorld, offsetOtherPos, otherFacing.getOpposite(), type);
+									}
 								}
 							}
 						}
@@ -224,6 +230,22 @@ public class PipeUtil {
 				}
 			}
 		}
+	}
+	
+	public static boolean containsPipe(List<TileEntityPipe> list, TileEntityPipe pipe){
+		for(TileEntityPipe oPipe : list){
+			if(oPipe.getPos() == pipe.getPos()){
+				World oWorld = oPipe.getWorld();
+				if(oWorld !=null){
+					if(oWorld.provider.getDimension() == pipe.getWorld().provider.getDimension()){
+						return true;
+					}
+				} else {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 }

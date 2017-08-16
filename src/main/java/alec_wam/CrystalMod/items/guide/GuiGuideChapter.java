@@ -1,17 +1,16 @@
 package alec_wam.CrystalMod.items.guide;
 
-import java.awt.Color;
 import java.io.IOException;
 
 import org.lwjgl.opengl.GL11;
 
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiScreen;
 import alec_wam.CrystalMod.api.guide.GuideChapter;
 import alec_wam.CrystalMod.api.guide.GuidePage;
 import alec_wam.CrystalMod.client.util.comp.GuiComponentBook;
 import alec_wam.CrystalMod.client.util.comp.GuiComponentSprite;
+import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiScreen;
 
 public class GuiGuideChapter extends GuiGuideBase {
 	private GuideChapter chapter;
@@ -68,6 +67,7 @@ public class GuiGuideChapter extends GuiGuideBase {
         this.pageTimer++;
     }
 	
+	@Override
 	public void handleMouseInput() throws IOException
     {
         super.handleMouseInput();
@@ -171,7 +171,6 @@ public class GuiGuideChapter extends GuiGuideBase {
 		GuiComponentSprite.renderSprite(mc, 0, 0, offsetX, offsetY, mouseX, mouseY, GuiComponentBook.iconPageLeft, GuiComponentBook.texture, 1f, 1f, 1f);
 		GuiComponentSprite.renderSprite(mc, (int)GuiComponentBook.iconPageRight.getWidth(), 0, offsetX, offsetY, mouseX, mouseY, GuiComponentBook.iconPageRight, GuiComponentBook.texture, 1f, 1f, 1f);
 		
-		int middle = xSize;
 		//GuiScreen.drawRect(guiLeft+middle-2, guiTop, guiLeft+middle+2, guiTop+ySize, Color.RED.getRGB());
 		for(int i = 0; i < this.currentPages.length; i++){
 			GuidePage page = this.currentPages[i];

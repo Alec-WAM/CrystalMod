@@ -1,12 +1,12 @@
 package alec_wam.CrystalMod.items;
 
-import net.minecraft.item.Item;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.client.model.dynamic.ItemRenderDragonWings;
 import alec_wam.CrystalMod.proxy.ClientProxy;
+import net.minecraft.item.Item;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemDragonWings extends Item implements ICustomModel {
 

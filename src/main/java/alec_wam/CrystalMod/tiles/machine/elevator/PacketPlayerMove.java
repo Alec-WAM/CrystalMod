@@ -1,12 +1,12 @@
 package alec_wam.CrystalMod.tiles.machine.elevator;
 
+import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.network.AbstractPacketThreadsafe;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.NetHandlerPlayServer;
 import net.minecraft.network.PacketBuffer;
-import alec_wam.CrystalMod.CrystalMod;
-import alec_wam.CrystalMod.network.AbstractPacketThreadsafe;
 
 public class PacketPlayerMove extends AbstractPacketThreadsafe {
 

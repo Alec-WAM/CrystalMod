@@ -1,13 +1,5 @@
 package alec_wam.CrystalMod.tiles.pipes.item;
 
-import io.netty.buffer.ByteBuf;
-import net.minecraft.client.network.NetHandlerPlayClient;
-import net.minecraft.network.NetHandlerPlayServer;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.world.World;
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.network.AbstractPacketThreadsafe;
 import alec_wam.CrystalMod.tiles.pipes.ConnectionMode;
@@ -19,9 +11,15 @@ import alec_wam.CrystalMod.tiles.pipes.attachments.AttachmentIOType;
 import alec_wam.CrystalMod.tiles.pipes.attachments.AttachmentUtil.AttachmentData;
 import alec_wam.CrystalMod.tiles.pipes.estorage.TileEntityPipeEStorage;
 import alec_wam.CrystalMod.tiles.pipes.item.filters.ItemPipeFilter.FilterType;
-import alec_wam.CrystalMod.tiles.pipes.liquid.TileEntityPipeLiquid;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
-import alec_wam.CrystalMod.util.ModLogger;
+import io.netty.buffer.ByteBuf;
+import net.minecraft.client.network.NetHandlerPlayClient;
+import net.minecraft.network.NetHandlerPlayServer;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 public class PacketPipe extends AbstractPacketThreadsafe {
 
@@ -80,9 +78,8 @@ public class PacketPipe extends AbstractPacketThreadsafe {
 				if(pipe instanceof TileEntityPipeItem){
 					TileEntityPipeItem item = (TileEntityPipeItem) pipe;
 					if(item.getFilter(dir).getStackInSlot(0) !=null && item.getFilter(dir).getStackInSlot(0).getMetadata() == FilterType.NORMAL.ordinal()){
-						String slot = data.substring(0, data.lastIndexOf(";"));
-						String amt = data.substring(data.lastIndexOf(";"));
-						//System.out.println("Ghost Set to "+slot+" "+amt);
+						data.substring(0, data.lastIndexOf(";"));
+						data.substring(data.lastIndexOf(";"));
 					}
 				}
 			}

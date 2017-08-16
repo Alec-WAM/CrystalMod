@@ -71,7 +71,7 @@ public abstract class BlockConnectedTexture extends Block implements ICustomMode
     
     @Override
     public IBlockState getExtendedState(final IBlockState state, final IBlockAccess world, final BlockPos pos) {
-		return (IBlockState)new ConnectedBlockState(state, world, pos);
+		return new ConnectedBlockState(state, world, pos);
     }
     
     @Override

@@ -35,12 +35,14 @@ public abstract class TileEntityMachine extends TileEntityInventory implements I
 
 		energyConfig = new EnergyConfig().setEnergyParams(20);
 		eStorage = new CEnergyStorage(this.energyConfig.maxEnergy, this.energyConfig.maxPower * 4) {
+			@Override
 			public boolean canExtract(){
 				return false;
 			}
 		};
     }
     
+	@Override
 	public void writeCustomNBT(NBTTagCompound nbt){
 		super.writeCustomNBT(nbt);
 		nbt.setInteger("Facing", facing);
@@ -53,14 +55,17 @@ public abstract class TileEntityMachine extends TileEntityInventory implements I
         nbt.setInteger("ProcRem", this.processRem);
 	}
 	
+	@Override
 	public void writeToStack(NBTTagCompound nbt){
 		this.writeCustomNBT(nbt);
 	}
 	
+	@Override
 	public void readFromStack(NBTTagCompound nbt){
 		this.readCustomNBT(nbt);
 	}
 	
+	@Override
 	public void readCustomNBT(NBTTagCompound nbt){
 		super.readCustomNBT(nbt);
 		facing = nbt.getInteger("Facing");
@@ -82,7 +87,8 @@ public abstract class TileEntityMachine extends TileEntityInventory implements I
 		}
 	}
     
-    public void update(){
+    @Override
+	public void update(){
 		super.update();
 		if(getWorld().isRemote){
 			return;

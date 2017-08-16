@@ -36,13 +36,14 @@ public class ItemCrystalChestMinecart extends Item implements ICustomModel
         /**
          * Dispense the specified stack, play the dispense sound and spawn particles.
          */
-        public ItemStack dispenseStack(IBlockSource source, ItemStack stack)
+        @Override
+		public ItemStack dispenseStack(IBlockSource source, ItemStack stack)
         {
-            EnumFacing enumfacing = (EnumFacing)source.getBlockState().getValue(BlockDispenser.FACING);
+            EnumFacing enumfacing = source.getBlockState().getValue(BlockDispenser.FACING);
             World world = source.getWorld();
-            double d0 = source.getX() + (double)enumfacing.getFrontOffsetX() * 1.125D;
-            double d1 = Math.floor(source.getY()) + (double)enumfacing.getFrontOffsetY();
-            double d2 = source.getZ() + (double)enumfacing.getFrontOffsetZ() * 1.125D;
+            double d0 = source.getX() + enumfacing.getFrontOffsetX() * 1.125D;
+            double d1 = Math.floor(source.getY()) + enumfacing.getFrontOffsetY();
+            double d2 = source.getZ() + enumfacing.getFrontOffsetZ() * 1.125D;
             BlockPos blockpos = source.getBlockPos().offset(enumfacing);
             IBlockState iblockstate = world.getBlockState(blockpos);
             BlockRailBase.EnumRailDirection blockrailbase$enumraildirection = iblockstate.getBlock() instanceof BlockRailBase ? (BlockRailBase.EnumRailDirection)iblockstate.getValue(((BlockRailBase)iblockstate.getBlock()).getShapeProperty()) : BlockRailBase.EnumRailDirection.NORTH_SOUTH;
@@ -95,7 +96,8 @@ public class ItemCrystalChestMinecart extends Item implements ICustomModel
         /**
          * Play the dispense sound from the specified block.
          */
-        protected void playDispenseSound(IBlockSource source)
+        @Override
+		protected void playDispenseSound(IBlockSource source)
         {
             source.getWorld().playEvent(1000, source.getBlockPos(), 0);
         }
@@ -111,7 +113,8 @@ public class ItemCrystalChestMinecart extends Item implements ICustomModel
         ModItems.registerItem(this, "minecart_chest");
     }
     
-    @SideOnly(Side.CLIENT)
+    @Override
+	@SideOnly(Side.CLIENT)
     public void initModel() {
     	for(int i = 0; i < CrystalChestType.values().length; i++){
     		ModelLoader.setCustomModelResourceLocation(this, i, new ModelResourceLocation(getRegistryName(), "inventory"));
@@ -162,7 +165,7 @@ public class ItemCrystalChestMinecart extends Item implements ICustomModel
                 }
 
                 CrystalChestType type = CrystalChestType.values()[CrystalChestType.validateMeta(stack.getMetadata())];
-                EntityMinecart entityminecart = EntityCrystalChestMinecartBase.makeMinecart(worldIn, (double)pos.getX() + 0.5D, (double)pos.getY() + 0.0625D + d0, (double)pos.getZ() + 0.5D, type);
+                EntityMinecart entityminecart = EntityCrystalChestMinecartBase.makeMinecart(worldIn, pos.getX() + 0.5D, pos.getY() + 0.0625D + d0, pos.getZ() + 0.5D, type);
 
                 if (stack.hasDisplayName())
                 {

@@ -15,7 +15,6 @@ import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -49,7 +48,7 @@ public class EntityDagger extends EntityArrow implements IEntityAdditionalSpawnD
 		pickupStatus = player.isCreative() ? PickupStatus.CREATIVE_ONLY : PickupStatus.ALLOWED;
 
 		// stuff from the arrow
-		this.setLocationAndAngles(player.posX, player.posY + (double) player.getEyeHeight(), player.posZ, player.rotationYaw, player.rotationPitch);
+		this.setLocationAndAngles(player.posX, player.posY + player.getEyeHeight(), player.posZ, player.rotationYaw, player.rotationPitch);
 
 		this.setPosition(this.posX, this.posY, this.posZ);
 		//this.yOffset = 0.0F;
@@ -59,6 +58,7 @@ public class EntityDagger extends EntityArrow implements IEntityAdditionalSpawnD
 		this.setThrowableHeading(this.motionX, this.motionY, this.motionZ, speed, inaccuracy);
 	}
 
+	@SuppressWarnings("deprecation")
 	protected void playHitBlockSound(float speed, IBlockState state) {
 		this.getEntityWorld().playSound(null, getPosition(), state.getBlock().getSoundType().getStepSound(), SoundCategory.BLOCKS, 5.0f, 1.0f);
 		//this.playSound(state.getBlock().getSoundType().getStepSound(), 0.8f, 1.0f);
@@ -88,13 +88,13 @@ public class EntityDagger extends EntityArrow implements IEntityAdditionalSpawnD
 		IBlockState iblockstate = this.getEntityWorld().getBlockState(blockpos);
 		setTile(iblockstate.getBlock());
 		setData(getTile().getMetaFromState(iblockstate));
-		this.motionX = (double) ((float) (raytraceResult.hitVec.xCoord - this.posX));
-		this.motionY = (double) ((float) (raytraceResult.hitVec.yCoord - this.posY));
-		this.motionZ = (double) ((float) (raytraceResult.hitVec.zCoord - this.posZ));
+		this.motionX = ((float) (raytraceResult.hitVec.xCoord - this.posX));
+		this.motionY = ((float) (raytraceResult.hitVec.yCoord - this.posY));
+		this.motionZ = ((float) (raytraceResult.hitVec.zCoord - this.posZ));
 		float speed = getSpeed();
-		this.posX -= this.motionX / (double) speed * 0.05000000074505806D;
-		this.posY -= this.motionY / (double) speed * 0.05000000074505806D;
-		this.posZ -= this.motionZ / (double) speed * 0.05000000074505806D;
+		this.posX -= this.motionX / speed * 0.05000000074505806D;
+		this.posY -= this.motionY / speed * 0.05000000074505806D;
+		this.posZ -= this.motionZ / speed * 0.05000000074505806D;
 
 		playHitBlockSound(speed, iblockstate);
 
@@ -150,7 +150,7 @@ public class EntityDagger extends EntityArrow implements IEntityAdditionalSpawnD
 		if(this.prevRotationPitch == 0.0F && this.prevRotationYaw == 0.0F) {
 			float f = MathHelper.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ);
 			this.prevRotationYaw = this.rotationYaw = (float) (Math.atan2(this.motionX, this.motionZ) * 180.0D / Math.PI);
-			this.prevRotationPitch = this.rotationPitch = (float) (Math.atan2(this.motionY, (double) f) * 180.0D / Math.PI);
+			this.prevRotationPitch = this.rotationPitch = (float) (Math.atan2(this.motionY, f) * 180.0D / Math.PI);
 		}
 
 		BlockPos blockpos = new BlockPos(getXTile(), getYTile(), getZTile());
@@ -184,9 +184,9 @@ public class EntityDagger extends EntityArrow implements IEntityAdditionalSpawnD
 		}
 		else {
 			this.inGround = false;
-			this.motionX *= (double) (this.rand.nextFloat() * 0.2F);
-			this.motionY *= (double) (this.rand.nextFloat() * 0.2F);
-			this.motionZ *= (double) (this.rand.nextFloat() * 0.2F);
+			this.motionX *= this.rand.nextFloat() * 0.2F;
+			this.motionY *= this.rand.nextFloat() * 0.2F;
+			this.motionZ *= this.rand.nextFloat() * 0.2F;
 			setTicksInGround(0);
 			setTicksInAir(0);
 		}
@@ -239,7 +239,7 @@ public class EntityDagger extends EntityArrow implements IEntityAdditionalSpawnD
 		if(this.isInWater()) {
 			for(int l = 0; l < 4; ++l) {
 				float f3 = 0.25F;
-				this.getEntityWorld().spawnParticle(EnumParticleTypes.WATER_BUBBLE, this.posX - this.motionX * (double) f3, this.posY - this.motionY * (double) f3, this.posZ - this.motionZ * (double) f3, this.motionX, this.motionY, this.motionZ);
+				this.getEntityWorld().spawnParticle(EnumParticleTypes.WATER_BUBBLE, this.posX - this.motionX * f3, this.posY - this.motionY * f3, this.posZ - this.motionZ * f3, this.motionX, this.motionY, this.motionZ);
 			}
 			slowdown *= 0.60d;
 		}
@@ -267,7 +267,7 @@ public class EntityDagger extends EntityArrow implements IEntityAdditionalSpawnD
 
 	public void drawCritParticles() {
 		for(int k = 0; k < 4; ++k) {
-			this.getEntityWorld().spawnParticle(EnumParticleTypes.CRIT, this.posX + this.motionX * (double) k / 4.0D, this.posY + this.motionY * (double) k / 4.0D, this.posZ + this.motionZ * (double) k / 4.0D, -this.motionX, -this.motionY + 0.2D, -this.motionZ);
+			this.getEntityWorld().spawnParticle(EnumParticleTypes.CRIT, this.posX + this.motionX * k / 4.0D, this.posY + this.motionY * k / 4.0D, this.posZ + this.motionZ * k / 4.0D, -this.motionX, -this.motionY + 0.2D, -this.motionZ);
 		}
 	}
 

@@ -1,24 +1,22 @@
 package alec_wam.CrystalMod.crafting;
 
-import alec_wam.CrystalMod.api.crafting.ICrystalRecipe;
-import alec_wam.CrystalMod.items.ModItems;
-import alec_wam.CrystalMod.items.ItemCrystal.CrystalType;
-import alec_wam.CrystalMod.items.ItemIngot.IngotType;
-import alec_wam.CrystalMod.items.armor.ItemCrystalArmor;
-import alec_wam.CrystalMod.items.tools.ItemToolParts.PartType;
-import alec_wam.CrystalMod.util.ItemNBTHelper;
-import alec_wam.CrystalMod.util.ItemStackTools;
-
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+
+import alec_wam.CrystalMod.api.crafting.ICrystalRecipe;
+import alec_wam.CrystalMod.items.ItemCrystal.CrystalType;
+import alec_wam.CrystalMod.items.ItemIngot.IngotType;
+import alec_wam.CrystalMod.items.ModItems;
+import alec_wam.CrystalMod.items.armor.ItemCrystalArmor;
+import alec_wam.CrystalMod.items.tools.ItemToolParts.PartType;
+import alec_wam.CrystalMod.util.ItemNBTHelper;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import net.minecraft.block.Block;
-import net.minecraft.init.Items;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -160,7 +158,8 @@ public class CrystalCraftingManager
     	
         Collections.sort(this.recipes, new Comparator<ICrystalRecipe>()
         {
-            public int compare(ICrystalRecipe p_compare_1_, ICrystalRecipe p_compare_2_)
+            @Override
+			public int compare(ICrystalRecipe p_compare_1_, ICrystalRecipe p_compare_2_)
             {
                 return p_compare_1_ instanceof ShapelessCrystalRecipe && p_compare_2_ instanceof ShapedCrystalRecipe ? 1 : (p_compare_2_ instanceof ShapelessCrystalRecipe && p_compare_1_ instanceof ShapedCrystalRecipe ? -1 : (p_compare_2_.getRecipeSize() < p_compare_1_.getRecipeSize() ? -1 : (p_compare_2_.getRecipeSize() > p_compare_1_.getRecipeSize() ? 1 : 0)));
             }
@@ -176,7 +175,7 @@ public class CrystalCraftingManager
 
         if (recipeComponents[i] instanceof String[])
         {
-            String[] astring = (String[])((String[])recipeComponents[i++]);
+            String[] astring = ((String[])recipeComponents[i++]);
 
             for (int l = 0; l < astring.length; ++l)
             {
@@ -228,7 +227,7 @@ public class CrystalCraftingManager
 
             if (map.containsKey(Character.valueOf(c0)))
             {
-                aitemstack[i1] = ((ItemStack)map.get(Character.valueOf(c0))).copy();
+                aitemstack[i1] = map.get(Character.valueOf(c0)).copy();
             }
             else
             {
@@ -253,7 +252,7 @@ public class CrystalCraftingManager
 
         if (recipeComponents[i] instanceof String[])
         {
-            String[] astring = (String[])((String[])recipeComponents[i++]);
+            String[] astring = ((String[])recipeComponents[i++]);
 
             for (int l = 0; l < astring.length; ++l)
             {
@@ -305,7 +304,7 @@ public class CrystalCraftingManager
 
             if (map.containsKey(Character.valueOf(c0)))
             {
-                aitemstack[i1] = ((ItemStack)map.get(Character.valueOf(c0))).copy();
+                aitemstack[i1] = map.get(Character.valueOf(c0)).copy();
             }
             else
             {

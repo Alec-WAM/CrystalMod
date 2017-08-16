@@ -16,7 +16,7 @@ public class ContainerCrystalFurnace extends Container
     {
         this.addPlayerInventory(player.inventory);
         
-        this.tileFurnace = ((TileEntityCrystalFurnace) tileEntity);
+        this.tileFurnace = (tileEntity);
 
         this.addSlotToContainer(new Slot(tileFurnace, 0, 56, 26));
         this.addSlotToContainer(new SlotFurnaceOutput(player, tileFurnace, 1, 116, 35));
@@ -46,7 +46,7 @@ public class ContainerCrystalFurnace extends Container
     {
     	ItemStack itemstack = ItemStackTools.getEmptyStack();
     	int par2 = i;
-		Slot slot = (Slot)this.inventorySlots.get(par2);
+		Slot slot = this.inventorySlots.get(par2);
 
 		if (slot != null && slot.getHasStack())
 		{

@@ -4,22 +4,16 @@ import javax.annotation.Nullable;
 
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.EnumBlock;
-import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.blocks.EnumBlock.IEnumMeta;
-import alec_wam.CrystalMod.util.ItemStackTools;
-import alec_wam.CrystalMod.util.ModLogger;
+import alec_wam.CrystalMod.blocks.ModBlocks;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.Explosion;
@@ -40,6 +34,7 @@ public class BlockCrystalTiles extends EnumBlock<BlockCrystalTiles.CrystalTileTy
 		this.setDefaultState(this.blockState.getBaseState().withProperty(TYPE, CrystalTileType.INGOT_BLUE));
 	}
 	
+	@Override
 	@SideOnly(Side.CLIENT)
 	public void initModel() {
 		for(CrystalTileType type : CrystalTileType.values())
@@ -55,6 +50,7 @@ public class BlockCrystalTiles extends EnumBlock<BlockCrystalTiles.CrystalTileTy
 		return Material.IRON;
 	}
     
+	@SuppressWarnings("deprecation")
 	@Override
 	public float getBlockHardness(IBlockState blockState, World worldIn, BlockPos pos)
     {

@@ -1,15 +1,10 @@
 package alec_wam.CrystalMod.items.tools.backpack;
 
-import alec_wam.CrystalMod.util.ItemStackTools;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.init.Items;
-import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.ItemStack;
 
 public class ModelBackpack extends ModelBiped
 {
@@ -44,7 +39,8 @@ public class ModelBackpack extends ModelBiped
     	setRotation(Strap_Long2, 0F, 0F, 0F);
     }
   
-    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5)
+    @Override
+	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5)
     {
     	GlStateManager.pushMatrix();
     
@@ -70,7 +66,8 @@ public class ModelBackpack extends ModelBiped
     	model.rotateAngleZ = z;
     }
   
-    public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, Entity par7Entity)
+    @Override
+	public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, Entity par7Entity)
     {
     	super.setRotationAngles(f, f1, f2, f3, f4, f5, par7Entity);
 

@@ -50,6 +50,7 @@ public class PlayerCubeChunkProvider implements IChunkGenerator
 		return new ArrayList<SpawnListEntry>();
 	}
 
+	@Override
 	@Nullable
     public BlockPos getStrongholdGen(World worldIn, String structureName, BlockPos position, boolean p_180513_4_)
 	{

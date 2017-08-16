@@ -8,6 +8,12 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.UUID;
 
+import com.google.common.base.Strings;
+import com.mojang.authlib.GameProfile;
+
+import alec_wam.CrystalMod.blocks.ModBlocks;
+import alec_wam.CrystalMod.network.CrystalModNetwork;
+import alec_wam.CrystalMod.tiles.TileEntityMod;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -17,12 +23,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import alec_wam.CrystalMod.blocks.ModBlocks;
-import alec_wam.CrystalMod.network.CrystalModNetwork;
-import alec_wam.CrystalMod.tiles.TileEntityMod;
-
-import com.google.common.base.Strings;
-import com.mojang.authlib.GameProfile;
 
 public class TileEntityPlayerCubePortal extends TileEntityMod {
 
@@ -32,6 +32,7 @@ public class TileEntityPlayerCubePortal extends TileEntityMod {
 	public String cubeID;
 	public boolean isLocked;
 	
+	@Override
 	public void writeCustomNBT(NBTTagCompound nbt){
 		super.writeCustomNBT(nbt);
 		if(this.mobileChunk != null){
@@ -247,6 +248,7 @@ public class TileEntityPlayerCubePortal extends TileEntityMod {
 		}
 	}
 	
+	@Override
 	public void invalidate(){
 		super.invalidate();
 		if(getCube() !=null){
@@ -254,6 +256,7 @@ public class TileEntityPlayerCubePortal extends TileEntityMod {
 		}
 	}
 	
+	@Override
 	public void onChunkUnload(){
 		super.onChunkUnload();
 		if(getCube() !=null){

@@ -1,13 +1,8 @@
 package alec_wam.CrystalMod.tiles.pipes.item.filters;
 
-import java.util.List;
-
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
-
-import com.google.common.collect.Lists;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -32,7 +27,8 @@ public class CameraFilterInventory implements IItemStackInventory
             this.readFromStack(masterStack);
     }
 
-    public void initializeInventory(ItemStack masterStack)
+    @Override
+	public void initializeInventory(ItemStack masterStack)
     {
         this.masterStack = masterStack;
         this.clear();
@@ -249,7 +245,8 @@ public class CameraFilterInventory implements IItemStackInventory
         }
     }
 
-    public boolean canInventoryBeManipulated()
+    @Override
+	public boolean canInventoryBeManipulated()
     {
         return !ItemStackTools.isNullStack(masterStack);
     }

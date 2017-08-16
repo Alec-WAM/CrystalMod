@@ -1,13 +1,11 @@
 package alec_wam.CrystalMod.entities.minecarts.chests.wireless;
 
+import org.lwjgl.opengl.GL11;
+
+import alec_wam.CrystalMod.util.ProfileUtil;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.util.ResourceLocation;
-
-import org.lwjgl.opengl.GL11;
-
-import alec_wam.CrystalMod.blocks.ModBlocks;
-import alec_wam.CrystalMod.util.ProfileUtil;
 
 public class GuiWirelessChestMinecart extends GuiContainer {
 

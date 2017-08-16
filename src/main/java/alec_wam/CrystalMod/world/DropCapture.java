@@ -2,14 +2,14 @@ package alec_wam.CrystalMod.world;
 
 import java.util.List;
 
+import com.google.common.collect.Lists;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-
-import com.google.common.collect.Lists;
 
 //Credit goes to OpenMods
 //https://github.com/OpenMods/OpenModsLib/blob/1.8.X/src/main/java/openmods/world/DropCapture.java

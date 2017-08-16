@@ -1,13 +1,5 @@
 package alec_wam.CrystalMod.entities.minecarts.chests.wireless;
 
-import org.lwjgl.opengl.GL11;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.model.TRSRTransformation;
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.client.model.dynamic.DynamicBaseModel;
 import alec_wam.CrystalMod.client.model.dynamic.ICustomItemRenderer;
@@ -15,6 +7,9 @@ import alec_wam.CrystalMod.integration.minecraft.ItemMinecartRender;
 import alec_wam.CrystalMod.tiles.chest.wireless.WirelessChestHelper;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.UUIDUtils;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.model.TRSRTransformation;
 
 public class ItemWirelessMinecartRender implements ICustomItemRenderer {
 

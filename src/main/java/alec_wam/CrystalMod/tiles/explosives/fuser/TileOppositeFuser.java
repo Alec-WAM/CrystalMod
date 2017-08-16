@@ -1,11 +1,8 @@
 package alec_wam.CrystalMod.tiles.explosives.fuser;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Set;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
 import alec_wam.CrystalMod.client.sound.ModSounds;
@@ -13,27 +10,15 @@ import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.packets.PacketEntityMessage;
 import alec_wam.CrystalMod.tiles.TileEntityMod;
 import alec_wam.CrystalMod.util.BlockUtil;
-import alec_wam.CrystalMod.util.ModLogger;
 import alec_wam.CrystalMod.util.TimeUtil;
-import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.play.server.SPacketBlockChange;
-import net.minecraft.network.play.server.SPacketChunkData;
-import net.minecraft.server.management.PlayerChunkMap;
-import net.minecraft.server.management.PlayerChunkMapEntry;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.world.Explosion;
-import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
-import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
 
 public class TileOppositeFuser extends TileEntityMod {
 
@@ -102,6 +87,7 @@ public class TileOppositeFuser extends TileEntityMod {
 		}
 	}
 	
+	@SuppressWarnings("deprecation")
 	public void createExplosion(WorldServer world, BlockPos pos, int size){
 		Set<BlockPos> set = Sets.<BlockPos>newHashSet();
         //BlockPos.MutableBlockPos blockpos = new BlockPos.MutableBlockPos();
@@ -140,7 +126,7 @@ public class TileOppositeFuser extends TileEntityMod {
         helper.setBlocksForRemoval(list);
         helper.addBlocksForUpdate(set);
         
-        long time = System.currentTimeMillis();
+        System.currentTimeMillis();
         helper.finish();
         //ModLogger.info("Explosion took "+(System.currentTimeMillis() - time)+"ms");
         

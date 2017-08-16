@@ -2,6 +2,15 @@ package alec_wam.CrystalMod.tiles.pipes.estorage.panel.wireless;
 
 import java.util.List;
 
+import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.api.estorage.security.NetworkAbility;
+import alec_wam.CrystalMod.blocks.ICustomModel;
+import alec_wam.CrystalMod.handler.GuiHandler;
+import alec_wam.CrystalMod.items.ModItems;
+import alec_wam.CrystalMod.util.ChatUtil;
+import alec_wam.CrystalMod.util.ItemNBTHelper;
+import alec_wam.CrystalMod.util.ItemStackTools;
+import alec_wam.CrystalMod.util.Lang;
 import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -10,27 +19,17 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import alec_wam.CrystalMod.CrystalMod;
-import alec_wam.CrystalMod.api.estorage.security.NetworkAbility;
-import alec_wam.CrystalMod.blocks.ICustomModel;
-import alec_wam.CrystalMod.handler.GuiHandler;
-import alec_wam.CrystalMod.items.ModItems;
-import alec_wam.CrystalMod.proxy.CommonProxy;
-import alec_wam.CrystalMod.util.ChatUtil;
-import alec_wam.CrystalMod.util.ItemNBTHelper;
-import alec_wam.CrystalMod.util.ItemStackTools;
-import alec_wam.CrystalMod.util.Lang;
 
 public class ItemWirelessPanel extends Item implements ICustomModel {
 
@@ -41,6 +40,7 @@ public class ItemWirelessPanel extends Item implements ICustomModel {
 		ModItems.registerItem(this, "wirelesspanelreceiver");
 	}
 	
+	@Override
 	@SideOnly(Side.CLIENT)
     public void initModel() {
 		final ModelResourceLocation loc = new ModelResourceLocation("crystalmod:item_wirelesspanel", "active=false");
@@ -164,6 +164,7 @@ public class ItemWirelessPanel extends Item implements ICustomModel {
         return EnumActionResult.PASS;
     }
 	
+	@Override
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean adv){
 		super.addInformation(stack, player, list, adv);

@@ -22,7 +22,8 @@ public class LayerBackItem implements LayerRenderer<EntityMinionBase>
         this.livingEntityRenderer = livingEntityRendererIn;
     }
 
-    public void doRenderLayer(EntityMinionBase entitylivingbaseIn1, float p_177141_2_, float p_177141_3_, float partialTicks, float p_177141_5_, float p_177141_6_, float p_177141_7_, float scale)
+    @Override
+	public void doRenderLayer(EntityMinionBase entitylivingbaseIn1, float p_177141_2_, float p_177141_3_, float partialTicks, float p_177141_5_, float p_177141_6_, float p_177141_7_, float scale)
     {
     	if(!(entitylivingbaseIn1 instanceof EntityMinionWarrior))return;
     	EntityMinionWarrior entitylivingbaseIn = ((EntityMinionWarrior)entitylivingbaseIn1);
@@ -67,7 +68,8 @@ public class LayerBackItem implements LayerRenderer<EntityMinionBase>
         }
     }
 
-    public boolean shouldCombineTextures()
+    @Override
+	public boolean shouldCombineTextures()
     {
         return false;
     }

@@ -31,6 +31,7 @@ public class ItemCursedBone extends Item implements ICustomModel {
 		ModItems.registerItem(this, "cursedbone");
 	}
 	
+	@Override
 	@SideOnly(Side.CLIENT)
     public void initModel() {
         for(BoneType type : BoneType.values()){
@@ -62,7 +63,7 @@ public class ItemCursedBone extends Item implements ICustomModel {
 		if(ItemStackTools.isValid(stack) && stack.getMetadata() == BoneType.BONEMEAL.getMetadata()){
 			IBlockState state = world.getBlockState(pos);
 			if(state.getBlock() == Blocks.NETHER_WART){
-				int i = ((Integer)state.getValue(BlockNetherWart.AGE)).intValue();
+				int i = state.getValue(BlockNetherWart.AGE).intValue();
 
 		        if (i < 3 && net.minecraftforge.common.ForgeHooks.onCropsGrowPre(world, pos, state, true))
 		        {
@@ -95,7 +96,8 @@ public class ItemCursedBone extends Item implements ICustomModel {
             this.unlocalizedName = name;
         }
 
-        public int getMetadata()
+        @Override
+		public int getMetadata()
         {
             return this.metadata;
         }
@@ -105,7 +107,8 @@ public class ItemCursedBone extends Item implements ICustomModel {
             return this.unlocalizedName;
         }
 
-        public String toString()
+        @Override
+		public String toString()
         {
             return this.unlocalizedName;
         }
@@ -120,7 +123,8 @@ public class ItemCursedBone extends Item implements ICustomModel {
             return METADATA_LOOKUP[metadata];
         }
 
-        public String getName()
+        @Override
+		public String getName()
         {
             return this.unlocalizedName;
         }

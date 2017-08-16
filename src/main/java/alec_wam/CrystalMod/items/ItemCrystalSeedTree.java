@@ -1,38 +1,23 @@
 package alec_wam.CrystalMod.items;
 
+import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.blocks.BlockCrystalLog;
+import alec_wam.CrystalMod.blocks.BlockCrystalLog.WoodType;
+import alec_wam.CrystalMod.blocks.ModBlocks;
+import alec_wam.CrystalMod.blocks.crops.BlockCrystalPlant.PlantType;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockOldLog;
-import net.minecraft.block.BlockPlanks;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import alec_wam.CrystalMod.CrystalMod;
-import alec_wam.CrystalMod.blocks.BlockCrystalLog;
-import alec_wam.CrystalMod.blocks.ModBlocks;
-import alec_wam.CrystalMod.blocks.BlockCrystalLog.WoodType;
-import alec_wam.CrystalMod.blocks.crops.BlockCrystalPlant;
-import alec_wam.CrystalMod.blocks.crops.BlockCrystalPlant.PlantType;
-import alec_wam.CrystalMod.items.tools.grapple.EntityGrapplingHook;
-import alec_wam.CrystalMod.items.tools.grapple.GrappleHandler;
-import alec_wam.CrystalMod.items.tools.grapple.GrappleType;
-import alec_wam.CrystalMod.network.CrystalModNetwork;
-import alec_wam.CrystalMod.network.packets.PacketEntityMessage;
-import alec_wam.CrystalMod.util.ItemStackTools;
 
 public class ItemCrystalSeedTree extends Item implements net.minecraftforge.common.IPlantable
 {
@@ -44,7 +29,8 @@ public class ItemCrystalSeedTree extends Item implements net.minecraftforge.comm
         ModItems.registerItem(this, type.getName().toLowerCase()+"crystaltreeseeds");
     }
     
-    @SideOnly(Side.CLIENT)
+    @Override
+	@SideOnly(Side.CLIENT)
 	public boolean hasEffect(ItemStack stack){
 		return true;
 	}
@@ -90,7 +76,8 @@ public class ItemCrystalSeedTree extends Item implements net.minecraftforge.comm
     /**
      * Called when a Block is right-clicked with this Item
      */
-    @Override
+    @SuppressWarnings("deprecation")
+	@Override
     public EnumActionResult onItemUse(EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ)
     {
     	ItemStack stack = playerIn.getHeldItem(hand);

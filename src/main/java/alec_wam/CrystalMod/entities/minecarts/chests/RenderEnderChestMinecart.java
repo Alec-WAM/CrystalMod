@@ -1,12 +1,9 @@
 package alec_wam.CrystalMod.entities.minecarts.chests;
 
-import alec_wam.CrystalMod.CrystalMod;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.entity.RenderMinecart;
-import net.minecraft.entity.monster.EntitySlime;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -19,7 +16,8 @@ public class RenderEnderChestMinecart extends RenderMinecart<EntityEnderChestMin
         super(renderManagerIn);
     }
 
-    protected void renderCartContents(EntityEnderChestMinecart cart, float p_188319_2_, IBlockState p_188319_3_)
+    @Override
+	protected void renderCartContents(EntityEnderChestMinecart cart, float p_188319_2_, IBlockState p_188319_3_)
     {
     	super.renderCartContents(cart, p_188319_2_, p_188319_3_);
     	

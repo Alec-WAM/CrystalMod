@@ -51,7 +51,6 @@ public class ContainerBackpackUpgradeWindow extends Container {
         
         int offsetArmor = 34;
         int offsetLeft = offsetArmor + gapLeft;
-        int offsetRight = gapRight;
         int offsetTabs = 32;
         int offsetY = 0;
         if(upgrade == BackpackUpgrade.ENDER){
@@ -139,14 +138,16 @@ public class ContainerBackpackUpgradeWindow extends Container {
                  * Returns the maximum stack size for a given slot (usually the same as getInventoryStackLimit(), but 1
                  * in the case of armor slots)
                  */
-                public int getSlotStackLimit()
+                @Override
+				public int getSlotStackLimit()
                 {
                     return 1;
                 }
                 /**
                  * Check if the stack is a valid item for this slot. Always true beside for the armor slots.
                  */
-                public boolean isItemValid(@Nullable ItemStack stack)
+                @Override
+				public boolean isItemValid(@Nullable ItemStack stack)
                 {
                     if (stack == null)
                     {
@@ -157,7 +158,8 @@ public class ContainerBackpackUpgradeWindow extends Container {
                         return stack.getItem().isValidArmor(stack, entityequipmentslot, playerInventory.player);
                     }
                 }
-                @Nullable
+                @Override
+				@Nullable
                 @SideOnly(Side.CLIENT)
                 public String getSlotTexture()
                 {
@@ -175,7 +177,8 @@ public class ContainerBackpackUpgradeWindow extends Container {
         }
     }
 
-    public boolean canInteractWith(EntityPlayer playerIn)
+    @Override
+	public boolean canInteractWith(EntityPlayer playerIn)
     {
         return this.upgradeInventory.isUsableByPlayer(playerIn);
     }
@@ -183,7 +186,8 @@ public class ContainerBackpackUpgradeWindow extends Container {
     /**
      * Take a stack from the specified inventory slot.
      */
-    @Nullable
+    @Override
+	@Nullable
     public ItemStack transferStackInSlot(EntityPlayer playerIn, int index)
     {
     	if(upgrade != BackpackUpgrade.ENDER)return null;
@@ -209,7 +213,7 @@ public class ContainerBackpackUpgradeWindow extends Container {
             boolean isArmor = entityequipmentslot.getSlotType() == EntityEquipmentSlot.Type.ARMOR;
             boolean isArmorFull = false;
             if(isArmor){
-            	isArmorFull = !((Slot)this.inventorySlots.get(armorEnd - entityequipmentslot.getIndex())).getHasStack();
+            	isArmorFull = !this.inventorySlots.get(armorEnd - entityequipmentslot.getIndex()).getHasStack();
             }
             
             boolean isBauble = hasBaublesSlots() && currentStack.getItem() instanceof IBauble;
@@ -332,7 +336,8 @@ public class ContainerBackpackUpgradeWindow extends Container {
     /**
      * Called when the container is closed.
      */
-    public void onContainerClosed(EntityPlayer playerIn)
+    @Override
+	public void onContainerClosed(EntityPlayer playerIn)
     {
         super.onContainerClosed(playerIn);
         backpackInventory.guiSaveSafe(playerIn);

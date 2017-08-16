@@ -1,12 +1,5 @@
 package alec_wam.CrystalMod.entities.minions.worker.jobs;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import alec_wam.CrystalMod.entities.minions.MinionConstants;
 import alec_wam.CrystalMod.entities.minions.worker.EntityMinionWorker;
 import alec_wam.CrystalMod.entities.minions.worker.WorkerJob;
@@ -16,6 +9,13 @@ import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.fakeplayer.FakePlayerUtil;
 import alec_wam.CrystalMod.util.tool.ToolUtil;
 import alec_wam.CrystalMod.util.tool.TreeUtil;
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 
 public class JobChopTree extends WorkerJob {
 
@@ -59,7 +59,7 @@ public class JobChopTree extends WorkerJob {
 		
 		double d0 = worker.posX - (logPos.getX() + 0.5);
         double d2 = worker.posZ - (logPos.getZ() + 0.5);
-        d =(double)MathHelper.sqrt(d0 * d0 + d2 * d2);
+        d =MathHelper.sqrt(d0 * d0 + d2 * d2);
 		
 		if(d <= 2.5D){
 			if (delay < 0)

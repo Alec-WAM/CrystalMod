@@ -100,10 +100,11 @@ public class FakePlayerCM extends FakePlayer {
               throw new RuntimeException("Invalid Side (" + side + ")");
           }
       }
-      this.setLocationAndAngles(x, y, z, (float)yaw, (float)pitch);
+      this.setLocationAndAngles(x, y, z, yaw, pitch);
   }
   
-  public float getEyeHeight() {
+  @Override
+public float getEyeHeight() {
       return 0.0f;
   }
   

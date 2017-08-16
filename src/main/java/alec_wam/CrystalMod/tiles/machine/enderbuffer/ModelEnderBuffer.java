@@ -1,9 +1,7 @@
 package alec_wam.CrystalMod.tiles.machine.enderbuffer;
 
-import net.minecraft.client.renderer.texture.*;
-import net.minecraft.util.*;
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.lwjgl.util.vector.Vector3f;
 
@@ -12,16 +10,23 @@ import alec_wam.CrystalMod.client.model.dynamic.DelegatingDynamicItemAndBlockMod
 import alec_wam.CrystalMod.tiles.machine.BlockMachine;
 import alec_wam.CrystalMod.tiles.machine.FakeTileState;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
-import alec_wam.CrystalMod.util.ModLogger;
 import alec_wam.CrystalMod.util.client.CustomModelUtil;
 import alec_wam.CrystalMod.util.client.RenderUtil;
-import net.minecraft.client.renderer.block.model.*;
-import net.minecraft.block.state.*;
-import net.minecraft.world.World;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.renderer.block.model.BlockFaceUV;
+import net.minecraft.client.renderer.block.model.BlockPartFace;
+import net.minecraft.client.renderer.block.model.FaceBakery;
+import net.minecraft.client.renderer.block.model.IBakedModel;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
+import net.minecraft.client.renderer.block.model.ModelRotation;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.world.World;
 
 public class ModelEnderBuffer extends DelegatingDynamicItemAndBlockModel 
 {
@@ -48,7 +53,8 @@ public class ModelEnderBuffer extends DelegatingDynamicItemAndBlockModel
         state = null;
     }
     
-    public List<BakedQuad> getGeneralQuads() {
+    @Override
+	public List<BakedQuad> getGeneralQuads() {
         final List<BakedQuad> list = new ArrayList<BakedQuad>();
         TextureAtlasSprite spriteIdle = RenderUtil.getSprite(CrystalMod.resource("blocks/machine/enderbuffer/enderbuffer"));
         TextureAtlasSprite spriteActive = RenderUtil.getSprite(CrystalMod.resource("blocks/machine/enderbuffer/enderbuffer_active"));
@@ -133,23 +139,28 @@ public class ModelEnderBuffer extends DelegatingDynamicItemAndBlockModel
         return list;
     }
     
-    public boolean isAmbientOcclusion() {
+    @Override
+	public boolean isAmbientOcclusion() {
         return false;
     }
     
-    public boolean isGui3d() {
+    @Override
+	public boolean isGui3d() {
         return true;
     }
     
-    public boolean isBuiltInRenderer() {
+    @Override
+	public boolean isBuiltInRenderer() {
         return false;
     }
     
-    public TextureAtlasSprite getParticleTexture() {
+    @Override
+	public TextureAtlasSprite getParticleTexture() {
         return RenderUtil.getTexture(Blocks.IRON_BLOCK.getDefaultState());
     }
     
-    public ItemCameraTransforms getItemCameraTransforms() {
+    @Override
+	public ItemCameraTransforms getItemCameraTransforms() {
         return super.getItemCameraTransforms();
     }
     

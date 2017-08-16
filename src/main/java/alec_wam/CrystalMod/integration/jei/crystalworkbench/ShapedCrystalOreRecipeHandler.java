@@ -7,10 +7,8 @@ import alec_wam.CrystalMod.integration.jei.CrystalModRecipeUids;
 import mezz.jei.api.IJeiHelpers;
 import mezz.jei.api.recipe.IRecipeHandler;
 import mezz.jei.api.recipe.IRecipeWrapper;
-import mezz.jei.api.recipe.VanillaRecipeCategoryUid;
 import mezz.jei.util.ErrorUtil;
 import mezz.jei.util.Log;
-import net.minecraftforge.oredict.ShapedOreRecipe;
 
 public class ShapedCrystalOreRecipeHandler implements IRecipeHandler<ShapedOreCrystalRecipe> {
 	private final IJeiHelpers jeiHelpers;
@@ -43,7 +41,7 @@ public class ShapedCrystalOreRecipeHandler implements IRecipeHandler<ShapedOreCr
 		}
 		int inputCount = 0;
 		for (Object input : recipe.getInput()) {
-			if (input instanceof List && ((List) input).isEmpty()) {
+			if (input instanceof List && ((List<?>) input).isEmpty()) {
 				// missing items for an oreDict name. This is normal behavior, but the recipe is invalid.
 				return false;
 			}

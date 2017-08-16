@@ -1,29 +1,8 @@
 package alec_wam.CrystalMod.client.model;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import javax.vecmath.Matrix4f;
-
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
-import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.block.model.IBakedModel;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.client.renderer.vertex.VertexFormat;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.world.World;
-import net.minecraftforge.common.model.TRSRTransformation;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -31,17 +10,23 @@ import com.google.common.collect.Lists;
 
 import alec_wam.CrystalMod.client.model.dynamic.DynamicItemAndBlockModel;
 import alec_wam.CrystalMod.client.model.dynamic.ICustomItemRenderer;
-import alec_wam.CrystalMod.util.ModLogger;
 import alec_wam.CrystalMod.util.client.RenderUtil;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.renderer.block.model.IBakedModel;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.world.World;
+import net.minecraftforge.common.model.TRSRTransformation;
 
 public class BakedCustomItemModel extends DynamicItemAndBlockModel
 {
 	private IBakedModel baseModel;
 	private ICustomItemRenderer render;
-	private ItemStack stack;
-	
-	private TransformType prevTransform;
-	
 	public BakedCustomItemModel(IBakedModel model, ICustomItemRenderer render)
 	{
 		super(false, true);
@@ -54,7 +39,6 @@ public class BakedCustomItemModel extends DynamicItemAndBlockModel
 		super(false, true);
 		baseModel = model;
 		this.render = render;
-		stack = s;
 	}
 	
 	@Override

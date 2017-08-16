@@ -3,6 +3,11 @@ package alec_wam.CrystalMod.tiles.machine.mobGrinder;
 import java.awt.Color;
 import java.util.List;
 
+import com.google.common.collect.Lists;
+
+import alec_wam.CrystalMod.tiles.machine.ContainerNull;
+import alec_wam.CrystalMod.util.Lang;
+import alec_wam.CrystalMod.util.client.RenderUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
@@ -10,11 +15,6 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
-import alec_wam.CrystalMod.tiles.machine.ContainerNull;
-import alec_wam.CrystalMod.util.Lang;
-import alec_wam.CrystalMod.util.client.RenderUtil;
-
-import com.google.common.collect.Lists;
 
 public class GuiMobGrinder extends GuiContainer {
 
@@ -24,7 +24,8 @@ public class GuiMobGrinder extends GuiContainer {
 		this.grinder = grinder;
 	}
 	
-    public void drawGuiContainerForegroundLayer(int par1, int par2){
+    @Override
+	public void drawGuiContainerForegroundLayer(int par1, int par2){
 		super.drawGuiContainerForegroundLayer(par1, par2);
 		
 		int cu = grinder.energyStorage.getCEnergyStored(); int maxCU = grinder.energyStorage.getMaxCEnergyStored();
@@ -58,6 +59,7 @@ public class GuiMobGrinder extends GuiContainer {
 			RenderHelper.enableGUIStandardItemLighting();
 		}
 	}
+	@Override
 	public void drawGuiContainerBackgroundLayer(float var1, int var2,int var3) {
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		Minecraft.getMinecraft().getTextureManager().bindTexture(new ResourceLocation("crystalmod:textures/gui/machine/mobGrinder.png"));

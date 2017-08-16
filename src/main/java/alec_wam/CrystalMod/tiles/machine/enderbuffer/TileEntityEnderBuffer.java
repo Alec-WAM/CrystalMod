@@ -95,6 +95,7 @@ public class TileEntityEnderBuffer extends TileEntityMod implements IEnderBuffer
 		if(!getWorld().isRemote)CrystalModNetwork.sendToAllAround(new PacketTileMessage(getPos(), "UpdateRedstone", nbt), this);
 	}
 	
+	@Override
 	public void update(){
 		super.update();
 		if(this.getWorld().isRemote){
@@ -229,6 +230,7 @@ public class TileEntityEnderBuffer extends TileEntityMod implements IEnderBuffer
 		}
     }
 	
+	@Override
 	public void writeCustomNBT(NBTTagCompound nbt){
 		super.writeCustomNBT(nbt);
 		nbt.setInteger("Code", code);
@@ -245,7 +247,8 @@ public class TileEntityEnderBuffer extends TileEntityMod implements IEnderBuffer
 		nbt.setByte("RSMode.Inv", (byte)this.invRSMode.ordinal());
 	}
 	
-    public void readCustomNBT(NBTTagCompound nbt){
+    @Override
+	public void readCustomNBT(NBTTagCompound nbt){
     	super.readCustomNBT(nbt);
     	if(nbt.hasKey("Code"))this.code = nbt.getInteger("Code");
     	boundToPlayer = PlayerUtil.uuidFromNBT(nbt);
@@ -487,7 +490,8 @@ public class TileEntityEnderBuffer extends TileEntityMod implements IEnderBuffer
             		return getBuffer().tank;
             	}
             	
-            	public int fill(FluidStack resource, boolean doFill) {
+            	@Override
+				public int fill(FluidStack resource, boolean doFill) {
                     if (resource == null || getTank() == null) {
                         return 0;
                     }
@@ -511,12 +515,14 @@ public class TileEntityEnderBuffer extends TileEntityMod implements IEnderBuffer
                     return totalUsed;
                 }
 
-                public FluidStack drain(int maxEmpty, boolean doDrain) {
+                @Override
+				public FluidStack drain(int maxEmpty, boolean doDrain) {
                 	FluidStack output = getTank().drain(maxEmpty, doDrain);
                     return output;
                 }
 
-                public FluidStack drain(FluidStack resource, boolean doDrain) {
+                @Override
+				public FluidStack drain(FluidStack resource, boolean doDrain) {
                     if (resource == null) {
                         return null;
                     }

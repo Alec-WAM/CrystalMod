@@ -16,6 +16,7 @@ public class SlotBackpack extends Slot {
 		super(inventoryIn, index, xPosition, yPosition);
 	}
 	
+	@Override
 	public boolean isItemValid(ItemStack stack){
 		if(!ItemStackTools.isValid(stack))return false;
 		boolean isBackpack = (stack.getItem() instanceof ItemBackpackBase);

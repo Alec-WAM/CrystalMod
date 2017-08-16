@@ -47,12 +47,14 @@ public class ItemMachineFrame extends Item implements ICustomModel {
 		ModItems.registerItem(this, "machineframe");
 	}
 	
+	@Override
 	@SideOnly(Side.CLIENT)
     public void initModel() {
 		ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation("crystalmod:machineframe", "inventory"));
 		ModelLoader.setCustomModelResourceLocation(this, 1, new ModelResourceLocation("crystalmod:machineframe", "ender"));
     }
 	
+	@Override
 	public String getUnlocalizedName(ItemStack stack)
     {
         int i = stack.getMetadata();

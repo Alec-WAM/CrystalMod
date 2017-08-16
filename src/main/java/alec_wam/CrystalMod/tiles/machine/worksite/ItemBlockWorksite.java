@@ -4,15 +4,14 @@ import java.util.Locale;
 
 import alec_wam.CrystalMod.tiles.machine.worksite.InventorySided.IRotatableTile;
 import alec_wam.CrystalMod.util.BlockUtil;
-import alec_wam.CrystalMod.util.Util;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class ItemBlockWorksite extends ItemBlock {
@@ -23,7 +22,8 @@ public class ItemBlockWorksite extends ItemBlock {
     this.setMaxDamage(0);
   }
   
-  public int getMetadata(int damage)
+  @Override
+public int getMetadata(int damage)
   {
       return damage;
   }
@@ -53,7 +53,8 @@ public class ItemBlockWorksite extends ItemBlock {
     return true;
   }
   
-  public String getUnlocalizedName(ItemStack stack)
+  @Override
+public String getUnlocalizedName(ItemStack stack)
   {
 	  @SuppressWarnings("deprecation")
 	  IBlockState state = block.getStateFromMeta(stack.getMetadata());

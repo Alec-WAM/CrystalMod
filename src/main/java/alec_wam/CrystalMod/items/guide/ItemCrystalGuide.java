@@ -9,14 +9,9 @@ import alec_wam.CrystalMod.capability.ExtendedPlayerProvider;
 import alec_wam.CrystalMod.handler.GuiHandler;
 import alec_wam.CrystalMod.items.IEnumMetaItem;
 import alec_wam.CrystalMod.items.ModItems;
-import alec_wam.CrystalMod.items.guide.GuidePages.LookupResult;
-import alec_wam.CrystalMod.util.EntityUtil;
-import alec_wam.CrystalMod.util.ItemStackTools;
-import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.ModLogger;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -27,7 +22,6 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
@@ -43,6 +37,7 @@ public class ItemCrystalGuide extends Item implements ICustomModel {
 		ModItems.registerItem(this, "guide");
 	}
 	
+	@Override
 	@SideOnly(Side.CLIENT)
     public void initModel() {
         for(GuideType type : GuideType.values()){
@@ -114,6 +109,7 @@ public class ItemCrystalGuide extends Item implements ICustomModel {
 		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, playerIn.getHeldItem(hand));
     }
 	
+	@Override
 	@SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced)
     {
@@ -134,7 +130,8 @@ public class ItemCrystalGuide extends Item implements ICustomModel {
             this.unlocalizedName = name;
         }
 
-        public int getMetadata()
+        @Override
+		public int getMetadata()
         {
             return this.metadata;
         }
@@ -144,7 +141,8 @@ public class ItemCrystalGuide extends Item implements ICustomModel {
             return this.unlocalizedName;
         }
 
-        public String toString()
+        @Override
+		public String toString()
         {
             return this.unlocalizedName;
         }
@@ -159,7 +157,8 @@ public class ItemCrystalGuide extends Item implements ICustomModel {
             return METADATA_LOOKUP[metadata];
         }
 
-        public String getName()
+        @Override
+		public String getName()
         {
             return this.unlocalizedName;
         }

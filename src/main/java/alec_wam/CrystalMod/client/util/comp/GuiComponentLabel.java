@@ -1,11 +1,10 @@
 package alec_wam.CrystalMod.client.util.comp;
 
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.ScaledResolution;
-
-
-import org.lwjgl.opengl.GL11;
 
 public class GuiComponentLabel extends BaseComponent {
 
@@ -49,12 +48,11 @@ public class GuiComponentLabel extends BaseComponent {
 		this.formattedText = new String[10];
 	}
 
-	@SuppressWarnings("unchecked")
 	private void compileFormattedText(FontRenderer fr) {
 		// if (textDelta != null && textDelta.equals(getText())) return;
 		textDelta = getText();
 		if (textDelta == null) return;
-		formattedText = (String[])fr.listFormattedStringToWidth(textDelta, getMaxWidth()).toArray(formattedText);
+		formattedText = fr.listFormattedStringToWidth(textDelta, getMaxWidth()).toArray(formattedText);
 	}
 
 	@Override

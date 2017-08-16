@@ -28,6 +28,7 @@ public ElementFluidScaled setFluid(FluidStack fluid)
   return this;
 }
 
+@Override
 public void drawBackground(int x, int y, float f)
 {
   if (fluid == null || fluid.getFluid() == null) {
@@ -39,8 +40,8 @@ public void drawBackground(int x, int y, float f)
       return;
     }
 
-    int renderAmount = (int) Math.max(this.sizeY, 1);
-    int posY = (int) (this.posY + this.sizeY - renderAmount);
+    int renderAmount = Math.max(this.sizeY, 1);
+    int posY = this.posY + this.sizeY - renderAmount;
 
     Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
     int color = fluid.getFluid().getColor(fluid);
@@ -49,10 +50,10 @@ public void drawBackground(int x, int y, float f)
     GlStateManager.enableBlend();    
     for (int i = 0; i < this.sizeX; i += 16) {
       for (int j = 0; j < renderAmount; j += 16) {
-        int drawWidth = (int) Math.min(this.sizeX - i, 16);
+        int drawWidth = Math.min(this.sizeX - i, 16);
         int drawHeight = Math.min(renderAmount - j, 16);
 
-        int drawX = (int) (this.posX + i);
+        int drawX = this.posX + i;
         int drawY = posY + j;
 
         double minU = icon.getMinU();
@@ -73,6 +74,7 @@ public void drawBackground(int x, int y, float f)
     //GlStateManager.disableBlend();
 }
 
+@Override
 public void drawForeground(int x, int y) {
 	if(texture == null)return;
     GlStateManager.color(1, 1, 1, 1);

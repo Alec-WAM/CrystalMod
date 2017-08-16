@@ -1,28 +1,14 @@
 package alec_wam.CrystalMod.tiles.pipes.estorage;
 
-import io.netty.handler.codec.EncoderException;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompressedStreamTools;
-import net.minecraft.nbt.NBTSizeTracker;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.items.ItemHandlerHelper;
-import net.minecraftforge.oredict.OreDictionary;
-
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 
-import alec_wam.CrystalMod.api.FluidStackList;
 import alec_wam.CrystalMod.api.ItemStackList;
 import alec_wam.CrystalMod.api.estorage.ICraftingTask;
 import alec_wam.CrystalMod.api.estorage.IInsertListener;
@@ -31,13 +17,19 @@ import alec_wam.CrystalMod.api.estorage.INetworkInventory;
 import alec_wam.CrystalMod.api.estorage.INetworkInventory.ExtractFilter;
 import alec_wam.CrystalMod.network.CompressedDataInput;
 import alec_wam.CrystalMod.network.CompressedDataOutput;
-import alec_wam.CrystalMod.tiles.pipes.estorage.FluidStorage.FluidStackData;
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.task.CraftingProcessBase;
-import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.task.CraftingProcessExternal;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.Lang;
-import alec_wam.CrystalMod.util.ModLogger;
+import io.netty.handler.codec.EncoderException;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompressedStreamTools;
+import net.minecraft.nbt.NBTSizeTracker;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.items.ItemHandlerHelper;
+import net.minecraftforge.oredict.OreDictionary;
 
 public class ItemStorage {
 

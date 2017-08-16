@@ -41,7 +41,8 @@ public class TilePatternEncoder extends TileEntityMod implements IMessageHandler
 	
     protected boolean isOreDict;
     
-    public void writeCustomNBT(NBTTagCompound nbt){
+    @Override
+	public void writeCustomNBT(NBTTagCompound nbt){
     	super.writeCustomNBT(nbt);
     	nbt.setBoolean("isOreDict", isOreDict);
     	NBTTagList tagList = new NBTTagList();
@@ -61,7 +62,8 @@ public class TilePatternEncoder extends TileEntityMod implements IMessageHandler
         nbt.setTag("Inventory", tagList);
     }
     
-    public void readCustomNBT(NBTTagCompound nbt){
+    @Override
+	public void readCustomNBT(NBTTagCompound nbt){
     	super.readCustomNBT(nbt);
     	this.isOreDict = nbt.getBoolean("isOreDict");
     	NBTTagList tagList = nbt.getTagList("Inventory", Constants.NBT.TAG_COMPOUND);

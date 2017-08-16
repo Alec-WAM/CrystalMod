@@ -7,7 +7,6 @@ import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 
@@ -21,7 +20,7 @@ public class RenderDagger extends Render<EntityDagger> {
 
 	@Override
 	public void doRender(EntityDagger entity, double x, double y, double z, float entityYaw, float partialTicks) {
-		ItemStack item = entity.getArrowStack();
+		entity.getArrowStack();
 
 		GlStateManager.pushMatrix();
 		//GlStateManager.enableRescaleNormal();
@@ -32,7 +31,7 @@ public class RenderDagger extends Render<EntityDagger> {
         GlStateManager.scale(0.5F, 0.5F, 0.5F);
 
 
-		float f11 = (float) entity.arrowShake - partialTicks;
+		float f11 = entity.arrowShake - partialTicks;
 		if(f11 > 0.0F) {
 			float f12 = -MathHelper.sin(f11 * 3.0F) * f11;
 			GlStateManager.rotate(f12, 0.0F, 0.0F, 1.0F);

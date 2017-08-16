@@ -1,5 +1,9 @@
 package alec_wam.CrystalMod.tiles.machine.power.engine.furnace;
 
+import alec_wam.CrystalMod.api.energy.CEnergyStorage;
+import alec_wam.CrystalMod.tiles.machine.power.engine.TileEntityEngineBase;
+import alec_wam.CrystalMod.util.ItemStackTools;
+import alec_wam.CrystalMod.util.ItemUtil;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.ISidedInventory;
@@ -9,10 +13,6 @@ import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import alec_wam.CrystalMod.api.energy.CEnergyStorage;
-import alec_wam.CrystalMod.tiles.machine.power.engine.TileEntityEngineBase;
-import alec_wam.CrystalMod.util.ItemStackTools;
-import alec_wam.CrystalMod.util.ItemUtil;
 
 public class TileEntityEngineFurnace extends TileEntityEngineBase implements ISidedInventory {
 
@@ -31,11 +31,13 @@ public class TileEntityEngineFurnace extends TileEntityEngineBase implements ISi
 		return new CEnergyStorage(60000*multi, 30*multi);
 	}
 	
+	@Override
 	public void writeCustomNBT(NBTTagCompound nbt){
 		super.writeCustomNBT(nbt);
 		ItemUtil.writeInventoryToNBT(inventory, nbt);
 	}
 	
+	@Override
 	public void readCustomNBT(NBTTagCompound nbt){
 		super.readCustomNBT(nbt);
 		ItemUtil.readInventoryFromNBT(inventory, nbt);
@@ -68,10 +70,12 @@ public class TileEntityEngineFurnace extends TileEntityEngineBase implements ISi
 	    return amt;
 	}
 	
+	@Override
 	public void update(){
 		super.update();
 	}
 	
+	@Override
 	public void refuel(){
 		ItemStack stack = getStackInSlot(0);
 		int amt = (ItemStackTools.isEmpty(stack) || (getItemEnergyValue(stack) == 0)) ? 0 : Math.min(multi, ItemStackTools.getStackSize(stack));
@@ -82,6 +86,7 @@ public class TileEntityEngineFurnace extends TileEntityEngineBase implements ISi
 		}
 	}
 	
+	@Override
 	public int getFuelValue(){
 		return 30;
 	}
@@ -171,7 +176,7 @@ public class TileEntityEngineFurnace extends TileEntityEngineBase implements ISi
 	    }
 
 	    return
-	    	player.getDistanceSq((double) pos.getX() + 0.5D, (double) pos.getY() + 0.5D, (double) pos.getZ() + 0.5D)
+	    	player.getDistanceSq(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D)
 	        <= 64D;
 	}
 

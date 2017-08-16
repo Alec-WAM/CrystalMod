@@ -60,6 +60,7 @@ public class CrystalMod {
 			super(label);
 		}
 		
+		@Override
 		@SideOnly(Side.CLIENT)
         public void displayAllRelevantItems(final NonNullList<ItemStack> list) {
             final NonNullList<ItemStack> newList = NonNullList.create();

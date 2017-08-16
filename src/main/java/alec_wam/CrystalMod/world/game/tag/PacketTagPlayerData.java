@@ -1,14 +1,13 @@
 package alec_wam.CrystalMod.world.game.tag;
 
-import io.netty.buffer.ByteBuf;
-
 import java.io.IOException;
 import java.util.List;
 
-import net.minecraft.client.network.NetHandlerPlayClient;
-import net.minecraft.network.NetHandlerPlayServer;
 import alec_wam.CrystalMod.network.AbstractPacketThreadsafe;
 import alec_wam.CrystalMod.world.game.tag.TagManager.PlayerData;
+import io.netty.buffer.ByteBuf;
+import net.minecraft.client.network.NetHandlerPlayClient;
+import net.minecraft.network.NetHandlerPlayServer;
 
 public class PacketTagPlayerData extends AbstractPacketThreadsafe {
 

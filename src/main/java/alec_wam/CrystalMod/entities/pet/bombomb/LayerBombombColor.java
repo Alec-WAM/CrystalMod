@@ -19,7 +19,8 @@ public class LayerBombombColor implements LayerRenderer<EntityBombomb>
         this.bombombRenderer = bombombRenderer;
     }
 
-    public void doRenderLayer(EntityBombomb entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale)
+    @Override
+	public void doRenderLayer(EntityBombomb entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale)
     {
         if (!entitylivingbaseIn.isInvisible())
         {
@@ -32,7 +33,8 @@ public class LayerBombombColor implements LayerRenderer<EntityBombomb>
         }
     }
 
-    public boolean shouldCombineTextures()
+    @Override
+	public boolean shouldCombineTextures()
     {
         return true;
     }

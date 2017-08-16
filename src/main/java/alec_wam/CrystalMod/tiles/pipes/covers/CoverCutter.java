@@ -367,8 +367,8 @@ public class CoverCutter
         }
         
         public void draw(final CustomBakedQuad quad, final int i) {
-            quad.vertices[i].vec.set((double)this.x, (double)this.y, (double)this.z);
-            quad.vertices[i].uv.set((double)this.u, (double)this.v);
+            quad.vertices[i].vec.set(this.x, this.y, this.z);
+            quad.vertices[i].uv.set(this.u, this.v);
             quad.colours[i].set(this.color);
             quad.normals[i].set(this.normal);
             quad.lightMaps[i] = this.brightness;

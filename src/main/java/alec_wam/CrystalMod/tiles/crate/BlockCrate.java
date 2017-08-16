@@ -2,8 +2,6 @@ package alec_wam.CrystalMod.tiles.crate;
 
 import java.util.Locale;
 
-import javax.annotation.Nullable;
-
 import alec_wam.CrystalMod.Config;
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.EnumBlock;
@@ -108,6 +106,7 @@ public class BlockCrate extends EnumBlock<BlockCrate.CrateType> implements ICust
 		return new TileCrate(meta);
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Override
 	public float getPlayerRelativeBlockHardness(IBlockState state, EntityPlayer player, World worldIn, BlockPos pos)
     {
@@ -135,6 +134,7 @@ public class BlockCrate extends EnumBlock<BlockCrate.CrateType> implements ICust
         return super.getPlayerRelativeBlockHardness(state, player, worldIn, pos);
     }
 	
+	@SuppressWarnings("deprecation")
 	@Override
 	public float getBlockHardness(IBlockState state, World world, BlockPos pos) {
 		TileEntity tile = world.getTileEntity(pos);

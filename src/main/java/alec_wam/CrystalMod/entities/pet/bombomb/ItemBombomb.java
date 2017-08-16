@@ -1,7 +1,6 @@
 package alec_wam.CrystalMod.entities.pet.bombomb;
 
 import java.util.List;
-import java.util.UUID;
 
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.ICustomModel;
@@ -13,8 +12,6 @@ import alec_wam.CrystalMod.util.ProfileUtil;
 import alec_wam.CrystalMod.util.UUIDUtils;
 import net.minecraft.block.BlockFence;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
@@ -93,7 +90,7 @@ public class ItemBombomb extends Item implements ICustomModel {
             
             if (bombomb != null)
             {
-            	bombomb.setPosition((double)pos.getX() + 0.5D, (double)pos.getY() + d0, (double)pos.getZ() + 0.5D);
+            	bombomb.setPosition(pos.getX() + 0.5D, pos.getY() + d0, pos.getZ() + 0.5D);
             	bombomb.setTamed(true);
             	bombomb.setOwnerId(EntityPlayer.getUUID(playerIn.getGameProfile()));
             	bombomb.loadFromItem(playerIn, stack);

@@ -1,25 +1,33 @@
 package alec_wam.CrystalMod.tiles.machine.power.engine;
 
-import net.minecraft.client.renderer.texture.*;
-import net.minecraft.client.*;
-import net.minecraft.util.*;
-import net.minecraft.world.World;
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 import org.lwjgl.util.vector.Vector3f;
 
-import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.blocks.BlockCrystalIngot.CrystalIngotBlockType;
+import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.client.model.dynamic.DelegatingDynamicItemAndBlockModel;
 import alec_wam.CrystalMod.tiles.pipes.covers.CoverUtil;
 import alec_wam.CrystalMod.util.client.RenderUtil;
-import net.minecraft.client.renderer.block.model.*;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.*;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.renderer.block.model.BlockFaceUV;
+import net.minecraft.client.renderer.block.model.BlockPartFace;
+import net.minecraft.client.renderer.block.model.BlockPartRotation;
+import net.minecraft.client.renderer.block.model.FaceBakery;
+import net.minecraft.client.renderer.block.model.IBakedModel;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
+import net.minecraft.client.renderer.block.model.ModelRotation;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.world.World;
 
 public class ModelEngine extends DelegatingDynamicItemAndBlockModel 
 {
@@ -47,7 +55,8 @@ public class ModelEngine extends DelegatingDynamicItemAndBlockModel
         return new ArrayList<BakedQuad>();
     }
     
-    public List<BakedQuad> getGeneralQuads() {
+    @Override
+	public List<BakedQuad> getGeneralQuads() {
         final List<BakedQuad> list = new ArrayList<BakedQuad>();
         BlockFaceUV uv = new BlockFaceUV(new float[] { 0.0f, 0.0f, 16.0f, 16.0f }, 0);
         BlockFaceUV uvSide = new BlockFaceUV(new float[] { 0.0f, 0.0f, 16.0f, 16.0f }, 0);
@@ -165,23 +174,28 @@ public class ModelEngine extends DelegatingDynamicItemAndBlockModel
         return list;
     }
     
-    public boolean isAmbientOcclusion() {
+    @Override
+	public boolean isAmbientOcclusion() {
         return false;
     }
     
-    public boolean isGui3d() {
+    @Override
+	public boolean isGui3d() {
         return true;
     }
     
-    public boolean isBuiltInRenderer() {
+    @Override
+	public boolean isBuiltInRenderer() {
         return false;
     }
     
-    public TextureAtlasSprite getParticleTexture() {
+    @Override
+	public TextureAtlasSprite getParticleTexture() {
         return RenderUtil.getTexture(ModBlocks.crystalIngot.getStateFromMeta(CrystalIngotBlockType.DARKIRON.getMeta()));
     }
     
-    public ItemCameraTransforms getItemCameraTransforms() {
+    @Override
+	public ItemCameraTransforms getItemCameraTransforms() {
         return ItemCameraTransforms.DEFAULT;
     }
     

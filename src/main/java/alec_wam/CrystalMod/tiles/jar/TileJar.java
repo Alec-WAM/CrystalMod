@@ -20,6 +20,7 @@ public class TileJar extends TileEntityModStatic implements INBTDrop {
 	
 	private boolean shulker;
 	
+	@Override
 	public void writeCustomNBT(NBTTagCompound nbt){
 		super.writeCustomNBT(nbt);
 		if(potion != PotionTypes.EMPTY){
@@ -32,6 +33,7 @@ public class TileJar extends TileEntityModStatic implements INBTDrop {
 		}
 	}
 	
+	@Override
 	public void writeToStack(NBTTagCompound nbt){
 		if(potion != PotionTypes.EMPTY){
 			nbt.setString("Potion", potion.getRegistryName().toString());
@@ -43,6 +45,7 @@ public class TileJar extends TileEntityModStatic implements INBTDrop {
 		}
 	}
 	
+	@Override
 	public void readCustomNBT(NBTTagCompound nbt){
 		super.readCustomNBT(nbt);
 		potion = PotionUtils.getPotionTypeFromNBT(nbt);
@@ -57,6 +60,7 @@ public class TileJar extends TileEntityModStatic implements INBTDrop {
 		}
 	}
 	
+	@Override
 	public void readFromStack(NBTTagCompound nbt){
 		readCustomNBT(nbt);
 	}

@@ -8,26 +8,20 @@ import org.lwjgl.input.Mouse;
 
 import com.google.common.collect.Lists;
 
-import alec_wam.CrystalMod.client.util.ButtonSprite;
-import alec_wam.CrystalMod.client.util.GuiButtonSprite;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.packets.PacketTileMessage;
 import alec_wam.CrystalMod.tiles.machine.ContainerNull;
 import alec_wam.CrystalMod.tiles.pipes.estorage.client.IGuiScreen;
 import alec_wam.CrystalMod.tiles.pipes.estorage.client.VScrollbar;
-import alec_wam.CrystalMod.util.client.Scrollbar;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.audio.SoundRegistry;
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvent;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 
 public class GuiSoundMuffler extends GuiContainer implements IGuiScreen{

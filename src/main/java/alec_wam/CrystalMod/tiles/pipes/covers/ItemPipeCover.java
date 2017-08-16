@@ -14,7 +14,6 @@ import alec_wam.CrystalMod.tiles.pipes.TileEntityPipe;
 import alec_wam.CrystalMod.tiles.pipes.covers.CoverUtil.CoverData;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemStackTools;
-import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.Util;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -50,7 +49,8 @@ public class ItemPipeCover extends Item implements ICustomModel {
     public void initModel(){
     	ModItems.initBasicModel(this);
     	ClientProxy.registerCustomModel(new CustomBakedModel(new ModelResourceLocation(getRegistryName(), "inventory"), ModelCover.INSTANCE){
-    		public void preModelRegister(){
+    		@Override
+			public void preModelRegister(){
     			ModelCover.map.clear();
     		}
     	});
@@ -163,7 +163,8 @@ public class ItemPipeCover extends Item implements ICustomModel {
     	return false;
     }
     
-    public static boolean isValidForCover(IBlockState state){
+    @SuppressWarnings("deprecation")
+	public static boolean isValidForCover(IBlockState state){
     	if (state.getBlock().hasTileEntity() || state.getBlock().hasTileEntity(state)) return false;
         if(!state.isFullCube()) return false;        
     	return true;
@@ -186,7 +187,8 @@ public class ItemPipeCover extends Item implements ICustomModel {
         }
     }
     
-    public static ItemStack getCoverFromItem(ItemStack stack){
+    @SuppressWarnings("deprecation")
+	public static ItemStack getCoverFromItem(ItemStack stack){
     	Item item = stack.getItem();
     	if(item instanceof ItemBlock){
     		ItemBlock iblock = (ItemBlock)stack.getItem();

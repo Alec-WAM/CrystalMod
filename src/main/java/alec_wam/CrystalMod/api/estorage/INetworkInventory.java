@@ -1,16 +1,10 @@
 package alec_wam.CrystalMod.api.estorage;
 
-import java.util.List;
-
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.FluidStack;
 import alec_wam.CrystalMod.api.FluidStackList;
 import alec_wam.CrystalMod.api.ItemStackList;
 import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetwork;
-import alec_wam.CrystalMod.tiles.pipes.estorage.FluidStorage;
-import alec_wam.CrystalMod.tiles.pipes.estorage.FluidStorage.FluidStackData;
-import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage;
-import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage.ItemStackData;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidStack;
 
 public interface INetworkInventory {
 

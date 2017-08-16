@@ -29,6 +29,7 @@ public class ItemWolfArmor extends Item implements IWolfArmor, ICustomModel {
 		ModItems.registerItem(this, "wolfarmor");
 	}
 	
+	@Override
 	@SideOnly(Side.CLIENT)
     public void initModel() {
 		final Map<WolfArmor, ModelResourceLocation> models = Maps.newHashMap();

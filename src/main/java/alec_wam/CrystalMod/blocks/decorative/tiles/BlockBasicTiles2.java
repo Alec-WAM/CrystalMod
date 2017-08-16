@@ -6,26 +6,21 @@ import javax.annotation.Nullable;
 
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.EnumBlock;
-import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.blocks.EnumBlock.IEnumMeta;
-import alec_wam.CrystalMod.blocks.decorative.tiles.BlockCrystalTiles.CrystalTileType;
-import alec_wam.CrystalMod.util.ItemStackTools;
-import alec_wam.CrystalMod.util.ModLogger;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
@@ -45,10 +40,21 @@ public class BlockBasicTiles2 extends EnumBlock<BlockBasicTiles2.BasicTileType2>
 		this.setDefaultState(this.blockState.getBaseState().withProperty(TYPE, BasicTileType2.LOG_OAK));
 	}
 	
+	@Override
 	@SideOnly(Side.CLIENT)
 	public void initModel() {
 		for(BasicTileType2 type : BasicTileType2.values())
 	        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), type.getMeta(), new ModelResourceLocation(this.getRegistryName(), TYPE.getName()+"="+type.getName()));
+	}
+	
+	@SideOnly(Side.CLIENT)
+	@Override
+	public void getSubBlocks(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> list) {
+		for(BasicTileType2 type : BasicTileType2.values()) {
+			if(type !=BasicTileType2.LAMP_ON){
+				list.add(new ItemStack(this, 1, type.getMeta()));
+			}
+		}
 	}
 	
 	@Override
@@ -63,6 +69,7 @@ public class BlockBasicTiles2 extends EnumBlock<BlockBasicTiles2.BasicTileType2>
 		return Material.ROCK;
 	}
     
+	@SuppressWarnings("deprecation")
 	@Override
 	public float getBlockHardness(IBlockState blockState, World worldIn, BlockPos pos)
     {
@@ -131,6 +138,7 @@ public class BlockBasicTiles2 extends EnumBlock<BlockBasicTiles2.BasicTileType2>
 		return super.getFireSpreadSpeed(world, pos, face);
     }
 	
+	@SuppressWarnings("deprecation")
 	@Override
 	public int getLightValue(IBlockState state)
     {

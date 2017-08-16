@@ -1,12 +1,13 @@
 package alec_wam.CrystalMod.tiles.machine.power.battery;
 
-import net.minecraft.client.renderer.texture.*;
-import net.minecraft.client.*;
-import net.minecraft.util.*;
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import org.lwjgl.util.vector.Vector3f;
+
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.ModBlocks;
@@ -15,17 +16,22 @@ import alec_wam.CrystalMod.tiles.TileEntityIOSides.IOType;
 import alec_wam.CrystalMod.tiles.machine.power.battery.BlockBattery.BatteryType;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.client.RenderUtil;
-
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-
-import net.minecraft.client.renderer.block.model.*;
-import net.minecraft.block.state.*;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.renderer.block.model.BlockFaceUV;
+import net.minecraft.client.renderer.block.model.BlockPartFace;
+import net.minecraft.client.renderer.block.model.BlockPartRotation;
+import net.minecraft.client.renderer.block.model.FaceBakery;
+import net.minecraft.client.renderer.block.model.IBakedModel;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
+import net.minecraft.client.renderer.block.model.ModelRotation;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 public class ModelBattery extends DelegatingDynamicItemAndBlockModel 
 {
@@ -54,7 +60,8 @@ public class ModelBattery extends DelegatingDynamicItemAndBlockModel
         return new ArrayList<BakedQuad>();
     }
     
-    public List<BakedQuad> getGeneralQuads() {
+    @Override
+	public List<BakedQuad> getGeneralQuads() {
         final List<BakedQuad> list = new ArrayList<BakedQuad>();
         
         //if(state !=null && state.pos !=BlockPos.ORIGIN)return list;
@@ -368,23 +375,28 @@ public class ModelBattery extends DelegatingDynamicItemAndBlockModel
 		return list;
     }
     
-    public boolean isAmbientOcclusion() {
+    @Override
+	public boolean isAmbientOcclusion() {
         return false;
     }
     
-    public boolean isGui3d() {
+    @Override
+	public boolean isGui3d() {
         return true;
     }
     
-    public boolean isBuiltInRenderer() {
+    @Override
+	public boolean isBuiltInRenderer() {
         return false;
     }
     
-    public TextureAtlasSprite getParticleTexture() {
+    @Override
+	public TextureAtlasSprite getParticleTexture() {
         return RenderUtil.getTexture(Blocks.IRON_BLOCK.getDefaultState());
     }
     
-    public ItemCameraTransforms getItemCameraTransforms() {
+    @Override
+	public ItemCameraTransforms getItemCameraTransforms() {
         return ItemCameraTransforms.DEFAULT;
     }
     

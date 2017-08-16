@@ -1,6 +1,5 @@
 package alec_wam.CrystalMod.tiles.workbench;
 
-import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.packets.InventoryCraftingSyncPacket;
 import alec_wam.CrystalMod.util.ItemStackTools;
@@ -30,11 +29,13 @@ public class InventoryCraftingPersistent extends InventoryCrafting {
     this.eventHandler = eventHandler;
   }
 
-  public int getSizeInventory() {
+  @Override
+public int getSizeInventory() {
     return this.length;
   }
 
-  public ItemStack getStackInSlot(int index) {
+  @Override
+public ItemStack getStackInSlot(int index) {
     return index >= this.getSizeInventory() ? ItemStackTools.getEmptyStack() : this.parent.getStackInSlot(index);
   }
 
@@ -42,11 +43,13 @@ public class InventoryCraftingPersistent extends InventoryCrafting {
     return "container.crafting";
   }
 
-  public boolean hasCustomName() {
+  @Override
+public boolean hasCustomName() {
     return false;
   }
 
-  public ItemStack decrStackSize(int index, int count) {
+  @Override
+public ItemStack decrStackSize(int index, int count) {
     if(!ItemStackTools.isNullStack(this.getStackInSlot(index))) {
       ItemStack itemstack;
 
@@ -72,7 +75,8 @@ public class InventoryCraftingPersistent extends InventoryCrafting {
     }
   }
 
-  public void setInventorySlotContents(int index, ItemStack stack) {
+  @Override
+public void setInventorySlotContents(int index, ItemStack stack) {
     this.parent.setInventorySlotContents(index, stack);
     this.eventHandler.onCraftMatrixChanged(this);
   }
@@ -85,7 +89,8 @@ public class InventoryCraftingPersistent extends InventoryCrafting {
     	CrystalModNetwork.sendToServer(new InventoryCraftingSyncPacket());
   }
 
-  public void clear() {
+  @Override
+public void clear() {
     // inventory can't clear the tile container
   }
 }

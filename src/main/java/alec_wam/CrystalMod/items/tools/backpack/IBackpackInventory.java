@@ -12,6 +12,7 @@ public interface IBackpackInventory extends IBackpack {
 	public InventoryBackpack getInventory(EntityPlayer player, ItemStack backpack);
 	public InventoryBackpack getInventory(ItemStack backpack);
 	
+	@Override
 	public default ICapabilityProvider initCapabilities(ItemStack stack, NBTTagCompound nbt) {
 		return ItemStackTools.isValid(stack) ? new BackpackInventoryHandler(stack, this) : null;
 	}

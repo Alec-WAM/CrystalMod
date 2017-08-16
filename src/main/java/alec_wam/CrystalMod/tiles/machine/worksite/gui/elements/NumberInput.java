@@ -159,6 +159,7 @@ public class NumberInput extends Text {
 		}
 	}
 
+	@Override
 	protected void onEnterPressed() {
 		this.setText(getText());
 	}

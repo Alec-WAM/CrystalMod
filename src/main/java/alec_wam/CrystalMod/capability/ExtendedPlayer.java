@@ -47,6 +47,7 @@ public class ExtendedPlayer {
 	private int maxFlashTime;
 	
 	private WatchableInteger radiationTime = new WatchableInteger();
+	public int redstoneCoreDelay;
 	
 	public ExtendedPlayer() {
 	}

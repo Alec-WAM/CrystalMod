@@ -1,16 +1,14 @@
 package alec_wam.CrystalMod.tiles.machine.worksite.gui.elements;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.PositionedSoundRecord;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.init.SoundEvents;
-import net.minecraft.util.ResourceLocation;
-
 import org.lwjgl.opengl.GL11;
 
 import alec_wam.CrystalMod.tiles.machine.worksite.gui.GuiContainerWorksiteBase.ActivationEvent;
 import alec_wam.CrystalMod.util.Lang;
 import alec_wam.CrystalMod.util.client.RenderUtil;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.PositionedSoundRecord;
+import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.init.SoundEvents;
 
 
 public class Button extends GuiElement {

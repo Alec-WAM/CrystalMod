@@ -5,7 +5,6 @@ import java.util.Random;
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.blocks.ModBlocks;
-import alec_wam.CrystalMod.tiles.darkinfection.BlockInfected.InfectedBlockType;
 import alec_wam.CrystalMod.util.ItemUtil;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -60,20 +59,18 @@ public class BlockRedstoneReactor extends BlockContainer implements ICustomModel
            TileRedstoneReactor reactor = (TileRedstoneReactor)tile;
            if(reactor.remainingFuel.getValue() > 0 && !world.isBlockPowered(pos)){
 	           Random random = world.rand;
-	           double d0 = 0.0625D;
-	
-	           double d1 = (double)((float)pos.getX() + random.nextFloat());
-	           double d2 = (double)((float)pos.getY() + random.nextFloat());
-	           double d3 = (double)((float)pos.getZ() + random.nextFloat());
+	           double d1 = pos.getX() + random.nextFloat();
+	           double d2 = pos.getY() + random.nextFloat();
+	           double d3 = pos.getZ() + random.nextFloat();
 	
 	           if (!world.getBlockState(pos.up()).isOpaqueCube())
 	           {
-	        	   d2 = (double)pos.getY() + 0.0625D + 1.0D;
+	        	   d2 = pos.getY() + 0.0625D + 1.0D;
 	           }
 	
-	           if (d1 < (double)pos.getX() || d1 > (double)(pos.getX() + 1) || d2 < 0.0D || d2 > (double)(pos.getY() + 1) || d3 < (double)pos.getZ() || d3 > (double)(pos.getZ() + 1))
+	           if (d1 < pos.getX() || d1 > pos.getX() + 1 || d2 < 0.0D || d2 > pos.getY() + 1 || d3 < pos.getZ() || d3 > pos.getZ() + 1)
 	           {
-	        	   float f = random.nextFloat() * 0.6F + 0.4F;
+	        	   random.nextFloat();
 	        	   world.spawnParticle(EnumParticleTypes.REDSTONE, d1, d2, d3, 0.0D, 0.0D, 0.0D, new int[0]);
 	           }
            }
@@ -106,6 +103,7 @@ public class BlockRedstoneReactor extends BlockContainer implements ICustomModel
 		}
 	}
 
+	@Override
 	@SideOnly(Side.CLIENT)
 	public void initModel() {
     	ModelLoader.setCustomStateMapper(this, new CustomBlockStateMapper());

@@ -200,10 +200,9 @@ public class BlockEnderTorch extends BlockContainer {
     @Override
     public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand)
     {
-        BlockPos blockpos = pos;
-        double d0 = (double)pos.getX() + 0.5D + (rand.nextDouble() - 0.5D) * 0.2D;
-        double d1 = (double)pos.getY() + 0.7D + (rand.nextDouble() - 0.5D) * 0.2D;
-        double d2 = (double)pos.getZ() + 0.5D + (rand.nextDouble() - 0.5D) * 0.2D;
+        double d0 = pos.getX() + 0.5D + (rand.nextDouble() - 0.5D) * 0.2D;
+        double d1 = pos.getY() + 0.7D + (rand.nextDouble() - 0.5D) * 0.2D;
+        double d2 = pos.getZ() + 0.5D + (rand.nextDouble() - 0.5D) * 0.2D;
         float f = rand.nextFloat() * 0.6F + 0.4F;
         worldIn.spawnParticle(EnumParticleTypes.REDSTONE, d0, d1, d2, f * 0.9F, f * 0.3F, f, new int[0]);
     }

@@ -12,6 +12,7 @@ public class EStorageType implements IPipeType {
 		return "crystalmod:blocks/pipe/storage_square";
 	}
 	
+	@Override
 	public boolean useIOTextures(){
 		return false;
 	}

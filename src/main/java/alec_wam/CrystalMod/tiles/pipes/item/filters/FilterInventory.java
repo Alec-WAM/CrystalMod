@@ -1,15 +1,14 @@
 package alec_wam.CrystalMod.tiles.pipes.item.filters;
 
+import alec_wam.CrystalMod.util.ItemNBTHelper;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
-import alec_wam.CrystalMod.util.ItemNBTHelper;
-import alec_wam.CrystalMod.util.ItemStackTools;
 
 public class FilterInventory implements IItemStackInventory
 {
@@ -30,23 +29,12 @@ public class FilterInventory implements IItemStackInventory
             this.readFromStack(masterStack);
     }
 
-    public void initializeInventory(ItemStack masterStack)
+    @Override
+	public void initializeInventory(ItemStack masterStack)
     {
         this.masterStack = masterStack;
         this.clear();
         this.readFromStack(masterStack);
-    }
-
-    private boolean isSyncedSlot(int slot)
-    {
-        for (int s : this.syncedSlots)
-        {
-            if (s == slot)
-            {
-                return true;
-            }
-        }
-        return false;
     }
 
     public void readFromNBT(NBTTagCompound tagCompound)
@@ -217,7 +205,8 @@ public class FilterInventory implements IItemStackInventory
         }
     }
 
-    public boolean canInventoryBeManipulated()
+    @Override
+	public boolean canInventoryBeManipulated()
     {
         return !ItemStackTools.isNullStack(masterStack);
     }

@@ -1,5 +1,8 @@
 package alec_wam.CrystalMod.tiles.tank;
 
+import alec_wam.CrystalMod.tiles.TileEntityMod;
+import alec_wam.CrystalMod.tiles.tank.BlockTank.TankType;
+import alec_wam.CrystalMod.util.BlockUtil;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -11,10 +14,6 @@ import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
-import alec_wam.CrystalMod.blocks.ModBlocks;
-import alec_wam.CrystalMod.tiles.TileEntityMod;
-import alec_wam.CrystalMod.tiles.tank.BlockTank.TankType;
-import alec_wam.CrystalMod.util.BlockUtil;
 
 public class TileEntityTank extends TileEntityMod {
 
@@ -124,7 +123,8 @@ public class TileEntityTank extends TileEntityMod {
             		return tank;
             	}
             	
-            	public int fill(FluidStack resource, boolean doFill) {
+            	@Override
+				public int fill(FluidStack resource, boolean doFill) {
                     if (resource == null) {
                         return 0;
                     }
@@ -173,7 +173,8 @@ public class TileEntityTank extends TileEntityMod {
                     return totalUsed;
                 }
 
-                public FluidStack drain(int maxEmpty, boolean doDrain) {
+                @Override
+				public FluidStack drain(int maxEmpty, boolean doDrain) {
                 	boolean infi = false;
                     IBlockState state = getWorld() !=null ? getWorld().getBlockState(getPos()) : null;
                     if(state !=null && state.getBlock() instanceof BlockTank){
@@ -197,7 +198,8 @@ public class TileEntityTank extends TileEntityMod {
                     return output;
                 }
 
-                public FluidStack drain(FluidStack resource, boolean doDrain) {
+                @Override
+				public FluidStack drain(FluidStack resource, boolean doDrain) {
                     if (resource == null) {
                         return null;
                     }

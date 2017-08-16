@@ -78,7 +78,7 @@ public class BackpackUtil {
         } else {
         	ItemNBTHelper.updateUUID(itemStack);
         	ExtendedPlayerProvider.getExtendedPlayer(player).setOpenBackpack(itemStack);
-            boolean sneaking = shift ? true : player.isSneaking();
+            player.isSneaking();
             player.openGui(CrystalMod.instance, GuiHandler.GUI_ID_BACKPACK, world, OpenType.ANY.ordinal(), 0, 0);
             return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStack);
         }

@@ -1,33 +1,22 @@
 package alec_wam.CrystalMod.tiles.pipes.estorage.storage.external;
 
 import java.util.Iterator;
-import java.util.List;
 
+import alec_wam.CrystalMod.api.FluidStackList;
+import alec_wam.CrystalMod.api.ItemStackList;
+import alec_wam.CrystalMod.api.estorage.IInsertListener;
+import alec_wam.CrystalMod.api.estorage.INetworkInventory;
+import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetwork;
+import alec_wam.CrystalMod.util.FluidUtil;
+import alec_wam.CrystalMod.util.ItemStackTools;
+import alec_wam.CrystalMod.util.ItemUtil;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
-import alec_wam.CrystalMod.api.FluidStackList;
-import alec_wam.CrystalMod.api.ItemStackList;
-import alec_wam.CrystalMod.api.estorage.IInsertListener;
-import alec_wam.CrystalMod.api.estorage.INetworkContainer;
-import alec_wam.CrystalMod.api.estorage.INetworkInventory;
-import alec_wam.CrystalMod.api.estorage.INetworkInventory.FluidExtractFilter;
-import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetwork;
-import alec_wam.CrystalMod.tiles.pipes.estorage.FluidStorage;
-import alec_wam.CrystalMod.tiles.pipes.estorage.FluidStorage.FluidStackData;
-import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage;
-import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage.ItemStackData;
-import alec_wam.CrystalMod.util.FluidUtil;
-import alec_wam.CrystalMod.util.ItemStackTools;
-import alec_wam.CrystalMod.util.ItemUtil;
-import alec_wam.CrystalMod.util.ModLogger;
-
-import com.google.common.collect.Lists;
 
 public class NetworkInventoryExternal implements INetworkInventory {
 
@@ -73,7 +62,6 @@ public class NetworkInventoryExternal implements INetworkInventory {
 	public ItemStack extractItem(EStorageNetwork network, ItemStack stack, int amount, ExtractFilter filter, boolean sim) {
 		IItemHandler handler = getInventory();
 		if (handler !=null) {
-			final int needed = amount;
 			int remaining = amount;
 
 	        ItemStack received = ItemStackTools.getEmptyStack();

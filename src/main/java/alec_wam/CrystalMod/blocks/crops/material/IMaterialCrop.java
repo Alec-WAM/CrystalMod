@@ -3,12 +3,10 @@ package alec_wam.CrystalMod.blocks.crops.material;
 import java.util.List;
 
 import javax.annotation.Nullable;
-import javax.vecmath.Vector4d;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
 
 public interface IMaterialCrop {
 	

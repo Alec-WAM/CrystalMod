@@ -15,7 +15,6 @@ import alec_wam.CrystalMod.tiles.machine.FakeTileState;
 import alec_wam.CrystalMod.tiles.pipes.CollidableComponent;
 import alec_wam.CrystalMod.tiles.pipes.RaytraceResult;
 import alec_wam.CrystalMod.util.BlockUtil;
-import alec_wam.CrystalMod.util.ChatUtil;
 import alec_wam.CrystalMod.util.EntityUtil;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
@@ -35,8 +34,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumFacing.Axis;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -62,6 +61,7 @@ public class BlockBridge extends BlockContainer implements ICustomModel {
         return BlockRenderLayer.CUTOUT;
     }
 	
+	@Override
 	@SideOnly(Side.CLIENT)
 	public void initModel(){
 		ModelLoader.setCustomStateMapper(this, new NormalBlockStateMapper());
@@ -76,11 +76,11 @@ public class BlockBridge extends BlockContainer implements ICustomModel {
         return EnumBlockRenderType.MODEL;
     }
 	
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public IBlockState getExtendedState(final IBlockState state, final IBlockAccess world, final BlockPos pos) {
 		TileEntity tile = world.getTileEntity(pos);
-        return (IBlockState)new FakeTileState(state, world, pos, tile);
+        return new FakeTileState(state, world, pos, tile);
     }
 
     @Override
@@ -308,7 +308,8 @@ public class BlockBridge extends BlockContainer implements ICustomModel {
     
   //RayTrace
     
-    @Override
+    @SuppressWarnings("deprecation")
+	@Override
 	public void addCollisionBoxToList(final IBlockState state, final World worldIn, final BlockPos pos, final AxisAlignedBB mask, final List<AxisAlignedBB> list, final Entity collidingEntity, boolean bool) {
     	Collection<CollidableComponent> bounds = getCollidableComponents(worldIn, pos);
     	for (CollidableComponent bnd : bounds) {

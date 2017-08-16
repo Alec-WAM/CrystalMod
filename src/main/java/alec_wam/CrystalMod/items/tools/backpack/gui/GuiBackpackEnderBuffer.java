@@ -97,6 +97,7 @@ public class GuiBackpackEnderBuffer extends GuiContainer {
 	
 	public static final ResourceLocation texture = new ResourceLocation("crystalmod:textures/gui/machine/buffer.png");
 	
+	@Override
 	public void drawGuiContainerBackgroundLayer(float var1, int var2,int var3) {
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		Minecraft.getMinecraft().getTextureManager().bindTexture(texture);

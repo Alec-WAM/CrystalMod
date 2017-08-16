@@ -9,6 +9,7 @@ import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.blocks.crops.BlockCrystalTreePlant;
 import alec_wam.CrystalMod.items.ItemCrystalSeedTree;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
@@ -38,7 +39,8 @@ public class WorldGenCrystalTree extends WorldGenAbstractTree
         this.plantsGrow = treePlants;
     }
 
-    public boolean generate(World worldIn, Random rand, BlockPos position)
+    @Override
+	public boolean generate(World worldIn, Random rand, BlockPos position)
     {
         int i = rand.nextInt(3) + this.minTreeHeight;
         boolean flag = true;
@@ -88,7 +90,7 @@ public class WorldGenCrystalTree extends WorldGenAbstractTree
             {
                 IBlockState state = worldIn.getBlockState(position.down());
 
-                if (state.getBlock().canSustainPlant(state, worldIn, position.down(), net.minecraft.util.EnumFacing.UP, (net.minecraft.block.BlockSapling)ModBlocks.crystalSapling) && position.getY() < worldIn.getHeight() - i - 1)
+                if (state.getBlock().canSustainPlant(state, worldIn, position.down(), net.minecraft.util.EnumFacing.UP, ModBlocks.crystalSapling) && position.getY() < worldIn.getHeight() - i - 1)
                 {
                     this.setDirtAt(worldIn, position.down());
                     for (int j3 = 0; j3 < i; ++j3)
@@ -182,6 +184,6 @@ public class WorldGenCrystalTree extends WorldGenAbstractTree
     {
     	IBlockState state = ItemCrystalSeedTree.getPlant(treeType);
     	if(state == null || !(state.getBlock() instanceof BlockCrystalTreePlant))return;
-        this.setBlockAndNotifyAdequately(worldIn, pos, state.getBlock().getDefaultState().withProperty(BlockCrystalTreePlant.AGE, Integer.valueOf(p_181652_2_)).withProperty(BlockCrystalTreePlant.FACING, side));
+        this.setBlockAndNotifyAdequately(worldIn, pos, state.getBlock().getDefaultState().withProperty(BlockCrystalTreePlant.AGE, Integer.valueOf(p_181652_2_)).withProperty(BlockHorizontal.FACING, side));
     }
 }

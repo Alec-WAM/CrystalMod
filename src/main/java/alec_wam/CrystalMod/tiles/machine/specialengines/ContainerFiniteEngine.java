@@ -12,12 +12,8 @@ import net.minecraft.item.ItemStack;
 
 public class ContainerFiniteEngine extends Container
 {
-    private final TileFiniteEngine engine;
-
     public ContainerFiniteEngine(IInventory playerInventory, TileFiniteEngine engine)
     {
-        this.engine = engine;
-
         for (int k = 0; k < 3; ++k)
         {
             for (int i1 = 0; i1 < 9; ++i1)
@@ -37,7 +33,8 @@ public class ContainerFiniteEngine extends Container
 		super.addListener(crafter);
 	}
     
-    public boolean canInteractWith(EntityPlayer playerIn)
+    @Override
+	public boolean canInteractWith(EntityPlayer playerIn)
     {
         return true;
     }
@@ -45,11 +42,12 @@ public class ContainerFiniteEngine extends Container
     /**
      * Take a stack from the specified inventory slot.
      */
-    @Nullable
+    @Override
+	@Nullable
     public ItemStack transferStackInSlot(EntityPlayer playerIn, int index)
     {
         ItemStack itemstack = ItemStackTools.getEmptyStack();
-        Slot slot = (Slot)this.inventorySlots.get(index);
+        Slot slot = this.inventorySlots.get(index);
 
         if (slot != null && slot.getHasStack())
         {

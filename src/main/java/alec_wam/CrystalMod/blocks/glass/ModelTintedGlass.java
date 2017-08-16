@@ -29,14 +29,17 @@ public class ModelTintedGlass extends ModelGlass {
 		super(state);
 	}
 	
+	@Override
 	public boolean renderCenter(){
 		return true;
 	}
 	
+	@Override
 	public TextureAtlasSprite getTexture(GlassType type){
 		return RenderUtil.getSprite("crystalmod:blocks/crystal_"+type.getName()+"_glass_tinted");
 	}
 	
+	@Override
 	public TextureAtlasSprite getCenterTexture(GlassType type){
 		return RenderUtil.getSprite("crystalmod:blocks/crystal_"+type.getName()+"_glass_tinted");
 	}

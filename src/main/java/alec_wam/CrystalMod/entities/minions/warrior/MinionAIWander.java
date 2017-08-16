@@ -2,11 +2,11 @@ package alec_wam.CrystalMod.entities.minions.warrior;
 
 import java.util.Random;
 
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.math.Vec3d;
 import alec_wam.CrystalMod.entities.ai.AIBase;
 import alec_wam.CrystalMod.entities.minions.EnumMovementState;
 import alec_wam.CrystalMod.entities.minions.ai.MinionRandomPositionGenerator;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.Vec3d;
 
 public class MinionAIWander extends AIBase<EntityMinionWarrior>{
 

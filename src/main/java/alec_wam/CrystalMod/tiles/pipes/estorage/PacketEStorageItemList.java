@@ -3,6 +3,12 @@ package alec_wam.CrystalMod.tiles.pipes.estorage;
 import java.io.IOException;
 import java.util.List;
 
+import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.api.estorage.INetworkContainer;
+import alec_wam.CrystalMod.network.AbstractPacketThreadsafe;
+import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage.ItemStackData;
+import alec_wam.CrystalMod.tiles.pipes.estorage.panel.TileEntityPanel;
+import alec_wam.CrystalMod.tiles.pipes.estorage.panel.wireless.TileEntityWirelessPanel;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.inventory.Container;
@@ -10,13 +16,6 @@ import net.minecraft.network.NetHandlerPlayServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import alec_wam.CrystalMod.CrystalMod;
-import alec_wam.CrystalMod.api.estorage.INetworkContainer;
-import alec_wam.CrystalMod.network.AbstractPacketThreadsafe;
-import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage.ItemStackData;
-import alec_wam.CrystalMod.tiles.pipes.estorage.panel.TileEntityPanel;
-import alec_wam.CrystalMod.tiles.pipes.estorage.panel.wireless.TileEntityWirelessPanel;
-import alec_wam.CrystalMod.util.ModLogger;
 
 public class PacketEStorageItemList extends AbstractPacketThreadsafe {
 

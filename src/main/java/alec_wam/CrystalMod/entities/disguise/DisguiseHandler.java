@@ -1,34 +1,14 @@
 package alec_wam.CrystalMod.entities.disguise;
 
-import java.util.UUID;
-
-import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.capability.ExtendedPlayer;
 import alec_wam.CrystalMod.capability.ExtendedPlayerProvider;
-import alec_wam.CrystalMod.entities.disguise.render.RenderMiniPlayer;
-import alec_wam.CrystalMod.entities.disguise.render.RenderPlayerHand;
 import alec_wam.CrystalMod.util.EntityUtil;
-import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ProfileUtil;
-import alec_wam.CrystalMod.util.client.DownloadedTextures;
-import alec_wam.CrystalMod.util.client.DownloadedTextures.PlayerSkin;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.AbstractClientPlayer;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.EnumHandSide;
-import net.minecraft.util.math.MathHelper;
-import net.minecraftforge.client.event.RenderPlayerEvent;
-import net.minecraftforge.client.event.RenderSpecificHandEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class DisguiseHandler {
 

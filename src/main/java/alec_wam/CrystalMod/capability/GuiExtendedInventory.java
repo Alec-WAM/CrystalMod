@@ -4,9 +4,6 @@ import java.io.IOException;
 
 import alec_wam.CrystalMod.CrystalMod;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.achievement.GuiAchievements;
-import net.minecraft.client.gui.achievement.GuiStats;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.InventoryEffectRenderer;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -15,7 +12,6 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Slot;
 import net.minecraft.util.ResourceLocation;
 
 public class GuiExtendedInventory extends InventoryEffectRenderer {
@@ -76,8 +72,8 @@ public class GuiExtendedInventory extends InventoryEffectRenderer {
     public void drawScreen(int par1, int par2, float par3)
     {
         super.drawScreen(par1, par2, par3);
-        this.xSizeFloat = (float)par1;
-        this.ySizeFloat = (float)par2;
+        this.xSizeFloat = par1;
+        this.ySizeFloat = par2;
     }
 
     @Override
@@ -98,15 +94,15 @@ public class GuiExtendedInventory extends InventoryEffectRenderer {
             }
         }*/
         
-        drawPlayerModel(k + 51, l + 75, 30, (float)(k + 51) - this.xSizeFloat, (float)(l + 75 - 50) - this.ySizeFloat, CrystalMod.proxy.getClientPlayer());
+        drawPlayerModel(k + 51, l + 75, 30, k + 51 - this.xSizeFloat, l + 75 - 50 - this.ySizeFloat, CrystalMod.proxy.getClientPlayer());
     }
 
     public static void drawPlayerModel(int x, int y, int scale, float yaw, float pitch, EntityLivingBase playerdrawn)
     {
         GlStateManager.enableColorMaterial();
         GlStateManager.pushMatrix();
-        GlStateManager.translate((float)x, (float)y, 50.0F);
-        GlStateManager.scale((float)(-scale), (float)scale, (float)scale);
+        GlStateManager.translate(x, y, 50.0F);
+        GlStateManager.scale((-scale), scale, scale);
         GlStateManager.rotate(180.0F, 0.0F, 0.0F, 1.0F);
         float f2 = playerdrawn.renderYawOffset;
         float f3 = playerdrawn.rotationYaw;
@@ -116,10 +112,10 @@ public class GuiExtendedInventory extends InventoryEffectRenderer {
         GlStateManager.rotate(135.0F, 0.0F, 1.0F, 0.0F);
         RenderHelper.enableStandardItemLighting();
         GlStateManager.rotate(-135.0F, 0.0F, 1.0F, 0.0F);
-        GlStateManager.rotate(-((float)Math.atan((double)(pitch / 40.0F))) * 20.0F, 1.0F, 0.0F, 0.0F);
-        playerdrawn.renderYawOffset = (float)Math.atan((double)(yaw / 40.0F)) * 20.0F;
-        playerdrawn.rotationYaw = (float)Math.atan((double)(yaw / 40.0F)) * 40.0F;
-        playerdrawn.rotationPitch = -((float)Math.atan((double)(pitch / 40.0F))) * 20.0F;
+        GlStateManager.rotate(-((float)Math.atan(pitch / 40.0F)) * 20.0F, 1.0F, 0.0F, 0.0F);
+        playerdrawn.renderYawOffset = (float)Math.atan(yaw / 40.0F) * 20.0F;
+        playerdrawn.rotationYaw = (float)Math.atan(yaw / 40.0F) * 40.0F;
+        playerdrawn.rotationPitch = -((float)Math.atan(pitch / 40.0F)) * 20.0F;
         playerdrawn.rotationYawHead = playerdrawn.rotationYaw;
         playerdrawn.prevRotationYawHead = playerdrawn.rotationYaw;
         GlStateManager.translate(0.0F, 0.0F, 0.0F);

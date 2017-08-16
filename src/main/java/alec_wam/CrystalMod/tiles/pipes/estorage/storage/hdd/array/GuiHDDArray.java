@@ -35,6 +35,7 @@ public class GuiHDDArray extends GuiContainer {
 		refreshButtons();
 	}
 	
+	@Override
 	public void actionPerformed(GuiButton button){
 		if(button.id == 0){
 			array.setPriority(array.getPriority()+1);
@@ -50,6 +51,7 @@ public class GuiHDDArray extends GuiContainer {
 		}
 	}
 	
+	@Override
 	public void updateScreen(){
 		super.updateScreen();
 	}
@@ -62,11 +64,13 @@ public class GuiHDDArray extends GuiContainer {
 		this.buttonList.add(new GuiButton(1, sx+45+45+45+18, sy+70, 10, 10, "-"));
 	}
 	
+	@Override
 	protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException
     {
 		super.mouseClicked(mouseX, mouseY, mouseButton);
 	}
 
+	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY)
     {
 		super.drawGuiContainerForegroundLayer(mouseX, mouseY);

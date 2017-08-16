@@ -19,12 +19,14 @@ public class TileEntityInventory extends TileEntityMod implements IInventory {
 		inventory = NonNullList.<ItemStack>withSize(size, ItemStack.EMPTY);
 	}
 	
+	@Override
 	public void writeCustomNBT(NBTTagCompound nbt){
 		super.writeCustomNBT(nbt);
 		nbt.setString("InvName", name);
 		ItemStackHelper.saveAllItems(nbt, inventory);
 	}
 	
+	@Override
 	public void readCustomNBT(NBTTagCompound nbt){
 		super.readCustomNBT(nbt);
 		name = nbt.getString("InvName");
@@ -109,7 +111,7 @@ public class TileEntityInventory extends TileEntityMod implements IInventory {
 	    }
 
 	    return
-	    	player.getDistanceSq((double) pos.getX() + 0.5D, (double) pos.getY() + 0.5D, (double) pos.getZ() + 0.5D)
+	    	player.getDistanceSq(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D)
 	        <= 64D;
 	}
 

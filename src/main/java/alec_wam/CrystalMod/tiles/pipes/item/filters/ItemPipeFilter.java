@@ -40,6 +40,7 @@ public class ItemPipeFilter extends Item implements ICustomModel {
     	ModItems.registerItem(this, "pipefilter");
     }
 	
+	@Override
 	@SideOnly(Side.CLIENT)
     public void initModel() {
         for(FilterType type : FilterType.values()){

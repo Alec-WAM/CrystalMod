@@ -6,15 +6,14 @@ import java.util.List;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Vector3f;
 
+import com.google.common.collect.Lists;
+
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.asm.ObfuscatedNames;
 import alec_wam.CrystalMod.client.model.dynamic.DynamicBaseModel;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ReflectionUtils;
 import alec_wam.CrystalMod.util.Vector3d;
-
-import com.google.common.collect.Lists;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -33,16 +32,13 @@ import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformT
 import net.minecraft.client.renderer.block.model.ModelRotation;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Timer;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fluids.Fluid;
@@ -99,14 +95,14 @@ public class RenderUtil {
 	
 	public static void drawGradientRect(double left, double top, double zLevel, double right, double bottom, int startColor, int endColor)
     {
-        float f = (float)(startColor >> 24 & 255) / 255.0F;
-        float f1 = (float)(startColor >> 16 & 255) / 255.0F;
-        float f2 = (float)(startColor >> 8 & 255) / 255.0F;
-        float f3 = (float)(startColor & 255) / 255.0F;
-        float f4 = (float)(endColor >> 24 & 255) / 255.0F;
-        float f5 = (float)(endColor >> 16 & 255) / 255.0F;
-        float f6 = (float)(endColor >> 8 & 255) / 255.0F;
-        float f7 = (float)(endColor & 255) / 255.0F;
+        float f = (startColor >> 24 & 255) / 255.0F;
+        float f1 = (startColor >> 16 & 255) / 255.0F;
+        float f2 = (startColor >> 8 & 255) / 255.0F;
+        float f3 = (startColor & 255) / 255.0F;
+        float f4 = (endColor >> 24 & 255) / 255.0F;
+        float f5 = (endColor >> 16 & 255) / 255.0F;
+        float f6 = (endColor >> 8 & 255) / 255.0F;
+        float f7 = (endColor & 255) / 255.0F;
         GlStateManager.disableTexture2D();
         GlStateManager.enableBlend();
         GlStateManager.disableAlpha();
@@ -115,10 +111,10 @@ public class RenderUtil {
         Tessellator tessellator = Tessellator.getInstance();
         VertexBuffer vertexbuffer = tessellator.getBuffer();
         vertexbuffer.begin(7, DefaultVertexFormats.POSITION_COLOR);
-        vertexbuffer.pos((double)right, (double)top, (double)zLevel).color(f1, f2, f3, f).endVertex();
-        vertexbuffer.pos((double)left, (double)top, (double)zLevel).color(f1, f2, f3, f).endVertex();
-        vertexbuffer.pos((double)left, (double)bottom, (double)zLevel).color(f5, f6, f7, f4).endVertex();
-        vertexbuffer.pos((double)right, (double)bottom, (double)zLevel).color(f5, f6, f7, f4).endVertex();
+        vertexbuffer.pos(right, top, zLevel).color(f1, f2, f3, f).endVertex();
+        vertexbuffer.pos(left, top, zLevel).color(f1, f2, f3, f).endVertex();
+        vertexbuffer.pos(left, bottom, zLevel).color(f5, f6, f7, f4).endVertex();
+        vertexbuffer.pos(right, bottom, zLevel).color(f5, f6, f7, f4).endVertex();
         tessellator.draw();
         GlStateManager.shadeModel(7424);
         GlStateManager.disableBlend();
@@ -292,16 +288,16 @@ public class RenderUtil {
 
 	public static void renderQuarteredTexture(int textureWidth,	int textureHeight, int texStartX, int texStartY, int texUsedWidth, int texUsedHeight, int renderStartX, int renderStartY, int renderWidth, int renderHeight) {
 		// perspective percent x, y
-		float perX = 1.f / ((float) textureWidth);
-		float perY = 1.f / ((float) textureHeight);
-		float texMinX = ((float) texStartX) * perX;
-		float texMinY = ((float) texStartY) * perY;
-		float texMaxX = (float) (texStartX + texUsedWidth) * perX;
-		float texMaxY = (float) (texStartY + texUsedHeight) * perY;
-		float halfWidth = (((float) renderWidth) / 2.f) * perX;
-		float halfHeight = (((float) renderHeight) / 2.f) * perY;
-		float halfRenderWidth = ((float) renderWidth) * 0.5f;
-		float halfRenderHeight = ((float) renderHeight) * 0.5f;
+		float perX = 1.f / (textureWidth);
+		float perY = 1.f / (textureHeight);
+		float texMinX = (texStartX) * perX;
+		float texMinY = (texStartY) * perY;
+		float texMaxX = (texStartX + texUsedWidth) * perX;
+		float texMaxY = (texStartY + texUsedHeight) * perY;
+		float halfWidth = ((renderWidth) / 2.f) * perX;
+		float halfHeight = ((renderHeight) / 2.f) * perY;
+		float halfRenderWidth = (renderWidth) * 0.5f;
+		float halfRenderHeight = (renderHeight) * 0.5f;
 
 		// draw top-left quadrant
 		renderTexturedQuad(renderStartX, renderStartY, renderStartX	+ halfRenderWidth, renderStartY + halfRenderHeight, texMinX, texMinY, texMinX + halfWidth, texMinY + halfHeight);

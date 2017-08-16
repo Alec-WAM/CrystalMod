@@ -4,32 +4,24 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import net.minecraft.block.Block;
+import com.google.common.collect.Maps;
+
+import alec_wam.CrystalMod.client.model.dynamic.DynamicItemAndBlockModel;
+import alec_wam.CrystalMod.tiles.pipes.ModelPipeBaked;
+import alec_wam.CrystalMod.tiles.pipes.attachments.AttachmentUtil.AttachmentData;
+import alec_wam.CrystalMod.util.ItemNBTHelper;
+import alec_wam.CrystalMod.util.ItemStackTools;
+import alec_wam.CrystalMod.util.client.RenderUtil;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.block.model.BlockFaceUV;
-import net.minecraft.client.renderer.block.model.BlockPartFace;
-import net.minecraft.client.renderer.block.model.BlockPartRotation;
-import net.minecraft.client.renderer.block.model.FaceBakery;
+import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.block.model.IBakedModel;
-import net.minecraft.client.renderer.block.model.ModelRotation;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-import alec_wam.CrystalMod.client.model.dynamic.DynamicItemAndBlockModel;
-import alec_wam.CrystalMod.tiles.pipes.ModelPipeBaked;
-import alec_wam.CrystalMod.tiles.pipes.attachments.AttachmentUtil.AttachmentData;
-import alec_wam.CrystalMod.tiles.pipes.covers.CoverUtil.CoverData;
-import alec_wam.CrystalMod.util.ItemNBTHelper;
-import alec_wam.CrystalMod.util.ItemStackTools;
-import alec_wam.CrystalMod.util.client.RenderUtil;
-
-import com.google.common.collect.Maps;
 
 public class ModelAttachment extends DynamicItemAndBlockModel
 {
@@ -51,7 +43,8 @@ public class ModelAttachment extends DynamicItemAndBlockModel
     
     private Map<String, AttachmentData> cachedAttchments = Maps.newHashMap();
     
-    public List<BakedQuad> getGeneralQuads() {
+    @Override
+	public List<BakedQuad> getGeneralQuads() {
         final List<BakedQuad> list = new ArrayList<BakedQuad>();
         if(!ItemStackTools.isNullStack(stack)){
         	if(ItemNBTHelper.verifyExistance(stack, "ID")){
@@ -69,11 +62,13 @@ public class ModelAttachment extends DynamicItemAndBlockModel
         return list;
     }
     
-    public boolean isGui3d() {
+    @Override
+	public boolean isGui3d() {
         return true;
     }
     
-    public ItemCameraTransforms getItemCameraTransforms() {
+    @Override
+	public ItemCameraTransforms getItemCameraTransforms() {
         return ItemCameraTransforms.DEFAULT;
     }
     

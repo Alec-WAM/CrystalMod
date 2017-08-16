@@ -6,15 +6,12 @@ import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
 
 public class BackpackInventoryHandler implements ICapabilityProvider {
 
 	private final InventoryBackpack inv;
-	private final ItemStack backpack;
 	public BackpackInventoryHandler(ItemStack backpack, IBackpackInventory type){
-		this.backpack = backpack;
 		inv = type.getInventory(backpack);
 	}
 	

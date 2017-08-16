@@ -68,6 +68,7 @@ public abstract class EntityCrystalChestMinecartBase extends EntityMinecartChest
 	
 	public abstract CrystalChestType getChestType();
 	
+	@Override
 	public void setDead()
     {
 		this.isDead = true;
@@ -77,6 +78,7 @@ public abstract class EntityCrystalChestMinecartBase extends EntityMinecartChest
         }
     }
 	
+	@Override
 	public void killMinecart(DamageSource source)
     {
 		this.setDead();
@@ -100,32 +102,38 @@ public abstract class EntityCrystalChestMinecartBase extends EntityMinecartChest
         }
     }
 	
+	@Override
 	public ItemStack getPickedResult(RayTraceResult target)
     {
 		return new ItemStack(ModItems.chestMinecart, 1, getChestType().ordinal());
     }
 	
+	@Override
 	public IBlockState getDefaultDisplayTile()
     {
         return ModBlocks.crystalChest.getStateFromMeta(getChestType().ordinal());
     }
 	
+	@Override
 	public int getSizeInventory(){
 		return getChestType().getRowCount() * getChestType().getRowLength();
 	}
 	
+	@Override
 	@Nullable
     public ItemStack getStackInSlot(int index)
     {
         return this.inventory.get(index);
     }
 	
+	@Override
 	@Nullable
     public ItemStack decrStackSize(int index, int count)
     {
         return ItemStackHelper.getAndSplit(this.inventory, index, count);
     }
 	
+	@Override
 	@Nullable
     public ItemStack removeStackFromSlot(int index)
     {
@@ -141,6 +149,7 @@ public abstract class EntityCrystalChestMinecartBase extends EntityMinecartChest
         }
     }
 	
+	@Override
 	public void setInventorySlotContents(int index, @Nullable ItemStack stack)
     {
 		this.inventory.set(index, stack);
@@ -163,13 +172,14 @@ public abstract class EntityCrystalChestMinecartBase extends EntityMinecartChest
         return true;
     }
 	
+	@Override
 	protected void writeEntityToNBT(NBTTagCompound compound)
     {
 		if (this.hasDisplayTile())
         {
             compound.setBoolean("CustomDisplayTile", true);
             IBlockState iblockstate = this.getDisplayTile();
-            ResourceLocation resourcelocation = (ResourceLocation)Block.REGISTRY.getNameForObject(iblockstate.getBlock());
+            ResourceLocation resourcelocation = Block.REGISTRY.getNameForObject(iblockstate.getBlock());
             compound.setString("DisplayTile", resourcelocation == null ? "" : resourcelocation.toString());
             compound.setInteger("DisplayData", iblockstate.getBlock().getMetaFromState(iblockstate));
             compound.setInteger("DisplayOffset", this.getDisplayTileOffset());
@@ -180,7 +190,9 @@ public abstract class EntityCrystalChestMinecartBase extends EntityMinecartChest
     /**
      * (abstract) Protected helper method to read subclass entity data from NBT.
      */
-    protected void readEntityFromNBT(NBTTagCompound compound)
+    @SuppressWarnings("deprecation")
+	@Override
+	protected void readEntityFromNBT(NBTTagCompound compound)
     {
     	if (compound.getBoolean("CustomDisplayTile"))
         {

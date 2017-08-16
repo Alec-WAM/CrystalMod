@@ -3,19 +3,15 @@ package alec_wam.CrystalMod.client.util.comp;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.ScaledResolution;
-
-
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import org.lwjgl.opengl.GL11;
-
-import com.google.common.base.Joiner;
 
 public class GuiComponentBookDiscription extends BaseComponent {
 
@@ -116,12 +112,11 @@ public class GuiComponentBookDiscription extends BaseComponent {
 			lines.add(new ArrayList<String>());
 		}
 
-		int i = 0;
 		for(List<String> words : lines) {
 			words.size();
 			int xi = x;
 			int spacing = 4;
-			int wcount = words.size();
+			words.size();
 			int compensationSpaces = 0;
 			/*boolean justify = ConfigHandler.lexiconJustifiedText && wcount > 0 && lines.size() > i && !lines.get(i + 1).isEmpty();
 
@@ -145,7 +140,6 @@ public class GuiComponentBookDiscription extends BaseComponent {
 			}
 
 			y += words.isEmpty() ? paragraphSize : 10;
-			i++;
 		}
 
 		font.setUnicodeFlag(unicode);

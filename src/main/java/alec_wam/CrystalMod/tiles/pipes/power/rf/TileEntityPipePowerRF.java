@@ -7,10 +7,10 @@ import javax.annotation.Nullable;
 import alec_wam.CrystalMod.Config;
 import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.tiles.pipes.AbstractPipeNetwork;
+import alec_wam.CrystalMod.tiles.pipes.BlockPipe.PipeType;
 import alec_wam.CrystalMod.tiles.pipes.ConnectionMode;
 import alec_wam.CrystalMod.tiles.pipes.IPipeWrapper;
 import alec_wam.CrystalMod.tiles.pipes.TileEntityPipe;
-import alec_wam.CrystalMod.tiles.pipes.BlockPipe.PipeType;
 import alec_wam.CrystalMod.tiles.pipes.power.IPowerInterface;
 import alec_wam.CrystalMod.tiles.pipes.types.IPipeType;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
@@ -18,8 +18,8 @@ import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.energy.CapabilityEnergy;
@@ -45,12 +45,14 @@ public class TileEntityPipePowerRF extends TileEntityPipe {
 		return subtype;
 	}
 	
+	@Override
 	public void writeCustomNBT(NBTTagCompound nbt){
 		super.writeCustomNBT(nbt);
 		nbt.setInteger("subtype", subtype);
 		nbt.setInteger("energyStoredRF", energyStoredRF);
 	}
 	
+	@Override
 	public void readCustomNBT(NBTTagCompound nbt){
 		super.readCustomNBT(nbt);
 		this.subtype = nbt.getInteger("subtype");
@@ -58,6 +60,7 @@ public class TileEntityPipePowerRF extends TileEntityPipe {
 		this.setEnergyStored(nbt.getInteger("energyStoredRF"));
 	}
 	
+	@Override
 	public boolean onNeighborBlockChange(Block blockId) {
 	    if(network != null && network.powerManager != null) {
 	      network.powerManager.receptorsChanged();
@@ -65,11 +68,13 @@ public class TileEntityPipePowerRF extends TileEntityPipe {
 	    return super.onNeighborBlockChange(blockId);
 	}
 	
+	@Override
 	public void setConnectionMode(EnumFacing dir, ConnectionMode mode) {
 		  super.setConnectionMode(dir, mode);
 		  recievedTicks = null;
 	}
 	
+	@Override
 	public boolean setNetwork(AbstractPipeNetwork network) {
 	    this.network = (RFPowerPipeNetwork) network;
 	    super.setNetwork(network);
@@ -160,6 +165,7 @@ public class TileEntityPipePowerRF extends TileEntityPipe {
 		return new RFPowerPipeNetwork();
 	}
 
+	@Override
 	public boolean canConnectToExternal(EnumFacing direction, boolean ignoreDisabled) {
 		World world = getWorld();
 	    if(world == null) {
@@ -175,6 +181,7 @@ public class TileEntityPipePowerRF extends TileEntityPipe {
 	    return rec != null && rec.canPipeConnect(direction);
 	}
 	
+	@Override
 	public boolean canConnectToPipe(EnumFacing direction, TileEntityPipe conduit) {
 	    boolean res = super.canConnectToPipe(direction, conduit);
 	    if(!res) {
@@ -223,7 +230,8 @@ public class TileEntityPipePowerRF extends TileEntityPipe {
 		return null;
     }	
     
-    public ItemStack getPipeDropped(){
+    @Override
+	public ItemStack getPipeDropped(){
     	ItemStack stack = new ItemStack(ModBlocks.crystalPipe, 1, PipeType.POWERRF.getMeta());
     	ItemNBTHelper.setInteger(stack, "Tier", getSubType());
     	return stack;
@@ -236,7 +244,8 @@ public class TileEntityPipePowerRF extends TileEntityPipe {
     	return super.hasCapability(capability, facing);
     }
     
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     @Nullable
     public <T> T getCapability(net.minecraftforge.common.capabilities.Capability<T> capability, @Nullable net.minecraft.util.EnumFacing facing)
     {

@@ -1,10 +1,10 @@
 package alec_wam.CrystalMod.api.tools;
 
+import com.google.common.base.Strings;
+
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.INBTSerializable;
-
-import com.google.common.base.Strings;
 
 public class UpgradeData implements INBTSerializable<NBTTagCompound> {
 	private ResourceLocation upgradeID;

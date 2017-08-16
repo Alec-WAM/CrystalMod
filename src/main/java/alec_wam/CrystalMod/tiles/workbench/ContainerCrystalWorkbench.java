@@ -1,5 +1,8 @@
 package alec_wam.CrystalMod.tiles.workbench;
 
+import alec_wam.CrystalMod.blocks.ModBlocks;
+import alec_wam.CrystalMod.crafting.CrystalCraftingManager;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -11,9 +14,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import alec_wam.CrystalMod.blocks.ModBlocks;
-import alec_wam.CrystalMod.crafting.CrystalCraftingManager;
-import alec_wam.CrystalMod.util.ItemStackTools;
 
 public class ContainerCrystalWorkbench extends Container
 {
@@ -97,7 +97,8 @@ public class ContainerCrystalWorkbench extends Container
     /**
      * Callback for when the crafting matrix is changed.
      */
-    public void onCraftMatrixChanged(IInventory inventoryIn)
+    @Override
+	public void onCraftMatrixChanged(IInventory inventoryIn)
     {
         this.craftResult.setInventorySlotContents(0, CrystalCraftingManager.getInstance().findMatchingRecipe(this.craftMatrix, this.worldObj));
     }
@@ -105,23 +106,26 @@ public class ContainerCrystalWorkbench extends Container
     /**
      * Called when the container is closed.
      */
-    public void onContainerClosed(EntityPlayer playerIn)
+    @Override
+	public void onContainerClosed(EntityPlayer playerIn)
     {
         super.onContainerClosed(playerIn);
     }
 
-    public boolean canInteractWith(EntityPlayer playerIn)
+    @Override
+	public boolean canInteractWith(EntityPlayer playerIn)
     {
-        return this.worldObj.getBlockState(this.pos).getBlock() != ModBlocks.crystalWorkbench ? false : playerIn.getDistanceSq((double)this.pos.getX() + 0.5D, (double)this.pos.getY() + 0.5D, (double)this.pos.getZ() + 0.5D) <= 64.0D;
+        return this.worldObj.getBlockState(this.pos).getBlock() != ModBlocks.crystalWorkbench ? false : playerIn.getDistanceSq(this.pos.getX() + 0.5D, this.pos.getY() + 0.5D, this.pos.getZ() + 0.5D) <= 64.0D;
     }
 
     /**
      * Take a stack from the specified inventory slot.
      */
-    public ItemStack transferStackInSlot(EntityPlayer playerIn, int index)
+    @Override
+	public ItemStack transferStackInSlot(EntityPlayer playerIn, int index)
     {
         ItemStack itemstack = ItemStackTools.getEmptyStack();
-        Slot slot = (Slot)this.inventorySlots.get(index);
+        Slot slot = this.inventorySlots.get(index);
 
         if (slot != null && slot.getHasStack())
         {
@@ -180,7 +184,8 @@ public class ContainerCrystalWorkbench extends Container
      * Called to determine if the current slot is valid for the stack merging (double-click) code. The stack passed in
      * is null for the initial slot that was double-clicked.
      */
-    public boolean canMergeSlot(ItemStack stack, Slot p_94530_2_)
+    @Override
+	public boolean canMergeSlot(ItemStack stack, Slot p_94530_2_)
     {
         return p_94530_2_.inventory != this.craftResult && super.canMergeSlot(stack, p_94530_2_);
     }

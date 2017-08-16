@@ -154,8 +154,8 @@ public class FarmUtil {
 	    
 	    if ((((bi instanceof IGrowable)) && (!((IGrowable)bi).canGrow(world, pos, state, world.isRemote)) && (!(bi instanceof BlockStem))) 
 	    		|| (((bi instanceof BlockCrops)) && ((BlockCrops)bi).isMaxAge(state) && (!found)) 
-	    		|| ((bi == Blocks.NETHER_WART) && (((Integer)state.getValue(BlockNetherWart.AGE)).intValue() >= 3)) 
-	    		|| ((bi == Blocks.COCOA) && (((Integer)state.getValue(BlockCocoa.AGE)).intValue() >= 2)) 
+	    		|| ((bi == Blocks.NETHER_WART) && (state.getValue(BlockNetherWart.AGE).intValue() >= 3)) 
+	    		|| ((bi == Blocks.COCOA) && (state.getValue(BlockCocoa.AGE).intValue() >= 2)) 
 	    		|| (getCrops(CropType.NORMAL).contains(bi.getUnlocalizedName() + md)) || (getCrops(CropType.STACKED).contains(bi.getUnlocalizedName() + md)) || ((getCrops(CropType.CLICKABLE).contains(bi.getUnlocalizedName() + md)) && (biB == bi))) {
 	      return true;
 	    }

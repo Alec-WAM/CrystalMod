@@ -26,6 +26,7 @@ public class GuiWeather extends GuiContainer {
 		this.height = this.ySize = 236;
 	}
 
+	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY)
     {
 		float partialTicks = RenderUtil.getPartialTick();
@@ -56,18 +57,18 @@ public class GuiWeather extends GuiContainer {
 	        float k2 = h;
 	        float l2 = h+1;
 	        double d5 = 0;
-	        worldrenderer.pos((double)(0 + 0), (double)(0 + 4), (double)this.zLevel).tex((double)((float)(0)), (double)((float)(k2 * 0.25D + d5))).endVertex();
-	        worldrenderer.pos((double)(0 + 4), (double)(0 + 4), (double)this.zLevel).tex((double)((float)(1)), (double)((float)(k2 * 0.25D + d5))).endVertex();
-	        worldrenderer.pos((double)(0 + 4), (double)(0 + 0), (double)this.zLevel).tex((double)((float)(1)), (double)((float)(l2 * 0.25D + d5))).endVertex();
-	        worldrenderer.pos((double)(0 + 0), (double)(0 + 0), (double)this.zLevel).tex((double)((float)(0)), (double)((float)(l2 * 0.25D + d5))).endVertex();
+	        worldrenderer.pos(0 + 0, 0 + 4, this.zLevel).tex(((0)), ((float)(k2 * 0.25D + d5))).endVertex();
+	        worldrenderer.pos(0 + 4, 0 + 4, this.zLevel).tex(((1)), ((float)(k2 * 0.25D + d5))).endVertex();
+	        worldrenderer.pos(0 + 4, 0 + 0, this.zLevel).tex(((1)), ((float)(l2 * 0.25D + d5))).endVertex();
+	        worldrenderer.pos(0 + 0, 0 + 0, this.zLevel).tex(((0)), ((float)(l2 * 0.25D + d5))).endVertex();
 	        tessellator.draw();
         }else{
         	mc.getTextureManager().bindTexture(locationSunPng);
 	        worldrenderer.begin(7, DefaultVertexFormats.POSITION_TEX);
-	        worldrenderer.pos((double)(0 + 0), (double)(0 + 4), (double)this.zLevel).tex((double)((float)(0)), (double)((float)(0))).endVertex();
-	        worldrenderer.pos((double)(0 + 4), (double)(0 + 4), (double)this.zLevel).tex((double)((float)(1)), (double)((float)(0))).endVertex();
-	        worldrenderer.pos((double)(0 + 4), (double)(0 + 0), (double)this.zLevel).tex((double)((float)(1)), (double)((float)(1))).endVertex();
-	        worldrenderer.pos((double)(0 + 0), (double)(0 + 0), (double)this.zLevel).tex((double)((float)(0)), (double)((float)(1))).endVertex();
+	        worldrenderer.pos(0 + 0, 0 + 4, this.zLevel).tex(((0)), ((0))).endVertex();
+	        worldrenderer.pos(0 + 4, 0 + 4, this.zLevel).tex(((1)), ((0))).endVertex();
+	        worldrenderer.pos(0 + 4, 0 + 0, this.zLevel).tex(((1)), ((1))).endVertex();
+	        worldrenderer.pos(0 + 0, 0 + 0, this.zLevel).tex(((0)), ((1))).endVertex();
 	        tessellator.draw();
         }
         GlStateManager.popMatrix();
@@ -79,15 +80,15 @@ public class GuiWeather extends GuiContainer {
         int i = CrystalMod.proxy.getClientWorld().getMoonPhase();
         int k = i % 4;
         int i1 = i / 4 % 2;
-        float f22 = (float)(k + 0) / 4.0F;
-        float f23 = (float)(i1 + 0) / 2.0F;
-        float f24 = (float)(k + 1) / 4.0F;
-        float f14 = (float)(i1 + 1) / 2.0F;
+        float f22 = (k + 0) / 4.0F;
+        float f23 = (i1 + 0) / 2.0F;
+        float f24 = (k + 1) / 4.0F;
+        float f14 = (i1 + 1) / 2.0F;
         worldrenderer.begin(7, DefaultVertexFormats.POSITION_TEX);
-        worldrenderer.pos((double)(0 + 0), (double)(0 + 4), (double)this.zLevel).tex((double)((float)(f24)), (double)((float)(f14))).endVertex();
-        worldrenderer.pos((double)(0 + 4), (double)(0 + 4), (double)this.zLevel).tex((double)((float)(f22)), (double)((float)(f14))).endVertex();
-        worldrenderer.pos((double)(0 + 4), (double)(0 + 0), (double)this.zLevel).tex((double)((float)(f22)), (double)((float)(f23))).endVertex();
-        worldrenderer.pos((double)(0 + 0), (double)(0 + 0), (double)this.zLevel).tex((double)((float)(f24)), (double)((float)(f23))).endVertex();
+        worldrenderer.pos(0 + 0, 0 + 4, this.zLevel).tex(((f24)), ((f14))).endVertex();
+        worldrenderer.pos(0 + 4, 0 + 4, this.zLevel).tex(((f22)), ((f14))).endVertex();
+        worldrenderer.pos(0 + 4, 0 + 0, this.zLevel).tex(((f22)), ((f23))).endVertex();
+        worldrenderer.pos(0 + 0, 0 + 0, this.zLevel).tex(((f24)), ((f23))).endVertex();
         tessellator.draw();
         GlStateManager.popMatrix();
         

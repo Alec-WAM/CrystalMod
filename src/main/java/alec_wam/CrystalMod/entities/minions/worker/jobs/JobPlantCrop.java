@@ -1,20 +1,18 @@
 package alec_wam.CrystalMod.entities.minions.worker.jobs;
 
-import net.minecraft.entity.player.EntityPlayer;
+import alec_wam.CrystalMod.entities.minions.MinionConstants;
+import alec_wam.CrystalMod.entities.minions.worker.EntityMinionWorker;
+import alec_wam.CrystalMod.entities.minions.worker.WorkerJob;
+import alec_wam.CrystalMod.tiles.machine.worksite.InventorySided.RelativeSide;
+import alec_wam.CrystalMod.tiles.machine.worksite.TileWorksiteBase;
+import alec_wam.CrystalMod.tiles.machine.worksite.imp.WorksiteCropFarm;
+import alec_wam.CrystalMod.util.ItemStackTools;
+import alec_wam.CrystalMod.util.fakeplayer.FakePlayerUtil;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.WorldServer;
-import alec_wam.CrystalMod.entities.minions.MinionConstants;
-import alec_wam.CrystalMod.entities.minions.worker.EntityMinionWorker;
-import alec_wam.CrystalMod.entities.minions.worker.WorkerJob;
-import alec_wam.CrystalMod.tiles.machine.worksite.TileWorksiteBase;
-import alec_wam.CrystalMod.tiles.machine.worksite.InventorySided.RelativeSide;
-import alec_wam.CrystalMod.tiles.machine.worksite.imp.WorksiteCropFarm;
-import alec_wam.CrystalMod.util.ItemStackTools;
-import alec_wam.CrystalMod.util.fakeplayer.FakePlayerUtil;
 
 public class JobPlantCrop extends WorkerJob {
 

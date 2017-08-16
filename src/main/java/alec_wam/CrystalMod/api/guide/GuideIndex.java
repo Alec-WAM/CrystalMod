@@ -3,9 +3,9 @@ package alec_wam.CrystalMod.api.guide;
 import java.util.Iterator;
 import java.util.List;
 
-import alec_wam.CrystalMod.api.CrystalModAPI;
-
 import com.google.common.collect.Lists;
+
+import alec_wam.CrystalMod.api.CrystalModAPI;
 
 public class GuideIndex {
 

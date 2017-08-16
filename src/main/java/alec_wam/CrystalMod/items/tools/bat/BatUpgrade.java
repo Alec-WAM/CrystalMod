@@ -2,18 +2,16 @@ package alec_wam.CrystalMod.items.tools.bat;
 
 import java.util.List;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 import alec_wam.CrystalMod.api.tools.IBatUpgrade;
 import alec_wam.CrystalMod.api.tools.UpgradeData;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 
 public abstract class BatUpgrade implements IBatUpgrade {
 
 	private ResourceLocation id;
 	private int IPL;
 	private int ML;
-	private boolean halfValue;
-	
 	public BatUpgrade(ResourceLocation id, int IPL, int ML){
 		this(id, IPL, ML, false);
 	}
@@ -22,7 +20,6 @@ public abstract class BatUpgrade implements IBatUpgrade {
 		this.id = id;
 		this.IPL = IPL;
 		this.ML = ML;
-		this.halfValue = half;
 	}
 
 	@Override
@@ -32,7 +29,7 @@ public abstract class BatUpgrade implements IBatUpgrade {
 	
 	@Override
 	public float getValue(UpgradeData data) {
-		float value = (int)(data.getAmount() / getItemsPerLevel());
+		float value = data.getAmount() / getItemsPerLevel();
 		/*if(halfValue && value > 0.0f){
 			value*=0.5f;
 		}*/

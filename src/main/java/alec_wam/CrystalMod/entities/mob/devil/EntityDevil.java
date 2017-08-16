@@ -7,7 +7,6 @@ import alec_wam.CrystalMod.entities.ModEntites;
 import alec_wam.CrystalMod.entities.mob.angel.EntityAngel;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.items.tools.projectiles.EntityDarkarang;
-import alec_wam.CrystalMod.util.ModLogger;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
@@ -22,8 +21,6 @@ import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.ai.EntityMoveHelper;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -35,7 +32,6 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
-import net.minecraft.world.storage.loot.LootTableList;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -52,7 +48,8 @@ public class EntityDevil extends EntityMob
     /**
      * Tries to move the entity towards the specified location.
      */
-    public void move(MoverType type, double x, double y, double z)
+    @Override
+	public void move(MoverType type, double x, double y, double z)
     {
         super.move(type, x, y, z);
     }
@@ -60,14 +57,16 @@ public class EntityDevil extends EntityMob
     /**
      * Called to update the entity's position/logic.
      */
-    public void onUpdate()
+    @Override
+	public void onUpdate()
     {
         super.onUpdate();
         this.fallDistance = 0;
         this.setNoGravity(true);
     }
 
-    protected void initEntityAI()
+    @Override
+	protected void initEntityAI()
     {
         super.initEntityAI();
         this.tasks.addTask(0, new EntityAISwimming(this));
@@ -80,14 +79,16 @@ public class EntityDevil extends EntityMob
         this.targetTasks.addTask(3, new EntityAINearestAttackableTarget<EntityAngel>(this, EntityAngel.class, true));
     }
 
-    protected void applyEntityAttributes()
+    @Override
+	protected void applyEntityAttributes()
     {
         super.applyEntityAttributes();
         this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(50.0D);
         this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(4.0D);
     }
 
-    protected void entityInit()
+    @Override
+	protected void entityInit()
     {
         super.entityInit();
     }
@@ -100,7 +101,8 @@ public class EntityDevil extends EntityMob
     /**
      * (abstract) Protected helper method to read subclass entity data from NBT.
      */
-    public void readEntityFromNBT(NBTTagCompound compound)
+    @Override
+	public void readEntityFromNBT(NBTTagCompound compound)
     {
         super.readEntityFromNBT(compound);
     }
@@ -108,33 +110,39 @@ public class EntityDevil extends EntityMob
     /**
      * (abstract) Protected helper method to write subclass entity data to NBT.
      */
-    public void writeEntityToNBT(NBTTagCompound compound)
+    @Override
+	public void writeEntityToNBT(NBTTagCompound compound)
     {
         super.writeEntityToNBT(compound);
     }
 
-    protected SoundEvent getAmbientSound()
+    @Override
+	protected SoundEvent getAmbientSound()
     {
         return ModSounds.devil_ambient;
     }
 
-    protected SoundEvent getDeathSound()
+    @Override
+	protected SoundEvent getDeathSound()
     {
         return ModSounds.devil_death;
     }
 
-    protected SoundEvent getHurtSound()
+    @Override
+	protected SoundEvent getHurtSound()
     {
         return ModSounds.devil_hurt;
     }
 
-    @Nullable
+    @Override
+	@Nullable
     protected ResourceLocation getLootTable()
     {
         return ModEntites.LOOTTABLE_DEVIL;
     }
 
-    @SideOnly(Side.CLIENT)
+    @Override
+	@SideOnly(Side.CLIENT)
     public int getBrightnessForRender(float partialTicks)
     {
         return 15728880;
@@ -143,7 +151,8 @@ public class EntityDevil extends EntityMob
     /**
      * Gets how bright this entity is.
      */
-    public float getBrightness(float partialTicks)
+    @Override
+	public float getBrightness(float partialTicks)
     {
         return 1.0F;
     }
@@ -152,7 +161,8 @@ public class EntityDevil extends EntityMob
      * Called only once on an entity when first time spawned, via egg, mob spawner, natural spawning etc, but not called
      * when entity is reloaded from nbt. Mainly used for initializing attributes and inventory
      */
-    @Nullable
+    @Override
+	@Nullable
     public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata)
     {
         this.setEquipmentBasedOnDifficulty(difficulty);
@@ -163,7 +173,8 @@ public class EntityDevil extends EntityMob
     /**
      * Gives armor or weapon for entity based on given DifficultyInstance
      */
-    protected void setEquipmentBasedOnDifficulty(DifficultyInstance difficulty)
+    @Override
+	protected void setEquipmentBasedOnDifficulty(DifficultyInstance difficulty)
     {
         this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(ModItems.darkarang));
         this.setDropChance(EntityEquipmentSlot.MAINHAND, 0.0F);
@@ -172,7 +183,6 @@ public class EntityDevil extends EntityMob
     class AIChargeAttack extends EntityAIBase
     {
     	private int attackTime;
-    	private int seeTime;
     	public AIChargeAttack()
         {
             this.setMutexBits(1);
@@ -181,7 +191,8 @@ public class EntityDevil extends EntityMob
         /**
          * Returns whether the EntityAIBase should begin execution.
          */
-        public boolean shouldExecute()
+        @Override
+		public boolean shouldExecute()
         {
             return EntityDevil.this.getAttackTarget() != null;
         }
@@ -189,7 +200,8 @@ public class EntityDevil extends EntityMob
         /**
          * Returns whether an in-progress EntityAIBase should continue executing
          */
-        public boolean continueExecuting()
+        @Override
+		public boolean continueExecuting()
         {
             return EntityDevil.this.getAttackTarget() != null && EntityDevil.this.getAttackTarget().isEntityAlive();
         }
@@ -197,7 +209,8 @@ public class EntityDevil extends EntityMob
         /**
          * Execute a one shot task or start executing a continuous task
          */
-        public void startExecuting()
+        @Override
+		public void startExecuting()
         {
             attackTime = 20;
         }
@@ -205,15 +218,16 @@ public class EntityDevil extends EntityMob
         /**
          * Resets the task
          */
-        public void resetTask()
+        @Override
+		public void resetTask()
         {
-            this.seeTime = 0;
         }
 
         /**
          * Updates the task
          */
-        public void updateTask()
+        @Override
+		public void updateTask()
         {
         	if(attackTime > 0)--this.attackTime;
             
@@ -234,7 +248,7 @@ public class EntityDevil extends EntityMob
             	attackTime = 40 + devil.rand.nextInt(10);
             	EntityDarkarang darkarang = new EntityDarkarang(world);
             	darkarang.shootingEntity = devil;
-            	darkarang.setLocationAndAngles(devil.posX, devil.posY + (double) devil.getEyeHeight(), devil.posZ, devil.rotationYaw, devil.rotationPitch);
+            	darkarang.setLocationAndAngles(devil.posX, devil.posY + devil.getEyeHeight(), devil.posZ, devil.rotationYaw, devil.rotationPitch);
 
             	darkarang.setPosition(darkarang.posX, darkarang.posY, darkarang.posZ);
             	darkarang.motionX = -MathHelper.sin(darkarang.rotationYaw / 180.0F * (float) Math.PI) * MathHelper.cos(darkarang.rotationPitch / 180.0F * (float) Math.PI);
@@ -253,7 +267,8 @@ public class EntityDevil extends EntityMob
             super(vex);
         }
 
-        public void onUpdateMoveHelper()
+        @Override
+		public void onUpdateMoveHelper()
         {
             if (this.action == EntityMoveHelper.Action.MOVE_TO)
             {
@@ -261,7 +276,7 @@ public class EntityDevil extends EntityMob
                 double d1 = this.posY - EntityDevil.this.posY;
                 double d2 = this.posZ - EntityDevil.this.posZ;
                 double d3 = d0 * d0 + d1 * d1 + d2 * d2;
-                d3 = (double)MathHelper.sqrt(d3);
+                d3 = MathHelper.sqrt(d3);
 
                 if (d3 < EntityDevil.this.getEntityBoundingBox().getAverageEdgeLength())
                 {
@@ -303,7 +318,8 @@ public class EntityDevil extends EntityMob
         /**
          * Returns whether the EntityAIBase should begin execution.
          */
-        public boolean shouldExecute()
+        @Override
+		public boolean shouldExecute()
         {
             return !EntityDevil.this.getMoveHelper().isUpdating() && EntityDevil.this.rand.nextInt(14) == 0;
         }
@@ -311,7 +327,8 @@ public class EntityDevil extends EntityMob
         /**
          * Returns whether an in-progress EntityAIBase should continue executing
          */
-        public boolean continueExecuting()
+        @Override
+		public boolean continueExecuting()
         {
             return false;
         }
@@ -319,7 +336,8 @@ public class EntityDevil extends EntityMob
         /**
          * Updates the task
          */
-        public void updateTask()
+        @Override
+		public void updateTask()
         {
             BlockPos blockpos = new BlockPos(EntityDevil.this);
 
@@ -332,11 +350,11 @@ public class EntityDevil extends EntityMob
                 
                 if (state.getBlock().isAir(state, world, blockpos1) && state2.getBlock().isAir(state2, world, blockpos2))
                 {
-                    EntityDevil.this.moveHelper.setMoveTo((double)blockpos1.getX() + 0.5D, (double)blockpos1.getY() + 0.5D, (double)blockpos1.getZ() + 0.5D, 0.25D);
+                    EntityDevil.this.moveHelper.setMoveTo(blockpos1.getX() + 0.5D, blockpos1.getY() + 0.5D, blockpos1.getZ() + 0.5D, 0.25D);
 
                     if (EntityDevil.this.getAttackTarget() == null)
                     {
-                        EntityDevil.this.getLookHelper().setLookPosition((double)blockpos1.getX() + 0.5D, (double)blockpos1.getY() + 0.5D, (double)blockpos1.getZ() + 0.5D, 180.0F, 20.0F);
+                        EntityDevil.this.getLookHelper().setLookPosition(blockpos1.getX() + 0.5D, blockpos1.getY() + 0.5D, blockpos1.getZ() + 0.5D, 180.0F, 20.0F);
                     }
 
                     break;

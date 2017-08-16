@@ -1,18 +1,14 @@
 package alec_wam.CrystalMod.tiles.machine.crafting.liquidizer;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import com.google.common.collect.Lists;
 
 import alec_wam.CrystalMod.fluids.ModFluids;
-import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.items.ItemCrystal.CrystalType;
 import alec_wam.CrystalMod.items.ItemIngot.IngotType;
-import alec_wam.CrystalMod.items.ItemMetalPlate.PlateType;
-import alec_wam.CrystalMod.tiles.machine.BasicMachineRecipe;
+import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import net.minecraft.init.Blocks;

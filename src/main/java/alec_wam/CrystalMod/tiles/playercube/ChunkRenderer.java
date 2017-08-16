@@ -1,5 +1,7 @@
 package alec_wam.CrystalMod.tiles.playercube;
 
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -21,8 +23,6 @@ import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import org.lwjgl.opengl.GL11;
-
 @SideOnly(Side.CLIENT)
 public class ChunkRenderer {
     /**
@@ -33,12 +33,6 @@ public class ChunkRenderer {
 
     private FakeChunk chunk;
     private int glRenderList = -1;
-
-    /**
-     * Bytes sent to the GPU
-     */
-    @SuppressWarnings("unused")
-    private int bytesDrawn;
 
     public ChunkRenderer(FakeChunk mobilechunk) {
         chunk = mobilechunk;

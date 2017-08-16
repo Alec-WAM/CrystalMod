@@ -16,7 +16,7 @@ public class ContainerCrystalInfuser extends Container
     {
         this.addPlayerInventory(player.inventory);
         
-        this.tileMachine = ((TileEntityCrystalInfuser) tileEntity);
+        this.tileMachine = (tileEntity);
 
         this.addSlotToContainer(new Slot(tileMachine, 0, 132, 34));
         this.addSlotToContainer(new SlotFurnaceOutput(player, tileMachine, 1, 80, 34));
@@ -46,7 +46,7 @@ public class ContainerCrystalInfuser extends Container
     {
     	ItemStack itemstack = ItemStackTools.getEmptyStack();
     	int par2 = i;
-		Slot slot = (Slot)this.inventorySlots.get(par2);
+		Slot slot = this.inventorySlots.get(par2);
 
 		if (slot != null && slot.getHasStack())
 		{

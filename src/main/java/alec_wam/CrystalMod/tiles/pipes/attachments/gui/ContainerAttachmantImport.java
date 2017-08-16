@@ -246,6 +246,7 @@ public class ContainerAttachmantImport extends Container {
 		return true;
 	}
 	
+	@Override
 	public ItemStack transferStackInSlot(EntityPlayer player, int slot){
 		return ItemStackTools.getEmptyStack();
 	}

@@ -10,7 +10,6 @@ import alec_wam.CrystalMod.capability.ExtendedPlayerProvider;
 import alec_wam.CrystalMod.entities.disguise.DisguiseType;
 import alec_wam.CrystalMod.util.ModLogger;
 import alec_wam.CrystalMod.util.ProfileUtil;
-import alec_wam.CrystalMod.util.UUIDUtils;
 import alec_wam.CrystalMod.util.client.DownloadedTextures;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
@@ -20,7 +19,6 @@ import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.model.ModelPlayer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderLivingBase;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.entity.RenderPlayer;
@@ -181,6 +179,7 @@ public class RenderMiniPlayer extends RenderPlayer
 		}
 	}
 	
+	@Override
 	public void doRender(AbstractClientPlayer entity, double x, double y, double z, float entityYaw, float partialTicks)
     {
         if (net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.RenderPlayerEvent.Pre(entity, this, partialTicks, x, y, z))) return;
@@ -316,7 +315,7 @@ public class RenderMiniPlayer extends RenderPlayer
         }
         catch (Exception exception)
         {
-            ModLogger.error((String)"Couldn\'t render entity", (Throwable)exception);
+            ModLogger.error("Couldn\'t render entity", (Throwable)exception);
         }
 
         GlStateManager.setActiveTexture(OpenGlHelper.lightmapTexUnit);
@@ -331,6 +330,7 @@ public class RenderMiniPlayer extends RenderPlayer
         net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.RenderLivingEvent.Post<AbstractClientPlayer>(entity, this, x, y, z));
     }
 	
+	@Override
 	protected void renderLayers(AbstractClientPlayer entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scaleIn)
     {
         for (LayerRenderer<AbstractClientPlayer> layerrenderer : this.layerRenderers)
@@ -355,6 +355,7 @@ public class RenderMiniPlayer extends RenderPlayer
         }
     }
 	
+	@Override
 	public void renderName(AbstractClientPlayer entity, double x, double y, double z)
     {
         if (net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.RenderLivingEvent.Specials.Pre<AbstractClientPlayer>(entity, this, x, y, z))) return;
@@ -363,7 +364,7 @@ public class RenderMiniPlayer extends RenderPlayer
             double d0 = entity.getDistanceSqToEntity(Minecraft.getMinecraft().getRenderManager().renderViewEntity);
             float f = entity.isSneaking() ? NAME_TAG_RANGE_SNEAK : NAME_TAG_RANGE;
 
-            if (d0 < (double)(f * f))
+            if (d0 < f * f)
             {
             	String s = ScorePlayerTeam.formatPlayerName(getFakeTeam(entity), entity.getDisplayNameString());
                 GlStateManager.alphaFunc(516, 0.1F);
@@ -373,6 +374,7 @@ public class RenderMiniPlayer extends RenderPlayer
         net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.RenderLivingEvent.Specials.Post<AbstractClientPlayer>(entity, this, x, y, z));
     }
 	
+	@Override
 	protected void renderEntityName(AbstractClientPlayer entityIn, double x, double y, double z, String name, double p_188296_9_)
     {
         if (p_188296_9_ < 100.0D)
@@ -384,14 +386,15 @@ public class RenderMiniPlayer extends RenderPlayer
             {
                 Score score = scoreboard.getOrCreateScore(getFakeUsername(entityIn), scoreobjective);
                 this.renderLivingLabel(entityIn, score.getScorePoints() + " " + scoreobjective.getDisplayName(), x, y, z, 64);
-                y += (double)((float)this.getFontRendererFromRenderManager().FONT_HEIGHT * 1.15F * 0.025F);
+                y += this.getFontRendererFromRenderManager().FONT_HEIGHT * 1.15F * 0.025F;
             }
         }
 
         this.renderLivingLabel(entityIn, name, x, y, z, 64);
     }
 
-    protected boolean canRenderName(AbstractClientPlayer entity)
+    @Override
+	protected boolean canRenderName(AbstractClientPlayer entity)
     {
         EntityPlayerSP entityplayersp = (EntityPlayerSP) CrystalMod.proxy.getClientPlayer();
         boolean flag = !entity.isInvisibleToPlayer(entityplayersp);

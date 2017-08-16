@@ -176,6 +176,7 @@ public class ContainerPatternEncoder extends Container {
         return super.canMergeSlot(stack, slot);
     }
 	
+	@Override
 	public ItemStack transferStackInSlot(EntityPlayer player, int slot){
 		return ItemStackTools.getEmptyStack();
 	}

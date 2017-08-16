@@ -3,7 +3,6 @@ package alec_wam.CrystalMod.tiles.machine.sap;
 import org.lwjgl.opengl.GL11;
 
 import alec_wam.CrystalMod.blocks.BlockCrystalLog.WoodType;
-import alec_wam.CrystalMod.client.util.ElementDualScaled;
 import alec_wam.CrystalMod.client.util.ElementEnergy;
 import alec_wam.CrystalMod.client.util.GuiElementContainer;
 import net.minecraft.client.renderer.GlStateManager;
@@ -21,6 +20,7 @@ public class GuiSapExtractor extends GuiElementContainer{
         this.name = "Sap Extractor";
     }
 	
+	@Override
 	public void initGui(){
 		super.initGui();
 		
@@ -28,6 +28,7 @@ public class GuiSapExtractor extends GuiElementContainer{
 		addElement(energyElement);
 	}
 	
+	@Override
 	protected void updateElementInformation()
 	{
 		super.updateElementInformation();

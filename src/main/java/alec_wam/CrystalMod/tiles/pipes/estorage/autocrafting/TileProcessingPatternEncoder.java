@@ -1,20 +1,19 @@
 package alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting;
 
-import java.util.List;
-
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.items.ItemHandlerHelper;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.tiles.BasicItemHandler;
 import alec_wam.CrystalMod.tiles.BasicItemValidator;
 import alec_wam.CrystalMod.util.ItemStackTools;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.items.ItemHandlerHelper;
 
 public class TileProcessingPatternEncoder extends TilePatternEncoder {
 
 	private BasicItemHandler patterns = new BasicItemHandler(2, this, new BasicItemValidator(ModItems.craftingPattern));
     private BasicItemHandler configuration = new BasicItemHandler(9 * 2, this);
     
-    public void onCreatePattern() {
+    @Override
+	public void onCreatePattern() {
         if (mayCreatePattern()) {
             ItemStack pattern = new ItemStack(ModItems.craftingPattern);
 
@@ -38,7 +37,8 @@ public class TileProcessingPatternEncoder extends TilePatternEncoder {
         }
     }
     
-    public boolean mayCreatePattern() {
+    @Override
+	public boolean mayCreatePattern() {
         int inputsFilled = 0, outputsFilled = 0;
 
         for (int i = 0; i < 9; ++i) {
@@ -70,7 +70,8 @@ public class TileProcessingPatternEncoder extends TilePatternEncoder {
         }
     }
     
-    public BasicItemHandler getPatterns() {
+    @Override
+	public BasicItemHandler getPatterns() {
         return patterns;
     }
 

@@ -21,6 +21,7 @@ public class ItemCrystalSap extends Item implements ICustomModel {
 		ModItems.registerItem(this, "crystalsap");
 	}
 	
+	@Override
 	@SideOnly(Side.CLIENT)
     public void initModel() {
         for(SapType type : SapType.values()){
@@ -28,6 +29,7 @@ public class ItemCrystalSap extends Item implements ICustomModel {
         }
     }
 	
+	@Override
 	public String getUnlocalizedName(ItemStack stack)
     {
         int i = stack.getMetadata();
@@ -61,7 +63,8 @@ public class ItemCrystalSap extends Item implements ICustomModel {
             this.unlocalizedName = name;
         }
 
-        public int getMetadata()
+        @Override
+		public int getMetadata()
         {
             return this.metadata;
         }
@@ -71,7 +74,8 @@ public class ItemCrystalSap extends Item implements ICustomModel {
             return this.unlocalizedName;
         }
 
-        public String toString()
+        @Override
+		public String toString()
         {
             return this.unlocalizedName;
         }
@@ -86,7 +90,8 @@ public class ItemCrystalSap extends Item implements ICustomModel {
             return METADATA_LOOKUP[metadata];
         }
 
-        public String getName()
+        @Override
+		public String getName()
         {
             return this.unlocalizedName;
         }

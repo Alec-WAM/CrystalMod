@@ -1,31 +1,19 @@
 package alec_wam.CrystalMod.integration.jei.machine;
 
-import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nonnull;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fluids.FluidStack;
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.integration.jei.RecipeHandler;
 import alec_wam.CrystalMod.tiles.machine.BasicMachineRecipe;
 import alec_wam.CrystalMod.tiles.machine.crafting.BlockCrystalMachine.MachineType;
-import alec_wam.CrystalMod.tiles.machine.crafting.liquidizer.TileEntityLiquidizer;
 import alec_wam.CrystalMod.tiles.machine.crafting.press.ContainerPress;
 import alec_wam.CrystalMod.tiles.machine.crafting.press.GuiPress;
 import alec_wam.CrystalMod.tiles.machine.crafting.press.PressRecipeManager;
 import alec_wam.CrystalMod.util.Lang;
-import alec_wam.CrystalMod.util.client.RenderUtil;
-
-import com.google.common.collect.Lists;
-
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.IJeiHelpers;
 import mezz.jei.api.IModRegistry;
@@ -38,6 +26,10 @@ import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.BlankRecipeCategory;
 import mezz.jei.api.recipe.BlankRecipeWrapper;
 import mezz.jei.api.recipe.IStackHelper;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 
 public class PressRecipeCategory extends BlankRecipeCategory<PressRecipeCategory.PressRecipe>  {
 
@@ -104,9 +96,7 @@ public class PressRecipeCategory extends BlankRecipeCategory<PressRecipeCategory
 	@Nonnull
 	protected final IDrawableAnimated arrow;
 	  
-	private PressRecipe currentRecipe;
-
-  	public PressRecipeCategory(IGuiHelper guiHelper) {
+	public PressRecipeCategory(IGuiHelper guiHelper) {
 	    ResourceLocation backgroundLocation = new ResourceLocation("crystalmod", "textures/gui/machine/press.png");
 	    background = guiHelper.createDrawable(backgroundLocation, xOff, yOff, 125, 50);
 
@@ -138,8 +128,6 @@ public class PressRecipeCategory extends BlankRecipeCategory<PressRecipeCategory
 
 	@Override
 	public void setRecipe(IRecipeLayout recipeLayout, PressRecipe recipeWrapper, IIngredients arg2) {
-		currentRecipe = recipeWrapper;
-		
 		IGuiItemStackGroup guiItemStacks = recipeLayout.getItemStacks();
 		guiItemStacks.init(0, true, 56 - xOff-1, 35 - yOff-1);
 		guiItemStacks.init(1, false, 116 - xOff-1, 35 - yOff-1);

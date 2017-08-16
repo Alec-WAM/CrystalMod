@@ -1,7 +1,6 @@
 package alec_wam.CrystalMod.tiles.machine.worksite.gui;
 
 import alec_wam.CrystalMod.handler.GuiHandler;
-import alec_wam.CrystalMod.proxy.CommonProxy;
 import alec_wam.CrystalMod.tiles.machine.worksite.TileWorksiteBoundedInventory;
 import alec_wam.CrystalMod.tiles.machine.worksite.gui.elements.Button;
 import alec_wam.CrystalMod.tiles.machine.worksite.gui.elements.Label;
@@ -16,7 +15,7 @@ public abstract class GuiWorksiteBase extends GuiContainerWorksiteBase {
 	public GuiWorksiteBase(ContainerWorksite par1Container) {
 		super(par1Container, 178, 240, defaultBackground);
 		worksite = ((ContainerWorksite) inventorySlots).worksite;
-		this.container = (ContainerWorksite) par1Container;
+		this.container = par1Container;
 		this.ySize = container.guiHeight + 12;
 	}
 

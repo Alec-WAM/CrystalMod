@@ -1,11 +1,10 @@
 package alec_wam.CrystalMod.items.guide.old;
 
-import net.minecraft.item.ItemStack;
 import alec_wam.CrystalMod.client.util.comp.BaseComponent;
 import alec_wam.CrystalMod.client.util.comp.GuiComponentLabel;
 import alec_wam.CrystalMod.client.util.comp.book.BlankPage;
 import alec_wam.CrystalMod.client.util.comp.book.SectionPage;
-import alec_wam.CrystalMod.items.guide.GuidePages;
+import net.minecraft.item.ItemStack;
 
 
 public class GuiEStorageGuide extends GuiGuideBase {
@@ -33,6 +32,7 @@ public class GuiEStorageGuide extends GuiGuideBase {
 		contentsPage.addComponent(lblItems);
 	}
 	
+	@Override
 	public void addBookPages(){
 		blocksIndex = book.getNumberOfPages();
 		

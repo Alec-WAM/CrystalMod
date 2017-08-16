@@ -1,20 +1,12 @@
 package alec_wam.CrystalMod.tiles.pipes.estorage.panel.popup;
 
-import net.minecraft.item.ItemStack;
-import alec_wam.CrystalMod.api.estorage.ICraftingTask;
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.task.BasicCraftingTask;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.GuiPanel;
+import net.minecraft.item.ItemStack;
 
 public class CraftingInfoPopup extends Popup {
 
-	private ItemStack requested;
-	private BasicCraftingTask task;
-	private int quantity;
-	
 	public CraftingInfoPopup(ItemStack stack, BasicCraftingTask task, int quantity) {
-		this.requested = stack;
-		this.task = task;
-		this.quantity = quantity;
 	}
 
 	@Override

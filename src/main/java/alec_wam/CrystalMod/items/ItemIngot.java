@@ -29,11 +29,13 @@ public class ItemIngot extends Item implements ICustomModel {
 		ModItems.registerItem(this, "crystalingot");
 	}
 	
+	@Override
 	@SideOnly(Side.CLIENT)
 	public boolean hasEffect(ItemStack stack){
 		return (stack.getItemDamage() !=IngotType.DARK_IRON.getMetadata());
 	}
 	
+	@Override
 	@SideOnly(Side.CLIENT)
     public void initModel() {
         for(IngotType type : IngotType.values()){
@@ -41,6 +43,7 @@ public class ItemIngot extends Item implements ICustomModel {
         }
     }
 	
+	@Override
 	public String getUnlocalizedName(ItemStack stack)
     {
         int i = stack.getMetadata();
@@ -76,7 +79,8 @@ public class ItemIngot extends Item implements ICustomModel {
             this.unlocalizedName = name;
         }
 
-        public int getMetadata()
+        @Override
+		public int getMetadata()
         {
             return this.metadata;
         }
@@ -86,7 +90,8 @@ public class ItemIngot extends Item implements ICustomModel {
             return this.unlocalizedName;
         }
 
-        public String toString()
+        @Override
+		public String toString()
         {
             return this.unlocalizedName;
         }
@@ -101,7 +106,8 @@ public class ItemIngot extends Item implements ICustomModel {
             return METADATA_LOOKUP[metadata];
         }
 
-        public String getName()
+        @Override
+		public String getName()
         {
             return this.unlocalizedName;
         }

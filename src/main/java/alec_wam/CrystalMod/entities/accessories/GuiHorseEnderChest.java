@@ -1,7 +1,6 @@
 package alec_wam.CrystalMod.entities.accessories;
 
 import alec_wam.CrystalMod.CrystalMod;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.client.renderer.GlStateManager;
@@ -44,7 +43,8 @@ public class GuiHorseEnderChest extends GuiContainer
     /**
      * Draw the foreground layer for the GuiContainer (everything in front of the items)
      */
-    protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY)
+    @Override
+	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY)
     {
         this.fontRendererObj.drawString(this.horseInventory.getDisplayName().getUnformattedText(), 8, 6, 4210752);
         if(this.enderChestInventory !=null){
@@ -64,7 +64,8 @@ public class GuiHorseEnderChest extends GuiContainer
     /**
      * Draws the background layer of this container (behind the items).
      */
-    protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY)
+    @Override
+	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY)
     {
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         this.mc.getTextureManager().bindTexture(HORSE_GUI_TEXTURES);
@@ -72,16 +73,17 @@ public class GuiHorseEnderChest extends GuiContainer
         int j = (this.height - this.ySize) / 2;
         this.drawTexturedModalRect(i, j, 0, 0, this.xSize, this.ySize);
 
-        GuiInventory.drawEntityOnScreen(i + 51 + 25, j + 60, 17, (float)(i + 51) - this.mousePosx, (float)(j + 75 - 50) - this.mousePosY, this.horseEntity);
+        GuiInventory.drawEntityOnScreen(i + 51 + 25, j + 60, 17, i + 51 - this.mousePosx, j + 75 - 50 - this.mousePosY, this.horseEntity);
     }
 
     /**
      * Draws the screen and all the components in it.
      */
-    public void drawScreen(int mouseX, int mouseY, float partialTicks)
+    @Override
+	public void drawScreen(int mouseX, int mouseY, float partialTicks)
     {
-        this.mousePosx = (float)mouseX;
-        this.mousePosY = (float)mouseY;
+        this.mousePosx = mouseX;
+        this.mousePosY = mouseY;
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
 }

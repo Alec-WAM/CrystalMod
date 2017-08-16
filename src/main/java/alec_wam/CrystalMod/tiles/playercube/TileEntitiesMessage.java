@@ -1,13 +1,14 @@
 package alec_wam.CrystalMod.tiles.playercube;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.ByteBufInputStream;
-import io.netty.buffer.ByteBufOutputStream;
-
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
+import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.network.packets.PacketTileMessage;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBufInputStream;
+import io.netty.buffer.ByteBufOutputStream;
 import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
@@ -15,8 +16,6 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import alec_wam.CrystalMod.CrystalMod;
-import alec_wam.CrystalMod.network.packets.PacketTileMessage;
 
 public class TileEntitiesMessage extends PacketTileMessage {
     private NBTTagCompound tagCompound;

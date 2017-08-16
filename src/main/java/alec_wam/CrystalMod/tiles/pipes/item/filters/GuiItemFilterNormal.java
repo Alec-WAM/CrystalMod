@@ -1,22 +1,14 @@
 package alec_wam.CrystalMod.tiles.pipes.item.filters;
 
-import java.awt.Color;
-
 import alec_wam.CrystalMod.network.CrystalModNetwork;
-import alec_wam.CrystalMod.network.IMessageHandler;
 import alec_wam.CrystalMod.network.packets.PacketGuiMessage;
-import alec_wam.CrystalMod.tiles.pipes.ConnectionMode;
-import alec_wam.CrystalMod.tiles.pipes.TileEntityPipe.RedstoneMode;
-import alec_wam.CrystalMod.tiles.pipes.item.PacketPipe;
 import alec_wam.CrystalMod.tiles.pipes.item.filters.ItemPipeFilter.FilterType;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;

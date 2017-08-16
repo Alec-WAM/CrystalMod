@@ -25,6 +25,7 @@ public class ShapelessRecipeNBT extends ShapelessRecipes {
         super(output, inputList);
     }
 	
+	@Override
 	public boolean matches(InventoryCrafting inv, World worldIn)
     {
         List<ItemStack> list = Lists.newArrayList(this.recipeItems);

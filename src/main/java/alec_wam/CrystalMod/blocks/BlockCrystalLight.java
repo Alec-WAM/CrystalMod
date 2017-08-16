@@ -23,6 +23,7 @@ public class BlockCrystalLight extends EnumBlock<BlockCrystalLight.LightBlockTyp
 		this.setDefaultState(this.blockState.getBaseState().withProperty(TYPE, LightBlockType.BLUE));
 	}
 	
+	@Override
 	@SideOnly(Side.CLIENT)
 	public void initModel() {
 		for(LightBlockType type : LightBlockType.values())

@@ -6,8 +6,8 @@ import java.awt.image.DataBufferInt;
 import java.awt.image.ImageObserver;
 
 import net.minecraft.client.renderer.IImageBuffer;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class ImageBufferFaceLarge implements IImageBuffer
@@ -19,7 +19,8 @@ public class ImageBufferFaceLarge implements IImageBuffer
     	this.imageHeight = h;
     }
 
-    public BufferedImage parseUserSkin(BufferedImage p_78432_1_)
+    @Override
+	public BufferedImage parseUserSkin(BufferedImage p_78432_1_)
     {
         if (p_78432_1_ == null)
         {
@@ -36,5 +37,6 @@ public class ImageBufferFaceLarge implements IImageBuffer
         }
     }
 
-    public void skinAvailable() {}
+    @Override
+	public void skinAvailable() {}
 }

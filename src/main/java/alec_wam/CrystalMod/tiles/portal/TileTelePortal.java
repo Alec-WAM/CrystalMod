@@ -146,37 +146,23 @@ public class TileTelePortal extends TileEntityMod implements IFacingTile {
 		
 		Vector3d motionVec = new Vector3d(ejectPower * portalFacing.getFrontOffsetX(), ejectPower * portalFacing.getFrontOffsetY(), ejectPower * portalFacing.getFrontOffsetZ());
 		
-		int pitch = 0;
-		int yaw = 0;
 		switch (portalFacing) {
 		case DOWN: {
-			pitch = 90;
-			yaw = 0;
 			break;
 		}
 		case UP: {
-			pitch = -90;
-			yaw = 0;
 			break;
 		}
 		case NORTH: {
-			yaw = 180;
-			pitch = 0;
 			break;
 		}
 		case SOUTH: {
-			yaw = 0;
-			pitch = 0;
 			break;
 		}
 		case WEST: {
-			yaw = 90;
-			pitch = 0;
 			break;
 		}
 		case EAST: {
-			yaw = 270;
-			pitch = 0;
 			break;
 		}
 		default: {

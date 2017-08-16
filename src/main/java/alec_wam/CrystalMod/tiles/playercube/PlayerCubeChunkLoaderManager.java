@@ -1,25 +1,32 @@
 package alec_wam.CrystalMod.tiles.playercube;
 
-import alec_wam.CrystalMod.CrystalMod;
-import alec_wam.CrystalMod.tiles.machine.worksite.WorksiteChunkLoader;
-import alec_wam.CrystalMod.world.ModDimensions;
-
-import com.mojang.authlib.*;
-
-import net.minecraftforge.common.*;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.world.*;
-import net.minecraftforge.fml.common.gameevent.*;
-import net.minecraftforge.fml.common.eventhandler.*;
-import net.minecraftforge.event.world.*;
-import gnu.trove.list.array.*;
-import net.minecraft.nbt.*;
-
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.UUID;
 
 import org.apache.logging.log4j.core.helpers.Strings;
 
-import com.google.common.collect.*;
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.ListMultimap;
+import com.google.common.collect.Multimap;
+import com.google.common.collect.Sets;
+import com.mojang.authlib.GameProfile;
+
+import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.tiles.machine.worksite.WorksiteChunkLoader;
+import alec_wam.CrystalMod.world.ModDimensions;
+import gnu.trove.list.array.TIntArrayList;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.ChunkPos;
+import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeChunkManager;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.world.WorldEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 public class PlayerCubeChunkLoaderManager implements ForgeChunkManager.LoadingCallback, ForgeChunkManager.PlayerOrderedLoadingCallback
 {
@@ -29,8 +36,8 @@ public class PlayerCubeChunkLoaderManager implements ForgeChunkManager.LoadingCa
     private static HashMap<GameProfile, ForgeChunkManager.Ticket> playerTickets;
     
     public static void init() {
-        ForgeChunkManager.setForcedChunkLoadingCallback((Object)CrystalMod.instance, (ForgeChunkManager.LoadingCallback)new WorksiteChunkLoader());
-        MinecraftForge.EVENT_BUS.register((Object)PlayerCubeChunkLoaderManager.instance);
+        ForgeChunkManager.setForcedChunkLoadingCallback(CrystalMod.instance, new WorksiteChunkLoader());
+        MinecraftForge.EVENT_BUS.register(PlayerCubeChunkLoaderManager.instance);
     }
     
     public static void register(final PlayerCube loader) {
@@ -49,7 +56,7 @@ public class PlayerCubeChunkLoaderManager implements ForgeChunkManager.LoadingCa
     
     public static void unregister(final PlayerCube loader) {
         synchronized (PlayerCubeChunkLoaderManager.chunkLoaders) {
-            PlayerCubeChunkLoaderManager.chunkLoaders.remove((Object)loader);
+            PlayerCubeChunkLoaderManager.chunkLoaders.remove(loader);
             PlayerCubeChunkLoaderManager.dirty = true;
         }
     }
@@ -83,7 +90,7 @@ public class PlayerCubeChunkLoaderManager implements ForgeChunkManager.LoadingCa
             final Multimap<ForgeChunkManager.Ticket, ChunkPos> toAdd = HashMultimap.create();
             final HashMap<GameProfile, ForgeChunkManager.Ticket> map = PlayerCubeChunkLoaderManager.playerTickets;
             for (final ForgeChunkManager.Ticket ticket : map.values()) {
-                final ImmutableSet<ChunkPos> chunkList = (ImmutableSet<ChunkPos>)ticket.getChunkList();
+                final ImmutableSet<ChunkPos> chunkList = ticket.getChunkList();
                 worldChunks.addAll(chunkList);
                 toUnload.putAll(ticket, chunkList);
                 loaded.putAll(ticket, chunkList);
@@ -147,7 +154,7 @@ public class PlayerCubeChunkLoaderManager implements ForgeChunkManager.LoadingCa
         }
         ForgeChunkManager.Ticket ticket = gameProfileTicketHashMap.get(profile);
         if (ticket == null) {
-            ticket = ForgeChunkManager.requestPlayerTicket((Object)CrystalMod.instance, profile.getName(), CubeManager.getInstance().getWorld(), ForgeChunkManager.Type.NORMAL);
+            ticket = ForgeChunkManager.requestPlayerTicket(CrystalMod.instance, profile.getName(), CubeManager.getInstance().getWorld(), ForgeChunkManager.Type.NORMAL);
             final NBTTagCompound tag = ticket.getModData();
             tag.setString("Name", profile.getName());
             final UUID id = profile.getId();
@@ -160,7 +167,8 @@ public class PlayerCubeChunkLoaderManager implements ForgeChunkManager.LoadingCa
         return ticket;
     }
     
-    public void ticketsLoaded(final List<ForgeChunkManager.Ticket> tickets, final World world) {
+    @Override
+	public void ticketsLoaded(final List<ForgeChunkManager.Ticket> tickets, final World world) {
     	if(world.provider.getDimension() != ModDimensions.CUBE_ID)return;
         PlayerCubeChunkLoaderManager.dirty = true;
         final HashMap<GameProfile, ForgeChunkManager.Ticket> cache = new HashMap<GameProfile, ForgeChunkManager.Ticket>();
@@ -173,7 +181,7 @@ public class PlayerCubeChunkLoaderManager implements ForgeChunkManager.LoadingCa
             if (modData.hasKey("UUIDL")) {
                 uuid = new UUID(modData.getLong("UUIDU"), modData.getLong("UUIDL"));
             }
-            if (Strings.isEmpty((CharSequence)name)) {
+            if (Strings.isEmpty(name)) {
                 profile = null;
             }
             else profile = new GameProfile(uuid, name);
@@ -189,7 +197,8 @@ public class PlayerCubeChunkLoaderManager implements ForgeChunkManager.LoadingCa
         }
     }
     
-    public ListMultimap<String, ForgeChunkManager.Ticket> playerTicketsLoaded(final ListMultimap<String, ForgeChunkManager.Ticket> tickets, final World world) {
+    @Override
+	public ListMultimap<String, ForgeChunkManager.Ticket> playerTicketsLoaded(final ListMultimap<String, ForgeChunkManager.Ticket> tickets, final World world) {
         return tickets;
     }
     

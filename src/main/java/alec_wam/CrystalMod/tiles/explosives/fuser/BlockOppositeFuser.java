@@ -2,7 +2,6 @@ package alec_wam.CrystalMod.tiles.explosives.fuser;
 
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.ICustomModel;
-import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.items.ItemCrystal.CrystalType;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
@@ -187,6 +186,7 @@ public class BlockOppositeFuser extends BlockContainer implements ICustomModel {
 		super.breakBlock(world, pos, blockState);
     }
 	
+	@Override
 	@SideOnly(Side.CLIENT)
     public void initModel() {
     	ModelLoader.setCustomStateMapper(this, new CustomStateMapper());

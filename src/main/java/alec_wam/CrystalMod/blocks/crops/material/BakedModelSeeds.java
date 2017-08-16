@@ -5,46 +5,30 @@ import java.util.Map;
 
 import javax.annotation.Nullable;
 
-import org.lwjgl.util.vector.Vector3f;
-
-import alec_wam.CrystalMod.blocks.glass.BlockCrystalGlass.GlassType;
-import alec_wam.CrystalMod.client.model.dynamic.DynamicItemAndBlockModel;
-import alec_wam.CrystalMod.util.ItemStackTools;
-import alec_wam.CrystalMod.util.ModLogger;
-import alec_wam.CrystalMod.util.client.CustomModelUtil;
-import alec_wam.CrystalMod.util.client.RenderUtil;
-
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-import net.minecraft.block.BlockGlass;
+import alec_wam.CrystalMod.client.model.dynamic.DynamicItemAndBlockModel;
+import alec_wam.CrystalMod.util.client.RenderUtil;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.block.model.BlockFaceUV;
-import net.minecraft.client.renderer.block.model.BlockPartFace;
-import net.minecraft.client.renderer.block.model.BlockPartRotation;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.block.model.ModelRotation;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class BakedModelSeeds extends DynamicItemAndBlockModel {
 
 	public static final BakedModelSeeds INSTANCE = new BakedModelSeeds();
-	private final ItemStack stack;
 	public BakedModelSeeds(){
 		super(true, false);
-		stack = null;
 	}
 	
 	public BakedModelSeeds(ItemStack stack){
 		super(false, true);
-		this.stack = stack;
 	}
 
 	@Override

@@ -7,9 +7,18 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
+import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+
+import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.blocks.ModBlocks;
+import alec_wam.CrystalMod.tiles.TileEntityMod;
+import alec_wam.CrystalMod.tiles.machine.elevator.caller.TileEntityElevatorCaller;
+import alec_wam.CrystalMod.tiles.machine.elevator.floor.TileEntityElevatorFloor;
+import alec_wam.CrystalMod.util.BlockUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -17,26 +26,16 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import alec_wam.CrystalMod.CrystalMod;
-import alec_wam.CrystalMod.blocks.ModBlocks;
-import alec_wam.CrystalMod.tiles.TileEntityMod;
-import alec_wam.CrystalMod.tiles.machine.elevator.caller.TileEntityElevatorCaller;
-import alec_wam.CrystalMod.tiles.machine.elevator.floor.TileEntityElevatorFloor;
-import alec_wam.CrystalMod.util.BlockUtil;
-
-import com.google.common.base.Strings;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 
 public class TileEntityElevator extends TileEntityMod implements ITickable {
 
@@ -97,14 +96,6 @@ public class TileEntityElevator extends TileEntityMod implements ITickable {
         if (!getWorld().isRemote) {
             if (isMoving()) {
             	markDirty();
-
-                //TODO Energy
-                /*int rfNeeded = (int) (ElevatorConfiguration.rfPerTickMoving * (3.0f - getInfusedFactor()) / 3.0f);
-                if (getEnergyStored(EnumFacing.DOWN) < rfNeeded) {
-                    return;
-                }
-                consumeEnergy(rfNeeded);*/
-
                 double d = calculateSpeed();
                 boolean stopped = handlePlatformMovement(d);
                 if (stopped) {
@@ -232,7 +223,6 @@ public class TileEntityElevator extends TileEntityMod implements ITickable {
     private void moveEntityOnPlatform(boolean stop, double offset, Entity entity) {
         if (entity instanceof EntityPlayer) {
             double dy = 1;
-            EntityPlayer player = (EntityPlayer) entity;
             if (stop) {
                 //BuffProperties.disableElevatorMode(player);
                 entity.posY = movingY + dy;
@@ -312,7 +302,7 @@ public class TileEntityElevator extends TileEntityMod implements ITickable {
     private void stopMoving() {
         movingY = stopY;
         for (BlockPos pos : positions) {
-            getWorld().setBlockState(getPosAtY(pos, (int) stopY), movingState, 3);
+            getWorld().setBlockState(getPosAtY(pos, stopY), movingState, 3);
         }
         // Current level will have to be recalculated
         cachedCurrent = -1;

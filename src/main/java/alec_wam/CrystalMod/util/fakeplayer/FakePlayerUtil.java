@@ -6,6 +6,12 @@ import java.util.List;
 import java.util.UUID;
 import java.util.WeakHashMap;
 
+import com.google.common.collect.Lists;
+import com.mojang.authlib.GameProfile;
+
+import alec_wam.CrystalMod.util.ItemStackTools;
+import alec_wam.CrystalMod.world.DropCapture;
+import alec_wam.CrystalMod.world.DropCapture.CaptureContext;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
@@ -13,10 +19,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -24,18 +30,6 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.FakePlayerFactory;
 import net.minecraftforge.event.world.BlockEvent;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import alec_wam.CrystalMod.util.ItemStackTools;
-import alec_wam.CrystalMod.world.DropCapture;
-import alec_wam.CrystalMod.world.DropCapture.CaptureContext;
-
-import com.google.common.collect.Lists;
-import com.mojang.authlib.GameProfile;
-
-import net.minecraft.network.EnumPacketDirection;
-import net.minecraft.network.NetHandlerPlayServer;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.Packet;
 
 public class FakePlayerUtil {
 
@@ -49,7 +43,7 @@ public class FakePlayerUtil {
         FakePlayer ret = CRYSTALMOD_PLAYER != null ? CRYSTALMOD_PLAYER.get() : null;
         if (ret == null)
         {
-            ret = FakePlayerFactory.get((WorldServer) world, CRYSTALMOD);
+            ret = FakePlayerFactory.get(world, CRYSTALMOD);
             CRYSTALMOD_PLAYER = new WeakReference<FakePlayer>(ret);
         }
         return ret;

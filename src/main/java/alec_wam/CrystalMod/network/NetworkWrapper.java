@@ -1,7 +1,5 @@
 package alec_wam.CrystalMod.network;
 
-import alec_wam.CrystalMod.util.ModLogger;
-import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;

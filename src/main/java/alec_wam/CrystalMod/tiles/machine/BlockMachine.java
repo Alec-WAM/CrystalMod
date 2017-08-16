@@ -1,17 +1,14 @@
 package alec_wam.CrystalMod.tiles.machine;
 
 import java.util.List;
-import java.util.UUID;
 
 import javax.annotation.Nullable;
 
-import alec_wam.CrystalMod.tiles.machine.enderbuffer.TileEntityEnderBuffer;
-import alec_wam.CrystalMod.util.BlockUtil;
-import alec_wam.CrystalMod.util.ItemNBTHelper;
-import alec_wam.CrystalMod.util.UUIDUtils;
-
 import com.google.common.collect.Lists;
 
+import alec_wam.CrystalMod.tiles.BlockStateFacing;
+import alec_wam.CrystalMod.util.BlockUtil;
+import alec_wam.CrystalMod.util.ItemNBTHelper;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockStateContainer;
@@ -35,6 +32,7 @@ public abstract class BlockMachine  extends BlockContainer {
 		super(materialIn);
 	}
 	
+	@Override
 	public EnumBlockRenderType getRenderType(IBlockState state)
     {
         return EnumBlockRenderType.MODEL;
@@ -45,7 +43,8 @@ public abstract class BlockMachine  extends BlockContainer {
         return new BlockStateMachine(this);
     }
     
-    public int getMetaFromState(IBlockState state){
+    @Override
+	public int getMetaFromState(IBlockState state){
     	return 0;
     }
     
@@ -62,7 +61,7 @@ public abstract class BlockMachine  extends BlockContainer {
         	}
         	if(te instanceof IActiveTile)active = ((IActiveTile)te).isActive();
         }
-        return state.withProperty(BlockStateMachine.facingProperty, face).withProperty(BlockStateMachine.activeProperty, Boolean.valueOf(active));
+        return state.withProperty(BlockStateFacing.facingProperty, face).withProperty(BlockStateMachine.activeProperty, Boolean.valueOf(active));
     }
 	
 	@Override
@@ -80,6 +79,7 @@ public abstract class BlockMachine  extends BlockContainer {
 	    worldIn.setBlockToAir(pos);
 	}
 	
+	@Override
 	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player)
     {
 		if(world == null || pos == null)return super.getPickBlock(state, target, world, pos, player);
@@ -144,7 +144,8 @@ public abstract class BlockMachine  extends BlockContainer {
         return entityIn.getHorizontalFacing().getOpposite();
     }
     
-    public boolean rotateBlock(World world, BlockPos pos, EnumFacing axis)
+    @Override
+	public boolean rotateBlock(World world, BlockPos pos, EnumFacing axis)
     {
 		TileEntity te = world.getTileEntity(pos);
         if(te !=null && te instanceof IFacingTile){
@@ -160,7 +161,8 @@ public abstract class BlockMachine  extends BlockContainer {
         return false;
     }
     
-    public EnumFacing[] getValidRotations(World world, BlockPos pos)
+    @Override
+	public EnumFacing[] getValidRotations(World world, BlockPos pos)
     {
     	TileEntity tile = world.getTileEntity(pos);
     	if(tile !=null && tile instanceof IFacingTile){
@@ -170,7 +172,8 @@ public abstract class BlockMachine  extends BlockContainer {
         return EnumFacing.HORIZONTALS;
     }
 
-    public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
+    @Override
+	public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
     {
         super.breakBlock(worldIn, pos, state);
         worldIn.removeTileEntity(pos);

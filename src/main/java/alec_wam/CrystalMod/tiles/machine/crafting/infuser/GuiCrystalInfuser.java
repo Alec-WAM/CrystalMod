@@ -2,14 +2,13 @@ package alec_wam.CrystalMod.tiles.machine.crafting.infuser;
 
 import java.util.List;
 
+import com.google.common.collect.Lists;
+
 import alec_wam.CrystalMod.client.util.ElementDualScaled;
 import alec_wam.CrystalMod.client.util.ElementEnergy;
 import alec_wam.CrystalMod.client.util.ElementFluidScaled;
 import alec_wam.CrystalMod.client.util.GuiElementContainer;
 import alec_wam.CrystalMod.util.client.RenderUtil;
-
-import com.google.common.collect.Lists;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
@@ -27,6 +26,7 @@ public class GuiCrystalInfuser extends GuiElementContainer{
         this.name = "Crystal Infuser";
     }
 	
+	@Override
 	public void initGui(){
 		super.initGui();
 		
@@ -37,6 +37,7 @@ public class GuiCrystalInfuser extends GuiElementContainer{
 
 	}
 	
+	@Override
 	public void drawGuiContainerForegroundLayer(int par1, int par2){
 		super.drawGuiContainerForegroundLayer(par1, par2);
 		RenderUtil.renderGuiTank(tileMachine.tank, 32, 23, zLevel, 12, 40);
@@ -54,6 +55,7 @@ public class GuiCrystalInfuser extends GuiElementContainer{
 		}
 	}
 	
+	@Override
 	protected void updateElementInformation()
 	{
 		super.updateElementInformation();

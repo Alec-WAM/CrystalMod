@@ -33,6 +33,7 @@ public class ItemWorksiteUpgrade extends Item implements ICustomModel {
 		ModItems.registerItem(this, "worksiteupgrade");
 	}
 	
+	@Override
 	@SideOnly(Side.CLIENT)
     public void initModel() {
         for(WorksiteUpgrade type : WorksiteUpgrade.values()){
@@ -59,7 +60,6 @@ public class ItemWorksiteUpgrade extends Item implements ICustomModel {
 				+ par1ItemStack.getItemDamage();
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public void getSubItems(Item item, CreativeTabs p_150895_2_, NonNullList<ItemStack> list) {
 		for (WorksiteUpgrade type : WorksiteUpgrade.values()) {

@@ -16,7 +16,7 @@ public class ContainerGrinder extends Container
     {
         this.addPlayerInventory(player.inventory);
         
-        this.tileMachine = ((TileEntityGrinder) tileEntity);
+        this.tileMachine = (tileEntity);
 
         this.addSlotToContainer(new Slot(tileMachine, 0, 56, 35));
         this.addSlotToContainer(new SlotFurnaceOutput(player, tileMachine, 1, 116, 35));
@@ -47,7 +47,7 @@ public class ContainerGrinder extends Container
     {
     	ItemStack itemstack = ItemStackTools.getEmptyStack();
     	int par2 = i;
-		Slot slot = (Slot)this.inventorySlots.get(par2);
+		Slot slot = this.inventorySlots.get(par2);
 
 		if (slot != null && slot.getHasStack())
 		{

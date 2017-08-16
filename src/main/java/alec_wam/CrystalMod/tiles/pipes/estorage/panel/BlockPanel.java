@@ -56,6 +56,7 @@ public class BlockPanel extends BlockContainer implements ICustomModel {
 	    }
 	}
 	
+	@Override
 	@SideOnly(Side.CLIENT)
 	public void initModel() {
 		ModelLoader.setCustomStateMapper(this, new PanelBlockStateMapper());
@@ -90,7 +91,7 @@ public class BlockPanel extends BlockContainer implements ICustomModel {
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
-	    return ((PanelType) state.getValue(PANEL_TYPE)).getMeta();
+	    return state.getValue(PANEL_TYPE).getMeta();
 	}
 
 	@Override

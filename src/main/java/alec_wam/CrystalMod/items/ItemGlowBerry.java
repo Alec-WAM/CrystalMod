@@ -37,6 +37,7 @@ public class ItemGlowBerry extends Item implements ICustomModel {
 		return true;
 	}
 	
+	@Override
 	@SideOnly(Side.CLIENT)
     public void initModel() {
         for(PlantType type : PlantType.values()){

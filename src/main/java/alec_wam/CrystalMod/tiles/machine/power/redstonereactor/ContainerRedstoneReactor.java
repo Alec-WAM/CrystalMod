@@ -2,11 +2,9 @@ package alec_wam.CrystalMod.tiles.machine.power.redstonereactor;
 
 import javax.annotation.Nullable;
 
-import alec_wam.CrystalMod.api.enhancements.KnowledgeManager;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.IInventory;
@@ -49,7 +47,8 @@ public class ContainerRedstoneReactor extends Container
 		super.addListener(crafter);
 	}
     
-    public boolean canInteractWith(EntityPlayer playerIn)
+    @Override
+	public boolean canInteractWith(EntityPlayer playerIn)
     {
         return this.reactor.isUsableByPlayer(playerIn);
     }
@@ -57,11 +56,12 @@ public class ContainerRedstoneReactor extends Container
     /**
      * Take a stack from the specified inventory slot.
      */
-    @Nullable
+    @Override
+	@Nullable
     public ItemStack transferStackInSlot(EntityPlayer playerIn, int index)
     {
         ItemStack itemstack = ItemStackTools.getEmptyStack();
-        Slot slot = (Slot)this.inventorySlots.get(index);
+        Slot slot = this.inventorySlots.get(index);
 
         if (slot != null && slot.getHasStack())
         {

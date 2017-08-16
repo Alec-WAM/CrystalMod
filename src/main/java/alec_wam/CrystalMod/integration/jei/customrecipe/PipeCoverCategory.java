@@ -108,7 +108,7 @@ public class PipeCoverCategory extends BlankRecipeCategory<PipeCoverCategory.Cov
 				guiItemStacks.init(index, true, x * 18, y * 18);
 			}
 		}
-		craftingGridHelper.setInputStacks(guiItemStacks, arg2.getInputs(ItemStack.class));
+		craftingGridHelper.setInputs(guiItemStacks, arg2.getInputs(ItemStack.class));
 		guiItemStacks.set(craftOutputSlot, arg2.getOutputs(ItemStack.class).get(0));
 	}
 

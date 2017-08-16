@@ -1,7 +1,5 @@
 package alec_wam.CrystalMod.tiles.pipes.estorage.panel;
 
-import alec_wam.CrystalMod.CrystalMod;
-import alec_wam.CrystalMod.api.estorage.INetworkItemProvider;
 import alec_wam.CrystalMod.api.estorage.INetworkTile;
 import alec_wam.CrystalMod.api.estorage.security.NetworkAbility;
 import alec_wam.CrystalMod.handler.GuiHandler;
@@ -14,9 +12,9 @@ import alec_wam.CrystalMod.tiles.TileEntityMod;
 import alec_wam.CrystalMod.tiles.pipes.ConnectionMode;
 import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetwork;
 import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetworkClient;
+import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetworkClient.SortType;
 import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetworkClient.ViewType;
 import alec_wam.CrystalMod.tiles.pipes.estorage.TileEntityPipeEStorage;
-import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetworkClient.SortType;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.monitor.TileEntityPanelMonitor;
 import alec_wam.CrystalMod.util.BlockUtil;
 import net.minecraft.entity.player.EntityPlayer;
@@ -39,6 +37,7 @@ public class TileEntityPanel extends TileEntityMod implements IMessageHandler, I
 	public EnumFacing facing = EnumFacing.NORTH;
 	public boolean connected;
 	
+	@Override
 	public void writeCustomNBT(NBTTagCompound nbt){
 		super.writeCustomNBT(nbt);
 		if(connectionDir !=null){
@@ -60,6 +59,7 @@ public class TileEntityPanel extends TileEntityMod implements IMessageHandler, I
 		nbt.setBoolean("JEISync", jeiSync);
 	}
 	
+	@Override
 	public void readCustomNBT(NBTTagCompound nbt){
 		super.readCustomNBT(nbt);
 		if(nbt.hasKey("ConDir")){

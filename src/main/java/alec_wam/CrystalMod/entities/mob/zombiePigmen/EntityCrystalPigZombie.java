@@ -51,7 +51,8 @@ public class EntityCrystalPigZombie extends EntityPigZombie
         this.isImmuneToFire = true;
     }
 
-    public void setRevengeTarget(EntityLivingBase livingBase)
+    @Override
+	public void setRevengeTarget(EntityLivingBase livingBase)
     {
         super.setRevengeTarget(livingBase);
 
@@ -61,19 +62,22 @@ public class EntityCrystalPigZombie extends EntityPigZombie
         }
     }
     
-    protected void entityInit()
+    @Override
+	protected void entityInit()
     {
         super.entityInit();
         this.dataManager.register(COLOR, Byte.valueOf((byte)0));
     }
 
-    protected void applyEntityAI()
+    @Override
+	protected void applyEntityAI()
     {
         this.targetTasks.addTask(1, new EntityCrystalPigZombie.AIHurtByAggressor(this));
         this.targetTasks.addTask(2, new EntityCrystalPigZombie.AITargetAggressor(this));
     }
 
-    protected void applyEntityAttributes()
+    @Override
+	protected void applyEntityAttributes()
     {
         super.applyEntityAttributes();
         this.getEntityAttribute(SPAWN_REINFORCEMENTS_CHANCE).setBaseValue(0.0D);
@@ -84,12 +88,14 @@ public class EntityCrystalPigZombie extends EntityPigZombie
     /**
      * Called to update the entity's position/logic.
      */
-    public void onUpdate()
+    @Override
+	public void onUpdate()
     {
         super.onUpdate();
     }
 
-    protected void updateAITasks()
+    @Override
+	protected void updateAITasks()
     {
         IAttributeInstance iattributeinstance = this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED);
 
@@ -126,7 +132,8 @@ public class EntityCrystalPigZombie extends EntityPigZombie
     /**
      * Checks if the entity's current position is a valid location to spawn this entity.
      */
-    public boolean getCanSpawnHere()
+    @Override
+	public boolean getCanSpawnHere()
     {
         return this.getEntityWorld().getDifficulty() != EnumDifficulty.PEACEFUL;
     }
@@ -134,7 +141,8 @@ public class EntityCrystalPigZombie extends EntityPigZombie
     /**
      * Checks that the entity is not colliding with any blocks / liquids
      */
-    public boolean isNotColliding()
+    @Override
+	public boolean isNotColliding()
     {
         return this.getEntityWorld().checkNoEntityCollision(this.getEntityBoundingBox(), this) && this.getEntityWorld().getCollisionBoxes(this, this.getEntityBoundingBox()).isEmpty() && !this.getEntityWorld().containsAnyLiquid(this.getEntityBoundingBox());
     }
@@ -142,7 +150,8 @@ public class EntityCrystalPigZombie extends EntityPigZombie
     /**
      * (abstract) Protected helper method to write subclass entity data to NBT.
      */
-    public void writeEntityToNBT(NBTTagCompound tagCompound)
+    @Override
+	public void writeEntityToNBT(NBTTagCompound tagCompound)
     {
         super.writeEntityToNBT(tagCompound);
         tagCompound.setByte("Color", (byte)this.getColor());
@@ -161,7 +170,8 @@ public class EntityCrystalPigZombie extends EntityPigZombie
     /**
      * (abstract) Protected helper method to read subclass entity data from NBT.
      */
-    public void readEntityFromNBT(NBTTagCompound tagCompund)
+    @Override
+	public void readEntityFromNBT(NBTTagCompound tagCompund)
     {
         super.readEntityFromNBT(tagCompund);
         this.angerLevel = tagCompund.getShort("Anger");
@@ -189,7 +199,8 @@ public class EntityCrystalPigZombie extends EntityPigZombie
     /**
      * Called when the entity is attacked.
      */
-    public boolean attackEntityFrom(DamageSource source, float amount)
+    @Override
+	public boolean attackEntityFrom(DamageSource source, float amount)
     {
         if (this.isEntityInvulnerable(source))
         {
@@ -222,7 +233,8 @@ public class EntityCrystalPigZombie extends EntityPigZombie
         }
     }
 
-    public boolean isAngry()
+    @Override
+	public boolean isAngry()
     {
         return this.angerLevel > 0;
     }
@@ -273,7 +285,8 @@ public class EntityCrystalPigZombie extends EntityPigZombie
     /**
      * Gives armor or weapon for entity based on given DifficultyInstance
      */
-    protected void setEquipmentBasedOnDifficulty(DifficultyInstance difficulty)
+    @Override
+	protected void setEquipmentBasedOnDifficulty(DifficultyInstance difficulty)
     {
     	
     }
@@ -282,24 +295,28 @@ public class EntityCrystalPigZombie extends EntityPigZombie
      * Called only once on an entity when first time spawned, via egg, mob spawner, natural spawning etc, but not called
      * when entity is reloaded from nbt. Mainly used for initializing attributes and inventory
      */
-    public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, IEntityLivingData livingdata)
+    @Override
+	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, IEntityLivingData livingdata)
     {
         super.onInitialSpawn(difficulty, livingdata);
         setColor(rand.nextInt(5));
         return livingdata;
     }
     
-    protected SoundEvent getAmbientSound()
+    @Override
+	protected SoundEvent getAmbientSound()
     {
         return SoundEvents.ENTITY_ZOMBIE_PIG_AMBIENT;
     }
 
-    protected SoundEvent getHurtSound()
+    @Override
+	protected SoundEvent getHurtSound()
     {
         return SoundEvents.ENTITY_ZOMBIE_PIG_HURT;
     }
 
-    protected SoundEvent getDeathSound()
+    @Override
+	protected SoundEvent getDeathSound()
     {
         return SoundEvents.ENTITY_ZOMBIE_PIG_DEATH;
     }
@@ -323,7 +340,8 @@ public class EntityCrystalPigZombie extends EntityPigZombie
                 super(p_i45828_1_, true, new Class[0]);
             }
 
-            protected void setEntityAttackTarget(EntityCreature creatureIn, EntityLivingBase entityLivingBaseIn)
+            @Override
+			protected void setEntityAttackTarget(EntityCreature creatureIn, EntityLivingBase entityLivingBaseIn)
             {
                 super.setEntityAttackTarget(creatureIn, entityLivingBaseIn);
 
@@ -344,7 +362,8 @@ public class EntityCrystalPigZombie extends EntityPigZombie
             /**
              * Returns whether the EntityAIBase should begin execution.
              */
-            public boolean shouldExecute()
+            @Override
+			public boolean shouldExecute()
             {
                 return ((EntityCrystalPigZombie)this.taskOwner).isAngry() && super.shouldExecute();
             }

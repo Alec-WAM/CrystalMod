@@ -4,10 +4,11 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import alec_wam.CrystalMod.blocks.ItemBlockMeta;
+import alec_wam.CrystalMod.tiles.tank.BlockTank.TankType;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import net.minecraft.block.Block;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -15,7 +16,6 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
@@ -24,16 +24,12 @@ import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import alec_wam.CrystalMod.blocks.ItemBlockMeta;
-import alec_wam.CrystalMod.tiles.tank.BlockTank.TankType;
-import alec_wam.CrystalMod.util.ItemStackTools;
 
 public class ItemBlockTank extends ItemBlockMeta {
 
 	public ItemBlockTank(Block block) {
 		super(block);
 	}
-	private static final FluidTank dummy = new FluidTank(FluidRegistry.WATER, 16000, 16000);
 	private FluidTank loadTank(ItemStack stack) {
 		int tankType = stack.getMetadata();
 		tankType = MathHelper.clamp(tankType, 0, BlockTank.tankCaps.length);
@@ -175,6 +171,7 @@ public class ItemBlockTank extends ItemBlockMeta {
 
 	  }
 	
+	@Override
 	@SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced)
     {

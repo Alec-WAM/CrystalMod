@@ -7,23 +7,20 @@ import java.util.Map;
 
 import com.google.common.collect.Lists;
 
+import alec_wam.CrystalMod.api.FluidStackList;
+import alec_wam.CrystalMod.api.estorage.IAutoCrafter;
+import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetwork;
+import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage;
+import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.CraftingPattern;
+import alec_wam.CrystalMod.util.BlockUtil;
+import alec_wam.CrystalMod.util.ItemStackTools;
+import alec_wam.CrystalMod.util.ItemUtil;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.FMLCommonHandler;
-import alec_wam.CrystalMod.api.FluidStackList;
-import alec_wam.CrystalMod.api.estorage.IAutoCrafter;
-import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetwork;
-import alec_wam.CrystalMod.tiles.pipes.estorage.FluidStorage;
-import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage;
-import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage.ItemStackData;
-import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.CraftingPattern;
-import alec_wam.CrystalMod.util.BlockUtil;
-import alec_wam.CrystalMod.util.ItemStackTools;
-import alec_wam.CrystalMod.util.ItemUtil;
-import alec_wam.CrystalMod.util.ModLogger;
 
 public abstract class CraftingProcessBase{
 	public static final String NBT_TYPE = "Type";

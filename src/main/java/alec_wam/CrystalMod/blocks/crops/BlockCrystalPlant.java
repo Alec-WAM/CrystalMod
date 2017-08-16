@@ -4,45 +4,36 @@ import java.util.Locale;
 import java.util.Random;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
-import net.minecraft.block.Block;
+import alec_wam.CrystalMod.blocks.BlockCrystal.CrystalBlockType;
+import alec_wam.CrystalMod.blocks.BlockCrystalIngot.CrystalIngotBlockType;
+import alec_wam.CrystalMod.blocks.ModBlocks;
+import alec_wam.CrystalMod.items.ItemCrystal.CrystalType;
+import alec_wam.CrystalMod.items.ModItems;
+import alec_wam.CrystalMod.util.ItemStackTools;
+import alec_wam.CrystalMod.util.ItemUtil;
+import alec_wam.CrystalMod.util.Util;
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.Enchantments;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.EnumPlantType;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import alec_wam.CrystalMod.blocks.EnumBlock;
-import alec_wam.CrystalMod.blocks.ModBlocks;
-import alec_wam.CrystalMod.blocks.BlockCrystal.CrystalBlockType;
-import alec_wam.CrystalMod.blocks.BlockCrystalIngot.CrystalIngotBlockType;
-import alec_wam.CrystalMod.blocks.EnumBlock.IEnumMeta;
-import alec_wam.CrystalMod.items.ModItems;
-import alec_wam.CrystalMod.util.ItemStackTools;
-import alec_wam.CrystalMod.util.ItemUtil;
-import alec_wam.CrystalMod.util.Util;
-import alec_wam.CrystalMod.items.ItemCrystal.CrystalType;
 
 public class BlockCrystalPlant extends BlockBush
 {
@@ -84,7 +75,7 @@ public class BlockCrystalPlant extends BlockBush
     @Override
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
     {
-        return AGE_AABB[((Integer)state.getValue(AGE)).intValue()];
+        return AGE_AABB[state.getValue(AGE).intValue()];
     }
 
     @Override
@@ -154,7 +145,7 @@ public class BlockCrystalPlant extends BlockBush
     @Override
     public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand)
     {
-        int i = ((Integer)state.getValue(AGE)).intValue();
+        int i = state.getValue(AGE).intValue();
 
         if (i < 3 && rand.nextInt(10) == 0)
         {
@@ -207,7 +198,7 @@ public class BlockCrystalPlant extends BlockBush
     @Override
     public int getMetaFromState(IBlockState state)
     {
-        return ((Integer)state.getValue(AGE)).intValue();
+        return state.getValue(AGE).intValue();
     }
 
     @Override
@@ -219,13 +210,13 @@ public class BlockCrystalPlant extends BlockBush
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ)
     {
-    	if(((Integer)state.getValue(AGE)) < 3)return false;
+    	if((state.getValue(AGE)) < 3)return false;
     	
     	if(worldIn.isRemote){
     		return true;
     	}
     	
-    	Random rand = worldIn instanceof World ? ((World)worldIn).rand : Util.rand;
+    	Random rand = worldIn instanceof World ? worldIn.rand : Util.rand;
     	int fortune = EnchantmentHelper.getMaxEnchantmentLevel(Enchantments.FORTUNE, playerIn);
     	int count = 1 + rand.nextInt(2) + (fortune > 0 ? rand.nextInt(fortune + 1) : 0);
     	ItemStack crop = getCrop();
@@ -256,7 +247,7 @@ public class BlockCrystalPlant extends BlockBush
         Random rand = world instanceof World ? ((World)world).rand : Util.rand;
         int count = 0;
 
-        if (((Integer)state.getValue(AGE)) >= 3)
+        if ((state.getValue(AGE)) >= 3)
         {
             count = 1 + rand.nextInt(2) + (fortune > 0 ? rand.nextInt(fortune + 1) : 0);
         }

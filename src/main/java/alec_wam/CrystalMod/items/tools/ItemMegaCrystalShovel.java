@@ -1,13 +1,10 @@
 package alec_wam.CrystalMod.items.tools;
 
-import java.util.List;
 import java.util.Map;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-import alec_wam.CrystalMod.Config;
 import alec_wam.CrystalMod.api.tools.IMegaTool;
 import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.ItemNBTHelper;

@@ -4,8 +4,8 @@ import java.util.Random;
 
 import alec_wam.CrystalMod.Config;
 import alec_wam.CrystalMod.api.world.IGenerationFeature;
-import alec_wam.CrystalMod.tiles.cluster.TileCrystalCluster;
 import alec_wam.CrystalMod.tiles.cluster.BlockCrystalCluster.EnumClusterType;
+import alec_wam.CrystalMod.tiles.cluster.TileCrystalCluster;
 import alec_wam.CrystalMod.util.ModLogger;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;

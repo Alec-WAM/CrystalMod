@@ -43,7 +43,7 @@ public class ItemBlockMeta extends ItemColored {
 	@SideOnly(Side.CLIENT)
 	public void registerItemModels() {
 		final Item item = this;
-		final ResourceLocation loc = (ResourceLocation) Block.REGISTRY.getNameForObject(block);
+		final ResourceLocation loc = Block.REGISTRY.getNameForObject(block);
 
 
 		for(Comparable o : (Collection<Comparable>)mappingProperty.getAllowedValues()) {

@@ -22,7 +22,8 @@ public class RenderAngel extends RenderBiped<EntityAngel>
     /**
      * Returns the location of an entity's texture. Doesn't seem to be called unless you call Render.bindEntityTexture.
      */
-    protected ResourceLocation getEntityTexture(EntityAngel entity)
+    @Override
+	protected ResourceLocation getEntityTexture(EntityAngel entity)
     {
         return ANGEL_TEXTURE;
     }
@@ -30,7 +31,8 @@ public class RenderAngel extends RenderBiped<EntityAngel>
     /**
      * Renders the desired {@code T} type Entity.
      */
-    public void doRender(EntityAngel entity, double x, double y, double z, float entityYaw, float partialTicks)
+    @Override
+	public void doRender(EntityAngel entity, double x, double y, double z, float entityYaw, float partialTicks)
     {
         int i = ((ModelAngel)this.mainModel).getModelVersion();
 
@@ -46,7 +48,8 @@ public class RenderAngel extends RenderBiped<EntityAngel>
     /**
      * Allows the render to do state modifications necessary before the model is rendered.
      */
-    protected void preRenderCallback(EntityAngel entitylivingbaseIn, float partialTickTime)
+    @Override
+	protected void preRenderCallback(EntityAngel entitylivingbaseIn, float partialTickTime)
     {
         GlStateManager.scale(0.8F, 0.8F, 0.8F);
     }

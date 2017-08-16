@@ -1,7 +1,6 @@
 package alec_wam.CrystalMod.util;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -11,18 +10,16 @@ import java.util.Set;
 
 import javax.annotation.Nonnull;
 
+import com.google.common.collect.Lists;
+
 import alec_wam.CrystalMod.blocks.EnumBlock.IEnumMeta;
 import alec_wam.CrystalMod.items.IEnumMetaItem;
 import alec_wam.CrystalMod.items.ModItems;
-import alec_wam.CrystalMod.tiles.chest.TileEntityBlueCrystalChest;
 import alec_wam.CrystalMod.tiles.machine.worksite.InventorySided;
 import alec_wam.CrystalMod.tiles.pipes.item.GhostItemHelper;
 import alec_wam.CrystalMod.tiles.pipes.item.filters.CameraFilterInventory;
 import alec_wam.CrystalMod.tiles.pipes.item.filters.FilterInventory;
 import alec_wam.CrystalMod.tiles.pipes.item.filters.ItemPipeFilter.FilterType;
-
-import com.google.common.collect.Lists;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.Enchantment;
@@ -49,14 +46,13 @@ import net.minecraft.stats.AchievementList;
 import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.ILockableContainer;
 import net.minecraft.world.World;
@@ -1289,8 +1285,8 @@ public class ItemUtil {
 		if(motion){
 			float f1 = player.getEntityWorld().rand.nextFloat() * 0.5F;
 			float f2 = player.getEntityWorld().rand.nextFloat() * (float) Math.PI * 2.0F;
-			ei.motionX = (double) (-MathHelper.sin(f2) * f1);
-			ei.motionZ = (double) (MathHelper.cos(f2) * f1);
+			ei.motionX = -MathHelper.sin(f2) * f1;
+			ei.motionZ = MathHelper.cos(f2) * f1;
 			ei.motionY = 0.20000000298023224D;
 		}
 		return ei;

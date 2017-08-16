@@ -24,6 +24,7 @@ public class GuiPatternEncoder extends GuiContainer {
 		ySize+=6;
 	}
 	
+	@Override
 	public void initGui(){
 		super.initGui();
 		String ore = encoder.isOreDict ? TextFormatting.GREEN+"O" : TextFormatting.RED+"O";
@@ -32,6 +33,7 @@ public class GuiPatternEncoder extends GuiContainer {
 		this.buttonList.add(oreButton);
 	}
 	
+	@Override
 	public void actionPerformed(GuiButton button){
 		if(button.id == oreButton.id){
 			boolean old = encoder.isOreDict;
@@ -56,11 +58,9 @@ public class GuiPatternEncoder extends GuiContainer {
 	
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
-		boolean showClearButton = true;
 		mc.getTextureManager().bindTexture(new ResourceLocation("crystalmod:textures/gui/eStorage_pattern.png"));
 		if(encoder instanceof TileProcessingPatternEncoder){
 			mc.getTextureManager().bindTexture(new ResourceLocation("crystalmod:textures/gui/eStorage_pattern_processing.png"));
-			showClearButton = false;
 		}
 		
 		drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);

@@ -5,10 +5,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import alec_wam.CrystalMod.blocks.BlockCrystalLog.WoodType;
-import alec_wam.CrystalMod.tiles.chest.TileEntityBlueCrystalChest;
-import alec_wam.CrystalMod.tiles.chest.TileEntityDarkCrystalChest;
-import alec_wam.CrystalMod.tiles.chest.TileEntityGreenCrystalChest;
-import alec_wam.CrystalMod.tiles.chest.TileEntityRedCrystalChest;
 import alec_wam.CrystalMod.blocks.ModBlocks;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;

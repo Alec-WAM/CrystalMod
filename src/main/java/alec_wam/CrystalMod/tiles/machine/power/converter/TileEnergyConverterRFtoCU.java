@@ -69,9 +69,11 @@ public class TileEnergyConverterRFtoCU extends TileEnergyConveterBase {
 	    }
 	}
 	
+	@Override
 	public void writeCustomNBT(NBTTagCompound nbt){
 		this.energyStorage.writeToNBT(nbt);
 	}
+	@Override
 	public void readCustomNBT(NBTTagCompound nbt){
 		this.energyStorage.readFromNBT(nbt);
 	}

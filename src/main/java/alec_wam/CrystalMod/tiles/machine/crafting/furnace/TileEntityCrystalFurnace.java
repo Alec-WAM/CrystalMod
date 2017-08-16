@@ -1,15 +1,15 @@
 package alec_wam.CrystalMod.tiles.machine.crafting.furnace;
 
+import alec_wam.CrystalMod.tiles.machine.BasicMachineRecipe;
+import alec_wam.CrystalMod.tiles.machine.TileEntityMachine;
+import alec_wam.CrystalMod.util.ItemStackTools;
+import alec_wam.CrystalMod.util.ItemUtil;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import alec_wam.CrystalMod.tiles.machine.BasicMachineRecipe;
-import alec_wam.CrystalMod.tiles.machine.TileEntityMachine;
-import alec_wam.CrystalMod.util.ItemStackTools;
-import alec_wam.CrystalMod.util.ItemUtil;
 
 public class TileEntityCrystalFurnace extends TileEntityMachine implements ISidedInventory {
 
@@ -17,6 +17,7 @@ public class TileEntityCrystalFurnace extends TileEntityMachine implements ISide
 		super("CrystalFurnace", 2);
 	}
 	
+	@Override
 	public boolean canStart() {
 		ItemStack stack = getStackInSlot(0);
         if (ItemStackTools.isNullStack(stack)) {
@@ -31,10 +32,12 @@ public class TileEntityCrystalFurnace extends TileEntityMachine implements ISide
         return ItemStackTools.isValid(output) && (ItemStackTools.isNullStack(stack2) || (ItemUtil.canCombine(output, stack2) && ItemStackTools.getStackSize(stack2) + ItemStackTools.getStackSize(output) <= output.getMaxStackSize()));
     }
 	
+	@Override
 	public boolean canContinueRunning(){
 		return hasValidInput();
 	}
 	
+	@Override
 	public boolean canFinish() {
         return processRem <= 0 && this.hasValidInput();
     }
@@ -45,13 +48,15 @@ public class TileEntityCrystalFurnace extends TileEntityMachine implements ISide
         return recipe != null && recipe.getInputSize() <= ItemStackTools.getStackSize(stack);
     }
     
-    public void processStart() {
+    @Override
+	public void processStart() {
     	this.processMax = CrystalFurnaceManager.getRecipe(getStackInSlot(0)).getEnergy();
         this.processRem = this.processMax;
         syncProcessValues();
     }
     
-    public void processFinish() {
+    @Override
+	public void processFinish() {
     	ItemStack stack = getStackInSlot(0);
     	ItemStack stack2 = getStackInSlot(1);
     	final ItemStack output = CrystalFurnaceManager.getRecipe(stack).getOutput();

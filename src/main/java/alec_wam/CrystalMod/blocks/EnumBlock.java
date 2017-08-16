@@ -55,7 +55,7 @@ public class EnumBlock<E extends Enum<E> & EnumBlock.IEnumMeta & IStringSerializ
 
   @Override
   public int getMetaFromState(IBlockState state) {
-    return ((E) state.getValue(prop)).getMeta();
+    return state.getValue(prop).getMeta();
   }
 
   @Override
@@ -71,13 +71,14 @@ public class EnumBlock<E extends Enum<E> & EnumBlock.IEnumMeta & IStringSerializ
     return values[meta];
   }
   
-  @SideOnly(Side.CLIENT)
+  @Override
+@SideOnly(Side.CLIENT)
   public void initModel() {
 	for(E type : values)
         ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), type.getMeta(), new ModelResourceLocation(this.getRegistryName(), prop.getName()+"="+type.getName()));
   }
 
-  public interface IEnumMeta {
+  public static interface IEnumMeta {
     int getMeta();
   }
 }

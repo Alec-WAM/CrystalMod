@@ -22,6 +22,7 @@ public class ItemBackpackUpgrade extends Item implements ICustomModel {
 		ModItems.registerItem(this, "backpackupgrade");
 	}
 	
+	@Override
 	@SideOnly(Side.CLIENT)
     public void initModel() {
         for(BackpackUpgrade type : BackpackUpgrade.values()){

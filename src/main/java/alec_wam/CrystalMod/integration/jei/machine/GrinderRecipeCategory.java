@@ -107,9 +107,7 @@ public class GrinderRecipeCategory extends BlankRecipeCategory<GrinderRecipeCate
 	@Nonnull
 	protected final IDrawableAnimated arrow;
 	  
-	private GrinderJEIRecipe currentRecipe;
-
-  	public GrinderRecipeCategory(IGuiHelper guiHelper) {
+	public GrinderRecipeCategory(IGuiHelper guiHelper) {
 	    ResourceLocation backgroundLocation = new ResourceLocation("crystalmod", "textures/gui/machine/grinder.png");
 	    background = guiHelper.createDrawable(backgroundLocation, xOff, yOff, 125, 50);
 
@@ -141,8 +139,6 @@ public class GrinderRecipeCategory extends BlankRecipeCategory<GrinderRecipeCate
 
 	@Override
 	public void setRecipe(IRecipeLayout recipeLayout, GrinderJEIRecipe recipeWrapper, IIngredients arg2) {
-		currentRecipe = recipeWrapper;
-		
 		IGuiItemStackGroup guiItemStacks = recipeLayout.getItemStacks();
 		guiItemStacks.init(0, true, 56 - xOff-1, 35 - yOff-1);
 		guiItemStacks.init(1, false, 116 - xOff-1, 35 - yOff-1);

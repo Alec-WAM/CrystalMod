@@ -31,7 +31,6 @@ import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -68,7 +67,8 @@ public class BlockWirelessChest extends BlockContainer implements ICustomModel
         this.setCreativeTab(CrystalMod.tabBlocks);
     }
     
-    @SideOnly(Side.CLIENT)
+    @Override
+	@SideOnly(Side.CLIENT)
     public void initModel(){
     	ModItems.initBasicModel(Item.getItemFromBlock(this));
     	RenderTileWirelessChest renderer = new RenderTileWirelessChest();

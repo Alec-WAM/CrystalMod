@@ -25,18 +25,22 @@ public class ServerProxy extends CommonProxy {
         super.postInit(e);
     }
     
-    public double getReachDistanceForPlayer(EntityPlayer entityPlayer) {
+    @Override
+	public double getReachDistanceForPlayer(EntityPlayer entityPlayer) {
     	return super.getReachDistanceForPlayer(entityPlayer);
     }
     
-    public World getWorld(int dim) {
+    @Override
+	public World getWorld(int dim) {
 		return super.getWorld(dim);
 	}
     
-    public EntityPlayer getPlayerForUsername(String playerName) {
+    @Override
+	public EntityPlayer getPlayerForUsername(String playerName) {
 		return super.getPlayerForUsername(playerName);
 	}
 
+	@Override
 	public boolean isOp(GameProfile profile) {
 		return super.isOp(profile);
 	}

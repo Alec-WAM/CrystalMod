@@ -1,7 +1,6 @@
 package alec_wam.CrystalMod.entities.misc;
 
 import alec_wam.CrystalMod.network.IMessageHandler;
-import alec_wam.CrystalMod.util.ModLogger;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFalling;
 import net.minecraft.block.ITileEntityProvider;
@@ -153,11 +152,13 @@ public class EntityCustomFallingBlock extends EntityFallingBlock implements IMes
 		}
 	}
 	
+	@Override
 	protected void writeEntityToNBT(NBTTagCompound compound)
     {
 		super.writeEntityToNBT(compound);
     }
 	
+	@Override
 	protected void readEntityFromNBT(NBTTagCompound compound)
     {
 		super.readEntityFromNBT(compound);

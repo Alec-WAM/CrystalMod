@@ -1,7 +1,7 @@
 package alec_wam.CrystalMod.entities.mob.enderman;
 
-import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.items.ItemCrystal.CrystalType;
+import alec_wam.CrystalMod.items.ModItems;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.monster.EntityEnderman;
@@ -21,12 +21,14 @@ public class EntityCrystalEnderman extends EntityEnderman {
 		super(worldIn);
 	}
     
-    protected void entityInit()
+    @Override
+	protected void entityInit()
     {
         super.entityInit();
         this.dataManager.register(COLOR, Byte.valueOf((byte)0));
     }
 
+	@Override
 	protected void applyEntityAttributes()
     {
         super.applyEntityAttributes();
@@ -34,12 +36,14 @@ public class EntityCrystalEnderman extends EntityEnderman {
         this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(9.0D);
     }
 	
+	@Override
 	public void writeEntityToNBT(NBTTagCompound tagCompound)
     {
         super.writeEntityToNBT(tagCompound);
         tagCompound.setByte("Color", (byte)this.getColor());
     }
 	
+	@Override
 	public void readEntityFromNBT(NBTTagCompound tagCompund)
     {
         super.readEntityFromNBT(tagCompund);
@@ -50,6 +54,7 @@ public class EntityCrystalEnderman extends EntityEnderman {
         }
     }
 	
+	@Override
 	protected void dropFewItems(boolean wasRecentlyHit, int lootingModifier)
     {
         super.dropFewItems(wasRecentlyHit, lootingModifier);
@@ -67,7 +72,8 @@ public class EntityCrystalEnderman extends EntityEnderman {
      * Called only once on an entity when first time spawned, via egg, mob spawner, natural spawning etc, but not called
      * when entity is reloaded from nbt. Mainly used for initializing attributes and inventory
      */
-    public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, IEntityLivingData livingdata)
+    @Override
+	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, IEntityLivingData livingdata)
     {
         super.onInitialSpawn(difficulty, livingdata);
         setColor(rand.nextInt(5));

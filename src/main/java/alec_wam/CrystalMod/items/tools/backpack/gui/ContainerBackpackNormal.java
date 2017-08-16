@@ -60,9 +60,8 @@ public class ContainerBackpackNormal extends Container {
         
         int offsetArmor = 34;
         int offsetLeft = offsetArmor + gapLeft;
-        int offsetRight = gapRight;
         int offsetTabs = hasTabs ? 32 : 0;
-        CrystalBackpackType type = CrystalBackpackType.byMetadata(backpackInventory.getBackpack().getMetadata());
+        CrystalBackpackType.byMetadata(backpackInventory.getBackpack().getMetadata());
         int rows = backpackInventory.getSize()/9;
         int offsetY = 18*(rows-3);
         for(int i = 0; i < rows; i++){
@@ -115,14 +114,16 @@ public class ContainerBackpackNormal extends Container {
                  * Returns the maximum stack size for a given slot (usually the same as getInventoryStackLimit(), but 1
                  * in the case of armor slots)
                  */
-                public int getSlotStackLimit()
+                @Override
+				public int getSlotStackLimit()
                 {
                     return 1;
                 }
                 /**
                  * Check if the stack is a valid item for this slot. Always true beside for the armor slots.
                  */
-                public boolean isItemValid(@Nullable ItemStack stack)
+                @Override
+				public boolean isItemValid(@Nullable ItemStack stack)
                 {
                     if (stack == null)
                     {
@@ -133,7 +134,8 @@ public class ContainerBackpackNormal extends Container {
                         return stack.getItem().isValidArmor(stack, entityequipmentslot, player);
                     }
                 }
-                @Nullable
+                @Override
+				@Nullable
                 @SideOnly(Side.CLIENT)
                 public String getSlotTexture()
                 {
@@ -182,7 +184,7 @@ public class ContainerBackpackNormal extends Container {
             boolean isArmor = entityequipmentslot.getSlotType() == EntityEquipmentSlot.Type.ARMOR;
             boolean isArmorFull = false;
             if(isArmor){
-            	isArmorFull = !((Slot)this.inventorySlots.get(armorEnd - entityequipmentslot.getIndex())).getHasStack();
+            	isArmorFull = !this.inventorySlots.get(armorEnd - entityequipmentslot.getIndex()).getHasStack();
             }
             
             boolean isBauble = hasBaublesSlots() && currentStack.getItem() instanceof IBauble;

@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.google.common.collect.Lists;
+
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.packets.PacketRecipeTransfer;
 import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetwork;
@@ -13,25 +16,19 @@ import alec_wam.CrystalMod.tiles.pipes.estorage.panel.crafting.TileEntityPanelCr
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.Lang;
-import com.google.common.collect.Lists;
 import mezz.jei.api.IModRegistry;
+import mezz.jei.api.gui.IGuiIngredient;
 import mezz.jei.api.gui.IGuiItemStackGroup;
 import mezz.jei.api.gui.IRecipeLayout;
-import mezz.jei.api.recipe.VanillaRecipeCategoryUid;
 import mezz.jei.api.recipe.transfer.IRecipeTransferError;
 import mezz.jei.api.recipe.transfer.IRecipeTransferHandler;
-import mezz.jei.api.gui.IGuiIngredient;
-import mezz.jei.util.StackHelper;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.util.Constants;
 
-public class RecipeTransferHandler implements IRecipeTransferHandler {
+public class RecipeTransferHandler implements IRecipeTransferHandler<ContainerPanelCrafting> {
 
 	private IModRegistry registry;
 	public RecipeTransferHandler(IModRegistry registry){
@@ -39,17 +36,13 @@ public class RecipeTransferHandler implements IRecipeTransferHandler {
 	}
 	
 	@Override
-	public Class<? extends Container> getContainerClass() {
+	public Class<ContainerPanelCrafting> getContainerClass() {
 		return ContainerPanelCrafting.class;
 	}
 
 	@Override
-	public IRecipeTransferError transferRecipe(Container container, IRecipeLayout recipeLayout, EntityPlayer player, boolean maxTransfer,
+	public IRecipeTransferError transferRecipe(ContainerPanelCrafting container, IRecipeLayout recipeLayout, EntityPlayer player, boolean maxTransfer,
 			boolean doTransfer) {
-		if (! (container instanceof ContainerPanelCrafting)) {
-		      return registry.getJeiHelpers().recipeTransferHandlerHelper().createInternalError();
-	    }
-		
 		ContainerPanelCrafting panelContainer = (ContainerPanelCrafting) container;
 	    if(doTransfer) {
 	      if(panelContainer.panel instanceof TileEntityPanelCrafting)((TileEntityPanelCrafting)panelContainer.panel).clearGrid();
@@ -227,23 +220,5 @@ public class RecipeTransferHandler implements IRecipeTransferHandler {
     			}
         	}
         }
-	}
-	
-	private boolean containerContainsIngredient(ContainerPanelCrafting panelContainer, List<ItemStack> allIng) {
-		List<Slot> playerSlots = Lists.newArrayList();
-		for(Slot slot : panelContainer.inventorySlots){
-			if(slot.inventory instanceof InventoryPlayer){
-				playerSlots.add(slot);
-			}
-		}
-	    List<ItemStack> available = new ArrayList<ItemStack>();
-	    for (Slot slot : playerSlots) {
-	      if (slot.getHasStack()) {
-	        available.add(slot.getStack());
-	      } 
-	    }
-	    
-	    StackHelper sh = (StackHelper)registry.getJeiHelpers().getStackHelper();
-	    return sh.containsAnyStack(available, allIng) != null;
 	}
 }

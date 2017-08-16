@@ -2,14 +2,13 @@ package alec_wam.CrystalMod.tiles.machine.crafting.liquidizer;
 
 import java.util.List;
 
+import com.google.common.collect.Lists;
+
 import alec_wam.CrystalMod.client.util.ElementDualScaled;
 import alec_wam.CrystalMod.client.util.ElementEnergy;
 import alec_wam.CrystalMod.client.util.GuiElementContainer;
 import alec_wam.CrystalMod.util.Lang;
 import alec_wam.CrystalMod.util.client.RenderUtil;
-
-import com.google.common.collect.Lists;
-
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
@@ -26,6 +25,7 @@ public class GuiLiquidizer extends GuiElementContainer{
         this.name = "Crystal Liquidizer";
     }
 	
+	@Override
 	public void initGui(){
 		super.initGui();
 		
@@ -35,6 +35,7 @@ public class GuiLiquidizer extends GuiElementContainer{
 	    
 	}
 	
+	@Override
 	public void drawGuiContainerForegroundLayer(int par1, int par2){
 		super.drawGuiContainerForegroundLayer(par1, par2);
 		RenderUtil.renderGuiTank(tileMachine.tank, 112, 23, zLevel, 12, 40);
@@ -53,6 +54,7 @@ public class GuiLiquidizer extends GuiElementContainer{
 		}
 	}
 	
+	@Override
 	protected void updateElementInformation()
 	{
 		super.updateElementInformation();

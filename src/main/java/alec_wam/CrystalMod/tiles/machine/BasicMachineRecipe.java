@@ -1,12 +1,7 @@
 package alec_wam.CrystalMod.tiles.machine;
 
-import java.util.List;
-
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
-
-import com.google.common.collect.Lists;
-
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.oredict.OreDictionary;

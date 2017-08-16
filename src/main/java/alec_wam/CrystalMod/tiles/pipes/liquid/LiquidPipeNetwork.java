@@ -5,17 +5,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import alec_wam.CrystalMod.tiles.pipes.AbstractPipeNetwork;
+import alec_wam.CrystalMod.tiles.pipes.ConnectionMode;
+import alec_wam.CrystalMod.tiles.pipes.item.RoundRobinIterator;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
-import alec_wam.CrystalMod.tiles.pipes.AbstractPipeNetwork;
-import alec_wam.CrystalMod.tiles.pipes.ConnectionMode;
-import alec_wam.CrystalMod.tiles.pipes.item.RoundRobinIterator;
 
 public class LiquidPipeNetwork extends AbstractPipeNetwork {
 	public static int MAX_EXTRACT = 500;

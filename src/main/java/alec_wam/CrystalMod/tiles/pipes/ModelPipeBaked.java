@@ -295,23 +295,28 @@ public class ModelPipeBaked implements IPerspectiveAwareModel
         return glassSquare;
 	}
 
+	@Override
 	public boolean isAmbientOcclusion() {
         return true;
     }
     
-    public boolean isGui3d() {
+    @Override
+	public boolean isGui3d() {
         return true;
     }
     
-    public boolean isBuiltInRenderer() {
+    @Override
+	public boolean isBuiltInRenderer() {
         return false;
     }
     
-    public TextureAtlasSprite getParticleTexture() {
+    @Override
+	public TextureAtlasSprite getParticleTexture() {
         return getCoreTexture(null);
     }
     
-    public ItemCameraTransforms getItemCameraTransforms() {
+    @Override
+	public ItemCameraTransforms getItemCameraTransforms() {
         return ItemCameraTransforms.DEFAULT;
     }
     

@@ -3,7 +3,6 @@ package alec_wam.CrystalMod.blocks.glass;
 import javax.annotation.Nonnull;
 
 import alec_wam.CrystalMod.blocks.ModBlocks;
-import alec_wam.CrystalMod.blocks.glass.BlockCrystalGlass.GlassType;
 import alec_wam.CrystalMod.proxy.ClientProxy;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;

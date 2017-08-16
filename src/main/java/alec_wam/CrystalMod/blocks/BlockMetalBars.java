@@ -63,7 +63,8 @@ public class BlockMetalBars extends BlockPane implements ICustomModel
         setSoundType(SoundType.METAL);
     }
 
-    @SideOnly(Side.CLIENT)
+    @Override
+	@SideOnly(Side.CLIENT)
 	public void initModel() {
 		ModelLoader.setCustomStateMapper(this, new CustomBlockStateMapper());
 		for(EnumMetalBarType type : EnumMetalBarType.values()){
@@ -77,9 +78,10 @@ public class BlockMetalBars extends BlockPane implements ICustomModel
      * Gets the metadata of the item this Block can drop. This method is called when the block gets destroyed. It
      * returns the metadata of the dropped item based on the old metadata of the block.
      */
-    public int damageDropped(IBlockState state)
+    @Override
+	public int damageDropped(IBlockState state)
     {
-        return ((EnumMetalBarType)state.getValue(TYPE)).getMeta();
+        return state.getValue(TYPE).getMeta();
     }
 
     /**
@@ -95,7 +97,8 @@ public class BlockMetalBars extends BlockPane implements ICustomModel
         }
     }
 
-    @SideOnly(Side.CLIENT)
+    @Override
+	@SideOnly(Side.CLIENT)
     public BlockRenderLayer getBlockLayer()
     {
         return BlockRenderLayer.CUTOUT_MIPPED;
@@ -104,7 +107,8 @@ public class BlockMetalBars extends BlockPane implements ICustomModel
     /**
      * Convert the given metadata into a BlockState for this Block
      */
-    public IBlockState getStateFromMeta(int meta)
+    @Override
+	public IBlockState getStateFromMeta(int meta)
     {
         return this.getDefaultState().withProperty(TYPE, EnumMetalBarType.byMetadata(meta));
     }
@@ -112,16 +116,18 @@ public class BlockMetalBars extends BlockPane implements ICustomModel
     /**
      * Convert the BlockState into the correct metadata value
      */
-    public int getMetaFromState(IBlockState state)
+    @Override
+	public int getMetaFromState(IBlockState state)
     {
-        return ((EnumMetalBarType)state.getValue(TYPE)).getMeta();
+        return state.getValue(TYPE).getMeta();
     }
 
     /**
      * Returns the blockstate with the given rotation from the passed blockstate. If inapplicable, returns the passed
      * blockstate.
      */
-    public IBlockState withRotation(IBlockState state, Rotation rot)
+    @Override
+	public IBlockState withRotation(IBlockState state, Rotation rot)
     {
         switch (rot)
         {
@@ -140,7 +146,8 @@ public class BlockMetalBars extends BlockPane implements ICustomModel
      * Returns the blockstate with the given mirror of the passed blockstate. If inapplicable, returns the passed
      * blockstate.
      */
-    public IBlockState withMirror(IBlockState state, Mirror mirrorIn)
+    @Override
+	public IBlockState withMirror(IBlockState state, Mirror mirrorIn)
     {
         switch (mirrorIn)
         {
@@ -153,7 +160,8 @@ public class BlockMetalBars extends BlockPane implements ICustomModel
         }
     }
 
-    protected BlockStateContainer createBlockState()
+    @Override
+	protected BlockStateContainer createBlockState()
     {
         return new BlockStateContainer(this, new IProperty[] {NORTH, EAST, WEST, SOUTH, TYPE});
     }

@@ -7,15 +7,12 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 import com.google.common.base.Objects;
-import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 
 import alec_wam.CrystalMod.api.guide.GuidePage;
 import alec_wam.CrystalMod.items.guide.GuiGuideChapter;
 import alec_wam.CrystalMod.items.guide.GuiGuideIndex;
 import alec_wam.CrystalMod.items.guide.GuidePages;
-import alec_wam.CrystalMod.items.guide.GuidePages.ManualChapter;
-import alec_wam.CrystalMod.items.guide.GuidePages.PageData;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.Lang;
 import alec_wam.CrystalMod.util.Util;
@@ -29,7 +26,6 @@ import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -54,12 +50,14 @@ public class PageIcon extends GuidePage {
 		stacks = resultingItem;
 	}
 	
+	@Override
 	@SideOnly(Side.CLIENT)
     public void initGui(GuiGuideChapter gui, int startX, int startY){
 		this.listIndex = 0;
     }
 	
 	public int listIndex = 0;
+	@Override
 	@SideOnly(Side.CLIENT)
     public void updateScreen(GuiGuideChapter gui, int startX, int startY, int timer){
 		if(!GuiScreen.isShiftKeyDown() && Util.isMultipleOf(timer, 20)){
@@ -76,6 +74,7 @@ public class PageIcon extends GuidePage {
 		super.drawBackground(gui, startX, startY, mouseX, mouseY, partialTicks);
 	}
 	
+	@Override
 	@SideOnly(Side.CLIENT)
     public void drawForeground(GuiGuideChapter gui, int startX, int startY, int mouseX, int mouseY, float partialTicks){
 		int x = 20;
@@ -99,9 +98,7 @@ public class PageIcon extends GuidePage {
 		String text = GuidePages.getText(getChapter(), this);
 		String title = GuidePages.getTitle(getChapter(), this);
 		x = startX+6;
-		int yOffset = 0;
 		if(title != null && !title.isEmpty()){
-			yOffset = 12;
 			title = title.replaceAll("<n>", "\n");
 			GlStateManager.pushMatrix();
 			boolean oldUnicode = gui.getFont().getUnicodeFlag();

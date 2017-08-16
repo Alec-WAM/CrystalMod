@@ -1,7 +1,6 @@
 package alec_wam.CrystalMod.api.tools;
 
 import java.util.List;
-import java.util.Set;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;

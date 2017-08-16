@@ -5,7 +5,6 @@ import javax.annotation.Nullable;
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.EnumBlock.IEnumMeta;
 import alec_wam.CrystalMod.util.ItemStackTools;
-import alec_wam.CrystalMod.util.ModLogger;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
@@ -38,6 +37,7 @@ public class BlockCompressed extends EnumBlock<BlockCompressed.CompressedBlockTy
 		this.setDefaultState(this.blockState.getBaseState().withProperty(TYPE, CompressedBlockType.FLINT));
 	}
 	
+	@Override
 	@SideOnly(Side.CLIENT)
 	public void initModel() {
 		for(CompressedBlockType type : CompressedBlockType.values())
@@ -284,6 +284,7 @@ public class BlockCompressed extends EnumBlock<BlockCompressed.CompressedBlockTy
         return false;
     }
 	
+	@SuppressWarnings("deprecation")
 	@Override
 	public Material getMaterial(IBlockState state){
 		CompressedBlockType type = state.getValue(TYPE);
@@ -299,6 +300,7 @@ public class BlockCompressed extends EnumBlock<BlockCompressed.CompressedBlockTy
 		return super.getMaterial(state);
 	}
     
+	@SuppressWarnings("deprecation")
 	@Override
 	public float getBlockHardness(IBlockState blockState, World worldIn, BlockPos pos)
     {
@@ -345,6 +347,7 @@ public class BlockCompressed extends EnumBlock<BlockCompressed.CompressedBlockTy
 		return super.getSoundType(state, world, pos, entity);
     }
 	
+	@SuppressWarnings("deprecation")
 	@Override
 	public int getFlammability(IBlockAccess world, BlockPos pos, EnumFacing face)
     {
@@ -362,6 +365,7 @@ public class BlockCompressed extends EnumBlock<BlockCompressed.CompressedBlockTy
         return getFlammability(world, pos, face) > 0;
     }
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public int getFireSpreadSpeed(IBlockAccess world, BlockPos pos, EnumFacing face)
     {

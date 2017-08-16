@@ -8,7 +8,6 @@ import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.BlockCrystal;
 import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.items.ItemCrystal.CrystalType;
-import alec_wam.CrystalMod.util.ModLogger;
 import net.minecraft.block.BlockChest;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -95,7 +94,7 @@ public class FusionTempleStructure extends StructureComponentTemplate {
 				//Warning this ignores integrity
 				IBlockState currentState = blockInfoIn.blockState;
 				if(currentState.getBlock() == ModBlocks.crystal){
-					BlockCrystal.CrystalBlockType type = (BlockCrystal.CrystalBlockType) currentState.getValue(BlockCrystal.TYPE);
+					BlockCrystal.CrystalBlockType type = currentState.getValue(BlockCrystal.TYPE);
 					if(type == BlockCrystal.CrystalBlockType.BLUE_BRICK){
 						if(templeType == CrystalType.RED){
 							return new BlockInfo(blockInfoIn.pos, currentState.withProperty(BlockCrystal.TYPE, BlockCrystal.CrystalBlockType.RED_BRICK), blockInfoIn.tileentityData);

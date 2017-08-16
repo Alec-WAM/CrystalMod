@@ -9,11 +9,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
-import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.item.ItemBlock;
@@ -37,7 +35,7 @@ public class RenderTileCrate<T extends TileCrate> extends TileEntitySpecialRende
 	        int ambLight = getWorld().getCombinedLight(tile.getPos().offset(facing), 0);
 	        int lu = ambLight % 65536;
 	        int lv = ambLight / 65536;
-	        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)lu / 1.0F, (float)lv / 1.0F);
+	        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, lu / 1.0F, lv / 1.0F);
 			boolean block = tile.getStack().getItem() instanceof ItemBlock;
 			float scale = 0.5f;
 			GlStateManager.scale(scale, scale, scale);
@@ -90,8 +88,6 @@ public class RenderTileCrate<T extends TileCrate> extends TileEntitySpecialRende
                 GlStateManager.disableAlpha();
                 Tessellator tessellator = Tessellator.getInstance();
                 VertexBuffer worldrenderer = tessellator.getBuffer();
-                int l = 255 - k << 16 | k << 8;
-                int i1 = (255 - k) / 4 << 16 | 16128;
                 double qX = 2;
                 int w = 13;
                 double qY = 13;
@@ -138,7 +134,7 @@ public class RenderTileCrate<T extends TileCrate> extends TileEntitySpecialRende
 			GlStateManager.pushMatrix();
 			int width = fontRender.getStringWidth(info);
 			GlStateManager.translate(-0.20, -50f, 0f );
-			float scale2 = Math.min(100F / (float) (width+10), 1.2F);
+			float scale2 = Math.min(100F / (width+10), 1.2F);
 	        GlStateManager.scale(scale2, scale2, 1);
 	        GlStateManager.translate(-width/2, fontRender.FONT_HEIGHT*(1.0f-scale), 0);
 			fontRender.drawString( info, 0, 0, 0 );
@@ -151,7 +147,7 @@ public class RenderTileCrate<T extends TileCrate> extends TileEntitySpecialRende
 				info = ""+stackSize;
 				width = fontRender.getStringWidth(info);
 				GlStateManager.translate(-0.20, 30f, 0f);
-				scale2 = Math.min(100F / (float) (width+10), 1.2F);
+				scale2 = Math.min(100F / (width+10), 1.2F);
 		        GlStateManager.scale(scale2, scale2, 1);
 		        GlStateManager.translate(-width/2, fontRender.FONT_HEIGHT*(1.0f-scale), 0);
 				fontRender.drawString( info, 0, 0, 0 );

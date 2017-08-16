@@ -9,17 +9,14 @@ import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.blocks.ModBlocks;
 import net.minecraft.block.BlockSlab;
 import net.minecraft.block.SoundType;
-import net.minecraft.block.BlockSlab.EnumBlockHalf;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
@@ -75,7 +72,6 @@ public class CrystexiumSlab extends BlockSlab implements ICustomModel
         return false;
     }
 	
-	@SuppressWarnings("deprecation")
 	@Override
 	@SideOnly(Side.CLIENT)
 	public boolean shouldSideBeRendered(IBlockState state, IBlockAccess worldIn, BlockPos pos, EnumFacing side)
@@ -98,30 +94,35 @@ public class CrystexiumSlab extends BlockSlab implements ICustomModel
     /**
      * Get the Item that this Block should drop when harvested.
      */
-    public Item getItemDropped(IBlockState state, Random rand, int fortune)
+    @Override
+	public Item getItemDropped(IBlockState state, Random rand, int fortune)
     {
         return Item.getItemFromBlock(ModBlocks.crystexiumSlab);
     }
 
-    public ItemStack getItem(World worldIn, BlockPos pos, IBlockState state)
+    @Override
+	public ItemStack getItem(World worldIn, BlockPos pos, IBlockState state)
     {
-        return new ItemStack(ModBlocks.crystexiumSlab, 1, ((CrystexiumSlab.EnumType)state.getValue(VARIANT)).getMetadata());
+        return new ItemStack(ModBlocks.crystexiumSlab, 1, state.getValue(VARIANT).getMetadata());
     }
 
     /**
      * Returns the slab block name with the type associated with it
      */
-    public String getUnlocalizedName(int meta)
+    @Override
+	public String getUnlocalizedName(int meta)
     {
         return super.getUnlocalizedName() + "." + CrystexiumSlab.EnumType.byMetadata(meta).getUnlocalizedName();
     }
 
-    public IProperty<?> getVariantProperty()
+    @Override
+	public IProperty<?> getVariantProperty()
     {
         return VARIANT;
     }
 
-    public Comparable<?> getTypeForItem(ItemStack stack)
+    @Override
+	public Comparable<?> getTypeForItem(ItemStack stack)
     {
         return CrystexiumSlab.EnumType.byMetadata(stack.getMetadata() & 7);
     }
@@ -129,7 +130,8 @@ public class CrystexiumSlab extends BlockSlab implements ICustomModel
     /**
      * returns a list of blocks with the same ID, but different meta (eg: wood returns 4 blocks)
      */
-    @SideOnly(Side.CLIENT)
+    @Override
+	@SideOnly(Side.CLIENT)
     public void getSubBlocks(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> list)
     {
     	for (CrystexiumSlab.EnumType blockstoneslab$enumtype : CrystexiumSlab.EnumType.values())
@@ -141,7 +143,8 @@ public class CrystexiumSlab extends BlockSlab implements ICustomModel
     /**
      * Convert the given metadata into a BlockState for this Block
      */
-    public IBlockState getStateFromMeta(int meta)
+    @Override
+	public IBlockState getStateFromMeta(int meta)
     {
         IBlockState iblockstate = this.getDefaultState().withProperty(VARIANT, CrystexiumSlab.EnumType.byMetadata(meta & 7));
 
@@ -153,10 +156,11 @@ public class CrystexiumSlab extends BlockSlab implements ICustomModel
     /**
      * Convert the BlockState into the correct metadata value
      */
-    public int getMetaFromState(IBlockState state)
+    @Override
+	public int getMetaFromState(IBlockState state)
     {
         int i = 0;
-        i = i | ((CrystexiumSlab.EnumType)state.getValue(VARIANT)).getMetadata();
+        i = i | state.getValue(VARIANT).getMetadata();
 
         if (state.getValue(HALF) == BlockSlab.EnumBlockHalf.TOP)
         {
@@ -166,7 +170,8 @@ public class CrystexiumSlab extends BlockSlab implements ICustomModel
         return i;
     }
 
-    protected BlockStateContainer createBlockState()
+    @Override
+	protected BlockStateContainer createBlockState()
     {
         return this.isDouble() ? new BlockStateContainer(this, new IProperty[] {VARIANT}): new BlockStateContainer(this, new IProperty[] {HALF, VARIANT});
     }
@@ -175,17 +180,19 @@ public class CrystexiumSlab extends BlockSlab implements ICustomModel
      * Gets the metadata of the item this Block can drop. This method is called when the block gets destroyed. It
      * returns the metadata of the dropped item based on the old metadata of the block.
      */
-    public int damageDropped(IBlockState state)
+    @Override
+	public int damageDropped(IBlockState state)
     {
-        return ((CrystexiumSlab.EnumType)state.getValue(VARIANT)).getMetadata();
+        return state.getValue(VARIANT).getMetadata();
     }
 
     /**
      * Get the MapColor for this Block and the given BlockState
      */
-    public MapColor getMapColor(IBlockState state)
+    @Override
+	public MapColor getMapColor(IBlockState state)
     {
-        return ((CrystexiumSlab.EnumType)state.getValue(VARIANT)).getMapColor();
+        return state.getValue(VARIANT).getMapColor();
     }
 
     public static enum EnumType implements IStringSerializable
@@ -226,7 +233,8 @@ public class CrystexiumSlab extends BlockSlab implements ICustomModel
             return this.mapColor;
         }
 
-        public String toString()
+        @Override
+		public String toString()
         {
             return this.name;
         }
@@ -241,7 +249,8 @@ public class CrystexiumSlab extends BlockSlab implements ICustomModel
             return META_LOOKUP[meta];
         }
 
-        public String getName()
+        @Override
+		public String getName()
         {
             return this.name;
         }

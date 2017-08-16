@@ -2,15 +2,11 @@ package alec_wam.CrystalMod.entities.pet.bombomb;
 
 import com.google.common.base.Strings;
 
-import alec_wam.CrystalMod.util.PlayerUtil;
 import alec_wam.CrystalMod.util.ProfileUtil;
-import alec_wam.CrystalMod.util.UUIDUtils;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
@@ -29,7 +25,8 @@ public class RenderEntityBombomb extends RenderLiving<EntityBombomb>{
 	/**
      * Allows the render to do state modifications necessary before the model is rendered.
      */
-    protected void preRenderCallback(EntityBombomb entitylivingbaseIn, float partialTickTime)
+    @Override
+	protected void preRenderCallback(EntityBombomb entitylivingbaseIn, float partialTickTime)
     {
         float f = entitylivingbaseIn.getFlashIntensity(partialTickTime);
         float f1 = 1.0F + MathHelper.sin(f * 100.0F) * f * 0.01F;
@@ -44,7 +41,8 @@ public class RenderEntityBombomb extends RenderLiving<EntityBombomb>{
     /**
      * Gets an RGBA int color multiplier to apply.
      */
-    protected int getColorMultiplier(EntityBombomb entitylivingbaseIn, float lightBrightness, float partialTickTime)
+    @Override
+	protected int getColorMultiplier(EntityBombomb entitylivingbaseIn, float lightBrightness, float partialTickTime)
     {
         float f = entitylivingbaseIn.getFlashIntensity(partialTickTime);
 
@@ -60,7 +58,8 @@ public class RenderEntityBombomb extends RenderLiving<EntityBombomb>{
         }
     }
 	
-    public void doRender(EntityBombomb entity, double x, double y, double z, float entityYaw, float partialTicks){
+    @Override
+	public void doRender(EntityBombomb entity, double x, double y, double z, float entityYaw, float partialTicks){
     	super.doRender(entity, x, y, z, entityYaw, partialTicks);
     	if (!this.renderOutlines)
         {

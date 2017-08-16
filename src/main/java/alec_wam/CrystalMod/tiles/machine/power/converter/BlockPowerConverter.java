@@ -3,6 +3,11 @@ package alec_wam.CrystalMod.tiles.machine.power.converter;
 import java.util.List;
 import java.util.Locale;
 
+import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.blocks.EnumBlock;
+import alec_wam.CrystalMod.blocks.ICustomModel;
+import alec_wam.CrystalMod.util.ChatUtil;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
@@ -12,20 +17,15 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import alec_wam.CrystalMod.CrystalMod;
-import alec_wam.CrystalMod.blocks.EnumBlock;
-import alec_wam.CrystalMod.blocks.ICustomModel;
-import alec_wam.CrystalMod.util.ChatUtil;
-import alec_wam.CrystalMod.util.ItemStackTools;
 
 public class BlockPowerConverter extends EnumBlock<BlockPowerConverter.ConverterType> implements ITileEntityProvider, ICustomModel {
 

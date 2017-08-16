@@ -28,6 +28,7 @@ public class ItemToolParts extends Item implements ICustomModel {
 		ModItems.registerItem(this, "toolparts");
 	}
 	
+	@Override
 	@SideOnly(Side.CLIENT)
     public void initModel() {
 		final ModelResourceLocation rod = new ModelResourceLocation(this.getRegistryName(), "rod");
@@ -82,6 +83,7 @@ public class ItemToolParts extends Item implements ICustomModel {
         });
     }
 	
+	@Override
 	public String getUnlocalizedName(ItemStack stack)
     {
         String type = ItemNBTHelper.getString(stack, "Type", "");
@@ -125,12 +127,14 @@ public class ItemToolParts extends Item implements ICustomModel {
         	colored = color;
         }
 
-        public String toString()
+        @Override
+		public String toString()
         {
             return name().toLowerCase();
         }
 
-        public String getName()
+        @Override
+		public String getName()
         {
             return name().toLowerCase();
         }

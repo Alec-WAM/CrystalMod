@@ -11,6 +11,7 @@ import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.EnumBlock;
 import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.ChatUtil;
+import net.minecraft.block.BlockDirectional;
 import net.minecraft.block.BlockPistonExtension;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
@@ -123,14 +124,14 @@ public class BlockCase extends EnumBlock<BlockCase.EnumCaseType> implements ITil
         	for(EnumFacing enumfacing : piston.validFaces){
         		BlockPos pos2 = pos.offset(enumfacing);
         		float progress = piston.progress[enumfacing.getIndex()];
-        		if ((double)progress >= 1.0D)
+        		if (progress >= 1.0D)
         		{
         			IBlockState iblockstate;
-        			iblockstate = Blocks.PISTON_HEAD.getDefaultState().withProperty(BlockPistonExtension.FACING, enumfacing).withProperty(BlockPistonExtension.SHORT, Boolean.valueOf(piston.isExtending[enumfacing.getIndex()] != 1.0F - progress < 0.25F));
+        			iblockstate = Blocks.PISTON_HEAD.getDefaultState().withProperty(BlockDirectional.FACING, enumfacing).withProperty(BlockPistonExtension.SHORT, Boolean.valueOf(piston.isExtending[enumfacing.getIndex()] != 1.0F - progress < 0.25F));
         			float f = piston.getExtendedProgress(progress, enumfacing);
-        			double d0 = (double)((float)enumfacing.getFrontOffsetX() * f);
-        			double d1 = (double)((float)enumfacing.getFrontOffsetY() * f);
-        			double d2 = (double)((float)enumfacing.getFrontOffsetZ() * f);
+        			double d0 = enumfacing.getFrontOffsetX() * f;
+        			double d1 = enumfacing.getFrontOffsetY() * f;
+        			double d2 = enumfacing.getFrontOffsetZ() * f;
         			iblockstate.addCollisionBoxToList(worldIn, pos2, entityBox.offset(-d0, -d1, -d2), collidingBoxes, entityIn, true);
         		}
         	}

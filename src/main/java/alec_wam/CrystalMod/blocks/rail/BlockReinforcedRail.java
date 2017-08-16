@@ -1,5 +1,6 @@
 package alec_wam.CrystalMod.blocks.rail;
 
+import alec_wam.CrystalMod.blocks.ICustomModel;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.block.SoundType;
@@ -8,17 +9,14 @@ import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import alec_wam.CrystalMod.CrystalMod;
-import alec_wam.CrystalMod.blocks.ICustomModel;
 
 public class BlockReinforcedRail extends BlockRailBase implements ICustomModel {
 
@@ -57,7 +55,8 @@ public class BlockReinforcedRail extends BlockRailBase implements ICustomModel {
         return i;
     }
 
-    public IProperty<BlockRailBase.EnumRailDirection> getShapeProperty()
+    @Override
+	public IProperty<BlockRailBase.EnumRailDirection> getShapeProperty()
     {
         return SHAPE;
     }
@@ -77,7 +76,7 @@ public class BlockReinforcedRail extends BlockRailBase implements ICustomModel {
     @Override
 	public int getMetaFromState(IBlockState state)
     {
-        return ((BlockRailBase.EnumRailDirection)state.getValue(SHAPE)).getMetadata();
+        return state.getValue(SHAPE).getMetadata();
     }
 
     @Override
@@ -102,6 +101,7 @@ public class BlockReinforcedRail extends BlockRailBase implements ICustomModel {
         }
     }
 
+	@Override
 	@SideOnly(Side.CLIENT)
     public void initModel() {
 		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(getRegistryName(), "inventory"));

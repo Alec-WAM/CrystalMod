@@ -2,7 +2,6 @@ package alec_wam.CrystalMod.tiles.pipes.estorage.stocker;
 
 import java.io.IOException;
 
-import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
 import com.google.common.primitives.Ints;
@@ -10,7 +9,6 @@ import com.google.common.primitives.Ints;
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.packets.PacketTileMessage;
-import alec_wam.CrystalMod.util.ModLogger;
 import alec_wam.CrystalMod.util.UUIDUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;

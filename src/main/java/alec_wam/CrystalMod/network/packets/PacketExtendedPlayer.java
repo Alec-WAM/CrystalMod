@@ -2,15 +2,15 @@ package alec_wam.CrystalMod.network.packets;
 
 import java.io.IOException;
 
+import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.capability.ExtendedPlayer;
+import alec_wam.CrystalMod.capability.ExtendedPlayerProvider;
+import alec_wam.CrystalMod.network.AbstractPacketThreadsafe;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetHandlerPlayServer;
-import alec_wam.CrystalMod.CrystalMod;
-import alec_wam.CrystalMod.capability.ExtendedPlayer;
-import alec_wam.CrystalMod.capability.ExtendedPlayerProvider;
-import alec_wam.CrystalMod.network.AbstractPacketThreadsafe;
 
 public class PacketExtendedPlayer extends AbstractPacketThreadsafe {
 

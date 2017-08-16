@@ -6,7 +6,6 @@ import com.google.common.collect.Lists;
 
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.packets.PacketTileMessage;
-import alec_wam.CrystalMod.util.ModLogger;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
@@ -25,7 +24,7 @@ public class TileEntityCaseNoteblock extends TileEntityCaseBase {
             p_185576_1_ = 0;
         }
 
-        return (SoundEvent)INSTRUMENTS.get(p_185576_1_);
+        return INSTRUMENTS.get(p_185576_1_);
     }
 	
 	@Override
@@ -61,11 +60,11 @@ public class TileEntityCaseNoteblock extends TileEntityCaseBase {
 			if (net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(e)) return;
 			i = e.getInstrument().ordinal();
 			note = e.getVanillaNoteId();
-			float f = (float)Math.pow(2.0D, (double)(note - 12) / 12.0D);
+			float f = (float)Math.pow(2.0D, (note - 12) / 12.0D);
 			if(!getWorld().isRemote){
 				getWorld().playSound((EntityPlayer)null, pos, getInstrument(i), SoundCategory.RECORDS, 3.0F, f);
 			}
-			else getWorld().spawnParticle(EnumParticleTypes.NOTE, (double)pos.getX() + 0.5D, (double)pos.getY() + 1.2D, (double)pos.getZ() + 0.5D, (double)note / 24.0D, 0.0D, 0.0D, new int[0]);
+			else getWorld().spawnParticle(EnumParticleTypes.NOTE, pos.getX() + 0.5D, pos.getY() + 1.2D, pos.getZ() + 0.5D, note / 24.0D, 0.0D, 0.0D, new int[0]);
 		}
 
 		if(!getWorld().isRemote){

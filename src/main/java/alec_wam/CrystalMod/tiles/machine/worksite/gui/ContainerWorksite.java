@@ -45,7 +45,7 @@ public class ContainerWorksite extends ContainerMessageBase {
 	@Override
 	public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int slotClickedIndex) {
 		int slots = worksite.inventory.getSizeInventory();
-		Slot slot = (Slot) this.inventorySlots.get(slotClickedIndex);
+		Slot slot = this.inventorySlots.get(slotClickedIndex);
 		if (slot == null || !slot.getHasStack()) {
 			return ItemStackTools.getEmptyStack();
 		}

@@ -4,8 +4,17 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
-import com.google.common.base.Strings;
-
+import alec_wam.CrystalMod.entities.EntityOwnable;
+import alec_wam.CrystalMod.entities.ai.AIManager;
+import alec_wam.CrystalMod.entities.minions.warrior.MinionAICombat;
+import alec_wam.CrystalMod.items.ModItems;
+import alec_wam.CrystalMod.network.CrystalModNetwork;
+import alec_wam.CrystalMod.network.IMessageHandler;
+import alec_wam.CrystalMod.network.packets.PacketEntityMessage;
+import alec_wam.CrystalMod.util.ChatUtil;
+import alec_wam.CrystalMod.util.ItemNBTHelper;
+import alec_wam.CrystalMod.util.ItemStackTools;
+import alec_wam.CrystalMod.util.ItemUtil;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.item.EntityItem;
@@ -20,24 +29,10 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
-import alec_wam.CrystalMod.entities.EntityOwnable;
-import alec_wam.CrystalMod.entities.ai.AIManager;
-import alec_wam.CrystalMod.entities.minions.MinionConstants;
-import alec_wam.CrystalMod.entities.minions.warrior.MinionAICombat;
-import alec_wam.CrystalMod.items.ModItems;
-import alec_wam.CrystalMod.network.CrystalModNetwork;
-import alec_wam.CrystalMod.network.IMessageHandler;
-import alec_wam.CrystalMod.network.packets.PacketEntityMessage;
-import alec_wam.CrystalMod.util.ChatUtil;
-import alec_wam.CrystalMod.util.ItemNBTHelper;
-import alec_wam.CrystalMod.util.ItemStackTools;
-import alec_wam.CrystalMod.util.ItemUtil;
-import alec_wam.CrystalMod.util.ModLogger;
 
 public class EntityBombomb extends EntityOwnable implements IMessageHandler {
 
@@ -73,12 +68,14 @@ public class EntityBombomb extends EntityOwnable implements IMessageHandler {
 		return aiManager;
 	}
 	
+	@Override
 	protected void entityInit()
     {
         super.entityInit();
         this.dataManager.register(COLOR, Integer.valueOf(EnumDyeColor.YELLOW.getDyeDamage()));
     }
 	
+	@Override
 	protected void applyEntityAttributes()
     {
         super.applyEntityAttributes();
@@ -94,6 +91,7 @@ public class EntityBombomb extends EntityOwnable implements IMessageHandler {
         }
     }
 	
+	@Override
 	public void setTamed(boolean tamed)
     {
 		super.setTamed(tamed);
@@ -107,6 +105,7 @@ public class EntityBombomb extends EntityOwnable implements IMessageHandler {
         }
     }
 	
+	@Override
 	public void onLivingUpdate()
     {
         super.onLivingUpdate();
@@ -123,6 +122,7 @@ public class EntityBombomb extends EntityOwnable implements IMessageHandler {
         }*/
     }
 	
+	@Override
 	public void onUpdate()
     {
         super.onUpdate();
@@ -227,7 +227,7 @@ public class EntityBombomb extends EntityOwnable implements IMessageHandler {
 	
 	public EnumDyeColor getColor()
     {
-        return EnumDyeColor.byDyeDamage(((Integer)this.dataManager.get(COLOR)).intValue() & 15);
+        return EnumDyeColor.byDyeDamage(this.dataManager.get(COLOR).intValue() & 15);
     }
 
     /**

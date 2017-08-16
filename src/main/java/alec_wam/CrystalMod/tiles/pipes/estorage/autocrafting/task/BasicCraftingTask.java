@@ -72,11 +72,13 @@ public class BasicCraftingTask implements ICraftingTask {
         this.toInsertFluids = toInsertFluids;
     }
     
-    public CraftingPattern getPattern() {
+    @Override
+	public CraftingPattern getPattern() {
         return pattern;
     }
 
-    public boolean update(final EStorageNetwork controller) {
+    @Override
+	public boolean update(final EStorageNetwork controller) {
         updatedOnce = true;
     	if (!this.missing.isEmpty()) {
         	ItemStackList list = missing;
@@ -152,7 +154,8 @@ public class BasicCraftingTask implements ICraftingTask {
     	return isFinished();
     }
     
-    public void calculate(EStorageNetwork network) {
+    @Override
+	public void calculate(EStorageNetwork network) {
     	ItemStackList insertList = new ItemStackList();
     	ItemStackList networkList = new ItemStackList();
     	for(ItemStackData data : network.getItemStorage().getItemList()){
@@ -215,7 +218,6 @@ public class BasicCraftingTask implements ICraftingTask {
         	boolean useOre = pattern.isOredict();
         	
         	int sizeNeeded = ItemStackTools.getStackSize(input);
-        	int tries = 0;
         	ItemStack extraStack = insertList.get(lookup, useOre);    
         	ItemStack networkStack = networkList.get(lookup, useOre);
         	
@@ -280,9 +282,7 @@ public class BasicCraftingTask implements ICraftingTask {
                     		sizeNeeded = 0;
                     	}
                     }
-                }
-	        	
-	        	tries++;   	
+                }   	
         	}
         	if(debugData) ModLogger.info("We still need "+sizeNeeded+" of "+lookup);
         }

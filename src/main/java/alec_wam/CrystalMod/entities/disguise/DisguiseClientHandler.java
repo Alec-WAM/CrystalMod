@@ -68,7 +68,7 @@ public class DisguiseClientHandler {
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void onRenderHand(RenderSpecificHandEvent event)
     {
-		Minecraft mc = Minecraft.getMinecraft();
+		Minecraft.getMinecraft();
 		AbstractClientPlayer abstractclientplayer = (AbstractClientPlayer) CrystalMod.proxy.getClientPlayer();
 		ExtendedPlayer ePlayer = ExtendedPlayerProvider.getExtendedPlayer(abstractclientplayer);
 		if(ePlayer !=null && ePlayer.getCurrentDiguise() !=DisguiseType.NONE)

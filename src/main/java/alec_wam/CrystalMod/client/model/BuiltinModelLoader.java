@@ -2,12 +2,11 @@ package alec_wam.CrystalMod.client.model;
 
 import java.util.Map;
 
+import com.google.common.collect.ImmutableMap;
+
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.tiles.pipes.ModelPipe;
 import alec_wam.CrystalMod.util.ModLogger;
-
-import com.google.common.collect.ImmutableMap;
-
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.client.resources.IResourceManagerReloadListener;
 import net.minecraft.util.ResourceLocation;

@@ -7,6 +7,13 @@ import org.lwjgl.opengl.GL11;
 
 import com.google.common.collect.Maps;
 
+import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.client.model.dynamic.DynamicBaseModel;
+import alec_wam.CrystalMod.client.model.dynamic.ICustomItemRenderer;
+import alec_wam.CrystalMod.items.ModItems;
+import alec_wam.CrystalMod.util.ItemNBTHelper;
+import alec_wam.CrystalMod.util.ItemStackTools;
+import alec_wam.CrystalMod.util.UUIDUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -18,13 +25,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.model.TRSRTransformation;
-import alec_wam.CrystalMod.CrystalMod;
-import alec_wam.CrystalMod.client.model.dynamic.DynamicBaseModel;
-import alec_wam.CrystalMod.client.model.dynamic.ICustomItemRenderer;
-import alec_wam.CrystalMod.items.ModItems;
-import alec_wam.CrystalMod.util.ItemNBTHelper;
-import alec_wam.CrystalMod.util.ItemStackTools;
-import alec_wam.CrystalMod.util.UUIDUtils;
 
 public class ItemRenderMinion implements ICustomItemRenderer {
 
@@ -39,7 +39,7 @@ public class ItemRenderMinion implements ICustomItemRenderer {
             	Class<? extends EntityMinionBase> minionClass = type.getEntityClass();
                 if (minionClass != null)
                 {
-                    entity = (EntityMinionBase)minionClass.getConstructor(new Class[] {World.class}).newInstance(new Object[] {world});
+                    entity = minionClass.getConstructor(new Class[] {World.class}).newInstance(new Object[] {world});
                 }
             }
             catch (Exception exception)

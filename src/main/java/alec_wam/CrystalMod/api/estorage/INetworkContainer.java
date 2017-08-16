@@ -2,10 +2,10 @@ package alec_wam.CrystalMod.api.estorage;
 
 import java.util.List;
 
-import net.minecraft.entity.player.EntityPlayerMP;
 import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetwork;
 import alec_wam.CrystalMod.tiles.pipes.estorage.FluidStorage.FluidStackData;
 import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage.ItemStackData;
+import net.minecraft.entity.player.EntityPlayerMP;
 
 public interface INetworkContainer {
 

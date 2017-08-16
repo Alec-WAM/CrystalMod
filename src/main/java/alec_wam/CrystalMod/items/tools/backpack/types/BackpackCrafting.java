@@ -1,5 +1,11 @@
 package alec_wam.CrystalMod.items.tools.backpack.types;
 
+import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.items.ModItems;
+import alec_wam.CrystalMod.items.tools.backpack.BackpackUtil;
+import alec_wam.CrystalMod.items.tools.backpack.IBackpack;
+import alec_wam.CrystalMod.items.tools.backpack.gui.ContainerBackpackCrafting;
+import alec_wam.CrystalMod.items.tools.backpack.gui.GuiBackpackCrafting;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -13,16 +19,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import alec_wam.CrystalMod.CrystalMod;
-import alec_wam.CrystalMod.handler.GuiHandler;
-import alec_wam.CrystalMod.items.ModItems;
-import alec_wam.CrystalMod.items.tools.backpack.BackpackUtil;
-import alec_wam.CrystalMod.items.tools.backpack.IBackpack;
-import alec_wam.CrystalMod.items.tools.backpack.gui.ContainerBackpackCrafting;
-import alec_wam.CrystalMod.items.tools.backpack.gui.ContainerBackpackNormal;
-import alec_wam.CrystalMod.items.tools.backpack.gui.GuiBackpackCrafting;
-import alec_wam.CrystalMod.items.tools.backpack.gui.GuiBackpackNormal;
-import alec_wam.CrystalMod.items.tools.backpack.gui.OpenType;
 
 public class BackpackCrafting implements IBackpack {
 
@@ -39,6 +35,7 @@ public class BackpackCrafting implements IBackpack {
 		return TEXTURE;
 	}
 	
+	@Override
 	@SideOnly(Side.CLIENT)
 	public void initModel(Item item){
 		ModItems.initBasicModel(item);

@@ -22,7 +22,8 @@ public class RenderDevil extends RenderBiped<EntityDevil>
     /**
      * Returns the location of an entity's texture. Doesn't seem to be called unless you call Render.bindEntityTexture.
      */
-    protected ResourceLocation getEntityTexture(EntityDevil entity)
+    @Override
+	protected ResourceLocation getEntityTexture(EntityDevil entity)
     {
         return DEVIL_TEXTURE;
     }
@@ -30,7 +31,8 @@ public class RenderDevil extends RenderBiped<EntityDevil>
     /**
      * Renders the desired {@code T} type Entity.
      */
-    public void doRender(EntityDevil entity, double x, double y, double z, float entityYaw, float partialTicks)
+    @Override
+	public void doRender(EntityDevil entity, double x, double y, double z, float entityYaw, float partialTicks)
     {
         int i = ((ModelDevil)this.mainModel).getModelVersion();
 
@@ -46,7 +48,8 @@ public class RenderDevil extends RenderBiped<EntityDevil>
     /**
      * Allows the render to do state modifications necessary before the model is rendered.
      */
-    protected void preRenderCallback(EntityDevil entitylivingbaseIn, float partialTickTime)
+    @Override
+	protected void preRenderCallback(EntityDevil entitylivingbaseIn, float partialTickTime)
     {
         GlStateManager.scale(0.8F, 0.8F, 0.8F);
     }

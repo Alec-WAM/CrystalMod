@@ -1,7 +1,6 @@
 package alec_wam.CrystalMod.tiles.pipes.estorage.panel.wireless;
 
 import alec_wam.CrystalMod.api.estorage.INetworkPowerTile;
-import alec_wam.CrystalMod.api.estorage.INetworkTile;
 import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.IMessageHandler;
@@ -23,6 +22,7 @@ public class TileEntityWirelessPanel extends TileEntityMod implements IMessageHa
 	public EnumFacing connectionDir;
 	public boolean connected;
 	
+	@Override
 	public void writeCustomNBT(NBTTagCompound nbt){
 		super.writeCustomNBT(nbt);
 		if(connectionDir !=null){
@@ -31,6 +31,7 @@ public class TileEntityWirelessPanel extends TileEntityMod implements IMessageHa
 		nbt.setBoolean("Connected", connected);
 	}
 	
+	@Override
 	public void readCustomNBT(NBTTagCompound nbt){
 		super.readCustomNBT(nbt);
 		if(nbt.hasKey("ConDir")){

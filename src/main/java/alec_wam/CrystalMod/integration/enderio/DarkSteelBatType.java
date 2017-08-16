@@ -1,17 +1,13 @@
 package alec_wam.CrystalMod.integration.enderio;
 
-import net.minecraft.block.Block;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.Item.ToolMaterial;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.util.EnumHelper;
-
 import alec_wam.CrystalMod.crafting.ModCrafting;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.items.tools.bat.BatHelper;
 import alec_wam.CrystalMod.items.tools.bat.BatType;
 import alec_wam.CrystalMod.util.client.RenderUtil;
+import net.minecraft.block.Block;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.util.ResourceLocation;
 
 public class DarkSteelBatType extends BatType {
 
@@ -19,6 +15,7 @@ public class DarkSteelBatType extends BatType {
 		super(new ResourceLocation("EnderIO:darksteel"), 4.0F + 7.0F, 2000);
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public TextureAtlasSprite getBatTexture() {
 		Block block = net.minecraft.block.Block.getBlockFromName("EnderIO:blockIngotStorage");

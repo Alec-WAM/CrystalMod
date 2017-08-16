@@ -1,11 +1,10 @@
 package alec_wam.CrystalMod.network;
 
+import io.netty.buffer.ByteBuf;
 import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.network.NetHandlerPlayServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-
-import io.netty.buffer.ByteBuf;
 
 public abstract class AbstractPacket implements IMessage {
 

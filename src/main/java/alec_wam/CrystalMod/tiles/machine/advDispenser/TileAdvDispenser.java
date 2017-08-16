@@ -29,7 +29,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.eventhandler.Event;
@@ -105,17 +104,16 @@ public class TileAdvDispenser extends TileEntityInventory implements IFacingTile
 			
 			final BlockPos facingPos = getPos().offset(facing);
 			int slotIndex = 0;
-			@SuppressWarnings("unused")
-			ItemStack stack = ItemStackTools.getEmptyStack();
+			ItemStackTools.getEmptyStack();
 			boolean random = false;
 			if(random){
 				
 			} else {
 				slotIndex = 0;
-				stack = getStackInSlot(0);
+				getStackInSlot(0);
 			}
 			if(this.fakePlayer == null){
-				this.fakePlayer = new FakePlayerCM((WorldServer)getWorld());
+				this.fakePlayer = new FakePlayerCM(getWorld());
 			}
 			this.fakePlayer.setLocationSide(facingPos, facing);
 			this.fakePlayer.setSneaking(isSneaking);
@@ -237,13 +235,13 @@ public class TileAdvDispenser extends TileEntityInventory implements IFacingTile
 			if(click == ClickType.RIGHT){
 				if(!ItemStackTools.isValid(copy))return EnumActionResult.FAIL;
 				//Can Interact
-				final PlayerInteractEvent.RightClickBlock event = (PlayerInteractEvent.RightClickBlock)ForgeHooks.onRightClickBlock(this.fakePlayer, hand, facingPos, facing.getOpposite(), ForgeHooks.rayTraceEyeHitVec(this.fakePlayer, 2.0));
+				final PlayerInteractEvent.RightClickBlock event = ForgeHooks.onRightClickBlock(this.fakePlayer, hand, facingPos, facing.getOpposite(), ForgeHooks.rayTraceEyeHitVec(this.fakePlayer, 2.0));
                 if (!event.isCanceled() && event.getUseItem() != Event.Result.DENY && copy.getItem().onItemUseFirst(this.fakePlayer, getWorld(), facingPos, facing.getOpposite(), hX, hY, hZ, hand) == EnumActionResult.PASS) {
                     return copy.onItemUse(this.fakePlayer, getWorld(), facingPos, hand, facing.getOpposite(), hX, hY, hZ);
                 }
                 return EnumActionResult.FAIL;
 			} else {
-				final PlayerInteractEvent.LeftClickBlock event = (PlayerInteractEvent.LeftClickBlock)ForgeHooks.onLeftClickBlock(this.fakePlayer, facingPos, facing.getOpposite(), ForgeHooks.rayTraceEyeHitVec(this.fakePlayer, 2.0));
+				final PlayerInteractEvent.LeftClickBlock event = ForgeHooks.onLeftClickBlock(this.fakePlayer, facingPos, facing.getOpposite(), ForgeHooks.rayTraceEyeHitVec(this.fakePlayer, 2.0));
 				if (!event.isCanceled() && event.getUseItem() != Event.Result.DENY){
 					//Prevents Looping the event
 					EventHandler.blockClickEvent = true;
@@ -261,7 +259,7 @@ public class TileAdvDispenser extends TileEntityInventory implements IFacingTile
 		} else if(interact == InteractType.ACTIVATE){
 			if(click == ClickType.RIGHT){
 				//Can Interact
-				final PlayerInteractEvent.RightClickBlock event = (PlayerInteractEvent.RightClickBlock)ForgeHooks.onRightClickBlock(this.fakePlayer, hand, facingPos, facing.getOpposite(), ForgeHooks.rayTraceEyeHitVec(this.fakePlayer, 2.0));
+				final PlayerInteractEvent.RightClickBlock event = ForgeHooks.onRightClickBlock(this.fakePlayer, hand, facingPos, facing.getOpposite(), ForgeHooks.rayTraceEyeHitVec(this.fakePlayer, 2.0));
                 if (!event.isCanceled() && event.getUseItem() != Event.Result.DENY){
                 	IBlockState blockFacing = getWorld().getBlockState(facingPos);
                 	boolean interacted = blockFacing.getBlock().onBlockActivated(getWorld(), facingPos, blockFacing, fakePlayer, hand, facing.getOpposite(), hX, hY, hZ);
@@ -270,7 +268,7 @@ public class TileAdvDispenser extends TileEntityInventory implements IFacingTile
                 return EnumActionResult.FAIL;
 			} else {
 				//Mainly for single clicks
-				final PlayerInteractEvent.LeftClickBlock event = (PlayerInteractEvent.LeftClickBlock)ForgeHooks.onLeftClickBlock(this.fakePlayer, facingPos, facing.getOpposite(), ForgeHooks.rayTraceEyeHitVec(this.fakePlayer, 2.0));
+				final PlayerInteractEvent.LeftClickBlock event = ForgeHooks.onLeftClickBlock(this.fakePlayer, facingPos, facing.getOpposite(), ForgeHooks.rayTraceEyeHitVec(this.fakePlayer, 2.0));
 				if (!event.isCanceled() && event.getUseItem() != Event.Result.DENY){
 					this.fakePlayer.interactionManager.onBlockClicked(facingPos, facing.getOpposite());
 					getWorld().extinguishFire(null, facingPos, facing.getOpposite());

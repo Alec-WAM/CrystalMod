@@ -45,12 +45,14 @@ public class TileEntityPipePowerCU extends TileEntityPipe {
 		return subtype;
 	}
 	
+	@Override
 	public void writeCustomNBT(NBTTagCompound nbt){
 		super.writeCustomNBT(nbt);
 		nbt.setInteger("subtype", subtype);
 		nbt.setInteger("energyStoredCU", energyStoredCU);
 	}
 	
+	@Override
 	public void readCustomNBT(NBTTagCompound nbt){
 		super.readCustomNBT(nbt);
 		this.subtype = nbt.getInteger("subtype");
@@ -58,6 +60,7 @@ public class TileEntityPipePowerCU extends TileEntityPipe {
 		this.setCEnergyStored(nbt.getInteger("energyStoredCU"));
 	}
 	
+	@Override
 	public boolean onNeighborBlockChange(Block blockId) {
 	    if(network != null && network.powerManager != null) {
 	      network.powerManager.receptorsChanged();
@@ -65,11 +68,13 @@ public class TileEntityPipePowerCU extends TileEntityPipe {
 	    return super.onNeighborBlockChange(blockId);
 	}
 	
+	@Override
 	public void setConnectionMode(EnumFacing dir, ConnectionMode mode) {
 		  super.setConnectionMode(dir, mode);
 		  recievedTicks = null;
 	}
 	
+	@Override
 	public boolean setNetwork(AbstractPipeNetwork network) {
 	    this.network = (CUPowerPipeNetwork) network;
 	    super.setNetwork(network);
@@ -161,6 +166,7 @@ public class TileEntityPipePowerCU extends TileEntityPipe {
 		return new CUPowerPipeNetwork();
 	}
 
+	@Override
 	public boolean canConnectToExternal(EnumFacing direction, boolean ignoreDisabled) {
 		World world = getWorld();
 	    if(world == null) {
@@ -176,6 +182,7 @@ public class TileEntityPipePowerCU extends TileEntityPipe {
 	    return rec != null && rec.canPipeConnect(direction);
 	}
 	
+	@Override
 	public boolean canConnectToPipe(EnumFacing direction, TileEntityPipe conduit) {
 	    boolean res = super.canConnectToPipe(direction, conduit);
 	    if(!res) {
@@ -224,7 +231,8 @@ public class TileEntityPipePowerCU extends TileEntityPipe {
 		return null;
     }	
     
-    public ItemStack getPipeDropped(){
+    @Override
+	public ItemStack getPipeDropped(){
     	ItemStack stack = new ItemStack(ModBlocks.crystalPipe, 1, PipeType.POWERCU.getMeta());
     	ItemNBTHelper.setInteger(stack, "Tier", getSubType());
     	return stack;
@@ -237,7 +245,8 @@ public class TileEntityPipePowerCU extends TileEntityPipe {
     	return super.hasCapability(capability, facing);
     }
     
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     @Nullable
     public <T> T getCapability(net.minecraftforge.common.capabilities.Capability<T> capability, @Nullable net.minecraft.util.EnumFacing facing)
     {

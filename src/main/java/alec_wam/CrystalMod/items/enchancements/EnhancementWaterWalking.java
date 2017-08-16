@@ -4,8 +4,6 @@ import java.util.List;
 
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.api.enhancements.IEnhancement;
-import alec_wam.CrystalMod.items.ItemDragonWings;
-import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;

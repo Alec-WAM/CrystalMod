@@ -13,6 +13,7 @@ public class SlotOffhand extends Slot {
 		super(inventoryIn, index, xPosition, yPosition);
 	}
 	
+	@Override
 	@Nullable
     @SideOnly(Side.CLIENT)
     public String getSlotTexture()

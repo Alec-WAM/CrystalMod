@@ -6,7 +6,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import alec_wam.CrystalMod.CrystalMod;
-import alec_wam.CrystalMod.util.ItemUtil;
 import net.minecraft.block.Block;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
@@ -25,7 +24,8 @@ public class ShapedOreRecipeNBT extends ShapedOreRecipe {
     public ShapedOreRecipeNBT(Item      result, Object... recipe){ super(new ItemStack(result), recipe); }
     public ShapedOreRecipeNBT(ItemStack result, Object... recipe){ super(result, recipe); }
     
-    @SuppressWarnings("unchecked")
+    @Override
+	@SuppressWarnings("unchecked")
     protected boolean checkMatch(InventoryCrafting inv, int startX, int startY, boolean mirror)
     {
         for (int x = 0; x < MAX_CRAFT_GRID_WIDTH; x++)

@@ -11,16 +11,15 @@ import alec_wam.CrystalMod.entities.minions.worker.jobs.JobHarvestCrop;
 import alec_wam.CrystalMod.entities.minions.worker.jobs.JobPlantCrop;
 import alec_wam.CrystalMod.entities.minions.worker.jobs.JobTillDirt;
 import alec_wam.CrystalMod.tiles.machine.worksite.InventorySided;
+import alec_wam.CrystalMod.tiles.machine.worksite.InventorySided.RelativeSide;
+import alec_wam.CrystalMod.tiles.machine.worksite.InventorySided.RotationType;
 import alec_wam.CrystalMod.tiles.machine.worksite.ItemSlotFilter;
 import alec_wam.CrystalMod.tiles.machine.worksite.TileWorksiteUserBlocks;
 import alec_wam.CrystalMod.tiles.machine.worksite.WorkerFilter;
-import alec_wam.CrystalMod.tiles.machine.worksite.InventorySided.RelativeSide;
-import alec_wam.CrystalMod.tiles.machine.worksite.InventorySided.RotationType;
 import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.FarmUtil;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
-import alec_wam.CrystalMod.util.fakeplayer.FakePlayerUtil;
 import alec_wam.CrystalMod.util.tool.ToolUtil;
 import net.minecraft.block.BlockStem;
 import net.minecraft.block.state.IBlockState;
@@ -36,7 +35,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.IPlantable;
 
 public class WorksiteCropFarm extends TileWorksiteUserBlocks {
@@ -81,7 +79,7 @@ public class WorksiteCropFarm extends TileWorksiteUserBlocks {
 				if (ItemStackTools.isEmpty(stack)) {
 					return true;
 				}
-				Item item = stack.getItem();
+				stack.getItem();
 				if (FarmUtil.isSeed(stack, true)) {
 					return true;
 				}
@@ -126,13 +124,12 @@ public class WorksiteCropFarm extends TileWorksiteUserBlocks {
 		plantableCount = 0;
 		bonemealCount = 0;
 		ItemStack stack;
-		Item item;
 		for (int i = 27; i < 30; i++) {
 			stack = inventory.getStackInSlot(i);
 			if (ItemStackTools.isEmpty(stack)) {
 				continue;
 			}
-			item = stack.getItem();
+			stack.getItem();
 			if (FarmUtil.isSeed(stack, true)) {
 				plantableCount += ItemStackTools.getStackSize(stack);
 			}
@@ -240,6 +237,7 @@ public class WorksiteCropFarm extends TileWorksiteUserBlocks {
 				state = getWorld().getBlockState(position);
 				if (getWorld().isAirBlock(position.up()) && (state.getBlock() == Blocks.GRASS || state.getBlock() == Blocks.DIRT)) {
 					EntityMinionWorker worker = getRandomWorker(new WorkerFilter(){
+						@Override
 						public boolean matches(EntityMinionWorker worker){
 							ItemStack held = worker.getHeldItemMainhand();
 							return ItemStackTools.isValid(held) && held.getItem() instanceof ItemHoe && !ToolUtil.isBrokenTinkerTool(held) && !ToolUtil.isEmptyRfTool(held);
@@ -276,13 +274,12 @@ public class WorksiteCropFarm extends TileWorksiteUserBlocks {
 				it.remove();
 				if (getWorld().isAirBlock(position)) {
 					ItemStack stack = ItemStackTools.getEmptyStack();
-					Item item;
 					for (int i = 27; i < 30; i++) {
 						stack = inventory.getStackInSlot(i);
 						if (ItemStackTools.isEmpty(stack)) {
 							continue;
 						}
-						item = stack.getItem();
+						stack.getItem();
 						if (FarmUtil.isSeed(stack, true)) {
 							boolean canPlant = true;
 							if (stack.getItem() instanceof IPlantable) {

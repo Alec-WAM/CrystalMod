@@ -3,10 +3,9 @@ package alec_wam.CrystalMod.tiles.playercube;
 import java.util.HashMap;
 import java.util.Map;
 
-import alec_wam.CrystalMod.blocks.ModBlocks;
-
 import com.google.common.collect.Maps;
 
+import alec_wam.CrystalMod.blocks.ModBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;

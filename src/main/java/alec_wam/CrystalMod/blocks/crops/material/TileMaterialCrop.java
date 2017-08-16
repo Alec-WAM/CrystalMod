@@ -1,6 +1,5 @@
 package alec_wam.CrystalMod.blocks.crops.material;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.collect.Lists;
@@ -11,7 +10,6 @@ import alec_wam.CrystalMod.network.IMessageHandler;
 import alec_wam.CrystalMod.network.packets.PacketTileMessage;
 import alec_wam.CrystalMod.tiles.TileEntityMod;
 import alec_wam.CrystalMod.util.BlockUtil;
-import alec_wam.CrystalMod.util.ModLogger;
 import alec_wam.CrystalMod.util.data.watchable.WatchableInteger;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;

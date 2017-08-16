@@ -9,11 +9,11 @@ import alec_wam.CrystalMod.util.ItemStackTools;
 import mezz.jei.api.IJeiHelpers;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.BlankRecipeWrapper;
+import mezz.jei.api.recipe.IRecipeWrapper;
 import mezz.jei.api.recipe.IStackHelper;
-import mezz.jei.api.recipe.wrapper.ICraftingRecipeWrapper;
 import net.minecraft.item.ItemStack;
 
-public class ShapelessCrystalRecipeWrapper extends BlankRecipeWrapper implements ICraftingRecipeWrapper {
+public class ShapelessCrystalRecipeWrapper extends BlankRecipeWrapper implements IRecipeWrapper {
 	private final IJeiHelpers jeiHelpers;
 	protected final ShapelessCrystalRecipe recipe;
 	

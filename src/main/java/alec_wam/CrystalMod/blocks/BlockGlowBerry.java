@@ -5,10 +5,8 @@ import java.util.Random;
 
 import com.google.common.collect.Lists;
 
-import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.crops.BlockCrystalPlant.PlantType;
 import alec_wam.CrystalMod.items.ModItems;
-import alec_wam.CrystalMod.util.ModLogger;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -16,7 +14,6 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -69,7 +66,7 @@ public class BlockGlowBerry extends Block
 
     public boolean canBlockStay(World worldIn, BlockPos pos, IBlockState state)
     {
-    	EnumFacing facing = (EnumFacing)state.getValue(FACING);
+    	EnumFacing facing = state.getValue(FACING);
     	if(facing == EnumFacing.DOWN){
     		pos = pos.offset(facing.getOpposite());
             IBlockState iblockstate = worldIn.getBlockState(pos);
@@ -100,7 +97,7 @@ public class BlockGlowBerry extends Block
     @Override
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
     {
-    	EnumFacing facing = (EnumFacing)state.getValue(FACING);
+    	EnumFacing facing = state.getValue(FACING);
     	if(facing == EnumFacing.NORTH){
     		return new AxisAlignedBB(0.180D, 0.0D, 0.06D, 0.820D, 0.75D, 0.6875D);
     	}
@@ -123,7 +120,7 @@ public class BlockGlowBerry extends Block
     @Override
     public IBlockState withRotation(IBlockState state, Rotation rot)
     {
-        return state.withProperty(FACING, rot.rotate((EnumFacing)state.getValue(FACING)));
+        return state.withProperty(FACING, rot.rotate(state.getValue(FACING)));
     }
 
     /**
@@ -133,7 +130,7 @@ public class BlockGlowBerry extends Block
     @Override
     public IBlockState withMirror(IBlockState state, Mirror mirrorIn)
     {
-        return state.withRotation(mirrorIn.toRotation((EnumFacing)state.getValue(FACING)));
+        return state.withRotation(mirrorIn.toRotation(state.getValue(FACING)));
     }
 
     /**
@@ -221,7 +218,7 @@ public class BlockGlowBerry extends Block
     @Override
     public int getMetaFromState(IBlockState state)
     {
-        return ((EnumFacing)state.getValue(FACING)).getIndex();
+        return state.getValue(FACING).getIndex();
     }
 
     @Override

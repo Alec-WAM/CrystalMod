@@ -1,6 +1,5 @@
 package alec_wam.CrystalMod.items.guide.page;
 
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -17,8 +16,6 @@ import alec_wam.CrystalMod.client.util.comp.GuiComponentSprite;
 import alec_wam.CrystalMod.items.guide.GuiGuideChapter;
 import alec_wam.CrystalMod.items.guide.GuiGuideIndex;
 import alec_wam.CrystalMod.items.guide.GuidePages;
-import alec_wam.CrystalMod.items.guide.GuidePages.ManualChapter;
-import alec_wam.CrystalMod.items.guide.GuidePages.PageData;
 import alec_wam.CrystalMod.tiles.machine.BasicMachineRecipe;
 import alec_wam.CrystalMod.tiles.machine.crafting.press.PressRecipeManager;
 import alec_wam.CrystalMod.util.ItemStackTools;
@@ -72,6 +69,7 @@ public class PagePress extends GuidePage {
 		return list;
 	}
 	
+	@Override
 	@SideOnly(Side.CLIENT)
     public void initGui(GuiGuideChapter gui, int startX, int startY){
 		outputIndex = 0;
@@ -79,6 +77,7 @@ public class PagePress extends GuidePage {
 	
 	private int outputIndex;
 	private int arrowTimer;
+	@Override
 	@SideOnly(Side.CLIENT)
     public void updateScreen(GuiGuideChapter gui, int startX, int startY, int timer){
 		
@@ -141,6 +140,7 @@ public class PagePress extends GuidePage {
 		GlStateManager.popMatrix();
 	}
 	
+	@Override
 	@SideOnly(Side.CLIENT)
     public void drawForeground(GuiGuideChapter gui, int startX, int startY, int mouseX, int mouseY, float partialTicks){
 		int itemBoxSize = 34;

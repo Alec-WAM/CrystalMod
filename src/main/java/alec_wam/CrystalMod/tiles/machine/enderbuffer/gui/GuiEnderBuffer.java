@@ -1,9 +1,20 @@
 package alec_wam.CrystalMod.tiles.machine.enderbuffer.gui;
 
 import java.awt.Color;
-import java.awt.Point;
 import java.util.List;
 
+import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.GL11;
+
+import com.google.common.collect.Lists;
+
+import alec_wam.CrystalMod.client.util.GuiContainerTabbed;
+import alec_wam.CrystalMod.tiles.machine.enderbuffer.EnderBufferManager.EnderBuffer;
+import alec_wam.CrystalMod.tiles.machine.enderbuffer.TileEntityEnderBuffer;
+import alec_wam.CrystalMod.tiles.machine.enderbuffer.TileEntityEnderBuffer.Mode;
+import alec_wam.CrystalMod.tiles.pipes.TileEntityPipe.RedstoneMode;
+import alec_wam.CrystalMod.util.Lang;
+import alec_wam.CrystalMod.util.client.RenderUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
@@ -11,19 +22,6 @@ import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.util.ResourceLocation;
-
-import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.GL11;
-
-import alec_wam.CrystalMod.client.util.GuiContainerTabbed;
-import alec_wam.CrystalMod.tiles.machine.enderbuffer.TileEntityEnderBuffer;
-import alec_wam.CrystalMod.tiles.machine.enderbuffer.EnderBufferManager.EnderBuffer;
-import alec_wam.CrystalMod.tiles.machine.enderbuffer.TileEntityEnderBuffer.Mode;
-import alec_wam.CrystalMod.tiles.pipes.TileEntityPipe.RedstoneMode;
-import alec_wam.CrystalMod.util.Lang;
-import alec_wam.CrystalMod.util.client.RenderUtil;
-
-import com.google.common.collect.Lists;
 
 public class GuiEnderBuffer extends GuiContainerTabbed {
 
@@ -34,7 +32,8 @@ public class GuiEnderBuffer extends GuiContainerTabbed {
 		this.buffer = buffer;
 	}
 	
-    public void drawGuiContainerForegroundLayer(int par1, int par2){
+    @Override
+	public void drawGuiContainerForegroundLayer(int par1, int par2){
 		super.drawGuiContainerForegroundLayer(par1, par2);
 		int cuX = 51;
 		int rfX = 71;
@@ -96,6 +95,7 @@ public class GuiEnderBuffer extends GuiContainerTabbed {
 			}
 	    }
 	}
+	@Override
 	public void drawGuiContainerBackgroundLayer(float var1, int var2,int var3) {
 		super.drawGuiContainerBackgroundLayer(var1, var2, var3);
 		
@@ -144,6 +144,7 @@ public class GuiEnderBuffer extends GuiContainerTabbed {
 			maxHeight = 55;
 			overlayColor = 0xd46c1f;
 		}
+		@Override
 		public boolean handleMouseClicked(int x, int y, int mouseButton)
 		{
 		    if (!isFullyOpened()) {
@@ -174,6 +175,7 @@ public class GuiEnderBuffer extends GuiContainerTabbed {
 		    
 		    return true;
 		}
+		@Override
 		public void update() {
 			super.update();
 			if (!isFullyOpened()) {
@@ -243,6 +245,7 @@ public class GuiEnderBuffer extends GuiContainerTabbed {
 			maxHeight = 55;
 			overlayColor = 0xFF0000;
 		}
+		@Override
 		public boolean handleMouseClicked(int x, int y, int mouseButton)
 		{
 		    if (!isFullyOpened()) {
@@ -274,6 +277,7 @@ public class GuiEnderBuffer extends GuiContainerTabbed {
 			}
 		    return true;
 		}
+		@Override
 		public void update() {
 			super.update();
 			if (!isFullyOpened()) {

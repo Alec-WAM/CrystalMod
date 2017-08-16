@@ -12,6 +12,7 @@ public class ShapedNBTRecipe extends ShapedCrystalRecipe {
 		super(width, height, p_i1917_3_, output);
 	}
 	
+	@Override
 	public boolean matches(InventoryCrafting inv, World worldIn)
     {
         for (int i = 0; i <= 3 - this.recipeWidth; ++i)

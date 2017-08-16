@@ -15,7 +15,6 @@ import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
-import scala.actors.threadpool.Arrays;
 
 public class InventoryBackpackUpgrades extends InventoryBackpack{
 

@@ -84,11 +84,6 @@ public class RenderTileJar<T extends TileJar> extends TileEntitySpecialRenderer<
 					float alpha = 0.65f;
 					GlStateManager.color(red, green, blue, alpha);
 					render.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-					final int MAX_LIGHT_X = 0xF000F0;
-					final int MAX_LIGHT_Y = 0xF000F0;
-	
-					
-					
 					float height = (0.8f/3.0f)*potionCount;
 					
 					render.pos(0.2, height, 0.2).tex(0, 0)/*.lightmap(MAX_LIGHT_X, MAX_LIGHT_Y)*/.endVertex();
@@ -151,8 +146,6 @@ public class RenderTileJar<T extends TileJar> extends TileEntitySpecialRenderer<
 	}
 	
 	public static Vector3f getColorFromPotion(PotionType type){
-		int i = 3694022;
-
 		if (type.getEffects().isEmpty())
 		{
 			return null;
@@ -170,9 +163,9 @@ public class RenderTileJar<T extends TileJar> extends TileEntitySpecialRenderer<
 				{
 					int k = potioneffect.getPotion().getLiquidColor();
 					int l = potioneffect.getAmplifier() + 1;
-					f += (float)(l * (k >> 16 & 255)) / 255.0F;
-					f1 += (float)(l * (k >> 8 & 255)) / 255.0F;
-					f2 += (float)(l * (k >> 0 & 255)) / 255.0F;
+					f += l * (k >> 16 & 255) / 255.0F;
+					f1 += l * (k >> 8 & 255) / 255.0F;
+					f2 += l * (k >> 0 & 255) / 255.0F;
 					j += l;
 				}
 			}
@@ -183,9 +176,9 @@ public class RenderTileJar<T extends TileJar> extends TileEntitySpecialRenderer<
 			}
 			else
 			{
-				f = f / (float)j * 255.0F;
-				f1 = f1 / (float)j * 255.0F;
-				f2 = f2 / (float)j * 255.0F;
+				f = f / j * 255.0F;
+				f1 = f1 / j * 255.0F;
+				f2 = f2 / j * 255.0F;
 				return new Vector3f(f, f1, f2);
 			}
 		}
@@ -237,10 +230,10 @@ public class RenderTileJar<T extends TileJar> extends TileEntitySpecialRenderer<
 				double textureY = 198 + i1 / 8 * 18;
 				Minecraft.getMinecraft().getTextureManager().bindTexture(GuiContainer.INVENTORY_BACKGROUND);
 				render.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-				render.pos(0.32, 0.22, potionZ+0.001).tex((double)((float)(textureX + 0) * 0.00390625F), (double)((float)(textureY + 18) * 0.00390625F)).endVertex();
-				render.pos(0.68, 0.22, potionZ+0.001).tex((double)((float)(textureX + 18) * 0.00390625F), (double)((float)(textureY + 18) * 0.00390625F)).endVertex();
-				render.pos(0.68, 0.58, potionZ+0.001).tex((double)((float)(textureX + 18) * 0.00390625F), (double)((float)(textureY + 0) * 0.00390625F)).endVertex();
-				render.pos(0.32, 0.58, potionZ+0.001).tex((double)((float)(textureX + 0) * 0.00390625F), (double)((float)(textureY + 0) * 0.00390625F)).endVertex();
+				render.pos(0.32, 0.22, potionZ+0.001).tex((float)(textureX + 0) * 0.00390625F, (float)(textureY + 18) * 0.00390625F).endVertex();
+				render.pos(0.68, 0.22, potionZ+0.001).tex((float)(textureX + 18) * 0.00390625F, (float)(textureY + 18) * 0.00390625F).endVertex();
+				render.pos(0.68, 0.58, potionZ+0.001).tex((float)(textureX + 18) * 0.00390625F, (float)(textureY + 0) * 0.00390625F).endVertex();
+				render.pos(0.32, 0.58, potionZ+0.001).tex((float)(textureX + 0) * 0.00390625F, (float)(textureY + 0) * 0.00390625F).endVertex();
 				tessy.draw();
 				
 				String numeral = "";
@@ -290,7 +283,7 @@ public class RenderTileJar<T extends TileJar> extends TileEntitySpecialRenderer<
 	        	for(String line : lines){
 	        		GlStateManager.pushMatrix();
 	        		int stringWidth = Minecraft.getMinecraft().fontRendererObj.getStringWidth(line);
-	                scale = Math.min(30F / (float) (stringWidth+10), 0.8F);
+	                scale = Math.min(30F / (stringWidth+10), 0.8F);
 	                double renderY = startY+(index*(Minecraft.getMinecraft().fontRendererObj.FONT_HEIGHT*(1.0-scale)));
 	                GlStateManager.translate(0, renderY, 0);
 	                GlStateManager.scale(scale, scale, 1);
@@ -403,14 +396,14 @@ public class RenderTileJar<T extends TileJar> extends TileEntitySpecialRenderer<
 
         for (int j = listQuads.size(); i < j; ++i)
         {
-            BakedQuad bakedquad = (BakedQuad)listQuads.get(i);
+            BakedQuad bakedquad = listQuads.get(i);
             vertexbuffer.begin(7, DefaultVertexFormats.ITEM);
             vertexbuffer.addVertexData(bakedquad.getVertexData());
 
             //vertexbuffer.putColorRGB_F4(red * brightness, green * brightness, blue * brightness);
 
             Vec3i vec3i = bakedquad.getFace().getDirectionVec();
-            vertexbuffer.putNormal((float)vec3i.getX(), (float)vec3i.getY(), (float)vec3i.getZ());
+            vertexbuffer.putNormal(vec3i.getX(), vec3i.getY(), vec3i.getZ());
             tessellator.draw();
         }
 

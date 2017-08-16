@@ -3,6 +3,7 @@ package alec_wam.CrystalMod.tiles.machine.power.engine;
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.EnumBlock.IEnumMeta;
 import alec_wam.CrystalMod.blocks.ICustomModel;
+import alec_wam.CrystalMod.tiles.BlockStateFacing;
 import alec_wam.CrystalMod.tiles.machine.BlockMachine;
 import alec_wam.CrystalMod.tiles.machine.BlockStateMachine;
 import alec_wam.CrystalMod.tiles.machine.power.engine.furnace.TileEntityEngineFurnace;
@@ -60,6 +61,7 @@ public class BlockEngine extends BlockMachine implements ICustomModel {
 		}
 	}
 	
+	@Override
 	@SideOnly(Side.CLIENT)
     public void initModel() {
 		ModelLoader.setCustomStateMapper(this, new EngineBlockStateMapper());
@@ -82,7 +84,7 @@ public class BlockEngine extends BlockMachine implements ICustomModel {
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
-	    return ((EngineType) state.getValue(ENGINE_TYPE)).getMeta();
+	    return state.getValue(ENGINE_TYPE).getMeta();
 	}
 
 	@Override
@@ -221,9 +223,9 @@ public class BlockEngine extends BlockMachine implements ICustomModel {
 			
 			builder.append(",");
 			
-			builder.append(BlockStateMachine.facingProperty.getName());
+			builder.append(BlockStateFacing.facingProperty.getName());
 			builder.append("=");
-			builder.append(state.getValue(BlockStateMachine.facingProperty));
+			builder.append(state.getValue(BlockStateFacing.facingProperty));
 			
 			nameOverride = block.getRegistryName().getResourcePath() + "_" + type.getName();
 

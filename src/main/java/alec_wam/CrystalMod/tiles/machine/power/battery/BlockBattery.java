@@ -2,8 +2,6 @@ package alec_wam.CrystalMod.tiles.machine.power.battery;
 
 import java.util.List;
 
-import javax.annotation.Nullable;
-
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.EnumBlock.IEnumMeta;
 import alec_wam.CrystalMod.blocks.ICustomModel;
@@ -82,6 +80,7 @@ public class BlockBattery extends BlockContainer implements ICustomModel {
 	    setCreativeTab(CrystalMod.tabBlocks);
 	}
 	
+	@Override
 	@SideOnly(Side.CLIENT)
 	public void initModel(){
 		ModelLoader.setCustomStateMapper(this, new BatteryBlockStateMapper());
@@ -109,6 +108,7 @@ public class BlockBattery extends BlockContainer implements ICustomModel {
 		}
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Override
     public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
         return super.getActualState(state, world, pos);
@@ -117,7 +117,7 @@ public class BlockBattery extends BlockContainer implements ICustomModel {
 	@Override
 	public IBlockState getExtendedState(final IBlockState state, final IBlockAccess world, final BlockPos pos) {
 		TileEntity tile = world.getTileEntity(pos);
-        return (IBlockState)new FakeBatteryState(state, world, pos, (tile !=null && tile instanceof TileEntityBattery) ? (TileEntityBattery)tile : null);
+        return new FakeBatteryState(state, world, pos, (tile !=null && tile instanceof TileEntityBattery) ? (TileEntityBattery)tile : null);
     }
 	
 	@Override
@@ -127,7 +127,7 @@ public class BlockBattery extends BlockContainer implements ICustomModel {
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
-	    return ((BatteryType) state.getValue(TYPE)).getMeta();
+	    return state.getValue(TYPE).getMeta();
 	}
 
 	@Override

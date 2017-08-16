@@ -61,6 +61,7 @@ public class ItemHDD extends Item implements ICustomModel, IItemProvider {
         return super.getUnlocalizedName(stack) + (colors[stack.getMetadata()]);
     }
 	
+	@Override
 	@SideOnly(Side.CLIENT)
     public void initModel() {
 		String[] colors = new String[]{"blue", "red", "green", "dark", "pure"};

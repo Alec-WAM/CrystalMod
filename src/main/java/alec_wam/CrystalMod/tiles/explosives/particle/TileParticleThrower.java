@@ -25,9 +25,9 @@ public class TileParticleThrower extends TileEntity {
 				if(state.getBlockHardness(world, blockPos) < 0.0D)continue;
 				
 				final TileEntity tile = world.getTileEntity(blockPos);
-				double explosionX = (double)blockPos.getX() + 0.5D;
-				double explosionY = (double)blockPos.getY();
-				double explosionZ = (double)blockPos.getZ() + 0.5D;
+				double explosionX = blockPos.getX() + 0.5D;
+				double explosionY = blockPos.getY();
+				double explosionZ = blockPos.getZ() + 0.5D;
 				
 				EntityCustomFallingBlock blockEntity = new EntityCustomFallingBlock(world, explosionX, explosionY, explosionZ, state);
 				NBTTagCompound tileNBT = null;

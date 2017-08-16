@@ -6,6 +6,9 @@ import org.lwjgl.opengl.GL11;
 
 import com.google.common.collect.Maps;
 
+import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.client.model.dynamic.DynamicBaseModel;
+import alec_wam.CrystalMod.client.model.dynamic.ICustomItemRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -21,10 +24,6 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.common.model.TRSRTransformation;
-import alec_wam.CrystalMod.CrystalMod;
-import alec_wam.CrystalMod.client.model.dynamic.DynamicBaseModel;
-import alec_wam.CrystalMod.client.model.dynamic.ICustomItemRenderer;
-import alec_wam.CrystalMod.entities.minecarts.chests.EntityCrystalChestMinecartBase;
 
 public class ItemMinecartRender implements ICustomItemRenderer {
 

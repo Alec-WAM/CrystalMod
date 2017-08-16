@@ -66,7 +66,7 @@ public abstract class CustomSpawnerBaseLogic {
 		if (!requiresPlayer)
 			return true;
 		else
-			return this.getSpawnerWorld().getClosestPlayer((double) this.getSpawnerX() + 0.5D, (double) this.getSpawnerY() + 0.5D, (double) this.getSpawnerZ() + 0.5D, (double) this.activatingRangeFromPlayer, false) != null;
+			return this.getSpawnerWorld().getClosestPlayer(this.getSpawnerX() + 0.5D, this.getSpawnerY() + 0.5D, this.getSpawnerZ() + 0.5D, this.activatingRangeFromPlayer, false) != null;
 	}
 
 	public void updateSpawner() {
@@ -74,9 +74,9 @@ public abstract class CustomSpawnerBaseLogic {
 			double d2;
 
 			if (this.getSpawnerWorld().isRemote) {
-				double d0 = (double) ((float) this.getSpawnerX() + this.getSpawnerWorld().rand.nextFloat());
-				double d1 = (double) ((float) this.getSpawnerY() + this.getSpawnerWorld().rand.nextFloat());
-				d2 = (double) ((float) this.getSpawnerZ() + this.getSpawnerWorld().rand.nextFloat());
+				double d0 = this.getSpawnerX() + this.getSpawnerWorld().rand.nextFloat();
+				double d1 = this.getSpawnerY() + this.getSpawnerWorld().rand.nextFloat();
+				d2 = this.getSpawnerZ() + this.getSpawnerWorld().rand.nextFloat();
 				this.getSpawnerWorld().spawnParticle(EnumParticleTypes.SMOKE_NORMAL, d0, d1, d2, 0.0D, 0.0D, 0.0D);
 				this.getSpawnerWorld().spawnParticle(EnumParticleTypes.FLAME, d0, d1, d2, 0.0D, 0.0D, 0.0D);
 
@@ -85,7 +85,7 @@ public abstract class CustomSpawnerBaseLogic {
 				}
 
 				this.renderRotation1 = this.renderRotation0;
-				this.renderRotation0 = (this.renderRotation0 + (double) (1000.0F / ((float) this.spawnDelay + 200.0F))) % 360.0D;
+				this.renderRotation0 = (this.renderRotation0 + 1000.0F / (this.spawnDelay + 200.0F)) % 360.0D;
 			} else {
 				if (this.spawnDelay == -1) {
 					this.resetTimer();
@@ -106,7 +106,7 @@ public abstract class CustomSpawnerBaseLogic {
 						return;
 					}
 
-					int j = this.getSpawnerWorld().getEntitiesWithinAABB(entity.getClass(), new AxisAlignedBB((double) this.getSpawnerX(), (double) this.getSpawnerY(), (double) this.getSpawnerZ(), (double) (this.getSpawnerX() + 1), (double) (this.getSpawnerY() + 1), (double) (this.getSpawnerZ() + 1)).expand((double) (this.spawnRange * 2), 4.0D, (double) (this.spawnRange * 2))).size();
+					int j = this.getSpawnerWorld().getEntitiesWithinAABB(entity.getClass(), new AxisAlignedBB(this.getSpawnerX(), this.getSpawnerY(), this.getSpawnerZ(), this.getSpawnerX() + 1, this.getSpawnerY() + 1, this.getSpawnerZ() + 1).expand(this.spawnRange * 2, 4.0D, this.spawnRange * 2)).size();
 
 					if (j >= this.maxNearbyEntities) {
 						this.resetTimer();
@@ -114,9 +114,9 @@ public abstract class CustomSpawnerBaseLogic {
 					}
 					World world = getSpawnerWorld();
 					BlockPos blockpos = new BlockPos(getSpawnerX(), getSpawnerY(), getSpawnerZ());
-					double x = (double)blockpos.getX() + (world.rand.nextDouble() - world.rand.nextDouble()) * (double)this.spawnRange + 0.5D;
-					double y = (double)(blockpos.getY() + world.rand.nextInt(3) - 1);
-					double z = (double)blockpos.getZ() + (world.rand.nextDouble() - world.rand.nextDouble()) * (double)this.spawnRange + 0.5D;
+					double x = blockpos.getX() + (world.rand.nextDouble() - world.rand.nextDouble()) * this.spawnRange + 0.5D;
+					double y = blockpos.getY() + world.rand.nextInt(3) - 1;
+					double z = blockpos.getZ() + (world.rand.nextDouble() - world.rand.nextDouble()) * this.spawnRange + 0.5D;
 					EntityLiving entityliving = entity instanceof EntityLiving ? (EntityLiving) entity : null;
 					entity.setLocationAndAngles(x, y, z, world.rand.nextFloat() * 360.0F, 0.0F);
 
@@ -148,7 +148,7 @@ public abstract class CustomSpawnerBaseLogic {
 			EntityEssenceInstance<?> essence = ItemMobEssence.getEssence(getEntityNameToSpawn());
 			if(essence !=null && essence.useInitialSpawn()){
 				if (!net.minecraftforge.event.ForgeEventFactory.doSpecialSpawn(((EntityLiving) par1Entity), this.getSpawnerWorld(), (float)par1Entity.posX, (float)par1Entity.posY, (float)par1Entity.posZ))
-				((EntityLiving) par1Entity).onInitialSpawn(getSpawnerWorld().getDifficultyForLocation(new BlockPos(((EntityLiving)par1Entity))), null);
+				((EntityLiving) par1Entity).onInitialSpawn(getSpawnerWorld().getDifficultyForLocation(new BlockPos((par1Entity))), null);
 			}
 			this.getSpawnerWorld().spawnEntity(par1Entity);
 			((EntityLiving)par1Entity).playLivingSound();

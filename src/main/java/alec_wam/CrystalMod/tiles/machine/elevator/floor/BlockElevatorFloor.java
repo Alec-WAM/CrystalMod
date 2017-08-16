@@ -1,5 +1,7 @@
 package alec_wam.CrystalMod.tiles.machine.elevator.floor;
 
+import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -11,13 +13,11 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import alec_wam.CrystalMod.CrystalMod;
-import alec_wam.CrystalMod.util.ItemStackTools;
 
 public class BlockElevatorFloor extends BlockContainer {
 

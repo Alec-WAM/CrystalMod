@@ -4,12 +4,9 @@ import java.util.Collection;
 import java.util.EnumSet;
 import java.util.Iterator;
 
-import net.minecraft.entity.player.EntityPlayer;
+import alec_wam.CrystalMod.util.BlockUtil;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
-import alec_wam.CrystalMod.entities.minions.worker.EntityMinionWorker;
-import alec_wam.CrystalMod.util.BlockUtil;
-import alec_wam.CrystalMod.util.ModLogger;
 
 public abstract class TileWorksiteBounded extends TileWorksiteBase {
 
@@ -75,6 +72,7 @@ public abstract class TileWorksiteBounded extends TileWorksiteBase {
 	  
 	}
 	
+	@Override
 	public void onBoundsAdjusted()
 	{
 	  
@@ -95,16 +93,19 @@ public abstract class TileWorksiteBounded extends TileWorksiteBase {
 		}
 	}
 	
+	@Override
 	public final void setWorkBoundsMin(BlockPos min)
 	{
 		bbMin = min;
 	}
 
+	@Override
 	public final void setWorkBoundsMax(BlockPos max)
 	{
 		bbMax = max;
 	}
 	
+	@Override
 	public void update(){
 		if(this.bbMax == null){
 			this.bbMax = pos.add(1, 0, 1);

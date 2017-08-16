@@ -2,16 +2,15 @@ package alec_wam.CrystalMod.blocks.crops;
 
 import java.util.Random;
 
-import alec_wam.CrystalMod.blocks.BlockCrystalLog;
-import alec_wam.CrystalMod.blocks.ModBlocks;
-import alec_wam.CrystalMod.blocks.BlockCrystalLog.WoodType;
-import alec_wam.CrystalMod.blocks.crops.BlockCrystalPlant.PlantType;
-import alec_wam.CrystalMod.items.ModItems;
-import alec_wam.CrystalMod.items.ItemCrystal.CrystalType;
-import alec_wam.CrystalMod.util.ItemStackTools;
-
 import com.google.common.collect.Lists;
 
+import alec_wam.CrystalMod.blocks.BlockCrystalLog;
+import alec_wam.CrystalMod.blocks.BlockCrystalLog.WoodType;
+import alec_wam.CrystalMod.blocks.ModBlocks;
+import alec_wam.CrystalMod.blocks.crops.BlockCrystalPlant.PlantType;
+import alec_wam.CrystalMod.items.ItemCrystal.CrystalType;
+import alec_wam.CrystalMod.items.ModItems;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.IGrowable;
@@ -90,7 +89,7 @@ public class BlockCrystalTreePlant extends BlockHorizontal implements IGrowable
         }
         else if (worldIn.rand.nextInt(5) == 0)
         {
-            int i = ((Integer)state.getValue(AGE)).intValue();
+            int i = state.getValue(AGE).intValue();
 
             if (i < 2)
             {
@@ -101,7 +100,7 @@ public class BlockCrystalTreePlant extends BlockHorizontal implements IGrowable
 
     public boolean canBlockStay(World worldIn, BlockPos pos, IBlockState state)
     {
-    	pos = pos.offset((EnumFacing)state.getValue(FACING));
+    	pos = pos.offset(state.getValue(FACING));
         IBlockState iblockstate = worldIn.getBlockState(pos);
         if(iblockstate.getBlock() != ModBlocks.crystalLog)return false;
         WoodType wood = iblockstate.getValue(BlockCrystalLog.VARIANT);
@@ -130,9 +129,9 @@ public class BlockCrystalTreePlant extends BlockHorizontal implements IGrowable
     @Override
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
     {
-        int i = ((Integer)state.getValue(AGE)).intValue();
+        int i = state.getValue(AGE).intValue();
 
-        switch ((EnumFacing)state.getValue(FACING))
+        switch (state.getValue(FACING))
         {
             case SOUTH:
                 return SOUTH_AABB[i];
@@ -153,7 +152,7 @@ public class BlockCrystalTreePlant extends BlockHorizontal implements IGrowable
     @Override
     public IBlockState withRotation(IBlockState state, Rotation rot)
     {
-        return state.withProperty(FACING, rot.rotate((EnumFacing)state.getValue(FACING)));
+        return state.withProperty(FACING, rot.rotate(state.getValue(FACING)));
     }
 
     /**
@@ -163,7 +162,7 @@ public class BlockCrystalTreePlant extends BlockHorizontal implements IGrowable
     @Override
     public IBlockState withMirror(IBlockState state, Mirror mirrorIn)
     {
-        return state.withRotation(mirrorIn.toRotation((EnumFacing)state.getValue(FACING)));
+        return state.withRotation(mirrorIn.toRotation(state.getValue(FACING)));
     }
 
     /**
@@ -172,7 +171,7 @@ public class BlockCrystalTreePlant extends BlockHorizontal implements IGrowable
     @Override
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack)
     {
-        EnumFacing enumfacing = EnumFacing.fromAngle((double)placer.rotationYaw);
+        EnumFacing enumfacing = EnumFacing.fromAngle(placer.rotationYaw);
         worldIn.setBlockState(pos, state.withProperty(FACING, enumfacing), 2);
     }
 
@@ -224,7 +223,7 @@ public class BlockCrystalTreePlant extends BlockHorizontal implements IGrowable
     public java.util.List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune)
     {
         java.util.List<ItemStack> dropped = Lists.newArrayList();
-        int i = ((Integer)state.getValue(AGE)).intValue();
+        int i = state.getValue(AGE).intValue();
         int j = 0;
 
         if (i >= 2)
@@ -259,19 +258,22 @@ public class BlockCrystalTreePlant extends BlockHorizontal implements IGrowable
     /**
      * Whether this IGrowable can grow
      */
-    public boolean canGrow(World worldIn, BlockPos pos, IBlockState state, boolean isClient)
+    @Override
+	public boolean canGrow(World worldIn, BlockPos pos, IBlockState state, boolean isClient)
     {
-        return ((Integer)state.getValue(AGE)).intValue() < 2;
+        return state.getValue(AGE).intValue() < 2;
     }
 
-    public boolean canUseBonemeal(World worldIn, Random rand, BlockPos pos, IBlockState state)
+    @Override
+	public boolean canUseBonemeal(World worldIn, Random rand, BlockPos pos, IBlockState state)
     {
         return true;
     }
 
-    public void grow(World worldIn, Random rand, BlockPos pos, IBlockState state)
+    @Override
+	public void grow(World worldIn, Random rand, BlockPos pos, IBlockState state)
     {
-        worldIn.setBlockState(pos, state.withProperty(AGE, Integer.valueOf(((Integer)state.getValue(AGE)).intValue() + 1)), 2);
+        worldIn.setBlockState(pos, state.withProperty(AGE, Integer.valueOf(state.getValue(AGE).intValue() + 1)), 2);
     }
 
     @Override
@@ -297,8 +299,8 @@ public class BlockCrystalTreePlant extends BlockHorizontal implements IGrowable
     public int getMetaFromState(IBlockState state)
     {
         int i = 0;
-        i = i | ((EnumFacing)state.getValue(FACING)).getHorizontalIndex();
-        i = i | ((Integer)state.getValue(AGE)).intValue() << 2;
+        i = i | state.getValue(FACING).getHorizontalIndex();
+        i = i | state.getValue(AGE).intValue() << 2;
         return i;
     }
 

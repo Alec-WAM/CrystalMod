@@ -2,6 +2,14 @@ package alec_wam.CrystalMod.items.tools;
 
 import javax.annotation.Nullable;
 
+import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.blocks.ICustomModel;
+import alec_wam.CrystalMod.items.ModItems;
+import alec_wam.CrystalMod.items.tools.grapple.EntityGrapplingHook;
+import alec_wam.CrystalMod.items.tools.grapple.GrappleHandler;
+import alec_wam.CrystalMod.network.CrystalModNetwork;
+import alec_wam.CrystalMod.network.packets.PacketEntityMessage;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -18,7 +26,6 @@ import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
@@ -29,15 +36,6 @@ import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import alec_wam.CrystalMod.CrystalMod;
-import alec_wam.CrystalMod.blocks.ICustomModel;
-import alec_wam.CrystalMod.items.ModItems;
-import alec_wam.CrystalMod.items.tools.grapple.EntityGrapplingHook;
-import alec_wam.CrystalMod.items.tools.grapple.GrappleHandler;
-import alec_wam.CrystalMod.network.CrystalModNetwork;
-import alec_wam.CrystalMod.network.packets.PacketEntityMessage;
-import alec_wam.CrystalMod.util.ItemStackTools;
-import alec_wam.CrystalMod.util.ModLogger;
 
 public class ItemDarkIronBow extends ItemBow implements ICustomModel {
 
@@ -209,21 +207,12 @@ public class ItemDarkIronBow extends ItemBow implements ICustomModel {
   				entityhook = null;
   			}
   			
-  			if (entityhook == null) {
-  				entityhook = new EntityGrapplingHook(worldIn, entityplayer, entityplayer.getActiveHand());
-  				entityhook.setHeadingFromThrower(entityplayer, entityplayer.rotationPitch, entityplayer.rotationYaw, 0.0F, drawRatio * entityhook.getVelocity(), 0.0F);
-  				GrappleHandler.setHook(entityplayer, entityhook);
-  				worldIn.playSound((EntityPlayer)null, entityplayer.posX, entityplayer.posY, entityplayer.posZ, SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.NEUTRAL, 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + f * 0.5F);
-  				
-  				worldIn.spawnEntity(entityhook);
-  			} else {
-  				Entity shooter = worldIn.getEntityByID(entityhook.shootingEntityID);
-  				if(shooter !=null && shooter instanceof EntityPlayerMP){
-  					CrystalModNetwork.sendTo(new PacketEntityMessage(shooter, "GrappleUnattach"), (EntityPlayerMP)shooter);
-  				}
-  				GrappleHandler.attached.remove(new Integer(entityhook.shootingEntityID));
-  				GrappleHandler.setHook(entityplayer, null);
-  			}
+  			entityhook = new EntityGrapplingHook(worldIn, entityplayer, entityplayer.getActiveHand());
+			entityhook.setHeadingFromThrower(entityplayer, entityplayer.rotationPitch, entityplayer.rotationYaw, 0.0F, drawRatio * entityhook.getVelocity(), 0.0F);
+			GrappleHandler.setHook(entityplayer, entityhook);
+			worldIn.playSound((EntityPlayer)null, entityplayer.posX, entityplayer.posY, entityplayer.posZ, SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.NEUTRAL, 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + f * 0.5F);
+			
+			worldIn.spawnEntity(entityhook);
           } else {
 	          EntityArrow entityarrow = itemarrow.createArrow(worldIn, itemstack, entityplayer);
 	          entityarrow.setAim(entityplayer, entityplayer.rotationPitch, entityplayer.rotationYaw, 0.0F, drawRatio * (3.0F + forceMultiplier), 0.25F);
@@ -319,6 +308,7 @@ public class ItemDarkIronBow extends ItemBow implements ICustomModel {
 
     }
 	
+	@Override
 	@SideOnly(Side.CLIENT)
     public void initModel() {
 		ModItems.initBasicModel(this);

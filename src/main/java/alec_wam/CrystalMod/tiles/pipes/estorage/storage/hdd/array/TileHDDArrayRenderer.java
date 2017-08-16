@@ -8,7 +8,6 @@ import org.lwjgl.opengl.GL11;
 import alec_wam.CrystalMod.items.ItemIngot;
 import alec_wam.CrystalMod.tiles.pipes.estorage.storage.hdd.ItemHDD;
 import alec_wam.CrystalMod.util.ItemStackTools;
-import alec_wam.CrystalMod.util.client.RenderUtil;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;

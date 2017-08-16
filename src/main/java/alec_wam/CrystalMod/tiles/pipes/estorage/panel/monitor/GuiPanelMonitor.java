@@ -1,26 +1,23 @@
 package alec_wam.CrystalMod.tiles.pipes.estorage.panel.monitor;
 
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.ResourceLocation;
-
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 
-import alec_wam.CrystalMod.CrystalMod;
+import com.google.common.collect.Lists;
+
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.tiles.pipes.estorage.PacketEStorageAddItem;
 import alec_wam.CrystalMod.tiles.pipes.estorage.client.IGuiScreen;
 import alec_wam.CrystalMod.util.Lang;
 import alec_wam.CrystalMod.util.client.GuiUtil;
 import alec_wam.CrystalMod.util.client.Scrollbar;
-
-import com.google.common.collect.Lists;
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextFormatting;
 
 public class GuiPanelMonitor extends GuiContainer implements IGuiScreen {
     public static final int VISIBLE_ROWS = 3;
@@ -181,7 +178,7 @@ public class GuiPanelMonitor extends GuiContainer implements IGuiScreen {
     }
 
     public int getOffset() {
-        return (int) (scrollbar.getCurrentScroll() / 89f * (float) getRows());
+        return (int) (scrollbar.getCurrentScroll() / 89f * getRows());
     }
 
     private int getRows() {

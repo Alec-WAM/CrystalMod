@@ -31,7 +31,6 @@ import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.Lang;
-import alec_wam.CrystalMod.util.ModLogger;
 import alec_wam.CrystalMod.util.client.RenderUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
@@ -109,6 +108,7 @@ public class GuiPanel extends GuiContainer implements IGuiScreen, INetworkGui  {
 		return (this instanceof GuiPanelCrafting) ? 70 : 74;
 	}
 
+	@Override
 	public void actionPerformed(GuiButton button){
 		if(button.id == 0){
 			if(panel !=null){
@@ -151,6 +151,7 @@ public class GuiPanel extends GuiContainer implements IGuiScreen, INetworkGui  {
 		}
 	}
 	
+	@Override
 	public void handleMouseInput() throws IOException
     {
         super.handleMouseInput();
@@ -224,12 +225,14 @@ public class GuiPanel extends GuiContainer implements IGuiScreen, INetworkGui  {
 		}
 	}
 	
+	@Override
 	public void onGuiClosed(){
 		super.onGuiClosed();
 		this.panel.setSearchBar(searchBar.getText());
 		Keyboard.enableRepeatEvents(false);
 	}
 	
+	@Override
 	public void updateScreen(){
 		super.updateScreen();
 		
@@ -297,6 +300,7 @@ public class GuiPanel extends GuiContainer implements IGuiScreen, INetworkGui  {
 		return Lists.newArrayList();
 	}
 	
+	@Override
 	protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException
     {
 		if(currentPopup !=null){
@@ -433,6 +437,7 @@ public class GuiPanel extends GuiContainer implements IGuiScreen, INetworkGui  {
 		return -1;
 	}
 	
+	@Override
 	public void drawScreen(int mouseX, int mouseY, float partialTicks){
 		super.drawScreen(mouseX, mouseY, partialTicks);
 		
@@ -440,7 +445,7 @@ public class GuiPanel extends GuiContainer implements IGuiScreen, INetworkGui  {
 		
 		for (int i = 0; i < this.buttonList.size(); i++)
         {
-            GuiButton button = (GuiButton)this.buttonList.get(i);
+            GuiButton button = this.buttonList.get(i);
 
             // Mouse is over the button
             if ((button instanceof GuiButtonHoverText) && button.mousePressed(this.mc, mouseX, mouseY) == true)
@@ -450,6 +455,7 @@ public class GuiPanel extends GuiContainer implements IGuiScreen, INetworkGui  {
         }
 	}
 	
+	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY)
     {
 		super.drawGuiContainerForegroundLayer(mouseX, mouseY);
@@ -586,6 +592,7 @@ public class GuiPanel extends GuiContainer implements IGuiScreen, INetworkGui  {
 		return "crystalmod:textures/gui/eStorage_panel.png";
 	}
 
+	@Override
 	protected void keyTyped(char typedChar, int keyCode) throws IOException
     {
 		if (keyCode == 1) {

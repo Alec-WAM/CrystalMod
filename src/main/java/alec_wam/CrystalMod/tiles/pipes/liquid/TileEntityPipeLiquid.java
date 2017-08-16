@@ -1,40 +1,24 @@
 package alec_wam.CrystalMod.tiles.pipes.liquid;
 
 import java.util.EnumMap;
-import java.util.List;
-import java.util.Map.Entry;
 
-import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.network.IMessageHandler;
 import alec_wam.CrystalMod.tiles.pipes.AbstractPipeNetwork;
 import alec_wam.CrystalMod.tiles.pipes.ConnectionMode;
 import alec_wam.CrystalMod.tiles.pipes.IPipeWrapper;
 import alec_wam.CrystalMod.tiles.pipes.PipeUtil;
 import alec_wam.CrystalMod.tiles.pipes.TileEntityPipe;
-import alec_wam.CrystalMod.tiles.pipes.item.ItemPipeNetwork;
-import alec_wam.CrystalMod.tiles.pipes.item.filters.ItemPipeFilter.FilterType;
 import alec_wam.CrystalMod.tiles.pipes.types.IPipeType;
-import alec_wam.CrystalMod.util.ItemNBTHelper;
-import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.ModLogger;
-
-import com.google.common.collect.Lists;
-
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.IInventoryChangedListener;
-import net.minecraft.inventory.InventoryBasic;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
@@ -62,6 +46,7 @@ public class TileEntityPipeLiquid extends TileEntityPipe implements IInventoryCh
 	    }
 	}
 	
+	@Override
 	public void writeCustomNBT(NBTTagCompound nbt){
 		super.writeCustomNBT(nbt);
 		for(EnumFacing face : EnumFacing.VALUES){
@@ -80,6 +65,7 @@ public class TileEntityPipeLiquid extends TileEntityPipe implements IInventoryCh
 		}
 	}
 	
+	@Override
 	public void readCustomNBT(NBTTagCompound nbt){
 		super.readCustomNBT(nbt);
 		for(EnumFacing face : EnumFacing.VALUES){
@@ -110,6 +96,7 @@ public class TileEntityPipeLiquid extends TileEntityPipe implements IInventoryCh
 		return new LiquidPipeNetwork();
 	}
 	
+	@Override
 	public boolean canConnectToExternal(EnumFacing direction, boolean ignoreDisabled) {
 		World world = getWorld();
 	    if(world == null) {
@@ -158,7 +145,7 @@ public class TileEntityPipeLiquid extends TileEntityPipe implements IInventoryCh
 	    if(!(network instanceof LiquidPipeNetwork)) {
 	      return false;
 	    }
-	    this.network = (LiquidPipeNetwork) network;
+	    this.network = network;
 	    for (EnumFacing dir : externalConnections) {
 	      if(this.network instanceof LiquidPipeNetwork)
 	      ((LiquidPipeNetwork)this.network).connectionChanged(this, dir);
@@ -251,18 +238,21 @@ public class TileEntityPipeLiquid extends TileEntityPipe implements IInventoryCh
 	            //noinspection unchecked
 	            return (T) new IFluidHandler() {
 	            	
-	            	public int fill(FluidStack resource, boolean doFill) {
+	            	@Override
+					public int fill(FluidStack resource, boolean doFill) {
 	            		if(network == null || !getConnectionMode(facing).acceptsInput() || !(network instanceof LiquidPipeNetwork)) {
             		      return 0;
             		    }
             		    return ((LiquidPipeNetwork)network).fillFrom(TileEntityPipeLiquid.this, facing, resource, doFill);
 	                }
 
-	                public FluidStack drain(int maxEmpty, boolean doDrain) {
+	                @Override
+					public FluidStack drain(int maxEmpty, boolean doDrain) {
 	                	return null;
 	                }
 
-	                public FluidStack drain(FluidStack resource, boolean doDrain) {
+	                @Override
+					public FluidStack drain(FluidStack resource, boolean doDrain) {
 	                    return null;
 	                }
 

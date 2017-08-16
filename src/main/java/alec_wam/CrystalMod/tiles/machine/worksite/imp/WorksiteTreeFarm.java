@@ -179,6 +179,7 @@ public class WorksiteTreeFarm extends TileWorksiteUserBlocks {
 		return false;
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Override
 	protected boolean processWork() {
 		BlockPos position;
@@ -186,6 +187,7 @@ public class WorksiteTreeFarm extends TileWorksiteUserBlocks {
 			Iterator<BlockPos> it = blocksToChop.iterator();
 			while (it.hasNext() && (position = it.next()) != null) {
 				EntityMinionWorker worker = getRandomWorker(new WorkerFilter(){
+					@Override
 					public boolean matches(EntityMinionWorker worker) {
 						ItemStack axe = worker.getHeldItemMainhand();
 						return ItemStackTools.isValid(axe) && ToolUtil.isAxe(axe) && !ToolUtil.isBrokenTinkerTool(axe) && !ToolUtil.isEmptyRfTool(axe);

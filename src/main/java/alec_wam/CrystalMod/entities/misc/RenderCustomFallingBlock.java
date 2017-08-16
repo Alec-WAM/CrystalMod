@@ -1,6 +1,5 @@
 package alec_wam.CrystalMod.entities.misc;
 
-import alec_wam.CrystalMod.util.ModLogger;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockRendererDispatcher;
@@ -13,7 +12,6 @@ import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.entity.item.EntityFallingBlock;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.ResourceLocation;
@@ -36,7 +34,8 @@ public class RenderCustomFallingBlock extends Render<EntityCustomFallingBlock>
     /**
      * Renders the desired {@code T} type Entity.
      */
-    public void doRender(EntityCustomFallingBlock entity, double x, double y, double z, float entityYaw, float partialTicks)
+    @Override
+	public void doRender(EntityCustomFallingBlock entity, double x, double y, double z, float entityYaw, float partialTicks)
     {
         if (entity.getBlock() != null)
         {
@@ -73,7 +72,7 @@ public class RenderCustomFallingBlock extends Render<EntityCustomFallingBlock>
 
                     vertexbuffer.begin(7, DefaultVertexFormats.BLOCK);
                     BlockPos blockpos = new BlockPos(entity.posX, entity.getEntityBoundingBox().maxY, entity.posZ);
-                    GlStateManager.translate((float)(x - (double)blockpos.getX() - 0.5D), (float)(y - (double)blockpos.getY()), (float)(z - (double)blockpos.getZ() - 0.5D));
+                    GlStateManager.translate((float)(x - blockpos.getX() - 0.5D), (float)(y - blockpos.getY()), (float)(z - blockpos.getZ() - 0.5D));
                     BlockRendererDispatcher blockrendererdispatcher = Minecraft.getMinecraft().getBlockRendererDispatcher();
                     blockrendererdispatcher.getBlockModelRenderer().renderModel(world, blockrendererdispatcher.getModelForState(iblockstate), iblockstate, blockpos, vertexbuffer, false, MathHelper.getPositionRandom(entity.getOrigin()));
                     tessellator.draw();
@@ -95,7 +94,8 @@ public class RenderCustomFallingBlock extends Render<EntityCustomFallingBlock>
     /**
      * Returns the location of an entity's texture. Doesn't seem to be called unless you call Render.bindEntityTexture.
      */
-    protected ResourceLocation getEntityTexture(EntityCustomFallingBlock entity)
+    @Override
+	protected ResourceLocation getEntityTexture(EntityCustomFallingBlock entity)
     {
         return TextureMap.LOCATION_BLOCKS_TEXTURE;
     }

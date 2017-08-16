@@ -2,6 +2,10 @@ package alec_wam.CrystalMod.util.client;
 
 import javax.annotation.Nullable;
 
+import org.lwjgl.util.vector.Matrix4f;
+import org.lwjgl.util.vector.Vector3f;
+import org.lwjgl.util.vector.Vector4f;
+
 import net.minecraft.client.renderer.EnumFaceDirection;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.BlockFaceUV;
@@ -15,10 +19,6 @@ import net.minecraft.util.math.Vec3i;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import org.lwjgl.util.vector.Matrix4f;
-import org.lwjgl.util.vector.Vector3f;
-import org.lwjgl.util.vector.Vector4f;
-
 @SideOnly(Side.CLIENT)
 public class CustomModelUtil
 {
@@ -30,28 +30,32 @@ public class CustomModelUtil
     private static final CustomModelUtil.Rotation[] UV_ROTATIONS = new CustomModelUtil.Rotation[ModelRotation.values().length * EnumFacing.values().length];
     private static final CustomModelUtil.Rotation UV_ROTATION_0 = new CustomModelUtil.Rotation()
     {
-        BlockFaceUV makeRotatedUV(float p_188007_1_, float p_188007_2_, float p_188007_3_, float p_188007_4_)
+        @Override
+		BlockFaceUV makeRotatedUV(float p_188007_1_, float p_188007_2_, float p_188007_3_, float p_188007_4_)
         {
             return new BlockFaceUV(new float[] {p_188007_1_, p_188007_2_, p_188007_3_, p_188007_4_}, 0);
         }
     };
     private static final CustomModelUtil.Rotation UV_ROTATION_270 = new CustomModelUtil.Rotation()
     {
-        BlockFaceUV makeRotatedUV(float p_188007_1_, float p_188007_2_, float p_188007_3_, float p_188007_4_)
+        @Override
+		BlockFaceUV makeRotatedUV(float p_188007_1_, float p_188007_2_, float p_188007_3_, float p_188007_4_)
         {
             return new BlockFaceUV(new float[] {p_188007_4_, 16.0F - p_188007_1_, p_188007_2_, 16.0F - p_188007_3_}, 270);
         }
     };
     private static final CustomModelUtil.Rotation UV_ROTATION_INVERSE = new CustomModelUtil.Rotation()
     {
-        BlockFaceUV makeRotatedUV(float p_188007_1_, float p_188007_2_, float p_188007_3_, float p_188007_4_)
+        @Override
+		BlockFaceUV makeRotatedUV(float p_188007_1_, float p_188007_2_, float p_188007_3_, float p_188007_4_)
         {
             return new BlockFaceUV(new float[] {16.0F - p_188007_1_, 16.0F - p_188007_2_, 16.0F - p_188007_3_, 16.0F - p_188007_4_}, 0);
         }
     };
     private static final CustomModelUtil.Rotation UV_ROTATION_90 = new CustomModelUtil.Rotation()
     {
-        BlockFaceUV makeRotatedUV(float p_188007_1_, float p_188007_2_, float p_188007_3_, float p_188007_4_)
+        @Override
+		BlockFaceUV makeRotatedUV(float p_188007_1_, float p_188007_2_, float p_188007_3_, float p_188007_4_)
         {
             return new BlockFaceUV(new float[] {16.0F - p_188007_2_, p_188007_3_, 16.0F - p_188007_4_, p_188007_1_}, 90);
         }
@@ -138,14 +142,9 @@ public class CustomModelUtil
         return afloat;
     }
 
-    private void fillVertexData(int[] p_188015_1_, int p_188015_2_, EnumFacing p_188015_3_, BlockFaceUV p_188015_4_, float[] p_188015_5_, TextureAtlasSprite p_188015_6_, ModelRotation p_188015_7_, @Nullable BlockPartRotation p_188015_8_, int color)
-    {
-        fillVertexData(p_188015_1_, p_188015_2_, p_188015_3_, p_188015_4_, p_188015_5_, p_188015_6_, (net.minecraftforge.common.model.ITransformation)p_188015_7_, p_188015_8_, color);
-    }
-
     private void fillVertexData(int[] p_188015_1_, int p_188015_2_, EnumFacing p_188015_3_, BlockFaceUV p_188015_4_, float[] p_188015_5_, TextureAtlasSprite p_188015_6_, net.minecraftforge.common.model.ITransformation p_188015_7_, BlockPartRotation p_188015_8_, int color)
     {
-        EnumFacing enumfacing = p_188015_7_.rotate(p_188015_3_);
+        p_188015_7_.rotate(p_188015_3_);
         int i = color;
         EnumFaceDirection.VertexInformation enumfacedirection$vertexinformation = EnumFaceDirection.getFacing(p_188015_3_).getVertexInformation(p_188015_2_);
         Vector3f vector3f = new Vector3f(p_188015_5_[enumfacedirection$vertexinformation.xIndex], p_188015_5_[enumfacedirection$vertexinformation.yIndex], p_188015_5_[enumfacedirection$vertexinformation.zIndex]);
@@ -161,8 +160,8 @@ public class CustomModelUtil
         faceData[i + 1] = Float.floatToRawIntBits(position.y);
         faceData[i + 2] = Float.floatToRawIntBits(position.z);
         faceData[i + 3] = shadeColor;
-        faceData[i + 4] = Float.floatToRawIntBits(sprite.getInterpolatedU((double)faceUV.getVertexU(vertexIndex) * .999 + faceUV.getVertexU((vertexIndex + 2) % 4) * .001));
-        faceData[i + 4 + 1] = Float.floatToRawIntBits(sprite.getInterpolatedV((double)faceUV.getVertexV(vertexIndex) * .999 + faceUV.getVertexV((vertexIndex + 2) % 4) * .001));
+        faceData[i + 4] = Float.floatToRawIntBits(sprite.getInterpolatedU(faceUV.getVertexU(vertexIndex) * .999 + faceUV.getVertexU((vertexIndex + 2) % 4) * .001));
+        faceData[i + 4 + 1] = Float.floatToRawIntBits(sprite.getInterpolatedV(faceUV.getVertexV(vertexIndex) * .999 + faceUV.getVertexV((vertexIndex + 2) % 4) * .001));
     }
 
     private void rotatePart(Vector3f p_178407_1_, @Nullable BlockPartRotation partRotation)
@@ -255,7 +254,7 @@ public class CustomModelUtil
         Vector3f.sub(vector3f, vector3f1, vector3f3);
         Vector3f.sub(vector3f2, vector3f1, vector3f4);
         Vector3f.cross(vector3f4, vector3f3, vector3f5);
-        float f = (float)Math.sqrt((double)(vector3f5.x * vector3f5.x + vector3f5.y * vector3f5.y + vector3f5.z * vector3f5.z));
+        float f = (float)Math.sqrt(vector3f5.x * vector3f5.x + vector3f5.y * vector3f5.y + vector3f5.z * vector3f5.z);
         vector3f5.x /= f;
         vector3f5.y /= f;
         vector3f5.z /= f;
@@ -265,7 +264,7 @@ public class CustomModelUtil
         for (EnumFacing enumfacing1 : EnumFacing.values())
         {
             Vec3i vec3i = enumfacing1.getDirectionVec();
-            Vector3f vector3f6 = new Vector3f((float)vec3i.getX(), (float)vec3i.getY(), (float)vec3i.getZ());
+            Vector3f vector3f6 = new Vector3f(vec3i.getX(), vec3i.getY(), vec3i.getZ());
             float f2 = Vector3f.dot(vector3f5, vector3f6);
 
             if (f2 >= 0.0F && f2 > f1)

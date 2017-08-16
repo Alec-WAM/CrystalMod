@@ -57,6 +57,7 @@ public class BlockWorksite extends BlockContainer implements ICustomModel {
 		}
 	}
 	
+	@Override
 	@SideOnly(Side.CLIENT)
     public void initModel() {
 		ModelLoader.setCustomStateMapper(this, new WorksiteBlockStateMapper());
@@ -94,7 +95,7 @@ public class BlockWorksite extends BlockContainer implements ICustomModel {
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
-	    return ((WorksiteType) state.getValue(WORKSITE_TYPE)).getMeta();
+	    return state.getValue(WORKSITE_TYPE).getMeta();
 	}
 
 	@Override

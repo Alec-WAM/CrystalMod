@@ -1,17 +1,13 @@
 package alec_wam.CrystalMod.tiles.pipes.wireless;
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.world.World;
-import net.minecraftforge.common.DimensionManager;
 import alec_wam.CrystalMod.tiles.TileEntityMod;
 import alec_wam.CrystalMod.tiles.pipes.IPipeWrapper;
-import alec_wam.CrystalMod.tiles.pipes.TileEntityPipe;
 import alec_wam.CrystalMod.util.BlockUtil;
-import alec_wam.CrystalMod.util.ModLogger;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraftforge.common.DimensionManager;
 
 public class TileEntityPipeWrapper extends TileEntityMod implements IPipeWrapper{
 
@@ -21,6 +17,7 @@ public class TileEntityPipeWrapper extends TileEntityMod implements IPipeWrapper
 	public EnumFacing pipeDir;
 	public boolean isSender;
 	
+	@Override
 	public void writeCustomNBT(NBTTagCompound nbt){
 		super.writeCustomNBT(nbt);
 		if(connectionPos !=null){
@@ -32,6 +29,7 @@ public class TileEntityPipeWrapper extends TileEntityMod implements IPipeWrapper
 		nbt.setBoolean("IsSender", isSender);
 	}
 	
+	@Override
 	public void readCustomNBT(NBTTagCompound nbt){
 		super.readCustomNBT(nbt);
 		if(nbt.hasKey("ConX") && nbt.hasKey("ConY") && nbt.hasKey("ConZ")){
@@ -41,6 +39,7 @@ public class TileEntityPipeWrapper extends TileEntityMod implements IPipeWrapper
 		isSender = nbt.getBoolean("IsSender");
 	}
 	
+	@Override
 	public World getOtherWorld(){
 		try{
 			return DimensionManager.getWorld(connectionDim);
@@ -48,10 +47,12 @@ public class TileEntityPipeWrapper extends TileEntityMod implements IPipeWrapper
 		return null;
 	}
 	
+	@Override
 	public BlockPos getOtherPos(){
 		return connectionPos;
 	}
 	
+	@Override
 	public boolean isSender(){
 		return isSender;
 	}

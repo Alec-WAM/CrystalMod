@@ -3,7 +3,6 @@ package alec_wam.CrystalMod.tiles.cluster;
 import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 import javax.annotation.Nullable;
 
@@ -14,23 +13,19 @@ import alec_wam.CrystalMod.blocks.EnumBlock;
 import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.proxy.ClientProxy;
-import alec_wam.CrystalMod.tiles.cluster.BlockCrystalCluster.CustomBlockStateMapper;
 import alec_wam.CrystalMod.tiles.cluster.TileCrystalCluster.ClusterData;
-import alec_wam.CrystalMod.tiles.machine.power.battery.BlockBattery.BatteryBlockStateMapper;
 import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.ChatUtil;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.Lang;
 import alec_wam.CrystalMod.util.TimeUtil;
-import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.client.renderer.block.statemap.IStateMapper;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
@@ -48,7 +43,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -146,7 +140,7 @@ public class BlockCrystalCluster extends EnumBlock<BlockCrystalCluster.EnumClust
 				tooltip.add("Current Output: "+TileCrystalCluster.calculatePowerOutput(data.getPowerOutput(), health, TimeUtil.MINECRAFT_DAY_TICKS)+Lang.localize("power.cu")+"/t");
 				
 				DecimalFormat decimalFormat = new DecimalFormat("#.##");
-				float healthPercent = (100.0f * (float)((float)health / (float)TimeUtil.MINECRAFT_DAY_TICKS));
+				float healthPercent = (100.0f * ((float)health / (float)TimeUtil.MINECRAFT_DAY_TICKS));
 				tooltip.add("Health: "+decimalFormat.format(healthPercent)+"%");
 			}
 		}

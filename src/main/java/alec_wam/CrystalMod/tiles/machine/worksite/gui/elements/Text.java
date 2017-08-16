@@ -3,12 +3,12 @@ package alec_wam.CrystalMod.tiles.machine.worksite.gui.elements;
 import java.util.HashSet;
 import java.util.Set;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import alec_wam.CrystalMod.tiles.machine.worksite.gui.GuiContainerWorksiteBase.ActivationEvent;
-
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
+
+import alec_wam.CrystalMod.tiles.machine.worksite.gui.GuiContainerWorksiteBase.ActivationEvent;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 
 /**
  * Text input field height = 12px

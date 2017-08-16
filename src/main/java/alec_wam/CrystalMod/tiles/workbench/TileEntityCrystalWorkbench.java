@@ -20,7 +20,7 @@ public class TileEntityCrystalWorkbench extends TileEntityInventory implements I
 	    }
 
 	    return
-	    	player.getDistanceSq((double) pos.getX() + 0.5D, (double) pos.getY() + 0.5D, (double) pos.getZ() + 0.5D)
+	    	player.getDistanceSq(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D)
 	        <= 64D;
 	}
 

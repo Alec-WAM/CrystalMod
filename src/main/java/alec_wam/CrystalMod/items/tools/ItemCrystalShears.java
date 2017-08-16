@@ -37,6 +37,7 @@ public class ItemCrystalShears extends ItemShears implements ICustomModel {
 		return ItemNBTHelper.getString(stack, "Color", "");
 	}
 	
+	@Override
 	@SideOnly(Side.CLIENT)
     public void initModel() {
 		final Map<String, ModelResourceLocation> models = Maps.newHashMap();

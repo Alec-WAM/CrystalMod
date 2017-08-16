@@ -23,7 +23,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 public class ModelBridge extends DelegatingDynamicItemAndBlockModel 
@@ -36,9 +35,9 @@ public class ModelBridge extends DelegatingDynamicItemAndBlockModel
     	state = null;
     }
     
-    public FakeTileState state;
+    public FakeTileState<?> state;
     
-    public ModelBridge(FakeTileState state, EnumFacing facing, long rand) {
+    public ModelBridge(FakeTileState<?> state, EnumFacing facing, long rand) {
         super(state, facing, rand);
         this.state = state;
     }
@@ -52,7 +51,8 @@ public class ModelBridge extends DelegatingDynamicItemAndBlockModel
         return new ArrayList<BakedQuad>();
     }
     
-    public List<BakedQuad> getGeneralQuads() {
+    @Override
+	public List<BakedQuad> getGeneralQuads() {
         final List<BakedQuad> list = new ArrayList<BakedQuad>();
         TextureAtlasSprite planks = RenderUtil.getTexture(Blocks.PLANKS.getDefaultState());
         //TextureAtlasSprite log = RenderUtil.getSprite("minecraft:blocks/log_oak");
@@ -60,7 +60,7 @@ public class ModelBridge extends DelegatingDynamicItemAndBlockModel
         Vector3f min = new Vector3f(0f, 16.0f*0.2f, 0f);
         Vector3f max = new Vector3f(16.0f, 16.0f*0.2f, 16.0f);
         BlockFaceUV uv = new BlockFaceUV(new float[] { 0.0f,0.0f, 16.0f, 16.0f }, 0);
-        BlockPartFace face = new BlockPartFace((EnumFacing)null, 0, "", uv);
+        new BlockPartFace((EnumFacing)null, 0, "", uv);
         ModelRotation modelRot = ModelRotation.X0_Y0;
         float sidewidth = 16.0f*0.2f;
         //NS
@@ -113,7 +113,7 @@ public class ModelBridge extends DelegatingDynamicItemAndBlockModel
         list.add(faceBakery.makeBakedQuad(min, max, faceS, planks, EnumFacing.DOWN, modelRot, (BlockPartRotation)null, false, true));
         
         uv = new BlockFaceUV(new float[] { 0.0f, 0.0f, sidewidth, 16.0f}, 0);
-        face = new BlockPartFace((EnumFacing)null, 0, "", uv);
+        new BlockPartFace((EnumFacing)null, 0, "", uv);
         float minSideZ = front ? sidewidth : 0.0f;
     	float maxSideZ = back ? 16.0f-sidewidth : 16.0F;
         if(left){
@@ -166,8 +166,6 @@ public class ModelBridge extends DelegatingDynamicItemAndBlockModel
         	list.add(faceBakery.makeBakedQuad(min, max, face2, planks, EnumFacing.SOUTH, modelRot, (BlockPartRotation)null, false, true));
         }
         
-        //Poles
-        float chunk = 16.0F*0.2f;
         boolean leftSide = left;
         boolean topLeft = bridge !=null && bridge.hasPost(EnumFacing.WEST, 2);
         boolean rightSide = right;
@@ -302,23 +300,28 @@ public class ModelBridge extends DelegatingDynamicItemAndBlockModel
         return RenderUtil.getSprite("minecraft:blocks/log_"+type.getUnlocalizedName().toLowerCase());
     }
     
-    public boolean isAmbientOcclusion() {
+    @Override
+	public boolean isAmbientOcclusion() {
         return false;
     }
     
-    public boolean isGui3d() {
+    @Override
+	public boolean isGui3d() {
         return true;
     }
     
-    public boolean isBuiltInRenderer() {
+    @Override
+	public boolean isBuiltInRenderer() {
         return false;
     }
     
-    public TextureAtlasSprite getParticleTexture() {
+    @Override
+	public TextureAtlasSprite getParticleTexture() {
         return RenderUtil.getTexture(Blocks.PLANKS.getDefaultState());
     }
     
-    public ItemCameraTransforms getItemCameraTransforms() {
+    @Override
+	public ItemCameraTransforms getItemCameraTransforms() {
         return ItemCameraTransforms.DEFAULT;
     }
     
@@ -330,7 +333,7 @@ public class ModelBridge extends DelegatingDynamicItemAndBlockModel
 
 	@Override
 	public IBakedModel handleBlockState(IBlockState state, EnumFacing side,	long rand) {
-		return (state instanceof FakeTileState) ? new ModelBridge((FakeTileState)state, side, rand) : null;
+		return (state instanceof FakeTileState) ? new ModelBridge((FakeTileState<?>)state, side, rand) : null;
 	}
 
 	@Override

@@ -1,5 +1,8 @@
 package alec_wam.CrystalMod.tiles.machine.elevator;
 
+import org.lwjgl.opengl.GL11;
+
+import alec_wam.CrystalMod.CrystalMod;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockRendererDispatcher;
@@ -14,17 +17,12 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
 import net.minecraft.profiler.Profiler;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.ReportedException;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.WorldType;
-
-import org.lwjgl.opengl.GL11;
-
-import alec_wam.CrystalMod.CrystalMod;
 
 public class TileEntityElevatorRenderer extends TileEntitySpecialRenderer<TileEntityElevator> {
 
@@ -85,8 +83,7 @@ public class TileEntityElevatorRenderer extends TileEntitySpecialRenderer<TileEn
     	return te.isMoving();
 	}
 	
-    @SuppressWarnings("deprecation")
-	public static boolean renderBlock(BlockRendererDispatcher dispatcher, IBlockState state, BlockPos pos, IBlockAccess blockAccess, VertexBuffer worldRendererIn) {
+    public static boolean renderBlock(BlockRendererDispatcher dispatcher, IBlockState state, BlockPos pos, IBlockAccess blockAccess, VertexBuffer worldRendererIn) {
     	 try {
              EnumBlockRenderType enumblockrendertype = state.getRenderType();
 

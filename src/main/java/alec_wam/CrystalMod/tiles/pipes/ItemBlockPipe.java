@@ -2,6 +2,11 @@ package alec_wam.CrystalMod.tiles.pipes;
 
 import java.util.Locale;
 
+import alec_wam.CrystalMod.tiles.pipes.BlockPipe.PipeType;
+import alec_wam.CrystalMod.tiles.pipes.power.cu.TileEntityPipePowerCU;
+import alec_wam.CrystalMod.tiles.pipes.power.rf.TileEntityPipePowerRF;
+import alec_wam.CrystalMod.util.BlockUtil;
+import alec_wam.CrystalMod.util.ItemNBTHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -11,11 +16,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import alec_wam.CrystalMod.tiles.pipes.BlockPipe.PipeType;
-import alec_wam.CrystalMod.tiles.pipes.power.cu.TileEntityPipePowerCU;
-import alec_wam.CrystalMod.tiles.pipes.power.rf.TileEntityPipePowerRF;
-import alec_wam.CrystalMod.util.BlockUtil;
-import alec_wam.CrystalMod.util.ItemNBTHelper;
 
 public class ItemBlockPipe extends ItemColored {
 

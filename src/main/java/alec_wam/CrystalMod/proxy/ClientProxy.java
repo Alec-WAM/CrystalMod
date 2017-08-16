@@ -277,11 +277,13 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
         event.getMap().registerSprite(new ResourceLocation("crystalmod:items/bat/leather_handle"));
     }
     
-    public EntityPlayer getPlayerForUsername(String playerName) {
+    @Override
+	public EntityPlayer getPlayerForUsername(String playerName) {
     	return null;
     }
     
-    public boolean isOp(GameProfile profile){
+    @Override
+	public boolean isOp(GameProfile profile){
     	return getClientWorld().getWorldInfo().areCommandsAllowed();
     }
     
@@ -343,11 +345,13 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
       return Minecraft.getMinecraft().playerController.getBlockReachDistance();
     }
     
-    public World getWorld(int dim) {
+    @Override
+	public World getWorld(int dim) {
 		return null;
 	}
     
-    public boolean isShiftKeyDown()
+    @Override
+	public boolean isShiftKeyDown()
     {
         return Keyboard.isKeyDown(42) || Keyboard.isKeyDown(54);
     }
@@ -355,7 +359,8 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
     @SideOnly(Side.CLIENT)
 	public static GuiGuideBase forcedChapter;
     
-    public void setForcedGuidePage(LookupResult result){
+    @Override
+	public void setForcedGuidePage(LookupResult result){
     	GuiGuideChapter chapterGui = null;
 		if(result !=null && result.getChapter() != null){
 			if(result.getPage() !=null){
@@ -367,7 +372,8 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		forcedChapter = chapterGui;
     }
     
-    public Object getForcedGuidePage(){
+    @Override
+	public Object getForcedGuidePage(){
     	return forcedChapter;
     }
     

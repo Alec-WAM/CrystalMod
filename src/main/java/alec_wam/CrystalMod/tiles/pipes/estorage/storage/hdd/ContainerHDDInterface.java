@@ -11,6 +11,7 @@ public class ContainerHDDInterface extends Container {
 
 	public ContainerHDDInterface(InventoryPlayer inventoryPlayer, TileEntityHDDInterface inter) {
 		this.addSlotToContainer(new Slot(inter, 0, 8, 14){
+			@Override
 			public boolean isItemValid(ItemStack stack)
 		    {
 		        return !ItemStackTools.isNullStack(stack) && stack.getItem() instanceof ItemHDD;
@@ -37,10 +38,11 @@ public class ContainerHDDInterface extends Container {
 		return true;
 	}
 	
+	@Override
 	public ItemStack transferStackInSlot(EntityPlayer playerIn, int index)
     {
         ItemStack itemstack = ItemStackTools.getEmptyStack();
-        Slot slot = (Slot)this.inventorySlots.get(index);
+        Slot slot = this.inventorySlots.get(index);
 
         if (slot != null && slot.getHasStack())
         {

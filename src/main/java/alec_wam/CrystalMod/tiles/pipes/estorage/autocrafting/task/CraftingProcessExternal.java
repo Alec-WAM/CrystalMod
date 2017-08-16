@@ -1,25 +1,18 @@
 package alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.task;
 
-import java.util.ArrayList;
 import java.util.Deque;
-import java.util.List;
 
-import com.google.common.collect.Lists;
-
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemHandlerHelper;
 import alec_wam.CrystalMod.api.FluidStackList;
 import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetwork;
 import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage;
 import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage.ItemStackData;
 import alec_wam.CrystalMod.tiles.pipes.estorage.autocrafting.CraftingPattern;
 import alec_wam.CrystalMod.util.ItemStackTools;
-import alec_wam.CrystalMod.util.ItemUtil;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.ItemHandlerHelper;
 
 public class CraftingProcessExternal extends CraftingProcessBase {
     
@@ -68,6 +61,7 @@ public class CraftingProcessExternal extends CraftingProcessBase {
 		 }
 	}
     
+	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound tag) {
 		tag.setString(NBT_TYPE, ID);
 		return super.writeToNBT(tag);

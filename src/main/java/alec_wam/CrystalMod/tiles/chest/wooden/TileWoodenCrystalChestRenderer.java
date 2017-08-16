@@ -39,13 +39,14 @@ public class TileWoodenCrystalChestRenderer<T extends TileWoodenCrystalChest> ex
             facing = tile.getFacing();
             type = tile.getType();
             IBlockState state = tile.getWorld().getBlockState(tile.getPos());
-            type = (WoodenCrystalChestType)state.getValue(BlockWoodenCrystalChest.VARIANT_PROP);
+            type = state.getValue(BlockWoodenCrystalChest.VARIANT_PROP);
         }
         float lidangle = tile.prevLidAngle + (tile.lidAngle - tile.prevLidAngle) * partialTick;
         renderChest(x, y, z, type, facing, lidangle, breakStage);
     }
 
-    public void renderTileEntityAt(TileWoodenCrystalChest tileentity, double x, double y, double z, float partialTick, int breakStage)
+    @Override
+	public void renderTileEntityAt(TileWoodenCrystalChest tileentity, double x, double y, double z, float partialTick, int breakStage)
     {
         render(tileentity, x, y, z, partialTick, breakStage);
     }

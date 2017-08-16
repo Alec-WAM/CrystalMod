@@ -1,11 +1,11 @@
 package alec_wam.CrystalMod.tiles.chest.wooden;
 
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.util.ResourceLocation;
-
-import org.lwjgl.opengl.GL11;
 
 public class GUIWoodenChest extends GuiContainer {
     public enum ResourceList {

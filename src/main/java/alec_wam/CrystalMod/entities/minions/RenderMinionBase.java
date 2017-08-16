@@ -2,6 +2,7 @@ package alec_wam.CrystalMod.entities.minions;
 
 import java.util.UUID;
 
+import alec_wam.CrystalMod.util.client.DownloadedTextures;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.Render;
@@ -16,9 +17,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHandSide;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
-import alec_wam.CrystalMod.util.ProfileUtil;
-import alec_wam.CrystalMod.util.UUIDUtils;
-import alec_wam.CrystalMod.util.client.DownloadedTextures;
 
 public class RenderMinionBase extends RenderBiped<EntityMinionBase> {
 
@@ -31,12 +29,14 @@ public class RenderMinionBase extends RenderBiped<EntityMinionBase> {
         this.addLayer(new LayerBackItem(this));
 	}
 	
-    public ModelMinionBase getMainModel()
+    @Override
+	public ModelMinionBase getMainModel()
     {
         return (ModelMinionBase)super.getMainModel();
     }
     
-    protected void preRenderCallback(EntityMinionBase entitylivingbaseIn, float partialTickTime)
+    @Override
+	protected void preRenderCallback(EntityMinionBase entitylivingbaseIn, float partialTickTime)
     {
     	super.preRenderCallback(entitylivingbaseIn, partialTickTime);
     	this.mainModel.isChild = false;
@@ -45,7 +45,8 @@ public class RenderMinionBase extends RenderBiped<EntityMinionBase> {
         GlStateManager.scale(f, f, f);
     }
     
-    public void doRender(EntityMinionBase entity, double x, double y, double z, float entityYaw, float partialTicks)
+    @Override
+	public void doRender(EntityMinionBase entity, double x, double y, double z, float entityYaw, float partialTicks)
     {
         double d0 = y;
 

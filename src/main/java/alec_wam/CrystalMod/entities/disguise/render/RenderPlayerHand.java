@@ -1,10 +1,13 @@
 package alec_wam.CrystalMod.entities.disguise.render;
 
+import alec_wam.CrystalMod.capability.ExtendedPlayer;
+import alec_wam.CrystalMod.capability.ExtendedPlayerProvider;
+import alec_wam.CrystalMod.entities.disguise.DisguiseType;
+import alec_wam.CrystalMod.util.client.DownloadedTextures;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.model.ModelPlayer;
-import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.entity.player.EnumPlayerModelParts;
@@ -12,17 +15,6 @@ import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHandSide;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
-import org.lwjgl.opengl.GL11;
-
-import alec_wam.CrystalMod.capability.ExtendedPlayer;
-import alec_wam.CrystalMod.capability.ExtendedPlayerProvider;
-import alec_wam.CrystalMod.entities.disguise.DisguiseType;
-import alec_wam.CrystalMod.util.ModLogger;
-import alec_wam.CrystalMod.util.PlayerUtil;
-import alec_wam.CrystalMod.util.ProfileUtil;
-import alec_wam.CrystalMod.util.UUIDUtils;
-import alec_wam.CrystalMod.util.client.DownloadedTextures;
 
 public class RenderPlayerHand extends RenderPlayer
 {
@@ -39,7 +31,7 @@ public class RenderPlayerHand extends RenderPlayer
     public void renderRightArm(AbstractClientPlayer clientPlayer)
     {
     	ExtendedPlayer exPlayer = ExtendedPlayerProvider.getExtendedPlayer(clientPlayer);
-    	DisguiseType type = exPlayer.getCurrentDiguise();
+    	exPlayer.getCurrentDiguise();
     	ResourceLocation skin = clientPlayer.getLocationSkin();
 		if(exPlayer.getCurrentDiguise() == DisguiseType.PLAYER && exPlayer.getPlayerDisguiseUUID() !=null){
 			ResourceLocation res = DownloadedTextures.getSkin(exPlayer.getPlayerDisguiseUUID());
@@ -49,9 +41,7 @@ public class RenderPlayerHand extends RenderPlayer
 		}
 		Minecraft.getMinecraft().getRenderManager().renderEngine.bindTexture(skin);
     	
-    	float f = 1.0F;
-        GlStateManager.color(1.0F, 1.0F, 1.0F);
-        float f1 = 0.0625F;
+    	GlStateManager.color(1.0F, 1.0F, 1.0F);
         ModelPlayer modelplayer = this.getMainModel();
         this.setModelVisibilities(clientPlayer);
         GlStateManager.enableBlend();
@@ -69,7 +59,7 @@ public class RenderPlayerHand extends RenderPlayer
     public void renderLeftArm(AbstractClientPlayer clientPlayer)
     {
     	ExtendedPlayer exPlayer = ExtendedPlayerProvider.getExtendedPlayer(clientPlayer);
-    	DisguiseType type = exPlayer.getCurrentDiguise();
+    	exPlayer.getCurrentDiguise();
     	ResourceLocation skin = clientPlayer.getLocationSkin();
 		if(exPlayer.getCurrentDiguise() == DisguiseType.PLAYER && exPlayer.getPlayerDisguiseUUID() !=null){
 			ResourceLocation res = DownloadedTextures.getSkin(exPlayer.getPlayerDisguiseUUID());
@@ -79,9 +69,7 @@ public class RenderPlayerHand extends RenderPlayer
 		}
 		
 		Minecraft.getMinecraft().getRenderManager().renderEngine.bindTexture(skin);
-    	float f = 1.0F;
-        GlStateManager.color(1.0F, 1.0F, 1.0F);
-        float f1 = 0.0625F;
+    	GlStateManager.color(1.0F, 1.0F, 1.0F);
         ModelPlayer modelplayer = this.getMainModel();
         this.setModelVisibilities(clientPlayer);
         GlStateManager.enableBlend();

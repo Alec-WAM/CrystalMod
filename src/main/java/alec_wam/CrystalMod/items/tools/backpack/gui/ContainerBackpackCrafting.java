@@ -4,10 +4,8 @@ import javax.annotation.Nullable;
 
 import alec_wam.CrystalMod.capability.ExtendedPlayerProvider;
 import alec_wam.CrystalMod.integration.baubles.BaublesIntegration;
-import alec_wam.CrystalMod.items.tools.backpack.BackpackUtil;
 import alec_wam.CrystalMod.items.tools.backpack.ItemBackpackBase;
 import alec_wam.CrystalMod.items.tools.backpack.types.InventoryBackpack;
-import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.inventory.SlotBauble;
@@ -18,7 +16,6 @@ import baubles.api.IBauble;
 import baubles.api.cap.IBaublesItemHandler;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ClickType;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -84,14 +81,16 @@ public class ContainerBackpackCrafting extends Container {
                  * Returns the maximum stack size for a given slot (usually the same as getInventoryStackLimit(), but 1
                  * in the case of armor slots)
                  */
-                public int getSlotStackLimit()
+                @Override
+				public int getSlotStackLimit()
                 {
                     return 1;
                 }
                 /**
                  * Check if the stack is a valid item for this slot. Always true beside for the armor slots.
                  */
-                public boolean isItemValid(ItemStack stack)
+                @Override
+				public boolean isItemValid(ItemStack stack)
                 {
                     if (ItemStackTools.isEmpty(stack))
                     {
@@ -102,7 +101,8 @@ public class ContainerBackpackCrafting extends Container {
                         return stack.getItem().isValidArmor(stack, entityequipmentslot, player);
                     }
                 }
-                @Nullable
+                @Override
+				@Nullable
                 @SideOnly(Side.CLIENT)
                 public String getSlotTexture()
                 {
@@ -134,11 +134,13 @@ public class ContainerBackpackCrafting extends Container {
 		return getBaublesSize() > 0;
 	}
 	
+	@Override
 	public void onCraftMatrixChanged(IInventory inventory)
     {
         this.craftResult.setInventorySlotContents(0, CraftingManager.getInstance().findMatchingRecipe(craftMatrix, player.getEntityWorld()));
     }
 	
+	@Override
 	public boolean canMergeSlot(ItemStack stack, Slot slotIn)
     {
         return slotIn.inventory != this.craftResult && super.canMergeSlot(stack, slotIn);
@@ -147,7 +149,7 @@ public class ContainerBackpackCrafting extends Container {
 	@Override
 	 public ItemStack transferStackInSlot(EntityPlayer player, int index){
 		ItemStack itemstack = ItemStackTools.getEmptyStack();
-        Slot slot = (Slot)this.inventorySlots.get(index);
+        Slot slot = this.inventorySlots.get(index);
 
         int inventoryStart = this.craftMatrix.getSizeInventory()+this.craftResult.getSizeInventory();
         int inventoryEnd = inventoryStart+26;
@@ -169,7 +171,7 @@ public class ContainerBackpackCrafting extends Container {
             boolean isArmor = entityequipmentslot.getSlotType() == EntityEquipmentSlot.Type.ARMOR;
             boolean isArmorFull = false;
             if(isArmor){
-            	isArmorFull = !((Slot)this.inventorySlots.get(armorEnd - entityequipmentslot.getIndex())).getHasStack();
+            	isArmorFull = !this.inventorySlots.get(armorEnd - entityequipmentslot.getIndex()).getHasStack();
             }
             
             if(slot instanceof SlotCrafting){

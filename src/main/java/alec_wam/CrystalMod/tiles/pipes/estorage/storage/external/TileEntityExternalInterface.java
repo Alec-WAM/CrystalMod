@@ -1,13 +1,12 @@
 package alec_wam.CrystalMod.tiles.pipes.estorage.storage.external;
 
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
 import alec_wam.CrystalMod.api.estorage.INetworkInventory;
-import alec_wam.CrystalMod.api.estorage.INetworkInventory.EnumUpdateType;
 import alec_wam.CrystalMod.api.estorage.INetworkItemProvider;
 import alec_wam.CrystalMod.network.IMessageHandler;
 import alec_wam.CrystalMod.tiles.TileEntityMod;
 import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetwork;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
 
 public class TileEntityExternalInterface extends TileEntityMod implements IMessageHandler, INetworkItemProvider{
 
@@ -15,12 +14,14 @@ public class TileEntityExternalInterface extends TileEntityMod implements IMessa
 	private int priority = 0;
 	public int facing = EnumFacing.NORTH.ordinal();
 	
+	@Override
 	public void writeCustomNBT(NBTTagCompound nbt){
 		super.writeCustomNBT(nbt);
 		nbt.setInteger("Priority", priority);
 		nbt.setInteger("Facing", facing);
 	}
 	
+	@Override
 	public void readCustomNBT(NBTTagCompound nbt){
 		super.readCustomNBT(nbt);
 		priority = nbt.getInteger("Priority");

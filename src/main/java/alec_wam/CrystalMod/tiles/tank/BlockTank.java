@@ -35,7 +35,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.fluids.FluidActionResult;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.FluidUtil;
@@ -77,7 +76,7 @@ public class BlockTank extends EnumBlock<BlockTank.TankType> implements ITileEnt
 	@Override
     public IBlockState getExtendedState(final IBlockState state, final IBlockAccess world, final BlockPos pos) {
 		TileEntity tile = world.getTileEntity(pos);
-        return (IBlockState)new FakeTankState(state, world, pos, (tile !=null && tile instanceof TileEntityTank) ? (TileEntityTank)tile : null);
+        return new FakeTankState(state, world, pos, (tile !=null && tile instanceof TileEntityTank) ? (TileEntityTank)tile : null);
     }
 	
 	@Override
@@ -116,7 +115,7 @@ public class BlockTank extends EnumBlock<BlockTank.TankType> implements ITileEnt
         	TileEntityTank tank = (TileEntityTank) tile;
         	FluidTank tankSaved = null;
         	if(stack.hasTagCompound()){
-        		NBTTagCompound nbt = (NBTTagCompound) stack.getTagCompound().copy();
+        		NBTTagCompound nbt = stack.getTagCompound().copy();
         		tankSaved = ItemBlockTank.loadTank(nbt);
         	}
         	if(tankSaved !=null){
@@ -158,11 +157,9 @@ public class BlockTank extends EnumBlock<BlockTank.TankType> implements ITileEnt
             	if(ToolUtil.isToolEquipped(entityplayer, hand)){
             		return ToolUtil.breakBlockWithTool(this, world, pos, entityplayer, hand);
             	}
-            	FluidActionResult result = FluidUtil.interactWithFluidHandler(current, FluidUtil.getFluidHandler(world, pos, side), entityplayer);
-                if(result.isSuccess()){
-                	entityplayer.setHeldItem(hand, result.getResult());
-                	return true;
-                }
+            	if(FluidUtil.interactWithFluidHandler(entityplayer, hand, world, pos, side)){
+            		return true;
+            	}
         	}
             
             if(!world.isRemote){
@@ -241,6 +238,7 @@ public class BlockTank extends EnumBlock<BlockTank.TankType> implements ITileEnt
 		
 	}
 	
+	@Override
 	public TileEntity createNewTileEntity(World world, int meta)
     {
 		if(meta == 5){

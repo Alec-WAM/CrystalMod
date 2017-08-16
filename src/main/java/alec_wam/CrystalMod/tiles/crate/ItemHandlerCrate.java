@@ -4,12 +4,7 @@ import alec_wam.CrystalMod.Config;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemHandlerHelper;
 
 public class ItemHandlerCrate implements IItemHandler
@@ -84,7 +79,8 @@ public class ItemHandlerCrate implements IItemHandler
         return reachedLimit ? ItemHandlerHelper.copyStackWithSize(stack, ItemStackTools.getStackSize(stack) - limit) : ItemStackTools.getEmptyStack();
     }
 
-    public ItemStack extractItem(int slot, int amount, boolean simulate)
+    @Override
+	public ItemStack extractItem(int slot, int amount, boolean simulate)
     {
         if (amount == 0)
             return ItemStackTools.getEmptyStack();

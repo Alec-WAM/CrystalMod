@@ -4,7 +4,6 @@ import alec_wam.CrystalMod.blocks.EnumBlock;
 import alec_wam.CrystalMod.blocks.EnumBlock.IEnumMeta;
 import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.tiles.BlockStateFacing;
-import alec_wam.CrystalMod.tiles.machine.BlockStateMachine;
 import alec_wam.CrystalMod.tiles.machine.IFacingTile;
 import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.ItemStackTools;
@@ -62,7 +61,8 @@ public class BlockShieldRack extends EnumBlock<BlockShieldRack.WoodType> impleme
             this.name = nameIn;
         }
 
-        public String toString()
+        @Override
+		public String toString()
         {
             return this.name;
         }
@@ -77,7 +77,8 @@ public class BlockShieldRack extends EnumBlock<BlockShieldRack.WoodType> impleme
             return META_LOOKUP[meta];
         }
 
-        public String getName()
+        @Override
+		public String getName()
         {
             return this.name;
         }
@@ -328,9 +329,9 @@ public class BlockShieldRack extends EnumBlock<BlockShieldRack.WoodType> impleme
 			StringBuilder builder = new StringBuilder();
 			String nameOverride = null;
 			
-			builder.append(BlockStateMachine.facingProperty.getName());
+			builder.append(BlockStateFacing.facingProperty.getName());
 			builder.append("=");
-			builder.append(state.getValue(BlockStateMachine.facingProperty));
+			builder.append(state.getValue(BlockStateFacing.facingProperty));
 			
 			nameOverride = state.getBlock().getRegistryName().getResourcePath() + "_" + type.getName();
 

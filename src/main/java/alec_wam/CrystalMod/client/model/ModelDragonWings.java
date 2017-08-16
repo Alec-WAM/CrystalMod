@@ -41,7 +41,8 @@ public class ModelDragonWings extends ModelBase
      * Used for easily adding entity-dependent animations. The second and third float params here are the same second
      * and third as in the setRotationAngles method.
      */
-    public void setLivingAnimations(EntityLivingBase entitylivingbaseIn, float p_78086_2_, float p_78086_3_, float partialTickTime)
+    @Override
+	public void setLivingAnimations(EntityLivingBase entitylivingbaseIn, float p_78086_2_, float p_78086_3_, float partialTickTime)
     {
         this.partialTicks = partialTickTime;
     }
@@ -49,19 +50,20 @@ public class ModelDragonWings extends ModelBase
     /**
      * Sets the models various rotation angles then renders the model.
      */
-    public void render(Entity entityIn, float p_78088_2_, float p_78088_3_, float p_78088_4_, float p_78088_5_, float p_78088_6_, float scale)
+    @Override
+	public void render(Entity entityIn, float p_78088_2_, float p_78088_3_, float p_78088_4_, float p_78088_5_, float p_78088_6_, float scale)
     {
         GlStateManager.pushMatrix();
         EntityDragon entitydragon = (EntityDragon)entityIn;
         float f = entitydragon.prevAnimTime + (entitydragon.animTime - entitydragon.prevAnimTime) * this.partialTicks;
-        float f1 = (float)(Math.sin((double)(f * (float)Math.PI * 2.0F - 1.0F)) + 1.0D);
+        float f1 = (float)(Math.sin(f * (float)Math.PI * 2.0F - 1.0F) + 1.0D);
         f1 = (f1 * f1 * 1.0F + f1 * 2.0F) * 0.05F;
         GlStateManager.translate(0.0F, f1 - 2.0F, -3.0F);
         GlStateManager.rotate(f1 * 2.0F, 1.0F, 0.0F, 0.0F);
         float f2 = -30.0F;
         float f5 = 1.5F;
         float f6 = this.updateRotations(entitydragon.getMovementOffsets(5, this.partialTicks)[0] - entitydragon.getMovementOffsets(10, this.partialTicks)[0]);
-        this.updateRotations(entitydragon.getMovementOffsets(5, this.partialTicks)[0] + (double)(f6 / 2.0F));
+        this.updateRotations(entitydragon.getMovementOffsets(5, this.partialTicks)[0] + f6 / 2.0F);
         f2 = f2 + 2.0F;
         f2 = 20.0F;
         GlStateManager.pushMatrix();
@@ -72,10 +74,10 @@ public class ModelDragonWings extends ModelBase
         {
             GlStateManager.enableCull();
             float f11 = f * (float)Math.PI * 2.0F;
-            this.wing.rotateAngleX = 0.125F - (float)Math.cos((double)f11) * 0.2F;
+            this.wing.rotateAngleX = 0.125F - (float)Math.cos(f11) * 0.2F;
             this.wing.rotateAngleY = 0.25F;
-            this.wing.rotateAngleZ = (float)(Math.sin((double)f11) + 0.125D) * 0.8F;
-            this.wingTip.rotateAngleZ = -((float)(Math.sin((double)(f11 + 2.0F)) + 0.5D)) * 0.75F;
+            this.wing.rotateAngleZ = (float)(Math.sin(f11) + 0.125D) * 0.8F;
+            this.wingTip.rotateAngleZ = -((float)(Math.sin(f11 + 2.0F) + 0.5D)) * 0.75F;
             this.wing.render(scale);
             GlStateManager.scale(-1.0F, 1.0F, 1.0F);
 

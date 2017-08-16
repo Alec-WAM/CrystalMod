@@ -10,7 +10,6 @@ import alec_wam.CrystalMod.api.recipe.IFusionRecipe;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.Lang;
-import alec_wam.CrystalMod.util.ModLogger;
 import alec_wam.CrystalMod.util.StringUtils;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.Vec3d;

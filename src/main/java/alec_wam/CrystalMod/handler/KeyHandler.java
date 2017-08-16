@@ -3,17 +3,10 @@ package alec_wam.CrystalMod.handler;
 import org.lwjgl.input.Keyboard;
 
 import alec_wam.CrystalMod.capability.PacketOpenExtendedInventory;
-import alec_wam.CrystalMod.enchantment.ModEnchantments;
 import alec_wam.CrystalMod.items.tools.backpack.PacketOpenBackpack;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
-import alec_wam.CrystalMod.network.packets.PacketEntityMessage;
-import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.Lang;
 import net.minecraft.client.settings.KeyBinding;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.settings.KeyConflictContext;
 import net.minecraftforge.client.settings.KeyModifier;
 import net.minecraftforge.fml.client.FMLClientHandler;

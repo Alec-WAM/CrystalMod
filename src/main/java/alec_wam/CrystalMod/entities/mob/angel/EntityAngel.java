@@ -21,7 +21,6 @@ import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.ai.EntityMoveHelper;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -33,7 +32,6 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
-import net.minecraft.world.storage.loot.LootTableList;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -50,7 +48,8 @@ public class EntityAngel extends EntityMob
     /**
      * Tries to move the entity towards the specified location.
      */
-    public void move(MoverType type, double x, double y, double z)
+    @Override
+	public void move(MoverType type, double x, double y, double z)
     {
         super.move(type, x, y, z);
     }
@@ -58,14 +57,16 @@ public class EntityAngel extends EntityMob
     /**
      * Called to update the entity's position/logic.
      */
-    public void onUpdate()
+    @Override
+	public void onUpdate()
     {
         super.onUpdate();
         this.fallDistance = 0;
         this.setNoGravity(true);
     }
 
-    protected void initEntityAI()
+    @Override
+	protected void initEntityAI()
     {
         super.initEntityAI();
         this.tasks.addTask(0, new EntityAISwimming(this));
@@ -78,14 +79,16 @@ public class EntityAngel extends EntityMob
         this.targetTasks.addTask(3, new EntityAINearestAttackableTarget<EntityDevil>(this, EntityDevil.class, true));
     }
 
-    protected void applyEntityAttributes()
+    @Override
+	protected void applyEntityAttributes()
     {
         super.applyEntityAttributes();
         this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(50.0D);
         this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(4.0D);
     }
 
-    protected void entityInit()
+    @Override
+	protected void entityInit()
     {
         super.entityInit();
     }
@@ -98,7 +101,8 @@ public class EntityAngel extends EntityMob
     /**
      * (abstract) Protected helper method to read subclass entity data from NBT.
      */
-    public void readEntityFromNBT(NBTTagCompound compound)
+    @Override
+	public void readEntityFromNBT(NBTTagCompound compound)
     {
         super.readEntityFromNBT(compound);
     }
@@ -106,33 +110,39 @@ public class EntityAngel extends EntityMob
     /**
      * (abstract) Protected helper method to write subclass entity data to NBT.
      */
-    public void writeEntityToNBT(NBTTagCompound compound)
+    @Override
+	public void writeEntityToNBT(NBTTagCompound compound)
     {
         super.writeEntityToNBT(compound);
     }
 
-    protected SoundEvent getAmbientSound()
+    @Override
+	protected SoundEvent getAmbientSound()
     {
         return ModSounds.angel_ambient;
     }
 
-    protected SoundEvent getDeathSound()
+    @Override
+	protected SoundEvent getDeathSound()
     {
         return ModSounds.angel_death;
     }
 
-    protected SoundEvent getHurtSound()
+    @Override
+	protected SoundEvent getHurtSound()
     {
         return ModSounds.angel_hurt;
     }
 
-    @Nullable
+    @Override
+	@Nullable
     protected ResourceLocation getLootTable()
     {
         return ModEntites.LOOTTABLE_ANGEL;
     }
 
-    @SideOnly(Side.CLIENT)
+    @Override
+	@SideOnly(Side.CLIENT)
     public int getBrightnessForRender(float partialTicks)
     {
         return 15728880;
@@ -141,7 +151,8 @@ public class EntityAngel extends EntityMob
     /**
      * Gets how bright this entity is.
      */
-    public float getBrightness(float partialTicks)
+    @Override
+	public float getBrightness(float partialTicks)
     {
         return 1.0F;
     }
@@ -150,7 +161,8 @@ public class EntityAngel extends EntityMob
      * Called only once on an entity when first time spawned, via egg, mob spawner, natural spawning etc, but not called
      * when entity is reloaded from nbt. Mainly used for initializing attributes and inventory
      */
-    @Nullable
+    @Override
+	@Nullable
     public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata)
     {
         this.setEquipmentBasedOnDifficulty(difficulty);
@@ -161,7 +173,8 @@ public class EntityAngel extends EntityMob
     /**
      * Gives armor or weapon for entity based on given DifficultyInstance
      */
-    protected void setEquipmentBasedOnDifficulty(DifficultyInstance difficulty)
+    @Override
+	protected void setEquipmentBasedOnDifficulty(DifficultyInstance difficulty)
     {
         this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(ModItems.dagger));
         this.setDropChance(EntityEquipmentSlot.MAINHAND, 0.0F);
@@ -170,7 +183,6 @@ public class EntityAngel extends EntityMob
     class AIChargeAttack extends EntityAIBase
     {
     	private int attackTime;
-    	private int seeTime;
     	public AIChargeAttack()
         {
             this.setMutexBits(1);
@@ -179,7 +191,8 @@ public class EntityAngel extends EntityMob
         /**
          * Returns whether the EntityAIBase should begin execution.
          */
-        public boolean shouldExecute()
+        @Override
+		public boolean shouldExecute()
         {
             return EntityAngel.this.getAttackTarget() != null;
         }
@@ -187,7 +200,8 @@ public class EntityAngel extends EntityMob
         /**
          * Returns whether an in-progress EntityAIBase should continue executing
          */
-        public boolean continueExecuting()
+        @Override
+		public boolean continueExecuting()
         {
             return EntityAngel.this.getAttackTarget() != null && EntityAngel.this.getAttackTarget().isEntityAlive();
         }
@@ -195,7 +209,8 @@ public class EntityAngel extends EntityMob
         /**
          * Execute a one shot task or start executing a continuous task
          */
-        public void startExecuting()
+        @Override
+		public void startExecuting()
         {
             attackTime = 20;
         }
@@ -203,15 +218,16 @@ public class EntityAngel extends EntityMob
         /**
          * Resets the task
          */
-        public void resetTask()
+        @Override
+		public void resetTask()
         {
-            this.seeTime = 0;
         }
 
         /**
          * Updates the task
          */
-        public void updateTask()
+        @Override
+		public void updateTask()
         {
         	if(attackTime > 0)--this.attackTime;
             
@@ -232,7 +248,7 @@ public class EntityAngel extends EntityMob
             	attackTime = 40 + angel.rand.nextInt(10);
             	EntityDagger dagger = new EntityDagger(world);
             	dagger.shootingEntity = angel;
-            	dagger.setLocationAndAngles(angel.posX, angel.posY + (double) angel.getEyeHeight(), angel.posZ, angel.rotationYaw, angel.rotationPitch);
+            	dagger.setLocationAndAngles(angel.posX, angel.posY + angel.getEyeHeight(), angel.posZ, angel.rotationYaw, angel.rotationPitch);
 
             	dagger.setPosition(dagger.posX, dagger.posY, dagger.posZ);
             	dagger.motionX = -MathHelper.sin(dagger.rotationYaw / 180.0F * (float) Math.PI) * MathHelper.cos(dagger.rotationPitch / 180.0F * (float) Math.PI);
@@ -251,7 +267,8 @@ public class EntityAngel extends EntityMob
             super(vex);
         }
 
-        public void onUpdateMoveHelper()
+        @Override
+		public void onUpdateMoveHelper()
         {
             if (this.action == EntityMoveHelper.Action.MOVE_TO)
             {
@@ -259,7 +276,7 @@ public class EntityAngel extends EntityMob
                 double d1 = this.posY - EntityAngel.this.posY;
                 double d2 = this.posZ - EntityAngel.this.posZ;
                 double d3 = d0 * d0 + d1 * d1 + d2 * d2;
-                d3 = (double)MathHelper.sqrt(d3);
+                d3 = MathHelper.sqrt(d3);
 
                 if (d3 < EntityAngel.this.getEntityBoundingBox().getAverageEdgeLength())
                 {
@@ -301,7 +318,8 @@ public class EntityAngel extends EntityMob
         /**
          * Returns whether the EntityAIBase should begin execution.
          */
-        public boolean shouldExecute()
+        @Override
+		public boolean shouldExecute()
         {
             return !EntityAngel.this.getMoveHelper().isUpdating() && EntityAngel.this.rand.nextInt(14) == 0;
         }
@@ -309,7 +327,8 @@ public class EntityAngel extends EntityMob
         /**
          * Returns whether an in-progress EntityAIBase should continue executing
          */
-        public boolean continueExecuting()
+        @Override
+		public boolean continueExecuting()
         {
             return false;
         }
@@ -317,7 +336,8 @@ public class EntityAngel extends EntityMob
         /**
          * Updates the task
          */
-        public void updateTask()
+        @Override
+		public void updateTask()
         {
             BlockPos blockpos = new BlockPos(EntityAngel.this);
 
@@ -330,11 +350,11 @@ public class EntityAngel extends EntityMob
                 
                 if (state.getBlock().isAir(state, world, blockpos1) && state2.getBlock().isAir(state2, world, blockpos2))
                 {
-                    EntityAngel.this.moveHelper.setMoveTo((double)blockpos1.getX() + 0.5D, (double)blockpos1.getY() + 0.5D, (double)blockpos1.getZ() + 0.5D, 0.25D);
+                    EntityAngel.this.moveHelper.setMoveTo(blockpos1.getX() + 0.5D, blockpos1.getY() + 0.5D, blockpos1.getZ() + 0.5D, 0.25D);
 
                     if (EntityAngel.this.getAttackTarget() == null)
                     {
-                        EntityAngel.this.getLookHelper().setLookPosition((double)blockpos1.getX() + 0.5D, (double)blockpos1.getY() + 0.5D, (double)blockpos1.getZ() + 0.5D, 180.0F, 20.0F);
+                        EntityAngel.this.getLookHelper().setLookPosition(blockpos1.getX() + 0.5D, blockpos1.getY() + 0.5D, blockpos1.getZ() + 0.5D, 180.0F, 20.0F);
                     }
 
                     break;

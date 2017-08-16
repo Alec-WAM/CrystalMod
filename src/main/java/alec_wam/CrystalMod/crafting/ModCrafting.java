@@ -59,6 +59,7 @@ import alec_wam.CrystalMod.tiles.crate.BlockCrate.CrateType;
 import alec_wam.CrystalMod.tiles.explosives.remover.BlockRemoverExplosion.RemoverType;
 import alec_wam.CrystalMod.tiles.fusion.ModFusionRecipes;
 import alec_wam.CrystalMod.tiles.lamps.BlockAdvancedLamp.LampType;
+import alec_wam.CrystalMod.tiles.machine.BlockMachine;
 import alec_wam.CrystalMod.tiles.machine.crafting.BlockCrystalMachine.MachineType;
 import alec_wam.CrystalMod.tiles.machine.crafting.furnace.CrystalFurnaceManager;
 import alec_wam.CrystalMod.tiles.machine.crafting.grinder.GrinderManager;
@@ -66,7 +67,6 @@ import alec_wam.CrystalMod.tiles.machine.crafting.infuser.CrystalInfusionManager
 import alec_wam.CrystalMod.tiles.machine.crafting.liquidizer.LiquidizerRecipeManager;
 import alec_wam.CrystalMod.tiles.machine.crafting.press.PressRecipeManager;
 import alec_wam.CrystalMod.tiles.machine.elevator.ItemMiscCard;
-import alec_wam.CrystalMod.tiles.machine.enderbuffer.BlockEnderBuffer;
 import alec_wam.CrystalMod.tiles.machine.power.battery.BlockBattery.BatteryType;
 import alec_wam.CrystalMod.tiles.machine.power.converter.BlockPowerConverter.ConverterType;
 import alec_wam.CrystalMod.tiles.machine.power.engine.BlockEngine.EngineType;
@@ -576,7 +576,7 @@ public class ModCrafting {
 			ItemStack buffer = new ItemStack(ModBlocks.enderBuffer);
 			NBTTagCompound nbt = new NBTTagCompound();
 			nbt.setInteger("Code", code);
-			ItemNBTHelper.getCompound(buffer).setTag(BlockEnderBuffer.TILE_NBT_STACK, nbt);
+			ItemNBTHelper.getCompound(buffer).setTag(BlockMachine.TILE_NBT_STACK, nbt);
 			
 			addShapedOreRecipe(buffer, new Object[]{"ECE", "RFP", "ETE", 'E', ender, 'P', ItemUtil.copy(tier2CU, 1), 'R', ItemUtil.copy(tier2RF, 1), 'T', new ItemStack(ModBlocks.crystalTank, 1, TankType.GREEN.getMeta()), 'C', wChest, 'F', machineFrameEnder});
 		}
@@ -767,7 +767,7 @@ public class ModCrafting {
 
         if (recipeComponents[i] instanceof String[])
         {
-            String[] astring = (String[])((String[])recipeComponents[i++]);
+            String[] astring = ((String[])recipeComponents[i++]);
 
             for (String s2 : astring)
             {
@@ -818,7 +818,7 @@ public class ModCrafting {
 
             if (map.containsKey(Character.valueOf(c0)))
             {
-                aitemstack[l] = ((ItemStack)map.get(Character.valueOf(c0))).copy();
+                aitemstack[l] = map.get(Character.valueOf(c0)).copy();
             }
             else
             {
@@ -1049,7 +1049,7 @@ public class ModCrafting {
 
         if (recipeComponents[i] instanceof String[])
         {
-            String[] astring = (String[])((String[])recipeComponents[i++]);
+            String[] astring = ((String[])recipeComponents[i++]);
 
             for (int l = 0; l < astring.length; ++l)
             {
@@ -1101,7 +1101,7 @@ public class ModCrafting {
 
             if (map.containsKey(Character.valueOf(c0)))
             {
-                aitemstack[i1] = ((ItemStack)map.get(Character.valueOf(c0))).copy();
+                aitemstack[i1] = map.get(Character.valueOf(c0)).copy();
             }
             else
             {

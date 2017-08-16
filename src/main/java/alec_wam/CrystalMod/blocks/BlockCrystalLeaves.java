@@ -40,7 +40,8 @@ public class BlockCrystalLeaves extends BlockLeaves implements ICustomModel
         this.setDefaultState(this.blockState.getBaseState().withProperty(CHECK_DECAY, false).withProperty(DECAYABLE, true));
     }
     
-    @SideOnly(Side.CLIENT)
+    @Override
+	@SideOnly(Side.CLIENT)
 	public void initModel() {
     	ModelLoader.setCustomStateMapper(this, new LeaveBlockStateMapper());
     	for(BlockCrystalLog.WoodType type : BlockCrystalLog.WoodType.values())
@@ -110,7 +111,7 @@ public class BlockCrystalLeaves extends BlockLeaves implements ICustomModel
     @Override
     protected ItemStack getSilkTouchDrop(IBlockState state)
     {
-        return new ItemStack(Item.getItemFromBlock(this), 1, ((BlockCrystalLog.WoodType)state.getValue(VARIANT)).getMeta());
+        return new ItemStack(Item.getItemFromBlock(this), 1, state.getValue(VARIANT).getMeta());
     }
 
     /**
@@ -129,7 +130,7 @@ public class BlockCrystalLeaves extends BlockLeaves implements ICustomModel
     @Override
     public int getMetaFromState(IBlockState state)
     {
-        int i = ((BlockCrystalLog.WoodType)state.getValue(VARIANT)).getMeta();
+        int i = state.getValue(VARIANT).getMeta();
 
         if (!state.getValue(DECAYABLE))
         {
@@ -157,7 +158,7 @@ public class BlockCrystalLeaves extends BlockLeaves implements ICustomModel
     @Override
     public int damageDropped(IBlockState state)
     {
-        return ((BlockCrystalLog.WoodType)state.getValue(VARIANT)).getMeta();
+        return state.getValue(VARIANT).getMeta();
     }
 
     @Override

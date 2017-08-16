@@ -1,5 +1,12 @@
 package alec_wam.CrystalMod.entities.minions.worker.jobs;
 
+import alec_wam.CrystalMod.entities.minions.MinionConstants;
+import alec_wam.CrystalMod.entities.minions.worker.EntityMinionWorker;
+import alec_wam.CrystalMod.entities.minions.worker.WorkerJob;
+import alec_wam.CrystalMod.tiles.machine.worksite.TileWorksiteBase;
+import alec_wam.CrystalMod.tiles.machine.worksite.imp.WorksiteCropFarm;
+import alec_wam.CrystalMod.util.ItemStackTools;
+import alec_wam.CrystalMod.util.fakeplayer.FakePlayerUtil;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -9,15 +16,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
-import net.minecraftforge.common.util.FakePlayer;
-import alec_wam.CrystalMod.entities.minions.MinionConstants;
-import alec_wam.CrystalMod.entities.minions.worker.EntityMinionWorker;
-import alec_wam.CrystalMod.entities.minions.worker.WorkerJob;
-import alec_wam.CrystalMod.tiles.machine.worksite.TileWorksiteBase;
-import alec_wam.CrystalMod.tiles.machine.worksite.imp.WorksiteCropFarm;
-import alec_wam.CrystalMod.tiles.machine.worksite.imp.WorksiteTreeFarm;
-import alec_wam.CrystalMod.util.ItemStackTools;
-import alec_wam.CrystalMod.util.fakeplayer.FakePlayerUtil;
 
 public class JobTillDirt extends WorkerJob {
 

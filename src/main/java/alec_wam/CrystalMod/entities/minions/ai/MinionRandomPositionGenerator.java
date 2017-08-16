@@ -4,7 +4,6 @@ import java.util.Random;
 
 import alec_wam.CrystalMod.entities.minions.warrior.EntityMinionWarrior;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -69,8 +68,8 @@ public class MinionRandomPositionGenerator
         if (homeLock && ((EntityMinionWarrior)entitycreatureIn).getWanderHome() !=null)
         {
         	BlockPos wanderHome = ((EntityMinionWarrior)entitycreatureIn).getWanderHome();
-            double d0 = wanderHome.distanceSq((double)MathHelper.floor(entitycreatureIn.posX), (double)MathHelper.floor(entitycreatureIn.posY), (double)MathHelper.floor(entitycreatureIn.posZ)) + 4.0D;
-            double d1 = (double)(((EntityMinionWarrior)entitycreatureIn).getMaximumWanderDistance() + (float)xz);
+            double d0 = wanderHome.distanceSq(MathHelper.floor(entitycreatureIn.posX), MathHelper.floor(entitycreatureIn.posY), MathHelper.floor(entitycreatureIn.posZ)) + 4.0D;
+            double d1 = ((EntityMinionWarrior)entitycreatureIn).getMaximumWanderDistance() + xz;
             flag = d0 < d1 * d1;
         }
         else
@@ -89,13 +88,13 @@ public class MinionRandomPositionGenerator
             int k1 = random.nextInt(2 * y + 1) - y;
             int i1 = random.nextInt(2 * xz + 1) - xz;
 
-            if (targetVec3d == null || (double)l * targetVec3d.xCoord + (double)i1 * targetVec3d.zCoord >= 0.0D)
+            if (targetVec3d == null || l * targetVec3d.xCoord + i1 * targetVec3d.zCoord >= 0.0D)
             {
                 if (homeLock && ((EntityMinionWarrior)entitycreatureIn).getWanderHome() !=null && xz > 1)
                 {
                     BlockPos blockpos = ((EntityMinionWarrior)entitycreatureIn).getWanderHome();
 
-                    if (entitycreatureIn.posX > (double)blockpos.getX())
+                    if (entitycreatureIn.posX > blockpos.getX())
                     {
                         l -= random.nextInt(xz / 2);
                     }
@@ -104,7 +103,7 @@ public class MinionRandomPositionGenerator
                         l += random.nextInt(xz / 2);
                     }
 
-                    if (entitycreatureIn.posZ > (double)blockpos.getZ())
+                    if (entitycreatureIn.posZ > blockpos.getZ())
                     {
                         j1 -= random.nextInt(xz / 2);
                     }
@@ -136,7 +135,7 @@ public class MinionRandomPositionGenerator
 
         if (flag)
         {
-            return new Vec3d((double)i, (double)j, (double)k);
+            return new Vec3d(i, j, k);
         }
         else
         {

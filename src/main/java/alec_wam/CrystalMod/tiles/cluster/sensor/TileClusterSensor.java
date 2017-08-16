@@ -1,6 +1,5 @@
 package alec_wam.CrystalMod.tiles.cluster.sensor;
 
-import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.IMessageHandler;
 import alec_wam.CrystalMod.network.packets.PacketTileMessage;

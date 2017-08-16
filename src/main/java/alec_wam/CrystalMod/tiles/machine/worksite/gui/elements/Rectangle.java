@@ -39,10 +39,10 @@ public class Rectangle extends GuiElement {
 		g = (color >> 16) & 255;
 		b = (color >> 8) & 255;
 		a = (color >> 0) & 255;
-		r = (float) r / 255.f;
-		g = (float) g / 255.f;
-		b = (float) b / 255.f;
-		a = (float) a / 255.f;
+		r = r / 255.f;
+		g = g / 255.f;
+		b = b / 255.f;
+		a = a / 255.f;
 		GL11.glColor4f(r, g, b, a);
 	}
 

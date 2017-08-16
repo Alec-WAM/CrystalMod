@@ -4,6 +4,11 @@ import java.util.concurrent.ConcurrentMap;
 
 import org.lwjgl.opengl.GL11;
 
+import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.client.model.dynamic.DynamicBaseModel;
+import alec_wam.CrystalMod.client.model.dynamic.ICustomItemRenderer;
+import alec_wam.CrystalMod.util.ItemNBTHelper;
+import alec_wam.CrystalMod.util.ProfileUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -13,12 +18,6 @@ import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.common.model.TRSRTransformation;
-import alec_wam.CrystalMod.CrystalMod;
-import alec_wam.CrystalMod.client.model.dynamic.DynamicBaseModel;
-import alec_wam.CrystalMod.client.model.dynamic.ICustomItemRenderer;
-import alec_wam.CrystalMod.util.ItemNBTHelper;
-import alec_wam.CrystalMod.util.ProfileUtil;
-import alec_wam.CrystalMod.util.client.RenderUtil;
 
 public class ItemRenderMobEssence implements ICustomItemRenderer {
 

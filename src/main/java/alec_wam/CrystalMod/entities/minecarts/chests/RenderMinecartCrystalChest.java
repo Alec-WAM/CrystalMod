@@ -18,7 +18,8 @@ public class RenderMinecartCrystalChest extends RenderMinecart<EntityCrystalChes
         super(renderManagerIn);
     }
 
-    protected void renderCartContents(EntityCrystalChestMinecartBase cart, float p_188319_2_, IBlockState p_188319_3_)
+    @Override
+	protected void renderCartContents(EntityCrystalChestMinecartBase cart, float p_188319_2_, IBlockState p_188319_3_)
     {
     	GlStateManager.pushMatrix();
         TileEntityBlueCrystalChestRenderer.renderChest(0, 0, -1, cart.getChestType(), 5, 0, -1);

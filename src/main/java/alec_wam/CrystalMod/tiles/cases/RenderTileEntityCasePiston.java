@@ -2,22 +2,19 @@ package alec_wam.CrystalMod.tiles.cases;
 
 import org.lwjgl.opengl.GL11;
 
-import alec_wam.CrystalMod.handler.ClientEventHandler;
-import alec_wam.CrystalMod.util.ItemStackTools;
+import alec_wam.CrystalMod.tiles.cases.BlockCase.EnumCaseType;
 import alec_wam.CrystalMod.util.client.RenderUtil;
-import net.minecraft.block.BlockPistonBase;
+import net.minecraft.block.BlockDirectional;
 import net.minecraft.block.BlockPistonExtension;
+import net.minecraft.block.BlockPistonExtension.EnumPistonType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockRendererDispatcher;
-import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.block.model.IBakedModel;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -25,7 +22,6 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ReportedException;
@@ -47,6 +43,7 @@ public class RenderTileEntityCasePiston extends TileEntitySpecialRenderer<TileEn
 		for(EnumFacing facing : EnumFacing.VALUES){
 			shouldRender |= tile.progress[facing.getIndex()] > 0;
 		}
+		boolean sticky = tile.getWorld().getBlockState(tile.getPos()).getValue(BlockCase.TYPE) == EnumCaseType.STICKY_PISTON;
 		if(shouldRender){
 			GlStateManager.pushMatrix();
 
@@ -68,7 +65,7 @@ public class RenderTileEntityCasePiston extends TileEntitySpecialRenderer<TileEn
 			EnumFacing[] faces = EnumFacing.VALUES;
 			for(EnumFacing facing : faces){
 				float progress = tile.getProgress(facing, partialTicks);
-				IBlockState piston = Blocks.PISTON_HEAD.getDefaultState().withProperty(BlockPistonBase.FACING, facing).withProperty(BlockPistonExtension.SHORT, false);
+				IBlockState piston = Blocks.PISTON_HEAD.getDefaultState().withProperty(BlockDirectional.FACING, facing).withProperty(BlockPistonExtension.SHORT, false).withProperty(BlockPistonExtension.TYPE, sticky ? EnumPistonType.STICKY : EnumPistonType.DEFAULT);
 				BlockPos pos = tile.getPos();
 				double dx = -progress * facing.getFrontOffsetX();
 				double dy = -progress * facing.getFrontOffsetY();
@@ -99,18 +96,19 @@ public class RenderTileEntityCasePiston extends TileEntitySpecialRenderer<TileEn
 			}
 
 			Tessellator tessellator = Tessellator.getInstance();
-			BlockRendererDispatcher dispatcher = Minecraft.getMinecraft().getBlockRendererDispatcher();
-			EnumFacing[] faces = {EnumFacing.NORTH};
 			BlockPos pos = tile.getPos();
 			int k2 = tile.getWorld().getCombinedLight(pos.offset(EnumFacing.UP), 0);
 	        int l2 = k2 >> 16 & 65535;
 	        int i3 = k2 & 65535;
 	        
 	        TextureAtlasSprite sprite = RenderUtil.getSprite("crystalmod:blocks/case_piston_head");
-			double d3 = (double)sprite.getMinU();
-			double d4 = (double)sprite.getMinV();
-			double d5 = (double)sprite.getMaxU();
-			double d6 = (double)sprite.getMaxV();
+	        if(sticky){
+	        	sprite = RenderUtil.getSprite("crystalmod:blocks/case_piston_sticky_head");
+	        }
+			double d3 = sprite.getMinU();
+			double d4 = sprite.getMinV();
+			double d5 = sprite.getMaxU();
+			double d6 = sprite.getMaxV();
 			VertexBuffer buffer = tessellator.getBuffer();
 			
 			float red = 1;

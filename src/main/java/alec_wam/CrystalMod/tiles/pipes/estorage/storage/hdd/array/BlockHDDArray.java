@@ -70,7 +70,6 @@ public class BlockHDDArray extends BlockContainer {
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
     	TileEntity tile = world.getTileEntity(pos);
         if (tile !=null && (tile instanceof TileHDDArray)) {
-        	TileHDDArray array = (TileHDDArray)tile;
         	if(!world.isRemote)GuiHandler.openNetworkGui(world, pos, player, NetworkAbility.VIEW);
         	return true;
         }

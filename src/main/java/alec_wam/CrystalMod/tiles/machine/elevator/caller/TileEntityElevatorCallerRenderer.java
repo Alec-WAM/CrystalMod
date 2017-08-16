@@ -1,12 +1,12 @@
 package alec_wam.CrystalMod.tiles.machine.elevator.caller;
 
+import alec_wam.CrystalMod.tiles.machine.elevator.caller.TileEntityElevatorCaller.ElevatorButton;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.EnumFacing;
-import alec_wam.CrystalMod.tiles.machine.elevator.caller.TileEntityElevatorCaller.ElevatorButton;
 
 public class TileEntityElevatorCallerRenderer extends TileEntitySpecialRenderer<TileEntityElevatorCaller> {
 

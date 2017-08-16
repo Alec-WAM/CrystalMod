@@ -131,7 +131,7 @@ public class ItemMinion extends Item implements ICustomModel {
             }
             if (minion != null && type !=MinionType.BASIC)
             {
-            	minion.setPosition((double)pos.getX() + 0.5D, (double)pos.getY() + d0, (double)pos.getZ() + 0.5D);
+            	minion.setPosition(pos.getX() + 0.5D, pos.getY() + d0, pos.getZ() + 0.5D);
             	minion.setTamed(true);
             	minion.setOwnerId(EntityPlayer.getUUID(playerIn.getGameProfile()));
             	minion.loadFromItem(playerIn, stack);

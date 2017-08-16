@@ -140,7 +140,8 @@ public class Quat4d
     vec.z = (d3 * this.s - d * this.z - d1 * this.y + d2 * this.x);
   }
   
-  public String toString()
+  @Override
+public String toString()
   {
     StringBuilder stringbuilder = new StringBuilder();
     Formatter formatter = new Formatter(stringbuilder, Locale.US);

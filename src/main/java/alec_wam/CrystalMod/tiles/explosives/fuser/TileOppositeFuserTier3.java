@@ -13,11 +13,13 @@ import net.minecraft.world.chunk.Chunk;
 
 public class TileOppositeFuserTier3 extends TileOppositeFuser {
 
+	@Override
 	public void triggerExplosion(){
 		this.fuseTime = 5 * TimeUtil.SECOND;
 		BlockUtil.markBlockForUpdate(getWorld(), getPos());
 	}
 	
+	@Override
 	public void explode() {
 		if(!getWorld().isRemote && getWorld() instanceof WorldServer){
 			createExplosion((WorldServer)getWorld(), getPos(), 40);

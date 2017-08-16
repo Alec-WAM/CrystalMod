@@ -7,25 +7,22 @@ import javax.annotation.Nullable;
 
 import org.lwjgl.util.vector.Vector3f;
 
-import alec_wam.CrystalMod.blocks.glass.BlockCrystalGlass.GlassType;
-import alec_wam.CrystalMod.client.model.dynamic.DynamicItemAndBlockModel;
-import alec_wam.CrystalMod.util.ItemStackTools;
-import alec_wam.CrystalMod.util.ModLogger;
-import alec_wam.CrystalMod.util.client.CustomModelUtil;
-import alec_wam.CrystalMod.util.client.RenderUtil;
-
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-import net.minecraft.block.BlockGlass;
+import alec_wam.CrystalMod.blocks.glass.BlockCrystalGlass.GlassType;
+import alec_wam.CrystalMod.client.model.dynamic.DynamicItemAndBlockModel;
+import alec_wam.CrystalMod.util.ItemStackTools;
+import alec_wam.CrystalMod.util.client.CustomModelUtil;
+import alec_wam.CrystalMod.util.client.RenderUtil;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.BlockFaceUV;
 import net.minecraft.client.renderer.block.model.BlockPartFace;
 import net.minecraft.client.renderer.block.model.BlockPartRotation;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.block.model.ModelRotation;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
@@ -53,6 +50,7 @@ public class ModelGlass extends DynamicItemAndBlockModel {
 		this.stack = ItemStackTools.getEmptyStack();
 	}
 
+	@Override
 	public List<BakedQuad> getQuads(@Nullable IBlockState state, @Nullable EnumFacing side, long rand){
 		return super.getQuads(state, side, rand);
 	}
@@ -90,7 +88,7 @@ public class ModelGlass extends DynamicItemAndBlockModel {
 		float max = 15.0F;
 		if(state == null){
 			final BlockFaceUV uv = new BlockFaceUV(new float[]{0, 0, 16F, 16F}, 0);
-			final BlockPartFace face = new BlockPartFace(EnumFacing.NORTH, 0, "", uv);
+			new BlockPartFace(EnumFacing.NORTH, 0, "", uv);
 			final BlockPartFace faceU = new BlockPartFace(EnumFacing.UP, 0, "", uv);
 			final BlockPartFace faceD = new BlockPartFace(EnumFacing.DOWN, 0, "", uv);
 			final BlockPartFace faceN = new BlockPartFace(EnumFacing.NORTH, 0, "", uv);

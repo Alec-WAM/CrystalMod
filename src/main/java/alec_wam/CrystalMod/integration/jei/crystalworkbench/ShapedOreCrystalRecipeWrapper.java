@@ -12,7 +12,6 @@ import mezz.jei.api.recipe.wrapper.IShapedCraftingRecipeWrapper;
 import mezz.jei.util.BrokenCraftingRecipeException;
 import mezz.jei.util.ErrorUtil;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.oredict.ShapedOreRecipe;
 
 public class ShapedOreCrystalRecipeWrapper extends BlankRecipeWrapper implements IShapedCraftingRecipeWrapper {
 	private final IJeiHelpers jeiHelpers;

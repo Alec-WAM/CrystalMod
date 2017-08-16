@@ -2,7 +2,6 @@ package alec_wam.CrystalMod.tiles.endertorch;
 
 import alec_wam.CrystalMod.handler.EventHandler;
 import alec_wam.CrystalMod.tiles.TileEntityMod;
-import alec_wam.CrystalMod.util.ModLogger;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.Vec3d;
 

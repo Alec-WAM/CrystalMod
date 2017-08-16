@@ -1,17 +1,15 @@
 package alec_wam.CrystalMod.tiles.machine.sap;
 
-import alec_wam.CrystalMod.blocks.BlockCrystalLog.WoodType;
 import alec_wam.CrystalMod.blocks.BlockCrystalLog;
+import alec_wam.CrystalMod.blocks.BlockCrystalLog.WoodType;
 import alec_wam.CrystalMod.blocks.ModBlocks;
+import alec_wam.CrystalMod.items.ItemCrystalSap.SapType;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.packets.PacketTileMessage;
-import alec_wam.CrystalMod.items.ItemCrystalSap.SapType;
 import alec_wam.CrystalMod.tiles.machine.TileEntityMachine;
-import alec_wam.CrystalMod.tiles.machine.crafting.furnace.CrystalFurnaceManager;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
-import alec_wam.CrystalMod.util.ModLogger;
 import alec_wam.CrystalMod.util.tool.TreeHarvestUtil;
 import alec_wam.CrystalMod.util.tool.TreeHarvestUtil.BaseHarvestTarget;
 import alec_wam.CrystalMod.util.tool.TreeHarvestUtil.TreeData;

@@ -22,11 +22,13 @@ public class ItemCrystal extends Item implements ICustomModel {
 		ModItems.registerItem(this, "crystal");
 	}
 	
+	@Override
 	@SideOnly(Side.CLIENT)
 	public boolean hasEffect(ItemStack stack){
 		return stack.getMetadata() !=CrystalType.DIRON_NUGGET.getMetadata();
 	}
 	
+	@Override
 	@SideOnly(Side.CLIENT)
     public void initModel() {
         for(CrystalType type : CrystalType.values()){
@@ -34,6 +36,7 @@ public class ItemCrystal extends Item implements ICustomModel {
         }
     }
 	
+	@Override
 	public String getUnlocalizedName(ItemStack stack)
     {
         int i = stack.getMetadata();
@@ -79,7 +82,8 @@ public class ItemCrystal extends Item implements ICustomModel {
             this.unlocalizedName = name;
         }
 
-        public int getMetadata()
+        @Override
+		public int getMetadata()
         {
             return this.metadata;
         }
@@ -89,7 +93,8 @@ public class ItemCrystal extends Item implements ICustomModel {
             return this.unlocalizedName;
         }
 
-        public String toString()
+        @Override
+		public String toString()
         {
             return this.unlocalizedName;
         }
@@ -104,7 +109,8 @@ public class ItemCrystal extends Item implements ICustomModel {
             return METADATA_LOOKUP[metadata];
         }
 
-        public String getName()
+        @Override
+		public String getName()
         {
             return this.unlocalizedName;
         }

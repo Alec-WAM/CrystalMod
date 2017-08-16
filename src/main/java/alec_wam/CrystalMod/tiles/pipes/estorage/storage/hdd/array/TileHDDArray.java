@@ -2,12 +2,10 @@ package alec_wam.CrystalMod.tiles.pipes.estorage.storage.hdd.array;
 
 import alec_wam.CrystalMod.api.estorage.INetworkInventory;
 import alec_wam.CrystalMod.api.estorage.INetworkItemProvider;
-import alec_wam.CrystalMod.api.estorage.INetworkInventory.EnumUpdateType;
 import alec_wam.CrystalMod.api.estorage.storage.IItemProvider;
 import alec_wam.CrystalMod.network.IMessageHandler;
 import alec_wam.CrystalMod.tiles.TileEntityInventory;
 import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetwork;
-import alec_wam.CrystalMod.tiles.pipes.estorage.storage.hdd.ItemHDD;
 import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import net.minecraft.item.ItemStack;
@@ -25,12 +23,14 @@ public class TileHDDArray extends TileEntityInventory implements ITickable, IMes
 	private int priority = 0;
 	public int facing = EnumFacing.NORTH.ordinal();
 	
+	@Override
 	public void writeCustomNBT(NBTTagCompound nbt){
 		super.writeCustomNBT(nbt);
 		nbt.setInteger("Priority", priority);
 		nbt.setInteger("Facing", facing);
 	}
 	
+	@Override
 	public void readCustomNBT(NBTTagCompound nbt){
 		super.readCustomNBT(nbt);
 		priority = nbt.getInteger("Priority");

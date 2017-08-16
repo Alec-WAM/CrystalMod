@@ -66,7 +66,8 @@ public class EntityWirelessChestMinecart extends EntityMinecartChest implements 
         super(worldIn, x, y, z);
     }
 
-    protected void entityInit()
+    @Override
+	protected void entityInit()
     {
         super.entityInit();
         this.dataManager.register(CODE, Integer.valueOf(0));
@@ -185,11 +186,13 @@ public class EntityWirelessChestMinecart extends EntityMinecartChest implements 
         }
     }
     
+	@Override
 	public void setDead()
     {
 		this.isDead = true;
     }
 	
+	@Override
 	public void killMinecart(DamageSource source)
     {
 		this.setDead();
@@ -208,6 +211,7 @@ public class EntityWirelessChestMinecart extends EntityMinecartChest implements 
         }
     }
 	
+	@Override
 	public ItemStack getPickedResult(RayTraceResult target)
     {
 		ItemStack stack = new ItemStack(ModItems.wirelessChestMinecart);
@@ -216,16 +220,19 @@ public class EntityWirelessChestMinecart extends EntityMinecartChest implements 
 		return stack;
     }
 	
+	@Override
 	public IBlockState getDefaultDisplayTile()
     {
         return ModBlocks.wirelessChest.getDefaultState();
     }
 	
+	@Override
 	public int getSizeInventory(){
 		if(getInventory() == null)return 0;
 		return getInventory().getSlots();
 	}
 	
+	@Override
 	@Nullable
     public ItemStack getStackInSlot(int index)
     {
@@ -233,6 +240,7 @@ public class EntityWirelessChestMinecart extends EntityMinecartChest implements 
         return getInventory().getStackInSlot(index);
     }
 	
+	@Override
 	@Nullable
     public ItemStack decrStackSize(int index, int count)
     {
@@ -240,6 +248,7 @@ public class EntityWirelessChestMinecart extends EntityMinecartChest implements 
         return getInventory().extractItem(index, count, false);
     }
 	
+	@Override
 	@Nullable
     public ItemStack removeStackFromSlot(int index)
     {
@@ -255,6 +264,7 @@ public class EntityWirelessChestMinecart extends EntityMinecartChest implements 
         }
     }
 	
+	@Override
 	public void setInventorySlotContents(int index, @Nullable ItemStack stack)
     {
 		if(getInventory() == null)return;
@@ -309,13 +319,14 @@ public class EntityWirelessChestMinecart extends EntityMinecartChest implements 
         return true;
     }
 	
+	@Override
 	protected void writeEntityToNBT(NBTTagCompound compound)
     {
 		if (this.hasDisplayTile())
         {
             compound.setBoolean("CustomDisplayTile", true);
             IBlockState iblockstate = this.getDisplayTile();
-            ResourceLocation resourcelocation = (ResourceLocation)Block.REGISTRY.getNameForObject(iblockstate.getBlock());
+            ResourceLocation resourcelocation = Block.REGISTRY.getNameForObject(iblockstate.getBlock());
             compound.setString("DisplayTile", resourcelocation == null ? "" : resourcelocation.toString());
             compound.setInteger("DisplayData", iblockstate.getBlock().getMetaFromState(iblockstate));
             compound.setInteger("DisplayOffset", this.getDisplayTileOffset());
@@ -327,7 +338,9 @@ public class EntityWirelessChestMinecart extends EntityMinecartChest implements 
     /**
      * (abstract) Protected helper method to read subclass entity data from NBT.
      */
-    protected void readEntityFromNBT(NBTTagCompound compound)
+    @SuppressWarnings("deprecation")
+	@Override
+	protected void readEntityFromNBT(NBTTagCompound compound)
     {
     	if (compound.getBoolean("CustomDisplayTile"))
         {

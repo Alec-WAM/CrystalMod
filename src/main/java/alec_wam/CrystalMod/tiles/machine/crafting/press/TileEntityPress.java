@@ -1,15 +1,15 @@
 package alec_wam.CrystalMod.tiles.machine.crafting.press;
 
+import alec_wam.CrystalMod.tiles.machine.BasicMachineRecipe;
+import alec_wam.CrystalMod.tiles.machine.TileEntityMachine;
+import alec_wam.CrystalMod.util.ItemStackTools;
+import alec_wam.CrystalMod.util.ItemUtil;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import alec_wam.CrystalMod.tiles.machine.BasicMachineRecipe;
-import alec_wam.CrystalMod.tiles.machine.TileEntityMachine;
-import alec_wam.CrystalMod.util.ItemStackTools;
-import alec_wam.CrystalMod.util.ItemUtil;
 
 public class TileEntityPress extends TileEntityMachine implements ISidedInventory {
 
@@ -17,6 +17,7 @@ public class TileEntityPress extends TileEntityMachine implements ISidedInventor
 		super("Press", 2);
 	}
 	
+	@Override
 	public boolean canStart() {
 		ItemStack stack = getStackInSlot(0);
         if (ItemStackTools.isNullStack(stack)) {
@@ -31,10 +32,12 @@ public class TileEntityPress extends TileEntityMachine implements ISidedInventor
         return ItemStackTools.isValid(output) && (ItemStackTools.isNullStack(stack2) || (ItemUtil.canCombine(output, stack2) && ItemStackTools.getStackSize(stack2) + ItemStackTools.getStackSize(output) <= output.getMaxStackSize()));
     }
 	
+	@Override
 	public boolean canContinueRunning(){
 		return hasValidInput();
 	}
 	
+	@Override
 	public boolean canFinish() {
         return processRem <= 0 && hasValidInput();
     }
@@ -44,13 +47,15 @@ public class TileEntityPress extends TileEntityMachine implements ISidedInventor
         return recipe != null && recipe.getInputSize() <= ItemStackTools.getStackSize(getStackInSlot(0));
     }
     
-    public void processStart() {
+    @Override
+	public void processStart() {
     	this.processMax = PressRecipeManager.getRecipe(getStackInSlot(0)).getEnergy();
         this.processRem = this.processMax;
         syncProcessValues();
     }
     
-    public void processFinish() {
+    @Override
+	public void processFinish() {
     	ItemStack stack = getStackInSlot(0);
     	ItemStack stack2 = getStackInSlot(1);
     	BasicMachineRecipe recipe = PressRecipeManager.getRecipe(stack);

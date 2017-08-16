@@ -1,5 +1,9 @@
 package alec_wam.CrystalMod.client.model.dynamic;
 
+import java.util.Collections;
+import java.util.List;
+
+import alec_wam.CrystalMod.util.ItemStackTools;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
@@ -9,11 +13,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-
-import java.util.Collections;
-import java.util.List;
-
-import alec_wam.CrystalMod.util.ItemStackTools;
 
 /**
  * A dynamic model that can be used for items and blocks.

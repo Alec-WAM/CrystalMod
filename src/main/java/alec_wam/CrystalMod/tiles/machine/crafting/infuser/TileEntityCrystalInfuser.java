@@ -32,11 +32,13 @@ public class TileEntityCrystalInfuser extends TileEntityMachine {
 		this.tank = new Tank("Tank", Fluid.BUCKET_VOLUME * 4, null);
 	}
 	
+	@Override
 	public void writeCustomNBT(NBTTagCompound nbt){
 		super.writeCustomNBT(nbt);
 		tank.writeToNBT(nbt);
 	}
 	
+	@Override
 	public void readCustomNBT(NBTTagCompound nbt){
 		super.readCustomNBT(nbt);
 		tank.readFromNBT(nbt);
@@ -65,6 +67,7 @@ public class TileEntityCrystalInfuser extends TileEntityMachine {
 		}
 	}
 	
+	@Override
 	public boolean canStart() {
 		ItemStack stack = getStackInSlot(0);
         if (ItemStackTools.isEmpty(stack) || tank.getFluid() == null) {
@@ -79,10 +82,12 @@ public class TileEntityCrystalInfuser extends TileEntityMachine {
         return ItemStackTools.isValid(output) && (ItemStackTools.isEmpty(stack2) || (ItemUtil.canCombine(output, stack2) && ItemStackTools.getStackSize(stack2) + ItemStackTools.getStackSize(output) <= output.getMaxStackSize()));
     }
 	
+	@Override
 	public boolean canContinueRunning(){
 		return hasValidInput();
 	}
 	
+	@Override
 	public boolean canFinish() {
         return processRem <= 0 && this.hasValidInput();
     }
@@ -92,13 +97,15 @@ public class TileEntityCrystalInfuser extends TileEntityMachine {
         return recipe != null && recipe.getFluidInput().amount <= tank.getFluidAmount();
     }
     
-    public void processStart() {
+    @Override
+	public void processStart() {
     	this.processMax = CrystalInfusionManager.getRecipe(getStackInSlot(0), tank.getFluid()).getEnergy();
         this.processRem = this.processMax;
         syncProcessValues();
     }
     
-    public void processFinish() {
+    @Override
+	public void processFinish() {
     	ItemStack stack = getStackInSlot(0);
     	ItemStack stack2 = getStackInSlot(1);
     	InfusionMachineRecipe recipe = CrystalInfusionManager.getRecipe(stack, tank.getFluid());
@@ -161,19 +168,22 @@ public class TileEntityCrystalInfuser extends TileEntityMachine {
             		return tank;
             	}
             	
-            	public int fill(FluidStack resource, boolean doFill) {
+            	@Override
+				public int fill(FluidStack resource, boolean doFill) {
             		int ret = tank.fill(resource, doFill);
             		if(ret > 0 && doFill){
             		}
             		return ret;
                 }
 
-                public FluidStack drain(int maxEmpty, boolean doDrain) {
+                @Override
+				public FluidStack drain(int maxEmpty, boolean doDrain) {
                 	if(facing !=EnumFacing.DOWN) return null;
                 	return tank.drain(maxEmpty, doDrain);
                 }
 
-                public FluidStack drain(FluidStack resource, boolean doDrain) {
+                @Override
+				public FluidStack drain(FluidStack resource, boolean doDrain) {
                 	if(facing !=EnumFacing.DOWN) return null;
                     return tank.drain(resource, doDrain);
                 }

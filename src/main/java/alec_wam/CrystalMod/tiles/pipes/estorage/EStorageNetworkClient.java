@@ -7,6 +7,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
+import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
+
 import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage.ItemStackData;
 import alec_wam.CrystalMod.tiles.pipes.estorage.client.CountComp;
 import alec_wam.CrystalMod.tiles.pipes.estorage.client.ItemFilter;
@@ -14,11 +17,6 @@ import alec_wam.CrystalMod.tiles.pipes.estorage.client.ModComp;
 import alec_wam.CrystalMod.tiles.pipes.estorage.client.NameComp;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
-import alec_wam.CrystalMod.util.ModLogger;
-
-import com.google.common.base.Strings;
-import com.google.common.collect.Lists;
-
 import net.minecraft.client.Minecraft;
 
 public class EStorageNetworkClient extends EStorageNetwork {

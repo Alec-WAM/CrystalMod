@@ -1,17 +1,14 @@
 package alec_wam.CrystalMod.tiles.machine.enderbuffer.packets;
 
 import java.io.IOException;
-import java.util.Iterator;
 
+import alec_wam.CrystalMod.network.AbstractPacketThreadsafe;
+import alec_wam.CrystalMod.util.ModLogger;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetHandlerPlayServer;
 import net.minecraft.network.PacketBuffer;
-import alec_wam.CrystalMod.network.AbstractPacketThreadsafe;
-import alec_wam.CrystalMod.tiles.machine.enderbuffer.EnderBufferManager;
-import alec_wam.CrystalMod.tiles.machine.enderbuffer.EnderBufferManager.EnderBuffer;
-import alec_wam.CrystalMod.util.ModLogger;
 
 public class PacketSyncBufferList extends AbstractPacketThreadsafe {
 

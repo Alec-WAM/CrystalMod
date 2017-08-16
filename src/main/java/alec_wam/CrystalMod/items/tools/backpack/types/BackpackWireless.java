@@ -64,6 +64,7 @@ public class BackpackWireless implements IBackpack {
 		return TEXTURE;
 	}
 	
+	@Override
 	@SideOnly(Side.CLIENT)
 	public void initModel(Item item){
 		ModItems.initBasicModel(item);

@@ -3,13 +3,10 @@ package alec_wam.CrystalMod.tiles.pipes.estorage.client;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Locale;
-import java.util.regex.Pattern;
 
 import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage.ItemStackData;
 
 public abstract class ItemFilter {
-
-  private static final Pattern SPLIT_PATTERN = Pattern.compile("\\s+");
 
   public abstract boolean matches(ItemStackData entry);
 

@@ -140,7 +140,8 @@ public class GuiAdvDispenser extends GuiContainer
     /**
      * Draw the foreground layer for the GuiContainer (everything in front of the items)
      */
-    protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY)
+    @Override
+	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY)
     {
         //String s = this.dispenserInventory.getDisplayName().getUnformattedText();
         //this.fontRendererObj.drawString(s, this.xSize / 2 - this.fontRendererObj.getStringWidth(s) / 2, 6, 4210752);
@@ -150,7 +151,8 @@ public class GuiAdvDispenser extends GuiContainer
     /**
      * Draws the background layer of this container (behind the items).
      */
-    protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY)
+    @Override
+	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY)
     {
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         this.mc.getTextureManager().bindTexture(DISPENSER_GUI_TEXTURES);

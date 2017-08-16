@@ -1,7 +1,5 @@
 package alec_wam.CrystalMod.entities.minecarts.chests;
 
-import javax.annotation.Nullable;
-
 import alec_wam.CrystalMod.items.ModItems;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecart;
@@ -27,7 +25,8 @@ public class EntityEnderChestMinecart extends EntityMinecart {
         super(worldIn, x, y, z);
     }
 
-    protected void entityInit()
+    @Override
+	protected void entityInit()
     {
         super.entityInit();
     }
@@ -37,11 +36,13 @@ public class EntityEnderChestMinecart extends EntityMinecart {
     	super.onUpdate();
     }
     
+	@Override
 	public void setDead()
     {
 		super.setDead();
     }
 	
+	@Override
 	public void killMinecart(DamageSource source)
     {
 		super.killMinecart(source);
@@ -52,12 +53,14 @@ public class EntityEnderChestMinecart extends EntityMinecart {
         }
     }
 	
+	@Override
 	public ItemStack getPickedResult(RayTraceResult target)
     {
 		ItemStack stack = new ItemStack(ModItems.enderChestMinecart);
 		return stack;
     }
 	
+	@Override
 	public IBlockState getDefaultDisplayTile()
     {
         return Blocks.ENDER_CHEST.getDefaultState();
@@ -76,6 +79,7 @@ public class EntityEnderChestMinecart extends EntityMinecart {
         return true;
     }
 	
+	@Override
 	protected void writeEntityToNBT(NBTTagCompound compound)
     {
 		super.writeEntityToNBT(compound);
@@ -84,7 +88,8 @@ public class EntityEnderChestMinecart extends EntityMinecart {
     /**
      * (abstract) Protected helper method to read subclass entity data from NBT.
      */
-    protected void readEntityFromNBT(NBTTagCompound compound)
+    @Override
+	protected void readEntityFromNBT(NBTTagCompound compound)
     {
     	super.readEntityFromNBT(compound);
     }

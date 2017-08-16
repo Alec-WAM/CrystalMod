@@ -2,13 +2,10 @@ package alec_wam.CrystalMod.capability;
 
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.handler.GuiHandler;
-import alec_wam.CrystalMod.items.tools.backpack.gui.OpenType;
-import alec_wam.CrystalMod.network.AbstractPacket;
 import alec_wam.CrystalMod.network.AbstractPacketThreadsafe;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.network.NetHandlerPlayServer;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 
 public class PacketOpenExtendedInventory extends AbstractPacketThreadsafe {
 

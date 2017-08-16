@@ -13,10 +13,9 @@ import alec_wam.CrystalMod.handler.ClientEventHandler;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.client.RenderUtil;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
-import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
@@ -43,9 +42,9 @@ public class RenderTileFusionPedistal<T extends TileFusionPedistal> extends Tile
 		boolean hasItem = ItemStackTools.isValid(tile.getStack());
 		if(tile.craftingCooldown.getValue() > 0 && hasItem){
         	int remaining = (tile.craftingCooldown.getValue());
-        	itemLift = (liftDistance) * ((float)(remaining / 100f));
+        	itemLift = (liftDistance) * (remaining / 100f);
         	float scale = tile.getStack().getItem() instanceof ItemBlock ? 0.1f : 0.25f;
-        	lazerLift = (liftDistance-scale) * ((float)(remaining / 100f));
+        	lazerLift = (liftDistance-scale) * (remaining / 100f);
 		}
 
         if(hasItem){
@@ -69,7 +68,7 @@ public class RenderTileFusionPedistal<T extends TileFusionPedistal> extends Tile
 	        	speed = 50f;
 	        	GlStateManager.translate(0, itemLift, 0);
 	        	int remaining = (tile.craftingCooldown.getValue());
-	        	double offset = 1.0d + (0.5*((float)(remaining / 100f)));
+	        	double offset = 1.0d + (0.5*(remaining / 100f));
 	        	GlStateManager.scale(offset, offset, offset);
 	        }
 	        
@@ -84,7 +83,7 @@ public class RenderTileFusionPedistal<T extends TileFusionPedistal> extends Tile
 	        	Tessellator tessellator = Tessellator.getInstance();
 	            VertexBuffer vertexbuffer = tessellator.getBuffer();
 	            RenderHelper.disableStandardItemLighting();
-	            float f = ((float)tile.craftingCooldown.getValue()) / 100.0F;
+	            float f = (tile.craftingCooldown.getValue()) / 100.0F;
 	            if(f == 1.0F){
 	            	f = 0.98f;
 	            }
@@ -111,7 +110,7 @@ public class RenderTileFusionPedistal<T extends TileFusionPedistal> extends Tile
 	            
             	GlStateManager.rotate((float)(((ClientEventHandler.elapsedTicks * 2))) % 360, 0, 1, 0);
 
-	            for (int i = 0; (float)i < (f + f * f) / 2.0F * 60.0F; ++i)
+	            for (int i = 0; i < (f + f * f) / 2.0F * 60.0F; ++i)
 	            {
 	                GlStateManager.rotate(random.nextFloat() * 360.0F, 1.0F, 0.0F, 0.0F);
 	                GlStateManager.rotate(random.nextFloat() * 360.0F, 0.0F, 1.0F, 0.0F);
@@ -136,10 +135,10 @@ public class RenderTileFusionPedistal<T extends TileFusionPedistal> extends Tile
 	                float alpha = 0.0F;
 	                vertexbuffer.begin(6, DefaultVertexFormats.POSITION_COLOR);
 	                vertexbuffer.pos(0.0D, 0.0D, 0.0D).color(255, 255, 255, (int)(255.0F * (1.0F - f1))).endVertex();
-	                vertexbuffer.pos(-0.866D * (double)f3, (double)f2, (double)(-0.5F * f3)).color(red, green, blue, alpha).endVertex();
-	                vertexbuffer.pos(0.866D * (double)f3, (double)f2, (double)(-0.5F * f3)).color(red, green, blue, alpha).endVertex();
-	                vertexbuffer.pos(0.0D, (double)f2, (double)(1.0F * f3)).color(red, green, blue, alpha).endVertex();
-	                vertexbuffer.pos(-0.866D * (double)f3, (double)f2, (double)(-0.5F * f3)).color(red, green, blue, alpha).endVertex();
+	                vertexbuffer.pos(-0.866D * f3, f2, -0.5F * f3).color(red, green, blue, alpha).endVertex();
+	                vertexbuffer.pos(0.866D * f3, f2, -0.5F * f3).color(red, green, blue, alpha).endVertex();
+	                vertexbuffer.pos(0.0D, f2, 1.0F * f3).color(red, green, blue, alpha).endVertex();
+	                vertexbuffer.pos(-0.866D * f3, f2, -0.5F * f3).color(red, green, blue, alpha).endVertex();
 	                tessellator.draw();
 	            }
 

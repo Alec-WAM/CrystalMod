@@ -49,7 +49,6 @@ import net.minecraft.client.audio.SoundEventAccessor;
 import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.gui.inventory.GuiScreenHorseInventory;
@@ -260,7 +259,7 @@ public class ClientEventHandler {
 
         fov = net.minecraftforge.client.ForgeHooksClient.getFOVModifier(Minecraft.getMinecraft().entityRenderer, entity, blockState, event.getPartialTicks(), fov);
         
-        Project.gluPerspective(fov, (float)Minecraft.getMinecraft().displayWidth / (float)Minecraft.getMinecraft().displayHeight, 0.05F, (float)(Minecraft.getMinecraft().gameSettings.renderDistanceChunks * 16) * 2.0F);
+        Project.gluPerspective(fov, (float)Minecraft.getMinecraft().displayWidth / (float)Minecraft.getMinecraft().displayHeight, 0.05F, Minecraft.getMinecraft().gameSettings.renderDistanceChunks * 16 * 2.0F);
         GlStateManager.matrixMode(5888);
         GlStateManager.loadIdentity();
 
@@ -293,9 +292,9 @@ public class ClientEventHandler {
             RenderHelper.enableStandardItemLighting();
             GlStateManager.popMatrix();
             
-            int i = CrystalMod.proxy.getClientWorld().getCombinedLight(new BlockPos(abstractclientplayer.posX, abstractclientplayer.posY + (double)abstractclientplayer.getEyeHeight(), abstractclientplayer.posZ), 0);
-            float f = (float)(i & 65535);
-            float f1 = (float)(i >> 16);
+            int i = CrystalMod.proxy.getClientWorld().getCombinedLight(new BlockPos(abstractclientplayer.posX, abstractclientplayer.posY + abstractclientplayer.getEyeHeight(), abstractclientplayer.posZ), 0);
+            float f = i & 65535;
+            float f1 = i >> 16;
             OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, f, f1);
             
             EntityPlayerSP entityplayerspIn = (EntityPlayerSP)abstractclientplayer;
@@ -328,11 +327,11 @@ public class ClientEventHandler {
             GlStateManager.translate(0.3, -height/2, -0.1);
             
             AbstractClientPlayer entitylivingbaseIn = (AbstractClientPlayer) CrystalMod.proxy.getClientPlayer();
-            double d0 = entitylivingbaseIn.prevChasingPosX + (entitylivingbaseIn.chasingPosX - entitylivingbaseIn.prevChasingPosX) * (double)event.getPartialTicks() - (entitylivingbaseIn.prevPosX + (entitylivingbaseIn.posX - entitylivingbaseIn.prevPosX) * (double)event.getPartialTicks());
-            double d2 = entitylivingbaseIn.prevChasingPosZ + (entitylivingbaseIn.chasingPosZ - entitylivingbaseIn.prevChasingPosZ) * (double)event.getPartialTicks() - (entitylivingbaseIn.prevPosZ + (entitylivingbaseIn.posZ - entitylivingbaseIn.prevPosZ) * (double)event.getPartialTicks());
+            double d0 = entitylivingbaseIn.prevChasingPosX + (entitylivingbaseIn.chasingPosX - entitylivingbaseIn.prevChasingPosX) * event.getPartialTicks() - (entitylivingbaseIn.prevPosX + (entitylivingbaseIn.posX - entitylivingbaseIn.prevPosX) * event.getPartialTicks());
+            double d2 = entitylivingbaseIn.prevChasingPosZ + (entitylivingbaseIn.chasingPosZ - entitylivingbaseIn.prevChasingPosZ) * event.getPartialTicks() - (entitylivingbaseIn.prevPosZ + (entitylivingbaseIn.posZ - entitylivingbaseIn.prevPosZ) * event.getPartialTicks());
             float fYaw2 = entitylivingbaseIn.prevRenderYawOffset + (entitylivingbaseIn.renderYawOffset - entitylivingbaseIn.prevRenderYawOffset) * event.getPartialTicks();
-            double d3 = (double)MathHelper.sin(fYaw2 * (float)Math.PI / 180.0F);
-            double d4 = (double)(-MathHelper.cos(fYaw2 * (float)Math.PI / 180.0F));
+            double d3 = MathHelper.sin(fYaw2 * (float)Math.PI / 180.0F);
+            double d4 = (-MathHelper.cos(fYaw2 * (float)Math.PI / 180.0F));
             float f3 = (float)(d0 * d4 - d2 * d3) * (120.0F);
             
             float angle = -f3 / 2.0F;
@@ -496,10 +495,11 @@ public class ClientEventHandler {
     }
 
     // RenderGlobal.drawBlockDamageTexture
-    public void drawBlockDamageTexture(Tessellator tessellatorIn, VertexBuffer vertexBuffer, Entity entityIn, float partialTicks, World world, List<BlockPos> blocks) {
-    	double d0 = entityIn.lastTickPosX + (entityIn.posX - entityIn.lastTickPosX) * (double) partialTicks;
-    	double d1 = entityIn.lastTickPosY + (entityIn.posY - entityIn.lastTickPosY) * (double) partialTicks;
-    	double d2 = entityIn.lastTickPosZ + (entityIn.posZ - entityIn.lastTickPosZ) * (double) partialTicks;
+    @SuppressWarnings("deprecation")
+	public void drawBlockDamageTexture(Tessellator tessellatorIn, VertexBuffer vertexBuffer, Entity entityIn, float partialTicks, World world, List<BlockPos> blocks) {
+    	double d0 = entityIn.lastTickPosX + (entityIn.posX - entityIn.lastTickPosX) * partialTicks;
+    	double d1 = entityIn.lastTickPosY + (entityIn.posY - entityIn.lastTickPosY) * partialTicks;
+    	double d2 = entityIn.lastTickPosZ + (entityIn.posZ - entityIn.lastTickPosZ) * partialTicks;
 
     	TextureManager renderEngine = Minecraft.getMinecraft().renderEngine;
     	float curBlockDamageMP = ObfuscationReflectionHelper.getPrivateValue(PlayerControllerMP.class, Minecraft.getMinecraft().playerController, 4);
@@ -526,9 +526,9 @@ public class ClientEventHandler {
     	vertexBuffer.noColor();
 
     	for(BlockPos blockpos : blocks) {
-    		double d3 = (double) blockpos.getX() - d0;
-    		double d4 = (double) blockpos.getY() - d1;
-    		double d5 = (double) blockpos.getZ() - d2;
+    		blockpos.getX();
+    		blockpos.getY();
+    		blockpos.getZ();
     		Block block = world.getBlockState(blockpos).getBlock();
     		TileEntity te = world.getTileEntity(blockpos);
     		boolean hasBreak = block instanceof BlockChest || block instanceof BlockEnderChest
@@ -566,7 +566,7 @@ public class ClientEventHandler {
     	if(world == null)return;
     	ISound sound = event.getSound();
     	//if(sound instanceof ITickableSound)return;
-    	AxisAlignedBB bb = new AxisAlignedBB((double)sound.getXPosF(), (double)sound.getYPosF(), (double)sound.getZPosF(), (double)sound.getXPosF(), (double)sound.getYPosF(), (double)sound.getZPosF()).expand(16, 16, 16);
+    	AxisAlignedBB bb = new AxisAlignedBB(sound.getXPosF(), sound.getYPosF(), sound.getZPosF(), sound.getXPosF(), sound.getYPosF(), sound.getZPosF()).expand(16, 16, 16);
     	List<TileSoundMuffler> mufflers = BlockUtil.searchBoxForTiles(world, bb, TileSoundMuffler.class, null);
     	for(TileSoundMuffler muffler : mufflers){
     		if(muffler.isSoundInList(sound.getSoundLocation())){
@@ -696,10 +696,10 @@ public class ClientEventHandler {
 	            GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
 	            float alpha = 0.8f;
 	            vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
-	            vertexbuffer.pos((double)left, (double)bottom, z).tex(u, maxV).color(1, 1, 1, alpha).endVertex();
-	            vertexbuffer.pos((double)right, (double)bottom, z).tex(maxU, maxV).color(1, 1, 1, alpha).endVertex();
-	            vertexbuffer.pos((double)right, (double)top, z).tex(maxU, v).color(1, 1, 1, alpha).endVertex();
-	            vertexbuffer.pos((double)left, (double)top, z).tex(u, v).color(1, 1, 1, alpha).endVertex();
+	            vertexbuffer.pos(left, bottom, z).tex(u, maxV).color(1, 1, 1, alpha).endVertex();
+	            vertexbuffer.pos(right, bottom, z).tex(maxU, maxV).color(1, 1, 1, alpha).endVertex();
+	            vertexbuffer.pos(right, top, z).tex(maxU, v).color(1, 1, 1, alpha).endVertex();
+	            vertexbuffer.pos(left, top, z).tex(u, v).color(1, 1, 1, alpha).endVertex();
 	            tessellator.draw();
 	            GlStateManager.disableBlend();
 	            
@@ -723,9 +723,9 @@ public class ClientEventHandler {
     		float f3 = 0.0f;//(((float)extPlayer.getMaxScreenFlashTime() - extPlayer.getScreenFlashTime()) / (float)extPlayer.getMaxScreenFlashTime());
     		
     		if(extPlayer.getScreenFlashTime() > extPlayer.getMaxScreenFlashTime() / 2){
-    			f3 = (((float)extPlayer.getMaxScreenFlashTime() - extPlayer.getScreenFlashTime()) / (float)extPlayer.getMaxScreenFlashTime());
+    			f3 = (((float)extPlayer.getMaxScreenFlashTime() - extPlayer.getScreenFlashTime()) / extPlayer.getMaxScreenFlashTime());
     		} else {
-    			f3 = 1.0F - (((float)extPlayer.getMaxScreenFlashTime() - extPlayer.getScreenFlashTime()) / (float)extPlayer.getMaxScreenFlashTime());
+    			f3 = 1.0F - (((float)extPlayer.getMaxScreenFlashTime() - extPlayer.getScreenFlashTime()) / extPlayer.getMaxScreenFlashTime());
     		}
     		
             float f = 255;
@@ -738,10 +738,10 @@ public class ClientEventHandler {
             GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
             GlStateManager.color(f, f1, f2, f3);
             vertexbuffer.begin(7, DefaultVertexFormats.POSITION);
-            vertexbuffer.pos((double)left, (double)bottom, 0.0D).endVertex();
-            vertexbuffer.pos((double)right, (double)bottom, 0.0D).endVertex();
-            vertexbuffer.pos((double)right, (double)top, 0.0D).endVertex();
-            vertexbuffer.pos((double)left, (double)top, 0.0D).endVertex();
+            vertexbuffer.pos(left, bottom, 0.0D).endVertex();
+            vertexbuffer.pos(right, bottom, 0.0D).endVertex();
+            vertexbuffer.pos(right, top, 0.0D).endVertex();
+            vertexbuffer.pos(left, top, 0.0D).endVertex();
             tessellator.draw();
             GlStateManager.enableTexture2D();
             GlStateManager.disableBlend();
@@ -778,19 +778,13 @@ public class ClientEventHandler {
         GlStateManager.enableBlend();
         GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
         GlStateManager.pushMatrix();
-        float f1 = 4.0F;
-        float f2 = -1.0F;
-        float f3 = 1.0F;
-        float f4 = -1.0F;
-        float f5 = 1.0F;
-        float f6 = -0.5F;
         float f7 = -Minecraft.getMinecraft().player.rotationYaw / 64.0F;
         float f8 = Minecraft.getMinecraft().player.rotationPitch / 64.0F;
         vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
-        vertexbuffer.pos(-1.0D, -1.0D, -0.5D).tex((double)(4.0F + f7), (double)(4.0F + f8)).endVertex();
-        vertexbuffer.pos(1.0D, -1.0D, -0.5D).tex((double)(0.0F + f7), (double)(4.0F + f8)).endVertex();
-        vertexbuffer.pos(1.0D, 1.0D, -0.5D).tex((double)(0.0F + f7), (double)(0.0F + f8)).endVertex();
-        vertexbuffer.pos(-1.0D, 1.0D, -0.5D).tex((double)(4.0F + f7), (double)(0.0F + f8)).endVertex();
+        vertexbuffer.pos(-1.0D, -1.0D, -0.5D).tex(4.0F + f7, 4.0F + f8).endVertex();
+        vertexbuffer.pos(1.0D, -1.0D, -0.5D).tex(0.0F + f7, 4.0F + f8).endVertex();
+        vertexbuffer.pos(1.0D, 1.0D, -0.5D).tex(0.0F + f7, 0.0F + f8).endVertex();
+        vertexbuffer.pos(-1.0D, 1.0D, -0.5D).tex(4.0F + f7, 0.0F + f8).endVertex();
         tessellator.draw();
         GlStateManager.popMatrix();
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);

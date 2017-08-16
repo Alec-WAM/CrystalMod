@@ -1,7 +1,6 @@
 package alec_wam.CrystalMod.util.inventory;
 
 import alec_wam.CrystalMod.util.ItemStackTools;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.items.IItemHandler;
