@@ -55,6 +55,9 @@ public class BlockSpecialEngine extends EnumBlock<BlockSpecialEngine.SpecialEngi
 		if(tile !=null && tile instanceof TileInfiniteEngine){
 			active = ((TileInfiniteEngine)tile).isRunning;
 		}
+		if(tile !=null && tile instanceof TileFiniteEngine){
+			active = ((TileFiniteEngine)tile).isRunning;
+		}
         return state.withProperty(activeProperty, active);
     }
 	

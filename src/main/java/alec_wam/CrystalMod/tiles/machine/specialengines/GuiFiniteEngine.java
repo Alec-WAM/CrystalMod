@@ -1,5 +1,7 @@
 package alec_wam.CrystalMod.tiles.machine.specialengines;
 
+import java.awt.Color;
+
 import alec_wam.CrystalMod.util.Lang;
 import alec_wam.CrystalMod.util.client.RenderUtil;
 import net.minecraft.client.Minecraft;
@@ -19,14 +21,14 @@ public class GuiFiniteEngine extends GuiContainer {
 	}
 
 	public static final ResourceLocation GUI_TEXTURE = new ResourceLocation("crystalmod:textures/gui/machine/specialengine.png");
-	
+	private final Color BAR_COLOR = new Color(0x9700B5);
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		
 		int rf = engine.energyStorage.getEnergyStored();
 		int maxRF = engine.energyStorage.getMaxEnergyStored();
-		RenderUtil.renderPowerBar(82, 6, (int)zLevel, 12, 78, rf, maxRF, 0xbb00e0, 0x83009d);
+		RenderUtil.renderPowerBar(82, 6, (int)zLevel, 12, 78, rf, maxRF, BAR_COLOR.getRGB(), BAR_COLOR.darker().getRGB());
 		
 		int xAxis = (mouseX - (width - xSize) / 2);
 		int yAxis = (mouseY - (height - ySize) / 2);
