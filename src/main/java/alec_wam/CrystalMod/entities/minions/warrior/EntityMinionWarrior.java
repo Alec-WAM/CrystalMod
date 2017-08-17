@@ -7,11 +7,11 @@ import alec_wam.CrystalMod.entities.minions.EnumMovementState;
 import alec_wam.CrystalMod.entities.minions.MinionConstants;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.packets.PacketEntityMessage;
+import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.ChatUtil;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.Lang;
-import alec_wam.CrystalMod.util.NBTUtil;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.entity.player.EntityPlayer;
@@ -80,7 +80,7 @@ public class EntityMinionWarrior extends EntityMinionBase {
 			nbt.setTag("BackStack", backNBT);
 		}
 		if(wanderHome !=null){
-			NBTUtil.writeBlockPosToNBT(nbt, "WanderPos", wanderHome);
+			BlockUtil.writeBlockPosToNBT(nbt, "WanderPos", wanderHome);
 		}
 		return nbt;
 	}
@@ -97,7 +97,7 @@ public class EntityMinionWarrior extends EntityMinionBase {
 		if(nbt.hasKey("BackStack")){
 			backStack = ItemStackTools.loadFromNBT(nbt.getCompoundTag("BackStack"));
 		}
-		wanderHome = nbt.hasKey("WanderPos") ? NBTUtil.readBlockPosFromNBT(nbt, "WanderPos") : null;
+		wanderHome = nbt.hasKey("WanderPos") ? BlockUtil.readBlockPosFromNBT(nbt, "WanderPos") : null;
 	}
 	
 	public void switchItems(){

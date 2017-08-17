@@ -9,7 +9,7 @@ import com.google.common.collect.Lists;
 import com.mojang.authlib.GameProfile;
 
 import alec_wam.CrystalMod.Config;
-import alec_wam.CrystalMod.util.NBTUtil;
+import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.PlayerUtil;
 import alec_wam.CrystalMod.util.UUIDUtils;
 import alec_wam.CrystalMod.world.ModDimensions;
@@ -198,7 +198,7 @@ public class CubeManager extends WorldSavedData {
 			String name = cubeCompound.getString("OwnerName");
 			UUID uuid = UUIDUtils.fromString(cubeCompound.getString("OwnerUUID"));
 			GameProfile profile = new GameProfile(uuid, name);
-			BlockPos pos = NBTUtil.readBlockPosFromNBT(cubeCompound, "pos");
+			BlockPos pos = BlockUtil.readBlockPosFromNBT(cubeCompound, "pos");
 			positions.put(profile, pos);
 		}
 	}
@@ -235,7 +235,7 @@ public class CubeManager extends WorldSavedData {
 			NBTTagCompound cubeCompound = new NBTTagCompound();
 			cubeCompound.setString("OwnerName", cube.getKey().getName());
 			cubeCompound.setString("OwnerUUID", UUIDUtils.fromUUID(cube.getKey().getId()));
-			NBTUtil.writeBlockPosToNBT(cubeCompound, "pos", cube.getValue());
+			BlockUtil.writeBlockPosToNBT(cubeCompound, "pos", cube.getValue());
 			cubePositions.appendTag(cubeCompound);
 		}
 		

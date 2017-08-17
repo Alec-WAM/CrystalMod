@@ -12,9 +12,9 @@ import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.proxy.ClientProxy;
 import alec_wam.CrystalMod.tiles.pipes.TileEntityPipe;
 import alec_wam.CrystalMod.tiles.pipes.covers.CoverUtil.CoverData;
+import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemStackTools;
-import alec_wam.CrystalMod.util.Util;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -176,7 +176,7 @@ public class ItemPipeCover extends Item implements ICustomModel {
         Block block = Block.getBlockFromItem(itemStack.getItem());
         if (block == null) return;
 
-        String recipeId = "crystalmod:cover{" + Util.getNameForBlock(block) + "#" + itemStack.getItemDamage() + "}";
+        String recipeId = "crystalmod:cover{" + BlockUtil.getNameForBlock(block) + "#" + itemStack.getItemDamage() + "}";
 
         @SuppressWarnings("deprecation")
 		ItemStack cover = getCoverForBlock(block.getStateFromMeta(itemStack.getItemDamage()));
@@ -213,7 +213,7 @@ public class ItemPipeCover extends Item implements ICustomModel {
     }
     
     private static boolean isBlockBlacklisted(Block block) {
-        String blockName = Util.getNameForBlock(block);
+        String blockName = BlockUtil.getNameForBlock(block);
 
         if (blockName == null) return true;
 

@@ -6,7 +6,7 @@ import com.google.common.collect.Lists;
 import com.mojang.authlib.GameProfile;
 
 import alec_wam.CrystalMod.blocks.ModBlocks;
-import alec_wam.CrystalMod.util.NBTUtil;
+import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.UUIDUtils;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.inventory.IInventory;
@@ -66,8 +66,8 @@ public class PlayerCube  implements IInventoryChangedListener
 			compound.setString("OwnerUUID", UUIDUtils.fromUUID(owner.getId()));
 		}
 		compound.setBoolean("chunkLoaded", chunkLoaded);
-		NBTUtil.writeBlockPosToNBT(compound, "spawnBlock", spawnBlock);
-		NBTUtil.writeBlockPosToNBT(compound, "minBlock", minBlock);
+		BlockUtil.writeBlockPosToNBT(compound, "spawnBlock", spawnBlock);
+		BlockUtil.writeBlockPosToNBT(compound, "minBlock", minBlock);
 	}
 
 	public void readFromNBT(NBTTagCompound compound)
@@ -77,8 +77,8 @@ public class PlayerCube  implements IInventoryChangedListener
 			owner = new GameProfile(UUIDUtils.fromString(compound.getString("OwnerUUID")), compound.getString("OwnerName"));
 		}
 		this.chunkLoaded = compound.getBoolean("chunkLoaded");
-		this.spawnBlock = NBTUtil.readBlockPosFromNBT(compound, "spawnBlock");
-		this.minBlock = NBTUtil.readBlockPosFromNBT(compound, "minBlock");
+		this.spawnBlock = BlockUtil.readBlockPosFromNBT(compound, "spawnBlock");
+		this.minBlock = BlockUtil.readBlockPosFromNBT(compound, "minBlock");
 	}
 
 	public GameProfile getOwner()

@@ -8,9 +8,9 @@ import java.util.Map;
 
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.client.util.ModelUVAverager;
+import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.ReflectionWrapper;
-import alec_wam.CrystalMod.util.Util;
 import alec_wam.CrystalMod.util.client.RenderUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -48,7 +48,7 @@ public class CoverUtil {
 		
 		public void writeToNBT(NBTTagCompound nbt) {
             if (state != null) {
-                nbt.setString("block", Util.getNameForBlock(state.getBlock()));
+                nbt.setString("block", BlockUtil.getNameForBlock(state.getBlock()));
                 nbt.setByte("metadata", (byte) state.getBlock().getMetaFromState(state));
             }
         }

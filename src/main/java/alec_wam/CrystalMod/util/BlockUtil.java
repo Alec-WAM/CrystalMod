@@ -316,4 +316,31 @@ public class BlockUtil {
 		public abstract boolean isValid(World world, BlockPos pos, IBlockState state);
 		
 	}
+	
+	public static void writeBlockPosToNBT(NBTTagCompound compound, String tagName, BlockPos pos)
+	{
+		NBTTagCompound posPounds = new NBTTagCompound();
+		
+		posPounds.setInteger("posX", pos.getX());
+		posPounds.setInteger("posY", pos.getY());
+		posPounds.setInteger("posZ", pos.getZ());
+		
+		compound.setTag(tagName, posPounds);
+	}
+	
+	public static BlockPos readBlockPosFromNBT(NBTTagCompound compound, String tagName)
+	{
+		NBTTagCompound posPounds = compound.getCompoundTag(tagName);
+		
+		return new BlockPos(posPounds.getInteger("posX"),posPounds.getInteger("posY"),posPounds.getInteger("posZ"));
+	}
+
+	public static String getNameForBlock(Block block) {
+		Object obj = Block.REGISTRY.getNameForObject(block);
+		if (obj == null) {
+			return null;
+		}
+		return obj.toString();
+	}
+	
 }
