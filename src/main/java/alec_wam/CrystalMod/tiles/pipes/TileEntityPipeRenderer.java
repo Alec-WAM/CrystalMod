@@ -10,6 +10,7 @@ import alec_wam.CrystalMod.tiles.pipes.covers.CoverUtil.CoverData;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.texture.TextureMap;
@@ -25,15 +26,27 @@ public class TileEntityPipeRenderer extends TileEntitySpecialRenderer<TileEntity
 	@Override
     public void renderTileEntityAt(TileEntityPipe te, double x, double y, double z, float partialTicks, int destroyStage) {
 		GlStateManager.pushMatrix();
+		GlStateManager.color(1, 1, 1, 1);
+		
+		RenderHelper.disableStandardItemLighting();
+		GlStateManager.blendFunc(770, 771);
+		GlStateManager.enableBlend();
+		GlStateManager.disableCull();		
 		BlockPos pos = te.getPos();
     	Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+    	if (Minecraft.isAmbientOcclusionEnabled()) {
+			GlStateManager.shadeModel(GL11.GL_SMOOTH);
+		} else {
+			GlStateManager.shadeModel(GL11.GL_FLAT);
+		}
+    	
     	for(EnumFacing side : EnumFacing.VALUES){
     		if(te.getCoverData(side) !=null){
     			CoverData data = te.getCoverData(side);
     			IBlockAccess world = te.getWorld();
     			IBlockState state = data.getBlockState();
     			Tessellator tess = Tessellator.getInstance();
-    			VertexBuffer buffer = tess.getBuffer();
+    			VertexBuffer buffer = tess.getBuffer();    			
     			buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
     			AxisAlignedBB bounds = CoverUtil.getCoverBoundingBox(side, false);
     			buffer.setTranslation(x-pos.getX(), y-pos.getY(), z-pos.getZ());
@@ -42,9 +55,13 @@ public class TileEntityPipeRenderer extends TileEntitySpecialRenderer<TileEntity
     			if(te.containsPipeConnection(side))cutType = CoverCutter.hollowPipeLarge;
     			CoverRender.renderBakedCoverQuads(buffer, world, pos, state, side.getIndex(), bounds, cutType);
     			buffer.setTranslation(0, 0, 0);
-    			tess.draw();
+    			tess.draw();    			
     		}
     	}
+    	
+    	GlStateManager.disableBlend();
+		GlStateManager.enableCull();
         GlStateManager.popMatrix();
+		RenderHelper.enableStandardItemLighting();
     }
 }

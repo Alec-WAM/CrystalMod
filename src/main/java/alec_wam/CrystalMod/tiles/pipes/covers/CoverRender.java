@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
+import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.client.util.CustomBakedQuad;
 import alec_wam.CrystalMod.tiles.pipes.PipeBlockAccessWrapper;
 import alec_wam.CrystalMod.util.client.RenderUtil;
@@ -14,8 +15,8 @@ import net.minecraft.client.renderer.BlockRendererDispatcher;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -130,11 +131,12 @@ public class CoverRender {
         return false;
 	}
 	
+	public static final TextureAtlasSprite sideSprite = RenderUtil.getSprite(CrystalMod.resourceL("blocks/machine/machine_side"));
+    
 	public static List<CustomBakedQuad> sliceQuads(final List<CustomBakedQuad> quads, final int side, final AxisAlignedBB bounds) {
         final float[][] quadPos = new float[4][3];
         final float[] vecPos = new float[3];
         final boolean[] flat = new boolean[3];
-        RenderUtil.getTexture(Blocks.IRON_BLOCK.getDefaultState())/*TDTextures.COVER_SIDE*/;
         final List<CustomBakedQuad> finalQuads = new LinkedList<CustomBakedQuad>();
         for (final CustomBakedQuad quad : quads) {
             boolean flag3;
@@ -196,10 +198,10 @@ public class CoverRender {
                     }
                     u = MathHelper.clamp(u, 0.0f, 1.0f) * 16.0f;
                     v2 = MathHelper.clamp(v2, 0.0f, 1.0f) * 16.0f;
-                    u = quad.sprite.getInterpolatedU(u);
-                    v2 = quad.sprite.getInterpolatedV(v2);
+                    u = sideSprite.getInterpolatedU(u);
+                    v2 = sideSprite.getInterpolatedV(v2);
                     quad.vertices[k2].uv.set(u, v2);
-                    //quad.tintIndex = -1;
+                    quad.tintIndex = -1;
                 }
                 quad.vertices[k2].vec.set(quadPos[k2]);
             }
