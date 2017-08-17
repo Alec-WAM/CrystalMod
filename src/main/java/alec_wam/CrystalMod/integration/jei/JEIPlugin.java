@@ -55,7 +55,6 @@ public class JEIPlugin  extends BlankModPlugin {
 
 		registry.addRecipes(CrystalCraftingManager.getInstance().getRecipeList());
 
-		//TODO Add Crystal Furnace Recipe Handler
 		PressRecipeCategory.register(jeiHelpers, registry, guiHelper);
 		CauldronRecipeCategory.register(jeiHelpers, registry, guiHelper);
 		LiquidizerRecipeCategory.register(jeiHelpers, registry, guiHelper);
@@ -87,6 +86,10 @@ public class JEIPlugin  extends BlankModPlugin {
 		jeiHelpers.getIngredientBlacklist().addIngredientToBlacklist(new ItemStack(ModBlocks.crystalTreePlantRed));
 		jeiHelpers.getIngredientBlacklist().addIngredientToBlacklist(new ItemStack(ModBlocks.crystalTreePlantGreen));
 		jeiHelpers.getIngredientBlacklist().addIngredientToBlacklist(new ItemStack(ModBlocks.crystalTreePlantDark));
+		jeiHelpers.getIngredientBlacklist().addIngredientToBlacklist(new ItemStack(ModBlocks.glowBerryBlue));
+		jeiHelpers.getIngredientBlacklist().addIngredientToBlacklist(new ItemStack(ModBlocks.glowBerryRed));
+		jeiHelpers.getIngredientBlacklist().addIngredientToBlacklist(new ItemStack(ModBlocks.glowBerryGreen));
+		jeiHelpers.getIngredientBlacklist().addIngredientToBlacklist(new ItemStack(ModBlocks.glowBerryDark));
 		jeiHelpers.getIngredientBlacklist().addIngredientToBlacklist(new ItemStack(ModBlocks.cubeBlock));
 		jeiHelpers.getIngredientBlacklist().addIngredientToBlacklist(new ItemStack(ModBlocks.cubeCore));
 		jeiHelpers.getIngredientBlacklist().addIngredientToBlacklist(new ItemStack(ModBlocks.fakeLight, 1, LightType.LIGHT.getMeta()));

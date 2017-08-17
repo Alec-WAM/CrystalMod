@@ -136,6 +136,7 @@ public class Config {
 	public static int engine_vampire_maxattack = 16;
 	public static int advDispenser_cooldown = 40; //2 seconds
 	public static boolean crates_leaveOneItem = true;
+	public static boolean crates_useAllSides = false;
 	
 	public static boolean backpackDeathUpgradeConsume = false;
 	public static boolean hardmode_MaterialCrops = false;
@@ -300,6 +301,7 @@ public class Config {
     	engine_vampire_maxattack = cfg.get(CATEGORY_MACHINE, "Engine_Vampire_AttackAmt", engine_vampire_maxattack, "Amount of entites the vampire engine can attack at once").getInt();
     	advDispenser_cooldown = cfg.get(CATEGORY_MACHINE, "advDispenser_cooldown", advDispenser_cooldown, "Amount of ticks inbetween each click on the Advanced Dispenser").getInt();
     	crates_leaveOneItem = cfg.get(CATEGORY_BLOCKS, "crates_leaveOneItem", crates_leaveOneItem, "Set to true to leave one item in a crate when it is clicked.").getBoolean();
+    	crates_useAllSides = cfg.get(CATEGORY_BLOCKS, "crates_useAllSides", crates_useAllSides, "Set to true to allow the player to insert and remove items from a crate on all sides, not just the front.").getBoolean();
     	int regenIndex = cfg.get(CATEGORY_BLOCKS, "crystalClusterRegenType", crystalClusterRegenType.ordinal(), "0 = Idle (Cluster Regens when not in use) 1 = Empty (Once the cluster is completly drained it will regen until power is extracted again) 2 = Never (Clusters will never regen)").getInt(0);
     	crystalClusterRegenType = RegenType.values()[regenIndex % RegenType.values().length];
     	

@@ -864,6 +864,7 @@ death.attack.darkarang=%1$s was slain by %2$s
 death.attack.darkarang.item=%1$s was slain by %2$s using %3$s
 death.attack.dagger=%1$s was slain by %2$s
 death.attack.dagger.item=%1$s was slain by %2$s using %3$s
+death.attack.crystalmod.radiation=%1$s radiated away
 
 #--Crops
 item.crystalmod.materialseed.name=Material Seed

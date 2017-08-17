@@ -22,6 +22,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Enchantments;
@@ -172,10 +173,13 @@ public class BlockCrystalBerryBush extends BlockBush implements IGrowable, ICust
     	int count = 1 + rand.nextInt(2) + (fortune > 0 ? rand.nextInt(fortune + 1) : 0);
     	ItemStack crop = getCrop();
     	worldIn.setBlockState(pos, getDefaultState());
+    	double x = pos.getX() + 0.5 + (side.getFrontOffsetX() * 0.6);
+    	double y = pos.getY() + 0.25 + (side.getFrontOffsetY() * 0.6);
+    	double z = pos.getZ() + 0.5 + (side.getFrontOffsetZ() * 0.6);
     	if(ItemStackTools.isValid(crop)){
     		for (int i = 0; i < count; i++)
     		{
-    			ItemUtil.spawnItemInWorldWithoutMotion(worldIn, crop, pos);
+    			ItemUtil.spawnItemInWorldWithoutMotion(new EntityItem(worldIn, x, y, z, crop));
     		}
     	}
     	return true;

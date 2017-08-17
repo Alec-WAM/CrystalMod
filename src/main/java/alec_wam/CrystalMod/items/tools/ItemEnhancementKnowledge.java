@@ -61,8 +61,7 @@ public class ItemEnhancementKnowledge extends Item {
 	@SideOnly(Side.CLIENT)
     public void getSubItems(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> subItems)
     {
-        //TODO Add Loot generation
-		for(IEnhancement enhancement : EnhancementManager.getEnhancements()){
+        for(IEnhancement enhancement : EnhancementManager.getEnhancements()){
         	if(enhancement.requiresKnowledge())subItems.add(createItem(enhancement));
         }
     }

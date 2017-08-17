@@ -12,6 +12,7 @@ import alec_wam.CrystalMod.tiles.machine.IFacingTile;
 import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
+import alec_wam.CrystalMod.util.tool.ToolUtil;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -33,7 +34,7 @@ import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -161,6 +162,7 @@ public class BlockCrate extends EnumBlock<BlockCrate.CrateType> implements ICust
 			ItemStack playerItem = player.getHeldItem(hand);
 			ItemStack stored = crate.getStack();
 			boolean changed = false;
+			boolean isFront = Config.crates_useAllSides || side == crate.facing;
 			if(crate.isTimerActive()){
 				crate.resetTimer();
 				if(ItemStackTools.isValid(stored)){
@@ -187,7 +189,7 @@ public class BlockCrate extends EnumBlock<BlockCrate.CrateType> implements ICust
 							}
 							return true;
 						}
-					} else if(crate.getMode() == 1 && (ItemStackTools.isEmpty(playerItem) || ItemUtil.canCombine(playerItem, stored))){
+					} else if(crate.getMode() == 1 && isFront && (ItemStackTools.isEmpty(playerItem) || ItemUtil.canCombine(playerItem, stored))){
 						for (int slot = 0; slot < player.inventory.mainInventory.size(); slot++) {
 							ItemStack original = player.inventory.getStackInSlot(slot);
 							ItemStack newItem = crate.addItem(original);
@@ -196,7 +198,7 @@ public class BlockCrate extends EnumBlock<BlockCrate.CrateType> implements ICust
 							}
 							player.inventory.setInventorySlotContents(slot, newItem);
 						}
-					} else if(ItemStackTools.isValid(playerItem)){
+					} else if(ItemStackTools.isValid(playerItem) && isFront){
 						if (playerItem.getItem() == Item.getItemFromBlock(this) && playerItem.getMetadata() > crate.getBlockMetadata()) {
 							crate.setClick(0, 0, DOUBLE_CLICK_TIME);
 							
@@ -210,7 +212,7 @@ public class BlockCrate extends EnumBlock<BlockCrate.CrateType> implements ICust
 						}
 					}
 				}
-			} else if(ItemStackTools.isValid(playerItem)){
+			} else if(ItemStackTools.isValid(playerItem) && isFront){
 				crate.setClick(0, 1, DOUBLE_CLICK_TIME);
 				
 				playerItem = crate.addItem(playerItem);
@@ -233,7 +235,9 @@ public class BlockCrate extends EnumBlock<BlockCrate.CrateType> implements ICust
 			if(crate.isAbrupted()){
 				ItemStack stored = crate.getStack();
 				ItemStack held = player.getHeldItemMainhand();
-				if(ItemStackTools.isValid(stored)){
+				RayTraceResult ray = ToolUtil.rayTrace(world, player, false);
+				boolean inFront = Config.crates_useAllSides || ray.sideHit == crate.facing;
+				if(ItemStackTools.isValid(stored) && inFront){
 					if (crate.isTimerActive() && crate.getSelectedSlot() != player.inventory.currentItem && ItemStackTools.isEmpty(held) && crate.getMode() == 2 && !player.isSneaking()){
 						crate.resetTimer();
 					}else{
@@ -424,34 +428,23 @@ public class BlockCrate extends EnumBlock<BlockCrate.CrateType> implements ICust
 		return item;
 	}
 	
-	public static void dropItemInWorld(TileEntity source, EntityPlayer player, ItemStack stack, double speedfactor)
+	public static void dropItemInWorld(TileCrate source, EntityPlayer player, ItemStack stack, double speedfactor)
 	{
-		int hitOrientation = MathHelper.floor(player.rotationYaw * 4.0F / 360.0F + 0.5D) & 0x3;
-		double stackCoordX = 0.0D;double stackCoordY = 0.0D;double stackCoordZ = 0.0D;
-		switch (hitOrientation)
-		{
-		case 0: 
-			stackCoordX = source.getPos().getX() + 0.5D;
-			stackCoordY = source.getPos().getY() + 0.5D;
-			stackCoordZ = source.getPos().getZ() - 0.25D;
-			break;
-		case 1: 
-			stackCoordX = source.getPos().getX() + 1.25D;
-			stackCoordY = source.getPos().getY() + 0.5D;
-			stackCoordZ = source.getPos().getZ() + 0.5D;
-			break;
-		case 2: 
-			stackCoordX = source.getPos().getX() + 0.5D;
-			stackCoordY = source.getPos().getY() + 0.5D;
-			stackCoordZ = source.getPos().getZ() + 1.25D;
-			break;
-		case 3: 
-			stackCoordX = source.getPos().getX() - 0.25D;
-			stackCoordY = source.getPos().getY() + 0.5D;
-			stackCoordZ = source.getPos().getZ() + 0.5D;
-		}
+		EnumFacing facing = EnumFacing.getFront(source.getFacing());
+		double stackCoordX = source.getPos().getX() + 0.5 + (facing.getFrontOffsetX() * 0.6);
+		double stackCoordY = source.getPos().getY() + 0.5 + (facing.getFrontOffsetY() * 0.6);
+		double stackCoordZ = source.getPos().getZ() + 0.5 + (facing.getFrontOffsetZ() * 0.6);
 		EntityItem droppedEntity = new EntityItem(source.getWorld(), stackCoordX, stackCoordY, stackCoordZ, stack);
-		if (player != null)
+		
+		Vec3d motion = new Vec3d(facing.getFrontOffsetX() * speedfactor, facing.getFrontOffsetY() * speedfactor, facing.getFrontOffsetZ() * speedfactor);
+		motion.normalize();
+		droppedEntity.motionX = motion.xCoord;
+		droppedEntity.motionY = motion.yCoord;
+		droppedEntity.motionZ = motion.zCoord;
+		double offset = 0.25D;
+		droppedEntity.setVelocity(motion.xCoord * offset, motion.yCoord * offset, motion.zCoord * offset);
+		
+		/*if (player != null)
 		{
 			Vec3d motion = new Vec3d(player.posX - stackCoordX, player.posY - stackCoordY, player.posZ - stackCoordZ);
 			motion.normalize();
@@ -460,10 +453,10 @@ public class BlockCrate extends EnumBlock<BlockCrate.CrateType> implements ICust
 			droppedEntity.motionZ = motion.zCoord;
 			double offset = 0.25D;
 			droppedEntity.setVelocity(motion.xCoord * offset, motion.yCoord * offset, motion.zCoord * offset);
-		}
-		droppedEntity.motionX *= speedfactor;
-		droppedEntity.motionY *= speedfactor;
-		droppedEntity.motionZ *= speedfactor;
+		}*/
+		//droppedEntity.motionX *= speedfactor;
+		//droppedEntity.motionY *= speedfactor;
+		//droppedEntity.motionZ *= speedfactor;
 
 		if(!source.getWorld().isRemote)source.getWorld().spawnEntity(droppedEntity);
 	}

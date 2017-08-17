@@ -362,7 +362,6 @@ public class GuidePages {
 		NonNullList<ItemStack> ingotList = ItemUtil.getItemSubtypes(ModItems.ingots, ingotArray);
 		CrystalModAPI.ITEMS.registerChapter(new GuideChapter("crystalingots", new PageIcon("0", ingotList), new PageFurnace("smelt", ingotList)).setDisplayObject(ingotList));
 		
-		//TODO Move Plate Page to Press Page
 		PlateType[] plateArray = new PlateType[]{PlateType.BLUE, PlateType.RED, PlateType.GREEN, PlateType.DARK};
 		NonNullList<ItemStack> plateList = ItemUtil.getItemSubtypes(ModItems.plates, plateArray);
 		CrystalModAPI.ITEMS.registerChapter(new GuideChapter("metalplate", new PageIcon("main", plateList), new PagePress("press", plateList)).setDisplayObject(plateList));

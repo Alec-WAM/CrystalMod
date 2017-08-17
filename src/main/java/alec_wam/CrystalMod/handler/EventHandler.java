@@ -431,6 +431,18 @@ public class EventHandler {
     		  entity.entityDropItem(armor, 0);
     	  }
       }
+      if(entity instanceof EntityPlayer){
+    	  EntityPlayer player = (EntityPlayer)entity;
+    	  ExtendedPlayer exPlayer = ExtendedPlayerProvider.getExtendedPlayer(player); 
+    	  if(exPlayer !=null){
+    		  exPlayer.redstoneCoreDelay = 0;
+    		  exPlayer.setRadiation(0);
+    		  NBTTagCompound nbt = new NBTTagCompound();
+    		  nbt.setInteger("Time", 0);
+    		  exPlayer.setLastRadiation(0);
+    		  CrystalModNetwork.sendTo(new PacketEntityMessage(player, "#UpdateRadiation#", nbt), (EntityPlayerMP)player);
+    	  }
+      }
     }
 	
 	@SubscribeEvent
@@ -750,14 +762,12 @@ public class EventHandler {
 								player.attackEntityFrom(new DamageSource("crystalmod.radiation").setDamageBypassesArmor(), 5.0F);
 							} else {
 								ePlayer.setRadiation(0);
+								ePlayer.redstoneCoreDelay = 0;
 							}
 						}
 					}
 				} else {
 					if(ePlayer.redstoneCoreDelay > 0)ePlayer.redstoneCoreDelay = 0;
-					if(ePlayer.getRadiation() > 0){
-						ePlayer.setRadiation(ePlayer.getRadiation()-1);
-					}
 				}
 				
 				boolean dirtyValue = ePlayer.getLastRadiation() != ePlayer.getRadiation() && player.getEntityWorld().getTotalWorldTime() % 20 == 0;

@@ -47,6 +47,13 @@ public class BlockCrystalReed extends Block implements net.minecraftforge.common
     }
     
     @Override
+	@Nullable
+    public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos)
+    {
+        return NULL_AABB;
+    }
+    
+    @Override
 	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand)
     {
         if (worldIn.getBlockState(pos.down()).getBlock() == this || this.checkForDrop(worldIn, pos, state))
