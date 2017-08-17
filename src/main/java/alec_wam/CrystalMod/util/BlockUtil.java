@@ -1,5 +1,7 @@
 package alec_wam.CrystalMod.util;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -9,9 +11,12 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
 import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.api.block.ICustomRaytraceBlock;
 import alec_wam.CrystalMod.client.container.ContainerMessageBase;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.packets.PacketGuiMessage;
+import alec_wam.CrystalMod.tiles.pipes.CollidableComponent;
+import alec_wam.CrystalMod.tiles.pipes.RaytraceResult;
 import alec_wam.CrystalMod.util.tool.ToolUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -27,6 +32,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
@@ -341,6 +347,90 @@ public class BlockUtil {
 			return null;
 		}
 		return obj.toString();
+	}
+	
+	//Custom Raytrace
+	public static RaytraceResult doRayTrace(World world, int x, int y, int z, EntityPlayer entityPlayer, ICustomRaytraceBlock block) {
+		List<RaytraceResult> allHits = doRayTraceAll(world, x, y, z, entityPlayer, block);
+		if (allHits == null) {
+			return null;
+		}
+		Vec3d origin = EntityUtil.getEyePosition(entityPlayer);
+		return RaytraceResult.getClosestHit(origin, allHits);
+	}
+
+	public static List<RaytraceResult> doRayTraceAll(World world, int x, int y, int z,	EntityPlayer entityPlayer, ICustomRaytraceBlock block) {
+		double pitch = Math.toRadians(entityPlayer.rotationPitch);
+		double yaw = Math.toRadians(entityPlayer.rotationYaw);
+
+		double dirX = -Math.sin(yaw) * Math.cos(pitch);
+		double dirY = -Math.sin(pitch);
+		double dirZ = Math.cos(yaw) * Math.cos(pitch);
+
+		double reachDistance = CrystalMod.proxy
+				.getReachDistanceForPlayer(entityPlayer);
+
+		Vec3d origin = EntityUtil.getEyePosition(entityPlayer);
+		Vec3d direction = origin.addVector(dirX * reachDistance, dirY
+				* reachDistance, dirZ * reachDistance);
+		return doRayTraceAll(world, x, y, z, origin, direction, entityPlayer, block);
+	}
+
+	public static RaytraceResult doRayTrace(World world, int x, int y, int z, Vec3d origin, Vec3d direction, EntityPlayer entityPlayer, ICustomRaytraceBlock block) {
+		List<RaytraceResult> allHits = doRayTraceAll(world, x, y, z, origin, direction, entityPlayer, block);
+		if (allHits == null) {
+			return null;
+		}
+		return RaytraceResult.getClosestHit(origin, allHits);
+	}
+	
+	protected static List<RaytraceResult> doRayTraceAll(World world, int x, int y,	int z, Vec3d origin, Vec3d direction, EntityPlayer player, ICustomRaytraceBlock block) {
+
+		BlockPos pos = new BlockPos(x, y, z);
+		List<RaytraceResult> hits = new ArrayList<RaytraceResult>();
+
+		if (player == null) {
+			player = CrystalMod.proxy.getClientPlayer();
+		}
+
+		Collection<CollidableComponent> components = new ArrayList<CollidableComponent>(block.getCollidableComponents(world, pos));
+		for (CollidableComponent component : components) {
+			block.setBounds(component.bound);
+			RayTraceResult hitPos = block.defaultRayTrace(world.getBlockState(pos), world, pos, origin, direction);
+			if (hitPos != null) {
+				hits.add(new RaytraceResult(component, hitPos));
+			}
+		}
+
+		block.resetBounds();
+
+		return hits;
+	}
+	
+	/**
+	 * Up is the default direction
+	 * @param bb
+	 * @param facing
+	 * @return rotated AxisAlignedBB
+	 */
+	public static AxisAlignedBB rotateBoundingBox(final AxisAlignedBB bb, EnumFacing facing){
+		AxisAlignedBB realBB = bb;
+		if(facing == EnumFacing.DOWN){
+			realBB = new AxisAlignedBB(bb.minX, 1.0F - bb.minY, bb.minZ, bb.maxX, 1.0F - bb.maxY, bb.maxZ);
+		}
+		if(facing == EnumFacing.NORTH){
+			realBB = new AxisAlignedBB(bb.minZ, bb.minX, 1.0F - bb.minY, bb.maxZ, bb.maxX, 1.0F - bb.maxY);
+		}
+		if(facing == EnumFacing.SOUTH){
+			realBB = new AxisAlignedBB(bb.minZ, bb.minX, bb.minY, bb.maxZ, bb.maxX, bb.maxY);
+		}
+		if(facing == EnumFacing.EAST){
+			realBB = new AxisAlignedBB(bb.minY, bb.minX, bb.minX, bb.maxY, bb.maxX, bb.maxZ);
+		}
+		if(facing == EnumFacing.WEST){
+			realBB = new AxisAlignedBB(1.0F - bb.minY, bb.minX, bb.minX, 1.0F - bb.maxY, bb.maxX, bb.maxZ);
+		}
+		return realBB;
 	}
 	
 }

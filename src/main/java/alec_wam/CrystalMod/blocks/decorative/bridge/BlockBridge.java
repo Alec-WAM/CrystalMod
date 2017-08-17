@@ -8,6 +8,7 @@ import java.util.List;
 import com.google.common.collect.Lists;
 
 import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.api.block.ICustomRaytraceBlock;
 import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.blocks.NormalBlockStateMapper;
@@ -22,6 +23,7 @@ import alec_wam.CrystalMod.util.ItemUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockPlanks;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -47,10 +49,11 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class BlockBridge extends BlockContainer implements ICustomModel {
+public class BlockBridge extends BlockContainer implements ICustomModel, ICustomRaytraceBlock {
 
 	public BlockBridge() {
 		super(Material.WOOD);
+		this.setSoundType(SoundType.WOOD);
 		this.setHardness(0.8F);
 		this.setResistance(4.0F);
 		this.setCreativeTab(CrystalMod.tabBlocks);
@@ -176,7 +179,7 @@ public class BlockBridge extends BlockContainer implements ICustomModel {
     		}
     		if(held.getItem() == Items.STICK){
     			if(side !=null && bridge.getBase(side) !=null){
-    				RaytraceResult result = doRayTrace(world, pos.getX(), pos.getY(), pos.getZ(), player);
+    				RaytraceResult result = BlockUtil.doRayTrace(world, pos.getX(), pos.getY(), pos.getZ(), player, this);
     				if(result !=null){
     					if(result.component !=null && result.component.data !=null){
     						if(result.component.data instanceof Integer){
@@ -255,7 +258,7 @@ public class BlockBridge extends BlockContainer implements ICustomModel {
     		return true;
     	}
     	TileBridge bridge = (TileBridge)tile;
-    	RaytraceResult result = doRayTrace(world, pos.getX(), pos.getY(), pos.getZ(), player);
+    	RaytraceResult result = BlockUtil.doRayTrace(world, pos.getX(), pos.getY(), pos.getZ(), player, this);
 		if(result !=null && result.component !=null){
 			EnumFacing side = result.component.dir;
 			if(result.component.data !=null){
@@ -315,10 +318,10 @@ public class BlockBridge extends BlockContainer implements ICustomModel {
 	public void addCollisionBoxToList(final IBlockState state, final World worldIn, final BlockPos pos, final AxisAlignedBB mask, final List<AxisAlignedBB> list, final Entity collidingEntity, boolean bool) {
     	Collection<CollidableComponent> bounds = getCollidableComponents(worldIn, pos);
     	for (CollidableComponent bnd : bounds) {
-    		setBlockBounds((float)bnd.bound.minX, (float)bnd.bound.minY, (float)bnd.bound.minZ, (float)bnd.bound.maxX, (float)bnd.bound.maxY, (float)bnd.bound.maxZ);
+    		setBounds(bnd.bound);
     		super.addCollisionBoxToList(state, worldIn, pos, mask, list, collidingEntity, bool);
     	}
-    	setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
+    	resetBounds();
     }
     
     @Override
@@ -327,8 +330,7 @@ public class BlockBridge extends BlockContainer implements ICustomModel {
     	EntityPlayer player = CrystalMod.proxy.getClientPlayer();
 		AxisAlignedBB minBB = new AxisAlignedBB(0, 0, 0, 1, 1, 1);
 
-		List<RaytraceResult> results = doRayTraceAll(world, pos.getX(),
-				pos.getY(), pos.getZ(), player);
+		List<RaytraceResult> results = BlockUtil.doRayTraceAll(world, pos.getX(),	pos.getY(), pos.getZ(), player, this);
 		Iterator<RaytraceResult> iter = results.iterator();
 		while (iter.hasNext()) {
 			CollidableComponent component = iter.next().component;
@@ -344,15 +346,13 @@ public class BlockBridge extends BlockContainer implements ICustomModel {
 			double BOTTOM_THICKNESS = 0.2D;
 			minBB = new AxisAlignedBB(0, 0, 0, 1, BOTTOM_THICKNESS, 1);
 		}
-		return new AxisAlignedBB(pos.getX() + minBB.minX, pos.getY()
-				+ minBB.minY, pos.getZ() + minBB.minZ, pos.getX() + minBB.maxX,
-				pos.getY() + minBB.maxY, pos.getZ() + minBB.maxZ);
+		return new AxisAlignedBB(pos.getX() + minBB.minX, pos.getY() + minBB.minY, pos.getZ() + minBB.minZ, pos.getX() + minBB.maxX, pos.getY() + minBB.maxY, pos.getZ() + minBB.maxZ);
     }
     
     @Override
     public RayTraceResult collisionRayTrace(IBlockState state, World world, BlockPos pos, Vec3d origin, Vec3d direction) {
 
-      RaytraceResult raytraceResult = doRayTrace(world, pos.getX(), pos.getY(), pos.getZ(), origin, direction, null);
+      RaytraceResult raytraceResult = BlockUtil.doRayTrace(world, pos.getX(), pos.getY(), pos.getZ(), origin, direction, null, this);
       net.minecraft.util.math.RayTraceResult ret = null;
       if (raytraceResult != null) {
         ret = raytraceResult.rayTraceResult;
@@ -363,74 +363,31 @@ public class BlockBridge extends BlockContainer implements ICustomModel {
 
       return ret;
     }
-    
-    public RaytraceResult doRayTrace(World world, int x, int y, int z, EntityPlayer entityPlayer) {
-		List<RaytraceResult> allHits = doRayTraceAll(world, x, y, z,
-				entityPlayer);
-		if (allHits == null) {
-			return null;
+	
+	private AxisAlignedBB bounds;
+
+	@Override
+	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source,
+			BlockPos pos) {
+		if(bounds == null){
+			double BOTTOM_THICKNESS = 0.2D;
+			return new AxisAlignedBB(0, 0, 0, 1, BOTTOM_THICKNESS, 1);
 		}
-		Vec3d origin = EntityUtil.getEyePosition(entityPlayer);
-		return RaytraceResult.getClosestHit(origin, allHits);
+		return bounds;
 	}
 
-	public List<RaytraceResult> doRayTraceAll(World world, int x, int y, int z,
-			EntityPlayer entityPlayer) {
-		double pitch = Math.toRadians(entityPlayer.rotationPitch);
-		double yaw = Math.toRadians(entityPlayer.rotationYaw);
-
-		double dirX = -Math.sin(yaw) * Math.cos(pitch);
-		double dirY = -Math.sin(pitch);
-		double dirZ = Math.cos(yaw) * Math.cos(pitch);
-
-		double reachDistance = CrystalMod.proxy
-				.getReachDistanceForPlayer(entityPlayer);
-
-		Vec3d origin = EntityUtil.getEyePosition(entityPlayer);
-		Vec3d direction = origin.addVector(dirX * reachDistance, dirY
-				* reachDistance, dirZ * reachDistance);
-		return doRayTraceAll(world, x, y, z, origin, direction, entityPlayer);
+	@Override
+	public TileEntity createNewTileEntity(World worldIn, int meta) {
+		return new TileBridge();
 	}
 
-	private RaytraceResult doRayTrace(World world, int x, int y, int z,
-			Vec3d origin, Vec3d direction, EntityPlayer entityPlayer) {
-		List<RaytraceResult> allHits = doRayTraceAll(world, x, y, z, origin,
-				direction, entityPlayer);
-		if (allHits == null) {
-			return null;
-		}
-		return RaytraceResult.getClosestHit(origin, allHits);
-	}
+	@SuppressWarnings("deprecation")
+	@Override
+	public RayTraceResult defaultRayTrace(IBlockState blockState, World world, BlockPos pos, Vec3d origin, Vec3d direction) {
+		return super.collisionRayTrace(blockState, world, pos, origin, direction);
+	}	
 
-	protected List<RaytraceResult> doRayTraceAll(World world, int x, int y,
-			int z, Vec3d origin, Vec3d direction, EntityPlayer player) {
-
-		BlockPos pos = new BlockPos(x, y, z);
-		List<RaytraceResult> hits = new ArrayList<RaytraceResult>();
-
-		if (player == null) {
-			player = CrystalMod.proxy.getClientPlayer();
-		}
-
-		Collection<CollidableComponent> components = new ArrayList<CollidableComponent>(getCollidableComponents(world, pos));
-		for (CollidableComponent component : components) {
-			setBlockBounds((float) component.bound.minX,
-					(float) component.bound.minY, (float) component.bound.minZ,
-					(float) component.bound.maxX, (float) component.bound.maxY,
-					(float) component.bound.maxZ);
-			@SuppressWarnings("deprecation")
-			RayTraceResult hitPos = super.collisionRayTrace(
-					world.getBlockState(pos), world, pos, origin, direction);
-			if (hitPos != null) {
-				hits.add(new RaytraceResult(component, hitPos));
-			}
-		}
-
-		setBlockBounds(0, 0, 0, 1, 1, 1);
-
-		return hits;
-	}
-
+	@Override
 	public List<CollidableComponent> getCollidableComponents(World world, BlockPos pos){
 		List<CollidableComponent> list = Lists.newArrayList();
 		double BOTTOM_THICKNESS = 0.2D;
@@ -539,27 +496,15 @@ public class BlockBridge extends BlockContainer implements ICustomModel {
 		
 		return list;
 	}
-	
-	private AxisAlignedBB bounds;
 
-	private void setBlockBounds(double f, double g, double h, double i,
-			double j, double k) {
-		bounds = new AxisAlignedBB(f, g, h, i, j, k);
+	@Override
+	public void setBounds(AxisAlignedBB bound) {
+		bounds = bound;
 	}
 
 	@Override
-	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source,
-			BlockPos pos) {
-		if(bounds == null){
-			double BOTTOM_THICKNESS = 0.2D;
-			return new AxisAlignedBB(0, 0, 0, 1, BOTTOM_THICKNESS, 1);
-		}
-		return bounds;
-	}
-
-	@Override
-	public TileEntity createNewTileEntity(World worldIn, int meta) {
-		return new TileBridge();
+	public void resetBounds() {
+		bounds = Block.FULL_BLOCK_AABB;
 	}
 
 }

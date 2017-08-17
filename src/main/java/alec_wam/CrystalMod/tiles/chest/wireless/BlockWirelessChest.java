@@ -1,6 +1,5 @@
 package alec_wam.CrystalMod.tiles.chest.wireless;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -11,6 +10,7 @@ import javax.annotation.Nullable;
 import com.google.common.collect.Lists;
 
 import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.api.block.ICustomRaytraceBlock;
 import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.items.ModItems;
@@ -27,6 +27,7 @@ import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.ProfileUtil;
 import alec_wam.CrystalMod.util.UUIDUtils;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockStateContainer;
@@ -57,7 +58,7 @@ import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class BlockWirelessChest extends BlockContainer implements ICustomModel 
+public class BlockWirelessChest extends BlockContainer implements ICustomModel, ICustomRaytraceBlock 
 {
     public BlockWirelessChest()
     {
@@ -144,7 +145,7 @@ public class BlockWirelessChest extends BlockContainer implements ICustomModel
         		}
         	}
         	EnumDyeColor color = ItemUtil.getDyeColor(stack);
-        	RaytraceResult result = doRayTrace(world, pos.getX(), pos.getY(), pos.getZ(), player);
+        	RaytraceResult result = BlockUtil.doRayTrace(world, pos.getX(), pos.getY(), pos.getZ(), player, this);
         	if(result !=null && color !=null){
         		if(result.component !=null){
         			CollidableComponent comp = result.component;
@@ -400,6 +401,20 @@ public class BlockWirelessChest extends BlockContainer implements ICustomModel
         return false;
     }
     
+    @SuppressWarnings("deprecation")
+	@Override
+    public float getPlayerRelativeBlockHardness(IBlockState state, EntityPlayer playerIn, World worldIn, BlockPos pos)
+    {
+    	TileEntity te = worldIn.getTileEntity(pos);
+    	if(te !=null && te instanceof TileWirelessChest){
+    		TileWirelessChest chest = (TileWirelessChest)te;
+    		if(!chest.isOwner(EntityPlayer.getUUID(playerIn.getGameProfile()))){
+    			return -1;
+    		}
+    	}
+    	return super.getPlayerRelativeBlockHardness(state, playerIn, worldIn, pos);
+    }
+    
     //RayTrace
     @Override
     @SideOnly(Side.CLIENT)
@@ -412,8 +427,7 @@ public class BlockWirelessChest extends BlockContainer implements ICustomModel
 		}
 		AxisAlignedBB minBB = new AxisAlignedBB(0.0625F, 0F, 0.0625F, 0.9375F, 0.875F, 0.9375F);
 
-		List<RaytraceResult> results = doRayTraceAll(world, pos.getX(),
-				pos.getY(), pos.getZ(), player);
+		List<RaytraceResult> results = BlockUtil.doRayTraceAll(world, pos.getX(), pos.getY(), pos.getZ(), player, this);
 		Iterator<RaytraceResult> iter = results.iterator();
 		while (iter.hasNext()) {
 			CollidableComponent component = iter.next().component;
@@ -436,7 +450,7 @@ public class BlockWirelessChest extends BlockContainer implements ICustomModel
     @Override
     public RayTraceResult collisionRayTrace(IBlockState state, World world, BlockPos pos, Vec3d origin, Vec3d direction) {
 
-      RaytraceResult raytraceResult = doRayTrace(world, pos.getX(), pos.getY(), pos.getZ(), origin, direction, null);
+      RaytraceResult raytraceResult = BlockUtil.doRayTrace(world, pos.getX(), pos.getY(), pos.getZ(), origin, direction, null, this);
       net.minecraft.util.math.RayTraceResult ret = null;
       if (raytraceResult != null) {
         ret = raytraceResult.rayTraceResult;
@@ -447,99 +461,8 @@ public class BlockWirelessChest extends BlockContainer implements ICustomModel
 
       return ret;
     }
-    
-    @SuppressWarnings("deprecation")
-	@Override
-    public float getPlayerRelativeBlockHardness(IBlockState state, EntityPlayer playerIn, World worldIn, BlockPos pos)
-    {
-    	TileEntity te = worldIn.getTileEntity(pos);
-    	if(te !=null && te instanceof TileWirelessChest){
-    		TileWirelessChest chest = (TileWirelessChest)te;
-    		if(!chest.isOwner(EntityPlayer.getUUID(playerIn.getGameProfile()))){
-    			return -1;
-    		}
-    	}
-    	return super.getPlayerRelativeBlockHardness(state, playerIn, worldIn, pos);
-    }
-    
-    public RaytraceResult doRayTrace(World world, int x, int y, int z, EntityPlayer entityPlayer) {
-		List<RaytraceResult> allHits = doRayTraceAll(world, x, y, z,
-				entityPlayer);
-		if (allHits == null) {
-			return null;
-		}
-		Vec3d origin = EntityUtil.getEyePosition(entityPlayer);
-		return RaytraceResult.getClosestHit(origin, allHits);
-	}
-
-	public List<RaytraceResult> doRayTraceAll(World world, int x, int y, int z,
-			EntityPlayer entityPlayer) {
-		double pitch = Math.toRadians(entityPlayer.rotationPitch);
-		double yaw = Math.toRadians(entityPlayer.rotationYaw);
-
-		double dirX = -Math.sin(yaw) * Math.cos(pitch);
-		double dirY = -Math.sin(pitch);
-		double dirZ = Math.cos(yaw) * Math.cos(pitch);
-
-		double reachDistance = CrystalMod.proxy
-				.getReachDistanceForPlayer(entityPlayer);
-
-		Vec3d origin = EntityUtil.getEyePosition(entityPlayer);
-		Vec3d direction = origin.addVector(dirX * reachDistance, dirY
-				* reachDistance, dirZ * reachDistance);
-		return doRayTraceAll(world, x, y, z, origin, direction, entityPlayer);
-	}
-
-	private RaytraceResult doRayTrace(World world, int x, int y, int z,
-			Vec3d origin, Vec3d direction, EntityPlayer entityPlayer) {
-		List<RaytraceResult> allHits = doRayTraceAll(world, x, y, z, origin,
-				direction, entityPlayer);
-		if (allHits == null) {
-			return null;
-		}
-		return RaytraceResult.getClosestHit(origin, allHits);
-	}
-
-	protected List<RaytraceResult> doRayTraceAll(World world, int x, int y,
-			int z, Vec3d origin, Vec3d direction, EntityPlayer player) {
-
-		BlockPos pos = new BlockPos(x, y, z);
-		TileEntity te = world.getTileEntity(pos);
-		if (!(te instanceof TileWirelessChest)) {
-			return null;
-		}
-		TileWirelessChest chest = (TileWirelessChest) te;
-		List<RaytraceResult> hits = new ArrayList<RaytraceResult>();
-
-		if (player == null) {
-			player = CrystalMod.proxy.getClientPlayer();
-		}
-
-		Collection<CollidableComponent> components = new ArrayList<CollidableComponent>(chest.getCollidableComponents());
-		for (CollidableComponent component : components) {
-			setBlockBounds((float) component.bound.minX,
-					(float) component.bound.minY, (float) component.bound.minZ,
-					(float) component.bound.maxX, (float) component.bound.maxY,
-					(float) component.bound.maxZ);
-			@SuppressWarnings("deprecation")
-			RayTraceResult hitPos = super.collisionRayTrace(
-					world.getBlockState(pos), world, pos, origin, direction);
-			if (hitPos != null) {
-				hits.add(new RaytraceResult(component, hitPos));
-			}
-		}
-
-		setBlockBounds(0.0625F, 0F, 0.0625F, 0.9375F, 0.875F, 0.9375F);
-
-		return hits;
-	}
 
 	private AxisAlignedBB bounds;
-
-	private void setBlockBounds(double f, double g, double h, double i,
-			double j, double k) {
-		bounds = new AxisAlignedBB(f, g, h, i, j, k);
-	}
 
 	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source,
@@ -548,5 +471,30 @@ public class BlockWirelessChest extends BlockContainer implements ICustomModel
 			return new AxisAlignedBB(0.0625F, 0F, 0.0625F, 0.9375F, 0.875F, 0.9375F);
 		}
 		return bounds;
+	}
+
+	@Override
+	public Collection<? extends CollidableComponent> getCollidableComponents(World world, BlockPos pos) {
+		TileEntity tile = world.getTileEntity(pos);
+		if(tile !=null && tile instanceof TileWirelessChest){
+			return ((TileWirelessChest)tile).getCollidableComponents();
+		}
+		return Lists.newArrayList();
+	}
+
+	@SuppressWarnings("deprecation")
+	@Override
+	public RayTraceResult defaultRayTrace(IBlockState blockState, World world, BlockPos pos, Vec3d origin, Vec3d direction) {
+		return super.collisionRayTrace(blockState, world, pos, origin, direction);
+	}
+
+	@Override
+	public void setBounds(AxisAlignedBB bound) {
+		bounds = bound;
+	}
+
+	@Override
+	public void resetBounds() {
+		bounds = Block.FULL_BLOCK_AABB;
 	}
 }

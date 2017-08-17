@@ -1,15 +1,29 @@
 package alec_wam.CrystalMod.tiles.fusion;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+
+import javax.annotation.Nullable;
+
+import com.google.common.collect.Lists;
+
 import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.api.block.ICustomRaytraceBlock;
 import alec_wam.CrystalMod.api.pedistals.IFusionPedistal;
 import alec_wam.CrystalMod.api.pedistals.IPedistal;
 import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.tiles.BlockStateFacing;
 import alec_wam.CrystalMod.tiles.machine.IFacingTile;
+import alec_wam.CrystalMod.tiles.pipes.CollidableComponent;
+import alec_wam.CrystalMod.tiles.pipes.RaytraceResult;
 import alec_wam.CrystalMod.util.BlockUtil;
+import alec_wam.CrystalMod.util.EntityUtil;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -17,6 +31,7 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
@@ -29,7 +44,10 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
@@ -37,9 +55,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.IItemHandler;
 
-public class BlockPedistal extends BlockContainer implements ICustomModel {
+public class BlockPedistal extends BlockContainer implements ICustomModel, ICustomRaytraceBlock {
 
-	//TODO Make custom hitboxes
 	public BlockPedistal() {
 		super(Material.ROCK);
 		this.setHardness(1f).setResistance(10F);
@@ -142,23 +159,29 @@ public class BlockPedistal extends BlockContainer implements ICustomModel {
 					return true;
 				}
 			} 
+			RaytraceResult result = BlockUtil.doRayTrace(worldIn, pos.getX(), pos.getY(), pos.getZ(), playerIn, this);
 			ItemStack pedistalStack = pedistal.getStack();
-			if(ItemStackTools.isValid(pedistalStack)){
-				ItemStack drop = ItemStackTools.safeCopy(pedistalStack);
-				pedistal.setStack(ItemStackTools.getEmptyStack());
-				boolean dropItem = true;
-				if(ItemStackTools.isEmpty(heldItem) && playerIn.isSneaking()){
-					playerIn.setHeldItem(hand, drop);
-					dropItem = false;
-				}
-				if(dropItem){
-					playerIn.inventory.addItemStackToInventory(drop);
-					if(!ItemStackTools.isEmpty(drop)){
-						ItemUtil.spawnItemInWorldWithRandomMotion(worldIn, drop, pos);
+			if(ItemStackTools.isValid(pedistalStack) && result !=null && result.component !=null){
+				if(result.component.data !=null && result.component.data instanceof Integer){
+					//Are we looking at the item? If so then remove the item from the pedestal
+					if(((Integer)result.component.data) == 1){
+						ItemStack drop = ItemStackTools.safeCopy(pedistalStack);
+						pedistal.setStack(ItemStackTools.getEmptyStack());
+						boolean dropItem = true;
+						if(ItemStackTools.isEmpty(heldItem) && playerIn.isSneaking()){
+							playerIn.setHeldItem(hand, drop);
+							dropItem = false;
+						}
+						if(dropItem){
+							playerIn.inventory.addItemStackToInventory(drop);
+							if(!ItemStackTools.isEmpty(drop)){
+								ItemUtil.spawnItemInWorldWithRandomMotion(worldIn, drop, pos);
+							}
+						}
+						worldIn.playSound(null, pos, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.BLOCKS, 0.5f, 0.85f);
+						return true;
 					}
 				}
-				worldIn.playSound(null, pos, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.BLOCKS, 0.5f, 0.85f);
-				return true;
 			}
 			return false;
 		}
@@ -238,6 +261,134 @@ public class BlockPedistal extends BlockContainer implements ICustomModel {
 			
 			return new ModelResourceLocation(baseLocation, builder.toString());
 		}
+	}
+	
+	//RayTrace
+	
+	@Override
+    public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn, boolean p_185477_7_)
+    {
+		TileEntity te = worldIn.getTileEntity(pos);
+        EnumFacing facing = EnumFacing.UP;
+        if (te !=null) {
+        	if(te instanceof IPedistal){
+        		facing = ((IPedistal)te).getRotation();
+        	}
+        }
+		for(final AxisAlignedBB bb : getPedistalBounds(facing)){
+			addCollisionBoxToList(pos, entityBox, collidingBoxes, bb);
+		}
+    }
+	
+    @Override
+    @SideOnly(Side.CLIENT)
+    public AxisAlignedBB getSelectedBoundingBox(IBlockState state, World world, BlockPos pos) {
+    	EntityPlayer player = CrystalMod.proxy.getClientPlayer();
+		AxisAlignedBB minBB = Block.FULL_BLOCK_AABB;
+
+		List<RaytraceResult> results = BlockUtil.doRayTraceAll(world, pos.getX(), pos.getY(), pos.getZ(), player, this);
+		Iterator<RaytraceResult> iter = results.iterator();
+		while (iter.hasNext()) {
+			CollidableComponent component = iter.next().component;
+			if (component == null) {
+				iter.remove();
+			}
+		}
+
+		RaytraceResult hit = RaytraceResult.getClosestHit(EntityUtil.getEyePosition(player), results);
+		if (hit != null && hit.component != null && hit.component.bound != null) {
+			minBB = hit.component.bound;
+		} else {
+			minBB = Block.FULL_BLOCK_AABB;
+		}
+		return new AxisAlignedBB(pos.getX() + minBB.minX, pos.getY()
+				+ minBB.minY, pos.getZ() + minBB.minZ, pos.getX() + minBB.maxX,
+				pos.getY() + minBB.maxY, pos.getZ() + minBB.maxZ);
+    }
+    
+    @Override
+    public RayTraceResult collisionRayTrace(IBlockState state, World world, BlockPos pos, Vec3d origin, Vec3d direction) {
+
+      RaytraceResult raytraceResult = BlockUtil.doRayTrace(world, pos.getX(), pos.getY(), pos.getZ(), origin, direction, null, this);
+      net.minecraft.util.math.RayTraceResult ret = null;
+      if (raytraceResult != null) {
+        ret = raytraceResult.rayTraceResult;
+        if (ret != null) {
+          ret.hitInfo = raytraceResult.component;
+        }
+      }
+
+      return ret;
+    }
+
+	private AxisAlignedBB bounds;
+
+	@Override
+	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source,
+			BlockPos pos) {
+		if(bounds == null){
+			return new AxisAlignedBB(0.0625F, 0F, 0.0625F, 0.9375F, 0.875F, 0.9375F);
+		}
+		return bounds;
+	}
+
+	@Override
+	public Collection<? extends CollidableComponent> getCollidableComponents(World world, BlockPos pos) {
+		TileEntity te = world.getTileEntity(pos);
+        EnumFacing facing = EnumFacing.UP;
+        boolean hasItem = false;
+        if (te !=null) {
+        	if(te instanceof IPedistal){
+        		hasItem = ItemStackTools.isValid(((IPedistal)te).getStack());
+        		facing = ((IPedistal)te).getRotation();
+        	}
+        }
+		
+		final List<CollidableComponent> collidables = new ArrayList<CollidableComponent>();
+		for(final AxisAlignedBB bb : getPedistalBounds(facing)){
+			collidables.add(new CollidableComponent(bb, null, 0));			
+		}
+		
+		//Do we have an Item in the pedestal?
+		if(hasItem){
+			AxisAlignedBB bb = new AxisAlignedBB(0.3, 0.3, 0.3, 0.7, 0.7, 0.7);
+			AxisAlignedBB realBB = bb.offset(facing.getFrontOffsetX() * 0.35, facing.getFrontOffsetY() * 0.35, facing.getFrontOffsetZ() * 0.35);
+			collidables.add(new CollidableComponent(realBB, null, 1));
+		}
+		return collidables;
+	}
+	
+	private List<AxisAlignedBB> getPedistalBounds(EnumFacing facing){
+		List<AxisAlignedBB> list = Lists.newArrayList();
+		List<AxisAlignedBB> bbs = Lists.newArrayList();
+		float pixel = 1.0F / 16.0F;
+		
+		bbs.add(new AxisAlignedBB(1 * pixel, 8 * pixel, 1 * pixel, 15 * pixel, 10 * pixel, 15 * pixel));
+		bbs.add(new AxisAlignedBB(3 * pixel, 7 * pixel, 3 * pixel, 13 * pixel, 8 * pixel, 13 * pixel));
+		bbs.add(new AxisAlignedBB(4 * pixel, 2 * pixel, 4 * pixel, 12 * pixel, 7 * pixel, 12 * pixel));
+		bbs.add(new AxisAlignedBB(3 * pixel, 1 * pixel, 3 * pixel, 13 * pixel, 2 * pixel, 13 * pixel));
+		bbs.add(new AxisAlignedBB(2 * pixel, 0 * pixel, 2 * pixel, 14 * pixel, 1 * pixel, 14 * pixel));
+		
+		for(final AxisAlignedBB bb : bbs){
+			list.add(BlockUtil.rotateBoundingBox(bb, facing));
+		}
+		return list;
+	}
+
+	@SuppressWarnings("deprecation")
+	@Override
+	public RayTraceResult defaultRayTrace(IBlockState blockState, World world, BlockPos pos, Vec3d origin, Vec3d direction) {
+		return super.collisionRayTrace(blockState, world, pos, origin, direction);
+	}
+
+	@Override
+	public void setBounds(AxisAlignedBB bound) {
+		bounds = bound;
+	}
+
+	@Override
+	public void resetBounds() {
+		bounds = Block.FULL_BLOCK_AABB;
 	}
 
 }
