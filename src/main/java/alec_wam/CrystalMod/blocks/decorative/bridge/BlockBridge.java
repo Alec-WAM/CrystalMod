@@ -9,6 +9,7 @@ import com.google.common.collect.Lists;
 
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.ICustomModel;
+import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.blocks.NormalBlockStateMapper;
 import alec_wam.CrystalMod.proxy.ClientProxy;
 import alec_wam.CrystalMod.tiles.machine.FakeTileState;
@@ -65,6 +66,7 @@ public class BlockBridge extends BlockContainer implements ICustomModel {
 	@SideOnly(Side.CLIENT)
 	public void initModel(){
 		ModelLoader.setCustomStateMapper(this, new NormalBlockStateMapper());
+		ModBlocks.initBasicModel(this);
 		ModelResourceLocation inv = new ModelResourceLocation(this.getRegistryName(), "inventory");
 		ClientProxy.registerCustomModel(inv, ModelBridge.INSTANCE);
 		ClientProxy.registerCustomModel(new ModelResourceLocation(this.getRegistryName(), "normal"), ModelBridge.INSTANCE);

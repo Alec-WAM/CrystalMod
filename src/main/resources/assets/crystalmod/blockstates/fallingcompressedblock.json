@@ -1,0 +1,11 @@
+{
+  "forge_marker": 1,
+  "variants": {
+    "normal": [{}],
+    "inventory": [{}],
+    "type": {
+      "gunpowder": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/compressed/gunpowder"} },
+	  "sugar": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/compressed/sugar"} }
+    }
+  }
+}

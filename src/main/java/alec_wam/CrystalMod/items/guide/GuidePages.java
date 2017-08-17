@@ -35,6 +35,7 @@ import alec_wam.CrystalMod.blocks.BlockCrystalIngot.CrystalIngotBlockType;
 import alec_wam.CrystalMod.blocks.BlockCrystalLog;
 import alec_wam.CrystalMod.blocks.BlockCrystalOre.CrystalOreType;
 import alec_wam.CrystalMod.blocks.BlockDecorative.DecorativeBlockType;
+import alec_wam.CrystalMod.blocks.BlockFallingCompressed.FallingCompressedBlockType;
 import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.blocks.crops.material.IMaterialCrop;
 import alec_wam.CrystalMod.blocks.crops.material.ItemMaterialSeed;
@@ -140,8 +141,8 @@ public class GuidePages {
 		
 		ItemStack charcoalBlock = new ItemStack(ModBlocks.compressed, 1, CompressedBlockType.CHARCOAL.getMeta());
 		ItemStack flintBlock = new ItemStack(ModBlocks.compressed, 1, CompressedBlockType.FLINT.getMeta());
-		ItemStack gunpowderBlock = new ItemStack(ModBlocks.compressed, 1, CompressedBlockType.GUNPOWDER.getMeta());
-		ItemStack sugarBlock = new ItemStack(ModBlocks.compressed, 1, CompressedBlockType.SUGAR.getMeta());
+		ItemStack gunpowderBlock = new ItemStack(ModBlocks.fallingCompressed, 1, FallingCompressedBlockType.GUNPOWDER.getMeta());
+		ItemStack sugarBlock = new ItemStack(ModBlocks.fallingCompressed, 1, FallingCompressedBlockType.SUGAR.getMeta());
 		ItemStack blazeRodBlock = new ItemStack(ModBlocks.blazeRodBlock);
 		NonNullList<ItemStack> compressedList = NonNullList.create();
 		compressedList.add(charcoalBlock);

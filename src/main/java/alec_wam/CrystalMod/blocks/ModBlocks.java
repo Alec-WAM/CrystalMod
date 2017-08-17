@@ -251,6 +251,7 @@ public class ModBlocks {
 	public static BlockAdvancedLamp advancedLamp;
 	public static BlockFakeLight fakeLight;
 	public static BlockCompressed compressed;
+	public static BlockFallingCompressed fallingCompressed;
 	public static BlockBlazeRod blazeRodBlock;	
 
 	public static BlockBasicTiles tileBasic;
@@ -468,6 +469,10 @@ public class ModBlocks {
 		registerTileEntity(TileEntityTank.class);
 
 		compressed = registerEnumBlock(new BlockCompressed(), "compressedblock");
+		fallingCompressed = new BlockFallingCompressed();
+		registerBlock(fallingCompressed, new ItemBlockMeta(fallingCompressed), "fallingcompressedblock");
+		ItemBlockMeta.setMappingProperty(fallingCompressed, BlockFallingCompressed.TYPE);
+		
 		blazeRodBlock = registerBlock(new BlockBlazeRod(), "blazerodblock");
 		GameRegistry.registerFuelHandler(new IFuelHandler() {
 

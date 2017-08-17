@@ -418,9 +418,9 @@ tile.crystalmod.crystalglasspane.dark.name=Dark Crystal Glass Pane
 tile.crystalmod.crystalglasspane.pure.name=Pure Crystal Glass Pane
 
 tile.crystalmod.compressedblock.flint.name=Flint Block
-tile.crystalmod.compressedblock.gunpowder.name=Compressed Gunpowder
 tile.crystalmod.compressedblock.charcoal.name=Charcoal Block
-tile.crystalmod.compressedblock.sugar.name=Sugar Cube
+tile.crystalmod.fallingcompressedblock.gunpowder.name=Compressed Gunpowder
+tile.crystalmod.fallingcompressedblock.sugar.name=Sugar Cube
 tile.crystalmod.blazerodblock.name=Blaze Rod Block
 
 tile.crystalmod.metalbars.dark_iron.name=Dark Iron Bars
@@ -659,6 +659,7 @@ tile.crystalmod.shieldrack.birch.name=Birch Shield Rack
 tile.crystalmod.shieldrack.jungle.name=Jungle Shield Rack
 tile.crystalmod.shieldrack.acacia.name=Acacia Shield Rack
 tile.crystalmod.shieldrack.darkoak.name=Dark Oak Shield Rack
+tile.crystalmod.bridge.name=Wooden Bridge
 
 tile.crystalmod.soundmuffler.name=Sound Muffler
 tile.crystalmod.particlethrower.name=Particle Thrower

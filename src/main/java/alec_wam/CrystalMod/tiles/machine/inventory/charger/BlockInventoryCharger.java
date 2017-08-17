@@ -45,7 +45,7 @@ public class BlockInventoryCharger extends BlockContainer implements ICustomMode
 		ModelLoader.setCustomStateMapper(this, new CustomBlockStateMapper());
 		for(ChargerBlockType type : ChargerBlockType.values()){
 			ResourceLocation baseLocation = new ResourceLocation("crystalmod", getRegistryName().getResourcePath() + "_" + type.getName());
-			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), type.getMeta(), new ModelResourceLocation(baseLocation, "inventory"));
+			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), type.getMeta(), new ModelResourceLocation(baseLocation, "facing=north"));
 		}
     }
 	
