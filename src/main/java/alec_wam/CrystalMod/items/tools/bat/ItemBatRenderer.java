@@ -10,6 +10,7 @@ import alec_wam.CrystalMod.client.model.dynamic.ICustomItemRenderer;
 import alec_wam.CrystalMod.util.client.RenderUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
@@ -65,11 +66,11 @@ public class ItemBatRenderer implements ICustomItemRenderer {
 			y = -0.5;
 		}
 		//GlStateManager.disableLighting();
-		GlStateManager.pushAttrib();
+		//GlStateManager.pushAttrib();
         //RenderHelper.enableStandardItemLighting();
 		renderWholeBat(stack, x, y, z);
-		//RenderHelper.disableStandardItemLighting();
-        GlStateManager.popAttrib();
+		GlStateManager.enableBlend();
+        //GlStateManager.popAttrib();
         //GlStateManager.enableLighting();
 		if(type == TransformType.GUI){
 			//RenderHelper.enableGUIStandardItemLighting();
