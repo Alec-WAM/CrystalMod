@@ -16,6 +16,7 @@ import net.minecraft.util.EnumFacing;
 public class TileCrate extends TileEntityMod implements IFacingTile, IMessageHandler {
 
 	public EnumFacing facing = EnumFacing.NORTH;
+	public int rotation = 0;
 	/** a timer used to determine if the player double clicked */
 	private int doubleClickTimer, selectedSlot, mode;
 	private int lastClicked, lastClickedExpected = -1;
@@ -36,6 +37,7 @@ public class TileCrate extends TileEntityMod implements IFacingTile, IMessageHan
 	public void writeCustomNBT(NBTTagCompound nbt){
 		super.writeCustomNBT(nbt);
 		nbt.setInteger("Facing", getFacing());
+		nbt.setInteger("Rotation", rotation);
 		if(ItemStackTools.isValid(storedStack)){
 			NBTTagCompound stackNBT = storedStack.serializeNBT();
 			stackNBT.setInteger("StackSize", ItemStackTools.getStackSize(storedStack));
@@ -49,6 +51,10 @@ public class TileCrate extends TileEntityMod implements IFacingTile, IMessageHan
 		if(nbt.hasKey("Facing"))setFacing(nbt.getInteger("Facing"));
 		else {
 			setFacing(EnumFacing.NORTH.getIndex());
+		}
+		if(nbt.hasKey("Rotation"))rotation = nbt.getInteger("Rotation");
+		else {
+			rotation = 0;
 		}
 		if(nbt.hasKey("StoredItem")){
 			NBTTagCompound stackNBT = nbt.getCompoundTag("StoredItem");

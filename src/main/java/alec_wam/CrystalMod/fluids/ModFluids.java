@@ -15,6 +15,7 @@ import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.items.ItemCrystal.CrystalType;
 import alec_wam.CrystalMod.items.ItemIngot;
 import alec_wam.CrystalMod.items.ModItems;
+import alec_wam.CrystalMod.util.Lang;
 import alec_wam.CrystalMod.util.ModLogger;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -26,7 +27,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.ForgeModContainer;
 import net.minecraftforge.fluids.BlockFluidBase;
@@ -92,10 +92,10 @@ public class ModFluids {
 		if(enderResult.wasRegistered()){
 			Block block = new BlockFluidEnder(fluidEnder, net.minecraft.block.material.Material.WATER);
 			ModBlocks.registerBlock(block, new ItemBlock(block){
-		    	@SuppressWarnings("deprecation")
+		    	@Override
 				public String getItemStackDisplayName(ItemStack stack)
 		        {
-		            return I18n.translateToLocal(this.getUnlocalizedNameInefficiently(stack)).trim();
+		            return Lang.translateToLocal(this.getUnlocalizedNameInefficiently(stack)).trim();
 		        }
     		}, fluidEnder.getName());
 		}
@@ -114,10 +114,10 @@ public class ModFluids {
 	public static BlockFluidBase registerClassicBlock(Fluid fluid) {
 	    BlockFluidBase block = new BlockCrystalFluid(fluid, net.minecraft.block.material.Material.WATER);
 	    return ModBlocks.registerBlock(block, new ItemBlock(block){
-			    	@SuppressWarnings("deprecation")
-					public String getItemStackDisplayName(ItemStack stack)
+	    	@Override
+			public String getItemStackDisplayName(ItemStack stack)
 			        {
-			            return I18n.translateToLocal(this.getUnlocalizedNameInefficiently(stack)).trim();
+			            return Lang.translateToLocal(this.getUnlocalizedNameInefficiently(stack)).trim();
 			        }
 	    		}, fluid.getName());
 	}
@@ -125,10 +125,10 @@ public class ModFluids {
 	public static BlockFluidBase registerMoltenBlock(Fluid fluid) {
 	    BlockFluidBase block = new BlockCrystalFluid(fluid, net.minecraft.block.material.Material.LAVA);
 	    return ModBlocks.registerBlock(block, new ItemBlock(block){
-	    	@SuppressWarnings("deprecation")
+	    	@Override
 			public String getItemStackDisplayName(ItemStack stack)
 	        {
-	            return I18n.translateToLocal(this.getUnlocalizedNameInefficiently(stack)).trim();
+	            return Lang.translateToLocal(this.getUnlocalizedNameInefficiently(stack)).trim();
 	        }
 		}, fluid.getName());
 	}

@@ -2,6 +2,7 @@ package alec_wam.CrystalMod.tiles.crate;
 
 import org.lwjgl.opengl.GL11;
 
+import alec_wam.CrystalMod.Config;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.client.RenderUtil;
@@ -59,16 +60,31 @@ public class RenderTileCrate<T extends TileCrate> extends TileEntitySpecialRende
 			}
 			GlStateManager.rotate(90*multi, 0, 1, 0);
 			GlStateManager.rotate(90*multiY, 1, 0, 0);
+			
+			GlStateManager.rotate(90 * tile.rotation, 0, 0, 1);
+			
 			GlStateManager.translate(0, 0, 1.03);
 
+			boolean gui = !(block ? Config.crates_3dBlock : Config.crates_3dItem);
 			GlStateManager.pushMatrix();
-			if(block){
-				GlStateManager.scale(1.3, 1.3, 1.3);
+			if(!gui){
 				GlStateManager.rotate(180, 0, 1, 0);
-				//GlStateManager.translate(0, 0, 0.1);
+				if(block){
+					GlStateManager.scale(1.3, 1.3, 1.3);
+				}
+			}
+			else{
+				if(block){
+					GlStateManager.scale(0.8, 0.8, 0.1);
+				}
+				else{
+					GlStateManager.translate(0, 0.01, 0);
+				}
 			}
 			ItemStack renderStack = ItemUtil.copy(tile.getStack(), 1);
-			RenderUtil.renderItem(renderStack, TransformType.FIXED);
+			if(gui)GlStateManager.disableDepth();
+			RenderUtil.renderItem(renderStack, gui ? TransformType.GUI : TransformType.FIXED);
+			if(gui)GlStateManager.enableDepth();
 			GlStateManager.popMatrix();
 			
 			

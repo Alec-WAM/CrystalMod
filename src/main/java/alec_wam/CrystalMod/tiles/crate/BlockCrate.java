@@ -29,11 +29,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumFacing.Axis;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockAccess;
@@ -313,12 +315,19 @@ public class BlockCrate extends EnumBlock<BlockCrate.CrateType> implements ICust
     public boolean rotateBlock(World world, BlockPos pos, EnumFacing axis)
     {
 		TileEntity te = world.getTileEntity(pos);
-        if(te !=null && te instanceof IFacingTile){
-        	IFacingTile tile = (IFacingTile)te;
+        if(te !=null && te instanceof TileCrate){
+        	TileCrate tile = (TileCrate)te;
+        	if(axis == tile.facing && axis.getAxis() == Axis.Y){
+        		tile.rotation++;
+        		tile.rotation%=4;
+            	BlockUtil.markBlockForUpdate(world, pos);
+            	return true;
+        	}
         	int next = tile.getFacing();
         	next++;
         	next%=6;
         	tile.setFacing(next);
+        	tile.rotation = 0;
         	BlockUtil.markBlockForUpdate(world, pos);
         	return true;
         }
@@ -430,35 +439,65 @@ public class BlockCrate extends EnumBlock<BlockCrate.CrateType> implements ICust
 	
 	public static void dropItemInWorld(TileCrate source, EntityPlayer player, ItemStack stack, double speedfactor)
 	{
-		EnumFacing facing = EnumFacing.getFront(source.getFacing());
-		double stackCoordX = source.getPos().getX() + 0.5 + (facing.getFrontOffsetX() * 0.6);
-		double stackCoordY = source.getPos().getY() + 0.5 + (facing.getFrontOffsetY() * 0.6);
-		double stackCoordZ = source.getPos().getZ() + 0.5 + (facing.getFrontOffsetZ() * 0.6);
-		EntityItem droppedEntity = new EntityItem(source.getWorld(), stackCoordX, stackCoordY, stackCoordZ, stack);
-		
-		Vec3d motion = new Vec3d(facing.getFrontOffsetX() * speedfactor, facing.getFrontOffsetY() * speedfactor, facing.getFrontOffsetZ() * speedfactor);
-		motion.normalize();
-		droppedEntity.motionX = motion.xCoord;
-		droppedEntity.motionY = motion.yCoord;
-		droppedEntity.motionZ = motion.zCoord;
-		double offset = 0.25D;
-		droppedEntity.setVelocity(motion.xCoord * offset, motion.yCoord * offset, motion.zCoord * offset);
-		
-		/*if (player != null)
-		{
-			Vec3d motion = new Vec3d(player.posX - stackCoordX, player.posY - stackCoordY, player.posZ - stackCoordZ);
+		if(Config.crates_useAllSides){
+			int hitOrientation = MathHelper.floor(player.rotationYaw * 4.0F / 360.0F + 0.5D) & 0x3;
+			double stackCoordX = 0.0D;double stackCoordY = 0.0D;double stackCoordZ = 0.0D;
+			switch (hitOrientation)
+			{
+			case 0: 
+				stackCoordX = source.getPos().getX() + 0.5D;
+				stackCoordY = source.getPos().getY() + 0.5D;
+				stackCoordZ = source.getPos().getZ() - 0.25D;
+				break;
+			case 1: 
+				stackCoordX = source.getPos().getX() + 1.25D;
+				stackCoordY = source.getPos().getY() + 0.5D;
+				stackCoordZ = source.getPos().getZ() + 0.5D;
+				break;
+			case 2: 
+				stackCoordX = source.getPos().getX() + 0.5D;
+				stackCoordY = source.getPos().getY() + 0.5D;
+				stackCoordZ = source.getPos().getZ() + 1.25D;
+				break;
+			case 3: 
+				stackCoordX = source.getPos().getX() - 0.25D;
+				stackCoordY = source.getPos().getY() + 0.5D;
+				stackCoordZ = source.getPos().getZ() + 0.5D;
+			}
+			EntityItem droppedEntity = new EntityItem(source.getWorld(), stackCoordX, stackCoordY, stackCoordZ, stack);
+			if (player != null)
+			{
+				Vec3d motion = new Vec3d(player.posX - stackCoordX, player.posY - stackCoordY, player.posZ - stackCoordZ);
+				motion.normalize();
+				droppedEntity.motionX = motion.xCoord;
+				droppedEntity.motionY = motion.yCoord;
+				droppedEntity.motionZ = motion.zCoord;
+				double offset = 0.25D;
+				droppedEntity.setVelocity(motion.xCoord * offset, motion.yCoord * offset, motion.zCoord * offset);
+			}
+			droppedEntity.motionX *= speedfactor;
+			droppedEntity.motionY *= speedfactor;
+			droppedEntity.motionZ *= speedfactor;
+
+			if(!source.getWorld().isRemote)source.getWorld().spawnEntity(droppedEntity);
+		}
+		else {
+			EnumFacing facing = EnumFacing.getFront(source.getFacing());
+			double stackCoordX = source.getPos().getX() + 0.5 + (facing.getFrontOffsetX() * 0.6);
+			double stackCoordY = source.getPos().getY() + 0.5 + (facing.getFrontOffsetY() * 0.6);
+			double stackCoordZ = source.getPos().getZ() + 0.5 + (facing.getFrontOffsetZ() * 0.6);
+			EntityItem droppedEntity = new EntityItem(source.getWorld(), stackCoordX, stackCoordY, stackCoordZ, stack);
+			
+			Vec3d motion = new Vec3d(facing.getFrontOffsetX() * speedfactor, facing.getFrontOffsetY() * speedfactor, facing.getFrontOffsetZ() * speedfactor);
 			motion.normalize();
 			droppedEntity.motionX = motion.xCoord;
 			droppedEntity.motionY = motion.yCoord;
 			droppedEntity.motionZ = motion.zCoord;
 			double offset = 0.25D;
 			droppedEntity.setVelocity(motion.xCoord * offset, motion.yCoord * offset, motion.zCoord * offset);
-		}*/
-		//droppedEntity.motionX *= speedfactor;
-		//droppedEntity.motionY *= speedfactor;
-		//droppedEntity.motionZ *= speedfactor;
 
-		if(!source.getWorld().isRemote)source.getWorld().spawnEntity(droppedEntity);
+			if(!source.getWorld().isRemote)source.getWorld().spawnEntity(droppedEntity);
+		}
 	}
     
 	@Override

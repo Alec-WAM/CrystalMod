@@ -13,7 +13,6 @@ import alec_wam.CrystalMod.tiles.WoodenBlockProperies;
 import alec_wam.CrystalMod.tiles.WoodenBlockProperies.WoodType;
 import alec_wam.CrystalMod.tiles.machine.FakeTileState;
 import alec_wam.CrystalMod.util.ItemStackTools;
-import alec_wam.CrystalMod.util.ModLogger;
 import alec_wam.CrystalMod.util.client.RenderUtil;
 import net.minecraft.block.BlockPlanks;
 import net.minecraft.block.state.IBlockState;
