@@ -62,6 +62,7 @@ import alec_wam.CrystalMod.items.guide.page.PageText;
 import alec_wam.CrystalMod.items.tools.ItemEnhancementKnowledge;
 import alec_wam.CrystalMod.items.tools.backpack.ItemBackpackNormal.CrystalBackpackType;
 import alec_wam.CrystalMod.items.tools.backpack.upgrade.ItemBackpackUpgrade.BackpackUpgrade;
+import alec_wam.CrystalMod.tiles.WoodenBlockProperies.WoodType;
 import alec_wam.CrystalMod.tiles.cases.BlockCase.EnumCaseType;
 import alec_wam.CrystalMod.tiles.chest.CrystalChestType;
 import alec_wam.CrystalMod.tiles.chest.wireless.WirelessChestHelper;
@@ -76,7 +77,6 @@ import alec_wam.CrystalMod.tiles.machine.power.redstonereactor.ItemReactorUpgrad
 import alec_wam.CrystalMod.tiles.machine.specialengines.BlockSpecialEngine.SpecialEngineType;
 import alec_wam.CrystalMod.tiles.machine.specialengines.ItemEngineCore.EngineCoreType;
 import alec_wam.CrystalMod.tiles.pipes.BlockPipe.PipeType;
-import alec_wam.CrystalMod.tiles.shieldrack.BlockShieldRack.WoodType;
 import alec_wam.CrystalMod.tiles.spawner.ItemMobEssence;
 import alec_wam.CrystalMod.tiles.tank.BlockTank.TankType;
 import alec_wam.CrystalMod.tiles.workbench.BlockCrystalWorkbench.WorkbenchType;

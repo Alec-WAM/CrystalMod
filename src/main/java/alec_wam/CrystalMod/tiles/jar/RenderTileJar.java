@@ -15,6 +15,8 @@ import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.client.model.dynamic.DynamicBaseModel;
 import alec_wam.CrystalMod.client.model.dynamic.ICustomItemRenderer;
+import alec_wam.CrystalMod.tiles.WoodenBlockProperies;
+import alec_wam.CrystalMod.tiles.WoodenBlockProperies.WoodType;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.client.RenderUtil;
 import net.minecraft.client.Minecraft;
@@ -141,8 +143,8 @@ public class RenderTileJar<T extends TileJar> extends TileEntitySpecialRenderer<
 		}
 	}
 	
-	public static IBakedModel getBakedJar(){
-		return Minecraft.getMinecraft().getBlockRendererDispatcher().getModelForState(ModBlocks.jar.getDefaultState());
+	public static IBakedModel getBakedJar(WoodType type){
+		return Minecraft.getMinecraft().getBlockRendererDispatcher().getModelForState(ModBlocks.jar.getDefaultState().withProperty(WoodenBlockProperies.WOOD, type));
 	}
 	
 	public static Vector3f getColorFromPotion(PotionType type){
@@ -388,7 +390,7 @@ public class RenderTileJar<T extends TileJar> extends TileEntitySpecialRenderer<
 			GlStateManager.rotate(180, 0, 1, 0);
 		}
 		
-		List<BakedQuad> listQuads = getBakedJar().getQuads(null, (EnumFacing)null, 0L);
+		List<BakedQuad> listQuads = getBakedJar(WoodType.byMetadata(stack.getItemDamage())).getQuads(null, (EnumFacing)null, 0L);
         
         Tessellator tessellator = Tessellator.getInstance();
         VertexBuffer vertexbuffer = tessellator.getBuffer();

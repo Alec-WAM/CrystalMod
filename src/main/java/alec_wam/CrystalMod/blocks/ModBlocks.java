@@ -675,11 +675,11 @@ public class ModBlocks {
 		registerBlock(darkIronRail, "reinforcedrail");
 
 		bridge = new BlockBridge();
-		registerBlock(bridge, "bridge");
+		registerEnumBlock(bridge, "bridge");
 		registerTileEntity(TileBridge.class);
 
 		jar = new BlockJar();
-		registerBlock(jar, "jar");
+		registerEnumBlock(jar, "jar");
 		registerTileEntity(TileJar.class);
 
 		shieldRack = new BlockShieldRack();

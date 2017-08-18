@@ -2,11 +2,18 @@ package alec_wam.CrystalMod.blocks.decorative.bridge;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.lwjgl.util.vector.Vector3f;
 
+import com.google.common.collect.Maps;
+
 import alec_wam.CrystalMod.client.model.dynamic.DelegatingDynamicItemAndBlockModel;
+import alec_wam.CrystalMod.tiles.WoodenBlockProperies;
+import alec_wam.CrystalMod.tiles.WoodenBlockProperies.WoodType;
 import alec_wam.CrystalMod.tiles.machine.FakeTileState;
+import alec_wam.CrystalMod.util.ItemStackTools;
+import alec_wam.CrystalMod.util.ModLogger;
 import alec_wam.CrystalMod.util.client.RenderUtil;
 import net.minecraft.block.BlockPlanks;
 import net.minecraft.block.state.IBlockState;
@@ -54,9 +61,14 @@ public class ModelBridge extends DelegatingDynamicItemAndBlockModel
     @Override
 	public List<BakedQuad> getGeneralQuads() {
         final List<BakedQuad> list = new ArrayList<BakedQuad>();
-        TextureAtlasSprite planks = RenderUtil.getTexture(Blocks.PLANKS.getDefaultState());
-        //TextureAtlasSprite log = RenderUtil.getSprite("minecraft:blocks/log_oak");
-        //TextureAtlasSprite logTop = RenderUtil.getSprite("minecraft:blocks/log_oak_top");
+        WoodType type = WoodType.OAK;
+        if(ItemStackTools.isValid(itemStack)){
+        	type = WoodType.byMetadata(itemStack.getMetadata());
+        } 
+        else if(state !=null){
+        	type = state.state.getValue(WoodenBlockProperies.WOOD);
+        }
+        TextureAtlasSprite planks = WoodenBlockProperies.getPlankTexture(type);
         Vector3f min = new Vector3f(0f, 16.0f*0.2f, 0f);
         Vector3f max = new Vector3f(16.0f, 16.0f*0.2f, 16.0f);
         BlockFaceUV uv = new BlockFaceUV(new float[] { 0.0f,0.0f, 16.0f, 16.0f }, 0);
@@ -325,7 +337,7 @@ public class ModelBridge extends DelegatingDynamicItemAndBlockModel
         return ItemCameraTransforms.DEFAULT;
     }
     
-    public static final ModelBridge ITEMMODEL = new ModelBridge();
+    public static final Map<Integer, ModelBridge> ITEMMODELS = Maps.newHashMap();
     
     static {
         ModelBridge.faceBakery = new FaceBakery();
@@ -338,7 +350,11 @@ public class ModelBridge extends DelegatingDynamicItemAndBlockModel
 
 	@Override
 	public IBakedModel handleItemState(ItemStack stack, World world, EntityLivingBase entity) {
-		return ITEMMODEL;
+		int meta = stack.getMetadata();
+		if(!ITEMMODELS.containsKey(meta)){
+			ITEMMODELS.put(meta, new ModelBridge(stack, world, entity));
+		}
+		return ITEMMODELS.get(stack.getMetadata());
 	}
 
 	

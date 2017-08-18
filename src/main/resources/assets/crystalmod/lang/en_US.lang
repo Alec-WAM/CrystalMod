@@ -649,7 +649,12 @@ tile.crystalmod.crystalcluster.blue.name=Blue Crystal Cluster
 tile.crystalmod.crystalcluster.red.name=Red Crystal Cluster
 tile.crystalmod.crystalcluster.green.name=Green Crystal Cluster
 tile.crystalmod.crystalcluster.dark.name=Dark Crystal Cluster
-tile.crystalmod.jar.name=Glass Jar
+tile.crystalmod.jar.oak.name=Glass Jar (Oak)
+tile.crystalmod.jar.spruce.name=Glass Jar (Spruce)
+tile.crystalmod.jar.birch.name=Glass Jar (Birch)
+tile.crystalmod.jar.jungle.name=Glass Jar (Jungle)
+tile.crystalmod.jar.acacia.name=Glass Jar (Acacia)
+tile.crystalmod.jar.darkoak.name=Glass Jar (Dark Oak)
 crystalmod.tooltip.jar.shulker=Shulker Lamp
 crystalmod.tooltip.jar.contains=Contains: %s/%s
 
@@ -659,7 +664,12 @@ tile.crystalmod.shieldrack.birch.name=Birch Shield Rack
 tile.crystalmod.shieldrack.jungle.name=Jungle Shield Rack
 tile.crystalmod.shieldrack.acacia.name=Acacia Shield Rack
 tile.crystalmod.shieldrack.darkoak.name=Dark Oak Shield Rack
-tile.crystalmod.bridge.name=Wooden Bridge
+tile.crystalmod.bridge.oak.name=Oak Wood Bridge
+tile.crystalmod.bridge.spruce.name=Spruce Wood Bridge
+tile.crystalmod.bridge.birch.name=Birch Wood Bridge
+tile.crystalmod.bridge.jungle.name=Jungle Wood Bridge
+tile.crystalmod.bridge.acacia.name=Acacia Wood Bridge
+tile.crystalmod.bridge.darkoak.name=Dark Oak Wood Bridge
 
 tile.crystalmod.soundmuffler.name=Sound Muffler
 tile.crystalmod.particlethrower.name=Particle Thrower

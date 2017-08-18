@@ -666,11 +666,11 @@ public class RenderUtil {
 		
 
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-		//GlStateManager.disableLighting();
-		//RenderHelper.enableStandardItemLighting();
+		GlStateManager.disableLighting();
+		RenderHelper.enableStandardItemLighting();
 		mc.getRenderItem().renderItem(itemStack, type);	
-		//RenderHelper.disableStandardItemLighting();
-		//GlStateManager.enableLighting();
+		RenderHelper.disableStandardItemLighting();
+		GlStateManager.enableLighting();
 		GlStateManager.popMatrix();
 	}
 	

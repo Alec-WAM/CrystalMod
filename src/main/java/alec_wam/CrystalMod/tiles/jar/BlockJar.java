@@ -7,11 +7,13 @@ import javax.annotation.Nullable;
 
 import com.google.common.collect.Lists;
 
+import alec_wam.CrystalMod.blocks.EnumBlock;
 import alec_wam.CrystalMod.blocks.ICustomModel;
-import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.packets.PacketTileMessage;
 import alec_wam.CrystalMod.proxy.ClientProxy;
+import alec_wam.CrystalMod.tiles.WoodenBlockProperies;
+import alec_wam.CrystalMod.tiles.WoodenBlockProperies.WoodType;
 import alec_wam.CrystalMod.tiles.machine.INBTDrop;
 import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.EntityUtil;
@@ -19,16 +21,19 @@ import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.Lang;
-import net.minecraft.block.BlockContainer;
+import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityShulkerBullet;
 import net.minecraft.init.Items;
 import net.minecraft.init.PotionTypes;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
@@ -40,6 +45,7 @@ import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -49,16 +55,17 @@ import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SuppressWarnings("deprecation")
-public class BlockJar extends BlockContainer implements ICustomModel {
+public class BlockJar extends EnumBlock<WoodenBlockProperies.WoodType> implements ITileEntityProvider, ICustomModel {
 
 	public BlockJar() {
-		super(Material.GLASS);
+		super(Material.GLASS, WoodenBlockProperies.WOOD, WoodType.class);
 		setHardness(0.8F);
 		setResistance(0.5F);
 		setCreativeTab(CreativeTabs.BREWING);
@@ -68,8 +75,14 @@ public class BlockJar extends BlockContainer implements ICustomModel {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void initModel(){
-		ModBlocks.initBasicModel(this);
-		RenderTileJar<TileJar> renderer = new RenderTileJar<TileJar>();
+		ModelLoader.setCustomStateMapper(this, new CustomBlockStateMapper());
+		RenderTileJar<TileJar> renderer = new RenderTileJar<TileJar>();		
+		for(WoodType type : WoodType.values()){
+			String nameOverride = getRegistryName().getResourcePath() + "_" + type.getName();
+			ResourceLocation baseLocation = nameOverride == null ? getRegistryName() : new ResourceLocation("crystalmod", nameOverride);
+			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), type.getMeta(), new ModelResourceLocation(baseLocation, "inventory"));
+			ClientProxy.registerItemRenderCustom(baseLocation.toString(), renderer);
+		}
 		ClientProxy.registerItemRenderCustom(getRegistryName().toString(), renderer);
 		ClientRegistry.bindTileEntitySpecialRenderer(TileJar.class, renderer);
 	}
@@ -367,5 +380,27 @@ public class BlockJar extends BlockContainer implements ICustomModel {
         	BlockUtil.markBlockForUpdate(world, pos);
         }
     }
+	
+	public static class CustomBlockStateMapper extends StateMapperBase
+	{
+		@Override
+		protected ModelResourceLocation getModelResourceLocation(IBlockState state)
+		{
+			WoodType type = state.getValue(WoodenBlockProperies.WOOD);
+			StringBuilder builder = new StringBuilder();
+			String nameOverride = null;
+			
+			nameOverride = state.getBlock().getRegistryName().getResourcePath() + "_" + type.getName();
+
+			if(builder.length() == 0)
+			{
+				builder.append("normal");
+			}
+
+			ResourceLocation baseLocation = nameOverride == null ? state.getBlock().getRegistryName() : new ResourceLocation("crystalmod", nameOverride);
+			
+			return new ModelResourceLocation(baseLocation, builder.toString());
+		}
+	}
 
 }

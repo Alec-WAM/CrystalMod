@@ -1,9 +1,10 @@
 package alec_wam.CrystalMod.tiles.shieldrack;
 
 import alec_wam.CrystalMod.blocks.EnumBlock;
-import alec_wam.CrystalMod.blocks.EnumBlock.IEnumMeta;
 import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.tiles.BlockStateFacing;
+import alec_wam.CrystalMod.tiles.WoodenBlockProperies;
+import alec_wam.CrystalMod.tiles.WoodenBlockProperies.WoodType;
 import alec_wam.CrystalMod.tiles.machine.IFacingTile;
 import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.ItemStackTools;
@@ -11,7 +12,6 @@ import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.tool.ToolUtil;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -27,7 +27,6 @@ import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumFacing.Axis;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -38,67 +37,10 @@ import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class BlockShieldRack extends EnumBlock<BlockShieldRack.WoodType> implements ITileEntityProvider, ICustomModel {
-
-	public static final PropertyEnum<WoodType> WOOD = PropertyEnum.<WoodType>create("wood", WoodType.class);
-	
-	public static enum WoodType implements IStringSerializable, IEnumMeta
-    {
-        OAK(0, "oak"),
-        SPRUCE(1, "spruce"),
-        BIRCH(2, "birch"),
-        JUNGLE(3, "jungle"),
-        ACACIA(4, "acacia"),
-        DARK_OAK(5, "darkoak");
-
-        private static final WoodType[] META_LOOKUP = new WoodType[values().length];
-        private final int meta;
-        private final String name;
-
-        private WoodType(int metaIn, String nameIn)
-        {
-            this.meta = metaIn;
-            this.name = nameIn;
-        }
-
-        @Override
-		public String toString()
-        {
-            return this.name;
-        }
-
-        public static WoodType byMetadata(int meta)
-        {
-            if (meta < 0 || meta >= META_LOOKUP.length)
-            {
-                meta = 0;
-            }
-
-            return META_LOOKUP[meta];
-        }
-
-        @Override
-		public String getName()
-        {
-            return this.name;
-        }
-
-        static
-        {
-            for (WoodType blockplanks$enumtype : values())
-            {
-                META_LOOKUP[blockplanks$enumtype.getMeta()] = blockplanks$enumtype;
-            }
-        }
-
-		@Override
-		public int getMeta() {
-			return this.meta;
-		}
-    }
+public class BlockShieldRack extends EnumBlock<WoodenBlockProperies.WoodType> implements ITileEntityProvider, ICustomModel {
 	
 	public BlockShieldRack() {
-		super(Material.WOOD, WOOD, WoodType.class);
+		super(Material.WOOD, WoodenBlockProperies.WOOD, WoodType.class);
 		setHardness(1.0F);
 		setCreativeTab(CreativeTabs.COMBAT);
 	}
@@ -117,7 +59,7 @@ public class BlockShieldRack extends EnumBlock<BlockShieldRack.WoodType> impleme
 	
 	@Override
     protected BlockStateContainer createBlockState() {
-        return new BlockStateFacing(this, WOOD);
+        return new BlockStateFacing(this, WoodenBlockProperies.WOOD);
     }
     
 	@Override
@@ -325,7 +267,7 @@ public class BlockShieldRack extends EnumBlock<BlockShieldRack.WoodType> impleme
 		@Override
 		protected ModelResourceLocation getModelResourceLocation(IBlockState state)
 		{
-			WoodType type = state.getValue(WOOD);
+			WoodType type = state.getValue(WoodenBlockProperies.WOOD);
 			StringBuilder builder = new StringBuilder();
 			String nameOverride = null;
 			

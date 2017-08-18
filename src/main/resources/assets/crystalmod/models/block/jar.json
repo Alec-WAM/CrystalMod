@@ -1,11 +1,6 @@
 {
     "__createdwith": "opl's Model Creator",
     "ambientocclusion": false,
-    "textures": {
-		"particle": "crystalmod:blocks/jarglass",
-        "glass": "crystalmod:blocks/jarglass",
-        "cork": "crystalmod:blocks/jarcork"
-    },
     "elements": [
         {
             "from": [3,0,3],

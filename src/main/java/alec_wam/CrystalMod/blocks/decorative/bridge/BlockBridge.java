@@ -9,10 +9,13 @@ import com.google.common.collect.Lists;
 
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.api.block.ICustomRaytraceBlock;
+import alec_wam.CrystalMod.blocks.EnumBlock;
 import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.blocks.NormalBlockStateMapper;
 import alec_wam.CrystalMod.proxy.ClientProxy;
+import alec_wam.CrystalMod.tiles.WoodenBlockProperies;
+import alec_wam.CrystalMod.tiles.WoodenBlockProperies.WoodType;
 import alec_wam.CrystalMod.tiles.machine.FakeTileState;
 import alec_wam.CrystalMod.tiles.pipes.CollidableComponent;
 import alec_wam.CrystalMod.tiles.pipes.RaytraceResult;
@@ -23,10 +26,12 @@ import alec_wam.CrystalMod.util.ItemUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockPlanks;
+import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -39,6 +44,7 @@ import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumFacing.Axis;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -49,10 +55,10 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class BlockBridge extends BlockContainer implements ICustomModel, ICustomRaytraceBlock {
+public class BlockBridge extends EnumBlock<WoodenBlockProperies.WoodType> implements ITileEntityProvider, ICustomModel, ICustomRaytraceBlock {
 
 	public BlockBridge() {
-		super(Material.WOOD);
+		super(Material.WOOD, WoodenBlockProperies.WOOD, WoodType.class);
 		this.setSoundType(SoundType.WOOD);
 		this.setHardness(0.8F);
 		this.setResistance(4.0F);
@@ -69,10 +75,13 @@ public class BlockBridge extends BlockContainer implements ICustomModel, ICustom
 	@SideOnly(Side.CLIENT)
 	public void initModel(){
 		ModelLoader.setCustomStateMapper(this, new NormalBlockStateMapper());
-		ModBlocks.initBasicModel(this);
-		ModelResourceLocation inv = new ModelResourceLocation(this.getRegistryName(), "inventory");
-		ClientProxy.registerCustomModel(inv, ModelBridge.INSTANCE);
-		ClientProxy.registerCustomModel(new ModelResourceLocation(this.getRegistryName(), "normal"), ModelBridge.INSTANCE);
+		for(WoodType type : WoodType.values()){
+			ResourceLocation baseLocation = getRegistryName();
+			ModelResourceLocation inv = new ModelResourceLocation(baseLocation, "inventory");
+			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), type.getMeta(), inv);
+			ClientProxy.registerCustomModel(inv, ModelBridge.INSTANCE);
+			ClientProxy.registerCustomModel(new ModelResourceLocation(baseLocation, "normal"), ModelBridge.INSTANCE);
+		}
 	}
 	
 	@Override
@@ -505,6 +514,28 @@ public class BlockBridge extends BlockContainer implements ICustomModel, ICustom
 	@Override
 	public void resetBounds() {
 		bounds = Block.FULL_BLOCK_AABB;
+	}
+	
+	public static class CustomBlockStateMapper extends StateMapperBase
+	{
+		@Override
+		protected ModelResourceLocation getModelResourceLocation(IBlockState state)
+		{
+			WoodType type = state.getValue(WoodenBlockProperies.WOOD);
+			StringBuilder builder = new StringBuilder();
+			String nameOverride = null;
+			
+			nameOverride = state.getBlock().getRegistryName().getResourcePath() + "_" + type.getName();
+
+			if(builder.length() == 0)
+			{
+				builder.append("normal");
+			}
+
+			ResourceLocation baseLocation = nameOverride == null ? state.getBlock().getRegistryName() : new ResourceLocation("crystalmod", nameOverride);
+			
+			return new ModelResourceLocation(baseLocation, builder.toString());
+		}
 	}
 
 }
