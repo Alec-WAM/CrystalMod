@@ -313,10 +313,9 @@ public class ModBlocks {
 	public static BlockFusionPedistal fusionPedistal;
 
 	public static BlockCrystalCluster crystalCluster;
-
 	
 	//TODO Re-add Crystexium
-	public static CrystexiumBlock crystexiumBlock;
+	/*public static CrystexiumBlock crystexiumBlock;
 	public static CrystexiumBlock blueCrystexiumBlock;
 	public static CrystexiumBlock redCrystexiumBlock;
 	public static CrystexiumBlock greenCrystexiumBlock;
@@ -331,7 +330,7 @@ public class ModBlocks {
 	public static BlockStairs redCrystexiumStairs;
 	public static BlockStairs greenCrystexiumStairs;
 	public static BlockStairs darkCrystexiumStairs;
-	public static BlockStairs pureCrystexiumStairs;
+	public static BlockStairs pureCrystexiumStairs;*/
 
 	public static final EnumPlantType crystalPlantType = EnumPlantType.getPlantType("crystal");
 
@@ -723,7 +722,7 @@ public class ModBlocks {
 		registerTileEntity(TileCrystalCluster.class);
 
 		//TODO Re-add Crystexium
-		crystexiumBlock = new CrystexiumBlock();
+		/*crystexiumBlock = new CrystexiumBlock();
 		registerEnumBlock(crystexiumBlock, "crystexiumblock");
 		blueCrystexiumBlock = new CrystexiumBlock();
 		registerEnumBlock(blueCrystexiumBlock, "bluecrystexiumblock");
@@ -754,7 +753,7 @@ public class ModBlocks {
 		darkCrystexiumStairs = new BlockCustomStairs(darkCrystexiumBlock.getDefaultState().withProperty(CrystexiumBlock.TYPE, CrystexiumBlockType.BRICK));
 		registerBlock(darkCrystexiumStairs, "darkcrystexiumstairs");
 		pureCrystexiumStairs = new BlockCustomStairs(pureCrystexiumBlock.getDefaultState().withProperty(CrystexiumBlock.TYPE, CrystexiumBlockType.BRICK));
-		registerBlock(pureCrystexiumStairs, "purecrystexiumstairs");
+		registerBlock(pureCrystexiumStairs, "purecrystexiumstairs");*/
 	}
 
 	@SideOnly(Side.CLIENT)

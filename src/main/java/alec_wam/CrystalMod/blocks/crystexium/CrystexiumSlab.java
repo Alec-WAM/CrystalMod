@@ -94,7 +94,8 @@ public class CrystexiumSlab extends BlockSlab implements ICustomModel
     /**
      * Get the Item that this Block should drop when harvested.
      */
-    @Override
+    //TODO Re-add Crystexium
+    /*@Override
 	public Item getItemDropped(IBlockState state, Random rand, int fortune)
     {
         return Item.getItemFromBlock(ModBlocks.crystexiumSlab);
@@ -104,7 +105,7 @@ public class CrystexiumSlab extends BlockSlab implements ICustomModel
 	public ItemStack getItem(World worldIn, BlockPos pos, IBlockState state)
     {
         return new ItemStack(ModBlocks.crystexiumSlab, 1, state.getValue(VARIANT).getMetadata());
-    }
+    }*/
 
     /**
      * Returns the slab block name with the type associated with it
