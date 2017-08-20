@@ -49,7 +49,7 @@ public class CustomItemRendererHandler {
 					FMLClientHandler.instance().getClient().mcProfiler.endSection();
 	    			return false;
 	    		}
-			}			
+			}	
 		}
 		return true;
 	}

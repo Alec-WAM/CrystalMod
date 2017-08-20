@@ -26,7 +26,7 @@ public class ItemEnderMinecartRender implements ICustomItemRenderer {
 		if(minecart == null){
 			return;
 		}
-		ItemMinecartRender.renderMinecart(minecart, lastTransform);
+		ItemMinecartRender.renderMinecart(minecart, lastTransform, false);
 	}
 
 	private TransformType lastTransform;

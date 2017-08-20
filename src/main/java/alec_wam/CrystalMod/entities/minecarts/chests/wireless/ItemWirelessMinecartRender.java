@@ -33,7 +33,7 @@ public class ItemWirelessMinecartRender implements ICustomItemRenderer {
 		minecart.setCode(ItemNBTHelper.getInteger(stack, WirelessChestHelper.NBT_CODE, 0));
         String owner = ItemNBTHelper.getString(stack, WirelessChestHelper.NBT_OWNER, "");
         if(UUIDUtils.isUUID(owner))minecart.setOwner(UUIDUtils.fromString(owner));
-        ItemMinecartRender.renderMinecart(minecart, lastTransform);
+        ItemMinecartRender.renderMinecart(minecart, lastTransform, false);
 	}
 
 	private TransformType lastTransform;

@@ -1,5 +1,6 @@
 package alec_wam.CrystalMod.blocks;
 
+import java.awt.Color;
 import java.util.EnumSet;
 import java.util.Random;
 
@@ -20,6 +21,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -61,6 +63,28 @@ public class BlockGlowBerry extends Block
         if (!this.canBlockStay(worldIn, pos, state))
         {
             this.dropBlock(worldIn, pos, state);
+        }
+    }
+    
+    @SideOnly(Side.CLIENT)
+    @Override
+    public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand)
+    {
+        double x = (double)((float)pos.getX() + 0.4F + rand.nextFloat() * 0.1F);
+        double y = (double)((float)pos.getY() + 0.4F + rand.nextFloat() * 0.01F);
+        double z = (double)((float)pos.getZ() + 0.4F + rand.nextFloat() * 0.1F);
+        int i = Color.YELLOW.getRGB();
+
+        if (i != -1)
+        {
+            double r = (double)(i >> 16 & 255) / 255.0D;
+            double g = (double)(i >> 8 & 255) / 255.0D;
+            double b = (double)(i >> 0 & 255) / 255.0D;
+
+            for (int j = 0; j < 1; ++j)
+            {
+                worldIn.spawnParticle(EnumParticleTypes.SPELL_MOB, x, y, z, r, g, b, new int[0]);
+            }
         }
     }
 

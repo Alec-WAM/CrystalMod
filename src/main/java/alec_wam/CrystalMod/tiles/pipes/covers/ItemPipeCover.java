@@ -16,6 +16,7 @@ import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
@@ -165,6 +166,7 @@ public class ItemPipeCover extends Item implements ICustomModel {
     
     @SuppressWarnings("deprecation")
 	public static boolean isValidForCover(IBlockState state){
+    	if(state.getMaterial() == Material.AIR) return false;
     	if (state.getBlock().hasTileEntity() || state.getBlock().hasTileEntity(state)) return false;
         if(!state.isFullCube()) return false;        
     	return true;
