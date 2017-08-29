@@ -38,6 +38,7 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -156,12 +157,17 @@ public class BlockTank extends EnumBlock<BlockTank.TankType> implements ITileEnt
         	if (ItemStackTools.isValid(current)) {
             	if(ToolUtil.isToolEquipped(entityplayer, hand)){
             		return ToolUtil.breakBlockWithTool(this, world, pos, entityplayer, hand);
-            	}
-            	if(FluidUtil.interactWithFluidHandler(entityplayer, hand, world, pos, side)){
-            		return true;
+            	}            
+
+            	IFluidHandlerItem containerFluidHandler = FluidUtil.getFluidHandler(current);
+            	if (containerFluidHandler != null)
+            	{
+            		if(FluidUtil.interactWithFluidHandler(entityplayer, hand, world, pos, side)){
+            			return true;
+            		}
             	}
         	}
-            
+        	
             if(!world.isRemote){
         		if(tank.tank !=null){
         			FluidStack fluid = tank.tank.getFluid();
