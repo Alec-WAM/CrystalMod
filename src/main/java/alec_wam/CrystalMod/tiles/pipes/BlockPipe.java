@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
+import javax.annotation.Nullable;
+
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.EnumBlock;
 import alec_wam.CrystalMod.blocks.ICustomModel;
@@ -28,6 +30,7 @@ import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.Util;
 import alec_wam.CrystalMod.util.client.RenderUtil;
 import net.minecraft.block.Block;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.IBlockState;
@@ -51,6 +54,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -343,6 +347,74 @@ public class BlockPipe extends EnumBlock<BlockPipe.PipeType> implements ICustomM
 		return super.addHitEffects(state, worldObj, target, effectRenderer);
 	}
 
+	@SuppressWarnings("deprecation")
+	@Override
+	public SoundType getSoundType(IBlockState state, World world, BlockPos pos, @Nullable Entity entity)
+    {
+		final TileEntityPipe te = (TileEntityPipe) world.getTileEntity(pos);
+		if(te == null) return getSoundType();
+		SoundType custom = new SoundType(getSoundType().getVolume(), getSoundType().getPitch(), null, null, null, null, null){
+			public float getVolume()
+		    {
+		        return this.volume;
+		    }
+
+		    public float getPitch()
+		    {
+		        return this.pitch;
+		    }
+
+		    public SoundEvent getBreakSound()
+		    {
+		    	//TODO Figure out entity specific cover break sound
+		    	return getSoundType().getBreakSound();
+		    }
+
+		    public SoundEvent getStepSound()
+		    {
+		    	CoverData data = te.getCoverData(EnumFacing.UP);
+				if(data !=null && data.getBlockState() !=null){
+					return data.getBlockState().getBlock().getSoundType(data.getBlockState(), new PipeWorldWrapper(world, pos, EnumFacing.UP), pos, entity).getStepSound();
+				}
+		        return getSoundType().getStepSound();
+		    }
+
+		    public SoundEvent getPlaceSound()
+		    {
+		        return getSoundType().getPlaceSound();
+		    }
+
+		    public SoundEvent getHitSound()
+		    {
+		    	if(entity instanceof EntityPlayer){
+			    	RaytraceResult result = te.getClosest((EntityPlayer)entity);
+					if(result !=null && result.component !=null){
+						if(result.component.data !=null && result.component.data instanceof PipePart){
+							PipePart part = (PipePart) result.component.data;
+							if(part == PipePart.COVER){
+								CoverData data = te.getCoverData(result.rayTraceResult.sideHit);
+								if(data.getBlockState() !=null){
+									return data.getBlockState().getBlock().getSoundType(data.getBlockState(), new PipeWorldWrapper(world, pos, result.rayTraceResult.sideHit), pos, entity).getHitSound();
+								}
+							}
+						}
+					}
+		    	}
+		        return getSoundType().getHitSound();
+		    }
+
+		    public SoundEvent getFallSound()
+		    {
+		    	CoverData data = te.getCoverData(EnumFacing.UP);
+				if(data !=null && data.getBlockState() !=null){
+					return data.getBlockState().getBlock().getSoundType(data.getBlockState(), new PipeWorldWrapper(world, pos, EnumFacing.UP), pos, entity).getFallSound();
+				}
+		        return getSoundType().getFallSound();
+		    }
+		};
+        return custom;
+    }
+	
 	@Override
 	public boolean canRenderInLayer(IBlockState state, final BlockRenderLayer layer) {
 		return true;
@@ -379,7 +451,7 @@ public class BlockPipe extends EnumBlock<BlockPipe.PipeType> implements ICustomM
 	public BlockRenderLayer getBlockLayer() {
 		return BlockRenderLayer.CUTOUT;
 	}
-
+	
 	@Override
 	public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
 		TileEntityPipe te = (TileEntityPipe) world.getTileEntity(pos);
@@ -1002,39 +1074,39 @@ public class BlockPipe extends EnumBlock<BlockPipe.PipeType> implements ICustomM
 		}
 	}
 
-	public RaytraceResult doRayTrace(World world, int x, int y, int z, EntityPlayer entityPlayer) {
-		List<RaytraceResult> allHits = doRayTraceAll(world, x, y, z, entityPlayer);
+	public RaytraceResult doRayTrace(World world, int x, int y, int z, EntityLivingBase entity) {
+		List<RaytraceResult> allHits = doRayTraceAll(world, x, y, z, entity);
 		if (allHits == null) {
 			return null;
 		}
-		Vec3d origin = EntityUtil.getEyePosition(entityPlayer);
+		Vec3d origin = EntityUtil.getEyePosition(entity);
 		return RaytraceResult.getClosestHit(origin, allHits);
 	}
 
-	public List<RaytraceResult> doRayTraceAll(World world, int x, int y, int z, EntityPlayer entityPlayer) {
-		double pitch = Math.toRadians(entityPlayer.rotationPitch);
-		double yaw = Math.toRadians(entityPlayer.rotationYaw);
+	public List<RaytraceResult> doRayTraceAll(World world, int x, int y, int z, EntityLivingBase entity) {
+		double pitch = Math.toRadians(entity.rotationPitch);
+		double yaw = Math.toRadians(entity.rotationYaw);
 
 		double dirX = -Math.sin(yaw) * Math.cos(pitch);
 		double dirY = -Math.sin(pitch);
 		double dirZ = Math.cos(yaw) * Math.cos(pitch);
 
-		double reachDistance = CrystalMod.proxy.getReachDistanceForPlayer(entityPlayer);
+		double reachDistance = EntityUtil.getReachDistance(entity);
 
-		Vec3d origin = EntityUtil.getEyePosition(entityPlayer);
+		Vec3d origin = EntityUtil.getEyePosition(entity);
 		Vec3d direction = origin.addVector(dirX * reachDistance, dirY * reachDistance, dirZ * reachDistance);
-		return doRayTraceAll(world, x, y, z, origin, direction, entityPlayer);
+		return doRayTraceAll(world, x, y, z, origin, direction, entity);
 	}
 
-	private RaytraceResult doRayTrace(World world, int x, int y, int z, Vec3d origin, Vec3d direction, EntityPlayer entityPlayer) {
-		List<RaytraceResult> allHits = doRayTraceAll(world, x, y, z, origin, direction, entityPlayer);
+	private RaytraceResult doRayTrace(World world, int x, int y, int z, Vec3d origin, Vec3d direction, EntityLivingBase entity) {
+		List<RaytraceResult> allHits = doRayTraceAll(world, x, y, z, origin, direction, entity);
 		if (allHits == null) {
 			return null;
 		}
 		return RaytraceResult.getClosestHit(origin, allHits);
 	}
 
-	protected List<RaytraceResult> doRayTraceAll(World world, int x, int y, int z, Vec3d origin, Vec3d direction, EntityPlayer player) {
+	protected List<RaytraceResult> doRayTraceAll(World world, int x, int y, int z, Vec3d origin, Vec3d direction, EntityLivingBase entity) {
 
 		BlockPos pos = new BlockPos(x, y, z);
 		TileEntity te = world.getTileEntity(pos);
@@ -1044,8 +1116,8 @@ public class BlockPipe extends EnumBlock<BlockPipe.PipeType> implements ICustomM
 		TileEntityPipe bundle = (TileEntityPipe) te;
 		List<RaytraceResult> hits = new ArrayList<RaytraceResult>();
 
-		if (player == null) {
-			player = CrystalMod.proxy.getClientPlayer();
+		if (entity == null) {
+			entity = CrystalMod.proxy.getClientPlayer();
 		}
 
 		Collection<CollidableComponent> components = new ArrayList<CollidableComponent>(bundle.getCollidableComponents());

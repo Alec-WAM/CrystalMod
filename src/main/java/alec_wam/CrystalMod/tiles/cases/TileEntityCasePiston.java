@@ -13,9 +13,12 @@ import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MoverType;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -144,6 +147,7 @@ public class TileEntityCasePiston extends TileEntityCaseBase {
 	public void onOpened() {
 		opening = true;
 		if(!getWorld().isRemote){
+			getWorld().playSound((EntityPlayer)null, pos, SoundEvents.BLOCK_PISTON_EXTEND, SoundCategory.BLOCKS, 0.5F, getWorld().rand.nextFloat() * 0.25F + 0.6F);
 			CrystalModNetwork.sendToAllAround(new PacketTileMessage(getPos(), "Open"), this);
 		}
 	}
@@ -152,6 +156,9 @@ public class TileEntityCasePiston extends TileEntityCaseBase {
 	public void onClosed() {
 		//ModLogger.info("Close "+getWorld().isRemote);
 		opening = false;
+		if(!getWorld().isRemote){
+			getWorld().playSound((EntityPlayer)null, pos, SoundEvents.BLOCK_PISTON_CONTRACT, SoundCategory.BLOCKS, 0.5F, getWorld().rand.nextFloat() * 0.15F + 0.6F);
+		}
 	}
 	
 	public float getExtendedProgress(float progress, EnumFacing side)

@@ -14,6 +14,7 @@ import alec_wam.CrystalMod.util.ChatUtil;
 import net.minecraft.block.BlockDirectional;
 import net.minecraft.block.BlockPistonExtension;
 import net.minecraft.block.ITileEntityProvider;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.IBlockState;
@@ -57,6 +58,13 @@ public class BlockCase extends EnumBlock<BlockCase.EnumCaseType> implements ITil
     	ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), EnumCaseType.PISTON.getMeta(), new ModelResourceLocation(this.getRegistryName(), prop.getName()+"="+EnumCaseType.PISTON.getName()+"_inventory"));
     	ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), EnumCaseType.STICKY_PISTON.getMeta(), new ModelResourceLocation(this.getRegistryName(), prop.getName()+"="+EnumCaseType.STICKY_PISTON.getName()+"_inventory"));
 	}
+	
+	@Override
+	public SoundType getSoundType(IBlockState state, World world, BlockPos pos, @Nullable Entity entity)
+    {
+		EnumCaseType type = state.getValue(TYPE);
+		return (type == EnumCaseType.NOTE) ? SoundType.WOOD : SoundType.STONE;
+    }
 	
 	public static class CustomBlockStateMapper extends StateMapperBase
 	{

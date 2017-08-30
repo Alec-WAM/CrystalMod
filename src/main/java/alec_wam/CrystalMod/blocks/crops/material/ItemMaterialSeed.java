@@ -14,6 +14,7 @@ import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemStackTools;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.block.model.ModelBakery;
@@ -27,6 +28,7 @@ import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
@@ -70,6 +72,9 @@ public class ItemMaterialSeed extends Item implements ICustomModel {
 			IBlockState state = worldIn.getBlockState(pos);
 			if(state.isSideSolid(worldIn, pos, facing) && worldIn.isAirBlock(up)){
 				worldIn.setBlockState(up, ModBlocks.materialCrop.getDefaultState(), 3);
+				SoundType soundtype = worldIn.getBlockState(pos).getBlock().getSoundType(worldIn.getBlockState(pos), worldIn, pos, playerIn);
+                worldIn.playSound(playerIn, pos, soundtype.getPlaceSound(), SoundCategory.BLOCKS, (soundtype.getVolume() + 1.0F) / 2.0F, soundtype.getPitch() * 0.8F);
+                
 				TileEntity tile = worldIn.getTileEntity(up);
 				if(tile !=null && tile instanceof TileMaterialCrop){
 					TileMaterialCrop crop = (TileMaterialCrop)tile;

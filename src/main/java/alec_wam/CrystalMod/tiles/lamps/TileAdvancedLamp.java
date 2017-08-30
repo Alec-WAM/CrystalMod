@@ -63,10 +63,10 @@ public class TileAdvancedLamp extends TileEntityMod {
 		}
 		
 		if(lit && count > 0){
-			ModLogger.info("Placed "+count+" light blocks");
+			//ModLogger.info("Placed "+count+" light blocks");
 		}
 		if(!lit && count > 0){
-			ModLogger.info("Removed "+count+" light blocks");
+			//ModLogger.info("Removed "+count+" light blocks");
 		}
     }
 

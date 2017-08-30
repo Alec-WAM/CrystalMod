@@ -17,15 +17,18 @@ import alec_wam.CrystalMod.items.ItemIngot;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.util.Lang;
 import alec_wam.CrystalMod.util.ModLogger;
+import alec_wam.CrystalMod.util.TimeUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
+import net.minecraft.init.MobEffects;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.ForgeModContainer;
@@ -100,13 +103,20 @@ public class ModFluids {
     		}, fluidEnder.getName());
 		}
 		
-		fluidInk = new Fluid("ink", CrystalMod.resourceL("blocks/fluid/ink_still"), CrystalMod.resourceL("blocks/fluid/ink_flowing")).setUnlocalizedName("crystalmod.ink");
+		fluidInk = new Fluid("ink", CrystalMod.resourceL("blocks/fluid/ink_still"), CrystalMod.resourceL("blocks/fluid/ink_flowing")).setUnlocalizedName("crystalmod.ink").setViscosity(6000);
 		registerFluid(fluidInk);
 		registerClassicBlock(fluidInk);
 		
 		fluidTears = new Fluid("tears", CrystalMod.resourceL("blocks/fluid/tears_still"), CrystalMod.resourceL("blocks/fluid/tears_flowing")).setUnlocalizedName("crystalmod.tears");
 		registerFluid(fluidTears);
-		registerClassicBlock(fluidTears);
+		Block tearsBlock = new BlockFluidPotionEffect(fluidTears, net.minecraft.block.material.Material.WATER, new PotionEffect(MobEffects.NAUSEA, 10 * TimeUtil.SECOND, 0));
+		ModBlocks.registerBlock(tearsBlock, new ItemBlock(tearsBlock){
+	    	@Override
+			public String getItemStackDisplayName(ItemStack stack)
+	        {
+	            return Lang.translateToLocal(this.getUnlocalizedNameInefficiently(stack)).trim();
+	        }
+		}, fluidTears.getName());
 		
 		createBuckets();
 	}

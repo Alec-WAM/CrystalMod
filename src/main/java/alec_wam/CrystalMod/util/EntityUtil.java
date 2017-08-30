@@ -42,19 +42,23 @@ import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
 public class EntityUtil {
 
-	public static Vec3d getEyePosition(EntityPlayer player) {
-	   return player.getPositionEyes(1.0F);
+	public static Vec3d getEyePosition(EntityLivingBase entity) {
+	   return entity.getPositionEyes(1.0F);
 	}
 
-	public static Vector3d getEyePositionCM(EntityPlayer player) {
-	    Vector3d res = new Vector3d(player.posX, player.posY, player.posZ);
-	    res.y += player.getEyeHeight();
+	public static Vector3d getEyePositionCM(EntityLivingBase entity) {
+	    Vector3d res = new Vector3d(entity.posX, entity.posY, entity.posZ);
+	    res.y += entity.getEyeHeight();
 	    return res;
 	}
 
-	public static Vector3d getLookVec(EntityPlayer player) {
-	    Vec3d lv = player.getLookVec();
+	public static Vector3d getLookVec(EntityLivingBase entity) {
+	    Vec3d lv = entity.getLookVec();
 	    return new Vector3d(lv.xCoord, lv.yCoord, lv.zCoord);
+	}
+	
+	public static double getReachDistance(EntityLivingBase entity){
+		return (entity instanceof EntityPlayer) ? CrystalMod.proxy.getReachDistanceForPlayer((EntityPlayer)entity) : 4.5;
 	}
 	
 	public static RayTraceResult getPlayerLookedObject(EntityPlayer entity){

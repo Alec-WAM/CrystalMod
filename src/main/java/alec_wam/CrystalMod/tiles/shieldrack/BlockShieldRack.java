@@ -11,6 +11,7 @@ import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.tool.ToolUtil;
 import net.minecraft.block.ITileEntityProvider;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
@@ -43,6 +44,7 @@ public class BlockShieldRack extends EnumBlock<WoodenBlockProperies.WoodType> im
 		super(Material.WOOD, WoodenBlockProperies.WOOD, WoodType.class);
 		setHardness(1.0F);
 		setCreativeTab(CreativeTabs.COMBAT);
+		setSoundType(SoundType.WOOD);
 	}
 	
 	@Override

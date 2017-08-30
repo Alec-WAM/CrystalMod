@@ -6,6 +6,7 @@ import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.EnumBlock;
 import alec_wam.CrystalMod.tiles.explosives.remover.TileRemoverExplosion.RemovingType;
 import net.minecraft.block.ITileEntityProvider;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.tileentity.TileEntity;
@@ -17,9 +18,10 @@ public class BlockRemoverExplosion extends EnumBlock<BlockRemoverExplosion.Remov
 	public static final PropertyEnum<RemoverType> TYPE = PropertyEnum.<RemoverType>create("type", RemoverType.class);
 	
 	public BlockRemoverExplosion() {
-		super(Material.IRON, TYPE, RemoverType.class);
-		this.setHardness(1.5F);
-		this.setCreativeTab(CrystalMod.tabBlocks);
+		super(Material.TNT, TYPE, RemoverType.class);
+		setHardness(1.5F);
+		setCreativeTab(CrystalMod.tabBlocks);
+		setSoundType(SoundType.PLANT);
 	}
 
 	@Override
