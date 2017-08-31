@@ -15,7 +15,6 @@ import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.proxy.ClientProxy;
 import alec_wam.CrystalMod.tiles.cluster.TileCrystalCluster.ClusterData;
 import alec_wam.CrystalMod.util.BlockUtil;
-import alec_wam.CrystalMod.util.ChatUtil;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.Lang;
@@ -36,7 +35,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
@@ -89,22 +87,6 @@ public class BlockCrystalCluster extends EnumBlock<BlockCrystalCluster.EnumClust
 		RenderTileCrystalCluster renderer = new RenderTileCrystalCluster();
 		ClientProxy.registerItemRenderCustom(getRegistryName().toString(), renderer);
 		ClientRegistry.bindTileEntitySpecialRenderer(TileCrystalCluster.class, renderer);
-	}
-	
-	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hX, float hY, float hZ){
-		TileEntity tile = world.getTileEntity(pos);
-		if(tile !=null && tile instanceof TileCrystalCluster){
-			TileCrystalCluster cluster = (TileCrystalCluster)tile;
-			if(!world.isRemote){
-				String power = "Power Output: (Max) "+cluster.getClusterData().getPowerOutput()+" / (Current) "+cluster.getPowerOutput();
-				String health = "Health: (Current) "+cluster.getHealth() + " / (Max) " + TimeUtil.MINECRAFT_DAY_TICKS;
-				String speed = "Regen: "+cluster.getClusterData().getRegenSpeed();
-				ChatUtil.sendNoSpam(player, power, health, speed);
-			}
-			return true;
-		}
-		return super.onBlockActivated(world, pos, state, player, hand, side, hX, hY, hZ);
 	}
 	
 	@Override

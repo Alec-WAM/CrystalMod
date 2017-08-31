@@ -49,8 +49,6 @@ import alec_wam.CrystalMod.tiles.machine.advDispenser.TileAdvDispenser;
 import alec_wam.CrystalMod.tiles.machine.enderbuffer.TileEntityEnderBuffer;
 import alec_wam.CrystalMod.tiles.machine.enderbuffer.gui.ContainerEnderBuffer;
 import alec_wam.CrystalMod.tiles.machine.enderbuffer.gui.GuiEnderBuffer;
-import alec_wam.CrystalMod.tiles.machine.mobGrinder.GuiMobGrinder;
-import alec_wam.CrystalMod.tiles.machine.mobGrinder.TileEntityMobGrinder;
 import alec_wam.CrystalMod.tiles.machine.power.battery.ContainerBattery;
 import alec_wam.CrystalMod.tiles.machine.power.battery.GuiBattery;
 import alec_wam.CrystalMod.tiles.machine.power.battery.TileEntityBattery;
@@ -66,12 +64,6 @@ import alec_wam.CrystalMod.tiles.machine.power.engine.vampire.TileEntityEngineVa
 import alec_wam.CrystalMod.tiles.machine.power.redstonereactor.ContainerRedstoneReactor;
 import alec_wam.CrystalMod.tiles.machine.power.redstonereactor.GuiRedstoneReactor;
 import alec_wam.CrystalMod.tiles.machine.power.redstonereactor.TileRedstoneReactor;
-import alec_wam.CrystalMod.tiles.machine.specialengines.ContainerFiniteEngine;
-import alec_wam.CrystalMod.tiles.machine.specialengines.ContainerInfiniteEngine;
-import alec_wam.CrystalMod.tiles.machine.specialengines.GuiFiniteEngine;
-import alec_wam.CrystalMod.tiles.machine.specialengines.GuiInfiniteEngine;
-import alec_wam.CrystalMod.tiles.machine.specialengines.TileFiniteEngine;
-import alec_wam.CrystalMod.tiles.machine.specialengines.TileInfiniteEngine;
 import alec_wam.CrystalMod.tiles.machine.worksite.TileWorksiteBase;
 import alec_wam.CrystalMod.tiles.machine.worksite.TileWorksiteBoundedInventory;
 import alec_wam.CrystalMod.tiles.machine.worksite.gui.ContainerWorksiteAnimalControl;
@@ -341,13 +333,10 @@ public class GuiHandler implements IGuiHandler {
         	if(te instanceof TileEntityEngineLava) return new GuiEngineLava(player, (TileEntityEngineLava)te);
         	if(te instanceof TileEntityEngineVampire) return new GuiEngineVampire(player, (TileEntityEngineVampire)te);
         	if(te instanceof TileEntityEnderBuffer) return new GuiEnderBuffer(player, (TileEntityEnderBuffer)te);
-        	if(te instanceof TileEntityMobGrinder) return new GuiMobGrinder(player, (TileEntityMobGrinder)te);
         	if(te instanceof TileEntityBattery) return new GuiBattery(player, (TileEntityBattery)te);
         	if(te instanceof TileSoundMuffler) return new GuiSoundMuffler((TileSoundMuffler)te);
         	if(te instanceof TileEnhancementTable) return new GuiEnhancementTable(player.inventory, (TileEnhancementTable)te);
         	if(te instanceof TileRedstoneReactor) return new GuiRedstoneReactor(player, (TileRedstoneReactor)te);
-        	if(te instanceof TileInfiniteEngine) return new GuiInfiniteEngine(player, (TileInfiniteEngine)te);
-        	if(te instanceof TileFiniteEngine) return new GuiFiniteEngine(player, (TileFiniteEngine)te);
         	if(te instanceof TileEntityCaseBase) return new GuiCase(player, (TileEntityCaseBase)te);
         } 
         return null;
@@ -495,13 +484,10 @@ public class GuiHandler implements IGuiHandler {
         	if(te instanceof TileEntityEngineLava) return new ContainerEngineLava(player, (TileEntityEngineLava)te);
         	if(te instanceof TileEntityEngineVampire) return new ContainerEngineVampire(player, (TileEntityEngineVampire)te);
         	if(te instanceof TileEntityEnderBuffer) return new ContainerEnderBuffer(player, (TileEntityEnderBuffer)te);
-        	if(te instanceof TileEntityMobGrinder) return new ContainerNull();
         	if(te instanceof TileEntityBattery) return new ContainerBattery(player, (TileEntityBattery)te);
         	if(te instanceof TileSoundMuffler) return new ContainerNull();
         	if(te instanceof TileEnhancementTable) return new ContainerEnhancementTable(player.inventory, (TileEnhancementTable)te);
         	if(te instanceof TileRedstoneReactor) return new ContainerRedstoneReactor(player.inventory, (TileRedstoneReactor)te);
-        	if(te instanceof TileInfiniteEngine) return new ContainerInfiniteEngine(player.inventory, (TileInfiniteEngine)te);
-        	if(te instanceof TileFiniteEngine) return new ContainerFiniteEngine(player.inventory, (TileFiniteEngine)te);
         	if(te instanceof TileEntityCaseBase) return new ContainerCase(player.inventory, (TileEntityCaseBase)te);
         }
         return null;

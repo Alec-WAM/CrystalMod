@@ -99,8 +99,7 @@ public class ModItems {
 	public static ItemGlowBerry glowBerry;
 	public static ItemCongealedRedstone congealedRedstone;
 	
-	//TODO Re-add Crystexium
-	//public static ItemCrystex crystexItems;
+	public static ItemCrystex crystexItems;
 	
 	public static ToolMaterial ToolMaterialCrystal = EnumHelper.addToolMaterial(CrystalMod.MODID.toLowerCase()+".crystal", 5, 2000, 20.0F, 6.0F, 22);
 	public static ToolMaterial ToolMaterialDarkIron = EnumHelper.addToolMaterial(CrystalMod.MODID.toLowerCase()+".darkIron", 2, 500/*250*/, 7.0F/*6.0F*/, 2.5F/*2.0F*/, 12/*14*/);
@@ -195,8 +194,7 @@ public class ModItems {
 		glowBerry = new ItemGlowBerry();
 		congealedRedstone = new ItemCongealedRedstone();
 		
-		//TODO Re-add Crystexium
-		//crystexItems = new ItemCrystex();
+		crystexItems = new ItemCrystex();
 
 		crystalAxe = new ItemCrystalAxe(ToolMaterialCrystal);
 		megaCrystalAxe = new ItemMegaCrystalAxe(ToolMaterialCrystal);

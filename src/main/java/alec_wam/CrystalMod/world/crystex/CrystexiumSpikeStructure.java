@@ -3,7 +3,11 @@ package alec_wam.CrystalMod.world.crystex;
 import java.util.Random;
 
 import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.blocks.ModBlocks;
+import alec_wam.CrystalMod.blocks.crystexium.CrystexiumBlock;
+import alec_wam.CrystalMod.blocks.crystexium.CrystexiumBlock.CrystexiumBlockType;
 import alec_wam.CrystalMod.util.ModLogger;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.Rotation;
@@ -56,8 +60,8 @@ public class CrystexiumSpikeStructure extends StructureComponentTemplate {
 
 			@Override
 			public BlockInfo processBlock(World worldIn, BlockPos pos, BlockInfo blockInfoIn) {
-				//TODO Re-add Crystexium
-				/*if(currentState.getBlock() == ModBlocks.crystexiumBlock){
+				IBlockState currentState = worldIn.getBlockState(pos);
+				if(currentState.getBlock() == ModBlocks.crystexiumBlock){
 					if(type == SpikeType.BLUE){
 						return new BlockInfo(blockInfoIn.pos, ModBlocks.blueCrystexiumBlock.getDefaultState().withProperty(CrystexiumBlock.TYPE, CrystexiumBlockType.NORMAL), blockInfoIn.tileentityData);
 					} 
@@ -73,7 +77,7 @@ public class CrystexiumSpikeStructure extends StructureComponentTemplate {
 					if(type == SpikeType.PURE){
 						return new BlockInfo(blockInfoIn.pos, ModBlocks.pureCrystexiumBlock.getDefaultState().withProperty(CrystexiumBlock.TYPE, CrystexiumBlockType.NORMAL), blockInfoIn.tileentityData);
 					} 
-				}*/
+				}
 				return blockInfoIn;
 			}
 

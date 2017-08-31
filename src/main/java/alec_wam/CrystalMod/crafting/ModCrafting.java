@@ -19,6 +19,7 @@ import alec_wam.CrystalMod.blocks.BlockMetalBars.EnumMetalBarType;
 import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.blocks.crops.BlockCrystalPlant.PlantType;
 import alec_wam.CrystalMod.blocks.crops.material.ModCrops;
+import alec_wam.CrystalMod.blocks.crystexium.CrystexiumBlock.CrystexiumBlockType;
 import alec_wam.CrystalMod.blocks.decorative.tiles.BlockBasicTiles.BasicTileType;
 import alec_wam.CrystalMod.blocks.decorative.tiles.BlockBasicTiles2.BasicTileType2;
 import alec_wam.CrystalMod.blocks.decorative.tiles.BlockCrystalTiles.CrystalTileType;
@@ -38,6 +39,7 @@ import alec_wam.CrystalMod.fluids.ModFluids;
 import alec_wam.CrystalMod.integration.baubles.BaublesIntegration;
 import alec_wam.CrystalMod.items.ItemCrystal.CrystalType;
 import alec_wam.CrystalMod.items.ItemCrystalSap.SapType;
+import alec_wam.CrystalMod.items.ItemCrystex.CrystexItemType;
 import alec_wam.CrystalMod.items.ItemCursedBone.BoneType;
 import alec_wam.CrystalMod.items.ItemIngot.IngotType;
 import alec_wam.CrystalMod.items.ItemMachineFrame.FrameType;
@@ -639,8 +641,6 @@ public class ModCrafting {
 		addShapedRecipe(new ItemStack(ModBlocks.specialengine, 1, SpecialEngineType.INFINITE.getMeta()), new Object[]{"PCP", "DMD", "PDP", 'P', dIronPlate, 'C', new ItemStack(ModItems.engineCore, 1, EngineCoreType.INFINITE.getMetadata()), 'D', darkBlock, 'M', machineFrameEnder});
 		
 		//Crystex Recipes
-		//TODO Re-add Crystexium
-		/*
 		addShapedRecipe(new ItemStack(ModItems.crystexItems, 6, CrystexItemType.CRYSTEXUS.getMetadata()), new Object[]{"GEG", "CLC", "GEG", 'G', Blocks.GLOWSTONE, 'E', Items.END_CRYSTAL, 'C', Items.PRISMARINE_CRYSTALS, 'L', new ItemStack(ModBlocks.advancedLamp, 1, LampType.PURE.getMeta())});
 		ItemStack crystexus = new ItemStack(ModItems.crystexItems, 1, CrystexItemType.CRYSTEXUS.getMetadata());
 		ItemStack crystexiumEssence = new ItemStack(ModItems.crystexItems, 1, CrystexItemType.CRYSTEXIUM_ESSENCE.getMetadata());
@@ -690,7 +690,6 @@ public class ModCrafting {
 		addShapedRecipe(new ItemStack(ModBlocks.greenCrystexiumBlock, 4, CrystexiumBlockType.SQUARE_BRICK.getMeta()), new Object[]{"XX", "XX", 'X', crystexiumBlockGreen});
 		addShapedRecipe(new ItemStack(ModBlocks.darkCrystexiumBlock, 4, CrystexiumBlockType.SQUARE_BRICK.getMeta()), new Object[]{"XX", "XX", 'X', crystexiumBlockDark});
 		addShapedRecipe(new ItemStack(ModBlocks.pureCrystexiumBlock, 4, CrystexiumBlockType.SQUARE_BRICK.getMeta()), new Object[]{"XX", "XX", 'X', crystexiumBlockPure});
-		 */
 		
 		addShapedRecipe(new ItemStack(ModBlocks.tileBasic, 4, BasicTileType.STONE_STONE.getMeta()), new Object[]{"XX", "XX", 'X', new ItemStack(Blocks.STONE, 1, BlockStone.EnumType.STONE.getMetadata())});
 		addShapedRecipe(new ItemStack(ModBlocks.tileBasic, 4, BasicTileType.STONE_CARVED.getMeta()), new Object[]{"XX", "XX", 'X',  new ItemStack(Blocks.STONEBRICK, 1, 3)});

@@ -10,9 +10,9 @@ public abstract class TileEnergyConveterBase extends TileEntityMod implements IM
 
 	public abstract PowerUnits getUnitType();
 	
-	protected abstract void setEnergyStored(int power);
-	protected abstract int getEnergyStored();
-	protected abstract int getMaxEnergyStored();
+	public abstract void setEnergyStored(int power);
+	public abstract int getEnergyStored();
+	public abstract int getMaxEnergyStored();
 	
 	protected float lastSyncPowerStored = -1;
 	@Override

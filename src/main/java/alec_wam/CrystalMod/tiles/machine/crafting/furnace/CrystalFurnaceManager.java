@@ -3,6 +3,10 @@ package alec_wam.CrystalMod.tiles.machine.crafting.furnace;
 import java.util.HashMap;
 import java.util.Map;
 
+import alec_wam.CrystalMod.blocks.ModBlocks;
+import alec_wam.CrystalMod.blocks.crystexium.CrystexiumBlock.CrystexiumBlockType;
+import alec_wam.CrystalMod.items.ItemCrystex.CrystexItemType;
+import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.tiles.machine.BasicMachineRecipe;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
@@ -43,8 +47,7 @@ public class CrystalFurnaceManager {
 
 
 	public static void initRecipes() {		
-		//TODO Re-add Crystexium
-		/*ItemStack crystexiumBlock = new ItemStack(ModBlocks.crystexiumBlock, 1, CrystexiumBlockType.NORMAL.getMeta());
+		ItemStack crystexiumBlock = new ItemStack(ModBlocks.crystexiumBlock, 1, CrystexiumBlockType.NORMAL.getMeta());
 		ItemStack crystexiumBlockBlue = new ItemStack(ModBlocks.blueCrystexiumBlock, 1, CrystexiumBlockType.NORMAL.getMeta());
 		ItemStack crystexiumBlockRed = new ItemStack(ModBlocks.redCrystexiumBlock, 1, CrystexiumBlockType.NORMAL.getMeta());
 		ItemStack crystexiumBlockGreen = new ItemStack(ModBlocks.greenCrystexiumBlock, 1, CrystexiumBlockType.NORMAL.getMeta());
@@ -63,7 +66,7 @@ public class CrystalFurnaceManager {
 		addRecipe(crystexiumBlockRed, crystexiumEssenceRed, 1600);
 		addRecipe(crystexiumBlockGreen, crystexiumEssenceGreen, 1600);
 		addRecipe(crystexiumBlockDark, crystexiumEssenceDark, 1600);
-		addRecipe(crystexiumBlockPure, crystexiumEssencePure, 1600);*/
+		addRecipe(crystexiumBlockPure, crystexiumEssencePure, 1600);
 	}
 	
 	public static BasicMachineRecipe addRecipe(ItemStack input, ItemStack output, int energy){

@@ -84,17 +84,17 @@ public class TileEnergyConverterRFtoCU extends TileEnergyConveterBase {
 	}
 
 	@Override
-	protected void setEnergyStored(int power) {
+	public void setEnergyStored(int power) {
 		energyStorage.setEnergyStored(power);
 	}
 
 	@Override
-	protected int getEnergyStored() {
+	public int getEnergyStored() {
 		return energyStorage.getCEnergyStored();
 	}
 
 	@Override
-	protected int getMaxEnergyStored() {
+	public int getMaxEnergyStored() {
 		return energyStorage.getMaxCEnergyStored();
 	}
 	

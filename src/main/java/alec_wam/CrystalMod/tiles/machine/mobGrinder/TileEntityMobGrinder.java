@@ -16,11 +16,11 @@ import alec_wam.CrystalMod.network.IMessageHandler;
 import alec_wam.CrystalMod.network.packets.PacketTileMessage;
 import alec_wam.CrystalMod.tiles.TileEntityMod;
 import alec_wam.CrystalMod.tiles.machine.IMachineTile;
+import alec_wam.CrystalMod.tiles.xp.TileEntityXPVacuum;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -119,7 +119,7 @@ public class TileEntityMobGrinder extends TileEntityMod implements IMessageHandl
 	public void update(){
 		super.update();
 		updateCenterPos();
-		pickupXP();
+		TileEntityXPVacuum.vacuumXP(getWorld(), getPos(), xpCon, getKillBox(), 4.5, 1.5);
 		if (getWorld().isRemote) return;
 		hasPower = energyStorage.getCEnergyStored() >= energyPerKill;
 		disabled = getWorld().isBlockIndirectlyGettingPowered(getPos()) > 0;
@@ -256,48 +256,6 @@ public class TileEntityMobGrinder extends TileEntityMod implements IMessageHandl
       }
       this.fakePlayer.inventory.clear();
 	}
-	
-	private void pickupXP() {
-
-	    double maxDist = 4.5*2;
-
-	    List<EntityXPOrb> xp = getWorld().getEntitiesWithinAABB(EntityXPOrb.class, getKillBox());
-
-	    for (EntityXPOrb entity : xp) {
-	      double xDist = (getPos().getX() + 0.5D - entity.posX);
-	      double yDist = (getPos().getY() + 0.5D - entity.posY);
-	      double zDist = (getPos().getZ() + 0.5D - entity.posZ);
-
-	      double totalDistance = Math.sqrt(xDist * xDist + yDist * yDist + zDist * zDist);
-
-	      if (totalDistance < 1.5) {
-	        pickupXP(entity);
-	      } else {
-	        double d = 1 - (Math.max(0.1, totalDistance) / maxDist);
-	        double speed = 0.01 + (d * 0.02);
-
-	        entity.motionX += xDist / totalDistance * speed;
-	        entity.motionZ += zDist / totalDistance * speed;
-	        entity.motionY += yDist / totalDistance * speed;
-	        if (yDist > 0.5) {
-	          entity.motionY = 0.12;
-	        }
-
-	      }
-	    }
-	}
-
-	private void pickupXP(EntityXPOrb entity) {
-	    if (!getWorld().isRemote) {
-	      if (!entity.isDead) {
-	        int xpValue = entity.getXpValue();
-	        if (xpValue > 0) {
-	          xpCon.addExperience(xpValue);
-	        }
-	        entity.setDead();
-	      }
-	    }
-  	}
 	
 	public void updateCenterPos(){
 		switch(facing){

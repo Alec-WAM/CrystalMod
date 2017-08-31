@@ -17,6 +17,10 @@ import alec_wam.CrystalMod.blocks.crops.ItemBlockWater;
 import alec_wam.CrystalMod.blocks.crops.material.BlockMaterialCrop;
 import alec_wam.CrystalMod.blocks.crops.material.RenderTileMaterialCrop;
 import alec_wam.CrystalMod.blocks.crops.material.TileMaterialCrop;
+import alec_wam.CrystalMod.blocks.crystexium.BlockCrysidian;
+import alec_wam.CrystalMod.blocks.crystexium.CrystexiumBlock;
+import alec_wam.CrystalMod.blocks.crystexium.CrystexiumBlock.CrystexiumBlockType;
+import alec_wam.CrystalMod.blocks.crystexium.CrystexiumSlab;
 import alec_wam.CrystalMod.blocks.decorative.BlockFailure;
 import alec_wam.CrystalMod.blocks.decorative.bridge.BlockBridge;
 import alec_wam.CrystalMod.blocks.decorative.bridge.TileBridge;
@@ -29,6 +33,7 @@ import alec_wam.CrystalMod.blocks.glass.BlockPaintedCrystalGlass;
 import alec_wam.CrystalMod.blocks.glass.BlockTintedCrystalGlass;
 import alec_wam.CrystalMod.blocks.rail.BlockReinforcedRail;
 import alec_wam.CrystalMod.handler.MissingItemHandler;
+import alec_wam.CrystalMod.tiles.BlockBasicTile;
 import alec_wam.CrystalMod.tiles.cases.BlockCase;
 import alec_wam.CrystalMod.tiles.cases.RenderTileEntityCasePiston;
 import alec_wam.CrystalMod.tiles.cases.TileEntityCaseNoteblock;
@@ -167,7 +172,6 @@ import alec_wam.CrystalMod.tiles.portal.TileTelePortal;
 import alec_wam.CrystalMod.tiles.shieldrack.BlockShieldRack;
 import alec_wam.CrystalMod.tiles.shieldrack.ItemBlockShieldRack;
 import alec_wam.CrystalMod.tiles.shieldrack.TileShieldRack;
-import alec_wam.CrystalMod.tiles.soundmuffler.BlockSoundMuffler;
 import alec_wam.CrystalMod.tiles.soundmuffler.TileSoundMuffler;
 import alec_wam.CrystalMod.tiles.spawner.BlockCustomSpawner;
 import alec_wam.CrystalMod.tiles.spawner.RenderTileEntityCustomSpawner;
@@ -177,12 +181,14 @@ import alec_wam.CrystalMod.tiles.tank.ItemBlockTank;
 import alec_wam.CrystalMod.tiles.tank.TileEntityTank;
 import alec_wam.CrystalMod.tiles.tooltable.BlockEnhancementTable;
 import alec_wam.CrystalMod.tiles.tooltable.TileEnhancementTable;
-import alec_wam.CrystalMod.tiles.weather.BlockWeather;
 import alec_wam.CrystalMod.tiles.weather.TileEntityWeather;
 import alec_wam.CrystalMod.tiles.workbench.BlockCrystalWorkbench;
 import alec_wam.CrystalMod.tiles.workbench.TileEntityCrystalWorkbench;
+import alec_wam.CrystalMod.tiles.xp.TileEntityXPVacuum;
 import alec_wam.CrystalMod.util.ModLogger;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockStairs;
+import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
@@ -236,12 +242,14 @@ public class ModBlocks {
 	public static BlockTank crystalTank;
 	public static BlockEngine engine;
 	public static BlockSpecialEngine specialengine;
-	public static BlockWeather weather;
+	public static BlockBasicTile weather;
 	public static BlockCrystalCauldron cauldron;
 	public static BlockCustomSpawner customSpawner;
 	public static BlockEnderTorch enderTorch;
 	public static BlockMobGrinder mobGrinder;
 	public static BlockEntityHopper entityHopper;
+	public static BlockBasicTile xpVacuum;
+	
 	public static BlockCrate crates;
 	public static BlockAdvancedLamp advancedLamp;
 	public static BlockFakeLight fakeLight;
@@ -295,7 +303,7 @@ public class ModBlocks {
 	public static BlockBridge bridge;
 	public static BlockJar jar;
 	public static BlockShieldRack shieldRack;
-	public static BlockSoundMuffler muffler;
+	public static BlockBasicTile muffler;
 
 	public static BlockParticleThrower particleThrower;
 	public static BlockRemoverExplosion remover;
@@ -309,8 +317,7 @@ public class ModBlocks {
 
 	public static BlockCrystalCluster crystalCluster;
 	
-	//TODO Re-add Crystexium
-	/*public static CrystexiumBlock crystexiumBlock;
+	public static CrystexiumBlock crystexiumBlock;
 	public static CrystexiumBlock blueCrystexiumBlock;
 	public static CrystexiumBlock redCrystexiumBlock;
 	public static CrystexiumBlock greenCrystexiumBlock;
@@ -325,7 +332,7 @@ public class ModBlocks {
 	public static BlockStairs redCrystexiumStairs;
 	public static BlockStairs greenCrystexiumStairs;
 	public static BlockStairs darkCrystexiumStairs;
-	public static BlockStairs pureCrystexiumStairs;*/
+	public static BlockStairs pureCrystexiumStairs;
 
 	public static final EnumPlantType crystalPlantType = EnumPlantType.getPlantType("crystal");
 
@@ -504,7 +511,7 @@ public class ModBlocks {
 			registerTileEntity(type.clazz);
 		}
 
-		weather = new BlockWeather();
+		weather = (BlockBasicTile) new BlockBasicTile(TileEntityWeather.class, Material.IRON).setHardness(1.0F);
 		registerBlock(weather, "weather");
 		registerTileEntity(TileEntityWeather.class);
 
@@ -660,6 +667,9 @@ public class ModBlocks {
 
 		entityHopper = registerBlock(new BlockEntityHopper(), "entityhopper");
 		registerTileEntity(TileEntityEntityHopper.class);
+		
+		xpVacuum = (BlockBasicTile)registerBlock(new BlockBasicTile(TileEntityXPVacuum.class, Material.IRON).setHardness(1.5F), "xpvacuum");
+		registerTileEntity(TileEntityXPVacuum.class);
 
 		crates = new BlockCrate();
 		registerEnumBlock(crates, "crate");
@@ -680,7 +690,7 @@ public class ModBlocks {
 		registerEnumBlock(shieldRack, new ItemBlockShieldRack(shieldRack), "shieldrack");
 		registerTileEntity(TileShieldRack.class);
 
-		muffler = new BlockSoundMuffler();
+		muffler = (BlockBasicTile)new BlockBasicTile(TileSoundMuffler.class, Material.IRON).setHardness(2F);
 		registerBlock(muffler, "soundmuffler");
 		registerTileEntity(TileSoundMuffler.class);
 
@@ -716,8 +726,7 @@ public class ModBlocks {
 		registerEnumBlock(crystalCluster, new ItemBlockFacing(crystalCluster), "crystalcluster");
 		registerTileEntity(TileCrystalCluster.class);
 
-		//TODO Re-add Crystexium
-		/*crystexiumBlock = new CrystexiumBlock();
+		crystexiumBlock = new CrystexiumBlock();
 		registerEnumBlock(crystexiumBlock, "crystexiumblock");
 		blueCrystexiumBlock = new CrystexiumBlock();
 		registerEnumBlock(blueCrystexiumBlock, "bluecrystexiumblock");
@@ -748,7 +757,7 @@ public class ModBlocks {
 		darkCrystexiumStairs = new BlockCustomStairs(darkCrystexiumBlock.getDefaultState().withProperty(CrystexiumBlock.TYPE, CrystexiumBlockType.BRICK));
 		registerBlock(darkCrystexiumStairs, "darkcrystexiumstairs");
 		pureCrystexiumStairs = new BlockCustomStairs(pureCrystexiumBlock.getDefaultState().withProperty(CrystexiumBlock.TYPE, CrystexiumBlockType.BRICK));
-		registerBlock(pureCrystexiumStairs, "purecrystexiumstairs");*/
+		registerBlock(pureCrystexiumStairs, "purecrystexiumstairs");
 	}
 
 	@SideOnly(Side.CLIENT)

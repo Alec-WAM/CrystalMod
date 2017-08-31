@@ -1,20 +1,15 @@
 package alec_wam.CrystalMod.tiles.spawner;
 
-import java.util.List;
 import java.util.Random;
-
-import com.google.common.collect.Lists;
 
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.BlockCrystal.CrystalBlockType;
 import alec_wam.CrystalMod.blocks.BlockCrystalIngot.CrystalIngotBlockType;
 import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.util.BlockUtil;
-import alec_wam.CrystalMod.util.ChatUtil;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
-import alec_wam.CrystalMod.util.Lang;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -30,7 +25,6 @@ import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -101,30 +95,6 @@ public class BlockCustomSpawner extends BlockContainer {
 					}
 					return true;
 				} 
-			}else{
-				List<String> list = Lists.newArrayList();
-				if(!playerIn.isSneaking()){
-					list.add(Lang.localize("msg.spawnerInfo1.txt") + ": ");
-					EntityEssenceInstance<?> essence = ItemMobEssence.getEssence(spawner.getBaseLogic().getEntityNameToSpawn());
-					if(essence !=null){
-						List<String> info = Lists.newArrayList();
-						essence.addInfo(info);
-						for(String line : info){
-							list.add(" -"+line);
-						}
-					}
-					list.add(Lang.localize("msg.spawnerInfo2.txt") + ": " + TextFormatting.DARK_AQUA + spawner.getBaseLogic().requiresPlayer);
-					list.add(Lang.localize("msg.spawnerInfo3.txt") + ": " + TextFormatting.DARK_AQUA + spawner.getBaseLogic().ignoreSpawnRequirements);
-					list.add(Lang.localize("msg.spawnerInfo4.txt") + ": " + TextFormatting.DARK_AQUA + spawner.getBaseLogic().spawnSpeed);
-					list.add(Lang.localize("msg.spawnerInfo5.txt"));
-				}else{
-					list.add(Lang.localize("msg.spawnerInfo6.txt"));
-					list.add(Lang.localize("msg.spawnerInfo7.txt"));
-					list.add(Lang.localize("msg.spawnerInfo8.txt"));
-					list.add(Lang.localize("msg.spawnerInfo9.txt"));
-				}
-				if(!worldIn.isRemote)ChatUtil.sendNoSpam(playerIn, list.toArray(new String[0]));
-				return true;
 			}
 		}
 		return false;

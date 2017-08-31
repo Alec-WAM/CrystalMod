@@ -1,5 +1,6 @@
 package alec_wam.CrystalMod.handler;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.ConcurrentModificationException;
@@ -9,6 +10,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.Project;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.api.CrystalModAPI;
@@ -28,11 +30,25 @@ import alec_wam.CrystalMod.items.tools.grapple.GrappleControllerBase;
 import alec_wam.CrystalMod.items.tools.grapple.GrappleHandler;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.packets.PacketGuiMessage;
+import alec_wam.CrystalMod.tiles.cluster.TileCrystalCluster;
+import alec_wam.CrystalMod.tiles.machine.inventory.charger.TileEntityInventoryChargerCU;
+import alec_wam.CrystalMod.tiles.machine.inventory.charger.TileEntityInventoryChargerRF;
+import alec_wam.CrystalMod.tiles.machine.mobGrinder.TileEntityMobGrinder;
+import alec_wam.CrystalMod.tiles.machine.power.converter.TileEnergyConverterCUtoRF;
+import alec_wam.CrystalMod.tiles.machine.power.converter.TileEnergyConverterRFtoCU;
+import alec_wam.CrystalMod.tiles.machine.specialengines.TileFiniteEngine;
+import alec_wam.CrystalMod.tiles.machine.specialengines.TileInfiniteEngine;
 import alec_wam.CrystalMod.tiles.soundmuffler.TileSoundMuffler;
+import alec_wam.CrystalMod.tiles.spawner.EntityEssenceInstance;
+import alec_wam.CrystalMod.tiles.spawner.ItemMobEssence;
+import alec_wam.CrystalMod.tiles.spawner.TileEntityCustomSpawner;
+import alec_wam.CrystalMod.tiles.xp.TileEntityXPVacuum;
 import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.ItemStackTools;
+import alec_wam.CrystalMod.util.Lang;
 import alec_wam.CrystalMod.util.ModLogger;
 import alec_wam.CrystalMod.util.ReflectionUtils;
+import alec_wam.CrystalMod.util.TimeUtil;
 import alec_wam.CrystalMod.util.client.RenderUtil;
 import alec_wam.CrystalMod.world.game.tag.TagManager;
 import net.minecraft.block.Block;
@@ -85,6 +101,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 import net.minecraftforge.client.event.GuiOpenEvent;
@@ -98,6 +115,7 @@ import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.client.event.sound.PlaySoundEvent;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidBlock;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -220,6 +238,200 @@ public class ClientEventHandler {
     			PacketGuiMessage pkt = new PacketGuiMessage("Gui");
     			pkt.setOpenGui(GuiHandler.GUI_ID_ENTITY, horse.getEntityId(), 0, 0);
     			CrystalModNetwork.sendToServer(pkt);
+    		}
+    	}
+    }
+    
+    private final Color DUAL_BAR_COLOR = new Color(0x9700B5);
+	@SubscribeEvent
+    public void screenInfo(RenderGameOverlayEvent event){
+    	Minecraft mc = Minecraft.getMinecraft();
+    	if(event.getType() == ElementType.ALL && mc.currentScreen == null){
+    		ScaledResolution sr = new ScaledResolution(mc);
+    		if(mc.objectMouseOver == null)return;
+    		BlockPos pos = mc.objectMouseOver.getBlockPos();
+    		if(pos == null)return;
+    		TileEntity tile = CrystalMod.proxy.getClientWorld().getTileEntity(pos);
+    		EntityPlayer player = CrystalMod.proxy.getClientPlayer();
+    		if(tile !=null){
+	    		int rf = 0;
+	    		int maxRF = 0;
+	    		boolean renderRF = false;
+	    		
+	    		int cu = 0;
+	    		int maxCU = 0;
+	    		boolean renderCU = false;
+	    		
+	    		int dualPower = 0;
+	    		int maxDualPower = 0;
+	    		boolean renderDualPower = false;
+	    		
+	    		FluidStack fluid = null;
+	    		int capacity = 0;
+	    		boolean renderFluid = false;
+	    		
+	    		List<String> list = Lists.newArrayList();
+	    		int barHeight = 58;
+	    		int offsetY = 0;	    
+	    		
+	    		if(tile instanceof TileEnergyConverterCUtoRF){
+	    			TileEnergyConverterCUtoRF con = (TileEnergyConverterCUtoRF)tile;
+	    			rf = con.getEnergyStored();
+	    			maxRF = con.getMaxEnergyStored();
+	    			renderRF = true;
+	    		}
+	    		if(tile instanceof TileEntityInventoryChargerRF){
+	    			TileEntityInventoryChargerRF con = (TileEntityInventoryChargerRF)tile;
+	    			rf = con.energyStorage.getEnergyStored();
+	    			maxRF = con.energyStorage.getMaxEnergyStored();
+	    			renderRF = true;
+	    		}
+	    		if(tile instanceof TileEnergyConverterRFtoCU){
+	    			TileEnergyConverterRFtoCU con = (TileEnergyConverterRFtoCU)tile;
+	    			cu = con.getEnergyStored();
+	    			maxCU = con.getMaxEnergyStored();
+	    			renderCU = true;
+	    		}
+	    		if(tile instanceof TileEntityInventoryChargerCU){
+	    			TileEntityInventoryChargerCU con = (TileEntityInventoryChargerCU)tile;
+	    			cu = con.energyStorage.getCEnergyStored();
+	    			maxCU = con.energyStorage.getMaxCEnergyStored();
+	    			renderCU = true;
+	    		}
+	    		
+	    		if(tile instanceof TileFiniteEngine){
+	    			TileFiniteEngine engine = (TileFiniteEngine)tile;
+	    			dualPower = engine.energyStorage.getEnergyStored();
+	    			maxDualPower = engine.energyStorage.getMaxEnergyStored();
+	    			renderDualPower = true;
+	    		}
+	    		if(tile instanceof TileInfiniteEngine){
+	    			TileInfiniteEngine engine = (TileInfiniteEngine)tile;
+	    			dualPower = engine.energyStorage.getEnergyStored();
+	    			maxDualPower = engine.energyStorage.getMaxEnergyStored();
+	    			renderDualPower = true;
+	    		}
+	    		
+	    		if(tile instanceof TileEntityXPVacuum){
+	    			TileEntityXPVacuum con = (TileEntityXPVacuum)tile;
+	    			fluid = con.xpCon.getFluid();
+	    			capacity = con.xpCon.getCapacity();
+	    			renderFluid = true;
+	    		}	    		
+	    		if(tile instanceof TileEntityMobGrinder){
+	    			TileEntityMobGrinder con = (TileEntityMobGrinder)tile;
+	    			fluid = con.xpCon.getFluid();
+	    			capacity = con.xpCon.getCapacity();
+	    			renderFluid = true;
+	    			cu = con.energyStorage.getCEnergyStored();
+	    			maxCU = con.energyStorage.getMaxCEnergyStored();
+	    			renderCU = true;
+	    			offsetY = 12;
+	    		}
+	    		
+	    		if(tile instanceof TileCrystalCluster){
+	    			TileCrystalCluster cluster = (TileCrystalCluster)tile;
+	    			String power = "Power Output: (Max) "+cluster.getClusterData().getPowerOutput()+" / (Current) "+cluster.getPowerOutput();
+					String health = "Health: (Current) "+cluster.getHealth() + " / (Max) " + TimeUtil.MINECRAFT_DAY_TICKS;
+					String speed = "Regen: "+cluster.getClusterData().getRegenSpeed();
+					list.add(power);
+					list.add(health);
+					list.add(speed);
+	    		}	    		
+	    		if(tile instanceof TileEntityCustomSpawner){
+	    			TileEntityCustomSpawner spawner = (TileEntityCustomSpawner)tile;
+	    			if(!player.isSneaking()){
+						list.add(Lang.localize("msg.spawnerInfo1.txt") + ": ");
+						EntityEssenceInstance<?> essence = ItemMobEssence.getEssence(spawner.getBaseLogic().getEntityNameToSpawn());
+						if(essence !=null){
+							List<String> info = Lists.newArrayList();
+							essence.addInfo(info);
+							for(String line : info){
+								list.add(" -"+line);
+							}
+						}
+						list.add(Lang.localize("msg.spawnerInfo2.txt") + ": " + TextFormatting.DARK_AQUA + spawner.getBaseLogic().requiresPlayer);
+						list.add(Lang.localize("msg.spawnerInfo3.txt") + ": " + TextFormatting.DARK_AQUA + spawner.getBaseLogic().ignoreSpawnRequirements);
+						list.add(Lang.localize("msg.spawnerInfo4.txt") + ": " + TextFormatting.DARK_AQUA + spawner.getBaseLogic().spawnSpeed);
+						list.add(Lang.localize("msg.spawnerInfo5.txt"));
+					}else{
+						list.add(Lang.localize("msg.spawnerInfo6.txt"));
+						list.add(Lang.localize("msg.spawnerInfo7.txt"));
+						list.add(Lang.localize("msg.spawnerInfo8.txt"));
+						list.add(Lang.localize("msg.spawnerInfo9.txt"));
+					}
+	    		}
+	    		
+	    		if(renderCU){
+	    			list.add("CU: "+cu+" / "+maxCU);
+		    		GlStateManager.pushMatrix();
+		    		GlStateManager.translate(10, sr.getScaledHeight()-(barHeight + 10 + offsetY), 0);	    		
+		    		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);	    			    		
+		    		int colorBorder = Color.GRAY.darker().getRGB();
+		    		int colorInside = Color.GRAY.getRGB();
+		    		RenderUtil.drawGradientRect(-1, -11, -11, 13, (barHeight - 9), colorBorder, colorBorder);
+		    		RenderUtil.drawGradientRect(0, -10, -10, 12, (barHeight - 10), colorInside, colorInside);
+		    		RenderUtil.renderPowerBar(0, -10, 0, 12, (barHeight), cu, maxCU, Color.CYAN.getRGB(), Color.CYAN.darker().getRGB());
+		    		GlStateManager.popMatrix();
+	    		}
+	    		
+	    		if(renderRF){
+	    			list.add("RF: "+rf+" / "+maxRF);
+	    			int offsetX = renderCU ? 16 : 0;
+		    		GlStateManager.pushMatrix();
+		    		GlStateManager.translate(10 + offsetX, sr.getScaledHeight()-(barHeight + 10 + offsetY), 0);	    		
+		    		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);	    			    		
+		    		int colorBorder = Color.GRAY.darker().getRGB();
+		    		int colorInside = Color.GRAY.getRGB();
+		    		RenderUtil.drawGradientRect(-1, -11, -11, 13, (barHeight - 9), colorBorder, colorBorder);
+		    		RenderUtil.drawGradientRect(0, -10, -10, 12, (barHeight - 10), colorInside, colorInside);
+		    		RenderUtil.renderPowerBar(0, -10, 0, 12, (barHeight), rf, maxRF, Color.RED.getRGB(), Color.RED.darker().getRGB());
+		    		GlStateManager.popMatrix();
+	    		}	    
+	    		
+	    		if(renderDualPower){
+	    			list.add("Energy: "+dualPower+" / "+maxDualPower);
+		    		GlStateManager.pushMatrix();
+		    		GlStateManager.translate(10, sr.getScaledHeight()-(barHeight + 10 + offsetY), 0);	    		
+		    		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);	    			    		
+		    		int colorBorder = Color.GRAY.darker().getRGB();
+		    		int colorInside = Color.GRAY.getRGB();
+		    		RenderUtil.drawGradientRect(-1, -11, -11, 13, (barHeight - 9), colorBorder, colorBorder);
+		    		RenderUtil.drawGradientRect(0, -10, -10, 12, (barHeight - 10), colorInside, colorInside);
+		    		RenderUtil.renderPowerBar(0, -10, 0, 12, (barHeight), dualPower, maxDualPower, DUAL_BAR_COLOR.getRGB(), DUAL_BAR_COLOR.darker().getRGB());
+		    		GlStateManager.popMatrix();
+	    		}
+	    		
+	    		if(renderFluid){
+	    			String fluidname = fluid !=null ? fluid.getLocalizedName()+": "+ fluid.amount + " / "+ capacity +"MB": Lang.localize("gui.empty");
+	    			list.add(fluidname);
+	    			int offsetX = 0;
+	    			if(renderCU){
+	    				offsetX+=16;
+	    			}
+	    			if(renderRF){
+	    				offsetX+=16;
+	    			}
+		    		GlStateManager.pushMatrix();
+		    		GlStateManager.translate(10 + offsetX, sr.getScaledHeight()-(barHeight + 10 + offsetY), 0);	    		
+		    		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);	    			    		
+		    		int colorBorder = Color.GRAY.darker().getRGB();
+		    		int colorInside = Color.GRAY.getRGB();
+		    		RenderUtil.drawGradientRect(-1, -11, -11, 13, (barHeight - 9), colorBorder, colorBorder);
+		    		RenderUtil.drawGradientRect(0, -10, -10, 12, (barHeight - 10), colorInside, colorInside);
+		    		if(fluid !=null){
+		    			RenderUtil.renderGuiTank(fluid, capacity, fluid.amount, 0, -10, 0, 12, barHeight);
+		    		}
+		    		GlStateManager.popMatrix();
+	    		}
+	    		
+	    		if(!list.isEmpty()){
+	    			GlStateManager.pushMatrix();
+	    			GlStateManager.translate(10, sr.getScaledHeight()-(barHeight + 10 + (12 * (list.size() - 1))), 0);
+		    		RenderUtil.drawHoveringText(list, -10, (barHeight + 8), 300, 100, -1, mc.fontRendererObj);
+					RenderHelper.enableGUIStandardItemLighting();
+		    		GlStateManager.popMatrix();	
+	    		}
     		}
     	}
     }
