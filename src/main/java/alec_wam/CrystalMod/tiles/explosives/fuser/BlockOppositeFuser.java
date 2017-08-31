@@ -118,6 +118,9 @@ public class BlockOppositeFuser extends BlockContainer implements ICustomModel {
 						if(fuser.facingNS){
 							if(facing == EnumFacing.SOUTH){
 								fuser.hasPure = true;
+								if(!player.capabilities.isCreativeMode){
+									player.setHeldItem(hand, ItemUtil.consumeItem(held));
+								}
 								if(fuser.hasDark){
 									fuser.triggerExplosion();
 								}
@@ -126,6 +129,9 @@ public class BlockOppositeFuser extends BlockContainer implements ICustomModel {
 						} else {
 							if(facing == EnumFacing.EAST){
 								fuser.hasPure = true;
+								if(!player.capabilities.isCreativeMode){
+									player.setHeldItem(hand, ItemUtil.consumeItem(held));
+								}
 								if(fuser.hasDark){
 									fuser.triggerExplosion();
 								}
@@ -138,6 +144,9 @@ public class BlockOppositeFuser extends BlockContainer implements ICustomModel {
 						if(fuser.facingNS){
 							if(facing == EnumFacing.NORTH){
 								fuser.hasDark = true;
+								if(!player.capabilities.isCreativeMode){
+									player.setHeldItem(hand, ItemUtil.consumeItem(held));
+								}
 								if(fuser.hasPure){
 									fuser.triggerExplosion();
 								}
@@ -146,6 +155,9 @@ public class BlockOppositeFuser extends BlockContainer implements ICustomModel {
 						} else {
 							if(facing == EnumFacing.WEST){
 								fuser.hasDark = true;
+								if(!player.capabilities.isCreativeMode){
+									player.setHeldItem(hand, ItemUtil.consumeItem(held));
+								}
 								if(fuser.hasPure){
 									fuser.triggerExplosion();
 								}

@@ -417,9 +417,10 @@ public class ModCrafting {
 		//TODO Add Recipe for Inventory Chargers
 		
 		addShapedOreRecipe(ModBlocks.customSpawner, new Object[]{"BBB", "BRB", "BBB", 'B', new ItemStack(ModBlocks.metalBars, 1, EnumMetalBarType.DARK_IRON.getMeta()), 'R', "rodBlaze"});
+		addShapedRecipe(ModBlocks.xpVacuum, new Object[]{" P ", "PTP", " F ", 'T', new ItemStack(ModBlocks.crystalTank, 1, TankType.RED.getMeta()), 'P', dIronPlate, 'F', new ItemStack(ModItems.machineFrame, 1, FrameType.ENDER.getMetadata())});
 		ItemStack pureSword = new ItemStack(ModItems.crystalSword);
 		ItemNBTHelper.getCompound(pureSword).setString("Color", "pure");
-		addShapedOreRecipeNBT(ModBlocks.mobGrinder, new Object[]{"PHP", "ISL", "PFP", 'P', dIronPlate, 'H', "skull", 'S', pureSword, 'I', itemPipe, 'L', new ItemStack(ModBlocks.crystalTank, 1, TankType.RED.getMeta()), 'F', machineFrame});
+		addShapedOreRecipeNBT(ModBlocks.mobGrinder, new Object[]{"PHP", "ISL", "PFP", 'P', dIronPlate, 'H', "skull", 'S', pureSword, 'I', itemPipe, 'L', ModBlocks.xpVacuum, 'F', machineFrame});
 		
 		addShapedRecipe(new ItemStack(ModBlocks.decorativeBlock, 8, DecorativeBlockType.SQUARE_TURN.getMeta()), new Object[]{"P P", " B ", "P P", 'P', darkPlate, 'B', dIronBlock});
 		

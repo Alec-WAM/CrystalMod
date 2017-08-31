@@ -1,6 +1,7 @@
 package alec_wam.CrystalMod.tiles.explosives.fuser;
 
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 import com.google.common.collect.Sets;
@@ -12,10 +13,13 @@ import alec_wam.CrystalMod.tiles.TileEntityMod;
 import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.TimeUtil;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
@@ -59,11 +63,10 @@ public class TileOppositeFuser extends TileEntityMod {
 			if(fuseTime > 0){
 				fuseTime--;
 				if(fuseTime <= 0){
-					//if(!getWorld().isRemote){
-						explode();
+					hasPure = hasDark = false;
+					explode();
 
-						getWorld().setBlockToAir(getPos());
-					//}
+					getWorld().setBlockToAir(getPos());
 				}
 			}
 		}
@@ -104,8 +107,7 @@ public class TileOppositeFuser extends TileEntityMod {
                 		double dx = pos.getX() - blockpos.getX();
                         double dy = pos.getY() - blockpos.getY();
                         double dz = pos.getZ() - blockpos.getZ();
-                		double dis = Math.sqrt(dx * dx + dy * dy + dz * dz);
-                		
+                		double dis = Math.sqrt(dx * dx + dy * dy + dz * dz);                		
 
                 		IBlockState iblockstate = world.getBlockState(blockpos);
                 		float resistance = (float) (size - dis);
@@ -121,23 +123,22 @@ public class TileOppositeFuser extends TileEntityMod {
             }
         }
         LinkedList<BlockPos> list = new LinkedList<BlockPos>(set);
-        //ModLogger.info("Blowing up "+list.size());
         ExplosionMaker helper = new ExplosionMaker(world);
         helper.setBlocksForRemoval(list);
         helper.addBlocksForUpdate(set);
         
-        System.currentTimeMillis();
         helper.finish();
-        //ModLogger.info("Explosion took "+(System.currentTimeMillis() - time)+"ms");
-        
-        /*for(BlockPos blPos : set){
-        	world.setBlockToAir(blPos);
-        }*/
-        /*Explosion explosion = new Explosion(world, null, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, size, false, true, list);
-        if (net.minecraftforge.event.ForgeEventFactory.onExplosionStart(world, explosion)) return;
-        explosion.doExplosionA();
-        explosion.doExplosionB(true);*/
-        //this.affectedBlockPositions.addAll(set);
+        List<Entity> entities = world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(getPos(), getPos().add(1, 1, 1)).expandXyz(size));
+        for(Entity entity : entities){
+        	if(!entity.isImmuneToExplosions()){
+        		double dx = pos.getX() - entity.posX;
+                double dy = pos.getY() - entity.posY;
+                double dz = pos.getZ() - entity.posZ;
+                double dis = Math.sqrt(dx * dx + dy * dy + dz * dz);
+                double power = ((size - dis) + 1.0F) / size;
+                entity.attackEntityFrom((new DamageSource("explosion")).setDifficultyScaled().setExplosion(), (float)(20.0F * power));
+        	}
+        }
 	}
 	
 }
