@@ -43,6 +43,9 @@ item.crystalmod.redcrystaltreeseeds.name=Red Tree-Plant Seed
 item.crystalmod.greencrystaltreeseeds.name=Green Tree-Plant Seed
 item.crystalmod.darkcrystaltreeseeds.name=Dark Tree-Plant Seed
 
+item.crystalmod.cornitem.kernels.name=Corn Kernels
+item.crystalmod.cornitem.corn.name=Corn
+
 item.crystalmod.crystalsap.blue.name=Blue Crystal Sap
 item.crystalmod.crystalsap.red.name=Red Crystal Sap
 item.crystalmod.crystalsap.green.name=Green Crystal Sap
@@ -621,6 +624,7 @@ tile.crystalmod.worksite.animal_farm.name=Minion Animal Farm
 tile.crystalmod.worksite.crop_farm.name=Minion Crop Farm
 
 tile.crystalmod.mobgrinder.name=Mob Grinder
+tile.crystalmod.xpvacuum.name=XP Vacuum
 tile.crystalmod.endertorch.name=Ender Torch
 tile.crystalmod.entityhopper.name=Entity Hopper
 crystalmod.entityhopper.filter.none=None

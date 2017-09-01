@@ -18,6 +18,7 @@ import alec_wam.CrystalMod.blocks.BlockFallingCompressed.FallingCompressedBlockT
 import alec_wam.CrystalMod.blocks.BlockMetalBars.EnumMetalBarType;
 import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.blocks.crops.BlockCrystalPlant.PlantType;
+import alec_wam.CrystalMod.blocks.crops.ItemCorn.CornItemType;
 import alec_wam.CrystalMod.blocks.crops.material.ModCrops;
 import alec_wam.CrystalMod.blocks.crystexium.CrystexiumBlock.CrystexiumBlockType;
 import alec_wam.CrystalMod.blocks.decorative.tiles.BlockBasicTiles.BasicTileType;
@@ -204,6 +205,8 @@ public class ModCrafting {
 		addShapedRecipe(new ItemStack(ModItems.crystals, 1, CrystalType.GREEN_SHARD.getMetadata()), "RRR", 'R', ModItems.crystalReedsGreen);
 		addShapedRecipe(new ItemStack(ModItems.crystals, 1, CrystalType.DARK_SHARD.getMetadata()), "RRR", 'R', ModItems.crystalReedsDark);
 		
+		addShapelessRecipe(new ItemStack(ModItems.corn, 2, CornItemType.KERNELS.getMetadata()), new Object[]{new ItemStack(ModItems.corn, 1, CornItemType.CORN.getMetadata())});
+
 		addShapelessRecipe(new ItemStack(ModItems.cursedBone, 3, BoneType.BONEMEAL.getMetadata()), new Object[]{new ItemStack(ModItems.cursedBone, 1, BoneType.BONE.getMetadata())});
 		
 		create9x9Recipe(blueCrystal, new ItemStack(ModItems.crystals, 1, CrystalType.BLUE_SHARD.getMetadata()), 9);

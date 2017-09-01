@@ -6,6 +6,7 @@ import com.google.common.collect.Maps;
 
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.BlockCompressed.CompressedBlockType;
+import alec_wam.CrystalMod.blocks.crops.BlockCorn;
 import alec_wam.CrystalMod.blocks.crops.BlockCrystalBerryBush;
 import alec_wam.CrystalMod.blocks.crops.BlockCrystalPlant;
 import alec_wam.CrystalMod.blocks.crops.BlockCrystalPlant.PlantType;
@@ -238,6 +239,7 @@ public class ModBlocks {
 	public static BlockCrystalSapling crystalSapling;
 	public static BlockCrystalPlanks crystalPlanks;
 	public static BlockMaterialCrop materialCrop;
+	public static BlockCorn corn;
 	public static BlockPipe crystalPipe;
 	public static BlockTank crystalTank;
 	public static BlockEngine engine;
@@ -457,7 +459,10 @@ public class ModBlocks {
 		materialCrop = new BlockMaterialCrop();
 		registerBlock(materialCrop, "materialcrop");
 		registerTileEntity(TileMaterialCrop.class);
-
+		
+		corn = new BlockCorn();
+		registerBlock(corn, "corn");
+		
 		crystalPipe = new BlockPipe();
 		registerBlock(crystalPipe, new ItemBlockPipe(crystalPipe), "crystalpipe");
 		for (PipeType type : PipeType.values()) {

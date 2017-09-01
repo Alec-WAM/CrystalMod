@@ -7,6 +7,7 @@ import com.google.common.collect.Maps;
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.blocks.ModBlocks;
+import alec_wam.CrystalMod.blocks.crops.ItemCorn;
 import alec_wam.CrystalMod.blocks.crops.BlockCrystalPlant.PlantType;
 import alec_wam.CrystalMod.blocks.crops.material.ItemMaterialSeed;
 import alec_wam.CrystalMod.entities.disguise.ItemDisguise;
@@ -141,6 +142,7 @@ public class ModItems {
 	public static ItemCrystalSeedTree crystalTreeSeedsBlue, crystalTreeSeedsRed, crystalTreeSeedsGreen, crystalTreeSeedsDark;
 	public static Item crystalReedsBlue, crystalReedsRed, crystalReedsGreen, crystalReedsDark;
 	public static ItemMaterialSeed materialSeed;
+	public static ItemCorn corn;
 	
 	public static ItemPipeCover pipeCover;
 	public static ItemPipeFilter pipeFilter;
@@ -241,6 +243,7 @@ public class ModItems {
 		crystalTreeSeedsGreen = new ItemCrystalSeedTree(PlantType.GREEN);
 		crystalTreeSeedsDark = new ItemCrystalSeedTree(PlantType.DARK);
 		materialSeed = new ItemMaterialSeed();
+		corn = new ItemCorn();
 		pipeCover = new ItemPipeCover();
 		pipeFilter = new ItemPipeFilter();
 		wrench = new ItemCrystalWrench();

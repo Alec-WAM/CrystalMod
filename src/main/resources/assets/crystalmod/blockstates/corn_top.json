@@ -1,0 +1,23 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "crystalmod:crystalreedblock"
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{}],
+	"age":{
+		"0":{},
+		"1":{},
+		"2":{
+			"textures": {"reedtexture": "crystalmod:blocks/plant/corn/corn_top_2"}
+		},
+		"3":{
+			"textures": {"reedtexture": "crystalmod:blocks/plant/corn/corn_top_3"}
+		},
+		"4":{
+			"textures": {"reedtexture": "crystalmod:blocks/plant/corn/corn_top_4"}
+		}
+	}
+  }
+}
