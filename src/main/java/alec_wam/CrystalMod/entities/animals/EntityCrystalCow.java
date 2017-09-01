@@ -128,5 +128,14 @@ public class EntityCrystalCow extends EntityCow implements net.minecraftforge.co
 		}
 		return ret;
 	}
+	
+	@Override
+	public boolean isBreedingItem(ItemStack stack)
+    {
+		if(stack.getItem() == ModItems.crystalBerry){
+			return true;
+		}
+        return false;
+    }
 
 }
