@@ -23,6 +23,7 @@ import alec_wam.CrystalMod.capability.ExtendedPlayerProvider;
 import alec_wam.CrystalMod.entities.accessories.GuiHorseEnderChest;
 import alec_wam.CrystalMod.entities.accessories.HorseAccessories;
 import alec_wam.CrystalMod.fluids.ModFluids;
+import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.items.enchancements.ModEnhancements;
 import alec_wam.CrystalMod.items.tools.backpack.BackpackUtil;
 import alec_wam.CrystalMod.items.tools.backpack.network.PacketToolSwap;
@@ -38,6 +39,12 @@ import alec_wam.CrystalMod.tiles.machine.power.converter.TileEnergyConverterCUto
 import alec_wam.CrystalMod.tiles.machine.power.converter.TileEnergyConverterRFtoCU;
 import alec_wam.CrystalMod.tiles.machine.specialengines.TileFiniteEngine;
 import alec_wam.CrystalMod.tiles.machine.specialengines.TileInfiniteEngine;
+import alec_wam.CrystalMod.tiles.pipes.TileEntityPipe;
+import alec_wam.CrystalMod.tiles.pipes.covers.CoverCutter;
+import alec_wam.CrystalMod.tiles.pipes.covers.CoverRender;
+import alec_wam.CrystalMod.tiles.pipes.covers.CoverUtil;
+import alec_wam.CrystalMod.tiles.pipes.covers.CoverUtil.CoverData;
+import alec_wam.CrystalMod.tiles.pipes.covers.ItemPipeCover;
 import alec_wam.CrystalMod.tiles.soundmuffler.TileSoundMuffler;
 import alec_wam.CrystalMod.tiles.spawner.EntityEssenceInstance;
 import alec_wam.CrystalMod.tiles.spawner.ItemMobEssence;
@@ -85,6 +92,7 @@ import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -94,6 +102,7 @@ import net.minecraft.inventory.ContainerHorseChest;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -600,6 +609,66 @@ public class ClientEventHandler {
     			BlockPos hitPos = event.getTarget().getBlockPos();
     			World world = event.getPlayer().getEntityWorld();
     			TileEntity tile = world.getTileEntity(hitPos);
+    			EntityPlayer player = event.getPlayer();
+    			EnumFacing side = event.getTarget().sideHit;
+    			if(tile !=null && tile instanceof TileEntityPipe){
+    				TileEntityPipe pipe = (TileEntityPipe)tile;
+    				ItemStack stackMain = player.getHeldItemMainhand();
+    				if(ItemStackTools.isEmpty(stackMain) || stackMain.getItem() !=ModItems.pipeCover){
+    					stackMain = player.getHeldItemOffhand();
+    				}
+    				if(ItemStackTools.isValid(stackMain) && stackMain.getItem() == ModItems.pipeCover){
+    					if(pipe.getCoverData(side) == null){
+    						
+    						BlockPos pos = hitPos;
+    				    	Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+    				    	GlStateManager.pushMatrix();
+    				    	
+    				    	net.minecraft.client.renderer.RenderHelper.enableStandardItemLighting();
+    						GlStateManager.enableAlpha();
+    						GlStateManager.enableColorMaterial();
+    						GlStateManager.enableBlend();
+    						GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+    						GlStateManager.enableTexture2D();
+
+    						GlStateManager.color(1, 1, 1, 0.5F);
+    						GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
+    						GlStateManager.enableBlend();
+    						GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
+    						
+    				    	
+    						GlStateManager.pushMatrix();
+    						{
+	    						CoverData data = ItemPipeCover.getCoverData(stackMain);
+	    				    	IBlockState state = data.getBlockState();
+	    				    	Tessellator tess = Tessellator.getInstance();
+	    				    	VertexBuffer buffer = tess.getBuffer();    			
+	    				    	buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
+	    				    	AxisAlignedBB bounds = CoverUtil.getCoverBoundingBox(side, false);
+	    				    	double x = (double)pos.getX() - TileEntityRendererDispatcher.staticPlayerX, y = (double)pos.getY() - TileEntityRendererDispatcher.staticPlayerY, z = (double)pos.getZ() - TileEntityRendererDispatcher.staticPlayerZ;
+	    				    	buffer.setTranslation(x-pos.getX(), y-pos.getY(), z-pos.getZ());
+	    				    	CoverCutter.ITransformer[] cutType = null;
+	    				    	if(pipe.containsExternalConnection(side))cutType = CoverCutter.hollowPipeTile;
+	    				    	if(pipe.containsPipeConnection(side))cutType = CoverCutter.hollowPipeLarge;					
+	    						CoverRender.renderBakedCoverQuads(buffer, world, pos, state, side.getIndex(), bounds, cutType);
+	    				    	buffer.setTranslation(0, 0, 0);
+	    				    	tess.draw();  
+    						}
+    				        GlStateManager.popMatrix();
+    				        
+
+    						net.minecraft.client.renderer.RenderHelper.disableStandardItemLighting();
+    						GlStateManager.disableAlpha();
+    						GlStateManager.disableColorMaterial();
+    						GlStateManager.disableLighting();
+    						GlStateManager.disableBlend();
+    				        
+    				        GlStateManager.popMatrix();
+    						event.setCanceled(true);
+    					}
+    				} 
+    			}
+    			
     			if(tile !=null && tile instanceof TileMaterialCrop){
     				TileMaterialCrop crop = (TileMaterialCrop)tile;
     				if(crop.getCrop() == null)return;
