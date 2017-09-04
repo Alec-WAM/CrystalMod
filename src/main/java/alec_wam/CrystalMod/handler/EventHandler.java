@@ -28,6 +28,7 @@ import alec_wam.CrystalMod.entities.minions.warrior.EntityMinionWarrior;
 import alec_wam.CrystalMod.integration.baubles.BaublesIntegration;
 import alec_wam.CrystalMod.integration.baubles.ItemBaubleWings;
 import alec_wam.CrystalMod.items.ItemCursedBone.BoneType;
+import alec_wam.CrystalMod.items.ItemMiscFood.FoodType;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.items.enchancements.ModEnhancements;
 import alec_wam.CrystalMod.items.tools.ItemEnhancementKnowledge;
@@ -98,10 +99,16 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.storage.loot.LootContext;
+import net.minecraft.world.storage.loot.LootContext.EntityTarget;
 import net.minecraft.world.storage.loot.LootEntry;
 import net.minecraft.world.storage.loot.LootPool;
+import net.minecraft.world.storage.loot.LootTableList;
+import net.minecraft.world.storage.loot.conditions.LootCondition;
 import net.minecraft.world.storage.loot.functions.LootFunction;
+import net.minecraftforge.common.BiomeDictionary;
+import net.minecraftforge.common.BiomeDictionary.Type;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.LootTableLoadEvent;
@@ -207,6 +214,13 @@ public class EventHandler {
     		if(event.getEntityLiving() instanceof EntityPlayer){
     			EntityPlayer player = (EntityPlayer)event.getEntityLiving();
     			updateWings(player);
+    			ExtendedPlayer exPlayer = ExtendedPlayerProvider.getExtendedPlayer(player);
+    			if(exPlayer !=null){
+    				if(exPlayer.hasFailed){
+    					ItemUtil.givePlayerItem(player, new ItemStack(ModBlocks.failureBlock));
+    					exPlayer.hasFailed = false;
+    				}
+    			}
     		}
     	}
     }
@@ -992,12 +1006,33 @@ public class EventHandler {
     }
     
     private static LootEntry customLootEnhancementBook;
+    private static LootEntry customLootWhiteFish;
     static{
     	customLootEnhancementBook = LootHelper.createLootEntryItem(ModItems.enhancementKnowledge, Config.enhancementBookRarity, 0, new LootFunction[]{
     			new LootFunction(null){
 					@Override
 					public ItemStack apply(ItemStack stack, Random rand, LootContext context) {
 						return ItemEnhancementKnowledge.createRandomBook(rand);
+					}    				
+    			}
+    	});
+    	LootCondition conditionCold = new LootCondition(){
+			@Override
+			public boolean testCondition(Random rand, LootContext context) {
+				Entity entity = context.getEntity(EntityTarget.THIS);
+				World world = context.getWorld();
+				Biome biome = world.getBiomeForCoordsBody(new BlockPos(entity));
+				if(BiomeDictionary.hasType(biome, Type.COLD) || BiomeDictionary.hasType(biome, Type.SNOWY)){
+					return true;
+				}
+				return false;
+			}    		
+    	};
+    	customLootWhiteFish = LootHelper.createLootEntryItem(ModItems.miscFood, 13, 0, new LootFunction[]{
+    			new LootFunction(new LootCondition[]{conditionCold}){
+					@Override
+					public ItemStack apply(ItemStack stack, Random rand, LootContext context) {
+						return new ItemStack(ModItems.miscFood, 1, FoodType.WHITE_FISH_RAW.getMetadata());
 					}    				
     			}
     	});
@@ -1009,6 +1044,12 @@ public class EventHandler {
             LootHelper.createPoolIfNotExists(event.getTable(), lootPoolId);
             final LootPool lootPool = event.getTable().getPool(lootPoolId);
             lootPool.addEntry(customLootEnhancementBook);
+        }
+        if(event.getName() == LootTableList.GAMEPLAY_FISHING_FISH){
+        	String lootPoolId = LootHelper.VANILLA_LOOT_POOL_ID;        	
+            LootHelper.createPoolIfNotExists(event.getTable(), lootPoolId);
+            final LootPool lootPool = event.getTable().getPool(lootPoolId);
+            lootPool.addEntry(customLootWhiteFish);            
         }
     }
     

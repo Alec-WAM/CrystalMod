@@ -105,6 +105,26 @@ public class CmdTag extends AbstractCMCommand{
 					return;
 				}
 				
+				if(args.length > 1 && args[1].equalsIgnoreCase("math")){
+					/*boolean top = true;
+					int age = 4;
+					int compTop = (top ? 1 : 0);
+			    	int compAge = age;
+			    	int compressed = (compAge << 1) | compTop;
+			    	ModLogger.info("Compressed: "+compressed);
+			    	int afterTop = (compressed & 1);
+			    	int afterAge = compressed >> 1;
+			    	ModLogger.info("After: "+afterTop+" "+afterAge);*/
+					int compTop = 1;
+			    	int compAge = 3;
+			    	int compressed = (compAge << 2) | compTop;
+			    	ModLogger.info("Compressed: "+compressed);
+			    	int afterTop = compressed & 3;
+			    	int afterAge = compressed >> 2;
+			    	ModLogger.info("After: "+afterTop+" "+afterAge);
+					return;
+				}
+				
 				if(args.length > 1 && args[1].equalsIgnoreCase("well")){
 					BlockPos pos = new BlockPos(player).offset(EnumFacing.DOWN);
 					int type = 0;

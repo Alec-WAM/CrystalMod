@@ -195,29 +195,31 @@ public class InventorySided implements IInventory, ISidedInventory
 	@Override
 	public ItemStack decrStackSize(int var1, int var2)
 	{
-		ItemStack stack = getStackInSlot(var1);
-		if(ItemStackTools.isValid(stack))
-		{
-			int qty = var2 > ItemStackTools.getStackSize(stack) ? ItemStackTools.getStackSize(stack) : var2;
-			ItemStackTools.incStackSize(stack, -qty);
-			ItemStack returnStack = stack.copy();
-			ItemStackTools.setStackSize(returnStack, qty);
-			if(ItemStackTools.isEmpty(stack))      
-			{
-				setInventorySlotContents(var1, ItemStackTools.getEmptyStack());
-			}
-			if(ItemStackTools.isEmpty(returnStack)){returnStack=ItemStackTools.getEmptyStack();}  
-			markDirty();
-			return returnStack;
-		}
-		return ItemStackTools.getEmptyStack();
+		ItemStack itemStack = getStackInSlot(var1);
+
+	    if(ItemStackTools.isNullStack(itemStack)) {
+	      return ItemStackTools.getEmptyStack();
+	    }
+
+	    if(ItemStackTools.getStackSize(itemStack) <= var2) {
+	      setInventorySlotContents(var1, ItemStackTools.getEmptyStack());
+	      markDirty();
+	      return itemStack;
+	    }
+
+	    itemStack = itemStack.splitStack(var2);
+	    if(ItemStackTools.isEmpty(getStackInSlot(var1))) {
+	      setInventorySlotContents(var1, ItemStackTools.getEmptyStack());
+	    }
+	    markDirty();
+	    return itemStack;
 	}
 
 	@Override
 	public void setInventorySlotContents(int var1, ItemStack var2)
 	{
-	  inventorySlots.set(var1, var2);  
-	  markDirty();
+		inventorySlots.set(var1, var2);  
+		markDirty();
 	}
 
 	@Override

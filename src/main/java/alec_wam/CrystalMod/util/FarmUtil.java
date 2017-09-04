@@ -8,6 +8,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import alec_wam.CrystalMod.blocks.ModBlocks;
+import alec_wam.CrystalMod.blocks.crops.ItemCorn.CornItemType;
 import alec_wam.CrystalMod.items.ModItems;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCocoa;
@@ -33,10 +34,10 @@ public class FarmUtil {
 		if(ItemStackTools.isNullStack(stack))return;
 		if (stack.getItemDamage() == OreDictionary.WILDCARD_VALUE) {
 			for (int a = 0; a < 16; a++) {
-				seeds.add(stack.getUnlocalizedName() + a);
+				seeds.add(stack.getItem().getRegistryName().toString() + "|" + a);
 			}
 		} else {
-			seeds.add(stack.getUnlocalizedName() + stack.getItemDamage());
+			seeds.add(stack.getItem().getRegistryName().toString() + "|" + stack.getItemDamage());
 		}
 	}
 	
@@ -54,13 +55,13 @@ public class FarmUtil {
 		  
 		  boolean found = false;
 	      for (int a = 0; a < 16; a++) {
-	        if ((seeds.contains(stack.getItem().getUnlocalizedName() + a)))
+	        if ((seeds.contains(stack.getItem().getRegistryName().toString() + "|" + a)))
 	        {
 	          found = true;
 	          break;
 	        }
 	      }
-		  if((stack.getItem() instanceof IPlantable) || found || (seeds.contains(stack.getItem().getUnlocalizedName() + stack.getItemDamage()))){
+		  if((stack.getItem() instanceof IPlantable) || found || (seeds.contains(stack.getItem().getRegistryName().toString() + "|" + stack.getItemDamage()))){
 			  return true;
 		  }
 		  return false;
@@ -252,12 +253,11 @@ public class FarmUtil {
 	}
 
 	public static void addDefaultCrops() {
-		addClickableCrop(new ItemStack(ModBlocks.crystalPlantBlue), 3);
-	    addClickableCrop(new ItemStack(ModBlocks.crystalPlantRed), 3);
-	    addClickableCrop(new ItemStack(ModBlocks.crystalPlantGreen), 3);
-	    addClickableCrop(new ItemStack(ModBlocks.crystalPlantDark), 3);
+		//TODO add corn
+		addClickableCrop(new ItemStack(ModBlocks.crystalPlant), 3);
 	    addClickableCrop(new ItemStack(ModBlocks.materialCrop), 1);
 	    addSeed(new ItemStack(ModItems.materialSeed));
+	    addSeed(new ItemStack(ModItems.corn, 1, CornItemType.KERNELS.getMetadata()));
 	    addStackedCrop(Blocks.REEDS, OreDictionary.WILDCARD_VALUE);
 	    addStackedCrop(Blocks.CACTUS, OreDictionary.WILDCARD_VALUE);
 	    addStackedCrop(ModBlocks.crystalReedsBlue, OreDictionary.WILDCARD_VALUE);

@@ -143,6 +143,7 @@ public class ModItems {
 	public static Item crystalReedsBlue, crystalReedsRed, crystalReedsGreen, crystalReedsDark;
 	public static ItemMaterialSeed materialSeed;
 	public static ItemCorn corn;
+	public static ItemMiscFood miscFood;
 	
 	public static ItemPipeCover pipeCover;
 	public static ItemPipeFilter pipeFilter;
@@ -244,6 +245,7 @@ public class ModItems {
 		crystalTreeSeedsDark = new ItemCrystalSeedTree(PlantType.DARK);
 		materialSeed = new ItemMaterialSeed();
 		corn = new ItemCorn();
+		miscFood = new ItemMiscFood();
 		pipeCover = new ItemPipeCover();
 		pipeFilter = new ItemPipeFilter();
 		wrench = new ItemCrystalWrench();

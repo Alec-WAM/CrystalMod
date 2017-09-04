@@ -23,6 +23,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -39,14 +40,14 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockCorn extends Block implements net.minecraftforge.common.IPlantable, ICustomModel, IGrowable
 {
-    public static final PropertyInteger AGE = PropertyInteger.create("age", 0, 4);
+    public static final PropertyInteger AGE = PropertyInteger.create("age", 0, 5);
     public static final PropertyBool TOP = PropertyBool.create("top");
     protected static final AxisAlignedBB REED_AABB = new AxisAlignedBB(0.125D, 0.0D, 0.125D, 0.875D, 1.0D, 0.875D);
     public BlockCorn()
     {
         super(Material.PLANTS);
         this.setSoundType(SoundType.PLANT);
-        this.setDefaultState(this.blockState.getBaseState().withProperty(AGE, Integer.valueOf(0)));
+        this.setDefaultState(this.blockState.getBaseState().withProperty(AGE, Integer.valueOf(0)).withProperty(TOP, false));
         this.setTickRandomly(true);
         disableStats();
     }
@@ -59,7 +60,7 @@ public class BlockCorn extends Block implements net.minecraftforge.common.IPlant
 	}
     
     public static void placeGrownCorn(World world, BlockPos pos, int age){
-    	if(age >= 2){
+    	if(age >= 1){
     		world.setBlockState(pos.up(), ModBlocks.corn.getDefaultState().withProperty(AGE, age).withProperty(TOP, true));
     	}
     	world.setBlockState(pos, ModBlocks.corn.getDefaultState().withProperty(AGE, age));
@@ -81,19 +82,82 @@ public class BlockCorn extends Block implements net.minecraftforge.common.IPlant
     @Override
 	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand)
     {
-        if(worldIn.isAirBlock(pos.up())){
+    	super.updateTick(worldIn, pos, state, rand);
+        if(worldIn.getLightFromNeighbors(pos.up()) >= 9){
         	boolean bottom = state.getValue(TOP) == false;
         	if(bottom){
         		int age = state.getValue(AGE).intValue();
         		if(age < 4){
-        			int newAge = age+1;
-        			if(newAge >= 2){
-        				worldIn.setBlockState(pos.up(), state.withProperty(AGE, Integer.valueOf(newAge)).withProperty(TOP, true), 4);
-        			}
-                    worldIn.setBlockState(pos, state.withProperty(AGE, Integer.valueOf(newAge)), 4);
+        			float f = getGrowthChance(this, worldIn, pos);
+        			boolean canGrow = rand.nextInt((int)(25.0F / f) + 1) == 0;
+        			if(net.minecraftforge.common.ForgeHooks.onCropsGrowPre(worldIn, pos, state, canGrow))
+                    {
+	        			int newAge = age+1;
+	        			if(newAge >= 1){
+	        				worldIn.setBlockState(pos.up(), state.withProperty(AGE, Integer.valueOf(newAge)).withProperty(TOP, true), 3);
+	        			}
+	                    worldIn.setBlockState(pos, state.withProperty(AGE, Integer.valueOf(newAge)), 2);
+	                    net.minecraftforge.common.ForgeHooks.onCropsGrowPost(worldIn, pos, state, worldIn.getBlockState(pos));
+                    }
         		}
         	}
         }
+    }
+    
+    //Ripped from BlockCrops
+    protected static float getGrowthChance(Block blockIn, World worldIn, BlockPos pos)
+    {
+        float f = 1.0F;
+        BlockPos blockpos = pos.down();
+
+        for (int i = -1; i <= 1; ++i)
+        {
+            for (int j = -1; j <= 1; ++j)
+            {
+                float f1 = 0.0F;
+                IBlockState iblockstate = worldIn.getBlockState(blockpos.add(i, 0, j));
+
+                if (iblockstate.getBlock().canSustainPlant(iblockstate, worldIn, blockpos.add(i, 0, j), net.minecraft.util.EnumFacing.UP, (net.minecraftforge.common.IPlantable)blockIn))
+                {
+                    f1 = 1.0F;
+
+                    if (iblockstate.getBlock().isFertile(worldIn, blockpos.add(i, 0, j)))
+                    {
+                        f1 = 3.0F;
+                    }
+                } 
+
+                if (i != 0 || j != 0)
+                {
+                    f1 /= 4.0F;
+                }
+
+                f += f1;
+            }
+        }
+
+        BlockPos blockpos1 = pos.north();
+        BlockPos blockpos2 = pos.south();
+        BlockPos blockpos3 = pos.west();
+        BlockPos blockpos4 = pos.east();
+        boolean flag = blockIn == worldIn.getBlockState(blockpos3).getBlock() || blockIn == worldIn.getBlockState(blockpos4).getBlock();
+        boolean flag1 = blockIn == worldIn.getBlockState(blockpos1).getBlock() || blockIn == worldIn.getBlockState(blockpos2).getBlock();
+
+        if (flag && flag1)
+        {
+            f /= 2.0F;
+        }
+        else
+        {
+            boolean flag2 = blockIn == worldIn.getBlockState(blockpos3.north()).getBlock() || blockIn == worldIn.getBlockState(blockpos4.north()).getBlock() || blockIn == worldIn.getBlockState(blockpos4.south()).getBlock() || blockIn == worldIn.getBlockState(blockpos3.south()).getBlock();
+
+            if (flag2)
+            {
+                f /= 2.0F;
+            }
+        }
+
+        return f;
     }
 
     @Override
@@ -102,7 +166,11 @@ public class BlockCorn extends Block implements net.minecraftforge.common.IPlant
     	IBlockState currentState = worldIn.getBlockState(pos);
         IBlockState state = worldIn.getBlockState(pos.down());
         Block block = state.getBlock();
-        if (block.canSustainPlant(state, worldIn, pos.down(), EnumFacing.UP, this)) return true;        
+        if (block.canSustainPlant(state, worldIn, pos.down(), EnumFacing.UP, this)) return true;
+        //Allow only dirt for plains generation
+        if(block == Blocks.DIRT){
+        	return true;
+        }
         if(currentState.getBlock() == this && currentState.getValue(TOP) == true){
         	return block == this;
         }        
@@ -221,8 +289,8 @@ public class BlockCorn extends Block implements net.minecraftforge.common.IPlant
     @Override
 	public IBlockState getStateFromMeta(int meta)
     {
-    	int top = meta & 0x2F;
-    	int age = (meta >> 2) & 1;
+    	int top = meta & 1;
+    	int age = meta >> 1;
     	return this.getDefaultState().withProperty(TOP, top == 1).withProperty(AGE, age);
     }
 
@@ -239,9 +307,9 @@ public class BlockCorn extends Block implements net.minecraftforge.common.IPlant
     @Override
 	public int getMetaFromState(IBlockState state)
     {
-    	int top = (state.getValue(TOP).booleanValue() ? 1 : 0);
+    	int top = state.getValue(TOP).booleanValue() ? 1 : 0;
     	int age = ((Integer)state.getValue(AGE)).intValue();
-    	return (top << 2) | age;
+    	return (age << 1) | top;
     }
 
     @Override
@@ -270,7 +338,7 @@ public class BlockCorn extends Block implements net.minecraftforge.common.IPlant
     @Override
     public IBlockState getPlant(IBlockAccess world, BlockPos pos)
     {
-        return getDefaultState();
+        return getDefaultState().withProperty(AGE, 0).withProperty(TOP, false);
     }
     
     public static class CustomBlockStateMapper extends StateMapperBase
@@ -302,7 +370,7 @@ public class BlockCorn extends Block implements net.minecraftforge.common.IPlant
 			int age = state.getValue(AGE).intValue();
 			if(age < 4){
 				int newAge = age+1;
-				if(newAge >= 2){
+				if(newAge >= 1){
 					worldIn.setBlockState(pos.up(), this.getDefaultState().withProperty(AGE, Integer.valueOf(newAge)).withProperty(TOP, true));
 				}
 				worldIn.setBlockState(pos, state.withProperty(AGE, Integer.valueOf(newAge)), 4);

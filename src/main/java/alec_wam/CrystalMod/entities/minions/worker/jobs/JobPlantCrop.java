@@ -48,9 +48,9 @@ public class JobPlantCrop extends WorkerJob {
 				worker.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, held);
 				worker.swingArm(EnumHand.MAIN_HAND);
 			}
-			if(worker.getHeldItemMainhand() !=null){
+			if(ItemStackTools.isValid(worker.getHeldItemMainhand())){
 				cFarm.addStackToInventory(worker.getHeldItemMainhand(), RelativeSide.FRONT, RelativeSide.TOP);
-				worker.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, null);
+				worker.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, ItemStackTools.getEmptyStack());
 			}
 			return true;
 		} else {

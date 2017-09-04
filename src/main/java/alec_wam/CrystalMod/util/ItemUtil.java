@@ -509,12 +509,12 @@ public class ItemUtil {
     return doInsertItemInv(inv, null, sidedSlotter.getInstance(slotArray), item, null, doInsert);
   }
 
-  private static int doInsertItemInv(IInventory inv, ISidedInventory sidedInv, ISlotIterator slots, ItemStack item, EnumFacing inventorySide,
+  public static int doInsertItemInv(IInventory inv, ISidedInventory sidedInv, ISlotIterator slots, ItemStack item, EnumFacing inventorySide,
       boolean doInsert) {
     int numInserted = 0;
     int numToInsert = ItemStackTools.getStackSize(item);
     int firstFreeSlot = -1;
-
+    
     // PASS1: Try to add to an existing stack
     while (numToInsert > 0 && slots.hasNext()) {
       final int slot = slots.nextSlot();
@@ -541,13 +541,17 @@ public class ItemUtil {
         }
       }
     }
-
+    
     // PASS2: Try to insert into an empty slot
     if (numToInsert > 0 && firstFreeSlot != -1) {
       final ItemStack toInsert = item.copy();
       ItemStackTools.setStackSize(toInsert, min(numToInsert, inv.getInventoryStackLimit(), toInsert.getMaxStackSize())); // some inventories like using itemstacks with invalid stack sizes
       if (sidedInv != null || inv.isItemValidForSlot(firstFreeSlot, toInsert)) {
     	if (doInsert) {
+    	  final int noToInsert = Math.min(numToInsert, inv.getInventoryStackLimit());
+    	  numInserted += noToInsert;
+          numToInsert -= noToInsert;
+          
           inv.setInventorySlotContents(firstFreeSlot, toInsert);
         }
       }
@@ -1436,6 +1440,17 @@ public class ItemUtil {
 		}
 		
 		spawnItemInWorldWithoutMotion(new EntityItem(worldIn, x, y, z, itemStack));
+	}
+
+	public static void givePlayerItem(EntityPlayer player, ItemStack stack) {
+		if(!player.inventory.addItemStackToInventory(stack)){
+			EntityItem item = new EntityItem(player.getEntityWorld(), player.posX, player.posY, player.posZ, stack);
+			item.setPickupDelay(0);
+			item.motionX = item.motionY = item.motionZ = 0.0D;
+
+		    if(!player.getEntityWorld().isRemote)
+		    	player.getEntityWorld().spawnEntity(item);
+		}
 	}
 
 }

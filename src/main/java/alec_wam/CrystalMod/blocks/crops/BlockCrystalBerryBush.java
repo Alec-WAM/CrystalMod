@@ -16,11 +16,13 @@ import net.minecraft.block.IGrowable;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -30,6 +32,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -42,16 +45,15 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockCrystalBerryBush extends BlockBush implements IGrowable, ICustomModel {
 
+	public static final PropertyEnum<PlantType> TYPE = PropertyEnum.create("type", PlantType.class);
 	public static final PropertyInteger AGE = PropertyInteger.create("age", 0, 3);
-    public final PlantType TYPE;
 
-    public BlockCrystalBerryBush(PlantType type)
+    public BlockCrystalBerryBush()
     {
         super(Material.LEAVES);
-        this.TYPE = type;
         this.setHardness(0.3f);
         this.setSoundType(SoundType.PLANT);
-        this.setDefaultState(this.blockState.getBaseState().withProperty(AGE, Integer.valueOf(0)));
+        this.setDefaultState(this.blockState.getBaseState().withProperty(AGE, Integer.valueOf(0)).withProperty(TYPE, PlantType.BLUE));
         this.setCreativeTab(CrystalMod.tabCrops);
     }
     
@@ -59,8 +61,18 @@ public class BlockCrystalBerryBush extends BlockBush implements IGrowable, ICust
 	@SideOnly(Side.CLIENT)
 	public void initModel() {
 		ModelLoader.setCustomStateMapper(this, new CustomBlockStateMapper());
-		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(getRegistryName(), "age=3"));
+		for(PlantType type : PlantType.values()){
+			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), type.getMeta(), new ModelResourceLocation("crystalmod:"+type.getName()+getRegistryName().getResourcePath(), "age=2"));
+		}
 	}
+    
+    @SideOnly(Side.CLIENT)
+    @Override
+    public void getSubBlocks(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> list) {
+      for(PlantType type : PlantType.values()) {
+        list.add(new ItemStack(this, 1, type.getMeta()));
+      }
+    }
 
 	public static class CustomBlockStateMapper extends StateMapperBase
 	{
@@ -74,7 +86,7 @@ public class BlockCrystalBerryBush extends BlockBush implements IGrowable, ICust
 			builder.append("=");
 			builder.append(state.getValue(AGE));
 
-			nameOverride = state.getBlock().getRegistryName().getResourcePath();
+			nameOverride = state.getValue(TYPE).getName()+state.getBlock().getRegistryName().getResourcePath();
 
 			if(builder.length() == 0)
 			{
@@ -141,7 +153,9 @@ public class BlockCrystalBerryBush extends BlockBush implements IGrowable, ICust
     @Override
     public IBlockState getStateFromMeta(int meta)
     {
-        return this.getDefaultState().withProperty(AGE, Integer.valueOf(meta));
+    	int afterTop = (meta & 3);
+    	int afterAge = meta >> 2;
+        return this.getDefaultState().withProperty(AGE, Integer.valueOf(afterAge)).withProperty(TYPE, PlantType.values()[afterTop]);
     }
 
     /**
@@ -150,13 +164,15 @@ public class BlockCrystalBerryBush extends BlockBush implements IGrowable, ICust
     @Override
     public int getMetaFromState(IBlockState state)
     {
-        return state.getValue(AGE).intValue();
+    	int compTop = state.getValue(TYPE).getMeta();
+    	int compAge = state.getValue(AGE).intValue();
+        return (compAge << 2) | compTop;
     }
 
     @Override
     protected BlockStateContainer createBlockState()
     {
-        return new BlockStateContainer(this, new IProperty[] {AGE});
+        return new BlockStateContainer(this, new IProperty[] {AGE, TYPE});
     }
 
     @Override
@@ -171,8 +187,8 @@ public class BlockCrystalBerryBush extends BlockBush implements IGrowable, ICust
     	Random rand = worldIn instanceof World ? worldIn.rand : Util.rand;
     	int fortune = EnchantmentHelper.getMaxEnchantmentLevel(Enchantments.FORTUNE, playerIn);
     	int count = 1 + rand.nextInt(2) + (fortune > 0 ? rand.nextInt(fortune + 1) : 0);
-    	ItemStack crop = getCrop();
-    	worldIn.setBlockState(pos, getDefaultState());
+    	ItemStack crop = new ItemStack(ModItems.crystalBerry, 1, state.getValue(TYPE).getMeta());
+    	worldIn.setBlockState(pos, state.withProperty(AGE, 0));
     	double x = pos.getX() + 0.5 + (side.getFrontOffsetX() * 0.6);
     	double y = pos.getY() + 0.25 + (side.getFrontOffsetY() * 0.6);
     	double z = pos.getZ() + 0.5 + (side.getFrontOffsetZ() * 0.6);
@@ -183,10 +199,6 @@ public class BlockCrystalBerryBush extends BlockBush implements IGrowable, ICust
     		}
     	}
     	return true;
-    }
-    
-    public ItemStack getCrop(){
-    	return new ItemStack(ModItems.crystalBerry, 1, TYPE.getMeta());
     }
     
     @Override
@@ -201,7 +213,7 @@ public class BlockCrystalBerryBush extends BlockBush implements IGrowable, ICust
             count = 1 + rand.nextInt(2) + (fortune > 0 ? rand.nextInt(fortune + 1) : 0);
         }
 
-        ItemStack crop = getCrop();
+        ItemStack crop = new ItemStack(ModItems.crystalBerry, 1, state.getValue(TYPE).getMeta());
         if(ItemStackTools.isValid(crop)){
 	        for (int i = 0; i < count; i++)
 	        {

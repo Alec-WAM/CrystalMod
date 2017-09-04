@@ -45,6 +45,7 @@ import alec_wam.CrystalMod.items.ItemCursedBone.BoneType;
 import alec_wam.CrystalMod.items.ItemIngot.IngotType;
 import alec_wam.CrystalMod.items.ItemMachineFrame.FrameType;
 import alec_wam.CrystalMod.items.ItemMetalPlate.PlateType;
+import alec_wam.CrystalMod.items.ItemMiscFood.FoodType;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.items.guide.ItemCrystalGuide.GuideType;
 import alec_wam.CrystalMod.items.tools.ItemToolParts.PartType;
@@ -206,6 +207,8 @@ public class ModCrafting {
 		addShapedRecipe(new ItemStack(ModItems.crystals, 1, CrystalType.DARK_SHARD.getMetadata()), "RRR", 'R', ModItems.crystalReedsDark);
 		
 		addShapelessRecipe(new ItemStack(ModItems.corn, 2, CornItemType.KERNELS.getMetadata()), new Object[]{new ItemStack(ModItems.corn, 1, CornItemType.CORN.getMetadata())});
+		GameRegistry.addSmelting(new ItemStack(ModItems.corn, 1, CornItemType.KERNELS.getMetadata()), new ItemStack(ModItems.miscFood, 1, FoodType.POPCORN.getMetadata()), 0.1F);
+		GameRegistry.addSmelting(new ItemStack(ModItems.corn, 1, CornItemType.CORN.getMetadata()), new ItemStack(ModItems.miscFood, 1, FoodType.CORN_COB.getMetadata()), 0.1F);
 
 		addShapelessRecipe(new ItemStack(ModItems.cursedBone, 3, BoneType.BONEMEAL.getMetadata()), new Object[]{new ItemStack(ModItems.cursedBone, 1, BoneType.BONE.getMetadata())});
 		

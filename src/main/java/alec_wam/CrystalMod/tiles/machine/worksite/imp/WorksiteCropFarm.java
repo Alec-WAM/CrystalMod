@@ -20,6 +20,7 @@ import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.FarmUtil;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
+import alec_wam.CrystalMod.util.ModLogger;
 import alec_wam.CrystalMod.util.tool.ToolUtil;
 import net.minecraft.block.BlockStem;
 import net.minecraft.block.state.IBlockState;
@@ -76,10 +77,6 @@ public class WorksiteCropFarm extends TileWorksiteUserBlocks {
 		ItemSlotFilter filter = new ItemSlotFilter() {
 			@Override
 			public boolean isItemValid(ItemStack stack) {
-				if (ItemStackTools.isEmpty(stack)) {
-					return true;
-				}
-				stack.getItem();
 				if (FarmUtil.isSeed(stack, true)) {
 					return true;
 				}
@@ -92,7 +89,7 @@ public class WorksiteCropFarm extends TileWorksiteUserBlocks {
 			@Override
 			public boolean isItemValid(ItemStack stack) {
 				if (ItemStackTools.isEmpty(stack)) {
-					return true;
+					return false;
 				}
 				if(stack.getItem() instanceof ItemHoe){
 					return true;
@@ -279,7 +276,6 @@ public class WorksiteCropFarm extends TileWorksiteUserBlocks {
 						if (ItemStackTools.isEmpty(stack)) {
 							continue;
 						}
-						stack.getItem();
 						if (FarmUtil.isSeed(stack, true)) {
 							boolean canPlant = true;
 							if (stack.getItem() instanceof IPlantable) {
@@ -311,11 +307,11 @@ public class WorksiteCropFarm extends TileWorksiteUserBlocks {
 			while (it.hasNext() && (position = it.next()) != null) {
 				it.remove();
 				if (FarmUtil.isCrop(getWorld(), position)	&& !FarmUtil.isGrownCrop(getWorld(), position)) {
-					ItemStack stack = null;
+					ItemStack stack = ItemStackTools.getEmptyStack();
 					Item item;
 					for (int i = 30; i < 33; i++) {
 						stack = inventory.getStackInSlot(i);
-						if (stack == null) {
+						if (ItemStackTools.isEmpty(stack)) {
 							continue;
 						}
 						item = stack.getItem();

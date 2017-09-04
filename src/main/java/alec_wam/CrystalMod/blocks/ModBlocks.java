@@ -230,9 +230,9 @@ public class ModBlocks {
 	public static BlockWoodenCrystalChest crystalWoodenChest;
 	public static BlockWirelessChest wirelessChest;
 	public static BlockCase storageCase;
-	public static BlockCrystalPlant crystalPlantBlue, crystalPlantRed, crystalPlantGreen, crystalPlantDark;
+	public static BlockCrystalPlant crystalPlant;
 	public static BlockCrystalTreePlant crystalTreePlantBlue, crystalTreePlantRed, crystalTreePlantGreen, crystalTreePlantDark;
-	public static BlockCrystalBerryBush crystalBushBlue, crystalBushRed, crystalBushGreen, crystalBushDark;	
+	public static BlockCrystalBerryBush crystalBush;	
 	public static BlockGlowBerry glowBerryBlue, glowBerryRed, glowBerryGreen, glowBerryDark;	
 	public static BlockCrystalLog crystalLog;
 	public static BlockCrystalLeaves crystalLeaves;
@@ -395,17 +395,9 @@ public class ModBlocks {
 		registerEnumBlock(storageCase, "storagecase");
 		registerTileEntity(TileEntityCaseNoteblock.class, TileEntityCasePiston.class);
 
-		crystalPlantBlue = new BlockCrystalPlant(PlantType.BLUE);
-		registerBlock(crystalPlantBlue, "bluecrystalplant");
-
-		crystalPlantRed = new BlockCrystalPlant(PlantType.RED);
-		registerBlock(crystalPlantRed, "redcrystalplant");
-
-		crystalPlantGreen = new BlockCrystalPlant(PlantType.GREEN);
-		registerBlock(crystalPlantGreen, "greencrystalplant");
-
-		crystalPlantDark = new BlockCrystalPlant(PlantType.DARK);
-		registerBlock(crystalPlantDark, "darkcrystalplant");
+		crystalPlant = new BlockCrystalPlant();
+		registerBlock(crystalPlant, new ItemBlockMeta(crystalPlant), "crystalplant");
+		ItemBlockMeta.setMappingProperty(crystalPlant, BlockCrystalPlant.TYPE);
 
 		crystalTreePlantBlue = new BlockCrystalTreePlant(PlantType.BLUE);
 		registerBlock(crystalTreePlantBlue, "bluecrystaltreeplant");
@@ -419,14 +411,9 @@ public class ModBlocks {
 		crystalTreePlantDark = new BlockCrystalTreePlant(PlantType.DARK);
 		registerBlock(crystalTreePlantDark, "darkcrystaltreeplant");
 		
-		crystalBushBlue = new BlockCrystalBerryBush(PlantType.BLUE);
-		registerBlock(crystalBushBlue, "bluecrystalbush");
-		crystalBushRed = new BlockCrystalBerryBush(PlantType.RED);
-		registerBlock(crystalBushRed, "redcrystalbush");
-		crystalBushGreen = new BlockCrystalBerryBush(PlantType.GREEN);
-		registerBlock(crystalBushGreen, "greencrystalbush");
-		crystalBushDark = new BlockCrystalBerryBush(PlantType.DARK);
-		registerBlock(crystalBushDark, "darkcrystalbush");
+		crystalBush = new BlockCrystalBerryBush();
+		registerBlock(crystalBush, new ItemBlockMeta(crystalBush), "crystalbush");
+		ItemBlockMeta.setMappingProperty(crystalBush, BlockCrystalBerryBush.TYPE);
 		
 		glowBerryBlue = new BlockGlowBerry(PlantType.BLUE);
 		registerBlock(glowBerryBlue, "blueglowberry");

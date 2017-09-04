@@ -1,6 +1,5 @@
 package alec_wam.CrystalMod.blocks.crops;
 
-import java.awt.Color;
 import java.util.Locale;
 import java.util.Random;
 
@@ -8,6 +7,7 @@ import javax.annotation.Nonnull;
 
 import alec_wam.CrystalMod.blocks.BlockCrystal.CrystalBlockType;
 import alec_wam.CrystalMod.blocks.BlockCrystalIngot.CrystalIngotBlockType;
+import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.items.ItemCrystal.CrystalType;
 import alec_wam.CrystalMod.items.ModItems;
@@ -18,9 +18,11 @@ import net.minecraft.block.BlockBush;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
@@ -29,17 +31,17 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.EnumPlantType;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class BlockCrystalPlant extends BlockBush
+public class BlockCrystalPlant extends BlockBush implements ICustomModel
 {
 	public static enum PlantType implements IStringSerializable, alec_wam.CrystalMod.blocks.EnumBlock.IEnumMeta{
 		BLUE, RED, GREEN, DARK;
@@ -64,17 +66,25 @@ public class BlockCrystalPlant extends BlockBush
 
     private static final AxisAlignedBB[] AGE_AABB = new AxisAlignedBB[] {new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.3125D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.6875D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.875D, 1.0D)};
 
+    public static final PropertyEnum<PlantType> TYPE = PropertyEnum.create("type", PlantType.class);
 	public static final PropertyInteger AGE = PropertyInteger.create("age", 0, 3);
-    public final PlantType TYPE;
 
-    public BlockCrystalPlant(PlantType type)
+    public BlockCrystalPlant()
     {
         super(Material.PLANTS);
-        this.TYPE = type;
         this.setSoundType(SoundType.PLANT);
-        this.setDefaultState(this.blockState.getBaseState().withProperty(AGE, Integer.valueOf(0)));
+        this.setDefaultState(this.blockState.getBaseState().withProperty(AGE, Integer.valueOf(0)).withProperty(TYPE, PlantType.BLUE));
         this.setCreativeTab((CreativeTabs)null);
     }
+    
+    @Override
+	@SideOnly(Side.CLIENT)
+	public void initModel() {
+		ModelLoader.setCustomStateMapper(this, new BlockCrystalBerryBush.CustomBlockStateMapper());
+		for(PlantType type : PlantType.values()){
+			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), type.getMeta(), new ModelResourceLocation("crystalmod:"+type.getName()+getRegistryName().getResourcePath(), "age=2"));
+		}
+	}
     
     @Override
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
@@ -83,9 +93,10 @@ public class BlockCrystalPlant extends BlockBush
     }
 
     @Override
-    protected boolean canSustainBush(IBlockState state)
+    public boolean canBlockStay(World worldIn, BlockPos pos, IBlockState state)
     {
-    	return getTypeFromBlock(state) == TYPE;
+    	IBlockState below = worldIn.getBlockState(pos.down());
+    	return getTypeFromBlock(below) == state.getValue(TYPE);
     }
 
     @Nonnull
@@ -94,8 +105,8 @@ public class BlockCrystalPlant extends BlockBush
       return ModBlocks.crystalPlantType;
     }
 
-    public ItemStack getSeeds(){
-    	switch(TYPE){
+    public ItemStack getSeeds(PlantType type){
+    	switch(type){
 	        case BLUE : {
 	        	return new ItemStack(ModItems.crystalSeedsBlue);
 	        }
@@ -115,7 +126,7 @@ public class BlockCrystalPlant extends BlockBush
     @Override
     public ItemStack getItem(World worldIn, BlockPos pos, IBlockState state)
     {
-        return getSeeds();
+        return getSeeds(state.getValue(TYPE));
     }
     
     public static PlantType getTypeFromBlock(IBlockState state){
@@ -193,7 +204,9 @@ public class BlockCrystalPlant extends BlockBush
     @Override
     public IBlockState getStateFromMeta(int meta)
     {
-        return this.getDefaultState().withProperty(AGE, Integer.valueOf(meta));
+    	int afterTop = (meta & 3);
+    	int afterAge = meta >> 2;
+        return this.getDefaultState().withProperty(AGE, Integer.valueOf(afterAge)).withProperty(TYPE, PlantType.values()[afterTop]);
     }
 
     /**
@@ -202,13 +215,15 @@ public class BlockCrystalPlant extends BlockBush
     @Override
     public int getMetaFromState(IBlockState state)
     {
-        return state.getValue(AGE).intValue();
+    	int compTop = state.getValue(TYPE).getMeta();
+    	int compAge = state.getValue(AGE).intValue();
+        return (compAge << 2) | compTop;
     }
 
     @Override
     protected BlockStateContainer createBlockState()
     {
-        return new BlockStateContainer(this, new IProperty[] {AGE});
+        return new BlockStateContainer(this, new IProperty[] {AGE, TYPE});
     }
 
     @Override
@@ -223,8 +238,8 @@ public class BlockCrystalPlant extends BlockBush
     	Random rand = worldIn instanceof World ? worldIn.rand : Util.rand;
     	int fortune = EnchantmentHelper.getMaxEnchantmentLevel(Enchantments.FORTUNE, playerIn);
     	int count = 1 + rand.nextInt(2) + (fortune > 0 ? rand.nextInt(fortune + 1) : 0);
-    	ItemStack crop = getCrop();
-    	worldIn.setBlockState(pos, getDefaultState());
+    	ItemStack crop = getCrop(state.getValue(TYPE));
+    	worldIn.setBlockState(pos, state.withProperty(AGE, 0));
     	if(ItemStackTools.isValid(crop)){
     		for (int i = 0; i < count; i++)
     		{
@@ -234,8 +249,8 @@ public class BlockCrystalPlant extends BlockBush
     	return true;
     }
     
-    public ItemStack getCrop(){
-    	switch(TYPE){
+    public ItemStack getCrop(PlantType type){
+    	switch(type){
     		case BLUE : return new ItemStack(ModItems.crystals, 1, CrystalType.BLUE_SHARD.getMetadata());
     		case RED : return new ItemStack(ModItems.crystals, 1, CrystalType.RED_SHARD.getMetadata());
     		case GREEN : return new ItemStack(ModItems.crystals, 1, CrystalType.GREEN_SHARD.getMetadata());
@@ -256,8 +271,8 @@ public class BlockCrystalPlant extends BlockBush
             count = 1 + rand.nextInt(2) + (fortune > 0 ? rand.nextInt(fortune + 1) : 0);
         }
 
-        ItemStack crop = getCrop();
-        ret.add(getSeeds());
+        ItemStack crop = getCrop(state.getValue(TYPE));
+        ret.add(getSeeds(state.getValue(TYPE)));
         if(ItemStackTools.isValid(crop)){
 	        for (int i = 0; i < count; i++)
 	        {

@@ -34,20 +34,7 @@ public class ItemCrystalSeeds extends Item implements net.minecraftforge.common.
 	}
 
     public IBlockState getPlant(){
-    	switch(TYPE){
-	    	 default : case BLUE : {
-	    		 return ModBlocks.crystalPlantBlue.getDefaultState();
-	    	 }
-	    	 case RED : {
-	    		 return ModBlocks.crystalPlantRed.getDefaultState();
-	    	 }
-	    	 case GREEN : {
-	    		 return ModBlocks.crystalPlantGreen.getDefaultState();
-	    	 }
-	    	 case DARK : {
-	    		 return ModBlocks.crystalPlantDark.getDefaultState();
-	    	 }
-    	}
+    	return ModBlocks.crystalPlant.getDefaultState().withProperty(BlockCrystalPlant.TYPE, TYPE);
     }
     
     /**
@@ -80,7 +67,7 @@ public class ItemCrystalSeeds extends Item implements net.minecraftforge.common.
     @Override
     public net.minecraftforge.common.EnumPlantType getPlantType(net.minecraft.world.IBlockAccess world, BlockPos pos)
     {
-        return net.minecraftforge.common.EnumPlantType.Cave;
+        return ModBlocks.crystalPlantType;
     }
 
     @Override

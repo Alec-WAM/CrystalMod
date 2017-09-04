@@ -6,7 +6,6 @@ import alec_wam.CrystalMod.api.world.IGenerationFeature;
 import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.blocks.crops.BlockCrystalBerryBush;
 import alec_wam.CrystalMod.blocks.crops.BlockCrystalPlant.PlantType;
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -32,21 +31,11 @@ public class CrystalBushFeature implements IGenerationFeature {
 				{
 					int range = 4;
 					BlockPos bushPos = center.add(MathHelper.getInt(random, -range, range), MathHelper.getInt(random, -4, 4), MathHelper.getInt(random, -range, range));
-					if (world.isAirBlock(bushPos.down()) && ModBlocks.crystalBushBlue.canPlaceBlockAt(world, bushPos.down()))
+					if (world.isAirBlock(bushPos.down()) && ModBlocks.crystalBush.canPlaceBlockAt(world, bushPos.down()))
 					{
 						int type = MathHelper.getInt(random, 0, PlantType.values().length-1);
 						int age = MathHelper.getInt(random, 0, 3);
-						Block block = ModBlocks.crystalBushBlue;
-						if(type == PlantType.RED.getMeta()){
-							block = ModBlocks.crystalBushRed;
-						}
-						if(type == PlantType.GREEN.getMeta()){
-							block = ModBlocks.crystalBushGreen;
-						}
-						if(type == PlantType.DARK.getMeta()){
-							block = ModBlocks.crystalBushDark;
-						}
-						IBlockState state = block.getDefaultState().withProperty(BlockCrystalBerryBush.AGE, age);
+						IBlockState state = ModBlocks.crystalBush.getDefaultState().withProperty(BlockCrystalBerryBush.AGE, age).withProperty(BlockCrystalBerryBush.TYPE, PlantType.values()[type]);
 						world.setBlockState(bushPos.down(), state);
 						placed = true;
 					}

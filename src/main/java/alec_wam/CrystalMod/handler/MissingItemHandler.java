@@ -36,6 +36,23 @@ public class MissingItemHandler {
 					fixed = true;
 				} 
 				if(mapping.type == GameRegistry.Type.ITEM && !fixed){
+					
+					if(mapping.resourceLocation.getResourcePath().equalsIgnoreCase("bluecrystalbush")||
+							mapping.resourceLocation.getResourcePath().equalsIgnoreCase("redcrystalbush") ||
+							mapping.resourceLocation.getResourcePath().equalsIgnoreCase("greencrystalbush") || 
+							mapping.resourceLocation.getResourcePath().equalsIgnoreCase("darkcrystalbush")){
+						mapping.ignore();
+						fixed = true;
+					}
+					
+					if(mapping.resourceLocation.getResourcePath().equalsIgnoreCase("bluecrystalplant")||
+							mapping.resourceLocation.getResourcePath().equalsIgnoreCase("redcrystalplant") ||
+							mapping.resourceLocation.getResourcePath().equalsIgnoreCase("greencrystalplant") || 
+							mapping.resourceLocation.getResourcePath().equalsIgnoreCase("darkcrystalplant")){
+						mapping.ignore();
+						fixed = true;
+					}
+					
 					ModLogger.info(remapItems.toString());
 					if(remapItems.containsKey(rl)){
 						Item item = remapItems.get(rl);
@@ -45,6 +62,22 @@ public class MissingItemHandler {
 					}
 				} 
 				if(mapping.type == GameRegistry.Type.BLOCK && !fixed){
+					if(mapping.resourceLocation.getResourcePath().equalsIgnoreCase("bluecrystalbush")||
+							mapping.resourceLocation.getResourcePath().equalsIgnoreCase("redcrystalbush") ||
+							mapping.resourceLocation.getResourcePath().equalsIgnoreCase("greencrystalbush") || 
+							mapping.resourceLocation.getResourcePath().equalsIgnoreCase("darkcrystalbush")){
+						mapping.ignore();
+						fixed = true;
+					}
+					
+					if(mapping.resourceLocation.getResourcePath().equalsIgnoreCase("bluecrystalplant")||
+							mapping.resourceLocation.getResourcePath().equalsIgnoreCase("redcrystalplant") ||
+							mapping.resourceLocation.getResourcePath().equalsIgnoreCase("greencrystalplant") || 
+							mapping.resourceLocation.getResourcePath().equalsIgnoreCase("darkcrystalplant")){
+						mapping.ignore();
+						fixed = true;
+					}
+					
 					if(remapBlocks.containsKey(rl)){
 						Block block = remapBlocks.get(rl);
 						mapping.remap(block);

@@ -1,0 +1,13 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "transform": "forge:default-item",
+        "model": "forge:item-layer"
+    },
+    "variants": {
+		"corn_cob": [{ "textures": { "layer0": "crystalmod:items/food/corn_cob" }}],
+        "popcorn": [{ "textures": { "layer0": "crystalmod:items/food/popcorn" }}],
+        "whitefish_raw": [{ "textures": { "layer0": "crystalmod:items/food/whitefish_raw" }}],
+        "whitefish_cooked": [{ "textures": { "layer0": "crystalmod:items/food/whitefish_cooked" }}]
+    }
+}

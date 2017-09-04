@@ -44,7 +44,7 @@ public class ContainerWorksite extends ContainerMessageBase {
 
 	@Override
 	public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int slotClickedIndex) {
-		int slots = worksite.inventory.getSizeInventory();
+		/*int slots = worksite.inventory.getSizeInventory();
 		Slot slot = this.inventorySlots.get(slotClickedIndex);
 		if (slot == null || !slot.getHasStack()) {
 			return ItemStackTools.getEmptyStack();
@@ -60,7 +60,46 @@ public class ContainerWorksite extends ContainerMessageBase {
 		} else {
 			slot.onSlotChanged();
 		}
-		return ItemStackTools.getEmptyStack();
+		return ItemStackTools.getEmptyStack();*/
+		int slots = worksite.inventory.getSizeInventory();
+		ItemStack itemstack = ItemStackTools.getEmptyStack();
+        Slot slot = this.inventorySlots.get(slotClickedIndex);
+
+        if (slot != null && slot.getHasStack())
+        {
+            ItemStack itemstack1 = slot.getStack();
+            itemstack = itemstack1.copy();
+
+            if (slotClickedIndex < slots)
+            {
+                if (!this.mergeItemStack(itemstack1, slots, slots + 36, false))
+                {
+                    return ItemStackTools.getEmptyStack();
+                }
+            }
+            else if (!this.mergeItemStack(itemstack1, 0, slots, false))
+            {
+                return ItemStackTools.getEmptyStack();
+            }
+
+            if (ItemStackTools.isEmpty(itemstack1))
+            {
+                slot.putStack(ItemStackTools.getEmptyStack());
+            }
+            else
+            {
+                slot.onSlotChanged();
+            }
+
+            if (ItemStackTools.getStackSize(itemstack1) == ItemStackTools.getStackSize(itemstack))
+            {
+                return ItemStackTools.getEmptyStack();
+            }
+
+            slot.onTake(par1EntityPlayer, itemstack1);
+        }
+
+        return itemstack;
 	}
 
 }

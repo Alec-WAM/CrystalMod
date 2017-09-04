@@ -23,16 +23,17 @@ public abstract class TileWorksiteBoundedInventory extends TileWorksiteBounded i
 	
 	public final boolean addStackToInventoryNoDrop(ItemStack stack, boolean sim, RelativeSide... sides)
 	{
-		ItemStack copy = stack.copy();
 		for(RelativeSide side : sides){
 		  int[] slots = inventory.getRawIndicesCombined(side);
-		  ItemStackTools.incStackSize(copy, -ItemUtil.doInsertItemInvArray(inventory, copy, slots, !sim));
-		  if(ItemStackTools.isEmpty(copy)){
-			  copy = ItemStackTools.getEmptyStack();
+		  ItemStack copy = stack.copy();
+		  int added = ItemUtil.doInsertItemInvArray(inventory, copy, slots, !sim);
+		  ItemStackTools.incStackSize(stack, -added);
+		  if(ItemStackTools.isEmpty(stack)){
+			  stack = ItemStackTools.getEmptyStack();
 			  return true;
 		  }
 		}
-		return false;
+		return stack.isEmpty();
 	}
 	
 	public final void addStackToInventory(ItemStack stack, RelativeSide... sides)

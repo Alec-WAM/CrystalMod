@@ -1,6 +1,8 @@
 package alec_wam.CrystalMod.entities.animals;
 
 import alec_wam.CrystalMod.blocks.ModBlocks;
+import alec_wam.CrystalMod.blocks.crops.BlockCrystalPlant;
+import alec_wam.CrystalMod.blocks.crops.BlockCrystalPlant.PlantType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelQuadruped;
@@ -34,10 +36,10 @@ public class LayerCrystalCowCrystals implements LayerRenderer<EntityCrystalCow>
             
             try{
             	switch(entitylivingbaseIn.getColor()){
-            		default : case 0 : state = ModBlocks.crystalPlantBlue.getDefaultState(); break;
-            		case 1 : state = ModBlocks.crystalPlantRed.getDefaultState(); break;
-            		case 2 : state = ModBlocks.crystalPlantGreen.getDefaultState(); break;
-            		case 3 : state = ModBlocks.crystalPlantDark.getDefaultState(); break;
+            		default : case 0 : state = ModBlocks.crystalPlant.getDefaultState().withProperty(BlockCrystalPlant.TYPE, PlantType.BLUE); break;
+            		case 1 : state = ModBlocks.crystalPlant.getDefaultState().withProperty(BlockCrystalPlant.TYPE, PlantType.RED); break;
+            		case 2 : state = ModBlocks.crystalPlant.getDefaultState().withProperty(BlockCrystalPlant.TYPE, PlantType.GREEN); break;
+            		case 3 : state = ModBlocks.crystalPlant.getDefaultState().withProperty(BlockCrystalPlant.TYPE, PlantType.DARK); break;
             	}
             }catch(Exception e){
             	e.printStackTrace();

@@ -1,6 +1,8 @@
 package alec_wam.CrystalMod.proxy;
 
 import java.io.File;
+import java.util.List;
+import java.util.Random;
 
 import com.mojang.authlib.GameProfile;
 
@@ -41,10 +43,17 @@ import alec_wam.CrystalMod.world.crystex.MapGenCrystexiumSpike;
 import alec_wam.CrystalMod.world.game.tag.TagManager;
 import alec_wam.CrystalMod.world.structures.FusionTempleStructure;
 import alec_wam.CrystalMod.world.structures.MapGenFusionTemple;
+import alec_wam.CrystalMod.world.structures.VillageCornField;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
+import net.minecraft.world.gen.structure.StructureComponent;
+import net.minecraft.world.gen.structure.StructureVillagePieces.PieceWeight;
+import net.minecraft.world.gen.structure.StructureVillagePieces.Start;
+import net.minecraft.world.gen.structure.StructureVillagePieces.Village;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.MinecraftForge;
@@ -55,6 +64,8 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.registry.VillagerRegistry;
+import net.minecraftforge.fml.common.registry.VillagerRegistry.IVillageCreationHandler;
 
 public class CommonProxy {
 
@@ -92,6 +103,9 @@ public class CommonProxy {
         MapGenStructureIO.registerStructureComponent(FusionTempleStructure.class, CrystalMod.resource("fusiontemple"));
         MapGenStructureIO.registerStructure(MapGenCrystexiumSpike.Start.class, CrystalMod.resource("crystexiumspikestart"));
         MapGenStructureIO.registerStructureComponent(CrystexiumSpikeStructure.class, CrystalMod.resource("crystexiumspike"));
+        MapGenStructureIO.registerStructureComponent(VillageCornField.class, CrystalMod.resource("villagecornfield"));
+        
+        
        
         MinecraftForge.EVENT_BUS.register(generator);
         
@@ -128,6 +142,26 @@ public class CommonProxy {
 		ModCrafting.init();
 		ModBanners.init();
 		ModIntegration.init();
+		
+		IVillageCreationHandler cornFieldVillageComp = new IVillageCreationHandler(){
+
+			@Override
+			public PieceWeight getVillagePieceWeight(Random random, int i) {
+				return new PieceWeight(VillageCornField.class, 3, MathHelper.getInt(random, 2 + i, 4 + i * 2));
+			}
+
+			@Override
+			public Class<?> getComponentClass() {
+				return VillageCornField.class;
+			}
+
+			@Override
+			public Village buildComponent(PieceWeight villagePiece, Start startPiece, List<StructureComponent> pieces, Random random, int p1, int p2, int p3, EnumFacing facing, int p5) {
+				return VillageCornField.createPiece(startPiece, pieces, random, p1, p2, p3, facing, p5);
+			}
+			
+		};
+		VillagerRegistry.instance().registerVillageCreationHandler(cornFieldVillageComp);
 	}
 	
 	public void postInit(FMLPostInitializationEvent event) {

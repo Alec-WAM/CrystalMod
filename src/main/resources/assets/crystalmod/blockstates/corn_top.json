@@ -8,7 +8,9 @@
     "inventory": [{}],
 	"age":{
 		"0":{},
-		"1":{},
+		"1":{
+			"textures": {"reedtexture": "crystalmod:blocks/plant/corn/corn_top_1"}
+		},
 		"2":{
 			"textures": {"reedtexture": "crystalmod:blocks/plant/corn/corn_top_2"}
 		},

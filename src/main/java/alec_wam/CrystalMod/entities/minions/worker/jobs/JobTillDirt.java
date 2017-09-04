@@ -45,7 +45,7 @@ public class JobTillDirt extends WorkerJob {
 		destroyTool(worker);
 		tFarm.giveHoe(worker);
 		ItemStack held = worker.getHeldItemMainhand();
-		if(held == null){
+		if(ItemStackTools.isEmpty(held)){
 			return true;
 		}
 		

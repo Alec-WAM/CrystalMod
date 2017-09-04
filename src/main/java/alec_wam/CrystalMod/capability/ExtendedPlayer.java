@@ -45,6 +45,7 @@ public class ExtendedPlayer {
 	/**Explosives**/
 	private int screenFlashTime;
 	private int maxFlashTime;
+	public boolean hasFailed;
 	
 	private WatchableInteger radiationTime = new WatchableInteger();
 	public int redstoneCoreDelay;
