@@ -1,0 +1,94 @@
+{
+    "__comment": "Model generated using MrCrayfish's Model Creator (http://mrcrayfish.com/modelcreator/)",
+    "textures": {	
+        "particle": "crystalmod:blocks/plant/bamboo_side",
+        "top": "crystalmod:blocks/plant/bamboo_top",
+        "side": "crystalmod:blocks/plant/bamboo_side"
+    },
+    "elements": [
+        {
+            "name": "Bottom",
+            "from": [ 4.0, 0.0, 4.0 ], 
+            "to": [ 12.0, 0.0, 12.0 ], 
+            "faces": {
+                "down": { "texture": "#top", "uv": [ 4.0, 4.0, 12.0, 12.0 ], "cullface": "down" }
+            }
+        },
+        {
+            "name": "Top",
+            "from": [ 4.0, 16.0, 4.0 ], 
+            "to": [ 12.0, 16.0, 12.0 ], 
+            "faces": {
+                "up": { "texture": "#top", "uv": [ 4.0, 4.0, 12.0, 12.0 ], "cullface": "up" }
+            }
+        },
+        {
+            "name": "West",
+            "from": [ 4.0, 0.0, 0.0 ], 
+            "to": [ 4.0, 16.0, 16.0 ], 
+            "faces": {
+                "east": { "texture": "#side", "uv": [ 0.0, 0.0, 16.0, 16.0 ] },
+                "west": { "texture": "#side", "uv": [ 0.0, 0.0, 16.0, 16.0 ] }
+            }
+        },
+        {
+            "name": "East",
+            "from": [ 12.0, 0.0, 0.0 ], 
+            "to": [ 12.0, 16.0, 16.0 ], 
+            "faces": {
+                "east": { "texture": "#side", "uv": [ 0.0, 0.0, 16.0, 16.0 ] },
+                "west": { "texture": "#side", "uv": [ 0.0, 0.0, 16.0, 16.0 ] }
+            }
+        },
+        {
+            "name": "North",
+            "from": [ 0.0, 0.0, 4.0 ], 
+            "to": [ 16.0, 16.0, 4.0 ], 
+            "faces": {
+                "north": { "texture": "#side", "uv": [ 0.0, 0.0, 16.0, 16.0 ] },
+                "south": { "texture": "#side", "uv": [ 0.0, 0.0, 16.0, 16.0 ] }
+            }
+        },
+        {
+            "name": "South",
+            "from": [ 0.0, 0.0, 12.0 ], 
+            "to": [ 16.0, 16.0, 12.0 ], 
+            "faces": {
+                "north": { "texture": "#side", "uv": [ 0.0, 0.0, 16.0, 16.0 ] },
+                "south": { "texture": "#side", "uv": [ 0.0, 0.0, 16.0, 16.0 ] }
+            }
+        },
+        {
+            "name": "WestInside",
+            "from": [ 5.0, 0.0, 5.0 ], 
+            "to": [ 5.0, 16.0, 11.0 ], 
+            "faces": {
+                "east": { "texture": "#side", "uv": [ 5.0, 0.0, 11.0, 16.0 ] }
+            }
+        },
+        {
+            "name": "EastInside",
+            "from": [ 11.0, 0.0, 5.0 ], 
+            "to": [ 11.0, 16.0, 11.0 ], 
+            "faces": {
+                "west": { "texture": "#side", "uv": [ 5.0, 0.0, 11.0, 16.0 ] }
+            }
+        },
+        {
+            "name": "NorthInside",
+            "from": [ 5.0, 0.0, 5.0 ], 
+            "to": [ 11.0, 16.0, 5.0 ], 
+            "faces": {
+                "south": { "texture": "#side", "uv": [ 5.0, 0.0, 11.0, 16.0 ] }
+            }
+        },
+        {
+            "name": "SouthInside",
+            "from": [ 5.0, 0.0, 11.0 ], 
+            "to": [ 11.0, 16.0, 11.0 ], 
+            "faces": {
+                "north": { "texture": "#side", "uv": [ 5.0, 0.0, 11.0, 16.0 ] }
+            }
+        }
+    ]
+}

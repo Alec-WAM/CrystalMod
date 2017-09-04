@@ -209,6 +209,7 @@ public class ModCrafting {
 		addShapelessRecipe(new ItemStack(ModItems.corn, 2, CornItemType.KERNELS.getMetadata()), new Object[]{new ItemStack(ModItems.corn, 1, CornItemType.CORN.getMetadata())});
 		GameRegistry.addSmelting(new ItemStack(ModItems.corn, 1, CornItemType.KERNELS.getMetadata()), new ItemStack(ModItems.miscFood, 1, FoodType.POPCORN.getMetadata()), 0.1F);
 		GameRegistry.addSmelting(new ItemStack(ModItems.corn, 1, CornItemType.CORN.getMetadata()), new ItemStack(ModItems.miscFood, 1, FoodType.CORN_COB.getMetadata()), 0.1F);
+		GameRegistry.addSmelting(new ItemStack(ModItems.miscFood, 1, FoodType.WHITE_FISH_RAW.getMetadata()), new ItemStack(ModItems.miscFood, 1, FoodType.WHITE_FISH_COOKED.getMetadata()), 0.5F);
 
 		addShapelessRecipe(new ItemStack(ModItems.cursedBone, 3, BoneType.BONEMEAL.getMetadata()), new Object[]{new ItemStack(ModItems.cursedBone, 1, BoneType.BONE.getMetadata())});
 		

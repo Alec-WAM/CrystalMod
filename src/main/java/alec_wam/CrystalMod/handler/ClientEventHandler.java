@@ -738,6 +738,7 @@ public class ClientEventHandler {
     		lastRenderDistance = Minecraft.getMinecraft().gameSettings.renderDistanceChunks;
     		//Update Leaves
     		ModBlocks.crystalLeaves.setGraphicsLevel(Minecraft.getMinecraft().gameSettings.fancyGraphics);
+    		ModBlocks.bambooLeaves.setGraphicsLevel(Minecraft.getMinecraft().gameSettings.fancyGraphics);
     	}
     	
     	PlayerControllerMP controllerMP = Minecraft.getMinecraft().playerController;

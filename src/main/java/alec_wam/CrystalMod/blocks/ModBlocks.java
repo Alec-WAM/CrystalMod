@@ -14,7 +14,10 @@ import alec_wam.CrystalMod.blocks.crops.BlockCrystalReed;
 import alec_wam.CrystalMod.blocks.crops.BlockCrystalSapling;
 import alec_wam.CrystalMod.blocks.crops.BlockCrystalTreePlant;
 import alec_wam.CrystalMod.blocks.crops.BlockFlowerLilyPad;
+import alec_wam.CrystalMod.blocks.crops.BlockNormalSapling;
 import alec_wam.CrystalMod.blocks.crops.ItemBlockWater;
+import alec_wam.CrystalMod.blocks.crops.bamboo.BlockBamboo;
+import alec_wam.CrystalMod.blocks.crops.bamboo.BlockBambooLeaves;
 import alec_wam.CrystalMod.blocks.crops.material.BlockMaterialCrop;
 import alec_wam.CrystalMod.blocks.crops.material.RenderTileMaterialCrop;
 import alec_wam.CrystalMod.blocks.crops.material.TileMaterialCrop;
@@ -240,6 +243,10 @@ public class ModBlocks {
 	public static BlockCrystalPlanks crystalPlanks;
 	public static BlockMaterialCrop materialCrop;
 	public static BlockCorn corn;
+	public static BlockBamboo bamboo;
+	public static BlockBambooLeaves bambooLeaves;
+	public static BlockNormalSapling normalSapling;
+	
 	public static BlockPipe crystalPipe;
 	public static BlockTank crystalTank;
 	public static BlockEngine engine;
@@ -449,6 +456,21 @@ public class ModBlocks {
 		
 		corn = new BlockCorn();
 		registerBlock(corn, "corn");
+		
+		bamboo = new BlockBamboo();
+		registerBlock(bamboo, "bamboo");
+		
+		bambooLeaves = new BlockBambooLeaves();
+		registerBlock(bambooLeaves, new ItemBlock(bambooLeaves) {
+			@Override
+			public int getMetadata(int m) {
+				return m | 4;
+			}
+		}, "bambooleaves");
+		
+		normalSapling = new BlockNormalSapling();
+		registerBlock(normalSapling, new ItemBlockMeta(normalSapling), "sapling");
+		ItemBlockMeta.setMappingProperty(normalSapling, BlockNormalSapling.VARIANT);
 		
 		crystalPipe = new BlockPipe();
 		registerBlock(crystalPipe, new ItemBlockPipe(crystalPipe), "crystalpipe");

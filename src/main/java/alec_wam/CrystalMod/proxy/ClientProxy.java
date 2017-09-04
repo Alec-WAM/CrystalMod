@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javax.annotation.Nullable;
+
 import org.lwjgl.input.Keyboard;
 
 import com.google.common.collect.Lists;
@@ -46,10 +48,14 @@ import alec_wam.CrystalMod.tiles.pipes.render.BakedModelLoader;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.Lang;
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.color.IBlockColor;
+import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderLivingBase;
 import net.minecraft.client.renderer.entity.RenderPlayer;
@@ -65,7 +71,11 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.ColorizerFoliage;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.BiomeColorHelper;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
@@ -123,6 +133,20 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
         
         keyHandler = new KeyHandler();
         MinecraftForge.EVENT_BUS.register(keyHandler);
+
+        Minecraft.getMinecraft().getBlockColors().registerBlockColorHandler(new IBlockColor(){
+        	public int colorMultiplier(IBlockState state, @Nullable IBlockAccess worldIn, @Nullable BlockPos pos, int tintIndex)
+        	{
+        		return worldIn != null && pos != null ? BiomeColorHelper.getFoliageColorAtPos(worldIn, pos) : ColorizerFoliage.getFoliageColorBasic();
+        	}
+        }, new Block[] {ModBlocks.bambooLeaves});
+        
+        Minecraft.getMinecraft().getItemColors().registerItemColorHandler(new IItemColor(){
+			@Override
+			public int getColorFromItemstack(ItemStack stack, int tintIndex) {
+				return ColorizerFoliage.getFoliageColorBasic();
+			}
+        }, ModBlocks.bambooLeaves);
     }
 
     @Override

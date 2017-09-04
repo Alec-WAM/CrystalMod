@@ -8,6 +8,7 @@
 		"corn_cob": [{ "textures": { "layer0": "crystalmod:items/food/corn_cob" }}],
         "popcorn": [{ "textures": { "layer0": "crystalmod:items/food/popcorn" }}],
         "whitefish_raw": [{ "textures": { "layer0": "crystalmod:items/food/whitefish_raw" }}],
-        "whitefish_cooked": [{ "textures": { "layer0": "crystalmod:items/food/whitefish_cooked" }}]
+        "whitefish_cooked": [{ "textures": { "layer0": "crystalmod:items/food/whitefish_cooked" }}],
+        "eucalyptus": [{ "textures": { "layer0": "crystalmod:items/food/eucalyptus" }}]
     }
 }

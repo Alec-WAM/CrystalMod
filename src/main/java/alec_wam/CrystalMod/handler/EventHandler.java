@@ -104,7 +104,6 @@ import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootContext.EntityTarget;
 import net.minecraft.world.storage.loot.LootEntry;
 import net.minecraft.world.storage.loot.LootPool;
-import net.minecraft.world.storage.loot.LootTableList;
 import net.minecraft.world.storage.loot.conditions.LootCondition;
 import net.minecraft.world.storage.loot.functions.LootFunction;
 import net.minecraftforge.common.BiomeDictionary;
@@ -216,7 +215,7 @@ public class EventHandler {
     			updateWings(player);
     			ExtendedPlayer exPlayer = ExtendedPlayerProvider.getExtendedPlayer(player);
     			if(exPlayer !=null){
-    				if(exPlayer.hasFailed){
+    				if(exPlayer.hasFailed && player.isEntityAlive()){
     					ItemUtil.givePlayerItem(player, new ItemStack(ModBlocks.failureBlock));
     					exPlayer.hasFailed = false;
     				}
@@ -1045,12 +1044,13 @@ public class EventHandler {
             final LootPool lootPool = event.getTable().getPool(lootPoolId);
             lootPool.addEntry(customLootEnhancementBook);
         }
-        if(event.getName() == LootTableList.GAMEPLAY_FISHING_FISH){
+        //TODO Rework this to only be caught in cold biomes
+        /*if(event.getName() == LootTableList.GAMEPLAY_FISHING_FISH){
         	String lootPoolId = LootHelper.VANILLA_LOOT_POOL_ID;        	
             LootHelper.createPoolIfNotExists(event.getTable(), lootPoolId);
             final LootPool lootPool = event.getTable().getPool(lootPoolId);
             lootPool.addEntry(customLootWhiteFish);            
-        }
+        }*/
     }
     
     public static final Map<Integer, List<BlockPos>> ACTIVE_INFINITE_ENGINES = Maps.newHashMap();

@@ -50,6 +50,7 @@ item.crystalmod.miscfood.corn_cob.name=Cooked Corn on the Cob
 item.crystalmod.miscfood.popcorn.name=Popcorn
 item.crystalmod.miscfood.whitefish_raw.name=Broad Whitefish
 item.crystalmod.miscfood.whitefish_cooked.name=Cooked Broad Whitefish
+item.crystalmod.miscfood.eucalyptus.name=Eucalyptus Leaves
 
 item.crystalmod.crystalsap.blue.name=Blue Crystal Sap
 item.crystalmod.crystalsap.red.name=Red Crystal Sap
@@ -460,6 +461,9 @@ tile.crystalmod.greenglowberry.name=Green Glow Berry
 tile.crystalmod.darkglowberry.name=Dark Glow
 tile.crystalmod.flowerlilypad.name=Flower Lily-pad
 tile.crystalmod.corn.name=Corn
+tile.crystalmod.bamboo.name=Bamboo
+tile.crystalmod.bambooleaves.name=Bamboo Leaves
+tile.crystalmod.sapling.bamboo.name=Bamboo Sapling
 
 tile.crystalmod.crystallog.blue.name=Blue Crystal Wood
 tile.crystalmod.crystallog.red.name=Red Crystal Wood

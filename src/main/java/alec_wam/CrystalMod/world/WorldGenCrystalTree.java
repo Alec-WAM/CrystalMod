@@ -150,20 +150,6 @@ public class WorldGenCrystalTree extends WorldGenAbstractTree
                                 }
                             }
                         }
-                        /*if (rand.nextInt(5) == 0)
-                        {*/
-                            /*for (int l3 = 0; l3 < 2; ++l3)
-                            {
-                                for (EnumFacing enumfacing : EnumFacing.Plane.HORIZONTAL)
-                                {
-                                    if (rand.nextInt(3 - l3) == 0)
-                                    {
-                                        EnumFacing enumfacing1 = enumfacing.getOpposite();
-                                        this.placeTreePlant(worldIn, rand.nextInt(3), position.add(enumfacing1.getFrontOffsetX(), i - 5 + l3, enumfacing1.getFrontOffsetZ()), enumfacing);
-                                    }
-                                }
-                            }*/
-                        //}
                     }
 
                     return true;

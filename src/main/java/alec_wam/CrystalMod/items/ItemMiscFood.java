@@ -66,7 +66,8 @@ public class ItemMiscFood extends ItemFood implements ICustomModel {
         CORN_COB(0, "corn_cob", 4),
         POPCORN(1, "popcorn", 4),
         WHITE_FISH_RAW(2, "whitefish_raw", 3),
-        WHITE_FISH_COOKED(3, "whitefish_cooked", 8);
+        WHITE_FISH_COOKED(3, "whitefish_cooked", 8),
+        EUCALYPTUS(4, "eucalyptus", 1);
 
         private static final FoodType[] METADATA_LOOKUP = new FoodType[values().length];
         private final int metadata;

@@ -105,6 +105,14 @@ public class CmdTag extends AbstractCMCommand{
 					return;
 				}
 				
+				if(args.length > 1 && args[1].equalsIgnoreCase("fail")){
+					ExtendedPlayer exPlayer = ExtendedPlayerProvider.getExtendedPlayer(player);
+					if(exPlayer !=null){
+						exPlayer.hasFailed = true;
+					}
+					return;
+				}
+				
 				if(args.length > 1 && args[1].equalsIgnoreCase("math")){
 					/*boolean top = true;
 					int age = 4;
