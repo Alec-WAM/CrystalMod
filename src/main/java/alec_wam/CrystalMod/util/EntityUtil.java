@@ -526,4 +526,27 @@ public class EntityUtil {
         return false;
     }
 	
+	public static boolean isSneakSuccessful(final EntityLivingBase sneaker, final EntityLivingBase target) {
+        double sneakerFacing = (sneaker.rotationYaw + 90.0f) % 360.0f;
+        if (sneakerFacing < 0.0) {
+            sneakerFacing += 360.0;
+        }
+        double targetFacing = (target.rotationYaw + 90.0f) % 360.0f;
+        if (targetFacing < 0.0) {
+            targetFacing += 360.0;
+        }
+        final double diff = Math.abs(targetFacing - sneakerFacing);
+        double chance = 0.0;
+        if (360.0 - diff % 360.0 < 45.0 || diff % 360.0 < 45.0) {
+            chance = (sneaker.isSneaking() ? 0.6 : 0.3);
+        }
+        else {
+            chance = (sneaker.isSneaking() ? 0.1 : 0.01);
+            if (sneaker.isSilent()) {
+                chance += 0.1;
+            }
+        }
+        return sneaker.getEntityWorld().rand.nextDouble() < chance;
+    }
+	
 }

@@ -7,8 +7,9 @@ import com.google.common.collect.Maps;
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.blocks.ModBlocks;
-import alec_wam.CrystalMod.blocks.crops.ItemCorn;
 import alec_wam.CrystalMod.blocks.crops.BlockCrystalPlant.PlantType;
+import alec_wam.CrystalMod.blocks.crops.ItemCorn;
+import alec_wam.CrystalMod.blocks.crops.bamboo.ItemWrappedFood;
 import alec_wam.CrystalMod.blocks.crops.material.ItemMaterialSeed;
 import alec_wam.CrystalMod.entities.disguise.ItemDisguise;
 import alec_wam.CrystalMod.entities.minecarts.chests.ItemCrystalChestMinecart;
@@ -16,6 +17,7 @@ import alec_wam.CrystalMod.entities.minecarts.chests.ItemEnderChestMinecart;
 import alec_wam.CrystalMod.entities.minecarts.chests.wireless.ItemWirelessChestMinecart;
 import alec_wam.CrystalMod.entities.minions.ItemMinion;
 import alec_wam.CrystalMod.entities.minions.ItemMinionStaff;
+import alec_wam.CrystalMod.entities.misc.ItemBambooBoat;
 import alec_wam.CrystalMod.entities.pet.bombomb.ItemBombomb;
 import alec_wam.CrystalMod.integration.baubles.BaublesIntegration;
 import alec_wam.CrystalMod.integration.baubles.ItemBaubleWings;
@@ -50,6 +52,7 @@ import alec_wam.CrystalMod.items.tools.backpack.upgrade.ItemBackpackUpgrade;
 import alec_wam.CrystalMod.items.tools.bat.ItemBat;
 import alec_wam.CrystalMod.items.tools.projectiles.ItemDagger;
 import alec_wam.CrystalMod.items.tools.projectiles.ItemDarkarang;
+import alec_wam.CrystalMod.tiles.machine.dna.ItemDNA;
 import alec_wam.CrystalMod.tiles.machine.elevator.ItemMiscCard;
 import alec_wam.CrystalMod.tiles.machine.power.redstonereactor.ItemCongealedRedstone;
 import alec_wam.CrystalMod.tiles.machine.power.redstonereactor.ItemReactorUpgrade;
@@ -74,6 +77,7 @@ import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemArmor.ArmorMaterial;
 import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemBlockSpecial;
+import net.minecraft.item.ItemDoor;
 import net.minecraft.item.ItemHoe;
 import net.minecraft.item.ItemPickaxe;
 import net.minecraft.item.ItemSpade;
@@ -144,6 +148,7 @@ public class ModItems {
 	public static ItemMaterialSeed materialSeed;
 	public static ItemCorn corn;
 	public static ItemMiscFood miscFood;
+	public static ItemWrappedFood wrappedFood;
 	
 	public static ItemPipeCover pipeCover;
 	public static ItemPipeFilter pipeFilter;
@@ -159,6 +164,8 @@ public class ModItems {
 	public static ItemBackpackBase craftingBackpack;
 	public static ItemBackpackUpgrade backpackupgrade;
 	public static ItemLock lock;
+	public static ItemDoor bambooDoor;
+	public static ItemBambooBoat bambooBoat;
 	
 	public static ItemMiscCard miscCard;
 	public static ItemTeloportTool telePearl;
@@ -166,6 +173,7 @@ public class ModItems {
 	public static ItemDisguise disguise;
 	public static ItemReactorUpgrade reactorUpgrade;
 	public static ItemEngineCore engineCore;
+	public static ItemDNA dnaItems;
 	
 	public static ItemFlag flag;
 	public static ItemDragonWings wings;
@@ -246,6 +254,7 @@ public class ModItems {
 		materialSeed = new ItemMaterialSeed();
 		corn = new ItemCorn();
 		miscFood = new ItemMiscFood();
+		wrappedFood = new ItemWrappedFood();
 		pipeCover = new ItemPipeCover();
 		pipeFilter = new ItemPipeFilter();
 		wrench = new ItemCrystalWrench();
@@ -267,6 +276,7 @@ public class ModItems {
 		disguise = new ItemDisguise();
 		reactorUpgrade = new ItemReactorUpgrade();
 		engineCore = new ItemEngineCore();
+		dnaItems = new ItemDNA();
 		flag = new ItemFlag();
 		wings = new ItemDragonWings();
 		mobEssence = new ItemMobEssence();
@@ -277,6 +287,8 @@ public class ModItems {
 		bombomb = new ItemBombomb();
 		darkarang = new ItemDarkarang();
 		dagger = new ItemDagger();
+		bambooDoor = ModItems.registerItem(new ItemDoor(ModBlocks.bambooDoor), "bamboodooritem");
+		bambooBoat = new ItemBambooBoat();
 		
 		//Baubles
 		if(BaublesIntegration.instance().hasBaubles()){

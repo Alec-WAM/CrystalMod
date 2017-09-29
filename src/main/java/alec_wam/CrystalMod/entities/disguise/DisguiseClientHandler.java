@@ -37,7 +37,7 @@ public class DisguiseClientHandler {
 			return;
 		}
 		ExtendedPlayer ePlayer = ExtendedPlayerProvider.getExtendedPlayer(event.getEntityPlayer());
-		if(ePlayer !=null && ePlayer.getCurrentDiguise() !=DisguiseType.NONE)
+		if(ePlayer !=null && (ePlayer.getPlayerDisguiseUUID() !=null || ePlayer.isMini()))
         {
             event.setCanceled(true);
             float f1 = event.getEntityPlayer().prevRotationYaw + (event.getEntityPlayer().rotationYaw - event.getEntityPlayer().prevRotationYaw) * event.getPartialRenderTick();
@@ -52,6 +52,9 @@ public class DisguiseClientHandler {
             		}
 
             		UUID renderUUID = event.getEntityPlayer().getUniqueID();
+            		if(ePlayer.getPlayerDisguiseUUID() !=null){
+            			renderUUID = ePlayer.getPlayerDisguiseUUID();
+            		}
             		PlayerSkin skin = DownloadedTextures.getPlayerSkin(renderUUID);
             		String type = skin.getSkinType();
             		if(type == "slim")miniPlayer.renderSlim.doRender((AbstractClientPlayer) event.getEntityPlayer(), event.getX(), event.getY(), event.getZ(), f1, event.getPartialRenderTick());
@@ -71,7 +74,7 @@ public class DisguiseClientHandler {
 		Minecraft.getMinecraft();
 		AbstractClientPlayer abstractclientplayer = (AbstractClientPlayer) CrystalMod.proxy.getClientPlayer();
 		ExtendedPlayer ePlayer = ExtendedPlayerProvider.getExtendedPlayer(abstractclientplayer);
-		if(ePlayer !=null && ePlayer.getCurrentDiguise() !=DisguiseType.NONE)
+		if(ePlayer !=null && ePlayer.getPlayerDisguiseUUID() !=null)
         {
 			boolean flag = event.getHand() == EnumHand.MAIN_HAND;
 	        EnumHandSide enumhandside = flag ? abstractclientplayer.getPrimaryHand() : abstractclientplayer.getPrimaryHand().opposite();
@@ -83,7 +86,7 @@ public class DisguiseClientHandler {
 	            {
 	            	event.setCanceled(true);
 	            	GlStateManager.pushMatrix();
-	                renderArmFirstPerson(event.getEquipProgress(), event.getSwingProgress(), enumhandside);
+	                renderArmFirstPerson(event.getEquipProgress(), event.getSwingProgress(), enumhandside, ePlayer.isMini());
 	                GlStateManager.popMatrix();
 	            }
 	        }
@@ -91,17 +94,20 @@ public class DisguiseClientHandler {
     }
 	
 	@SideOnly(Side.CLIENT)
-    public static void renderArmFirstPerson(float p_187456_1_, float p_187456_2_, EnumHandSide p_187456_3_)
+    public static void renderArmFirstPerson(float progress, float swing, EnumHandSide handSide, boolean mini)
     {
-        boolean flag = p_187456_3_ != EnumHandSide.LEFT;
+        boolean flag = handSide != EnumHandSide.LEFT;
         float f = flag ? 1.0F : -1.0F;
-        float f1 = MathHelper.sqrt(p_187456_2_);
+        float f1 = MathHelper.sqrt(swing);
         float f2 = -0.3F * MathHelper.sin(f1 * (float)Math.PI);
         float f3 = 0.4F * MathHelper.sin(f1 * ((float)Math.PI * 2F));
-        float f4 = -0.4F * MathHelper.sin(p_187456_2_ * (float)Math.PI);
-        GlStateManager.translate(f * (f2 + 0.64000005F), f3 + -0.6F + p_187456_1_ * -0.6F, f4 + -0.71999997F);
+        float f4 = -0.4F * MathHelper.sin(swing * (float)Math.PI);
+        GlStateManager.translate(f * (f2 + 0.64000005F), f3 + -0.6F + progress * -0.6F, f4 + -0.71999997F);
         GlStateManager.rotate(f * 45.0F, 0.0F, 1.0F, 0.0F);
-        float f5 = MathHelper.sin(p_187456_2_ * p_187456_2_ * (float)Math.PI);
+        
+        if(mini)GlStateManager.scale(0.8, 0.8, 0.8);
+        
+        float f5 = MathHelper.sin(swing * swing * (float)Math.PI);
         float f6 = MathHelper.sin(f1 * (float)Math.PI);
         GlStateManager.rotate(f * f6 * 70.0F, 0.0F, 1.0F, 0.0F);
         GlStateManager.rotate(f * f5 * -20.0F, 0.0F, 0.0F, 1.0F);
@@ -112,6 +118,7 @@ public class DisguiseClientHandler {
         GlStateManager.rotate(200.0F, 1.0F, 0.0F, 0.0F);
         GlStateManager.rotate(f * -135.0F, 0.0F, 1.0F, 0.0F);
         GlStateManager.translate(f * 5.6F, 0.0F, 0.0F);
+        
         RenderPlayer renderplayer = renderHandOverride;
         GlStateManager.disableCull();
 

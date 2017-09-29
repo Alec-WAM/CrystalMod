@@ -7,6 +7,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
+import javax.annotation.Nullable;
+
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 
@@ -18,6 +20,7 @@ import alec_wam.CrystalMod.tiles.pipes.estorage.client.NameComp;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
 
 public class EStorageNetworkClient extends EStorageNetwork {
 
@@ -106,10 +109,10 @@ public class EStorageNetworkClient extends EStorageNetwork {
 	public boolean needsListUpdate;
 	private List<ItemStackData> displayItemsCache = Lists.newArrayList();
 	
-	private List<ItemStackData> getSortedItems(String filterString, SortType sType, ViewType vType){
+	private List<ItemStackData> getSortedItems(String filterString, SortType sType, ViewType vType, @Nullable EntityPlayer player){
 		List<ItemStackData> data = getItemsSorted(sType == null ? SortType.NAME : sType, vType == null ? ViewType.BOTH : vType);
 		if(filterString != null){
-			ItemFilter filter = Strings.isNullOrEmpty(filterString) ? null : ItemFilter.parse(filterString, LOCALE);
+			ItemFilter filter = Strings.isNullOrEmpty(filterString) ? null : ItemFilter.parse(filterString, LOCALE, player);
 			if(filter != null) {
 		        Iterator<ItemStackData> iter = data.iterator();
 		        while(iter.hasNext()) {
@@ -123,9 +126,9 @@ public class EStorageNetworkClient extends EStorageNetwork {
 		return data;
 	}
 	
-	public List<ItemStackData> getDisplayItems(String filterString, SortType sType, ViewType vType){
+	public List<ItemStackData> getDisplayItems(String filterString, SortType sType, ViewType vType, @Nullable EntityPlayer player){
 		if(needsListUpdate){
-			displayItemsCache = getSortedItems(filterString, sType, vType);
+			displayItemsCache = getSortedItems(filterString, sType, vType, player);
 			needsListUpdate = false;
 		}
 		return displayItemsCache;

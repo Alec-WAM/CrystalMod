@@ -1,0 +1,7 @@
+{
+    "parent": "block/door_bottom_rh",
+    "textures": {
+        "bottom": "crystalmod:blocks/door_bamboo_lower",
+        "top": "crystalmod:blocks/door_bamboo_upper"
+    }
+}

@@ -13,6 +13,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.event.terraingen.OreGenEvent.GenerateMinable;
 
 public class CrystalOreFeature implements IGenerationFeature {
 
@@ -70,7 +71,10 @@ public class CrystalOreFeature implements IGenerationFeature {
             IBlockState[] ores = {ModBlocks.crystalOre.getStateFromMeta(CrystalOreType.BLUE.getMeta()), ModBlocks.crystalOre.getStateFromMeta(CrystalOreType.RED.getMeta()), ModBlocks.crystalOre.getStateFromMeta(CrystalOreType.GREEN.getMeta()), ModBlocks.crystalOre.getStateFromMeta(CrystalOreType.DARK.getMeta())};
             
         	WorldGenMinableRandom minable = new WorldGenMinableRandom(ores, (minVeinSize - random.nextInt(maxVeinSize - minVeinSize)), net.minecraft.block.state.pattern.BlockMatcher.forBlock(targetBlock.getBlock()));
-        	minable.generate(world, random, new BlockPos(posX, posY, posZ));
+        	BlockPos pos = new BlockPos(posX, posY, posZ);
+        	if(net.minecraftforge.event.terraingen.TerrainGen.generateOre(world, random, minable, pos, GenerateMinable.EventType.CUSTOM)){
+        		minable.generate(world, random, pos);
+        	}
         }
     }
     
@@ -83,7 +87,10 @@ public class CrystalOreFeature implements IGenerationFeature {
             IBlockState[] ores = {ModBlocks.crystalOre.getStateFromMeta(CrystalOreType.BLUE_NETHER.getMeta()), ModBlocks.crystalOre.getStateFromMeta(CrystalOreType.RED_NETHER.getMeta()), ModBlocks.crystalOre.getStateFromMeta(CrystalOreType.GREEN_NETHER.getMeta()), ModBlocks.crystalOre.getStateFromMeta(CrystalOreType.DARK_NETHER.getMeta())};
             
         	WorldGenMinableRandom minable = new WorldGenMinableRandom(ores, (minVeinSize - random.nextInt(maxVeinSize - minVeinSize)), net.minecraft.block.state.pattern.BlockMatcher.forBlock(targetBlock.getBlock()));
-        	minable.generate(world, random, new BlockPos(posX, posY, posZ));
+        	BlockPos pos = new BlockPos(posX, posY, posZ);
+        	if(net.minecraftforge.event.terraingen.TerrainGen.generateOre(world, random, minable, pos, GenerateMinable.EventType.CUSTOM)){
+        		minable.generate(world, random, pos);
+        	}
         }
     }
     
@@ -96,7 +103,10 @@ public class CrystalOreFeature implements IGenerationFeature {
             IBlockState[] ores = {ModBlocks.crystalOre.getStateFromMeta(CrystalOreType.BLUE_END.getMeta()), ModBlocks.crystalOre.getStateFromMeta(CrystalOreType.RED_END.getMeta()), ModBlocks.crystalOre.getStateFromMeta(CrystalOreType.GREEN_END.getMeta()), ModBlocks.crystalOre.getStateFromMeta(CrystalOreType.DARK_END.getMeta())};
             
         	WorldGenMinableRandom minable = new WorldGenMinableRandom(ores, (minVeinSize - random.nextInt(maxVeinSize - minVeinSize)), net.minecraft.block.state.pattern.BlockMatcher.forBlock(targetBlock.getBlock()));
-        	minable.generate(world, random, new BlockPos(posX, posY, posZ));
+        	BlockPos pos = new BlockPos(posX, posY, posZ);
+        	if(net.minecraftforge.event.terraingen.TerrainGen.generateOre(world, random, minable, pos, GenerateMinable.EventType.CUSTOM)){
+        		minable.generate(world, random, pos);
+        	}
         }
     }
 

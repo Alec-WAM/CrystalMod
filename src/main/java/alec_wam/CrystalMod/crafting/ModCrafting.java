@@ -18,6 +18,7 @@ import alec_wam.CrystalMod.blocks.BlockFallingCompressed.FallingCompressedBlockT
 import alec_wam.CrystalMod.blocks.BlockMetalBars.EnumMetalBarType;
 import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.blocks.crops.BlockCrystalPlant.PlantType;
+import alec_wam.CrystalMod.blocks.crops.BlockNormalSapling.SaplingType;
 import alec_wam.CrystalMod.blocks.crops.ItemCorn.CornItemType;
 import alec_wam.CrystalMod.blocks.crops.material.ModCrops;
 import alec_wam.CrystalMod.blocks.crystexium.CrystexiumBlock.CrystexiumBlockType;
@@ -72,6 +73,7 @@ import alec_wam.CrystalMod.tiles.machine.crafting.grinder.GrinderManager;
 import alec_wam.CrystalMod.tiles.machine.crafting.infuser.CrystalInfusionManager;
 import alec_wam.CrystalMod.tiles.machine.crafting.liquidizer.LiquidizerRecipeManager;
 import alec_wam.CrystalMod.tiles.machine.crafting.press.PressRecipeManager;
+import alec_wam.CrystalMod.tiles.machine.dna.ItemDNA.DNAItemType;
 import alec_wam.CrystalMod.tiles.machine.elevator.ItemMiscCard;
 import alec_wam.CrystalMod.tiles.machine.power.battery.BlockBattery.BatteryType;
 import alec_wam.CrystalMod.tiles.machine.power.converter.BlockPowerConverter.ConverterType;
@@ -300,6 +302,9 @@ public class ModCrafting {
 		for(WoodType type : WoodType.values()){
 			addShapelessRecipe(new ItemStack(ModBlocks.crystalPlanks, 4, type.getMeta()), new Object[]{new ItemStack(ModBlocks.crystalLog, 1, type.getMeta())});
 		}
+		addShapelessRecipe(new ItemStack(ModBlocks.bambooPlanks, 2, 0), new Object[]{new ItemStack(ModBlocks.bamboo)});
+		addShapedRecipe(ModItems.bambooBoat, new Object[]{"X X", "XXX", 'X', ModBlocks.bambooPlanks});
+		addShapedRecipe(new ItemStack(ModItems.bambooDoor, 3), new Object[]{"XX", "XX", "XX", 'X', ModBlocks.bambooPlanks});
 		
 		addShapedOreRecipe(new ItemStack(ModBlocks.crates, 1, CrateType.BLUE.getMeta()), new Object[] {"XXX", "# #", "XXX", 'X', new ItemStack(ModBlocks.crystalPlanks, 1, WoodType.BLUE.getMeta()), '#', "chestWood"});
 		addShapedOreRecipe(new ItemStack(ModBlocks.crates, 1, CrateType.RED.getMeta()), new Object[] {"XXX", "#C#", "XXX", 'X', new ItemStack(ModBlocks.crystalPlanks, 1, WoodType.RED.getMeta()), '#', "chestWood", 'C', new ItemStack(ModBlocks.crates, 1, CrateType.BLUE.getMeta())});
@@ -328,7 +333,8 @@ public class ModCrafting {
 		addShapedRecipe(ModItems.lock, new Object[]{" N ", "NPN", "NNN", 'N', dIronNugget, 'P', dIronPlate});
 
 		addShapedOreRecipe(ModItems.emptyMobEssence, new Object[]{" D ", "DID", " D ", 'D', new ItemStack(ModBlocks.metalBars, 1, EnumMetalBarType.DARK_IRON.getMeta()) , 'I', "ingotIron"});
-
+	
+		
 		ItemStack cShears = new ItemStack(ModItems.shears);
 		ItemNBTHelper.setString(cShears, "Color", "darkIron");
 		addShapedRecipe(cShears, new Object[] {" #", "# ", '#', dIronIngot});
@@ -537,6 +543,10 @@ public class ModCrafting {
 		addShapedRecipe(new ItemStack(ModBlocks.crystalMachine, 1, MachineType.GRINDER.getMeta()), new Object[]{"III", "GFG", "IPI", 'I', dIronPlate, 'G', Items.FLINT, 'P', ItemUtil.copy(tier0CU, 1), 'F', machineFrame});
 		addShapedRecipe(new ItemStack(ModBlocks.sapExtractor), new Object[]{"#M#", "DFD", "#P#", 'D', dIronPlate, '#', purePlate, 'M', new ItemStack(ModBlocks.crystalMachine, 1, MachineType.LIQUIDIZER.getMeta()), 'P', ItemUtil.copy(fluidPipe, 1), 'F', machineFrame});
 
+		addShapedRecipe(new ItemStack(ModBlocks.dnaMachine), new Object[]{"III", "GFS", "IPI", 'I', dIronPlate, 'G', new ItemStack(ModItems.dnaItems, 1, DNAItemType.EMPTY_SYRINGE.getMetadata()), 'S', new ItemStack(ModItems.dnaItems, 1, DNAItemType.SAMPLE_EMPTY.getMetadata()), 'P', ItemUtil.copy(tier0CU, 1), 'F', machineFrame});
+		addShapedOreRecipe(new ItemStack(ModItems.dnaItems, 4, DNAItemType.EMPTY_SYRINGE.getMetadata()), "IG ", "GSG", " GS", 'I', dIronIngot, 'G', "blockGlassColorless", 'S', "stone");
+		addShapedOreRecipe(new ItemStack(ModItems.dnaItems, 8, DNAItemType.SAMPLE_EMPTY.getMetadata()), " GI", "G G", "GG ", 'I', dIronIngot, 'G', "blockGlassColorless");
+		
 		addShapedOreRecipe(new ItemStack(ModBlocks.advDispenser), new Object[]{"PPP", "PMP", "PDP", 'P', dIronPlate, 'M', "skull", 'D', Blocks.DISPENSER});
 		addShapedOreRecipe(new ItemStack(ModBlocks.muffler), new Object[]{"WWW", "NMN", "WWW", 'W', "wool", 'M', machineFrame, 'N', Blocks.NOTEBLOCK});
 
@@ -971,9 +981,15 @@ public class ModCrafting {
 		oredict(new ItemStack(ModBlocks.crystalOre, 1, CrystalOreType.DARK_END.getMeta()),  "oreCrystalDark");
 		
 		for(WoodType type : WoodType.values()){
+			oredict(new ItemStack(ModBlocks.crystalSapling, 1, type.getMeta()), "treeSapling");
+			oredict(new ItemStack(ModBlocks.crystalLeaves, 1, type.getMeta()), "treeLeaves");
 			oredict(new ItemStack(ModBlocks.crystalLog, 1, type.getMeta()), "logCrystal", "logWood");
 			oredict(new ItemStack(ModBlocks.crystalPlanks, 1, type.getMeta()), "plankCrystal", "plankWood");
 		}
+		oredict(new ItemStack(ModBlocks.normalSapling, 1, SaplingType.BAMBOO.getMeta()), "treeSapling");
+		oredict(new ItemStack(ModBlocks.bambooLeaves), "treeLeaves");
+		oredict(new ItemStack(ModBlocks.bamboo), "logBamboo", "logWood");
+		oredict(new ItemStack(ModBlocks.bambooPlanks), "plankBamboo", "plankWood");
 		
 		oredictCrystal(CrystalType.BLUE_SHARD.getMetadata(), CrystalType.BLUE_NUGGET.getMetadata(), CrystalType.BLUE.getMetadata(), IngotType.BLUE.getMetadata(), CrystalBlockType.BLUE.getMeta(), CrystalIngotBlockType.BLUE.getMeta());
 		oredictCrystal(CrystalType.RED_SHARD.getMetadata(), CrystalType.RED_NUGGET.getMetadata(), CrystalType.RED.getMetadata(), IngotType.RED.getMetadata(), CrystalBlockType.RED.getMeta(), CrystalIngotBlockType.RED.getMeta());

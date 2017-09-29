@@ -17,6 +17,7 @@ import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.api.enhancements.EnhancementManager;
 import alec_wam.CrystalMod.api.enhancements.IEnhancement;
 import alec_wam.CrystalMod.blocks.ModBlocks;
+import alec_wam.CrystalMod.blocks.crops.bamboo.ModelWrappedFood;
 import alec_wam.CrystalMod.blocks.crops.material.CropOverlays;
 import alec_wam.CrystalMod.blocks.crops.material.ModelSeed;
 import alec_wam.CrystalMod.blocks.glass.BlockCrystalGlass.GlassType;
@@ -97,6 +98,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
         ModItems.initClient();
         ModelLoaderRegistry.registerLoader(new BakedModelLoader());
         ModelLoaderRegistry.registerLoader(ModelSeed.LoaderSeeds.INSTANCE);
+        ModelLoaderRegistry.registerLoader(ModelWrappedFood.LoaderWrappedFood.INSTANCE);
         IResourceManager manager = FMLClientHandler.instance().getClient().getResourceManager();
         if(manager !=null && manager instanceof IReloadableResourceManager){
         	((IReloadableResourceManager)manager).registerReloadListener(new GuidePageLoader());
@@ -295,6 +297,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
         CropOverlays.registerIcons(event.getMap());
         event.getMap().registerSprite(new ResourceLocation("crystalmod:items/crop/seed_background"));
         event.getMap().registerSprite(new ResourceLocation("crystalmod:items/crop/seed_overlay"));
+        event.getMap().registerSprite(new ResourceLocation("crystalmod:items/food/eucalyptus_overlay_basic"));
         event.getMap().registerSprite(new ResourceLocation("crystalmod:items/icon_sword"));
         event.getMap().registerSprite(new ResourceLocation("crystalmod:items/icon_pickaxe"));
         

@@ -206,7 +206,7 @@ public class ItemUtil {
    */
   public static String getStringForItemStack(ItemStack stack, boolean damage, boolean size) {
     if (ItemStackTools.isNullStack(stack)) {
-      return null;
+      return "";
     }
 
     String base = Item.REGISTRY.getNameForObject(stack.getItem()).toString();
@@ -220,6 +220,20 @@ public class ItemUtil {
     }
 
     return base;
+  }
+  
+  public static ItemStack getStackFromString(String name, boolean damage){
+	  if(!name.isEmpty()){
+		  String base = damage ? name.substring(0, name.indexOf(";")) : name;
+		  Item item = Item.REGISTRY.getObject(new ResourceLocation(base));
+
+		  if(item !=null){
+			  int meta = damage ? Integer.parseInt(name.substring(name.indexOf(";")+1)) : 0;
+			  ItemStack itemStack = new ItemStack(item, 1, meta);
+			  return itemStack;
+		  }
+	  }
+	  return ItemStackTools.getEmptyStack();
   }
   
   public static void dropContent(int newSize, IItemHandler chest, World world, BlockPos pos)

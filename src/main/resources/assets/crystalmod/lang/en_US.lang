@@ -275,6 +275,12 @@ item.crystalmod.misccard.pcube.name=Player Cube Card
 item.crystalmod.misccard.elevator.name=Elevator Binder (WIP)
 item.crystalmod.misccard.tportal.name=Teleportal Link Card
 
+item.crystalmod.dnaitem.sample_empty.name=Empty DNA Sample
+item.crystalmod.dnaitem.sample_full.name=DNA Sample
+item.crystalmod.dnaitem.syringe_empty.name=Empty DNA Syringe
+item.crystalmod.dnaitem.syringe_full.name=DNA Syringe
+item.crystalmod.dnaitem.cure.name=DNA Purifier
+
 item.crystalmod.worksiteupgrade.0.name=Medium Bounds Upgrade
 item.crystalmod.worksiteupgrade.1.name=Large Bounds Upgrade
 item.crystalmod.worksiteupgrade.2.name=Medium Quarry Upgrade
@@ -314,6 +320,9 @@ item.crystalmod.disguise.empty.name=Empty Disguise
 item.crystalmod.disguise.player.name=Player Disguise
 item.crystalmod.disguise.mini.name=Mini Disguise
 item.crystalmod.dragonwings.name=Dragon Wings
+
+item.crystalmod.bamboodooritem.name=Bamboo Door
+item.crystalmod.bambooboat.name=Bamboo Boat
 
 item.crystalmod.mobessence.name=Mob Essence
 crystalmod.info.mobessence1.txt=Can be used on an Advanced Mob Spawner to set the entity
@@ -464,6 +473,8 @@ tile.crystalmod.corn.name=Corn
 tile.crystalmod.bamboo.name=Bamboo
 tile.crystalmod.bambooleaves.name=Bamboo Leaves
 tile.crystalmod.sapling.bamboo.name=Bamboo Sapling
+tile.crystalmod.bambooplanks.name=Bamboo Planks
+tile.crystalmod.bamboodoor.name=Bamboo Door
 
 tile.crystalmod.crystallog.blue.name=Blue Crystal Wood
 tile.crystalmod.crystallog.red.name=Red Crystal Wood
@@ -627,6 +638,7 @@ tile.crystalmod.crystalmachine.press.name=Metal Press
 tile.crystalmod.crystalmachine.liquidizer.name=Liquidizer
 tile.crystalmod.crystalmachine.grinder.name=Grinder
 tile.crystalmod.crystalmachine.infuser.name=Liquid Infuser
+tile.crystalmod.dnamachine.name=DNA Manipulator
 tile.crystalmod.sapextractor.name=Sap Extractor
 
 tile.crystalmod.worksite.tree_farm.name=Minion Tree Farm
@@ -869,6 +881,9 @@ entity.minecart_chest_darkiron.name=Minecart with Dark Iron Chest
 
 entity.minecart_wirelesschest.name=Minecart with Super Chest
 entity.minecart_enderchest.name=Minecart with Ender Chest
+
+entity.polarbear_tamed.name=Tamed Polar Bear
+entity.bambooboat.name=Bamboo Boat
 
 #--Misc
 crystalmod.power.cu=CU

@@ -2,15 +2,22 @@ package alec_wam.CrystalMod.tiles.pipes.estorage.client;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 
+import javax.annotation.Nullable;
+
+import com.google.common.collect.Lists;
+
 import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage.ItemStackData;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
 
 public abstract class ItemFilter {
 
   public abstract boolean matches(ItemStackData entry);
 
-  public static ItemFilter parse(String filter, Locale locale) {
+  public static ItemFilter parse(String filter, Locale locale, @Nullable EntityPlayer player) {
     ArrayList<ItemFilter> list = new ArrayList<ItemFilter>();
 
     String[] parts = filter.split("\\|");
@@ -25,6 +32,12 @@ public abstract class ItemFilter {
     	  part = part.substring(1);
     	  if(!part.isEmpty()) {
     		  list.add(new OreFilter(part, locale));
+    	  }
+      }
+      else if(part.startsWith("*")) {
+    	  part = part.substring(1);
+    	  if(!part.isEmpty()) {
+    		  list.add(new DeepNameFilter(part, locale, player));
     	  }
       }
       else if(!part.isEmpty()) {
@@ -132,5 +145,37 @@ public abstract class ItemFilter {
     public String toString() {
       return text;
     }
+  }
+  
+  static class DeepNameFilter extends ItemFilter {
+	  final String text;
+	  final Locale locale;
+	  final EntityPlayer player;
+
+	  DeepNameFilter(String text, Locale locale, @Nullable EntityPlayer player) {
+		  this.text = text.toLowerCase(locale);
+		  this.locale = locale;
+		  this.player = player;
+	  }
+
+	  @Override
+	  public boolean matches(ItemStackData entry) {
+		  List<String> infoList = Lists.newArrayList();
+		  if(player !=null){
+			  entry.stack.getItem().addInformation(entry.stack, player, infoList, Minecraft.getMinecraft().gameSettings.advancedItemTooltips);
+		  }
+		  if(entry.getLowercaseUnlocName(locale).contains(text))return true;
+		  for(String line : infoList){
+			  if(line.toLowerCase(locale).contains(text)){
+				  return true;
+			  }
+		  }
+		  return false;
+	  }
+
+	  @Override
+	  public String toString() {
+		  return text;
+	  }
   }
 }

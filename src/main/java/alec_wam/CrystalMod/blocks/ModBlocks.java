@@ -25,6 +25,7 @@ import alec_wam.CrystalMod.blocks.crystexium.BlockCrysidian;
 import alec_wam.CrystalMod.blocks.crystexium.CrystexiumBlock;
 import alec_wam.CrystalMod.blocks.crystexium.CrystexiumBlock.CrystexiumBlockType;
 import alec_wam.CrystalMod.blocks.crystexium.CrystexiumSlab;
+import alec_wam.CrystalMod.blocks.decorative.BlockCustomDoor;
 import alec_wam.CrystalMod.blocks.decorative.BlockFailure;
 import alec_wam.CrystalMod.blocks.decorative.bridge.BlockBridge;
 import alec_wam.CrystalMod.blocks.decorative.bridge.TileBridge;
@@ -37,6 +38,7 @@ import alec_wam.CrystalMod.blocks.glass.BlockPaintedCrystalGlass;
 import alec_wam.CrystalMod.blocks.glass.BlockTintedCrystalGlass;
 import alec_wam.CrystalMod.blocks.rail.BlockReinforcedRail;
 import alec_wam.CrystalMod.handler.MissingItemHandler;
+import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.tiles.BlockBasicTile;
 import alec_wam.CrystalMod.tiles.cases.BlockCase;
 import alec_wam.CrystalMod.tiles.cases.RenderTileEntityCasePiston;
@@ -91,6 +93,8 @@ import alec_wam.CrystalMod.tiles.machine.advDispenser.BlockAdvDispenser;
 import alec_wam.CrystalMod.tiles.machine.advDispenser.TileAdvDispenser;
 import alec_wam.CrystalMod.tiles.machine.crafting.BlockCrystalMachine;
 import alec_wam.CrystalMod.tiles.machine.crafting.BlockCrystalMachine.MachineType;
+import alec_wam.CrystalMod.tiles.machine.dna.BlockDNAMachine;
+import alec_wam.CrystalMod.tiles.machine.dna.TileEntityDNAMachine;
 import alec_wam.CrystalMod.tiles.machine.elevator.BlockElevator;
 import alec_wam.CrystalMod.tiles.machine.elevator.TileEntityElevator;
 import alec_wam.CrystalMod.tiles.machine.elevator.TileEntityElevatorRenderer;
@@ -192,6 +196,7 @@ import alec_wam.CrystalMod.tiles.xp.TileEntityXPVacuum;
 import alec_wam.CrystalMod.util.ModLogger;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockStairs;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
@@ -245,6 +250,7 @@ public class ModBlocks {
 	public static BlockCorn corn;
 	public static BlockBamboo bamboo;
 	public static BlockBambooLeaves bambooLeaves;
+	public static Block bambooPlanks;
 	public static BlockNormalSapling normalSapling;
 	
 	public static BlockPipe crystalPipe;
@@ -302,6 +308,7 @@ public class ModBlocks {
 	public static BlockInventoryCharger invCharger;
 	public static BlockCrystalMachine crystalMachine;
 	public static BlockSapExtractor sapExtractor;
+	public static BlockDNAMachine dnaMachine;
 	public static BlockEnderBuffer enderBuffer;
 	public static BlockWorksite worksite;
 
@@ -313,6 +320,7 @@ public class ModBlocks {
 	public static BlockJar jar;
 	public static BlockShieldRack shieldRack;
 	public static BlockBasicTile muffler;
+	public static BlockCustomDoor bambooDoor;
 
 	public static BlockParticleThrower particleThrower;
 	public static BlockRemoverExplosion remover;
@@ -467,6 +475,13 @@ public class ModBlocks {
 				return m | 4;
 			}
 		}, "bambooleaves");
+		
+		bambooPlanks = (new Block(Material.WOOD){
+			public SoundType getSoundType(){
+				return SoundType.WOOD;
+			}
+		}).setHardness(2.0F).setResistance(5.0F).setCreativeTab(CrystalMod.tabBlocks);
+		registerBlock(bambooPlanks, "bambooplanks");
 		
 		normalSapling = new BlockNormalSapling();
 		registerBlock(normalSapling, new ItemBlockMeta(normalSapling), "sapling");
@@ -644,6 +659,10 @@ public class ModBlocks {
 		registerBlock(sapExtractor, "sapextractor");
 		registerTileEntity(TileSapExtractor.class);
 
+		dnaMachine = new BlockDNAMachine();
+		registerBlock(dnaMachine, "dnamachine");
+		registerTileEntity(TileEntityDNAMachine.class);		
+		
 		enderBuffer = new BlockEnderBuffer();
 		registerBlock(enderBuffer, "enderbuffer");
 		registerTileEntity(TileEntityEnderBuffer.class);
@@ -707,6 +726,9 @@ public class ModBlocks {
 		muffler = (BlockBasicTile)new BlockBasicTile(TileSoundMuffler.class, Material.IRON).setHardness(2F);
 		registerBlock(muffler, "soundmuffler");
 		registerTileEntity(TileSoundMuffler.class);
+		
+		bambooDoor = (BlockCustomDoor)new BlockCustomDoor(Material.WOOD, SoundType.WOOD, ModItems.bambooDoor).setHardness(3.0F).setCreativeTab(null);
+		registerBlock(bambooDoor, "bamboodoor");
 
 		particleThrower = new BlockParticleThrower();
 		registerBlock(particleThrower, "particlethrower");

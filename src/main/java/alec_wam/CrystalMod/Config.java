@@ -90,6 +90,7 @@ public class Config {
     };
     public static List<ResourceLocation> enhancementBookLootLocationList = Lists.newArrayList();
 	public static int enhancementBookRarity = 10;
+	public static int whiteFishRarity = 10;
     
 	public static ItemDropType mobHeadType = ItemDropType.KILLED;
 	public static int mobHeadDropChance = 200;
@@ -266,6 +267,8 @@ public class Config {
     	enhancementBookLootLocationList = Lists.newArrayList(bookLocations);
     	enhancementBookRarity = cfg.get(CATEGORY_WORLD, "enhancementBookRarity", enhancementBookRarity,
                 "Rarity of Enhancement Books in chest loot").setRequiresMcRestart(true).getInt(10);
+    	whiteFishRarity = cfg.get(CATEGORY_WORLD, "whiteFishRarity", whiteFishRarity,
+                "Chance of Broad Whitefish replacing normal fish in cold biomes when caught with a fishing pole. Higher the number the lower the chance. Zero or less means never.").getInt(10);
         
         superTorchMaxCount = cfg.get(CATEGORY_ITEM, "superTorchCapacity", superTorchMaxCount, "Maximum amount of torches allowed to be stored in a Super Torch.").getInt();
         

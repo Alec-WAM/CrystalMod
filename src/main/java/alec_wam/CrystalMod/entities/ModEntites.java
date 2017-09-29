@@ -8,7 +8,9 @@ import com.google.common.collect.Lists;
 
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.entities.animals.EntityCrystalCow;
+import alec_wam.CrystalMod.entities.animals.EntityTamedPolarBear;
 import alec_wam.CrystalMod.entities.animals.RenderCrystalCow;
+import alec_wam.CrystalMod.entities.animals.RenderTamedPolarBear;
 import alec_wam.CrystalMod.entities.minecarts.chests.EntityCrystalChestMinecartBase;
 import alec_wam.CrystalMod.entities.minecarts.chests.EntityCrystalChestMinecartBlue;
 import alec_wam.CrystalMod.entities.minecarts.chests.EntityCrystalChestMinecartDark;
@@ -25,8 +27,10 @@ import alec_wam.CrystalMod.entities.minions.EntityMinionBase;
 import alec_wam.CrystalMod.entities.minions.RenderMinionBase;
 import alec_wam.CrystalMod.entities.minions.warrior.EntityMinionWarrior;
 import alec_wam.CrystalMod.entities.minions.worker.EntityMinionWorker;
+import alec_wam.CrystalMod.entities.misc.EntityBambooBoat;
 import alec_wam.CrystalMod.entities.misc.EntityCustomFallingBlock;
 import alec_wam.CrystalMod.entities.misc.RenderCustomFallingBlock;
+import alec_wam.CrystalMod.entities.misc.RenderEntityBambooBoat;
 import alec_wam.CrystalMod.entities.mob.angel.EntityAngel;
 import alec_wam.CrystalMod.entities.mob.angel.RenderAngel;
 import alec_wam.CrystalMod.entities.mob.devil.EntityDevil;
@@ -117,6 +121,12 @@ public class ModEntites {
 		
 		addEntity(EntityDarkarang.class, "darkarang", 160, 20, true);
 		addEntity(EntityDagger.class, "dagger", 160, 20, true);
+		
+		ResourceLocation tamedPolarBear = addEntity(EntityTamedPolarBear.class, "polarbear_tamed");
+		EntityRegistry.registerEgg(tamedPolarBear, 15921906, 9803152);
+		
+
+		addEntity(EntityBambooBoat.class, "bambooboat", 80, 3, true);
 	}
 	
 	public static void postInit(){
@@ -196,6 +206,20 @@ public class ModEntites {
 			@Override
 			public Render<EntityDagger> createRenderFor(RenderManager manager) {
 				return new RenderDagger(manager);
+			}
+		});
+        
+        RenderingRegistry.registerEntityRenderingHandler(EntityTamedPolarBear.class, new IRenderFactory<EntityTamedPolarBear>() {
+			@Override
+			public Render<EntityTamedPolarBear> createRenderFor(RenderManager manager) {
+				return new RenderTamedPolarBear(manager);
+			}
+		});
+        
+        RenderingRegistry.registerEntityRenderingHandler(EntityBambooBoat.class, new IRenderFactory<EntityBambooBoat>() {
+			@Override
+			public RenderEntityBambooBoat createRenderFor(RenderManager manager) {
+				return new RenderEntityBambooBoat(manager);
 			}
 		});
 	}

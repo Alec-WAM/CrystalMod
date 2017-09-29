@@ -7,7 +7,6 @@ import alec_wam.CrystalMod.api.enhancements.KnowledgeManager;
 import alec_wam.CrystalMod.capability.ExtendedPlayer;
 import alec_wam.CrystalMod.capability.ExtendedPlayerProvider;
 import alec_wam.CrystalMod.client.sound.ModSounds;
-import alec_wam.CrystalMod.entities.disguise.DisguiseType;
 import alec_wam.CrystalMod.items.tools.grapple.EntityGrapplingHook;
 import alec_wam.CrystalMod.items.tools.grapple.GrappleControllerBase;
 import alec_wam.CrystalMod.items.tools.grapple.GrappleHandler;
@@ -16,6 +15,7 @@ import alec_wam.CrystalMod.network.AbstractPacketThreadsafe;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.IMessageHandler;
 import alec_wam.CrystalMod.util.EntityUtil;
+import alec_wam.CrystalMod.util.ModLogger;
 import alec_wam.CrystalMod.util.TimeUtil;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.network.NetHandlerPlayClient;
@@ -147,22 +147,28 @@ public class PacketEntityMessage extends AbstractPacketThreadsafe {
 				}
 			}
 			if(type.equalsIgnoreCase("DisguiseSync")){
-				
 				if(entity instanceof EntityPlayer){
 					EntityPlayer player = (EntityPlayer)entity;
 					ExtendedPlayer playerEx = ExtendedPlayerProvider.getExtendedPlayer(player);
-					if(data.hasKey("Type")){
-						byte type = data.getByte("Type");
-						DisguiseType disguise = DisguiseType.values()[type];
-						playerEx.setCurrentDiguise(disguise);
-					}
-					if(data.hasKey("UUID", Constants.NBT.TAG_COMPOUND) && !data.hasKey("NullUUID")){
+					if(data.hasKey("NullUUID")){
+						playerEx.setPlayerDisguiseUUID(null);
+					}else if(data.hasKey("UUID", Constants.NBT.TAG_COMPOUND)){
 						playerEx.setPlayerDisguiseUUID(NBTUtil.getUUIDFromTag(data.getCompoundTag("UUID")));
 					}
-					if(data.hasKey("LastNullUUID")){
-						playerEx.setPlayerDisguiseUUID(null);
-						playerEx.setPlayerDisguiseUUID(null);
+					if(data.hasKey("Mini")){
+						playerEx.setMini(data.getBoolean("Mini"));
 					}
+				}
+			}
+			if(type.equalsIgnoreCase("ExtendedPlayerSync")){
+				if(!client){
+					ModLogger.warning("A ExtendedPlayerSync packet was just sent to the server!");
+					return;
+				}
+				if(entity instanceof EntityPlayer){
+					EntityPlayer player = (EntityPlayer)entity;
+					ExtendedPlayer playerEx = ExtendedPlayerProvider.getExtendedPlayer(player);
+					playerEx.unpackSyncPacket(data);
 				}
 			}
 			if(type.equalsIgnoreCase("EntityMovement")){

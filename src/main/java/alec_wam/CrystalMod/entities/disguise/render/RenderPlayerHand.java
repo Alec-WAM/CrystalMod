@@ -2,7 +2,6 @@ package alec_wam.CrystalMod.entities.disguise.render;
 
 import alec_wam.CrystalMod.capability.ExtendedPlayer;
 import alec_wam.CrystalMod.capability.ExtendedPlayerProvider;
-import alec_wam.CrystalMod.entities.disguise.DisguiseType;
 import alec_wam.CrystalMod.util.client.DownloadedTextures;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
@@ -31,9 +30,8 @@ public class RenderPlayerHand extends RenderPlayer
     public void renderRightArm(AbstractClientPlayer clientPlayer)
     {
     	ExtendedPlayer exPlayer = ExtendedPlayerProvider.getExtendedPlayer(clientPlayer);
-    	exPlayer.getCurrentDiguise();
     	ResourceLocation skin = clientPlayer.getLocationSkin();
-		if(exPlayer.getCurrentDiguise() == DisguiseType.PLAYER && exPlayer.getPlayerDisguiseUUID() !=null){
+		if(exPlayer.getPlayerDisguiseUUID() !=null){
 			ResourceLocation res = DownloadedTextures.getSkin(exPlayer.getPlayerDisguiseUUID());
 			if(res !=null){
 				skin = res;
@@ -59,9 +57,8 @@ public class RenderPlayerHand extends RenderPlayer
     public void renderLeftArm(AbstractClientPlayer clientPlayer)
     {
     	ExtendedPlayer exPlayer = ExtendedPlayerProvider.getExtendedPlayer(clientPlayer);
-    	exPlayer.getCurrentDiguise();
     	ResourceLocation skin = clientPlayer.getLocationSkin();
-		if(exPlayer.getCurrentDiguise() == DisguiseType.PLAYER && exPlayer.getPlayerDisguiseUUID() !=null){
+		if(exPlayer.getPlayerDisguiseUUID() !=null){
 			ResourceLocation res = DownloadedTextures.getSkin(exPlayer.getPlayerDisguiseUUID());
 			if(res !=null){
 				skin = res;

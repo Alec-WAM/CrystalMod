@@ -12,7 +12,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 
 public class DisguiseHandler {
 
-	public static void updateSize(EntityPlayer player, DisguiseType type)
+	public static void updateSize(EntityPlayer player, boolean mini)
 	{
 		if (!player.getEntityWorld().isRemote)
 		{
@@ -21,7 +21,7 @@ public class DisguiseHandler {
 			float stepSize = 0.5F;
 			float eyeHeight = player.getDefaultEyeHeight();
 
-			if(type == DisguiseType.MINI){
+			if(mini){
 				width /= 2F;
 				height /= 3F;
 				eyeHeight/=3;
@@ -38,13 +38,12 @@ public class DisguiseHandler {
 			EntityPlayer player = event.player;
 			
 			ExtendedPlayer playerEx = ExtendedPlayerProvider.getExtendedPlayer(player);
-			DisguiseType type = playerEx.getCurrentDiguise();
 			float width = 0.6F;
 			float height = 1.8F;
 			float stepSize = 0.5F;
 			float eyeHeight = player.getDefaultEyeHeight();
 			boolean doFunc = false;
-			if(type == DisguiseType.MINI){
+			if(playerEx.isMini()){
 				width /= 2F;
 				height /= 3F;
 				eyeHeight/=3;
@@ -61,9 +60,9 @@ public class DisguiseHandler {
 	public void overrideDisplayName(PlayerEvent.NameFormat event){
 		EntityPlayer player = event.getEntityPlayer();
 		ExtendedPlayer ePlayer = ExtendedPlayerProvider.getExtendedPlayer(player);
-		if(ePlayer !=null && ePlayer.getCurrentDiguise() !=DisguiseType.NONE)
+		if(ePlayer !=null && ePlayer.getPlayerDisguiseUUID() !=null)
         {
-			if(ePlayer.getPlayerDisguiseUUID() !=null)event.setDisplayname(ProfileUtil.getUsername(ePlayer.getPlayerDisguiseUUID()));
+			event.setDisplayname(ProfileUtil.getUsername(ePlayer.getPlayerDisguiseUUID()));
         }
 	}
 	

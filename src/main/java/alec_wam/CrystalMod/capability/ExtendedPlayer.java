@@ -6,19 +6,21 @@ import java.util.UUID;
 import javax.annotation.Nonnull;
 
 import alec_wam.CrystalMod.CrystalMod;
-import alec_wam.CrystalMod.entities.disguise.DisguiseType;
 import alec_wam.CrystalMod.items.guide.GuiGuideBase;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.data.watchable.WatchableInteger;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTUtil;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ExtendedPlayer {
 
 	public final static String EXT_PROP_NAME = CrystalMod.MODID+"PlayerProperties";
+	
+	public boolean needsSync;
 	
 	/**Keeps track of jumps for Double Jump**/
 	public boolean hasJumped;
@@ -35,10 +37,8 @@ public class ExtendedPlayer {
 	private ExtendedPlayerInventory inventory = new ExtendedPlayerInventory();
 	private @Nonnull ItemStack openBackpack = ItemStackTools.getEmptyStack();
 	
-	private DisguiseType lastDiguise;
-	private DisguiseType currentDiguise = DisguiseType.NONE;
-	private UUID lastPlayerDisguiseUUID;
 	private UUID playerDisguiseUUID;
+	private boolean isMini = false;
 	
 	private int enhancementXP;
 	
@@ -62,7 +62,12 @@ public class ExtendedPlayer {
 		}
 		
 		properties.setInteger("EnhancementXP", enhancementXP);		
-		properties.setInteger("RadiationTime", radiationTime.getValue());		
+		properties.setInteger("RadiationTime", radiationTime.getValue());
+		
+		properties.setBoolean("Mini", isMini);
+		if(playerDisguiseUUID !=null){
+			properties.setTag("DisguiseUUID", NBTUtil.createUUIDTag(playerDisguiseUUID));
+		}
 		return properties;
 	}
 
@@ -79,6 +84,31 @@ public class ExtendedPlayer {
 		}
 		enhancementXP = properties.getInteger("EnhancementXP");				
 		radiationTime.setValue(properties.getInteger("RadiationTime"));	
+		
+		isMini = properties.getBoolean("Mini");
+		if(properties.hasKey("DisguiseUUID")){
+			playerDisguiseUUID = NBTUtil.getUUIDFromTag(properties.getCompoundTag("DisguiseUUID"));
+		} else {
+			playerDisguiseUUID = null;
+		}
+	}
+	
+	public NBTTagCompound buildSyncPacket(){
+		NBTTagCompound properties = new NBTTagCompound();
+		properties.setBoolean("Mini", isMini);
+		if(playerDisguiseUUID !=null){
+			properties.setTag("DisguiseUUID", NBTUtil.createUUIDTag(playerDisguiseUUID));
+		}
+		return properties;
+	}
+	
+	public void unpackSyncPacket(NBTTagCompound properties){
+		isMini = properties.getBoolean("Mini");
+		if(properties.hasKey("DisguiseUUID")){
+			playerDisguiseUUID = NBTUtil.getUUIDFromTag(properties.getCompoundTag("DisguiseUUID"));
+		} else {
+			playerDisguiseUUID = null;
+		}
 	}
 
 	/**
@@ -133,35 +163,21 @@ public class ExtendedPlayer {
 	public void setOpenBackpack(ItemStack stack){
 		openBackpack = stack;
 	}
-
-	public DisguiseType getLastDiguise() {
-		return lastDiguise;
-	}
-
-	public void setLastDiguise(DisguiseType lastDiguise) {
-		this.lastDiguise = lastDiguise;
-	}
-
-	public DisguiseType getCurrentDiguise() {
-		return currentDiguise;
-	}
-
-	public void setCurrentDiguise(DisguiseType currentDiguise) {
-		this.lastDiguise = this.currentDiguise;
-		this.currentDiguise = currentDiguise;
-	}
-
-	public UUID getLastPlayerDisguiseUUID() {
-		return lastPlayerDisguiseUUID;
-	}
 	
 	public UUID getPlayerDisguiseUUID() {
 		return playerDisguiseUUID;
 	}
 	
 	public void setPlayerDisguiseUUID(UUID uuid) {
-		lastPlayerDisguiseUUID = playerDisguiseUUID;
 		playerDisguiseUUID = uuid;
+	}
+	
+	public boolean isMini() {
+		return isMini;
+	}
+	
+	public void setMini(boolean mini) {
+		isMini = mini;
 	}
 
 	public int getScreenFlashTime() {

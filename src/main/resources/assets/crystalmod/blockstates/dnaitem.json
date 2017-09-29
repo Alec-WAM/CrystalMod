@@ -1,0 +1,14 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "transform": "forge:default-item",
+        "model": "forge:item-layer"
+    },
+    "variants": {
+		"sample_empty": [{ "textures": { "layer0": "crystalmod:items/machine/dna_sample_empty" }}],
+        "sample_full": [{ "textures": { "layer0": "crystalmod:items/machine/dna_sample_full" }}],
+        "syringe_empty": [{ "textures": { "layer0": "crystalmod:items/machine/syringe_empty" }}],
+        "syringe_full": [{ "textures": { "layer0": "crystalmod:items/machine/syringe_full" }}],
+        "cure": [{ "textures": { "layer0": "crystalmod:items/machine/dna_cure" }}]
+    }
+}

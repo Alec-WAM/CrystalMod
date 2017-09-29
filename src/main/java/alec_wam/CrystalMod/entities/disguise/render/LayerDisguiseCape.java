@@ -2,7 +2,6 @@ package alec_wam.CrystalMod.entities.disguise.render;
 
 import alec_wam.CrystalMod.capability.ExtendedPlayer;
 import alec_wam.CrystalMod.capability.ExtendedPlayerProvider;
-import alec_wam.CrystalMod.entities.disguise.DisguiseType;
 import alec_wam.CrystalMod.util.client.DownloadedTextures;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.renderer.GlStateManager;
@@ -38,8 +37,8 @@ public class LayerDisguiseCape implements LayerRenderer<AbstractClientPlayer>
                 GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
                 ResourceLocation cape = null;
 				ExtendedPlayer ePlayer = ExtendedPlayerProvider.getExtendedPlayer(entitylivingbaseIn);
-        		if(ePlayer.getCurrentDiguise() == DisguiseType.PLAYER && ePlayer.getPlayerDisguiseUUID() !=null){
-        			cape =  DownloadedTextures.getCape(ePlayer.getPlayerDisguiseUUID());
+        		if(ePlayer.getPlayerDisguiseUUID() !=null){
+        			cape = DownloadedTextures.getCape(ePlayer.getPlayerDisguiseUUID());
         		} 
         		if(cape == null)return;
                 

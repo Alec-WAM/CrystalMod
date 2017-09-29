@@ -11,9 +11,6 @@ import alec_wam.CrystalMod.capability.ExtendedPlayer;
 import alec_wam.CrystalMod.capability.ExtendedPlayerProvider;
 import alec_wam.CrystalMod.items.IEnumMetaItem;
 import alec_wam.CrystalMod.items.ModItems;
-import alec_wam.CrystalMod.network.CrystalModNetwork;
-import alec_wam.CrystalMod.network.packets.PacketEntityMessage;
-import alec_wam.CrystalMod.util.ChatUtil;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.PlayerUtil;
 import alec_wam.CrystalMod.util.ProfileUtil;
@@ -22,11 +19,9 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
@@ -130,7 +125,7 @@ public class ItemDisguise extends Item implements ICustomModel {
 			int level = 1;
 			if (countdown == Math.max((level - 1) * 4, 1))
 			{
-				DisguiseType currentDiguise = playerEx.getCurrentDiguise();
+				/*DisguiseType currentDiguise = playerEx.getCurrentDiguise();
 				if(stack.getItemDamage() == 0){
 					playerEx.setCurrentDiguise(DisguiseType.NONE);
 					//Clears Last and Current
@@ -162,8 +157,6 @@ public class ItemDisguise extends Item implements ICustomModel {
 							CrystalModNetwork.sendToAll(message);
 							return;
 						} else if(currentDiguise == DisguiseType.MINI){
-							UUID uuid = playerEx.getLastPlayerDisguiseUUID();
-							playerEx.setPlayerDisguiseUUID(uuid);
 							NBTTagCompound nbt = new NBTTagCompound();
 							if(uuid !=null)nbt.setTag("UUID", NBTUtil.createUUIDTag(uuid));
 							else nbt.setBoolean("NullUUID", true);
@@ -185,18 +178,15 @@ public class ItemDisguise extends Item implements ICustomModel {
 							return;
 						}
 						
-						UUID lastUUID = playerEx.getLastPlayerDisguiseUUID();
 						UUID currentUUID = playerEx.getPlayerDisguiseUUID();
 						if(currentUUID !=null && UUIDUtils.areEqual(currentUUID, boundUUID)){
-							if(lastUUID !=null){
-								playerEx.setPlayerDisguiseUUID(lastUUID);
-								NBTTagCompound nbt = new NBTTagCompound();
-								nbt.setTag("UUID", NBTUtil.createUUIDTag(lastUUID));
-								PacketEntityMessage message = new PacketEntityMessage(player, "DisguiseSync", nbt);
-								CrystalModNetwork.sendTo(message, (EntityPlayerMP)player);
-								CrystalModNetwork.sendToAll(message);
-								return;
-							}
+							playerEx.setPlayerDisguiseUUID(null);
+							NBTTagCompound nbt = new NBTTagCompound();
+							nbt.setBoolean("NullUUID", true);
+							PacketEntityMessage message = new PacketEntityMessage(player, "DisguiseSync", nbt);
+							CrystalModNetwork.sendTo(message, (EntityPlayerMP)player);
+							CrystalModNetwork.sendToAll(message);
+							return;
 						}
 						
 						playerEx.setPlayerDisguiseUUID(boundUUID);
@@ -248,7 +238,7 @@ public class ItemDisguise extends Item implements ICustomModel {
 						CrystalModNetwork.sendToAll(message);
 						return;
 					}
-				}
+				}*/
 			}
 		}
 	}

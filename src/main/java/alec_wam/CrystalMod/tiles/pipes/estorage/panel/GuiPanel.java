@@ -295,7 +295,7 @@ public class GuiPanel extends GuiContainer implements IGuiScreen, INetworkGui  {
 		boolean safe = panel !=null && panel.getNetwork() !=null && panel.getNetwork() instanceof EStorageNetworkClient;
 		if(safe){
 			EStorageNetworkClient net = (EStorageNetworkClient) panel.getNetwork();
-			return net.getDisplayItems(searchBar.getText(), panel.getSortType(), panel.getViewType());
+			return net.getDisplayItems(searchBar.getText(), panel.getSortType(), panel.getViewType(), Minecraft.getMinecraft().player);
 		}
 		return Lists.newArrayList();
 	}

@@ -1,12 +1,17 @@
 package alec_wam.CrystalMod.capability;
 
+import alec_wam.CrystalMod.network.CrystalModNetwork;
+import alec_wam.CrystalMod.network.packets.PacketEntityMessage;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.relauncher.Side;
 
 public class ExtendedPlayerProvider implements ICapabilitySerializable<NBTTagCompound> {
 
@@ -48,7 +53,9 @@ public class ExtendedPlayerProvider implements ICapabilitySerializable<NBTTagCom
         @Override
         public void readNBT(Capability<ExtendedPlayer> capability, ExtendedPlayer instance, EnumFacing side, NBTBase nbt) {
             if(instance != null && (nbt instanceof NBTTagCompound)) {
-                instance.readFromNBT((NBTTagCompound) nbt);
+            	NBTTagCompound nbtTag = (NBTTagCompound) nbt;
+                instance.readFromNBT(nbtTag);
+                instance.needsSync = true;
             }
         }
     }

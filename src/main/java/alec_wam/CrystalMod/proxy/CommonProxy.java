@@ -38,6 +38,7 @@ import alec_wam.CrystalMod.world.CrystalModWorldGenerator;
 import alec_wam.CrystalMod.world.DropCapture;
 import alec_wam.CrystalMod.world.ModDimensions;
 import alec_wam.CrystalMod.world.WorldTickHandler;
+import alec_wam.CrystalMod.world.biomes.ModBiomes;
 import alec_wam.CrystalMod.world.crystex.CrystexiumSpikeStructure;
 import alec_wam.CrystalMod.world.crystex.MapGenCrystexiumSpike;
 import alec_wam.CrystalMod.world.game.tag.TagManager;
@@ -46,9 +47,11 @@ import alec_wam.CrystalMod.world.structures.MapGenFusionTemple;
 import alec_wam.CrystalMod.world.structures.VillageCornField;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.Biomes;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldType;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraft.world.gen.structure.StructureComponent;
 import net.minecraft.world.gen.structure.StructureVillagePieces.PieceWeight;
@@ -137,11 +140,19 @@ public class CommonProxy {
 		MinecraftForge.EVENT_BUS.register(WorldTickHandler.instance);
 		new TagManager();
 		MinecraftForge.EVENT_BUS.register(new ArmorEventHandler());
-		
 		ModEnhancements.init();
 		ModCrafting.init();
 		ModBanners.init();
 		ModIntegration.init();
+		ModBiomes.init();	
+
+		
+		WorldType bambooForestType = new WorldType("cm.bambooforest"){
+			public net.minecraft.world.biome.BiomeProvider getBiomeProvider(World world)
+		    {
+				return new net.minecraft.world.biome.BiomeProviderSingle(ModBiomes.BAMBOO_FOREST);
+		    }
+		};
 		
 		IVillageCreationHandler cornFieldVillageComp = new IVillageCreationHandler(){
 
@@ -162,6 +173,8 @@ public class CommonProxy {
 			
 		};
 		VillagerRegistry.instance().registerVillageCreationHandler(cornFieldVillageComp);
+		
+		
 	}
 	
 	public void postInit(FMLPostInitializationEvent event) {

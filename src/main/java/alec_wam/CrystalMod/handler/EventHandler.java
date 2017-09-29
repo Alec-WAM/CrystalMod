@@ -71,6 +71,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.boss.EntityWither;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.monster.EntityWitherSkeleton;
@@ -79,6 +80,7 @@ import net.minecraft.entity.passive.AbstractHorse;
 import net.minecraft.entity.passive.EntityWolf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.projectile.EntityFishHook;
 import net.minecraft.entity.projectile.EntityShulkerBullet;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -86,9 +88,11 @@ import net.minecraft.init.PotionTypes;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArrow;
+import net.minecraft.item.ItemFishFood.FishType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionUtils;
+import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.DamageSource;
@@ -99,11 +103,13 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootContext.EntityTarget;
 import net.minecraft.world.storage.loot.LootEntry;
 import net.minecraft.world.storage.loot.LootPool;
+import net.minecraft.world.storage.loot.LootTableList;
 import net.minecraft.world.storage.loot.conditions.LootCondition;
 import net.minecraft.world.storage.loot.functions.LootFunction;
 import net.minecraftforge.common.BiomeDictionary;
@@ -123,6 +129,7 @@ import net.minecraftforge.event.entity.living.LootingLevelEvent;
 import net.minecraftforge.event.entity.player.ArrowLooseEvent;
 import net.minecraftforge.event.entity.player.ArrowNockEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
+import net.minecraftforge.event.entity.player.ItemFishedEvent;
 import net.minecraftforge.event.entity.player.PlayerDropsEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -758,8 +765,7 @@ public class EventHandler {
 		// player events
 		if (event.getEntity() instanceof EntityPlayer) {			
 			EntityPlayer player = (EntityPlayer) event.getEntity();
-			ExtendedPlayer ePlayer = ExtendedPlayerProvider.getExtendedPlayer(player);
-			
+			ExtendedPlayer ePlayer = ExtendedPlayerProvider.getExtendedPlayer(player);			
 			if(ePlayer !=null){
 				boolean redstoneCore = player.inventory.hasItemStack(new ItemStack(ModBlocks.redstoneCore));
 				
@@ -790,38 +796,44 @@ public class EventHandler {
 					ePlayer.setLastRadiation(ePlayer.getRadiation());
 					CrystalModNetwork.sendTo(new PacketEntityMessage(player, "#UpdateRadiation#", nbt), (EntityPlayerMP)player);
 				}
-			}
-			
-			ExtendedPlayerInventory inventory = ePlayer.getInventory();
-			String[] hashOld = syncCheck.get(player.getCachedUniqueIdString());
-			
-			BackpackUtil.updateBackpack(player);
-			boolean syncTick = player.ticksExisted % 10 == 0;
-			for (int a = 0; a < inventory.getSlots(); a++) {
-				ItemStack stack = inventory.getStackInSlot(a);
-				if(ItemStackTools.isValid(stack)){
-					if (!player.getEntityWorld().isRemote) {
-						if (syncTick && !inventory.isChanged(a)) {							
-							String s = stack.toString();
-							if (stack.hasTagCompound()) s += stack.getTagCompound().toString();
-							if (!s.equals(hashOld[a])) {
-								inventory.setChanged(a,true);
-							}
-							hashOld[a] = s;							
-						}						
+				
+				ExtendedPlayerInventory inventory = ePlayer.getInventory();
+				String[] hashOld = syncCheck.get(player.getCachedUniqueIdString());
+				
+				BackpackUtil.updateBackpack(player);
+				boolean syncTick = player.ticksExisted % 10 == 0;
+				for (int a = 0; a < inventory.getSlots(); a++) {
+					ItemStack stack = inventory.getStackInSlot(a);
+					if(ItemStackTools.isValid(stack)){
+						if (!player.getEntityWorld().isRemote) {
+							if (syncTick && !inventory.isChanged(a)) {							
+								String s = stack.toString();
+								if (stack.hasTagCompound()) s += stack.getTagCompound().toString();
+								if (!s.equals(hashOld[a])) {
+									inventory.setChanged(a,true);
+								}
+								hashOld[a] = s;							
+							}						
+						}
+					}
+					
+					if (inventory.isChanged(a)) {
+						try {
+							CrystalModNetwork.sendToDimension(new PacketExtendedPlayerInvSync(player, a),
+									player.getEntityWorld().provider.getDimension());
+						} catch (Exception e) {	}				
 					}
 				}
 				
-				if (inventory.isChanged(a)) {
-					try {
-						CrystalModNetwork.sendToDimension(new PacketExtendedPlayerInvSync(player, a),
-								player.getEntityWorld().provider.getDimension());
-					} catch (Exception e) {	}				
+				if(ePlayer.needsSync){
+					NBTTagCompound packedData = ePlayer.buildSyncPacket();
+					PacketEntityMessage message = new PacketEntityMessage(player, "ExtendedPlayerSync", packedData);
+					CrystalModNetwork.sendTo(message, (EntityPlayerMP)player);
+					CrystalModNetwork.sendToAll(message);
+					ePlayer.needsSync = false;
 				}
-			}
-				
-		}
-			
+			}				
+		}			
 	}
 	
 	@SubscribeEvent
@@ -1019,6 +1031,7 @@ public class EventHandler {
 			@Override
 			public boolean testCondition(Random rand, LootContext context) {
 				Entity entity = context.getEntity(EntityTarget.THIS);
+				if(entity == null)return false;
 				World world = context.getWorld();
 				Biome biome = world.getBiomeForCoordsBody(new BlockPos(entity));
 				if(BiomeDictionary.hasType(biome, Type.COLD) || BiomeDictionary.hasType(biome, Type.SNOWY)){
@@ -1124,5 +1137,51 @@ public class EventHandler {
     public static boolean inRangeOfEngine(BlockPos engine, BlockPos pos){
     	List<BlockPos> checkList = BlockUtil.getBlocksInBB(engine, 10, 10, 10);
     	return checkList.contains(pos);
+    }
+    
+    @SubscribeEvent 
+    public void addWhiteFish(ItemFishedEvent event){
+    	EntityFishHook hook = event.getHookEntity();
+    	World world = hook.getEntityWorld();
+		Biome biome = world.getBiomeForCoordsBody(new BlockPos(hook));
+		boolean editedList = false;
+		List<ItemStack> drops = Lists.newArrayList();
+		if(BiomeDictionary.hasType(biome, Type.COLD) || BiomeDictionary.hasType(biome, Type.SNOWY)){
+			for(ItemStack stack : event.getDrops()){
+				if(ItemStackTools.isValid(stack) && stack.getItem() == Items.FISH && stack.getMetadata() == FishType.COD.getMetadata()){
+					if(Config.whiteFishRarity > 0 && Util.rand.nextInt(Config.whiteFishRarity) == 0){
+						//Go ahead and replace with whitefish
+						drops.add(new ItemStack(ModItems.miscFood, 1, FoodType.WHITE_FISH_RAW.getMetadata()));
+						editedList = true;
+						continue;
+					}
+				}
+				drops.add(stack);
+			}
+		}
+		
+		if(editedList){
+			event.damageRodBy(1);
+			for (ItemStack itemstack : drops)
+            {
+                EntityItem entityitem = new EntityItem(hook.world, hook.posX, hook.posY, hook.posZ, itemstack);
+                double d0 = event.getEntityPlayer().posX - hook.posX;
+                double d1 = event.getEntityPlayer().posY - hook.posY;
+                double d2 = event.getEntityPlayer().posZ - hook.posZ;
+                double d3 = (double)MathHelper.sqrt(d0 * d0 + d1 * d1 + d2 * d2);
+                entityitem.motionX = d0 * 0.1D;
+                entityitem.motionY = d1 * 0.1D + (double)MathHelper.sqrt(d3) * 0.08D;
+                entityitem.motionZ = d2 * 0.1D;
+                hook.world.spawnEntity(entityitem);
+                event.getEntityPlayer().world.spawnEntity(new EntityXPOrb(event.getEntityPlayer().world, event.getEntityPlayer().posX, event.getEntityPlayer().posY + 0.5D, event.getEntityPlayer().posZ + 0.5D, Util.rand.nextInt(6) + 1));
+                Item item = itemstack.getItem();
+
+                if (item == Items.FISH || item == Items.COOKED_FISH)
+                {
+                	event.getEntityPlayer().addStat(StatList.FISH_CAUGHT, 1);
+                }
+            }
+			event.setCanceled(true);
+		}
     }
 }

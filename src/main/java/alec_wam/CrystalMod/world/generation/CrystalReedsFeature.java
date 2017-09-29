@@ -31,7 +31,11 @@ public class CrystalReedsFeature implements IGenerationFeature {
     				if (j16 > 0)
     				{
     					int i19 = random.nextInt(j16);
-    					return reedGen.generate(world, random, chunkPos.add(j9, i19, i13)) && !newGen;
+    					BlockPos genPos = chunkPos.add(j9, i19, i13);
+    					if(net.minecraftforge.event.terraingen.TerrainGen.decorate(world, random, genPos, net.minecraftforge.event.terraingen.DecorateBiomeEvent.Decorate.EventType.REED))
+    			        {
+    						return reedGen.generate(world, random, genPos) && !newGen;
+    			        }
     				}
     			}
     		}
