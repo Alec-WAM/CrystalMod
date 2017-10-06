@@ -204,63 +204,87 @@ public class ItemDNA extends Item implements ICustomModel {
 				return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);	
 			}
 		}
+		
+		if(stack.getMetadata() == DNAItemType.EMPTY_SYRINGE.getMetadata()){
+			ExtendedPlayer playerEx = ExtendedPlayerProvider.getExtendedPlayer(player);
+			if(playerEx !=null){
+				EnumHand otherHand = hand == EnumHand.MAIN_HAND ? EnumHand.OFF_HAND : EnumHand.MAIN_HAND;
+				ItemStack otherStack = player.getHeldItem(otherHand);
+				if(ItemStackTools.isValid(otherStack) && otherStack.getItem() == Item.getItemFromBlock(Blocks.RED_MUSHROOM)){
+					if(!worldIn.isRemote){
+						boolean changed = !playerEx.isMini();
+						playerEx.setMini(changed);
+						DisguiseHandler.updateSize(player, changed);
+						NBTTagCompound nbt = new NBTTagCompound();
+						nbt.setBoolean("Mini", changed);
+						PacketEntityMessage message = new PacketEntityMessage(player, "DisguiseSync", nbt);
+						CrystalModNetwork.sendTo(message, (EntityPlayerMP)player);
+						CrystalModNetwork.sendToAll(message);
+					}
+					player.swingArm(hand);
+					return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
+				}
+			}
+		}
+		
 		if(stack.getMetadata() == DNAItemType.FILLED_SYRINGE.getMetadata()){
 			UUID playerDNA = PlayerDNA.loadPlayerDNA(stack);
 			if(playerDNA !=null){
 				ExtendedPlayer playerEx = ExtendedPlayerProvider.getExtendedPlayer(player);
 				if(playerEx !=null){
-					EnumHand otherHand = hand == EnumHand.MAIN_HAND ? EnumHand.OFF_HAND : EnumHand.MAIN_HAND;
-					boolean mini = false;
-					ItemStack otherStack = player.getHeldItem(otherHand);
-					mini = ItemStackTools.isValid(otherStack) && otherStack.getItem() == Items.APPLE;
-					if(mini){
-						if(!worldIn.isRemote){
-							boolean changed = !playerEx.isMini();
-							playerEx.setMini(changed);
-							DisguiseHandler.updateSize(player, changed);
+					if ((playerDNA == null) || (UUIDUtils.areEqual(playerDNA, player.getUniqueID())))
+					{
+						if(playerEx.getPlayerDisguiseUUID() == null){
+							return new ActionResult<ItemStack>(EnumActionResult.PASS, stack);
+						}
+						if(!worldIn.isRemote){								
+							playerEx.setPlayerDisguiseUUID(null);
 							NBTTagCompound nbt = new NBTTagCompound();
-							nbt.setBoolean("Mini", changed);
+							nbt.setBoolean("NullUUID", true);
 							PacketEntityMessage message = new PacketEntityMessage(player, "DisguiseSync", nbt);
 							CrystalModNetwork.sendTo(message, (EntityPlayerMP)player);
 							CrystalModNetwork.sendToAll(message);
 						}
 						player.swingArm(hand);
-						return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);							
-					} else {
-						if ((playerDNA == null) || (UUIDUtils.areEqual(playerDNA, player.getUniqueID())))
-						{
-							if(playerEx.getPlayerDisguiseUUID() == null){
+						if(!player.capabilities.isCreativeMode){
+							ItemStack empty = new ItemStack(ModItems.dnaItems, 1, DNAItemType.EMPTY_SYRINGE.getMetadata());
+							if(ItemStackTools.getStackSize(stack) == 1){
+								player.setHeldItem(hand, empty);
+							}
+							else {
+								ItemUtil.givePlayerItem(player, empty);
+								player.setHeldItem(hand, ItemUtil.consumeItem(stack));
+							}
+						}
+					}
+					else
+					{
+						if(playerEx.getPlayerDisguiseUUID() !=null){
+							if(UUIDUtils.areEqual(playerEx.getPlayerDisguiseUUID(), playerDNA)){
 								return new ActionResult<ItemStack>(EnumActionResult.PASS, stack);
 							}
-							if(!worldIn.isRemote){								
-								playerEx.setPlayerDisguiseUUID(null);
-								NBTTagCompound nbt = new NBTTagCompound();
-								nbt.setBoolean("NullUUID", true);
-								PacketEntityMessage message = new PacketEntityMessage(player, "DisguiseSync", nbt);
-								CrystalModNetwork.sendTo(message, (EntityPlayerMP)player);
-								CrystalModNetwork.sendToAll(message);
-							}
-							player.swingArm(hand);
 						}
-						else
-						{
-							if(playerEx.getPlayerDisguiseUUID() !=null){
-								if(UUIDUtils.areEqual(playerEx.getPlayerDisguiseUUID(), playerDNA)){
-									return new ActionResult<ItemStack>(EnumActionResult.PASS, stack);
-								}
-							}
-							if(!worldIn.isRemote){
-								playerEx.setPlayerDisguiseUUID(playerDNA);
-								NBTTagCompound nbt = new NBTTagCompound();
-								nbt.setTag("UUID", NBTUtil.createUUIDTag(playerDNA));
-								PacketEntityMessage message = new PacketEntityMessage(player, "DisguiseSync", nbt);
-								CrystalModNetwork.sendTo(message, (EntityPlayerMP)player);
-								CrystalModNetwork.sendToAll(message);
-							}
-							player.swingArm(hand);
+						if(!worldIn.isRemote){
+							playerEx.setPlayerDisguiseUUID(playerDNA);
+							NBTTagCompound nbt = new NBTTagCompound();
+							nbt.setTag("UUID", NBTUtil.createUUIDTag(playerDNA));
+							PacketEntityMessage message = new PacketEntityMessage(player, "DisguiseSync", nbt);
+							CrystalModNetwork.sendTo(message, (EntityPlayerMP)player);
+							CrystalModNetwork.sendToAll(message);
 						}
-						return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
+						player.swingArm(hand);
+						if(!player.capabilities.isCreativeMode){
+							ItemStack empty = new ItemStack(ModItems.dnaItems, 1, DNAItemType.EMPTY_SYRINGE.getMetadata());
+							if(ItemStackTools.getStackSize(stack) == 1){
+								player.setHeldItem(hand, empty);
+							}
+							else {
+								ItemUtil.givePlayerItem(player, empty);
+								player.setHeldItem(hand, ItemUtil.consumeItem(stack));
+							}
+						}
 					}
+					return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
 				}
 			}
 		}

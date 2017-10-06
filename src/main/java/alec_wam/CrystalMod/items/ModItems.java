@@ -50,6 +50,7 @@ import alec_wam.CrystalMod.items.tools.backpack.types.BackpackNormal;
 import alec_wam.CrystalMod.items.tools.backpack.types.BackpackWireless;
 import alec_wam.CrystalMod.items.tools.backpack.upgrade.ItemBackpackUpgrade;
 import alec_wam.CrystalMod.items.tools.bat.ItemBat;
+import alec_wam.CrystalMod.items.tools.blowdart.ItemBlowGun;
 import alec_wam.CrystalMod.items.tools.projectiles.ItemDagger;
 import alec_wam.CrystalMod.items.tools.projectiles.ItemDarkarang;
 import alec_wam.CrystalMod.tiles.machine.dna.ItemDNA;
@@ -185,6 +186,7 @@ public class ModItems {
 	public static ItemBombomb bombomb;
 	public static ItemDarkarang darkarang;
 	public static ItemDagger dagger;
+	public static ItemBlowGun blowGun;
 	
 	//Baubles
 	public static ItemBaubleWings dragonWingsBauble;
@@ -289,6 +291,7 @@ public class ModItems {
 		dagger = new ItemDagger();
 		bambooDoor = ModItems.registerItem(new ItemDoor(ModBlocks.bambooDoor), "bamboodooritem");
 		bambooBoat = new ItemBambooBoat();
+		blowGun = new ItemBlowGun();
 		
 		//Baubles
 		if(BaublesIntegration.instance().hasBaubles()){

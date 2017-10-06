@@ -323,6 +323,7 @@ item.crystalmod.dragonwings.name=Dragon Wings
 
 item.crystalmod.bamboodooritem.name=Bamboo Door
 item.crystalmod.bambooboat.name=Bamboo Boat
+item.crystalmod.blowgun.name=Bamboo Blowgun
 
 item.crystalmod.mobessence.name=Mob Essence
 crystalmod.info.mobessence1.txt=Can be used on an Advanced Mob Spawner to set the entity
@@ -492,6 +493,10 @@ tile.crystalmod.crystalplanks.blue.name=Blue Crystal Planks
 tile.crystalmod.crystalplanks.red.name=Red Crystal Planks
 tile.crystalmod.crystalplanks.green.name=Green Crystal Planks
 tile.crystalmod.crystalplanks.dark.name=Dark Crystal Planks
+tile.crystalmod.crystalladder.blue.name=Blue Crystal Ladder
+tile.crystalmod.crystalladder.red.name=Red Crystal Ladder
+tile.crystalmod.crystalladder.green.name=Green Crystal Ladder
+tile.crystalmod.crystalladder.dark.name=Dark Crystal Ladder
 
 tile.crystalmod.crystalore.blue.name=Blue Crystal Ore
 tile.crystalmod.crystalore.red.name=Red Crystal Ore
@@ -861,7 +866,7 @@ enhancement.crystalmod.jumpboost.name=Jump Boost
 enhancement.crystalmod.waterwalking.name=Water Walking
 
 crystalmod.jei.pipecover.category=Pipe Cover
-
+crystalmod.jei.dnasample.category=DNA Manipulation
 #--Entity
 entity.crystalpigzombie.name=Crystal Zombie Pigman
 entity.crystalcow.name=Crystal Cow

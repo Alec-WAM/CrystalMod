@@ -20,7 +20,7 @@
       "down": {"x": 90}
     },
     "hdd": {
-      "empty": { "model": "crystalmod:estorage/hddinterface_empty", "textures": { "front": "crystalmod:blocks/estorage/hddInterface/front_empty" } },
+      "empty": { "model": {"crystalmod:estorage/hddinterface_empty"}, "textures": { "front": "crystalmod:blocks/estorage/hddInterface/front_empty" } },
       "blue": { "textures": { "front": "crystalmod:blocks/estorage/hddInterface/front_blue" } },
       "red": { "textures": { "front": "crystalmod:blocks/estorage/hddInterface/front_red" } },
       "green": { "textures": { "front": "crystalmod:blocks/estorage/hddInterface/front_green" } },

@@ -1,26 +1,26 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "model": "crystalmod:crystalreedblock"
+    "model": "crystalmod:fixedcross"
   },
   "variants": {
     "normal": [{}],
     "inventory": [{}],
 	"age":{
 		"0":{
-			"textures": {"reedtexture": "crystalmod:blocks/plant/corn/corn_bottom_0"}
+			"textures": {"cross": "crystalmod:blocks/plant/corn/corn_bottom_0"}
 		},
 		"1":{
-			"textures": {"reedtexture": "crystalmod:blocks/plant/corn/corn_bottom_1"}
+			"textures": {"cross": "crystalmod:blocks/plant/corn/corn_bottom_1"}
 		},
 		"2":{
-			"textures": {"reedtexture": "crystalmod:blocks/plant/corn/corn_bottom_2"}
+			"textures": {"cross": "crystalmod:blocks/plant/corn/corn_bottom_2"}
 		},
 		"3":{
-			"textures": {"reedtexture": "crystalmod:blocks/plant/corn/corn_bottom_3"}
+			"textures": {"cross": "crystalmod:blocks/plant/corn/corn_bottom_3"}
 		},
 		"4":{
-			"textures": {"reedtexture": "crystalmod:blocks/plant/corn/corn_bottom_4"}
+			"textures": {"cross": "crystalmod:blocks/plant/corn/corn_bottom_4"}
 		}
 	}
   }

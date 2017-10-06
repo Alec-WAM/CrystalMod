@@ -1,0 +1,45 @@
+{
+	"forge_marker": 1,
+	"defaults": {
+		"model": "crystalmod:ladder",
+		"transform": "forge:default-item"
+	},
+	"variants": {
+        "facing": {
+			"north": {},
+			"south": { "y": 180 },
+			"east": { "y": 90 },
+			"west": { "y": 270 }
+		},
+        "variant": {
+			"blue": {
+				"model": "crystalmod:ladder",
+				"textures": {
+					"particle": "crystalmod:blocks/ladder_blue",
+					"texture": "crystalmod:blocks/ladder_blue"
+				}
+			},
+			"red": {
+				"model": "crystalmod:ladder",
+				"textures": {
+					"particle": "crystalmod:blocks/ladder_red",
+					"texture": "crystalmod:blocks/ladder_red"
+				}
+			},
+			"green": {
+				"model": "crystalmod:ladder",
+				"textures": {
+					"particle": "crystalmod:blocks/ladder_green",
+					"texture": "crystalmod:blocks/ladder_green"
+				}
+			},
+			"dark": {
+				"model": "crystalmod:ladder",
+				"textures": {
+					"particle": "crystalmod:blocks/ladder_dark",
+					"texture": "crystalmod:blocks/ladder_dark"
+				}
+			}
+		}
+    }
+}

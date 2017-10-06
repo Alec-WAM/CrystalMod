@@ -24,6 +24,7 @@ import alec_wam.CrystalMod.capability.ExtendedPlayerProvider;
 import alec_wam.CrystalMod.capability.PacketExtendedPlayerInvSync;
 import alec_wam.CrystalMod.entities.accessories.HorseAccessories;
 import alec_wam.CrystalMod.entities.accessories.WolfAccessories;
+import alec_wam.CrystalMod.entities.animals.EntityTamedPolarBear;
 import alec_wam.CrystalMod.entities.minions.warrior.EntityMinionWarrior;
 import alec_wam.CrystalMod.integration.baubles.BaublesIntegration;
 import alec_wam.CrystalMod.integration.baubles.ItemBaubleWings;
@@ -73,6 +74,7 @@ import net.minecraft.entity.boss.EntityWither;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.monster.EntityCreeper;
+import net.minecraft.entity.monster.EntityPolarBear;
 import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.monster.EntityWitherSkeleton;
 import net.minecraft.entity.monster.EntityZombie;
@@ -372,6 +374,20 @@ public class EventHandler {
         if(entity instanceof EntityWolf){
         	if(WolfAccessories.handleWolfInteract(player, held, event.getHand(), (EntityWolf)entity)){
         		event.setCanceled(true);
+        	}
+        }
+        if(entity instanceof EntityPolarBear){
+        	EntityPolarBear bear = (EntityPolarBear)entity;
+        	if(ItemStackTools.isValid(held)){
+        		if(held.getItem() == ModItems.miscFood && held.getMetadata() == FoodType.WHITE_FISH_RAW.getMetadata()){
+        			if (!player.getEntityWorld().isRemote){
+        				if (EntityUtil.rand.nextInt(3) == 0 && !net.minecraftforge.event.ForgeEventFactory.onAnimalTame(bear, player))
+                        {
+        					EntityTamedPolarBear.convertToTamed(player.getEntityWorld(), bear, player);
+                        }   				
+        			}
+        			event.setCanceled(true);
+        		}
         	}
         }
         if(entity instanceof EntityShulkerBullet){

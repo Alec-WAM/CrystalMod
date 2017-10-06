@@ -21,6 +21,7 @@ public class PlayerDNA {
 	}
 	
 	public static UUID loadPlayerDNA(ItemStack stack){
+		if(!stack.hasTagCompound()) return null;
 		return loadPlayerDNA(ItemNBTHelper.getCompound(stack), NBT_PLAYERDNA);
 	}
 	

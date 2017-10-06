@@ -37,6 +37,7 @@ import alec_wam.CrystalMod.blocks.glass.BlockCrystalGlassPane;
 import alec_wam.CrystalMod.blocks.glass.BlockPaintedCrystalGlass;
 import alec_wam.CrystalMod.blocks.glass.BlockTintedCrystalGlass;
 import alec_wam.CrystalMod.blocks.rail.BlockReinforcedRail;
+import alec_wam.CrystalMod.blocks.underwater.BlockKelp;
 import alec_wam.CrystalMod.handler.MissingItemHandler;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.tiles.BlockBasicTile;
@@ -238,6 +239,7 @@ public class ModBlocks {
 	public static BlockWoodenCrystalChest crystalWoodenChest;
 	public static BlockWirelessChest wirelessChest;
 	public static BlockCase storageCase;
+	
 	public static BlockCrystalPlant crystalPlant;
 	public static BlockCrystalTreePlant crystalTreePlantBlue, crystalTreePlantRed, crystalTreePlantGreen, crystalTreePlantDark;
 	public static BlockCrystalBerryBush crystalBush;	
@@ -245,13 +247,15 @@ public class ModBlocks {
 	public static BlockCrystalLog crystalLog;
 	public static BlockCrystalLeaves crystalLeaves;
 	public static BlockCrystalSapling crystalSapling;
-	public static BlockCrystalPlanks crystalPlanks;
+	public static BlockCrystalPlanks crystalPlanks;	
 	public static BlockMaterialCrop materialCrop;
 	public static BlockCorn corn;
 	public static BlockBamboo bamboo;
 	public static BlockBambooLeaves bambooLeaves;
 	public static Block bambooPlanks;
 	public static BlockNormalSapling normalSapling;
+	
+	public static BlockCrystalLadder ladder;
 	
 	public static BlockPipe crystalPipe;
 	public static BlockTank crystalTank;
@@ -333,6 +337,8 @@ public class ModBlocks {
 	public static BlockFusionPedistal fusionPedistal;
 
 	public static BlockCrystalCluster crystalCluster;
+	
+	public static BlockKelp kelp;
 	
 	public static CrystexiumBlock crystexiumBlock;
 	public static CrystexiumBlock blueCrystexiumBlock;
@@ -486,6 +492,9 @@ public class ModBlocks {
 		normalSapling = new BlockNormalSapling();
 		registerBlock(normalSapling, new ItemBlockMeta(normalSapling), "sapling");
 		ItemBlockMeta.setMappingProperty(normalSapling, BlockNormalSapling.VARIANT);
+		
+		ladder = new BlockCrystalLadder();
+		registerBlock(ladder, new ItemBlockCrystalLadder(ladder), "crystalladder");		
 		
 		crystalPipe = new BlockPipe();
 		registerBlock(crystalPipe, new ItemBlockPipe(crystalPipe), "crystalpipe");
@@ -762,6 +771,8 @@ public class ModBlocks {
 		registerEnumBlock(crystalCluster, new ItemBlockFacing(crystalCluster), "crystalcluster");
 		registerTileEntity(TileCrystalCluster.class);
 
+		kelp = registerBlock(new BlockKelp(), "kelp");
+		
 		crystexiumBlock = new CrystexiumBlock();
 		registerEnumBlock(crystexiumBlock, "crystexiumblock");
 		blueCrystexiumBlock = new CrystexiumBlock();

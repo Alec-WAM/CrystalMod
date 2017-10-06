@@ -4,12 +4,12 @@
 		"model": "crystalmod:null"
 	},
 	"variants": {
-		"inventory": { },
-		"normal": { },
+		"inventory": {},
+		"normal": {},
 		"type": {
-			"blue":{},
+			"blue": {},
 			"red": {},
-			"green" {},
+			"green": {},
 			"dark": {},
 			"pure": {}
 		}

@@ -12,7 +12,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityCreature;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.IJumpingMount;
@@ -27,6 +26,7 @@ import net.minecraft.entity.ai.EntityAISit;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
+import net.minecraft.entity.monster.EntityPolarBear;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -65,6 +65,28 @@ public class EntityTamedPolarBear extends EntityTameable implements IJumpingMoun
         this.setSize(1.3F, 1.4F);
     }
 
+    public static void convertToTamed(World world, EntityPolarBear polarBear, EntityPlayer player){
+    	EntityTamedPolarBear tamedBear = new EntityTamedPolarBear(world);
+    	tamedBear.copyLocationAndAnglesFrom(polarBear);
+    	world.removeEntity(polarBear);
+    	tamedBear.setNoAI(polarBear.isAIDisabled());
+    	if (polarBear.hasCustomName())
+        {
+    		tamedBear.setCustomNameTag(polarBear.getCustomNameTag());
+    		tamedBear.setAlwaysRenderNameTag(polarBear.getAlwaysRenderNameTag());
+        }
+    	
+    	world.spawnEntity(tamedBear);
+
+    	tamedBear.setTamed(true);
+    	tamedBear.navigator.clearPathEntity();
+    	tamedBear.setAttackTarget((EntityLivingBase)null);
+    	tamedBear.aiSit.setSitting(true);
+    	tamedBear.setOwnerId(player.getUniqueID());
+    	tamedBear.playTameEffect(true);
+        tamedBear.world.setEntityState(tamedBear, (byte)7);
+    }
+    
 	@Override
 	public EntityAgeable createChild(EntityAgeable ageable) {
 		return null;
@@ -250,7 +272,7 @@ public class EntityTamedPolarBear extends EntityTameable implements IJumpingMoun
         {
         	if (this.isOwner(player) && ItemStackTools.isValid(itemstack))
             {
-        		if(itemstack.getItem() == Items.SADDLE){
+        		if(itemstack.getItem() == Items.SADDLE && !isSitting()){
 	        		this.mountTo(player);
 	        		return true;
         		}

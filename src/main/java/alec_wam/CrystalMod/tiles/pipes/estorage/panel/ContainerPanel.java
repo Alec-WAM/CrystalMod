@@ -116,6 +116,8 @@ public class ContainerPanel extends Container implements INetworkContainer {
         			if(added > 0){
         				slot6.decrStackSize(added);
         				detectAndSendChanges();
+        				//TODO Confirm this is needed
+        				sendItemsTo((EntityPlayerMP) playerIn);
         				if (ItemStackTools.isValid(slot6.getStack()) && slot6.getStack().getItem() == copy.getItem())
                         {
                             this.retrySlotClick(slotId, clickedButton, true, playerIn);
@@ -229,6 +231,8 @@ public class ContainerPanel extends Container implements INetworkContainer {
 				}else{
 					getSlot(slot).decrStackSize(added);
 				}
+				//TODO Confirm this is needed
+				sendItemsTo(player);
 			}
 		}
 	}
@@ -265,6 +269,8 @@ public class ContainerPanel extends Container implements INetworkContainer {
 					}
 					player.updateHeldItem();
 				}
+				//TODO Confirm this is needed
+				sendItemsTo(player);
 			}
 		}
 	}

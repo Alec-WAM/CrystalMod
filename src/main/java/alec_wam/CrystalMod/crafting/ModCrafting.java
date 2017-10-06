@@ -301,10 +301,12 @@ public class ModCrafting {
 		}
 		for(WoodType type : WoodType.values()){
 			addShapelessRecipe(new ItemStack(ModBlocks.crystalPlanks, 4, type.getMeta()), new Object[]{new ItemStack(ModBlocks.crystalLog, 1, type.getMeta())});
+			addShapedOreRecipe(new ItemStack(ModBlocks.ladder, 4, type.getMeta()), new Object[]{"S S", "S#S", "S S", 'S', "stickWood", '#', new ItemStack(ModBlocks.crystalPlanks, 1, type.getMeta())});
 		}
 		addShapelessRecipe(new ItemStack(ModBlocks.bambooPlanks, 2, 0), new Object[]{new ItemStack(ModBlocks.bamboo)});
 		addShapedRecipe(ModItems.bambooBoat, new Object[]{"X X", "XXX", 'X', ModBlocks.bambooPlanks});
 		addShapedRecipe(new ItemStack(ModItems.bambooDoor, 3), new Object[]{"XX", "XX", "XX", 'X', ModBlocks.bambooPlanks});
+		addShapedRecipe(ModItems.blowGun, new Object[]{"X", "X", "X", 'X', ModBlocks.bamboo});
 		
 		addShapedOreRecipe(new ItemStack(ModBlocks.crates, 1, CrateType.BLUE.getMeta()), new Object[] {"XXX", "# #", "XXX", 'X', new ItemStack(ModBlocks.crystalPlanks, 1, WoodType.BLUE.getMeta()), '#', "chestWood"});
 		addShapedOreRecipe(new ItemStack(ModBlocks.crates, 1, CrateType.RED.getMeta()), new Object[] {"XXX", "#C#", "XXX", 'X', new ItemStack(ModBlocks.crystalPlanks, 1, WoodType.RED.getMeta()), '#', "chestWood", 'C', new ItemStack(ModBlocks.crates, 1, CrateType.BLUE.getMeta())});
@@ -505,7 +507,6 @@ public class ModCrafting {
 		addShapedOreRecipe(Items.NAME_TAG, new Object[]{" PP", "SBI", " PP", 'S', "string", 'I', "ingotIron", 'P', "paper", 'B', "slimeball"});
 		
 		BackpackUtil.addRecipes();
-		//addShapedOreRecipe(ModItems.telePearl, new Object[]{"#P#", "PEP", "#P#", '#', pureIngot, 'P', "nuggetCrystal", 'E', "endereye"});
 
 		addShapedOreRecipe(new ItemStack(ModBlocks.darkIronRail, 16), new Object[] {"X X", "X#X", "X X", 'X', dIronIngot, '#', "stickWood"});
 
