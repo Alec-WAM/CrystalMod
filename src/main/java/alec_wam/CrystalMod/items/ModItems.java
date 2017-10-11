@@ -11,6 +11,7 @@ import alec_wam.CrystalMod.blocks.crops.BlockCrystalPlant.PlantType;
 import alec_wam.CrystalMod.blocks.crops.ItemCorn;
 import alec_wam.CrystalMod.blocks.crops.bamboo.ItemWrappedFood;
 import alec_wam.CrystalMod.blocks.crops.material.ItemMaterialSeed;
+import alec_wam.CrystalMod.entities.accessories.horseshoes.ItemHorseShoe;
 import alec_wam.CrystalMod.entities.disguise.ItemDisguise;
 import alec_wam.CrystalMod.entities.minecarts.chests.ItemCrystalChestMinecart;
 import alec_wam.CrystalMod.entities.minecarts.chests.ItemEnderChestMinecart;
@@ -126,6 +127,7 @@ public class ModItems {
 	public static ItemArmor darkIronHelmet, darkIronChestplate, darkIronLeggings, darkIronBoots;
 	public static ItemArmor crystalHelmet, crystalChestplate, crystalLeggings, crystalBoots;
 	public static ItemWolfArmor wolfArmor;
+	public static ItemHorseShoe horseShoes;
 	
 	public static ItemAxe darkIronAxe;
 	public static ItemHoe darkIronHoe;
@@ -231,6 +233,7 @@ public class ModItems {
 		crystalBoots = registerItem(new ItemCrystalArmor(ArmorMaterialCrystal, EntityEquipmentSlot.FEET, "boots", ItemStackTools.getEmptyStack()), "crystalboots");
 		
 		wolfArmor = new ItemWolfArmor();
+		horseShoes = new ItemHorseShoe();
 		
 		darkIronAxe = registerItem(new ItemCustomAxe(ToolMaterialDarkIron), "darkironaxe");
 		darkIronHoe = (ItemHoe) registerItem(new ItemHoe(ToolMaterialDarkIron), "darkironhoe").setCreativeTab(CrystalMod.tabTools);

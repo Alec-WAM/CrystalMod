@@ -380,11 +380,15 @@ public class EventHandler {
         	EntityPolarBear bear = (EntityPolarBear)entity;
         	if(ItemStackTools.isValid(held)){
         		if(held.getItem() == ModItems.miscFood && held.getMetadata() == FoodType.WHITE_FISH_RAW.getMetadata()){
+        			if (!player.capabilities.isCreativeMode)
+    	            {
+        				held.shrink(1);
+    	            }
         			if (!player.getEntityWorld().isRemote){
         				if (EntityUtil.rand.nextInt(3) == 0 && !net.minecraftforge.event.ForgeEventFactory.onAnimalTame(bear, player))
                         {
         					EntityTamedPolarBear.convertToTamed(player.getEntityWorld(), bear, player);
-                        }   				
+                        }   
         			}
         			event.setCanceled(true);
         		}

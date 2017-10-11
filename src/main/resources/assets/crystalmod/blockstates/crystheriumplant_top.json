@@ -1,0 +1,28 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "crystalmod:fixedcross",
+	"transform": "forge:default-item"        
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{}],
+	"type":{
+		"normal":{
+			"textures": {"cross": "crystalmod:blocks/crystexium/crystherium/crystherium_flowers_top"}
+		},
+		"blue":{
+			"textures": {"cross": "crystalmod:blocks/crystexium/crystherium/blue_crystherium_flowers_top"}
+		},
+		"red":{
+			"textures": {"cross": "crystalmod:blocks/crystexium/crystherium/red_crystherium_flowers_top"}
+		},
+		"green":{
+			"textures": {"cross": "crystalmod:blocks/crystexium/crystherium/green_crystherium_flowers_top"}
+		},
+		"dark":{
+			"textures": {"cross": "crystalmod:blocks/crystexium/crystherium/dark_crystherium_flowers_top"}
+		}
+	}
+  }
+}

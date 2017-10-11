@@ -22,9 +22,11 @@ import alec_wam.CrystalMod.blocks.crops.material.BlockMaterialCrop;
 import alec_wam.CrystalMod.blocks.crops.material.RenderTileMaterialCrop;
 import alec_wam.CrystalMod.blocks.crops.material.TileMaterialCrop;
 import alec_wam.CrystalMod.blocks.crystexium.BlockCrysidian;
+import alec_wam.CrystalMod.blocks.crystexium.BlockCrystheriumPlant;
 import alec_wam.CrystalMod.blocks.crystexium.CrystexiumBlock;
 import alec_wam.CrystalMod.blocks.crystexium.CrystexiumBlock.CrystexiumBlockType;
 import alec_wam.CrystalMod.blocks.crystexium.CrystexiumSlab;
+import alec_wam.CrystalMod.blocks.crystexium.ItemBlockCrystheriumPlant;
 import alec_wam.CrystalMod.blocks.decorative.BlockCustomDoor;
 import alec_wam.CrystalMod.blocks.decorative.BlockFailure;
 import alec_wam.CrystalMod.blocks.decorative.bridge.BlockBridge;
@@ -349,6 +351,7 @@ public class ModBlocks {
 	
 	public static CrystexiumSlab crystexiumSlab;
 	public static BlockCrysidian crysidian;
+	public static BlockCrystheriumPlant crystheriumPlant;
 	
 	public static BlockStairs crystexiumStairs;
 	public static BlockStairs blueCrystexiumStairs;
@@ -468,8 +471,7 @@ public class ModBlocks {
 		registerBlock(materialCrop, "materialcrop");
 		registerTileEntity(TileMaterialCrop.class);
 		
-		corn = new BlockCorn();
-		registerBlock(corn, "corn");
+		corn = registerBlock(new BlockCorn(), "corn");
 		
 		bamboo = new BlockBamboo();
 		registerBlock(bamboo, "bamboo");
@@ -791,7 +793,9 @@ public class ModBlocks {
 		ItemBlockMeta.setMappingProperty(crystexiumSlab, CrystexiumSlab.VARIANT);
 		
 		crysidian = registerBlock(new BlockCrysidian(), "crysidian");
-		
+		crystheriumPlant = new BlockCrystheriumPlant();
+		registerBlock(crystheriumPlant, new ItemBlockCrystheriumPlant(crystheriumPlant), "crystheriumplant");
+		ItemBlockMeta.setMappingProperty(crystheriumPlant, BlockCrystheriumPlant.TYPE);
 		
 		crystexiumStairs = new BlockCustomStairs(crystexiumBlock.getDefaultState().withProperty(CrystexiumBlock.TYPE, CrystexiumBlockType.BRICK));
 		registerBlock(crystexiumStairs, "crystexiumstairs");

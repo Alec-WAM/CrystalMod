@@ -86,6 +86,11 @@ item.crystalmod.crystexitem.crystexium_brick_red.name=Red Crystexium Brick
 item.crystalmod.crystexitem.crystexium_brick_green.name=Green Crystexium Brick
 item.crystalmod.crystexitem.crystexium_brick_dark.name=Dark Crystexium Brick
 item.crystalmod.crystexitem.crystexium_brick_pure.name=Pure Crystexium Brick
+item.crystalmod.crystexitem.crystherium_utilia_normal.name=Crystherium Utilia
+item.crystalmod.crystexitem.crystherium_utilia_blue.name=Blue Crystherium Utilia
+item.crystalmod.crystexitem.crystherium_utilia_red.name=Red Crystherium Utilia
+item.crystalmod.crystexitem.crystherium_utilia_green.name=Green Crystherium Utilia
+item.crystalmod.crystexitem.crystherium_utilia_dark.name=Dark Crystherium Utilia
 
 item.crystalmod.toolparts.rod.name=Crystal Tool Rod
 item.crystalmod.toolparts.cover.name=Crystal Sword Hilt
@@ -181,6 +186,7 @@ item.crystalmod.wolfarmor.iron.name=Iron Wolf Armor
 item.crystalmod.wolfarmor.diron.name=Dark Iron Wolf Armor
 item.crystalmod.wolfarmor.diamond.name=Diamond Wolf Armor
 item.crystalmod.wolfarmor.gold.name=Gold Wolf Armor
+item.crystalmod.horseshoes.name=Horse Shoes
 
 item.crystalmod.supertorch.name=Super Torch
 
@@ -740,6 +746,12 @@ tile.crystalmod.darkcrystexiumblock.square_brick.name=Dark Crystexium Square Bri
 tile.crystalmod.purecrystexiumblock.normal.name=Pure Crystexium Block
 tile.crystalmod.purecrystexiumblock.brick.name=Pure Crystexium Bricks
 tile.crystalmod.purecrystexiumblock.square_brick.name=Pure Crystexium Square Bricks
+
+tile.crystalmod.crystheriumplant.normal.name=Crystherium
+tile.crystalmod.crystheriumplant.blue.name=Blue Crystherium
+tile.crystalmod.crystheriumplant.red.name=Red Crystherium
+tile.crystalmod.crystheriumplant.green.name=Green Crystherium
+tile.crystalmod.crystheriumplant.dark.name=Dark Crystherium
 
 tile.crystalmod.crystexiumstairs.name=Crystexium Brick Stairs
 tile.crystalmod.bluecrystexiumstairs.name=Blue Crystexium Brick Stairs

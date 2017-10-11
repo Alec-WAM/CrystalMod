@@ -17,6 +17,11 @@
 		"crystexium_brick_red": [{ "textures": { "layer0": "crystalmod:items/crystex/crystexium_brick_red" }}],
 		"crystexium_brick_green": [{ "textures": { "layer0": "crystalmod:items/crystex/crystexium_brick_green" }}],
 		"crystexium_brick_dark": [{ "textures": { "layer0": "crystalmod:items/crystex/crystexium_brick_dark" }}],
-		"crystexium_brick_pure": [{ "textures": { "layer0": "crystalmod:items/crystex/crystexium_brick_pure" }}]
+		"crystexium_brick_pure": [{ "textures": { "layer0": "crystalmod:items/crystex/crystexium_brick_pure" }}],
+		"crystherium_utilia_normal": [{ "textures": { "layer0": "crystalmod:items/crystex/crystherium_utilia" }}],
+		"crystherium_utilia_blue": [{ "textures": { "layer0": "crystalmod:items/crystex/blue_crystherium_utilia" }}],
+		"crystherium_utilia_red": [{ "textures": { "layer0": "crystalmod:items/crystex/red_crystherium_utilia" }}],
+		"crystherium_utilia_green": [{ "textures": { "layer0": "crystalmod:items/crystex/green_crystherium_utilia" }}],
+		"crystherium_utilia_dark": [{ "textures": { "layer0": "crystalmod:items/crystex/dark_crystherium_utilia" }}]
     }
 }

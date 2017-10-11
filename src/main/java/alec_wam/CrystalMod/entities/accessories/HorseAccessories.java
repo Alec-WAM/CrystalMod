@@ -1,6 +1,9 @@
 package alec_wam.CrystalMod.entities.accessories;
 
+import javax.annotation.Nonnull;
+
 import alec_wam.CrystalMod.asm.ObfuscatedNames;
+import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.util.EntityUtil;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ReflectionUtils;
@@ -18,7 +21,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumHand;
 
 public class HorseAccessories {
-    public static String NBT_ACCESSORY_HORSE_ENDERCHEST = "EnderChest";
+    //EnderChest stuff
+	public static String NBT_ACCESSORY_HORSE_ENDERCHEST = "EnderChest";
     
     public static boolean handleHorseInteract(EntityPlayer player, ItemStack held, EnumHand hand, AbstractHorse horse){
     	if(handleEnderChestInteract(horse, held, hand, player))return true;
@@ -130,6 +134,88 @@ public class HorseAccessories {
     	if(horse == null || !hasEnderChest(horse)) return false;
     	setHasEnderChest(horse, false);
     	return true;
+    }
+    
+    //Horse Shoe Stuff
+    public static String NBT_ACCESSORY_HORSE_HORSESHOES = "HorseShoes";
+
+    private static boolean handleHorseShoeInteract(AbstractHorse horse, ItemStack held, EnumHand hand, EntityPlayer player){
+    	//TODO Finish this
+    	if(ItemStackTools.isValid(getHorseShoes(horse))){
+    		if(ItemStackTools.isNullStack(held)){
+    			if(!player.isSneaking())return false;
+	  			InventoryEnderChest inventoryenderchest = player.getInventoryEnderChest();
+	  			if(inventoryenderchest !=null){
+	  				if(player.getEntityWorld().isRemote){
+	  					return true;
+	  				}
+	  				player.displayGUIChest(inventoryenderchest);
+	  				return true;
+	  			}
+  		  	} else {
+  		  		Block block = Block.getBlockFromItem(held.getItem());
+  		  		boolean isChest = block !=null && Block.getBlockFromItem(held.getItem()) instanceof BlockChest;
+  		  		if(isChest){
+  		  			boolean success = removeEnderChest(horse);
+  		  			if(success) {
+	  		  			if(player.getEntityWorld().isRemote){
+		  					return true;
+		  				}
+		  		  		horse.dropItem(Item.getItemFromBlock(Blocks.ENDER_CHEST), 1);
+		  		  		return true;
+  		  			}
+  		  		}
+  		  	}
+    	} else {
+    		if(ItemStackTools.isValid(held)){
+	    		if(held.getItem() == ModItems.horseShoes){
+	    			boolean success = addHorseShoes(horse, held);
+		  			if(success) {
+		  				if(player.getEntityWorld().isRemote){
+		  					return true;
+		  				}
+		  				if(!player.capabilities.isCreativeMode){
+		  					ItemStackTools.incStackSize(held, -1);
+		  				}
+		  				return true;
+		  			}
+	    		}
+    		}
+    	}
+    	return false;
+    }
+    
+    public static ItemStack getHorseShoes(AbstractHorse horse){
+    	NBTTagCompound nbt = EntityUtil.getCustomEntityData(horse);
+    	if(nbt.hasKey(NBT_ACCESSORY_HORSE_HORSESHOES)){
+    		ItemStack shoes = ItemStackTools.loadFromNBT(nbt.getCompoundTag(NBT_ACCESSORY_HORSE_HORSESHOES));
+    		return ItemStackTools.isValid(shoes) ? shoes : ItemStackTools.getEmptyStack();
+    	}
+    	return ItemStackTools.getEmptyStack();
+    }
+    
+    public static void setHorseShoes(AbstractHorse horse, @Nonnull ItemStack shoes){
+    	NBTTagCompound nbt = EntityUtil.getCustomEntityData(horse);
+    	if(ItemStackTools.isEmpty(shoes)){
+    		nbt.removeTag(NBT_ACCESSORY_HORSE_HORSESHOES);
+    	} else {
+    		nbt.setTag(NBT_ACCESSORY_HORSE_HORSESHOES, shoes.writeToNBT(new NBTTagCompound()));
+    	}
+    	EntityUtil.setCustomEntityData(horse, nbt);
+    }
+    
+    public static boolean addHorseShoes(AbstractHorse horse, ItemStack shoes){
+    	if(horse == null || horse.getGrowingAge() != 0 || ItemStackTools.isValid(getHorseShoes(horse))) return false;
+    	
+    	setHorseShoes(horse, shoes);
+    	return true;
+    }
+    
+    public static ItemStack removeHorseShoes(AbstractHorse horse){
+    	if(horse == null || ItemStackTools.isEmpty(getHorseShoes(horse))) return ItemStackTools.getEmptyStack();
+    	ItemStack shoes = getHorseShoes(horse);
+    	setHorseShoes(horse, ItemStackTools.getEmptyStack());
+    	return shoes;
     }
 	
 }
