@@ -86,6 +86,8 @@ public class Config {
 
     public static boolean generateSeaweed = true;
     public static boolean retrogenSeaweed = false;
+    public static boolean generateKelp = true;
+    public static boolean retrogenKelp = false;
     public static int coralChance = 20;
     public static boolean retrogenCoral = false;
     
@@ -269,6 +271,9 @@ public class Config {
         generateSeaweed = cfg.get(CATEGORY_WORLD, "generateSeaweed", generateSeaweed, "Enable or disable Seaweed generation in oceans.").getBoolean();
         retrogenSeaweed = cfg.get(CATEGORY_WORLD, "retrogenSeaweed", retrogenSeaweed,
                 "Set to true to enable retrogen of seaweed").getBoolean();
+        generateKelp = cfg.get(CATEGORY_WORLD, "generateKelp", generateKelp, "Enable or disable Kelp generation in oceans.").getBoolean();
+        retrogenKelp = cfg.get(CATEGORY_WORLD, "retrogenKelp", retrogenKelp,
+                "Set to true to enable retrogen of kelp").getBoolean();
         coralChance = cfg.get(CATEGORY_WORLD, "coralGenChance", coralChance, "How rare are Coral Reefs in oceans? Set to 0 to disable them").getInt(20);
         retrogenCoral = cfg.get(CATEGORY_WORLD, "retrogenCoral", retrogenCoral,
                 "Set to true to enable retrogen of Coral Reefs").getBoolean();
@@ -366,6 +371,6 @@ public class Config {
     }
     
     public static boolean needRetroGen(){
-    	return Config.retrogenOres || Config.retrogenTrees || Config.retrogenClusters || Config.retrogenReeds || Config.retrogenSeaweed || Config.retrogenCoral;
+    	return Config.retrogenOres || Config.retrogenTrees || Config.retrogenClusters || Config.retrogenReeds || Config.retrogenSeaweed || Config.retrogenKelp || Config.retrogenCoral;
     }
 }

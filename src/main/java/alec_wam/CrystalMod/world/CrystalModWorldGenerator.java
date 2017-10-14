@@ -17,6 +17,7 @@ import alec_wam.CrystalMod.world.generation.CrystalReedsFeature;
 import alec_wam.CrystalMod.world.generation.CrystalTreeFeature;
 import alec_wam.CrystalMod.world.generation.CrystalWellFeature;
 import alec_wam.CrystalMod.world.generation.FusionTempleFeature;
+import alec_wam.CrystalMod.world.generation.KelpFeature;
 import alec_wam.CrystalMod.world.generation.SeaweedFeature;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.ChunkPos;
@@ -39,6 +40,7 @@ public class CrystalModWorldGenerator implements IWorldGenerator {
     	featureList.add(new CrystalClusterFeature());  
     	featureList.add(new CrystalBushFeature());    
     	featureList.add(new SeaweedFeature());      	 
+    	featureList.add(new KelpFeature());   	 
     	featureList.add(new CoralReefFeature()); 
     	
     	featureList.add(new FusionTempleFeature());
