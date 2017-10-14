@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.ConcurrentModificationException;
 import java.util.List;
+import java.util.UUID;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.Project;
@@ -54,6 +55,8 @@ import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.Lang;
 import alec_wam.CrystalMod.util.ModLogger;
+import alec_wam.CrystalMod.util.PlayerUtil;
+import alec_wam.CrystalMod.util.ProfileUtil;
 import alec_wam.CrystalMod.util.ReflectionUtils;
 import alec_wam.CrystalMod.util.TimeUtil;
 import alec_wam.CrystalMod.util.client.RenderUtil;
@@ -72,6 +75,7 @@ import net.minecraft.client.audio.SoundEventAccessor;
 import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.gui.inventory.GuiScreenHorseInventory;
@@ -95,8 +99,16 @@ import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.IEntityOwnable;
+import net.minecraft.entity.item.EntityBoat;
+import net.minecraft.entity.item.EntityItemFrame;
+import net.minecraft.entity.item.EntityMinecart;
+import net.minecraft.entity.item.EntityMinecartEmpty;
+import net.minecraft.entity.item.EntityMinecartFurnace;
 import net.minecraft.entity.passive.EntityHorse;
+import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ContainerHorseChest;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -934,7 +946,10 @@ public class ClientEventHandler {
 
 	}
     
+    //OVERLAYS
+    
     public static final ResourceLocation OVERLAY_REDSTONERADIATION = CrystalMod.resourceL("textures/gui/overlay/redstone_radiation.png");
+    public static final ResourceLocation OVERLAY_SUPREME_INTELLECT = CrystalMod.resourceL("textures/gui/overlay/supreme_intellect.png");
     
     @SubscribeEvent
     public void renderScreen(RenderGameOverlayEvent event){
@@ -946,8 +961,8 @@ public class ClientEventHandler {
     	
     	ScaledResolution sr = event.getResolution();
     	if(event.getType() == ElementType.ALL){
-			if(extPlayer.getRadiation() > 0){
-				
+    		//Radiation
+			if(extPlayer.getRadiation() > 0){				
 				int phase = extPlayer.getRadiation() / 600;
 				Minecraft.getMinecraft().renderEngine.bindTexture(OVERLAY_REDSTONERADIATION);
 				GlStateManager.pushMatrix();
@@ -987,6 +1002,75 @@ public class ClientEventHandler {
 	            
 	    		GlStateManager.popMatrix();
 			}
+			//Intellect
+			if(extPlayer.getIntellectTime() > 0){				
+				Minecraft.getMinecraft().renderEngine.bindTexture(OVERLAY_SUPREME_INTELLECT);
+				GlStateManager.pushMatrix();
+	    		
+	    		int left = 0;
+	    		int top = 0;
+	    		int right = sr.getScaledWidth();
+	    		int bottom = sr.getScaledHeight();
+
+	            double uD = 1.0f / 1280;
+	            double vD = 1.0f / 1080;
+	            
+	            double z = 1000;
+	            
+	    		double u = 0 * uD;
+	            double v = 0 * vD;
+	            double maxU = 1280 * uD;
+	            double maxV = 1080 * vD;
+	            Tessellator tessellator = Tessellator.getInstance();
+	            VertexBuffer vertexbuffer = tessellator.getBuffer();
+	            GlStateManager.enableBlend();
+	            GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+	            float alpha = 0.8f;
+	            vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
+	            vertexbuffer.pos(left, bottom, z).tex(u, maxV).color(1, 1, 1, alpha).endVertex();
+	            vertexbuffer.pos(right, bottom, z).tex(maxU, maxV).color(1, 1, 1, alpha).endVertex();
+	            vertexbuffer.pos(right, top, z).tex(maxU, v).color(1, 1, 1, alpha).endVertex();
+	            vertexbuffer.pos(left, top, z).tex(u, v).color(1, 1, 1, alpha).endVertex();
+	            tessellator.draw();
+	            GlStateManager.disableBlend();
+	            
+	    		GlStateManager.popMatrix();
+	    		
+	    		
+			}
+			
+			if(event.getType() == ElementType.ALL && !Minecraft.getMinecraft().gameSettings.showDebugInfo && !(Minecraft.getMinecraft().currentScreen instanceof GuiChat)){
+    			List<String> lines = Lists.newArrayList();   			
+    			
+    			RayTraceResult ray = Minecraft.getMinecraft().objectMouseOver;
+    			if(ray !=null){
+    				if(ray.typeOfHit == RayTraceResult.Type.ENTITY && ray.entityHit !=null){
+    					Entity entity = ray.entityHit;
+    					collectEntityData(lines, ray, entity);
+    				}
+    				if(ray.typeOfHit == RayTraceResult.Type.BLOCK){
+    					BlockPos pos = ray.getBlockPos();
+    					World world = CrystalMod.proxy.getClientWorld();
+    					IBlockState state = world.getBlockState(pos);
+    					if(state !=null){
+    						Block block = state.getBlock();
+    						ItemStack blockStack = block.getPickBlock(state, ray, world, pos, player);
+    						if(ItemStackTools.isValid(blockStack)){
+    							lines.add(blockStack.getDisplayName());
+    							lines.add(blockStack.getItem().getRegistryName().toString());
+    						}
+    					}
+    				}
+    			}
+    			if(!lines.isEmpty()){
+	    			int x = 0;
+	    			int y = sr.getScaledHeight() - ((lines.size() * 10)-5);
+	    	        GlStateManager.pushMatrix();
+	    			RenderUtil.drawHoveringText(lines, x, y, sr.getScaledWidth(), sr.getScaledHeight(), 300, Minecraft.getMinecraft().fontRendererObj);
+	    			GlStateManager.disableLighting();		            
+		    		GlStateManager.popMatrix();
+    			}
+    		}
 		}
     	
     	if(extPlayer.getScreenFlashTime() > 0){
@@ -1071,5 +1155,77 @@ public class ClientEventHandler {
         GlStateManager.popMatrix();
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         GlStateManager.disableBlend();
+    }
+    
+    public void collectEntityData(List<String> lines, RayTraceResult ray, Entity entity){
+    	String nameLine = entity.getDisplayName().getFormattedText() + " (#"+entity.getEntityId()+")";
+		lines.add(nameLine);		
+		
+    	boolean handledRider = false;
+		if(entity instanceof EntityItemFrame){
+			EntityItemFrame frame = (EntityItemFrame)entity;
+			ItemStack item = frame.getDisplayedItem();
+			if(ItemStackTools.isEmpty(item)){
+				lines.add("Item: "+Lang.localize("gui.empty"));
+			} else {
+				lines.add("Item: "+item.getDisplayName());
+			}
+		}
+		
+    	if(entity instanceof EntityLivingBase){
+			EntityLivingBase living = (EntityLivingBase)entity;
+			String health = "Health: "+(living.getHealth()+" / "+ living.getMaxHealth());
+			lines.add(health);
+		}
+    	
+    	if(entity instanceof EntityBoat){
+    		EntityBoat boat = (EntityBoat)entity;
+    		
+    		if(boat.getControllingPassenger() !=null){
+    			lines.add("Driver: "+boat.getControllingPassenger().getDisplayName().getFormattedText());
+    		} else {
+    			lines.add("Driver: "+Lang.localize("gui.empty"));
+    		}
+    		
+    		if(!boat.getPassengers().isEmpty() && boat.getPassengers().size() > 1 && boat.getPassengers().get(1) !=null){
+    			lines.add("Passenger: "+boat.getPassengers().get(1).getDisplayName().getFormattedText());
+    		} else {
+    			lines.add("Passenger: "+Lang.localize("gui.empty"));
+    		}
+    		handledRider = true;
+    	}
+    	
+    	if(entity instanceof EntityMinecart){
+    		EntityMinecart cart = (EntityMinecart)entity;
+
+    		if(cart instanceof EntityMinecartEmpty){
+	    		if(cart.getControllingPassenger() !=null){
+	    			lines.add("Rider: "+cart.getControllingPassenger().getDisplayName().getFormattedText());
+	    		} else {
+	    			lines.add("Rider: "+Lang.localize("gui.empty"));
+	    		}
+    		}
+    		if(cart instanceof EntityMinecartFurnace){
+    			EntityMinecartFurnace furnace = (EntityMinecartFurnace)cart;
+    			int fuel = ObfuscationReflectionHelper.getPrivateValue(EntityMinecartFurnace.class, furnace, 1);
+	    		lines.add("Fuel: "+TimeUtil.getTimeFromTicks(fuel));
+    		}
+    		handledRider = true;
+    	}
+    	
+    	if(entity instanceof IEntityOwnable){
+    		IEntityOwnable ownable = (IEntityOwnable)entity;
+    		UUID owner = ownable.getOwnerId();
+    		if(owner !=null){
+    			String name = ProfileUtil.getUsername(owner);
+    			if(name != ProfileUtil.ERROR){
+    				lines.add("Owner: "+name);
+    			}
+    		}
+    	}
+    	
+    	if(!handledRider && entity.getControllingPassenger() !=null){
+    		lines.add("Rider: "+entity.getControllingPassenger().getDisplayName().getFormattedText());
+    	}
     }
 }

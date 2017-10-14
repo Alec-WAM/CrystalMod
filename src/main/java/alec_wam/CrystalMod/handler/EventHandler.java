@@ -105,13 +105,11 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootContext.EntityTarget;
 import net.minecraft.world.storage.loot.LootEntry;
 import net.minecraft.world.storage.loot.LootPool;
-import net.minecraft.world.storage.loot.LootTableList;
 import net.minecraft.world.storage.loot.conditions.LootCondition;
 import net.minecraft.world.storage.loot.functions.LootFunction;
 import net.minecraftforge.common.BiomeDictionary;
@@ -478,9 +476,10 @@ public class EventHandler {
     		  exPlayer.redstoneCoreDelay = 0;
     		  exPlayer.setRadiation(0);
     		  NBTTagCompound nbt = new NBTTagCompound();
+    		  nbt.setString("Type", "Radiation");
     		  nbt.setInteger("Time", 0);
     		  exPlayer.setLastRadiation(0);
-    		  CrystalModNetwork.sendTo(new PacketEntityMessage(player, "#UpdateRadiation#", nbt), (EntityPlayerMP)player);
+    		  CrystalModNetwork.sendTo(new PacketEntityMessage(player, PacketEntityMessage.MESSAGE_UPDATETIME, nbt), (EntityPlayerMP)player);
     	  }
       }
     }
@@ -809,12 +808,26 @@ public class EventHandler {
 					if(ePlayer.redstoneCoreDelay > 0)ePlayer.redstoneCoreDelay = 0;
 				}
 				
+				if(ePlayer.getIntellectTime() > 0){
+					ePlayer.setIntellectTime(ePlayer.getIntellectTime()-1);
+				}
+				
 				boolean dirtyValue = ePlayer.getLastRadiation() != ePlayer.getRadiation() && player.getEntityWorld().getTotalWorldTime() % 20 == 0;
 				if(dirtyValue && player instanceof EntityPlayerMP){
 					NBTTagCompound nbt = new NBTTagCompound();
+					nbt.setString("Type", "Radiation");
 					nbt.setInteger("Time", ePlayer.getRadiation());
 					ePlayer.setLastRadiation(ePlayer.getRadiation());
-					CrystalModNetwork.sendTo(new PacketEntityMessage(player, "#UpdateRadiation#", nbt), (EntityPlayerMP)player);
+					CrystalModNetwork.sendTo(new PacketEntityMessage(player, PacketEntityMessage.MESSAGE_UPDATETIME, nbt), (EntityPlayerMP)player);
+				}
+				
+				dirtyValue = ePlayer.getLastIntellectTime() != ePlayer.getIntellectTime() && player.getEntityWorld().getTotalWorldTime() % 20 == 0;
+				if(dirtyValue && player instanceof EntityPlayerMP){
+					NBTTagCompound nbt = new NBTTagCompound();
+					nbt.setString("Type", "Intellect");
+					nbt.setInteger("Time", ePlayer.getIntellectTime());
+					ePlayer.setLastIntellectTime(ePlayer.getIntellectTime());
+					CrystalModNetwork.sendTo(new PacketEntityMessage(player, PacketEntityMessage.MESSAGE_UPDATETIME, nbt), (EntityPlayerMP)player);
 				}
 				
 				ExtendedPlayerInventory inventory = ePlayer.getInventory();

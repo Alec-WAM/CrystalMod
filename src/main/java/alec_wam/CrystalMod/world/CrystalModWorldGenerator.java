@@ -9,6 +9,7 @@ import alec_wam.CrystalMod.Config;
 import alec_wam.CrystalMod.api.world.IGenerationFeature;
 import alec_wam.CrystalMod.util.ModLogger;
 import alec_wam.CrystalMod.world.crystex.MapGenCrystexiumSpike;
+import alec_wam.CrystalMod.world.generation.CoralReefFeature;
 import alec_wam.CrystalMod.world.generation.CrystalBushFeature;
 import alec_wam.CrystalMod.world.generation.CrystalClusterFeature;
 import alec_wam.CrystalMod.world.generation.CrystalOreFeature;
@@ -16,6 +17,7 @@ import alec_wam.CrystalMod.world.generation.CrystalReedsFeature;
 import alec_wam.CrystalMod.world.generation.CrystalTreeFeature;
 import alec_wam.CrystalMod.world.generation.CrystalWellFeature;
 import alec_wam.CrystalMod.world.generation.FusionTempleFeature;
+import alec_wam.CrystalMod.world.generation.SeaweedFeature;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
@@ -35,8 +37,10 @@ public class CrystalModWorldGenerator implements IWorldGenerator {
     	featureList.add(new CrystalTreeFeature());
     	featureList.add(new CrystalReedsFeature());
     	featureList.add(new CrystalClusterFeature());  
-    	featureList.add(new CrystalBushFeature());  	
-
+    	featureList.add(new CrystalBushFeature());    
+    	featureList.add(new SeaweedFeature());      	 
+    	featureList.add(new CoralReefFeature()); 
+    	
     	featureList.add(new FusionTempleFeature());
     	featureList.add(new CrystalWellFeature());
     }

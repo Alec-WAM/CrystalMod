@@ -16,6 +16,7 @@ import alec_wam.CrystalMod.blocks.BlockCrystalOre.CrystalOreType;
 import alec_wam.CrystalMod.blocks.BlockDecorative.DecorativeBlockType;
 import alec_wam.CrystalMod.blocks.BlockFallingCompressed.FallingCompressedBlockType;
 import alec_wam.CrystalMod.blocks.BlockMetalBars.EnumMetalBarType;
+import alec_wam.CrystalMod.Config;
 import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.blocks.crops.BlockCrystalPlant.PlantType;
 import alec_wam.CrystalMod.blocks.crops.BlockNormalSapling.SaplingType;
@@ -53,6 +54,7 @@ import alec_wam.CrystalMod.items.tools.ItemToolParts.PartType;
 import alec_wam.CrystalMod.items.tools.backpack.BackpackUtil;
 import alec_wam.CrystalMod.items.tools.bat.BatHelper;
 import alec_wam.CrystalMod.items.tools.bat.RecipeBatUpgrade;
+import alec_wam.CrystalMod.items.tools.blowdart.ItemDart.DartType;
 import alec_wam.CrystalMod.tiles.cases.BlockCase.EnumCaseType;
 import alec_wam.CrystalMod.tiles.cauldron.CauldronRecipeManager;
 import alec_wam.CrystalMod.tiles.chest.CrystalChestType;
@@ -138,27 +140,32 @@ public class ModCrafting {
 		
 		ItemStack blueCrystal = new ItemStack(ModItems.crystals, 1, CrystalType.BLUE.getMetadata());
 		ItemStack blueIngot = new ItemStack(ModItems.ingots, 1, IngotType.BLUE.getMetadata());
+		ItemStack blueShard = new ItemStack(ModItems.crystals, 1, CrystalType.BLUE_SHARD.getMetadata());
 		ItemStack blueNugget = new ItemStack(ModItems.crystals, 1, CrystalType.BLUE_NUGGET.getMetadata());
 		ItemStack bluePlate = new ItemStack(ModItems.plates, 1, PlateType.BLUE.getMetadata());
 		
 		ItemStack redCrystal = new ItemStack(ModItems.crystals, 1, CrystalType.RED.getMetadata());
 		ItemStack redIngot = new ItemStack(ModItems.ingots, 1, IngotType.RED.getMetadata());
+		ItemStack redShard = new ItemStack(ModItems.crystals, 1, CrystalType.RED_SHARD.getMetadata());
 		ItemStack redNugget = new ItemStack(ModItems.crystals, 1, CrystalType.RED_NUGGET.getMetadata());
 		ItemStack redPlate = new ItemStack(ModItems.plates, 1, PlateType.RED.getMetadata());
 		
 		ItemStack greenCrystal = new ItemStack(ModItems.crystals, 1, CrystalType.GREEN.getMetadata());
 		ItemStack greenIngot = new ItemStack(ModItems.ingots, 1, IngotType.GREEN.getMetadata());
+		ItemStack greenShard = new ItemStack(ModItems.crystals, 1, CrystalType.GREEN_SHARD.getMetadata());
 		ItemStack greenNugget = new ItemStack(ModItems.crystals, 1, CrystalType.GREEN_NUGGET.getMetadata());
 		ItemStack greenPlate = new ItemStack(ModItems.plates, 1, PlateType.GREEN.getMetadata());
 		
 		ItemStack darkCrystal = new ItemStack(ModItems.crystals, 1, CrystalType.DARK.getMetadata());
 		ItemStack darkIngot = new ItemStack(ModItems.ingots, 1, IngotType.DARK.getMetadata());
+		ItemStack darkShard = new ItemStack(ModItems.crystals, 1, CrystalType.DARK_SHARD.getMetadata());
 		ItemStack darkNugget = new ItemStack(ModItems.crystals, 1, CrystalType.DARK_NUGGET.getMetadata());
 		ItemStack darkPlate = new ItemStack(ModItems.plates, 1, PlateType.DARK.getMetadata());
 		ItemStack darkBlock = new ItemStack(ModBlocks.crystal, 1, CrystalBlockType.DARK.getMeta());
 		
 		ItemStack pureCrystal = new ItemStack(ModItems.crystals, 1, CrystalType.PURE.getMetadata());
 		ItemStack pureIngot = new ItemStack(ModItems.ingots, 1, IngotType.PURE.getMetadata());
+		ItemStack pureShard = new ItemStack(ModItems.crystals, 1, CrystalType.PURE_SHARD.getMetadata());
 		ItemStack pureNugget = new ItemStack(ModItems.crystals, 1, CrystalType.PURE_NUGGET.getMetadata());
 		ItemStack purePlate = new ItemStack(ModItems.plates, 1, PlateType.PURE.getMetadata());
 		ItemStack pureBlock = new ItemStack(ModBlocks.crystal, 1, CrystalBlockType.PURE.getMeta());
@@ -203,6 +210,12 @@ public class ModCrafting {
 		GameRegistry.addSmelting(darkCrystal, darkIngot, 1.0F);
 		GameRegistry.addSmelting(pureCrystal, pureIngot, 1.0F);
 
+		if(Config.dyeFromCoral){
+			for(EnumDyeColor color : EnumDyeColor.values()){
+				GameRegistry.addSmelting(new ItemStack(ModBlocks.coral, 1, color.getMetadata()), new ItemStack(Items.DYE, 1, color.getDyeDamage()), 0.5F);
+			}
+		}
+		
 		addShapedRecipe(new ItemStack(ModItems.crystals, 1, CrystalType.BLUE_SHARD.getMetadata()), "RRR", 'R', ModItems.crystalReedsBlue);
 		addShapedRecipe(new ItemStack(ModItems.crystals, 1, CrystalType.RED_SHARD.getMetadata()), "RRR", 'R', ModItems.crystalReedsRed);
 		addShapedRecipe(new ItemStack(ModItems.crystals, 1, CrystalType.GREEN_SHARD.getMetadata()), "RRR", 'R', ModItems.crystalReedsGreen);
@@ -212,6 +225,9 @@ public class ModCrafting {
 		GameRegistry.addSmelting(new ItemStack(ModItems.corn, 1, CornItemType.KERNELS.getMetadata()), new ItemStack(ModItems.miscFood, 1, FoodType.POPCORN.getMetadata()), 0.1F);
 		GameRegistry.addSmelting(new ItemStack(ModItems.corn, 1, CornItemType.CORN.getMetadata()), new ItemStack(ModItems.miscFood, 1, FoodType.CORN_COB.getMetadata()), 0.1F);
 		GameRegistry.addSmelting(new ItemStack(ModItems.miscFood, 1, FoodType.WHITE_FISH_RAW.getMetadata()), new ItemStack(ModItems.miscFood, 1, FoodType.WHITE_FISH_COOKED.getMetadata()), 0.5F);
+		GameRegistry.addSmelting(new ItemStack(ModItems.miscFood, 1, FoodType.SEAWEED.getMetadata()), new ItemStack(ModItems.miscFood, 1, FoodType.SEAWEED_COOKED.getMetadata()), 0.5F);
+		GameRegistry.addSmelting(new ItemStack(ModItems.miscFood, 1, FoodType.KELP.getMetadata()), new ItemStack(ModItems.miscFood, 1, FoodType.KELP_COOKED.getMetadata()), 0.5F);
+		GameRegistry.addSmelting(new ItemStack(ModItems.miscFood, 1, FoodType.YELLOW_KELP.getMetadata()), new ItemStack(ModItems.miscFood, 1, FoodType.YELLOW_KELP_COOKED.getMetadata()), 0.5F);
 
 		addShapelessRecipe(new ItemStack(ModItems.cursedBone, 3, BoneType.BONEMEAL.getMetadata()), new Object[]{new ItemStack(ModItems.cursedBone, 1, BoneType.BONE.getMetadata())});
 		
@@ -307,6 +323,13 @@ public class ModCrafting {
 		addShapedRecipe(ModItems.bambooBoat, new Object[]{"X X", "XXX", 'X', ModBlocks.bambooPlanks});
 		addShapedRecipe(new ItemStack(ModItems.bambooDoor, 3), new Object[]{"XX", "XX", "XX", 'X', ModBlocks.bambooPlanks});
 		addShapedRecipe(ModItems.blowGun, new Object[]{"X", "X", "X", 'X', ModBlocks.bamboo});
+		addShapedOreRecipe(new ItemStack(ModItems.dart, 4, DartType.BASIC.getMetadata()), new Object[] {"  #", " S ", "F  ", '#', Items.FLINT, 'F', Items.FEATHER, 'S', "stickWood"});
+		addShapedOreRecipe(new ItemStack(ModItems.dart, 4, DartType.BLUE.getMetadata()), new Object[] {"  #", " S ", "F  ", '#', blueShard, 'F', Items.FEATHER, 'S', "stickWood"});
+		addShapedOreRecipe(new ItemStack(ModItems.dart, 4, DartType.RED.getMetadata()), new Object[] {"  #", " S ", "F  ", '#', redShard, 'F', Items.FEATHER, 'S', "stickWood"});
+		addShapedOreRecipe(new ItemStack(ModItems.dart, 4, DartType.GREEN.getMetadata()), new Object[] {"  #", " S ", "F  ", '#', greenShard, 'F', Items.FEATHER, 'S', "stickWood"});
+		addShapedOreRecipe(new ItemStack(ModItems.dart, 4, DartType.DARK.getMetadata()), new Object[] {"  #", " S ", "F  ", '#', darkShard, 'F', Items.FEATHER, 'S', "stickWood"});
+		addShapedOreRecipe(new ItemStack(ModItems.dart, 4, DartType.PURE.getMetadata()), new Object[] {"  #", " S ", "F  ", '#', pureShard, 'F', Items.FEATHER, 'S', "stickWood"});
+		
 		
 		addShapedOreRecipe(new ItemStack(ModBlocks.crates, 1, CrateType.BLUE.getMeta()), new Object[] {"XXX", "# #", "XXX", 'X', new ItemStack(ModBlocks.crystalPlanks, 1, WoodType.BLUE.getMeta()), '#', "chestWood"});
 		addShapedOreRecipe(new ItemStack(ModBlocks.crates, 1, CrateType.RED.getMeta()), new Object[] {"XXX", "#C#", "XXX", 'X', new ItemStack(ModBlocks.crystalPlanks, 1, WoodType.RED.getMeta()), '#', "chestWood", 'C', new ItemStack(ModBlocks.crates, 1, CrateType.BLUE.getMeta())});

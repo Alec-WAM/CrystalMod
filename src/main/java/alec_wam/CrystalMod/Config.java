@@ -31,6 +31,11 @@ public class Config {
 	public static final String CATEGORY_MINIONS = "minions";
 	public static final String CATEGORY_MACHINE = "machines";
 	
+	//CLIENT
+	public static boolean vanillaMinecarts3d = true;
+	public static boolean useRemoteManualFile = true;
+	
+	//WORLD
 	public static boolean generateOreOverworld = true;
 	public static int oreMinimumVeinSize = 5;
     public static int oreMaximumVeinSize = 8;
@@ -79,6 +84,11 @@ public class Config {
     public static int clusterSpawnChance = 24;
     public static int clusterSpawnTries = 8;
 
+    public static boolean generateSeaweed = true;
+    public static boolean retrogenSeaweed = false;
+    public static int coralChance = 20;
+    public static boolean retrogenCoral = false;
+    
     public static final ResourceLocation[] defaultEnhancementBookLootList = new ResourceLocation[]{
     		LootTableList.CHESTS_ABANDONED_MINESHAFT,
     		LootTableList.CHESTS_IGLOO_CHEST,
@@ -91,12 +101,18 @@ public class Config {
     public static List<ResourceLocation> enhancementBookLootLocationList = Lists.newArrayList();
 	public static int enhancementBookRarity = 10;
 	public static int whiteFishRarity = 10;
+	
+	public static int playerCubePlayerLimit = 16;
     
+	
+	//ENTITY
 	public static ItemDropType mobHeadType = ItemDropType.KILLED;
 	public static int mobHeadDropChance = 200;
 	public static ItemDropType playerHeadType = ItemDropType.ALL;
 	public static int playerHeadDropChance = 50;
 	
+	//ITEMS
+	public static boolean backpackDeathUpgradeConsume = false;
 	public static int superTorchMaxCount = 128;
 	public static int tool_pureDamageAddition = 1000;
 	
@@ -122,40 +138,33 @@ public class Config {
 	};
 	public static List<ItemStack> farmHoes = new ArrayList<ItemStack>();
 	
+	//MACHINES
 	public static int powerConduitTierOneCU = 640;
 	public static int powerConduitTierTwoCU = 5120;
 	public static int powerConduitTierThreeCU = 20480;
-	public static int powerConduitTierFourCU = 40960;
-	
+	public static int powerConduitTierFourCU = 40960;	
 	public static int powerConduitTierOneRF = 640;
 	public static int powerConduitTierTwoRF = 5120;
 	public static int powerConduitTierThreeRF = 20480;
 	public static int powerConduitTierFourRF = 40960;
-    
-	public static boolean vanillaMinecarts3d = true;
 	
 	public static int engine_vampire_maxattack = 16;
 	public static int advDispenser_cooldown = 40; //2 seconds
+	
+	//BLOCKS
 	public static boolean crates_leaveOneItem = true;
 	public static boolean crates_useAllSides = false;
 	public static boolean crates_3dItem = true;
 	public static boolean crates_3dBlock = true;
-	
-	public static boolean backpackDeathUpgradeConsume = false;
 	public static boolean hardmode_MaterialCrops = false;
-	public static int playerCubePlayerLimit = 16;
-	
 	public static enum RegenType {
 		IDLE, EMPTY, NEVER;
-	}
-	
+	}	
 	public static RegenType crystalClusterRegenType = RegenType.IDLE;
-	
 	public static int infectionRange = 30;
 	public static int infectionEncasingRange = 30;
 	public static int infectionEncasingSize = 5;
-	
-	public static boolean useRemoteManualFile = true;
+	public static boolean dyeFromCoral = true;
 
 	@SubscribeEvent
 	public void onConfigChanged(OnConfigChangedEvent event) {
@@ -166,6 +175,7 @@ public class Config {
 	}
 	
     public static void init(Configuration cfg) {
+    	//WORLD
     	generateOreOverworld = cfg.get(CATEGORY_WORLD, "generateOreOverworld", generateOreOverworld, "Enable or disable Crystal Ore in the Overworld").getBoolean();
     	oreMinimumVeinSize = cfg.get(CATEGORY_WORLD, "oreMinimumVeinSize", oreMinimumVeinSize,
                                      "Minimum vein size of crystal ores").getInt();
@@ -222,7 +232,6 @@ public class Config {
         netherWellChance = cfg.get(CATEGORY_WORLD, "netherWellChance", netherWellChance, "Chance of the Nether Well generating. The higher the number the lower the chance. If the number is less than 0 it will not generate.").getInt(500);
         generateEndWell = cfg.get(CATEGORY_WORLD, "generateEndWell", generateEndWell, "Enable or disable Ender Well Generation in the End.").getBoolean();
         endWellChance = cfg.get(CATEGORY_WORLD, "endWellChance", endWellChance, "Chance of the End Well generating. The higher the number the lower the chance. If the number is less than 0 it will not generate.").getInt(100);
-
         
         retrogenInfo = cfg.get(CATEGORY_WORLD, "retrogenInfo", retrogenInfo,
                 "Set to true if you want retro gen chunks logged.").getBoolean();
@@ -257,6 +266,13 @@ public class Config {
         	CrystalReedsFeature.reedDimBlacklist.add(i);
         }
         
+        generateSeaweed = cfg.get(CATEGORY_WORLD, "generateSeaweed", generateSeaweed, "Enable or disable Seaweed generation in oceans.").getBoolean();
+        retrogenSeaweed = cfg.get(CATEGORY_WORLD, "retrogenSeaweed", retrogenSeaweed,
+                "Set to true to enable retrogen of seaweed").getBoolean();
+        coralChance = cfg.get(CATEGORY_WORLD, "coralGenChance", coralChance, "How rare are Coral Reefs in oceans? Set to 0 to disable them").getInt(20);
+        retrogenCoral = cfg.get(CATEGORY_WORLD, "retrogenCoral", retrogenCoral,
+                "Set to true to enable retrogen of Coral Reefs").getBoolean();
+        
         //Loot
     	String[] defaultLocations = StringUtils.makeStringArray(defaultEnhancementBookLootList);
     	String[] configLocations = cfg.getStringList("enhancementBookLocations", CATEGORY_WORLD, defaultLocations, "Loot Tables that CrystalMod is allowed to place the Enhancement Books in");
@@ -270,7 +286,14 @@ public class Config {
     	whiteFishRarity = cfg.get(CATEGORY_WORLD, "whiteFishRarity", whiteFishRarity,
                 "Chance of Broad Whitefish replacing normal fish in cold biomes when caught with a fishing pole. Higher the number the lower the chance. Zero or less means never.").getInt(10);
         
-        superTorchMaxCount = cfg.get(CATEGORY_ITEM, "superTorchCapacity", superTorchMaxCount, "Maximum amount of torches allowed to be stored in a Super Torch.").getInt();
+    	playerCubePlayerLimit = cfg.get(CATEGORY_WORLD, "PlayerCubePlayerLimit", playerCubePlayerLimit, "The maximum amount of player cubes each player is allowed to create. (If this equals zero no cubes are allowed)").getInt(16);
+        if(playerCubePlayerLimit < 0){
+        	playerCubePlayerLimit = 0;
+        }
+        
+       
+    	//ITEMS
+    	superTorchMaxCount = cfg.get(CATEGORY_ITEM, "superTorchCapacity", superTorchMaxCount, "Maximum amount of torches allowed to be stored in a Super Torch.").getInt();
         
         if(superTorchMaxCount < 0){
         	superTorchMaxCount = 0;
@@ -282,11 +305,8 @@ public class Config {
         
         hardmode_MaterialCrops = cfg.get(CATEGORY_ITEM, "HardmodeMaterialCrops", hardmode_MaterialCrops, "Set to true if seeds must be crafted with fusion instead of normal crafting.").getBoolean();
 
-        playerCubePlayerLimit = cfg.get(CATEGORY_WORLD, "PlayerCubePlayerLimit", playerCubePlayerLimit, "The maximum amount of player cubes each player is allowed to create. (If this equals zero no cubes are allowed)").getInt(16);
-        if(playerCubePlayerLimit < 0){
-        	playerCubePlayerLimit = 0;
-        }
         
+        //ENTITY
         int headtype = cfg.get(CATEGORY_ENTITY, "mobHeadDrop", mobHeadType.ordinal(), "0 = Never Drop; 1 = Drop when killed; 2 = Drop only when killed by player;").getInt(mobHeadType.ordinal());
     	if(headtype < 0)headtype = 0;
     	if(headtype > 2)headtype = 2;
@@ -301,10 +321,12 @@ public class Config {
         	    	
     	hoeStrings = cfg.get(CATEGORY_MINIONS, "Hoes", hoeStrings, "Use this to specify items that are hoes. Use the registry name (eg. modid:name).").getStringList();
     
-    	//Machines
+    	//MACHINE
     	PowerUnits.RF.conversionRation = cfg.get(CATEGORY_MACHINE, "RFValue", 5, "Amount of RF needed to convert to one unit of CU").getInt(5);
     	engine_vampire_maxattack = cfg.get(CATEGORY_MACHINE, "Engine_Vampire_AttackAmt", engine_vampire_maxattack, "Amount of entites the vampire engine can attack at once").getInt();
     	advDispenser_cooldown = cfg.get(CATEGORY_MACHINE, "advDispenser_cooldown", advDispenser_cooldown, "Amount of ticks inbetween each click on the Advanced Dispenser").getInt();
+    	
+    	//BLOCK
     	crates_leaveOneItem = cfg.get(CATEGORY_BLOCKS, "crates_leaveOneItem", crates_leaveOneItem, "Set to true to leave one item in a crate when it is clicked.").getBoolean();
     	crates_useAllSides = cfg.get(CATEGORY_BLOCKS, "crates_useAllSides", crates_useAllSides, "Set to true to allow the player to insert and remove items from a crate on all sides, not just the front.").getBoolean();
     	crates_3dItem = cfg.get(CATEGORY_BLOCKS, "crates_3dItem", crates_3dItem, "Set to false to render items in 2D.").getBoolean();
@@ -315,8 +337,9 @@ public class Config {
     	infectionRange = cfg.get(CATEGORY_BLOCKS, "darkInfectionRange", infectionRange, "Maximum Radius allowed for the Dark Infection to spread. Set to 0 for infinite").getInt(30);
     	infectionEncasingRange = cfg.get(CATEGORY_BLOCKS, "darkInfectionEncasingRange", infectionEncasingRange, "When does the Dark Infection begin encasing itself. Set to 0 to disable").getInt(30);
     	infectionEncasingSize = cfg.get(CATEGORY_BLOCKS, "darkInfectionEncasingSize", infectionEncasingSize, "Size of the orb that encases the Dark Infection Source.").getInt(5);
+    	dyeFromCoral = cfg.get(CATEGORY_BLOCKS, "dyeFromCoral", dyeFromCoral, "Can Coral be smelted down into their dye color?").setRequiresMcRestart(true).getBoolean(true);
 
-    	//Client
+    	//CLIENT
     	vanillaMinecarts3d = cfg.get(CATEGORY_CLIENT, "3dMinecartItems", vanillaMinecarts3d, "Override Minecart Item Render to 3d items.").getBoolean();
     	useRemoteManualFile = cfg.get(CATEGORY_CLIENT, "useRemoteManualFile", useRemoteManualFile, "Disable to only use local manual file.").getBoolean();
     }
@@ -343,6 +366,6 @@ public class Config {
     }
     
     public static boolean needRetroGen(){
-    	return Config.retrogenOres || Config.retrogenTrees || Config.retrogenClusters || Config.retrogenReeds;
+    	return Config.retrogenOres || Config.retrogenTrees || Config.retrogenClusters || Config.retrogenReeds || Config.retrogenSeaweed || Config.retrogenCoral;
     }
 }

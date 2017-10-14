@@ -69,6 +69,7 @@ import net.minecraft.entity.passive.EntityWolf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Items;
+import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -158,14 +159,14 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
         	{
         		return worldIn != null && pos != null ? BiomeColorHelper.getGrassColorAtPos(worldIn, pos) : ColorizerGrass.getGrassColor(0.5D, 1.0D);
         	}
-        }, ModBlocks.kelp);
+        }, ModBlocks.seaweed);
         
         Minecraft.getMinecraft().getItemColors().registerItemColorHandler(new IItemColor(){
 			@Override
 			public int getColorFromItemstack(ItemStack stack, int tintIndex) {
 				return ColorizerGrass.getGrassColor(0.5D, 1.0D);
 			}
-        }, ModBlocks.kelp);
+        }, ModBlocks.seaweed);
     }
 
     @Override
@@ -289,6 +290,10 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
         }
         
         event.getMap().registerSprite(new ResourceLocation("crystalmod:blocks/case_piston_head"));
+        
+        for(EnumDyeColor type : EnumDyeColor.values()){
+        	event.getMap().registerSprite(new ResourceLocation("crystalmod:blocks/coral/coral_"+type.getName().toLowerCase()));
+        }
         
         event.getMap().registerSprite(new ResourceLocation("crystalmod:blocks/machine/battery/io_blocked"));
         event.getMap().registerSprite(new ResourceLocation("crystalmod:blocks/machine/battery/io_in"));

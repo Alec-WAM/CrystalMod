@@ -1,0 +1,15 @@
+{
+	"forge_marker": 1,
+	"defaults": {
+		"model": "crystalmod:fixedcross",
+		"textures": {
+			"particle": "crystalmod:blocks/plant/kelp",
+			"cross": "crystalmod:blocks/plant/kelp"
+		},
+		"transform": "forge:default-block"
+	},
+	"variants": {
+        "inventory": [{}],
+        "normal": [{}]
+    }
+}

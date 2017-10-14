@@ -39,7 +39,10 @@ import alec_wam.CrystalMod.blocks.glass.BlockCrystalGlassPane;
 import alec_wam.CrystalMod.blocks.glass.BlockPaintedCrystalGlass;
 import alec_wam.CrystalMod.blocks.glass.BlockTintedCrystalGlass;
 import alec_wam.CrystalMod.blocks.rail.BlockReinforcedRail;
+import alec_wam.CrystalMod.blocks.underwater.BlockCoral;
 import alec_wam.CrystalMod.blocks.underwater.BlockKelp;
+import alec_wam.CrystalMod.blocks.underwater.BlockSeaweed;
+import alec_wam.CrystalMod.blocks.underwater.ItemBlockKelp;
 import alec_wam.CrystalMod.handler.MissingItemHandler;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.tiles.BlockBasicTile;
@@ -204,6 +207,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemCloth;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
@@ -341,6 +345,8 @@ public class ModBlocks {
 	public static BlockCrystalCluster crystalCluster;
 	
 	public static BlockKelp kelp;
+	public static BlockSeaweed seaweed;
+	public static BlockCoral coral;
 	
 	public static CrystexiumBlock crystexiumBlock;
 	public static CrystexiumBlock blueCrystexiumBlock;
@@ -773,7 +779,11 @@ public class ModBlocks {
 		registerEnumBlock(crystalCluster, new ItemBlockFacing(crystalCluster), "crystalcluster");
 		registerTileEntity(TileCrystalCluster.class);
 
-		kelp = registerBlock(new BlockKelp(), "kelp");
+		kelp = new BlockKelp();
+		registerBlock(kelp, new ItemBlockKelp(kelp), "kelp");
+		seaweed = registerBlock(new BlockSeaweed(), "seaweed");
+		coral = new BlockCoral();
+		registerBlock(coral, new ItemCloth(coral), "coral");
 		
 		crystexiumBlock = new CrystexiumBlock();
 		registerEnumBlock(crystexiumBlock, "crystexiumblock");

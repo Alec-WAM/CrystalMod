@@ -291,7 +291,7 @@ public class ItemDarkIronBow extends ItemBow implements ICustomModel {
     @SideOnly(Side.CLIENT)
     @SubscribeEvent
     public void onFovUpdateEvent(FOVUpdateEvent fovEvt) {
-      ItemStack currentItem = fovEvt.getEntity().getHeldItemMainhand();
+      ItemStack currentItem = fovEvt.getEntity().getActiveItemStack();
       if (ItemStackTools.isNullStack(currentItem) || currentItem.getItem() != this || fovEvt.getEntity().getItemInUseCount() <= 0) {
         return;
       }

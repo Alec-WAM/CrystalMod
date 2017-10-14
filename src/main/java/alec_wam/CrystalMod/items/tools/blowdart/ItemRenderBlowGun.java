@@ -33,21 +33,37 @@ public class ItemRenderBlowGun implements ICustomItemRenderer {
 			GlStateManager.rotate(15, 1, 0, 0);
 			GlStateManager.rotate(45, 0, 0, -1);
 			GlStateManager.scale(0.2, 0.2, 0.2);
-			/*GlStateManager.scale(0.18, 0.18, 0.18);
-			GlStateManager.translate(-3, -3, -0.5);
-			GlStateManager.rotate(45, 1, 1, 0);*/
 		}
 		else if(lastTransform == TransformType.FIRST_PERSON_RIGHT_HAND)
 		{
 			GlStateManager.rotate(90, 0, 0, 1);
 			GlStateManager.rotate(45, 1, 0, 0);
+			
 			GlStateManager.translate(-1, -0.3, -0.5);
+			int use = Minecraft.getMinecraft().player.getItemInUseCount();
+			if(use > 0){
+				int drawDuration = stack.getMaxItemUseDuration() - Minecraft.getMinecraft().player.getItemInUseCount();
+				float pull = drawDuration / (float) 25.0F;
+				if (pull > 1.0F) {
+					pull = 1.0F;
+				} 
+				GlStateManager.translate(0, -(5.0F * pull), 0);
+			}
 		}
 		else if(lastTransform == TransformType.FIRST_PERSON_LEFT_HAND)
 		{
 			GlStateManager.rotate(90, 0, 0, 1);
 			GlStateManager.rotate(-45, 1, 0, 0);
 			GlStateManager.translate(-1, -0.3, 0.5);
+			int use = Minecraft.getMinecraft().player.getItemInUseCount();
+			if(use > 0){
+				int drawDuration = stack.getMaxItemUseDuration() - Minecraft.getMinecraft().player.getItemInUseCount();
+				float pull = drawDuration / (float) 25.0F;
+				if (pull > 1.0F) {
+					pull = 1.0F;
+				} 
+				GlStateManager.translate(0, -(5.0F * pull), 0);
+			}
 		}
 		else if(lastTransform == TransformType.THIRD_PERSON_RIGHT_HAND)
 		{

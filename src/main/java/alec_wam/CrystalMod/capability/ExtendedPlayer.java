@@ -50,6 +50,9 @@ public class ExtendedPlayer {
 	private WatchableInteger radiationTime = new WatchableInteger();
 	public int redstoneCoreDelay;
 	
+	private WatchableInteger intellectTimer = new WatchableInteger();	
+	
+	
 	public ExtendedPlayer() {
 	}
     
@@ -63,6 +66,7 @@ public class ExtendedPlayer {
 		
 		properties.setInteger("EnhancementXP", enhancementXP);		
 		properties.setInteger("RadiationTime", radiationTime.getValue());
+		properties.setInteger("IntellectTimer", intellectTimer.getValue());
 		
 		properties.setBoolean("Mini", isMini);
 		if(playerDisguiseUUID !=null){
@@ -84,6 +88,7 @@ public class ExtendedPlayer {
 		}
 		enhancementXP = properties.getInteger("EnhancementXP");				
 		radiationTime.setValue(properties.getInteger("RadiationTime"));	
+		intellectTimer.setValue(properties.getInteger("IntellectTimer"));
 		
 		isMini = properties.getBoolean("Mini");
 		if(properties.hasKey("DisguiseUUID")){
@@ -204,6 +209,7 @@ public class ExtendedPlayer {
 		this.enhancementXP = enhancementXP;
 	}
 	
+	//Radiation
 	public int getRadiation() {
 		return radiationTime.getValue();
 	}
@@ -219,4 +225,23 @@ public class ExtendedPlayer {
 	public void setLastRadiation(int value) {
 		this.radiationTime.setLastValue(value);
 	}
+	
+	//Intellect
+	public int getIntellectTime() {
+		return intellectTimer.getValue();
+	}
+	
+	public int getLastIntellectTime() {
+		return intellectTimer.getLastValue();
+	}
+
+	public void setIntellectTime(int value) {
+		this.intellectTimer.setValue(value);
+	}
+	
+	public void setLastIntellectTime(int value) {
+		this.intellectTimer.setLastValue(value);
+	}
+	
+	
 }

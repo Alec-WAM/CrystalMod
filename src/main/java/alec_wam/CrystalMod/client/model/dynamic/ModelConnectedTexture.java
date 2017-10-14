@@ -81,7 +81,6 @@ public abstract class ModelConnectedTexture extends DynamicItemAndBlockModel {
 		float max = 15.0F;
 		if(state == null){
 			final BlockFaceUV uv = new BlockFaceUV(new float[]{0, 0, 16F, 16F}, 0);
-			new BlockPartFace(EnumFacing.NORTH, 0, "", uv);
 			final BlockPartFace faceU = new BlockPartFace(EnumFacing.UP, 0, "", uv);
 			final BlockPartFace faceD = new BlockPartFace(EnumFacing.DOWN, 0, "", uv);
 			final BlockPartFace faceN = new BlockPartFace(EnumFacing.NORTH, 0, "", uv);

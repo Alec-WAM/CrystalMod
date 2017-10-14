@@ -5,6 +5,7 @@ public class CommandCrystalMod extends DefaultCommand {
 	public CommandCrystalMod(){
 		super();
 		registerCommand(new CmdTag());
+		registerCommand(new CmdDebug());
 	}
 	
 	@Override

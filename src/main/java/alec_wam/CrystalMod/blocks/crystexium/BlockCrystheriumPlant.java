@@ -51,7 +51,6 @@ public class BlockCrystheriumPlant extends Block implements net.minecraftforge.c
         this.setCreativeTab(CrystalMod.tabCrops);
         this.setSoundType(SoundType.PLANT);
         this.setDefaultState(this.blockState.getBaseState().withProperty(TYPE, CrystheriumType.NORMAL).withProperty(TOP, false));
-        this.setTickRandomly(true);
         disableStats();
     }
     
@@ -60,7 +59,7 @@ public class BlockCrystheriumPlant extends Block implements net.minecraftforge.c
 	public void initModel(){
 		ModelLoader.setCustomStateMapper(this, new CustomBlockStateMapper());
 		for(CrystheriumType type : CrystheriumType.values()){
-			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), type.getMeta(), new ModelResourceLocation(new ResourceLocation(getRegistryName()+"_top"), "type="+type.getName()));
+			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), type.getMeta(), new ModelResourceLocation(new ResourceLocation(getRegistryName()+"_"+type.getName()), "inventory"));
 		}
 	}
     
@@ -259,7 +258,7 @@ public class BlockCrystheriumPlant extends Block implements net.minecraftforge.c
 		{
 			boolean top = state.getValue(TOP);
 			CrystheriumType type = state.getValue(TYPE);
-			return new ModelResourceLocation(new ResourceLocation(state.getBlock().getRegistryName()+"_"+(top ? "top" : "bottom")), "type="+type.getName());
+			return new ModelResourceLocation(new ResourceLocation(state.getBlock().getRegistryName()+"_"+type.getName()), "top="+top);
 		}
 	}
 }

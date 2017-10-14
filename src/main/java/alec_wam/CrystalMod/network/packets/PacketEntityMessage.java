@@ -80,6 +80,8 @@ public class PacketEntityMessage extends AbstractPacketThreadsafe {
 		handle(netHandler.playerEntity.getEntityWorld(), id, false);
 	}
 	
+	public static final String MESSAGE_UPDATETIME = "#UpdateTime#";
+	
 	public void handle(World world, int id, boolean client){
 		if(world == null){
 			return;
@@ -108,12 +110,17 @@ public class PacketEntityMessage extends AbstractPacketThreadsafe {
 					}
 				}
 			}
-			if(type.equalsIgnoreCase("#UpdateRadiation#")){
+			if(type.equalsIgnoreCase(MESSAGE_UPDATETIME)){
 				if(entity instanceof EntityPlayer){
 					EntityPlayer ePlayer = (EntityPlayer)entity;
 					ExtendedPlayer exPlayer = ExtendedPlayerProvider.getExtendedPlayer(ePlayer);
 					if(exPlayer !=null){
-						exPlayer.setRadiation(data.getInteger("Time"));
+						if(data.getString("Type").equalsIgnoreCase("Radiation")){
+							exPlayer.setRadiation(data.getInteger("Time"));
+						}
+						if(data.getString("Type").equalsIgnoreCase("Intellect")){
+							exPlayer.setIntellectTime(data.getInteger("Time"));
+						}
 					}
 				}
 			}

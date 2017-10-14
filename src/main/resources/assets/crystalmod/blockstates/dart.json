@@ -1,0 +1,15 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "transform": "forge:default-item",
+        "model": "forge:item-layer"
+    },
+    "variants": {
+		"basic": [{ "textures": { "layer0": "crystalmod:items/tool/dartgun/dart_basic" }}],
+        "blue": [{ "textures": { "layer0": "crystalmod:items/tool/dartgun/dart_blue" }}],
+        "red": [{ "textures": { "layer0": "crystalmod:items/tool/dartgun/dart_red" }}],
+        "green": [{ "textures": { "layer0": "crystalmod:items/tool/dartgun/dart_green" }}],
+        "dark": [{ "textures": { "layer0": "crystalmod:items/tool/dartgun/dart_dark" }}],
+        "pure": [{ "textures": { "layer0": "crystalmod:items/tool/dartgun/dart_pure" }}]
+    }
+}

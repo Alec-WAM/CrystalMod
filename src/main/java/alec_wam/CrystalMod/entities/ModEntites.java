@@ -41,6 +41,8 @@ import alec_wam.CrystalMod.entities.mob.zombiePigmen.EntityCrystalPigZombie;
 import alec_wam.CrystalMod.entities.mob.zombiePigmen.RenderCrystalPigZombie;
 import alec_wam.CrystalMod.entities.pet.bombomb.EntityBombomb;
 import alec_wam.CrystalMod.entities.pet.bombomb.RenderEntityBombomb;
+import alec_wam.CrystalMod.items.tools.blowdart.EntityDart;
+import alec_wam.CrystalMod.items.tools.blowdart.RenderEntityDart;
 import alec_wam.CrystalMod.items.tools.grapple.EntityGrapplingHook;
 import alec_wam.CrystalMod.items.tools.grapple.RenderEntityGrapplingHook;
 import alec_wam.CrystalMod.items.tools.projectiles.EntityDagger;
@@ -127,6 +129,7 @@ public class ModEntites {
 		
 
 		addEntity(EntityBambooBoat.class, "bambooboat", 80, 3, true);
+		addEntity(EntityDart.class, "dart", 64, 24, false);
 	}
 	
 	public static void postInit(){
@@ -220,6 +223,13 @@ public class ModEntites {
 			@Override
 			public RenderEntityBambooBoat createRenderFor(RenderManager manager) {
 				return new RenderEntityBambooBoat(manager);
+			}
+		});
+        
+        RenderingRegistry.registerEntityRenderingHandler(EntityDart.class, new IRenderFactory<EntityDart>() {
+			@Override
+			public RenderEntityDart createRenderFor(RenderManager manager) {
+				return new RenderEntityDart(manager);
 			}
 		});
 	}

@@ -1,0 +1,6 @@
+{
+    "parent": "item/generated",
+    "textures": {
+        "layer0": "crystalmod:blocks/crystexium/crystherium/dark_crystherium_flowers_top"
+    }
+}

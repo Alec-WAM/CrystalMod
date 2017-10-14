@@ -9,6 +9,12 @@
         "popcorn": [{ "textures": { "layer0": "crystalmod:items/food/popcorn" }}],
         "whitefish_raw": [{ "textures": { "layer0": "crystalmod:items/food/whitefish_raw" }}],
         "whitefish_cooked": [{ "textures": { "layer0": "crystalmod:items/food/whitefish_cooked" }}],
-        "eucalyptus": [{ "textures": { "layer0": "crystalmod:items/food/eucalyptus" }}]
+        "eucalyptus": [{ "textures": { "layer0": "crystalmod:items/food/eucalyptus" }}],
+        "seaweed": [{ "textures": { "layer0": "crystalmod:items/food/seaweed" }}],
+        "seaweed_cooked": [{ "textures": { "layer0": "crystalmod:items/food/seaweed_cooked" }}],
+        "kelp": [{ "textures": { "layer0": "crystalmod:items/food/kelp" }}],
+        "kelp_cooked": [{ "textures": { "layer0": "crystalmod:items/food/kelp_cooked" }}],
+        "yellow_kelp": [{ "textures": { "layer0": "crystalmod:items/food/yellow_kelp" }}],
+        "yellow_kelp_cooked": [{ "textures": { "layer0": "crystalmod:items/food/yellow_kelp_cooked" }}]
     }
 }
