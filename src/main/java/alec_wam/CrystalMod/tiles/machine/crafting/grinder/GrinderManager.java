@@ -9,6 +9,8 @@ import javax.annotation.Nullable;
 
 import com.google.common.collect.Lists;
 
+import alec_wam.CrystalMod.blocks.ModBlocks;
+import alec_wam.CrystalMod.blocks.decorative.BlockBetterRoses.RoseType;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.ModLogger;
@@ -151,7 +153,19 @@ public class GrinderManager {
 		addRecipe(new ItemStack(Blocks.RED_FLOWER, 1, EnumFlowerType.OXEYE_DAISY.getMeta()), new ItemStack(Items.DYE, 3, EnumDyeColor.SILVER.getDyeDamage()), ItemStackTools.getEmptyStack(), 0, powerDye);
 		addRecipe(new ItemStack(Blocks.DOUBLE_PLANT, 1, EnumPlantType.SUNFLOWER.getMeta()), new ItemStack(Items.DYE, 4, EnumDyeColor.YELLOW.getDyeDamage()), ItemStackTools.getEmptyStack(), 0, 1600);
 		addRecipe(new ItemStack(Blocks.DOUBLE_PLANT, 1, EnumPlantType.SYRINGA.getMeta()), new ItemStack(Items.DYE, 4, EnumDyeColor.MAGENTA.getDyeDamage()), ItemStackTools.getEmptyStack(), 0, 1600);
+		
 		addRecipe(new ItemStack(Blocks.DOUBLE_PLANT, 1, EnumPlantType.ROSE.getMeta()), new ItemStack(Items.DYE, 4, EnumDyeColor.RED.getDyeDamage()), ItemStackTools.getEmptyStack(), 0, 1600);
+		
+		//Better Roses
+		addRecipe(new ItemStack(ModBlocks.roseBush, 1, RoseType.WHITE.getMeta()), new ItemStack(Items.DYE, 4, EnumDyeColor.WHITE.getDyeDamage()), ItemStackTools.getEmptyStack(), 0, 1600);
+		addRecipe(new ItemStack(ModBlocks.roseBush, 1, RoseType.ORANGE.getMeta()), new ItemStack(Items.DYE, 4, EnumDyeColor.ORANGE.getDyeDamage()), ItemStackTools.getEmptyStack(), 0, 1600);
+		addRecipe(new ItemStack(ModBlocks.roseBush, 1, RoseType.MAGENTA.getMeta()), new ItemStack(Items.DYE, 4, EnumDyeColor.MAGENTA.getDyeDamage()), ItemStackTools.getEmptyStack(), 0, 1600);
+		addRecipe(new ItemStack(ModBlocks.roseBush, 1, RoseType.YELLOW.getMeta()), new ItemStack(Items.DYE, 4, EnumDyeColor.YELLOW.getDyeDamage()), ItemStackTools.getEmptyStack(), 0, 1600);
+		addRecipe(new ItemStack(ModBlocks.roseBush, 1, RoseType.PINK.getMeta()), new ItemStack(Items.DYE, 4, EnumDyeColor.PINK.getDyeDamage()), ItemStackTools.getEmptyStack(), 0, 1600);
+		addRecipe(new ItemStack(ModBlocks.roseBush, 1, RoseType.CYAN.getMeta()), new ItemStack(Items.DYE, 4, EnumDyeColor.CYAN.getDyeDamage()), ItemStackTools.getEmptyStack(), 0, 1600);
+		addRecipe(new ItemStack(ModBlocks.roseBush, 1, RoseType.PURPLE.getMeta()), new ItemStack(Items.DYE, 4, EnumDyeColor.PURPLE.getDyeDamage()), ItemStackTools.getEmptyStack(), 0, 1600);
+
+		
 		addRecipe(new ItemStack(Blocks.DOUBLE_PLANT, 1, EnumPlantType.PAEONIA.getMeta()), new ItemStack(Items.DYE, 4, EnumDyeColor.PINK.getDyeDamage()), ItemStackTools.getEmptyStack(), 0, 1600);
 		addRecipe(new ItemStack(Items.BEETROOT), new ItemStack(Items.DYE, 2, EnumDyeColor.RED.getDyeDamage()), new ItemStack(Items.BEETROOT_SEEDS), 30, powerDye);
 

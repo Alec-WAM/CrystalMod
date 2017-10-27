@@ -18,6 +18,7 @@ import alec_wam.CrystalMod.world.generation.CrystalTreeFeature;
 import alec_wam.CrystalMod.world.generation.CrystalWellFeature;
 import alec_wam.CrystalMod.world.generation.FusionTempleFeature;
 import alec_wam.CrystalMod.world.generation.KelpFeature;
+import alec_wam.CrystalMod.world.generation.RoseBushFeature;
 import alec_wam.CrystalMod.world.generation.SeaweedFeature;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.ChunkPos;
@@ -42,6 +43,9 @@ public class CrystalModWorldGenerator implements IWorldGenerator {
     	featureList.add(new SeaweedFeature());      	 
     	featureList.add(new KelpFeature());   	 
     	featureList.add(new CoralReefFeature()); 
+    	featureList.add(new RoseBushFeature()); 
+    	
+    	//TODO Generate Crystherium
     	
     	featureList.add(new FusionTempleFeature());
     	featureList.add(new CrystalWellFeature());
@@ -67,16 +71,27 @@ public class CrystalModWorldGenerator implements IWorldGenerator {
     
     @SubscribeEvent
     public void handleChunkSaveEvent(ChunkDataEvent.Save event) {
-    	NBTTagCompound nbt = new NBTTagCompound();
-		event.getData().setTag(NBT_RETRO, nbt);
-		nbt.setBoolean(Config.retrogenID, true);
+    	if(areAnyRetroGensEnabled()){
+	    	NBTTagCompound nbt = new NBTTagCompound();
+			event.getData().setTag(NBT_RETRO, nbt);
+			nbt.setBoolean(Config.retrogenID, true);
+    	}
     }
 
+    public static boolean areAnyRetroGensEnabled(){
+    	for(IGenerationFeature feature : featureList){
+    		if(feature.isRetroGenAllowed()){
+    			return true;
+    		}
+    	}
+    	return false;
+    }
+    
     @SubscribeEvent
     public void handleChunkLoadEvent(ChunkDataEvent.Load event) {
         
     	int dimension = event.getWorld().provider.getDimension();
-		if((!event.getData().getCompoundTag(NBT_RETRO).hasKey(Config.retrogenID)) && (Config.needRetroGen()))
+		if((!event.getData().getCompoundTag(NBT_RETRO).hasKey(Config.retrogenID)) && (areAnyRetroGensEnabled()))
 		{
 			if(Config.retrogenInfo)
 				ModLogger.info("Chunk "+event.getChunk().getPos()+" has been flagged for RetroGen by CM.");

@@ -90,6 +90,9 @@ public class Config {
     public static boolean retrogenKelp = false;
     public static int coralChance = 20;
     public static boolean retrogenCoral = false;
+
+    public static boolean generateRoses = true;
+    public static boolean retrogenRoses = false;
     
     public static final ResourceLocation[] defaultEnhancementBookLootList = new ResourceLocation[]{
     		LootTableList.CHESTS_ABANDONED_MINESHAFT,
@@ -277,6 +280,9 @@ public class Config {
         coralChance = cfg.get(CATEGORY_WORLD, "coralGenChance", coralChance, "How rare are Coral Reefs in oceans? Set to 0 to disable them").getInt(20);
         retrogenCoral = cfg.get(CATEGORY_WORLD, "retrogenCoral", retrogenCoral,
                 "Set to true to enable retrogen of Coral Reefs").getBoolean();
+        generateRoses = cfg.get(CATEGORY_WORLD, "generateRoses", generateRoses, "Enable or disable More Colors of Roses in Forests.").getBoolean();
+        retrogenRoses = cfg.get(CATEGORY_WORLD, "retrogenRoses", retrogenRoses,
+                "Set to true to enable retrogen of more colored roses").getBoolean();
         
         //Loot
     	String[] defaultLocations = StringUtils.makeStringArray(defaultEnhancementBookLootList);
@@ -368,9 +374,5 @@ public class Config {
         }
         stack.setItemDamage(meta);
         return stack;
-    }
-    
-    public static boolean needRetroGen(){
-    	return Config.retrogenOres || Config.retrogenTrees || Config.retrogenClusters || Config.retrogenReeds || Config.retrogenSeaweed || Config.retrogenKelp || Config.retrogenCoral;
     }
 }

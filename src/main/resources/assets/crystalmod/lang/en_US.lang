@@ -785,6 +785,15 @@ tile.crystalmod.crystheriumplant.red.name=Red Crystherium
 tile.crystalmod.crystheriumplant.green.name=Green Crystherium
 tile.crystalmod.crystheriumplant.dark.name=Dark Crystherium
 
+tile.doublePlant.rose.name=Red Rose Bush
+tile.crystalmod.rosebush.white.name=White Rose Bush
+tile.crystalmod.rosebush.orange.name=Orange Rose Bush
+tile.crystalmod.rosebush.magenta.name=Magenta Rose Bush
+tile.crystalmod.rosebush.yellow.name=Yellow Rose Bush
+tile.crystalmod.rosebush.pink.name=Pink Rose Bush
+tile.crystalmod.rosebush.cyan.name=Cyan Rose Bush
+tile.crystalmod.rosebush.purple.name=Purple Rose Bush
+
 tile.crystalmod.crystexiumstairs.name=Crystexium Brick Stairs
 tile.crystalmod.bluecrystexiumstairs.name=Blue Crystexium Brick Stairs
 tile.crystalmod.redcrystexiumstairs.name=Red Crystexium Brick Stairs

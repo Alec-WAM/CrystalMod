@@ -1009,8 +1009,8 @@ public class ClientEventHandler {
 	    		
 	    		int left = 0;
 	    		int top = 0;
-	    		int right = sr.getScaledWidth();
-	    		int bottom = sr.getScaledHeight();
+	    		int right = Minecraft.getMinecraft().displayWidth;
+	    		int bottom = Minecraft.getMinecraft().displayHeight;
 
 	            double uD = 1.0f / 1280;
 	            double vD = 1.0f / 1080;
@@ -1019,8 +1019,8 @@ public class ClientEventHandler {
 	            
 	    		double u = 0 * uD;
 	            double v = 0 * vD;
-	            double maxU = 1280 * uD;
-	            double maxV = 1080 * vD;
+	            double maxU = 1.0D;
+	            double maxV = 1.0D;
 	            Tessellator tessellator = Tessellator.getInstance();
 	            VertexBuffer vertexbuffer = tessellator.getBuffer();
 	            GlStateManager.enableBlend();

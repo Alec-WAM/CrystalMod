@@ -27,8 +27,10 @@ import alec_wam.CrystalMod.blocks.crystexium.CrystexiumBlock;
 import alec_wam.CrystalMod.blocks.crystexium.CrystexiumBlock.CrystexiumBlockType;
 import alec_wam.CrystalMod.blocks.crystexium.CrystexiumSlab;
 import alec_wam.CrystalMod.blocks.crystexium.ItemBlockCrystheriumPlant;
+import alec_wam.CrystalMod.blocks.decorative.BlockBetterRoses;
 import alec_wam.CrystalMod.blocks.decorative.BlockCustomDoor;
 import alec_wam.CrystalMod.blocks.decorative.BlockFailure;
+import alec_wam.CrystalMod.blocks.decorative.ItemBlockBetterRose;
 import alec_wam.CrystalMod.blocks.decorative.bridge.BlockBridge;
 import alec_wam.CrystalMod.blocks.decorative.bridge.TileBridge;
 import alec_wam.CrystalMod.blocks.decorative.tiles.BlockBasicTiles;
@@ -347,6 +349,8 @@ public class ModBlocks {
 	public static BlockKelp kelp;
 	public static BlockSeaweed seaweed;
 	public static BlockCoral coral;
+	
+	public static BlockBetterRoses roseBush;
 	
 	public static CrystexiumBlock crystexiumBlock;
 	public static CrystexiumBlock blueCrystexiumBlock;
@@ -784,6 +788,10 @@ public class ModBlocks {
 		seaweed = registerBlock(new BlockSeaweed(), "seaweed");
 		coral = new BlockCoral();
 		registerBlock(coral, new ItemCloth(coral), "coral");
+		
+		roseBush = new BlockBetterRoses();
+		registerBlock(roseBush, new ItemBlockBetterRose(roseBush), "rosebush");
+		ItemBlockMeta.setMappingProperty(roseBush, BlockBetterRoses.COLOR);
 		
 		crystexiumBlock = new CrystexiumBlock();
 		registerEnumBlock(crystexiumBlock, "crystexiumblock");

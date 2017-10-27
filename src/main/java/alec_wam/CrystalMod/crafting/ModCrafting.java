@@ -23,6 +23,7 @@ import alec_wam.CrystalMod.blocks.crops.BlockNormalSapling.SaplingType;
 import alec_wam.CrystalMod.blocks.crops.ItemCorn.CornItemType;
 import alec_wam.CrystalMod.blocks.crops.material.ModCrops;
 import alec_wam.CrystalMod.blocks.crystexium.CrystexiumBlock.CrystexiumBlockType;
+import alec_wam.CrystalMod.blocks.decorative.BlockBetterRoses.RoseType;
 import alec_wam.CrystalMod.blocks.decorative.tiles.BlockBasicTiles.BasicTileType;
 import alec_wam.CrystalMod.blocks.decorative.tiles.BlockBasicTiles2.BasicTileType2;
 import alec_wam.CrystalMod.blocks.decorative.tiles.BlockCrystalTiles.CrystalTileType;
@@ -526,6 +527,15 @@ public class ModCrafting {
 
 		addShapelessOreRecipe(new ItemStack(ModItems.miscCard, 1, ItemMiscCard.CardType.CUBE.getMetadata()), new Object[]{dIronPlate, "paper", Items.NAME_TAG});
 
+		addShapelessRecipe(new ItemStack(Items.DYE, 2, EnumDyeColor.WHITE.getDyeDamage()), new Object[]{new ItemStack(ModBlocks.roseBush, 1, RoseType.WHITE.getMeta())});
+		addShapelessRecipe(new ItemStack(Items.DYE, 2, EnumDyeColor.ORANGE.getDyeDamage()), new Object[]{new ItemStack(ModBlocks.roseBush, 1, RoseType.ORANGE.getMeta())});
+		addShapelessRecipe(new ItemStack(Items.DYE, 2, EnumDyeColor.MAGENTA.getDyeDamage()), new Object[]{new ItemStack(ModBlocks.roseBush, 1, RoseType.MAGENTA.getMeta())});
+		addShapelessRecipe(new ItemStack(Items.DYE, 2, EnumDyeColor.YELLOW.getDyeDamage()), new Object[]{new ItemStack(ModBlocks.roseBush, 1, RoseType.YELLOW.getMeta())});
+		addShapelessRecipe(new ItemStack(Items.DYE, 2, EnumDyeColor.PINK.getDyeDamage()), new Object[]{new ItemStack(ModBlocks.roseBush, 1, RoseType.PINK.getMeta())});
+		addShapelessRecipe(new ItemStack(Items.DYE, 2, EnumDyeColor.CYAN.getDyeDamage()), new Object[]{new ItemStack(ModBlocks.roseBush, 1, RoseType.CYAN.getMeta())});
+		addShapelessRecipe(new ItemStack(Items.DYE, 2, EnumDyeColor.PURPLE.getDyeDamage()), new Object[]{new ItemStack(ModBlocks.roseBush, 1, RoseType.PURPLE.getMeta())});
+
+		
 		addShapelessRecipe(Items.SLIME_BALL, new Object[]{Items.WATER_BUCKET, Items.MILK_BUCKET});
 		addShapedOreRecipe(Items.NAME_TAG, new Object[]{" PP", "SBI", " PP", 'S', "string", 'I', "ingotIron", 'P', "paper", 'B', "slimeball"});
 		

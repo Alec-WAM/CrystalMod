@@ -2,9 +2,14 @@ package alec_wam.CrystalMod.tiles.weather;
 
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.asm.ObfuscatedNames;
+import alec_wam.CrystalMod.client.util.IconRenderer;
+import alec_wam.CrystalMod.client.util.IconRenderer.Icon;
 import alec_wam.CrystalMod.util.ReflectionUtils;
+import alec_wam.CrystalMod.util.TimeUtil;
+import alec_wam.CrystalMod.util.client.GuiUtil;
 import alec_wam.CrystalMod.util.client.RenderUtil;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.client.renderer.GlStateManager;
@@ -14,6 +19,7 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.storage.WorldInfo;
 
 public class GuiWeather extends GuiContainer {
 
@@ -40,10 +46,14 @@ public class GuiWeather extends GuiContainer {
         GlStateManager.pushMatrix();
         GlStateManager.translate(5, 23, 0);
         GlStateManager.scale(18, 18, 0);
+        
+        WorldInfo info = CrystalMod.proxy.getClientWorld().getWorldInfo();
+        
         float f = CrystalMod.proxy.getClientWorld().getRainStrength(partialTicks);
 
         if (f > 0.0F)
         {
+        	//Rain
             BlockPos.MutableBlockPos blockpos$mutableblockpos = new BlockPos.MutableBlockPos();
         	blockpos$mutableblockpos.setPos(weather.getPos().getX(), weather.getPos().getY(), weather.getPos().getZ());
         	Biome biomegenbase = CrystalMod.proxy.getClientWorld().getBiome(blockpos$mutableblockpos);
@@ -63,6 +73,7 @@ public class GuiWeather extends GuiContainer {
 	        worldrenderer.pos(0 + 0, 0 + 0, this.zLevel).tex(((0)), ((float)(l2 * 0.25D + d5))).endVertex();
 	        tessellator.draw();
         }else{
+        	//Sun
         	mc.getTextureManager().bindTexture(locationSunPng);
 	        worldrenderer.begin(7, DefaultVertexFormats.POSITION_TEX);
 	        worldrenderer.pos(0 + 0, 0 + 4, this.zLevel).tex(((0)), ((0))).endVertex();
@@ -73,13 +84,14 @@ public class GuiWeather extends GuiContainer {
         }
         GlStateManager.popMatrix();
         
+        //Moon
         GlStateManager.pushMatrix();
         GlStateManager.translate(2+(76*2), 23, 0);
         GlStateManager.scale(18.3, 18, 0);
 		mc.getTextureManager().bindTexture(locationMoonPhasesPng);
-        int i = CrystalMod.proxy.getClientWorld().getMoonPhase();
-        int k = i % 4;
-        int i1 = i / 4 % 2;
+        int moonPhase = CrystalMod.proxy.getClientWorld().getMoonPhase();
+        int k = moonPhase % 4;
+        int i1 = moonPhase / 4 % 2;
         float f22 = (k + 0) / 4.0F;
         float f23 = (i1 + 0) / 2.0F;
         float f24 = (k + 1) / 4.0F;
@@ -92,10 +104,51 @@ public class GuiWeather extends GuiContainer {
         tessellator.draw();
         GlStateManager.popMatrix();
         
-        /*if(f > 0){
-        	String time = ""+TimeUtil.getTimeFromTicks(CrystalMod.proxy.getClientWorld().getWorldInfo().getRainTime());
-        	this.drawString(fontRendererObj, "Rain Left: "+time, 5, 23+76+3, java.awt.Color.BLUE.getRGB());
-        }*/
+        
+        boolean clearInfo = weather.clearTime > 0;
+        int offset = clearInfo ? 0 : -16;
+        
+        //Info
+        GlStateManager.pushMatrix();
+        if(clearInfo){
+        	IconRenderer.renderIcon(Icon.WEATHER_SUNNY, 5, 102);
+        }else{        
+	        if(!info.isRaining()){
+	        	IconRenderer.renderIcon(Icon.WEATHER_RAIN, 5, 102);
+	        } else {
+	        	IconRenderer.renderIcon(Icon.WEATHER_SUNNY, 5, 102);
+	        }
+	        IconRenderer.renderIcon(Icon.WEATHER_STORM, 5, 120);
+        }
+        
+        GlStateManager.popMatrix();
+        
+        if(clearInfo){
+        	String clearWheaterTime = TimeUtil.getTimeFromTicks(weather.clearTime);
+        	fontRendererObj.drawString("Clear Weather: "+clearWheaterTime, 25, 107, java.awt.Color.GRAY.getRGB());
+        } else {	        
+	        String timeUntilNextRain = TimeUtil.getTimeFromTicks(weather.rainTime);
+	        if(info.isRaining()){
+	        	fontRendererObj.drawString(timeUntilNextRain, 25, 107, java.awt.Color.BLUE.getRGB());
+	        } else {
+	        	fontRendererObj.drawString(timeUntilNextRain, 25, 107, java.awt.Color.BLUE.getRGB());
+	        }
+	        
+	        String timeUntilNextThunder = TimeUtil.getTimeFromTicks(weather.thunderTime);
+	        if(info.isThundering()){
+	        	fontRendererObj.drawString("Thunder Ends: "+timeUntilNextThunder, 25, 123, java.awt.Color.YELLOW.getRGB());
+	        } else {
+	        	fontRendererObj.drawString(timeUntilNextThunder, 25, 123, java.awt.Color.YELLOW.getRGB());
+	        }
+        }
+        
+        if(moonPhase > 0){
+        	int daysLeft = 8-moonPhase;
+        	int day = (int) (weather.getWorld().getWorldTime() % 24000L);
+        	int timeLeft = ((daysLeft) * 24000) - (day);
+        	String timeUntilFullMoon = TimeUtil.getTimeFromTicks(timeLeft);
+            fontRendererObj.drawString("Next Full Moon: "+timeUntilFullMoon, 25, 165+offset, java.awt.Color.GRAY.getRGB());
+        }
     }
 	
 	@Override
@@ -105,8 +158,7 @@ public class GuiWeather extends GuiContainer {
 	    int sx = (width - xSize) / 2;
 	    int sy = (height - ySize) / 2;
 	    
-	    Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation("crystalmod:textures/gui/weather.png"));
-	    drawTexturedModalRect(sx, sy, 0, 0, this.xSize, this.ySize);
+	    GuiUtil.renderBlankGuiBackground(sx, sy, xSize, ySize);
 	}
 
 }

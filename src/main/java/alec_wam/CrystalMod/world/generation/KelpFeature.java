@@ -41,13 +41,12 @@ public class KelpFeature implements IGenerationFeature {
 	                {
 	                    position = position.down();
 	                }
-	                int count = MathHelper.getInt(random, 8, 14);
 	                boolean placed = false;
-	                for (int i = 0; i < count; ++i)
+	                for (int i = 0; i < 125; ++i)
 	                {
 	                    BlockPos blockpos = position.add(random.nextInt(4) - random.nextInt(4), random.nextInt(4) - random.nextInt(4), random.nextInt(4) - random.nextInt(4));
 	
-	                    if (world.getBlockState(blockpos).getBlock() == Blocks.WATER && ModBlocks.kelp.canBlockStay(world, blockpos, ModBlocks.kelp.getDefaultState()))
+	                    if (world.getBlockState(blockpos).getBlock() == Blocks.WATER && ModBlocks.kelp.canBlockStay(world, blockpos, ModBlocks.kelp.getDefaultState()) && world.getBlockState(blockpos.down()).getMaterial() == Material.SAND)
 	                    {
 	                        if(generateKelp(world, blockpos, random)){
 	                        	placed = true;

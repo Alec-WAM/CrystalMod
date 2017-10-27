@@ -209,7 +209,7 @@ public class BlockCoral extends BlockColored implements ICustomModel, ICustomRay
     }
 	
 	public boolean canBlockStay(final World worldIn, final BlockPos pos, final IBlockState state) {
-		return worldIn.getBlockState(pos.up()).getBlock() == Blocks.WATER;
+		return worldIn.getBlockState(pos.up()).getBlock() == Blocks.WATER || worldIn.getBlockState(pos.up()).getBlock() == this;
 	}
 
 	@Override
