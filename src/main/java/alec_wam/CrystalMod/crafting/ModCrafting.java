@@ -25,6 +25,8 @@ import alec_wam.CrystalMod.blocks.crops.material.ModCrops;
 import alec_wam.CrystalMod.blocks.crystexium.CrystexiumBlock.CrystexiumBlockType;
 import alec_wam.CrystalMod.blocks.decorative.BlockBetterRoses.RoseType;
 import alec_wam.CrystalMod.blocks.decorative.BlockFancyGlowstone.GlowstoneType;
+import alec_wam.CrystalMod.blocks.decorative.BlockFancyLadder.FancyLadderType;
+import alec_wam.CrystalMod.blocks.decorative.BlockFancyLadder2.FancyLadderType2;
 import alec_wam.CrystalMod.blocks.decorative.tiles.BlockBasicTiles.BasicTileType;
 import alec_wam.CrystalMod.blocks.decorative.tiles.BlockBasicTiles2.BasicTileType2;
 import alec_wam.CrystalMod.blocks.decorative.tiles.BlockCrystalTiles.CrystalTileType;
@@ -322,6 +324,14 @@ public class ModCrafting {
 			addShapedOreRecipe(new ItemStack(ModBlocks.ladder, 4, type.getMeta()), new Object[]{"S S", "S#S", "S S", 'S', "stickWood", '#', new ItemStack(ModBlocks.crystalPlanks, 1, type.getMeta())});
 		}
 		
+		addShapedOreRecipe(new ItemStack(ModBlocks.fancyLadders, 4, FancyLadderType.WIDE.getMeta()), new Object[]{"S S", "S#S", "S S", 'S', "stickWood", '#', Blocks.LADDER});
+		addShapedOreRecipe(new ItemStack(ModBlocks.fancyLadders, 4, FancyLadderType.ARROW.getMeta()), new Object[]{" S ", "SSS", "S#S", 'S', "stickWood", '#', Blocks.LADDER});
+		addShapedOreRecipe(new ItemStack(ModBlocks.fancyLadders, 3, FancyLadderType.DIAMOND.getMeta()), new Object[]{" S ", "S#S", " S ", 'S', "stickWood", '#', Blocks.LADDER});
+		addShapedOreRecipe(new ItemStack(ModBlocks.fancyLadders, 4, FancyLadderType.HELIX.getMeta()), new Object[]{" S ", "S#S", "SSS", 'S', "stickWood", '#', Blocks.LADDER});
+		addShapedOreRecipe(new ItemStack(ModBlocks.fancyLadders2, 4, FancyLadderType2.CIRCLE.getMeta()), new Object[]{"SS ", "S#S", " SS", 'S', "stickWood", '#', Blocks.LADDER});
+		addShapedOreRecipe(new ItemStack(ModBlocks.fancyLadders2, 4, FancyLadderType2.LATTICED.getMeta()), new Object[]{"# #", "   ", "# #", 'S', "stickWood", '#', Blocks.LADDER});
+		addShapedOreRecipe(new ItemStack(ModBlocks.fancyLadders2, 3, FancyLadderType2.X.getMeta()), new Object[]{"S S", " S ", "S#S", 'S', "stickWood", '#', Blocks.LADDER});
+
 		//Glowstone
 		addShapedOreRecipe(new ItemStack(ModBlocks.fancyGlowstone, 4, GlowstoneType.ASYMMETRICAL.getMeta()), new Object[]{" X ", "X  ", " XX", 'X', "glowstone"});
 		addShapedOreRecipe(new ItemStack(ModBlocks.fancyGlowstone, 6, GlowstoneType.CHECKERED.getMeta()), new Object[]{" XX", "XDX", "DXD", 'X', "glowstone", 'D', "dustGlowstone"});

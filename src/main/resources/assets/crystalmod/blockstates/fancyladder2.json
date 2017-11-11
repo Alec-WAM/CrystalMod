@@ -1,0 +1,38 @@
+{
+	"forge_marker": 1,
+	"defaults": {
+		"model": "crystalmod:ladder",
+		"transform": "forge:default-item"
+	},
+	"variants": {
+        "facing": {
+			"north": {},
+			"south": { "y": 180 },
+			"east": { "y": 90 },
+			"west": { "y": 270 }
+		},
+        "type": {
+			"circle": {
+				"model": "crystalmod:ladder",
+				"textures": {
+					"particle": "crystalmod:blocks/decorative/ladder/circle",
+					"texture": "crystalmod:blocks/decorative/ladder/circle"
+				}
+			},
+			"latticed": {
+				"model": "crystalmod:ladder",
+				"textures": {
+					"particle": "crystalmod:blocks/decorative/ladder/latticed",
+					"texture": "crystalmod:blocks/decorative/ladder/latticed"
+				}
+			},
+			"x": {
+				"model": "crystalmod:ladder",
+				"textures": {
+					"particle": "crystalmod:blocks/decorative/ladder/x",
+					"texture": "crystalmod:blocks/decorative/ladder/x"
+				}
+			}
+		}
+    }
+}

@@ -31,7 +31,11 @@ import alec_wam.CrystalMod.blocks.decorative.BlockBetterRoses;
 import alec_wam.CrystalMod.blocks.decorative.BlockCustomDoor;
 import alec_wam.CrystalMod.blocks.decorative.BlockFailure;
 import alec_wam.CrystalMod.blocks.decorative.BlockFancyGlowstone;
+import alec_wam.CrystalMod.blocks.decorative.BlockFancyLadder;
+import alec_wam.CrystalMod.blocks.decorative.BlockFancyLadder2;
 import alec_wam.CrystalMod.blocks.decorative.ItemBlockBetterRose;
+import alec_wam.CrystalMod.blocks.decorative.ItemBlockFancyLadders;
+import alec_wam.CrystalMod.blocks.decorative.ItemBlockFancyLadders2;
 import alec_wam.CrystalMod.blocks.decorative.bridge.BlockBridge;
 import alec_wam.CrystalMod.blocks.decorative.bridge.TileBridge;
 import alec_wam.CrystalMod.blocks.decorative.tiles.BlockBasicTiles;
@@ -266,6 +270,8 @@ public class ModBlocks {
 	public static BlockNormalSapling normalSapling;
 	
 	public static BlockCrystalLadder ladder;
+	public static BlockFancyLadder fancyLadders;
+	public static BlockFancyLadder2 fancyLadders2;
 	
 	public static BlockPipe crystalPipe;
 	public static BlockTank crystalTank;
@@ -511,6 +517,10 @@ public class ModBlocks {
 		
 		ladder = new BlockCrystalLadder();
 		registerBlock(ladder, new ItemBlockCrystalLadder(ladder), "crystalladder");		
+		fancyLadders = new BlockFancyLadder();
+		registerBlock(fancyLadders, new ItemBlockFancyLadders(fancyLadders), "fancyladder");	
+		fancyLadders2 = new BlockFancyLadder2();
+		registerBlock(fancyLadders2, new ItemBlockFancyLadders2(fancyLadders2), "fancyladder2");
 		
 		crystalPipe = new BlockPipe();
 		registerBlock(crystalPipe, new ItemBlockPipe(crystalPipe), "crystalpipe");

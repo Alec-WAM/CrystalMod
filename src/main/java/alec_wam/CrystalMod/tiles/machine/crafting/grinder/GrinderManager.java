@@ -11,6 +11,7 @@ import com.google.common.collect.Lists;
 
 import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.blocks.decorative.BlockBetterRoses.RoseType;
+import alec_wam.CrystalMod.blocks.decorative.BlockFancyGlowstone.GlowstoneType;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.ModLogger;
@@ -179,6 +180,11 @@ public class GrinderManager {
 		addRecipeListOutput(new ItemStack(Items.QUARTZ), OreDictionary.getOres("dustNetherQuartz", false), 1, ItemStackTools.getEmptyStack(), 0, 1600);
 
 		addRecipe(new ItemStack(Blocks.GLOWSTONE), new ItemStack(Items.GLOWSTONE_DUST, 4), ItemStackTools.getEmptyStack(), 0, 1600);
+		
+		for(GlowstoneType type : GlowstoneType.values()){
+			addRecipe(new ItemStack(ModBlocks.fancyGlowstone, 1, type.getMeta()), new ItemStack(Items.GLOWSTONE_DUST, 3), ItemStackTools.getEmptyStack(), 0, 1600);			
+		}
+		
 		List<ItemStack> flourList = Lists.newArrayList();
 		flourList.addAll(OreDictionary.getOres("dustWheat", false));
 		flourList.addAll(OreDictionary.getOres("dustFlour", false));
