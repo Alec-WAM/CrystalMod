@@ -153,6 +153,12 @@ public class CauldronRecipeManager {
 		addRecipe(new ItemStack(Items.NETHER_WART), new FluidStack(ModFluids.fluidRedCrystal, 6 * bucket), new ItemStack(ModItems.crystalSeedsRed));
 		addRecipe(new ItemStack(Items.NETHER_WART), new FluidStack(ModFluids.fluidGreenCrystal, 6 * bucket), new ItemStack(ModItems.crystalSeedsGreen));
 		addRecipe(new ItemStack(Items.NETHER_WART), new FluidStack(ModFluids.fluidDarkCrystal, 6 * bucket), new ItemStack(ModItems.crystalSeedsDark));
+		
+		addRecipe(new ItemStack(Items.PAINTING), new FluidStack(ModFluids.fluidBlueCrystal, 100), new ItemStack(ModItems.crystalmodPainting));
+		addRecipe(new ItemStack(Items.PAINTING), new FluidStack(ModFluids.fluidRedCrystal, 100), new ItemStack(ModItems.crystalmodPainting));
+		addRecipe(new ItemStack(Items.PAINTING), new FluidStack(ModFluids.fluidGreenCrystal, 100), new ItemStack(ModItems.crystalmodPainting));
+		addRecipe(new ItemStack(Items.PAINTING), new FluidStack(ModFluids.fluidDarkCrystal, 100), new ItemStack(ModItems.crystalmodPainting));
+		
 	}
 
 	public static List<InfusionRecipe> getRecipes() {

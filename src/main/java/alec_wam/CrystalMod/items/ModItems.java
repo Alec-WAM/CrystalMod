@@ -19,6 +19,7 @@ import alec_wam.CrystalMod.entities.minecarts.chests.wireless.ItemWirelessChestM
 import alec_wam.CrystalMod.entities.minions.ItemMinion;
 import alec_wam.CrystalMod.entities.minions.ItemMinionStaff;
 import alec_wam.CrystalMod.entities.misc.ItemBambooBoat;
+import alec_wam.CrystalMod.entities.misc.ItemCrystalModPainting;
 import alec_wam.CrystalMod.entities.pet.bombomb.ItemBombomb;
 import alec_wam.CrystalMod.integration.baubles.BaublesIntegration;
 import alec_wam.CrystalMod.integration.baubles.ItemBaubleWings;
@@ -145,6 +146,7 @@ public class ModItems {
 	public static ItemCrystalWrench wrench;
 	public static ItemCrystalGuide guide;
 	public static ItemEnhancementKnowledge enhancementKnowledge;
+	public static ItemCrystalModPainting crystalmodPainting;
 	
 	public static ItemCrystalSeeds crystalSeedsBlue, crystalSeedsRed, crystalSeedsGreen, crystalSeedsDark;
 	public static ItemCrystalSeedTree crystalTreeSeedsBlue, crystalTreeSeedsRed, crystalTreeSeedsGreen, crystalTreeSeedsDark;
@@ -267,6 +269,7 @@ public class ModItems {
 		wrench = new ItemCrystalWrench();
 		guide = new ItemCrystalGuide();
 		enhancementKnowledge = new ItemEnhancementKnowledge();
+		crystalmodPainting = new ItemCrystalModPainting();
 		harddrive = new ItemHDD();
 		craftingPattern = new ItemPattern();
 		securityCard = new ItemSecurityCard();

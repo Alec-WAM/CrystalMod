@@ -286,6 +286,7 @@ item.crystalmod.misccard.eportal.name=Network Pipe Portal Binder
 item.crystalmod.misccard.pcube.name=Player Cube Card
 item.crystalmod.misccard.elevator.name=Elevator Binder (WIP)
 item.crystalmod.misccard.tportal.name=Teleportal Link Card
+item.crystalmod.crystalmodpainting.name=Crystal Painting
 
 item.crystalmod.dnaitem.sample_empty.name=Empty DNA Sample
 item.crystalmod.dnaitem.sample_full.name=DNA Sample
