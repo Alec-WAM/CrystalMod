@@ -57,7 +57,7 @@ public class BlockCrystalLadder extends Block implements ICustomModel
     	IStateMapper stateMapper = new StateMap.Builder().build();
 		ModelLoader.setCustomStateMapper(this, stateMapper);
 		for(WoodType type : WoodType.values()){
-			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), type.getMeta(), new ModelResourceLocation(getRegistryName(), "facing=north,variant="+type.getName()));
+			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), type.getMeta(), new ModelResourceLocation(getRegistryName()+"_"+type.getName(), "inventory"));
 		}
     }
     
