@@ -30,6 +30,7 @@ import alec_wam.CrystalMod.blocks.crystexium.ItemBlockCrystheriumPlant;
 import alec_wam.CrystalMod.blocks.decorative.BlockBetterRoses;
 import alec_wam.CrystalMod.blocks.decorative.BlockCustomDoor;
 import alec_wam.CrystalMod.blocks.decorative.BlockFailure;
+import alec_wam.CrystalMod.blocks.decorative.BlockFancyGlowstone;
 import alec_wam.CrystalMod.blocks.decorative.ItemBlockBetterRose;
 import alec_wam.CrystalMod.blocks.decorative.bridge.BlockBridge;
 import alec_wam.CrystalMod.blocks.decorative.bridge.TileBridge;
@@ -239,6 +240,7 @@ public class ModBlocks {
 	public static BlockPaintedCrystalGlass crystalGlassPainted;
 	public static BlockCrystalGlassPane crystalGlassPane;
 	public static BlockMetalBars metalBars;
+	public static BlockFancyGlowstone fancyGlowstone;
 	public static BlockCrystalReed crystalReedsBlue, crystalReedsRed, crystalReedsGreen, crystalReedsDark;
 	public static BlockFlowerLilyPad flowerLilypad;
 	public static BlockCrystalWorkbench crystalWorkbench;
@@ -387,6 +389,8 @@ public class ModBlocks {
 		registerBlock(crystalGlassPane, new ItemBlockMeta(crystalGlassPane), "crystalglasspane");
 		ItemBlockMeta.setMappingProperty(crystalGlassPane, BlockCrystalGlass.TYPE);
 
+		fancyGlowstone = registerEnumBlock(new BlockFancyGlowstone(), "fancyglowstone");
+		
 		metalBars = new BlockMetalBars();
 		registerBlock(metalBars, new ItemBlockMeta(metalBars), "metalbars");
 		ItemBlockMeta.setMappingProperty(metalBars, BlockMetalBars.TYPE);

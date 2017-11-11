@@ -24,6 +24,7 @@ import alec_wam.CrystalMod.blocks.crops.ItemCorn.CornItemType;
 import alec_wam.CrystalMod.blocks.crops.material.ModCrops;
 import alec_wam.CrystalMod.blocks.crystexium.CrystexiumBlock.CrystexiumBlockType;
 import alec_wam.CrystalMod.blocks.decorative.BlockBetterRoses.RoseType;
+import alec_wam.CrystalMod.blocks.decorative.BlockFancyGlowstone.GlowstoneType;
 import alec_wam.CrystalMod.blocks.decorative.tiles.BlockBasicTiles.BasicTileType;
 import alec_wam.CrystalMod.blocks.decorative.tiles.BlockBasicTiles2.BasicTileType2;
 import alec_wam.CrystalMod.blocks.decorative.tiles.BlockCrystalTiles.CrystalTileType;
@@ -320,6 +321,26 @@ public class ModCrafting {
 			addShapelessRecipe(new ItemStack(ModBlocks.crystalPlanks, 4, type.getMeta()), new Object[]{new ItemStack(ModBlocks.crystalLog, 1, type.getMeta())});
 			addShapedOreRecipe(new ItemStack(ModBlocks.ladder, 4, type.getMeta()), new Object[]{"S S", "S#S", "S S", 'S', "stickWood", '#', new ItemStack(ModBlocks.crystalPlanks, 1, type.getMeta())});
 		}
+		
+		//Glowstone
+		addShapedOreRecipe(new ItemStack(ModBlocks.fancyGlowstone, 4, GlowstoneType.ASYMMETRICAL.getMeta()), new Object[]{" X ", "X  ", " XX", 'X', "glowstone"});
+		addShapedOreRecipe(new ItemStack(ModBlocks.fancyGlowstone, 6, GlowstoneType.CHECKERED.getMeta()), new Object[]{" XX", "XDX", "DXD", 'X', "glowstone", 'D', "dustGlowstone"});
+		addShapedOreRecipe(new ItemStack(ModBlocks.fancyGlowstone, 8, GlowstoneType.FLAT.getMeta()), new Object[]{"XXX", "XDX", "XXX", 'X', "glowstone", 'D', "dustGlowstone"});
+		addShapedOreRecipe(new ItemStack(ModBlocks.fancyGlowstone, 3, GlowstoneType.GLITTERING.getMeta()), new Object[]{"DDD", "DXD", "DDD", 'X', "glowstone", 'D', "dustGlowstone"});
+		addShapedOreRecipe(new ItemStack(ModBlocks.fancyGlowstone, 9, GlowstoneType.GRIDDED.getMeta()), new Object[]{"XXX", "XXX", "XXX", 'X', "glowstone", 'D', "dustGlowstone"});
+		addShapedOreRecipe(new ItemStack(ModBlocks.fancyGlowstone, 3, GlowstoneType.GRIDDED_LITE.getMeta()), new Object[]{"DDD", "DGD", "DDD", 'G', new ItemStack(ModBlocks.fancyGlowstone, 1, GlowstoneType.GRIDDED.getMeta()), 'D', "dustGlowstone"});
+		addShapedOreRecipe(new ItemStack(ModBlocks.fancyGlowstone, 7, GlowstoneType.LATTICED.getMeta()), new Object[]{"XDX", "XDX", "XDX", 'X', "glowstone", 'D', "dustGlowstone"});
+		addShapedOreRecipe(new ItemStack(ModBlocks.fancyGlowstone, 5, GlowstoneType.MOVING.getMeta()), new Object[]{"RXR", "XDX", "RDR", 'X', "glowstone", 'D', "dustGlowstone", 'R', "dustRedstone"});
+		addShapedRecipe(new ItemStack(ModBlocks.fancyGlowstone, 4, GlowstoneType.NOISY.getMeta()), new Object[]{"GG", "GG", 'G', new ItemStack(ModBlocks.fancyGlowstone, 1, GlowstoneType.LATTICED.getMeta())});
+		addShapedOreRecipe(new ItemStack(ModBlocks.fancyGlowstone, 5, GlowstoneType.ORGANIZED.getMeta()), new Object[]{"X X", " X ", "X X", 'X', "glowstone", 'D', "dustGlowstone"});
+		addShapedOreRecipe(new ItemStack(ModBlocks.fancyGlowstone, 3, GlowstoneType.UNORGANIZED.getMeta()), new Object[]{"X D", " X ", "D X", 'X', "glowstone", 'D', "dustGlowstone"});
+		addShapedOreRecipe(new ItemStack(ModBlocks.fancyGlowstone, 8, GlowstoneType.OUTER_SQUARE.getMeta()), new Object[]{"XXX", "X X", "XXX", 'X', "glowstone", 'D', "dustGlowstone"});
+		addShapedOreRecipe(new ItemStack(ModBlocks.fancyGlowstone, 4, GlowstoneType.POPPED.getMeta()), new Object[]{"X X", " D ", "X X", 'X', "glowstone", 'D', "dustGlowstone"});
+		addShapelessRecipe(new ItemStack(ModBlocks.fancyGlowstone, 2, GlowstoneType.POPPED_ORGANIZED.getMeta()), new Object[]{new ItemStack(ModBlocks.fancyGlowstone, 1, GlowstoneType.POPPED.getMeta()), new ItemStack(ModBlocks.fancyGlowstone, 1, GlowstoneType.ORGANIZED.getMeta())});
+		addShapedOreRecipe(new ItemStack(ModBlocks.fancyGlowstone, 5, GlowstoneType.ROCKY.getMeta()), new Object[]{"X X", " XX", "X  ", 'X', "glowstone", 'D', "dustGlowstone"});
+		addShapedOreRecipe(new ItemStack(ModBlocks.fancyGlowstone, 2, GlowstoneType.SPARKLING.getMeta()), new Object[]{" D ", "DXD", " D ", 'X', "glowstone", 'D', "dustGlowstone"});
+		
+		
 		addShapelessRecipe(new ItemStack(ModBlocks.bambooPlanks, 2, 0), new Object[]{new ItemStack(ModBlocks.bamboo)});
 		addShapedRecipe(ModItems.bambooBoat, new Object[]{"X X", "XXX", 'X', ModBlocks.bambooPlanks});
 		addShapedRecipe(new ItemStack(ModItems.bambooDoor, 3), new Object[]{"XX", "XX", "XX", 'X', ModBlocks.bambooPlanks});

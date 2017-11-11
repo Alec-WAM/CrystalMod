@@ -1,0 +1,25 @@
+{
+  "forge_marker": 1,
+  "variants": {
+    "normal": [{}],
+    "inventory": [{}],
+    "type": {
+      "asymmetrical": {"model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/decorative/glowstone/asymmetrical"}},
+	  "checkered": {"model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/decorative/glowstone/checkered"}},
+	  "flat": {"model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/decorative/glowstone/flat"}},
+	  "glittering": {"model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/decorative/glowstone/glittering"}},
+	  "gridded": {"model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/decorative/glowstone/gridded"}},
+	  "gridded_lite": {"model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/decorative/glowstone/gridded_lite"}},
+	  "latticed": {"model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/decorative/glowstone/latticed"}},
+	  "moving": {"model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/decorative/glowstone/moving"}},
+	  "noisy": {"model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/decorative/glowstone/noisy"}},
+	  "organized": {"model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/decorative/glowstone/organized"}},
+	  "unorganized": {"model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/decorative/glowstone/unorganized"}},
+	  "outer_square": {"model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/decorative/glowstone/outer_square"}},
+	  "popped": {"model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/decorative/glowstone/popped"}},
+	  "popped_organized": {"model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/decorative/glowstone/popped_organized"}},
+	  "rocky": {"model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/decorative/glowstone/rocky"}},
+	  "sparkling": {"model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/decorative/glowstone/sparkling"}}
+    }
+  }
+}

@@ -385,6 +385,23 @@ tile.crystalmod.etchedcrystalblock.pure.name=Etched Pure Crystal Block
 tile.crystalmod.decorativeblock.redstone_bricks.name=Congealed Redstone Brick
 tile.crystalmod.decorativeblock.square_turn.name=Square Turn Block
 
+tile.crystalmod.fancyglowstone.asymmetrical.name=Asymmetrical Glowstone
+tile.crystalmod.fancyglowstone.checkered.name=Checkered Glowstone
+tile.crystalmod.fancyglowstone.flat.name=Flat Glowstone
+tile.crystalmod.fancyglowstone.glittering.name=Glittering Glowstone
+tile.crystalmod.fancyglowstone.gridded.name=Gridded Glowstone
+tile.crystalmod.fancyglowstone.gridded_lite.name=Lite Gridded Glowstone
+tile.crystalmod.fancyglowstone.latticed.name=Latticed Glowstone
+tile.crystalmod.fancyglowstone.moving.name=Moving Glowstone
+tile.crystalmod.fancyglowstone.noisy.name=Noisy Glowstone
+tile.crystalmod.fancyglowstone.organized.name=Organized Glowstone
+tile.crystalmod.fancyglowstone.unorganized.name=Unorganized Glowstone
+tile.crystalmod.fancyglowstone.outer_square.name=Outer Square Glowstone
+tile.crystalmod.fancyglowstone.popped.name=Popped Glowstone
+tile.crystalmod.fancyglowstone.popped_organized.name=Popped Organized Glowstone
+tile.crystalmod.fancyglowstone.rocky.name=Rocky Glowstone
+tile.crystalmod.fancyglowstone.sparkling.name=Sparkling Glowstone
+
 tile.crystalmod.tiles_basic.stone_stone.name=Stone Slab Tiles
 tile.crystalmod.tiles_basic.stone_carved.name=Chiseled Stonebrick Tiles
 tile.crystalmod.tiles_basic.stone_granite.name=Polished Granite Tiles
