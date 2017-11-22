@@ -3,6 +3,7 @@ package alec_wam.CrystalMod.items.tools.backpack.upgrade;
 import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.items.IEnumMetaItem;
 import alec_wam.CrystalMod.items.ModItems;
+import alec_wam.CrystalMod.items.tools.backpack.upgrade.ContainerBackpackUpgradeWindow.UpgradeWindowType;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
@@ -52,8 +53,24 @@ public class ItemBackpackUpgrade extends Item implements ICustomModel {
 	}
 	
 	public static enum BackpackUpgrade implements IStringSerializable, IEnumMetaItem {
-		HOPPER, ENDER, RESTOCKING, VOID, POCKETS, BOW, DESPAWN, DEATH;
+		HOPPER(UpgradeWindowType.SINGLESLOT), 
+		ENDER(UpgradeWindowType.NORMAL), 
+		RESTOCKING(UpgradeWindowType.SINGLESLOT), 
+		VOID(UpgradeWindowType.SINGLESLOT), 
+		POCKETS(), 
+		BOW(), 
+		DESPAWN(),
+		DEATH();
 
+		final UpgradeWindowType windowType;
+		BackpackUpgrade(){
+			this(UpgradeWindowType.NONE);
+		}
+		
+		BackpackUpgrade(UpgradeWindowType windowType){
+			this.windowType = windowType;
+		}
+		
 		@Override
 		public int getMetadata() {
 			return ordinal();

@@ -1,5 +1,6 @@
 package alec_wam.CrystalMod.items.tools.backpack.gui;
 
+import java.awt.Color;
 import java.io.IOException;
 
 import alec_wam.CrystalMod.CrystalMod;
@@ -11,9 +12,13 @@ import alec_wam.CrystalMod.items.tools.backpack.upgrade.InventoryBackpackUpgrade
 import alec_wam.CrystalMod.items.tools.backpack.upgrade.ItemBackpackUpgrade.BackpackUpgrade;
 import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.ItemStackTools;
+import alec_wam.CrystalMod.util.client.RenderUtil;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -79,6 +84,23 @@ public class GuiBackpackNormal extends GuiContainer {
     			GlStateManager.scale(0.55, 0.55, 1);
     			this.itemRender.renderItemAndEffectIntoGUI(lockIconStack, 0, 0);
     			GlStateManager.popMatrix();
+    		}
+    		
+    		int upgradeIndex = 0;
+    		for(int i = 0; i < upgrades.getSize(); i++){
+    			ItemStack stack = upgrades.getStackInSlot(i);
+    			if(ItemStackTools.isValid(stack)){
+    				int upgradeX = offsetLeft + (170 - (16*upgrades.getUpgradeCount())) + 16*upgradeIndex;
+    				int upgradeY = 16+(18*slotRows)+3+offsetTop;
+    				GlStateManager.pushMatrix();
+        			GlStateManager.translate(upgradeX, upgradeY, 0);
+        			GlStateManager.scale(0.75, 0.75, 1);
+        			GlStateManager.pushMatrix();
+        			this.itemRender.renderItemAndEffectIntoGUI(stack, 0, 0);
+        			GlStateManager.popMatrix();
+        			GlStateManager.popMatrix();
+    				upgradeIndex++;
+    			}
     		}
     	}
     	this.fontRendererObj.drawString(I18n.format("container.inventory", new Object[0]), 8+offsetLeft, 16+(18*slotRows)+5+offsetTop, 4210752);

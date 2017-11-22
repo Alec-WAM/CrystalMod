@@ -34,6 +34,10 @@ public class ContainerBackpackUpgradeWindow extends Container {
 	protected IBaublesItemHandler baubles;
 	private final EntityEquipmentSlot[] entityequipmentslots = new EntityEquipmentSlot[] {EntityEquipmentSlot.HEAD, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS, EntityEquipmentSlot.FEET};
 
+	public static enum UpgradeWindowType {
+    	NONE, NORMAL, SINGLESLOT;
+    }    
+	
     public ContainerBackpackUpgradeWindow(final InventoryPlayer playerInventory, InventoryBackpackUpgrades upgradeInventory, BackpackUpgrade upgrade)
     {
         this.upgradeInventory = upgradeInventory;
@@ -63,32 +67,49 @@ public class ContainerBackpackUpgradeWindow extends Container {
             }
         }
         if(upgrade == BackpackUpgrade.VOID){
-        	this.addSlotToContainer(new Slot(upgradeInventory, upgradeInventory.getSize() + InventoryBackpackUpgrades.SLOT_FILTER_VOID, (8+offsetLeft), offsetTabs+17){
+        	this.addSlotToContainer(new Slot(upgradeInventory, upgradeInventory.getSize() + InventoryBackpackUpgrades.SLOT_FILTER_VOID, (80+offsetLeft), offsetTabs+35){
         		
         		@Override
         		public boolean isItemValid(ItemStack stack){
         			return ItemStackTools.isValid(stack) && stack.getItem() instanceof ItemPipeFilter;
         		}
+        		
+        		@Override
+        		@SideOnly(Side.CLIENT)
+        	    public String getSlotTexture(){
+	        		return "crystalmod:items/pipe/icon_filter";
+	        	}
         		
         	});
         }
         if(upgrade == BackpackUpgrade.HOPPER){
-        	this.addSlotToContainer(new Slot(upgradeInventory, upgradeInventory.getSize() + InventoryBackpackUpgrades.SLOT_FILTER_HOPPER, (8+offsetLeft), offsetTabs+17){
+        	this.addSlotToContainer(new Slot(upgradeInventory, upgradeInventory.getSize() + InventoryBackpackUpgrades.SLOT_FILTER_HOPPER, (80+offsetLeft), offsetTabs+35){
         		
         		@Override
         		public boolean isItemValid(ItemStack stack){
         			return ItemStackTools.isValid(stack) && stack.getItem() instanceof ItemPipeFilter;
         		}
         		
+        		@Override
+        		@SideOnly(Side.CLIENT)
+        	    public String getSlotTexture(){
+	        		return "crystalmod:items/pipe/icon_filter";
+	        	}
         	});
         }
         if(upgrade == BackpackUpgrade.RESTOCKING){
-        	this.addSlotToContainer(new Slot(upgradeInventory, upgradeInventory.getSize() + InventoryBackpackUpgrades.SLOT_FILTER_RESTOCKING, (8+offsetLeft), offsetTabs+17){
+        	this.addSlotToContainer(new Slot(upgradeInventory, upgradeInventory.getSize() + InventoryBackpackUpgrades.SLOT_FILTER_RESTOCKING, (80+offsetLeft), offsetTabs+35){
         		
         		@Override
         		public boolean isItemValid(ItemStack stack){
         			return ItemStackTools.isValid(stack) && stack.getItem() instanceof ItemPipeFilter;
         		}
+        		
+        		@Override
+        		@SideOnly(Side.CLIENT)
+        	    public String getSlotTexture(){
+	        		return "crystalmod:items/pipe/icon_filter";
+	        	}
         		
         	});
         }
@@ -102,6 +123,7 @@ public class ContainerBackpackUpgradeWindow extends Container {
 	        	}
 	        	
 	        	@Override
+	        	@SideOnly(Side.CLIENT)
 	        	public String getSlotTexture(){
 	        		return "crystalmod:items/icon_sword";
 	        	}
@@ -113,6 +135,7 @@ public class ContainerBackpackUpgradeWindow extends Container {
 	        	}
 	        	
 	        	@Override
+	        	@SideOnly(Side.CLIENT)
 	        	public String getSlotTexture(){
 	        		return "crystalmod:items/icon_pickaxe";
 	        	}
@@ -190,9 +213,12 @@ public class ContainerBackpackUpgradeWindow extends Container {
 	@Nullable
     public ItemStack transferStackInSlot(EntityPlayer playerIn, int index)
     {
-    	if(upgrade != BackpackUpgrade.ENDER)return null;
     	boolean hasPockets = upgradeInventory.hasUpgrade(BackpackUpgrade.POCKETS);
-    	int inventoryStart = 27 + (hasPockets ? 2 : 0);
+    	int startSlot = 1;
+    	if(upgrade == BackpackUpgrade.ENDER){
+    		startSlot = 27;
+    	}
+    	int inventoryStart = startSlot + (hasPockets ? 2 : 0);
         int inventoryEnd = inventoryStart+26;
         int hotbarStart = inventoryEnd+1;
         int hotbarEnd = hotbarStart+8;

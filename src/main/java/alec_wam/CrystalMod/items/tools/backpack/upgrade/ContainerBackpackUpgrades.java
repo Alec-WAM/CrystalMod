@@ -2,12 +2,15 @@ package alec_wam.CrystalMod.items.tools.backpack.upgrade;
 
 import javax.annotation.Nullable;
 
+import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.handler.GuiHandler;
 import alec_wam.CrystalMod.items.tools.backpack.BackpackUtil;
 import alec_wam.CrystalMod.items.tools.backpack.IBackpack;
 import alec_wam.CrystalMod.items.tools.backpack.IBackpackInventory;
 import alec_wam.CrystalMod.items.tools.backpack.types.InventoryBackpack;
 import alec_wam.CrystalMod.items.tools.backpack.types.NormalInventoryBackpack;
 import alec_wam.CrystalMod.items.tools.backpack.upgrade.ItemBackpackUpgrade.BackpackUpgrade;
+import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -127,5 +130,6 @@ public class ContainerBackpackUpgrades extends Container
     {
         super.onContainerClosed(playerIn);
         upgradeInventory.guiSaveSafe(playerIn);
+        BlockUtil.openWorksiteGui(CrystalMod.proxy.getClientPlayer(), GuiHandler.GUI_ID_BACKPACK, 0, 0, 0);
     }
 }

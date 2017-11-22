@@ -6,6 +6,7 @@ import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.handler.GuiHandler;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.items.tools.backpack.gui.OpenType;
+import alec_wam.CrystalMod.items.tools.backpack.upgrade.ContainerBackpackUpgradeWindow.UpgradeWindowType;
 import alec_wam.CrystalMod.items.tools.backpack.upgrade.ItemBackpackUpgrade.BackpackUpgrade;
 import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.ItemStackTools;
@@ -24,7 +25,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class GuiBackpackUpgradeWindow extends GuiContainer {
 
     private static final ResourceLocation RES_LOC = new ResourceLocation("crystalmod:textures/gui/backpack/normal.png");
-    
+    private static final ResourceLocation RES_LOC_SINGLESLOT = new ResourceLocation("crystalmod:textures/gui/backpack/tab_upgrade_singleslot.png");
+
     private ItemStack backpack;
     private InventoryBackpackUpgrades upgrades;
     private BackpackUpgrade upgrade;
@@ -39,9 +41,7 @@ public class GuiBackpackUpgradeWindow extends GuiContainer {
         
         this.xSize = 176+34+34+(hasPockets ? 34*2 : 0);
         
-        boolean isEnder = upgrades.hasUpgrade(BackpackUpgrade.ENDER);
-        
-        int topSpace = 16+32+(isEnder ? 3*18 : 0);
+        int topSpace = 48+(18*3);
         int bottomSize = 101;
         this.ySize = topSpace+bottomSize;
     }
@@ -80,7 +80,8 @@ public class GuiBackpackUpgradeWindow extends GuiContainer {
     public void drawGuiContainerBackgroundLayer(float f, int x, int y){
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 
-        this.mc.getTextureManager().bindTexture(RES_LOC);
+        boolean singleSlot = upgrade.windowType == UpgradeWindowType.SINGLESLOT;
+        this.mc.getTextureManager().bindTexture(singleSlot ? RES_LOC_SINGLESLOT : RES_LOC);
         
         int tabOffset = 32;
         int topSpace = 16;
@@ -100,9 +101,15 @@ public class GuiBackpackUpgradeWindow extends GuiContainer {
         //this.drawTexturedModalRect(this.guiLeft+34, this.guiTop, 0, 0, xSize, ySize);
         //this.drawTexturedModalRect(this.guiLeft+offsetLeft, this.guiTop+tabOffset, 0, 0, 176, topSpace);
         
-        for(int i = 0; i < 3; i++){
-        	int slotY = topSpace+(18*i);
-        	this.drawTexturedModalRect(this.guiLeft+offsetLeft, guiTop+slotY+tabOffset, 0, topSpace, 176, 18);
+        if(singleSlot){
+        	int slotY = topSpace;
+        	this.drawTexturedModalRect(this.guiLeft+offsetLeft, guiTop+slotY+tabOffset, 0, topSpace, 176, 18*3);
+        }
+        else {
+	        for(int i = 0; i < 3; i++){
+	        	int slotY = topSpace+(18*i);
+	        	this.drawTexturedModalRect(this.guiLeft+offsetLeft, guiTop+slotY+tabOffset, 0, topSpace, 176, 18);
+	        }
         }
         this.drawTexturedModalRect(this.guiLeft+offsetLeft, guiTop+topSpace+slotBlock+tabOffset, 0, topSpace+gap, 176, bottomSize);
         
@@ -272,5 +279,10 @@ public class GuiBackpackUpgradeWindow extends GuiContainer {
         }
 
         super.mouseReleased(mouseX, mouseY, state);
+    }
+    
+    @Override
+    public void onGuiClosed(){
+    	super.onGuiClosed();
     }
 }

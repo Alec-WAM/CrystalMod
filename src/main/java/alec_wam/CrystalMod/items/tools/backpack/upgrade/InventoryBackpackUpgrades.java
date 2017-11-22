@@ -6,6 +6,7 @@ import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 
 import alec_wam.CrystalMod.items.tools.backpack.types.InventoryBackpack;
+import alec_wam.CrystalMod.items.tools.backpack.upgrade.ContainerBackpackUpgradeWindow.UpgradeWindowType;
 import alec_wam.CrystalMod.items.tools.backpack.upgrade.ItemBackpackUpgrade.BackpackUpgrade;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemStackTools;
@@ -118,8 +119,9 @@ public class InventoryBackpackUpgrades extends InventoryBackpack{
 			if(ItemStackTools.isValid(stack)){
 				if(stack.getItem() instanceof ItemBackpackUpgrade){
 					BackpackUpgrade upgrade = BackpackUpgrade.byMetadata(stack.getMetadata());
-					if(upgrade == BackpackUpgrade.POCKETS)continue;
-					tabs.add(upgrade);
+					if(upgrade.windowType !=UpgradeWindowType.NONE){
+						tabs.add(upgrade);
+					}
 				}
 			}
 		}

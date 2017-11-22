@@ -61,7 +61,6 @@ public class ContainerBackpackNormal extends Container {
         int offsetArmor = 34;
         int offsetLeft = offsetArmor + gapLeft;
         int offsetTabs = hasTabs ? 32 : 0;
-        CrystalBackpackType.byMetadata(backpackInventory.getBackpack().getMetadata());
         int rows = backpackInventory.getSize()/9;
         int offsetY = 18*(rows-3);
         for(int i = 0; i < rows; i++){
