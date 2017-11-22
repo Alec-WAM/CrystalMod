@@ -115,6 +115,9 @@ public class CrystalInfusionManager {
 		//Molten Block
 		recipes.add(new InfusionMachineRecipe(new ItemStack(Blocks.NETHERRACK), new FluidStack(FluidRegistry.LAVA, 125), new ItemStack(Blocks.MAGMA), 1600));
 		recipes.add(new InfusionMachineRecipe(new ItemStack(Blocks.NETHERRACK), new FluidStack(ModFluids.fluidEnder, 125), new ItemStack(Blocks.END_STONE), 1600));
+		
+
+		recipes.add(new InfusionMachineRecipe(new ItemStack(Items.GLASS_BOTTLE), new FluidStack(ModFluids.fluidEnder, 250), new ItemStack(ModItems.enderbottle), 1600));
 	}
 	
 	public static void addRecipe(ItemStack stack, FluidStack fluidStack, ItemStack output, int power){

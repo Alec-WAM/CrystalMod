@@ -19,7 +19,7 @@ public class BlockFluidEnder extends BlockCrystalFluid {
 	@Override
 	public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entityIn)
     {
-		if(!worldIn.isRemote && FluidUtil.isFluidSource(worldIn, pos, state)){
+		if(!worldIn.isRemote){
 			EntityUtil.randomTeleport(entityIn, 16);
 		}
     }

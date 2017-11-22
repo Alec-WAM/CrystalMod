@@ -172,6 +172,7 @@ public class ModItems {
 	public static ItemLock lock;
 	public static ItemDoor bambooDoor;
 	public static ItemBambooBoat bambooBoat;
+	public static ItemDrinkableEnderFluid enderbottle;
 	
 	public static ItemMiscCard miscCard;
 	public static ItemTeloportTool telePearl;
@@ -299,6 +300,7 @@ public class ModItems {
 		dagger = new ItemDagger();
 		bambooDoor = ModItems.registerItem(new ItemDoor(ModBlocks.bambooDoor), "bamboodooritem");
 		bambooBoat = new ItemBambooBoat();
+		enderbottle = new ItemDrinkableEnderFluid();
 		blowGun = new ItemBlowGun();
 		dart = new ItemDart();
 		

@@ -344,6 +344,8 @@ item.crystalmod.dart.green.name=Green Crystal Blow Dart
 item.crystalmod.dart.dark.name=Dark Crystal Blow Dart
 item.crystalmod.dart.pure.name=Blue Crystal Blow Dart
 
+item.crystalmod.enderfluidbottle.name=Bottle of Ender Fluid
+
 item.crystalmod.mobessence.name=Mob Essence
 crystalmod.info.mobessence1.txt=Can be used on an Advanced Mob Spawner to set the entity
 crystalmod.info.mobessence2.txt=Or used anywhere when sneaking to spawn the entity in the world
