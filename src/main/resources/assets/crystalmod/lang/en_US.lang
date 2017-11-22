@@ -419,6 +419,23 @@ tile.crystalmod.fancyobsidian.sporadic.name=Sporadic Obsidian
 tile.crystalmod.fancyobsidian.sporadic_gridded.name=Gridded Sporadic Obsidian
 tile.crystalmod.fancyobsidian.sporadic_gridded_smooth.name=Polished Gridded Sporadic Obsidian
 
+tile.crystalmod.fancysealantern.borderless.name=Borderless Sea Lantern
+tile.crystalmod.fancysealantern.borderless_x.name=Borderless X-Crossed Sea Lantern
+tile.crystalmod.fancysealantern.crossed.name=Crossed Sea Lantern
+tile.crystalmod.fancysealantern.crossed_x.name=X-Crossed Sea Lantern
+tile.crystalmod.fancysealantern.grated.name=Grated Sea Lantern
+tile.crystalmod.fancysealantern.grated_bar.name=Bar-Grated Sea Lantern
+tile.crystalmod.fancysealantern.gridded.name=Gridded Sea Lantern
+tile.crystalmod.fancysealantern.gridded_lite.name=Lite Gridded Sea Lantern
+tile.crystalmod.fancysealantern.latticed.name=Latticed Sea Lantern
+tile.crystalmod.fancysealantern.latticed_diagonal.name=Diagonal Latticed Sea Lantern
+tile.crystalmod.fancysealantern.latticed_x.name=X-Latticed Sea Lantern
+tile.crystalmod.fancysealantern.sharpened.name=Sharpened Border Sea Lantern
+tile.crystalmod.fancysealantern.seperated_horizontal.name=Horizontally Seperated Sea Lantern
+tile.crystalmod.fancysealantern.seperated_vertical.name=Vertically Seperated Sea Lantern
+tile.crystalmod.fancysealantern.vine.name=Vine-Like Sea Lantern
+tile.crystalmod.fancysealantern.web.name=Web-Like Sea Lantern
+
 
 tile.crystalmod.tiles_basic.stone_stone.name=Stone Slab Tiles
 tile.crystalmod.tiles_basic.stone_carved.name=Chiseled Stonebrick Tiles

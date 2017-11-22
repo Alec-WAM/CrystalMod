@@ -1,0 +1,25 @@
+{
+  "forge_marker": 1,
+  "variants": {
+    "normal": [{}],
+    "inventory": [{}],
+    "type": {
+      "borderless": {"model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/decorative/sealantern/borderless"}},
+	  "borderless_x": {"model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/decorative/sealantern/borderless_x"}},
+	  "crossed": {"model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/decorative/sealantern/crossed"}},
+	  "crossed_x": {"model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/decorative/sealantern/crossed_x"}},
+	  "grated": {"model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/decorative/sealantern/grated"}},
+	  "grated_bar": {"model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/decorative/sealantern/grated_bar"}},
+	  "gridded": {"model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/decorative/sealantern/gridded"}},
+	  "gridded_lite": {"model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/decorative/sealantern/gridded_lite"}},
+	  "latticed": {"model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/decorative/sealantern/latticed"}},
+	  "latticed_diagonal": {"model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/decorative/sealantern/latticed_diagonal"}},
+	  "latticed_x": {"model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/decorative/sealantern/latticed_x"}},
+	  "sharpened": {"model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/decorative/sealantern/sharpened"}},
+	  "seperated_horizontal": {"model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/decorative/sealantern/seperated_horizontal"}},
+	  "seperated_vertical": {"model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/decorative/sealantern/seperated_vertical"}},
+	  "vine": {"model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/decorative/sealantern/vine"}},
+	  "web": {"model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/decorative/sealantern/web"}}
+    }
+  }
+}

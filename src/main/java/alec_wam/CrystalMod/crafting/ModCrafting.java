@@ -28,6 +28,7 @@ import alec_wam.CrystalMod.blocks.decorative.BlockFancyGlowstone.GlowstoneType;
 import alec_wam.CrystalMod.blocks.decorative.BlockFancyLadder.FancyLadderType;
 import alec_wam.CrystalMod.blocks.decorative.BlockFancyLadder2.FancyLadderType2;
 import alec_wam.CrystalMod.blocks.decorative.BlockFancyObsidian.ObsidianType;
+import alec_wam.CrystalMod.blocks.decorative.BlockFancySeaLantern.SeaLanternType;
 import alec_wam.CrystalMod.blocks.decorative.tiles.BlockBasicTiles.BasicTileType;
 import alec_wam.CrystalMod.blocks.decorative.tiles.BlockBasicTiles2.BasicTileType2;
 import alec_wam.CrystalMod.blocks.decorative.tiles.BlockCrystalTiles.CrystalTileType;
@@ -369,6 +370,25 @@ public class ModCrafting {
 		addShapedRecipe(new ItemStack(ModBlocks.fancyObsidian, 9, ObsidianType.SPORADIC_GRIDDED.getMeta()), new Object[]{"XXX", "XXX", "XXX", 'X', new ItemStack(ModBlocks.fancyObsidian, 1, ObsidianType.SPORADIC.getMeta())});
 		addShapedRecipe(new ItemStack(ModBlocks.fancyObsidian, 9, ObsidianType.SPORADIC_GRIDDED_SMOOTH.getMeta()), new Object[]{"XXX", "XXX", "XXX", 'X', new ItemStack(ModBlocks.fancyObsidian, 1, ObsidianType.SMOOTH_SPORADIC.getMeta())});
 
+		//Sea Lanterns
+		addShapedRecipe(new ItemStack(ModBlocks.fancySeaLantern, 1, SeaLanternType.BORDERLESS.getMeta()), new Object[]{" X ", "X#X", " X ", '#', Blocks.SEA_LANTERN, 'X', Items.PRISMARINE_CRYSTALS});
+		addShapedRecipe(new ItemStack(ModBlocks.fancySeaLantern, 2, SeaLanternType.BORDERLESS_X.getMeta()), new Object[]{"X X", " X ", "X#X", '#', new ItemStack(ModBlocks.fancySeaLantern, 1, SeaLanternType.BORDERLESS.getMeta()), 'X', Items.PRISMARINE_SHARD});
+		addShapedRecipe(new ItemStack(ModBlocks.fancySeaLantern, 2, SeaLanternType.CROSSED.getMeta()), new Object[]{"#X", "XXX", " X ", '#', new ItemStack(ModBlocks.fancySeaLantern, 1, SeaLanternType.BORDERLESS.getMeta()), 'X', Items.PRISMARINE_SHARD});
+		addShapedRecipe(new ItemStack(ModBlocks.fancySeaLantern, 2, SeaLanternType.CROSSED_X.getMeta()), new Object[]{"X X", " X ", "X#X", '#', Items.PRISMARINE_SHARD, 'X', Items.PRISMARINE_CRYSTALS});
+		addShapedRecipe(new ItemStack(ModBlocks.fancySeaLantern, 3, SeaLanternType.GRATED.getMeta()), new Object[]{"XLX", "X#X", "XLX", '#', Items.PRISMARINE_SHARD, 'X', Items.PRISMARINE_CRYSTALS, 'L', Blocks.LADDER});
+		addShapedRecipe(new ItemStack(ModBlocks.fancySeaLantern, 3, SeaLanternType.GRATED_BAR.getMeta()), new Object[]{"XBX", "X#X", "XBX", '#', Items.PRISMARINE_SHARD, 'X', Items.PRISMARINE_CRYSTALS, 'B', Blocks.IRON_BARS});
+		addShapedRecipe(new ItemStack(ModBlocks.fancySeaLantern, 9, SeaLanternType.GRIDDED.getMeta()), new Object[]{"XXX", "XXX", "XXX", 'X', Items.PRISMARINE_SHARD});
+		addShapedRecipe(new ItemStack(ModBlocks.fancySeaLantern, 2, SeaLanternType.GRIDDED_LITE.getMeta()), new Object[]{"XXX", "X#X", "XXX", 'X', Items.PRISMARINE_CRYSTALS, '#', new ItemStack(ModBlocks.fancySeaLantern, 1, SeaLanternType.GRIDDED.getMeta())});
+		addShapedRecipe(new ItemStack(ModBlocks.fancySeaLantern, 1, SeaLanternType.LATTICED.getMeta()), new Object[]{"X X", " # ", "X X", 'X', Items.PRISMARINE_SHARD, '#', Items.PRISMARINE_CRYSTALS});
+		addShapedRecipe(new ItemStack(ModBlocks.fancySeaLantern, 1, SeaLanternType.LATTICED_DIAGONAL.getMeta()), new Object[]{"  #", " # ", "#X ", 'X', Items.PRISMARINE_SHARD, '#', Items.PRISMARINE_CRYSTALS});
+		addShapelessRecipe(new ItemStack(ModBlocks.fancySeaLantern, 2, SeaLanternType.LATTICED_X.getMeta()), new Object[]{new ItemStack(ModBlocks.fancySeaLantern, 1, SeaLanternType.LATTICED_DIAGONAL.getMeta()), new ItemStack(ModBlocks.fancySeaLantern, 1, SeaLanternType.LATTICED_DIAGONAL.getMeta())});
+		addShapedRecipe(new ItemStack(ModBlocks.fancySeaLantern, 1, SeaLanternType.SHARPENED.getMeta()), new Object[]{" X", "X#X", " X ", '#', new ItemStack(ModBlocks.fancySeaLantern, 1, SeaLanternType.BORDERLESS.getMeta()), 'X', Items.PRISMARINE_SHARD});
+		addShapedRecipe(new ItemStack(ModBlocks.fancySeaLantern, 1, SeaLanternType.SEPERATED_HORIZONTAL.getMeta()), new Object[]{"X#X", '#', new ItemStack(ModBlocks.fancySeaLantern, 1, SeaLanternType.BORDERLESS.getMeta()), 'X', Items.PRISMARINE_SHARD});
+		addShapedRecipe(new ItemStack(ModBlocks.fancySeaLantern, 1, SeaLanternType.SEPERATED_VERTICAL.getMeta()), new Object[]{"X", "#", "X", '#', new ItemStack(ModBlocks.fancySeaLantern, 1, SeaLanternType.BORDERLESS.getMeta()), 'X', Items.PRISMARINE_SHARD});
+		addShapedRecipe(new ItemStack(ModBlocks.fancySeaLantern, 3, SeaLanternType.VINE.getMeta()), new Object[]{"XBX", "X#X", "XBX", '#', Items.PRISMARINE_SHARD, 'X', Items.PRISMARINE_CRYSTALS, 'B', Blocks.VINE});
+		addShapedRecipe(new ItemStack(ModBlocks.fancySeaLantern, 3, SeaLanternType.WEB.getMeta()), new Object[]{"XBX", "X#X", "XBX", '#', Items.PRISMARINE_SHARD, 'X', Items.PRISMARINE_CRYSTALS, 'B', Blocks.WEB});
+
+		
 		addShapelessRecipe(new ItemStack(ModBlocks.bambooPlanks, 2, 0), new Object[]{new ItemStack(ModBlocks.bamboo)});
 		addShapedRecipe(ModItems.bambooBoat, new Object[]{"X X", "XXX", 'X', ModBlocks.bambooPlanks});
 		addShapedRecipe(new ItemStack(ModItems.bambooDoor, 3), new Object[]{"XX", "XX", "XX", 'X', ModBlocks.bambooPlanks});
