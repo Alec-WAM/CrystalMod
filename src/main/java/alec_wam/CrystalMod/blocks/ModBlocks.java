@@ -33,6 +33,8 @@ import alec_wam.CrystalMod.blocks.decorative.BlockFailure;
 import alec_wam.CrystalMod.blocks.decorative.BlockFancyGlowstone;
 import alec_wam.CrystalMod.blocks.decorative.BlockFancyLadder;
 import alec_wam.CrystalMod.blocks.decorative.BlockFancyLadder2;
+import alec_wam.CrystalMod.blocks.decorative.BlockFancyObsidian;
+import alec_wam.CrystalMod.blocks.decorative.BlockFancySeaLantern;
 import alec_wam.CrystalMod.blocks.decorative.ItemBlockBetterRose;
 import alec_wam.CrystalMod.blocks.decorative.ItemBlockFancyLadders;
 import alec_wam.CrystalMod.blocks.decorative.ItemBlockFancyLadders2;
@@ -245,6 +247,8 @@ public class ModBlocks {
 	public static BlockCrystalGlassPane crystalGlassPane;
 	public static BlockMetalBars metalBars;
 	public static BlockFancyGlowstone fancyGlowstone;
+	public static BlockFancyObsidian fancyObsidian;
+	public static BlockFancySeaLantern fancySeaLantern;
 	public static BlockCrystalReed crystalReedsBlue, crystalReedsRed, crystalReedsGreen, crystalReedsDark;
 	public static BlockFlowerLilyPad flowerLilypad;
 	public static BlockCrystalWorkbench crystalWorkbench;
@@ -396,6 +400,8 @@ public class ModBlocks {
 		ItemBlockMeta.setMappingProperty(crystalGlassPane, BlockCrystalGlass.TYPE);
 
 		fancyGlowstone = registerEnumBlock(new BlockFancyGlowstone(), "fancyglowstone");
+		fancyObsidian = registerEnumBlock(new BlockFancyObsidian(), "fancyobsidian");
+		fancySeaLantern = registerEnumBlock(new BlockFancySeaLantern(), "fancysealantern");
 		
 		metalBars = new BlockMetalBars();
 		registerBlock(metalBars, new ItemBlockMeta(metalBars), "metalbars");

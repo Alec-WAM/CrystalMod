@@ -1,0 +1,25 @@
+{
+  "forge_marker": 1,
+  "variants": {
+    "normal": [{}],
+    "inventory": [{}],
+    "type": {
+      "fan": {"model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/decorative/obsidian/fan"}},
+	  "flat": {"model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/decorative/obsidian/flat"}},
+	  "flat_cornered": {"model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/decorative/obsidian/flat_cornered"}},
+	  "gridded": {"model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/decorative/obsidian/gridded"}},
+	  "gridded_lite": {"model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/decorative/obsidian/gridded_lite"}},
+	  "insignia": {"model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/decorative/obsidian/insignia"}},
+	  "insignia_cornered": {"model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/decorative/obsidian/insignia_cornered"}},
+	  "patterned": {"model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/decorative/obsidian/patterned"}},
+	  "separated": {"model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/decorative/obsidian/separated"}},
+	  "separated_sharply": {"model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/decorative/obsidian/separated_sharply"}},
+	  "smooth": {"model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/decorative/obsidian/smooth"}},
+	  "smooth_gridded": {"model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/decorative/obsidian/smooth_gridded"}},
+	  "smooth_sporadic": {"model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/decorative/obsidian/smooth_sporadic"}},
+	  "sporadic": {"model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/decorative/obsidian/sporadic"}},
+	  "sporadic_gridded": {"model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/decorative/obsidian/sporadic_gridded"}},
+	  "sporadic_gridded_smooth": {"model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/decorative/obsidian/sporadic_gridded_smooth"}}
+    }
+  }
+}

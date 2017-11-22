@@ -27,6 +27,7 @@ import alec_wam.CrystalMod.blocks.decorative.BlockBetterRoses.RoseType;
 import alec_wam.CrystalMod.blocks.decorative.BlockFancyGlowstone.GlowstoneType;
 import alec_wam.CrystalMod.blocks.decorative.BlockFancyLadder.FancyLadderType;
 import alec_wam.CrystalMod.blocks.decorative.BlockFancyLadder2.FancyLadderType2;
+import alec_wam.CrystalMod.blocks.decorative.BlockFancyObsidian.ObsidianType;
 import alec_wam.CrystalMod.blocks.decorative.tiles.BlockBasicTiles.BasicTileType;
 import alec_wam.CrystalMod.blocks.decorative.tiles.BlockBasicTiles2.BasicTileType2;
 import alec_wam.CrystalMod.blocks.decorative.tiles.BlockCrystalTiles.CrystalTileType;
@@ -350,7 +351,24 @@ public class ModCrafting {
 		addShapedOreRecipe(new ItemStack(ModBlocks.fancyGlowstone, 5, GlowstoneType.ROCKY.getMeta()), new Object[]{"X X", " XX", "X  ", 'X', "glowstone", 'D', "dustGlowstone"});
 		addShapedOreRecipe(new ItemStack(ModBlocks.fancyGlowstone, 2, GlowstoneType.SPARKLING.getMeta()), new Object[]{" D ", "DXD", " D ", 'X', "glowstone", 'D', "dustGlowstone"});
 		
-		
+		//Obsidian
+		addShapedRecipe(new ItemStack(ModBlocks.fancyObsidian, 5, ObsidianType.FAN.getMeta()), new Object[]{" X ", "X#X", " X ", 'X', new ItemStack(ModBlocks.fancyObsidian, 1, ObsidianType.SEPARATED_SHARPLY.getMeta()), '#', new ItemStack(ModBlocks.fancyObsidian, 1, ObsidianType.FLAT.getMeta())});
+		addShapedOreRecipe(new ItemStack(ModBlocks.fancyObsidian, 4, ObsidianType.FLAT.getMeta()), new Object[]{"XX", "XX", 'X', "obsidian"});
+		addShapedOreRecipe(new ItemStack(ModBlocks.fancyObsidian, 5, ObsidianType.FLAT_CORNERED.getMeta()), new Object[]{"X X", " # ", "X X", 'X', "obsidian", '#', new ItemStack(ModBlocks.fancyObsidian, 1, ObsidianType.FLAT.getMeta())});
+		addShapedOreRecipe(new ItemStack(ModBlocks.fancyObsidian, 9, ObsidianType.GRIDDED.getMeta()), new Object[]{"XXX", "XXX", "XXX", 'X', "obsidian"});
+		addShapedOreRecipe(new ItemStack(ModBlocks.fancyObsidian, 9, ObsidianType.GRIDDED_LITE.getMeta()), new Object[]{"XXX", "X#X", "XXX", 'X', "obsidian", '#', new ItemStack(ModBlocks.fancyObsidian, 1, ObsidianType.GRIDDED.getMeta())});
+		addShapedRecipe(new ItemStack(ModBlocks.fancyObsidian, 3, ObsidianType.INSIGNIA.getMeta()), new Object[]{"X", "#", "X", 'X', new ItemStack(ModBlocks.fancyObsidian, 1, ObsidianType.SEPARATED_SHARPLY.getMeta()), '#', new ItemStack(ModBlocks.fancyObsidian, 1, ObsidianType.FLAT.getMeta())});
+		addShapedRecipe(new ItemStack(ModBlocks.fancyObsidian, 5, ObsidianType.INSIGNIA_CORNERED.getMeta()), new Object[]{"X  X", " # ", "X X", 'X', new ItemStack(ModBlocks.fancyObsidian, 1, ObsidianType.SEPARATED_SHARPLY.getMeta()), '#', new ItemStack(ModBlocks.fancyObsidian, 1, ObsidianType.INSIGNIA.getMeta())});
+		addShapedRecipe(new ItemStack(ModBlocks.fancyObsidian, 9, ObsidianType.PATTERNED.getMeta()), new Object[]{"XXX", "X#X", "XXX", 'X', new ItemStack(ModBlocks.fancyObsidian, 1, ObsidianType.FLAT_CORNERED.getMeta()), '#', new ItemStack(ModBlocks.fancyObsidian, 1, ObsidianType.FLAT.getMeta())});
+		addShapedRecipe(new ItemStack(ModBlocks.fancyObsidian, 4, ObsidianType.SEPARATED.getMeta()), new Object[]{"XX", "XX", 'X', new ItemStack(ModBlocks.fancyObsidian, 1, ObsidianType.PATTERNED.getMeta())});
+		addShapelessRecipe(new ItemStack(ModBlocks.fancyObsidian, 1, ObsidianType.SEPARATED_SHARPLY.getMeta()), new Object[]{new ItemStack(ModBlocks.fancyObsidian, 1, ObsidianType.SEPARATED.getMeta())});
+		addShapedRecipe(new ItemStack(ModBlocks.fancyObsidian, 4, ObsidianType.SMOOTH.getMeta()), new Object[]{"XX", "XX", 'X', new ItemStack(ModBlocks.fancyObsidian, 1, ObsidianType.FLAT.getMeta())});
+		addShapedRecipe(new ItemStack(ModBlocks.fancyObsidian, 9, ObsidianType.SMOOTH_GRIDDED.getMeta()), new Object[]{"XXX", "XXX", "XXX", 'X', new ItemStack(ModBlocks.fancyObsidian, 1, ObsidianType.SMOOTH.getMeta())});
+		addShapedRecipe(new ItemStack(ModBlocks.fancyObsidian, 4, ObsidianType.SMOOTH_SPORADIC.getMeta()), new Object[]{"XX", "XX", 'X', new ItemStack(ModBlocks.fancyObsidian, 1, ObsidianType.SPORADIC.getMeta())});
+		addShapedRecipe(new ItemStack(ModBlocks.fancyObsidian, 9, ObsidianType.SPORADIC.getMeta()), new Object[]{"XXX", "XXX", "XXX", 'X', new ItemStack(ModBlocks.fancyObsidian, 1, ObsidianType.SEPARATED.getMeta())});
+		addShapedRecipe(new ItemStack(ModBlocks.fancyObsidian, 9, ObsidianType.SPORADIC_GRIDDED.getMeta()), new Object[]{"XXX", "XXX", "XXX", 'X', new ItemStack(ModBlocks.fancyObsidian, 1, ObsidianType.SPORADIC.getMeta())});
+		addShapedRecipe(new ItemStack(ModBlocks.fancyObsidian, 9, ObsidianType.SPORADIC_GRIDDED_SMOOTH.getMeta()), new Object[]{"XXX", "XXX", "XXX", 'X', new ItemStack(ModBlocks.fancyObsidian, 1, ObsidianType.SMOOTH_SPORADIC.getMeta())});
+
 		addShapelessRecipe(new ItemStack(ModBlocks.bambooPlanks, 2, 0), new Object[]{new ItemStack(ModBlocks.bamboo)});
 		addShapedRecipe(ModItems.bambooBoat, new Object[]{"X X", "XXX", 'X', ModBlocks.bambooPlanks});
 		addShapedRecipe(new ItemStack(ModItems.bambooDoor, 3), new Object[]{"XX", "XX", "XX", 'X', ModBlocks.bambooPlanks});

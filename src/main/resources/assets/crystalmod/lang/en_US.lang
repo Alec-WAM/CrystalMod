@@ -402,6 +402,24 @@ tile.crystalmod.fancyglowstone.popped_organized.name=Popped Organized Glowstone
 tile.crystalmod.fancyglowstone.rocky.name=Rocky Glowstone
 tile.crystalmod.fancyglowstone.sparkling.name=Sparkling Glowstone
 
+tile.crystalmod.fancyobsidian.fan.name=Fan Obsidian
+tile.crystalmod.fancyobsidian.flat.name=Flat Obsidian
+tile.crystalmod.fancyobsidian.flat_cornered.name=Cornered Flat Obsidian
+tile.crystalmod.fancyobsidian.gridded.name=Gridded Obsidian
+tile.crystalmod.fancyobsidian.gridded_lite.name=Lite Gridded Obsidian
+tile.crystalmod.fancyobsidian.insignia.name=Insignia Obsidian
+tile.crystalmod.fancyobsidian.insignia_cornered.name=Cornered Insignia Obsidian
+tile.crystalmod.fancyobsidian.patterned.name=Patterned Obsidian
+tile.crystalmod.fancyobsidian.seperated.name=Seperated Obsidian
+tile.crystalmod.fancyobsidian.seperated_sharply.name=Sharply Seperated Obsidian
+tile.crystalmod.fancyobsidian.smooth.name=Polished Obsidian
+tile.crystalmod.fancyobsidian.smooth_gridded.name=Gridded Polished Obsidian
+tile.crystalmod.fancyobsidian.smooth_sporadic.name=Sporadic Polished Obsidian
+tile.crystalmod.fancyobsidian.sporadic.name=Sporadic Obsidian
+tile.crystalmod.fancyobsidian.sporadic_gridded.name=Gridded Sporadic Obsidian
+tile.crystalmod.fancyobsidian.sporadic_gridded_smooth.name=Polished Gridded Sporadic Obsidian
+
+
 tile.crystalmod.tiles_basic.stone_stone.name=Stone Slab Tiles
 tile.crystalmod.tiles_basic.stone_carved.name=Chiseled Stonebrick Tiles
 tile.crystalmod.tiles_basic.stone_granite.name=Polished Granite Tiles
