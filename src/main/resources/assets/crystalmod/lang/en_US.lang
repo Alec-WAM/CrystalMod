@@ -617,6 +617,7 @@ tile.crystalmod.crate.dark.name=Dark Crystal Crate
 
 tile.crystalmod.wirelesschest.name=Super Chest
 tile.crystalmod.advdispenser.name=Advanced Dispenser
+tile.crystalmod.obsidiandispenser.name=Obsidian Dispenser
 
 tile.crystalmod.storagecase.note.name=Noteblock Storage Case
 tile.crystalmod.storagecase.piston.name=Piston Storage Case

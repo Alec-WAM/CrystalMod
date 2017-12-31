@@ -81,6 +81,8 @@ import alec_wam.CrystalMod.tiles.machine.worksite.imp.GuiWorksiteTreeFarm;
 import alec_wam.CrystalMod.tiles.machine.worksite.imp.WorksiteAnimalFarm;
 import alec_wam.CrystalMod.tiles.machine.worksite.imp.WorksiteCropFarm;
 import alec_wam.CrystalMod.tiles.machine.worksite.imp.WorksiteTreeFarm;
+import alec_wam.CrystalMod.tiles.obsidiandispenser.GuiObsidianDispener;
+import alec_wam.CrystalMod.tiles.obsidiandispenser.TileObsidianDispenser;
 import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetwork;
 import alec_wam.CrystalMod.tiles.pipes.estorage.GuiEStoragePipe;
 import alec_wam.CrystalMod.tiles.pipes.estorage.TileEntityPipeEStorage;
@@ -148,6 +150,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.AbstractHorse;
 import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.ContainerDispenser;
 import net.minecraft.inventory.ContainerHorseChest;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -227,7 +230,7 @@ public class GuiHandler implements IGuiHandler {
     				ExtendedPlayerProvider.getExtendedPlayer(player).setOpenBackpack(backpack);
     				InventoryBackpackUpgrades upgradeInv = type.getUpgradeInventory(backpack);
     				BackpackUpgrade[] tabs = upgradeInv.getTabs();
-    				if(y > 0){
+    				if(y > 0 && tabs.length > 0){
     					int index = y-1;
     					BackpackUpgrade tab = tabs[index % tabs.length];
     					if(tab !=null){
@@ -338,6 +341,7 @@ public class GuiHandler implements IGuiHandler {
         	if(te instanceof TileEnhancementTable) return new GuiEnhancementTable(player.inventory, (TileEnhancementTable)te);
         	if(te instanceof TileRedstoneReactor) return new GuiRedstoneReactor(player, (TileRedstoneReactor)te);
         	if(te instanceof TileEntityCaseBase) return new GuiCase(player, (TileEntityCaseBase)te);
+        	if(te instanceof TileObsidianDispenser) return new GuiObsidianDispener(player.inventory, (TileObsidianDispenser)te);
         } 
         return null;
     }
@@ -384,7 +388,7 @@ public class GuiHandler implements IGuiHandler {
     				ExtendedPlayerProvider.getExtendedPlayer(player).setOpenBackpack(backpack);
     				InventoryBackpackUpgrades upgradeInv = type.getUpgradeInventory(backpack);
     				BackpackUpgrade[] tabs = upgradeInv.getTabs();
-    				if(y > 0){
+    				if(y > 0 && tabs.length > 0){
     					int index = y-1;
     					BackpackUpgrade tab = tabs[index % tabs.length];
     					if(tab !=null){
@@ -489,6 +493,7 @@ public class GuiHandler implements IGuiHandler {
         	if(te instanceof TileEnhancementTable) return new ContainerEnhancementTable(player.inventory, (TileEnhancementTable)te);
         	if(te instanceof TileRedstoneReactor) return new ContainerRedstoneReactor(player.inventory, (TileRedstoneReactor)te);
         	if(te instanceof TileEntityCaseBase) return new ContainerCase(player.inventory, (TileEntityCaseBase)te);
+        	if(te instanceof TileObsidianDispenser) return new ContainerDispenser(player.inventory, (TileObsidianDispenser)te);
         }
         return null;
     }

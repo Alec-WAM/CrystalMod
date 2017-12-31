@@ -56,19 +56,12 @@ public class FakeChunk implements IBlockAccess {
 	
 	public void clear(){
 		this.onChunkLoad();
-		/*for(int y = 1; y < 15; y ++){
-			for(int x = 1; x < 15; x ++){
-				for(int z = 1; z < 15; z ++){
-					BlockPos fix = getCube().minBlock.add(x, y, z);*/
-					for(BlockPos pos : this.cubeBlocks.keySet()){
-						setBlockState(pos, Blocks.AIR.getDefaultState());
-						removeChunkBlockTileEntity(pos);
-					}
-					cubeBlocks.clear();
-					this.blockCount = 0;
-				/*}
-			}
-		}*/
+		for(BlockPos pos : this.cubeBlocks.keySet()){
+			setBlockState(pos, Blocks.AIR.getDefaultState());
+			removeChunkBlockTileEntity(pos);
+		}
+		cubeBlocks.clear();
+		this.blockCount = 0;
 	}
 	
 	public boolean addBlockWithState(BlockPos pos, IBlockState state) {
@@ -256,17 +249,6 @@ public class FakeChunk implements IBlockAccess {
 	
 	//PORTAL FUNTIONS
 	public void setBlockArray(BlockPos pos, IBlockState state){
-		/*if(getCube() == null)return;
-		int fixX = pos.getX()-getCube().minBlock.getX();
-		int fixZ = pos.getZ()-getCube().minBlock.getZ();
-		if(fixX >= 0 && fixX < 16){
-			if(pos.getY() >= 0 && pos.getY() < 16){
-				if(fixZ >= 0 && fixZ < 16){
-					if(state == null)state = Blocks.air.getDefaultState();
-					cubeBlocks[fixX][pos.getY()][fixZ] = state;
-				}
-			}
-		}*/
 		if(getCube() == null){
 			if(state == null)state = Blocks.AIR.getDefaultState();
 			this.cubeBlocks.put(pos, state);
@@ -284,22 +266,21 @@ public class FakeChunk implements IBlockAccess {
 		}
 	}
 	
-
-
-	public IBlockState getBlockStateFromArray(BlockPos pos) {
-		/*if(getCube() == null)return Blocks.air.getDefaultState();
-		int fixX = pos.getX()-getCube().minBlock.getX();
-		int fixZ = pos.getZ()-getCube().minBlock.getZ();
+	public void setBlockArraySpecial(BlockPos pos, IBlockState state){
+		int fixX = pos.getX();
+		int fixZ = pos.getZ();
 		if(fixX >= 0 && fixX < 16){
 			if(pos.getY() >= 0 && pos.getY() < 16){
 				if(fixZ >= 0 && fixZ < 16){
-					IBlockState state = cubeBlocks[fixX][pos.getY()][fixZ];
-					if(state == null)return Blocks.air.getDefaultState();
-					return state;
+					if(state == null)state = Blocks.AIR.getDefaultState();
+					this.cubeBlocks.put(pos, state);
 				}
 			}
 		}
-		return Blocks.air.getDefaultState();*/
+	}
+
+
+	public IBlockState getBlockStateFromArray(BlockPos pos) {
 		IBlockState state = cubeBlocks.get(pos);
 		if(state == null)return Blocks.AIR.getDefaultState();
 		return state;

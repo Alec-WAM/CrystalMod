@@ -5,6 +5,7 @@ import java.util.Collection;
 
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.network.packets.PacketTileMessage;
+import alec_wam.CrystalMod.tiles.fishtank.TileEntityFishTank;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -34,6 +35,13 @@ public class ChunkBlockUpdateMessage extends PacketTileMessage {
 			if (tile != null && tile instanceof TileEntityPlayerCubePortal) {
 				try {
 	                ChunkIO.readCompressed(buf, ((TileEntityPlayerCubePortal)tile).mobileChunk);
+	            } catch (IOException e) {
+	                e.printStackTrace();
+	            }
+	        }
+			if (tile != null && tile instanceof TileEntityFishTank) {
+				try {
+	                ChunkIO.readCompressed(buf, ((TileEntityFishTank)tile).mobileChunk);
 	            } catch (IOException e) {
 	                e.printStackTrace();
 	            }

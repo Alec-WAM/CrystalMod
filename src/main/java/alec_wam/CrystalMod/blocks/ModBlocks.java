@@ -148,6 +148,8 @@ import alec_wam.CrystalMod.tiles.machine.worksite.BlockWorksite.WorksiteType;
 import alec_wam.CrystalMod.tiles.machine.worksite.ItemBlockWorksite;
 import alec_wam.CrystalMod.tiles.machine.worksite.TileWorksiteBase;
 import alec_wam.CrystalMod.tiles.machine.worksite.TileWorksiteRenderer;
+import alec_wam.CrystalMod.tiles.obsidiandispenser.BlockObsidianDispenser;
+import alec_wam.CrystalMod.tiles.obsidiandispenser.TileObsidianDispenser;
 import alec_wam.CrystalMod.tiles.pipes.BlockPipe;
 import alec_wam.CrystalMod.tiles.pipes.BlockPipe.PipeType;
 import alec_wam.CrystalMod.tiles.pipes.ItemBlockPipe;
@@ -338,6 +340,7 @@ public class ModBlocks {
 
 	public static BlockPowerConverter converter;
 	public static BlockAdvDispenser advDispenser;
+	public static BlockObsidianDispenser obsidianDispenser;
 
 	public static BlockReinforcedRail darkIronRail;
 	public static BlockBridge bridge;
@@ -721,6 +724,10 @@ public class ModBlocks {
 		advDispenser = new BlockAdvDispenser();
 		registerBlock(advDispenser, "advdispenser");
 		registerTileEntity(TileAdvDispenser.class);
+		
+		obsidianDispenser = new BlockObsidianDispenser();
+		registerBlock(obsidianDispenser, "obsidiandispenser");
+		registerTileEntity(TileObsidianDispenser.class);
 
 		customSpawner = new BlockCustomSpawner();
 		registerBlock(customSpawner, "customspawner");

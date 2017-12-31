@@ -652,6 +652,7 @@ public class ModCrafting {
 		
 		addShapedOreRecipe(new ItemStack(ModBlocks.advDispenser), new Object[]{"PPP", "PMP", "PDP", 'P', dIronPlate, 'M', "skull", 'D', Blocks.DISPENSER});
 		addShapedOreRecipe(new ItemStack(ModBlocks.muffler), new Object[]{"WWW", "NMN", "WWW", 'W', "wool", 'M', machineFrame, 'N', Blocks.NOTEBLOCK});
+		addShapedOreRecipe(new ItemStack(ModBlocks.obsidianDispenser), new Object[]{"OOO", "ODO", "OGO", 'O', "obsidian", 'D', Blocks.DISPENSER, 'G', "gemDiamond"});
 
 		addShapedOreRecipe(new ItemStack(ModBlocks.remover, 1, RemoverType.REDSTONE.getMeta()), new Object[]{"CRC", "RTR", "CRC", 'R', "dustRedstone", 'T', Blocks.TNT, 'C', redPlate});
 		addShapedOreRecipe(new ItemStack(ModBlocks.remover, 1, RemoverType.WATER.getMeta()), new Object[]{"CWC", " T ", "CWC", 'W', Items.WATER_BUCKET, 'T', Blocks.TNT, 'C', bluePlate});

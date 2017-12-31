@@ -1,0 +1,42 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "crystalmod:machine",
+    "textures": {
+	  "particle":"crystalmod:blocks/machine/obsidiandispenser/bottom",
+	  "up":"crystalmod:blocks/machine/obsidiandispenser/bottom",
+	  "down":"crystalmod:blocks/machine/obsidiandispenser/bottom",
+	  "front":"crystalmod:blocks/machine/obsidiandispenser/front_horizontal",
+	  "side":"crystalmod:blocks/machine/obsidiandispenser/side"
+    },
+    "transform": "forge:default-block"
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{}],
+    "facing": {
+      "north": {},
+      "south": {"y": 180},
+      "west": {"y": 270},
+      "east": {"y": 90},
+      "up": {
+		"x": -90,
+		"textures": {
+			"front":"crystalmod:blocks/machine/obsidiandispenser/front_vertical"
+		}
+	  },
+      "down": {
+		"x": 90,
+		"textures": {
+			"front":"crystalmod:blocks/machine/obsidiandispenser/front_vertical"
+		}
+	  }
+    },
+	"active": {
+		"false": {
+		},
+		"true": {
+		}
+	}
+  }
+}
