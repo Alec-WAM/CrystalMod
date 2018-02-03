@@ -28,6 +28,7 @@ import alec_wam.CrystalMod.blocks.decorative.BlockFancyGlowstone.GlowstoneType;
 import alec_wam.CrystalMod.blocks.decorative.BlockFancyLadder.FancyLadderType;
 import alec_wam.CrystalMod.blocks.decorative.BlockFancyLadder2.FancyLadderType2;
 import alec_wam.CrystalMod.blocks.decorative.BlockFancyObsidian.ObsidianType;
+import alec_wam.CrystalMod.blocks.decorative.BlockFancyPumpkin.PumpkinType;
 import alec_wam.CrystalMod.blocks.decorative.BlockFancySeaLantern.SeaLanternType;
 import alec_wam.CrystalMod.blocks.decorative.tiles.BlockBasicTiles.BasicTileType;
 import alec_wam.CrystalMod.blocks.decorative.tiles.BlockBasicTiles2.BasicTileType2;
@@ -321,6 +322,7 @@ public class ModCrafting {
 		for(GlassType type : GlassType.values()){
 			addShapedRecipe(new ItemStack(ModBlocks.crystalGlassPane, 16, type.getMeta()), new Object[]{"###", "###", '#', new ItemStack(ModBlocks.crystalGlass, 1, type.getMeta())});
 		}
+		
 		for(WoodType type : WoodType.values()){
 			addShapelessRecipe(new ItemStack(ModBlocks.crystalPlanks, 4, type.getMeta()), new Object[]{new ItemStack(ModBlocks.crystalLog, 1, type.getMeta())});
 			addShapedOreRecipe(new ItemStack(ModBlocks.ladder, 4, type.getMeta()), new Object[]{"S S", "S#S", "S S", 'S', "stickWood", '#', new ItemStack(ModBlocks.crystalPlanks, 1, type.getMeta())});
@@ -428,7 +430,9 @@ public class ModCrafting {
 		addShapedRecipe(ModItems.lock, new Object[]{" N ", "NPN", "NNN", 'N', dIronNugget, 'P', dIronPlate});
 
 		addShapedOreRecipe(ModItems.emptyMobEssence, new Object[]{" D ", "DID", " D ", 'D', new ItemStack(ModBlocks.metalBars, 1, EnumMetalBarType.DARK_IRON.getMeta()) , 'I', "ingotIron"});
-	
+		
+		addShapedOreRecipe(new ItemStack(ModItems.pumpkinScoop), new Object[] {" P ", " SP", "S  ", 'P', Blocks.PUMPKIN, 'S', "stickWood"});
+		
 		
 		ItemStack cShears = new ItemStack(ModItems.shears);
 		ItemNBTHelper.setString(cShears, "Color", "darkIron");
@@ -510,6 +514,11 @@ public class ModCrafting {
 			addShapedOreRecipe(new ItemStack(ModBlocks.bridge, 6, woodType.getMetadata()), new Object[]{"S S", "WWW", 'W', slab, 'S', "stickWood"});
 		}		
 
+		for(PumpkinType type : PumpkinType.values()){
+			addShapelessRecipe(new ItemStack(ModBlocks.fancyPumpkinLit, 1, type.getMeta()), new Object[]{Blocks.TORCH, new ItemStack(ModBlocks.fancyPumpkin, 1, type.getMeta())});
+			addShapedRecipe(new ItemStack(Items.PUMPKIN_SEEDS, 4), new Object[]{"P", 'P', new ItemStack(ModBlocks.fancyPumpkin, 1, type.getMeta())});
+		}
+		
 		List<String> copyListBattery = Lists.newArrayList();
 		copyListBattery.add("Energy");
 		copyListBattery.add("BatteryData");

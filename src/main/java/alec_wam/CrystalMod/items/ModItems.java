@@ -43,6 +43,7 @@ import alec_wam.CrystalMod.items.tools.ItemLock;
 import alec_wam.CrystalMod.items.tools.ItemMegaCrystalAxe;
 import alec_wam.CrystalMod.items.tools.ItemMegaCrystalPickaxe;
 import alec_wam.CrystalMod.items.tools.ItemMegaCrystalShovel;
+import alec_wam.CrystalMod.items.tools.ItemPumpkinScoop;
 import alec_wam.CrystalMod.items.tools.ItemSuperTorch;
 import alec_wam.CrystalMod.items.tools.ItemToolParts;
 import alec_wam.CrystalMod.items.tools.backpack.ItemBackpackBase;
@@ -125,6 +126,7 @@ public class ModItems {
 	public static ItemMegaCrystalPickaxe megaCrystalPickaxe;
 	public static ItemCrystalSword crystalSword;
 	public static ItemCrystalShears shears;
+	public static ItemPumpkinScoop pumpkinScoop;
 	
 	public static ItemArmor darkIronHelmet, darkIronChestplate, darkIronLeggings, darkIronBoots;
 	public static ItemArmor crystalHelmet, crystalChestplate, crystalLeggings, crystalBoots;
@@ -225,6 +227,7 @@ public class ModItems {
 		megaCrystalPickaxe = new ItemMegaCrystalPickaxe(ToolMaterialCrystal);
 		crystalSword = new ItemCrystalSword(ToolMaterialCrystal);
 		shears = new ItemCrystalShears();
+		pumpkinScoop = new ItemPumpkinScoop();
 		
 		ItemStack darkIronPlate = new ItemStack(plates, 1, PlateType.DARK_IRON.getMetadata());
 		darkIronHelmet = registerItem(new ItemCustomArmor(ArmorMaterialDarkIron, EntityEquipmentSlot.HEAD, "diron", darkIronPlate), "darkironhelmet");

@@ -179,6 +179,8 @@ item.crystalmod.crystalshears.dark.name=Dark Crystal Shears
 item.crystalmod.crystalshears.pure.name=Pure Crystal Shears
 item.crystalmod.crystalshears.darkIron.name=Dark Iron Shears
 
+item.crystalmod.pumpkinscoop.name=Pumpkin Scoop
+
 item.crystalmod.darkironaxe.name=Dark Iron Axe
 item.crystalmod.darkironhoe.name=Dark Iron Hoe
 item.crystalmod.darkironshovel.name=Dark Iron Shovel
@@ -570,6 +572,15 @@ tile.crystalmod.crystalladder.blue.name=Blue Crystal Ladder
 tile.crystalmod.crystalladder.red.name=Red Crystal Ladder
 tile.crystalmod.crystalladder.green.name=Green Crystal Ladder
 tile.crystalmod.crystalladder.dark.name=Dark Crystal Ladder
+
+tile.crystalmod.fancypumpkin.steve.name=Pumpkin (Steve)
+tile.crystalmod.fancypumpkin.alex.name=Pumpkin (Alex)
+tile.crystalmod.fancypumpkin.creeper.name=Pumpkin (Creeper)
+tile.crystalmod.fancypumpkin.spider.name=Pumpkin (Spider)
+tile.crystalmod.fancypumpkinlit.steve.name=Steve Jack o'Lantern
+tile.crystalmod.fancypumpkinlit.alex.name=Alex Jack o'Lantern
+tile.crystalmod.fancypumpkinlit.creeper.name=Creeper Jack o'Lantern
+tile.crystalmod.fancypumpkinlit.spider.name=Spider Jack o'Lantern
 
 tile.crystalmod.crystalore.blue.name=Blue Crystal Ore
 tile.crystalmod.crystalore.red.name=Red Crystal Ore

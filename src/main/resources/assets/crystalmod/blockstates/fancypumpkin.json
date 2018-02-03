@@ -1,0 +1,45 @@
+{
+	"forge_marker": 1,
+	"defaults": {
+		"model": "pumpkin",
+		"transform": "forge:default-block"
+	},
+	"variants": {
+        "facing": {
+			"north": {},
+			"south": { "y": 180 },
+			"east": { "y": 90 },
+			"west": { "y": 270 }
+		},
+        "type": {
+			"steve": {
+				"model": "pumpkin",
+				"textures": {
+					"particle": "crystalmod:blocks/decorative/pumpkins/pumpkin_steve_off",
+					"front": "crystalmod:blocks/decorative/pumpkins/pumpkin_steve_off"
+				}
+			},
+			"alex": {
+				"model": "pumpkin",
+				"textures": {
+					"particle": "crystalmod:blocks/decorative/pumpkins/pumpkin_alex_off",
+					"front": "crystalmod:blocks/decorative/pumpkins/pumpkin_alex_off"
+				}
+			},
+			"creeper": {
+				"model": "pumpkin",
+				"textures": {
+					"particle": "crystalmod:blocks/decorative/pumpkins/pumpkin_creeper_off",
+					"front": "crystalmod:blocks/decorative/pumpkins/pumpkin_creeper_off"
+				}
+			},
+			"spider": {
+				"model": "pumpkin",
+				"textures": {
+					"particle": "crystalmod:blocks/decorative/pumpkins/pumpkin_spider_off",
+					"front": "crystalmod:blocks/decorative/pumpkins/pumpkin_spider_off"
+				}
+			}
+		}
+    }
+}

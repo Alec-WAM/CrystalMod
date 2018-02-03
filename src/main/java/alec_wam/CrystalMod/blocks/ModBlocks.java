@@ -34,6 +34,7 @@ import alec_wam.CrystalMod.blocks.decorative.BlockFancyGlowstone;
 import alec_wam.CrystalMod.blocks.decorative.BlockFancyLadder;
 import alec_wam.CrystalMod.blocks.decorative.BlockFancyLadder2;
 import alec_wam.CrystalMod.blocks.decorative.BlockFancyObsidian;
+import alec_wam.CrystalMod.blocks.decorative.BlockFancyPumpkin;
 import alec_wam.CrystalMod.blocks.decorative.BlockFancySeaLantern;
 import alec_wam.CrystalMod.blocks.decorative.ItemBlockBetterRose;
 import alec_wam.CrystalMod.blocks.decorative.ItemBlockFancyLadders;
@@ -274,6 +275,8 @@ public class ModBlocks {
 	public static BlockBambooLeaves bambooLeaves;
 	public static Block bambooPlanks;
 	public static BlockNormalSapling normalSapling;
+	public static BlockFancyPumpkin fancyPumpkin;
+	public static BlockFancyPumpkin fancyPumpkinLit;
 	
 	public static BlockCrystalLadder ladder;
 	public static BlockFancyLadder fancyLadders;
@@ -523,6 +526,14 @@ public class ModBlocks {
 		normalSapling = new BlockNormalSapling();
 		registerBlock(normalSapling, new ItemBlockMeta(normalSapling), "sapling");
 		ItemBlockMeta.setMappingProperty(normalSapling, BlockNormalSapling.VARIANT);
+		
+		fancyPumpkin = new BlockFancyPumpkin();
+		registerBlock(fancyPumpkin, new ItemBlockMeta(fancyPumpkin), "fancypumpkin");
+		ItemBlockMeta.setMappingProperty(fancyPumpkin, BlockFancyPumpkin.TYPE);
+		
+		fancyPumpkinLit = (BlockFancyPumpkin) new BlockFancyPumpkin().setLightLevel(1.0F);
+		registerBlock(fancyPumpkinLit, new ItemBlockMeta(fancyPumpkinLit), "fancypumpkinlit");
+		ItemBlockMeta.setMappingProperty(fancyPumpkinLit, BlockFancyPumpkin.TYPE);
 		
 		ladder = new BlockCrystalLadder();
 		registerBlock(ladder, new ItemBlockCrystalLadder(ladder), "crystalladder");		
