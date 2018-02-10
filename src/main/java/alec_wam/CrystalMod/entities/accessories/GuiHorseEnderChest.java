@@ -4,6 +4,7 @@ import alec_wam.CrystalMod.CrystalMod;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.entity.passive.AbstractHorse;
 import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryEnderChest;
@@ -22,13 +23,13 @@ public class GuiHorseEnderChest extends GuiContainer
     /** The enderchest inventory bound to this GUI. */
     private final InventoryEnderChest enderChestInventory;
     /** The EntityHorse whose inventory is currently being accessed. */
-    private final EntityHorse horseEntity;
+    private final AbstractHorse horseEntity;
     /** The mouse x-position recorded during the last rendered frame. */
     private float mousePosx;
     /** The mouse y-position recorded during the last renderered frame. */
     private float mousePosY;
 
-    public GuiHorseEnderChest(IInventory playerInv, IInventory horseInv, EntityHorse horse)
+    public GuiHorseEnderChest(IInventory playerInv, IInventory horseInv, AbstractHorse horse)
     {
         super(new ContainerHorseEnderChest(playerInv, horseInv, horse, CrystalMod.proxy.getClientPlayer()));
         xSize = 176;

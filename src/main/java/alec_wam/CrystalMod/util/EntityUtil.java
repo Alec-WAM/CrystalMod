@@ -170,6 +170,11 @@ public class EntityUtil {
 		
 		return new NBTTagCompound();
 	}
+	
+	public static void sendSyncPacket(Entity entity){
+		if(entity == null || entity.getEntityWorld() == null || entity.getEntityWorld().isRemote)return;
+		CrystalModNetwork.sendToAllAround(new PacketEntityMessage(entity, "CustomDataSync", getCustomEntityData(entity)), entity);
+	}
 
 	public static final Random rand = new Random();
 	

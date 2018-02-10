@@ -84,22 +84,24 @@ public class HorseAccessories {
 		  					return true;
 		  				}
 		  		  		horse.dropItem(Item.getItemFromBlock(Blocks.ENDER_CHEST), 1);
+		  		  		EntityUtil.sendSyncPacket(horse);
 		  		  		return true;
   		  			}
   		  		}
   		  	}
     	} else {
-    		if(!ItemStackTools.isNullStack(held)){
+    		if(ItemStackTools.isValid(held)){
 	    		Block block = Block.getBlockFromItem(held.getItem());
 	    		if(block !=null && block == Blocks.ENDER_CHEST){
 	    			boolean success = addEnderChest(horse);
-		  			if(success) {
+	    			if(success) {
 		  				if(player.getEntityWorld().isRemote){
 		  					return true;
 		  				}
 		  				if(!player.capabilities.isCreativeMode){
 		  					ItemStackTools.incStackSize(held, -1);
 		  				}
+		  				EntityUtil.sendSyncPacket(horse);
 		  				return true;
 		  			}
 	    		}
@@ -181,6 +183,7 @@ public class HorseAccessories {
     					return true;
     				}
     				ItemUtil.spawnItemInWorldWithoutMotion(horse.getEntityWorld(), shoes, (int)horse.posX, (int)horse.posY, (int)horse.posZ);
+    				EntityUtil.sendSyncPacket(horse);
     				return true;
     			}
   		  	}
@@ -195,6 +198,7 @@ public class HorseAccessories {
 		  				if(!player.capabilities.isCreativeMode){
 		  					ItemStackTools.incStackSize(held, -1);
 		  				}
+		  				EntityUtil.sendSyncPacket(horse);
 		  				return true;
 		  			}
 	    		}

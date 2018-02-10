@@ -64,8 +64,12 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.IReloadableResourceManager;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.client.resources.IResourceManagerReloadListener;
+import net.minecraft.entity.passive.AbstractChestHorse;
 import net.minecraft.entity.passive.AbstractHorse;
+import net.minecraft.entity.passive.EntityHorse;
+import net.minecraft.entity.passive.EntitySkeletonHorse;
 import net.minecraft.entity.passive.EntityWolf;
+import net.minecraft.entity.passive.EntityZombieHorse;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Items;
@@ -113,7 +117,8 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
         OBJLoader.INSTANCE.addDomain(CrystalMod.MODID);
     }
 
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     public void init(FMLInitializationEvent e) {
         super.init(e);
         LayerDragonWings dragonWingsRenderer = new LayerDragonWings();
@@ -123,10 +128,12 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		}
 		
 		LayerHorseAccessories horseAccessoryRenderer = new LayerHorseAccessories();
-		Render<?> renderHorse = Minecraft.getMinecraft().getRenderManager().getEntityClassRenderObject(AbstractHorse.class);
-		if(renderHorse !=null && renderHorse instanceof RenderLivingBase){
-			RenderLivingBase<?> livingRender = (RenderLivingBase<?>)renderHorse;
-			livingRender.addLayer(horseAccessoryRenderer);
+		for(Class<? extends AbstractHorse> clazz : new Class[]{AbstractHorse.class, AbstractChestHorse.class, EntityHorse.class, EntitySkeletonHorse.class, EntityZombieHorse.class}){
+			Render<?> renderHorse = Minecraft.getMinecraft().getRenderManager().getEntityClassRenderObject(clazz);
+			if(renderHorse !=null && renderHorse instanceof RenderLivingBase){
+				RenderLivingBase<?> livingRender = (RenderLivingBase<?>)renderHorse;
+				livingRender.addLayer(horseAccessoryRenderer);
+			}
 		}
 		Render<?> renderWolf = Minecraft.getMinecraft().getRenderManager().getEntityClassRenderObject(EntityWolf.class);
 		if(renderWolf !=null && renderWolf instanceof RenderLivingBase){

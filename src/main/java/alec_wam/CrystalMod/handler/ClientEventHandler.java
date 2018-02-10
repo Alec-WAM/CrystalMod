@@ -107,6 +107,7 @@ import net.minecraft.entity.item.EntityItemFrame;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.item.EntityMinecartEmpty;
 import net.minecraft.entity.item.EntityMinecartFurnace;
+import net.minecraft.entity.passive.AbstractHorse;
 import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
@@ -251,7 +252,7 @@ public class ClientEventHandler {
     	GuiScreen gui = event.getGui();
     	if(gui !=null && gui instanceof GuiScreenHorseInventory){
     		GuiScreenHorseInventory horseGui = (GuiScreenHorseInventory)gui;
-    		EntityHorse horse = (EntityHorse)ReflectionUtils.getPrivateValue(horseGui, GuiScreenHorseInventory.class, ObfuscatedNames.GuiScreenHorseInventory_horseEntity);
+    		AbstractHorse horse = (AbstractHorse)ReflectionUtils.getPrivateValue(horseGui, GuiScreenHorseInventory.class, ObfuscatedNames.GuiScreenHorseInventory_horseEntity);
     		if(horse !=null && HorseAccessories.hasEnderChest(horse)){
     			ContainerHorseChest animalchest = new ContainerHorseChest("HorseChest", 2);
     			animalchest.setCustomName(horse.getName());
