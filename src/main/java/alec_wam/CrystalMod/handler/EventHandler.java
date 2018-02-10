@@ -67,6 +67,8 @@ import baubles.api.BaubleType;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.boss.EntityDragon;
@@ -85,6 +87,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.projectile.EntityFishHook;
 import net.minecraft.entity.projectile.EntityShulkerBullet;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Enchantments;
 import net.minecraft.init.Items;
 import net.minecraft.init.PotionTypes;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -97,6 +100,7 @@ import net.minecraft.potion.PotionUtils;
 import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.CombatRules;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
@@ -125,6 +129,7 @@ import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.LootingLevelEvent;
 import net.minecraftforge.event.entity.player.ArrowLooseEvent;
 import net.minecraftforge.event.entity.player.ArrowNockEvent;
@@ -227,6 +232,9 @@ public class EventHandler {
     					exPlayer.hasFailed = false;
     				}
     			}
+    		}
+    		if(event.getEntityLiving() instanceof AbstractHorse){
+    			HorseAccessories.updateHorse((AbstractHorse)event.getEntityLiving());
     		}
     	}
     }
@@ -416,6 +424,38 @@ public class EventHandler {
         		}
         	}
         }
+    }
+    
+    @SubscribeEvent
+    public void onEntityLivingHurt(LivingHurtEvent event)
+    {
+    	EntityLivingBase entity = event.getEntityLiving();
+    	if(entity instanceof AbstractHorse){
+    		AbstractHorse horse = (AbstractHorse)entity;
+    		ItemStack shoes = HorseAccessories.getHorseShoes(horse);
+    		if(ItemStackTools.isValid(shoes)){
+    			Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(shoes);
+    			if(enchantments.containsKey(Enchantments.FEATHER_FALLING) && event.getSource() == DamageSource.FALL){
+    				int level = enchantments.get(Enchantments.FEATHER_FALLING);
+    				int damageReduction = level * 3;
+    				if(damageReduction > 0)event.setAmount(CombatRules.getDamageAfterMagicAbsorb(event.getAmount(), damageReduction));
+    			}
+    		}
+    	}
+    	
+    	Entity riding = entity.getRidingEntity();
+    	if(riding !=null && riding instanceof AbstractHorse){
+    		AbstractHorse horse = (AbstractHorse)riding;
+    		ItemStack shoes = HorseAccessories.getHorseShoes(horse);
+    		if(ItemStackTools.isValid(shoes)){
+    			Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(shoes);
+    			if(enchantments.containsKey(Enchantments.FEATHER_FALLING) && event.getSource() == DamageSource.FALL){
+    				int level = enchantments.get(Enchantments.FEATHER_FALLING);
+    				int damageReduction = level * 3;
+    				if(damageReduction > 0)event.setAmount(CombatRules.getDamageAfterMagicAbsorb(event.getAmount(), damageReduction));
+    			}
+    		}
+    	}
     }
     
 	@SubscribeEvent
@@ -1030,7 +1070,6 @@ public class EventHandler {
     	
     	if(entity.isInsideOfMaterial(Material.WATER)){
     		if(ItemStackTools.isValid(stack) && stack.getItem() == Items.GLASS_BOTTLE){
-    			//Restore to full air
     			entity.setAir(300);
     			ItemStack waterbottle = PotionUtils.addPotionToItemStack(new ItemStack(Items.POTIONITEM), PotionTypes.WATER);
     			if(ItemStackTools.getStackSize(stack) > 1){

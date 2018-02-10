@@ -1,17 +1,20 @@
 package alec_wam.CrystalMod.handler;
 
+import alec_wam.CrystalMod.entities.accessories.HorseAccessories;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.items.armor.ItemCrystalArmor;
 import alec_wam.CrystalMod.items.enchancements.ModEnhancements;
 import alec_wam.CrystalMod.util.EntityUtil;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemStackTools;
+import alec_wam.CrystalMod.util.ModLogger;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentThorns;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.passive.AbstractHorse;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -96,7 +99,10 @@ public class ArmorEventHandler {
 		int redCount = getArmorCount(living, "red");
 		int pureCount = getArmorCount(living, "pure");
 		
-		if(blueCount == 4 || pureCount == 4 || (ModEnhancements.WATER_WALKING.isApplied(living.getItemStackFromSlot(EntityEquipmentSlot.FEET)))){
+		boolean horseShoes = (living instanceof AbstractHorse && ModEnhancements.WATER_WALKING.isApplied(HorseAccessories.getHorseShoes((AbstractHorse)living)));
+		boolean horseShoes2 = (living.getRidingEntity() !=null && living.getRidingEntity() instanceof AbstractHorse && ModEnhancements.WATER_WALKING.isApplied(HorseAccessories.getHorseShoes((AbstractHorse)living.getRidingEntity())));
+		
+		if(blueCount == 4 || pureCount == 4 || (ModEnhancements.WATER_WALKING.isApplied(living.getItemStackFromSlot(EntityEquipmentSlot.FEET))) || horseShoes){
 			World world = event.getWorld();
 			BlockPos pos = new BlockPos(living).down();
 			IBlockState state = world.getBlockState(pos);
@@ -115,6 +121,31 @@ public class ArmorEventHandler {
 				}
 			}
 		}
+		
+		//TODO Get water walking working on horseshoes 
+		/*if(horseShoes2){
+			AbstractHorse horse = (AbstractHorse) living.getRidingEntity();
+			World world = event.getWorld();
+			BlockPos pos = new BlockPos(horse).down();
+			IBlockState state = world.getBlockState(pos);
+			if (state.getBlock() instanceof BlockLiquid && horse.posY > pos.getY() + 0.9 && !(world.getBlockState(pos.up()).getBlock().getMaterial(world.getBlockState(pos.up())) == Material.WATER))
+			{
+				if (!horse.isSneaking() && horse.fallDistance <= 4D)
+				{
+					if (state.getBlock().getMaterial(state) == Material.WATER)
+					{
+						BlockPos downPos = pos.up();
+						AxisAlignedBB bb = new AxisAlignedBB(downPos.getX(), downPos.getY(), downPos.getZ(), (double) downPos.getX() + 1,  (double) downPos.getY() + 1, (double) downPos.getZ() + 1);
+						ModLogger.info("ON WATER!" + downPos);
+						//if (event.getAabb().intersectsWith(bb))
+						//{
+							event.getCollisionBoxesList().add(bb);
+						//}
+					}
+				}
+			}
+		}*/
+		
 		if(redCount == 4 || pureCount == 4){
 			World world = event.getWorld();
 			BlockPos pos = new BlockPos(living).down();

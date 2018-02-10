@@ -1,31 +1,64 @@
 package alec_wam.CrystalMod.entities.accessories;
 
+import java.util.Map;
+
 import javax.annotation.Nonnull;
+
+import com.google.common.base.Objects;
 
 import alec_wam.CrystalMod.asm.ObfuscatedNames;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.util.EntityUtil;
 import alec_wam.CrystalMod.util.ItemStackTools;
+import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.ReflectionUtils;
+import alec_wam.CrystalMod.util.tool.ToolUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockChest;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentFrostWalker;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.passive.AbstractChestHorse;
 import net.minecraft.entity.passive.AbstractHorse;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Enchantments;
 import net.minecraft.inventory.ContainerHorseChest;
 import net.minecraft.inventory.InventoryEnderChest;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
 
 public class HorseAccessories {
+
+	public static void updateHorse(AbstractHorse horse) {
+		ItemStack horseShoes = getHorseShoes(horse);
+		if(ItemStackTools.isValid(horseShoes)){
+			Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(horseShoes);
+			if(enchantments.containsKey(Enchantments.FROST_WALKER) && !horse.getPassengers().isEmpty()){
+				if (!horse.getEntityWorld().isRemote)
+	            {
+	                BlockPos blockpos = new BlockPos(horse);
+	                BlockPos prevBlockPos = (BlockPos) ReflectionUtils.getPrivateValue(horse, EntityLivingBase.class, ObfuscatedNames.EntityLivingBase_prevBlockpos);;
+	                if (!Objects.equal(prevBlockPos, blockpos))
+	                {
+	                	ReflectionUtils.setPrivateValue(horse, blockpos, EntityLivingBase.class, ObfuscatedNames.EntityLivingBase_prevBlockpos);
+	                	EnchantmentFrostWalker.freezeNearby(horse, horse.getEntityWorld(), blockpos, enchantments.get(Enchantments.FROST_WALKER));
+	                }
+	            }
+			}
+		}
+	}
+	
     //EnderChest stuff
 	public static String NBT_ACCESSORY_HORSE_ENDERCHEST = "EnderChest";
     
     public static boolean handleHorseInteract(EntityPlayer player, ItemStack held, EnumHand hand, AbstractHorse horse){
     	if(handleEnderChestInteract(horse, held, hand, player))return true;
+    	if(handleHorseShoeInteract(horse, held, hand, player))return true;
     	return false;
     }
 
@@ -140,31 +173,16 @@ public class HorseAccessories {
     public static String NBT_ACCESSORY_HORSE_HORSESHOES = "HorseShoes";
 
     private static boolean handleHorseShoeInteract(AbstractHorse horse, ItemStack held, EnumHand hand, EntityPlayer player){
-    	//TODO Finish this
     	if(ItemStackTools.isValid(getHorseShoes(horse))){
-    		if(ItemStackTools.isNullStack(held)){
-    			if(!player.isSneaking())return false;
-	  			InventoryEnderChest inventoryenderchest = player.getInventoryEnderChest();
-	  			if(inventoryenderchest !=null){
-	  				if(player.getEntityWorld().isRemote){
-	  					return true;
-	  				}
-	  				player.displayGUIChest(inventoryenderchest);
-	  				return true;
-	  			}
-  		  	} else {
-  		  		Block block = Block.getBlockFromItem(held.getItem());
-  		  		boolean isChest = block !=null && Block.getBlockFromItem(held.getItem()) instanceof BlockChest;
-  		  		if(isChest){
-  		  			boolean success = removeEnderChest(horse);
-  		  			if(success) {
-	  		  			if(player.getEntityWorld().isRemote){
-		  					return true;
-		  				}
-		  		  		horse.dropItem(Item.getItemFromBlock(Blocks.ENDER_CHEST), 1);
-		  		  		return true;
-  		  			}
-  		  		}
+    		if(ToolUtil.isToolEquipped(player, hand)){
+    			ItemStack shoes = removeHorseShoes(horse);
+    			if(ItemStackTools.isValid(shoes)) {
+    				if(player.getEntityWorld().isRemote){
+    					return true;
+    				}
+    				ItemUtil.spawnItemInWorldWithoutMotion(horse.getEntityWorld(), shoes, (int)horse.posX, (int)horse.posY, (int)horse.posZ);
+    				return true;
+    			}
   		  	}
     	} else {
     		if(ItemStackTools.isValid(held)){

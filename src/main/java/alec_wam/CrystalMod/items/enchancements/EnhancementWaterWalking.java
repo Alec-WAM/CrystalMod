@@ -4,6 +4,7 @@ import java.util.List;
 
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.api.enhancements.IEnhancement;
+import alec_wam.CrystalMod.entities.accessories.horseshoes.ItemHorseShoe;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
@@ -40,6 +41,9 @@ public class EnhancementWaterWalking implements IEnhancement {
     			ItemArmor armor = (ItemArmor)stack.getItem();
     			return armor.armorType == EntityEquipmentSlot.FEET;
     		}
+    		if(stack.getItem() instanceof ItemHorseShoe){
+    			return true;
+    		}
 		}
 		return false;
 	}
@@ -52,6 +56,9 @@ public class EnhancementWaterWalking implements IEnhancement {
     			if(armor.armorType == EntityEquipmentSlot.FEET){
     				return ItemNBTHelper.verifyExistance(stack, getNBTID());
     			}
+    		}
+    		if(stack.getItem() instanceof ItemHorseShoe){
+    			return ItemNBTHelper.verifyExistance(stack, getNBTID());
     		}
 		}
 		return false;
