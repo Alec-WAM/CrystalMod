@@ -159,7 +159,6 @@ public class GuiLiquidPipe extends GuiContainer {
 	    int slot = (x - filterX) / 18;
 	    if(slot < 5 && slot >= 0){
 	    	if(filter.setFluid(slot, st)){
-	    		//ModLogger.info(slot+" "+(FluidUtil.getFluidTypeFromItem(st) !=null ? FluidUtil.getFluidTypeFromItem(st).getLocalizedName() : ""));
 	    		updateFilter(filter);
 	    	}
 	    }

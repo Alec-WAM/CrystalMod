@@ -18,6 +18,7 @@ import alec_wam.CrystalMod.tiles.machine.power.battery.BlockBattery.BatteryType;
 import alec_wam.CrystalMod.util.Lang;
 import alec_wam.CrystalMod.util.client.RenderUtil;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
@@ -49,8 +50,8 @@ public class GuiBattery extends GuiContainerTabbed {
 		RenderUtil.renderPowerBar(80, 20, 0, 16, 45, cu, maxCU, Color.CYAN.getRGB(), Color.CYAN.darker().getRGB());
 		
 		if(type != BatteryType.CREATIVE){
-			String in = "In: "+battery.energyStorage.getMaxReceive();
-			String out = "Out: "+battery.energyStorage.getMaxExtract();
+			String in = "In: "+battery.getEnergyReceive();
+			String out = "Out: "+battery.getEnergySend();
 			drawString(fontRendererObj, in, (xSize/4)-(fontRendererObj.getStringWidth(in)/2), 60, Color.GRAY.getRGB());
 			drawString(fontRendererObj, out, xSize-(xSize/4)-(fontRendererObj.getStringWidth(out)/2), 60, Color.GRAY.getRGB());
 		}
@@ -65,6 +66,52 @@ public class GuiBattery extends GuiContainerTabbed {
 			} else lines.add(cu > 0 ? cu +" / "+ maxCU + " "+Lang.localize("power.cu"): Lang.localize("gui.empty"));
 			drawHoveringText(lines, xAxis, yAxis);
 			RenderHelper.enableGUIStandardItemLighting();
+		}
+	}
+	
+	@Override
+	public void initGui(){
+		super.initGui();
+		this.buttonList.add(new GuiButton(0, guiLeft+(xSize/4)-10, guiTop+70, 10, 10, "-"));
+		this.buttonList.add(new GuiButton(1, guiLeft+(xSize/4), guiTop+70, 10, 10, "+"));
+		
+		this.buttonList.add(new GuiButton(2, guiLeft+xSize-(xSize/4)-10, guiTop+70, 10, 10, "-"));
+		this.buttonList.add(new GuiButton(3, guiLeft+xSize-(xSize/4), guiTop+70, 10, 10, "+"));
+	}
+	
+	@Override
+	public void actionPerformed(GuiButton button){
+		int amount = 10;
+		if(GuiScreen.isCtrlKeyDown()) amount = 1;
+		else if(GuiScreen.isShiftKeyDown()) amount = 100;
+		
+		if(button.id == 0){
+			battery.receiveAmount -=amount;
+			if(battery.receiveAmount < 0)battery.receiveAmount = 0;
+			NBTTagCompound nbt = new NBTTagCompound();
+			nbt.setInteger("Amount", battery.receiveAmount);
+			CrystalModNetwork.sendToServer(new PacketTileMessage(battery.getPos(), "UpdateReceive", nbt));
+		}
+		if(button.id == 1){
+			battery.receiveAmount +=amount;
+			if(battery.receiveAmount > TileEntityBattery.MAX_RECEIVE[battery.getBlockMetadata()])battery.receiveAmount = TileEntityBattery.MAX_RECEIVE[battery.getBlockMetadata()];
+			NBTTagCompound nbt = new NBTTagCompound();
+			nbt.setInteger("Amount", battery.receiveAmount);
+			CrystalModNetwork.sendToServer(new PacketTileMessage(battery.getPos(), "UpdateReceive", nbt));
+		}
+		if(button.id == 2){
+			battery.sendAmount -=amount;
+			if(battery.sendAmount < 0)battery.sendAmount = 0;
+			NBTTagCompound nbt = new NBTTagCompound();
+			nbt.setInteger("Amount", battery.sendAmount);
+			CrystalModNetwork.sendToServer(new PacketTileMessage(battery.getPos(), "UpdateSend", nbt));
+		}
+		if(button.id == 3){
+			battery.sendAmount +=amount;
+			if(battery.sendAmount > TileEntityBattery.MAX_SEND[battery.getBlockMetadata()])battery.sendAmount = TileEntityBattery.MAX_SEND[battery.getBlockMetadata()];
+			NBTTagCompound nbt = new NBTTagCompound();
+			nbt.setInteger("Amount", battery.sendAmount);
+			CrystalModNetwork.sendToServer(new PacketTileMessage(battery.getPos(), "UpdateSend", nbt));
 		}
 	}
 	

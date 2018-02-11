@@ -22,6 +22,8 @@ public class TileEntityBattery extends TileEntityIOSides implements IMessageHand
 	public int facing = EnumFacing.NORTH.ordinal();
 	
 	public CEnergyStorage energyStorage;
+	public int sendAmount;
+	public int receiveAmount; 
 	
 	public boolean loadedUpdate = false;
 	
@@ -32,6 +34,8 @@ public class TileEntityBattery extends TileEntityIOSides implements IMessageHand
 	public TileEntityBattery(int meta) {
 		super();
 		energyStorage = new CEnergyStorage(MAX_ENERGY[meta], MAX_RECEIVE[meta], MAX_SEND[meta]);
+		this.sendAmount = MAX_SEND[meta];
+		this.receiveAmount = MAX_RECEIVE[meta];
 	}
 	
 	@Override
@@ -39,6 +43,8 @@ public class TileEntityBattery extends TileEntityIOSides implements IMessageHand
 		super.writeCustomNBT(nbt);
 		nbt.setInteger("Type", getBlockMetadata());
 		nbt.setInteger("Facing", facing);
+		nbt.setInteger("Send", sendAmount);
+		nbt.setInteger("Receive", receiveAmount);
 		this.energyStorage.writeToNBT(nbt);
 	}
 	
@@ -48,6 +54,8 @@ public class TileEntityBattery extends TileEntityIOSides implements IMessageHand
 		facing = nbt.getInteger("Facing");
 		int meta = nbt.getInteger("Type");
 		energyStorage = new CEnergyStorage(MAX_ENERGY[meta], MAX_RECEIVE[meta], MAX_SEND[meta]);
+		this.sendAmount = Math.min(MAX_SEND[meta], nbt.getInteger("Send"));
+		this.receiveAmount = Math.min(MAX_RECEIVE[meta], nbt.getInteger("Receive"));
 		this.energyStorage.readFromNBT(nbt);
 		updateAfterLoad();
 	}
@@ -63,6 +71,20 @@ public class TileEntityBattery extends TileEntityIOSides implements IMessageHand
 		if(messageId.equalsIgnoreCase("UpdateEnergy")){
 			energyStorage.setEnergyStored(messageData.getInteger("Energy"));
 		}
+		if(messageId.equalsIgnoreCase("UpdateSend")){
+			this.sendAmount = messageData.getInteger("Amount");
+		}
+		if(messageId.equalsIgnoreCase("UpdateReceive")){
+			this.receiveAmount = messageData.getInteger("Amount");
+		}
+	}
+	
+	public int getEnergySend(){
+		return Math.min(MAX_SEND[getBlockMetadata()], sendAmount);
+	}
+	
+	public int getEnergyReceive(){
+		return Math.min(MAX_RECEIVE[getBlockMetadata()], receiveAmount);
 	}
 
 	@Override
@@ -76,7 +98,7 @@ public class TileEntityBattery extends TileEntityIOSides implements IMessageHand
 					if(tile !=null && tile.hasCapability(CapabilityCrystalEnergy.CENERGY, face.getOpposite())){
 						ICEnergyStorage rec = tile.getCapability(CapabilityCrystalEnergy.CENERGY, face.getOpposite());
 						boolean creative = BlockBattery.fromMeta(getBlockMetadata()) == BatteryType.CREATIVE;
-						int drain = !rec.canReceive() ? 0 : rec.fillCEnergy(creative ? energyStorage.getMaxExtract() : Math.min(energyStorage.getMaxExtract(), energyStorage.getCEnergyStored()), false);
+						int drain = !rec.canReceive() ? 0 : rec.fillCEnergy(creative ? getEnergySend() : Math.min(getEnergySend(), energyStorage.getCEnergyStored()), false);
 						if(!creative){
 							this.energyStorage.modifyEnergyStored(-drain);
 							if(drain > 0){
@@ -141,7 +163,7 @@ public class TileEntityBattery extends TileEntityIOSides implements IMessageHand
 						return 0;
 					}
 					
-					int fill = energyStorage.fillCEnergy(Math.min(MAX_RECEIVE[0], maxReceive), simulate);
+					int fill = energyStorage.fillCEnergy(Math.min(getEnergyReceive(), maxReceive), simulate);
 					if(fill > 0 && !simulate){
 						if(!getWorld().isRemote){
 							NBTTagCompound nbt = new NBTTagCompound();

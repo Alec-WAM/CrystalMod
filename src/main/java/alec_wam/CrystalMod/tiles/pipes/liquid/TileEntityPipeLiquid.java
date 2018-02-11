@@ -9,7 +9,6 @@ import alec_wam.CrystalMod.tiles.pipes.IPipeWrapper;
 import alec_wam.CrystalMod.tiles.pipes.PipeUtil;
 import alec_wam.CrystalMod.tiles.pipes.TileEntityPipe;
 import alec_wam.CrystalMod.tiles.pipes.types.IPipeType;
-import alec_wam.CrystalMod.util.ModLogger;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.IInventoryChangedListener;
 import net.minecraft.nbt.NBTTagCompound;

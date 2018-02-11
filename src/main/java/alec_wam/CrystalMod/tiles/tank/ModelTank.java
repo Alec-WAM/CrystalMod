@@ -69,7 +69,7 @@ public class ModelTank extends DynamicItemAndBlockModel {
 	public List<BakedQuad> getGeneralQuads() {
 		List<BakedQuad> list = Lists.newArrayList();
 		boolean item = this.type >=0;
-		
+		boolean shade = true;
 		TankType tankType = null;
 		if(state !=null){
 			tankType = state.state.getValue(BlockTank.TYPE);
@@ -152,24 +152,24 @@ public class ModelTank extends DynamicItemAndBlockModel {
 			        textureUp = RenderUtil.getSprite("crystalmod:blocks/tank/tank_creative");
 		        }
 		        faceCover.blockFaceUV.uvs = new float[] { 0.0f, 15.0f, 16.0f, 16.0f };
-		        list.add(faceBakery.makeBakedQuad(new org.lwjgl.util.vector.Vector3f(0.0f, 16.0f, 15.0f), new org.lwjgl.util.vector.Vector3f(16.0f, 16.0f, 16.0f), faceCover, textureUp, EnumFacing.UP, coverModelRot, (BlockPartRotation)null, true, true));
-		        list.add(faceBakery.makeBakedQuad(new org.lwjgl.util.vector.Vector3f(0.0f, 0.0f, 15.0f), new org.lwjgl.util.vector.Vector3f(16.0f, 0.0f, 16.0f), faceCover, textureDown, EnumFacing.DOWN, coverModelRot, (BlockPartRotation)null, true, true));
+		        list.add(faceBakery.makeBakedQuad(new org.lwjgl.util.vector.Vector3f(0.0f, 16.0f, 15.0f), new org.lwjgl.util.vector.Vector3f(16.0f, 16.0f, 16.0f), faceCover, textureUp, EnumFacing.UP, coverModelRot, (BlockPartRotation)null, true, shade));
+		        list.add(faceBakery.makeBakedQuad(new org.lwjgl.util.vector.Vector3f(0.0f, 0.0f, 15.0f), new org.lwjgl.util.vector.Vector3f(16.0f, 0.0f, 16.0f), faceCover, textureDown, EnumFacing.DOWN, coverModelRot, (BlockPartRotation)null, true, shade));
 		        faceCover.blockFaceUV.uvs = new float[] { 0.0f, 0.0f, 16.0f, 16.0f };
 		        
-		        list.add(faceBakery.makeBakedQuad(new org.lwjgl.util.vector.Vector3f(0.0f, 0.0f, 15.0f), new org.lwjgl.util.vector.Vector3f(16.0f, 16.0f, 16.0f), faceCover, textureNorth, EnumFacing.NORTH, coverModelRot, (BlockPartRotation)null, true, true));
-		        list.add(faceBakery.makeBakedQuad(new org.lwjgl.util.vector.Vector3f(0.0f, 0.0f, 15.0f), new org.lwjgl.util.vector.Vector3f(16.0f, 16.0f, 16.0f), faceCover, textureSouth, EnumFacing.SOUTH, coverModelRot, (BlockPartRotation)null, true, true));
+		        list.add(faceBakery.makeBakedQuad(new org.lwjgl.util.vector.Vector3f(0.0f, 0.0f, 15.0f), new org.lwjgl.util.vector.Vector3f(16.0f, 16.0f, 16.0f), faceCover, textureNorth, EnumFacing.NORTH, coverModelRot, (BlockPartRotation)null, true, shade));
+		        list.add(faceBakery.makeBakedQuad(new org.lwjgl.util.vector.Vector3f(0.0f, 0.0f, 15.0f), new org.lwjgl.util.vector.Vector3f(16.0f, 16.0f, 16.0f), faceCover, textureSouth, EnumFacing.SOUTH, coverModelRot, (BlockPartRotation)null, true, shade));
 		    	
 		        faceCover.blockFaceUV.uvs = new float[] { 0.0f, 15.0f, 1.0f, 16.0f };
-		        list.add(faceBakery.makeBakedQuad(new org.lwjgl.util.vector.Vector3f(0.0f, 0.0f, 15.0f), new org.lwjgl.util.vector.Vector3f(0.0f, 16.0f, 16.0f), faceCover, textureWest, EnumFacing.WEST, coverModelRot, (BlockPartRotation)null, true, true));
-		    	list.add(faceBakery.makeBakedQuad(new org.lwjgl.util.vector.Vector3f(16.0f, 0.0f, 15.0f), new org.lwjgl.util.vector.Vector3f(16.0f, 16.0f, 16.0f), faceCover, textureEast, EnumFacing.EAST, coverModelRot, (BlockPartRotation)null, true, true));
+		        list.add(faceBakery.makeBakedQuad(new org.lwjgl.util.vector.Vector3f(0.0f, 0.0f, 15.0f), new org.lwjgl.util.vector.Vector3f(0.0f, 16.0f, 16.0f), faceCover, textureWest, EnumFacing.WEST, coverModelRot, (BlockPartRotation)null, true, shade));
+		    	list.add(faceBakery.makeBakedQuad(new org.lwjgl.util.vector.Vector3f(16.0f, 0.0f, 15.0f), new org.lwjgl.util.vector.Vector3f(16.0f, 16.0f, 16.0f), faceCover, textureEast, EnumFacing.EAST, coverModelRot, (BlockPartRotation)null, true, shade));
 		    	faceCover.blockFaceUV.uvs = new float[] { 0.0f, 0.0f, 16.0f, 16.0f };
 	        }else{
-	        	list.add(faceBakery.makeBakedQuad(new org.lwjgl.util.vector.Vector3f(1.0f, 15.0f, 15.0f), new org.lwjgl.util.vector.Vector3f(15.0f, 15.0f, 16.0f), faceCover, textureUp, EnumFacing.UP, coverModelRot, (BlockPartRotation)null, true, true));
-		    	list.add(faceBakery.makeBakedQuad(new org.lwjgl.util.vector.Vector3f(1.0f, 1.0f, 15.0f), new org.lwjgl.util.vector.Vector3f(15.0f, 1.0f, 16.0f), faceCover, textureDown, EnumFacing.DOWN, coverModelRot, (BlockPartRotation)null, true, true));
-		    	list.add(faceBakery.makeBakedQuad(new org.lwjgl.util.vector.Vector3f(1.0f, 1.0f, 15.0f), new org.lwjgl.util.vector.Vector3f(15.0f, 15.0f, 16.0f), faceCover, textureNorth, EnumFacing.NORTH, coverModelRot, (BlockPartRotation)null, true, true));
-		    	list.add(faceBakery.makeBakedQuad(new org.lwjgl.util.vector.Vector3f(1.0f, 1.0f, 15.0f), new org.lwjgl.util.vector.Vector3f(15.0f, 15.0f, 16.0f), faceCover, textureSouth, EnumFacing.SOUTH, coverModelRot, (BlockPartRotation)null, true, true));
-		    	list.add(faceBakery.makeBakedQuad(new org.lwjgl.util.vector.Vector3f(1.0f, 1.0f, 15.0f), new org.lwjgl.util.vector.Vector3f(1.0f, 15.0f, 16.0f), faceCover, textureWest, EnumFacing.WEST, coverModelRot, (BlockPartRotation)null, true, true));
-		    	list.add(faceBakery.makeBakedQuad(new org.lwjgl.util.vector.Vector3f(15.0f, 1.0f, 15.0f), new org.lwjgl.util.vector.Vector3f(15.0f, 15.0f, 16.0f), faceCover, textureEast, EnumFacing.EAST, coverModelRot, (BlockPartRotation)null, true, true));
+	        	list.add(faceBakery.makeBakedQuad(new org.lwjgl.util.vector.Vector3f(1.0f, 15.0f, 15.0f), new org.lwjgl.util.vector.Vector3f(15.0f, 15.0f, 16.0f), faceCover, textureUp, EnumFacing.UP, coverModelRot, (BlockPartRotation)null, true, shade));
+		    	list.add(faceBakery.makeBakedQuad(new org.lwjgl.util.vector.Vector3f(1.0f, 1.0f, 15.0f), new org.lwjgl.util.vector.Vector3f(15.0f, 1.0f, 16.0f), faceCover, textureDown, EnumFacing.DOWN, coverModelRot, (BlockPartRotation)null, true, shade));
+		    	list.add(faceBakery.makeBakedQuad(new org.lwjgl.util.vector.Vector3f(1.0f, 1.0f, 15.0f), new org.lwjgl.util.vector.Vector3f(15.0f, 15.0f, 16.0f), faceCover, textureNorth, EnumFacing.NORTH, coverModelRot, (BlockPartRotation)null, true, shade));
+		    	list.add(faceBakery.makeBakedQuad(new org.lwjgl.util.vector.Vector3f(1.0f, 1.0f, 15.0f), new org.lwjgl.util.vector.Vector3f(15.0f, 15.0f, 16.0f), faceCover, textureSouth, EnumFacing.SOUTH, coverModelRot, (BlockPartRotation)null, true, shade));
+		    	list.add(faceBakery.makeBakedQuad(new org.lwjgl.util.vector.Vector3f(1.0f, 1.0f, 15.0f), new org.lwjgl.util.vector.Vector3f(1.0f, 15.0f, 16.0f), faceCover, textureWest, EnumFacing.WEST, coverModelRot, (BlockPartRotation)null, true, shade));
+		    	list.add(faceBakery.makeBakedQuad(new org.lwjgl.util.vector.Vector3f(15.0f, 1.0f, 15.0f), new org.lwjgl.util.vector.Vector3f(15.0f, 15.0f, 16.0f), faceCover, textureEast, EnumFacing.EAST, coverModelRot, (BlockPartRotation)null, true, shade));
 		    }
 	        
         }
@@ -187,33 +187,33 @@ public class ModelTank extends DynamicItemAndBlockModel {
 		float minPole = 1f;
 		final BlockPartFace faceCover = new BlockPartFace(EnumFacing.SOUTH, 0, "", uvCover);
 		faceCover.blockFaceUV.uvs = new float[] { 0.0f, 0.0f, 1.0f, 1.0f };
-    	list.add(faceBakery.makeBakedQuad(new Vector3f(UpLeftOffsetHollow, maxPole, minZ), new Vector3f(16.0f, maxPole, 16.0f), faceCover, textureUp, EnumFacing.UP, ModelRotation.X0_Y0, (BlockPartRotation)null, true, true));
-		list.add(faceBakery.makeBakedQuad(new Vector3f(UpLeftOffsetHollow, minPole, minZ), new Vector3f(16.0f, minPole, 16.0f), faceCover, textureDown, EnumFacing.DOWN, ModelRotation.X0_Y0, (BlockPartRotation)null, true, true));
-		list.add(faceBakery.makeBakedQuad(new Vector3f(UpLeftOffsetHollow, minPole, minZ), new Vector3f(16.0f, maxPole, 16.0f), faceCover, textureNorth, EnumFacing.NORTH, ModelRotation.X0_Y0, (BlockPartRotation)null, true, true));
-		list.add(faceBakery.makeBakedQuad(new Vector3f(UpLeftOffsetHollow, minPole, minZ), new Vector3f(16.0f, maxPole, 16.0f), faceCover, textureSouth, EnumFacing.SOUTH, ModelRotation.X0_Y0, (BlockPartRotation)null, true, true));
-		list.add(faceBakery.makeBakedQuad(new Vector3f(UpLeftOffsetHollow, minPole, minZ), new Vector3f(UpLeftOffsetHollow, maxPole, 16.0f), faceCover, textureWest, EnumFacing.WEST, ModelRotation.X0_Y0, (BlockPartRotation)null, true, true));
-		list.add(faceBakery.makeBakedQuad(new Vector3f(16.0f, minPole, minZ), new Vector3f(16.0f, maxPole, 16.0f), faceCover, textureEast, EnumFacing.EAST, ModelRotation.X0_Y0, (BlockPartRotation)null, true, true));
+    	list.add(faceBakery.makeBakedQuad(new Vector3f(UpLeftOffsetHollow, maxPole, minZ), new Vector3f(16.0f, maxPole, 16.0f), faceCover, textureUp, EnumFacing.UP, ModelRotation.X0_Y0, (BlockPartRotation)null, true, shade));
+		list.add(faceBakery.makeBakedQuad(new Vector3f(UpLeftOffsetHollow, minPole, minZ), new Vector3f(16.0f, minPole, 16.0f), faceCover, textureDown, EnumFacing.DOWN, ModelRotation.X0_Y0, (BlockPartRotation)null, true, shade));
+		list.add(faceBakery.makeBakedQuad(new Vector3f(UpLeftOffsetHollow, minPole, minZ), new Vector3f(16.0f, maxPole, 16.0f), faceCover, textureNorth, EnumFacing.NORTH, ModelRotation.X0_Y0, (BlockPartRotation)null, true, shade));
+		list.add(faceBakery.makeBakedQuad(new Vector3f(UpLeftOffsetHollow, minPole, minZ), new Vector3f(16.0f, maxPole, 16.0f), faceCover, textureSouth, EnumFacing.SOUTH, ModelRotation.X0_Y0, (BlockPartRotation)null, true, shade));
+		list.add(faceBakery.makeBakedQuad(new Vector3f(UpLeftOffsetHollow, minPole, minZ), new Vector3f(UpLeftOffsetHollow, maxPole, 16.0f), faceCover, textureWest, EnumFacing.WEST, ModelRotation.X0_Y0, (BlockPartRotation)null, true, shade));
+		list.add(faceBakery.makeBakedQuad(new Vector3f(16.0f, minPole, minZ), new Vector3f(16.0f, maxPole, 16.0f), faceCover, textureEast, EnumFacing.EAST, ModelRotation.X0_Y0, (BlockPartRotation)null, true, shade));
 		
-		list.add(faceBakery.makeBakedQuad(new Vector3f(0f, maxPole, minZ), new Vector3f(1.0f, maxPole, 16.0f), faceCover, textureUp, EnumFacing.UP, ModelRotation.X0_Y0, (BlockPartRotation)null, true, true));
-		list.add(faceBakery.makeBakedQuad(new Vector3f(0f, minPole, minZ), new Vector3f(1.0f, minPole, 16.0f), faceCover, textureDown, EnumFacing.DOWN, ModelRotation.X0_Y0, (BlockPartRotation)null, true, true));
-		list.add(faceBakery.makeBakedQuad(new Vector3f(0f, minPole, minZ), new Vector3f(1.0f, maxPole, 16.0f), faceCover, textureNorth, EnumFacing.NORTH, ModelRotation.X0_Y0, (BlockPartRotation)null, true, true));
-		list.add(faceBakery.makeBakedQuad(new Vector3f(0f, minPole, minZ), new Vector3f(1.0f, maxPole, 16.0f), faceCover, textureSouth, EnumFacing.SOUTH, ModelRotation.X0_Y0, (BlockPartRotation)null, true, true));
-		list.add(faceBakery.makeBakedQuad(new Vector3f(0f, minPole, minZ), new Vector3f(0f, maxPole, 16.0f), faceCover, textureWest, EnumFacing.WEST, ModelRotation.X0_Y0, (BlockPartRotation)null, true, true));
-		list.add(faceBakery.makeBakedQuad(new Vector3f(1.0f, minPole, minZ), new Vector3f(1.0f, maxPole, 16.0f), faceCover, textureEast, EnumFacing.EAST, ModelRotation.X0_Y0, (BlockPartRotation)null, true, true));
+		list.add(faceBakery.makeBakedQuad(new Vector3f(0f, maxPole, minZ), new Vector3f(1.0f, maxPole, 16.0f), faceCover, textureUp, EnumFacing.UP, ModelRotation.X0_Y0, (BlockPartRotation)null, true, shade));
+		list.add(faceBakery.makeBakedQuad(new Vector3f(0f, minPole, minZ), new Vector3f(1.0f, minPole, 16.0f), faceCover, textureDown, EnumFacing.DOWN, ModelRotation.X0_Y0, (BlockPartRotation)null, true, shade));
+		list.add(faceBakery.makeBakedQuad(new Vector3f(0f, minPole, minZ), new Vector3f(1.0f, maxPole, 16.0f), faceCover, textureNorth, EnumFacing.NORTH, ModelRotation.X0_Y0, (BlockPartRotation)null, true, shade));
+		list.add(faceBakery.makeBakedQuad(new Vector3f(0f, minPole, minZ), new Vector3f(1.0f, maxPole, 16.0f), faceCover, textureSouth, EnumFacing.SOUTH, ModelRotation.X0_Y0, (BlockPartRotation)null, true, shade));
+		list.add(faceBakery.makeBakedQuad(new Vector3f(0f, minPole, minZ), new Vector3f(0f, maxPole, 16.0f), faceCover, textureWest, EnumFacing.WEST, ModelRotation.X0_Y0, (BlockPartRotation)null, true, shade));
+		list.add(faceBakery.makeBakedQuad(new Vector3f(1.0f, minPole, minZ), new Vector3f(1.0f, maxPole, 16.0f), faceCover, textureEast, EnumFacing.EAST, ModelRotation.X0_Y0, (BlockPartRotation)null, true, shade));
 		
-		list.add(faceBakery.makeBakedQuad(new Vector3f(UpLeftOffsetHollow, maxPole, 0), new Vector3f(16.0f, maxPole, 1.0f), faceCover, textureUp, EnumFacing.UP, ModelRotation.X0_Y0, (BlockPartRotation)null, true, true));
-		list.add(faceBakery.makeBakedQuad(new Vector3f(UpLeftOffsetHollow, minPole, 0), new Vector3f(16.0f, minPole, 1.0f), faceCover, textureDown, EnumFacing.DOWN, ModelRotation.X0_Y0, (BlockPartRotation)null, true, true));
-		list.add(faceBakery.makeBakedQuad(new Vector3f(UpLeftOffsetHollow, minPole, 0), new Vector3f(16.0f, maxPole, 1.0f), faceCover, textureNorth, EnumFacing.NORTH, ModelRotation.X0_Y0, (BlockPartRotation)null, true, true));
-		list.add(faceBakery.makeBakedQuad(new Vector3f(UpLeftOffsetHollow, minPole, 0), new Vector3f(16.0f, maxPole, 1.0f), faceCover, textureSouth, EnumFacing.SOUTH, ModelRotation.X0_Y0, (BlockPartRotation)null, true, true));
-		list.add(faceBakery.makeBakedQuad(new Vector3f(UpLeftOffsetHollow, minPole, 0), new Vector3f(UpLeftOffsetHollow, maxPole, 1.0f), faceCover, textureWest, EnumFacing.WEST, ModelRotation.X0_Y0, (BlockPartRotation)null, true, true));
-		list.add(faceBakery.makeBakedQuad(new Vector3f(16.0f, minPole, 0), new Vector3f(16.0f, maxPole, 1.0f), faceCover, textureEast, EnumFacing.EAST, ModelRotation.X0_Y0, (BlockPartRotation)null, true, true));
+		list.add(faceBakery.makeBakedQuad(new Vector3f(UpLeftOffsetHollow, maxPole, 0), new Vector3f(16.0f, maxPole, 1.0f), faceCover, textureUp, EnumFacing.UP, ModelRotation.X0_Y0, (BlockPartRotation)null, true, shade));
+		list.add(faceBakery.makeBakedQuad(new Vector3f(UpLeftOffsetHollow, minPole, 0), new Vector3f(16.0f, minPole, 1.0f), faceCover, textureDown, EnumFacing.DOWN, ModelRotation.X0_Y0, (BlockPartRotation)null, true, shade));
+		list.add(faceBakery.makeBakedQuad(new Vector3f(UpLeftOffsetHollow, minPole, 0), new Vector3f(16.0f, maxPole, 1.0f), faceCover, textureNorth, EnumFacing.NORTH, ModelRotation.X0_Y0, (BlockPartRotation)null, true, shade));
+		list.add(faceBakery.makeBakedQuad(new Vector3f(UpLeftOffsetHollow, minPole, 0), new Vector3f(16.0f, maxPole, 1.0f), faceCover, textureSouth, EnumFacing.SOUTH, ModelRotation.X0_Y0, (BlockPartRotation)null, true, shade));
+		list.add(faceBakery.makeBakedQuad(new Vector3f(UpLeftOffsetHollow, minPole, 0), new Vector3f(UpLeftOffsetHollow, maxPole, 1.0f), faceCover, textureWest, EnumFacing.WEST, ModelRotation.X0_Y0, (BlockPartRotation)null, true, shade));
+		list.add(faceBakery.makeBakedQuad(new Vector3f(16.0f, minPole, 0), new Vector3f(16.0f, maxPole, 1.0f), faceCover, textureEast, EnumFacing.EAST, ModelRotation.X0_Y0, (BlockPartRotation)null, true, shade));
 	
-		list.add(faceBakery.makeBakedQuad(new Vector3f(0f, maxPole, 0), new Vector3f(1.0f, maxPole, 1.0f), faceCover, textureUp, EnumFacing.UP, ModelRotation.X0_Y0, (BlockPartRotation)null, true, true));
-		list.add(faceBakery.makeBakedQuad(new Vector3f(0f, minPole, 0), new Vector3f(1.0f, minPole, 1.0f), faceCover, textureDown, EnumFacing.DOWN, ModelRotation.X0_Y0, (BlockPartRotation)null, true, true));
-		list.add(faceBakery.makeBakedQuad(new Vector3f(0f, minPole, 0), new Vector3f(1.0f, maxPole, 1.0f), faceCover, textureNorth, EnumFacing.NORTH, ModelRotation.X0_Y0, (BlockPartRotation)null, true, true));
-		list.add(faceBakery.makeBakedQuad(new Vector3f(0f, minPole, 0), new Vector3f(1.0f, maxPole, 1.0f), faceCover, textureSouth, EnumFacing.SOUTH, ModelRotation.X0_Y0, (BlockPartRotation)null, true, true));
-		list.add(faceBakery.makeBakedQuad(new Vector3f(0f, minPole, 0), new Vector3f(0f, maxPole, 1.0f), faceCover, textureWest, EnumFacing.WEST, ModelRotation.X0_Y0, (BlockPartRotation)null, true, true));
-		list.add(faceBakery.makeBakedQuad(new Vector3f(1.0f, minPole, 0), new Vector3f(1.0f, maxPole, 1.0f), faceCover, textureEast, EnumFacing.EAST, ModelRotation.X0_Y0, (BlockPartRotation)null, true, true));
+		list.add(faceBakery.makeBakedQuad(new Vector3f(0f, maxPole, 0), new Vector3f(1.0f, maxPole, 1.0f), faceCover, textureUp, EnumFacing.UP, ModelRotation.X0_Y0, (BlockPartRotation)null, true, shade));
+		list.add(faceBakery.makeBakedQuad(new Vector3f(0f, minPole, 0), new Vector3f(1.0f, minPole, 1.0f), faceCover, textureDown, EnumFacing.DOWN, ModelRotation.X0_Y0, (BlockPartRotation)null, true, shade));
+		list.add(faceBakery.makeBakedQuad(new Vector3f(0f, minPole, 0), new Vector3f(1.0f, maxPole, 1.0f), faceCover, textureNorth, EnumFacing.NORTH, ModelRotation.X0_Y0, (BlockPartRotation)null, true, shade));
+		list.add(faceBakery.makeBakedQuad(new Vector3f(0f, minPole, 0), new Vector3f(1.0f, maxPole, 1.0f), faceCover, textureSouth, EnumFacing.SOUTH, ModelRotation.X0_Y0, (BlockPartRotation)null, true, shade));
+		list.add(faceBakery.makeBakedQuad(new Vector3f(0f, minPole, 0), new Vector3f(0f, maxPole, 1.0f), faceCover, textureWest, EnumFacing.WEST, ModelRotation.X0_Y0, (BlockPartRotation)null, true, shade));
+		list.add(faceBakery.makeBakedQuad(new Vector3f(1.0f, minPole, 0), new Vector3f(1.0f, maxPole, 1.0f), faceCover, textureEast, EnumFacing.EAST, ModelRotation.X0_Y0, (BlockPartRotation)null, true, shade));
 		
 		FluidStack fluid = stack !=null ? stack : (state !=null && state.tank !=null && state.tank.tank !=null) ? state.tank.tank.getFluid() : null;
 		if(fluid !=null){
