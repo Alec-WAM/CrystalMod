@@ -1,5 +1,6 @@
 package alec_wam.CrystalMod.blocks;
 
+import alec_wam.CrystalMod.CrystalMod;
 import net.minecraft.block.BlockStairs;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -12,6 +13,7 @@ public class BlockCustomStairs extends BlockStairs implements ICustomModel {
 
 	public BlockCustomStairs(IBlockState modelState) {
 		super(modelState);
+		setCreativeTab(CrystalMod.tabBlocks);
 	}
 
 	@SideOnly(Side.CLIENT)

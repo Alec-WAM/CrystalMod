@@ -1,6 +1,5 @@
 package alec_wam.CrystalMod.items;
 
-import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.ICustomModel;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
@@ -19,7 +18,7 @@ public class ItemMiscFood extends ItemFood implements ICustomModel {
 		super(1, false);
 		setHasSubtypes(true);
 		setMaxDamage(0);
-		setCreativeTab(CrystalMod.tabItems);
+		setCreativeTab(CreativeTabs.FOOD);
 		ModItems.registerItem(this, "miscfood");
 	}
 	

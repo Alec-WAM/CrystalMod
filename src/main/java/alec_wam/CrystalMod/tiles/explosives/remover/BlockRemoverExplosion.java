@@ -2,13 +2,13 @@ package alec_wam.CrystalMod.tiles.explosives.remover;
 
 import java.util.Locale;
 
-import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.EnumBlock;
 import alec_wam.CrystalMod.tiles.explosives.remover.TileRemoverExplosion.RemovingType;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.world.World;
@@ -20,7 +20,7 @@ public class BlockRemoverExplosion extends EnumBlock<BlockRemoverExplosion.Remov
 	public BlockRemoverExplosion() {
 		super(Material.TNT, TYPE, RemoverType.class);
 		setHardness(1.5F);
-		setCreativeTab(CrystalMod.tabBlocks);
+		setCreativeTab(CreativeTabs.REDSTONE);
 		setSoundType(SoundType.PLANT);
 	}
 

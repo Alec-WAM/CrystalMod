@@ -12,6 +12,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -29,7 +30,7 @@ public class BlockAdvDispenser extends BlockMachine implements ICustomModel {
 	public BlockAdvDispenser() {
 		super(Material.IRON);
 		this.setHardness(1f).setResistance(10F);
-		this.setCreativeTab(CrystalMod.tabBlocks);
+		this.setCreativeTab(CreativeTabs.REDSTONE);
 	}
 	
 	@Override

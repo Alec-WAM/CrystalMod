@@ -1,6 +1,5 @@
 package alec_wam.CrystalMod.blocks.decorative;
 
-import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.EnumBlock.IEnumMeta;
 import alec_wam.CrystalMod.blocks.ICustomModel;
 import net.minecraft.block.Block;
@@ -14,7 +13,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.IStateMapper;
 import net.minecraft.client.renderer.block.statemap.StateMap;
-import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
@@ -47,7 +45,7 @@ public class BlockFancyLadder extends Block implements ICustomModel
     {
         super(Material.CIRCUITS);
         this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(TYPE, FancyLadderType.WIDE));
-        this.setCreativeTab(CrystalMod.tabBlocks);
+        this.setCreativeTab(CreativeTabs.DECORATIONS);
     }
 
     @SideOnly(Side.CLIENT)

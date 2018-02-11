@@ -2,7 +2,6 @@ package alec_wam.CrystalMod.blocks.decorative.tiles;
 
 import javax.annotation.Nullable;
 
-import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.EnumBlock;
 import alec_wam.CrystalMod.blocks.EnumBlock.IEnumMeta;
 import net.minecraft.block.SoundType;
@@ -10,6 +9,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
@@ -28,7 +28,7 @@ public class BlockBasicTiles extends EnumBlock<BlockBasicTiles.BasicTileType> {
 
 	public BlockBasicTiles() {
 		super(Material.ROCK, TYPE, BasicTileType.class);
-		this.setCreativeTab(CrystalMod.tabBlocks);
+		this.setCreativeTab(CreativeTabs.DECORATIONS);
 		this.setHardness(2f);
 		this.setDefaultState(this.blockState.getBaseState().withProperty(TYPE, BasicTileType.STONE_STONE));
 	}

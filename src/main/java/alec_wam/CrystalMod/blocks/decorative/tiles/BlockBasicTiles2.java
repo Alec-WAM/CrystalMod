@@ -4,7 +4,6 @@ import java.util.Random;
 
 import javax.annotation.Nullable;
 
-import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.EnumBlock;
 import alec_wam.CrystalMod.blocks.EnumBlock.IEnumMeta;
 import net.minecraft.block.Block;
@@ -35,7 +34,7 @@ public class BlockBasicTiles2 extends EnumBlock<BlockBasicTiles2.BasicTileType2>
 	
 	public BlockBasicTiles2() {
 		super(Material.ROCK, TYPE, BasicTileType2.class);
-		this.setCreativeTab(CrystalMod.tabBlocks);
+		this.setCreativeTab(CreativeTabs.DECORATIONS);
 		this.setHardness(2f);
 		this.setDefaultState(this.blockState.getBaseState().withProperty(TYPE, BasicTileType2.LOG_OAK));
 	}

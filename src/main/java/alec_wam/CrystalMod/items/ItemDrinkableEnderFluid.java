@@ -3,10 +3,9 @@ package alec_wam.CrystalMod.items;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.fluids.ModFluids;
-import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.EntityUtil;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -19,17 +18,15 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.fluids.BlockFluidBase;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStack;
 
 public class ItemDrinkableEnderFluid extends Item {
 
 	public ItemDrinkableEnderFluid(){
-		this.setCreativeTab(CrystalMod.tabItems);
+		this.setCreativeTab(CreativeTabs.BREWING);
 		this.setMaxStackSize(16);
 		ModItems.registerItem(this, "enderfluidbottle");
 	}

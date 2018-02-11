@@ -2,7 +2,6 @@ package alec_wam.CrystalMod.blocks;
 
 import javax.annotation.Nullable;
 
-import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.EnumBlock.IEnumMeta;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import net.minecraft.block.BlockFalling;
@@ -35,7 +34,7 @@ public class BlockFallingCompressed extends BlockFalling implements ICustomModel
 	
 	public BlockFallingCompressed() {
 		super(Material.SAND);
-		this.setCreativeTab(CrystalMod.tabBlocks);
+		this.setCreativeTab(CreativeTabs.BUILDING_BLOCKS);
 		this.setHardness(0.5f);
 		this.setDefaultState(this.blockState.getBaseState().withProperty(TYPE, FallingCompressedBlockType.GUNPOWDER));
 	}

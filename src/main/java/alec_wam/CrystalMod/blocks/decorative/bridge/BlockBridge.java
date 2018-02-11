@@ -30,6 +30,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -60,7 +61,7 @@ public class BlockBridge extends EnumBlock<WoodenBlockProperies.WoodType> implem
 		this.setSoundType(SoundType.WOOD);
 		this.setHardness(0.8F);
 		this.setResistance(4.0F);
-		this.setCreativeTab(CrystalMod.tabBlocks);
+		this.setCreativeTab(CreativeTabs.DECORATIONS);
 	}
 	
 	@Override

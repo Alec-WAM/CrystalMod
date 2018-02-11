@@ -1,6 +1,5 @@
 package alec_wam.CrystalMod.blocks.decorative;
 
-import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.EnumBlock.IEnumMeta;
 import alec_wam.CrystalMod.blocks.ICustomModel;
 import net.minecraft.block.Block;
@@ -46,7 +45,7 @@ public class BlockFancyLadder2 extends Block implements ICustomModel
     {
         super(Material.CIRCUITS);
         this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(TYPE, FancyLadderType2.CIRCLE));
-        this.setCreativeTab(CrystalMod.tabBlocks);
+        this.setCreativeTab(CreativeTabs.DECORATIONS);
     }
 
     @SideOnly(Side.CLIENT)

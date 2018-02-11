@@ -3,6 +3,7 @@ package alec_wam.CrystalMod.blocks.decorative;
 import alec_wam.CrystalMod.blocks.EnumBlock.IEnumMeta;
 import alec_wam.CrystalMod.blocks.ICustomModel;
 import net.minecraft.block.BlockPumpkin;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
@@ -53,7 +54,10 @@ public class BlockFancyPumpkin extends BlockPumpkin implements ICustomModel {
     
     public BlockFancyPumpkin(){
     	super();
-    	this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(TYPE, PumpkinType.STEVE));
+    	setCreativeTab(CreativeTabs.BUILDING_BLOCKS);
+    	setHardness(1.0F);
+    	setSoundType(SoundType.WOOD);
+    	setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(TYPE, PumpkinType.STEVE));
     }
     
     @SideOnly(Side.CLIENT)

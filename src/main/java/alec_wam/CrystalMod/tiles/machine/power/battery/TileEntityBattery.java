@@ -54,8 +54,16 @@ public class TileEntityBattery extends TileEntityIOSides implements IMessageHand
 		facing = nbt.getInteger("Facing");
 		int meta = nbt.getInteger("Type");
 		energyStorage = new CEnergyStorage(MAX_ENERGY[meta], MAX_RECEIVE[meta], MAX_SEND[meta]);
-		this.sendAmount = Math.min(MAX_SEND[meta], nbt.getInteger("Send"));
-		this.receiveAmount = Math.min(MAX_RECEIVE[meta], nbt.getInteger("Receive"));
+		if(nbt.hasKey("Send")){
+			this.sendAmount = Math.min(MAX_SEND[meta], nbt.getInteger("Send"));
+		} else {
+			this.sendAmount = MAX_SEND[meta];
+		}
+		if(nbt.hasKey("Receive")){
+			this.receiveAmount = Math.min(MAX_RECEIVE[meta], nbt.getInteger("Receive"));
+		}else{
+			this.receiveAmount =MAX_RECEIVE[meta];
+		}
 		this.energyStorage.readFromNBT(nbt);
 		updateAfterLoad();
 	}

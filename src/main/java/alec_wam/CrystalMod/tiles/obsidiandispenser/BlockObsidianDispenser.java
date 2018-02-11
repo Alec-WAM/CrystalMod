@@ -1,24 +1,19 @@
 package alec_wam.CrystalMod.tiles.obsidiandispenser;
 
-import java.util.Random;
-
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.tiles.BlockStateFacing;
 import alec_wam.CrystalMod.tiles.machine.BlockMachine;
 import alec_wam.CrystalMod.tiles.machine.BlockStateMachine;
-import alec_wam.CrystalMod.util.ChatUtil;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
-import alec_wam.CrystalMod.util.ModLogger;
-import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
-import net.minecraft.entity.item.EntityItem;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
@@ -38,7 +33,7 @@ public class BlockObsidianDispenser extends BlockMachine implements ICustomModel
 		super(Material.ROCK);
 		this.setSoundType(SoundType.STONE);
 		this.setHardness(50f).setResistance(2000F);
-		this.setCreativeTab(CrystalMod.tabBlocks);
+		this.setCreativeTab(CreativeTabs.REDSTONE);
 	}
 	
 	@Override
@@ -86,9 +81,7 @@ public class BlockObsidianDispenser extends BlockMachine implements ICustomModel
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hX, float hY, float hZ){
 		TileEntity tile = world.getTileEntity(pos);
 		if(tile !=null && tile instanceof TileObsidianDispenser){
-			TileObsidianDispenser dis = (TileObsidianDispenser)tile;
 			if(!world.isRemote){
-				//ChatUtil.sendChat(player, ""+dis.getStackInSlot(0));
 				player.openGui(CrystalMod.instance, 0, world, pos.getX(), pos.getY(), pos.getZ());
 			}
 			return true;

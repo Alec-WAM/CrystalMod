@@ -5,7 +5,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
-import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.entities.animals.EntityCrystalCow;
 import alec_wam.CrystalMod.entities.mob.enderman.EntityCrystalEnderman;
@@ -112,7 +111,7 @@ public class ItemMobEssence extends Item implements ICustomModel{
 	public ItemMobEssence(){
 		super();
 		this.setMaxStackSize(1);
-		this.setCreativeTab(CrystalMod.tabItems);
+		this.setCreativeTab(CreativeTabs.MISC);
 		ModItems.registerItem(this, "mobessence");
 	}
 	

@@ -2,9 +2,9 @@ package alec_wam.CrystalMod.entities.accessories.horseshoes;
 
 import java.util.Map;
 
-import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.util.ItemStackTools;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.init.Enchantments;
@@ -19,7 +19,7 @@ public class ItemHorseShoe extends Item {
 
 	public ItemHorseShoe(){
 		super();
-		setCreativeTab(CrystalMod.tabTools);
+		setCreativeTab(CreativeTabs.COMBAT);
 		setMaxStackSize(1);
 		ModItems.registerItem(this, "horseshoes");
 		MinecraftForge.EVENT_BUS.register(this);
