@@ -1,6 +1,5 @@
 package alec_wam.CrystalMod.blocks.decorative;
 
-import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.EnumBlock;
 import alec_wam.CrystalMod.blocks.EnumBlock.IEnumMeta;
 import net.minecraft.block.SoundType;
@@ -9,6 +8,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
 import net.minecraft.util.IStringSerializable;
@@ -24,7 +24,7 @@ public class BlockFancySeaLantern extends EnumBlock<BlockFancySeaLantern.SeaLant
 	
 	public BlockFancySeaLantern() {
 		super(Material.GLASS, TYPE, SeaLanternType.class);
-		setCreativeTab(CrystalMod.tabBlocks);
+		setCreativeTab(CreativeTabs.BUILDING_BLOCKS);
 		setHardness(0.3f);
 		setSoundType(SoundType.GLASS);
 		setLightLevel(1.0F);

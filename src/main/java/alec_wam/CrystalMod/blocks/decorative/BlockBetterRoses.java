@@ -8,7 +8,6 @@ import javax.annotation.Nullable;
 
 import com.google.common.collect.Lists;
 
-import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.EnumBlock.IEnumMeta;
 import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.blocks.ModBlocks;
@@ -51,7 +50,7 @@ public class BlockBetterRoses extends BlockBush implements IGrowable, IShearable
     public BlockBetterRoses()
     {
         super(Material.PLANTS);
-        this.setCreativeTab(CrystalMod.tabCrops);
+        this.setCreativeTab(CreativeTabs.DECORATIONS);
         this.setSoundType(SoundType.PLANT);
         this.setDefaultState(this.blockState.getBaseState().withProperty(COLOR, RoseType.WHITE).withProperty(TOP, false));
         disableStats();
@@ -184,12 +183,6 @@ public class BlockBetterRoses extends BlockBush implements IGrowable, IShearable
     	int top = state.getValue(TOP).booleanValue() ? 1 : 0;
     	int type = ((Integer)state.getValue(COLOR).getMeta()).intValue();
     	return (type << 1) | top;
-    }
-
-    @Override
-    public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos)
-    {
-        return super.getActualState(state, worldIn, pos);
     }
     
     @Nullable

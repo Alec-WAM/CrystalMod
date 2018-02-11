@@ -1,12 +1,12 @@
 package alec_wam.CrystalMod.blocks.decorative;
 
-import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.EnumBlock;
 import alec_wam.CrystalMod.blocks.EnumBlock.IEnumMeta;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.util.IStringSerializable;
 import net.minecraftforge.client.model.ModelLoader;
@@ -19,7 +19,7 @@ public class BlockFancyGlowstone extends EnumBlock<BlockFancyGlowstone.Glowstone
 	
 	public BlockFancyGlowstone() {
 		super(Material.GLASS, TYPE, GlowstoneType.class);
-		setCreativeTab(CrystalMod.tabBlocks);
+		setCreativeTab(CreativeTabs.BUILDING_BLOCKS);
 		setHardness(0.3f);
 		setSoundType(SoundType.GLASS);
 		setLightLevel(1.0F);

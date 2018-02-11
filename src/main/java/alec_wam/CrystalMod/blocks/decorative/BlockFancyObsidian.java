@@ -1,6 +1,5 @@
 package alec_wam.CrystalMod.blocks.decorative;
 
-import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.EnumBlock;
 import alec_wam.CrystalMod.blocks.EnumBlock.IEnumMeta;
 import net.minecraft.block.SoundType;
@@ -9,6 +8,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.util.IStringSerializable;
 import net.minecraftforge.client.model.ModelLoader;
@@ -21,7 +21,7 @@ public class BlockFancyObsidian extends EnumBlock<BlockFancyObsidian.ObsidianTyp
 	
 	public BlockFancyObsidian() {
 		super(Material.ROCK, TYPE, ObsidianType.class);
-		setCreativeTab(CrystalMod.tabBlocks);
+		setCreativeTab(CreativeTabs.BUILDING_BLOCKS);
 		setHardness(50f);
 		setSoundType(SoundType.STONE);
 		setResistance(2000.0F);
