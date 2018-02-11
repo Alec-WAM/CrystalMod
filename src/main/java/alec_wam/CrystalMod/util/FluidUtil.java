@@ -41,6 +41,9 @@ public class FluidUtil {
 	    if (provider != null && provider.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, side)) {
 	      return provider.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, side);
 	    }
+	    if (provider != null && provider.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, side)) {
+	    	return provider.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, side);
+	    }
 	    return getLegacyHandler(provider, side);
 	}
 	

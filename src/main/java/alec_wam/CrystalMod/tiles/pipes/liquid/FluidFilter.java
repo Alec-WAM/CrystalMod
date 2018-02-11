@@ -1,6 +1,7 @@
 package alec_wam.CrystalMod.tiles.pipes.liquid;
 
 import alec_wam.CrystalMod.util.FluidUtil;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -51,7 +52,7 @@ public class FluidFilter {
   }
 
   public boolean setFluid(int index, ItemStack stack) {
-    if(stack == null) {
+    if(ItemStackTools.isEmpty(stack)) {
       return setFluid(index, (FluidStack) null);
     }
     FluidStack f = FluidUtil.getFluidTypeFromItem(stack);

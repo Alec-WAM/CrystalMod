@@ -12,13 +12,10 @@ import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.packets.PacketTileMessage;
 import alec_wam.CrystalMod.tiles.pipes.ConnectionMode;
 import alec_wam.CrystalMod.tiles.pipes.item.PacketPipe;
-import alec_wam.CrystalMod.util.FluidUtil;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.Lang;
-import alec_wam.CrystalMod.util.ModLogger;
 import alec_wam.CrystalMod.util.client.RenderUtil;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
@@ -27,6 +24,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fluids.FluidStack;
 
 public class GuiLiquidPipe extends GuiContainer {
@@ -125,7 +123,7 @@ public class GuiLiquidPipe extends GuiContainer {
 			FluidFilter filter = pipe.getFilter(dir, isInput());
 			this.buttonList.add(new GuiButton(1, sx+8, sy+35, 12, 12, inOutShowIn ? "I" : "O"));
 			if(filter !=null){
-				this.buttonList.add(new GuiButton(2, sx+8+15, sy+35, 12, 12, filter.isBlacklist() ? "B" : "W"));
+				this.buttonList.add(new GuiButton(2, sx+69, sy+55, 40, 12, (filter.isBlacklist() ? "Block" : "Allow")));
 			}
 		}
 	}
@@ -142,8 +140,8 @@ public class GuiLiquidPipe extends GuiContainer {
 	    if(!isFilterVisible()) {
 	      return;
 	    }
-	    int filterX = 59;
-	    int filterY = 63;
+	    int filterX = 45;
+	    int filterY = 33;
 	    Rectangle filterBounds = new Rectangle(filterX, filterY, 90, 18);
 	   
 	    if(!filterBounds.contains(x, y)) {
@@ -160,9 +158,10 @@ public class GuiLiquidPipe extends GuiContainer {
 	    }
 	    int slot = (x - filterX) / 18;
 	    if(slot < 5 && slot >= 0){
-	    	ModLogger.info(slot+" "+(FluidUtil.getFluidTypeFromItem(st) !=null ? FluidUtil.getFluidTypeFromItem(st).getLocalizedName() : ""));
-	    	filter.setFluid(slot, st);
-	    	updateFilter(filter);
+	    	if(filter.setFluid(slot, st)){
+	    		//ModLogger.info(slot+" "+(FluidUtil.getFluidTypeFromItem(st) !=null ? FluidUtil.getFluidTypeFromItem(st).getLocalizedName() : ""));
+	    		updateFilter(filter);
+	    	}
 	    }
 	}
 	
@@ -170,54 +169,32 @@ public class GuiLiquidPipe extends GuiContainer {
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY)
     {
 		super.drawGuiContainerForegroundLayer(mouseX, mouseY);
-		boolean isInput = isInput();
-		int filterX = 59;
-	    int filterY = 63;
-	    if(isInput) {
-	      int y = guiTop;
-	      fontRendererObj.drawString("Input", guiLeft+filterX, y+filterY-10, Color.DARK_GRAY.getRGB());
-	    }
-	    if(isFilterVisible()) {
-	    	
-	      if(pipe.getConnectionMode(dir) == ConnectionMode.IN_OUT) {
-	        String inOutStr = inOutShowIn ? Lang.localize("gui.pipe.ioMode.input") : Lang.localize("gui.pipe.ioMode.output");
-	        int x = 0 + xSize - 20 - 5 - fontRendererObj.getStringWidth(inOutStr);
-	        int y = 20;
-	        fontRendererObj.drawString(inOutStr, x, y, Color.DARK_GRAY.getRGB());
-	      }
-
-	      GlStateManager.color(1, 1, 1);
-	      //gui.bindGuiTexture(1);
-	      //gui.drawTexturedModalRect(gui.getGuiLeft(), gui.getGuiTop() + 55, 0, 55, gui.getXSize(), 145);
-	      String filterStr = "Filter";
-	      FontRenderer fr = fontRendererObj;
-	      int sw = fr.getStringWidth(filterStr);
-	      int x = sw / 2;
-	      int y = 0 + 40;
-	      fr.drawString(filterStr, x, y, Color.DARK_GRAY.getRGB());
-	      
-	      x = 0 + filterX;
-	      y = 0 + filterY;
-	      GlStateManager.color(1, 1, 1);
-	      //gui.bindGuiTexture();
-	      //gui.drawTexturedModalRect(x, y, 24, 238, 90, 18);
-
-	      FluidFilter filter = getFilter();
-	      for(int i = 0; i < 5; i++){
-	    	  drawRect(x + (i * 18), y, x + (i * 18) + 16, y + 16, Color.GRAY.getRGB());
-	      }
-	      
-	      if(filter != null && !filter.isEmpty()) {
-	    	  
-	        for (int i = 0; i < filter.size(); i++) {
-	          FluidStack f = filter.getFluidStackAt(i);
-	          if(f != null) {
-	            renderFluid(f, x + (i * 18), y);
-	          }
-	        }
-	      }
-
-	    }
+		int filterX = 45;
+		int filterY = 33;
+		if(isFilterVisible()) {
+			if(pipe.getConnectionMode(dir) == ConnectionMode.IN_OUT) {
+				String inOutStr = inOutShowIn ? TextFormatting.AQUA + "Input" : TextFormatting.RED + "Output";
+				int x = 90 - (fontRendererObj.getStringWidth(inOutStr)/2);
+				int y = 20;
+				fontRendererObj.drawString(inOutStr, x, y, Color.DARK_GRAY.getRGB());
+			}
+			GlStateManager.color(1, 1, 1);
+			int x = filterX;
+			int y = filterY;
+			GlStateManager.color(1, 1, 1);
+			FluidFilter filter = getFilter();
+			for(int i = 0; i < 5; i++){
+				drawRect(x + (i * 18), y, x + (i * 18) + 16, y + 16, Color.GRAY.getRGB());
+			}
+			if(filter != null && !filter.isEmpty()) {
+				for (int i = 0; i < filter.size(); i++) {
+					FluidStack f = filter.getFluidStackAt(i);
+					if(f != null) {
+						renderFluid(f, x + (i * 18)-1, y-1);
+					}
+				}
+			}
+		}
     }
 	
 	private void renderFluid(FluidStack f, int x, int y) {

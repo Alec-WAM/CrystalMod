@@ -70,17 +70,18 @@ public class TileEntityPipeLiquid extends TileEntityPipe implements IInventoryCh
 		super.readCustomNBT(nbt);
 		for(EnumFacing face : EnumFacing.VALUES){
 		  String key = "filter.out."+face.name();
+		  FluidFilter out = new FluidFilter();
 	      if(nbt.hasKey(key)) {
-	    	  FluidFilter out = new FluidFilter();
-    	      out.readFromNBT(nbt.getCompoundTag(key));
-    	      outputFilters.put(face, out);
-	      }
+	    	  out.readFromNBT(nbt.getCompoundTag(key));
+	      } 
+	      outputFilters.put(face, out);
+	      
 	      key = "filter.in."+face.name();
-	      if(nbt.hasKey(key)) {
-	    	  FluidFilter in = new FluidFilter();
+	      FluidFilter in = new FluidFilter();
+    	  if(nbt.hasKey(key)) {
 	    	  in.readFromNBT(nbt.getCompoundTag(key));
-    	      inputFilters.put(face, in);
 	      }
+	      inputFilters.put(face, in);
 		}
 	}
 	
@@ -273,7 +274,6 @@ public class TileEntityPipeLiquid extends TileEntityPipe implements IInventoryCh
 
 		@Override
 		public void handleMessage(String messageId, NBTTagCompound messageData, boolean client) {
-			ModLogger.info("Message");
 			if(messageId.equalsIgnoreCase("FilterFluid")){
 				EnumFacing dir = EnumFacing.getFront(messageData.getInteger("Dir"));
 				FluidFilter filter = new FluidFilter();
