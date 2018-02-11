@@ -662,6 +662,7 @@ public class ModCrafting {
 		addShapedOreRecipe(new ItemStack(ModBlocks.advDispenser), new Object[]{"PPP", "PMP", "PDP", 'P', dIronPlate, 'M', "skull", 'D', Blocks.DISPENSER});
 		addShapedOreRecipe(new ItemStack(ModBlocks.muffler), new Object[]{"WWW", "NMN", "WWW", 'W', "wool", 'M', machineFrame, 'N', Blocks.NOTEBLOCK});
 		addShapedOreRecipe(new ItemStack(ModBlocks.obsidianDispenser), new Object[]{"OOO", "ODO", "OGO", 'O', "obsidian", 'D', Blocks.DISPENSER, 'G', "gemDiamond"});
+		addShapedOreRecipe(new ItemStack(ModBlocks.epst), new Object[]{"XEX", "EDE", "XEX", 'X', ModFluids.bucketList.get(ModFluids.fluidXpJuice), 'E', ModFluids.bucketList.get(ModFluids.fluidEnder), 'D', ModBlocks.obsidianDispenser});
 
 		addShapedOreRecipe(new ItemStack(ModBlocks.remover, 1, RemoverType.REDSTONE.getMeta()), new Object[]{"CRC", "RTR", "CRC", 'R', "dustRedstone", 'T', Blocks.TNT, 'C', redPlate});
 		addShapedOreRecipe(new ItemStack(ModBlocks.remover, 1, RemoverType.WATER.getMeta()), new Object[]{"CWC", " T ", "CWC", 'W', Items.WATER_BUCKET, 'T', Blocks.TNT, 'C', bluePlate});
@@ -728,6 +729,9 @@ public class ModCrafting {
 		ItemStack goldWolfArmor = new ItemStack(ModItems.wolfArmor);
 		ItemNBTHelper.setString(goldWolfArmor, "ArmorID", WolfArmor.GOLD.name().toLowerCase());
 		addShapedOreRecipe(goldWolfArmor, new Object[]{"ICH", "BLB", 'I', "ingotGold", 'C', Items.GOLDEN_CHESTPLATE, 'H', Items.GOLDEN_HELMET, 'B', Items.GOLDEN_BOOTS, 'L', "leather"});
+		
+		addShapedRecipe(ModItems.horseShoes, new Object[]{"N N", "N N", " P ", 'N', dIronNugget, 'P', dIronPlate});
+		
 		
 		addShapedRecipe(ModItems.enderChestMinecart, new Object[] {"A", "B", 'A', Blocks.ENDER_CHEST, 'B', Items.MINECART});
 		

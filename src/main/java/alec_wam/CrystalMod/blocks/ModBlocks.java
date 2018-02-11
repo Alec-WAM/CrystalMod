@@ -121,6 +121,8 @@ import alec_wam.CrystalMod.tiles.machine.elevator.floor.BlockElevatorFloor;
 import alec_wam.CrystalMod.tiles.machine.elevator.floor.TileEntityElevatorFloor;
 import alec_wam.CrystalMod.tiles.machine.enderbuffer.BlockEnderBuffer;
 import alec_wam.CrystalMod.tiles.machine.enderbuffer.TileEntityEnderBuffer;
+import alec_wam.CrystalMod.tiles.machine.epst.BlockEPST;
+import alec_wam.CrystalMod.tiles.machine.epst.TileEPST;
 import alec_wam.CrystalMod.tiles.machine.inventory.charger.BlockInventoryCharger;
 import alec_wam.CrystalMod.tiles.machine.inventory.charger.BlockStateInventoryCharger;
 import alec_wam.CrystalMod.tiles.machine.inventory.charger.TileEntityInventoryChargerCU;
@@ -344,6 +346,7 @@ public class ModBlocks {
 	public static BlockPowerConverter converter;
 	public static BlockAdvDispenser advDispenser;
 	public static BlockObsidianDispenser obsidianDispenser;
+	public static BlockEPST epst;
 
 	public static BlockReinforcedRail darkIronRail;
 	public static BlockBridge bridge;
@@ -739,6 +742,10 @@ public class ModBlocks {
 		obsidianDispenser = new BlockObsidianDispenser();
 		registerBlock(obsidianDispenser, "obsidiandispenser");
 		registerTileEntity(TileObsidianDispenser.class);
+		
+		epst = new BlockEPST();
+		registerBlock(epst, "epst");
+		registerTileEntity(TileEPST.class);
 
 		customSpawner = new BlockCustomSpawner();
 		registerBlock(customSpawner, "customspawner");

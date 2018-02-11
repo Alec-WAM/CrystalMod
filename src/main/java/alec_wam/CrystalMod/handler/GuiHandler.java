@@ -49,6 +49,9 @@ import alec_wam.CrystalMod.tiles.machine.advDispenser.TileAdvDispenser;
 import alec_wam.CrystalMod.tiles.machine.enderbuffer.TileEntityEnderBuffer;
 import alec_wam.CrystalMod.tiles.machine.enderbuffer.gui.ContainerEnderBuffer;
 import alec_wam.CrystalMod.tiles.machine.enderbuffer.gui.GuiEnderBuffer;
+import alec_wam.CrystalMod.tiles.machine.epst.ContainerEPST;
+import alec_wam.CrystalMod.tiles.machine.epst.GuiEPST;
+import alec_wam.CrystalMod.tiles.machine.epst.TileEPST;
 import alec_wam.CrystalMod.tiles.machine.power.battery.ContainerBattery;
 import alec_wam.CrystalMod.tiles.machine.power.battery.GuiBattery;
 import alec_wam.CrystalMod.tiles.machine.power.battery.TileEntityBattery;
@@ -342,6 +345,7 @@ public class GuiHandler implements IGuiHandler {
         	if(te instanceof TileRedstoneReactor) return new GuiRedstoneReactor(player, (TileRedstoneReactor)te);
         	if(te instanceof TileEntityCaseBase) return new GuiCase(player, (TileEntityCaseBase)te);
         	if(te instanceof TileObsidianDispenser) return new GuiObsidianDispener(player.inventory, (TileObsidianDispenser)te);
+        	if(te instanceof TileEPST) return new GuiEPST(player.inventory, (TileEPST)te);
         } 
         return null;
     }
@@ -494,6 +498,7 @@ public class GuiHandler implements IGuiHandler {
         	if(te instanceof TileRedstoneReactor) return new ContainerRedstoneReactor(player.inventory, (TileRedstoneReactor)te);
         	if(te instanceof TileEntityCaseBase) return new ContainerCase(player.inventory, (TileEntityCaseBase)te);
         	if(te instanceof TileObsidianDispenser) return new ContainerDispenser(player.inventory, (TileObsidianDispenser)te);
+        	if(te instanceof TileEPST) return new ContainerEPST(player.inventory, (TileEPST)te);
         }
         return null;
     }

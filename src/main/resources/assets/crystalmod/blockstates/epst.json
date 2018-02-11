@@ -1,0 +1,42 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "crystalmod:machine",
+    "textures": {
+	  "particle":"crystalmod:blocks/machine/epst/bottom",
+	  "up":"crystalmod:blocks/machine/epst/bottom",
+	  "down":"crystalmod:blocks/machine/epst/bottom",
+	  "front":"crystalmod:blocks/machine/epst/front_horizontal",
+	  "side":"crystalmod:blocks/machine/epst/side"
+    },
+    "transform": "forge:default-block"
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{}],
+    "facing": {
+      "north": {},
+      "south": {"y": 180},
+      "west": {"y": 270},
+      "east": {"y": 90},
+      "up": {
+		"x": -90,
+		"textures": {
+			"front":"crystalmod:blocks/machine/epst/front_vertical"
+		}
+	  },
+      "down": {
+		"x": 90,
+		"textures": {
+			"front":"crystalmod:blocks/machine/epst/front_vertical"
+		}
+	  }
+    },
+	"active": {
+		"false": {
+		},
+		"true": {
+		}
+	}
+  }
+}
