@@ -71,7 +71,10 @@ public class Config {
     public static boolean generateNetherWell = true;
     public static int netherWellChance = 500;
     public static boolean generateEndWell = true;
-    public static int endWellChance = 100;
+    public static int endWellChance = 100;    
+
+    public static boolean generateNetherCrysineMushrooms = true;
+    public static int giantCrysineMushroomChance = 15;
     
     public static boolean retrogenInfo = false;
     public static String retrogenID = "generated";
@@ -238,6 +241,9 @@ public class Config {
         generateEndWell = cfg.get(CATEGORY_WORLD, "generateEndWell", generateEndWell, "Enable or disable Ender Well Generation in the End.").getBoolean();
         endWellChance = cfg.get(CATEGORY_WORLD, "endWellChance", endWellChance, "Chance of the End Well generating. The higher the number the lower the chance. If the number is less than 0 it will not generate.").getInt(100);
         
+        generateNetherCrysineMushrooms = cfg.get(CATEGORY_WORLD, "generateNetherCrysineMushrooms", generateNetherCrysineMushrooms, "Enable or disable Crysine Mushroom Generation in the Nether.").getBoolean();
+        giantCrysineMushroomChance = cfg.get(CATEGORY_WORLD, "giantCrysineMushroomChance", giantCrysineMushroomChance, "Chance of giant Crysine Mushrooms generating in the Nether. The higher the number the lower the chance. If the number is less than 0 it will not generate.").getInt(15);
+       
         retrogenInfo = cfg.get(CATEGORY_WORLD, "retrogenInfo", retrogenInfo,
                 "Set to true if you want retro gen chunks logged.").getBoolean();
         retrogenID = cfg.get(CATEGORY_WORLD, "retrogenID", retrogenID,

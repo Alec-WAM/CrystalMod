@@ -1,0 +1,143 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "cube",
+    "textures": {
+	  "particle":"crystalmod:blocks/plant/crysine/inside"
+    },
+    "transform": "forge:default-block"
+  },
+  "variants": {
+	"inventory": {
+		"model": "cube_all",
+		"textures": {
+			"all": "crystalmod:blocks/plant/crysine/skin"
+		}
+	},
+	"variant": {
+		"north_west": { 
+			"textures": {
+				"down": "crystalmod:blocks/plant/crysine/inside",
+				"up": "crystalmod:blocks/plant/crysine/skin",
+				"north": "crystalmod:blocks/plant/crysine/skin",
+				"east": "crystalmod:blocks/plant/crysine/inside",
+				"south": "crystalmod:blocks/plant/crysine/inside",
+				"west": "crystalmod:blocks/plant/crysine/skin"
+			}
+		},
+		"north": { 
+			"textures": {
+				"particle": "crystalmod:blocks/plant/crysine/inside",
+				"down": "crystalmod:blocks/plant/crysine/inside",
+				"up": "crystalmod:blocks/plant/crysine/skin",
+				"north": "crystalmod:blocks/plant/crysine/skin",
+				"east": "crystalmod:blocks/plant/crysine/inside",
+				"south": "crystalmod:blocks/plant/crysine/inside",
+				"west": "crystalmod:blocks/plant/crysine/inside"
+			}
+		},
+		"north_east": { 
+			"textures": {
+				"particle": "crystalmod:blocks/plant/crysine/inside",
+				"down": "crystalmod:blocks/plant/crysine/inside",
+				"up": "crystalmod:blocks/plant/crysine/skin",
+				"north": "crystalmod:blocks/plant/crysine/skin",
+				"east": "crystalmod:blocks/plant/crysine/skin",
+				"south": "crystalmod:blocks/plant/crysine/inside",
+				"west": "crystalmod:blocks/plant/crysine/inside"
+			}
+		},
+		"west": { 
+			"textures": {
+				"particle": "crystalmod:blocks/plant/crysine/inside",
+				"down": "crystalmod:blocks/plant/crysine/inside",
+				"up": "crystalmod:blocks/plant/crysine/skin",
+				"north": "crystalmod:blocks/plant/crysine/inside",
+				"east": "crystalmod:blocks/plant/crysine/inside",
+				"south": "crystalmod:blocks/plant/crysine/inside",
+				"west": "crystalmod:blocks/plant/crysine/skin"
+			}
+		},
+		"center": { 
+			"textures": {
+				"particle": "crystalmod:blocks/plant/crysine/inside",
+				"down": "crystalmod:blocks/plant/crysine/inside",
+				"up": "crystalmod:blocks/plant/crysine/skin",
+				"north": "crystalmod:blocks/plant/crysine/inside",
+				"east": "crystalmod:blocks/plant/crysine/inside",
+				"south": "crystalmod:blocks/plant/crysine/inside",
+				"west": "crystalmod:blocks/plant/crysine/inside"
+			}
+		},
+		"east": { 
+			"textures": {
+				"particle": "crystalmod:blocks/plant/crysine/inside",
+				"down": "crystalmod:blocks/plant/crysine/inside",
+				"up": "crystalmod:blocks/plant/crysine/skin",
+				"north": "crystalmod:blocks/plant/crysine/inside",
+				"east": "crystalmod:blocks/plant/crysine/skin",
+				"south": "crystalmod:blocks/plant/crysine/inside",
+				"west": "crystalmod:blocks/plant/crysine/inside"
+			}
+		},
+		"south_west": { 
+			"textures": {
+				"particle": "crystalmod:blocks/plant/crysine/inside",
+				"down": "crystalmod:blocks/plant/crysine/inside",
+				"up": "crystalmod:blocks/plant/crysine/skin",
+				"north": "crystalmod:blocks/plant/crysine/inside",
+				"east": "crystalmod:blocks/plant/crysine/inside",
+				"south": "crystalmod:blocks/plant/crysine/skin",
+				"west": "crystalmod:blocks/plant/crysine/skin"
+			}
+		},
+		"south": { 
+			"textures": {
+				"particle": "crystalmod:blocks/plant/crysine/inside",
+				"down": "crystalmod:blocks/plant/crysine/inside",
+				"up": "crystalmod:blocks/plant/crysine/skin",
+				"north": "crystalmod:blocks/plant/crysine/inside",
+				"east": "crystalmod:blocks/plant/crysine/inside",
+				"south": "crystalmod:blocks/plant/crysine/skin",
+				"west": "crystalmod:blocks/plant/crysine/inside"
+			}
+		},
+		"south_east": { 
+			"textures": {
+				"particle": "crystalmod:blocks/plant/crysine/inside",
+				"down": "crystalmod:blocks/plant/crysine/inside",
+				"up": "crystalmod:blocks/plant/crysine/skin",
+				"north": "crystalmod:blocks/plant/crysine/inside",
+				"east": "crystalmod:blocks/plant/crysine/skin",
+				"south": "crystalmod:blocks/plant/crysine/skin",
+				"west": "crystalmod:blocks/plant/crysine/inside"
+			}
+		},
+		"stem": { 
+			"model": "cube_column",
+			"textures": {
+				"side": "crystalmod:blocks/plant/crysine/stem",
+				"end": "crystalmod:blocks/plant/crysine/inside"
+			}
+		},
+		"all_stem": { 
+			"model": "cube_all",
+			"textures": {
+				"all": "crystalmod:blocks/plant/crysine/stem"
+			}
+		},
+		"all_outside": { 
+			"model": "cube_all",
+			"textures": {
+				"all": "crystalmod:blocks/plant/crysine/skin"
+			}
+		},
+		"all_inside": { 
+			"model": "cube_all",
+			"textures": {
+				"all": "crystalmod:blocks/plant/crysine/inside"
+			}
+		}
+	}
+  }
+}

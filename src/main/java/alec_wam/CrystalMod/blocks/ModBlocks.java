@@ -7,6 +7,7 @@ import com.google.common.collect.Maps;
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.BlockCompressed.CompressedBlockType;
 import alec_wam.CrystalMod.blocks.crops.BlockCorn;
+import alec_wam.CrystalMod.blocks.crops.BlockCrysineMushroom;
 import alec_wam.CrystalMod.blocks.crops.BlockCrystalBerryBush;
 import alec_wam.CrystalMod.blocks.crops.BlockCrystalPlant;
 import alec_wam.CrystalMod.blocks.crops.BlockCrystalPlant.PlantType;
@@ -14,6 +15,7 @@ import alec_wam.CrystalMod.blocks.crops.BlockCrystalReed;
 import alec_wam.CrystalMod.blocks.crops.BlockCrystalSapling;
 import alec_wam.CrystalMod.blocks.crops.BlockCrystalTreePlant;
 import alec_wam.CrystalMod.blocks.crops.BlockFlowerLilyPad;
+import alec_wam.CrystalMod.blocks.crops.BlockHugeCrysineMushroom;
 import alec_wam.CrystalMod.blocks.crops.BlockNormalSapling;
 import alec_wam.CrystalMod.blocks.crops.ItemBlockWater;
 import alec_wam.CrystalMod.blocks.crops.bamboo.BlockBamboo;
@@ -217,8 +219,10 @@ import alec_wam.CrystalMod.tiles.workbench.TileEntityCrystalWorkbench;
 import alec_wam.CrystalMod.tiles.xp.TileEntityXPVacuum;
 import alec_wam.CrystalMod.util.ModLogger;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockHugeMushroom;
 import net.minecraft.block.BlockStairs;
 import net.minecraft.block.SoundType;
+import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
@@ -281,6 +285,8 @@ public class ModBlocks {
 	public static BlockNormalSapling normalSapling;
 	public static BlockFancyPumpkin fancyPumpkin;
 	public static BlockFancyPumpkin fancyPumpkinLit;
+	public static BlockCrysineMushroom crysineMushroom;
+	public static BlockHugeCrysineMushroom crysineMushroomBlock;
 	
 	public static BlockCrystalLadder ladder;
 	public static BlockFancyLadder fancyLadders;
@@ -540,6 +546,10 @@ public class ModBlocks {
 		fancyPumpkinLit = (BlockFancyPumpkin) new BlockFancyPumpkin().setLightLevel(1.0F);
 		registerBlock(fancyPumpkinLit, new ItemBlockMeta(fancyPumpkinLit), "fancypumpkinlit");
 		ItemBlockMeta.setMappingProperty(fancyPumpkinLit, BlockFancyPumpkin.TYPE);
+		
+		crysineMushroom = registerBlock(new BlockCrysineMushroom(), "crysinemushroom");
+		crysineMushroomBlock = (BlockHugeCrysineMushroom) new BlockHugeCrysineMushroom(Material.WOOD, MapColor.PURPLE, crysineMushroom).setHardness(0.2f);
+		registerBlock(crysineMushroomBlock, "crysinemushroomblock");
 		
 		ladder = new BlockCrystalLadder();
 		registerBlock(ladder, new ItemBlockCrystalLadder(ladder), "crystalladder");		

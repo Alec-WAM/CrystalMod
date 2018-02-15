@@ -235,7 +235,8 @@ public class ModCrafting {
 		GameRegistry.addSmelting(new ItemStack(ModItems.miscFood, 1, FoodType.SEAWEED.getMetadata()), new ItemStack(ModItems.miscFood, 1, FoodType.SEAWEED_COOKED.getMetadata()), 0.5F);
 		GameRegistry.addSmelting(new ItemStack(ModItems.miscFood, 1, FoodType.KELP.getMetadata()), new ItemStack(ModItems.miscFood, 1, FoodType.KELP_COOKED.getMetadata()), 0.5F);
 		GameRegistry.addSmelting(new ItemStack(ModItems.miscFood, 1, FoodType.YELLOW_KELP.getMetadata()), new ItemStack(ModItems.miscFood, 1, FoodType.YELLOW_KELP_COOKED.getMetadata()), 0.5F);
-
+		addShapelessRecipe(new ItemStack(ModItems.miscFood, 1, FoodType.SUPER_MUSHROOM_STEW.getMetadata()), new Object[] {ModBlocks.crysineMushroom, ModBlocks.crysineMushroom, Items.BOWL});
+		
 		addShapelessRecipe(new ItemStack(ModItems.cursedBone, 3, BoneType.BONEMEAL.getMetadata()), new Object[]{new ItemStack(ModItems.cursedBone, 1, BoneType.BONE.getMetadata())});
 		
 		create9x9Recipe(blueCrystal, new ItemStack(ModItems.crystals, 1, CrystalType.BLUE_SHARD.getMetadata()), 9);

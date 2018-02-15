@@ -57,6 +57,7 @@ item.crystalmod.miscfood.kelp.name=Kelp
 item.crystalmod.miscfood.kelp_cooked.name=Roasted Kelp
 item.crystalmod.miscfood.yellow_kelp.name=Yellow Kelp
 item.crystalmod.miscfood.yellow_kelp_cooked.name=Roasted Yellow Kelp
+item.crystalmod.miscfood.super_mushroom_stew.name=Super Mushroom Stew
 
 item.crystalmod.crystalsap.blue.name=Blue Crystal Sap
 item.crystalmod.crystalsap.red.name=Red Crystal Sap
@@ -581,6 +582,9 @@ tile.crystalmod.fancypumpkinlit.steve.name=Steve Jack o'Lantern
 tile.crystalmod.fancypumpkinlit.alex.name=Alex Jack o'Lantern
 tile.crystalmod.fancypumpkinlit.creeper.name=Creeper Jack o'Lantern
 tile.crystalmod.fancypumpkinlit.spider.name=Spider Jack o'Lantern
+
+tile.crystalmod.crysinemushroom.name=Crysine Mushroom
+tile.crystalmod.crysinemushroomblock.name=Crysine Mushroom
 
 tile.crystalmod.crystalore.blue.name=Blue Crystal Ore
 tile.crystalmod.crystalore.red.name=Red Crystal Ore

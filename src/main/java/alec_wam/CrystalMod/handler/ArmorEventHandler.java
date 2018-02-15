@@ -7,7 +7,6 @@ import alec_wam.CrystalMod.items.enchancements.ModEnhancements;
 import alec_wam.CrystalMod.util.EntityUtil;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemStackTools;
-import alec_wam.CrystalMod.util.ModLogger;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -146,7 +145,7 @@ public class ArmorEventHandler {
 			}
 		}*/
 		
-		if(redCount == 4 || pureCount == 4){
+		if(redCount == 4 || pureCount == 4 || (ModEnhancements.LAVA_WALKING.isApplied(living.getItemStackFromSlot(EntityEquipmentSlot.FEET)))){
 			World world = event.getWorld();
 			BlockPos pos = new BlockPos(living).down();
 			IBlockState state = world.getBlockState(pos);

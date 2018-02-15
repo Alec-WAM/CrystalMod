@@ -15,6 +15,7 @@
         "kelp": [{ "textures": { "layer0": "crystalmod:items/food/kelp" }}],
         "kelp_cooked": [{ "textures": { "layer0": "crystalmod:items/food/kelp_cooked" }}],
         "yellow_kelp": [{ "textures": { "layer0": "crystalmod:items/food/yellow_kelp" }}],
-        "yellow_kelp_cooked": [{ "textures": { "layer0": "crystalmod:items/food/yellow_kelp_cooked" }}]
+        "yellow_kelp_cooked": [{ "textures": { "layer0": "crystalmod:items/food/yellow_kelp_cooked" }}],
+        "super_mushroom_stew": [{ "textures": { "layer0": "crystalmod:items/food/super_mushroom_stew" }}]
     }
 }

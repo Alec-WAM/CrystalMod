@@ -10,6 +10,7 @@ import alec_wam.CrystalMod.api.world.IGenerationFeature;
 import alec_wam.CrystalMod.util.ModLogger;
 import alec_wam.CrystalMod.world.crystex.MapGenCrystexiumSpike;
 import alec_wam.CrystalMod.world.generation.CoralReefFeature;
+import alec_wam.CrystalMod.world.generation.CrysineMushroomFeature;
 import alec_wam.CrystalMod.world.generation.CrystalBushFeature;
 import alec_wam.CrystalMod.world.generation.CrystalClusterFeature;
 import alec_wam.CrystalMod.world.generation.CrystalOreFeature;
@@ -44,6 +45,7 @@ public class CrystalModWorldGenerator implements IWorldGenerator {
     	featureList.add(new KelpFeature());   	 
     	featureList.add(new CoralReefFeature()); 
     	featureList.add(new RoseBushFeature()); 
+    	featureList.add(new CrysineMushroomFeature()); 
     	
     	//TODO Generate Crystherium
     	
