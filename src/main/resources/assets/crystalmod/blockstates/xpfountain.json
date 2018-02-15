@@ -1,0 +1,34 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "cube",
+    "textures": {
+	  "particle":"crystalmod:blocks/machine/xpfountain/side",
+	  "down": "crystalmod:blocks/machine/xpfountain/side",
+	  "up": "crystalmod:blocks/machine/xpfountain/vent",
+	  "north": "crystalmod:blocks/machine/xpfountain/side",
+	  "east": "crystalmod:blocks/machine/xpfountain/side_ender",
+	  "south": "crystalmod:blocks/machine/xpfountain/side",
+	  "west": "crystalmod:blocks/machine/xpfountain/side_xpjuice"
+    },
+    "transform": "forge:default-block"
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{}],
+    "facing": {
+      "south": {},
+      "west": {"y": 90},
+      "north": {"y": 180},
+      "east": {"y": 270},
+      "up": {},
+      "down": {}
+    },
+	"active": {
+		"false": {
+		},
+		"true": {
+		}
+	}
+  }
+}

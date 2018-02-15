@@ -33,6 +33,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec2f;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
@@ -431,6 +432,27 @@ public class BlockUtil {
 			realBB = new AxisAlignedBB(1.0F - bb.minY, bb.minX, bb.minX, 1.0F - bb.maxY, bb.maxX, bb.maxZ);
 		}
 		return realBB;
+	}
+
+	public static Vec2f getAnglesFromFacing(EnumFacing facing) {
+		float rotationYawIn = 0.0F;
+		float rotationPitchIn = 0.0F;
+		if(facing == EnumFacing.UP){
+			rotationPitchIn = -90;
+		}
+		if(facing == EnumFacing.DOWN){
+			rotationPitchIn = 90;
+		}
+		if(facing == EnumFacing.NORTH){
+			rotationYawIn = 180;
+		}
+		if(facing == EnumFacing.WEST){
+			rotationYawIn = 90.0F;
+		}
+		if(facing == EnumFacing.EAST){
+			rotationYawIn = -90.0F;
+		}
+		return new Vec2f(rotationYawIn, rotationPitchIn);
 	}
 	
 }

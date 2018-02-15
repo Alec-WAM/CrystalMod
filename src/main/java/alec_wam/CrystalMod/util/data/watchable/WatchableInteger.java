@@ -39,4 +39,12 @@ public class WatchableInteger {
 	public void setLastValue(int lastValue) {
 		this.lastValue = lastValue;
 	}
+	
+	public boolean needsSync(){
+		return currentValue != lastValue;
+	}
+	
+	public void syncValues(){
+		this.lastValue = this.currentValue;
+	}
 }

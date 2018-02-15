@@ -174,6 +174,11 @@ public class CmdDebug extends AbstractCMCommand{
 				ItemMobEssence.initDefaultMobs();
 				return;
 			}
+			
+			if(args.length > 1 && args[1].equalsIgnoreCase("clearxp")){
+				player.removeExperienceLevel(Integer.MAX_VALUE);
+				return;
+			}
 
 			if(args.length > 1 && args[1].equalsIgnoreCase("dumpItems")){
 				List<String> list = Lists.newArrayList();

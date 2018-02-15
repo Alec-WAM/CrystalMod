@@ -9,27 +9,21 @@ import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 
 import alec_wam.CrystalMod.tiles.TileEntityInventory;
-import alec_wam.CrystalMod.tiles.machine.BlockStateMachine;
 import alec_wam.CrystalMod.tiles.machine.IFacingTile;
 import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.ItemStackTools;
-import alec_wam.CrystalMod.util.ModLogger;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
 
 public class TileObsidianDispenser extends TileEntityInventory implements IFacingTile{
 	public static final Random RNG = new Random();

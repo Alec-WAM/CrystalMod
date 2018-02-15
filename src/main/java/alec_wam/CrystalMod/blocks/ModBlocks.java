@@ -151,6 +151,8 @@ import alec_wam.CrystalMod.tiles.machine.worksite.BlockWorksite.WorksiteType;
 import alec_wam.CrystalMod.tiles.machine.worksite.ItemBlockWorksite;
 import alec_wam.CrystalMod.tiles.machine.worksite.TileWorksiteBase;
 import alec_wam.CrystalMod.tiles.machine.worksite.TileWorksiteRenderer;
+import alec_wam.CrystalMod.tiles.machine.xpfountain.BlockXPFountain;
+import alec_wam.CrystalMod.tiles.machine.xpfountain.TileEntityXPFountain;
 import alec_wam.CrystalMod.tiles.obsidiandispenser.BlockObsidianDispenser;
 import alec_wam.CrystalMod.tiles.obsidiandispenser.TileObsidianDispenser;
 import alec_wam.CrystalMod.tiles.pipes.BlockPipe;
@@ -295,6 +297,7 @@ public class ModBlocks {
 	public static BlockMobGrinder mobGrinder;
 	public static BlockEntityHopper entityHopper;
 	public static BlockBasicTile xpVacuum;
+	public static BlockXPFountain xpFountain;
 	
 	public static BlockCrate crates;
 	public static BlockAdvancedLamp advancedLamp;
@@ -769,6 +772,8 @@ public class ModBlocks {
 		
 		xpVacuum = (BlockBasicTile)registerBlock(new BlockBasicTile(TileEntityXPVacuum.class, Material.IRON).setHardness(1.5F), "xpvacuum");
 		registerTileEntity(TileEntityXPVacuum.class);
+		xpFountain = registerBlock(new BlockXPFountain(), "xpfountain");
+		registerTileEntity(TileEntityXPFountain.class);
 
 		crates = new BlockCrate();
 		registerEnumBlock(crates, "crate");

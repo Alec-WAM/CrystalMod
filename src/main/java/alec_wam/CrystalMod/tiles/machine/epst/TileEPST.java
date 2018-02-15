@@ -16,6 +16,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec2f;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
 public class TileEPST extends TileEntityInventory implements IFacingTile{
@@ -105,35 +106,21 @@ public class TileEPST extends TileEntityInventory implements IFacingTile{
 
 		if(slot > -1){
 			ItemStack itemstack = getStackInSlot(slot);
-			EntityEnderPearl entityenderpearl = new EntityEnderPearl(getWorld(), playerOwner);
-			entityenderpearl.setPosition(d0, d1, d2);
-			
-			//entityenderpearl.setHeadingFromThrower(playerOwner, playerIn.rotationPitch, playerIn.rotationYaw, 0.0F, 1.5F, 1.0F);
-			float rotationYawIn = 0.0F;
-			float rotationPitchIn = 0.0F;
-			if(facing == EnumFacing.UP){
-				rotationPitchIn = -90;
+			if(ItemStackTools.isValid(itemstack)){
+				EntityEnderPearl entityenderpearl = new EntityEnderPearl(getWorld(), playerOwner);
+				entityenderpearl.setPosition(d0, d1, d2);
+				Vec2f angles = BlockUtil.getAnglesFromFacing(facing);
+				float rotationYawIn = angles.x;
+				float rotationPitchIn = angles.y;				
+				float f = -MathHelper.sin(rotationYawIn * 0.017453292F) * MathHelper.cos(rotationPitchIn * 0.017453292F);
+				float f1 = -MathHelper.sin((rotationPitchIn) * 0.017453292F);
+				float f2 = MathHelper.cos(rotationYawIn * 0.017453292F) * MathHelper.cos(rotationPitchIn * 0.017453292F);
+				entityenderpearl.setThrowableHeading((double)f, (double)f1, (double)f2, 1.5F, 1.0F);
+
+				getWorld().spawnEntity(entityenderpearl);
+				setInventorySlotContents(slot, ItemUtil.consumeItem(itemstack));
+				BlockUtil.markBlockForUpdate(getWorld(), getPos());
 			}
-			if(facing == EnumFacing.DOWN){
-				rotationPitchIn = 90;
-			}
-			if(facing == EnumFacing.NORTH){
-				rotationYawIn = 180;
-			}
-			if(facing == EnumFacing.WEST){
-				rotationYawIn = 90.0F;
-			}
-			if(facing == EnumFacing.EAST){
-				rotationYawIn = -90.0F;
-			}
-			float f = -MathHelper.sin(rotationYawIn * 0.017453292F) * MathHelper.cos(rotationPitchIn * 0.017453292F);
-	        float f1 = -MathHelper.sin((rotationPitchIn) * 0.017453292F);
-	        float f2 = MathHelper.cos(rotationYawIn * 0.017453292F) * MathHelper.cos(rotationPitchIn * 0.017453292F);
-	        entityenderpearl.setThrowableHeading((double)f, (double)f1, (double)f2, 1.5F, 1.0F);
-			
-			getWorld().spawnEntity(entityenderpearl);
-			setInventorySlotContents(slot, ItemUtil.consumeItem(itemstack));
-			BlockUtil.markBlockForUpdate(getWorld(), getPos());
 		}
 	}
 	

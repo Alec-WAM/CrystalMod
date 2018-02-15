@@ -535,6 +535,8 @@ public class ModCrafting {
 		
 		addShapedOreRecipe(ModBlocks.customSpawner, new Object[]{"BBB", "BRB", "BBB", 'B', new ItemStack(ModBlocks.metalBars, 1, EnumMetalBarType.DARK_IRON.getMeta()), 'R', "rodBlaze"});
 		addShapedRecipe(ModBlocks.xpVacuum, new Object[]{" P ", "PTP", " F ", 'T', new ItemStack(ModBlocks.crystalTank, 1, TankType.RED.getMeta()), 'P', dIronPlate, 'F', new ItemStack(ModItems.machineFrame, 1, FrameType.ENDER.getMetadata())});
+		addShapedRecipe(ModBlocks.xpFountain, new Object[]{" B ", "XME", " P ", 'B', new ItemStack(ModBlocks.metalBars, 1, EnumMetalBarType.DARK_IRON.getMeta()), 'X', ModFluids.bucketList.get(ModFluids.fluidXpJuice), 'M', new ItemStack(ModItems.machineFrame, 1, FrameType.ENDER.getMetadata()), 'E', ModFluids.bucketList.get(ModFluids.fluidEnder), 'P', fluidPipe});
+
 		ItemStack pureSword = new ItemStack(ModItems.crystalSword);
 		ItemNBTHelper.getCompound(pureSword).setString("Color", "pure");
 		addShapedOreRecipeNBT(ModBlocks.mobGrinder, new Object[]{"PHP", "ISL", "PFP", 'P', dIronPlate, 'H', "skull", 'S', pureSword, 'I', itemPipe, 'L', ModBlocks.xpVacuum, 'F', machineFrame});

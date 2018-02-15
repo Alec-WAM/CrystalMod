@@ -80,7 +80,7 @@ public class ToolUtil {
     if (entityPlayer.isSneaking() && (tool !=null && tool.canUse(heldItem, entityPlayer, pos) || (tool == null && isWrench(heldItem)))) {
       IBlockState bs = world.getBlockState(pos);;
       if(block.removedByPlayer(bs, world, pos, entityPlayer, true)) {
-        block.harvestBlock(world, entityPlayer, pos, world.getBlockState(pos), world.getTileEntity(pos), heldItem);
+        block.harvestBlock(world, entityPlayer, pos, bs, world.getTileEntity(pos), heldItem);
       }
       if(tool !=null)tool.used(heldItem, entityPlayer, pos);
       return true;

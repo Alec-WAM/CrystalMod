@@ -49,11 +49,12 @@ public class GuiBattery extends GuiContainerTabbed {
 		
 		RenderUtil.renderPowerBar(80, 20, 0, 16, 45, cu, maxCU, Color.CYAN.getRGB(), Color.CYAN.darker().getRGB());
 		
+		String out = "Out: "+battery.getEnergySend();
+		drawString(fontRendererObj, out, xSize-(xSize/4)-(fontRendererObj.getStringWidth(out)/2), 60, Color.GRAY.getRGB());
+		
 		if(type != BatteryType.CREATIVE){
 			String in = "In: "+battery.getEnergyReceive();
-			String out = "Out: "+battery.getEnergySend();
 			drawString(fontRendererObj, in, (xSize/4)-(fontRendererObj.getStringWidth(in)/2), 60, Color.GRAY.getRGB());
-			drawString(fontRendererObj, out, xSize-(xSize/4)-(fontRendererObj.getStringWidth(out)/2), 60, Color.GRAY.getRGB());
 		}
 		
 		int xAxis = (par1 - (width - xSize) / 2);
@@ -72,8 +73,11 @@ public class GuiBattery extends GuiContainerTabbed {
 	@Override
 	public void initGui(){
 		super.initGui();
-		this.buttonList.add(new GuiButton(0, guiLeft+(xSize/4)-10, guiTop+70, 10, 10, "-"));
-		this.buttonList.add(new GuiButton(1, guiLeft+(xSize/4), guiTop+70, 10, 10, "+"));
+		BatteryType type = BlockBattery.fromMeta(battery.getBlockMetadata());
+		if(type != BatteryType.CREATIVE){
+			this.buttonList.add(new GuiButton(0, guiLeft+(xSize/4)-10, guiTop+70, 10, 10, "-"));
+			this.buttonList.add(new GuiButton(1, guiLeft+(xSize/4), guiTop+70, 10, 10, "+"));
+		}
 		
 		this.buttonList.add(new GuiButton(2, guiLeft+xSize-(xSize/4)-10, guiTop+70, 10, 10, "-"));
 		this.buttonList.add(new GuiButton(3, guiLeft+xSize-(xSize/4), guiTop+70, 10, 10, "+"));

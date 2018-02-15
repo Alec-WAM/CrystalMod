@@ -738,6 +738,7 @@ tile.crystalmod.worksite.crop_farm.name=Minion Crop Farm
 
 tile.crystalmod.mobgrinder.name=Mob Grinder
 tile.crystalmod.xpvacuum.name=XP Vacuum
+tile.crystalmod.xpfountain.name=XP Fountain
 tile.crystalmod.endertorch.name=Ender Torch
 tile.crystalmod.entityhopper.name=Entity Hopper
 crystalmod.entityhopper.filter.none=None

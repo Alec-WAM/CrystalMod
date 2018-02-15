@@ -145,10 +145,11 @@ public class GuiContainerTabbed extends GuiContainer {
 				String tooltip = tab.getTooltip();
 				if(Strings.isNotEmpty(tooltip)){
 					int textWidth = fontRendererObj.getStringWidth(tooltip);
+					GL11.glDisable(GL11.GL_DEPTH_TEST);
 					drawGradientRect(startX - 3, startY - 3, startX + textWidth + 3, startY + 8 + 3, 0xc0000000, 0xc0000000);
 					fontRendererObj.drawStringWithShadow(tooltip, startX, startY, -1);
+					GL11.glEnable(GL11.GL_DEPTH_TEST);
 				}
-				
 			}
 		}
 
