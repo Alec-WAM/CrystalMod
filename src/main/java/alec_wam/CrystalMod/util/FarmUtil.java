@@ -8,6 +8,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import alec_wam.CrystalMod.blocks.ModBlocks;
+import alec_wam.CrystalMod.blocks.crops.BlockCorn;
 import alec_wam.CrystalMod.blocks.crops.ItemCorn.CornItemType;
 import alec_wam.CrystalMod.items.ModItems;
 import net.minecraft.block.Block;
@@ -253,7 +254,6 @@ public class FarmUtil {
 	}
 
 	public static void addDefaultCrops() {
-		//TODO add corn
 		addClickableCrop(new ItemStack(ModBlocks.crystalPlant), 3);
 	    addClickableCrop(new ItemStack(ModBlocks.materialCrop), 1);
 	    addSeed(new ItemStack(ModItems.materialSeed));
@@ -264,6 +264,8 @@ public class FarmUtil {
 	    addStackedCrop(ModBlocks.crystalReedsRed, OreDictionary.WILDCARD_VALUE);
 	    addStackedCrop(ModBlocks.crystalReedsGreen, OreDictionary.WILDCARD_VALUE);
 	    addStackedCrop(ModBlocks.crystalReedsDark, OreDictionary.WILDCARD_VALUE);
+	    int cornMeta = ModBlocks.corn.getMetaFromState(ModBlocks.corn.getDefaultState().withProperty(BlockCorn.AGE, 5));
+	    addStackedCrop(ModBlocks.corn, cornMeta);
 	}
 	
 }

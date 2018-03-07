@@ -12,6 +12,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemFishingRod;
@@ -23,6 +24,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.item.ItemTool;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
@@ -530,5 +533,18 @@ public class ToolUtil {
 		  }
 	  }
 	  return player.getHeldItemMainhand();
+  }
+
+  
+  public static final ResourceLocation[] swordRegistryNames = {
+		  Items.WOODEN_SWORD.getRegistryName(),
+		  Items.STONE_SWORD.getRegistryName(),
+		  Items.IRON_SWORD.getRegistryName(),
+		  Items.DIAMOND_SWORD.getRegistryName(),
+		  Items.GOLDEN_SWORD.getRegistryName()
+  };
+  public static NonNullList<ItemStack> getAllSwords() {
+	  NonNullList<ItemStack> list = NonNullList.create();
+	  return list;
   }
 }
