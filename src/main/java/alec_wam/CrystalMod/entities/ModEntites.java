@@ -11,6 +11,8 @@ import alec_wam.CrystalMod.entities.animals.EntityCrystalCow;
 import alec_wam.CrystalMod.entities.animals.EntityTamedPolarBear;
 import alec_wam.CrystalMod.entities.animals.RenderCrystalCow;
 import alec_wam.CrystalMod.entities.animals.RenderTamedPolarBear;
+import alec_wam.CrystalMod.entities.boatflume.EntityFlumeBoat;
+import alec_wam.CrystalMod.entities.boatflume.RenderFlumeBoat;
 import alec_wam.CrystalMod.entities.minecarts.chests.EntityCrystalChestMinecartBase;
 import alec_wam.CrystalMod.entities.minecarts.chests.EntityCrystalChestMinecartBlue;
 import alec_wam.CrystalMod.entities.minecarts.chests.EntityCrystalChestMinecartDark;
@@ -28,11 +30,13 @@ import alec_wam.CrystalMod.entities.minions.RenderMinionBase;
 import alec_wam.CrystalMod.entities.minions.warrior.EntityMinionWarrior;
 import alec_wam.CrystalMod.entities.minions.worker.EntityMinionWorker;
 import alec_wam.CrystalMod.entities.misc.EntityBambooBoat;
+import alec_wam.CrystalMod.entities.misc.EntityBoatChest;
 import alec_wam.CrystalMod.entities.misc.EntityCrystalModPainting;
 import alec_wam.CrystalMod.entities.misc.EntityCustomFallingBlock;
 import alec_wam.CrystalMod.entities.misc.RenderCrystalModPainting;
 import alec_wam.CrystalMod.entities.misc.RenderCustomFallingBlock;
 import alec_wam.CrystalMod.entities.misc.RenderEntityBambooBoat;
+import alec_wam.CrystalMod.entities.misc.RenderEntityBoatChest;
 import alec_wam.CrystalMod.entities.mob.angel.EntityAngel;
 import alec_wam.CrystalMod.entities.mob.angel.RenderAngel;
 import alec_wam.CrystalMod.entities.mob.devil.EntityDevil;
@@ -133,6 +137,8 @@ public class ModEntites {
 		addEntity(EntityBambooBoat.class, "bambooboat", 80, 3, true);
 		addEntity(EntityDart.class, "dart", 64, 24, false);
 		addEntity(EntityCrystalModPainting.class, "crystalmodpainting", 160, Integer.MAX_VALUE, false);
+		addEntity(EntityFlumeBoat.class, "flumeboat", 80, 3, true);
+		addEntity(EntityBoatChest.class, "chestboat", 80, 3, true);
 	}
 	
 	public static void postInit(){
@@ -240,6 +246,20 @@ public class ModEntites {
 			@Override
 			public RenderCrystalModPainting createRenderFor(RenderManager manager) {
 				return new RenderCrystalModPainting(manager);
+			}
+		});
+        
+        RenderingRegistry.registerEntityRenderingHandler(EntityFlumeBoat.class, new IRenderFactory<EntityFlumeBoat>() {
+			@Override
+			public RenderFlumeBoat createRenderFor(RenderManager manager) {
+				return new RenderFlumeBoat(manager);
+			}
+		});
+        
+        RenderingRegistry.registerEntityRenderingHandler(EntityBoatChest.class, new IRenderFactory<EntityBoatChest>() {
+			@Override
+			public RenderEntityBoatChest createRenderFor(RenderManager manager) {
+				return new RenderEntityBoatChest(manager);
 			}
 		});
 	}

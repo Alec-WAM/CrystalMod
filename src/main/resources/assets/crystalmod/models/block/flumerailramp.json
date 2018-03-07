@@ -1,0 +1,59 @@
+{
+    "__comment": "Model generated using MrCrayfish's Model Creator (http://mrcrayfish.com/modelcreator/)",
+    "textures": {
+        "0": "crystalmod:blocks/flume/flume_ramp_rail",
+        "1": "crystalmod:blocks/flume/flume_ramp_sides",
+        "2": "crystalmod:blocks/flume/flume_ramp_sides",
+        "3": "crystalmod:blocks/flume/flume_ramp_sides"
+    },
+    "elements": [
+        {
+            "name": "Rail",
+            "from": [ 0.0, 9.0, 0.0 ], 
+            "to": [ 16.0, 9.0, 16.0 ], 
+            "rotation": { "origin": [ 8.0, 9.0, 8.0 ], "axis": "x", "angle": 45.0, "rescale": true },
+            "faces": {
+                "up": { "texture": "#0", "uv": [ 0.0, 0.0, 16.0, 16.0 ] },
+                "down": { "texture": "#0", "uv": [ 0.0, 0.0, 16.0, 16.0 ] }
+            }
+        },
+        {
+            "name": "SupportPiece",
+            "from": [ 6.0, 7.0, 7.0 ], 
+            "to": [ 10.0, 11.0, 8.0 ], 
+            "rotation": { "origin": [ 8.0, 9.0, 8.0 ], "axis": "x", "angle": -45.0 },
+            "faces": {
+                "north": { "texture": "#1", "uv": [ 1.0, 1.0, 5.0, 5.0 ] },
+                "east": { "texture": "#1", "uv": [ 0.0, 0.0, 1.0, 4.0 ] },
+                "west": { "texture": "#1", "uv": [ 0.0, 0.0, 1.0, 4.0 ] },
+                "up": { "texture": "#1", "uv": [ 0.0, 0.0, 4.0, 1.0 ] },
+                "down": { "texture": "#2", "uv": [ 0.0, 0.0, 4.0, 1.0 ] }
+            }
+        },
+        {
+            "name": "SupportBar",
+            "from": [ 7.0, 2.0, 6.0 ], 
+            "to": [ 9.0, 9.0, 8.0 ], 
+            "faces": {
+                "north": { "texture": "#1", "uv": [ 1.0, 2.0, 3.0, 9.0 ] },
+                "east": { "texture": "#1", "uv": [ 1.0, 1.0, 3.0, 8.0 ] },
+                "south": { "texture": "#1", "uv": [ 1.0, 1.0, 3.0, 8.0 ] },
+                "west": { "texture": "#1", "uv": [ 1.0, 1.0, 3.0, 8.0 ] },
+                "up": { "texture": "#2", "uv": [ 1.0, 1.0, 3.0, 3.0 ] }
+            }
+        },
+        {
+            "name": "SupportBase",
+            "from": [ 5.0, 0.0, 4.0 ], 
+            "to": [ 11.0, 2.0, 10.0 ], 
+            "faces": {
+                "north": { "texture": "#1", "uv": [ 0.0, 0.0, 16.0, 3.0 ] },
+                "east": { "texture": "#1", "uv": [ 0.0, 0.0, 16.0, 3.0 ] },
+                "south": { "texture": "#1", "uv": [ 0.0, 0.0, 16.0, 3.0 ] },
+                "west": { "texture": "#1", "uv": [ 0.0, 0.0, 16.0, 3.0 ] },
+                "up": { "texture": "#1", "uv": [ 0.0, 0.0, 16.0, 16.0 ] },
+                "down": { "texture": "#3", "uv": [ 0.0, 0.0, 16.0, 16.0 ] }
+            }
+        }
+    ]
+}

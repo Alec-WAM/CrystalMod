@@ -347,6 +347,13 @@ item.crystalmod.dart.green.name=Green Crystal Blow Dart
 item.crystalmod.dart.dark.name=Dark Crystal Blow Dart
 item.crystalmod.dart.pure.name=Blue Crystal Blow Dart
 
+item.crystalmod.chestboat.oak.name=Oak Chest Boat
+item.crystalmod.chestboat.spruce.name=Spruce Chest Boat
+item.crystalmod.chestboat.birch.name=Birch Chest Boat
+item.crystalmod.chestboat.jungle.name=Jungle Chest Boat
+item.crystalmod.chestboat.acacia.name=Acacia Chest Boat
+item.crystalmod.chestboat.dark_oak.name=Dark Oak Chest Boat
+
 item.crystalmod.enderfluidbottle.name=Bottle of Ender Fluid
 
 item.crystalmod.mobessence.name=Mob Essence
@@ -455,6 +462,9 @@ tile.crystalmod.tiles_basic.metal_iron.name=Iron Tiles
 tile.crystalmod.tiles_basic.metal_gold.name=Gold Tiles
 tile.crystalmod.tiles_basic.metal_diamond.name=Diamond Tiles
 tile.crystalmod.tiles_basic.metal_emerald.name=Emerald Tiles
+
+tile.crystalmod.octagonbricks.normal.name=Octagonal Stone Bricks
+tile.crystalmod.octagonbricks.tiles.name=Octagonal Stone Brick Tiles
 
 tile.crystalmod.tiles_basic2.log_oak.name=Oak Wood Tiles
 tile.crystalmod.tiles_basic2.log_spruce.name=Spruce Wood Tiles
@@ -722,6 +732,14 @@ tile.crystalmod.elevator.name=Elevator
 tile.crystalmod.elevatorfloor.name=Elevator Floor Marker
 tile.crystalmod.elevatorcaller.name=Elevator Dialer
 tile.crystalmod.reinforcedrail.name=Reinforced Rail
+
+tile.crystalmod.flumerailbasic.name=Flume Rail
+tile.crystalmod.flumerailholding.name=Holding Flume Rail
+tile.crystalmod.flumeraildetector.name=Detector Flume Rail
+
+tile.crystalmod.flumerailbasic_ground.name=Reinforced Flume Rail
+tile.crystalmod.flumerailholding_ground.name=Reinforced Holding Flume Rail
+tile.crystalmod.flumerailramp.name=Flume Ramp
 
 tile.crystalmod.teleportal.name=Teleporting Portal
 
@@ -1128,3 +1146,55 @@ key.categories.crystalmod=Crystal Mod
 keybind.crystalmodbackpack=Open Backpack
 keybind.crystalmodinventory=Tool Inventory
 crystalmod.subtitle.fusion_ding=Fusion Complete
+
+#--Banners
+item.banner.sword.black=Black Sword
+item.banner.sword.red=Red Sword
+item.banner.sword.green=Green Sword
+item.banner.sword.brown=Brown Sword
+item.banner.sword.blue=Blue Sword
+item.banner.sword.purple=Purple Sword
+item.banner.sword.cyan=Cyan Sword
+item.banner.sword.silver=Light Gray Sword
+item.banner.sword.gray=Gray Sword
+item.banner.sword.pink=Pink Sword
+item.banner.sword.lime=Lime Sword
+item.banner.sword.yellow=Yellow Sword
+item.banner.sword.lightBlue=Light Blue Sword
+item.banner.sword.magenta=Magenta Sword
+item.banner.sword.orange=Orange Sword
+item.banner.sword.white=White Sword
+
+item.banner.crystalmod_crystal.black=Black Crystal
+item.banner.crystalmod_crystal.red=Red Crystal
+item.banner.crystalmod_crystal.green=Green Crystal
+item.banner.crystalmod_crystal.brown=Brown Crystal
+item.banner.crystalmod_crystal.blue=Blue Crystal
+item.banner.crystalmod_crystal.purple=Purple Crystal
+item.banner.crystalmod_crystal.cyan=Cyan Crystal
+item.banner.crystalmod_crystal.silver=Light Gray Crystal
+item.banner.crystalmod_crystal.gray=Gray Crystal
+item.banner.crystalmod_crystal.pink=Pink Crystal
+item.banner.crystalmod_crystal.lime=Lime Crystal
+item.banner.crystalmod_crystal.yellow=Yellow Crystal
+item.banner.crystalmod_crystal.lightBlue=Light Blue Crystal
+item.banner.crystalmod_crystal.magenta=Magenta Crystal
+item.banner.crystalmod_crystal.orange=Orange Crystal
+item.banner.crystalmod_crystal.white=White Crystal
+
+item.banner.crystalmod_octagon.black=Black Octagon
+item.banner.crystalmod_octagon.red=Red Octagon
+item.banner.crystalmod_octagon.green=Green Octagon
+item.banner.crystalmod_octagon.brown=Brown Octagon
+item.banner.crystalmod_octagon.blue=Blue Octagon
+item.banner.crystalmod_octagon.purple=Purple Octagon
+item.banner.crystalmod_octagon.cyan=Cyan Octagon
+item.banner.crystalmod_octagon.silver=Light Gray Octagon
+item.banner.crystalmod_octagon.gray=Gray Octagon
+item.banner.crystalmod_octagon.pink=Pink Octagon
+item.banner.crystalmod_octagon.lime=Lime Octagon
+item.banner.crystalmod_octagon.yellow=Yellow Octagon
+item.banner.crystalmod_octagon.lightBlue=Light Blue Octagon
+item.banner.crystalmod_octagon.magenta=Magenta Octagon
+item.banner.crystalmod_octagon.orange=Orange Octagon
+item.banner.crystalmod_octagon.white=White Octagon

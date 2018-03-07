@@ -232,6 +232,11 @@ public class PacketEntityMessage extends AbstractPacketThreadsafe {
 			if(type.equalsIgnoreCase("SyncKnowledge")){
 				KnowledgeManager.loadData(data);
 			}
+			if(type.equalsIgnoreCase("RotationChange")){
+				if(data.hasKey("Yaw")){
+					entity.rotationYaw = data.getFloat("Yaw");
+				}
+			}
 			if(entity instanceof IMessageHandler){
 				((IMessageHandler)entity).handleMessage(type, data, client);
 			}

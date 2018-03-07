@@ -1,0 +1,19 @@
+{
+    "variants": {
+        "shape=ascending_east": { 
+			"model": "crystalmod:flumerailramp", 
+			"y": 90 
+		},
+        "shape=ascending_west": { 
+			"model": "crystalmod:flumerailramp",
+			"y": 270
+		},
+        "shape=ascending_north": { 
+			"model": "crystalmod:flumerailramp"
+		},
+        "shape=ascending_south": { 
+			"model": "crystalmod:flumerailramp",
+			"y": 180
+		}
+    }
+}

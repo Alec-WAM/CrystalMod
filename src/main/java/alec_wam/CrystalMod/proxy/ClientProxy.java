@@ -324,6 +324,8 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
         event.getMap().registerSprite(FluidColored.LiquidStill);
         event.getMap().registerSprite(FluidColored.LiquidFlowing);
         CropOverlays.registerIcons(event.getMap());
+        event.getMap().registerSprite(new ResourceLocation("crystalmod:blocks/flume/rail_ramp"));
+        
         event.getMap().registerSprite(new ResourceLocation("crystalmod:items/crop/seed_background"));
         event.getMap().registerSprite(new ResourceLocation("crystalmod:items/crop/seed_overlay"));
         event.getMap().registerSprite(new ResourceLocation("crystalmod:items/food/eucalyptus_overlay_basic"));

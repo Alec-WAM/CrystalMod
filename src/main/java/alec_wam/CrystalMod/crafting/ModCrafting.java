@@ -30,6 +30,7 @@ import alec_wam.CrystalMod.blocks.decorative.BlockFancyLadder2.FancyLadderType2;
 import alec_wam.CrystalMod.blocks.decorative.BlockFancyObsidian.ObsidianType;
 import alec_wam.CrystalMod.blocks.decorative.BlockFancyPumpkin.PumpkinType;
 import alec_wam.CrystalMod.blocks.decorative.BlockFancySeaLantern.SeaLanternType;
+import alec_wam.CrystalMod.blocks.decorative.BlockOctagonalBricks.OctagonBrickType;
 import alec_wam.CrystalMod.blocks.decorative.tiles.BlockBasicTiles.BasicTileType;
 import alec_wam.CrystalMod.blocks.decorative.tiles.BlockBasicTiles2.BasicTileType2;
 import alec_wam.CrystalMod.blocks.decorative.tiles.BlockCrystalTiles.CrystalTileType;
@@ -45,6 +46,7 @@ import alec_wam.CrystalMod.entities.accessories.WolfAccessories.WolfArmor;
 import alec_wam.CrystalMod.entities.minecarts.chests.wireless.RecipeWirelessChestMinecart;
 import alec_wam.CrystalMod.entities.minions.ItemMinion;
 import alec_wam.CrystalMod.entities.minions.MinionType;
+import alec_wam.CrystalMod.entities.misc.EntityCustomBoat;
 import alec_wam.CrystalMod.fluids.ModFluids;
 import alec_wam.CrystalMod.integration.baubles.BaublesIntegration;
 import alec_wam.CrystalMod.items.ItemCrystal.CrystalType;
@@ -115,6 +117,8 @@ import net.minecraft.enchantment.EnchantmentData;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Enchantments;
 import net.minecraft.init.Items;
+import net.minecraft.init.MobEffects;
+import net.minecraft.init.PotionTypes;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -122,8 +126,11 @@ import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.potion.PotionType;
+import net.minecraft.potion.PotionUtils;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.NonNullList;
+import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
 import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStack;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
@@ -236,6 +243,8 @@ public class ModCrafting {
 		GameRegistry.addSmelting(new ItemStack(ModItems.miscFood, 1, FoodType.KELP.getMetadata()), new ItemStack(ModItems.miscFood, 1, FoodType.KELP_COOKED.getMetadata()), 0.5F);
 		GameRegistry.addSmelting(new ItemStack(ModItems.miscFood, 1, FoodType.YELLOW_KELP.getMetadata()), new ItemStack(ModItems.miscFood, 1, FoodType.YELLOW_KELP_COOKED.getMetadata()), 0.5F);
 		addShapelessRecipe(new ItemStack(ModItems.miscFood, 1, FoodType.SUPER_MUSHROOM_STEW.getMetadata()), new Object[] {ModBlocks.crysineMushroom, ModBlocks.crysineMushroom, Items.BOWL});
+		BrewingRecipeRegistry.addRecipe(new ItemStack(Items.POTIONITEM), new ItemStack(ModBlocks.crysineMushroom), PotionUtils.addPotionToItemStack(new ItemStack(Items.POTIONITEM), PotionTypes.LONG_FIRE_RESISTANCE));
+		
 		
 		addShapelessRecipe(new ItemStack(ModItems.cursedBone, 3, BoneType.BONEMEAL.getMetadata()), new Object[]{new ItemStack(ModItems.cursedBone, 1, BoneType.BONE.getMetadata())});
 		
@@ -392,6 +401,9 @@ public class ModCrafting {
 		addShapedRecipe(new ItemStack(ModBlocks.fancySeaLantern, 3, SeaLanternType.WEB.getMeta()), new Object[]{"XBX", "X#X", "XBX", '#', Items.PRISMARINE_SHARD, 'X', Items.PRISMARINE_CRYSTALS, 'B', Blocks.WEB});
 
 		
+		addShapedRecipe(new ItemStack(ModBlocks.octagonBricks, 4, OctagonBrickType.NORMAL.getMeta()), new Object[]{"X X", "   ", "X X", 'X', Blocks.STONEBRICK});
+		addShapedRecipe(new ItemStack(ModBlocks.octagonBricks, 4, OctagonBrickType.TILES.getMeta()), new Object[]{"XX", "XX", 'X', new ItemStack(ModBlocks.octagonBricks, 1, OctagonBrickType.NORMAL.getMeta())});
+
 		addShapelessRecipe(new ItemStack(ModBlocks.bambooPlanks, 2, 0), new Object[]{new ItemStack(ModBlocks.bamboo)});
 		addShapedRecipe(ModItems.bambooBoat, new Object[]{"X X", "XXX", 'X', ModBlocks.bambooPlanks});
 		addShapedRecipe(new ItemStack(ModItems.bambooDoor, 3), new Object[]{"XX", "XX", "XX", 'X', ModBlocks.bambooPlanks});
@@ -403,6 +415,9 @@ public class ModCrafting {
 		addShapedOreRecipe(new ItemStack(ModItems.dart, 4, DartType.DARK.getMetadata()), new Object[] {"  #", " S ", "F  ", '#', darkShard, 'F', Items.FEATHER, 'S', "stickWood"});
 		addShapedOreRecipe(new ItemStack(ModItems.dart, 4, DartType.PURE.getMetadata()), new Object[] {"  #", " S ", "F  ", '#', pureShard, 'F', Items.FEATHER, 'S', "stickWood"});
 		
+		for(EntityCustomBoat.Type type : EntityCustomBoat.Type.values()){
+			addShapedRecipe(new ItemStack(ModItems.chestBoat, 1, type.getMetadata()), new Object[]{"X", "B", 'X', Blocks.CHEST, 'B', Items.BOAT});
+		}
 		
 		addShapedOreRecipe(new ItemStack(ModBlocks.crates, 1, CrateType.BLUE.getMeta()), new Object[] {"XXX", "# #", "XXX", 'X', new ItemStack(ModBlocks.crystalPlanks, 1, WoodType.BLUE.getMeta()), '#', "chestWood"});
 		addShapedOreRecipe(new ItemStack(ModBlocks.crates, 1, CrateType.RED.getMeta()), new Object[] {"XXX", "#C#", "XXX", 'X', new ItemStack(ModBlocks.crystalPlanks, 1, WoodType.RED.getMeta()), '#', "chestWood", 'C', new ItemStack(ModBlocks.crates, 1, CrateType.BLUE.getMeta())});

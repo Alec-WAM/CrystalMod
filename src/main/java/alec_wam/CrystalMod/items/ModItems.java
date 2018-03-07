@@ -19,6 +19,7 @@ import alec_wam.CrystalMod.entities.minecarts.chests.wireless.ItemWirelessChestM
 import alec_wam.CrystalMod.entities.minions.ItemMinion;
 import alec_wam.CrystalMod.entities.minions.ItemMinionStaff;
 import alec_wam.CrystalMod.entities.misc.ItemBambooBoat;
+import alec_wam.CrystalMod.entities.misc.ItemChestBoat;
 import alec_wam.CrystalMod.entities.misc.ItemCrystalModPainting;
 import alec_wam.CrystalMod.entities.pet.bombomb.ItemBombomb;
 import alec_wam.CrystalMod.integration.baubles.BaublesIntegration;
@@ -132,6 +133,7 @@ public class ModItems {
 	public static ItemArmor crystalHelmet, crystalChestplate, crystalLeggings, crystalBoots;
 	public static ItemWolfArmor wolfArmor;
 	public static ItemHorseShoe horseShoes;
+	public static ItemChestBoat chestBoat;
 	
 	public static ItemAxe darkIronAxe;
 	public static ItemHoe darkIronHoe;
@@ -242,6 +244,7 @@ public class ModItems {
 		
 		wolfArmor = new ItemWolfArmor();
 		horseShoes = new ItemHorseShoe();
+		chestBoat = new ItemChestBoat();
 		
 		darkIronAxe = registerItem(new ItemCustomAxe(ToolMaterialDarkIron), "darkironaxe");
 		darkIronHoe = (ItemHoe) registerItem(new ItemHoe(ToolMaterialDarkIron), "darkironhoe").setCreativeTab(CrystalMod.tabTools);

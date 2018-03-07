@@ -25,6 +25,9 @@ import alec_wam.CrystalMod.capability.PacketExtendedPlayerInvSync;
 import alec_wam.CrystalMod.entities.accessories.HorseAccessories;
 import alec_wam.CrystalMod.entities.accessories.WolfAccessories;
 import alec_wam.CrystalMod.entities.animals.EntityTamedPolarBear;
+import alec_wam.CrystalMod.entities.boatflume.BlockFlumeRailBase;
+import alec_wam.CrystalMod.entities.boatflume.BlockFlumeRailBase.EnumRailDirection;
+import alec_wam.CrystalMod.entities.boatflume.EntityFlumeBoat;
 import alec_wam.CrystalMod.entities.minions.warrior.EntityMinionWarrior;
 import alec_wam.CrystalMod.integration.baubles.BaublesIntegration;
 import alec_wam.CrystalMod.integration.baubles.ItemBaubleWings;
@@ -74,6 +77,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.boss.EntityWither;
+import net.minecraft.entity.item.EntityBoat;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.monster.EntityCreeper;
@@ -246,6 +250,64 @@ public class EventHandler {
         if (EventHandler.blockClickEvent) {
         	EventHandler.blockClickEvent = false;
             event.setUseBlock(Event.Result.DENY);
+        }
+    }
+    
+    @SubscribeEvent
+    public void onRightClick(final PlayerInteractEvent.RightClickBlock event) {
+        EntityPlayer player = event.getEntityPlayer();
+        ItemStack stack = event.getItemStack();
+        BlockPos pos = event.getPos();
+        IBlockState state = player.getEntityWorld().getBlockState(event.getPos());
+        if(BlockFlumeRailBase.isRailBlock(state)){
+        	EnumRailDirection dir = ((BlockFlumeRailBase)state.getBlock()).getRailDirection(player.getEntityWorld(), pos, state, null);
+	        if(ItemStackTools.isValid(stack)){
+	        	boolean flat = dir.getMetadata() <= 1;
+	        	EntityBoat.Type boatType = null;
+	        	if(stack.getItem() == Items.BOAT){
+	        		boatType = EntityBoat.Type.OAK;
+	        	} else if(stack.getItem() == Items.SPRUCE_BOAT){
+	        		boatType = EntityBoat.Type.SPRUCE;
+	        	} else if(stack.getItem() == Items.BIRCH_BOAT){
+	        		boatType = EntityBoat.Type.BIRCH;
+	        	} else if(stack.getItem() == Items.JUNGLE_BOAT){
+	        		boatType = EntityBoat.Type.JUNGLE;
+	        	} else if(stack.getItem() == Items.ACACIA_BOAT){
+	        		boatType = EntityBoat.Type.ACACIA;
+	        	} else if(stack.getItem() == Items.DARK_OAK_BOAT){
+	        		boatType = EntityBoat.Type.DARK_OAK;
+	        	}
+
+	        	if(boatType !=null){
+	        		EntityFlumeBoat flume = new EntityFlumeBoat(player.getEntityWorld(), pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
+	        		flume.setBoatType(boatType);
+	        		float angle = 0;
+
+	        		if(dir == EnumRailDirection.NORTH_SOUTH){
+	        			if(player.rotationYaw < -90){
+	        				angle = 180;
+	        			} 
+	        		}
+
+	        		if(dir == EnumRailDirection.EAST_WEST){
+	        			/*if(player.rotationYaw > 0 && player.rotationYaw < 180){
+	        				
+	        			} */
+	        			angle = 90;
+	        			if(player.rotationYaw > -180 && player.rotationYaw < -0){
+	        				angle = -90;
+	        			}
+	        		}
+
+	        		flume.rotationYaw = angle;
+	        		if(flat){
+	        			if(!player.getEntityWorld().isRemote){
+	        				player.getEntityWorld().spawnEntity(flume);
+	        			}
+	        		}
+	        		event.setCanceled(true);
+	        	}
+	        }
         }
     }
     

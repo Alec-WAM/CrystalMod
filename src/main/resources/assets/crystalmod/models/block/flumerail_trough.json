@@ -1,0 +1,46 @@
+{
+    "__comment": "Model generated using MrCrayfish's Model Creator (http://mrcrayfish.com/modelcreator/)",
+    "textures": {
+        "rail": "crystalmod:blocks/flume/rail_basic_ground",
+        "wall": "crystalmod:blocks/flume/trough"
+    },
+    "elements": [
+        {
+            "name": "LeftWall",
+            "from": [ -1.0, 0.0, 0.0 ], 
+            "to": [ 0.0, 4.0, 16.0 ], 
+            "faces": {
+                "north": { "texture": "#wall", "uv": [ 0.0, 0.0, 1.0, 5.0 ] },
+                "east": { "texture": "#wall", "uv": [ 0.0, 0.0, 16.0, 5.0 ] },
+                "south": { "texture": "#wall", "uv": [ 15.0, 0.0, 16.0, 5.0 ] },
+                "west": { "texture": "#wall", "uv": [ 0.0, 0.0, 16.0, 5.0 ] },
+                "up": { "texture": "#wall", "uv": [ 0.0, 0.0, 1.0, 16.0 ] },
+                "down": { "texture": "#wall", "uv": [ 15.0, 0.0, 16.0, 16.0 ] }
+            }
+        },
+        {
+            "name": "Floor",
+            "from": [ 0.0, 0.0, 0.0 ], 
+            "to": [ 16.0, 1.0, 16.0 ], 
+            "faces": {
+                "north": { "texture": "#wall", "uv": [ 0.0, 0.0, 16.0, 1.0 ] },
+                "south": { "texture": "#wall", "uv": [ 0.0, 15.0, 16.0, 16.0 ] },
+                "up": { "texture": "#rail", "uv": [ 0.0, 0.0, 16.0, 16.0 ] },
+                "down": { "texture": "#wall", "uv": [ 0.0, 0.0, 16.0, 16.0 ] }
+            }
+        },
+        {
+            "name": "RightWall",
+            "from": [ 16.0, 0.0, 0.0 ], 
+            "to": [ 17.0, 4.0, 16.0 ], 
+            "faces": {
+                "north": { "texture": "#wall", "uv": [ 0.0, 0.0, 1.0, 5.0 ] },
+                "east": { "texture": "#wall", "uv": [ 0.0, 0.0, 16.0, 5.0 ] },
+                "south": { "texture": "#wall", "uv": [ 15.0, 0.0, 16.0, 5.0 ] },
+                "west": { "texture": "#wall", "uv": [ 0.0, 0.0, 16.0, 5.0 ] },
+                "up": { "texture": "#wall", "uv": [ 0.0, 0.0, 1.0, 16.0 ] },
+                "down": { "texture": "#wall", "uv": [ 15.0, 0.0, 16.0, 16.0 ] }
+            }
+        }
+    ]
+}

@@ -1,0 +1,6 @@
+{
+    "parent": "crystalmod:block/flumerail_trough_corner",
+    "textures": {
+        "rail": "crystalmod:blocks/flume/rail_basic_ground_curved"
+    }
+}

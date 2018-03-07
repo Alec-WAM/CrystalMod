@@ -1,6 +1,6 @@
 {
     "parent": "block/rail_curved",
     "textures": {
-        "rail": "crystalmod:blocks/rail_reinforced_turned"
+        "rail": "crystalmod:blocks/flume/rail_basic_curved"
     }
 }

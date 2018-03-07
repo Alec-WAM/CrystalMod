@@ -179,6 +179,21 @@ public class CmdDebug extends AbstractCMCommand{
 				player.removeExperienceLevel(Integer.MAX_VALUE);
 				return;
 			}
+			
+			if(args.length > 1 && args[1].equalsIgnoreCase("angle")){
+				if(args.length > 3){
+					double x = 0.0D;
+					double y = 0.0D;
+					try{
+						x = Double.parseDouble(args[2]);
+						y = Double.parseDouble(args[3]);
+					}catch(Exception e){}
+					
+					double angle = (float)(Math.atan2(y, x) * 180.0D / Math.PI);
+					ChatUtil.sendChat(player, "Angle: "+angle);
+				}
+				return;
+			}
 
 			if(args.length > 1 && args[1].equalsIgnoreCase("dumpItems")){
 				List<String> list = Lists.newArrayList();

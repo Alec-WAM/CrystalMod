@@ -1,0 +1,40 @@
+{
+    "variants": {
+		"shape=north_south": { 
+			"model": "crystalmod:flumerailbasic_flat"
+		},
+        "shape=east_west": { 
+			"model": "crystalmod:flumerailbasic_flat",
+			"y": 90 
+		},
+        "shape=ascending_east": { 
+			"model": "crystalmod:flumerailbasic_raised_ne", 
+			"y": 90 
+		},
+        "shape=ascending_west": { 
+			"model": "crystalmod:flumerailbasic_raised_sw", 
+			"y": 90 
+		},
+        "shape=ascending_north": { 
+			"model": "crystalmod:flumerailbasic_raised_ne"
+		},
+        "shape=ascending_south": { 
+			"model": "crystalmod:flumerailbasic_raised_sw"
+		},
+        "shape=south_east": { 
+			"model": "crystalmod:flumerailbasic_curved"
+		},
+        "shape=south_west": { 
+			"model": "crystalmod:flumerailbasic_curved", 
+			"y": 90 
+		},
+        "shape=north_west": { 
+			"model": "crystalmod:flumerailbasic_curved", 
+			"y": 180 
+		},
+        "shape=north_east": { 
+			"model": "crystalmod:flumerailbasic_curved", 
+			"y": 270 
+		}
+    }
+}

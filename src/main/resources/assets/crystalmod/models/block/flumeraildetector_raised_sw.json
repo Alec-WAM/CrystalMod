@@ -1,6 +1,6 @@
 {
     "parent": "block/rail_raised_sw",
     "textures": {
-        "rail": "crystalmod:blocks/rail_reinforced"
+        "rail": "crystalmod:blocks/flume/rail_detector"
     }
 }

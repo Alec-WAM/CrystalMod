@@ -38,6 +38,7 @@ import alec_wam.CrystalMod.blocks.decorative.BlockFancyLadder2;
 import alec_wam.CrystalMod.blocks.decorative.BlockFancyObsidian;
 import alec_wam.CrystalMod.blocks.decorative.BlockFancyPumpkin;
 import alec_wam.CrystalMod.blocks.decorative.BlockFancySeaLantern;
+import alec_wam.CrystalMod.blocks.decorative.BlockOctagonalBricks;
 import alec_wam.CrystalMod.blocks.decorative.ItemBlockBetterRose;
 import alec_wam.CrystalMod.blocks.decorative.ItemBlockFancyLadders;
 import alec_wam.CrystalMod.blocks.decorative.ItemBlockFancyLadders2;
@@ -55,6 +56,12 @@ import alec_wam.CrystalMod.blocks.underwater.BlockCoral;
 import alec_wam.CrystalMod.blocks.underwater.BlockKelp;
 import alec_wam.CrystalMod.blocks.underwater.BlockSeaweed;
 import alec_wam.CrystalMod.blocks.underwater.ItemBlockKelp;
+import alec_wam.CrystalMod.entities.boatflume.rails.BlockFlumeRailAscending;
+import alec_wam.CrystalMod.entities.boatflume.rails.BlockFlumeRailBasic;
+import alec_wam.CrystalMod.entities.boatflume.rails.BlockFlumeRailBasicGround;
+import alec_wam.CrystalMod.entities.boatflume.rails.BlockFlumeRailDetector;
+import alec_wam.CrystalMod.entities.boatflume.rails.BlockFlumeRailHolding;
+import alec_wam.CrystalMod.entities.boatflume.rails.BlockFlumeRailHoldingGround;
 import alec_wam.CrystalMod.handler.MissingItemHandler;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.tiles.BlockBasicTile;
@@ -317,6 +324,7 @@ public class ModBlocks {
 	public static BlockCrystalTiles tileCrystal;	
 	public static BlockCrystalLight crystalLight;
 	public static BlockFailure failureBlock;
+	public static BlockOctagonalBricks octagonBricks;
 
 	public static BlockRedstoneReactor redstoneReactor;
 	public static BlockRedstoneCore redstoneCore;
@@ -363,6 +371,14 @@ public class ModBlocks {
 	public static BlockShieldRack shieldRack;
 	public static BlockBasicTile muffler;
 	public static BlockCustomDoor bambooDoor;
+	
+	public static BlockFlumeRailBasic flumeRailBasic;
+	public static BlockFlumeRailHolding flumeRailHolding;
+	public static BlockFlumeRailDetector flumeRailDetector;
+	
+	public static BlockFlumeRailBasicGround flumeRailBasicGround;
+	public static BlockFlumeRailHoldingGround flumeRailHoldingGround;
+	public static BlockFlumeRailAscending flumeRailRamp;
 
 	public static BlockParticleThrower particleThrower;
 	public static BlockRemoverExplosion remover;
@@ -597,7 +613,8 @@ public class ModBlocks {
 		tileCrystal = registerEnumBlock(new BlockCrystalTiles(), "tiles_crystal");		
 		//TODO Add Tile Recipes and Burn time for wood tiles
 		crystalLight = registerEnumBlock(new BlockCrystalLight(), "crystallightblock");		
-		failureBlock = registerBlock(new BlockFailure(), "failureblock");		
+		failureBlock = registerBlock(new BlockFailure(), "failureblock");	
+		octagonBricks = registerEnumBlock(new BlockOctagonalBricks(), "octagonbricks");	
 
 		engine = new BlockEngine();
 		registerBlock(engine, new ItemBlockEngine(engine), "engine");
@@ -810,6 +827,22 @@ public class ModBlocks {
 		
 		bambooDoor = (BlockCustomDoor)new BlockCustomDoor(Material.WOOD, SoundType.WOOD, ModItems.bambooDoor).setHardness(3.0F).setCreativeTab(null);
 		registerBlock(bambooDoor, "bamboodoor");
+		
+		flumeRailBasic = (BlockFlumeRailBasic) new BlockFlumeRailBasic().setHardness(0.7F);
+		registerBlock(flumeRailBasic, "flumerailbasic");
+		
+		flumeRailHolding = (BlockFlumeRailHolding) new BlockFlumeRailHolding().setHardness(0.7F);
+		registerBlock(flumeRailHolding, "flumerailholding");
+		
+		flumeRailDetector = (BlockFlumeRailDetector) new BlockFlumeRailDetector().setHardness(0.7F);
+		registerBlock(flumeRailDetector, "flumeraildetector");
+		
+		flumeRailBasicGround = (BlockFlumeRailBasicGround) new BlockFlumeRailBasicGround().setHardness(0.7F);
+		registerBlock(flumeRailBasicGround, "flumerailbasic_ground");
+		flumeRailHoldingGround = (BlockFlumeRailHoldingGround) new BlockFlumeRailHoldingGround().setHardness(0.7F);
+		registerBlock(flumeRailHoldingGround, "flumerailholding_ground");
+		flumeRailRamp = (BlockFlumeRailAscending) new BlockFlumeRailAscending().setHardness(0.7F);
+		registerBlock(flumeRailRamp, "flumerailramp");
 
 		particleThrower = new BlockParticleThrower();
 		registerBlock(particleThrower, "particlethrower");
@@ -927,8 +960,7 @@ public class ModBlocks {
 
 	@SideOnly(Side.CLIENT)
 	public static void initBasicModel(Block block) {
-		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0,
-				new ModelResourceLocation(block.getRegistryName(), "inventory"));
+		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, new ModelResourceLocation(block.getRegistryName(), "inventory"));
 	}
 
 	@SideOnly(Side.CLIENT)

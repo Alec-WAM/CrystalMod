@@ -1,0 +1,6 @@
+{
+    "parent": "crystalmod:block/flumerail_trough",
+    "textures": {
+        "rail": "crystalmod:blocks/flume/rail_holding_ground"
+    }
+}

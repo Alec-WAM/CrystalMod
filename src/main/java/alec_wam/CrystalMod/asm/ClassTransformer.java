@@ -4,7 +4,9 @@ import static org.objectweb.asm.Opcodes.ALOAD;
 import static org.objectweb.asm.Opcodes.GETSTATIC;
 import static org.objectweb.asm.Opcodes.IFGT;
 import static org.objectweb.asm.Opcodes.INVOKEVIRTUAL;
+import static org.objectweb.asm.Opcodes.INVOKESTATIC;
 import static org.objectweb.asm.Opcodes.RETURN;
+import static org.objectweb.asm.Opcodes.IRETURN;
 
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -12,6 +14,7 @@ import org.apache.logging.log4j.Logger;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Label;
+import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.FieldInsnNode;
 import org.objectweb.asm.tree.InsnList;
@@ -43,6 +46,10 @@ public class ClassTransformer implements IClassTransformer
 		if (transformedName.equals("net.minecraft.client.renderer.RenderItem"))
 		{
 			return patchRenderItem(basicClass);
+		}
+		if (transformedName.equals("net.minecraft.entity.item.EntityItem"))
+		{
+			return patchEntityItem(basicClass);
 		}
 		return basicClass;
 	}
@@ -160,6 +167,61 @@ public class ClassTransformer implements IClassTransformer
 		ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_MAXS);
 		classNode.accept(writer);
 
+		return writer.toByteArray();
+	}
+	
+	private byte[] patchEntityItem(byte[] basicClass)
+	{
+		ClassNode classNode = new ClassNode();
+		ClassReader classReader = new ClassReader(basicClass);
+		classReader.accept(classNode, 0);
+		ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_MAXS);
+		classNode.accept(writer);
+
+		MethodNode attackEntityFrom = null;
+
+		for (MethodNode mn : classNode.methods)
+		{
+			if (Sets.newHashSet(ObfuscatedNames.EntityItem_attackEntityFrom).contains(mn.name) && mn.desc.equals("(Lnet/minecraft/util/DamageSource;F)Z"))
+			{
+				attackEntityFrom = mn;
+			}
+		}
+		
+		if (attackEntityFrom != null)
+		{
+			logger.log(Level.INFO, "- Found attackEntityFrom (" + attackEntityFrom.desc + ")");
+			logger.log(Level.INFO, "- Inserting Damage Handler");
+			boolean patched = false;
+			//LabelNode l = new LabelNode(new Label());
+			//InsnList toInsert = new InsnList();
+	
+			/*toInsert.add(new VarInsnNode(ALOAD, 0));
+			toInsert.add(new VarInsnNode(ALOAD, 1));
+			toInsert.add(new MethodInsnNode(INVOKESTATIC, "alec_wam/CrystalMod/items/enhancements/util/FireproofHandler", "onEntityItemAttacked", "(Lnet/minecraft/entity/item/EntityItem;Lnet/minecraft/util/DamageSource;)Z", false));
+			toInsert.add(new JumpInsnNode(IFGT, l));
+			toInsert.add(new InsnNode(IRETURN));
+			toInsert.add(l);*/
+
+			
+			//attackEntityFrom.instructions.insert(toInsert);
+			AbstractInsnNode before = attackEntityFrom.instructions.getFirst();
+			LabelNode l = new LabelNode(new Label());
+			attackEntityFrom.instructions.insertBefore(before, new VarInsnNode(ALOAD, 0));
+			attackEntityFrom.instructions.insertBefore(before, new VarInsnNode(ALOAD, 1));
+			attackEntityFrom.instructions.insertBefore(before, new MethodInsnNode(INVOKESTATIC, "alec_wam/CrystalMod/items/enhancements/util/FireproofHandler", "onEntityItemAttacked", "(Lnet/minecraft/entity/item/EntityItem;Lnet/minecraft/util/DamageSource;)Z", false));
+			attackEntityFrom.instructions.insertBefore(before, new JumpInsnNode(IFGT, l));
+			attackEntityFrom.instructions.insertBefore(before, new InsnNode(IRETURN));
+			
+			
+			patched = true;
+			if(!patched){
+				throw new RuntimeException("Unable to patch EntityItem attackEntityFrom");
+			}
+		} else {
+			throw new RuntimeException("Unable to find EntityItem attackEntityFrom");
+		}
+		
 		return writer.toByteArray();
 	}
 }

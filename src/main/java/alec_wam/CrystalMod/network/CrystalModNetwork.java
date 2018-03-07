@@ -13,6 +13,7 @@ import alec_wam.CrystalMod.network.packets.PacketExtendedPlayer;
 import alec_wam.CrystalMod.network.packets.PacketGuiMessage;
 import alec_wam.CrystalMod.network.packets.PacketItemNBT;
 import alec_wam.CrystalMod.network.packets.PacketRecipeTransfer;
+import alec_wam.CrystalMod.network.packets.PacketSpawnParticle;
 import alec_wam.CrystalMod.network.packets.PacketTileMessage;
 import alec_wam.CrystalMod.tiles.machine.elevator.PacketPlayerMove;
 import alec_wam.CrystalMod.tiles.machine.enderbuffer.packets.PacketSyncBuffer;
@@ -86,6 +87,7 @@ public class CrystalModNetwork extends NetworkWrapper {
 	    
 	    registerPacket(PacketEnhancementTable.class);
 	    registerPacket(PacketItemNBT.class);
+	    registerPacket(PacketSpawnParticle.class);
 	  }
 
 	  public static void sendToAll(AbstractPacket packet)

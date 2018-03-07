@@ -1,0 +1,6 @@
+{
+    "parent": "block/rail_flat",
+    "textures": {
+        "rail": "crystalmod:blocks/flume/rail_detector_powered"
+    }
+}

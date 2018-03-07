@@ -1,0 +1,6 @@
+{
+    "parent": "crystalmod:block/flumerail_trough_raised_ne",
+    "textures": {
+        "rail": "crystalmod:blocks/flume/rail_basic_ground"
+    }
+}
