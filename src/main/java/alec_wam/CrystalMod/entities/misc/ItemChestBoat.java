@@ -4,11 +4,13 @@ import java.util.List;
 
 import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.items.ModItems;
+import alec_wam.CrystalMod.util.ModLogger;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.item.EntityBoat;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -86,7 +88,7 @@ public class ItemChestBoat extends Item implements ICustomModel
         }
         else
         {
-            Vec3d vec3d2 = playerIn.getLook(1.0F);
+        	Vec3d vec3d2 = playerIn.getLook(1.0F);
             boolean flag = false;
             List<Entity> list = worldIn.getEntitiesWithinAABBExcludingEntity(playerIn, playerIn.getEntityBoundingBox().addCoord(vec3d2.xCoord * 5.0D, vec3d2.yCoord * 5.0D, vec3d2.zCoord * 5.0D).expandXyz(1.0D));
 
@@ -115,21 +117,21 @@ public class ItemChestBoat extends Item implements ICustomModel
             }
             else
             {
-                Block block = worldIn.getBlockState(raytraceresult.getBlockPos()).getBlock();
+            	Block block = worldIn.getBlockState(raytraceresult.getBlockPos()).getBlock();
                 boolean flag1 = block == Blocks.WATER || block == Blocks.FLOWING_WATER;
                 EntityBoatChest entityboat = new EntityBoatChest(worldIn, raytraceresult.hitVec.xCoord, flag1 ? raytraceresult.hitVec.yCoord - 0.12D : raytraceresult.hitVec.yCoord, raytraceresult.hitVec.zCoord);
-                entityboat.setBoatType(EntityCustomBoat.Type.byId(itemstack.getMetadata()));
+                entityboat.setBoatType(EntityBoat.Type.byId(itemstack.getMetadata()));
                 entityboat.rotationYaw = playerIn.rotationYaw;
 
                 if (!worldIn.getCollisionBoxes(entityboat, entityboat.getEntityBoundingBox().expandXyz(-0.1D)).isEmpty())
                 {
-                    return new ActionResult<ItemStack>(EnumActionResult.FAIL, itemstack);
+                	return new ActionResult<ItemStack>(EnumActionResult.FAIL, itemstack);
                 }
                 else
                 {
-                    if (!worldIn.isRemote)
+                	if (!worldIn.isRemote)
                     {
-                        worldIn.spawnEntity(entityboat);
+                		worldIn.spawnEntity(entityboat);
                     }
 
                     if (!playerIn.capabilities.isCreativeMode)

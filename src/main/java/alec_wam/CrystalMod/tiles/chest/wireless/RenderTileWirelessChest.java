@@ -77,9 +77,6 @@ public class RenderTileWirelessChest extends TileEntitySpecialRenderer<TileWirel
 
 	private static ModelChest model = new ModelChest();
 	public static void renderChest(double x, double y, double z, int code, int facing, boolean owned, float lidangle, int breakStage){
-		renderChest(x, y, z, code, facing, facing+1, owned, lidangle, breakStage);
-	}
-    public static void renderChest(double x, double y, double z, int code, int facing, int buttonFacing, boolean owned, float lidangle, int breakStage){
     	if (breakStage >= 0)
         {
             Minecraft.getMinecraft().renderEngine.bindTexture(DESTROY_STAGES[breakStage]);
@@ -96,16 +93,21 @@ public class RenderTileWirelessChest extends TileEntitySpecialRenderer<TileWirel
         GlStateManager.scale(1.0F, -1F, -1F);
         GlStateManager.translate(0.5F, 0.5F, 0.5F);
         int k = 0;
+        int buttonFacing = 0;
         if (facing == 2) {
+        	buttonFacing = 2;
             k = 180;
         }
         if (facing == 3) {
+        	buttonFacing = 0;
             k = 0;
         }
         if (facing == 4) {
+        	buttonFacing = 1;
             k = 90;
         }
         if (facing == 5) {
+        	buttonFacing = 3;
             k = -90;
         }
         GlStateManager.rotate(k, 0.0F, 1.0F, 0.0F);
@@ -123,6 +125,7 @@ public class RenderTileWirelessChest extends TileEntitySpecialRenderer<TileWirel
             GlStateManager.matrixMode(5888);
         }
         GlStateManager.popMatrix();
+        
         GlStateManager.pushMatrix();
         GlStateManager.translate(x, y, z);
         renderButtons(code, buttonFacing, chestLidAngle);

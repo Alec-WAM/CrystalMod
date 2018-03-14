@@ -1,5 +1,6 @@
 package alec_wam.CrystalMod.tiles.machine.xpfountain;
 
+import alec_wam.CrystalMod.Config;
 import alec_wam.CrystalMod.fluids.ModFluids;
 import alec_wam.CrystalMod.fluids.XpUtil;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
@@ -80,7 +81,7 @@ public class TileEntityXPFountain extends TileEntityMachine {
 	@Override
 	public boolean canStart() {
 		//TODO Config Power needs
-		boolean hasPower = this.getEnergyStorage().getCEnergyStored() >= 3000;
+		boolean hasPower = this.getEnergyStorage().getCEnergyStored() >= Config.xpFountain_powerNeeded;
 		return fountainTime.getValue() == 0 && hasInputs() && hasPower;
 	}
 

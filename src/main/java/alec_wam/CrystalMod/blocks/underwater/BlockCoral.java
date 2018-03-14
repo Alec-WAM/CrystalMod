@@ -127,6 +127,12 @@ public class BlockCoral extends BlockColored implements ICustomModel, ICustomRay
 	}
 	
 	@Override
+	public boolean canRenderInLayer(IBlockState state, BlockRenderLayer layer)
+    {
+        return layer == BlockRenderLayer.CUTOUT || layer == BlockRenderLayer.TRANSLUCENT;
+    }
+	
+	@Override
 	public EnumBlockRenderType getRenderType(IBlockState state) {
 		return EnumBlockRenderType.MODEL;
 	}	
@@ -143,7 +149,8 @@ public class BlockCoral extends BlockColored implements ICustomModel, ICustomRay
                   .withProperty(BlockConnectedTexture.CONNECTED_NORTH, isSideConnectable(world, position, EnumFacing.NORTH))
                   .withProperty(BlockConnectedTexture.CONNECTED_SOUTH, isSideConnectable(world, position, EnumFacing.SOUTH))
                   .withProperty(BlockConnectedTexture.CONNECTED_UP,    isSideConnectable(world, position, EnumFacing.UP))
-                  .withProperty(BlockConnectedTexture.CONNECTED_WEST,  isSideConnectable(world, position, EnumFacing.WEST));
+                  .withProperty(BlockConnectedTexture.CONNECTED_WEST,  isSideConnectable(world, position, EnumFacing.WEST))
+                  .withProperty(BlockLiquid.LEVEL, 0);
     }
     
     public boolean isSideConnectable(IBlockAccess world, BlockPos pos, EnumFacing side) {
@@ -209,7 +216,13 @@ public class BlockCoral extends BlockColored implements ICustomModel, ICustomRay
     }
 	
 	public boolean canBlockStay(final World worldIn, final BlockPos pos, final IBlockState state) {
-		return worldIn.getBlockState(pos.up()).getBlock() == Blocks.WATER || worldIn.getBlockState(pos.up()).getBlock() == this;
+		for(EnumFacing facing : EnumFacing.HORIZONTALS){
+			BlockPos offset = pos.offset(facing);
+			if(worldIn.getBlockState(offset).getBlock() == Blocks.WATER){
+				return true;
+			}
+		}
+		return worldIn.getBlockState(pos.up()).getBlock() == Blocks.WATER;
 	}
 
 	@Override

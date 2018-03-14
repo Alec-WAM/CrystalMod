@@ -35,6 +35,8 @@ public class ModSounds {
 	public static final SoundEvent angel_ambient;
 	public static final SoundEvent angel_death;
 	public static final SoundEvent angel_hurt;
+
+	public static final SoundEvent backpack_zipper;
 	
 	static {
         if (!Bootstrap.isRegistered()) {
@@ -63,6 +65,8 @@ public class ModSounds {
         	angel_ambient = getRegisteredSoundEvent(CrystalMod.resource("angel_ambient"));
         	angel_death = getRegisteredSoundEvent(CrystalMod.resource("angel_death"));
         	angel_hurt = getRegisteredSoundEvent(CrystalMod.resource("angel_hurt"));
+        	
+        	backpack_zipper = getRegisteredSoundEvent(CrystalMod.resource("backpack_zipper"));
         }
     }
 

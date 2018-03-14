@@ -1,5 +1,7 @@
 package alec_wam.CrystalMod.crafting;
 
+import static net.minecraftforge.oredict.RecipeSorter.Category.SHAPED;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +19,7 @@ import alec_wam.CrystalMod.blocks.BlockDecorative.DecorativeBlockType;
 import alec_wam.CrystalMod.blocks.BlockFallingCompressed.FallingCompressedBlockType;
 import alec_wam.CrystalMod.blocks.BlockMetalBars.EnumMetalBarType;
 import alec_wam.CrystalMod.Config;
+import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.blocks.crops.BlockCrystalPlant.PlantType;
 import alec_wam.CrystalMod.blocks.crops.BlockNormalSapling.SaplingType;
@@ -86,6 +89,7 @@ import alec_wam.CrystalMod.tiles.machine.crafting.liquidizer.LiquidizerRecipeMan
 import alec_wam.CrystalMod.tiles.machine.crafting.press.PressRecipeManager;
 import alec_wam.CrystalMod.tiles.machine.dna.ItemDNA.DNAItemType;
 import alec_wam.CrystalMod.tiles.machine.elevator.ItemMiscCard;
+import alec_wam.CrystalMod.tiles.machine.inventory.charger.BlockInventoryCharger.ChargerBlockType;
 import alec_wam.CrystalMod.tiles.machine.power.battery.BlockBattery.BatteryType;
 import alec_wam.CrystalMod.tiles.machine.power.converter.BlockPowerConverter.ConverterType;
 import alec_wam.CrystalMod.tiles.machine.power.engine.BlockEngine.EngineType;
@@ -119,6 +123,7 @@ import net.minecraft.init.Enchantments;
 import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
 import net.minecraft.init.PotionTypes;
+import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -134,6 +139,7 @@ import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
 import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStack;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.oredict.RecipeSorter;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 
@@ -415,10 +421,13 @@ public class ModCrafting {
 		addShapedOreRecipe(new ItemStack(ModItems.dart, 4, DartType.DARK.getMetadata()), new Object[] {"  #", " S ", "F  ", '#', darkShard, 'F', Items.FEATHER, 'S', "stickWood"});
 		addShapedOreRecipe(new ItemStack(ModItems.dart, 4, DartType.PURE.getMetadata()), new Object[] {"  #", " S ", "F  ", '#', pureShard, 'F', Items.FEATHER, 'S', "stickWood"});
 		
-		for(EntityCustomBoat.Type type : EntityCustomBoat.Type.values()){
-			addShapedRecipe(new ItemStack(ModItems.chestBoat, 1, type.getMetadata()), new Object[]{"X", "B", 'X', Blocks.CHEST, 'B', Items.BOAT});
-		}
-		
+		addShapedRecipe(new ItemStack(ModItems.chestBoat, 1, EntityCustomBoat.Type.OAK.getMetadata()), new Object[]{"X", "B", 'X', Blocks.CHEST, 'B', Items.BOAT});
+		addShapedRecipe(new ItemStack(ModItems.chestBoat, 1, EntityCustomBoat.Type.SPRUCE.getMetadata()), new Object[]{"X", "B", 'X', Blocks.CHEST, 'B', Items.SPRUCE_BOAT});
+		addShapedRecipe(new ItemStack(ModItems.chestBoat, 1, EntityCustomBoat.Type.BIRCH.getMetadata()), new Object[]{"X", "B", 'X', Blocks.CHEST, 'B', Items.BIRCH_BOAT});
+		addShapedRecipe(new ItemStack(ModItems.chestBoat, 1, EntityCustomBoat.Type.JUNGLE.getMetadata()), new Object[]{"X", "B", 'X', Blocks.CHEST, 'B', Items.JUNGLE_BOAT});
+		addShapedRecipe(new ItemStack(ModItems.chestBoat, 1, EntityCustomBoat.Type.ACACIA.getMetadata()), new Object[]{"X", "B", 'X', Blocks.CHEST, 'B', Items.ACACIA_BOAT});
+		addShapedRecipe(new ItemStack(ModItems.chestBoat, 1, EntityCustomBoat.Type.DARK_OAK.getMetadata()), new Object[]{"X", "B", 'X', Blocks.CHEST, 'B', Items.DARK_OAK_BOAT});
+
 		addShapedOreRecipe(new ItemStack(ModBlocks.crates, 1, CrateType.BLUE.getMeta()), new Object[] {"XXX", "# #", "XXX", 'X', new ItemStack(ModBlocks.crystalPlanks, 1, WoodType.BLUE.getMeta()), '#', "chestWood"});
 		addShapedOreRecipe(new ItemStack(ModBlocks.crates, 1, CrateType.RED.getMeta()), new Object[] {"XXX", "#C#", "XXX", 'X', new ItemStack(ModBlocks.crystalPlanks, 1, WoodType.RED.getMeta()), '#', "chestWood", 'C', new ItemStack(ModBlocks.crates, 1, CrateType.BLUE.getMeta())});
 		addShapedOreRecipe(new ItemStack(ModBlocks.crates, 1, CrateType.GREEN.getMeta()), new Object[] {"XXX", "#C#", "XXX", 'X', new ItemStack(ModBlocks.crystalPlanks, 1, WoodType.GREEN.getMeta()), '#', "chestWood", 'C', new ItemStack(ModBlocks.crates, 1, CrateType.RED.getMeta())});
@@ -547,8 +556,9 @@ public class ModCrafting {
 		ModCrafting.addNBTRecipe(new ItemStack(ModBlocks.battery, 1, BatteryType.DARK.getMeta()), copyListBattery, new Object[]{"I#I", "#B#", "I#I", '#', darkPlate, 'I', darkIngot, 'B', new ItemStack(ModBlocks.battery, 1, BatteryType.GREEN.getMeta())});
 		ModCrafting.addNBTRecipe(new ItemStack(ModBlocks.battery, 1, BatteryType.PURE.getMeta()), copyListBattery, new Object[]{"I#I", "#B#", "I#I", '#', purePlate, 'I', pureIngot, 'B', new ItemStack(ModBlocks.battery, 1, BatteryType.DARK.getMeta())});
 
-		//TODO Add Recipe for Inventory Chargers
-		
+		addShapedOreRecipe(new ItemStack(ModBlocks.invCharger, 1, ChargerBlockType.RF.getMeta()), new Object[]{" C ", "PME", 'C', "chestWood", 'E', "endereye", 'P', ItemUtil.copy(tier0RF, 1), 'M', machineFrameEnder});
+		addShapedOreRecipe(new ItemStack(ModBlocks.invCharger, 1, ChargerBlockType.CU.getMeta()), new Object[]{" C ", "PME", 'C', "chestWood", 'E', "endereye", 'P', ItemUtil.copy(tier0CU, 1), 'M', machineFrameEnder});
+
 		addShapedOreRecipe(ModBlocks.customSpawner, new Object[]{"BBB", "BRB", "BBB", 'B', new ItemStack(ModBlocks.metalBars, 1, EnumMetalBarType.DARK_IRON.getMeta()), 'R', "rodBlaze"});
 		addShapedRecipe(ModBlocks.xpVacuum, new Object[]{" P ", "PTP", " F ", 'T', new ItemStack(ModBlocks.crystalTank, 1, TankType.RED.getMeta()), 'P', dIronPlate, 'F', new ItemStack(ModItems.machineFrame, 1, FrameType.ENDER.getMetadata())});
 		addShapedRecipe(ModBlocks.xpFountain, new Object[]{" B ", "XME", " P ", 'B', new ItemStack(ModBlocks.metalBars, 1, EnumMetalBarType.DARK_IRON.getMeta()), 'X', ModFluids.bucketList.get(ModFluids.fluidXpJuice), 'M', new ItemStack(ModItems.machineFrame, 1, FrameType.ENDER.getMetadata()), 'E', ModFluids.bucketList.get(ModFluids.fluidEnder), 'P', fluidPipe});
@@ -724,9 +734,8 @@ public class ModCrafting {
 			ItemStack buffer = new ItemStack(ModBlocks.enderBuffer);
 			NBTTagCompound nbt = new NBTTagCompound();
 			nbt.setInteger("Code", code);
-			ItemNBTHelper.getCompound(buffer).setTag(BlockMachine.TILE_NBT_STACK, nbt);
-			
-			addShapedOreRecipe(buffer, new Object[]{"ECE", "RFP", "ETE", 'E', ender, 'P', ItemUtil.copy(tier2CU, 1), 'R', ItemUtil.copy(tier2RF, 1), 'T', new ItemStack(ModBlocks.crystalTank, 1, TankType.GREEN.getMeta()), 'C', wChest, 'F', machineFrameEnder});
+			ItemNBTHelper.getCompound(buffer).setTag(BlockMachine.TILE_NBT_STACK, nbt);			
+			GameRegistry.addRecipe(new EnderBufferCustomRecipe(buffer, new Object[]{"ECE", "RFP", "ETE", 'E', ender, 'P', ItemUtil.copy(tier2CU, 1), 'R', ItemUtil.copy(tier2RF, 1), 'T', new ItemStack(ModBlocks.crystalTank, 1, TankType.GREEN.getMeta()), 'C', wChest, 'F', machineFrameEnder}));
 		}
 		
 		ItemStack leatherWolfArmor = new ItemStack(ModItems.wolfArmor);
@@ -899,6 +908,40 @@ public class ModCrafting {
 		PressRecipeManager.oreSearch();
 	}
 	
+	
+	public static class EnderBufferCustomRecipe extends ShapedOreRecipe {
+
+		static {
+			RecipeSorter.register(CrystalMod.resource("enderbuffer"),  EnderBufferCustomRecipe.class,  SHAPED,  "after:minecraft:shaped");
+		}
+		
+		public EnderBufferCustomRecipe(ItemStack result, Object[] recipe) {
+			super(result, recipe);
+		}
+		
+		@Override
+		public ItemStack getCraftingResult(InventoryCrafting inv)
+	    {
+	        ItemStack itemstack = this.getRecipeOutput().copy();
+	        for (int i = 0; i < inv.getSizeInventory(); ++i)
+	        {
+	            ItemStack itemstack1 = inv.getStackInSlot(i);
+
+	            if (ItemStackTools.isValid(itemstack1))
+	            {
+	            	if(itemstack1.getItem() == Item.getItemFromBlock(ModBlocks.wirelessChest)){
+	            		int code = ItemNBTHelper.getInteger(itemstack1, WirelessChestHelper.NBT_CODE, 0);
+	            		NBTTagCompound nbt = new NBTTagCompound();
+	        			nbt.setInteger("Code", code);
+	        			ItemNBTHelper.getCompound(itemstack).setTag(BlockMachine.TILE_NBT_STACK, nbt);
+	            	}
+	            }
+	        }
+
+	        return itemstack;
+	    }
+		
+	}
 	public static void addShapedRecipe(Item result, Object... recipe){ addShapedRecipe(new ItemStack(result), recipe); }
 	public static void addShapedRecipe(Block result, Object... recipe){ addShapedRecipe(new ItemStack(result), recipe); }
 	public static void addShapedRecipe(ItemStack output, Object... params){

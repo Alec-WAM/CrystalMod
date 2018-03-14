@@ -15,10 +15,10 @@ import net.minecraft.world.World;
 
 public class ModelTintedGlass extends ModelGlass {
 	
-	public static final ModelTintedGlass INSTANCE = new ModelTintedGlass();
+	public static final ModelTintedGlass INSTANCE = new ModelTintedGlass(GlassType.BLUE);
 	
-	public ModelTintedGlass(){
-		super();
+	public ModelTintedGlass(GlassType type){
+		super(type);
 	}
 	
 	public ModelTintedGlass(ItemStack stack){

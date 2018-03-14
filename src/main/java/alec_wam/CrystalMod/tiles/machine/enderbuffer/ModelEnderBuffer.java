@@ -152,11 +152,11 @@ public class ModelEnderBuffer extends DelegatingDynamicItemAndBlockModel
     @Override
 	public boolean isBuiltInRenderer() {
         return false;
-    }
+    } 
     
     @Override
 	public TextureAtlasSprite getParticleTexture() {
-        return RenderUtil.getTexture(Blocks.IRON_BLOCK.getDefaultState());
+        return RenderUtil.getSprite(CrystalMod.resource("blocks/machine/enderbuffer/enderbuffer"));
     }
     
     @Override

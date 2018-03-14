@@ -70,4 +70,7 @@ public interface IBackpack {
 		
 	}
 
+	public default boolean playOpenSound(){
+		return true;
+	}
 }

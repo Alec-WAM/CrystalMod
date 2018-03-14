@@ -31,7 +31,7 @@ public class BlockPaintedCrystalGlass extends BlockCrystalGlass {
     	ClientProxy.registerCustomModel(inv, ModelPaintedGlass.INSTANCE);
 		for(GlassType type : GlassType.values()){
 	        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), type.getMeta(), inv);
-	        ClientProxy.registerCustomModel(new ModelResourceLocation(getRegistryName(), "type="+type.getName()), ModelPaintedGlass.INSTANCE);
+	        ClientProxy.registerCustomModel(new ModelResourceLocation(getRegistryName(), "type="+type.getName()), new ModelPaintedGlass(type));
 		}
     }
 	

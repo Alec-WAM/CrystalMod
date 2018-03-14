@@ -267,7 +267,20 @@ public class TileWirelessChest extends TileEntityMod implements IMessageHandler 
 			for(int i = 0; i < 3; i++){
 				DyeButton ebutton = buttons[i].copy();
 	            ebutton.rotate(0, 0.5625, 0.0625, 1, 0, 0, 0);
-	            ebutton.rotateMeta(facing+1);
+	            int buttonFacing = 0;
+	            if (facing == 2) {
+	            	buttonFacing = 2;
+	            }
+	            if (facing == 3) {
+	            	buttonFacing = 0;
+	            }
+	            if (facing == 4) {
+	            	buttonFacing = 1;
+	            }
+	            if (facing == 5) {
+	            	buttonFacing = 3;
+	            }
+	            ebutton.rotateMeta(buttonFacing);
 	            Vector3d min = ebutton.getMin();
 	            Vector3d max = ebutton.getMax();
 	            cachedCollidables.add(new CollidableComponent(new AxisAlignedBB(min.x, min.y, min.z, max.x, max.y, max.z), null, i+1));

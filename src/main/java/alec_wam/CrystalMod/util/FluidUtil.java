@@ -11,12 +11,14 @@ import alec_wam.CrystalMod.tiles.pipes.item.filters.FilterInventory;
 import alec_wam.CrystalMod.tiles.pipes.item.filters.ItemPipeFilter.FilterType;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fluids.Fluid;
@@ -193,5 +195,48 @@ public class FluidUtil {
 		}
 		return false;
 	}
+
+	public static float getFluidHeight(IBlockAccess blockAccess, BlockPos blockPosIn, Material blockMaterial)
+    {
+        int i = 0;
+        float f = 0.0F;
+
+        for (int j = 0; j < 4; ++j)
+        {
+            BlockPos blockpos = blockPosIn.add(-(j & 1), 0, -(j >> 1 & 1));
+
+            if (blockAccess.getBlockState(blockpos.up()).getMaterial() == blockMaterial)
+            {
+                return 1.0F;
+            }
+
+            IBlockState iblockstate = blockAccess.getBlockState(blockpos);
+            Material material = iblockstate.getMaterial();
+
+            if (material != blockMaterial)
+            {
+                if (!material.isSolid())
+                {
+                    ++f;
+                    ++i;
+                }
+            }
+            else
+            {
+                int k = ((Integer)iblockstate.getValue(BlockLiquid.LEVEL)).intValue();
+
+                if (k >= 8 || k == 0)
+                {
+                    f += BlockLiquid.getLiquidHeightPercent(k) * 10.0F;
+                    i += 10;
+                }
+
+                f += BlockLiquid.getLiquidHeightPercent(k);
+                ++i;
+            }
+        }
+
+        return 1.0F - f / (float)i;
+    }
 	
 }

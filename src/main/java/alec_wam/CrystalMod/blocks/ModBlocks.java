@@ -829,13 +829,13 @@ public class ModBlocks {
 		registerBlock(bambooDoor, "bamboodoor");
 		
 		flumeRailBasic = (BlockFlumeRailBasic) new BlockFlumeRailBasic().setHardness(0.7F);
-		registerBlock(flumeRailBasic, "flumerailbasic");
+		registerBlock(flumeRailBasic, new ItemBlockWater(flumeRailBasic), "flumerailbasic");
 		
 		flumeRailHolding = (BlockFlumeRailHolding) new BlockFlumeRailHolding().setHardness(0.7F);
-		registerBlock(flumeRailHolding, "flumerailholding");
+		registerBlock(flumeRailHolding, new ItemBlockWater(flumeRailHolding), "flumerailholding");
 		
 		flumeRailDetector = (BlockFlumeRailDetector) new BlockFlumeRailDetector().setHardness(0.7F);
-		registerBlock(flumeRailDetector, "flumeraildetector");
+		registerBlock(flumeRailDetector, new ItemBlockWater(flumeRailDetector), "flumeraildetector");
 		
 		flumeRailBasicGround = (BlockFlumeRailBasicGround) new BlockFlumeRailBasicGround().setHardness(0.7F);
 		registerBlock(flumeRailBasicGround, "flumerailbasic_ground");

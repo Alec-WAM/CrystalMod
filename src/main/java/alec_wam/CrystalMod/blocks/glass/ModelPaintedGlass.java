@@ -15,10 +15,10 @@ import net.minecraft.world.World;
 
 public class ModelPaintedGlass extends ModelGlass {
 	
-	public static final ModelPaintedGlass INSTANCE = new ModelPaintedGlass();
+	public static final ModelPaintedGlass INSTANCE = new ModelPaintedGlass(GlassType.BLUE);
 	
-	public ModelPaintedGlass(){
-		super();
+	public ModelPaintedGlass(GlassType type){
+		super(type);
 	}
 	
 	public ModelPaintedGlass(ItemStack stack){

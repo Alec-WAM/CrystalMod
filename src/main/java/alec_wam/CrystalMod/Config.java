@@ -159,6 +159,8 @@ public class Config {
 	public static int engine_vampire_maxattack = 16;
 	public static int advDispenser_cooldown = 40; //2 seconds
 	
+	public static int xpFountain_powerNeeded = 3000;
+	
 	//BLOCKS
 	public static boolean crates_leaveOneItem = true;
 	public static boolean crates_useAllSides = false;
@@ -342,7 +344,8 @@ public class Config {
     	PowerUnits.RF.conversionRation = cfg.get(CATEGORY_MACHINE, "RFValue", 5, "Amount of RF needed to convert to one unit of CU").getInt(5);
     	engine_vampire_maxattack = cfg.get(CATEGORY_MACHINE, "Engine_Vampire_AttackAmt", engine_vampire_maxattack, "Amount of entites the vampire engine can attack at once").getInt();
     	advDispenser_cooldown = cfg.get(CATEGORY_MACHINE, "advDispenser_cooldown", advDispenser_cooldown, "Amount of ticks inbetween each click on the Advanced Dispenser").getInt();
-    	
+    	xpFountain_powerNeeded = cfg.get(CATEGORY_MACHINE, "xpFountain_powerNeeded", xpFountain_powerNeeded, "Amount of power needed to activate the XP Fountain").getInt(3000);
+
     	//BLOCK
     	crates_leaveOneItem = cfg.get(CATEGORY_BLOCKS, "crates_leaveOneItem", crates_leaveOneItem, "Set to true to leave one item in a crate when it is clicked.").getBoolean();
     	crates_useAllSides = cfg.get(CATEGORY_BLOCKS, "crates_useAllSides", crates_useAllSides, "Set to true to allow the player to insert and remove items from a crate on all sides, not just the front.").getBoolean();

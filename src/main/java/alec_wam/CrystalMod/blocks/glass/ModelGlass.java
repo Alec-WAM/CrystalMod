@@ -31,23 +31,27 @@ import net.minecraft.world.World;
 
 public class ModelGlass extends DynamicItemAndBlockModel {
 
-	public static final ModelGlass INSTANCE = new ModelGlass();
+	public static final ModelGlass INSTANCE = new ModelGlass(GlassType.BLUE);
 	private final GlassBlockState state;
 	private final ItemStack stack;
-	public ModelGlass(){
+	private final GlassType glassType;
+	public ModelGlass(GlassType type){
 		super(true, false);
 		state = null;
 		stack = null;
+		this.glassType = type;
 	}
 	public ModelGlass(ItemStack stack){
 		super(false, true);
 		state = null;
 		this.stack = stack;
+		this.glassType = GlassType.values()[stack.getMetadata() % (GlassType.values().length)];
 	}
 	public ModelGlass(GlassBlockState state){
 		super(false, false);
 		this.state = state;
 		this.stack = ItemStackTools.getEmptyStack();
+		this.glassType = state.getValue(BlockCrystalGlass.TYPE);
 	}
 
 	@Override
@@ -64,7 +68,7 @@ public class ModelGlass extends DynamicItemAndBlockModel {
 		List<BakedQuad> list = Lists.newArrayList();
 		boolean renderUp = true, renderD = true, renderN = true, renderS = true, renderW = true, renderE = true;
 		ModelRotation rot = ModelRotation.X0_Y0;
-		GlassType type = GlassType.BLUE;
+		GlassType type = glassType;
 		if(ItemStackTools.isValid(stack)){
 			type = GlassType.values()[stack.getMetadata() % (GlassType.values().length)];
 		}else if(state !=null){
@@ -853,11 +857,7 @@ public class ModelGlass extends DynamicItemAndBlockModel {
 
 	@Override
 	public TextureAtlasSprite getParticleTexture() {
-		if(state !=null){
-			GlassType type = state.getValue(BlockCrystalGlass.TYPE);
-			if(type !=null)return getTexture(type);
-		}
-		return getClear();
+		return glassType !=null ? getTexture(glassType) : getClear();
 	}
 
 	public TextureAtlasSprite getClear(){

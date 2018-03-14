@@ -1193,8 +1193,7 @@ public class EventHandler {
             final LootPool lootPool = event.getTable().getPool(lootPoolId);
             lootPool.addEntry(customLootEnhancementBook);
         }
-        //TODO Rework this to only be caught in cold biomes
-        /*if(event.getName() == LootTableList.GAMEPLAY_FISHING_FISH){
+       /*if(event.getName() == LootTableList.GAMEPLAY_FISHING_FISH){
         	String lootPoolId = LootHelper.VANILLA_LOOT_POOL_ID;        	
             LootHelper.createPoolIfNotExists(event.getTable(), lootPoolId);
             final LootPool lootPool = event.getTable().getPool(lootPoolId);

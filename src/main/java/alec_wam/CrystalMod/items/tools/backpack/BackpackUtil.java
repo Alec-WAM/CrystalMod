@@ -8,6 +8,7 @@ import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.capability.ExtendedPlayer;
 import alec_wam.CrystalMod.capability.ExtendedPlayerInventory;
 import alec_wam.CrystalMod.capability.ExtendedPlayerProvider;
+import alec_wam.CrystalMod.client.sound.ModSounds;
 import alec_wam.CrystalMod.crafting.ModCrafting;
 import alec_wam.CrystalMod.handler.GuiHandler;
 import alec_wam.CrystalMod.items.ItemCrystal.CrystalType;
@@ -69,17 +70,17 @@ public class BackpackUtil {
 			}
 			return new ActionResult<ItemStack>(EnumActionResult.PASS, itemStack);
 		}
+		IBackpack type = getType(itemStack);
         if (world.isRemote){ //client side
             ItemNBTHelper.updateUUID(itemStack);
             ExtendedPlayerProvider.getExtendedPlayer(player).setOpenBackpack(itemStack);
-            //TODO Open sound
-            //player.playSound(open_backpack, 1F, 1F);
+            if(type.playOpenSound())player.playSound(ModSounds.backpack_zipper, 0.8F, 1F);
             return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStack);
         } else {
         	ItemNBTHelper.updateUUID(itemStack);
         	ExtendedPlayerProvider.getExtendedPlayer(player).setOpenBackpack(itemStack);
-            player.isSneaking();
             player.openGui(CrystalMod.instance, GuiHandler.GUI_ID_BACKPACK, world, OpenType.ANY.ordinal(), 0, 0);
+            if(type.playOpenSound()) player.playSound(ModSounds.backpack_zipper, 0.8F, 1F);
             return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStack);
         }
     }

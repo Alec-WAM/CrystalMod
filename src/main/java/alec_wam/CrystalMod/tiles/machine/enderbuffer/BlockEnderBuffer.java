@@ -1,5 +1,6 @@
 package alec_wam.CrystalMod.tiles.machine.enderbuffer;
 
+import java.util.List;
 import java.util.UUID;
 
 import alec_wam.CrystalMod.CrystalMod;
@@ -8,12 +9,14 @@ import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.packets.PacketTileMessage;
 import alec_wam.CrystalMod.proxy.ClientProxy;
+import alec_wam.CrystalMod.tiles.chest.wireless.WirelessChestHelper;
 import alec_wam.CrystalMod.tiles.machine.BlockMachine;
 import alec_wam.CrystalMod.tiles.machine.FakeTileState;
 import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
+import alec_wam.CrystalMod.util.ProfileUtil;
 import alec_wam.CrystalMod.util.UUIDUtils;
 import alec_wam.CrystalMod.util.tool.ToolUtil;
 import net.minecraft.block.material.Material;
@@ -55,6 +58,19 @@ public class BlockEnderBuffer extends BlockMachine implements ICustomModel
     	ClientProxy.registerCustomModel(new ModelResourceLocation(getRegistryName(), "active=false,facing=north"), ModelEnderBuffer.INSTANCE);
     	ClientProxy.registerCustomModel(new ModelResourceLocation(getRegistryName(), "active=true,facing=north"), ModelEnderBuffer.INSTANCE);
     	ClientProxy.registerCustomModel(new ModelResourceLocation(getRegistryName(), "inventory"), ModelEnderBuffer.INSTANCE);
+    }
+    
+    @Override
+    public void addInformation(ItemStack stack, EntityPlayer player, List<String> tooltip, boolean advanced)
+    {
+    	if(ItemNBTHelper.verifyExistance(stack, TILE_NBT_STACK)){
+    		NBTTagCompound nbt = ItemNBTHelper.getCompound(stack).getCompoundTag(TILE_NBT_STACK);
+	    	int code = nbt.getInteger("Code");
+			String color1 = ItemUtil.getDyeName(WirelessChestHelper.getDye1(code));
+			String color2 = ItemUtil.getDyeName(WirelessChestHelper.getDye2(code));
+			String color3 = ItemUtil.getDyeName(WirelessChestHelper.getDye3(code));
+			tooltip.add("Code: " + color1 + " / " + color2 + " / " + color3);
+    	}
     }
 
     @Override

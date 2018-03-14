@@ -257,5 +257,14 @@
         "stream": false
       }
     ], "subtitle": "crystalmod.subtitle.angel_hurt"
+  },
+  "backpack_zipper": {
+    "category": "player",
+    "sounds": [
+      {
+        "name": "crystalmod:backpack_zipper",
+        "stream": false
+      }
+    ], "subtitle": "crystalmod.subtitle.backpack_zipper"
   }
 }

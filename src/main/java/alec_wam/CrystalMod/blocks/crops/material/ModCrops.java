@@ -314,10 +314,11 @@ public class ModCrops {
 		}
 
 		
-		GameRegistry.addSmelting(ItemMaterialSeed.getSeed(COBBLESTONE), ItemMaterialSeed.getSeed(STONE), 0.35F);
-		GameRegistry.addSmelting(ItemMaterialSeed.getSeed(SAND), ItemMaterialSeed.getSeed(GLASS), 0.35F);
-		CrystalInfusionManager.addRecipe(ItemMaterialSeed.getSeed(COBBLESTONE), new FluidStack(FluidRegistry.LAVA, 100), ItemMaterialSeed.getSeed(NETHERRACK), 1600);
+		ModCrafting.addShapelessRecipe(ItemMaterialSeed.getSeed(STONE), new Object[]{Items.COAL, ItemMaterialSeed.getSeed(COBBLESTONE)});
+		ModCrafting.addShapelessRecipe(ItemMaterialSeed.getSeed(GLASS), new Object[]{Items.COAL, ItemMaterialSeed.getSeed(SAND)});
+		ModCrafting.addShapelessRecipe(ItemMaterialSeed.getSeed(HARDENED_CLAY), new Object[]{Items.COAL, ItemMaterialSeed.getSeed(CLAY)});
 		
-		GameRegistry.addSmelting(ItemMaterialSeed.getSeed(CLAY), ItemMaterialSeed.getSeed(HARDENED_CLAY), 0.35F);
+		
+		CrystalInfusionManager.addRecipe(ItemMaterialSeed.getSeed(COBBLESTONE), new FluidStack(FluidRegistry.LAVA, 100), ItemMaterialSeed.getSeed(NETHERRACK), 1600);
 	}
 }

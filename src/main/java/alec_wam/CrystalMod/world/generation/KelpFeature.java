@@ -10,7 +10,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeOcean;
@@ -62,7 +61,18 @@ public class KelpFeature implements IGenerationFeature {
 	}
 
 	private boolean generateKelp(World world, BlockPos blockpos, Random random) {
-		int height = MathHelper.getInt(random, 2, 5);
+		int height = 3;		
+		int waterHeight = 0;
+		for(int i = 0; (i < 64); i++){
+			BlockPos pos = blockpos.add(0, i, 0);
+			if (world.getBlockState(pos).getBlock() == Blocks.WATER)
+            {
+				waterHeight++;
+            } else {
+            	break;
+            }
+		}
+		height = waterHeight - (waterHeight < 5 ? 2 : 5);
 		boolean isYellow = random.nextInt(4) == 0;
 		IBlockState kelpState = ModBlocks.kelp.getDefaultState().withProperty(BlockKelp.ISYELLOW, isYellow);
 		boolean hasPlaced = false;

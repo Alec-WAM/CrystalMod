@@ -5,6 +5,7 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import alec_wam.CrystalMod.items.ModItems;
+import alec_wam.CrystalMod.util.ModLogger;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.MoverType;
@@ -12,6 +13,7 @@ import net.minecraft.entity.item.EntityBoat;
 import net.minecraft.entity.passive.EntityWaterMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.inventory.ItemStackHelper;
@@ -35,7 +37,7 @@ public class EntityBoatChest extends EntityCustomBoat implements IInventory {
 	
 	public EntityBoatChest(World worldIn, double x, double y, double z)
     {
-		super(worldIn, x, y, z);
+		super(worldIn, x, y, z);        
     }
 	
 	@Override
@@ -56,7 +58,22 @@ public class EntityBoatChest extends EntityCustomBoat implements IInventory {
 	@Override
 	public Item getItemBoat()
     {
-		return ModItems.bambooBoat;
+		if(getBoatType() == Type.SPRUCE){
+			return Items.SPRUCE_BOAT;
+		}
+		if(getBoatType() == Type.BIRCH){
+			return Items.BIRCH_BOAT;
+		}
+		if(getBoatType() == Type.JUNGLE){
+			return Items.JUNGLE_BOAT;
+		}
+		if(getBoatType() == Type.ACACIA){
+			return Items.ACACIA_BOAT;
+		}
+		if(getBoatType() == Type.DARK_OAK){
+			return Items.DARK_OAK_BOAT;
+		}
+		return Items.BOAT;
     }
 	
 	@Override
@@ -78,6 +95,7 @@ public class EntityBoatChest extends EntityCustomBoat implements IInventory {
 	@Override
 	public void onUpdate()
     {
+        //ModLogger.info("Update Test Pre ");
         //this.previousStatus = this.status;
         ObfuscationReflectionHelper.setPrivateValue(EntityBoat.class, this, ObfuscationReflectionHelper.getPrivateValue(EntityBoat.class, this, FIELD_STATUS), FIELD_PREVSTATUS);
         //this.status = this.getBoatStatus();
@@ -188,6 +206,8 @@ public class EntityBoatChest extends EntityCustomBoat implements IInventory {
                 }
             }
         }
+        //ModLogger.info("Update Test ");
+    	
     }
 	
 	@Nullable
@@ -207,7 +227,7 @@ public class EntityBoatChest extends EntityCustomBoat implements IInventory {
             InventoryHelper.dropInventoryItems(this.world, this, this);
         }
 
-        super.setDead();
+		super.setDead();
     }
 
     /**

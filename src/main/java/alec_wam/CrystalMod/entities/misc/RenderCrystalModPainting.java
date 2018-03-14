@@ -75,7 +75,6 @@ public class RenderCrystalModPainting extends Render<EntityCrystalModPainting>
         float maxY = f1;
         
         this.setLightmap(painting, (minX + maxX) / 2.0F, (minY + maxY) / 2.0F);
-        //TODO Check this to confirm
         float minU = 0.0f;
         float maxU = 1.0f;
         float minV = 0.0f;

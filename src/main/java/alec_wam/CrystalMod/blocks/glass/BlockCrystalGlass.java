@@ -114,7 +114,7 @@ public class BlockCrystalGlass extends EnumBlock<BlockCrystalGlass.GlassType> im
     	ClientProxy.registerCustomModel(inv, ModelGlass.INSTANCE);
 		for(GlassType type : GlassType.values()){
 	        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), type.getMeta(), inv);
-	        ClientProxy.registerCustomModel(new ModelResourceLocation(getRegistryName(), "type="+type.getName()), ModelGlass.INSTANCE);
+	        ClientProxy.registerCustomModel(new ModelResourceLocation(getRegistryName(), "type="+type.getName()), new ModelGlass(type));
 		}
     }
     

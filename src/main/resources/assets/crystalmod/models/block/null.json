@@ -13,7 +13,7 @@
             ],
             "faces":{
                 "north":{
-                    "texture":"#particle"
+                    "texture": "#particle"
                 }
             }
         }

@@ -288,7 +288,8 @@ public class ClientEventHandler {
 	    		int capacity = 0;
 	    		boolean renderFluid = false;
 	    		
-	    		List<String> list = Lists.newArrayList();
+	    		List<String> infolines = Lists.newArrayList(); 
+				List<String> list = Lists.newArrayList();
 	    		int barHeight = 58;
 	    		int offsetY = 0;	    
 	    		
@@ -380,6 +381,34 @@ public class ClientEventHandler {
 					}
 	    		}
 	    		
+	    		//intelect
+	    		boolean blockInfo = true;
+	    		if(blockInfo && event.getType() == ElementType.ALL && !Minecraft.getMinecraft().gameSettings.showDebugInfo && !(Minecraft.getMinecraft().currentScreen instanceof GuiChat)){
+	    			RayTraceResult ray = Minecraft.getMinecraft().objectMouseOver;
+	    			if(ray !=null){
+	    				if(ray.typeOfHit == RayTraceResult.Type.ENTITY && ray.entityHit !=null){
+	    					Entity entity = ray.entityHit;
+	    					collectEntityData(infolines, ray, entity);
+	    				}
+	    				if(ray.typeOfHit == RayTraceResult.Type.BLOCK){
+	    					World world = CrystalMod.proxy.getClientWorld();
+	    					IBlockState state = world.getBlockState(pos);
+	    					if(state !=null){
+	    						Block block = state.getBlock();
+	    						ItemStack blockStack = block.getPickBlock(state, ray, world, pos, player);
+	    						if(ItemStackTools.isValid(blockStack)){
+	    							infolines.add(blockStack.getDisplayName());
+	    							infolines.add(blockStack.getItem().getRegistryName().toString());
+	    						}
+	    					}
+	    				}
+	    			}
+	    		}
+	    		
+	    		if(!infolines.isEmpty()){
+	    			offsetY+=((infolines.size() * 10)+10);
+	    		}
+	    		
 	    		if(renderCU){
 	    			list.add("CU: "+cu+" / "+maxCU);
 		    		GlStateManager.pushMatrix();
@@ -442,10 +471,23 @@ public class ClientEventHandler {
 		    		}
 		    		GlStateManager.popMatrix();
 	    		}
-	    		
+
+
+    			if(!infolines.isEmpty()){
+	    			int x = 0;
+	    			int listSize = ((infolines.size() * 10)-5);
+	    			int y = sr.getScaledHeight() - listSize;
+	    	        GlStateManager.pushMatrix();
+	    			RenderUtil.drawHoveringText(infolines, x, y, sr.getScaledWidth(), sr.getScaledHeight(), 300, Minecraft.getMinecraft().fontRendererObj);
+	    			GlStateManager.disableLighting();		            
+		    		GlStateManager.popMatrix();
+		    		offsetY+=listSize;
+    			}
 	    		if(!list.isEmpty()){
+	    			int listSize = infolines.isEmpty() ? 0 : ((infolines.size() * 10)+10);
+	    			
 	    			GlStateManager.pushMatrix();
-	    			GlStateManager.translate(10, sr.getScaledHeight()-(barHeight + 10 + (12 * (list.size() - 1))), 0);
+	    			GlStateManager.translate(10, sr.getScaledHeight()-(barHeight + 10 + (12 * (list.size() - 1))) - listSize, 0);
 		    		RenderUtil.drawHoveringText(list, -10, (barHeight + 8), 300, 100, -1, mc.fontRendererObj);
 					RenderHelper.enableGUIStandardItemLighting();
 		    		GlStateManager.popMatrix();	
@@ -1035,39 +1077,6 @@ public class ClientEventHandler {
 	    		
 	    		
 			}
-			
-			if(event.getType() == ElementType.ALL && !Minecraft.getMinecraft().gameSettings.showDebugInfo && !(Minecraft.getMinecraft().currentScreen instanceof GuiChat)){
-    			List<String> lines = Lists.newArrayList();   			
-    			
-    			RayTraceResult ray = Minecraft.getMinecraft().objectMouseOver;
-    			if(ray !=null){
-    				if(ray.typeOfHit == RayTraceResult.Type.ENTITY && ray.entityHit !=null){
-    					Entity entity = ray.entityHit;
-    					collectEntityData(lines, ray, entity);
-    				}
-    				if(ray.typeOfHit == RayTraceResult.Type.BLOCK){
-    					BlockPos pos = ray.getBlockPos();
-    					World world = CrystalMod.proxy.getClientWorld();
-    					IBlockState state = world.getBlockState(pos);
-    					if(state !=null){
-    						Block block = state.getBlock();
-    						ItemStack blockStack = block.getPickBlock(state, ray, world, pos, player);
-    						if(ItemStackTools.isValid(blockStack)){
-    							lines.add(blockStack.getDisplayName());
-    							lines.add(blockStack.getItem().getRegistryName().toString());
-    						}
-    					}
-    				}
-    			}
-    			if(!lines.isEmpty()){
-	    			int x = 0;
-	    			int y = sr.getScaledHeight() - ((lines.size() * 10)-5);
-	    	        GlStateManager.pushMatrix();
-	    			RenderUtil.drawHoveringText(lines, x, y, sr.getScaledWidth(), sr.getScaledHeight(), 300, Minecraft.getMinecraft().fontRendererObj);
-	    			GlStateManager.disableLighting();		            
-		    		GlStateManager.popMatrix();
-    			}
-    		}
 		}
     	
     	if(extPlayer.getScreenFlashTime() > 0){

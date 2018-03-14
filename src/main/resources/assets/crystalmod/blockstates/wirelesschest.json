@@ -1,15 +1,15 @@
 {
 	"variants": {
-		"grown=false": { 
+		"inventory": { 
 			"model": "crystalmod:null",
 			"textures": {
-				"particle": "minecraft:sapling_oak"
+				"particle": "crystalmod:blocks/darkiron_ingot"
 			} 
 		},
-        "grown=true": { 
+        "normal": { 
 			"model": "crystalmod:null",
 			"textures": {
-				"particle": "minecraft:sapling_oak"
+				"particle": "crystalmod:blocks/darkiron_ingot"
 			}
 		}
     }

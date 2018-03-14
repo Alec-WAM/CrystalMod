@@ -31,7 +31,7 @@ public class BlockTintedCrystalGlass extends BlockCrystalGlass {
     	ClientProxy.registerCustomModel(inv, ModelTintedGlass.INSTANCE);
 		for(GlassType type : GlassType.values()){
 	        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), type.getMeta(), inv);
-	        ClientProxy.registerCustomModel(new ModelResourceLocation(getRegistryName(), "type="+type.getName()), ModelTintedGlass.INSTANCE);
+	        ClientProxy.registerCustomModel(new ModelResourceLocation(getRegistryName(), "type="+type.getName()), new ModelTintedGlass(type));
 		}
     }
 	

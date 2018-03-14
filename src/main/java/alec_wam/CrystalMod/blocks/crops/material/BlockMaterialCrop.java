@@ -58,7 +58,7 @@ public class BlockMaterialCrop extends BlockContainer {
 	@Override
     public EnumBlockRenderType getRenderType(IBlockState state)
     {
-        return EnumBlockRenderType.INVISIBLE;
+        return EnumBlockRenderType.ENTITYBLOCK_ANIMATED;
     }
 	
 	@Override

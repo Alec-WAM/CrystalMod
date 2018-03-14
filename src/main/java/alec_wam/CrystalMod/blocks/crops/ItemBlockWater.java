@@ -1,5 +1,6 @@
 package alec_wam.CrystalMod.blocks.crops;
 
+import alec_wam.CrystalMod.util.FluidUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
@@ -46,7 +47,7 @@ public class ItemBlockWater extends ItemBlock {
                 BlockPos blockpos1 = blockpos.up();
                 IBlockState iblockstate = worldIn.getBlockState(blockpos);
 
-                if (iblockstate.getMaterial() == Material.WATER && iblockstate.getValue(BlockLiquid.LEVEL).intValue() == 0 && worldIn.isAirBlock(blockpos1))
+                if (FluidUtil.isFluidSource(worldIn, blockpos, iblockstate) && worldIn.isAirBlock(blockpos1))
                 {
                     net.minecraftforge.common.util.BlockSnapshot blocksnapshot = net.minecraftforge.common.util.BlockSnapshot.getBlockSnapshot(worldIn, blockpos1);
                     worldIn.setBlockState(blockpos1, block.getDefaultState());

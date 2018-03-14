@@ -55,7 +55,7 @@ public class CrystalModNetwork extends NetworkWrapper {
 	    
 	    registerPacketClient(PacketExtendedPlayerInvSync.class);
 	    registerPacketServer(PacketOpenExtendedInventory.class);
-	    registerPacketServer(PacketOpenBackpack.class);
+	    registerPacket(PacketOpenBackpack.class);
 	    registerPacketServer(PacketToolSwap.class);
 	    
 	    registerPacketClient(PacketNoSpamChat.class);
