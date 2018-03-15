@@ -32,23 +32,27 @@ import net.minecraft.world.World;
 
 public class ModelGlassPane extends DynamicItemAndBlockModel {
 
-	public static final ModelGlassPane INSTANCE = new ModelGlassPane();
+	public static final ModelGlassPane INSTANCE = new ModelGlassPane(GlassType.BLUE);
 	private final GlassBlockState state;
 	private final ItemStack stack;
-	public ModelGlassPane(){
+	private final GlassType glassType;
+	public ModelGlassPane(GlassType glassType){
 		super(true, false);
 		state = null;
 		stack = null;
+		this.glassType = glassType;
 	}
 	public ModelGlassPane(ItemStack stack){
 		super(false, true);
 		state = null;
 		this.stack = stack;
+		glassType = GlassType.values()[stack.getMetadata() % (GlassType.values().length)];
 	}
 	public ModelGlassPane(GlassBlockState state){
 		super(false, false);
 		this.state = state;
 		this.stack = ItemStackTools.getEmptyStack();
+		glassType = state.getValue(BlockCrystalGlass.TYPE);
 	}
 
 	@Override
@@ -143,7 +147,9 @@ public class ModelGlassPane extends DynamicItemAndBlockModel {
 			if(renderNorth){
 				final BlockFaceUV uv = new BlockFaceUV(left, 0);
 				final BlockPartFace face = new BlockPartFace(EnumFacing.NORTH, 0, "", uv);
-				if(!connectedN && !connectedE && !connectedW)list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(7, 0, 7), new Vector3f(9, 16, 9), face, sprite, EnumFacing.NORTH, ModelRotation.X0_Y0, (BlockPartRotation)null, true));
+				if(!connectedN && !connectedE && !connectedW){
+					list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(7, 0, 7), new Vector3f(9, 16, 9), face, sprite, EnumFacing.NORTH, ModelRotation.X0_Y0, (BlockPartRotation)null, true));
+				}
 			}
 			boolean renderConnected = true;
 			if(renderConnected){
@@ -155,7 +161,9 @@ public class ModelGlassPane extends DynamicItemAndBlockModel {
 			if(renderSouth){
 				final BlockFaceUV uv = new BlockFaceUV(left, 0);
 				final BlockPartFace face = new BlockPartFace(EnumFacing.SOUTH, 0, "", uv);
-				if(!connectedS && !connectedE && !connectedW)list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(7, 0, 7), new Vector3f(9, 16, 9), face, sprite, EnumFacing.SOUTH, ModelRotation.X0_Y0, (BlockPartRotation)null, true));
+				if(!connectedS && !connectedE && !connectedW){
+					list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(7, 0, 7), new Vector3f(9, 16, 9), face, sprite, EnumFacing.SOUTH, ModelRotation.X0_Y0, (BlockPartRotation)null, true));
+				}
 				
 			}
 			if(renderEast){
@@ -189,11 +197,7 @@ public class ModelGlassPane extends DynamicItemAndBlockModel {
 
 	@Override
 	public TextureAtlasSprite getParticleTexture() {
-		if(state !=null){
-			GlassType type = state.getValue(BlockCrystalGlass.TYPE);
-			if(type !=null)return getTexture(type);
-		}
-		return getClear();
+		return glassType !=null ? getTexture(glassType) : getClear();
 	}
 
 	public TextureAtlasSprite getClear(){
@@ -249,6 +253,7 @@ public class ModelGlassPane extends DynamicItemAndBlockModel {
 		boolean connectedE = state.getValue(BlockPane.EAST);
 		boolean connectedW = state.getValue(BlockPane.WEST);
 		EnumFacing renderFace = glassFace;
+		boolean connectedThisSide = glassFace == EnumFacing.SOUTH ? state.getValue(BlockPane.SOUTH) : state.getValue(BlockPane.NORTH);
 		
 		boolean mT = false;
 		boolean mT2 = false;
@@ -341,10 +346,10 @@ public class ModelGlassPane extends DynamicItemAndBlockModel {
 		}
 
 		if(connectedE && !connectedW){
-			mT = lineM = mB = !BlockCrystalGlassPane.isSideConnectable(state.blockAccess, state.pos, rightFacing);
+			mT = lineM = mB = (!BlockCrystalGlassPane.isSideConnectable(state.blockAccess, state.pos, rightFacing) && !connectedThisSide);
 		}
 		if(connectedW && !connectedE){
-			mT2 = lineM2 = mB2 = !BlockCrystalGlassPane.isSideConnectable(state.blockAccess, state.pos, leftFacing);
+			mT2 = lineM2 = mB2 = (!BlockCrystalGlassPane.isSideConnectable(state.blockAccess, state.pos, leftFacing) && !connectedThisSide);
 		}
 
 		if(connectedW){
@@ -397,19 +402,23 @@ public class ModelGlassPane extends DynamicItemAndBlockModel {
 
 		if(tLineL){
 			face.blockFaceUV.uvs = new float[]{1f, 0f, 7f, 1f};
-			list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(8, 15, z), new Vector3f(16, 16, z), face, sprite, renderFace, rot, (BlockPartRotation)null, true));
+			float min = connectedThisSide ? 9 : 8;
+			list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(min, 15, z), new Vector3f(16, 16, z), face, sprite, renderFace, rot, (BlockPartRotation)null, true));
 		}
 		if(bLineL){
 			face.blockFaceUV.uvs = new float[]{1f, 15f, 7f, 16f};
-			list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(8, 0, z), new Vector3f(16, 1, z), face, sprite, renderFace, rot, (BlockPartRotation)null, true));
+			float min = connectedThisSide ? 9 : 8;
+			list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(min, 0, z), new Vector3f(16, 1, z), face, sprite, renderFace, rot, (BlockPartRotation)null, true));
 		}
 		if(tLineR){
 			face.blockFaceUV.uvs = new float[]{1f, 0f, 7f, 1f};
-			list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(0, 15, z), new Vector3f(8, 16, z), face, sprite, renderFace, rot, (BlockPartRotation)null, true));
+			float max = connectedThisSide ? 7 : 8;
+			list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(0, 15, z), new Vector3f(max, 16, z), face, sprite, renderFace, rot, (BlockPartRotation)null, true));
 		}
 		if(bLineR){
 			face.blockFaceUV.uvs = new float[]{1f, 15f, 7f, 16f};
-			list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(0, 0, z), new Vector3f(8, 1, z), face, sprite, renderFace, rot, (BlockPartRotation)null, true));
+			float max = connectedThisSide ? 7 : 8;
+			list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(0, 0, z), new Vector3f(max, 1, z), face, sprite, renderFace, rot, (BlockPartRotation)null, true));
 		}
 		if(lineR){
 			face.blockFaceUV.uvs = new float[]{15f, 1f, 16f, 15f};
@@ -453,6 +462,7 @@ public class ModelGlassPane extends DynamicItemAndBlockModel {
 		
 		boolean connectedL = state.getValue(BlockPane.SOUTH);
 		boolean connectedR = state.getValue(BlockPane.NORTH);
+		boolean connectedThisSide = glassFace == EnumFacing.EAST ? state.getValue(BlockPane.EAST) : state.getValue(BlockPane.WEST);
 		EnumFacing renderFace = glassFace;
 		
 		boolean mT = false;
@@ -546,10 +556,10 @@ public class ModelGlassPane extends DynamicItemAndBlockModel {
 		}
 
 		if(connectedL && !connectedR){
-			mT = lineM = mB = !BlockCrystalGlassPane.isSideConnectable(state.blockAccess, state.pos, rightFacing);
+			mT = lineM = mB = (!BlockCrystalGlassPane.isSideConnectable(state.blockAccess, state.pos, rightFacing) && !connectedThisSide);
 		}
 		if(connectedR && !connectedL){
-			mT2 = lineM2 = mB2 = !BlockCrystalGlassPane.isSideConnectable(state.blockAccess, state.pos, leftFacing);
+			mT2 = lineM2 = mB2 = (!BlockCrystalGlassPane.isSideConnectable(state.blockAccess, state.pos, leftFacing) && !connectedThisSide);
 		}
 
 		if(connectedR){
@@ -602,19 +612,23 @@ public class ModelGlassPane extends DynamicItemAndBlockModel {
 
 		if(tLineL){
 			face.blockFaceUV.uvs = new float[]{1f, 0f, 7f, 1f};
-			list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(x, 15, 8), new Vector3f(x, 16, 16), face, sprite, renderFace, rot, (BlockPartRotation)null, true));
+			float min = connectedThisSide ? 9 : 8;
+			list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(x, 15, min), new Vector3f(x, 16, 16), face, sprite, renderFace, rot, (BlockPartRotation)null, true));
 		}
 		if(bLineL){
 			face.blockFaceUV.uvs = new float[]{1f, 15f, 7f, 16f};
-			list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(x, 0, 8), new Vector3f(x, 1, 16), face, sprite, renderFace, rot, (BlockPartRotation)null, true));
+			float min = connectedThisSide ? 9 : 8;
+			list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(x, 0, min), new Vector3f(x, 1, 16), face, sprite, renderFace, rot, (BlockPartRotation)null, true));
 		}
 		if(tLineR){
 			face.blockFaceUV.uvs = new float[]{1f, 0f, 7f, 1f};
-			list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(x, 15, 0), new Vector3f(x, 16, 8), face, sprite, renderFace, rot, (BlockPartRotation)null, true));
+			float max = connectedThisSide ? 7 : 8;
+			list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(x, 15, 0), new Vector3f(x, 16, max), face, sprite, renderFace, rot, (BlockPartRotation)null, true));
 		}
 		if(bLineR){
 			face.blockFaceUV.uvs = new float[]{1f, 15f, 7f, 16f};
-			list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(x, 0, 0), new Vector3f(x, 1, 8), face, sprite, renderFace, rot, (BlockPartRotation)null, true));
+			float max = connectedThisSide ? 7 : 8;
+			list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(x, 0, 0), new Vector3f(x, 1, max), face, sprite, renderFace, rot, (BlockPartRotation)null, true));
 		}
 		if(lineR){
 			face.blockFaceUV.uvs = new float[]{15f, 1f, 16f, 15f};

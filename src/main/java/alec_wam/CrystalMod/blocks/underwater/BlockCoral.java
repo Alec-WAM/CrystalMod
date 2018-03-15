@@ -218,11 +218,11 @@ public class BlockCoral extends BlockColored implements ICustomModel, ICustomRay
 	public boolean canBlockStay(final World worldIn, final BlockPos pos, final IBlockState state) {
 		for(EnumFacing facing : EnumFacing.HORIZONTALS){
 			BlockPos offset = pos.offset(facing);
-			if(worldIn.getBlockState(offset).getBlock() == Blocks.WATER){
+			if(worldIn.getBlockState(offset).getBlock() == Blocks.WATER || worldIn.getBlockState(offset).getBlock() == this){
 				return true;
 			}
 		}
-		return worldIn.getBlockState(pos.up()).getBlock() == Blocks.WATER;
+		return worldIn.getBlockState(pos.up()).getBlock() == Blocks.WATER || worldIn.getBlockState(pos.up()).getBlock() == this;
 	}
 
 	@Override

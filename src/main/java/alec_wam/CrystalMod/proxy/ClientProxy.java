@@ -17,6 +17,7 @@ import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.api.enhancements.EnhancementManager;
 import alec_wam.CrystalMod.api.enhancements.IEnhancement;
 import alec_wam.CrystalMod.blocks.ModBlocks;
+import alec_wam.CrystalMod.blocks.crops.bamboo.ItemWrappedFood.WrappedFoodType;
 import alec_wam.CrystalMod.blocks.crops.bamboo.ModelWrappedFood;
 import alec_wam.CrystalMod.blocks.crops.material.CropOverlays;
 import alec_wam.CrystalMod.blocks.crops.material.ModelSeed;
@@ -329,6 +330,9 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
         event.getMap().registerSprite(new ResourceLocation("crystalmod:items/crop/seed_background"));
         event.getMap().registerSprite(new ResourceLocation("crystalmod:items/crop/seed_overlay"));
         event.getMap().registerSprite(new ResourceLocation("crystalmod:items/food/eucalyptus_overlay_basic"));
+        for(WrappedFoodType wrappedFood : WrappedFoodType.values()){
+        	event.getMap().registerSprite(new ResourceLocation("crystalmod:items/food/eucalyptus/"+wrappedFood.getName()));
+        }
         event.getMap().registerSprite(new ResourceLocation("crystalmod:items/icon_sword"));
         event.getMap().registerSprite(new ResourceLocation("crystalmod:items/icon_pickaxe"));
         event.getMap().registerSprite(new ResourceLocation("crystalmod:items/pipe/icon_filter"));

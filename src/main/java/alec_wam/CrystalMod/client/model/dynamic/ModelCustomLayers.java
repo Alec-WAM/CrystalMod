@@ -116,7 +116,11 @@ public abstract class ModelCustomLayers implements IModel, IModelCustomData
     	Optional<TRSRTransformation> transform = state.apply(Optional.<IModelPart>absent());
         ImmutableList.Builder<BakedQuad> builder = ImmutableList.builder();
         addLayers(builder, format, transform, bakedTextureGetter);
-        return new BakedItemModel(this, format, builder.build(), RenderUtil.getMissingSprite(), map, getOverrides(), null);
+        return new BakedItemModel(this, format, builder.build(), getParticle(), map, getOverrides(), null);
+    }
+    
+    public TextureAtlasSprite getParticle(){
+    	return RenderUtil.getMissingSprite();
     }
     
     public abstract void addLayers(ImmutableList.Builder<BakedQuad> builder, VertexFormat format, Optional<TRSRTransformation> transform, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter);

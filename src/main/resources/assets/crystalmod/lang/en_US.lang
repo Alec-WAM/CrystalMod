@@ -58,6 +58,7 @@ item.crystalmod.miscfood.kelp_cooked.name=Roasted Kelp
 item.crystalmod.miscfood.yellow_kelp.name=Yellow Kelp
 item.crystalmod.miscfood.yellow_kelp_cooked.name=Roasted Yellow Kelp
 item.crystalmod.miscfood.super_mushroom_stew.name=Super Mushroom Stew
+item.crystalmod.wrappedfood.name=Eucalyptus Leaf Wrapped %s
 
 item.crystalmod.crystalsap.blue.name=Blue Crystal Sap
 item.crystalmod.crystalsap.red.name=Red Crystal Sap

@@ -11,11 +11,10 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
 
+import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.blocks.crops.bamboo.ItemWrappedFood.WrappedFoodType;
 import alec_wam.CrystalMod.client.model.dynamic.ModelCustomLayers;
-import alec_wam.CrystalMod.util.ItemStackTools;
-import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.client.RenderUtil;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ItemOverride;
@@ -25,7 +24,6 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
@@ -38,39 +36,37 @@ public final class ModelWrappedFood extends ModelCustomLayers
 {
     public static final ModelResourceLocation LOCATION = new ModelResourceLocation(new ResourceLocation("crystalmod", "wrappedfood"), "inventory");
 
-    public static final IModel MODEL = new ModelWrappedFood();
-    private ItemStack food = ItemStackTools.getEmptyStack();
-    private final ResourceLocation textureOverlay = new ResourceLocation("crystalmod:items/food/eucalyptus_overlay_basic");
+    public static final IModel MODEL = new ModelWrappedFood(WrappedFoodType.APPLE);
+    public final WrappedFoodType foodType;
+    private static final Map<WrappedFoodType, ResourceLocation> TEXTURE_MAP = Maps.newHashMap();
     
-    public ModelWrappedFood()
-    {
-        this(ItemStackTools.getEmptyStack());
+    static {
+    	for(WrappedFoodType t : WrappedFoodType.values()){
+    		TEXTURE_MAP.put(t, CrystalMod.resourceL("items/food/eucalyptus/"+t.getName()));
+    	}
     }
-
-    public ModelWrappedFood(ItemStack food)
+    
+    public ModelWrappedFood(WrappedFoodType type)
     {
-    	this.food = food;
+       foodType = type;
     }
 
     @Override
     public Collection<ResourceLocation> getTextures()
     {
         ImmutableSet.Builder<ResourceLocation> builder = ImmutableSet.builder();
-        if (this.textureOverlay !=null)
-            builder.add(textureOverlay);
+        builder.add(TEXTURE_MAP.get(foodType));
         return builder.build();
     }
     
     public void addLayers(ImmutableList.Builder<BakedQuad> builder, VertexFormat format, Optional<TRSRTransformation> transform, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter){
-    	if(ItemStackTools.isValid(food)){
-     		IBakedModel model = Minecraft.getMinecraft().getRenderItem().getItemModelWithOverrides(food, null, null);
-     		builder.addAll(model.getQuads(null, null, 0L));
-     	}
-    	if (textureOverlay != null)
-        {
-        	TextureAtlasSprite base = bakedTextureGetter.apply(textureOverlay);
-            builder.addAll(getQuadsForSprite(Color.WHITE.getRGB(), base, format, transform));
-        } 
+    	TextureAtlasSprite base = bakedTextureGetter.apply(TEXTURE_MAP.get(foodType));
+        builder.addAll(getQuadsForSprite(Color.WHITE.getRGB(), base, format, transform));
+    }
+    
+    @Override
+    public TextureAtlasSprite getParticle(){
+    	return RenderUtil.getSprite(TEXTURE_MAP.get(foodType));
     }
     
     public ItemOverrideList getOverrides(){
@@ -81,10 +77,9 @@ public final class ModelWrappedFood extends ModelCustomLayers
     public ModelWrappedFood process(ImmutableMap<String, String> customData)
     {
         String cropName = customData.get("food");
-        ItemStack stack = ItemUtil.getStackFromString(cropName, true);
+        WrappedFoodType type = WrappedFoodType.byName(cropName);
 
-        if (!ItemStackTools.isValid(stack)) stack = new ItemStack(Items.APPLE);
-        return new ModelWrappedFood(stack);
+        return new ModelWrappedFood(type);
     }
 
     public enum LoaderWrappedFood implements ICustomModelLoader
@@ -122,17 +117,16 @@ public final class ModelWrappedFood extends ModelCustomLayers
         @Override
         public IBakedModel handleItemState(IBakedModel originalModel, ItemStack stack, World world, EntityLivingBase entity)
         {
-            ItemStack food = ItemWrappedFood.getFood(stack);
+            WrappedFoodType food = ItemWrappedFood.getFood(stack);
 
             // not a crop item
-            if (!ItemStackTools.isValid(food))
+            if (food == null)
             {
                 return originalModel;
             }
-
             //BakedSeed model = (BakedSeed)originalModel;
             BakedItemModel model = (BakedItemModel)originalModel;
-            String name = ItemUtil.getStringForItemStack(food, true, false);
+            String name = food.getUnlocalizedName();
             String cacheName = name+"v1";
             if (!cache.containsKey(cacheName))
             {

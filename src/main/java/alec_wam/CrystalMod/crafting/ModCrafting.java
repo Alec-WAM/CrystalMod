@@ -24,6 +24,8 @@ import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.blocks.crops.BlockCrystalPlant.PlantType;
 import alec_wam.CrystalMod.blocks.crops.BlockNormalSapling.SaplingType;
 import alec_wam.CrystalMod.blocks.crops.ItemCorn.CornItemType;
+import alec_wam.CrystalMod.blocks.crops.bamboo.ItemWrappedFood;
+import alec_wam.CrystalMod.blocks.crops.bamboo.ItemWrappedFood.WrappedFoodType;
 import alec_wam.CrystalMod.blocks.crops.material.ModCrops;
 import alec_wam.CrystalMod.blocks.crystexium.CrystexiumBlock.CrystexiumBlockType;
 import alec_wam.CrystalMod.blocks.decorative.BlockBetterRoses.RoseType;
@@ -251,6 +253,12 @@ public class ModCrafting {
 		addShapelessRecipe(new ItemStack(ModItems.miscFood, 1, FoodType.SUPER_MUSHROOM_STEW.getMetadata()), new Object[] {ModBlocks.crysineMushroom, ModBlocks.crysineMushroom, Items.BOWL});
 		BrewingRecipeRegistry.addRecipe(new ItemStack(Items.POTIONITEM), new ItemStack(ModBlocks.crysineMushroom), PotionUtils.addPotionToItemStack(new ItemStack(Items.POTIONITEM), PotionTypes.LONG_FIRE_RESISTANCE));
 		
+		for(WrappedFoodType foodType : WrappedFoodType.values()){
+			if(!ItemStackTools.isValid(foodType.getFoodStack()))continue;
+			ItemStack wrapped = new ItemStack(ModItems.wrappedFood);
+			ItemWrappedFood.setFood(wrapped, foodType);
+			addShapelessRecipe(wrapped, new Object[]{foodType.getFoodStack(), new ItemStack(ModItems.miscFood, 1, FoodType.EUCALYPTUS.getMetadata())});
+		}
 		
 		addShapelessRecipe(new ItemStack(ModItems.cursedBone, 3, BoneType.BONEMEAL.getMetadata()), new Object[]{new ItemStack(ModItems.cursedBone, 1, BoneType.BONE.getMetadata())});
 		

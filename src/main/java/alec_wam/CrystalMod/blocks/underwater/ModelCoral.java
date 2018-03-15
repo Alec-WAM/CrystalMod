@@ -159,9 +159,11 @@ public class ModelCoral implements IPerspectiveAwareModel
 			
 			final BlockFaceUV uvFull = new BlockFaceUV(new float[]{0, 0, 16, 16}, 0);
 			final BlockPartFace faceFull = new BlockPartFace(EnumFacing.UP, 0, "", uvFull);
+			final BlockPartFace faceFullDown = new BlockPartFace(EnumFacing.DOWN, 0, "", uvFull);
 			
 			
 			quads.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(0, height, 0), new Vector3f(16F, height, 16F), faceFull, waterSprite, EnumFacing.UP, rot, (BlockPartRotation)null, uvLocked));
+			quads.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(0, height-0.001f, 0), new Vector3f(16F, height-0.001f, 16F), faceFullDown, waterSprite, EnumFacing.DOWN, rot, (BlockPartRotation)null, uvLocked));
 		}
 		
 		return quads;
