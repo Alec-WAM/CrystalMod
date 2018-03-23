@@ -1,9 +1,8 @@
 {
 	"forge_marker": 1,
 	"defaults": {
-		"model": "crystalmod:fixedcross",
+		"model": "cross",
 		"textures": {
-			"particle": "crystalmod:blocks/plant/kelp_yellow",
 			"cross": "crystalmod:blocks/plant/kelp_yellow"
 		},
 		"transform": "forge:default-block"

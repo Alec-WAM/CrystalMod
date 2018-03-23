@@ -56,5 +56,13 @@ public class StringUtils {
 		}
 		return array;
 	}
+
+	public static String chopAtFirst(String str, String character) {
+		return str.substring(0, str.indexOf(character));
+	}
+	
+	public static String chopAtLast(String str, String character) {
+		return str.substring(0, str.lastIndexOf(character));
+	}
 	
 }

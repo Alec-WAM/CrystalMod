@@ -2,7 +2,6 @@ package alec_wam.CrystalMod.blocks.crops.bamboo;
 
 import java.util.List;
 
-import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.items.IEnumMetaItem;
 import alec_wam.CrystalMod.items.ItemMiscFood.FoodType;
@@ -33,7 +32,7 @@ public class ItemWrappedFood extends ItemFood implements ICustomModel {
 
 	public ItemWrappedFood(){
 		super(0, 0.0F, false);
-		this.setCreativeTab(CrystalMod.tabItems);
+		this.setCreativeTab(CreativeTabs.FOOD);
 		ModItems.registerItem(this, "wrappedfood");
 	}
 
@@ -108,7 +107,7 @@ public class ItemWrappedFood extends ItemFood implements ICustomModel {
 	@Override
 	public String getItemStackDisplayName(ItemStack stack)
     {
-		String foodName = "xErrorx";
+		String foodName = "*Error*";
 		ItemStack food = getFood(stack).getFoodStack();
 		if(ItemStackTools.isValid(food)){
 			foodName = food.getDisplayName();

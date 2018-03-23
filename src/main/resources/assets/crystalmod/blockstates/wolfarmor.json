@@ -1,7 +1,8 @@
 {
     "forge_marker": 1,
     "defaults": {
-        "model": "crystalmod:item/fixedonetexture"
+        "transform": "forge:default-item",
+        "model": "forge:item-layer"
     },
     "variants": {
         "armor": {

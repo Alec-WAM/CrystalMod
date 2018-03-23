@@ -1,0 +1,6 @@
+{
+    "variants": {
+		"type=light": {"model": "crystalmod:null"},
+		"type=dark": {"model": "crystalmod:null"}
+    }
+}

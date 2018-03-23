@@ -1,9 +1,8 @@
 {
 	"forge_marker": 1,
 	"defaults": {
-		"model": "crystalmod:fixedcrosstinted",
+		"model": "tinted_cross",
 		"textures": {
-			"particle": "crystalmod:blocks/plant/seaweed",
 			"cross": "crystalmod:blocks/plant/seaweed"
 		},
 		"transform": "forge:default-block"

@@ -737,6 +737,7 @@ tile.crystalmod.reinforcedrail.name=Reinforced Rail
 tile.crystalmod.flumerailbasic.name=Flume Rail
 tile.crystalmod.flumerailholding.name=Holding Flume Rail
 tile.crystalmod.flumeraildetector.name=Detector Flume Rail
+tile.crystalmod.flumerailentrance.name=Entrance Flume Rail
 
 tile.crystalmod.flumerailbasic_ground.name=Reinforced Flume Rail
 tile.crystalmod.flumerailholding_ground.name=Reinforced Holding Flume Rail

@@ -13,6 +13,8 @@ import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.EnumBlock;
 import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.items.ModItems;
+import alec_wam.CrystalMod.network.CrystalModNetwork;
+import alec_wam.CrystalMod.network.packets.PacketTileMessage;
 import alec_wam.CrystalMod.tiles.pipes.TileEntityPipe.PipePart;
 import alec_wam.CrystalMod.tiles.pipes.attachments.AttachmentUtil.AttachmentData;
 import alec_wam.CrystalMod.tiles.pipes.covers.CoverUtil.CoverData;
@@ -46,6 +48,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumBlockRenderType;
@@ -63,6 +66,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -223,6 +227,13 @@ public class BlockPipe extends EnumBlock<BlockPipe.PipeType> implements ICustomM
 			TileEntityPipe pipe = ((TileEntityPipe)tile);
 			tex = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(pipe.getPipeType().getCoreTexture(pipe));
 
+			if(pipe.lastBrokenCover !=null){
+		    	CoverData data = pipe.lastBrokenCover;
+				if(data !=null && data.getBlockState() !=null){
+					tex = RenderUtil.getTexture(data.getBlockState());
+				}
+	    	}
+			
 			if(tex == null){
 				return false;
 			}
@@ -366,7 +377,12 @@ public class BlockPipe extends EnumBlock<BlockPipe.PipeType> implements ICustomM
 
 		    public SoundEvent getBreakSound()
 		    {
-		    	//TODO Figure out entity specific cover break sound
+		    	if(te.lastBrokenCover !=null){
+			    	CoverData data = te.lastBrokenCover;
+					if(data !=null && data.getBlockState() !=null){
+						return data.getBlockState().getBlock().getSoundType(data.getBlockState(), new PipeWorldWrapper(world, pos, te.lastBrokenCoverSide), pos, null).getBreakSound();
+					}
+		    	}
 		    	return getSoundType().getBreakSound();
 		    }
 
@@ -452,6 +468,13 @@ public class BlockPipe extends EnumBlock<BlockPipe.PipeType> implements ICustomM
 		return BlockRenderLayer.CUTOUT;
 	}
 	
+	@SideOnly(Side.CLIENT)
+	@Override
+	public boolean hasCustomBreakingProgress(IBlockState state)
+	{
+		return true;
+	}	
+	
 	@Override
 	public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
 		TileEntityPipe te = (TileEntityPipe) world.getTileEntity(pos);
@@ -486,6 +509,13 @@ public class BlockPipe extends EnumBlock<BlockPipe.PipeType> implements ICustomM
 								breakBlock = false;
 								final CoverData coverData = te.getCoverData(dir);
 								te.setCover(dir, null);
+								if(!world.isRemote){
+									NBTTagCompound nbt = new NBTTagCompound();
+									nbt.setInteger("Dir", dir.ordinal());
+									nbt.setTag("Cover", coverData.writeToNBT(new NBTTagCompound()));
+									CrystalModNetwork.sendToAllAround(new PacketTileMessage(pos, "BreakCover", nbt), te);
+								}
+								
 								ItemStack cover = ItemPipeCover.getCover(coverData);
 								if (ItemStackTools.isValid(cover)) {
 									drop.add(cover);

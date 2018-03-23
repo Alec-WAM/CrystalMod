@@ -1,5 +1,6 @@
 {
     "variants": {
+        "inventory":  { "model": "crystalmod:null" },
         "facing=east,half=lower,hinge=left,open=false":  { "model": "crystalmod:bamboo_door_bottom" },
         "facing=south,half=lower,hinge=left,open=false": { "model": "crystalmod:bamboo_door_bottom", "y": 90 },
         "facing=west,half=lower,hinge=left,open=false":  { "model": "crystalmod:bamboo_door_bottom", "y": 180 },

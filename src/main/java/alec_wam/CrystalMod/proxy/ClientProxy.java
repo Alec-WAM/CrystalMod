@@ -1,5 +1,7 @@
 package alec_wam.CrystalMod.proxy;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -8,7 +10,8 @@ import javax.annotation.Nullable;
 
 import org.lwjgl.input.Keyboard;
 
-import com.google.common.collect.Lists;
+import com.google.common.base.Function;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
 import com.mojang.authlib.GameProfile;
 
@@ -50,6 +53,8 @@ import alec_wam.CrystalMod.tiles.pipes.render.BakedModelLoader;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.Lang;
+import alec_wam.CrystalMod.util.ModLogger;
+import alec_wam.CrystalMod.util.StringUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -62,6 +67,7 @@ import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderLivingBase;
 import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.client.resources.IReloadableResourceManager;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.client.resources.IResourceManagerReloadListener;
@@ -86,9 +92,14 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeColorHelper;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraftforge.client.model.ICustomModelLoader;
+import net.minecraftforge.client.model.IModel;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.model.IModelState;
+import net.minecraftforge.common.model.TRSRTransformation;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -104,6 +115,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
         super.preInit(e);
         ModItems.initClient();
         ModelLoaderRegistry.registerLoader(new BakedModelLoader());
+        ModelLoaderRegistry.registerLoader(new CustomModModelLoader());
         ModelLoaderRegistry.registerLoader(ModelSeed.LoaderSeeds.INSTANCE);
         ModelLoaderRegistry.registerLoader(ModelWrappedFood.LoaderWrappedFood.INSTANCE);
         IResourceManager manager = FMLClientHandler.instance().getClient().getResourceManager();
@@ -184,7 +196,66 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
     }
     
     private static final Map<ResourceLocation, ICustomItemRenderer> CUSTOM_RENDERS = Maps.newHashMap();
-    private static final List<CustomBakedModel> CUSTOM_MODELS = Lists.newArrayList();
+    private static final Map<ModelResourceLocation, CustomBakedModel> CUSTOM_MODELS = Maps.newHashMap();
+    
+    public static class CustomModModelLoader implements ICustomModelLoader {
+
+		@Override
+		public void onResourceManagerReload(IResourceManager resourceManager) {
+			
+		}
+
+		@Override
+		public boolean accepts(ResourceLocation modelLocation) {
+			if(modelLocation.toString().endsWith("#inventory")){
+				String name = StringUtils.chopAtFirst(modelLocation.toString(), "#");
+				if(CUSTOM_RENDERS.containsKey(new ResourceLocation(name))){
+					return true;
+				}
+			}
+			return CUSTOM_MODELS.containsKey(modelLocation);
+		}
+
+		@Override
+		public IModel loadModel(ResourceLocation modelLocation) throws Exception {
+			boolean hasCustomItemRender = false;
+			if(modelLocation.toString().endsWith("#inventory")){
+				String name = StringUtils.chopAtFirst(modelLocation.toString(), "#");
+				hasCustomItemRender = CUSTOM_RENDERS.containsKey(new ResourceLocation(name));
+			}
+			if(hasCustomItemRender){
+				return ModelLoaderRegistry.getModelOrMissing(CrystalMod.resourceL("null"));
+			}
+			return new IModel(){
+
+				@Override
+				public Collection<ResourceLocation> getDependencies()
+				{
+					return Collections.emptySet();
+				}
+
+				@Override
+				public Collection<ResourceLocation> getTextures()
+				{
+					return ImmutableSet.of();
+				}
+
+				@Override
+				public IBakedModel bake( IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter )
+				{
+					return CUSTOM_MODELS.get(modelLocation).getModel();
+				}
+
+				@Override
+				public IModelState getDefaultState()
+				{
+					return TRSRTransformation.identity();
+				}
+				
+			};
+		}
+    	
+    }
     
     public static void registerItemRenderCustom(String id, ICustomItemRenderer render){
     	CUSTOM_RENDERS.put(new ResourceLocation(id), render);
@@ -207,14 +278,14 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
     }
     
     public static void registerCustomModel(CustomBakedModel model){
-    	CUSTOM_MODELS.add(model);
+    	CUSTOM_MODELS.put(model.getModelLoc(), model);
     }
     
     public static ItemMinecartRender MinecartRenderer3d = new ItemMinecartRender();
     
     @SubscribeEvent
     public void onBakeModel(final ModelBakeEvent event) {
-    	for(CustomBakedModel model : CUSTOM_MODELS){
+    	for(CustomBakedModel model : CUSTOM_MODELS.values()){
     		model.preModelRegister();
     		event.getModelRegistry().putObject(model.getModelLoc(), model.getModel());
     		model.postModelRegister();

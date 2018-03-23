@@ -1,6 +1,7 @@
 {
 	"variants": {
-		"grown=false": { 
+		"inventory": {"model": "crystalmod:null"},
+        "grown=false": { 
 			"model": "crystalmod:null",
 			"textures": {
 				"particle": "minecraft:sapling_oak"

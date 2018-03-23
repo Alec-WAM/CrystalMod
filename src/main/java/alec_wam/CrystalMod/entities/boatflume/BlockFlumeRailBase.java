@@ -602,8 +602,11 @@ public abstract class BlockFlumeRailBase extends Block
                 blockrailbase$enumraildirection = BlockFlumeRailBase.EnumRailDirection.NORTH_SOUTH;
             }
 
-            this.state = this.state.withProperty(this.block.getShapeProperty(), blockrailbase$enumraildirection);
-            this.world.setBlockState(this.pos, this.state, 3);
+            IProperty<BlockFlumeRailBase.EnumRailDirection> shape = this.block.getShapeProperty();
+            if(shape.getAllowedValues().contains(blockrailbase$enumraildirection)){
+            	this.state = this.state.withProperty(shape, blockrailbase$enumraildirection);
+            	this.world.setBlockState(this.pos, this.state, 3);
+            }
         }
 
         private boolean hasNeighborRail(BlockPos p_180361_1_)
@@ -759,7 +762,10 @@ public abstract class BlockFlumeRailBase extends Block
             }
 
             this.updateConnectedRails(blockrailbase$enumraildirection);
-            this.state = this.state.withProperty(this.block.getShapeProperty(), blockrailbase$enumraildirection);
+            IProperty<BlockFlumeRailBase.EnumRailDirection> shape = this.block.getShapeProperty();
+            if(shape.getAllowedValues().contains(blockrailbase$enumraildirection)){
+            	this.state = this.state.withProperty(shape, blockrailbase$enumraildirection);
+            }
 
             if (p_180364_2_ || this.world.getBlockState(this.pos) != this.state)
             {

@@ -46,6 +46,7 @@ import alec_wam.CrystalMod.blocks.decorative.bridge.BlockBridge;
 import alec_wam.CrystalMod.blocks.decorative.bridge.TileBridge;
 import alec_wam.CrystalMod.blocks.decorative.tiles.BlockBasicTiles;
 import alec_wam.CrystalMod.blocks.decorative.tiles.BlockBasicTiles2;
+import alec_wam.CrystalMod.blocks.decorative.tiles.BlockBasicTiles2.BasicTileType2;
 import alec_wam.CrystalMod.blocks.decorative.tiles.BlockCrystalTiles;
 import alec_wam.CrystalMod.blocks.glass.BlockCrystalGlass;
 import alec_wam.CrystalMod.blocks.glass.BlockCrystalGlassPane;
@@ -60,6 +61,7 @@ import alec_wam.CrystalMod.entities.boatflume.rails.BlockFlumeRailAscending;
 import alec_wam.CrystalMod.entities.boatflume.rails.BlockFlumeRailBasic;
 import alec_wam.CrystalMod.entities.boatflume.rails.BlockFlumeRailBasicGround;
 import alec_wam.CrystalMod.entities.boatflume.rails.BlockFlumeRailDetector;
+import alec_wam.CrystalMod.entities.boatflume.rails.BlockFlumeRailEntrance;
 import alec_wam.CrystalMod.entities.boatflume.rails.BlockFlumeRailHolding;
 import alec_wam.CrystalMod.entities.boatflume.rails.BlockFlumeRailHoldingGround;
 import alec_wam.CrystalMod.handler.MissingItemHandler;
@@ -375,6 +377,7 @@ public class ModBlocks {
 	public static BlockFlumeRailBasic flumeRailBasic;
 	public static BlockFlumeRailHolding flumeRailHolding;
 	public static BlockFlumeRailDetector flumeRailDetector;
+	public static BlockFlumeRailEntrance flumeRailEntrance;
 	
 	public static BlockFlumeRailBasicGround flumeRailBasicGround;
 	public static BlockFlumeRailHoldingGround flumeRailHoldingGround;
@@ -611,7 +614,25 @@ public class ModBlocks {
 		tileBasic = registerEnumBlock(new BlockBasicTiles(), "tiles_basic");		
 		tileBasic2 = registerEnumBlock(new BlockBasicTiles2(), "tiles_basic2");		
 		tileCrystal = registerEnumBlock(new BlockCrystalTiles(), "tiles_crystal");		
-		//TODO Add Tile Recipes and Burn time for wood tiles
+		GameRegistry.registerFuelHandler(new IFuelHandler() {
+
+			@Override
+			public int getBurnTime(ItemStack fuel) {
+				if (fuel.getItem() == Item.getItemFromBlock(ModBlocks.tileBasic2)) {
+					int meta = fuel.getMetadata();
+					if (meta == BasicTileType2.LOG_OAK.getMeta() 
+							|| meta == BasicTileType2.LOG_SPRUCE.getMeta() 
+							|| meta == BasicTileType2.LOG_BIRCH.getMeta()
+							|| meta == BasicTileType2.LOG_JUNGLE.getMeta()
+							|| meta == BasicTileType2.LOG_ACACIA.getMeta()
+							|| meta == BasicTileType2.LOG_DARK_OAK.getMeta()) {
+						return 300 * 4;
+					}
+				}
+				return 0;
+			}
+
+		});
 		crystalLight = registerEnumBlock(new BlockCrystalLight(), "crystallightblock");		
 		failureBlock = registerBlock(new BlockFailure(), "failureblock");	
 		octagonBricks = registerEnumBlock(new BlockOctagonalBricks(), "octagonbricks");	
@@ -830,12 +851,12 @@ public class ModBlocks {
 		
 		flumeRailBasic = (BlockFlumeRailBasic) new BlockFlumeRailBasic().setHardness(0.7F);
 		registerBlock(flumeRailBasic, new ItemBlockWater(flumeRailBasic), "flumerailbasic");
-		
 		flumeRailHolding = (BlockFlumeRailHolding) new BlockFlumeRailHolding().setHardness(0.7F);
 		registerBlock(flumeRailHolding, new ItemBlockWater(flumeRailHolding), "flumerailholding");
-		
 		flumeRailDetector = (BlockFlumeRailDetector) new BlockFlumeRailDetector().setHardness(0.7F);
 		registerBlock(flumeRailDetector, new ItemBlockWater(flumeRailDetector), "flumeraildetector");
+		flumeRailEntrance = (BlockFlumeRailEntrance) new BlockFlumeRailEntrance().setHardness(0.7F);
+		registerBlock(flumeRailEntrance, new ItemBlockWater(flumeRailEntrance), "flumerailentrance");
 		
 		flumeRailBasicGround = (BlockFlumeRailBasicGround) new BlockFlumeRailBasicGround().setHardness(0.7F);
 		registerBlock(flumeRailBasicGround, "flumerailbasic_ground");

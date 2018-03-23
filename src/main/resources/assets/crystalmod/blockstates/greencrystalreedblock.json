@@ -1,8 +1,8 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "model": "crystalmod:crystalreedblock",
-	"textures": {"reedtexture": "crystalmod:blocks/crystal_green_reeds"}
+    "model": "cross",
+	"textures": {"cross": "crystalmod:blocks/crystal_green_reeds"}
   },
   "variants": {
     "normal": [{}],

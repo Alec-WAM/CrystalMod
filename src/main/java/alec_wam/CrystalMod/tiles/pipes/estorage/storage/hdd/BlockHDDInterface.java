@@ -61,7 +61,7 @@ public class BlockHDDInterface extends BlockContainer implements ICustomModel {
 	@Override
 	@SideOnly(Side.CLIENT)
     public void initModel() {
-		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(getRegistryName(), "inventory"));
+		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(getRegistryName(), "facing=north,hdd=empty"));
         StateMap.Builder ignorePower = new StateMap.Builder();
         ModelLoader.setCustomStateMapper(this, ignorePower.build());
     }

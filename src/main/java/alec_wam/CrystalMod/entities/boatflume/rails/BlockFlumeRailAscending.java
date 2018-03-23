@@ -5,7 +5,6 @@ import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.entities.boatflume.BlockFlumeRailBase;
 import alec_wam.CrystalMod.entities.boatflume.BlockFlumeRailBaseLand;
-import alec_wam.CrystalMod.entities.boatflume.BlockFlumeRailBase.EnumRailDirection;
 import alec_wam.CrystalMod.proxy.ClientProxy;
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
@@ -27,13 +26,13 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockFlumeRailAscending extends BlockFlumeRailBaseLand implements ICustomModel
 {
-    public static final PropertyEnum<BlockFlumeRailBase.EnumRailDirection> CUSTOM_SHAPE = PropertyEnum.<BlockFlumeRailBase.EnumRailDirection>create("shape", BlockFlumeRailBase.EnumRailDirection.class);
+    public static final PropertyEnum<BlockFlumeRailBase.EnumRailDirection> CUSTOM_SHAPE = PropertyEnum.<BlockFlumeRailBase.EnumRailDirection>create("shape", BlockFlumeRailBase.EnumRailDirection.class, BlockFlumeRailBase.EnumRailDirection.ASCENDING_EAST, BlockFlumeRailBase.EnumRailDirection.ASCENDING_WEST, BlockFlumeRailBase.EnumRailDirection.ASCENDING_NORTH, BlockFlumeRailBase.EnumRailDirection.ASCENDING_SOUTH);
 
 
     public BlockFlumeRailAscending()
     {
         super(false);
-        this.setDefaultState(this.blockState.getBaseState().withProperty(CUSTOM_SHAPE, BlockFlumeRailBase.EnumRailDirection.NORTH_SOUTH));
+        this.setDefaultState(this.blockState.getBaseState().withProperty(CUSTOM_SHAPE, BlockFlumeRailBase.EnumRailDirection.ASCENDING_NORTH));
     }
 
     @SideOnly(Side.CLIENT)

@@ -50,14 +50,14 @@ public class ItemBlockWater extends ItemBlock {
                 if (FluidUtil.isFluidSource(worldIn, blockpos, iblockstate) && worldIn.isAirBlock(blockpos1))
                 {
                     net.minecraftforge.common.util.BlockSnapshot blocksnapshot = net.minecraftforge.common.util.BlockSnapshot.getBlockSnapshot(worldIn, blockpos1);
-                    worldIn.setBlockState(blockpos1, block.getDefaultState());
+                    IBlockState iblockstate1 = this.block.getStateForPlacement(worldIn, blockpos1, playerIn.getHorizontalFacing(), 0, 0, 0, 0, playerIn, handIn);
                     if (net.minecraftforge.event.ForgeEventFactory.onPlayerBlockPlace(playerIn, blocksnapshot, net.minecraft.util.EnumFacing.UP, handIn).isCanceled())
                     {
                         blocksnapshot.restore(true, false);
                         return new ActionResult<ItemStack>(EnumActionResult.FAIL, itemstack);
                     }
-
-                    worldIn.setBlockState(blockpos1, block.getDefaultState(), 11);
+                    worldIn.setBlockState(blockpos1, iblockstate1, 11);
+                    this.block.onBlockPlacedBy(worldIn, blockpos1, iblockstate1, playerIn, itemstack);
 
                     if (!playerIn.capabilities.isCreativeMode)
                     {

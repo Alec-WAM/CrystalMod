@@ -1,0 +1,25 @@
+{
+    "variants": {
+        "shape=north_south":  { 
+			"model": "crystalmod:flumerailentrance_flat"
+		},
+        "shape=east_west":  { 
+			"model": "crystalmod:flumerailentrance_flat",
+			"y": 90 
+		},
+        "shape=ascending_east": { 
+			"model": "crystalmod:flumerailholding_raised_ne", 
+			"y": 90 
+		},
+        "shape=ascending_west": { 
+			"model": "crystalmod:flumerailholding_raised_sw", 
+			"y": 90 
+		},
+        "shape=ascending_north": { 
+			"model": "crystalmod:flumerailholding_raised_ne"
+		},
+        "shape=ascending_south": { 
+			"model": "crystalmod:flumerailholding_raised_sw"
+		}
+    }
+}

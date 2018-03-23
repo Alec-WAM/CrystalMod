@@ -1,7 +1,10 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "model": "crystalmod:fixedcross"       
+    "model": "cross",
+    "textures": {
+	  "cross":"crystalmod:blocks/crystexium/crystherium/blue_crystherium_flowers_bottom"
+    }      
   },
   "variants": {
     "normal": [{}],

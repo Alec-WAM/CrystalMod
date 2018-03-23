@@ -9,7 +9,7 @@
   },
   "variants": {
     "normal": [{}],
-    "inventory": [{"transform": "forge:default-item"}],
+    "inventory": [{}],
     "stage": {
       "0": {},
       "1": {}

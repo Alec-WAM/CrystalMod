@@ -1,14 +1,14 @@
 {
     "variants": {
-		"shape=north_south": { "model": "crystalmod:custom_rail_flat" },
-        "shape=east_west": { "model": "crystalmod:custom_rail_flat", "y": 90 },
-        "shape=ascending_east": { "model": "crystalmod:custom_rail_raised_ne", "y": 90 },
-        "shape=ascending_west": { "model": "crystalmod:custom_rail_raised_sw", "y": 90 },
-        "shape=ascending_north": { "model": "crystalmod:custom_rail_raised_ne" },
-        "shape=ascending_south": { "model": "crystalmod:custom_rail_raised_sw" },
-        "shape=south_east": { "model": "crystalmod:custom_rail_curved" },
-        "shape=south_west": { "model": "crystalmod:custom_rail_curved", "y": 90 },
-        "shape=north_west": { "model": "crystalmod:custom_rail_curved", "y": 180 },
-        "shape=north_east": { "model": "crystalmod:custom_rail_curved", "y": 270 }
+		"shape=north_south": { "model": "crystalmod:reinforcedrail_flat" },
+        "shape=east_west": { "model": "crystalmod:reinforcedrail_flat", "y": 90 },
+        "shape=ascending_east": { "model": "crystalmod:reinforcedrail_raised_ne", "y": 90 },
+        "shape=ascending_west": { "model": "crystalmod:reinforcedrail_raised_sw", "y": 90 },
+        "shape=ascending_north": { "model": "crystalmod:reinforcedrail_raised_ne" },
+        "shape=ascending_south": { "model": "crystalmod:reinforcedrail_raised_sw" },
+        "shape=south_east": { "model": "crystalmod:reinforcedrail_curved" },
+        "shape=south_west": { "model": "crystalmod:reinforcedrail_curved", "y": 90 },
+        "shape=north_west": { "model": "crystalmod:reinforcedrail_curved", "y": 180 },
+        "shape=north_east": { "model": "crystalmod:reinforcedrail_curved", "y": 270 }
     }
 }

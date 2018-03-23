@@ -1,7 +1,10 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "model": "crystalmod:fixedcross"
+    "model": "cross",
+	"textures" {
+		"cross": "crystalmod:blocks/plant/corn/corn_bottom_0"
+	}
   },
   "variants": {
     "normal": [{}],

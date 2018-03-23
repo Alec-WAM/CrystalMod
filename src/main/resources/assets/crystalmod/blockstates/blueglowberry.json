@@ -7,6 +7,7 @@
         }
     },
 	"variants": {
+        "inventory": {"model": "crystalmod:glowberry_top"},
         "facing=down": [{ "model": "crystalmod:glowberry_top"}],
         "facing=south": [{ "model": "crystalmod:glowberry_side", "y": 180}],
         "facing=west": [{ "model": "crystalmod:glowberry_side", "y": 270 }],

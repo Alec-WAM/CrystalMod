@@ -2,6 +2,7 @@ package alec_wam.CrystalMod.tiles.cases;
 
 import org.lwjgl.opengl.GL11;
 
+import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.tiles.cases.BlockCase.EnumCaseType;
 import alec_wam.CrystalMod.util.client.RenderUtil;
 import net.minecraft.block.BlockDirectional;
@@ -34,7 +35,7 @@ public class RenderTileEntityCasePiston extends TileEntitySpecialRenderer<TileEn
 	@Override
 	public void renderTileEntityAt(TileEntityCasePiston tile, double x, double y, double z, float partialTicks, int destroyState)
 	{
-		if(tile == null)return;
+		if(tile == null || tile.getWorld().getBlockState(tile.getPos()).getBlock() !=ModBlocks.storageCase)return;
 		GlStateManager.pushMatrix();
 		GlStateManager.color(1, 1, 1, 1);
 

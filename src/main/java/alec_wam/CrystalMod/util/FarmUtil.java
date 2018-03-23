@@ -10,6 +10,7 @@ import com.google.common.collect.Maps;
 import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.blocks.crops.BlockCorn;
 import alec_wam.CrystalMod.blocks.crops.ItemCorn.CornItemType;
+import alec_wam.CrystalMod.blocks.crops.material.TileMaterialCrop;
 import alec_wam.CrystalMod.items.ModItems;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCocoa;
@@ -20,6 +21,7 @@ import net.minecraft.block.IGrowable;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -154,6 +156,14 @@ public class FarmUtil {
 	    Block biB = world.getBlockState(pos.down()).getBlock();
 	    int md = bi.getMetaFromState(state);
 	    
+	    if(bi == ModBlocks.materialCrop){
+	    	TileEntity tile = world.getTileEntity(pos);
+	    	if(tile !=null && tile instanceof TileMaterialCrop){
+				return ((TileMaterialCrop)tile).isGrown();
+			}
+	    	return false;
+	    }
+	    
 	    if ((((bi instanceof IGrowable)) && (!((IGrowable)bi).canGrow(world, pos, state, world.isRemote)) && (!(bi instanceof BlockStem))) 
 	    		|| (((bi instanceof BlockCrops)) && ((BlockCrops)bi).isMaxAge(state) && (!found)) 
 	    		|| ((bi == Blocks.NETHER_WART) && (state.getValue(BlockNetherWart.AGE).intValue() >= 3)) 
@@ -202,6 +212,9 @@ public class FarmUtil {
 	      }
 	    }
 	    int md = bi.getMetaFromState(state);
+	    if(bi == ModBlocks.materialCrop){
+	    	return true;
+	    }
 	    if (found || (getCrops(CropType.CLICKABLE).contains(bi.getUnlocalizedName() + md))) {
 	      return true;
 	    }
@@ -264,7 +277,7 @@ public class FarmUtil {
 	    addStackedCrop(ModBlocks.crystalReedsRed, OreDictionary.WILDCARD_VALUE);
 	    addStackedCrop(ModBlocks.crystalReedsGreen, OreDictionary.WILDCARD_VALUE);
 	    addStackedCrop(ModBlocks.crystalReedsDark, OreDictionary.WILDCARD_VALUE);
-	    int cornMeta = ModBlocks.corn.getMetaFromState(ModBlocks.corn.getDefaultState().withProperty(BlockCorn.AGE, 5));
+	    int cornMeta = ModBlocks.corn.getMetaFromState(ModBlocks.corn.getDefaultState().withProperty(BlockCorn.AGE, 4));
 	    addStackedCrop(ModBlocks.corn, cornMeta);
 	}
 	

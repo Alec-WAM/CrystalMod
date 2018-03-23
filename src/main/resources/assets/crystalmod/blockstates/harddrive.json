@@ -1,15 +1,16 @@
 {
     "forge_marker": 1,
     "defaults": {
-        "model": "crystalmod:item/fixedOneTexture"
+        "transform": "forge:default-item",
+        "model": "forge:item-layer"
     },
     "variants": {
         "color": {
-			"blue": { "textures": { "icon0": "crystalmod:items/hdd_blue"}},
-			"red": { "textures": { "icon0": "crystalmod:items/hdd_red" }},
-			"green": { "textures": { "icon0": "crystalmod:items/hdd_green" }},
-			"dark": { "textures": { "icon0": "crystalmod:items/hdd_dark" }},
-			"pure": { "textures": { "icon0": "crystalmod:items/hdd_pure" }}
+			"blue": { "textures": { "layer0": "crystalmod:items/hdd_blue"}},
+			"red": { "textures": { "layer0": "crystalmod:items/hdd_red" }},
+			"green": { "textures": { "layer0": "crystalmod:items/hdd_green" }},
+			"dark": { "textures": { "layer0": "crystalmod:items/hdd_dark" }},
+			"pure": { "textures": { "layer0": "crystalmod:items/hdd_pure" }}
 		}
     }
 }

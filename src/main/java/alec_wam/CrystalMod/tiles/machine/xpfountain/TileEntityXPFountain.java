@@ -80,7 +80,6 @@ public class TileEntityXPFountain extends TileEntityMachine {
 	
 	@Override
 	public boolean canStart() {
-		//TODO Config Power needs
 		boolean hasPower = this.getEnergyStorage().getCEnergyStored() >= Config.xpFountain_powerNeeded;
 		return fountainTime.getValue() == 0 && hasInputs() && hasPower;
 	}

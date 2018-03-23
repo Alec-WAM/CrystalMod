@@ -46,11 +46,12 @@ public class CoverUtil {
 			return state;
 		}
 		
-		public void writeToNBT(NBTTagCompound nbt) {
+		public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
             if (state != null) {
                 nbt.setString("block", BlockUtil.getNameForBlock(state.getBlock()));
                 nbt.setByte("metadata", (byte) state.getBlock().getMetaFromState(state));
             }
+            return nbt;
         }
 		@SuppressWarnings("deprecation")
 		public static CoverData readFromNBT(NBTTagCompound nbt) {

@@ -25,6 +25,19 @@ public class TileEntityPipeRenderer extends TileEntitySpecialRenderer<TileEntity
 
 	@Override
     public void renderTileEntityAt(TileEntityPipe te, double x, double y, double z, float partialTicks, int destroyStage) {
+		/*if (destroyStage >= 0)
+        {
+            this.bindTexture(DESTROY_STAGES[destroyStage]);
+            GlStateManager.matrixMode(5890);
+            GlStateManager.pushMatrix();
+            GlStateManager.scale(4.0F, 4.0F, 1.0F);
+            GlStateManager.translate(0.0625F, 0.0625F, 0.0625F);
+            GlStateManager.matrixMode(5888);
+        }
+        else
+        {*/
+        	Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+        //}
 		GlStateManager.pushMatrix();
 		GlStateManager.color(1, 1, 1, 1);
 		
@@ -33,7 +46,9 @@ public class TileEntityPipeRenderer extends TileEntitySpecialRenderer<TileEntity
 		GlStateManager.enableBlend();
 		GlStateManager.disableCull();		
 		BlockPos pos = te.getPos();
-    	Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+    	
+		
+		
     	if (Minecraft.isAmbientOcclusionEnabled()) {
 			GlStateManager.shadeModel(GL11.GL_SMOOTH);
 		} else {
@@ -63,5 +78,12 @@ public class TileEntityPipeRenderer extends TileEntitySpecialRenderer<TileEntity
 		GlStateManager.enableCull();
         GlStateManager.popMatrix();
 		RenderHelper.enableStandardItemLighting();
+		
+		/*if (destroyStage >= 0)
+        {
+            GlStateManager.matrixMode(5890);
+            GlStateManager.popMatrix();
+            GlStateManager.matrixMode(5888);
+        }*/
     }
 }

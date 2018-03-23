@@ -316,6 +316,8 @@ public abstract class TileEntityPipe extends TileEntityMod implements ITickable,
 	protected final Set<EnumFacing> externalConnections = EnumSet
 			.noneOf(EnumFacing.class);
 	protected final Map<EnumFacing, CoverData> covers = Maps.newHashMap();
+	public CoverData lastBrokenCover;
+	public EnumFacing lastBrokenCoverSide;
 	protected final Map<EnumFacing, AttachmentData> attachments = Maps.newHashMap();
 
 	protected final EnumMap<EnumFacing, ConnectionMode> conectionModes = new EnumMap<EnumFacing, ConnectionMode>(
@@ -1087,6 +1089,11 @@ public abstract class TileEntityPipe extends TileEntityMod implements ITickable,
 					data.handleMessage(this, dir, messageData);
 				}
 			}
+		}
+		if(messageId.equalsIgnoreCase("BreakCover")){
+			EnumFacing dir = messageData.hasKey("Dir") ? EnumFacing.getFront(messageData.getInteger("Dir")) : null;
+			this.lastBrokenCoverSide = dir;
+			this.lastBrokenCover = CoverData.readFromNBT(messageData.getCompoundTag("Cover"));
 		}
 	}
 

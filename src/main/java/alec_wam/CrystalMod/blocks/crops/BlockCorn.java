@@ -40,7 +40,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockCorn extends Block implements net.minecraftforge.common.IPlantable, ICustomModel, IGrowable
 {
-    public static final PropertyInteger AGE = PropertyInteger.create("age", 0, 5);
+    public static final PropertyInteger AGE = PropertyInteger.create("age", 0, 4);
     public static final PropertyBool TOP = PropertyBool.create("top");
     protected static final AxisAlignedBB REED_AABB = new AxisAlignedBB(0.125D, 0.0D, 0.125D, 0.875D, 1.0D, 0.875D);
     public BlockCorn()
@@ -56,7 +56,7 @@ public class BlockCorn extends Block implements net.minecraftforge.common.IPlant
 	@SideOnly(Side.CLIENT)
 	public void initModel(){
 		ModelLoader.setCustomStateMapper(this, new CustomBlockStateMapper());
-		ModBlocks.initBasicModel(this);
+		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(getRegistryName()+"_top", "inventory"));
 	}
     
     public static void placeGrownCorn(World world, BlockPos pos, int age){
