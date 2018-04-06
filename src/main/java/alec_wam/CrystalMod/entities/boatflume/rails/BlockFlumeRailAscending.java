@@ -26,6 +26,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockFlumeRailAscending extends BlockFlumeRailBaseLand implements ICustomModel
 {
+	public static final BlockFlumeRailBase.EnumRailDirection[] ASCENDING_DIRS =  new EnumRailDirection[]{BlockFlumeRailBase.EnumRailDirection.ASCENDING_NORTH, BlockFlumeRailBase.EnumRailDirection.ASCENDING_SOUTH, BlockFlumeRailBase.EnumRailDirection.ASCENDING_WEST, BlockFlumeRailBase.EnumRailDirection.ASCENDING_EAST};
     public static final PropertyEnum<BlockFlumeRailBase.EnumRailDirection> CUSTOM_SHAPE = PropertyEnum.<BlockFlumeRailBase.EnumRailDirection>create("shape", BlockFlumeRailBase.EnumRailDirection.class, BlockFlumeRailBase.EnumRailDirection.ASCENDING_EAST, BlockFlumeRailBase.EnumRailDirection.ASCENDING_WEST, BlockFlumeRailBase.EnumRailDirection.ASCENDING_NORTH, BlockFlumeRailBase.EnumRailDirection.ASCENDING_SOUTH);
 
 
@@ -47,7 +48,7 @@ public class BlockFlumeRailAscending extends BlockFlumeRailBaseLand implements I
 	@SideOnly(Side.CLIENT)
 	public void initModel(){
     	ModBlocks.initBasicModel(this);
-    	for(EnumRailDirection dir : new EnumRailDirection[]{BlockFlumeRailBase.EnumRailDirection.ASCENDING_NORTH, BlockFlumeRailBase.EnumRailDirection.ASCENDING_SOUTH, BlockFlumeRailBase.EnumRailDirection.ASCENDING_WEST, BlockFlumeRailBase.EnumRailDirection.ASCENDING_EAST}){
+    	for(EnumRailDirection dir : ASCENDING_DIRS){
 			ResourceLocation baseLocation = getRegistryName();
 			ModelResourceLocation inv = new ModelResourceLocation(baseLocation, "shape="+dir.getName());
 			ClientProxy.registerCustomModel(inv, RAISED_MODEL_INSTANCE);
@@ -62,7 +63,7 @@ public class BlockFlumeRailAscending extends BlockFlumeRailBaseLand implements I
     @Override
     public IBlockState getStateFromMeta(int meta)
     {
-        return this.getDefaultState().withProperty(CUSTOM_SHAPE, BlockFlumeRailBase.EnumRailDirection.byMetadata(meta));
+        return this.getDefaultState().withProperty(CUSTOM_SHAPE, ASCENDING_DIRS[meta % 4]);
     }
 
     /**
@@ -71,7 +72,8 @@ public class BlockFlumeRailAscending extends BlockFlumeRailBaseLand implements I
     @Override
     public int getMetaFromState(IBlockState state)
     {
-        return ((BlockFlumeRailBase.EnumRailDirection)state.getValue(CUSTOM_SHAPE)).getMetadata();
+        EnumRailDirection dir = ((BlockFlumeRailBase.EnumRailDirection)state.getValue(CUSTOM_SHAPE));
+        return dir == EnumRailDirection.ASCENDING_SOUTH ? 1 : dir == EnumRailDirection.ASCENDING_WEST ? 2 : dir == EnumRailDirection.ASCENDING_EAST ? 3 : 0;
     }
     
 

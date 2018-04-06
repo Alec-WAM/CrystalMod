@@ -250,7 +250,7 @@ public class ModCrafting {
 		GameRegistry.addSmelting(new ItemStack(ModItems.miscFood, 1, FoodType.SEAWEED.getMetadata()), new ItemStack(ModItems.miscFood, 1, FoodType.SEAWEED_COOKED.getMetadata()), 0.5F);
 		GameRegistry.addSmelting(new ItemStack(ModItems.miscFood, 1, FoodType.KELP.getMetadata()), new ItemStack(ModItems.miscFood, 1, FoodType.KELP_COOKED.getMetadata()), 0.5F);
 		GameRegistry.addSmelting(new ItemStack(ModItems.miscFood, 1, FoodType.YELLOW_KELP.getMetadata()), new ItemStack(ModItems.miscFood, 1, FoodType.YELLOW_KELP_COOKED.getMetadata()), 0.5F);
-		addShapelessRecipe(new ItemStack(ModItems.miscFood, 1, FoodType.SUPER_MUSHROOM_STEW.getMetadata()), new Object[] {ModBlocks.crysineMushroom, ModBlocks.crysineMushroom, Items.BOWL});
+		addShapelessRecipe(new ItemStack(ModItems.miscFood, 1, FoodType.SUPER_MUSHROOM_STEW.getMetadata()), new Object[] {Blocks.RED_MUSHROOM, Blocks.BROWN_MUSHROOM, ModBlocks.crysineMushroom, Items.BOWL});
 		BrewingRecipeRegistry.addRecipe(new ItemStack(Items.POTIONITEM), new ItemStack(ModBlocks.crysineMushroom), PotionUtils.addPotionToItemStack(new ItemStack(Items.POTIONITEM), PotionTypes.LONG_FIRE_RESISTANCE));
 		
 		for(WrappedFoodType foodType : WrappedFoodType.values()){

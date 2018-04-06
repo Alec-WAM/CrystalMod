@@ -8,11 +8,15 @@ import net.minecraft.block.BlockDirt;
 import net.minecraft.block.IGrowable;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockCrysineMushroom extends BlockBush implements IGrowable
 {
@@ -23,6 +27,18 @@ public class BlockCrysineMushroom extends BlockBush implements IGrowable
         this.setTickRandomly(true);
     }
 
+    @Override
+	@SideOnly(Side.CLIENT)
+	public BlockRenderLayer getBlockLayer()
+	{
+		return BlockRenderLayer.TRANSLUCENT;
+	}
+	
+	@Override
+    public EnumBlockRenderType getRenderType(IBlockState state){
+		return EnumBlockRenderType.MODEL;
+	}
+    
     @Override
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
     {

@@ -18,6 +18,8 @@ import alec_wam.CrystalMod.api.block.IExplosionImmune;
 import alec_wam.CrystalMod.api.estorage.security.NetworkAbility;
 import alec_wam.CrystalMod.api.tools.UpgradeData;
 import alec_wam.CrystalMod.blocks.ModBlocks;
+import alec_wam.CrystalMod.blocks.crops.bamboo.ItemWrappedFood;
+import alec_wam.CrystalMod.blocks.crops.bamboo.ItemWrappedFood.WrappedFoodType;
 import alec_wam.CrystalMod.capability.ExtendedPlayer;
 import alec_wam.CrystalMod.capability.ExtendedPlayerInventory;
 import alec_wam.CrystalMod.capability.ExtendedPlayerProvider;
@@ -449,7 +451,7 @@ public class EventHandler {
         if(entity instanceof EntityPolarBear){
         	EntityPolarBear bear = (EntityPolarBear)entity;
         	if(ItemStackTools.isValid(held)){
-        		if(held.getItem() == ModItems.miscFood && held.getMetadata() == FoodType.WHITE_FISH_RAW.getMetadata()){
+        		if(ItemUtil.canCombine(held, ItemWrappedFood.getFood(WrappedFoodType.WHITEFISH_RAW))){
         			if (!player.capabilities.isCreativeMode)
     	            {
         				held.shrink(1);

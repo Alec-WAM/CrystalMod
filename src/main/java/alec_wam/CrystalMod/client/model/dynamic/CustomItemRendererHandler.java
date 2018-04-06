@@ -50,25 +50,25 @@ public class CustomItemRendererHandler {
 	    			return false;
 	    		}
 			}	
+
+			if(Config.vanillaBoats3d){
+				Item[] boats = new Item[] {Items.BOAT, Items.BIRCH_BOAT, Items.SPRUCE_BOAT, Items.JUNGLE_BOAT, Items.ACACIA_BOAT, Items.DARK_OAK_BOAT};
+	    		if(Arrays.asList(boats).contains(item)){
+	    			FMLClientHandler.instance().getClient().mcProfiler.startSection("crystalmod-itemrender-"+registryName);
+	    			GlStateManager.pushMatrix();
+					GlStateManager.rotate(180, 0, 1, 0);
+					ClientProxy.BoatRenderer3d.render(itemStackIn);
+					GlStateManager.popMatrix();
+					FMLClientHandler.instance().getClient().mcProfiler.endSection();
+	    			return false;
+	    		}
+			}
 		}
 		return true;
 	}
 	
 	public boolean renderByItem(ItemStack itemStackIn)
 	{
-		//Item item = itemStackIn.getItem();
-		/*if(item == Item.getItemFromBlock(Blocks.CHEST)){
-			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-            GlStateManager.enableRescaleNormal();
-			GlStateManager.pushMatrix();
-			GlStateManager.rotate(180, 0, 1, 0);
-			ClientProxy.MinecartRenderer3d.render(new ItemStack(Items.MINECART));
-			GlStateManager.popMatrix();
-			
-			Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-			
-			return false;
-		}*/
 		return false;
 	}
 }

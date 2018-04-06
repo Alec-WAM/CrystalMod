@@ -16,6 +16,7 @@ public class BlockXPFountain extends BlockMachine {
 	public BlockXPFountain() {
 		super(Material.IRON);
 		setHardness(1.5F);
+		this.setCreativeTab(CrystalMod.tabBlocks);
 	}
 	
 	@Override

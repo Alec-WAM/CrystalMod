@@ -22,7 +22,7 @@ public class WorldGenCrysineMushroom extends WorldGenerator
     {
         Block block = ModBlocks.crysineMushroomBlock;
 
-        int i = rand.nextInt(3) + 4;
+        int i = rand.nextInt(5) + 4;
 
         if (position.getY() >= 1 && position.getY() + i + 1 < 256)
         {

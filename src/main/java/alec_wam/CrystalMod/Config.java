@@ -33,6 +33,7 @@ public class Config {
 	
 	//CLIENT
 	public static boolean vanillaMinecarts3d = true;
+	public static boolean vanillaBoats3d = true;
 	public static boolean useRemoteManualFile = true;
 	
 	//WORLD
@@ -361,6 +362,7 @@ public class Config {
 
     	//CLIENT
     	vanillaMinecarts3d = cfg.get(CATEGORY_CLIENT, "3dMinecartItems", vanillaMinecarts3d, "Override Minecart Item Render to 3d items.").getBoolean();
+    	vanillaBoats3d = cfg.get(CATEGORY_CLIENT, "3dBoatItems", vanillaBoats3d, "Override Boat Item Render to 3d items.").getBoolean();
     	useRemoteManualFile = cfg.get(CATEGORY_CLIENT, "useRemoteManualFile", useRemoteManualFile, "Disable to only use local manual file.").getBoolean();
     }
     

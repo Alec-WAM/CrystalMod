@@ -38,6 +38,7 @@ import alec_wam.CrystalMod.fluids.FluidColored;
 import alec_wam.CrystalMod.fluids.ModFluids;
 import alec_wam.CrystalMod.handler.ClientEventHandler;
 import alec_wam.CrystalMod.handler.KeyHandler;
+import alec_wam.CrystalMod.integration.minecraft.ItemBoatRender;
 import alec_wam.CrystalMod.integration.minecraft.ItemMinecartRender;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.items.guide.GuiGuideBase;
@@ -282,7 +283,8 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
     }
     
     public static ItemMinecartRender MinecartRenderer3d = new ItemMinecartRender();
-    
+    public static ItemBoatRender BoatRenderer3d = new ItemBoatRender();
+
     @SubscribeEvent
     public void onBakeModel(final ModelBakeEvent event) {
     	for(CustomBakedModel model : CUSTOM_MODELS.values()){
@@ -301,6 +303,18 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
     	        	event.getModelRegistry().putObject(model, new CustomItemModelFactory((IBakedModel)obj, MinecartRenderer3d));
     	        }
     		}
+    	}
+    	
+    	if(Config.vanillaBoats3d){
+	    	for(Item item : new Item[] {Items.BOAT, Items.BIRCH_BOAT, Items.SPRUCE_BOAT, Items.JUNGLE_BOAT, Items.ACACIA_BOAT, Items.DARK_OAK_BOAT}){
+				ModelResourceLocation model = new ModelResourceLocation(item.getRegistryName(), "inventory");
+				Object obj = event.getModelRegistry().getObject(model);
+		        
+		        if(obj instanceof IBakedModel)
+		        {
+		        	event.getModelRegistry().putObject(model, new CustomItemModelFactory((IBakedModel)obj, BoatRenderer3d));
+		        }
+			}
     	}
     	
         for(Entry<ResourceLocation, ICustomItemRenderer> entry : CUSTOM_RENDERS.entrySet())

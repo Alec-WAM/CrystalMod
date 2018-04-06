@@ -130,8 +130,7 @@ public class ModEntites {
 		addEntity(EntityDarkarang.class, "darkarang", 160, 20, true);
 		addEntity(EntityDagger.class, "dagger", 160, 20, true);
 		
-		ResourceLocation tamedPolarBear = addEntity(EntityTamedPolarBear.class, "polarbear_tamed");
-		EntityRegistry.registerEgg(tamedPolarBear, 15921906, 9803152);
+		addEntity(EntityTamedPolarBear.class, "polarbear_tamed");
 		
 
 		addEntity(EntityBambooBoat.class, "bambooboat", 80, 3, true);

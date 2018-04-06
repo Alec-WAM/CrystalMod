@@ -137,6 +137,12 @@ public class ItemWrappedFood extends ItemFood implements ICustomModel {
 		}
 	}
 	
+	public static ItemStack getFood(WrappedFoodType type){
+		ItemStack stack = new ItemStack(ModItems.wrappedFood);
+		setFood(stack, type);
+		return stack;
+	}
+	
 	public static enum WrappedFoodType implements IStringSerializable, IEnumMetaItem
     {
 		APPLE(Items.APPLE),
