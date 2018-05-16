@@ -736,10 +736,12 @@ tile.crystalmod.reinforcedrail.name=Reinforced Rail
 
 tile.crystalmod.flumerailbasic.name=Flume Rail
 tile.crystalmod.flumerailholding.name=Holding Flume Rail
+tile.crystalmod.flumerailbooster.name=Booster Flume Rail
 tile.crystalmod.flumeraildetector.name=Detector Flume Rail
 tile.crystalmod.flumerailentrance.name=Entrance Flume Rail
 
 tile.crystalmod.flumerailbasic_ground.name=Reinforced Flume Rail
+tile.crystalmod.flumerailbooster_ground.name=Reinforced Booster Flume Rail
 tile.crystalmod.flumerailholding_ground.name=Reinforced Holding Flume Rail
 tile.crystalmod.flumerailramp.name=Flume Ramp
 
@@ -763,6 +765,9 @@ tile.crystalmod.worksite.crop_farm.name=Minion Crop Farm
 tile.crystalmod.mobgrinder.name=Mob Grinder
 tile.crystalmod.xpvacuum.name=XP Vacuum
 tile.crystalmod.xpfountain.name=XP Fountain
+tile.crystalmod.xptank.name=XP Tank
+crystalmod.xptank.tooltip.level=XP Levels: %s
+
 tile.crystalmod.endertorch.name=Ender Torch
 tile.crystalmod.entityhopper.name=Entity Hopper
 crystalmod.entityhopper.filter.none=None

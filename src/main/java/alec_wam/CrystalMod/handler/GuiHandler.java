@@ -67,6 +67,8 @@ import alec_wam.CrystalMod.tiles.machine.power.engine.vampire.TileEntityEngineVa
 import alec_wam.CrystalMod.tiles.machine.power.redstonereactor.ContainerRedstoneReactor;
 import alec_wam.CrystalMod.tiles.machine.power.redstonereactor.GuiRedstoneReactor;
 import alec_wam.CrystalMod.tiles.machine.power.redstonereactor.TileRedstoneReactor;
+import alec_wam.CrystalMod.tiles.machine.seismic.GuiSeismicScanner;
+import alec_wam.CrystalMod.tiles.machine.seismic.TileEntitySeismicScanner;
 import alec_wam.CrystalMod.tiles.machine.worksite.TileWorksiteBase;
 import alec_wam.CrystalMod.tiles.machine.worksite.TileWorksiteBoundedInventory;
 import alec_wam.CrystalMod.tiles.machine.worksite.gui.ContainerWorksiteAnimalControl;
@@ -147,8 +149,11 @@ import alec_wam.CrystalMod.tiles.weather.TileEntityWeather;
 import alec_wam.CrystalMod.tiles.workbench.ContainerCrystalWorkbench;
 import alec_wam.CrystalMod.tiles.workbench.GuiCrystalWorkbench;
 import alec_wam.CrystalMod.tiles.workbench.TileEntityCrystalWorkbench;
+import alec_wam.CrystalMod.tiles.xp.GuiXPTank;
+import alec_wam.CrystalMod.tiles.xp.TileEntityXPTank;
 import alec_wam.CrystalMod.util.ChatUtil;
 import alec_wam.CrystalMod.util.ItemStackTools;
+import alec_wam.CrystalMod.util.ModLogger;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.AbstractHorse;
 import net.minecraft.entity.passive.EntityHorse;
@@ -346,6 +351,8 @@ public class GuiHandler implements IGuiHandler {
         	if(te instanceof TileEntityCaseBase) return new GuiCase(player, (TileEntityCaseBase)te);
         	if(te instanceof TileObsidianDispenser) return new GuiObsidianDispener(player.inventory, (TileObsidianDispenser)te);
         	if(te instanceof TileEPST) return new GuiEPST(player.inventory, (TileEPST)te);
+        	if(te instanceof TileEntitySeismicScanner)return new GuiSeismicScanner((TileEntitySeismicScanner)te);    
+        	if(te instanceof TileEntityXPTank)return new GuiXPTank((TileEntityXPTank)te);       	                                         
         } 
         return null;
     }
@@ -430,7 +437,6 @@ public class GuiHandler implements IGuiHandler {
     	TileEntity te = world.getTileEntity(new BlockPos(x, y, z));
         if (te != null)
         {
-        	
         	if(ID == GUI_ID_WORK_BOUNDS && te instanceof TileWorksiteBase){return new ContainerWorksiteBoundsAdjust(player, (TileWorksiteBase)te);}
     		if(ID == GUI_ID_WORK_CONFIG && te instanceof TileWorksiteBoundedInventory){return new ContainerWorksiteInventorySideSelection(player, (TileWorksiteBoundedInventory)te);}
     		if(ID == GUI_ID_WORK_ALT ){
@@ -499,6 +505,8 @@ public class GuiHandler implements IGuiHandler {
         	if(te instanceof TileEntityCaseBase) return new ContainerCase(player.inventory, (TileEntityCaseBase)te);
         	if(te instanceof TileObsidianDispenser) return new ContainerDispenser(player.inventory, (TileObsidianDispenser)te);
         	if(te instanceof TileEPST) return new ContainerEPST(player.inventory, (TileEPST)te);
+        	if(te instanceof TileEntitySeismicScanner) return new ContainerNull();
+        	if(te instanceof TileEntityXPTank) return new ContainerNull();
         }
         return null;
     }

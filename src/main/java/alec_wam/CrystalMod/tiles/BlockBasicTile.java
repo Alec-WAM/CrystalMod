@@ -1,6 +1,7 @@
 package alec_wam.CrystalMod.tiles;
 
 import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.util.ModLogger;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;

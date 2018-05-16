@@ -1,0 +1,10 @@
+{
+  "forge_marker": 1,
+  defaults:{
+	"model": "crystalmod:fixedOneTexture"
+  },
+  "variants": {
+    "normal": { "model": "crystalmod:fixedOneTexture", "textures": { "all": "crystalmod:blocks/machine/machine_side" } },
+	"inventory": { "model": "crystalmod:fixedOneTexture", "textures": { "all": "crystalmod:blocks/machine/machine_side" } }
+  }
+}

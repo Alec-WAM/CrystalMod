@@ -25,6 +25,7 @@ import alec_wam.CrystalMod.tiles.playercube.ChunkBlockUpdateMessage;
 import alec_wam.CrystalMod.tiles.playercube.PacketRequestTileEntitites;
 import alec_wam.CrystalMod.tiles.playercube.TileEntitiesMessage;
 import alec_wam.CrystalMod.tiles.tooltable.PacketEnhancementTable;
+import alec_wam.CrystalMod.tiles.xp.PacketXPTank;
 import alec_wam.CrystalMod.util.ChatUtil.PacketNoSpamChat;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -88,6 +89,7 @@ public class CrystalModNetwork extends NetworkWrapper {
 	    registerPacket(PacketEnhancementTable.class);
 	    registerPacket(PacketItemNBT.class);
 	    registerPacket(PacketSpawnParticle.class);
+	    registerPacketServer(PacketXPTank.class);
 	  }
 
 	  public static void sendToAll(AbstractPacket packet)

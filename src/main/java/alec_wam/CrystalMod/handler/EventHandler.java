@@ -614,6 +614,12 @@ public class EventHandler {
         	event.getDrops().add(item);
         }
         
+        if(Util.notNullAndInstanceOf(event.getEntityLiving(), EntityPolarBear.class) && EntityUtil.rand.nextInt(5) == 0){
+        	ItemStack stack = new ItemStack(ModItems.miscFood, MathHelper.getInt(EntityUtil.rand, 1, 3), FoodType.WHITE_FISH_RAW.getMetadata());
+        	EntityItem item = new EntityItem(event.getEntity().getEntityWorld(), event.getEntity().posX, event.getEntity().posY, event.getEntity().posZ, stack);
+        	event.getDrops().add(item);
+        }
+        
         addMobHeads(event);
     }
 	

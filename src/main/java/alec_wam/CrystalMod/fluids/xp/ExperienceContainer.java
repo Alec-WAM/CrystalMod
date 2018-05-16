@@ -87,7 +87,7 @@ public class ExperienceContainer extends FluidTank {
     return xpToAdd;
   }
 
-  private int getXpBarCapacity() {
+  public int getXpBarCapacity() {
     return XpUtil.getXpBarCapacity(experienceLevel);
   }
 

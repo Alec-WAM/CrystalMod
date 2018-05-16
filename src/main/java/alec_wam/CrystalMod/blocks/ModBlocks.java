@@ -60,6 +60,8 @@ import alec_wam.CrystalMod.blocks.underwater.ItemBlockKelp;
 import alec_wam.CrystalMod.entities.boatflume.rails.BlockFlumeRailAscending;
 import alec_wam.CrystalMod.entities.boatflume.rails.BlockFlumeRailBasic;
 import alec_wam.CrystalMod.entities.boatflume.rails.BlockFlumeRailBasicGround;
+import alec_wam.CrystalMod.entities.boatflume.rails.BlockFlumeRailBooster;
+import alec_wam.CrystalMod.entities.boatflume.rails.BlockFlumeRailBoosterGround;
 import alec_wam.CrystalMod.entities.boatflume.rails.BlockFlumeRailDetector;
 import alec_wam.CrystalMod.entities.boatflume.rails.BlockFlumeRailEntrance;
 import alec_wam.CrystalMod.entities.boatflume.rails.BlockFlumeRailHolding;
@@ -155,6 +157,7 @@ import alec_wam.CrystalMod.tiles.machine.power.redstonereactor.BlockRedstoneReac
 import alec_wam.CrystalMod.tiles.machine.power.redstonereactor.TileRedstoneReactor;
 import alec_wam.CrystalMod.tiles.machine.sap.BlockSapExtractor;
 import alec_wam.CrystalMod.tiles.machine.sap.TileSapExtractor;
+import alec_wam.CrystalMod.tiles.machine.seismic.TileEntitySeismicScanner;
 import alec_wam.CrystalMod.tiles.machine.specialengines.BlockSpecialEngine;
 import alec_wam.CrystalMod.tiles.machine.specialengines.BlockSpecialEngine.SpecialEngineType;
 import alec_wam.CrystalMod.tiles.machine.worksite.BlockWorksite;
@@ -225,10 +228,12 @@ import alec_wam.CrystalMod.tiles.tooltable.TileEnhancementTable;
 import alec_wam.CrystalMod.tiles.weather.TileEntityWeather;
 import alec_wam.CrystalMod.tiles.workbench.BlockCrystalWorkbench;
 import alec_wam.CrystalMod.tiles.workbench.TileEntityCrystalWorkbench;
+import alec_wam.CrystalMod.tiles.xp.BlockXPTank;
+import alec_wam.CrystalMod.tiles.xp.RenderTileEntityXPTank;
+import alec_wam.CrystalMod.tiles.xp.TileEntityXPTank;
 import alec_wam.CrystalMod.tiles.xp.TileEntityXPVacuum;
 import alec_wam.CrystalMod.util.ModLogger;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockHugeMushroom;
 import net.minecraft.block.BlockStairs;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
@@ -313,6 +318,8 @@ public class ModBlocks {
 	public static BlockEntityHopper entityHopper;
 	public static BlockBasicTile xpVacuum;
 	public static BlockXPFountain xpFountain;
+	public static BlockXPTank xpTank;
+	public static BlockBasicTile seismicScanner;
 	
 	public static BlockCrate crates;
 	public static BlockAdvancedLamp advancedLamp;
@@ -376,11 +383,13 @@ public class ModBlocks {
 	
 	public static BlockFlumeRailBasic flumeRailBasic;
 	public static BlockFlumeRailHolding flumeRailHolding;
+	public static BlockFlumeRailBooster flumeRailBooster;
 	public static BlockFlumeRailDetector flumeRailDetector;
 	public static BlockFlumeRailEntrance flumeRailEntrance;
 	
 	public static BlockFlumeRailBasicGround flumeRailBasicGround;
 	public static BlockFlumeRailHoldingGround flumeRailHoldingGround;
+	public static BlockFlumeRailBoosterGround flumeRailBoosterGround;
 	public static BlockFlumeRailAscending flumeRailRamp;
 
 	public static BlockParticleThrower particleThrower;
@@ -822,6 +831,10 @@ public class ModBlocks {
 		registerTileEntity(TileEntityXPVacuum.class);
 		xpFountain = registerBlock(new BlockXPFountain(), "xpfountain");
 		registerTileEntity(TileEntityXPFountain.class);
+		xpTank = registerBlock(new BlockXPTank(), "xptank");
+		registerTileEntity(TileEntityXPTank.class);
+		seismicScanner = (BlockBasicTile)registerBlock(new BlockBasicTile(TileEntitySeismicScanner.class, Material.IRON).setHardness(1.5F), "seismic_scanner");
+		registerTileEntity(TileEntitySeismicScanner.class);
 
 		crates = new BlockCrate();
 		registerEnumBlock(crates, "crate");
@@ -853,6 +866,8 @@ public class ModBlocks {
 		registerBlock(flumeRailBasic, new ItemBlockWater(flumeRailBasic), "flumerailbasic");
 		flumeRailHolding = (BlockFlumeRailHolding) new BlockFlumeRailHolding().setHardness(0.7F);
 		registerBlock(flumeRailHolding, new ItemBlockWater(flumeRailHolding), "flumerailholding");
+		flumeRailBooster = (BlockFlumeRailBooster) new BlockFlumeRailBooster().setHardness(0.7F);
+		registerBlock(flumeRailBooster, new ItemBlockWater(flumeRailBooster), "flumerailbooster");
 		flumeRailDetector = (BlockFlumeRailDetector) new BlockFlumeRailDetector().setHardness(0.7F);
 		registerBlock(flumeRailDetector, new ItemBlockWater(flumeRailDetector), "flumeraildetector");
 		flumeRailEntrance = (BlockFlumeRailEntrance) new BlockFlumeRailEntrance().setHardness(0.7F);
@@ -862,6 +877,8 @@ public class ModBlocks {
 		registerBlock(flumeRailBasicGround, "flumerailbasic_ground");
 		flumeRailHoldingGround = (BlockFlumeRailHoldingGround) new BlockFlumeRailHoldingGround().setHardness(0.7F);
 		registerBlock(flumeRailHoldingGround, "flumerailholding_ground");
+		flumeRailBoosterGround = (BlockFlumeRailBoosterGround) new BlockFlumeRailBoosterGround().setHardness(0.7F);
+		registerBlock(flumeRailBoosterGround, "flumerailbooster_ground");
 		flumeRailRamp = (BlockFlumeRailAscending) new BlockFlumeRailAscending().setHardness(0.7F);
 		registerBlock(flumeRailRamp, "flumerailramp");
 
@@ -977,6 +994,7 @@ public class ModBlocks {
 				new RenderTileFusionPedistal<TileFusionPedistal>());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileCrate.class, new RenderTileCrate<TileCrate>());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCasePiston.class, new RenderTileEntityCasePiston());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityXPTank.class, new RenderTileEntityXPTank());
 	}
 
 	@SideOnly(Side.CLIENT)

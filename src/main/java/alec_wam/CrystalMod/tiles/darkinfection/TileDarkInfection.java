@@ -152,7 +152,7 @@ public class TileDarkInfection extends TileEntityMod implements IMessageHandler 
 	
 	public void calcNextOrb(){
 		currentOrb++;
-		toPlace2 = BlockUtil.createOrb(world, pos, currentOrb);
+		toPlace2 = BlockUtil.createOrbList(pos, currentOrb);
 	}
 
 	public int getOpeningPhase() {

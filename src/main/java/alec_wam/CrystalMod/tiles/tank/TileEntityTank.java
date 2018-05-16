@@ -125,7 +125,7 @@ public class TileEntityTank extends TileEntityMod {
             	
             	@Override
 				public int fill(FluidStack resource, boolean doFill) {
-                    if (resource == null) {
+                    if (resource == null || !tank.canFill() || !tank.canFillFluidType(resource)) {
                         return 0;
                     }
                     FluidStack resourceCopy = resource.copy();
@@ -175,6 +175,7 @@ public class TileEntityTank extends TileEntityMod {
 
                 @Override
 				public FluidStack drain(int maxEmpty, boolean doDrain) {
+                	if(!tank.canDrain())return null;
                 	boolean infi = false;
                     IBlockState state = getWorld() !=null ? getWorld().getBlockState(getPos()) : null;
                     if(state !=null && state.getBlock() instanceof BlockTank){
@@ -200,7 +201,7 @@ public class TileEntityTank extends TileEntityMod {
 
                 @Override
 				public FluidStack drain(FluidStack resource, boolean doDrain) {
-                    if (resource == null) {
+                    if (resource == null || !tank.canDrainFluidType(resource)) {
                         return null;
                     }
                     if (!resource.isFluidEqual(getTank().getFluid())) {

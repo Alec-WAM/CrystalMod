@@ -27,6 +27,10 @@ public class XpUtil {
   public static int getLiquidForLevel(int level) {
     return experienceToLiquid(getExperienceForLevel(level));
   }
+  
+  public static int getLevelFromLiquid(int liquid){
+	  return getLevelForExperience(liquidToExperience(liquid));
+  }
 
   private static final Integer[] xpmap = new Integer[256];
 

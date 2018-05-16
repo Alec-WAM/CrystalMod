@@ -1,0 +1,18 @@
+{
+    "variants": {
+        "powered=false,shape=north_south":  { 
+			"model": "crystalmod:flumerailbooster_ground_flat"
+		},
+        "powered=false,shape=east_west":  { 
+			"model": "crystalmod:flumerailbooster_ground_flat",
+			"y": 90 
+		},
+        "powered=true,shape=north_south":  { 
+			"model": "crystalmod:flumerailbooster_ground_flat_powered"
+		},
+        "powered=true,shape=east_west":  { 
+			"model": "crystalmod:flumerailbooster_ground_flat_powered", 
+			"y": 90 
+		}
+    }
+}

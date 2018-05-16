@@ -419,13 +419,15 @@ public class ModCrafting {
 		addShapedRecipe(new ItemStack(ModBlocks.octagonBricks, 4, OctagonBrickType.NORMAL.getMeta()), new Object[]{"X X", "   ", "X X", 'X', Blocks.STONEBRICK});
 		addShapedRecipe(new ItemStack(ModBlocks.octagonBricks, 4, OctagonBrickType.TILES.getMeta()), new Object[]{"XX", "XX", 'X', new ItemStack(ModBlocks.octagonBricks, 1, OctagonBrickType.NORMAL.getMeta())});
 
-		addShapedRecipe(new ItemStack(ModBlocks.flumeRailBasic, 16), new Object[] {"X X", "XBX", "X X", 'X', Items.STICK, 'B', Items.WATER_BUCKET});
-		addShapedRecipe(new ItemStack(ModBlocks.flumeRailEntrance, 1), new Object[] {"XPX", "XBX", "X X", 'X', Items.STICK, 'B', Items.WATER_BUCKET, 'P', Blocks.OAK_FENCE_GATE});
-		addShapedRecipe(new ItemStack(ModBlocks.flumeRailHolding, 4), new Object[] {"XPX", "XBX", "X X", 'X', Items.STICK, 'B', Items.WATER_BUCKET, 'P', Items.REDSTONE});
-		addShapedRecipe(new ItemStack(ModBlocks.flumeRailDetector, 6), new Object[] {"XPX", "XBX", "X X", 'X', Items.STICK, 'B', Items.WATER_BUCKET, 'P', Blocks.STONE_PRESSURE_PLATE});
+		addShapedOreRecipe(new ItemStack(ModBlocks.flumeRailBasic, 16), new Object[] {"X X", "XBX", "X X", 'X', "stickWood", 'B', Items.WATER_BUCKET});
+		addShapedOreRecipe(new ItemStack(ModBlocks.flumeRailBooster, 8), new Object[] {"XRX", "XBX", "XGX", 'X', "stickWood", 'B', Items.WATER_BUCKET, 'R', "dustRedstone", 'G', "ingotGold"});
+		addShapedOreRecipe(new ItemStack(ModBlocks.flumeRailEntrance, 1), new Object[] {"XPX", "XBX", "X X", 'X', "stickWood", 'B', Items.WATER_BUCKET, 'P', Blocks.OAK_FENCE_GATE});
+		addShapedOreRecipe(new ItemStack(ModBlocks.flumeRailHolding, 4), new Object[] {"XPX", "XBX", "X X", 'X', "stickWood", 'B', Items.WATER_BUCKET, 'P', "dustRedstone"});
+		addShapedOreRecipe(new ItemStack(ModBlocks.flumeRailDetector, 6), new Object[] {"XPX", "XBX", "X X", 'X', "stickWood", 'B', Items.WATER_BUCKET, 'P', Blocks.STONE_PRESSURE_PLATE});
 		
-		addShapedRecipe(new ItemStack(ModBlocks.flumeRailBasicGround, 16), new Object[] {"X X", "XBX", "XSX", 'X', Items.STICK, 'B', Items.WATER_BUCKET, 'S', Blocks.STONE_SLAB});
-		addShapedRecipe(new ItemStack(ModBlocks.flumeRailHoldingGround, 4), new Object[] {"XPX", "XBX", "XSX", 'X', Items.STICK, 'B', Items.WATER_BUCKET, 'P', Items.REDSTONE, 'S', Blocks.STONE_SLAB});
+		addShapedRecipe(new ItemStack(ModBlocks.flumeRailBasicGround, 16), new Object[] {"X X", "XBX", "XSX", 'X', Items.STICK, 'B', Items.WATER_BUCKET, 'S', new ItemStack(Blocks.STONE_SLAB, 1, 0)});
+		addShapelessRecipe(new ItemStack(ModBlocks.flumeRailBoosterGround, 1), new Object[] {ModBlocks.flumeRailBooster, new ItemStack(Blocks.STONE_SLAB, 1, 0)});
+		addShapedRecipe(new ItemStack(ModBlocks.flumeRailHoldingGround, 4), new Object[] {"XPX", "XBX", "XSX", 'X', Items.STICK, 'B', Items.WATER_BUCKET, 'P', Items.REDSTONE, 'S', new ItemStack(Blocks.STONE_SLAB, 1, 0)});
 		addShapedRecipe(new ItemStack(ModBlocks.flumeRailRamp, 4), new Object[] {"F", "S", "R", 'F', ModBlocks.flumeRailBasic, 'S', Blocks.STONE_BRICK_STAIRS, 'R', Items.REDSTONE});
 		
 		addShapelessRecipe(new ItemStack(ModBlocks.bambooPlanks, 2, 0), new Object[]{new ItemStack(ModBlocks.bamboo)});

@@ -306,9 +306,13 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
     	}
     	
     	if(Config.vanillaBoats3d){
-	    	for(Item item : new Item[] {Items.BOAT, Items.BIRCH_BOAT, Items.SPRUCE_BOAT, Items.JUNGLE_BOAT, Items.ACACIA_BOAT, Items.DARK_OAK_BOAT}){
-				ModelResourceLocation model = new ModelResourceLocation(item.getRegistryName(), "inventory");
-				Object obj = event.getModelRegistry().getObject(model);
+    		ModelResourceLocation boat = ModelLoader.getInventoryVariant("minecraft:oak_boat");
+    		event.getModelRegistry().putObject(boat, new CustomItemModelFactory(null, BoatRenderer3d));
+    		boat = ModelLoader.getInventoryVariant("minecraft:boat");
+    		event.getModelRegistry().putObject(boat, new CustomItemModelFactory(null, BoatRenderer3d));
+	    	for(Item item : new Item[] {Items.BIRCH_BOAT, Items.SPRUCE_BOAT, Items.JUNGLE_BOAT, Items.ACACIA_BOAT, Items.DARK_OAK_BOAT}){
+	    		ModelResourceLocation model = new ModelResourceLocation(item.getRegistryName(), "inventory");
+	    		Object obj = event.getModelRegistry().getObject(model);
 		        
 		        if(obj instanceof IBakedModel)
 		        {

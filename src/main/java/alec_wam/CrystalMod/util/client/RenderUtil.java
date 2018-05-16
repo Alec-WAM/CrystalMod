@@ -484,16 +484,12 @@ public class RenderUtil {
 	 * Renders block with offset x/y/z from x1/y1/z1 to x2/y2/z2 inside the
 	 * block local coordinates, so from 0-1
 	 */
-	public static void renderFluidCuboid(FluidStack fluid, BlockPos pos,
-			double x, double y, double z, double x1, double y1, double z1,
-			double x2, double y2, double z2, int color, boolean useFlowing) {
+	public static void renderFluidCuboid(FluidStack fluid, BlockPos pos, double x, double y, double z, double x1, double y1, double z1,	double x2, double y2, double z2, int color, boolean useFlowing) {
 		Tessellator tessellator = Tessellator.getInstance();
 		VertexBuffer renderer = tessellator.getBuffer();
 		renderer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
-		Minecraft.getMinecraft().renderEngine
-				.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-		// RenderUtil.setColorRGBA(color);
-		int brightness = CrystalMod.proxy.getClientWorld().getCombinedLight(
+		Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+		int brightness = pos == null ? 15 : CrystalMod.proxy.getClientWorld().getCombinedLight(
 				pos, fluid.getFluid().getLuminosity());
 
 		pre(x, y, z);
@@ -502,13 +498,53 @@ public class RenderUtil {
 				.getTextureMapBlocks()
 				.getTextureExtry(fluid.getFluid().getStill(fluid).toString());
 		TextureAtlasSprite flowing = null;
-		
+
 		if(useFlowing)flowing = Minecraft.getMinecraft()
 				.getTextureMapBlocks()
 				.getTextureExtry(fluid.getFluid().getFlowing(fluid).toString());
 		else flowing = still;
 
 		// x/y/z2 - x/y/z1 is because we need the width/height/depth
+		putTexturedQuad(renderer, still, x1, y1, z1, x2 - x1, y2 - y1, z2 - z1,
+				EnumFacing.DOWN, color, brightness, false);
+		putTexturedQuad(renderer, flowing, x1, y1, z1, x2 - x1, y2 - y1, z2
+				- z1, EnumFacing.NORTH, color, brightness, true);
+		putTexturedQuad(renderer, flowing, x1, y1, z1, x2 - x1, y2 - y1, z2
+				- z1, EnumFacing.EAST, color, brightness, true);
+		putTexturedQuad(renderer, flowing, x1, y1, z1, x2 - x1, y2 - y1, z2
+				- z1, EnumFacing.SOUTH, color, brightness, true);
+		putTexturedQuad(renderer, flowing, x1, y1, z1, x2 - x1, y2 - y1, z2
+				- z1, EnumFacing.WEST, color, brightness, true);
+		putTexturedQuad(renderer, still, x1, y1, z1, x2 - x1, y2 - y1, z2 - z1,
+				EnumFacing.UP, color, brightness, false);
+
+		tessellator.draw();
+
+		post();
+	}
+	
+	public static void renderFluidCuboid(Fluid fluid, double x, double y, double z, double x1, double y1, double z1, double x2, double y2, double z2, boolean useFlowing, int brightness) {
+		int color = fluid.getColor();
+		renderFluidCuboid(fluid, x, y, z, x1, y1, z1, x2, y2, z2, color, useFlowing, brightness);
+	}
+	
+	public static void renderFluidCuboid(Fluid fluid, double x, double y, double z, double x1, double y1, double z1, double x2, double y2, double z2, int color, boolean useFlowing, int brightness) {
+		Tessellator tessellator = Tessellator.getInstance();
+		VertexBuffer renderer = tessellator.getBuffer();
+		renderer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
+		Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+		pre(x, y, z);
+
+		TextureAtlasSprite still = Minecraft.getMinecraft()
+				.getTextureMapBlocks()
+				.getTextureExtry(fluid.getStill().toString());
+		TextureAtlasSprite flowing = null;
+
+		if(useFlowing)flowing = Minecraft.getMinecraft()
+				.getTextureMapBlocks()
+				.getTextureExtry(fluid.getFlowing().toString());
+		else flowing = still;
+
 		putTexturedQuad(renderer, still, x1, y1, z1, x2 - x1, y2 - y1, z2 - z1,
 				EnumFacing.DOWN, color, brightness, false);
 		putTexturedQuad(renderer, flowing, x1, y1, z1, x2 - x1, y2 - y1, z2

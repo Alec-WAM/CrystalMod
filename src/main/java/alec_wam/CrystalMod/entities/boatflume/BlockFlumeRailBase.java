@@ -234,7 +234,7 @@ public abstract class BlockFlumeRailBase extends Block
      */
     public float getSpeed(World world, EntityFlumeBoat flume, BlockPos pos)
     {
-        return 0.0008f;
+        return 0.0012f;
     }
     
     /**

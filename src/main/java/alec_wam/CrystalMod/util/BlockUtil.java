@@ -35,6 +35,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec2f;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.ForgeHooks;
@@ -268,7 +269,7 @@ public class BlockUtil {
 		}
 	}
 	
-	public static List<BlockPos> createCircle(World world, BlockPos center, int size){
+	public static List<BlockPos> createCircleList(BlockPos center, int size){
 		List<BlockPos> list = Lists.newArrayList();
 		double circleSize = size-0.5;
 		for(int x = -size; x <= size; x++){
@@ -283,7 +284,7 @@ public class BlockUtil {
 		return list;
 	}
 	
-	public static List<BlockPos> createOrb(World world, BlockPos center, int size){
+	public static List<BlockPos> createOrbList(BlockPos center, int size){
 		List<BlockPos> list = Lists.newArrayList();
 		double circleSize = size-0.5;
 		for(int x = -size; x <= size; x++){
