@@ -188,12 +188,17 @@ public class RenderTileCrystalCluster extends TileEntitySpecialRenderer<TileCrys
 		return DynamicBaseModel.DEFAULT_PERSPECTIVE_TRANSFORMS.get(type);
 	}
 	
+	public final Vector3d COLOR_BLUE = new Vector3d(0, 1, 1); 
+	public final Vector3d COLOR_RED = new Vector3d(1, 0, 0); 
+	public final Vector3d COLOR_GREEN = new Vector3d(0, 1, 0); 
+	public final Vector3d COLOR_DARK = new Vector3d(1, 1, 1); 
+
 	public Vector3d getColor(EnumClusterType type){
 		switch(type){
-			default : case BLUE : return new Vector3d(0, 1, 1);
-			case RED : return new Vector3d(1, 0, 0);
-			case GREEN : return new Vector3d(0, 1, 0);
-			case DARK : return new Vector3d(1, 1, 1);
+			default : case BLUE : return COLOR_BLUE;
+			case RED : return COLOR_RED;
+			case GREEN : return COLOR_GREEN;
+			case DARK : return COLOR_DARK;
 		}
 	}
 }

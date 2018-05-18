@@ -23,7 +23,6 @@ public class TileEntityXPTank extends TileEntityMod implements IMessageHandler, 
 	public ExperienceContainer xpCon;
 	public TileEntityXPTank(){
 		xpCon = new ExperienceContainer(XpUtil.getExperienceForLevel(100));
-		xpCon.setCanFill(false);
 	}
 	
 	public void changeXP(EntityPlayer player, int amount, boolean add){
@@ -91,7 +90,13 @@ public class TileEntityXPTank extends TileEntityMod implements IMessageHandler, 
             	
             	@Override
 				public int fill(FluidStack resource, boolean doFill) {
-                   return 0;
+            		if (resource == null) {
+                        return 0;
+                    }
+                    if (!resource.isFluidEqual(getTank().getFluid())) {
+                        return 0;
+                    }
+            		return getTank().fill(resource, doFill);
                 }
 
                 @Override

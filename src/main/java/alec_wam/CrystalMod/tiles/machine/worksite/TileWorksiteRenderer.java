@@ -15,30 +15,10 @@ public class TileWorksiteRenderer<T extends TileWorksiteBase> extends TileEntity
 	public void renderTileEntityAt(TileWorksiteBase worksite, double x, double y, double z, float partialTicks, int destroyStage) {
 		
 		if (worksite.hasWorkBounds() && worksite.renderBounds()) {
-			/*GlStateManager.pushMatrix();
-			GlStateManager.translate(x, y, z);
-			BlockPos min = worksite.getWorkBoundsMin();
-			BlockPos max = worksite.getWorkBoundsMax();
-			if (min != null && max != null) {
-				BlockPos pos = worksite.getPos();
-				AxisAlignedBB bb = new AxisAlignedBB(
-						min.getX() - pos.getX(),
-						min.getY() - pos.getY(),
-						min.getZ() - pos.getZ(),
-						max.getX() - pos.getX() + 1,
-						max.getY() - pos.getY() + 1,
-						max.getZ() - pos.getZ() + 1
-				);
-				RenderUtil.drawOutlinedBoundingBox(bb, (float) 1, (float) 1, (float) 1, 0.0625f 3.5f);
-			}
-			//GL11.glPopAttrib();
-			GlStateManager.popMatrix();*/
-			
 			GlStateManager.pushMatrix();
 			GlStateManager.translate(x, y, z);
 
 			GlStateManager.pushMatrix();
-	        //GlStateManager.disableDepth();
 	        GlStateManager.disableTexture2D();
 	        GlStateManager.disableCull();
 	        GlStateManager.enableBlend();
@@ -106,7 +86,6 @@ public class TileWorksiteRenderer<T extends TileWorksiteBase> extends TileEntity
 	        GlStateManager.disableBlend();
 	        GlStateManager.enableCull();
 	        GlStateManager.enableTexture2D();
-	        //GlStateManager.enableDepth();
 	        GlStateManager.popMatrix();
 	        
 	        GlStateManager.popMatrix();

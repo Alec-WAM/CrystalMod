@@ -392,7 +392,16 @@ public class ModelBattery extends DelegatingDynamicItemAndBlockModel
     
     @Override
 	public TextureAtlasSprite getParticleTexture() {
-        return RenderUtil.getTexture(Blocks.IRON_BLOCK.getDefaultState());
+    	String color = "blue";
+        if(state !=null){
+        	BatteryType type = state.state.getValue(BlockBattery.TYPE);
+        	if(type !=null){
+        		color = type.getName().toLowerCase();
+        	}
+        }
+        
+        String batteryLoc = "crystalmod:blocks/machine/battery/battery_"+color;
+        return RenderUtil.getSprite(batteryLoc);
     }
     
     @Override

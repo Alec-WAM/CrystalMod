@@ -46,11 +46,8 @@ public class RenderTileEntityXPTank extends TileEntitySpecialRenderer<TileEntity
 		GlStateManager.popMatrix();
 	}
 
-	private TransformType lastTransform;
-	
 	@Override
 	public TRSRTransformation getTransform(TransformType type) {
-		lastTransform = type;
 		return DynamicBaseModel.DEFAULT_PERSPECTIVE_TRANSFORMS.get(type);
 	}
 }

@@ -24,6 +24,8 @@ public class RenderTileMaterialCrop<T extends TileMaterialCrop> extends TileEnti
 	public void renderTileEntityAt(TileMaterialCrop tile, double x, double y, double z, float partialTicks, int destroyState)
 	{
 		if(tile == null || tile.getCrop() == null)return;
+		tile.getWorld().theProfiler.startSection("crystalmod-materialcrop");
+		
 		GlStateManager.pushMatrix();
 		
 		GlStateManager.translate(x, y, z);
@@ -39,6 +41,7 @@ public class RenderTileMaterialCrop<T extends TileMaterialCrop> extends TileEnti
 		GlStateManager.translate(-0.5, 0, -0.5);
 		renderPlant(tile.getWorld(), tile.getPos(), tile.getCrop(), tile.isGrown() ? tile.getCropYield() : 0, destroyState);
 		GlStateManager.popMatrix();
+		tile.getWorld().theProfiler.endSection();
 	}
 	
 	public void renderPlant(@Nullable IBlockAccess world, @Nullable BlockPos pos, IMaterialCrop crop, int cropCount, int destroyState){

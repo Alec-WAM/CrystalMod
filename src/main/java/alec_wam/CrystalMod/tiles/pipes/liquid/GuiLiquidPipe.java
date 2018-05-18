@@ -121,7 +121,8 @@ public class GuiLiquidPipe extends GuiContainer {
 		this.buttonList.add(new GuiButton(0, sx+40, sy+2, 100, 10, Lang.localize(pipe.getConnectionMode(dir).getUnlocalisedName())));
 		if(isFilterVisible()){
 			FluidFilter filter = pipe.getFilter(dir, isInput());
-			this.buttonList.add(new GuiButton(1, sx+8, sy+35, 12, 12, inOutShowIn ? "I" : "O"));
+			ConnectionMode mode = pipe.getConnectionMode(dir);
+			if(mode == ConnectionMode.IN_OUT)this.buttonList.add(new GuiButton(1, sx+8, sy+35, 12, 12, inOutShowIn ? "I" : "O"));
 			if(filter !=null){
 				this.buttonList.add(new GuiButton(2, sx+69, sy+55, 40, 12, (filter.isBlacklist() ? "Block" : "Allow")));
 			}
@@ -183,6 +184,7 @@ public class GuiLiquidPipe extends GuiContainer {
 			GlStateManager.color(1, 1, 1);
 			FluidFilter filter = getFilter();
 			for(int i = 0; i < 5; i++){
+				//drawRect(x + (i * 18) - 1, y - 1, x + (i * 18) + 16 + 1, y + 16 + 1, Color.WHITE.getRGB());
 				drawRect(x + (i * 18), y, x + (i * 18) + 16, y + 16, Color.GRAY.getRGB());
 			}
 			if(filter != null && !filter.isEmpty()) {
@@ -209,7 +211,7 @@ public class GuiLiquidPipe extends GuiContainer {
 	    int sx = (width - xSize) / 2;
 	    int sy = (height - ySize) / 2;
 
-	    Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation("crystalmod:textures/gui/pipe.png"));
+	    Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation("crystalmod:textures/gui/pipe_liquid.png"));
 	    drawTexturedModalRect(sx, sy, 0, 0, this.xSize, this.ySize);
 	}
 	

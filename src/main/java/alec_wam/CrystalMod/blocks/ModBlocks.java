@@ -972,8 +972,7 @@ public class ModBlocks {
 
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPipe.class, new TileEntityPipeRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCrystalCauldron.class, new RenderTileCrystalCauldron());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityHDDInterface.class,
-				new TileEntityHDDInterfaceRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityHDDInterface.class, new TileEntityHDDInterfaceRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileHDDArray.class, new TileHDDArrayRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPanelItem.class,
 				new TileEntityPanelItemRenderer<TileEntityPanelItem>());

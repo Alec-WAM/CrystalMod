@@ -9,6 +9,8 @@ import java.util.Map;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
+import alec_wam.CrystalMod.Config;
+import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.BlockCompressed.CompressedBlockType;
 import alec_wam.CrystalMod.blocks.BlockCrystal.CrystalBlockType;
 import alec_wam.CrystalMod.blocks.BlockCrystalIngot.CrystalIngotBlockType;
@@ -18,8 +20,6 @@ import alec_wam.CrystalMod.blocks.BlockCrystalOre.CrystalOreType;
 import alec_wam.CrystalMod.blocks.BlockDecorative.DecorativeBlockType;
 import alec_wam.CrystalMod.blocks.BlockFallingCompressed.FallingCompressedBlockType;
 import alec_wam.CrystalMod.blocks.BlockMetalBars.EnumMetalBarType;
-import alec_wam.CrystalMod.Config;
-import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.blocks.crops.BlockCrystalPlant.PlantType;
 import alec_wam.CrystalMod.blocks.crops.BlockNormalSapling.SaplingType;
@@ -123,7 +123,6 @@ import net.minecraft.enchantment.EnchantmentData;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Enchantments;
 import net.minecraft.init.Items;
-import net.minecraft.init.MobEffects;
 import net.minecraft.init.PotionTypes;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.EnumDyeColor;
@@ -133,7 +132,6 @@ import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.potion.PotionType;
 import net.minecraft.potion.PotionUtils;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.NonNullList;
@@ -552,6 +550,8 @@ public class ModCrafting {
 		ModCrafting.addNBTRecipe(new ItemStack(ModBlocks.crystalTank, 1, TankType.DARK.getMeta()), copyListTank, new Object[]{"###", "#T#", "###", '#', darkPlate, 'T', new ItemStack(ModBlocks.crystalTank, 1, TankType.GREEN.getMeta())});
 		ModCrafting.addNBTRecipe(new ItemStack(ModBlocks.crystalTank, 1, TankType.PURE.getMeta()), copyListTank, new Object[]{"###", "#T#", "###", '#', purePlate, 'T', new ItemStack(ModBlocks.crystalTank, 1, TankType.DARK.getMeta())});
 
+		addShapedOreRecipe(ModBlocks.xpTank, new Object[]{"###", "#G#", "###", '#', dIronPlate, 'G', "blockGlass"});
+		
 		for(BlockPlanks.EnumType woodType : BlockPlanks.EnumType.values()){
 			ItemStack slab = new ItemStack(Blocks.WOODEN_SLAB, 1, woodType.getMetadata());
 			addShapedRecipe(new ItemStack(ModBlocks.shieldRack, 1, woodType.getMetadata()), new Object[]{"HSH", "SHS", " S ", 'S', slab, 'H', Blocks.TRIPWIRE_HOOK});
@@ -580,7 +580,7 @@ public class ModCrafting {
 		addShapedOreRecipe(new ItemStack(ModBlocks.invCharger, 1, ChargerBlockType.CU.getMeta()), new Object[]{" C ", "PME", 'C', "chestWood", 'E', "endereye", 'P', ItemUtil.copy(tier0CU, 1), 'M', machineFrameEnder});
 
 		addShapedOreRecipe(ModBlocks.customSpawner, new Object[]{"BBB", "BRB", "BBB", 'B', new ItemStack(ModBlocks.metalBars, 1, EnumMetalBarType.DARK_IRON.getMeta()), 'R', "rodBlaze"});
-		addShapedRecipe(ModBlocks.xpVacuum, new Object[]{" P ", "PTP", " F ", 'T', new ItemStack(ModBlocks.crystalTank, 1, TankType.RED.getMeta()), 'P', dIronPlate, 'F', new ItemStack(ModItems.machineFrame, 1, FrameType.ENDER.getMetadata())});
+		addShapedRecipe(ModBlocks.xpVacuum, new Object[]{" P ", "PTP", " F ", 'T', ModBlocks.xpTank, 'P', dIronPlate, 'F', new ItemStack(ModItems.machineFrame, 1, FrameType.ENDER.getMetadata())});
 		addShapedRecipe(ModBlocks.xpFountain, new Object[]{" B ", "XME", " P ", 'B', new ItemStack(ModBlocks.metalBars, 1, EnumMetalBarType.DARK_IRON.getMeta()), 'X', ModFluids.bucketList.get(ModFluids.fluidXpJuice), 'M', new ItemStack(ModItems.machineFrame, 1, FrameType.ENDER.getMetadata()), 'E', ModFluids.bucketList.get(ModFluids.fluidEnder), 'P', fluidPipe});
 
 		ItemStack pureSword = new ItemStack(ModItems.crystalSword);

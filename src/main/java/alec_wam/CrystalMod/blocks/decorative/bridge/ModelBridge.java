@@ -13,6 +13,7 @@ import alec_wam.CrystalMod.tiles.WoodenBlockProperies;
 import alec_wam.CrystalMod.tiles.WoodenBlockProperies.WoodType;
 import alec_wam.CrystalMod.tiles.machine.FakeTileState;
 import alec_wam.CrystalMod.util.ItemStackTools;
+import alec_wam.CrystalMod.util.ModLogger;
 import alec_wam.CrystalMod.util.client.RenderUtil;
 import net.minecraft.block.BlockPlanks;
 import net.minecraft.block.state.IBlockState;
@@ -33,11 +34,12 @@ import net.minecraft.world.World;
 
 public class ModelBridge extends DelegatingDynamicItemAndBlockModel 
 {
-	public static final ModelBridge INSTANCE = new ModelBridge();
-    static FaceBakery faceBakery;
+	static FaceBakery faceBakery;
+    WoodType type;
     
-    public ModelBridge() {
+    public ModelBridge(WoodType type) {
     	super();
+    	this.type = type;
     	state = null;
     }
     
@@ -328,7 +330,11 @@ public class ModelBridge extends DelegatingDynamicItemAndBlockModel
     
     @Override
 	public TextureAtlasSprite getParticleTexture() {
-        return RenderUtil.getTexture(Blocks.PLANKS.getDefaultState());
+    	WoodType type = WoodType.OAK;
+    	if(this.type !=null){
+    		type = this.type;
+        }
+        return WoodenBlockProperies.getPlankTexture(type);
     }
     
     @Override

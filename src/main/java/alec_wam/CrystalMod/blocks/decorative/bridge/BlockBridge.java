@@ -78,8 +78,8 @@ public class BlockBridge extends EnumBlock<WoodenBlockProperies.WoodType> implem
 			ResourceLocation baseLocation = getRegistryName();
 			ModelResourceLocation inv = new ModelResourceLocation(baseLocation, "inventory");
 			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), type.getMeta(), inv);
-			ClientProxy.registerCustomModel(inv, ModelBridge.INSTANCE);
-			ClientProxy.registerCustomModel(new ModelResourceLocation(baseLocation, "normal"), ModelBridge.INSTANCE);
+			ClientProxy.registerCustomModel(inv, new ModelBridge(type));
+			ClientProxy.registerCustomModel(new ModelResourceLocation(baseLocation, "normal"), new ModelBridge(type));
 		}
 	}
 	

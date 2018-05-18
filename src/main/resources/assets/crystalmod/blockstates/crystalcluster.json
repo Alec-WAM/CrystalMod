@@ -2,16 +2,49 @@
 	"forge_marker": 1,
 	"defaults": {
 		"model": "crystalmod:null",
+		"textures": {
+			"particle": "crystalmod:blocks/blank"
+		},
 		"transform": "forge:default-block"
 	},
 	"variants": {
-        "inventory":{"model": "crystalmod:null"},
-        "normal":{"model": "crystalmod:null"},
+        "inventory":{
+			"model": "crystalmod:null",
+			"textures": {
+				"particle": "crystalmod:blocks/blank"
+			}
+		},
+        "normal":{
+			"model": "crystalmod:null",
+			"textures": {
+				"particle": "crystalmod:blocks/blank"
+			}
+		},
 		"type":{
-			"blue":{"model": "crystalmod:null"},
-			"red":{"model": "crystalmod:null"},
-			"green":{"model": "crystalmod:null"},
-			"dark":{"model": "crystalmod:null"}
+			"blue":{
+				"model": "crystalmod:null",
+				"textures": {
+					"particle": "crystalmod:blocks/blank"
+				}
+			},
+			"red":{
+				"model": "crystalmod:null",
+				"textures": {
+					"particle": "crystalmod:blocks/blank"
+				}
+			},
+			"green":{
+				"model": "crystalmod:null",
+				"textures": {
+					"particle": "crystalmod:blocks/blank"
+				}
+			},
+			"dark":{
+				"model": "crystalmod:null",
+				"textures": {
+					"particle": "crystalmod:blocks/blank"
+				}
+			}
 		}
     }
 }
