@@ -1,6 +1,7 @@
 package alec_wam.CrystalMod.tiles.fusion;
 
 import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.util.ModLogger;
 import alec_wam.CrystalMod.util.tool.ToolUtil;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;

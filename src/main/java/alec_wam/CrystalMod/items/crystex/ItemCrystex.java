@@ -1,9 +1,11 @@
-package alec_wam.CrystalMod.items;
+package alec_wam.CrystalMod.items.crystex;
 
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.capability.ExtendedPlayer;
 import alec_wam.CrystalMod.capability.ExtendedPlayerProvider;
+import alec_wam.CrystalMod.items.IEnumMetaItem;
+import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.TimeUtil;

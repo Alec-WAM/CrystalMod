@@ -22,7 +22,9 @@ import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.Vector3d;
 import alec_wam.CrystalMod.util.data.watchable.WatchableBoolean;
 import alec_wam.CrystalMod.util.data.watchable.WatchableInteger;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -67,6 +69,14 @@ public class TileFusionPedistal extends TileEntityInventory implements IFusionPe
 	@Override
 	public void update(){
 		super.update();
+		IBlockState below = getWorld().getBlockState(getPos().offset(facing.getOpposite()));
+		if(below.getBlock() == Blocks.NOTEBLOCK){
+			if(!isCrafting.getValue() && runningRecipe == null){
+				if(getWorld().isBlockIndirectlyGettingPowered(getPos()) > 0){
+					this.startCrafting(null);
+				}
+			}
+		}
 		if(!getWorld().isRemote){
 			if(this.shouldDoWorkThisTick(5)){
 				if(isCrafting.getValue() !=isCrafting.getLastValue()){
@@ -157,7 +167,6 @@ public class TileFusionPedistal extends TileEntityInventory implements IFusionPe
 		pedistalSearch();
 		
 		runningRecipe = CrystalModAPI.findFusionRecipe(this, getWorld(), linkedPedistals);
-		
 		if(runningRecipe !=null && runningRecipe.matches(this, getWorld(), linkedPedistals)){
 			String message = runningRecipe.canCraft(this, getWorld(), linkedPedistals);
 			boolean passes = message.equalsIgnoreCase("true");
