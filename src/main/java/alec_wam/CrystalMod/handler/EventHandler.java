@@ -235,6 +235,11 @@ public class EventHandler {
     			updateWings(player);
     			ExtendedPlayer exPlayer = ExtendedPlayerProvider.getExtendedPlayer(player);
     			if(exPlayer !=null){
+    				BlockPos playerPos = player.getPosition();
+    				boolean insidePortal = player.getEntityWorld().getBlockState(playerPos).getBlock() == ModBlocks.crystexPortal || player.getEntityWorld().getBlockState(playerPos.up()).getBlock() == ModBlocks.crystexPortal;
+    				if(exPlayer.crystexPortalCooldown > 0 && !insidePortal){
+    					exPlayer.crystexPortalCooldown--;
+    				}
     				if(exPlayer.hasFailed && player.isEntityAlive()){
     					ItemUtil.givePlayerItem(player, new ItemStack(ModBlocks.failureBlock));
     					exPlayer.hasFailed = false;
@@ -855,6 +860,7 @@ public class EventHandler {
         ExtendedPlayer oldProps = ExtendedPlayerProvider.getExtendedPlayer(oldPlayer);
         ExtendedPlayer newProps = ExtendedPlayerProvider.getExtendedPlayer(newPlayer);
         if(oldPlayer != null && newProps != null) {
+        	newProps.copyFrom(oldProps);
             newProps.readFromNBT(oldProps.writeToNBT());
         }
     }

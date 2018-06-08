@@ -20,6 +20,7 @@ import alec_wam.CrystalMod.util.ModLogger;
 import alec_wam.CrystalMod.util.ProfileUtil;
 import alec_wam.CrystalMod.util.StringUtils;
 import alec_wam.CrystalMod.util.UUIDUtils;
+import alec_wam.CrystalMod.world.crystex.CrystexTeleporter;
 import alec_wam.CrystalMod.world.generation.FusionTempleFeature;
 import alec_wam.CrystalMod.world.structures.CrystalWell;
 import mezz.jei.Internal;
@@ -34,6 +35,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.Loader;
 
 public class CmdDebug extends AbstractCMCommand{
@@ -227,6 +229,12 @@ public class CmdDebug extends AbstractCMCommand{
 				}else{
 					ChatUtil.sendChat(player, "Missing UUID");
 				}	
+				return;
+			}
+			
+			if(args.length > 1 && args[1].equalsIgnoreCase("makeCrystexPortal")){
+				CrystexTeleporter tele = new CrystexTeleporter((WorldServer)sender.getEntityWorld());
+				tele.makePortal(player);
 				return;
 			}
 		}

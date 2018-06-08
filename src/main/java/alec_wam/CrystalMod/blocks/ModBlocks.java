@@ -24,6 +24,7 @@ import alec_wam.CrystalMod.blocks.crops.material.BlockMaterialCrop;
 import alec_wam.CrystalMod.blocks.crops.material.RenderTileMaterialCrop;
 import alec_wam.CrystalMod.blocks.crops.material.TileMaterialCrop;
 import alec_wam.CrystalMod.blocks.crystexium.BlockCrysidian;
+import alec_wam.CrystalMod.blocks.crystexium.BlockCrystexPortal;
 import alec_wam.CrystalMod.blocks.crystexium.BlockCrystheriumPlant;
 import alec_wam.CrystalMod.blocks.crystexium.CrystexiumBlock;
 import alec_wam.CrystalMod.blocks.crystexium.CrystexiumBlock.CrystexiumBlockType;
@@ -416,10 +417,10 @@ public class ModBlocks {
 	public static CrystexiumBlock greenCrystexiumBlock;
 	public static CrystexiumBlock darkCrystexiumBlock;
 	public static CrystexiumBlock pureCrystexiumBlock;
-	
 	public static CrystexiumSlab crystexiumSlab;
 	public static BlockCrysidian crysidian;
 	public static BlockCrystheriumPlant crystheriumPlant;
+	public static BlockCrystexPortal crystexPortal;
 	
 	public static BlockStairs crystexiumStairs;
 	public static BlockStairs blueCrystexiumStairs;
@@ -942,6 +943,7 @@ public class ModBlocks {
 		ItemBlockMeta.setMappingProperty(crystexiumSlab, CrystexiumSlab.VARIANT);
 		
 		crysidian = registerBlock(new BlockCrysidian(), "crysidian");
+		crystexPortal = registerBlock(new BlockCrystexPortal(), "crystexportal");
 		crystheriumPlant = new BlockCrystheriumPlant();
 		registerBlock(crystheriumPlant, new ItemBlockCrystheriumPlant(crystheriumPlant), "crystheriumplant");
 		ItemBlockMeta.setMappingProperty(crystheriumPlant, BlockCrystheriumPlant.TYPE);

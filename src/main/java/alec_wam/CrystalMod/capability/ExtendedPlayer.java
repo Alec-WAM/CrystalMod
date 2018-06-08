@@ -6,13 +6,20 @@ import java.util.UUID;
 import javax.annotation.Nonnull;
 
 import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.items.guide.GuiGuideBase;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.data.watchable.WatchableInteger;
+import net.minecraft.block.state.pattern.BlockPattern;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -52,6 +59,11 @@ public class ExtendedPlayer {
 	
 	private WatchableInteger intellectTimer = new WatchableInteger();	
 	
+	/**Crystex**/
+	public int crystexPortalCooldown;
+	public BlockPos lastCrystexPortalPos;
+    public Vec3d lastCrystexPortalVec;
+    public EnumFacing teleportCrystexDirection;
 	
 	public ExtendedPlayer() {
 	}
@@ -145,6 +157,9 @@ public class ExtendedPlayer {
 	}
 
 	public void copyFrom(ExtendedPlayer oldPlayer) {
+		this.lastCrystexPortalPos = oldPlayer.lastCrystexPortalPos;
+		this.lastCrystexPortalVec = oldPlayer.lastCrystexPortalVec;
+		this.teleportCrystexDirection = oldPlayer.teleportCrystexDirection;
 	}
 	
 	private EntityPlayer player;
@@ -243,5 +258,19 @@ public class ExtendedPlayer {
 		this.intellectTimer.setLastValue(value);
 	}
 	
-	
+	//Crystex
+	public void setCrystexPortal(BlockPos pos){
+		World world = player.world;
+		if (!world.isRemote && !pos.equals(this.lastCrystexPortalVec))
+        {
+            this.lastCrystexPortalPos = new BlockPos(pos);
+            BlockPattern.PatternHelper blockpattern$patternhelper = ModBlocks.crystexPortal.createPatternHelper(world, this.lastCrystexPortalPos);
+            double d0 = blockpattern$patternhelper.getForwards().getAxis() == EnumFacing.Axis.X ? (double)blockpattern$patternhelper.getFrontTopLeft().getZ() : (double)blockpattern$patternhelper.getFrontTopLeft().getX();
+            double d1 = blockpattern$patternhelper.getForwards().getAxis() == EnumFacing.Axis.X ? player.posZ : player.posX;
+            d1 = Math.abs(MathHelper.pct(d1 - (double)(blockpattern$patternhelper.getForwards().rotateY().getAxisDirection() == EnumFacing.AxisDirection.NEGATIVE ? 1 : 0), d0, d0 - (double)blockpattern$patternhelper.getWidth()));
+            double d2 = MathHelper.pct(player.posY - 1.0D, (double)blockpattern$patternhelper.getFrontTopLeft().getY(), (double)(blockpattern$patternhelper.getFrontTopLeft().getY() - blockpattern$patternhelper.getHeight()));
+            this.lastCrystexPortalVec = new Vec3d(d1, d2, 0.0D);
+            this.teleportCrystexDirection = blockpattern$patternhelper.getForwards();
+        }
+	}
 }

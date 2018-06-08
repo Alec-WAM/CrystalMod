@@ -1,0 +1,15 @@
+{
+  "forge_marker": 1,
+  "variants": {
+    "normal": [{}],
+    "inventory": [{}],
+	"axis": {
+		"x": {
+			"model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/crystexium/crystex_portal"}
+		},
+		"z": {
+			"model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/crystexium/crystex_portal"}
+		}
+	}
+  }
+}

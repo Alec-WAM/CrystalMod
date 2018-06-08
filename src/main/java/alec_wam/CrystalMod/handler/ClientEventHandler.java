@@ -382,7 +382,8 @@ public class ClientEventHandler {
 	    		}
 	    		
 	    		//intelect
-	    		boolean blockInfo = true;
+	    		ExtendedPlayer ePlayer = ExtendedPlayerProvider.getExtendedPlayer(player);
+	    		boolean blockInfo = ePlayer.getIntellectTime() > 0;
 	    		if(blockInfo && event.getType() == ElementType.ALL && !Minecraft.getMinecraft().gameSettings.showDebugInfo && !(Minecraft.getMinecraft().currentScreen instanceof GuiChat)){
 	    			RayTraceResult ray = Minecraft.getMinecraft().objectMouseOver;
 	    			if(ray !=null){

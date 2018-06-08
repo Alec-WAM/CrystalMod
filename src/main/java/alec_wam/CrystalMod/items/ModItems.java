@@ -28,6 +28,8 @@ import alec_wam.CrystalMod.items.ItemMetalPlate.PlateType;
 import alec_wam.CrystalMod.items.armor.ItemCrystalArmor;
 import alec_wam.CrystalMod.items.armor.ItemCustomArmor;
 import alec_wam.CrystalMod.items.armor.ItemWolfArmor;
+import alec_wam.CrystalMod.items.crystex.ItemCryniter;
+import alec_wam.CrystalMod.items.crystex.ItemCrystex;
 import alec_wam.CrystalMod.items.game.ItemFlag;
 import alec_wam.CrystalMod.items.guide.ItemCrystalGuide;
 import alec_wam.CrystalMod.items.tools.ItemCrystalAxe;
@@ -111,6 +113,7 @@ public class ModItems {
 	public static ItemCongealedRedstone congealedRedstone;
 	
 	public static ItemCrystex crystexItems;
+	public static ItemCryniter cryniter;
 	
 	public static ToolMaterial ToolMaterialCrystal = EnumHelper.addToolMaterial(CrystalMod.MODID.toLowerCase()+".crystal", 5, 2000, 20.0F, 6.0F, 22);
 	public static ToolMaterial ToolMaterialDarkIron = EnumHelper.addToolMaterial(CrystalMod.MODID.toLowerCase()+".darkIron", 2, 500/*250*/, 7.0F/*6.0F*/, 2.5F/*2.0F*/, 12/*14*/);
@@ -219,6 +222,7 @@ public class ModItems {
 		congealedRedstone = new ItemCongealedRedstone();
 		
 		crystexItems = new ItemCrystex();
+		cryniter = new ItemCryniter();
 
 		crystalAxe = new ItemCrystalAxe(ToolMaterialCrystal);
 		megaCrystalAxe = new ItemMegaCrystalAxe(ToolMaterialCrystal);

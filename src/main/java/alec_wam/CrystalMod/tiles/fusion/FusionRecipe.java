@@ -54,6 +54,7 @@ public class FusionRecipe implements IFusionRecipe {
 				boolean found = false;
 				for(IPedistal pedistal : pedistalCopy){
 					ItemStack stack = pedistal.getStack();
+					if(ItemStackTools.isEmpty(stack))continue;
 					if(ItemUtil.matches(ingredient, stack)){
 						found = true;
 						pedistalCopy.remove(pedistal);
@@ -87,6 +88,7 @@ public class FusionRecipe implements IFusionRecipe {
 				boolean found = false;
 				for(IPedistal pedistal : pedistalCopy){
 					ItemStack stack = pedistal.getStack();
+					if(ItemStackTools.isEmpty(stack))continue;
 					if(ItemUtil.matches(ingredient, stack)){
 						found = true;
 						pedistalCopy.remove(pedistal);

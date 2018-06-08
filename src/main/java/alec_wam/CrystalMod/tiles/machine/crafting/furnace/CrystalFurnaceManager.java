@@ -5,8 +5,8 @@ import java.util.Map;
 
 import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.blocks.crystexium.CrystexiumBlock.CrystexiumBlockType;
-import alec_wam.CrystalMod.items.ItemCrystex.CrystexItemType;
 import alec_wam.CrystalMod.items.ModItems;
+import alec_wam.CrystalMod.items.crystex.ItemCrystex.CrystexItemType;
 import alec_wam.CrystalMod.tiles.machine.BasicMachineRecipe;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
