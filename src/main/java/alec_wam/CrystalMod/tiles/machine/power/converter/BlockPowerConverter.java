@@ -86,7 +86,7 @@ public class BlockPowerConverter extends EnumBlock<BlockPowerConverter.Converter
 		return new TileEnergyConverterRFtoCU();
 	}
 	
-	public static enum ConverterType implements IStringSerializable, alec_wam.CrystalMod.blocks.EnumBlock.IEnumMeta{
+	public static enum ConverterType implements IStringSerializable, alec_wam.CrystalMod.util.IEnumMeta{
 		RF, CU;
 
 		final int meta;

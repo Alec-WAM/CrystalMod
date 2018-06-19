@@ -235,7 +235,7 @@ public class ModItems {
 		shears = new ItemCrystalShears();
 		pumpkinScoop = new ItemPumpkinScoop();
 		
-		ItemStack darkIronPlate = new ItemStack(plates, 1, PlateType.DARK_IRON.getMetadata());
+		ItemStack darkIronPlate = new ItemStack(plates, 1, PlateType.DARK_IRON.getMeta());
 		darkIronHelmet = registerItem(new ItemCustomArmor(ArmorMaterialDarkIron, EntityEquipmentSlot.HEAD, "diron", darkIronPlate), "darkironhelmet");
 		darkIronChestplate = registerItem(new ItemCustomArmor(ArmorMaterialDarkIron, EntityEquipmentSlot.CHEST, "diron", darkIronPlate), "darkironchestplate");
 		darkIronLeggings = registerItem(new ItemCustomArmor(ArmorMaterialDarkIron, EntityEquipmentSlot.LEGS, "diron", darkIronPlate), "darkironleggings");

@@ -38,13 +38,13 @@ public class DNASampleCategory extends BlankRecipeCategory<DNASampleCategory.DNA
 	public static class DNARecipeWrapper extends BlankRecipeWrapper {
 		protected final UUID uuid;
 		protected final ItemStack sample, syringe;
-		protected static final ItemStack EMPTY_SYRINGE = new ItemStack(ModItems.dnaItems, 1, DNAItemType.EMPTY_SYRINGE.getMetadata());
+		protected static final ItemStack EMPTY_SYRINGE = new ItemStack(ModItems.dnaItems, 1, DNAItemType.EMPTY_SYRINGE.getMeta());
 		
 		public DNARecipeWrapper(UUID uuid) {
 			this.uuid = uuid;
-			this.sample = new ItemStack(ModItems.dnaItems, 1, DNAItemType.SAMPLE_FULL.getMetadata());
+			this.sample = new ItemStack(ModItems.dnaItems, 1, DNAItemType.SAMPLE_FULL.getMeta());
 			//PlayerDNA.savePlayerDNA(sample, uuid);
-			this.syringe = new ItemStack(ModItems.dnaItems, 1, DNAItemType.FILLED_SYRINGE.getMetadata());
+			this.syringe = new ItemStack(ModItems.dnaItems, 1, DNAItemType.FILLED_SYRINGE.getMeta());
 			//PlayerDNA.savePlayerDNA(syringe, uuid);
 		}
 

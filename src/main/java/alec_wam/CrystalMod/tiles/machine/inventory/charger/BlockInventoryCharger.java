@@ -3,7 +3,7 @@ package alec_wam.CrystalMod.tiles.machine.inventory.charger;
 
 
 import alec_wam.CrystalMod.CrystalMod;
-import alec_wam.CrystalMod.blocks.EnumBlock.IEnumMeta;
+import alec_wam.CrystalMod.util.IEnumMeta;
 import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.tiles.BlockStateFacing;
 import alec_wam.CrystalMod.util.BlockUtil;

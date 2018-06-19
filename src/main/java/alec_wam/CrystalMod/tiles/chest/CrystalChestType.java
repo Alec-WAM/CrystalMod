@@ -141,22 +141,22 @@ public enum CrystalChestType implements IStringSerializable
     public static Object translateOreName(String mat)
     {
     	if(mat.equalsIgnoreCase("ingotBlue")){
-    		return new ItemStack(ModItems.ingots, 1, IngotType.BLUE.getMetadata());
+    		return new ItemStack(ModItems.ingots, 1, IngotType.BLUE.getMeta());
     	}
     	else if(mat.equalsIgnoreCase("ingotRed")){
-    		return new ItemStack(ModItems.ingots, 1, IngotType.RED.getMetadata());
+    		return new ItemStack(ModItems.ingots, 1, IngotType.RED.getMeta());
     	}
     	else if(mat.equalsIgnoreCase("ingotGreen")){
-    		return new ItemStack(ModItems.ingots, 1, IngotType.GREEN.getMetadata());
+    		return new ItemStack(ModItems.ingots, 1, IngotType.GREEN.getMeta());
     	}
     	else if(mat.equalsIgnoreCase("ingotDark")){
-    		return new ItemStack(ModItems.ingots, 1, IngotType.DARK.getMetadata());
+    		return new ItemStack(ModItems.ingots, 1, IngotType.DARK.getMeta());
     	}
     	else if(mat.equalsIgnoreCase("ingotPure")){
-    		return new ItemStack(ModItems.ingots, 1, IngotType.PURE.getMetadata());
+    		return new ItemStack(ModItems.ingots, 1, IngotType.PURE.getMeta());
     	}
     	else if(mat.equalsIgnoreCase("ingotDarkIron")){
-    		return new ItemStack(ModItems.ingots, 1, IngotType.DARK_IRON.getMetadata());
+    		return new ItemStack(ModItems.ingots, 1, IngotType.DARK_IRON.getMeta());
     	}
     	else if (mat.equals("obsidian"))
         {

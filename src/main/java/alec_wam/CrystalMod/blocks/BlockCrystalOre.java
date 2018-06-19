@@ -66,7 +66,7 @@ public class BlockCrystalOre extends EnumBlock<BlockCrystalOre.CrystalOreType> {
 	        Item item = ModItems.crystals;
 	        if (item != null)
 	        {
-	        	ret.add(new ItemStack(item, 1, blueOre ? CrystalType.BLUE.getMetadata() : redOre ? CrystalType.RED.getMetadata() : greenOre ? CrystalType.GREEN.getMetadata() : CrystalType.DARK.getMetadata()));
+	        	ret.add(new ItemStack(item, 1, blueOre ? CrystalType.BLUE.getMeta() : redOre ? CrystalType.RED.getMeta() : greenOre ? CrystalType.GREEN.getMeta() : CrystalType.DARK.getMeta()));
 	        }
         }
         
@@ -74,7 +74,7 @@ public class BlockCrystalOre extends EnumBlock<BlockCrystalOre.CrystalOreType> {
         	Item item = ModItems.crystals;
 	        if (item != null)
 	        {
-	        	ret.add(new ItemStack(item, 1, blueOre ? CrystalType.BLUE_SHARD.getMetadata() : redOre ? CrystalType.RED_SHARD.getMetadata() : greenOre ? CrystalType.GREEN_SHARD.getMetadata() : CrystalType.DARK_SHARD.getMetadata()));
+	        	ret.add(new ItemStack(item, 1, blueOre ? CrystalType.BLUE_SHARD.getMeta() : redOre ? CrystalType.RED_SHARD.getMeta() : greenOre ? CrystalType.GREEN_SHARD.getMeta() : CrystalType.DARK_SHARD.getMeta()));
 	        }
         }
         
@@ -92,7 +92,7 @@ public class BlockCrystalOre extends EnumBlock<BlockCrystalOre.CrystalOreType> {
         return 0;
     }
 	
-	public static enum CrystalOreType implements IStringSerializable, alec_wam.CrystalMod.blocks.EnumBlock.IEnumMeta{
+	public static enum CrystalOreType implements IStringSerializable, alec_wam.CrystalMod.util.IEnumMeta{
 		BLUE, RED, GREEN, DARK, BLUE_NETHER, RED_NETHER, GREEN_NETHER, DARK_NETHER, BLUE_END, RED_END, GREEN_END, DARK_END;
 
 		final int meta;

@@ -222,7 +222,7 @@ public class BlockCase extends EnumBlock<BlockCase.EnumCaseType> implements ITil
 		return null;
 	}
 	
-	public static enum EnumCaseType implements IStringSerializable, alec_wam.CrystalMod.blocks.EnumBlock.IEnumMeta {
+	public static enum EnumCaseType implements IStringSerializable, alec_wam.CrystalMod.util.IEnumMeta {
 		NOTE, PISTON, STICKY_PISTON;
 
 		final int meta;

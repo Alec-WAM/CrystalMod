@@ -24,7 +24,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockPatternEncoder extends EnumBlock<BlockPatternEncoder.EncoderType> implements ICustomModel  {
 
-	public static enum EncoderType implements IStringSerializable, alec_wam.CrystalMod.blocks.EnumBlock.IEnumMeta{
+	public static enum EncoderType implements IStringSerializable, alec_wam.CrystalMod.util.IEnumMeta{
 		NORMAL, PROCESSING;
 
 		private final int meta;

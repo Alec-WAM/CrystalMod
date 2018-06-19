@@ -43,7 +43,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockCrystalPlant extends BlockBush implements ICustomModel
 {
-	public static enum PlantType implements IStringSerializable, alec_wam.CrystalMod.blocks.EnumBlock.IEnumMeta{
+	//TODO REMOVE
+	public static enum PlantType implements IStringSerializable, alec_wam.CrystalMod.util.IEnumMeta{
 		BLUE, RED, GREEN, DARK;
 
 		final int meta;
@@ -251,10 +252,10 @@ public class BlockCrystalPlant extends BlockBush implements ICustomModel
     
     public ItemStack getCrop(PlantType type){
     	switch(type){
-    		case BLUE : return new ItemStack(ModItems.crystals, 1, CrystalType.BLUE_SHARD.getMetadata());
-    		case RED : return new ItemStack(ModItems.crystals, 1, CrystalType.RED_SHARD.getMetadata());
-    		case GREEN : return new ItemStack(ModItems.crystals, 1, CrystalType.GREEN_SHARD.getMetadata());
-    		case DARK : return new ItemStack(ModItems.crystals, 1, CrystalType.DARK_SHARD.getMetadata());
+    		case BLUE : return new ItemStack(ModItems.crystals, 1, CrystalType.BLUE_SHARD.getMeta());
+    		case RED : return new ItemStack(ModItems.crystals, 1, CrystalType.RED_SHARD.getMeta());
+    		case GREEN : return new ItemStack(ModItems.crystals, 1, CrystalType.GREEN_SHARD.getMeta());
+    		case DARK : return new ItemStack(ModItems.crystals, 1, CrystalType.DARK_SHARD.getMeta());
     	}
     	return ItemStackTools.getEmptyStack();
     }

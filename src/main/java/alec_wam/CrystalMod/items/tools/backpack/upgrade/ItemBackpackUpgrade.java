@@ -1,7 +1,7 @@
 package alec_wam.CrystalMod.items.tools.backpack.upgrade;
 
+import alec_wam.CrystalMod.util.IEnumMeta;
 import alec_wam.CrystalMod.blocks.ICustomModel;
-import alec_wam.CrystalMod.items.IEnumMetaItem;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.items.tools.backpack.upgrade.ContainerBackpackUpgradeWindow.UpgradeWindowType;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -27,7 +27,7 @@ public class ItemBackpackUpgrade extends Item implements ICustomModel {
 	@SideOnly(Side.CLIENT)
     public void initModel() {
         for(BackpackUpgrade type : BackpackUpgrade.values()){
-        	 ModelLoader.setCustomModelResourceLocation(this, type.getMetadata(), new ModelResourceLocation(getRegistryName(), type.getName()));
+        	 ModelLoader.setCustomModelResourceLocation(this, type.getMeta(), new ModelResourceLocation(getRegistryName(), type.getName()));
         }
     }
 	
@@ -52,7 +52,7 @@ public class ItemBackpackUpgrade extends Item implements ICustomModel {
 		return true;
 	}
 	
-	public static enum BackpackUpgrade implements IStringSerializable, IEnumMetaItem {
+	public static enum BackpackUpgrade implements IStringSerializable, IEnumMeta {
 		HOPPER(UpgradeWindowType.SINGLESLOT), 
 		ENDER(UpgradeWindowType.NORMAL), 
 		RESTOCKING(UpgradeWindowType.SINGLESLOT), 
@@ -72,7 +72,7 @@ public class ItemBackpackUpgrade extends Item implements ICustomModel {
 		}
 		
 		@Override
-		public int getMetadata() {
+		public int getMeta() {
 			return ordinal();
 		}
 

@@ -2,7 +2,7 @@ package alec_wam.CrystalMod.blocks;
 
 import javax.annotation.Nullable;
 
-import alec_wam.CrystalMod.blocks.EnumBlock.IEnumMeta;
+import alec_wam.CrystalMod.util.IEnumMeta;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import net.minecraft.block.BlockFalling;
 import net.minecraft.block.SoundType;

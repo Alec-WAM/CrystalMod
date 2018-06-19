@@ -6,7 +6,6 @@ import java.util.Locale;
 
 import alec_wam.CrystalMod.api.CrystalModAPI;
 import alec_wam.CrystalMod.blocks.BlockCrystal.CrystalBlockType;
-import alec_wam.CrystalMod.blocks.BlockCrystalLog;
 import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.blocks.crops.material.IMaterialCrop;
 import alec_wam.CrystalMod.blocks.crops.material.ItemMaterialSeed;
@@ -20,6 +19,7 @@ import alec_wam.CrystalMod.network.commands.CommandCrystalMod;
 import alec_wam.CrystalMod.proxy.CommonProxy;
 import alec_wam.CrystalMod.tiles.pipes.covers.CoverUtil.CoverData;
 import alec_wam.CrystalMod.tiles.pipes.covers.ItemPipeCover;
+import alec_wam.CrystalMod.util.CrystalColors;
 import alec_wam.CrystalMod.util.ItemUtil;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
@@ -75,7 +75,7 @@ public class CrystalMod {
         @Override
         @SideOnly(Side.CLIENT)
         public ItemStack getTabIconItem() {
-            return new ItemStack(ModItems.crystals, 1, CrystalType.BLUE.getMetadata());
+            return new ItemStack(ModItems.crystals, 1, CrystalType.BLUE.getMeta());
         }
 
 		@Override
@@ -141,7 +141,7 @@ public class CrystalMod {
         @Override
         @SideOnly(Side.CLIENT)
         public ItemStack getTabIconItem() {
-            return new ItemStack(ModBlocks.crystalSapling, 1, BlockCrystalLog.WoodType.BLUE.getMeta());
+            return new ItemStack(ModBlocks.crystalSapling, 1, CrystalColors.Basic.BLUE.getMeta());
         }
         
         @Override

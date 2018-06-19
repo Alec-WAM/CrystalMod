@@ -199,15 +199,15 @@ public class BackpackUtil {
 	
 	public static void addRecipes() {
 		
-		ItemStack blueIngot = new ItemStack(ModItems.ingots, 1, IngotType.BLUE.getMetadata());
-		ItemStack redIngot = new ItemStack(ModItems.ingots, 1, IngotType.RED.getMetadata());
-		ItemStack greenIngot = new ItemStack(ModItems.ingots, 1, IngotType.GREEN.getMetadata());
-		ItemStack darkIngot = new ItemStack(ModItems.ingots, 1, IngotType.DARK.getMetadata());
-		ItemStack pureIngot = new ItemStack(ModItems.ingots, 1, IngotType.PURE.getMetadata());
-		ItemStack dIronIngot = new ItemStack(ModItems.ingots, 1, IngotType.DARK_IRON.getMetadata());
+		ItemStack blueIngot = new ItemStack(ModItems.ingots, 1, IngotType.BLUE.getMeta());
+		ItemStack redIngot = new ItemStack(ModItems.ingots, 1, IngotType.RED.getMeta());
+		ItemStack greenIngot = new ItemStack(ModItems.ingots, 1, IngotType.GREEN.getMeta());
+		ItemStack darkIngot = new ItemStack(ModItems.ingots, 1, IngotType.DARK.getMeta());
+		ItemStack pureIngot = new ItemStack(ModItems.ingots, 1, IngotType.PURE.getMeta());
+		ItemStack dIronIngot = new ItemStack(ModItems.ingots, 1, IngotType.DARK_IRON.getMeta());
 		
-		ItemStack dIronNugget = new ItemStack(ModItems.crystals, 1, CrystalType.DIRON_NUGGET.getMetadata());
-		ItemStack dIronPlate = new ItemStack(ModItems.plates, 1, PlateType.DARK_IRON.getMetadata());
+		ItemStack dIronNugget = new ItemStack(ModItems.crystals, 1, CrystalType.DIRON_NUGGET.getMeta());
+		ItemStack dIronPlate = new ItemStack(ModItems.plates, 1, PlateType.DARK_IRON.getMeta());
 
 		ModCrafting.addShapedOreRecipe(new ItemStack(ModItems.craftingBackpack), new Object[]{"LTL", "SCS", "L#L", 'S', Items.LEAD, 'T', Blocks.TRIPWIRE_HOOK, 'C', "workbench", 'L', "leather", '#', "ingotCrystal"});
 		//EnderIO before default enderpearl
@@ -229,14 +229,14 @@ public class BackpackUtil {
 		ModCrafting.addNBTRecipe(new ItemStack(ModItems.normalBackpack, 1, CrystalBackpackType.PURE.ordinal()), Collections.<String>emptyList(), new Object[]{"III", "IBI", "III", 'I', pureIngot, 'B', new ItemStack(ModItems.normalBackpack, 1, CrystalBackpackType.DARK.ordinal())});
 	
 		//Upgrades
-		ModCrafting.addShapedRecipe(new ItemStack(ModItems.backpackupgrade, 1, BackpackUpgrade.HOPPER.getMetadata()), new Object[]{"#!#", "!M!", "#!#", '#', dIronPlate, '!', dIronNugget, 'M', Blocks.HOPPER});
-		ModCrafting.addShapedOreRecipe(new ItemStack(ModItems.backpackupgrade, 1, BackpackUpgrade.ENDER.getMetadata()), new Object[]{"#!#", "!M!", "#!#", '#', dIronPlate, '!', dIronNugget, 'M', "chestEnder"});
-		ModCrafting.addShapedRecipe(new ItemStack(ModItems.backpackupgrade, 1, BackpackUpgrade.RESTOCKING.getMetadata()), new Object[]{"#!#", "!M!", "#!#", '#', dIronPlate, '!', dIronNugget, 'M', Blocks.PISTON});
-		ModCrafting.addShapedOreRecipe(new ItemStack(ModItems.backpackupgrade, 1, BackpackUpgrade.VOID.getMetadata()), new Object[]{"#!#", "!M!", "#!#", '#', dIronPlate, '!', dIronNugget, 'M', "obsidian"});
-		ModCrafting.addShapedOreRecipe(new ItemStack(ModItems.backpackupgrade, 1, BackpackUpgrade.POCKETS.getMetadata()), new Object[]{"#!#", "!M!", "#!#", '#', dIronPlate, '!', "leather", 'M', "nuggetGold"});
-		ModCrafting.addShapedRecipe(new ItemStack(ModItems.backpackupgrade, 1, BackpackUpgrade.BOW.getMetadata()), new Object[]{"#!#", "!M!", "#!#", '#', dIronPlate, '!', dIronNugget, 'M', Items.ARROW});
-		ModCrafting.addShapedRecipe(new ItemStack(ModItems.backpackupgrade, 1, BackpackUpgrade.DESPAWN.getMetadata()), new Object[]{"#!#", "!M!", "#!#", '#', dIronPlate, '!', dIronNugget, 'M', Items.CLOCK});
-		ModCrafting.addShapedRecipe(new ItemStack(ModItems.backpackupgrade, 1, BackpackUpgrade.DEATH.getMetadata()), new Object[]{"#!#", "!M!", "#!#", '#', dIronPlate, '!', dIronNugget, 'M', new ItemStack(Items.SKULL, 1, 1)});
+		ModCrafting.addShapedRecipe(new ItemStack(ModItems.backpackupgrade, 1, BackpackUpgrade.HOPPER.getMeta()), new Object[]{"#!#", "!M!", "#!#", '#', dIronPlate, '!', dIronNugget, 'M', Blocks.HOPPER});
+		ModCrafting.addShapedOreRecipe(new ItemStack(ModItems.backpackupgrade, 1, BackpackUpgrade.ENDER.getMeta()), new Object[]{"#!#", "!M!", "#!#", '#', dIronPlate, '!', dIronNugget, 'M', "chestEnder"});
+		ModCrafting.addShapedRecipe(new ItemStack(ModItems.backpackupgrade, 1, BackpackUpgrade.RESTOCKING.getMeta()), new Object[]{"#!#", "!M!", "#!#", '#', dIronPlate, '!', dIronNugget, 'M', Blocks.PISTON});
+		ModCrafting.addShapedOreRecipe(new ItemStack(ModItems.backpackupgrade, 1, BackpackUpgrade.VOID.getMeta()), new Object[]{"#!#", "!M!", "#!#", '#', dIronPlate, '!', dIronNugget, 'M', "obsidian"});
+		ModCrafting.addShapedOreRecipe(new ItemStack(ModItems.backpackupgrade, 1, BackpackUpgrade.POCKETS.getMeta()), new Object[]{"#!#", "!M!", "#!#", '#', dIronPlate, '!', "leather", 'M', "nuggetGold"});
+		ModCrafting.addShapedRecipe(new ItemStack(ModItems.backpackupgrade, 1, BackpackUpgrade.BOW.getMeta()), new Object[]{"#!#", "!M!", "#!#", '#', dIronPlate, '!', dIronNugget, 'M', Items.ARROW});
+		ModCrafting.addShapedRecipe(new ItemStack(ModItems.backpackupgrade, 1, BackpackUpgrade.DESPAWN.getMeta()), new Object[]{"#!#", "!M!", "#!#", '#', dIronPlate, '!', dIronNugget, 'M', Items.CLOCK});
+		ModCrafting.addShapedRecipe(new ItemStack(ModItems.backpackupgrade, 1, BackpackUpgrade.DEATH.getMeta()), new Object[]{"#!#", "!M!", "#!#", '#', dIronPlate, '!', dIronNugget, 'M', new ItemStack(Items.SKULL, 1, 1)});
 	}
 
 	public static boolean canSwapWeapons(EntityPlayer player){

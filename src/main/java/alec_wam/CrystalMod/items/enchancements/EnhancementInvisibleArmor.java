@@ -76,7 +76,7 @@ public class EnhancementInvisibleArmor implements IEnhancement {
 	@Override
 	public NonNullList<ItemStack> getRequiredItems() {
 		NonNullList<ItemStack> list = NonNullList.create();
-		list.add(new ItemStack(ModItems.crystals, 1, CrystalType.PURE.getMetadata()));
+		list.add(new ItemStack(ModItems.crystals, 1, CrystalType.PURE.getMeta()));
 		list.add(new ItemStack(Items.GOLDEN_CARROT));
 		return list;
 	}
@@ -87,7 +87,7 @@ public class EnhancementInvisibleArmor implements IEnhancement {
 		boolean removedCarrot = false;
 		search : for(int i = 0; i < player.inventory.getSizeInventory(); i++){
 			ItemStack stack = player.inventory.getStackInSlot(i);
-			if(ItemStackTools.isValid(stack) && stack.getItem() == ModItems.crystals && stack.getMetadata() == CrystalType.PURE.getMetadata()){
+			if(ItemStackTools.isValid(stack) && stack.getItem() == ModItems.crystals && stack.getMetadata() == CrystalType.PURE.getMeta()){
 				ItemStackTools.incStackSize(stack, -1);
 				if(ItemStackTools.isEmpty(stack)){
 					player.inventory.setInventorySlotContents(i, ItemStackTools.getEmptyStack());
@@ -108,7 +108,7 @@ public class EnhancementInvisibleArmor implements IEnhancement {
 		}
 		
 		if(removedPure && !removedCarrot){
-			player.inventory.addItemStackToInventory(new ItemStack(ModItems.crystals, 1, CrystalType.PURE.getMetadata()));
+			player.inventory.addItemStackToInventory(new ItemStack(ModItems.crystals, 1, CrystalType.PURE.getMeta()));
 		}
 		
 		if(!removedPure && removedCarrot){
@@ -120,7 +120,7 @@ public class EnhancementInvisibleArmor implements IEnhancement {
 
 	@Override
 	public boolean returnItemsToPlayer(EntityPlayer player) {
-		final ItemStack pure = new ItemStack(ModItems.crystals, 1, CrystalType.PURE.getMetadata());
+		final ItemStack pure = new ItemStack(ModItems.crystals, 1, CrystalType.PURE.getMeta());
 		if(!player.inventory.addItemStackToInventory(pure)){
 			ItemUtil.spawnItemInWorldWithoutMotion(player.world, pure, new BlockPos(player));
 		}

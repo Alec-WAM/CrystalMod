@@ -3,7 +3,7 @@ package alec_wam.CrystalMod.blocks.decorative.tiles;
 import javax.annotation.Nullable;
 
 import alec_wam.CrystalMod.blocks.EnumBlock;
-import alec_wam.CrystalMod.blocks.EnumBlock.IEnumMeta;
+import alec_wam.CrystalMod.util.IEnumMeta;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;

@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import alec_wam.CrystalMod.blocks.BlockCrystalLog.WoodType;
 import alec_wam.CrystalMod.blocks.ModBlocks;
+import alec_wam.CrystalMod.util.CrystalColors;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
@@ -121,16 +121,16 @@ public enum WoodenCrystalChestType implements IStringSerializable
     public static Object translateOreName(String mat)
     {
     	if(mat.equalsIgnoreCase("plankBlue")){
-    		return new ItemStack(ModBlocks.crystalPlanks, 1, WoodType.BLUE.getMeta());
+    		return new ItemStack(ModBlocks.crystalPlanks, 1, CrystalColors.Basic.BLUE.getMeta());
     	}
     	else if(mat.equalsIgnoreCase("plankRed")){
-    		return new ItemStack(ModBlocks.crystalPlanks, 1, WoodType.RED.getMeta());
+    		return new ItemStack(ModBlocks.crystalPlanks, 1, CrystalColors.Basic.RED.getMeta());
     	}
     	else if(mat.equalsIgnoreCase("plankGreen")){
-    		return new ItemStack(ModBlocks.crystalPlanks, 1, WoodType.GREEN.getMeta());
+    		return new ItemStack(ModBlocks.crystalPlanks, 1, CrystalColors.Basic.GREEN.getMeta());
     	}
     	else if(mat.equalsIgnoreCase("plankDark")){
-    		return new ItemStack(ModBlocks.crystalPlanks, 1, WoodType.DARK.getMeta());
+    		return new ItemStack(ModBlocks.crystalPlanks, 1, CrystalColors.Basic.DARK.getMeta());
     	}
         return mat;
     }

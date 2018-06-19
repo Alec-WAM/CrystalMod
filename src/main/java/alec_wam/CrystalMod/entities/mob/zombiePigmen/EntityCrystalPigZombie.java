@@ -259,7 +259,7 @@ public class EntityCrystalPigZombie extends EntityPigZombie
 
         for (int k = 0; k < i; ++k)
         {
-        	int META = CrystalType.BLUE_SHARD.getMetadata() + getColor();
+        	int META = CrystalType.BLUE_SHARD.getMeta() + getColor();
             this.entityDropItem(new ItemStack(ModItems.crystals, 1, META), 0.0f);
         }
         
@@ -267,7 +267,7 @@ public class EntityCrystalPigZombie extends EntityPigZombie
         	//Taken from ZombiePigman Loottable
         	double chance = 0.025 + (0.01 * lootingModifier);
         	if(rand.nextFloat() < chance){
-        		int META = IngotType.BLUE.getMetadata() + getColor();
+        		int META = IngotType.BLUE.getMeta() + getColor();
                 this.entityDropItem(new ItemStack(ModItems.ingots, 1, META), 0.0f);
         	}
         }

@@ -95,6 +95,7 @@ public class JEIPlugin  extends BlankModPlugin {
 		jeiHelpers.getIngredientBlacklist().addIngredientToBlacklist(new ItemStack(ModBlocks.bambooDoor));
 		jeiHelpers.getIngredientBlacklist().addIngredientToBlacklist(new ItemStack(ModBlocks.fakeLight, 1, LightType.LIGHT.getMeta()));
 		jeiHelpers.getIngredientBlacklist().addIngredientToBlacklist(new ItemStack(ModBlocks.fakeLight, 1, LightType.DARK.getMeta()));
+		jeiHelpers.getIngredientBlacklist().addIngredientToBlacklist(new ItemStack(ModBlocks.crystexPortal));
 
 		String desc = "Dropped upon killing an Ender Dragon.";
 		//Lang.localize("jei.desc.wings");

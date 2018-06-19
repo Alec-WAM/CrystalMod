@@ -68,7 +68,7 @@ public class EntityDart extends EntityArrow
     
     public void setType(DartType type){
     	this.setDamage(type.getDamage());
-        this.dataManager.set(TYPE, (byte)type.getMetadata());
+        this.dataManager.set(TYPE, (byte)type.getMeta());
     }
     
     public DartType getType(){
@@ -77,7 +77,7 @@ public class EntityDart extends EntityArrow
 
     protected ItemStack getArrowStack()
     {
-        ItemStack dart = new ItemStack(ModItems.dart, 1, getType().getMetadata());
+        ItemStack dart = new ItemStack(ModItems.dart, 1, getType().getMeta());
         if(potion !=PotionTypes.EMPTY){
         	PotionUtils.addPotionToItemStack(dart, this.potion);
             PotionUtils.appendEffects(dart, this.customPotionEffects);
@@ -137,7 +137,7 @@ public class EntityDart extends EntityArrow
     public void writeEntityToNBT(NBTTagCompound compound)
     {
         super.writeEntityToNBT(compound);
-        compound.setInteger("Type", getType().getMetadata());
+        compound.setInteger("Type", getType().getMeta());
         
         if (this.potion != PotionTypes.EMPTY && this.potion != null)
         {

@@ -3,7 +3,7 @@
   "variants": {
     "normal": [{}],
     "inventory": [{}],
-    "variant": {
+    "color": {
       "blue": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/planks_blue"} },
 	  "red": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/planks_red"} },
 	  "green": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/planks_green"} },

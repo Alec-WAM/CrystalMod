@@ -223,7 +223,7 @@ public class BlockTank extends EnumBlock<BlockTank.TankType> implements ITileEnt
     	return EnumBlockRenderType.MODEL;
     }
     
-	public static enum TankType implements IStringSerializable, alec_wam.CrystalMod.blocks.EnumBlock.IEnumMeta{
+	public static enum TankType implements IStringSerializable, alec_wam.CrystalMod.util.IEnumMeta{
 		BLUE, RED, GREEN, DARK, PURE, CREATIVE;
 
 		final int meta;

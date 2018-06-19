@@ -54,7 +54,7 @@ public class BlockSeaweed extends BlockBush implements ICustomModel {
 
         for (int k = 0; k < count; ++k)
         {
-        	dropped.add(new ItemStack(ModItems.miscFood, 1, FoodType.SEAWEED.getMetadata()));
+        	dropped.add(new ItemStack(ModItems.miscFood, 1, FoodType.SEAWEED.getMeta()));
         }
     	return dropped;
     }

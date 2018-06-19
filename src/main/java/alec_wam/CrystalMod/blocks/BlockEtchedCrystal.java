@@ -1,59 +1,28 @@
 package alec_wam.CrystalMod.blocks;
 
 import alec_wam.CrystalMod.CrystalMod;
-import alec_wam.CrystalMod.blocks.EnumBlock.IEnumMeta;
+import alec_wam.CrystalMod.util.CrystalColors;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
-import net.minecraft.util.IStringSerializable;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class BlockEtchedCrystal extends EnumBlock<BlockEtchedCrystal.EtchedCrystalBlockType> {
+public class BlockEtchedCrystal extends EnumBlock<CrystalColors.Special> {
 
-	public static final PropertyEnum<EtchedCrystalBlockType> TYPE = PropertyEnum.<EtchedCrystalBlockType>create("type", EtchedCrystalBlockType.class);
-	
 	public BlockEtchedCrystal() {
-		super(Material.ROCK, TYPE, EtchedCrystalBlockType.class);
+		super(Material.ROCK, CrystalColors.COLOR_SPECIAL, CrystalColors.Special.class);
 		this.setCreativeTab(CrystalMod.tabBlocks);
 		this.setHardness(2f);
-		this.setDefaultState(this.blockState.getBaseState().withProperty(TYPE, EtchedCrystalBlockType.BLUE));
+		this.setDefaultState(this.blockState.getBaseState().withProperty(CrystalColors.COLOR_SPECIAL, CrystalColors.Special.BLUE));
 	}
 	
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void initModel() {
-		for(EtchedCrystalBlockType type : EtchedCrystalBlockType.values())
-	        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), type.getMeta(), new ModelResourceLocation(this.getRegistryName(), TYPE.getName()+"="+type.getName()));
+		for(CrystalColors.Special type : CrystalColors.Special.values())
+	        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), type.getMeta(), new ModelResourceLocation(this.getRegistryName(), CrystalColors.COLOR_SPECIAL.getName()+"="+type.getName()));
 	}
-    
-    public static enum EtchedCrystalBlockType implements IStringSerializable, IEnumMeta {
-		BLUE("blue"),
-		RED("red"),
-		GREEN("green"),
-		DARK("dark"),
-		PURE("pure");
-
-		private final String unlocalizedName;
-		public final int meta;
-
-		EtchedCrystalBlockType(String name) {
-	      meta = ordinal();
-	      unlocalizedName = name;
-	    }
-
-	    @Override
-	    public String getName() {
-	      return unlocalizedName;
-	    }
-
-	    @Override
-	    public int getMeta() {
-	      return meta;
-	    }
-    	
-    }
 
 }

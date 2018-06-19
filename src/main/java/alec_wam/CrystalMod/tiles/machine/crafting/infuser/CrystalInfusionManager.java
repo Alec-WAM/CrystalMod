@@ -106,7 +106,7 @@ public class CrystalInfusionManager {
 			recipes.add(new InfusionMachineRecipe(recipe.getInput(), recipe.getFluidInput(), recipe.getOutput().copy(), 1600));
 		}
 		
-		recipes.add(new InfusionMachineRecipe(new ItemStack(ModItems.machineFrame, 1, FrameType.BASIC.getMetadata()), new FluidStack(ModFluids.fluidEnder, 1000), new ItemStack(ModItems.machineFrame, 1, FrameType.ENDER.getMetadata()), 1600));
+		recipes.add(new InfusionMachineRecipe(new ItemStack(ModItems.machineFrame, 1, FrameType.BASIC.getMeta()), new FluidStack(ModFluids.fluidEnder, 1000), new ItemStack(ModItems.machineFrame, 1, FrameType.ENDER.getMeta()), 1600));
 
 		recipes.add(new InfusionMachineRecipe(new ItemStack(Items.GLASS_BOTTLE), new FluidStack(ModFluids.fluidXpJuice, XpUtil.LIQUID_PER_XP_BOTTLE), new ItemStack(Items.EXPERIENCE_BOTTLE), 800));
 

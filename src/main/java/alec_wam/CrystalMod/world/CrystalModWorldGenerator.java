@@ -61,7 +61,7 @@ public class CrystalModWorldGenerator implements IWorldGenerator {
             }
         }
         boolean genSpikes = false;
-        if(world.provider.getDimension() == 0 && genSpikes){
+        if(world.provider.getDimension() == ModDimensions.CRYSTEX_ID && genSpikes){
         	crystexiumSpikeGen.generate(world, chunkX, chunkZ, null);
         	crystexiumSpikeGen.generateStructure(world, random, new ChunkPos(chunkX, chunkZ));
         }        

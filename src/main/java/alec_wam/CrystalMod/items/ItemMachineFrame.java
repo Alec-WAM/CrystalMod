@@ -1,6 +1,7 @@
 package alec_wam.CrystalMod.items;
 
 import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.util.IEnumMeta;
 import alec_wam.CrystalMod.blocks.ICustomModel;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
@@ -14,11 +15,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemMachineFrame extends Item implements ICustomModel {
 
-	public static enum FrameType implements IStringSerializable, IEnumMetaItem{
+	public static enum FrameType implements IStringSerializable, IEnumMeta {
 		BASIC, ENDER;
 
 		@Override
-		public int getMetadata() {
+		public int getMeta() {
 			return ordinal();
 		}
 

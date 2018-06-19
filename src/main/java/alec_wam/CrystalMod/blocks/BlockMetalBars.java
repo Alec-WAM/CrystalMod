@@ -29,7 +29,7 @@ public class BlockMetalBars extends BlockPane implements ICustomModel
 {
     public static final PropertyEnum<EnumMetalBarType> TYPE = PropertyEnum.<EnumMetalBarType>create("type", EnumMetalBarType.class);
 
-    public static enum EnumMetalBarType implements IStringSerializable, alec_wam.CrystalMod.blocks.EnumBlock.IEnumMeta{
+    public static enum EnumMetalBarType implements IStringSerializable, alec_wam.CrystalMod.util.IEnumMeta{
 		DARK_IRON, BLUE, RED, GREEN, DARK, PURE;
 
 		final int meta;

@@ -2,12 +2,10 @@ package alec_wam.CrystalMod.world;
 
 import java.util.Random;
 
-import alec_wam.CrystalMod.blocks.BlockCrystalLeaves;
-import alec_wam.CrystalMod.blocks.BlockCrystalLog;
-import alec_wam.CrystalMod.blocks.BlockCrystalLog.WoodType;
 import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.blocks.crops.BlockCrystalTreePlant;
 import alec_wam.CrystalMod.items.ItemCrystalSeedTree;
+import alec_wam.CrystalMod.util.CrystalColors;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.material.Material;
@@ -24,14 +22,14 @@ public class WorldGenCrystalTree extends WorldGenAbstractTree
     /** True if this tree should grow Tree Plants. */
     private final boolean plantsGrow;
     
-    private WoodType treeType;
+    private CrystalColors.Basic treeType;
 
     public WorldGenCrystalTree(boolean notify)
     {
-        this(notify, 4, WoodType.BLUE, false);
+        this(notify, 4, CrystalColors.Basic.BLUE, false);
     }
 
-    public WorldGenCrystalTree(boolean notify, int height, WoodType type, boolean treePlants)
+    public WorldGenCrystalTree(boolean notify, int height, CrystalColors.Basic type, boolean treePlants)
     {
         super(notify);
         this.minTreeHeight = height;
@@ -100,7 +98,7 @@ public class WorldGenCrystalTree extends WorldGenAbstractTree
 
                         if (state.getBlock().isAir(state, worldIn, upN) || state.getBlock().isLeaves(state, worldIn, upN) || state.getMaterial() == Material.VINE)
                         {
-                        	IBlockState woodState = ModBlocks.crystalLog.getDefaultState().withProperty(BlockCrystalLog.VARIANT, treeType);
+                        	IBlockState woodState = ModBlocks.crystalLog.getDefaultState().withProperty(CrystalColors.COLOR_BASIC, treeType);
                             this.setBlockAndNotifyAdequately(worldIn, position.up(j3), woodState);
                         }
                     }
@@ -123,7 +121,7 @@ public class WorldGenCrystalTree extends WorldGenAbstractTree
                                     BlockPos blockpos = new BlockPos(k1, i3, i2);
                                     state = worldIn.getBlockState(blockpos);
                                     Block block = state.getBlock();
-                                    IBlockState leaveState = ModBlocks.crystalLeaves.getDefaultState().withProperty(BlockCrystalLeaves.VARIANT, treeType);
+                                    IBlockState leaveState = ModBlocks.crystalLeaves.getDefaultState().withProperty(CrystalColors.COLOR_BASIC, treeType);
                                     if (block.isAir(state, worldIn, blockpos) || block.canPlaceBlockAt(worldIn, blockpos) || worldIn.getBlockState(blockpos) == leaveState)
                                     {
                                     	//worldIn.setBlockState(blockpos, leaveState, 3);

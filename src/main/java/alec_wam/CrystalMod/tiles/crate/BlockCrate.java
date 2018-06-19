@@ -1,7 +1,5 @@
 package alec_wam.CrystalMod.tiles.crate;
 
-import java.util.Locale;
-
 import alec_wam.CrystalMod.Config;
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.EnumBlock;
@@ -10,13 +8,13 @@ import alec_wam.CrystalMod.tiles.BlockStateFacing;
 import alec_wam.CrystalMod.tiles.machine.BlockMachine;
 import alec_wam.CrystalMod.tiles.machine.IFacingTile;
 import alec_wam.CrystalMod.util.BlockUtil;
+import alec_wam.CrystalMod.util.CrystalColors;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.tool.ToolUtil;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -31,7 +29,6 @@ import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumFacing.Axis;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
@@ -44,39 +41,13 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class BlockCrate extends EnumBlock<BlockCrate.CrateType> implements ICustomModel, ITileEntityProvider {
+public class BlockCrate extends EnumBlock<CrystalColors.Basic> implements ICustomModel, ITileEntityProvider {
 
-	public static enum CrateType implements IStringSerializable, alec_wam.CrystalMod.blocks.EnumBlock.IEnumMeta{
-		BLUE, RED, GREEN, DARK;
-
-		final int meta;
-		
-		CrateType(){
-			meta = ordinal();
-		}
-		
-		@Override
-		public int getMeta() {
-			return meta;
-		}
-
-		@Override
-		public String getName() {
-			return this.toString().toLowerCase(Locale.US);
-		}
-
-		public static CrateType byMetadata(int meta) {
-			return values()[meta % values().length];
-		}
-		
-	}
-	
 	/**Click Times**/
 	public static final int STARTING_TIME = 20,	CONTINOUS_TIME = 5,	DOUBLE_CLICK_TIME = 10,	FILL_TIME = 20,	DELAY_PICKUP_TIME = 20,	EMPLY_CRATE_TIME = 5;
-    public static final PropertyEnum<CrateType> TYPE = PropertyEnum.<CrateType>create("type", CrateType.class);
 
 	public BlockCrate() {
-		super(Material.WOOD, TYPE, CrateType.class);
+		super(Material.WOOD, CrystalColors.COLOR_BASIC, CrystalColors.Basic.class);
 		this.setHardness(2.0F);
 		this.setSoundType(SoundType.WOOD);
 		this.setCreativeTab(CrystalMod.tabBlocks);
@@ -90,14 +61,14 @@ public class BlockCrate extends EnumBlock<BlockCrate.CrateType> implements ICust
     
     @Override
     protected BlockStateContainer createBlockState() {
-      return new BlockStateContainer(this, TYPE, BlockStateFacing.facingProperty);
+      return new BlockStateContainer(this, CrystalColors.COLOR_BASIC, BlockStateFacing.facingProperty);
     }
     
     @Override
     @SideOnly(Side.CLIENT)
     public void initModel(){
     	ModelLoader.setCustomStateMapper(this, new CustomBlockStateMapper());
-		for(CrateType type : CrateType.values()){
+		for(CrystalColors.Basic type : CrystalColors.Basic.values()){
 			String nameOverride = getRegistryName().getResourcePath() + "_" + type.getName();
 			ResourceLocation baseLocation = nameOverride == null ? getRegistryName() : new ResourceLocation("crystalmod", nameOverride);
 			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), type.getMeta(), new ModelResourceLocation(baseLocation, "inventory"));
@@ -518,7 +489,7 @@ public class BlockCrate extends EnumBlock<BlockCrate.CrateType> implements ICust
 		@Override
 		protected ModelResourceLocation getModelResourceLocation(IBlockState state)
 		{
-			CrateType type = state.getValue(TYPE);
+			CrystalColors.Basic type = state.getValue(CrystalColors.COLOR_BASIC);
 			StringBuilder builder = new StringBuilder();
 			String nameOverride = null;
 			

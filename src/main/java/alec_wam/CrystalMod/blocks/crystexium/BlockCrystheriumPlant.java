@@ -194,7 +194,7 @@ public class BlockCrystheriumPlant extends Block implements net.minecraftforge.c
 
         for (int k = 0; k < count; ++k)
         {
-        	dropped.add(new ItemStack(ModItems.crystexItems, 1, CrystexItemType.CRYSTHERIUM_UTILIA_NORMAL.getMetadata() + type.getMeta()));
+        	dropped.add(new ItemStack(ModItems.crystexItems, 1, CrystexItemType.CRYSTHERIUM_UTILIA_NORMAL.getMeta() + type.getMeta()));
         }
     	return dropped;
     }

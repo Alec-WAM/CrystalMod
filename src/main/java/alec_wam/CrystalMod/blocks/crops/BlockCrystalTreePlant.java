@@ -4,12 +4,11 @@ import java.util.Random;
 
 import com.google.common.collect.Lists;
 
-import alec_wam.CrystalMod.blocks.BlockCrystalLog;
-import alec_wam.CrystalMod.blocks.BlockCrystalLog.WoodType;
 import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.blocks.crops.BlockCrystalPlant.PlantType;
 import alec_wam.CrystalMod.items.ItemCrystal.CrystalType;
 import alec_wam.CrystalMod.items.ModItems;
+import alec_wam.CrystalMod.util.CrystalColors;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockHorizontal;
@@ -103,11 +102,11 @@ public class BlockCrystalTreePlant extends BlockHorizontal implements IGrowable
     	pos = pos.offset(state.getValue(FACING));
         IBlockState iblockstate = worldIn.getBlockState(pos);
         if(iblockstate.getBlock() != ModBlocks.crystalLog)return false;
-        WoodType wood = iblockstate.getValue(BlockCrystalLog.VARIANT);
-    	if(wood == WoodType.BLUE && TYPE !=PlantType.BLUE)return false;
-    	if(wood == WoodType.RED && TYPE !=PlantType.RED)return false;
-    	if(wood == WoodType.GREEN && TYPE !=PlantType.GREEN)return false;
-    	if(wood == WoodType.DARK && TYPE !=PlantType.DARK)return false;
+        CrystalColors.Basic wood = iblockstate.getValue(CrystalColors.COLOR_BASIC);
+    	if(wood == CrystalColors.Basic.BLUE && TYPE !=PlantType.BLUE)return false;
+    	if(wood == CrystalColors.Basic.RED && TYPE !=PlantType.RED)return false;
+    	if(wood == CrystalColors.Basic.GREEN && TYPE !=PlantType.GREEN)return false;
+    	if(wood == CrystalColors.Basic.DARK && TYPE !=PlantType.DARK)return false;
         return true;
     }
 
@@ -233,13 +232,13 @@ public class BlockCrystalTreePlant extends BlockHorizontal implements IGrowable
         ItemStack crop = ItemStackTools.getEmptyStack();
         PlantType type = TYPE;
     	if(type == PlantType.BLUE){
-    		crop = new ItemStack(ModItems.crystals, 1, CrystalType.BLUE_SHARD.getMetadata());
+    		crop = new ItemStack(ModItems.crystals, 1, CrystalType.BLUE_SHARD.getMeta());
     	}else if(type == PlantType.RED){
-    		crop = new ItemStack(ModItems.crystals, 1, CrystalType.RED_SHARD.getMetadata());
+    		crop = new ItemStack(ModItems.crystals, 1, CrystalType.RED_SHARD.getMeta());
     	}else if(type == PlantType.GREEN){
-    		crop = new ItemStack(ModItems.crystals, 1, CrystalType.GREEN_SHARD.getMetadata());
+    		crop = new ItemStack(ModItems.crystals, 1, CrystalType.GREEN_SHARD.getMeta());
     	}else if(type == PlantType.DARK){
-    		crop = new ItemStack(ModItems.crystals, 1, CrystalType.DARK_SHARD.getMetadata());
+    		crop = new ItemStack(ModItems.crystals, 1, CrystalType.DARK_SHARD.getMeta());
     	}
         for (int k = 0; k < j; ++k)
         {

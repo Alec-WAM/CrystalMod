@@ -58,7 +58,7 @@ public class CrystexiumBlock extends EnumBlock<CrystexiumBlock.CrystexiumBlockTy
 		return super.shouldSideBeRendered(state, worldIn, pos, side);
 	}
 	
-	public static enum CrystexiumBlockType implements IStringSerializable, alec_wam.CrystalMod.blocks.EnumBlock.IEnumMeta{
+	public static enum CrystexiumBlockType implements IStringSerializable, alec_wam.CrystalMod.util.IEnumMeta{
 		NORMAL, BRICK, SQUARE_BRICK;
 
 		final int meta;

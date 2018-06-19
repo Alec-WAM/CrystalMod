@@ -87,7 +87,7 @@ public class BlockFakeLight extends EnumBlock<BlockFakeLight.LightType> {
         return false;
     }
     
-    public static enum LightType implements IStringSerializable, alec_wam.CrystalMod.blocks.EnumBlock.IEnumMeta {
+    public static enum LightType implements IStringSerializable, alec_wam.CrystalMod.util.IEnumMeta {
 		LIGHT, DARK;
 
 		final int meta;

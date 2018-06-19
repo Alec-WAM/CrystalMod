@@ -3,8 +3,8 @@ package alec_wam.CrystalMod.items.tools.blowdart;
 import java.util.List;
 
 import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.util.IEnumMeta;
 import alec_wam.CrystalMod.blocks.ICustomModel;
-import alec_wam.CrystalMod.items.IEnumMetaItem;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -35,7 +35,7 @@ public class ItemDart extends Item implements ICustomModel {
 	@SideOnly(Side.CLIENT)
     public void initModel() {
         for(DartType type : DartType.values()){
-        	 ModelLoader.setCustomModelResourceLocation(this, type.getMetadata(), new ModelResourceLocation(getRegistryName(), type.getUnlocalizedName()));
+        	 ModelLoader.setCustomModelResourceLocation(this, type.getMeta(), new ModelResourceLocation(getRegistryName(), type.getUnlocalizedName()));
         }
     }
 	
@@ -78,7 +78,7 @@ public class ItemDart extends Item implements ICustomModel {
         return enchant <= 0 ? false : this.getClass() == ItemDart.class;
     }
 	
-    public static enum DartType implements IStringSerializable, IEnumMetaItem
+    public static enum DartType implements IStringSerializable, IEnumMeta
     {
         BASIC(0, "basic", 2.0F),
         BLUE(1, "blue", 3.0F),
@@ -100,7 +100,7 @@ public class ItemDart extends Item implements ICustomModel {
         }
 
         @Override
-		public int getMetadata()
+		public int getMeta()
         {
             return this.metadata;
         }
@@ -140,7 +140,7 @@ public class ItemDart extends Item implements ICustomModel {
         {
             for (DartType type : values())
             {
-                METADATA_LOOKUP[type.getMetadata()] = type;
+                METADATA_LOOKUP[type.getMeta()] = type;
             }
         }
     }

@@ -7,23 +7,19 @@ import com.google.common.collect.Lists;
 
 import alec_wam.CrystalMod.blocks.BlockCrystal;
 import alec_wam.CrystalMod.blocks.BlockCrystal.CrystalBlockType;
-import alec_wam.CrystalMod.blocks.BlockCrystalLog;
-import alec_wam.CrystalMod.blocks.BlockCrystalLog.WoodType;
 import alec_wam.CrystalMod.blocks.BlockMetalBars;
 import alec_wam.CrystalMod.blocks.BlockMetalBars.EnumMetalBarType;
 import alec_wam.CrystalMod.blocks.ModBlocks;
-import alec_wam.CrystalMod.blocks.glass.BlockCrystalGlass;
 import alec_wam.CrystalMod.fluids.ModFluids;
 import alec_wam.CrystalMod.items.ItemCrystal.CrystalType;
-import alec_wam.CrystalMod.items.ItemCrystalSap.SapType;
 import alec_wam.CrystalMod.items.ItemIngot.IngotType;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.items.tools.ItemEnhancementKnowledge;
 import alec_wam.CrystalMod.tiles.chest.BlockCrystalChest;
 import alec_wam.CrystalMod.tiles.chest.CrystalChestType;
 import alec_wam.CrystalMod.tiles.chest.TileEntityBlueCrystalChest;
-import alec_wam.CrystalMod.tiles.cluster.BlockCrystalCluster.EnumClusterType;
 import alec_wam.CrystalMod.tiles.cluster.TileCrystalCluster;
+import alec_wam.CrystalMod.util.CrystalColors;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
@@ -49,46 +45,42 @@ public class CrystalWell {
 	
 	public static void generateOverworldWell(World world, BlockPos pos, Random rand, int type){
 		boolean placeLiquid = true;
-		WoodType wood = WoodType.BLUE;
+		CrystalColors.Basic basicColor = CrystalColors.Basic.BLUE;
 		CrystalBlockType brickType = CrystalBlockType.BLUE_BRICK;
 		CrystalBlockType chisledType = CrystalBlockType.BLUE_CHISELED;
 		Fluid fluid = ModFluids.fluidBlueCrystal;
 		CrystalChestType chestType = CrystalChestType.BLUE;
 		EnumMetalBarType barType = EnumMetalBarType.BLUE;
-		EnumClusterType clusterType = EnumClusterType.BLUE;
 		if(type == 1){
-			wood = WoodType.RED;
+			basicColor = CrystalColors.Basic.RED;
 			brickType = CrystalBlockType.RED_BRICK;
 			chisledType = CrystalBlockType.RED_CHISELED;
 			fluid = ModFluids.fluidRedCrystal;
 			chestType = CrystalChestType.RED;
 			barType = EnumMetalBarType.RED;
-			clusterType = EnumClusterType.RED;
 		} else if(type == 2){
-			wood = WoodType.GREEN;
+			basicColor = CrystalColors.Basic.GREEN;
 			brickType = CrystalBlockType.GREEN_BRICK;
 			chisledType = CrystalBlockType.GREEN_CHISELED;
 			fluid = ModFluids.fluidGreenCrystal;
 			chestType = CrystalChestType.GREEN;
 			barType = EnumMetalBarType.GREEN;
-			clusterType = EnumClusterType.GREEN;
 		} else if(type == 3){
-			wood = WoodType.DARK;
+			basicColor = CrystalColors.Basic.DARK;
 			brickType = CrystalBlockType.DARK_BRICK;
 			chisledType = CrystalBlockType.DARK_CHISELED;
 			fluid = ModFluids.fluidDarkCrystal;
 			chestType = CrystalChestType.DARK;
 			barType = EnumMetalBarType.DARK;
-			clusterType = EnumClusterType.DARK;
 		}
 		
 		
-		IBlockState log = ModBlocks.crystalLog.getDefaultState().withProperty(BlockCrystalLog.VARIANT, wood);
+		IBlockState log = ModBlocks.crystalLog.getDefaultState().withProperty(CrystalColors.COLOR_BASIC, basicColor);
 		IBlockState xLog = log.withProperty(BlockLog.LOG_AXIS, EnumAxis.X);
 		IBlockState yLog = log.withProperty(BlockLog.LOG_AXIS, EnumAxis.Y);
 		IBlockState zLog = log.withProperty(BlockLog.LOG_AXIS, EnumAxis.Z);
 		
-		IBlockState planks = ModBlocks.crystalPlanks.getDefaultState().withProperty(BlockCrystalLog.VARIANT, wood);
+		IBlockState planks = ModBlocks.crystalPlanks.getDefaultState().withProperty(CrystalColors.COLOR_BASIC, basicColor);
 		IBlockState chisled = ModBlocks.crystal.getDefaultState().withProperty(BlockCrystal.TYPE, chisledType);
 		IBlockState bricks = ModBlocks.crystal.getDefaultState().withProperty(BlockCrystal.TYPE, brickType);
 		IBlockState liquid = fluid.getBlock().getDefaultState();
@@ -109,7 +101,7 @@ public class CrystalWell {
 		
 		setBlockAndNotifyAdequately(world, pos.offset(EnumFacing.UP, 1).offset(EnumFacing.EAST, 2).offset(EnumFacing.SOUTH, 2), chisled, false);
 
-		TileCrystalCluster.createRandomCluster(world, rand, pos.offset(EnumFacing.UP, 2).offset(EnumFacing.EAST, 2).offset(EnumFacing.SOUTH, 2), clusterType, 60, 100, 5, 10, false);
+		TileCrystalCluster.createRandomCluster(world, rand, pos.offset(EnumFacing.UP, 2).offset(EnumFacing.EAST, 2).offset(EnumFacing.SOUTH, 2), basicColor, 60, 100, 5, 10, false);
         
 		//Main Layer
 		setBlockAndNotifyAdequately(world, pos, yLog, false);
@@ -209,17 +201,17 @@ public class CrystalWell {
 	
 	public static ItemStack getRandomLootItem(Random rand, int color){
 		List<ItemStack> stacks = Lists.newArrayList();
-		
+		CrystalColors.Basic basicColor = CrystalColors.Basic.byMetadata(color);
 		if(color == 0){
-			stacks.add(new ItemStack(ModItems.crystals, 1, CrystalType.BLUE.getMetadata()));
-			stacks.add(new ItemStack(ModItems.crystals, 1, CrystalType.BLUE_SHARD.getMetadata()));
-			stacks.add(new ItemStack(ModItems.crystals, 1, CrystalType.BLUE_NUGGET.getMetadata()));
-			stacks.add(new ItemStack(ModItems.ingots, 1, IngotType.BLUE.getMetadata()));
-			stacks.add(new ItemStack(ModItems.crystalSap, 1, SapType.BLUE.getMetadata()));
+			stacks.add(new ItemStack(ModItems.crystals, 1, CrystalType.BLUE.getMeta()));
+			stacks.add(new ItemStack(ModItems.crystals, 1, CrystalType.BLUE_SHARD.getMeta()));
+			stacks.add(new ItemStack(ModItems.crystals, 1, CrystalType.BLUE_NUGGET.getMeta()));
+			stacks.add(new ItemStack(ModItems.ingots, 1, IngotType.BLUE.getMeta()));
+			stacks.add(new ItemStack(ModItems.crystalSap, 1, basicColor.getMeta()));
 			stacks.add(new ItemStack(ModItems.crystalTreeSeedsBlue));
 			stacks.add(new ItemStack(ModItems.crystalReedsBlue));
 			stacks.add(new ItemStack(ModItems.crystalSeedsBlue));
-			stacks.add(new ItemStack(ModBlocks.crystalSapling, 1, WoodType.BLUE.getMeta()));
+			stacks.add(new ItemStack(ModBlocks.crystalSapling, 1, CrystalColors.Basic.BLUE.getMeta()));
 			
 			for(String type : new String[]{"axe", "hoe", "pick", "shovel", "sword"}){
 				ItemStack stack = new ItemStack(ModItems.toolParts);
@@ -229,15 +221,15 @@ public class CrystalWell {
 			}
 		}
 		if(color == 1){
-			stacks.add(new ItemStack(ModItems.crystals, 1, CrystalType.RED.getMetadata()));
-			stacks.add(new ItemStack(ModItems.crystals, 1, CrystalType.RED_SHARD.getMetadata()));
-			stacks.add(new ItemStack(ModItems.crystals, 1, CrystalType.RED_NUGGET.getMetadata()));
-			stacks.add(new ItemStack(ModItems.ingots, 1, IngotType.RED.getMetadata()));
-			stacks.add(new ItemStack(ModItems.crystalSap, 1, SapType.RED.getMetadata()));
+			stacks.add(new ItemStack(ModItems.crystals, 1, CrystalType.RED.getMeta()));
+			stacks.add(new ItemStack(ModItems.crystals, 1, CrystalType.RED_SHARD.getMeta()));
+			stacks.add(new ItemStack(ModItems.crystals, 1, CrystalType.RED_NUGGET.getMeta()));
+			stacks.add(new ItemStack(ModItems.ingots, 1, IngotType.RED.getMeta()));
+			stacks.add(new ItemStack(ModItems.crystalSap, 1, basicColor.getMeta()));
 			stacks.add(new ItemStack(ModItems.crystalTreeSeedsRed));
 			stacks.add(new ItemStack(ModItems.crystalReedsRed));
 			stacks.add(new ItemStack(ModItems.crystalSeedsRed));
-			stacks.add(new ItemStack(ModBlocks.crystalSapling, 1, WoodType.RED.getMeta()));
+			stacks.add(new ItemStack(ModBlocks.crystalSapling, 1, CrystalColors.Basic.RED.getMeta()));
 			
 			for(String type : new String[]{"axe", "hoe", "pick", "shovel", "sword"}){
 				ItemStack stack = new ItemStack(ModItems.toolParts);
@@ -247,15 +239,15 @@ public class CrystalWell {
 			}
 		}
 		if(color == 2){
-			stacks.add(new ItemStack(ModItems.crystals, 1, CrystalType.GREEN.getMetadata()));
-			stacks.add(new ItemStack(ModItems.crystals, 1, CrystalType.GREEN_SHARD.getMetadata()));
-			stacks.add(new ItemStack(ModItems.crystals, 1, CrystalType.GREEN_NUGGET.getMetadata()));
-			stacks.add(new ItemStack(ModItems.ingots, 1, IngotType.GREEN.getMetadata()));
-			stacks.add(new ItemStack(ModItems.crystalSap, 1, SapType.GREEN.getMetadata()));
+			stacks.add(new ItemStack(ModItems.crystals, 1, CrystalType.GREEN.getMeta()));
+			stacks.add(new ItemStack(ModItems.crystals, 1, CrystalType.GREEN_SHARD.getMeta()));
+			stacks.add(new ItemStack(ModItems.crystals, 1, CrystalType.GREEN_NUGGET.getMeta()));
+			stacks.add(new ItemStack(ModItems.ingots, 1, IngotType.GREEN.getMeta()));
+			stacks.add(new ItemStack(ModItems.crystalSap, 1, basicColor.getMeta()));
 			stacks.add(new ItemStack(ModItems.crystalTreeSeedsGreen));
 			stacks.add(new ItemStack(ModItems.crystalReedsGreen));
 			stacks.add(new ItemStack(ModItems.crystalSeedsGreen));
-			stacks.add(new ItemStack(ModBlocks.crystalSapling, 1, WoodType.GREEN.getMeta()));
+			stacks.add(new ItemStack(ModBlocks.crystalSapling, 1, CrystalColors.Basic.GREEN.getMeta()));
 			
 			for(String type : new String[]{"axe", "hoe", "pick", "shovel", "sword"}){
 				ItemStack stack = new ItemStack(ModItems.toolParts);
@@ -265,15 +257,15 @@ public class CrystalWell {
 			}
 		}
 		if(color == 3){
-			stacks.add(new ItemStack(ModItems.crystals, 1, CrystalType.DARK.getMetadata()));
-			stacks.add(new ItemStack(ModItems.crystals, 1, CrystalType.DARK_SHARD.getMetadata()));
-			stacks.add(new ItemStack(ModItems.crystals, 1, CrystalType.DARK_NUGGET.getMetadata()));
-			stacks.add(new ItemStack(ModItems.ingots, 1, IngotType.DARK.getMetadata()));
-			stacks.add(new ItemStack(ModItems.crystalSap, 1, SapType.DARK.getMetadata()));
+			stacks.add(new ItemStack(ModItems.crystals, 1, CrystalType.DARK.getMeta()));
+			stacks.add(new ItemStack(ModItems.crystals, 1, CrystalType.DARK_SHARD.getMeta()));
+			stacks.add(new ItemStack(ModItems.crystals, 1, CrystalType.DARK_NUGGET.getMeta()));
+			stacks.add(new ItemStack(ModItems.ingots, 1, IngotType.DARK.getMeta()));
+			stacks.add(new ItemStack(ModItems.crystalSap, 1, basicColor.getMeta()));
 			stacks.add(new ItemStack(ModItems.crystalTreeSeedsDark));
 			stacks.add(new ItemStack(ModItems.crystalReedsDark));
 			stacks.add(new ItemStack(ModItems.crystalSeedsDark));
-			stacks.add(new ItemStack(ModBlocks.crystalSapling, 1, WoodType.DARK.getMeta()));
+			stacks.add(new ItemStack(ModBlocks.crystalSapling, 1, CrystalColors.Basic.DARK.getMeta()));
 			
 			for(String type : new String[]{"axe", "hoe", "pick", "shovel", "sword"}){
 				ItemStack stack = new ItemStack(ModItems.toolParts);
@@ -295,7 +287,7 @@ public class CrystalWell {
 		IBlockState chisled = Blocks.QUARTZ_BLOCK.getDefaultState().withProperty(BlockQuartz.VARIANT, BlockQuartz.EnumType.CHISELED);
 		IBlockState quartz = Blocks.QUARTZ_BLOCK.getDefaultState().withProperty(BlockQuartz.VARIANT, BlockQuartz.EnumType.DEFAULT);
 		IBlockState bars = ModBlocks.metalBars.getDefaultState().withProperty(BlockMetalBars.TYPE, BlockMetalBars.EnumMetalBarType.PURE);
-		IBlockState glass = ModBlocks.crystalGlass.getDefaultState().withProperty(BlockCrystalGlass.TYPE, BlockCrystalGlass.GlassType.PURE);
+		IBlockState glass = ModBlocks.crystalGlass.getDefaultState().withProperty(CrystalColors.COLOR_SPECIAL, CrystalColors.Special.PURE);
 		IBlockState liquid = ModFluids.fluidPureCrystal.getBlock().getDefaultState();
 		IBlockState pureBlock = ModBlocks.crystal.getDefaultState().withProperty(BlockCrystal.TYPE, CrystalBlockType.PURE);
 		IBlockState pureChiseled = ModBlocks.crystal.getDefaultState().withProperty(BlockCrystal.TYPE, CrystalBlockType.PURE_CHISELED);

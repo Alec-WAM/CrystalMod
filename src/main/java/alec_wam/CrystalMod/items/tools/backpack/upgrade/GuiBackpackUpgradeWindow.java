@@ -150,13 +150,13 @@ public class GuiBackpackUpgradeWindow extends GuiContainer {
 		        boolean flag = index == guiTab;
 		        if(flag)continue;
 		        ItemStack stack = backpack;
-	        	if(t > 0)stack = new ItemStack(ModItems.backpackupgrade, 1, tabs[t-1].getMetadata());
+	        	if(t > 0)stack = new ItemStack(ModItems.backpackupgrade, 1, tabs[t-1].getMeta());
 		        renderTab(index, tabStart, tabOffset, stack, false);
 	        }
 	        this.mc.getTextureManager().bindTexture(RES_LOC);
 	        this.drawTexturedModalRect(this.guiLeft+offsetLeft, this.guiTop+tabOffset, 0, 0, 176, topSpace);
 	        
-	        ItemStack itemstack = new ItemStack(ModItems.backpackupgrade, 1, upgrade.getMetadata());
+	        ItemStack itemstack = new ItemStack(ModItems.backpackupgrade, 1, upgrade.getMeta());
 	        renderTab(guiTab, tabStart, tabOffset, itemstack, true);
         }
     }

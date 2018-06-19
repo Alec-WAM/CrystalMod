@@ -1,7 +1,7 @@
 package alec_wam.CrystalMod.blocks;
 
 import alec_wam.CrystalMod.CrystalMod;
-import alec_wam.CrystalMod.blocks.BlockCrystalLog.WoodType;
+import alec_wam.CrystalMod.util.CrystalColors;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.material.Material;
@@ -40,14 +40,14 @@ public class BlockCrystalLadder extends Block implements ICustomModel
     public BlockCrystalLadder()
     {
         super(Material.CIRCUITS);
-        this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(BlockCrystalLog.VARIANT, WoodType.BLUE));
+        this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(CrystalColors.COLOR_BASIC, CrystalColors.Basic.BLUE));
         this.setCreativeTab(CrystalMod.tabBlocks);
     }
 
     @SideOnly(Side.CLIENT)
     @Override
     public void getSubBlocks(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> list) {
-      for(WoodType type : WoodType.values()) {
+      for(CrystalColors.Basic type : CrystalColors.Basic.values()) {
         list.add(new ItemStack(this, 1, type.getMeta()));
       }
     }
@@ -56,7 +56,7 @@ public class BlockCrystalLadder extends Block implements ICustomModel
     public void initModel(){
     	IStateMapper stateMapper = new StateMap.Builder().build();
 		ModelLoader.setCustomStateMapper(this, stateMapper);
-		for(WoodType type : WoodType.values()){
+		for(CrystalColors.Basic type : CrystalColors.Basic.values()){
 			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), type.getMeta(), new ModelResourceLocation(getRegistryName()+"_"+type.getName(), "inventory"));
 		}
     }
@@ -158,7 +158,7 @@ public class BlockCrystalLadder extends Block implements ICustomModel
     @Override
 	public IBlockState getStateFromMeta(int meta)
     {
-    	WoodType type = WoodType.byMetadata((meta & 3) % 4);
+    	CrystalColors.Basic type = CrystalColors.Basic.byMetadata((meta & 3) % 4);
         EnumFacing enumfacing = EnumFacing.NORTH;
 
         switch (meta & 12)
@@ -176,7 +176,7 @@ public class BlockCrystalLadder extends Block implements ICustomModel
             	enumfacing = EnumFacing.NORTH;
         }
 
-        return this.getDefaultState().withProperty(BlockCrystalLog.VARIANT, type).withProperty(FACING, enumfacing);
+        return this.getDefaultState().withProperty(CrystalColors.COLOR_BASIC, type).withProperty(FACING, enumfacing);
     }
 
     @SideOnly(Side.CLIENT)
@@ -193,7 +193,7 @@ public class BlockCrystalLadder extends Block implements ICustomModel
 	public int getMetaFromState(IBlockState state)
     {
     	int i = 0;
-        i = i | state.getValue(BlockCrystalLog.VARIANT).getMeta();
+        i = i | state.getValue(CrystalColors.COLOR_BASIC).getMeta();
 
         switch (state.getValue(FACING))
         {
@@ -234,7 +234,7 @@ public class BlockCrystalLadder extends Block implements ICustomModel
     @Override
 	protected BlockStateContainer createBlockState()
     {
-        return new BlockStateContainer(this, new IProperty[] {FACING, BlockCrystalLog.VARIANT});
+        return new BlockStateContainer(this, new IProperty[] {FACING, CrystalColors.COLOR_BASIC});
     }
 
     @Override public boolean isLadder(IBlockState state, IBlockAccess world, BlockPos pos, EntityLivingBase entity) { return true; }

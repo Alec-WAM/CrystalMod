@@ -1,6 +1,6 @@
 package alec_wam.CrystalMod.blocks.decorative;
 
-import alec_wam.CrystalMod.blocks.EnumBlock.IEnumMeta;
+import alec_wam.CrystalMod.util.IEnumMeta;
 import alec_wam.CrystalMod.blocks.ICustomModel;
 import net.minecraft.block.BlockPumpkin;
 import net.minecraft.block.SoundType;

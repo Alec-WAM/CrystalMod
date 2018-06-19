@@ -8,10 +8,9 @@ import javax.annotation.Nullable;
 
 import com.google.common.collect.Lists;
 
-import alec_wam.CrystalMod.blocks.EnumBlock.IEnumMeta;
+import alec_wam.CrystalMod.util.IEnumMeta;
 import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.blocks.ModBlocks;
-import alec_wam.CrystalMod.items.IEnumMetaItem;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.IGrowable;
@@ -222,7 +221,7 @@ public class BlockBetterRoses extends BlockBush implements IGrowable, IShearable
 		spawnAsEntity(worldIn, pos, new ItemStack(this, 1, state.getValue(COLOR).getMeta()));
 	}
     
-    public enum RoseType implements IStringSerializable, IEnumMeta, IEnumMetaItem {
+    public enum RoseType implements IStringSerializable, IEnumMeta {
     	WHITE, ORANGE, MAGENTA, YELLOW, PINK, CYAN, PURPLE;
 
     	final int meta;
@@ -239,11 +238,6 @@ public class BlockBetterRoses extends BlockBush implements IGrowable, IShearable
     	@Override
     	public String getName() {
     		return this.toString().toLowerCase(Locale.US);
-    	}
-
-    	@Override
-    	public int getMetadata() {
-    		return meta;
     	}
     	
     }

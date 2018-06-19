@@ -56,7 +56,7 @@ public class BlockDecorative extends EnumBlock<BlockDecorative.DecorativeBlockTy
         return MapColor.RED;
     }
 	
-	public static enum DecorativeBlockType implements IStringSerializable, alec_wam.CrystalMod.blocks.EnumBlock.IEnumMeta{
+	public static enum DecorativeBlockType implements IStringSerializable, alec_wam.CrystalMod.util.IEnumMeta{
 		REDSTONE_BRICKS, SQUARE_TURN;
 
 		final int meta;

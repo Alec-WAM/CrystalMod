@@ -41,7 +41,7 @@ public class BlockAdvancedLamp extends EnumBlock<BlockAdvancedLamp.LampType> imp
 		super.breakBlock(worldIn, pos, state);
 	}
 	
-	public static enum LampType implements IStringSerializable, alec_wam.CrystalMod.blocks.EnumBlock.IEnumMeta {
+	public static enum LampType implements IStringSerializable, alec_wam.CrystalMod.util.IEnumMeta {
 		PURE, DARK;
 
 		final int meta;

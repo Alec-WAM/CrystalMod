@@ -12,8 +12,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumBlockRenderType;
@@ -45,7 +43,7 @@ public class BlockBamboo extends Block {
             if (chance < 5) chance = 5;
         }
         if(rand.nextInt(chance) == 0){
-        	ret.add(new ItemStack(ModItems.miscFood, 1, FoodType.EUCALYPTUS.getMetadata()));
+        	ret.add(new ItemStack(ModItems.miscFood, 1, FoodType.EUCALYPTUS.getMeta()));
         }
         return ret;
     }

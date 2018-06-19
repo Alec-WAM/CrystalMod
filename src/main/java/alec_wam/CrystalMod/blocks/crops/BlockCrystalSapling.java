@@ -5,13 +5,11 @@ import java.util.Random;
 import javax.annotation.Nonnull;
 
 import alec_wam.CrystalMod.CrystalMod;
-import alec_wam.CrystalMod.blocks.BlockCrystalLog;
-import alec_wam.CrystalMod.blocks.BlockCrystalLog.WoodType;
 import alec_wam.CrystalMod.blocks.ICustomModel;
+import alec_wam.CrystalMod.util.CrystalColors;
 import alec_wam.CrystalMod.world.WorldGenCrystalTree;
 import net.minecraft.block.BlockSapling;
 import net.minecraft.block.SoundType;
-import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -36,8 +34,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SuppressWarnings("deprecation")
 public class BlockCrystalSapling extends BlockSapling implements ICustomModel {
 
-	public static final PropertyEnum<BlockCrystalLog.WoodType> VARIANT = PropertyEnum.<BlockCrystalLog.WoodType>create("variant", BlockCrystalLog.WoodType.class);
-
 	public BlockCrystalSapling() {
 		setCreativeTab(CrystalMod.tabCrops);
 		setDefaultState(this.blockState.getBaseState());
@@ -46,8 +42,8 @@ public class BlockCrystalSapling extends BlockSapling implements ICustomModel {
 
 	@Override
 	public void getSubBlocks(@Nonnull Item itemIn, CreativeTabs tab, NonNullList<ItemStack> list) {
-		for(WoodType type : WoodType.values()) {
-			list.add(new ItemStack(this, 1, getMetaFromState(getDefaultState().withProperty(VARIANT, type))));
+		for(CrystalColors.Basic type : CrystalColors.Basic.values()) {
+			list.add(new ItemStack(this, 1, getMetaFromState(getDefaultState().withProperty(CrystalColors.COLOR_BASIC, type))));
 		}
 	}
 
@@ -55,7 +51,7 @@ public class BlockCrystalSapling extends BlockSapling implements ICustomModel {
 	@SideOnly(Side.CLIENT)
 	public void initModel() {
 		ModelLoader.setCustomStateMapper(this, new SaplingBlockStateMapper());
-		for(WoodType type : WoodType.values()){
+		for(CrystalColors.Basic type : CrystalColors.Basic.values()){
 			String nameOverride = getRegistryName().getResourcePath() + "_" + type.getName();
 			ResourceLocation baseLocation = nameOverride == null ? getRegistryName() : new ResourceLocation("crystalmod", nameOverride);
 			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), type.getMeta(), new ModelResourceLocation(baseLocation, "inventory"));
@@ -67,7 +63,7 @@ public class BlockCrystalSapling extends BlockSapling implements ICustomModel {
 		@Override
 		protected ModelResourceLocation getModelResourceLocation(IBlockState state)
 		{
-			WoodType type = state.getValue(VARIANT);
+			CrystalColors.Basic type = state.getValue(CrystalColors.COLOR_BASIC);
 			StringBuilder builder = new StringBuilder();
 			String nameOverride = null;
 
@@ -99,7 +95,7 @@ public class BlockCrystalSapling extends BlockSapling implements ICustomModel {
 	@Override
 	protected BlockStateContainer createBlockState() {
 		// TYPE has to be included because of the BlockSapling constructor.. but it's never used.
-		return new BlockStateContainer(this, VARIANT, STAGE, TYPE);
+		return new BlockStateContainer(this, CrystalColors.COLOR_BASIC, STAGE, TYPE);
 	}
 
 	/**
@@ -108,11 +104,7 @@ public class BlockCrystalSapling extends BlockSapling implements ICustomModel {
 	@Nonnull
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		if(meta < 0 || meta >= WoodType.values().length) {
-			meta = 0;
-		}
-		WoodType grass = WoodType.values()[meta];
-		return this.getDefaultState().withProperty(VARIANT, grass);
+		return this.getDefaultState().withProperty(CrystalColors.COLOR_BASIC, CrystalColors.Basic.byMetadata(meta));
 	}
 
 	/**
@@ -120,7 +112,7 @@ public class BlockCrystalSapling extends BlockSapling implements ICustomModel {
 	 */
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		return state.getValue(VARIANT).ordinal();
+		return state.getValue(CrystalColors.COLOR_BASIC).ordinal();
 	}
 
 	@Override
@@ -146,7 +138,7 @@ public class BlockCrystalSapling extends BlockSapling implements ICustomModel {
 		if(!net.minecraftforge.event.terraingen.TerrainGen.saplingGrowTree(worldIn, rand, pos)) {
 			return;
 		}
-		WoodType type = state.getValue(VARIANT);
+		CrystalColors.Basic type = state.getValue(CrystalColors.COLOR_BASIC);
 		WorldGenerator gen = (new WorldGenCrystalTree(true, MathHelper.getInt(rand, 4, 6), type, false));
 
 		// replace sapling with air

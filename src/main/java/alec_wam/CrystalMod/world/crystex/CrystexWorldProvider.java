@@ -24,9 +24,25 @@ public class CrystexWorldProvider extends WorldProvider
 	protected void init()
     {
         this.hasSkyLight = true;
-        List<Biome> spawnList = Lists.newArrayList(Biomes.FOREST);
-        List<Biome> commonList = Lists.newArrayList(Biomes.FOREST, Biomes.BIRCH_FOREST);
-        List<Biome> rareList = Lists.newArrayList(ModBiomes.BAMBOO_FOREST);
+        List<Biome> spawnList = 
+        		Lists.newArrayList(
+        				ModBiomes.BLUE_CRYSTEX_FOREST, 
+        				ModBiomes.RED_CRYSTEX_FOREST,
+        				ModBiomes.GREEN_CRYSTEX_FOREST,
+        				ModBiomes.DARK_CRYSTEX_FOREST
+        		);
+        List<Biome> commonList = 
+        		Lists.newArrayList(
+        				ModBiomes.BLUE_CRYSTEX_FOREST, 
+        				ModBiomes.RED_CRYSTEX_FOREST,
+        				ModBiomes.GREEN_CRYSTEX_FOREST,
+        				ModBiomes.DARK_CRYSTEX_FOREST,
+        				ModBiomes.BLUE_CRYSTEX_PLAINS, 
+        				ModBiomes.RED_CRYSTEX_PLAINS,
+        				ModBiomes.GREEN_CRYSTEX_PLAINS,
+        				ModBiomes.DARK_CRYSTEX_PLAINS
+        		);
+        List<Biome> rareList = Lists.newArrayList(/*ModBiomes.BAMBOO_FOREST*/);
         this.biomeProvider = new CustomBiomeProvider(this.world, spawnList, commonList, rareList);
     }
 	

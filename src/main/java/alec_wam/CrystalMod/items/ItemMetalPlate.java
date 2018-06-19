@@ -1,6 +1,7 @@
 package alec_wam.CrystalMod.items;
 
 import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.util.IEnumMeta;
 import alec_wam.CrystalMod.blocks.ICustomModel;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
@@ -25,14 +26,14 @@ public class ItemMetalPlate extends Item implements ICustomModel {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public boolean hasEffect(ItemStack stack){
-		return stack.getItemDamage() !=PlateType.DARK_IRON.getMetadata();
+		return stack.getItemDamage() !=PlateType.DARK_IRON.getMeta();
 	}
 	
 	@Override
 	@SideOnly(Side.CLIENT)
     public void initModel() {
         for(PlateType type : PlateType.values()){
-        	 ModelLoader.setCustomModelResourceLocation(this, type.getMetadata(), new ModelResourceLocation(getRegistryName(), type.getUnlocalizedName()));
+        	 ModelLoader.setCustomModelResourceLocation(this, type.getMeta(), new ModelResourceLocation(getRegistryName(), type.getUnlocalizedName()));
         }
     }
 	
@@ -53,7 +54,7 @@ public class ItemMetalPlate extends Item implements ICustomModel {
         }
     }
 	
-	public static enum PlateType implements IStringSerializable, IEnumMetaItem
+	public static enum PlateType implements IStringSerializable, IEnumMeta
     {
         BLUE(0, "blue"),
         RED(1, "red"),
@@ -73,7 +74,7 @@ public class ItemMetalPlate extends Item implements ICustomModel {
         }
 
         @Override
-		public int getMetadata()
+		public int getMeta()
         {
             return this.metadata;
         }
@@ -109,7 +110,7 @@ public class ItemMetalPlate extends Item implements ICustomModel {
         {
             for (PlateType type : values())
             {
-                METADATA_LOOKUP[type.getMetadata()] = type;
+                METADATA_LOOKUP[type.getMeta()] = type;
             }
         }
     }

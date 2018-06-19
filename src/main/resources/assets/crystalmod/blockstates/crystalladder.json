@@ -11,7 +11,7 @@
 			"east": { "y": 90 },
 			"west": { "y": 270 }
 		},
-        "variant": {
+        "color": {
 			"blue": {
 				"model": "crystalmod:ladder",
 				"textures": {

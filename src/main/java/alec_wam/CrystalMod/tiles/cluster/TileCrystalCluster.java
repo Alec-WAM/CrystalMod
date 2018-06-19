@@ -11,9 +11,9 @@ import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.IMessageHandler;
 import alec_wam.CrystalMod.network.packets.PacketTileMessage;
 import alec_wam.CrystalMod.tiles.TileEntityMod;
-import alec_wam.CrystalMod.tiles.cluster.BlockCrystalCluster.EnumClusterType;
 import alec_wam.CrystalMod.tiles.machine.IFacingTile;
 import alec_wam.CrystalMod.util.BlockUtil;
+import alec_wam.CrystalMod.util.CrystalColors;
 import alec_wam.CrystalMod.util.TimeUtil;
 import alec_wam.CrystalMod.util.data.watchable.WatchableInteger;
 import net.minecraft.nbt.NBTTagCompound;
@@ -200,7 +200,7 @@ public class TileCrystalCluster extends TileEntityMod implements IMessageHandler
 		return facing.getIndex();
 	}
 	
-	public static void createRandomCluster(World world, Random rand, BlockPos pos, EnumClusterType type, int minPower, int maxPower, int minRegen, int maxRegen, boolean randomHealth){
+	public static void createRandomCluster(World world, Random rand, BlockPos pos, CrystalColors.Basic type, int minPower, int maxPower, int minRegen, int maxRegen, boolean randomHealth){
 		//Randomized based on seed. If the world has the same seed it will generate the same clusters.
 		world.setBlockState(pos, ModBlocks.crystalCluster.getStateFromMeta(type.getMeta()), 3);
 		TileEntity tile = world.getTileEntity(pos);

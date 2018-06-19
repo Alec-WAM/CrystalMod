@@ -53,7 +53,7 @@ public class CrystexiumSpikeStructure extends StructureComponentTemplate {
 	public boolean addComponentParts(World worldIn, Random randomIn, StructureBoundingBox structureBoundingBoxIn) {
 		if(templatePosition == null || worldIn == null || template == null)return false;
 		
-		ModLogger.info("Placing "+type+" Spike at "+templatePosition+" Size: "+size);
+		//ModLogger.info("Placing "+type+" Spike at "+templatePosition+" Size: "+size);
 		
 		this.placeSettings.setBoundingBox(structureBoundingBoxIn);
 		this.template.addBlocksToWorld(worldIn, this.templatePosition, new ITemplateProcessor(){

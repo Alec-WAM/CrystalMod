@@ -5,7 +5,7 @@ import java.util.Random;
 import javax.annotation.Nonnull;
 
 import alec_wam.CrystalMod.CrystalMod;
-import alec_wam.CrystalMod.blocks.EnumBlock.IEnumMeta;
+import alec_wam.CrystalMod.util.IEnumMeta;
 import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.world.WorldGenBambooTree;
 import net.minecraft.block.BlockSapling;

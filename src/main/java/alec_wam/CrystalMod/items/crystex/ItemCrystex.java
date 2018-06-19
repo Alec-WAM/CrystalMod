@@ -1,10 +1,10 @@
 package alec_wam.CrystalMod.items.crystex;
 
 import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.util.IEnumMeta;
 import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.capability.ExtendedPlayer;
 import alec_wam.CrystalMod.capability.ExtendedPlayerProvider;
-import alec_wam.CrystalMod.items.IEnumMetaItem;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
@@ -40,7 +40,7 @@ public class ItemCrystex extends Item implements ICustomModel {
 	@SideOnly(Side.CLIENT)
     public void initModel() {
         for(CrystexItemType type : CrystexItemType.values()){
-        	 ModelLoader.setCustomModelResourceLocation(this, type.getMetadata(), new ModelResourceLocation(getRegistryName(), type.getUnlocalizedName()));
+        	 ModelLoader.setCustomModelResourceLocation(this, type.getMeta(), new ModelResourceLocation(getRegistryName(), type.getUnlocalizedName()));
         }
     }
 	
@@ -66,7 +66,7 @@ public class ItemCrystex extends Item implements ICustomModel {
     {
 		ItemStack stack = player.getHeldItem(hand);
 		if(ItemStackTools.isValid(stack)){
-			if(stack.getMetadata() == CrystexItemType.CRYSTHERIUM_UTILIA_NORMAL.getMetadata()){
+			if(stack.getMetadata() == CrystexItemType.CRYSTHERIUM_UTILIA_NORMAL.getMeta()){
 				ExtendedPlayer ePlayer = ExtendedPlayerProvider.getExtendedPlayer(player);
 				if(ePlayer !=null){
 					if(ePlayer.getIntellectTime() <= 0){
@@ -88,7 +88,7 @@ public class ItemCrystex extends Item implements ICustomModel {
 		return EnumActionResult.PASS;
     }
 	
-	public static enum CrystexItemType implements IStringSerializable, IEnumMetaItem
+	public static enum CrystexItemType implements IStringSerializable, IEnumMeta
     {
         CRYSTEXUS(0, "crystexus"),
         CRYSTEXIUM_ESSENCE(1, "crystexium_essence"),
@@ -120,7 +120,7 @@ public class ItemCrystex extends Item implements ICustomModel {
         }
 
         @Override
-		public int getMetadata()
+		public int getMeta()
         {
             return this.metadata;
         }
@@ -156,7 +156,7 @@ public class ItemCrystex extends Item implements ICustomModel {
         {
             for (CrystexItemType type : values())
             {
-                METADATA_LOOKUP[type.getMetadata()] = type;
+                METADATA_LOOKUP[type.getMeta()] = type;
             }
         }
     }

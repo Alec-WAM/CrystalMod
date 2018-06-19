@@ -2,7 +2,6 @@ package alec_wam.CrystalMod.tiles.cluster;
 
 import java.text.DecimalFormat;
 import java.util.List;
-import java.util.Locale;
 
 import javax.annotation.Nullable;
 
@@ -15,6 +14,7 @@ import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.proxy.ClientProxy;
 import alec_wam.CrystalMod.tiles.cluster.TileCrystalCluster.ClusterData;
 import alec_wam.CrystalMod.util.BlockUtil;
+import alec_wam.CrystalMod.util.CrystalColors;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.Lang;
@@ -22,7 +22,6 @@ import alec_wam.CrystalMod.util.TimeUtil;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
@@ -35,7 +34,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -45,32 +43,10 @@ import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class BlockCrystalCluster extends EnumBlock<BlockCrystalCluster.EnumClusterType> implements ITileEntityProvider, ICustomModel {
-
-	public static enum EnumClusterType implements IStringSerializable, alec_wam.CrystalMod.blocks.EnumBlock.IEnumMeta{
-		BLUE, RED, GREEN, DARK;
-
-		final int meta;
-		
-		EnumClusterType(){
-			meta = ordinal();
-		}
-		
-		@Override
-		public int getMeta() {
-			return meta;
-		}
-
-		@Override
-		public String getName() {
-			return this.toString().toLowerCase(Locale.US);
-		}
-		
-	}
-	public static final PropertyEnum<EnumClusterType> TYPE = PropertyEnum.<EnumClusterType>create("type", EnumClusterType.class);
+public class BlockCrystalCluster extends EnumBlock<CrystalColors.Basic> implements ITileEntityProvider, ICustomModel {
 
 	public BlockCrystalCluster() {
-		super(Material.GLASS, TYPE, EnumClusterType.class);
+		super(Material.GLASS, CrystalColors.COLOR_BASIC, CrystalColors.Basic.class);
 		setCreativeTab(CrystalMod.tabBlocks);
 		setHardness(3.0f);
         setResistance(5.0f);
@@ -81,7 +57,7 @@ public class BlockCrystalCluster extends EnumBlock<BlockCrystalCluster.EnumClust
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void initModel(){
-		for(EnumClusterType type : EnumClusterType.values()){
+		for(CrystalColors.Basic type : CrystalColors.Basic.values()){
 			ModBlocks.initBasicModel(this, type.getMeta());
 		}
 		RenderTileCrystalCluster renderer = new RenderTileCrystalCluster();
@@ -92,7 +68,7 @@ public class BlockCrystalCluster extends EnumBlock<BlockCrystalCluster.EnumClust
 	@Override
 	@SideOnly(Side.CLIENT)
     public void getSubBlocks(Item item, CreativeTabs tab, NonNullList<ItemStack> list){
-		for(EnumClusterType type : EnumClusterType.values()){
+		for(CrystalColors.Basic type : CrystalColors.Basic.values()){
 			ItemStack stack = createCluster(new ClusterData(22, 1), TimeUtil.MINECRAFT_DAY_TICKS);
 			stack.setItemDamage(type.getMeta());
 			list.add(stack);

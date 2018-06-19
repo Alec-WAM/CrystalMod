@@ -2,7 +2,7 @@ package alec_wam.CrystalMod.tiles.machine.specialengines;
 
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.EnumBlock;
-import alec_wam.CrystalMod.blocks.EnumBlock.IEnumMeta;
+import alec_wam.CrystalMod.util.IEnumMeta;
 import alec_wam.CrystalMod.blocks.ICustomModel;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;

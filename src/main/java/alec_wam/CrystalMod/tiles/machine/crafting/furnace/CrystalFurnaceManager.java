@@ -54,12 +54,12 @@ public class CrystalFurnaceManager {
 		ItemStack crystexiumBlockDark = new ItemStack(ModBlocks.darkCrystexiumBlock, 1, CrystexiumBlockType.NORMAL.getMeta());
 		ItemStack crystexiumBlockPure = new ItemStack(ModBlocks.pureCrystexiumBlock, 1, CrystexiumBlockType.NORMAL.getMeta());
 		
-		ItemStack crystexiumEssence = new ItemStack(ModItems.crystexItems, 1, CrystexItemType.CRYSTEXIUM_ESSENCE.getMetadata());
-		ItemStack crystexiumEssenceBlue = new ItemStack(ModItems.crystexItems, 1, CrystexItemType.CRYSTEXIUM_ESSENCE_BLUE.getMetadata());
-		ItemStack crystexiumEssenceRed = new ItemStack(ModItems.crystexItems, 1, CrystexItemType.CRYSTEXIUM_ESSENCE_RED.getMetadata());
-		ItemStack crystexiumEssenceGreen = new ItemStack(ModItems.crystexItems, 1, CrystexItemType.CRYSTEXIUM_ESSENCE_GREEN.getMetadata());
-		ItemStack crystexiumEssenceDark = new ItemStack(ModItems.crystexItems, 1, CrystexItemType.CRYSTEXIUM_ESSENCE_DARK.getMetadata());
-		ItemStack crystexiumEssencePure = new ItemStack(ModItems.crystexItems, 1, CrystexItemType.CRYSTEXIUM_ESSENCE_PURE.getMetadata());
+		ItemStack crystexiumEssence = new ItemStack(ModItems.crystexItems, 1, CrystexItemType.CRYSTEXIUM_ESSENCE.getMeta());
+		ItemStack crystexiumEssenceBlue = new ItemStack(ModItems.crystexItems, 1, CrystexItemType.CRYSTEXIUM_ESSENCE_BLUE.getMeta());
+		ItemStack crystexiumEssenceRed = new ItemStack(ModItems.crystexItems, 1, CrystexItemType.CRYSTEXIUM_ESSENCE_RED.getMeta());
+		ItemStack crystexiumEssenceGreen = new ItemStack(ModItems.crystexItems, 1, CrystexItemType.CRYSTEXIUM_ESSENCE_GREEN.getMeta());
+		ItemStack crystexiumEssenceDark = new ItemStack(ModItems.crystexItems, 1, CrystexItemType.CRYSTEXIUM_ESSENCE_DARK.getMeta());
+		ItemStack crystexiumEssencePure = new ItemStack(ModItems.crystexItems, 1, CrystexItemType.CRYSTEXIUM_ESSENCE_PURE.getMeta());
 		
 		addRecipe(crystexiumBlock, crystexiumEssence, 1600);
 		addRecipe(crystexiumBlockBlue, crystexiumEssenceBlue, 1600);

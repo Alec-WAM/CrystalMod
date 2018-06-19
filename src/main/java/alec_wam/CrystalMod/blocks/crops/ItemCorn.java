@@ -1,9 +1,9 @@
 package alec_wam.CrystalMod.blocks.crops;
 
 import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.util.IEnumMeta;
 import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.blocks.ModBlocks;
-import alec_wam.CrystalMod.items.IEnumMetaItem;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import net.minecraft.block.SoundType;
@@ -38,7 +38,7 @@ public class ItemCorn extends Item implements ICustomModel {
 	@SideOnly(Side.CLIENT)
     public void initModel() {
         for(CornItemType type : CornItemType.values()){
-        	 ModelLoader.setCustomModelResourceLocation(this, type.getMetadata(), new ModelResourceLocation(getRegistryName(), type.getUnlocalizedName()));
+        	 ModelLoader.setCustomModelResourceLocation(this, type.getMeta(), new ModelResourceLocation(getRegistryName(), type.getUnlocalizedName()));
         }
     }
 	
@@ -63,7 +63,7 @@ public class ItemCorn extends Item implements ICustomModel {
 	public EnumActionResult onItemUse(EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
     {
 		ItemStack stack = playerIn.getHeldItem(hand);
-		if(ItemStackTools.isValid(stack) && stack.getMetadata() == CornItemType.KERNELS.getMetadata()){
+		if(ItemStackTools.isValid(stack) && stack.getMetadata() == CornItemType.KERNELS.getMeta()){
 			if(facing != EnumFacing.UP){
 				return EnumActionResult.PASS; 
 			}
@@ -84,7 +84,7 @@ public class ItemCorn extends Item implements ICustomModel {
         return EnumActionResult.PASS;
     }
 	
-	public static enum CornItemType implements IStringSerializable, IEnumMetaItem
+	public static enum CornItemType implements IStringSerializable, IEnumMeta
     {
         KERNELS(0, "kernels"),
         CORN(1, "corn");
@@ -100,7 +100,7 @@ public class ItemCorn extends Item implements ICustomModel {
         }
 
         @Override
-		public int getMetadata()
+		public int getMeta()
         {
             return this.metadata;
         }
@@ -136,7 +136,7 @@ public class ItemCorn extends Item implements ICustomModel {
         {
             for (CornItemType type : values())
             {
-                METADATA_LOOKUP[type.getMetadata()] = type;
+                METADATA_LOOKUP[type.getMeta()] = type;
             }
         }
     }

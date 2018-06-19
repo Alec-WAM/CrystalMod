@@ -199,7 +199,7 @@ public class BlockInfected extends EnumBlock<BlockInfected.InfectedBlockType> {
        }
     }
 	
-	public static enum InfectedBlockType implements IStringSerializable, alec_wam.CrystalMod.blocks.EnumBlock.IEnumMeta {
+	public static enum InfectedBlockType implements IStringSerializable, alec_wam.CrystalMod.util.IEnumMeta {
 		NORMAL, CHISLED, CASING, LEAVES;
 
 		final int meta;

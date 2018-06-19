@@ -51,8 +51,8 @@ public class CrystalCraftingManager
         			ItemStack stack = new ItemStack(ModItems.toolParts);
                 	ItemNBTHelper.setString(stack, "Type", part.getName()+(part.colored ? "_head" : ""));
         			ItemNBTHelper.setString(stack, "Color", color);
-        			ItemStack crystal = new ItemStack(ModItems.crystals, 1, color == "blue" ? CrystalType.BLUE.getMetadata() : color == "red" ? CrystalType.RED.getMetadata() : color == "green" ? CrystalType.GREEN.getMetadata() : color == "dark" ? CrystalType.DARK.getMetadata() : CrystalType.PURE.getMetadata());
-        			ItemStack ingot = new ItemStack(ModItems.ingots, 1, color == "blue" ? IngotType.BLUE.getMetadata() : color == "red" ? IngotType.RED.getMetadata() : color == "green" ? IngotType.GREEN.getMetadata() : color == "dark" ? IngotType.DARK.getMetadata() : IngotType.PURE.getMetadata());
+        			ItemStack crystal = new ItemStack(ModItems.crystals, 1, color == "blue" ? CrystalType.BLUE.getMeta() : color == "red" ? CrystalType.RED.getMeta() : color == "green" ? CrystalType.GREEN.getMeta() : color == "dark" ? CrystalType.DARK.getMeta() : CrystalType.PURE.getMeta());
+        			ItemStack ingot = new ItemStack(ModItems.ingots, 1, color == "blue" ? IngotType.BLUE.getMeta() : color == "red" ? IngotType.RED.getMeta() : color == "green" ? IngotType.GREEN.getMeta() : color == "dark" ? IngotType.DARK.getMeta() : IngotType.PURE.getMeta());
         			
         			
         			if(part == PartType.AXE)this.addRecipe(stack, new Object[] {"###","#X ", '#', ingot, 'X', crystal});
@@ -69,7 +69,7 @@ public class CrystalCraftingManager
         }
     	
     	for(String color : new String[]{"blue", "red", "green", "dark", "pure"}){
-			ItemStack ingot = new ItemStack(ModItems.ingots, 1, color == "blue" ? IngotType.BLUE.getMetadata() : color == "red" ? IngotType.RED.getMetadata() : color == "green" ? IngotType.GREEN.getMetadata() : color == "dark" ? IngotType.DARK.getMetadata() : IngotType.PURE.getMetadata());
+			ItemStack ingot = new ItemStack(ModItems.ingots, 1, color == "blue" ? IngotType.BLUE.getMeta() : color == "red" ? IngotType.RED.getMeta() : color == "green" ? IngotType.GREEN.getMeta() : color == "dark" ? IngotType.DARK.getMeta() : IngotType.PURE.getMeta());
 
     		ItemStack axeHead = new ItemStack(ModItems.toolParts);
         	ItemNBTHelper.setString(axeHead, "Type", PartType.AXE.getName()+("_head"));

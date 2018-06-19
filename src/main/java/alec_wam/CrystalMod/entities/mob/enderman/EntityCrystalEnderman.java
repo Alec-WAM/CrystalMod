@@ -63,7 +63,7 @@ public class EntityCrystalEnderman extends EntityEnderman {
 
         for (int k = 0; k < i; ++k)
         {
-        	int META = CrystalType.BLUE_SHARD.getMetadata() + getColor();
+        	int META = CrystalType.BLUE_SHARD.getMeta() + getColor();
             this.entityDropItem(new ItemStack(ModItems.crystals, 1, META), 0.0f);
         }
     }

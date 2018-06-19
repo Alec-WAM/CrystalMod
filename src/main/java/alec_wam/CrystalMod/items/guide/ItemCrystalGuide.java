@@ -3,11 +3,11 @@ package alec_wam.CrystalMod.items.guide;
 import java.util.List;
 
 import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.util.IEnumMeta;
 import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.capability.ExtendedPlayer;
 import alec_wam.CrystalMod.capability.ExtendedPlayerProvider;
 import alec_wam.CrystalMod.handler.GuiHandler;
-import alec_wam.CrystalMod.items.IEnumMetaItem;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.util.ModLogger;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -41,7 +41,7 @@ public class ItemCrystalGuide extends Item implements ICustomModel {
 	@SideOnly(Side.CLIENT)
     public void initModel() {
         for(GuideType type : GuideType.values()){
-        	 ModelLoader.setCustomModelResourceLocation(this, type.getMetadata(), new ModelResourceLocation(getRegistryName(), type.getUnlocalizedName()));
+        	 ModelLoader.setCustomModelResourceLocation(this, type.getMeta(), new ModelResourceLocation(getRegistryName(), type.getUnlocalizedName()));
         }
     }
 	
@@ -115,7 +115,7 @@ public class ItemCrystalGuide extends Item implements ICustomModel {
     {
     }
 	
-	public static enum GuideType implements IStringSerializable, IEnumMetaItem
+	public static enum GuideType implements IStringSerializable, IEnumMeta
     {
         CRYSTAL(0, "crystal"),
         ESTORAGE(1, "estorage");
@@ -131,7 +131,7 @@ public class ItemCrystalGuide extends Item implements ICustomModel {
         }
 
         @Override
-		public int getMetadata()
+		public int getMeta()
         {
             return this.metadata;
         }
@@ -167,7 +167,7 @@ public class ItemCrystalGuide extends Item implements ICustomModel {
         {
             for (GuideType type : values())
             {
-                METADATA_LOOKUP[type.getMetadata()] = type;
+                METADATA_LOOKUP[type.getMeta()] = type;
             }
         }
     }

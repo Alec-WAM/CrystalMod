@@ -2,8 +2,8 @@ package alec_wam.CrystalMod.crafting.recipes;
 
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.BlockCrystal.CrystalBlockType;
-import alec_wam.CrystalMod.blocks.BlockEtchedCrystal.EtchedCrystalBlockType;
 import alec_wam.CrystalMod.blocks.ModBlocks;
+import alec_wam.CrystalMod.util.CrystalColors;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import net.minecraft.block.Block;
@@ -78,7 +78,7 @@ public class ChisledBlockRecipe implements IRecipe {
         }
         if(inputStack.getMetadata() == CrystalBlockType.BLUE_CHISELED.getMeta()){
         	block = ModBlocks.crystalEtched;
-        	meta = EtchedCrystalBlockType.BLUE.getMeta();
+        	meta = CrystalColors.Special.BLUE.getMeta();
         }
         if(inputStack.getMetadata() == CrystalBlockType.RED.getMeta()){
         	block = ModBlocks.crystal;
@@ -86,7 +86,7 @@ public class ChisledBlockRecipe implements IRecipe {
         }
         if(inputStack.getMetadata() == CrystalBlockType.RED_CHISELED.getMeta()){
         	block = ModBlocks.crystalEtched;
-        	meta = EtchedCrystalBlockType.RED.getMeta();
+        	meta = CrystalColors.Special.RED.getMeta();
         }
         if(inputStack.getMetadata() == CrystalBlockType.GREEN.getMeta()){
         	block = ModBlocks.crystal;
@@ -94,7 +94,7 @@ public class ChisledBlockRecipe implements IRecipe {
         }
         if(inputStack.getMetadata() == CrystalBlockType.GREEN_CHISELED.getMeta()){
         	block = ModBlocks.crystalEtched;
-        	meta = EtchedCrystalBlockType.GREEN.getMeta();
+        	meta = CrystalColors.Special.GREEN.getMeta();
         }
         if(inputStack.getMetadata() == CrystalBlockType.DARK.getMeta()){
         	block = ModBlocks.crystal;
@@ -102,7 +102,7 @@ public class ChisledBlockRecipe implements IRecipe {
         }
         if(inputStack.getMetadata() == CrystalBlockType.DARK_CHISELED.getMeta()){
         	block = ModBlocks.crystalEtched;
-        	meta = EtchedCrystalBlockType.DARK.getMeta();
+        	meta = CrystalColors.Special.DARK.getMeta();
         }
         if(inputStack.getMetadata() == CrystalBlockType.PURE.getMeta()){
         	block = ModBlocks.crystal;
@@ -110,7 +110,7 @@ public class ChisledBlockRecipe implements IRecipe {
         }
         if(inputStack.getMetadata() == CrystalBlockType.PURE_CHISELED.getMeta()){
         	block = ModBlocks.crystalEtched;
-        	meta = EtchedCrystalBlockType.PURE.getMeta();
+        	meta = CrystalColors.Special.PURE.getMeta();
         }
         
         if(block !=null && meta > -1){

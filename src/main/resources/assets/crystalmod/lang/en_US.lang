@@ -99,6 +99,7 @@ item.crystalmod.crystexitem.crystherium_utilia_blue.name=Blue Crystherium Utilia
 item.crystalmod.crystexitem.crystherium_utilia_red.name=Red Crystherium Utilia
 item.crystalmod.crystexitem.crystherium_utilia_green.name=Green Crystherium Utilia
 item.crystalmod.crystexitem.crystherium_utilia_dark.name=Dark Crystherium Utilia
+item.crystalmod.cryniter.name=Cryniter
 
 item.crystalmod.toolparts.rod.name=Crystal Tool Rod
 item.crystalmod.toolparts.cover.name=Crystal Sword Hilt
@@ -885,11 +886,25 @@ tile.crystalmod.purecrystexiumblock.normal.name=Pure Crystexium Block
 tile.crystalmod.purecrystexiumblock.brick.name=Pure Crystexium Bricks
 tile.crystalmod.purecrystexiumblock.square_brick.name=Pure Crystexium Square Bricks
 
+tile.crystalmod.crystexportal.name=Crystex Portal
+
 tile.crystalmod.crystheriumplant.normal.name=Crystherium
 tile.crystalmod.crystheriumplant.blue.name=Blue Crystherium
 tile.crystalmod.crystheriumplant.red.name=Red Crystherium
 tile.crystalmod.crystheriumplant.green.name=Green Crystherium
 tile.crystalmod.crystheriumplant.dark.name=Dark Crystherium
+
+tile.crystalmod.crystexgrass.blue.name=Blue Crystex Grass
+tile.crystalmod.crystexgrass.red.name=Red Crystex Grass
+tile.crystalmod.crystexgrass.green.name=Green Crystex Grass
+tile.crystalmod.crystexgrass.dark.name=Dark Crystex Grass
+tile.crystalmod.crystexgrass.pure.name=Pure Crystex Grass
+
+tile.crystalmod.crystextallgrass.blue.name=Tall Blue Crystex Grass
+tile.crystalmod.crystextallgrass.red.name=Tall Red Crystex Grass
+tile.crystalmod.crystextallgrass.green.name=Tall Green Crystex Grass
+tile.crystalmod.crystextallgrass.dark.name=Tall Dark Crystex Grass
+tile.crystalmod.crystextallgrass.pure.name=Tall Pure Crystex Grass
 
 tile.doublePlant.rose.name=Red Rose Bush
 tile.crystalmod.rosebush.white.name=White Rose Bush

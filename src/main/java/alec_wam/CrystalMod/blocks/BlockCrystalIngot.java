@@ -25,7 +25,7 @@ public class BlockCrystalIngot extends EnumBlock<BlockCrystalIngot.CrystalIngotB
  		return true;
  	}
     
-	public static enum CrystalIngotBlockType implements IStringSerializable, alec_wam.CrystalMod.blocks.EnumBlock.IEnumMeta{
+	public static enum CrystalIngotBlockType implements IStringSerializable, alec_wam.CrystalMod.util.IEnumMeta{
 		BLUE, RED, GREEN, DARK, PURE, DARKIRON;
 
 		final int meta;

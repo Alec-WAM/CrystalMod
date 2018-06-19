@@ -12,8 +12,7 @@ import javax.annotation.Nonnull;
 
 import com.google.common.collect.Lists;
 
-import alec_wam.CrystalMod.blocks.EnumBlock.IEnumMeta;
-import alec_wam.CrystalMod.items.IEnumMetaItem;
+import alec_wam.CrystalMod.util.IEnumMeta;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.tiles.machine.worksite.InventorySided;
 import alec_wam.CrystalMod.tiles.pipes.item.GhostItemHelper;
@@ -1425,10 +1424,10 @@ public class ItemUtil {
 	}
 
 	/**Returns stacks that correspond to the provided IEnumMetaItem enum array**/
-	public static NonNullList<ItemStack> getItemSubtypes(Item obj, IEnumMetaItem... array){
+	public static NonNullList<ItemStack> getItemSubtypes(Item obj, IEnumMeta... array){
 		NonNullList<ItemStack> list = NonNullList.create();
-		for(IEnumMetaItem type : array){
-			list.add(new ItemStack(obj, 1, type.getMetadata()));
+		for(IEnumMeta type : array){
+			list.add(new ItemStack(obj, 1, type.getMeta()));
 		}
 		return list;
 	}

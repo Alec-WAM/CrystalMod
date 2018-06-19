@@ -24,8 +24,10 @@ import alec_wam.CrystalMod.blocks.crops.material.BlockMaterialCrop;
 import alec_wam.CrystalMod.blocks.crops.material.RenderTileMaterialCrop;
 import alec_wam.CrystalMod.blocks.crops.material.TileMaterialCrop;
 import alec_wam.CrystalMod.blocks.crystexium.BlockCrysidian;
+import alec_wam.CrystalMod.blocks.crystexium.BlockCrystexGrass;
 import alec_wam.CrystalMod.blocks.crystexium.BlockCrystexPortal;
 import alec_wam.CrystalMod.blocks.crystexium.BlockCrystheriumPlant;
+import alec_wam.CrystalMod.blocks.crystexium.BlockTallCrystexGrass;
 import alec_wam.CrystalMod.blocks.crystexium.CrystexiumBlock;
 import alec_wam.CrystalMod.blocks.crystexium.CrystexiumBlock.CrystexiumBlockType;
 import alec_wam.CrystalMod.blocks.crystexium.CrystexiumSlab;
@@ -233,6 +235,7 @@ import alec_wam.CrystalMod.tiles.xp.BlockXPTank;
 import alec_wam.CrystalMod.tiles.xp.RenderTileEntityXPTank;
 import alec_wam.CrystalMod.tiles.xp.TileEntityXPTank;
 import alec_wam.CrystalMod.tiles.xp.TileEntityXPVacuum;
+import alec_wam.CrystalMod.util.CrystalColors;
 import alec_wam.CrystalMod.util.ModLogger;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockStairs;
@@ -421,6 +424,8 @@ public class ModBlocks {
 	public static BlockCrysidian crysidian;
 	public static BlockCrystheriumPlant crystheriumPlant;
 	public static BlockCrystexPortal crystexPortal;
+	public static BlockCrystexGrass crystexGrass;
+	public static BlockTallCrystexGrass crystexTallGrass;
 	
 	public static BlockStairs crystexiumStairs;
 	public static BlockStairs blueCrystexiumStairs;
@@ -444,7 +449,7 @@ public class ModBlocks {
 
 		crystalGlassPane = new BlockCrystalGlassPane();
 		registerBlock(crystalGlassPane, new ItemBlockMeta(crystalGlassPane), "crystalglasspane");
-		ItemBlockMeta.setMappingProperty(crystalGlassPane, BlockCrystalGlass.TYPE);
+		ItemBlockMeta.setMappingProperty(crystalGlassPane, CrystalColors.COLOR_SPECIAL);
 
 		fancyGlowstone = registerEnumBlock(new BlockFancyGlowstone(), "fancyglowstone");
 		fancyObsidian = registerEnumBlock(new BlockFancyObsidian(), "fancyobsidian");
@@ -523,7 +528,7 @@ public class ModBlocks {
 
 		crystalLog = new BlockCrystalLog();
 		registerBlock(crystalLog, new ItemBlockMeta(crystalLog), "crystallog");
-		ItemBlockMeta.setMappingProperty(crystalLog, BlockCrystalLog.VARIANT);
+		ItemBlockMeta.setMappingProperty(crystalLog, CrystalColors.COLOR_BASIC);
 
 		crystalLeaves = new BlockCrystalLeaves();
 		registerBlock(crystalLeaves, new ItemBlockMeta(crystalLeaves) {
@@ -532,11 +537,11 @@ public class ModBlocks {
 				return m | 4;
 			}
 		}, "crystalleaves");
-		ItemBlockMeta.setMappingProperty(crystalLeaves, BlockCrystalLeaves.VARIANT);
+		ItemBlockMeta.setMappingProperty(crystalLeaves, CrystalColors.COLOR_BASIC);
 
 		crystalSapling = new BlockCrystalSapling();
 		registerBlock(crystalSapling, new ItemBlockMeta(crystalSapling), "crystalsapling");
-		ItemBlockMeta.setMappingProperty(crystalSapling, BlockCrystalSapling.VARIANT);
+		ItemBlockMeta.setMappingProperty(crystalSapling, CrystalColors.COLOR_BASIC);
 
 		crystalPlanks = registerEnumBlock(new BlockCrystalPlanks(), "crystalplanks");
 
@@ -947,6 +952,11 @@ public class ModBlocks {
 		crystheriumPlant = new BlockCrystheriumPlant();
 		registerBlock(crystheriumPlant, new ItemBlockCrystheriumPlant(crystheriumPlant), "crystheriumplant");
 		ItemBlockMeta.setMappingProperty(crystheriumPlant, BlockCrystheriumPlant.TYPE);
+		crystexGrass = new BlockCrystexGrass();
+		registerEnumBlock(crystexGrass, "crystexgrass");
+		crystexTallGrass = new BlockTallCrystexGrass();
+		registerBlock(crystexTallGrass, new ItemBlockMeta(crystexTallGrass), "crystextallgrass");
+		ItemBlockMeta.setMappingProperty(crystexTallGrass, CrystalColors.COLOR_SPECIAL);
 		
 		crystexiumStairs = new BlockCustomStairs(crystexiumBlock.getDefaultState().withProperty(CrystexiumBlock.TYPE, CrystexiumBlockType.BRICK));
 		registerBlock(crystexiumStairs, "crystexiumstairs");

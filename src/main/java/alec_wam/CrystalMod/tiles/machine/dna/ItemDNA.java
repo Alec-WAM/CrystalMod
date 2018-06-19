@@ -6,11 +6,11 @@ import java.util.UUID;
 import com.google.common.collect.Lists;
 
 import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.util.IEnumMeta;
 import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.capability.ExtendedPlayer;
 import alec_wam.CrystalMod.capability.ExtendedPlayerProvider;
 import alec_wam.CrystalMod.entities.disguise.DisguiseHandler;
-import alec_wam.CrystalMod.items.IEnumMetaItem;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.packets.PacketEntityMessage;
@@ -27,7 +27,6 @@ import net.minecraft.entity.passive.AbstractHorse;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -58,7 +57,7 @@ public class ItemDNA extends Item implements ICustomModel {
 	@SideOnly(Side.CLIENT)
     public void initModel() {
         for(DNAItemType type : DNAItemType.values()){
-        	 ModelLoader.setCustomModelResourceLocation(this, type.getMetadata(), new ModelResourceLocation(getRegistryName(), type.getUnlocalizedName()));
+        	 ModelLoader.setCustomModelResourceLocation(this, type.getMeta(), new ModelResourceLocation(getRegistryName(), type.getUnlocalizedName()));
         }
     }
 	
@@ -75,7 +74,7 @@ public class ItemDNA extends Item implements ICustomModel {
     {
         for (int i = 0; i < DNAItemType.values().length; ++i)
         {
-        	if(i == DNAItemType.SAMPLE_FULL.getMetadata() || i == DNAItemType.FILLED_SYRINGE.getMetadata()){
+        	if(i == DNAItemType.SAMPLE_FULL.getMeta() || i == DNAItemType.FILLED_SYRINGE.getMeta()){
         		for(UUID uuid : new UUID[]{PlayerUtil.Alec_WAM, PlayerUtil.AH9902}){
         			ItemStack stack = new ItemStack(itemIn, 1, i);
         			PlayerDNA.savePlayerDNA(stack, uuid);
@@ -90,19 +89,19 @@ public class ItemDNA extends Item implements ICustomModel {
 	@SideOnly(Side.CLIENT)
 	public boolean hasEffect(ItemStack stack)
 	{
-		return stack.getMetadata() == DNAItemType.CURE.getMetadata();
+		return stack.getMetadata() == DNAItemType.CURE.getMeta();
 	}
 	
 	@Override
 	public int getItemStackLimit(ItemStack stack)
     {
-		if(stack.getMetadata() == DNAItemType.EMPTY_SYRINGE.getMetadata() || stack.getMetadata() == DNAItemType.FILLED_SYRINGE.getMetadata()){
+		if(stack.getMetadata() == DNAItemType.EMPTY_SYRINGE.getMeta() || stack.getMetadata() == DNAItemType.FILLED_SYRINGE.getMeta()){
 			return 16;
 		}
-		if(stack.getMetadata() == DNAItemType.SAMPLE_EMPTY.getMetadata()){
+		if(stack.getMetadata() == DNAItemType.SAMPLE_EMPTY.getMeta()){
 			return 64;
 		}
-		if(stack.getMetadata() == DNAItemType.SAMPLE_FULL.getMetadata()){
+		if(stack.getMetadata() == DNAItemType.SAMPLE_FULL.getMeta()){
 			return 1;
 		}
 		return super.getItemStackLimit(stack);
@@ -112,7 +111,7 @@ public class ItemDNA extends Item implements ICustomModel {
 	public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean advTooltips)
 	{
 		super.addInformation(stack, player, list, advTooltips);
-		if(stack.getMetadata() == DNAItemType.SAMPLE_FULL.getMetadata() || stack.getMetadata() == DNAItemType.FILLED_SYRINGE.getMetadata()){
+		if(stack.getMetadata() == DNAItemType.SAMPLE_FULL.getMeta() || stack.getMetadata() == DNAItemType.FILLED_SYRINGE.getMeta()){
 			if(PlayerDNA.loadPlayerDNA(stack) !=null){
 				UUID dna = PlayerDNA.loadPlayerDNA(stack);
 				String username = ProfileUtil.getUsername(dna);
@@ -132,7 +131,7 @@ public class ItemDNA extends Item implements ICustomModel {
 		//Grab DNA from a bed
 		UUID bedDNA = collectDNAFromBed(world, pos, player, stack);
 		if(bedDNA !=null){
-			ItemStack sample = new ItemStack(this, 1, DNAItemType.SAMPLE_FULL.getMetadata());
+			ItemStack sample = new ItemStack(this, 1, DNAItemType.SAMPLE_FULL.getMeta());
 			PlayerDNA.savePlayerDNA(sample, bedDNA);
 			if(ItemStackTools.getStackSize(stack) == 1){
 				player.setHeldItem(hand, sample);
@@ -152,7 +151,7 @@ public class ItemDNA extends Item implements ICustomModel {
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer player, EnumHand hand)
     {
 		ItemStack stack = player.getHeldItem(hand);
-		if(stack.getMetadata() == DNAItemType.CURE.getMetadata()){
+		if(stack.getMetadata() == DNAItemType.CURE.getMeta()){
 			ExtendedPlayer exPlayer = ExtendedPlayerProvider.getExtendedPlayer(player);
 			if(exPlayer !=null){
 				if(!worldIn.isRemote){
@@ -169,7 +168,7 @@ public class ItemDNA extends Item implements ICustomModel {
 				return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
 			}
 		}
-		if(stack.getMetadata() == DNAItemType.SAMPLE_EMPTY.getMetadata()){
+		if(stack.getMetadata() == DNAItemType.SAMPLE_EMPTY.getMeta()){
 			UUID playerDNA = null;
 			RayTraceResult ray = EntityUtil.getPlayerLookedObject(player);
 			if(ray !=null && ray.entityHit !=null){
@@ -190,7 +189,7 @@ public class ItemDNA extends Item implements ICustomModel {
 				}
 			}
 			if(playerDNA !=null){
-				ItemStack sample = new ItemStack(this, 1, DNAItemType.SAMPLE_FULL.getMetadata());
+				ItemStack sample = new ItemStack(this, 1, DNAItemType.SAMPLE_FULL.getMeta());
 				PlayerDNA.savePlayerDNA(sample, playerDNA);
 				if(ItemStackTools.getStackSize(stack) == 1){
 					player.setHeldItem(hand, sample);
@@ -205,7 +204,7 @@ public class ItemDNA extends Item implements ICustomModel {
 			}
 		}
 		
-		if(stack.getMetadata() == DNAItemType.EMPTY_SYRINGE.getMetadata()){
+		if(stack.getMetadata() == DNAItemType.EMPTY_SYRINGE.getMeta()){
 			ExtendedPlayer playerEx = ExtendedPlayerProvider.getExtendedPlayer(player);
 			if(playerEx !=null){
 				EnumHand otherHand = hand == EnumHand.MAIN_HAND ? EnumHand.OFF_HAND : EnumHand.MAIN_HAND;
@@ -227,7 +226,7 @@ public class ItemDNA extends Item implements ICustomModel {
 			}
 		}
 		
-		if(stack.getMetadata() == DNAItemType.FILLED_SYRINGE.getMetadata()){
+		if(stack.getMetadata() == DNAItemType.FILLED_SYRINGE.getMeta()){
 			UUID playerDNA = PlayerDNA.loadPlayerDNA(stack);
 			if(playerDNA !=null){
 				ExtendedPlayer playerEx = ExtendedPlayerProvider.getExtendedPlayer(player);
@@ -247,7 +246,7 @@ public class ItemDNA extends Item implements ICustomModel {
 						}
 						player.swingArm(hand);
 						if(!player.capabilities.isCreativeMode){
-							ItemStack empty = new ItemStack(ModItems.dnaItems, 1, DNAItemType.EMPTY_SYRINGE.getMetadata());
+							ItemStack empty = new ItemStack(ModItems.dnaItems, 1, DNAItemType.EMPTY_SYRINGE.getMeta());
 							if(ItemStackTools.getStackSize(stack) == 1){
 								player.setHeldItem(hand, empty);
 							}
@@ -274,7 +273,7 @@ public class ItemDNA extends Item implements ICustomModel {
 						}
 						player.swingArm(hand);
 						if(!player.capabilities.isCreativeMode){
-							ItemStack empty = new ItemStack(ModItems.dnaItems, 1, DNAItemType.EMPTY_SYRINGE.getMetadata());
+							ItemStack empty = new ItemStack(ModItems.dnaItems, 1, DNAItemType.EMPTY_SYRINGE.getMeta());
 							if(ItemStackTools.getStackSize(stack) == 1){
 								player.setHeldItem(hand, empty);
 							}
@@ -311,7 +310,7 @@ public class ItemDNA extends Item implements ICustomModel {
 		return null;
 	}
 	
-	public static enum DNAItemType implements IStringSerializable, IEnumMetaItem
+	public static enum DNAItemType implements IStringSerializable, IEnumMeta
     {
         SAMPLE_EMPTY(0, "sample_empty"),
         SAMPLE_FULL(1, "sample_full"),
@@ -330,7 +329,7 @@ public class ItemDNA extends Item implements ICustomModel {
         }
 
         @Override
-		public int getMetadata()
+		public int getMeta()
         {
             return this.metadata;
         }
@@ -366,7 +365,7 @@ public class ItemDNA extends Item implements ICustomModel {
         {
             for (DNAItemType type : values())
             {
-                METADATA_LOOKUP[type.getMetadata()] = type;
+                METADATA_LOOKUP[type.getMeta()] = type;
             }
         }
     }

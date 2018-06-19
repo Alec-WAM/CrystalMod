@@ -1,13 +1,11 @@
 package alec_wam.CrystalMod.tiles.machine.sap;
 
-import alec_wam.CrystalMod.blocks.BlockCrystalLog;
-import alec_wam.CrystalMod.blocks.BlockCrystalLog.WoodType;
 import alec_wam.CrystalMod.blocks.ModBlocks;
-import alec_wam.CrystalMod.items.ItemCrystalSap.SapType;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.packets.PacketTileMessage;
 import alec_wam.CrystalMod.tiles.machine.TileEntityMachine;
+import alec_wam.CrystalMod.util.CrystalColors;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.tool.TreeHarvestUtil;
@@ -25,7 +23,7 @@ public class TileSapExtractor extends TileEntityMachine {
 
 	private boolean validTree;
 	private int leafCount;
-	private WoodType treeType;
+	private CrystalColors.Basic treeType;
 	private boolean hasInitialized;
 	public TileSapExtractor() {
 		super("SapExtractor", 1);
@@ -60,7 +58,7 @@ public class TileSapExtractor extends TileEntityMachine {
 			if(data.isValid()){
 				this.validTree = true;
 				this.leafCount = data.getLeaves();
-				this.treeType = log.getValue(BlockCrystalLog.VARIANT);
+				this.treeType = log.getValue(CrystalColors.COLOR_BASIC);
 				if(!getWorld().isRemote){
 					NBTTagCompound nbt = new NBTTagCompound();
 					nbt.setInteger("Type", treeType.ordinal());
@@ -88,7 +86,7 @@ public class TileSapExtractor extends TileEntityMachine {
 			if(type < 0){
 				treeType = null;
 			} else {
-				treeType = WoodType.byMetadata(type);
+				treeType = CrystalColors.Basic.byMetadata(type);
 			}
 		}
 	}
@@ -101,16 +99,7 @@ public class TileSapExtractor extends TileEntityMachine {
 	@Override
 	public boolean canStart() {
 		if(treeType == null)return false;
-		ItemStack sap = new ItemStack(ModItems.crystalSap, 1, SapType.BLUE.getMetadata());
-		if(treeType == WoodType.RED){
-			sap.setItemDamage(SapType.RED.getMetadata());
-		}
-		if(treeType == WoodType.GREEN){
-			sap.setItemDamage(SapType.GREEN.getMetadata());
-		}
-		if(treeType == WoodType.DARK){
-			sap.setItemDamage(SapType.DARK.getMetadata());
-		}
+		ItemStack sap = new ItemStack(ModItems.crystalSap, 1, treeType.getMeta());
 		
 		boolean canFit = true;
 		if(ItemStackTools.isValid(getStackInSlot(0))){
@@ -135,16 +124,7 @@ public class TileSapExtractor extends TileEntityMachine {
 
 	@Override
 	public void processFinish() {
-		ItemStack sap = new ItemStack(ModItems.crystalSap, 1, SapType.BLUE.getMetadata());
-		if(treeType == WoodType.RED){
-			sap.setItemDamage(SapType.RED.getMetadata());
-		}
-		if(treeType == WoodType.GREEN){
-			sap.setItemDamage(SapType.GREEN.getMetadata());
-		}
-		if(treeType == WoodType.DARK){
-			sap.setItemDamage(SapType.DARK.getMetadata());
-		}
+		ItemStack sap = new ItemStack(ModItems.crystalSap, 1, treeType.getMeta());
 		
 		int chance = MathHelper.getInt(getWorld().rand, 20, 40);
 		
@@ -167,7 +147,7 @@ public class TileSapExtractor extends TileEntityMachine {
 		return new GuiSapExtractor(player, this);
 	}
 
-	public WoodType getTreeType() {
+	public CrystalColors.Basic getTreeType() {
 		return treeType;
 	}
 

@@ -16,7 +16,6 @@ import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemArrow;
 import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
@@ -90,7 +89,7 @@ public class ItemBlowGun extends Item implements ICustomModel {
             ItemStack ammo = player.getActiveHand() == EnumHand.MAIN_HAND ? player.getHeldItem(EnumHand.OFF_HAND) : player.getHeldItem(EnumHand.MAIN_HAND);
     		if(creativeAmmo || ItemStackTools.isValid(ammo)){
     			if(ItemStackTools.isEmpty(ammo)){
-    				ammo = new ItemStack(ModItems.dart, 1, DartType.BASIC.getMetadata());
+    				ammo = new ItemStack(ModItems.dart, 1, DartType.BASIC.getMeta());
     			}
     			int i = this.getMaxItemUseDuration(stack) - timeLeft;
     			if (i < 0) return;

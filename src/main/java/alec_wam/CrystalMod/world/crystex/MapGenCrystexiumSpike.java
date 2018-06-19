@@ -3,11 +3,15 @@ package alec_wam.CrystalMod.world.crystex;
 import java.util.Random;
 
 import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.util.CrystalColors;
+import alec_wam.CrystalMod.world.ModDimensions;
 import alec_wam.CrystalMod.world.crystex.CrystexiumSpikeStructure.SpikeType;
+import alec_wam.CrystalMod.world.crystex.biomes.ICrystexColorBiome;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.structure.MapGenStructure;
 import net.minecraft.world.gen.structure.StructureStart;
 
@@ -76,8 +80,16 @@ public class MapGenCrystexiumSpike extends MapGenStructure {
             	generatePos = generatePos.offset(EnumFacing.DOWN, 11);
             }
             SpikeType type = SpikeType.PLAIN;
-            int typeNum = MathHelper.getInt(random, 0, SpikeType.values().length-1);
-            type = SpikeType.values()[typeNum];
+            if(worldIn.provider.getDimension() == ModDimensions.CRYSTEX_ID){
+            	Biome biome = worldIn.getBiome(generatePos);
+            	if(biome instanceof ICrystexColorBiome){
+            		CrystalColors.Basic color = ((ICrystexColorBiome)biome).getColor();
+            		type = SpikeType.values()[1+color.getMeta()];
+            	}
+            } else {
+	            int typeNum = MathHelper.getInt(random, 0, SpikeType.values().length-1);
+	            type = SpikeType.values()[typeNum];
+            }
             int size = MathHelper.getInt(random, 0, 6);
             CrystexiumSpikeStructure temple = new CrystexiumSpikeStructure(worldIn.getSaveHandler().getStructureTemplateManager(), generatePos, type, size);
             this.components.add(temple);

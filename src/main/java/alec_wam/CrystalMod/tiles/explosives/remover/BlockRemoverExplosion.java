@@ -29,7 +29,7 @@ public class BlockRemoverExplosion extends EnumBlock<BlockRemoverExplosion.Remov
 		return new TileRemoverExplosion(RemovingType.values()[meta]);
 	}
 	
-	public static enum RemoverType implements IStringSerializable, alec_wam.CrystalMod.blocks.EnumBlock.IEnumMeta {
+	public static enum RemoverType implements IStringSerializable, alec_wam.CrystalMod.util.IEnumMeta {
 		REDSTONE, WATER, XP;
 
 		final int meta;

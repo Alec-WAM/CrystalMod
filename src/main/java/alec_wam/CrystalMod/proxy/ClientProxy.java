@@ -24,7 +24,6 @@ import alec_wam.CrystalMod.blocks.crops.bamboo.ItemWrappedFood.WrappedFoodType;
 import alec_wam.CrystalMod.blocks.crops.bamboo.ModelWrappedFood;
 import alec_wam.CrystalMod.blocks.crops.material.CropOverlays;
 import alec_wam.CrystalMod.blocks.crops.material.ModelSeed;
-import alec_wam.CrystalMod.blocks.glass.BlockCrystalGlass.GlassType;
 import alec_wam.CrystalMod.capability.LayerExtendedPlayerInventory;
 import alec_wam.CrystalMod.client.model.CustomBakedModel;
 import alec_wam.CrystalMod.client.model.CustomItemModelFactory;
@@ -51,10 +50,10 @@ import alec_wam.CrystalMod.tiles.pipes.estorage.panel.GuiPanel;
 import alec_wam.CrystalMod.tiles.pipes.estorage.storage.hdd.GuiHDDInterface;
 import alec_wam.CrystalMod.tiles.pipes.item.GhostItemHelper;
 import alec_wam.CrystalMod.tiles.pipes.render.BakedModelLoader;
+import alec_wam.CrystalMod.util.CrystalColors;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.Lang;
-import alec_wam.CrystalMod.util.ModLogger;
 import alec_wam.CrystalMod.util.StringUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -362,7 +361,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
         	event.getMap().registerSprite(new ResourceLocation("crystalmod:blocks/pipe/rfpower_square_"+i));
         }
         
-        for(GlassType type : GlassType.values()){
+        for(CrystalColors.Special type : CrystalColors.Special.values()){
         	event.getMap().registerSprite(new ResourceLocation("crystalmod:blocks/crystal_"+type.getName()+"_glass"));
         	event.getMap().registerSprite(new ResourceLocation("crystalmod:blocks/crystal_"+type.getName()+"_glass_tinted"));
         	event.getMap().registerSprite(new ResourceLocation("crystalmod:blocks/crystal_"+type.getName()+"_glass_painted"));

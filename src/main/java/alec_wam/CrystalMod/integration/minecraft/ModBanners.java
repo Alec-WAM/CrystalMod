@@ -12,7 +12,7 @@ public class ModBanners {
 	
 	public static void init() {
 		String crystal = "crystalmod_crystal";
-		addBanner(crystal, crystal, "cmcrystal", new ItemStack(ModItems.crystals, 1, CrystalType.BLUE.getMetadata()));
+		addBanner(crystal, crystal, "cmcrystal", new ItemStack(ModItems.crystals, 1, CrystalType.BLUE.getMeta()));
 		
 		String sword = "sword";
 		addBanner(sword, sword, "sword", new ItemStack(Items.STONE_SWORD));

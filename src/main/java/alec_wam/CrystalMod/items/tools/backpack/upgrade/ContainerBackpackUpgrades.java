@@ -103,7 +103,7 @@ public class ContainerBackpackUpgrades extends Container
     				ItemStack stack = slot.getStack();
     				if(ItemStackTools.isValid(stack)){
     					if(stack.getItem() instanceof ItemBackpackUpgrade){
-    						if(stack.getMetadata() == BackpackUpgrade.POCKETS.getMetadata()){
+    						if(stack.getMetadata() == BackpackUpgrade.POCKETS.getMeta()){
     							if(type instanceof IBackpackInventory){
     			    				InventoryBackpack inv = ((IBackpackInventory)type).getInventory(backpack);
     			    				if(inv !=null && inv instanceof NormalInventoryBackpack){

@@ -1,5 +1,6 @@
 package alec_wam.CrystalMod.items;
 import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.util.IEnumMeta;
 import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
@@ -35,7 +36,7 @@ public class ItemCursedBone extends Item implements ICustomModel {
 	@SideOnly(Side.CLIENT)
     public void initModel() {
         for(BoneType type : BoneType.values()){
-        	 ModelLoader.setCustomModelResourceLocation(this, type.getMetadata(), new ModelResourceLocation(getRegistryName(), type.getUnlocalizedName()));
+        	 ModelLoader.setCustomModelResourceLocation(this, type.getMeta(), new ModelResourceLocation(getRegistryName(), type.getUnlocalizedName()));
         }
     }
 	
@@ -60,7 +61,7 @@ public class ItemCursedBone extends Item implements ICustomModel {
 	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
     {
 		ItemStack stack = player.getHeldItem(hand);
-		if(ItemStackTools.isValid(stack) && stack.getMetadata() == BoneType.BONEMEAL.getMetadata()){
+		if(ItemStackTools.isValid(stack) && stack.getMetadata() == BoneType.BONEMEAL.getMeta()){
 			IBlockState state = world.getBlockState(pos);
 			if(state.getBlock() == Blocks.NETHER_WART){
 				int i = state.getValue(BlockNetherWart.AGE).intValue();
@@ -81,7 +82,7 @@ public class ItemCursedBone extends Item implements ICustomModel {
 		return EnumActionResult.PASS;
     }
 	
-	public static enum BoneType implements IStringSerializable, IEnumMetaItem
+	public static enum BoneType implements IStringSerializable, IEnumMeta
     {
         BONE(0, "bone"),
         BONEMEAL(1, "bonemeal");
@@ -97,7 +98,7 @@ public class ItemCursedBone extends Item implements ICustomModel {
         }
 
         @Override
-		public int getMetadata()
+		public int getMeta()
         {
             return this.metadata;
         }
@@ -133,7 +134,7 @@ public class ItemCursedBone extends Item implements ICustomModel {
         {
             for (BoneType type : values())
             {
-                METADATA_LOOKUP[type.getMetadata()] = type;
+                METADATA_LOOKUP[type.getMeta()] = type;
             }
         }
     }

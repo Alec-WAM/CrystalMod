@@ -1,7 +1,7 @@
 package alec_wam.CrystalMod.blocks;
 
 import alec_wam.CrystalMod.CrystalMod;
-import alec_wam.CrystalMod.blocks.EnumBlock.IEnumMeta;
+import alec_wam.CrystalMod.util.IEnumMeta;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -20,13 +20,6 @@ public class BlockCrystal extends EnumBlock<BlockCrystal.CrystalBlockType> {
 		this.setCreativeTab(CrystalMod.tabBlocks);
 		this.setHardness(2f);
 		this.setDefaultState(this.blockState.getBaseState().withProperty(TYPE, CrystalBlockType.BLUE));
-	}
-	
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void initModel() {
-		for(CrystalBlockType type : CrystalBlockType.values())
-	        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), type.getMeta(), new ModelResourceLocation(this.getRegistryName(), TYPE.getName()+"="+type.getName()));
 	}
     
     public static enum CrystalBlockType implements IStringSerializable, IEnumMeta {

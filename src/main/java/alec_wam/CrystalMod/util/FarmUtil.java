@@ -270,7 +270,7 @@ public class FarmUtil {
 		addClickableCrop(new ItemStack(ModBlocks.crystalPlant), 3);
 	    addClickableCrop(new ItemStack(ModBlocks.materialCrop), 1);
 	    addSeed(new ItemStack(ModItems.materialSeed));
-	    addSeed(new ItemStack(ModItems.corn, 1, CornItemType.KERNELS.getMetadata()));
+	    addSeed(new ItemStack(ModItems.corn, 1, CornItemType.KERNELS.getMeta()));
 	    addStackedCrop(Blocks.REEDS, OreDictionary.WILDCARD_VALUE);
 	    addStackedCrop(Blocks.CACTUS, OreDictionary.WILDCARD_VALUE);
 	    addStackedCrop(ModBlocks.crystalReedsBlue, OreDictionary.WILDCARD_VALUE);

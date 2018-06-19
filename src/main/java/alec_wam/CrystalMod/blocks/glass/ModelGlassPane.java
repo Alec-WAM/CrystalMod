@@ -10,8 +10,8 @@ import org.lwjgl.util.vector.Vector3f;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-import alec_wam.CrystalMod.blocks.glass.BlockCrystalGlass.GlassType;
 import alec_wam.CrystalMod.client.model.dynamic.DynamicItemAndBlockModel;
+import alec_wam.CrystalMod.util.CrystalColors;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.client.CustomModelUtil;
 import alec_wam.CrystalMod.util.client.RenderUtil;
@@ -32,11 +32,11 @@ import net.minecraft.world.World;
 
 public class ModelGlassPane extends DynamicItemAndBlockModel {
 
-	public static final ModelGlassPane INSTANCE = new ModelGlassPane(GlassType.BLUE);
+	public static final ModelGlassPane INSTANCE = new ModelGlassPane(CrystalColors.Special.BLUE);
 	private final GlassBlockState state;
 	private final ItemStack stack;
-	private final GlassType glassType;
-	public ModelGlassPane(GlassType glassType){
+	private final CrystalColors.Special glassType;
+	public ModelGlassPane(CrystalColors.Special glassType){
 		super(true, false);
 		state = null;
 		stack = null;
@@ -46,13 +46,13 @@ public class ModelGlassPane extends DynamicItemAndBlockModel {
 		super(false, true);
 		state = null;
 		this.stack = stack;
-		glassType = GlassType.values()[stack.getMetadata() % (GlassType.values().length)];
+		glassType = CrystalColors.Special.byMetadata(stack.getMetadata());
 	}
 	public ModelGlassPane(GlassBlockState state){
 		super(false, false);
 		this.state = state;
 		this.stack = ItemStackTools.getEmptyStack();
-		glassType = state.getValue(BlockCrystalGlass.TYPE);
+		glassType = state.getValue(CrystalColors.COLOR_SPECIAL);
 	}
 
 	@Override
@@ -63,11 +63,11 @@ public class ModelGlassPane extends DynamicItemAndBlockModel {
 	@Override
 	public List<BakedQuad> getGeneralQuads() {
 		List<BakedQuad> list = Lists.newArrayList();
-		GlassType type = GlassType.BLUE;
+		CrystalColors.Special type = CrystalColors.Special.BLUE;
 		if(ItemStackTools.isValid(stack)){
-			type = GlassType.values()[stack.getMetadata() % (GlassType.values().length)];
+			type = CrystalColors.Special.byMetadata(stack.getMetadata());
 		}else if(state !=null){
-			type = state.getValue(BlockCrystalGlass.TYPE);
+			type = state.getValue(CrystalColors.COLOR_SPECIAL);
 		}
 		TextureAtlasSprite sprite = getTexture(type);
 		float[] top = new float[] { 0.0f, 0.0f, 16.0f, 1.0f };
@@ -204,7 +204,7 @@ public class ModelGlassPane extends DynamicItemAndBlockModel {
 		return RenderUtil.getSprite("crystalmod:blocks/blank");
 	}
 	
-	public static TextureAtlasSprite getTexture(GlassType type){
+	public static TextureAtlasSprite getTexture(CrystalColors.Special type){
 		return RenderUtil.getSprite("crystalmod:blocks/crystal_"+type.getName()+"_glass");
 	}
 	
@@ -228,7 +228,7 @@ public class ModelGlassPane extends DynamicItemAndBlockModel {
 		return itemModels.get(stack.getMetadata());
 	}
 	
-	public static void addNSQuads(List<BakedQuad> list, GlassBlockState state, EnumFacing glassFace, GlassType type){
+	public static void addNSQuads(List<BakedQuad> list, GlassBlockState state, EnumFacing glassFace, CrystalColors.Special type){
 		BlockPos posU = state.pos.up();
 		BlockPos posD = state.pos.down();
 		IBlockState stateUp = state.blockAccess.getBlockState(posU);
@@ -438,7 +438,7 @@ public class ModelGlassPane extends DynamicItemAndBlockModel {
 		}
 	}
 	
-	public static void addEWQuads(List<BakedQuad> list, GlassBlockState state, EnumFacing glassFace, GlassType type){
+	public static void addEWQuads(List<BakedQuad> list, GlassBlockState state, EnumFacing glassFace, CrystalColors.Special type){
 		BlockPos posU = state.pos.up();
 		BlockPos posD = state.pos.down();
 		IBlockState stateUp = state.blockAccess.getBlockState(posU);

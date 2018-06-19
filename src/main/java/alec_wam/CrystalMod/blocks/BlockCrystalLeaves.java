@@ -6,11 +6,10 @@ import java.util.Random;
 import javax.annotation.Nullable;
 
 import alec_wam.CrystalMod.CrystalMod;
-import alec_wam.CrystalMod.blocks.BlockCrystalLog.WoodType;
+import alec_wam.CrystalMod.util.CrystalColors;
 import net.minecraft.block.BlockLeaves;
 import net.minecraft.block.BlockPlanks.EnumType;
 import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -30,8 +29,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockCrystalLeaves extends BlockLeaves implements ICustomModel
 {
-    public static final PropertyEnum<BlockCrystalLog.WoodType> VARIANT = PropertyEnum.<BlockCrystalLog.WoodType>create("variant", BlockCrystalLog.WoodType.class);
-
     public BlockCrystalLeaves()
     {
     	super();
@@ -44,7 +41,7 @@ public class BlockCrystalLeaves extends BlockLeaves implements ICustomModel
 	@SideOnly(Side.CLIENT)
 	public void initModel() {
     	ModelLoader.setCustomStateMapper(this, new LeaveBlockStateMapper());
-    	for(BlockCrystalLog.WoodType type : BlockCrystalLog.WoodType.values())
+    	for(CrystalColors.Basic type : CrystalColors.Basic.values())
 	        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), type.getMeta(), new ModelResourceLocation(this.getRegistryName(), (""+type).toLowerCase()));
 	}
     
@@ -59,7 +56,7 @@ public class BlockCrystalLeaves extends BlockLeaves implements ICustomModel
 		@Override
 		protected ModelResourceLocation getModelResourceLocation(IBlockState state)
 		{
-			WoodType type = state.getValue(VARIANT);
+			CrystalColors.Basic type = state.getValue(CrystalColors.COLOR_BASIC);
 			StringBuilder builder = new StringBuilder();
 			String nameOverride = null;
 			builder.append(type.getName());
@@ -103,7 +100,7 @@ public class BlockCrystalLeaves extends BlockLeaves implements ICustomModel
     @Override
     public void getSubBlocks(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> list)
     {
-    	for(BlockCrystalLog.WoodType type : BlockCrystalLog.WoodType.values()){
+    	for(CrystalColors.Basic type : CrystalColors.Basic.values()){
     		list.add(new ItemStack(itemIn, 1, type.getMeta()));
     	}
     }
@@ -111,7 +108,7 @@ public class BlockCrystalLeaves extends BlockLeaves implements ICustomModel
     @Override
     protected ItemStack getSilkTouchDrop(IBlockState state)
     {
-        return new ItemStack(Item.getItemFromBlock(this), 1, state.getValue(VARIANT).getMeta());
+        return new ItemStack(Item.getItemFromBlock(this), 1, state.getValue(CrystalColors.COLOR_BASIC).getMeta());
     }
 
     /**
@@ -121,7 +118,7 @@ public class BlockCrystalLeaves extends BlockLeaves implements ICustomModel
     public IBlockState getStateFromMeta(int meta)
     {
     	int type = meta % 4;
-        return this.getDefaultState().withProperty(VARIANT, BlockCrystalLog.WoodType.byMetadata(type)).withProperty(DECAYABLE, Boolean.valueOf((meta & 4) == 0)).withProperty(CHECK_DECAY, Boolean.valueOf((meta & 8) > 0));
+        return this.getDefaultState().withProperty(CrystalColors.COLOR_BASIC, CrystalColors.Basic.byMetadata(type)).withProperty(DECAYABLE, Boolean.valueOf((meta & 4) == 0)).withProperty(CHECK_DECAY, Boolean.valueOf((meta & 8) > 0));
     }
 
     /**
@@ -130,7 +127,7 @@ public class BlockCrystalLeaves extends BlockLeaves implements ICustomModel
     @Override
     public int getMetaFromState(IBlockState state)
     {
-        int i = state.getValue(VARIANT).getMeta();
+        int i = state.getValue(CrystalColors.COLOR_BASIC).getMeta();
 
         if (!state.getValue(DECAYABLE))
         {
@@ -148,7 +145,7 @@ public class BlockCrystalLeaves extends BlockLeaves implements ICustomModel
     @Override
     protected BlockStateContainer createBlockState()
     {
-        return new BlockStateContainer(this, new IProperty[] {VARIANT, CHECK_DECAY, DECAYABLE});
+        return new BlockStateContainer(this, new IProperty[] {CrystalColors.COLOR_BASIC, CHECK_DECAY, DECAYABLE});
     }
 
     /**
@@ -158,7 +155,7 @@ public class BlockCrystalLeaves extends BlockLeaves implements ICustomModel
     @Override
     public int damageDropped(IBlockState state)
     {
-        return state.getValue(VARIANT).getMeta();
+        return state.getValue(CrystalColors.COLOR_BASIC).getMeta();
     }
 
     @Override

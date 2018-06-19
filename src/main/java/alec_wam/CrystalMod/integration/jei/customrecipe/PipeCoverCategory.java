@@ -37,7 +37,7 @@ public class PipeCoverCategory extends BlankRecipeCategory<PipeCoverCategory.Cov
 	public static class CoverRecipeWrapper extends BlankRecipeWrapper {
 		protected final ItemStack coverStack;
 		protected final ItemStack coverBlock;
-		public static final ItemStack PLATE = new ItemStack(ModItems.plates, 1, PlateType.DARK_IRON.getMetadata());
+		public static final ItemStack PLATE = new ItemStack(ModItems.plates, 1, PlateType.DARK_IRON.getMeta());
 		public static final ItemStack SLIME = new ItemStack(Items.SLIME_BALL);
 		
 		public CoverRecipeWrapper(ItemStack cover) {

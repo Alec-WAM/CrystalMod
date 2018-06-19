@@ -1,5 +1,6 @@
 package alec_wam.CrystalMod.blocks;
 
+import alec_wam.CrystalMod.util.IEnumMeta;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
@@ -15,7 +16,7 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class EnumBlock<E extends Enum<E> & EnumBlock.IEnumMeta & IStringSerializable> extends Block implements ICustomModel {
+public class EnumBlock<E extends Enum<E> & IEnumMeta & IStringSerializable> extends Block implements ICustomModel {
   public final PropertyEnum<E> prop;
   private final E[] values;
 
@@ -76,9 +77,5 @@ public class EnumBlock<E extends Enum<E> & EnumBlock.IEnumMeta & IStringSerializ
   public void initModel() {
 	for(E type : values)
         ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), type.getMeta(), new ModelResourceLocation(this.getRegistryName(), prop.getName()+"="+type.getName()));
-  }
-
-  public static interface IEnumMeta {
-    int getMeta();
   }
 }

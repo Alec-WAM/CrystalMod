@@ -1,8 +1,8 @@
 package alec_wam.CrystalMod.tiles.machine.specialengines;
 
 import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.util.IEnumMeta;
 import alec_wam.CrystalMod.blocks.ICustomModel;
-import alec_wam.CrystalMod.items.IEnumMetaItem;
 import alec_wam.CrystalMod.items.ModItems;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
@@ -27,7 +27,7 @@ public class ItemEngineCore extends Item implements ICustomModel {
 	@SideOnly(Side.CLIENT)
     public void initModel() {
         for(EngineCoreType type : EngineCoreType.values()){
-        	 ModelLoader.setCustomModelResourceLocation(this, type.getMetadata(), new ModelResourceLocation(getRegistryName(), type.getUnlocalizedName()));
+        	 ModelLoader.setCustomModelResourceLocation(this, type.getMeta(), new ModelResourceLocation(getRegistryName(), type.getUnlocalizedName()));
         }
     }
 	
@@ -48,7 +48,7 @@ public class ItemEngineCore extends Item implements ICustomModel {
         }
     }
 
-	public static enum EngineCoreType implements IStringSerializable, IEnumMetaItem
+	public static enum EngineCoreType implements IStringSerializable, IEnumMeta
     {
         FINITE(0, "finite"),
         INFINITE(1, "infinite");
@@ -64,7 +64,7 @@ public class ItemEngineCore extends Item implements ICustomModel {
         }
 
         @Override
-		public int getMetadata()
+		public int getMeta()
         {
             return this.metadata;
         }
@@ -100,7 +100,7 @@ public class ItemEngineCore extends Item implements ICustomModel {
         {
             for (EngineCoreType type : values())
             {
-                METADATA_LOOKUP[type.getMetadata()] = type;
+                METADATA_LOOKUP[type.getMeta()] = type;
             }
         }
     }

@@ -2,8 +2,8 @@ package alec_wam.CrystalMod.blocks.crops.bamboo;
 
 import java.util.List;
 
+import alec_wam.CrystalMod.util.IEnumMeta;
 import alec_wam.CrystalMod.blocks.ICustomModel;
-import alec_wam.CrystalMod.items.IEnumMetaItem;
 import alec_wam.CrystalMod.items.ItemMiscFood.FoodType;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
@@ -143,7 +143,7 @@ public class ItemWrappedFood extends ItemFood implements ICustomModel {
 		return stack;
 	}
 	
-	public static enum WrappedFoodType implements IStringSerializable, IEnumMetaItem
+	public static enum WrappedFoodType implements IStringSerializable, IEnumMeta
     {
 		APPLE(Items.APPLE),
 		BEEF_RAW(Items.BEEF),
@@ -158,8 +158,8 @@ public class ItemWrappedFood extends ItemFood implements ICustomModel {
 		FISH_COOKED(Items.COOKED_FISH, FishType.COD.getMetadata()),
 		SALMON_RAW(Items.FISH, FishType.SALMON.getMetadata()),
 		SALMON_COOKED(Items.COOKED_FISH, FishType.SALMON.getMetadata()),
-		WHITEFISH_RAW(ModItems.miscFood, FoodType.WHITE_FISH_RAW.getMetadata()),
-		WHITEFISH_COOKED(ModItems.miscFood, FoodType.WHITE_FISH_COOKED.getMetadata()),
+		WHITEFISH_RAW(ModItems.miscFood, FoodType.WHITE_FISH_RAW.getMeta()),
+		WHITEFISH_COOKED(ModItems.miscFood, FoodType.WHITE_FISH_COOKED.getMeta()),
 		MELON(Items.MELON),
 		MUTTON_RAW(Items.MUTTON),
 		MUTTON_COOKED(Items.COOKED_MUTTON),
@@ -201,7 +201,7 @@ public class ItemWrappedFood extends ItemFood implements ICustomModel {
         }
 
         @Override
-		public int getMetadata()
+		public int getMeta()
         {
             return this.metadata;
         }
@@ -256,7 +256,7 @@ public class ItemWrappedFood extends ItemFood implements ICustomModel {
         {
             for (WrappedFoodType type : values())
             {
-                METADATA_LOOKUP[type.getMetadata()] = type;
+                METADATA_LOOKUP[type.getMeta()] = type;
             }
         }
     }

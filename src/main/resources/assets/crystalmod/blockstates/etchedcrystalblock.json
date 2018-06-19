@@ -3,7 +3,7 @@
   "variants": {
     "normal": [{}],
     "inventory": [{}],
-    "type": {
+    "color": {
       "blue": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/crystal_blue_etched"} },
 	  "red": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/crystal_red_etched"} },
 	  "green": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/crystal_green_etched"} },

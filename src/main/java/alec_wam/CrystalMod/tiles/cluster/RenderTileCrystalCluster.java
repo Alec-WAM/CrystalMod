@@ -8,8 +8,8 @@ import com.google.common.base.Function;
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.client.model.dynamic.DynamicBaseModel;
 import alec_wam.CrystalMod.client.model.dynamic.ICustomItemRenderer;
-import alec_wam.CrystalMod.tiles.cluster.BlockCrystalCluster.EnumClusterType;
 import alec_wam.CrystalMod.tiles.cluster.TileCrystalCluster.ClusterData;
+import alec_wam.CrystalMod.util.CrystalColors;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.TimeUtil;
@@ -72,14 +72,14 @@ public class RenderTileCrystalCluster extends TileEntitySpecialRenderer<TileCrys
     		GlStateManager.translate(1, -1, 0);
     	}
     	
-    	EnumClusterType type = te.getWorld().getBlockState(te.getPos()).getValue(BlockCrystalCluster.TYPE);
+    	CrystalColors.Basic type = te.getWorld().getBlockState(te.getPos()).getValue(CrystalColors.COLOR_BASIC);
 		Vector3d color = getColor(type);
 		
 		boolean debug = false;
 		if(debug){
 			GlStateManager.disableDepth();
 		}
-		renderCluster(te.getClusterData(), te.getHealth(), color, type !=EnumClusterType.DARK);
+		renderCluster(te.getClusterData(), te.getHealth(), color, type !=CrystalColors.Basic.DARK);
 		if(debug){
 			GlStateManager.enableDepth();
 		}
@@ -172,9 +172,9 @@ public class RenderTileCrystalCluster extends TileEntitySpecialRenderer<TileCrys
 				if(lastTransform == TransformType.FIXED){
 					GlStateManager.translate(0, -0.8, 0);
 				}
-				EnumClusterType type = EnumClusterType.values()[stack.getMetadata()];
+				CrystalColors.Basic type = CrystalColors.Basic.byMetadata(stack.getMetadata());
 				Vector3d color = getColor(type);
-				renderCluster(data, health, color, type !=EnumClusterType.DARK);
+				renderCluster(data, health, color, type !=CrystalColors.Basic.DARK);
 				GlStateManager.popMatrix();
 			}
 		}
@@ -193,7 +193,7 @@ public class RenderTileCrystalCluster extends TileEntitySpecialRenderer<TileCrys
 	public final Vector3d COLOR_GREEN = new Vector3d(0, 1, 0); 
 	public final Vector3d COLOR_DARK = new Vector3d(1, 1, 1); 
 
-	public Vector3d getColor(EnumClusterType type){
+	public Vector3d getColor(CrystalColors.Basic type){
 		switch(type){
 			default : case BLUE : return COLOR_BLUE;
 			case RED : return COLOR_RED;

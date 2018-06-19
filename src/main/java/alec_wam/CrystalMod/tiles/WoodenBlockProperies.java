@@ -1,6 +1,6 @@
 package alec_wam.CrystalMod.tiles;
 
-import alec_wam.CrystalMod.blocks.EnumBlock.IEnumMeta;
+import alec_wam.CrystalMod.util.IEnumMeta;
 import alec_wam.CrystalMod.util.client.RenderUtil;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;

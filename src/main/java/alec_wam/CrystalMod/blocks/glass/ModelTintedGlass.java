@@ -4,7 +4,7 @@ import java.util.Map;
 
 import com.google.common.collect.Maps;
 
-import alec_wam.CrystalMod.blocks.glass.BlockCrystalGlass.GlassType;
+import alec_wam.CrystalMod.util.CrystalColors;
 import alec_wam.CrystalMod.util.client.RenderUtil;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -15,9 +15,9 @@ import net.minecraft.world.World;
 
 public class ModelTintedGlass extends ModelGlass {
 	
-	public static final ModelTintedGlass INSTANCE = new ModelTintedGlass(GlassType.BLUE);
+	public static final ModelTintedGlass INSTANCE = new ModelTintedGlass(CrystalColors.Special.BLUE);
 	
-	public ModelTintedGlass(GlassType type){
+	public ModelTintedGlass(CrystalColors.Special type){
 		super(type);
 	}
 	
@@ -35,12 +35,12 @@ public class ModelTintedGlass extends ModelGlass {
 	}
 	
 	@Override
-	public TextureAtlasSprite getTexture(GlassType type){
+	public TextureAtlasSprite getTexture(CrystalColors.Special type){
 		return RenderUtil.getSprite("crystalmod:blocks/crystal_"+type.getName()+"_glass_tinted");
 	}
 	
 	@Override
-	public TextureAtlasSprite getCenterTexture(GlassType type){
+	public TextureAtlasSprite getCenterTexture(CrystalColors.Special type){
 		return RenderUtil.getSprite("crystalmod:blocks/crystal_"+type.getName()+"_glass_tinted");
 	}
 	

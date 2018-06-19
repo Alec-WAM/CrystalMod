@@ -2,9 +2,9 @@ package alec_wam.CrystalMod.tiles.machine.sap;
 
 import org.lwjgl.opengl.GL11;
 
-import alec_wam.CrystalMod.blocks.BlockCrystalLog.WoodType;
 import alec_wam.CrystalMod.client.util.ElementEnergy;
 import alec_wam.CrystalMod.client.util.GuiElementContainer;
+import alec_wam.CrystalMod.util.CrystalColors;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
@@ -42,22 +42,22 @@ public class GuiSapExtractor extends GuiElementContainer{
 		if(texture !=null){
 			bindTexture(texture);
 			
-			WoodType type = tileMachine.getTreeType();
+			CrystalColors.Basic type = tileMachine.getTreeType();
 			GlStateManager.pushMatrix();
 			if(type !=null){
 				float r = 1.0f;
 				float g = 1.0f;
 				float b = 1.0f;
-				if(type == WoodType.BLUE){
+				if(type == CrystalColors.Basic.BLUE){
 					r = 0.0f; g = 1.0f; b = 1.0f;
 				}
-				if(type == WoodType.RED){
+				if(type == CrystalColors.Basic.RED){
 					r = 1.0f; g = 0.0f; b = 0.0f;
 				}
-				if(type == WoodType.GREEN){
+				if(type == CrystalColors.Basic.GREEN){
 					r = 0.0f; g = 1.0f; b = 0.0f;
 				}
-				if(type == WoodType.DARK){
+				if(type == CrystalColors.Basic.DARK){
 					r = 0.0f; g = 0.0f; b = 0.0f;
 				}
 				GlStateManager.color(r, g, b, 1.0F);

@@ -4,9 +4,10 @@ import javax.annotation.Nonnull;
 
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.EnumBlock;
-import alec_wam.CrystalMod.blocks.EnumBlock.IEnumMeta;
+import alec_wam.CrystalMod.util.IEnumMeta;
 import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.proxy.ClientProxy;
+import alec_wam.CrystalMod.util.CrystalColors;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -28,9 +29,9 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class BlockCrystalGlass extends EnumBlock<BlockCrystalGlass.GlassType> implements ICustomModel {
+public class BlockCrystalGlass extends EnumBlock<CrystalColors.Special> implements ICustomModel {
     
-	public static final PropertyEnum<GlassType> TYPE = PropertyEnum.<GlassType>create("type", GlassType.class);
+	/*public static final PropertyEnum<GlassType> TYPE = PropertyEnum.<GlassType>create("type", GlassType.class);
 	public static enum GlassType implements IStringSerializable, IEnumMeta {
 			BLUE("blue"),
 			RED("red"),
@@ -55,7 +56,7 @@ public class BlockCrystalGlass extends EnumBlock<BlockCrystalGlass.GlassType> im
 		    public int getMeta() {
 		      return meta;
 		    }
-	}
+	}*/
 	
     // These are the properties used for determining whether or not a side is connected. They
     // do NOT take up block IDs, they are unlisted properties
@@ -68,7 +69,7 @@ public class BlockCrystalGlass extends EnumBlock<BlockCrystalGlass.GlassType> im
     
     public BlockCrystalGlass() {
         
-      super(Material.GLASS, TYPE, GlassType.class);
+      super(Material.GLASS, CrystalColors.COLOR_SPECIAL, CrystalColors.Special.class);
       
       this.setHardness(0.3f);
       setHarvestLevel("pickaxe", -1);
@@ -112,7 +113,7 @@ public class BlockCrystalGlass extends EnumBlock<BlockCrystalGlass.GlassType> im
     	ModelLoader.setCustomStateMapper(this, new GlassBlockStateMapper());
     	ModelResourceLocation inv = new ModelResourceLocation(this.getRegistryName(), "inventory");
     	ClientProxy.registerCustomModel(inv, ModelGlass.INSTANCE);
-		for(GlassType type : GlassType.values()){
+		for(CrystalColors.Special type : CrystalColors.Special.values()){
 	        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), type.getMeta(), inv);
 	        ClientProxy.registerCustomModel(new ModelResourceLocation(getRegistryName(), "type="+type.getName()), new ModelGlass(type));
 		}
@@ -139,7 +140,7 @@ public class BlockCrystalGlass extends EnumBlock<BlockCrystalGlass.GlassType> im
     @Nonnull
     @Override
     protected BlockStateContainer createBlockState() {
-    	return new BlockStateContainer(this, new IProperty[] { TYPE, CONNECTED_DOWN, CONNECTED_UP, CONNECTED_NORTH, CONNECTED_SOUTH, CONNECTED_WEST, CONNECTED_EAST });
+    	return new BlockStateContainer(this, new IProperty[] { CrystalColors.COLOR_SPECIAL, CONNECTED_DOWN, CONNECTED_UP, CONNECTED_NORTH, CONNECTED_SOUTH, CONNECTED_WEST, CONNECTED_EAST });
     }
     
     /**
@@ -165,8 +166,8 @@ public class BlockCrystalGlass extends EnumBlock<BlockCrystalGlass.GlassType> im
      */
     public boolean canConnect(@Nonnull IBlockState original, @Nonnull IBlockState connected) {
     	if(original.getBlock() == connected.getBlock()){
-    		GlassType typeO = original.getValue(TYPE);
-    		GlassType typeC = connected.getValue(TYPE);
+    		CrystalColors.Special typeO = original.getValue(CrystalColors.COLOR_SPECIAL);
+    		CrystalColors.Special typeC = connected.getValue(CrystalColors.COLOR_SPECIAL);
     		return typeO == typeC;
     	}
     	return false;
@@ -178,11 +179,11 @@ public class BlockCrystalGlass extends EnumBlock<BlockCrystalGlass.GlassType> im
 		protected ModelResourceLocation getModelResourceLocation(IBlockState state)
 		{
 			//BlockCrystalGlass block = (BlockCrystalGlass)state.getBlock();
-			GlassType type = state.getValue(TYPE);
+			CrystalColors.Special type = state.getValue(CrystalColors.COLOR_SPECIAL);
 			StringBuilder builder = new StringBuilder();
 			String nameOverride = null;
 			
-			builder.append(TYPE.getName());
+			builder.append(CrystalColors.COLOR_SPECIAL.getName());
 			builder.append("=");
 			builder.append(type);
 			

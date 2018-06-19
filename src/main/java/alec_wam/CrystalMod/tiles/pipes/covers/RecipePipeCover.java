@@ -45,7 +45,7 @@ public class RecipePipeCover implements IRecipe {
             }
             // otherwise.. input material
             else{
-            	if(slot.getItem() == ModItems.plates && slot.getMetadata() == PlateType.DARK_IRON.getMetadata() && !hasPlate){
+            	if(slot.getItem() == ModItems.plates && slot.getMetadata() == PlateType.DARK_IRON.getMeta() && !hasPlate){
             		hasPlate = true;
             	} 
             	else if(slot.getItem() == Items.SLIME_BALL && !hasSlime){
@@ -81,7 +81,7 @@ public class RecipePipeCover implements IRecipe {
             }
             // otherwise.. input material
             else{
-            	if(slot.getItem() == ModItems.plates && slot.getMetadata() == PlateType.DARK_IRON.getMetadata() && !hasPlate){
+            	if(slot.getItem() == ModItems.plates && slot.getMetadata() == PlateType.DARK_IRON.getMeta() && !hasPlate){
             		hasPlate = true;
             	} 
             	else if(slot.getItem() == Items.SLIME_BALL && !hasSlime){

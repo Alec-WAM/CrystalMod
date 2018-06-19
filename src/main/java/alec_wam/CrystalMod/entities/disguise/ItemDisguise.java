@@ -6,10 +6,10 @@ import java.util.UUID;
 import com.google.common.collect.Lists;
 
 import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.util.IEnumMeta;
 import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.capability.ExtendedPlayer;
 import alec_wam.CrystalMod.capability.ExtendedPlayerProvider;
-import alec_wam.CrystalMod.items.IEnumMetaItem;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.PlayerUtil;
@@ -47,7 +47,7 @@ public class ItemDisguise extends Item implements ICustomModel {
 	@SideOnly(Side.CLIENT)
     public void initModel() {
         for(EnumDisguiseType type : EnumDisguiseType.values()){
-        	 ModelLoader.setCustomModelResourceLocation(this, type.getMetadata(), new ModelResourceLocation(getRegistryName(), type.getName()));
+        	 ModelLoader.setCustomModelResourceLocation(this, type.getMeta(), new ModelResourceLocation(getRegistryName(), type.getName()));
         }
     }
 	
@@ -254,12 +254,12 @@ public class ItemDisguise extends Item implements ICustomModel {
 		return null;
 	}
 	
-	public static enum EnumDisguiseType implements IStringSerializable, IEnumMetaItem
+	public static enum EnumDisguiseType implements IStringSerializable, IEnumMeta
     {
 		EMPTY, PLAYER, MINI;
 
 		@Override
-		public int getMetadata() {
+		public int getMeta() {
 			return ordinal();
 		}
 

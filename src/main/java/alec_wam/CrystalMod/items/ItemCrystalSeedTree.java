@@ -1,10 +1,9 @@
 package alec_wam.CrystalMod.items;
 
 import alec_wam.CrystalMod.CrystalMod;
-import alec_wam.CrystalMod.blocks.BlockCrystalLog;
-import alec_wam.CrystalMod.blocks.BlockCrystalLog.WoodType;
 import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.blocks.crops.BlockCrystalPlant.PlantType;
+import alec_wam.CrystalMod.util.CrystalColors;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
@@ -58,7 +57,7 @@ public class ItemCrystalSeedTree extends Item implements net.minecraftforge.comm
     	}
     }
     
-    public static IBlockState getPlant(WoodType type){
+    public static IBlockState getPlant(CrystalColors.Basic type){
     	switch(type){
 	    	 default : case BLUE : {
 	    		 return ModBlocks.crystalTreePlantBlue.getDefaultState();
@@ -95,11 +94,11 @@ public class ItemCrystalSeedTree extends Item implements net.minecraftforge.comm
         Block block = iblockstate.getBlock();
         if (block == ModBlocks.crystalLog)
         {
-        	WoodType wood = iblockstate.getValue(BlockCrystalLog.VARIANT);
-        	if(wood == WoodType.BLUE && TYPE !=PlantType.BLUE)return EnumActionResult.PASS;
-        	if(wood == WoodType.RED && TYPE !=PlantType.RED)return EnumActionResult.PASS;
-        	if(wood == WoodType.GREEN && TYPE !=PlantType.GREEN)return EnumActionResult.PASS;
-        	if(wood == WoodType.DARK && TYPE !=PlantType.DARK)return EnumActionResult.PASS;
+        	CrystalColors.Basic wood = iblockstate.getValue(CrystalColors.COLOR_BASIC);
+        	if(wood == CrystalColors.Basic.BLUE && TYPE !=PlantType.BLUE)return EnumActionResult.PASS;
+        	if(wood == CrystalColors.Basic.RED && TYPE !=PlantType.RED)return EnumActionResult.PASS;
+        	if(wood == CrystalColors.Basic.GREEN && TYPE !=PlantType.GREEN)return EnumActionResult.PASS;
+        	if(wood == CrystalColors.Basic.DARK && TYPE !=PlantType.DARK)return EnumActionResult.PASS;
             pos = pos.offset(side);
 
             if (worldIn.isAirBlock(pos))

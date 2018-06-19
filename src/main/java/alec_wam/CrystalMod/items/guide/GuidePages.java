@@ -32,7 +32,6 @@ import alec_wam.CrystalMod.api.guide.TranslationHandler;
 import alec_wam.CrystalMod.blocks.BlockCompressed.CompressedBlockType;
 import alec_wam.CrystalMod.blocks.BlockCrystal.CrystalBlockType;
 import alec_wam.CrystalMod.blocks.BlockCrystalIngot.CrystalIngotBlockType;
-import alec_wam.CrystalMod.blocks.BlockCrystalLog;
 import alec_wam.CrystalMod.blocks.BlockCrystalOre.CrystalOreType;
 import alec_wam.CrystalMod.blocks.BlockDecorative.DecorativeBlockType;
 import alec_wam.CrystalMod.blocks.BlockFallingCompressed.FallingCompressedBlockType;
@@ -42,13 +41,11 @@ import alec_wam.CrystalMod.blocks.crops.material.ItemMaterialSeed;
 import alec_wam.CrystalMod.blocks.decorative.tiles.BlockBasicTiles.BasicTileType;
 import alec_wam.CrystalMod.blocks.decorative.tiles.BlockBasicTiles2.BasicTileType2;
 import alec_wam.CrystalMod.blocks.decorative.tiles.BlockCrystalTiles.CrystalTileType;
-import alec_wam.CrystalMod.blocks.glass.BlockCrystalGlass.GlassType;
 import alec_wam.CrystalMod.client.util.comp.GuiComponentBasicItemPage;
 import alec_wam.CrystalMod.client.util.comp.GuiComponentBook;
 import alec_wam.CrystalMod.client.util.comp.GuiComponentStandardRecipePage;
 import alec_wam.CrystalMod.entities.accessories.WolfAccessories.WolfArmor;
 import alec_wam.CrystalMod.items.ItemCrystal.CrystalType;
-import alec_wam.CrystalMod.items.ItemCrystalSap.SapType;
 import alec_wam.CrystalMod.items.ItemCursedBone.BoneType;
 import alec_wam.CrystalMod.items.ItemIngot.IngotType;
 import alec_wam.CrystalMod.items.ItemMetalPlate.PlateType;
@@ -66,7 +63,6 @@ import alec_wam.CrystalMod.tiles.WoodenBlockProperies.WoodType;
 import alec_wam.CrystalMod.tiles.cases.BlockCase.EnumCaseType;
 import alec_wam.CrystalMod.tiles.chest.CrystalChestType;
 import alec_wam.CrystalMod.tiles.chest.wireless.WirelessChestHelper;
-import alec_wam.CrystalMod.tiles.crate.BlockCrate.CrateType;
 import alec_wam.CrystalMod.tiles.explosives.remover.BlockRemoverExplosion.RemoverType;
 import alec_wam.CrystalMod.tiles.lamps.BlockAdvancedLamp.LampType;
 import alec_wam.CrystalMod.tiles.machine.BlockMachine;
@@ -79,7 +75,7 @@ import alec_wam.CrystalMod.tiles.machine.specialengines.ItemEngineCore.EngineCor
 import alec_wam.CrystalMod.tiles.pipes.BlockPipe.PipeType;
 import alec_wam.CrystalMod.tiles.spawner.ItemMobEssence;
 import alec_wam.CrystalMod.tiles.tank.BlockTank.TankType;
-import alec_wam.CrystalMod.tiles.workbench.BlockCrystalWorkbench.WorkbenchType;
+import alec_wam.CrystalMod.util.CrystalColors;
 import alec_wam.CrystalMod.util.FileInfo;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemUtil;
@@ -129,10 +125,10 @@ public class GuidePages {
 		NonNullList<ItemStack> ingotBlockList = ItemUtil.getBlockSubtypes(ModBlocks.crystalIngot, CrystalIngotBlockType.values());
 		CrystalModAPI.BLOCKS.registerChapter(new GuideChapter("crystalingotblock", new PageCrafting("main", ingotBlockList)).setDisplayObject(ingotBlockList));
 		
-		NonNullList<ItemStack> glassList = ItemUtil.getBlockSubtypes(ModBlocks.crystalGlass, GlassType.BLUE, GlassType.RED, GlassType.GREEN, GlassType.DARK);
-		NonNullList<ItemStack> paneList = ItemUtil.getBlockSubtypes(ModBlocks.crystalGlassPane, GlassType.BLUE, GlassType.RED, GlassType.GREEN, GlassType.DARK);
-		NonNullList<ItemStack> tintedList = ItemUtil.getBlockSubtypes(ModBlocks.crystalGlassTinted, GlassType.BLUE, GlassType.RED, GlassType.GREEN, GlassType.DARK);
-		NonNullList<ItemStack> paintedList = ItemUtil.getBlockSubtypes(ModBlocks.crystalGlassPainted, GlassType.BLUE, GlassType.RED, GlassType.GREEN, GlassType.DARK);
+		NonNullList<ItemStack> glassList = ItemUtil.getBlockSubtypes(ModBlocks.crystalGlass, CrystalColors.Special.BLUE, CrystalColors.Special.RED, CrystalColors.Special.GREEN, CrystalColors.Special.DARK);
+		NonNullList<ItemStack> paneList = ItemUtil.getBlockSubtypes(ModBlocks.crystalGlassPane, CrystalColors.Special.BLUE, CrystalColors.Special.RED, CrystalColors.Special.GREEN, CrystalColors.Special.DARK);
+		NonNullList<ItemStack> tintedList = ItemUtil.getBlockSubtypes(ModBlocks.crystalGlassTinted, CrystalColors.Special.BLUE, CrystalColors.Special.RED, CrystalColors.Special.GREEN, CrystalColors.Special.DARK);
+		NonNullList<ItemStack> paintedList = ItemUtil.getBlockSubtypes(ModBlocks.crystalGlassPainted, CrystalColors.Special.BLUE, CrystalColors.Special.RED, CrystalColors.Special.GREEN, CrystalColors.Special.DARK);
 
 		NonNullList<ItemStack> glassDisplayList = NonNullList.create();
 		glassDisplayList.addAll(glassList); glassDisplayList.addAll(paneList);
@@ -158,7 +154,7 @@ public class GuidePages {
 		tiles.addAll(ItemUtil.getBlockSubtypes(ModBlocks.tileCrystal, CrystalTileType.values()));
 		CrystalModAPI.BLOCKS.registerChapter(new GuideChapter("tiles", new PageCrafting("main", tiles)).setDisplayObject(tiles));
 		
-		NonNullList<ItemStack> workbenchList = ItemUtil.getBlockSubtypes(ModBlocks.crystalWorkbench, WorkbenchType.values());
+		NonNullList<ItemStack> workbenchList = ItemUtil.getBlockSubtypes(ModBlocks.crystalWorkbench, CrystalColors.Basic.values());
 		CrystalModAPI.BLOCKS.registerChapter(new GuideChapter("crystalworkbench", new PageCrafting("main", workbenchList)).setDisplayObject(workbenchList));
 		
 		ItemStack enhancementtable = new ItemStack(ModBlocks.enhancementTable);
@@ -216,8 +212,8 @@ public class GuidePages {
 		specialEngines.add(new ItemStack(ModBlocks.specialengine, 1, SpecialEngineType.INFINITE.getMeta()));
 		advEngines.addAll(specialEngines);		
 		NonNullList<ItemStack> enginecores = NonNullList.create();
-		enginecores.add(new ItemStack(ModItems.engineCore, 1, EngineCoreType.FINITE.getMetadata()));
-		enginecores.add(new ItemStack(ModItems.engineCore, 1, EngineCoreType.INFINITE.getMetadata()));
+		enginecores.add(new ItemStack(ModItems.engineCore, 1, EngineCoreType.FINITE.getMeta()));
+		enginecores.add(new ItemStack(ModItems.engineCore, 1, EngineCoreType.INFINITE.getMeta()));
 		advEngines.addAll(enginecores);
 		CrystalModAPI.BLOCKS.registerChapter(new GuideChapter("advancedengines", new PageCrafting("engines", specialEngines), new PageCrafting("cores", enginecores)).setDisplayObject(advEngines));
 		
@@ -246,18 +242,18 @@ public class GuidePages {
 		plantList.add(new ItemStack(ModItems.crystalSeedsDark));
 		CrystalModAPI.BLOCKS.registerChapter(new GuideChapter("crystalplant", new PageIcon("main", plantList)).setDisplayObject(plantList));
 		
-		NonNullList<ItemStack> listSaplings = ItemUtil.getBlockSubtypes(ModBlocks.crystalSapling, BlockCrystalLog.WoodType.values());
-		NonNullList<ItemStack> listLogs = ItemUtil.getBlockSubtypes(ModBlocks.crystalLog, BlockCrystalLog.WoodType.values());
+		NonNullList<ItemStack> listSaplings = ItemUtil.getBlockSubtypes(ModBlocks.crystalSapling, CrystalColors.Basic.values());
+		NonNullList<ItemStack> listLogs = ItemUtil.getBlockSubtypes(ModBlocks.crystalLog, CrystalColors.Basic.values());
 		NonNullList<ItemStack> treePlantList = NonNullList.create();
 		treePlantList.add(new ItemStack(ModItems.crystalTreeSeedsBlue));
 		treePlantList.add(new ItemStack(ModItems.crystalTreeSeedsRed));
 		treePlantList.add(new ItemStack(ModItems.crystalTreeSeedsGreen));
 		treePlantList.add(new ItemStack(ModItems.crystalTreeSeedsDark));
-		NonNullList<ItemStack> plankList = ItemUtil.getBlockSubtypes(ModBlocks.crystalPlanks, BlockCrystalLog.WoodType.values());
+		NonNullList<ItemStack> plankList = ItemUtil.getBlockSubtypes(ModBlocks.crystalPlanks, CrystalColors.Basic.values());
 		CrystalModAPI.BLOCKS.registerChapter(new GuideChapter("crystaltrees", new PageIcon("main", listSaplings), new PageIcon("logs", listLogs), new PageCrafting("planks", plankList), new PageIcon("treeplant", treePlantList)).setDisplayObject(listSaplings));
 
 		ItemStack sapExtractor = new ItemStack(ModBlocks.sapExtractor);
-		CrystalModAPI.BLOCKS.registerChapter(new GuideChapter("sap", new PageCrafting("extractor", sapExtractor), new PageIcon("sap", ItemUtil.getItemSubtypes(ModItems.crystalSap, SapType.values()))).setDisplayObject(sapExtractor));
+		CrystalModAPI.BLOCKS.registerChapter(new GuideChapter("sap", new PageCrafting("extractor", sapExtractor), new PageIcon("sap", ItemUtil.getItemSubtypes(ModItems.crystalSap, CrystalColors.Basic.values()))).setDisplayObject(sapExtractor));
 		
 		NonNullList<ItemStack> listTanks = ItemUtil.getBlockSubtypes(ModBlocks.crystalTank, TankType.BLUE, TankType.RED, TankType.GREEN, TankType.DARK);
 		CrystalModAPI.BLOCKS.registerChapter(new GuideChapter("crystaltank", new PageCrafting("main", listTanks)).setDisplayObject(listTanks));
@@ -317,7 +313,7 @@ public class GuidePages {
 		ItemStack entityhopper = new ItemStack(ModBlocks.entityHopper);
 		CrystalModAPI.BLOCKS.registerChapter(new GuideChapter("entityhopper", new PageCrafting("main", entityhopper), new PageText("types")).setDisplayObject(entityhopper));
 				
-		NonNullList<ItemStack> crates = ItemUtil.getBlockSubtypes(ModBlocks.crates, CrateType.values());
+		NonNullList<ItemStack> crates = ItemUtil.getBlockSubtypes(ModBlocks.crates, CrystalColors.Basic.values());
 		CrystalModAPI.BLOCKS.registerChapter(new GuideChapter("crate", new PageCrafting("main", crates)).setDisplayObject(crates));
 		
 		ItemStack jar = new ItemStack(ModBlocks.jar);
@@ -425,8 +421,8 @@ public class GuidePages {
 		}
 		CrystalModAPI.ITEMS.registerChapter(new GuideChapter("wolfarmor", new PageCrafting("main", wolfArmor)).setDisplayObject(wolfArmor));
 		
-		ItemStack cursedBone = new ItemStack(ModItems.cursedBone, 1, BoneType.BONE.getMetadata());
-		ItemStack cursedBonemeal = new ItemStack(ModItems.cursedBone, 1, BoneType.BONEMEAL.getMetadata());
+		ItemStack cursedBone = new ItemStack(ModItems.cursedBone, 1, BoneType.BONE.getMeta());
+		ItemStack cursedBonemeal = new ItemStack(ModItems.cursedBone, 1, BoneType.BONEMEAL.getMeta());
 		NonNullList<ItemStack> boneList = NonNullList.create();
 		boneList.add(cursedBone);
 		boneList.add(cursedBonemeal);

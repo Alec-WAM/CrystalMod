@@ -3,7 +3,7 @@
   "variants": {
     "normal": [{}],
     "inventory": [{}],
-	"type":{
+	"color":{
 		"blue":{"model": "crystalmod:crystalworkbench", "textures": {"side": "crystalmod:blocks/workbench_blue_side", "top": "crystalmod:blocks/workbench_blue_top", "down": "crystalmod:blocks/workbench_blue_bottum"}},
 		"red":{"model": "crystalmod:crystalworkbench", "textures": {"side": "crystalmod:blocks/workbench_red_side", "top": "crystalmod:blocks/workbench_red_top", "down": "crystalmod:blocks/workbench_red_bottum"}},
 		"green":{"model": "crystalmod:crystalworkbench", "textures": {"side": "crystalmod:blocks/workbench_green_side", "top": "crystalmod:blocks/workbench_green_top", "down": "crystalmod:blocks/workbench_green_bottum"}},

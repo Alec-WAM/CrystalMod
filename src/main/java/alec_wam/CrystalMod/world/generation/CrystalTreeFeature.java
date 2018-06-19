@@ -6,7 +6,7 @@ import java.util.Random;
 
 import alec_wam.CrystalMod.Config;
 import alec_wam.CrystalMod.api.world.IGenerationFeature;
-import alec_wam.CrystalMod.blocks.BlockCrystalLog.WoodType;
+import alec_wam.CrystalMod.util.CrystalColors;
 import alec_wam.CrystalMod.world.WorldGenCrystalTree;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -39,10 +39,7 @@ public class CrystalTreeFeature implements IGenerationFeature {
         if (BiomeDictionary.hasType(biome, BiomeDictionary.Type.FOREST) || biome instanceof BiomeForest) {
         	if(net.minecraftforge.event.terraingen.TerrainGen.decorate(world, random, bp, net.minecraftforge.event.terraingen.DecorateBiomeEvent.Decorate.EventType.TREE))
             {
-        		WoodType type = WoodType.BLUE;
-        		try{
-        			type = WoodType.byMetadata(MathHelper.getInt(random, 0, WoodType.values().length-1));
-        		} catch(Exception e){}
+        		CrystalColors.Basic type = CrystalColors.Basic.getRandom(random);
         		int size = MathHelper.getInt(random, 4, 6);
         		final boolean t = new WorldGenCrystalTree(false, size, type, random.nextInt(2) == 0).generate(world, random, bp);
         		return t;

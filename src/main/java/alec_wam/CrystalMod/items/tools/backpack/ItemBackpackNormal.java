@@ -1,7 +1,7 @@
 package alec_wam.CrystalMod.items.tools.backpack;
 
+import alec_wam.CrystalMod.util.IEnumMeta;
 import alec_wam.CrystalMod.blocks.ICustomModel;
-import alec_wam.CrystalMod.items.IEnumMetaItem;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -41,7 +41,7 @@ public class ItemBackpackNormal extends ItemBackpackBase implements ICustomModel
         }
     }
 	
-	public static enum CrystalBackpackType implements IStringSerializable, IEnumMetaItem
+	public static enum CrystalBackpackType implements IStringSerializable, IEnumMeta
     {
 		NORMAL(0, "normal"),
 		DARK_IRON(1, "darkiron"),
@@ -62,7 +62,7 @@ public class ItemBackpackNormal extends ItemBackpackBase implements ICustomModel
         }
 
         @Override
-		public int getMetadata()
+		public int getMeta()
         {
             return this.metadata;
         }
@@ -98,7 +98,7 @@ public class ItemBackpackNormal extends ItemBackpackBase implements ICustomModel
         {
             for (CrystalBackpackType type : values())
             {
-                METADATA_LOOKUP[type.getMetadata()] = type;
+                METADATA_LOOKUP[type.getMeta()] = type;
             }
         }
     }

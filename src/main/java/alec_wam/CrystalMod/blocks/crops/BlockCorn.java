@@ -259,7 +259,7 @@ public class BlockCorn extends Block implements net.minecraftforge.common.IPlant
 	@SideOnly(Side.CLIENT)
     public ItemStack getItem(World worldIn, BlockPos pos, IBlockState state)
     {
-    	return new ItemStack(ModItems.corn, 1, CornItemType.CORN.getMetadata());
+    	return new ItemStack(ModItems.corn, 1, CornItemType.CORN.getMeta());
     }
     
     @Override
@@ -275,10 +275,10 @@ public class BlockCorn extends Block implements net.minecraftforge.common.IPlant
 
             for (int k = 0; k < count; ++k)
             {
-                dropped.add(new ItemStack(ModItems.corn, 1, CornItemType.CORN.getMetadata()));
+                dropped.add(new ItemStack(ModItems.corn, 1, CornItemType.CORN.getMeta()));
             }
         } else {
-        	dropped.add(new ItemStack(ModItems.corn, 1, CornItemType.KERNELS.getMetadata()));
+        	dropped.add(new ItemStack(ModItems.corn, 1, CornItemType.KERNELS.getMeta()));
         }
     	return dropped;
     }

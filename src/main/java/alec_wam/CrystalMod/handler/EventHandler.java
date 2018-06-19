@@ -37,7 +37,6 @@ import alec_wam.CrystalMod.items.ItemCursedBone.BoneType;
 import alec_wam.CrystalMod.items.ItemMiscFood.FoodType;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.items.enchancements.ModEnhancements;
-import alec_wam.CrystalMod.items.enchancements.util.FireproofHandler;
 import alec_wam.CrystalMod.items.tools.ItemEnhancementKnowledge;
 import alec_wam.CrystalMod.items.tools.backpack.BackpackUtil;
 import alec_wam.CrystalMod.items.tools.backpack.IBackpack;
@@ -150,7 +149,6 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickBloc
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.BlockEvent.CreateFluidSourceEvent;
 import net.minecraftforge.event.world.ExplosionEvent;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.Event.Result;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -608,19 +606,19 @@ public class EventHandler {
         }
         
         if(Util.notNullAndInstanceOf(event.getEntityLiving(), EntityWither.class)){
-        	ItemStack stack = new ItemStack(ModItems.cursedBone, MathHelper.getInt(EntityUtil.rand, 10, 20), BoneType.BONE.getMetadata());
+        	ItemStack stack = new ItemStack(ModItems.cursedBone, MathHelper.getInt(EntityUtil.rand, 10, 20), BoneType.BONE.getMeta());
         	EntityItem item = new EntityItem(event.getEntity().getEntityWorld(), event.getEntity().posX, event.getEntity().posY, event.getEntity().posZ, stack);
         	event.getDrops().add(item);
         }
         
         if(Util.notNullAndInstanceOf(event.getEntityLiving(), EntityWitherSkeleton.class)){
-        	ItemStack stack = new ItemStack(ModItems.cursedBone, MathHelper.getInt(EntityUtil.rand, 1, 3), BoneType.BONE.getMetadata());
+        	ItemStack stack = new ItemStack(ModItems.cursedBone, MathHelper.getInt(EntityUtil.rand, 1, 3), BoneType.BONE.getMeta());
         	EntityItem item = new EntityItem(event.getEntity().getEntityWorld(), event.getEntity().posX, event.getEntity().posY, event.getEntity().posZ, stack);
         	event.getDrops().add(item);
         }
         
         if(Util.notNullAndInstanceOf(event.getEntityLiving(), EntityPolarBear.class) && EntityUtil.rand.nextInt(5) == 0){
-        	ItemStack stack = new ItemStack(ModItems.miscFood, MathHelper.getInt(EntityUtil.rand, 1, 3), FoodType.WHITE_FISH_RAW.getMetadata());
+        	ItemStack stack = new ItemStack(ModItems.miscFood, MathHelper.getInt(EntityUtil.rand, 1, 3), FoodType.WHITE_FISH_RAW.getMeta());
         	EntityItem item = new EntityItem(event.getEntity().getEntityWorld(), event.getEntity().posX, event.getEntity().posY, event.getEntity().posZ, stack);
         	event.getDrops().add(item);
         }
@@ -1194,7 +1192,7 @@ public class EventHandler {
     			new LootFunction(new LootCondition[]{conditionCold}){
 					@Override
 					public ItemStack apply(ItemStack stack, Random rand, LootContext context) {
-						return new ItemStack(ModItems.miscFood, 1, FoodType.WHITE_FISH_RAW.getMetadata());
+						return new ItemStack(ModItems.miscFood, 1, FoodType.WHITE_FISH_RAW.getMeta());
 					}    				
     			}
     	});
@@ -1300,7 +1298,7 @@ public class EventHandler {
 				if(ItemStackTools.isValid(stack) && stack.getItem() == Items.FISH && stack.getMetadata() == FishType.COD.getMetadata()){
 					if(Config.whiteFishRarity > 0 && Util.rand.nextInt(Config.whiteFishRarity) == 0){
 						//Go ahead and replace with whitefish
-						drops.add(new ItemStack(ModItems.miscFood, 1, FoodType.WHITE_FISH_RAW.getMetadata()));
+						drops.add(new ItemStack(ModItems.miscFood, 1, FoodType.WHITE_FISH_RAW.getMeta()));
 						editedList = true;
 						continue;
 					}

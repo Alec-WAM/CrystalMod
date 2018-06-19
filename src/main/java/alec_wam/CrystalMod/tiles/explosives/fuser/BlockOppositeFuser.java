@@ -113,7 +113,7 @@ public class BlockOppositeFuser extends BlockContainer implements ICustomModel {
 					return true;
 				}
 				if(held.getItem() == ModItems.crystals){
-					if(held.getMetadata() == CrystalType.PURE.getMetadata() && !fuser.hasPure){
+					if(held.getMetadata() == CrystalType.PURE.getMeta() && !fuser.hasPure){
 						//PURE
 						if(fuser.facingNS){
 							if(facing == EnumFacing.SOUTH){
@@ -139,7 +139,7 @@ public class BlockOppositeFuser extends BlockContainer implements ICustomModel {
 							}
 						}
 					}
-					if(held.getMetadata() == CrystalType.DARK.getMetadata() && !fuser.hasDark){
+					if(held.getMetadata() == CrystalType.DARK.getMeta() && !fuser.hasDark){
 						//DARK
 						if(fuser.facingNS){
 							if(facing == EnumFacing.NORTH){
@@ -189,10 +189,10 @@ public class BlockOppositeFuser extends BlockContainer implements ICustomModel {
 		if(tile !=null && tile instanceof TileOppositeFuser){
 			TileOppositeFuser fuser = (TileOppositeFuser)tile;
 			if(fuser.hasDark){
-				ItemUtil.spawnItemInWorldWithRandomMotion(world, new ItemStack(ModItems.crystals, 1, CrystalType.DARK.getMetadata()), pos);
+				ItemUtil.spawnItemInWorldWithRandomMotion(world, new ItemStack(ModItems.crystals, 1, CrystalType.DARK.getMeta()), pos);
 			}
 			if(fuser.hasPure){
-				ItemUtil.spawnItemInWorldWithRandomMotion(world, new ItemStack(ModItems.crystals, 1, CrystalType.PURE.getMetadata()), pos);
+				ItemUtil.spawnItemInWorldWithRandomMotion(world, new ItemStack(ModItems.crystals, 1, CrystalType.PURE.getMeta()), pos);
 			}
 		}
 		super.breakBlock(world, pos, blockState);

@@ -164,7 +164,7 @@ public class GuiBackpackNormal extends GuiContainer {
 	        BackpackUpgrade[] tabs = upgrades.getTabs();
 	        for(int t = 0; t < tabs.length+1; t++){
 	        	ItemStack stack = backpack;
-	        	if(t > 0)stack = new ItemStack(ModItems.backpackupgrade, 1, tabs[t-1].getMetadata());
+	        	if(t > 0)stack = new ItemStack(ModItems.backpackupgrade, 1, tabs[t-1].getMeta());
 	        	this.renderTab(t, tabStart, tabOffset, stack, t == 0);
 	        }
         }

@@ -10,8 +10,8 @@ import org.lwjgl.util.vector.Vector3f;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-import alec_wam.CrystalMod.blocks.glass.BlockCrystalGlass.GlassType;
 import alec_wam.CrystalMod.client.model.dynamic.DynamicItemAndBlockModel;
+import alec_wam.CrystalMod.util.CrystalColors;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.client.CustomModelUtil;
 import alec_wam.CrystalMod.util.client.RenderUtil;
@@ -31,11 +31,11 @@ import net.minecraft.world.World;
 
 public class ModelGlass extends DynamicItemAndBlockModel {
 
-	public static final ModelGlass INSTANCE = new ModelGlass(GlassType.BLUE);
+	public static final ModelGlass INSTANCE = new ModelGlass(CrystalColors.Special.BLUE);
 	private final GlassBlockState state;
 	private final ItemStack stack;
-	private final GlassType glassType;
-	public ModelGlass(GlassType type){
+	private final CrystalColors.Special glassType;
+	public ModelGlass(CrystalColors.Special type){
 		super(true, false);
 		state = null;
 		stack = null;
@@ -45,13 +45,13 @@ public class ModelGlass extends DynamicItemAndBlockModel {
 		super(false, true);
 		state = null;
 		this.stack = stack;
-		this.glassType = GlassType.values()[stack.getMetadata() % (GlassType.values().length)];
+		this.glassType = CrystalColors.Special.values()[stack.getMetadata() % (CrystalColors.Special.values().length)];
 	}
 	public ModelGlass(GlassBlockState state){
 		super(false, false);
 		this.state = state;
 		this.stack = ItemStackTools.getEmptyStack();
-		this.glassType = state.getValue(BlockCrystalGlass.TYPE);
+		this.glassType = state.getValue(CrystalColors.COLOR_SPECIAL);
 	}
 
 	@Override
@@ -68,12 +68,12 @@ public class ModelGlass extends DynamicItemAndBlockModel {
 		List<BakedQuad> list = Lists.newArrayList();
 		boolean renderUp = true, renderD = true, renderN = true, renderS = true, renderW = true, renderE = true;
 		ModelRotation rot = ModelRotation.X0_Y0;
-		GlassType type = glassType;
+		CrystalColors.Special type = glassType;
 		if(ItemStackTools.isValid(stack)){
-			type = GlassType.values()[stack.getMetadata() % (GlassType.values().length)];
+			type = CrystalColors.Special.values()[stack.getMetadata() % (CrystalColors.Special.values().length)];
 		}else if(state !=null){
 			
-			type = state.getValue(BlockCrystalGlass.TYPE);
+			type = state.getValue(CrystalColors.COLOR_SPECIAL);
 			renderUp = !state.getValue(BlockCrystalGlass.CONNECTED_UP);
 			renderD = !state.getValue(BlockCrystalGlass.CONNECTED_DOWN);
 			renderN = !state.getValue(BlockCrystalGlass.CONNECTED_NORTH);
@@ -864,11 +864,11 @@ public class ModelGlass extends DynamicItemAndBlockModel {
 		return RenderUtil.getSprite("crystalmod:blocks/blank");
 	}
 	
-	public TextureAtlasSprite getTexture(GlassType type){
+	public TextureAtlasSprite getTexture(CrystalColors.Special type){
 		return RenderUtil.getSprite("crystalmod:blocks/crystal_"+type.getName()+"_glass");
 	}
 
-	public TextureAtlasSprite getCenterTexture(GlassType type) {
+	public TextureAtlasSprite getCenterTexture(CrystalColors.Special type) {
 		return RenderUtil.getSprite("crystalmod:blocks/crystal_"+type.getName()+"_glass");
 	}
 	

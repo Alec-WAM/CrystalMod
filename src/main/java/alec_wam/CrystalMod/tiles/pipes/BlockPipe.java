@@ -72,7 +72,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockPipe extends EnumBlock<BlockPipe.PipeType> implements ICustomModel {
 
-	public static enum PipeType implements IStringSerializable, alec_wam.CrystalMod.blocks.EnumBlock.IEnumMeta{
+	public static enum PipeType implements IStringSerializable, alec_wam.CrystalMod.util.IEnumMeta{
 		ITEM(TileEntityPipeItem.class), FLUID(TileEntityPipeLiquid.class), ESTORAGE(TileEntityPipeEStorage.class), 
 		POWERCU(TileEntityPipePowerCU.class, true), POWERRF(TileEntityPipePowerRF.class, true);
 

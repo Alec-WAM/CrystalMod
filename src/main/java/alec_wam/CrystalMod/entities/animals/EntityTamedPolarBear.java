@@ -294,7 +294,7 @@ public class EntityTamedPolarBear extends EntityTameable implements IJumpingMoun
                 return true;
             }
         }
-        else if (itemstack.getItem() == ModItems.miscFood && itemstack.getMetadata() == FoodType.WHITE_FISH_RAW.getMetadata())
+        else if (itemstack.getItem() == ModItems.miscFood && itemstack.getMetadata() == FoodType.WHITE_FISH_RAW.getMeta())
         {
             if (!player.capabilities.isCreativeMode)
             {

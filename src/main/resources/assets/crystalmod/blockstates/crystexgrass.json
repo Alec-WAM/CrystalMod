@@ -1,0 +1,44 @@
+{
+  "forge_marker": 1,
+  "variants": {
+    "normal": [{}],
+    "inventory": [{}],
+    "color": {
+      "blue": { 
+		"model": "crystalmod:grass", 
+		"textures":{
+			"top": "crystalmod:blocks/crystexium/grass_blue_top",
+			"side": "crystalmod:blocks/crystexium/grass_blue_side"
+		} 
+	  },
+	  "red": { 
+		"model": "crystalmod:grass", 
+		"textures":{
+			"top": "crystalmod:blocks/crystexium/grass_red_top",
+			"side": "crystalmod:blocks/crystexium/grass_red_side"
+		} 
+	  },
+	  "green": { 
+		"model": "crystalmod:grass", 
+		"textures":{
+			"top": "crystalmod:blocks/crystexium/grass_green_top",
+			"side": "crystalmod:blocks/crystexium/grass_green_side"
+		} 
+	  },
+	  "dark": { 
+		"model": "crystalmod:grass", 
+		"textures":{
+			"top": "crystalmod:blocks/crystexium/grass_dark_top",
+			"side": "crystalmod:blocks/crystexium/grass_dark_side"
+		} 
+	  },
+	  "pure": { 
+		"model": "crystalmod:grass", 
+		"textures":{
+			"top": "crystalmod:blocks/crystexium/grass_pure_top",
+			"side": "crystalmod:blocks/crystexium/grass_pure_side"
+		} 
+	  }
+    }
+  }
+}

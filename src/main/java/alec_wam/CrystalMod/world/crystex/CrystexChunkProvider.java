@@ -5,6 +5,11 @@ import java.util.Random;
 
 import javax.annotation.Nullable;
 
+import alec_wam.CrystalMod.fluids.ModFluids;
+import alec_wam.CrystalMod.util.CrystalColors;
+import alec_wam.CrystalMod.world.crystex.biomes.ICrystexColorBiome;
+import alec_wam.CrystalMod.world.generation.WorldGenLakesFixed;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockFalling;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EnumCreatureType;
@@ -24,7 +29,6 @@ import net.minecraft.world.gen.MapGenCaves;
 import net.minecraft.world.gen.MapGenRavine;
 import net.minecraft.world.gen.NoiseGeneratorOctaves;
 import net.minecraft.world.gen.NoiseGeneratorPerlin;
-import net.minecraft.world.gen.feature.WorldGenLakes;
 
 public class CrystexChunkProvider implements IChunkGenerator
 {
@@ -357,13 +361,27 @@ public class CrystexChunkProvider implements IChunkGenerator
         net.minecraftforge.event.ForgeEventFactory.onChunkPopulate(true, this, this.world, this.rand, x, z, flag);
 
         boolean lakes = this.rand.nextInt(4) == 0;
+        boolean crystal_lakes = this.rand.nextInt(8) == 0;
         
         if (lakes && net.minecraftforge.event.terraingen.TerrainGen.populate(this, this.world, this.rand, x, z, flag, net.minecraftforge.event.terraingen.PopulateChunkEvent.Populate.EventType.LAKE))
         {
             int i1 = this.rand.nextInt(16) + 8;
             int j1 = this.rand.nextInt(256);
             int k1 = this.rand.nextInt(16) + 8;
-            (new WorldGenLakes(Blocks.WATER)).generate(this.world, this.rand, blockpos.add(i1, j1, k1));
+            (new WorldGenLakesFixed(Blocks.WATER)).generate(this.world, this.rand, blockpos.add(i1, j1, k1));
+        }
+        
+        if (crystal_lakes && biome instanceof ICrystexColorBiome && net.minecraftforge.event.terraingen.TerrainGen.populate(this, this.world, this.rand, x, z, flag, net.minecraftforge.event.terraingen.PopulateChunkEvent.Populate.EventType.LAKE))
+        {
+            int i1 = this.rand.nextInt(16) + 8;
+            int j1 = this.rand.nextInt(256);
+            int k1 = this.rand.nextInt(16) + 8;
+            CrystalColors.Basic color = ((ICrystexColorBiome)biome).getColor();
+            Block liquid = ModFluids.fluidBlueCrystal.getBlock();
+            if(color == CrystalColors.Basic.RED)liquid = ModFluids.fluidRedCrystal.getBlock();
+            if(color == CrystalColors.Basic.GREEN)liquid = ModFluids.fluidGreenCrystal.getBlock();
+            if(color == CrystalColors.Basic.DARK)liquid = ModFluids.fluidDarkCrystal.getBlock();
+            (new WorldGenLakesFixed(liquid)).generate(this.world, this.rand, blockpos.add(i1, j1, k1));
         }
 
         /*if (!flag && this.rand.nextInt(this.settings.lavaLakeChance / 10) == 0 && this.settings.useLavaLakes)

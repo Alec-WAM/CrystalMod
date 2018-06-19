@@ -55,7 +55,7 @@ public class TileEntityDNAMachine extends TileEntityMachine implements ISidedInv
 		ItemStack sample = getSampleStack();
 		UUID playerDNA = PlayerDNA.loadPlayerDNA(sample);
 		
-		final ItemStack output = new ItemStack(ModItems.dnaItems, 1, DNAItemType.FILLED_SYRINGE.getMetadata());
+		final ItemStack output = new ItemStack(ModItems.dnaItems, 1, DNAItemType.FILLED_SYRINGE.getMeta());
         PlayerDNA.savePlayerDNA(output, playerDNA);
         
         //Can we actually fit the syringe?
@@ -75,7 +75,7 @@ public class TileEntityDNAMachine extends TileEntityMachine implements ISidedInv
     
     protected boolean hasValidInput() {
     	ItemStack sample = getSampleStack();
-		if (ItemStackTools.isNullStack(sample) || !(sample.getItem() == ModItems.dnaItems && sample.getMetadata() == DNAItemType.SAMPLE_FULL.getMetadata())) {
+		if (ItemStackTools.isNullStack(sample) || !(sample.getItem() == ModItems.dnaItems && sample.getMetadata() == DNAItemType.SAMPLE_FULL.getMeta())) {
             return false;
         }
 		UUID playerDNA = PlayerDNA.loadPlayerDNA(sample);
@@ -84,7 +84,7 @@ public class TileEntityDNAMachine extends TileEntityMachine implements ISidedInv
 		}
 		//Do we have the empty syringes?
         ItemStack syringes = getEmptySyringes();
-        if (ItemStackTools.isNullStack(syringes) || !(syringes.getItem() == ModItems.dnaItems && syringes.getMetadata() == DNAItemType.EMPTY_SYRINGE.getMetadata())) {
+        if (ItemStackTools.isNullStack(syringes) || !(syringes.getItem() == ModItems.dnaItems && syringes.getMetadata() == DNAItemType.EMPTY_SYRINGE.getMeta())) {
             return false;
         }
         return true;
@@ -102,7 +102,7 @@ public class TileEntityDNAMachine extends TileEntityMachine implements ISidedInv
     	ItemStack sample = getSampleStack();
 		UUID playerDNA = PlayerDNA.loadPlayerDNA(sample);
 		
-		final ItemStack output = new ItemStack(ModItems.dnaItems, 1, DNAItemType.FILLED_SYRINGE.getMetadata());
+		final ItemStack output = new ItemStack(ModItems.dnaItems, 1, DNAItemType.FILLED_SYRINGE.getMeta());
         PlayerDNA.savePlayerDNA(output, playerDNA);
         
         //Can we actually fit the syringe?
@@ -119,13 +119,13 @@ public class TileEntityDNAMachine extends TileEntityMachine implements ISidedInv
     @Override
     public boolean isItemValidForSlot(int index, ItemStack stack) {
     	if(index == 0){
-			return stack.getItem() == ModItems.dnaItems && stack.getMetadata() == DNAItemType.SAMPLE_FULL.getMetadata();
+			return stack.getItem() == ModItems.dnaItems && stack.getMetadata() == DNAItemType.SAMPLE_FULL.getMeta();
 		}
     	if(index == 1){
-			return stack.getItem() == ModItems.dnaItems && stack.getMetadata() == DNAItemType.EMPTY_SYRINGE.getMetadata();
+			return stack.getItem() == ModItems.dnaItems && stack.getMetadata() == DNAItemType.EMPTY_SYRINGE.getMeta();
 		}
     	if(index == 2){
-			return stack.getItem() == ModItems.dnaItems && stack.getMetadata() == DNAItemType.FILLED_SYRINGE.getMetadata();
+			return stack.getItem() == ModItems.dnaItems && stack.getMetadata() == DNAItemType.FILLED_SYRINGE.getMeta();
 		}
     	return false;
 	}
@@ -133,10 +133,10 @@ public class TileEntityDNAMachine extends TileEntityMachine implements ISidedInv
 	@Override
 	public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction) {
 		if(direction == EnumFacing.UP){
-			return index == 0 && itemStackIn.getItem() == ModItems.dnaItems && itemStackIn.getMetadata() == DNAItemType.SAMPLE_FULL.getMetadata();
+			return index == 0 && itemStackIn.getItem() == ModItems.dnaItems && itemStackIn.getMetadata() == DNAItemType.SAMPLE_FULL.getMeta();
 		}
 		if(direction.getAxis().isHorizontal()){
-			return index == 1 && itemStackIn.getItem() == ModItems.dnaItems && itemStackIn.getMetadata() == DNAItemType.EMPTY_SYRINGE.getMetadata();
+			return index == 1 && itemStackIn.getItem() == ModItems.dnaItems && itemStackIn.getMetadata() == DNAItemType.EMPTY_SYRINGE.getMeta();
 		}
 		return false;
 	}

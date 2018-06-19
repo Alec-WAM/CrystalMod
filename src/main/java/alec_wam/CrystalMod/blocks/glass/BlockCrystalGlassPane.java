@@ -5,8 +5,8 @@ import javax.annotation.Nonnull;
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.blocks.glass.BlockCrystalGlass.GlassBlockStateMapper;
-import alec_wam.CrystalMod.blocks.glass.BlockCrystalGlass.GlassType;
 import alec_wam.CrystalMod.proxy.ClientProxy;
+import alec_wam.CrystalMod.util.CrystalColors;
 import net.minecraft.block.BlockPane;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -44,7 +44,7 @@ public class BlockCrystalGlassPane extends BlockPane implements ICustomModel {
 	@SideOnly(Side.CLIENT)
 	public void initModel() {
     	ModelLoader.setCustomStateMapper(this, new GlassBlockStateMapper());
-		for(GlassType type : GlassType.values()){
+		for(CrystalColors.Special type : CrystalColors.Special.values()){
 			 ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), type.getMeta(), new ModelResourceLocation(new ResourceLocation("crystalmod", getRegistryName().getResourcePath() + "_" + type.getName()), "inventory"));
 	        ClientProxy.registerCustomModel(new ModelResourceLocation(getRegistryName(), "type="+type.getName()), new ModelGlassPane(type));
 		}
@@ -57,7 +57,7 @@ public class BlockCrystalGlassPane extends BlockPane implements ICustomModel {
     @Override
 	public int damageDropped(IBlockState state)
     {
-        return state.getValue(BlockCrystalGlass.TYPE).getMeta();
+        return state.getValue(CrystalColors.COLOR_SPECIAL).getMeta();
     }
 
     /**
@@ -67,7 +67,7 @@ public class BlockCrystalGlassPane extends BlockPane implements ICustomModel {
     @Override
     public void getSubBlocks(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> list)
     {
-        for (int i = 0; i < GlassType.values().length; ++i)
+        for (int i = 0; i < CrystalColors.Special.values().length; ++i)
         {
             list.add(new ItemStack(itemIn, 1, i));
         }
@@ -91,7 +91,7 @@ public class BlockCrystalGlassPane extends BlockPane implements ICustomModel {
     @Override
 	public IBlockState getStateFromMeta(int meta)
     {
-        return this.getDefaultState().withProperty(BlockCrystalGlass.TYPE, GlassType.values()[meta % GlassType.values().length]);
+        return this.getDefaultState().withProperty(CrystalColors.COLOR_SPECIAL, CrystalColors.Special.byMetadata(meta));
     }
 
     /**
@@ -100,7 +100,7 @@ public class BlockCrystalGlassPane extends BlockPane implements ICustomModel {
     @Override
 	public int getMetaFromState(IBlockState state)
     {
-        return state.getValue(BlockCrystalGlass.TYPE).getMeta();
+        return state.getValue(CrystalColors.COLOR_SPECIAL).getMeta();
     }
 
     /**
@@ -144,7 +144,7 @@ public class BlockCrystalGlassPane extends BlockPane implements ICustomModel {
     @Override
 	protected BlockStateContainer createBlockState()
     {
-        return new BlockStateContainer(this, new IProperty[] {NORTH, EAST, WEST, SOUTH, BlockCrystalGlass.TYPE});
+        return new BlockStateContainer(this, new IProperty[] {NORTH, EAST, WEST, SOUTH, CrystalColors.COLOR_SPECIAL});
     }
     
     @Override
@@ -175,8 +175,8 @@ public class BlockCrystalGlassPane extends BlockPane implements ICustomModel {
      */
     public static boolean canConnect(@Nonnull IBlockState original, @Nonnull IBlockState connected) {
     	if(original.getBlock() == connected.getBlock()){
-    		GlassType typeO = original.getValue(BlockCrystalGlass.TYPE);
-    		GlassType typeC = connected.getValue(BlockCrystalGlass.TYPE);
+    		CrystalColors.Special typeO = original.getValue(CrystalColors.COLOR_SPECIAL);
+    		CrystalColors.Special typeC = connected.getValue(CrystalColors.COLOR_SPECIAL);
     		return typeO == typeC;
     	}
     	return false;

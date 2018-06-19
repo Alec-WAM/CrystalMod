@@ -2,7 +2,7 @@ package alec_wam.CrystalMod.blocks;
 
 import java.util.Locale;
 
-import alec_wam.CrystalMod.blocks.BlockCrystalLog.WoodType;
+import alec_wam.CrystalMod.util.CrystalColors;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
@@ -27,7 +27,7 @@ public class ItemBlockCrystalLadder extends ItemColored {
 	public String getUnlocalizedName(ItemStack stack) {
 		@SuppressWarnings("deprecation")
 		IBlockState state = block.getStateFromMeta(stack.getMetadata());
-		WoodType type = state.getValue(BlockCrystalLog.VARIANT);
+		CrystalColors.Basic type = state.getValue(CrystalColors.COLOR_BASIC);
 		String name = type.toString().toLowerCase(Locale.US);
 	    return super.getUnlocalizedName(stack) + "." + name;
 	}
@@ -48,7 +48,7 @@ public class ItemBlockCrystalLadder extends ItemColored {
         if (!itemstack.isEmpty() && player.canPlayerEdit(pos, facing, itemstack) && worldIn.mayPlace(this.block, pos, false, facing, (Entity)null))
         {
             int i = this.getMetadata(itemstack.getMetadata());
-            IBlockState iblockstate1 = this.block.getDefaultState().withProperty(BlockCrystalLog.VARIANT, WoodType.byMetadata(i));
+            IBlockState iblockstate1 = this.block.getDefaultState().withProperty(CrystalColors.COLOR_BASIC, CrystalColors.Basic.byMetadata(i));
 
             if (facing.getAxis().isHorizontal() && ((BlockCrystalLadder)this.block).canBlockStay(worldIn, pos, facing))
             {

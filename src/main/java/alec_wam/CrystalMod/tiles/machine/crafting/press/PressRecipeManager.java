@@ -48,12 +48,12 @@ public class PressRecipeManager {
 	
 	public static void initRecipes(){
 		final int defaultPower = 1600;
-		addRecipe(new ItemStack(ModItems.ingots, 1, IngotType.BLUE.getMetadata()), new ItemStack(ModItems.plates, 1, PlateType.BLUE.getMetadata()), defaultPower);
-		addRecipe(new ItemStack(ModItems.ingots, 1, IngotType.RED.getMetadata()), new ItemStack(ModItems.plates, 1, PlateType.RED.getMetadata()), defaultPower);
-		addRecipe(new ItemStack(ModItems.ingots, 1, IngotType.GREEN.getMetadata()), new ItemStack(ModItems.plates, 1, PlateType.GREEN.getMetadata()), defaultPower);
-		addRecipe(new ItemStack(ModItems.ingots, 1, IngotType.DARK.getMetadata()), new ItemStack(ModItems.plates, 1, PlateType.DARK.getMetadata()), defaultPower);
-		addRecipe(new ItemStack(ModItems.ingots, 1, IngotType.PURE.getMetadata()), new ItemStack(ModItems.plates, 1, PlateType.PURE.getMetadata()), defaultPower);
-		addRecipe(new ItemStack(ModItems.ingots, 1, IngotType.DARK_IRON.getMetadata()), new ItemStack(ModItems.plates, 1, PlateType.DARK_IRON.getMetadata()), defaultPower);
+		addRecipe(new ItemStack(ModItems.ingots, 1, IngotType.BLUE.getMeta()), new ItemStack(ModItems.plates, 1, PlateType.BLUE.getMeta()), defaultPower);
+		addRecipe(new ItemStack(ModItems.ingots, 1, IngotType.RED.getMeta()), new ItemStack(ModItems.plates, 1, PlateType.RED.getMeta()), defaultPower);
+		addRecipe(new ItemStack(ModItems.ingots, 1, IngotType.GREEN.getMeta()), new ItemStack(ModItems.plates, 1, PlateType.GREEN.getMeta()), defaultPower);
+		addRecipe(new ItemStack(ModItems.ingots, 1, IngotType.DARK.getMeta()), new ItemStack(ModItems.plates, 1, PlateType.DARK.getMeta()), defaultPower);
+		addRecipe(new ItemStack(ModItems.ingots, 1, IngotType.PURE.getMeta()), new ItemStack(ModItems.plates, 1, PlateType.PURE.getMeta()), defaultPower);
+		addRecipe(new ItemStack(ModItems.ingots, 1, IngotType.DARK_IRON.getMeta()), new ItemStack(ModItems.plates, 1, PlateType.DARK_IRON.getMeta()), defaultPower);
 		addRecipe(new ItemStack(Items.BLAZE_POWDER, 2, 0), new ItemStack(Items.BLAZE_ROD), defaultPower);
 	}
 

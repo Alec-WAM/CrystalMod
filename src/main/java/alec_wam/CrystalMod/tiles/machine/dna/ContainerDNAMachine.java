@@ -71,14 +71,14 @@ public class ContainerDNAMachine extends Container
 			}
 			else if (par2 != 37 && par2 != 36)/*not input*/
 			{
-				if (itemstack1.getItem() == ModItems.dnaItems && itemstack1.getMetadata() == DNAItemType.SAMPLE_FULL.getMetadata())
+				if (itemstack1.getItem() == ModItems.dnaItems && itemstack1.getMetadata() == DNAItemType.SAMPLE_FULL.getMeta())
 				{
 					if (!this.mergeItemStack(itemstack1, 36, 37, false))
 					{
 						return ItemStackTools.getEmptyStack();
 					}
 				}
-				else if (itemstack1.getItem() == ModItems.dnaItems && itemstack1.getMetadata() == DNAItemType.EMPTY_SYRINGE.getMetadata())
+				else if (itemstack1.getItem() == ModItems.dnaItems && itemstack1.getMetadata() == DNAItemType.EMPTY_SYRINGE.getMeta())
 				{
 					if (!this.mergeItemStack(itemstack1, 37, 38, false))
 					{

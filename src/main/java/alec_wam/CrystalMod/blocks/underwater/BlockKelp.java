@@ -94,7 +94,7 @@ public class BlockKelp extends BlockBush implements ICustomModel, IShearable {
 
         for (int k = 0; k < count; ++k)
         {
-        	dropped.add(new ItemStack(ModItems.miscFood, 1, state.getValue(ISYELLOW) ? FoodType.YELLOW_KELP.getMetadata() : FoodType.KELP.getMetadata()));
+        	dropped.add(new ItemStack(ModItems.miscFood, 1, state.getValue(ISYELLOW) ? FoodType.YELLOW_KELP.getMeta() : FoodType.KELP.getMeta()));
         }
     	return dropped;
     }

@@ -1,5 +1,6 @@
 package alec_wam.CrystalMod.items;
 
+import alec_wam.CrystalMod.util.IEnumMeta;
 import alec_wam.CrystalMod.blocks.ICustomModel;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
@@ -29,7 +30,7 @@ public class ItemMiscFood extends ItemFood implements ICustomModel {
 	@SideOnly(Side.CLIENT)
     public void initModel() {
         for(FoodType type : FoodType.values()){
-        	 ModelLoader.setCustomModelResourceLocation(this, type.getMetadata(), new ModelResourceLocation(getRegistryName(), type.getUnlocalizedName()));
+        	 ModelLoader.setCustomModelResourceLocation(this, type.getMeta(), new ModelResourceLocation(getRegistryName(), type.getUnlocalizedName()));
         }
     }
 	
@@ -83,7 +84,7 @@ public class ItemMiscFood extends ItemFood implements ICustomModel {
         return super.onItemUseFinish(stack, worldIn, entityLiving);
     }
 	
-    public static enum FoodType implements IStringSerializable, IEnumMetaItem
+    public static enum FoodType implements IStringSerializable, IEnumMeta
     {
         CORN_COB(0, "corn_cob", 4),
         POPCORN(1, "popcorn", 4),
@@ -111,7 +112,7 @@ public class ItemMiscFood extends ItemFood implements ICustomModel {
         }
 
         @Override
-		public int getMetadata()
+		public int getMeta()
         {
             return this.metadata;
         }
@@ -152,7 +153,7 @@ public class ItemMiscFood extends ItemFood implements ICustomModel {
         {
             for (FoodType type : values())
             {
-                METADATA_LOOKUP[type.getMetadata()] = type;
+                METADATA_LOOKUP[type.getMeta()] = type;
             }
         }
     }

@@ -222,15 +222,15 @@ public class ModFluids {
 		Fluid shardColor = null;
 		int amt = 0;
 		int shardAmt = 100;
-		if(stack.getMetadata() == CrystalType.BLUE_SHARD.getMetadata()){
+		if(stack.getMetadata() == CrystalType.BLUE_SHARD.getMeta()){
 			shardColor = ModFluids.fluidBlueCrystal; amt = shardAmt;
-		}else if(stack.getMetadata() == CrystalType.RED_SHARD.getMetadata()){
+		}else if(stack.getMetadata() == CrystalType.RED_SHARD.getMeta()){
 			shardColor = ModFluids.fluidRedCrystal; amt = shardAmt;
-		}else if(stack.getMetadata() == CrystalType.GREEN_SHARD.getMetadata()){
+		}else if(stack.getMetadata() == CrystalType.GREEN_SHARD.getMeta()){
 			shardColor = ModFluids.fluidGreenCrystal; amt = shardAmt;
-		}else if(stack.getMetadata() == CrystalType.DARK_SHARD.getMetadata()){
+		}else if(stack.getMetadata() == CrystalType.DARK_SHARD.getMeta()){
 			shardColor = ModFluids.fluidDarkCrystal; amt = shardAmt;
-		}else if(stack.getMetadata() == CrystalType.PURE_SHARD.getMetadata()){
+		}else if(stack.getMetadata() == CrystalType.PURE_SHARD.getMeta()){
 			shardColor = ModFluids.fluidPureCrystal; amt = shardAmt;
 		}
 		return (shardColor !=null && amt > 0) ? new FluidStack(shardColor, amt) : null;

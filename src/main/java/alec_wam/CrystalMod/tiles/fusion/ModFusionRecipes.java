@@ -22,18 +22,18 @@ public class ModFusionRecipes {
 	public static void initRecipes(){
 		Vec3d colorPure = new Vec3d(255, 255, 255);
 		List<ItemStack> ingredientsPure = Lists.newArrayList();
-		ingredientsPure.add(new ItemStack(ModItems.crystals, 1, CrystalType.BLUE.getMetadata()));
-		ingredientsPure.add(new ItemStack(ModItems.crystals, 1, CrystalType.RED.getMetadata()));
-		ingredientsPure.add(new ItemStack(ModItems.crystals, 1, CrystalType.GREEN.getMetadata()));
-		ingredientsPure.add(new ItemStack(ModItems.crystals, 1, CrystalType.DARK.getMetadata()));
-		CrystalModAPI.registerFusion(new FusionRecipe("gemCrystal", ingredientsPure, new ItemStack(ModItems.crystals, 1, CrystalType.PURE.getMetadata()), colorPure));
+		ingredientsPure.add(new ItemStack(ModItems.crystals, 1, CrystalType.BLUE.getMeta()));
+		ingredientsPure.add(new ItemStack(ModItems.crystals, 1, CrystalType.RED.getMeta()));
+		ingredientsPure.add(new ItemStack(ModItems.crystals, 1, CrystalType.GREEN.getMeta()));
+		ingredientsPure.add(new ItemStack(ModItems.crystals, 1, CrystalType.DARK.getMeta()));
+		CrystalModAPI.registerFusion(new FusionRecipe("gemCrystal", ingredientsPure, new ItemStack(ModItems.crystals, 1, CrystalType.PURE.getMeta()), colorPure));
 		
 		List<ItemStack> ingredientsPureIngot = Lists.newArrayList();
-		ingredientsPureIngot.add(new ItemStack(ModItems.ingots, 1, IngotType.BLUE.getMetadata()));
-		ingredientsPureIngot.add(new ItemStack(ModItems.ingots, 1, IngotType.RED.getMetadata()));
-		ingredientsPureIngot.add(new ItemStack(ModItems.ingots, 1, IngotType.GREEN.getMetadata()));
-		ingredientsPureIngot.add(new ItemStack(ModItems.ingots, 1, IngotType.DARK.getMetadata()));
-		CrystalModAPI.registerFusion(new FusionRecipe("ingotCrystal", ingredientsPureIngot, new ItemStack(ModItems.ingots, 1, IngotType.PURE.getMetadata()), colorPure));
+		ingredientsPureIngot.add(new ItemStack(ModItems.ingots, 1, IngotType.BLUE.getMeta()));
+		ingredientsPureIngot.add(new ItemStack(ModItems.ingots, 1, IngotType.RED.getMeta()));
+		ingredientsPureIngot.add(new ItemStack(ModItems.ingots, 1, IngotType.GREEN.getMeta()));
+		ingredientsPureIngot.add(new ItemStack(ModItems.ingots, 1, IngotType.DARK.getMeta()));
+		CrystalModAPI.registerFusion(new FusionRecipe("ingotCrystal", ingredientsPureIngot, new ItemStack(ModItems.ingots, 1, IngotType.PURE.getMeta()), colorPure));
 		
 		List<ItemStack> ingredientsPureBlock = Lists.newArrayList();
 		ingredientsPureBlock.add(new ItemStack(ModBlocks.crystal, 1, CrystalBlockType.BLUE.getMeta()));
@@ -51,7 +51,7 @@ public class ModFusionRecipes {
 		
 		List<Object> ingredientsPearl = Lists.newArrayList();
 		for(int i = 0; i < 4; i++)ingredientsPearl.add("nuggetCrystal");
-		for(int i = 0; i < 4; i++)ingredientsPearl.add(new ItemStack(ModItems.ingots, 1, IngotType.PURE.getMetadata()));
+		for(int i = 0; i < 4; i++)ingredientsPearl.add(new ItemStack(ModItems.ingots, 1, IngotType.PURE.getMeta()));
 		addRecipe(new ItemStack(Items.ENDER_EYE), new ItemStack(ModItems.telePearl), ingredientsPearl.toArray());
 		
 		CrystalModAPI.registerFusion(new FusionRecipeEnchantment());
