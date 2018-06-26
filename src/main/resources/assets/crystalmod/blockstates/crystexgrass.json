@@ -38,6 +38,13 @@
 			"top": "crystalmod:blocks/crystexium/grass_pure_top",
 			"side": "crystalmod:blocks/crystexium/grass_pure_side"
 		} 
+	  },
+	  "crystex": { 
+		"model": "crystalmod:grass", 
+		"textures":{
+			"top": "crystalmod:blocks/crystexium/grass_crystex_top",
+			"side": "crystalmod:blocks/crystexium/grass_crystex_side"
+		} 
 	  }
     }
   }

@@ -2,6 +2,8 @@ package alec_wam.CrystalMod.world;
 
 import java.util.Random;
 
+import alec_wam.CrystalMod.blocks.BlockSpecialCrystalLog;
+import alec_wam.CrystalMod.blocks.BlockSpecialCrystalLog.SpecialCrystalLog;
 import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.blocks.crops.BlockCrystalTreePlant;
 import alec_wam.CrystalMod.items.ItemCrystalSeedTree;
@@ -22,19 +24,19 @@ public class WorldGenCrystalTree extends WorldGenAbstractTree
     /** True if this tree should grow Tree Plants. */
     private final boolean plantsGrow;
     
-    private CrystalColors.Basic treeType;
+    private CrystalColors.SuperSpecial treeType;
 
     public WorldGenCrystalTree(boolean notify)
     {
-        this(notify, 4, CrystalColors.Basic.BLUE, false);
+        this(notify, 4, CrystalColors.SuperSpecial.BLUE, false);
     }
 
-    public WorldGenCrystalTree(boolean notify, int height, CrystalColors.Basic type, boolean treePlants)
+    public WorldGenCrystalTree(boolean notify, int height, CrystalColors.SuperSpecial type, boolean treePlants)
     {
         super(notify);
         this.minTreeHeight = height;
         this.treeType = type;
-        this.plantsGrow = treePlants;
+        this.plantsGrow = treePlants && (type !=CrystalColors.SuperSpecial.PURE && type !=CrystalColors.SuperSpecial.CRYSTEX);
     }
 
     @Override
@@ -43,6 +45,33 @@ public class WorldGenCrystalTree extends WorldGenAbstractTree
         int i = rand.nextInt(3) + this.minTreeHeight;
         boolean flag = true;
 
+        IBlockState woodState = null;
+        IBlockState leaveState = null;
+    	if(treeType == CrystalColors.SuperSpecial.BLUE){
+    		woodState = ModBlocks.crystalLog.getDefaultState().withProperty(CrystalColors.COLOR_BASIC, CrystalColors.Basic.BLUE);
+    		leaveState = ModBlocks.crystalLeaves.getDefaultState().withProperty(CrystalColors.COLOR_BASIC, CrystalColors.Basic.BLUE);
+    	}
+    	else if(treeType == CrystalColors.SuperSpecial.RED){
+    		woodState = ModBlocks.crystalLog.getDefaultState().withProperty(CrystalColors.COLOR_BASIC, CrystalColors.Basic.RED);
+    		leaveState = ModBlocks.crystalLeaves.getDefaultState().withProperty(CrystalColors.COLOR_BASIC, CrystalColors.Basic.RED);
+    	}
+    	else if(treeType == CrystalColors.SuperSpecial.GREEN){
+    		woodState = ModBlocks.crystalLog.getDefaultState().withProperty(CrystalColors.COLOR_BASIC, CrystalColors.Basic.GREEN);
+    		leaveState = ModBlocks.crystalLeaves.getDefaultState().withProperty(CrystalColors.COLOR_BASIC, CrystalColors.Basic.GREEN);
+    	}
+    	else if(treeType == CrystalColors.SuperSpecial.DARK){
+    		woodState = ModBlocks.crystalLog.getDefaultState().withProperty(CrystalColors.COLOR_BASIC, CrystalColors.Basic.DARK);
+    		leaveState = ModBlocks.crystalLeaves.getDefaultState().withProperty(CrystalColors.COLOR_BASIC, CrystalColors.Basic.DARK);
+    	}
+    	else if(treeType == CrystalColors.SuperSpecial.PURE){
+    		woodState = ModBlocks.crystalSpecialLog.getDefaultState().withProperty(BlockSpecialCrystalLog.COLOR, SpecialCrystalLog.PURE);
+    		leaveState = ModBlocks.crystalSpecialLeaves.getDefaultState().withProperty(BlockSpecialCrystalLog.COLOR, SpecialCrystalLog.PURE);
+    	}
+    	else if(treeType == CrystalColors.SuperSpecial.CRYSTEX){
+    		woodState = ModBlocks.crystalSpecialLog.getDefaultState().withProperty(BlockSpecialCrystalLog.COLOR, SpecialCrystalLog.CRYSTEX);
+    		leaveState = ModBlocks.crystalSpecialLeaves.getDefaultState().withProperty(BlockSpecialCrystalLog.COLOR, SpecialCrystalLog.CRYSTEX);
+    	}
+        
         if (position.getY() >= 1 && position.getY() + i + 1 <= worldIn.getHeight())
         {
             for (int j = position.getY(); j <= position.getY() + 1 + i; ++j)
@@ -98,8 +127,7 @@ public class WorldGenCrystalTree extends WorldGenAbstractTree
 
                         if (state.getBlock().isAir(state, worldIn, upN) || state.getBlock().isLeaves(state, worldIn, upN) || state.getMaterial() == Material.VINE)
                         {
-                        	IBlockState woodState = ModBlocks.crystalLog.getDefaultState().withProperty(CrystalColors.COLOR_BASIC, treeType);
-                            this.setBlockAndNotifyAdequately(worldIn, position.up(j3), woodState);
+                        	this.setBlockAndNotifyAdequately(worldIn, position.up(j3), woodState);
                         }
                     }
 
@@ -121,10 +149,8 @@ public class WorldGenCrystalTree extends WorldGenAbstractTree
                                     BlockPos blockpos = new BlockPos(k1, i3, i2);
                                     state = worldIn.getBlockState(blockpos);
                                     Block block = state.getBlock();
-                                    IBlockState leaveState = ModBlocks.crystalLeaves.getDefaultState().withProperty(CrystalColors.COLOR_BASIC, treeType);
                                     if (block.isAir(state, worldIn, blockpos) || block.canPlaceBlockAt(worldIn, blockpos) || worldIn.getBlockState(blockpos) == leaveState)
                                     {
-                                    	//worldIn.setBlockState(blockpos, leaveState, 3);
                                     	setBlockAndNotifyAdequately(worldIn, blockpos, leaveState);
                                     }
                                 }

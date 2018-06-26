@@ -57,6 +57,23 @@ public class ItemCrystalSeedTree extends Item implements net.minecraftforge.comm
     	}
     }
     
+    public static IBlockState getPlant(CrystalColors.SuperSpecial type){
+    	switch(type){
+	    	 default : case BLUE : {
+	    		 return ModBlocks.crystalTreePlantBlue.getDefaultState();
+	    	 }
+	    	 case RED : {
+	    		 return ModBlocks.crystalTreePlantRed.getDefaultState();
+	    	 }
+	    	 case GREEN : {
+	    		 return ModBlocks.crystalTreePlantGreen.getDefaultState();
+	    	 }
+	    	 case DARK : {
+	    		 return ModBlocks.crystalTreePlantDark.getDefaultState();
+	    	 }
+    	}
+    }
+    
     public static IBlockState getPlant(CrystalColors.Basic type){
     	switch(type){
 	    	 default : case BLUE : {

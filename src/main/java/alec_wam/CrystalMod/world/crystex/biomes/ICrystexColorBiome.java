@@ -4,6 +4,6 @@ import alec_wam.CrystalMod.util.CrystalColors;
 
 public interface ICrystexColorBiome {
 
-	public CrystalColors.Basic getColor();
+	public CrystalColors.SuperSpecial getColor();
 	
 }

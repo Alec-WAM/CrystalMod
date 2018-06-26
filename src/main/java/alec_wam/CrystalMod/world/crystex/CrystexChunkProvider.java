@@ -376,12 +376,14 @@ public class CrystexChunkProvider implements IChunkGenerator
             int i1 = this.rand.nextInt(16) + 8;
             int j1 = this.rand.nextInt(256);
             int k1 = this.rand.nextInt(16) + 8;
-            CrystalColors.Basic color = ((ICrystexColorBiome)biome).getColor();
-            Block liquid = ModFluids.fluidBlueCrystal.getBlock();
-            if(color == CrystalColors.Basic.RED)liquid = ModFluids.fluidRedCrystal.getBlock();
-            if(color == CrystalColors.Basic.GREEN)liquid = ModFluids.fluidGreenCrystal.getBlock();
-            if(color == CrystalColors.Basic.DARK)liquid = ModFluids.fluidDarkCrystal.getBlock();
-            (new WorldGenLakesFixed(liquid)).generate(this.world, this.rand, blockpos.add(i1, j1, k1));
+            CrystalColors.SuperSpecial color = ((ICrystexColorBiome)biome).getColor();
+            Block liquid = null;
+            if(color == CrystalColors.SuperSpecial.BLUE)liquid = ModFluids.fluidBlueCrystal.getBlock();
+            if(color == CrystalColors.SuperSpecial.RED)liquid = ModFluids.fluidRedCrystal.getBlock();
+            if(color == CrystalColors.SuperSpecial.GREEN)liquid = ModFluids.fluidGreenCrystal.getBlock();
+            if(color == CrystalColors.SuperSpecial.DARK)liquid = ModFluids.fluidDarkCrystal.getBlock();
+            if(color == CrystalColors.SuperSpecial.PURE)liquid = ModFluids.fluidPureCrystal.getBlock();
+            if(liquid !=null)new WorldGenLakesFixed(liquid).generate(this.world, this.rand, blockpos.add(i1, j1, k1));
         }
 
         /*if (!flag && this.rand.nextInt(this.settings.lavaLakeChance / 10) == 0 && this.settings.useLavaLakes)

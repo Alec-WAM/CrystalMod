@@ -1,0 +1,19 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "cube_column",
+    "textures": {
+	  "end":"crystalmod:blocks/log_pure_top",
+	  "side":"crystalmod:blocks/log_pure"
+    },
+    "transform": "forge:default-block"
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{}],
+	"axis=x": [{"x": 90, "y": 90}],
+	"axis=y": [{}],
+	"axis=z": [{"x": 90}],
+	"axis=none": [{}]
+  }
+}

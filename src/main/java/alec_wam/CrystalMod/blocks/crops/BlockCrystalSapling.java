@@ -42,8 +42,8 @@ public class BlockCrystalSapling extends BlockSapling implements ICustomModel {
 
 	@Override
 	public void getSubBlocks(@Nonnull Item itemIn, CreativeTabs tab, NonNullList<ItemStack> list) {
-		for(CrystalColors.Basic type : CrystalColors.Basic.values()) {
-			list.add(new ItemStack(this, 1, getMetaFromState(getDefaultState().withProperty(CrystalColors.COLOR_BASIC, type))));
+		for(CrystalColors.SuperSpecial type : CrystalColors.SuperSpecial.values()) {
+			list.add(new ItemStack(this, 1, getMetaFromState(getDefaultState().withProperty(CrystalColors.COLOR_SUPER, type))));
 		}
 	}
 
@@ -51,7 +51,7 @@ public class BlockCrystalSapling extends BlockSapling implements ICustomModel {
 	@SideOnly(Side.CLIENT)
 	public void initModel() {
 		ModelLoader.setCustomStateMapper(this, new SaplingBlockStateMapper());
-		for(CrystalColors.Basic type : CrystalColors.Basic.values()){
+		for(CrystalColors.SuperSpecial type : CrystalColors.SuperSpecial.values()){
 			String nameOverride = getRegistryName().getResourcePath() + "_" + type.getName();
 			ResourceLocation baseLocation = nameOverride == null ? getRegistryName() : new ResourceLocation("crystalmod", nameOverride);
 			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), type.getMeta(), new ModelResourceLocation(baseLocation, "inventory"));
@@ -63,7 +63,7 @@ public class BlockCrystalSapling extends BlockSapling implements ICustomModel {
 		@Override
 		protected ModelResourceLocation getModelResourceLocation(IBlockState state)
 		{
-			CrystalColors.Basic type = state.getValue(CrystalColors.COLOR_BASIC);
+			CrystalColors.SuperSpecial type = state.getValue(CrystalColors.COLOR_SUPER);
 			StringBuilder builder = new StringBuilder();
 			String nameOverride = null;
 
@@ -95,7 +95,7 @@ public class BlockCrystalSapling extends BlockSapling implements ICustomModel {
 	@Override
 	protected BlockStateContainer createBlockState() {
 		// TYPE has to be included because of the BlockSapling constructor.. but it's never used.
-		return new BlockStateContainer(this, CrystalColors.COLOR_BASIC, STAGE, TYPE);
+		return new BlockStateContainer(this, CrystalColors.COLOR_SUPER, STAGE, TYPE);
 	}
 
 	/**
@@ -104,7 +104,7 @@ public class BlockCrystalSapling extends BlockSapling implements ICustomModel {
 	@Nonnull
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		return this.getDefaultState().withProperty(CrystalColors.COLOR_BASIC, CrystalColors.Basic.byMetadata(meta));
+		return this.getDefaultState().withProperty(CrystalColors.COLOR_SUPER, CrystalColors.SuperSpecial.byMetadata(meta));
 	}
 
 	/**
@@ -112,7 +112,7 @@ public class BlockCrystalSapling extends BlockSapling implements ICustomModel {
 	 */
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		return state.getValue(CrystalColors.COLOR_BASIC).ordinal();
+		return state.getValue(CrystalColors.COLOR_SUPER).ordinal();
 	}
 
 	@Override
@@ -138,7 +138,7 @@ public class BlockCrystalSapling extends BlockSapling implements ICustomModel {
 		if(!net.minecraftforge.event.terraingen.TerrainGen.saplingGrowTree(worldIn, rand, pos)) {
 			return;
 		}
-		CrystalColors.Basic type = state.getValue(CrystalColors.COLOR_BASIC);
+		CrystalColors.SuperSpecial type = state.getValue(CrystalColors.COLOR_SUPER);
 		WorldGenerator gen = (new WorldGenCrystalTree(true, MathHelper.getInt(rand, 4, 6), type, false));
 
 		// replace sapling with air

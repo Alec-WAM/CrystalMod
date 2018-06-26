@@ -42,7 +42,7 @@ public class ItemPumpkinScoop extends Item {
     {
 		ItemStack otherHand = player.getHeldItem(hand == EnumHand.MAIN_HAND ? EnumHand.OFF_HAND : EnumHand.MAIN_HAND);
 		if(ItemStackTools.isValid(otherHand)){
-			if(ToolUtil.isSword(otherHand)){
+			if(ToolUtil.isAxe(otherHand)){
 				boolean isCreative = player.capabilities.isCreativeMode;
 				IBlockState state = world.getBlockState(pos);
 				boolean didAction = false;

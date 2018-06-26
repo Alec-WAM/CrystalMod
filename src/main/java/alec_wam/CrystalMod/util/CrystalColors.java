@@ -2,7 +2,6 @@ package alec_wam.CrystalMod.util;
 
 import java.util.Random;
 
-import alec_wam.CrystalMod.util.IEnumMeta;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.MathHelper;
@@ -10,6 +9,8 @@ import net.minecraft.util.math.MathHelper;
 public class CrystalColors {
 	public static final PropertyEnum<Basic> COLOR_BASIC = PropertyEnum.<Basic>create("color", Basic.class);
 	public static final PropertyEnum<Special> COLOR_SPECIAL = PropertyEnum.<Special>create("color", Special.class);
+	public static final PropertyEnum<SuperSpecial> COLOR_SUPER = PropertyEnum.<SuperSpecial>create("color", SuperSpecial.class);
+	
 	
 	public static enum Basic implements IStringSerializable, IEnumMeta {
 		BLUE("blue"),
@@ -98,4 +99,49 @@ public class CrystalColors {
 			return BLUE;
 		}
 	}
+	
+	public static enum SuperSpecial implements IStringSerializable, IEnumMeta {
+		BLUE("blue"),
+		RED("red"),
+		GREEN("green"),
+		DARK("dark"),
+		PURE("pure"),
+		CRYSTEX("crystex");
+
+		private final String unlocalizedName;
+		public final int meta;
+
+		SuperSpecial(String name) {
+	      meta = ordinal();
+	      unlocalizedName = name;
+	    }
+
+	    @Override
+	    public String getName() {
+	      return unlocalizedName;
+	    }
+
+	    @Override
+	    public int getMeta() {
+	      return meta;
+	    }
+
+		public static SuperSpecial byMetadata(int meta)
+        {
+            if (meta < 0 || meta >= values().length)
+            {
+                meta = 0;
+            }
+
+            return values()[meta];
+        }
+		
+		public static SuperSpecial getRandom(Random rand, boolean basic){
+			if(basic){
+				return byMetadata(MathHelper.getInt(rand, 0, 3));
+			}
+			return byMetadata(MathHelper.getInt(rand, 0, values().length-1));
+		}
+	}
+
 }

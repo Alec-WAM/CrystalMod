@@ -83,8 +83,8 @@ public class MapGenCrystexiumSpike extends MapGenStructure {
             if(worldIn.provider.getDimension() == ModDimensions.CRYSTEX_ID){
             	Biome biome = worldIn.getBiome(generatePos);
             	if(biome instanceof ICrystexColorBiome){
-            		CrystalColors.Basic color = ((ICrystexColorBiome)biome).getColor();
-            		type = SpikeType.values()[1+color.getMeta()];
+            		CrystalColors.SuperSpecial color = ((ICrystexColorBiome)biome).getColor();
+            		type = SpikeType.convert(color);
             	}
             } else {
 	            int typeNum = MathHelper.getInt(random, 0, SpikeType.values().length-1);

@@ -39,7 +39,7 @@ public class CrystalTreeFeature implements IGenerationFeature {
         if (BiomeDictionary.hasType(biome, BiomeDictionary.Type.FOREST) || biome instanceof BiomeForest) {
         	if(net.minecraftforge.event.terraingen.TerrainGen.decorate(world, random, bp, net.minecraftforge.event.terraingen.DecorateBiomeEvent.Decorate.EventType.TREE))
             {
-        		CrystalColors.Basic type = CrystalColors.Basic.getRandom(random);
+        		CrystalColors.SuperSpecial type = CrystalColors.SuperSpecial.getRandom(random, true);
         		int size = MathHelper.getInt(random, 4, 6);
         		final boolean t = new WorldGenCrystalTree(false, size, type, random.nextInt(2) == 0).generate(world, random, bp);
         		return t;

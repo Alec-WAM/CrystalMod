@@ -7,7 +7,9 @@
       "blue": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/planks_blue"} },
 	  "red": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/planks_red"} },
 	  "green": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/planks_green"} },
-	  "dark": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/planks_dark"} }
+	  "dark": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/planks_dark"} },
+	  "pure": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/planks_pure"} },
+	  "crystex": { "model": "crystalmod:fixedOneTexture", "textures":{"all": "crystalmod:blocks/crystexium/planks"} }
     }
   }
 }

@@ -16,14 +16,14 @@ public class BiomeCrystexPlains extends BiomePlains implements ICrystexColorBiom
 
 	public final WorldGenCrystalTree CRYSTAL_TREE;
 	public final WorldGenCrystalTree CRYSTAL_TREE_SPECIAL;
-	public final CrystalColors.Basic color;
-	public BiomeCrystexPlains(CrystalColors.Basic color, BiomeProperties properties) {
+	public final CrystalColors.SuperSpecial color;
+	public BiomeCrystexPlains(CrystalColors.SuperSpecial color, BiomeProperties properties) {
 		super(false, properties);
 		this.color = color;
 		CRYSTAL_TREE = new WorldGenCrystalTree(false, 4, color, false);
 		CRYSTAL_TREE_SPECIAL = new WorldGenCrystalTree(false, 6, color, true);
 		
-		topBlock = ModBlocks.crystexGrass.getDefaultState().withProperty(CrystalColors.COLOR_SPECIAL, CrystalColors.Special.convert(color));
+		topBlock = ModBlocks.crystexGrass.getDefaultState().withProperty(CrystalColors.COLOR_SUPER, color);
 	}
 
 	@Override
@@ -41,11 +41,11 @@ public class BiomeCrystexPlains extends BiomePlains implements ICrystexColorBiom
 	@Override
 	public WorldGenerator getRandomWorldGenForGrass(Random rand)
     {
-		return new WorldGenCustomTallGrass(ModBlocks.crystexTallGrass.getDefaultState().withProperty(CrystalColors.COLOR_SPECIAL, CrystalColors.Special.convert(color)));
+		return new WorldGenCustomTallGrass(ModBlocks.crystexTallGrass.getDefaultState().withProperty(CrystalColors.COLOR_SUPER, color));
     }
 
 	@Override
-	public CrystalColors.Basic getColor() {
+	public CrystalColors.SuperSpecial getColor() {
 		return color;
 	}
 	

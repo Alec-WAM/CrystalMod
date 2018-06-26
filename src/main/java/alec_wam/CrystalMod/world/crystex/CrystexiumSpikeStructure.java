@@ -6,7 +6,7 @@ import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.blocks.crystexium.CrystexiumBlock;
 import alec_wam.CrystalMod.blocks.crystexium.CrystexiumBlock.CrystexiumBlockType;
-import alec_wam.CrystalMod.util.ModLogger;
+import alec_wam.CrystalMod.util.CrystalColors;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.server.MinecraftServer;
@@ -25,6 +25,15 @@ public class CrystexiumSpikeStructure extends StructureComponentTemplate {
 
 	public static enum SpikeType {
 		PLAIN, BLUE, RED, GREEN, DARK, PURE;
+		
+		public static SpikeType convert(CrystalColors.SuperSpecial color){
+			if(color == CrystalColors.SuperSpecial.BLUE)return BLUE;
+			if(color == CrystalColors.SuperSpecial.RED)return RED;
+			if(color == CrystalColors.SuperSpecial.GREEN)return GREEN;
+			if(color == CrystalColors.SuperSpecial.DARK)return DARK;
+			if(color == CrystalColors.SuperSpecial.PURE)return PURE;
+			return PLAIN;
+		}
 	}
 	
 	public int size = 0;

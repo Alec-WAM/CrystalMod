@@ -39,13 +39,13 @@ public class BlockTallCrystexGrass extends BlockBush implements ICustomModel, ne
 		super(Material.VINE);
 		setHardness(0.0F);
 		setSoundType(SoundType.PLANT);
-		this.setDefaultState(this.blockState.getBaseState().withProperty(CrystalColors.COLOR_SPECIAL, CrystalColors.Special.BLUE));
+		this.setDefaultState(this.blockState.getBaseState().withProperty(CrystalColors.COLOR_SUPER, CrystalColors.SuperSpecial.BLUE));
 	}
 	
 	@Override
 	public void getSubBlocks(@Nonnull Item itemIn, CreativeTabs tab, NonNullList<ItemStack> list) {
-		for(CrystalColors.Special type : CrystalColors.Special.values()) {
-			list.add(new ItemStack(this, 1, getMetaFromState(getDefaultState().withProperty(CrystalColors.COLOR_SPECIAL, type))));
+		for(CrystalColors.SuperSpecial type : CrystalColors.SuperSpecial.values()) {
+			list.add(new ItemStack(this, 1, getMetaFromState(getDefaultState().withProperty(CrystalColors.COLOR_SUPER, type))));
 		}
 	}
 
@@ -63,7 +63,7 @@ public class BlockTallCrystexGrass extends BlockBush implements ICustomModel, ne
 	@Nonnull
 	@Override
 	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, CrystalColors.COLOR_SPECIAL);
+		return new BlockStateContainer(this, CrystalColors.COLOR_SUPER);
 	}
 
 	@Nonnull
@@ -72,13 +72,13 @@ public class BlockTallCrystexGrass extends BlockBush implements ICustomModel, ne
 		if(meta < 0 || meta >= CrystalColors.Special.values().length) {
 			meta = 0;
 		}
-		CrystalColors.Special color = CrystalColors.Special.values()[meta];
-		return this.getDefaultState().withProperty(CrystalColors.COLOR_SPECIAL, color);
+		CrystalColors.SuperSpecial color = CrystalColors.SuperSpecial.values()[meta];
+		return this.getDefaultState().withProperty(CrystalColors.COLOR_SUPER, color);
 	}
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		return state.getValue(CrystalColors.COLOR_SPECIAL).ordinal();
+		return state.getValue(CrystalColors.COLOR_SUPER).ordinal();
 	}
 
 	@Override
@@ -122,7 +122,7 @@ public class BlockTallCrystexGrass extends BlockBush implements ICustomModel, ne
         if (!worldIn.isRemote && stack.getItem() == Items.SHEARS)
         {
             player.addStat(StatList.getBlockStats(this));
-            spawnAsEntity(worldIn, pos, new ItemStack(this, 1, state.getValue(CrystalColors.COLOR_SPECIAL).getMeta()));
+            spawnAsEntity(worldIn, pos, new ItemStack(this, 1, state.getValue(CrystalColors.COLOR_SUPER).getMeta()));
         }
         else
         {
@@ -146,7 +146,7 @@ public class BlockTallCrystexGrass extends BlockBush implements ICustomModel, ne
     @Override
     public NonNullList<ItemStack> onSheared(ItemStack item, IBlockAccess world, BlockPos pos, int fortune)
     {
-        return NonNullList.withSize(1, new ItemStack(this, 1, world.getBlockState(pos).getValue(CrystalColors.COLOR_SPECIAL).getMeta()));
+        return NonNullList.withSize(1, new ItemStack(this, 1, world.getBlockState(pos).getValue(CrystalColors.COLOR_SUPER).getMeta()));
     }
     @Override
     public NonNullList<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune)
@@ -164,7 +164,7 @@ public class BlockTallCrystexGrass extends BlockBush implements ICustomModel, ne
 		@Override
 		protected ModelResourceLocation getModelResourceLocation(IBlockState state)
 		{
-			CrystalColors.Special type = state.getValue(CrystalColors.COLOR_SPECIAL);
+			CrystalColors.SuperSpecial type = state.getValue(CrystalColors.COLOR_SUPER);
 			String nameOverride = null;
 
 			nameOverride = state.getBlock().getRegistryName().getResourcePath() + "_" + type.getName();

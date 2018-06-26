@@ -19,6 +19,7 @@ import alec_wam.CrystalMod.blocks.BlockCrystalOre.CrystalOreType;
 import alec_wam.CrystalMod.blocks.BlockDecorative.DecorativeBlockType;
 import alec_wam.CrystalMod.blocks.BlockFallingCompressed.FallingCompressedBlockType;
 import alec_wam.CrystalMod.blocks.BlockMetalBars.EnumMetalBarType;
+import alec_wam.CrystalMod.blocks.BlockSpecialCrystalLog.SpecialCrystalLog;
 import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.blocks.crops.BlockCrystalPlant.PlantType;
 import alec_wam.CrystalMod.blocks.crops.BlockNormalSapling.SaplingType;
@@ -345,6 +346,8 @@ public class ModCrafting {
 			addShapelessRecipe(new ItemStack(ModBlocks.crystalPlanks, 4, type.getMeta()), new Object[]{new ItemStack(ModBlocks.crystalLog, 1, type.getMeta())});
 			addShapedOreRecipe(new ItemStack(ModBlocks.ladder, 4, type.getMeta()), new Object[]{"S S", "S#S", "S S", 'S', "stickWood", '#', new ItemStack(ModBlocks.crystalPlanks, 1, type.getMeta())});
 		}
+		addShapelessRecipe(new ItemStack(ModBlocks.crystalPlanks, 4, CrystalColors.SuperSpecial.PURE.getMeta()), new Object[]{new ItemStack(ModBlocks.crystalSpecialLog, 1, SpecialCrystalLog.PURE.getMeta())});
+		addShapelessRecipe(new ItemStack(ModBlocks.crystalPlanks, 4, CrystalColors.SuperSpecial.CRYSTEX.getMeta()), new Object[]{new ItemStack(ModBlocks.crystalSpecialLog, 1, SpecialCrystalLog.CRYSTEX.getMeta())});
 		
 		addShapedOreRecipe(new ItemStack(ModBlocks.fancyLadders, 4, FancyLadderType.WIDE.getMeta()), new Object[]{"S S", "S#S", "S S", 'S', "stickWood", '#', Blocks.LADDER});
 		addShapedOreRecipe(new ItemStack(ModBlocks.fancyLadders, 4, FancyLadderType.ARROW.getMeta()), new Object[]{" S ", "SSS", "S#S", 'S', "stickWood", '#', Blocks.LADDER});
@@ -1179,6 +1182,15 @@ public class ModCrafting {
 			oredict(new ItemStack(ModBlocks.crystalLog, 1, type.getMeta()), "logCrystal", "logWood");
 			oredict(new ItemStack(ModBlocks.crystalPlanks, 1, type.getMeta()), "plankCrystal", "plankWood");
 		}
+		oredict(new ItemStack(ModBlocks.crystalSpecialLog, 1, SpecialCrystalLog.PURE.getMeta()), "logCrystal", "logWood");
+		oredict(new ItemStack(ModBlocks.crystalSpecialLog, 1, SpecialCrystalLog.CRYSTEX.getMeta()), "logWood");
+		oredict(new ItemStack(ModBlocks.crystalSpecialLeaves, 1, SpecialCrystalLog.PURE.getMeta()), "treeLeaves");
+		oredict(new ItemStack(ModBlocks.crystalSpecialLeaves, 1, SpecialCrystalLog.CRYSTEX.getMeta()), "treeLeaves");
+		oredict(new ItemStack(ModBlocks.crystalSapling, 1, CrystalColors.SuperSpecial.PURE.getMeta()), "treeSapling");
+		oredict(new ItemStack(ModBlocks.crystalSapling, 1, CrystalColors.SuperSpecial.CRYSTEX.getMeta()), "treeSapling");
+		oredict(new ItemStack(ModBlocks.crystalPlanks, 1, CrystalColors.SuperSpecial.PURE.getMeta()), "plankCrystal", "plankWood");
+		oredict(new ItemStack(ModBlocks.crystalPlanks, 1, CrystalColors.SuperSpecial.CRYSTEX.getMeta()), "plankWood");
+		
 		oredict(new ItemStack(ModBlocks.normalSapling, 1, SaplingType.BAMBOO.getMeta()), "treeSapling");
 		oredict(new ItemStack(ModBlocks.bambooLeaves), "treeLeaves");
 		oredict(new ItemStack(ModBlocks.bamboo), "logBamboo", "logWood");

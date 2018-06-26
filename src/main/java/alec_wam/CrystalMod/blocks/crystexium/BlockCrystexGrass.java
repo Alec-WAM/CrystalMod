@@ -15,15 +15,15 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-public class BlockCrystexGrass extends EnumBlock<CrystalColors.Special>{
+public class BlockCrystexGrass extends EnumBlock<CrystalColors.SuperSpecial>{
 	
 
 	public BlockCrystexGrass() {
-		super(Material.GRASS, CrystalColors.COLOR_SPECIAL, CrystalColors.Special.class);
+		super(Material.GRASS, CrystalColors.COLOR_SUPER, CrystalColors.SuperSpecial.class);
 		this.setTickRandomly(true);
 		setHardness(0.6F);
 		setSoundType(SoundType.PLANT);
-		this.setDefaultState(this.blockState.getBaseState().withProperty(CrystalColors.COLOR_SPECIAL, CrystalColors.Special.BLUE));
+		this.setDefaultState(this.blockState.getBaseState().withProperty(CrystalColors.COLOR_SUPER, CrystalColors.SuperSpecial.BLUE));
 	}
 	
 	@Override

@@ -295,6 +295,8 @@ public class ModBlocks {
 	public static BlockCrystalLeaves crystalLeaves;
 	public static BlockCrystalSapling crystalSapling;
 	public static BlockCrystalPlanks crystalPlanks;	
+	public static BlockSpecialCrystalLog crystalSpecialLog;
+	public static BlockSpecialCrystalLeaves crystalSpecialLeaves;
 	public static BlockMaterialCrop materialCrop;
 	public static BlockCorn corn;
 	public static BlockBamboo bamboo;
@@ -529,6 +531,9 @@ public class ModBlocks {
 		crystalLog = new BlockCrystalLog();
 		registerBlock(crystalLog, new ItemBlockMeta(crystalLog), "crystallog");
 		ItemBlockMeta.setMappingProperty(crystalLog, CrystalColors.COLOR_BASIC);
+		crystalSpecialLog = new BlockSpecialCrystalLog();
+		registerBlock(crystalSpecialLog, new ItemBlockMeta(crystalSpecialLog), "crystalspeciallog");
+		ItemBlockMeta.setMappingProperty(crystalSpecialLog, BlockSpecialCrystalLog.COLOR);
 
 		crystalLeaves = new BlockCrystalLeaves();
 		registerBlock(crystalLeaves, new ItemBlockMeta(crystalLeaves) {
@@ -538,10 +543,18 @@ public class ModBlocks {
 			}
 		}, "crystalleaves");
 		ItemBlockMeta.setMappingProperty(crystalLeaves, CrystalColors.COLOR_BASIC);
+		crystalSpecialLeaves = new BlockSpecialCrystalLeaves();
+		registerBlock(crystalSpecialLeaves, new ItemBlockMeta(crystalSpecialLeaves) {
+			@Override
+			public int getMetadata(int m) {
+				return m | 4;
+			}
+		}, "crystalspecialleaves");
+		ItemBlockMeta.setMappingProperty(crystalSpecialLeaves, BlockSpecialCrystalLog.COLOR);
 
 		crystalSapling = new BlockCrystalSapling();
 		registerBlock(crystalSapling, new ItemBlockMeta(crystalSapling), "crystalsapling");
-		ItemBlockMeta.setMappingProperty(crystalSapling, CrystalColors.COLOR_BASIC);
+		ItemBlockMeta.setMappingProperty(crystalSapling, CrystalColors.COLOR_SUPER);
 
 		crystalPlanks = registerEnumBlock(new BlockCrystalPlanks(), "crystalplanks");
 
@@ -956,7 +969,7 @@ public class ModBlocks {
 		registerEnumBlock(crystexGrass, "crystexgrass");
 		crystexTallGrass = new BlockTallCrystexGrass();
 		registerBlock(crystexTallGrass, new ItemBlockMeta(crystexTallGrass), "crystextallgrass");
-		ItemBlockMeta.setMappingProperty(crystexTallGrass, CrystalColors.COLOR_SPECIAL);
+		ItemBlockMeta.setMappingProperty(crystexTallGrass, CrystalColors.COLOR_SUPER);
 		
 		crystexiumStairs = new BlockCustomStairs(crystexiumBlock.getDefaultState().withProperty(CrystexiumBlock.TYPE, CrystexiumBlockType.BRICK));
 		registerBlock(crystexiumStairs, "crystexiumstairs");

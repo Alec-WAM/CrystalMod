@@ -48,29 +48,29 @@ public class ModBiomes {
 		BiomeProperties forest_red = new Biome.BiomeProperties("Red Crystex Forest").setTemperature(0.7F).setRainfall(0.8F);
 		BiomeProperties forest_green = new Biome.BiomeProperties("Green Crystex Forest").setTemperature(0.7F).setRainfall(0.8F);
 		BiomeProperties forest_dark = new Biome.BiomeProperties("Dark Crystex Forest").setTemperature(0.7F).setRainfall(0.8F);
-		BLUE_CRYSTEX_PLAINS = (BiomeCrystexPlains) new BiomeCrystexPlains(CrystalColors.Basic.BLUE, plains_blue).setRegistryName(CrystalMod.resourceL("crystex_blueplains"));
+		BLUE_CRYSTEX_PLAINS = (BiomeCrystexPlains) new BiomeCrystexPlains(CrystalColors.SuperSpecial.BLUE, plains_blue).setRegistryName(CrystalMod.resourceL("crystex_blueplains"));
 		GameRegistry.register(BLUE_CRYSTEX_PLAINS);
 		BiomeDictionary.addTypes(BLUE_CRYSTEX_PLAINS, BiomeDictionary.Type.PLAINS);
-		RED_CRYSTEX_PLAINS = (BiomeCrystexPlains) new BiomeCrystexPlains(CrystalColors.Basic.RED, plains_red).setRegistryName(CrystalMod.resourceL("crystex_redplains"));
+		RED_CRYSTEX_PLAINS = (BiomeCrystexPlains) new BiomeCrystexPlains(CrystalColors.SuperSpecial.RED, plains_red).setRegistryName(CrystalMod.resourceL("crystex_redplains"));
 		GameRegistry.register(RED_CRYSTEX_PLAINS);
 		BiomeDictionary.addTypes(RED_CRYSTEX_PLAINS, BiomeDictionary.Type.PLAINS);
-		GREEN_CRYSTEX_PLAINS = (BiomeCrystexPlains) new BiomeCrystexPlains(CrystalColors.Basic.GREEN, plains_green).setRegistryName(CrystalMod.resourceL("crystex_greenplains"));
+		GREEN_CRYSTEX_PLAINS = (BiomeCrystexPlains) new BiomeCrystexPlains(CrystalColors.SuperSpecial.GREEN, plains_green).setRegistryName(CrystalMod.resourceL("crystex_greenplains"));
 		GameRegistry.register(GREEN_CRYSTEX_PLAINS);
 		BiomeDictionary.addTypes(GREEN_CRYSTEX_PLAINS, BiomeDictionary.Type.PLAINS);
-		DARK_CRYSTEX_PLAINS = (BiomeCrystexPlains) new BiomeCrystexPlains(CrystalColors.Basic.DARK, plains_dark).setRegistryName(CrystalMod.resourceL("crystex_darkplains"));
+		DARK_CRYSTEX_PLAINS = (BiomeCrystexPlains) new BiomeCrystexPlains(CrystalColors.SuperSpecial.DARK, plains_dark).setRegistryName(CrystalMod.resourceL("crystex_darkplains"));
 		GameRegistry.register(DARK_CRYSTEX_PLAINS);
 		BiomeDictionary.addTypes(DARK_CRYSTEX_PLAINS, BiomeDictionary.Type.PLAINS);
 		
-		BLUE_CRYSTEX_FOREST = (BiomeCrystexForest) new BiomeCrystexForest(CrystalColors.Basic.BLUE, forest_blue).setRegistryName(CrystalMod.resourceL("crystex_blueforest"));
+		BLUE_CRYSTEX_FOREST = (BiomeCrystexForest) new BiomeCrystexForest(CrystalColors.SuperSpecial.BLUE, forest_blue).setRegistryName(CrystalMod.resourceL("crystex_blueforest"));
 		GameRegistry.register(BLUE_CRYSTEX_FOREST);
 		BiomeDictionary.addTypes(BLUE_CRYSTEX_FOREST, BiomeDictionary.Type.FOREST);
-		RED_CRYSTEX_FOREST = (BiomeCrystexForest) new BiomeCrystexForest(CrystalColors.Basic.RED, forest_red).setRegistryName(CrystalMod.resourceL("crystex_redforest"));
+		RED_CRYSTEX_FOREST = (BiomeCrystexForest) new BiomeCrystexForest(CrystalColors.SuperSpecial.RED, forest_red).setRegistryName(CrystalMod.resourceL("crystex_redforest"));
 		GameRegistry.register(RED_CRYSTEX_FOREST);
 		BiomeDictionary.addTypes(RED_CRYSTEX_FOREST, BiomeDictionary.Type.FOREST);
-		GREEN_CRYSTEX_FOREST = (BiomeCrystexForest) new BiomeCrystexForest(CrystalColors.Basic.GREEN, forest_green).setRegistryName(CrystalMod.resourceL("crystex_greenforest"));
+		GREEN_CRYSTEX_FOREST = (BiomeCrystexForest) new BiomeCrystexForest(CrystalColors.SuperSpecial.GREEN, forest_green).setRegistryName(CrystalMod.resourceL("crystex_greenforest"));
 		GameRegistry.register(GREEN_CRYSTEX_FOREST);
 		BiomeDictionary.addTypes(GREEN_CRYSTEX_FOREST, BiomeDictionary.Type.FOREST);
-		DARK_CRYSTEX_FOREST = (BiomeCrystexForest) new BiomeCrystexForest(CrystalColors.Basic.DARK, forest_dark).setRegistryName(CrystalMod.resourceL("crystex_darkforest"));
+		DARK_CRYSTEX_FOREST = (BiomeCrystexForest) new BiomeCrystexForest(CrystalColors.SuperSpecial.DARK, forest_dark).setRegistryName(CrystalMod.resourceL("crystex_darkforest"));
 		GameRegistry.register(DARK_CRYSTEX_FOREST);
 		BiomeDictionary.addTypes(DARK_CRYSTEX_FOREST, BiomeDictionary.Type.FOREST);
 		

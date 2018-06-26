@@ -1,10 +1,11 @@
 package alec_wam.CrystalMod.blocks;
 
 import alec_wam.CrystalMod.CrystalMod;
-import alec_wam.CrystalMod.util.CrystalColors;
+import alec_wam.CrystalMod.util.IEnumMeta;
 import net.minecraft.block.BlockLog;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -13,19 +14,22 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumBlockRenderType;
+import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class BlockCrystalLog extends BlockLog implements ICustomModel
+public class BlockSpecialCrystalLog extends BlockLog implements ICustomModel
 {
-    public BlockCrystalLog()
+	public static final PropertyEnum<SpecialCrystalLog> COLOR = PropertyEnum.<SpecialCrystalLog>create("color", SpecialCrystalLog.class);
+
+    public BlockSpecialCrystalLog()
     {
     	super();
         this.setCreativeTab(CrystalMod.tabBlocks);
-        this.setDefaultState(this.blockState.getBaseState().withProperty(CrystalColors.COLOR_BASIC, CrystalColors.Basic.BLUE).withProperty(LOG_AXIS, BlockLog.EnumAxis.Y));
+        this.setDefaultState(this.blockState.getBaseState().withProperty(COLOR, SpecialCrystalLog.PURE).withProperty(LOG_AXIS, BlockLog.EnumAxis.Y));
     }
     
     @Override
@@ -48,7 +52,7 @@ public class BlockCrystalLog extends BlockLog implements ICustomModel
 	@SideOnly(Side.CLIENT)
     public void initModel() {
     	ModelLoader.setCustomStateMapper(this, new LogBlockStateMapper());
-		for(CrystalColors.Basic type : CrystalColors.Basic.values()){
+		for(SpecialCrystalLog type : SpecialCrystalLog.values()){
 			String nameOverride = getRegistryName().getResourcePath() + "_" + type.getName();
 			ResourceLocation baseLocation = nameOverride == null ? getRegistryName() : new ResourceLocation("crystalmod", nameOverride);
 			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), type.getMeta(), new ModelResourceLocation(baseLocation, "inventory"));
@@ -60,7 +64,7 @@ public class BlockCrystalLog extends BlockLog implements ICustomModel
 		@Override
 		protected ModelResourceLocation getModelResourceLocation(IBlockState state)
 		{
-			CrystalColors.Basic type = state.getValue(CrystalColors.COLOR_BASIC);
+			SpecialCrystalLog type = state.getValue(COLOR);
 			StringBuilder builder = new StringBuilder();
 			String nameOverride = null;
 			EnumAxis axis = state.getValue(LOG_AXIS);
@@ -88,7 +92,7 @@ public class BlockCrystalLog extends BlockLog implements ICustomModel
     @Override
     public void getSubBlocks(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> list)
     {
-        for(CrystalColors.Basic type : CrystalColors.Basic.values()){
+        for(SpecialCrystalLog type : SpecialCrystalLog.values()){
         	list.add(new ItemStack(this, 1, type.getMeta()));
         }
     }
@@ -99,7 +103,7 @@ public class BlockCrystalLog extends BlockLog implements ICustomModel
     @Override
     public IBlockState getStateFromMeta(int meta)
     {
-        IBlockState iblockstate = this.getDefaultState().withProperty(CrystalColors.COLOR_BASIC, CrystalColors.Basic.byMetadata((meta & 3) % 4));
+        IBlockState iblockstate = this.getDefaultState().withProperty(COLOR, SpecialCrystalLog.byMetadata((meta & 3) % 4));
 
         switch (meta & 12)
         {
@@ -127,7 +131,7 @@ public class BlockCrystalLog extends BlockLog implements ICustomModel
     public int getMetaFromState(IBlockState state)
     {
         int i = 0;
-        i = i | state.getValue(CrystalColors.COLOR_BASIC).getMeta();
+        i = i | state.getValue(COLOR).getMeta();
 
         switch (state.getValue(LOG_AXIS))
         {
@@ -147,13 +151,13 @@ public class BlockCrystalLog extends BlockLog implements ICustomModel
     @Override
     protected BlockStateContainer createBlockState()
     {
-        return new BlockStateContainer(this, new IProperty[] {CrystalColors.COLOR_BASIC, LOG_AXIS});
+        return new BlockStateContainer(this, new IProperty[] {COLOR, LOG_AXIS});
     }
 
     @Override
     protected ItemStack getSilkTouchDrop(IBlockState state)
     {
-    	return new ItemStack(Item.getItemFromBlock(this), 1, state.getValue(CrystalColors.COLOR_BASIC).getMeta());
+    	return new ItemStack(Item.getItemFromBlock(this), 1, state.getValue(COLOR).getMeta());
     }
 
     /**
@@ -163,6 +167,36 @@ public class BlockCrystalLog extends BlockLog implements ICustomModel
     @Override
     public int damageDropped(IBlockState state)
     {
-        return state.getValue(CrystalColors.COLOR_BASIC).getMeta();
+        return state.getValue(COLOR).getMeta();
     }
+    
+    public static enum SpecialCrystalLog implements IStringSerializable, IEnumMeta {
+		PURE, CRYSTEX;
+
+		public final int meta;
+
+		SpecialCrystalLog() {
+	      meta = ordinal();
+	    }
+
+	    @Override
+	    public String getName() {
+	      return name().toLowerCase();
+	    }
+
+	    @Override
+	    public int getMeta() {
+	      return meta;
+	    }
+
+		public static SpecialCrystalLog byMetadata(int meta)
+        {
+            if (meta < 0 || meta >= values().length)
+            {
+                meta = 0;
+            }
+
+            return values()[meta];
+        }
+	}
 }

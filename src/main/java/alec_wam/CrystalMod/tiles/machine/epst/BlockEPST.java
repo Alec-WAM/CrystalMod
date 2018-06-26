@@ -1,5 +1,7 @@
 package alec_wam.CrystalMod.tiles.machine.epst;
 
+import java.util.List;
+
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.blocks.ModBlocks;
@@ -8,6 +10,7 @@ import alec_wam.CrystalMod.tiles.machine.BlockMachine;
 import alec_wam.CrystalMod.tiles.machine.BlockStateMachine;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
+import alec_wam.CrystalMod.util.Lang;
 import alec_wam.CrystalMod.util.UUIDUtils;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -49,6 +52,13 @@ public class BlockEPST extends BlockMachine implements ICustomModel {
 	public TileEntity createNewTileEntity(World worldIn, int meta) {
 		return new TileEPST();
 	}
+	
+	@Override
+	@SideOnly(Side.CLIENT)
+    public void addInformation(ItemStack stack, EntityPlayer player, List<String> tooltip, boolean advanced)
+    {
+		tooltip.add(Lang.localize("epst.tooltip"));
+    }
 	
 	@Override
 	public boolean hasComparatorInputOverride(IBlockState state)
