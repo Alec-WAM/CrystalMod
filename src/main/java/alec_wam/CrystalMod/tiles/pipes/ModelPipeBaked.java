@@ -55,52 +55,34 @@ public class ModelPipeBaked implements IPerspectiveAwareModel
 		this.renderStack = stack;
 	}
     
-    private void drawGlassStump(final ModelRotation modelRot, final List<BakedQuad> list) {
-        final boolean scale = false;
-        TextureAtlasSprite glass = RenderUtil.getSprite("crystalmod:blocks/pipe/power_plus");
-        float max = 11/*pixel*11.0F*/;
-        float min = 5/*pixel*5F*/;
-        
-        final BlockPartFace face4 = new BlockPartFace((EnumFacing)null, 0, "", new BlockFaceUV(new float[] { min, max+4F, max, 16.0f }, 0));
-        final BlockPartFace face3 = new BlockPartFace((EnumFacing)null, 0, "", new BlockFaceUV(new float[] { min, max, min, 16.0f }, 0));
-        final BlockPartFace face2 = new BlockPartFace((EnumFacing)null, 0, "", new BlockFaceUV(new float[] { max, max, max, 16.0f }, 0));
-        final BlockPartFace face = new BlockPartFace((EnumFacing)null, 0, "", new BlockFaceUV(new float[] { min, max, max, 16.0f }, 0));
-        
-        list.add(faceBakery.makeBakedQuad(new Vector3f(min, max, max), new Vector3f(max, max, 16.0f), face, glass, EnumFacing.UP, modelRot, (BlockPartRotation)null, scale, true));
-        list.add(faceBakery.makeBakedQuad(new Vector3f(min, min, max), new Vector3f(max, min, 16.0f), face4, glass, EnumFacing.DOWN, modelRot, (BlockPartRotation)null, scale, true));
-        list.add(faceBakery.makeBakedQuad(new Vector3f(min, min, max), new Vector3f(min, max, 16.0f), face3, glass, EnumFacing.WEST, modelRot, (BlockPartRotation)null, scale, true));
-        list.add(faceBakery.makeBakedQuad(new Vector3f(max, min, max), new Vector3f(max, max, 16.0f), face2, glass, EnumFacing.EAST, modelRot, (BlockPartRotation)null, scale, true));
-    }
-    
-    private void renderIronCap(final FakeState state, final int dir, final List<BakedQuad> list) {
+    private void renderIronCap(final FakeState state, final EnumFacing dir, final List<BakedQuad> list) {
         ModelRotation modelRot = ModelRotation.X0_Y0;
         switch (dir) {
-            case 0: {
+            case DOWN: {
                 modelRot = ModelRotation.X270_Y0;
                 break;
             }
-            case 1: {
+            case UP: {
                 modelRot = ModelRotation.X90_Y0;
                 break;
             }
-            case 2: {
+            case NORTH: {
                 modelRot = ModelRotation.X180_Y0;
                 break;
             }
-            case 3: {
+            case SOUTH: {
                 modelRot = ModelRotation.X0_Y0;
                 break;
             }
-            case 4: {
+            case WEST: {
                 modelRot = ModelRotation.X0_Y90;
                 break;
             }
-            case 5: {
+            case EAST: {
                 modelRot = ModelRotation.X0_Y270;
                 break;
             }
         }
-        //modelRot = ModelRotation.X0_Y0;
         
         final BlockFaceUV uv = new BlockFaceUV(new float[] { 0.0f, 0.0f, 16.0f, 16.0f }, 0);
         final BlockPartFace face = new BlockPartFace((EnumFacing)null, 0, "", uv);
@@ -129,13 +111,12 @@ public class ModelPipeBaked implements IPerspectiveAwareModel
         	}
         }
         
-        ConnectionMode mode = (state !=null && state.pipe !=null) ? state.pipe.getConnectionMode(EnumFacing.getFront(dir)) : ConnectionMode.DISABLED;
+        ConnectionMode mode = (state !=null && state.pipe !=null) ? state.pipe.getConnectionMode(dir) : ConnectionMode.DISABLED;
         TextureAtlasSprite modeSprite = mode == ConnectionMode.IN_OUT ? spriteQuartz : mode == ConnectionMode.OUTPUT ? spriteRedstone : mode == ConnectionMode.INPUT ? spriteLapis : iron;
         
         
         
-        if(mode != ConnectionMode.DISABLED){
-        	
+        if(mode != ConnectionMode.DISABLED){        	
 	        list.add(faceBakery.makeBakedQuad(new Vector3f(3.0f, 13.0f, 14.0f), new Vector3f(13.0f, 13.0f, 15.0f), face180, modeSprite, EnumFacing.UP, modelRot, (BlockPartRotation)null, scale, true));
 	        list.add(faceBakery.makeBakedQuad(new Vector3f(3.0f, 3.0f, 14.0f), new Vector3f(13.0f, 3.0f, 15.0f), face, modeSprite, EnumFacing.DOWN, modelRot, (BlockPartRotation)null, scale, true));
 	        list.add(faceBakery.makeBakedQuad(new Vector3f(3.0f, 3.0f, 14.0f), new Vector3f(13.0f, 13.0f, 15.0f), face, iron, EnumFacing.NORTH, modelRot, (BlockPartRotation)null, true, true));
@@ -174,77 +155,103 @@ public class ModelPipeBaked implements IPerspectiveAwareModel
         
         boolean scale = true;
         
-        boolean extension0 = (state !=null && state.pipe !=null) ? (state.pipe.isConnectedTo(EnumFacing.getFront(0)) && state.pipe.getConnectionMode(EnumFacing.getFront(0)) != ConnectionMode.DISABLED) : false;
-        boolean extension1 = (state !=null && state.pipe !=null) ? (state.pipe.isConnectedTo(EnumFacing.getFront(1)) && state.pipe.getConnectionMode(EnumFacing.getFront(1)) != ConnectionMode.DISABLED) : false;
-        boolean extension2 = (state !=null && state.pipe !=null) ? (state.pipe.isConnectedTo(EnumFacing.getFront(2)) && state.pipe.getConnectionMode(EnumFacing.getFront(2)) != ConnectionMode.DISABLED) : false;
-        boolean extension3 = (state !=null && state.pipe !=null) ? (state.pipe.isConnectedTo(EnumFacing.getFront(3)) && state.pipe.getConnectionMode(EnumFacing.getFront(3)) != ConnectionMode.DISABLED) : false;
-        boolean extension4 = (state !=null && state.pipe !=null) ? (state.pipe.isConnectedTo(EnumFacing.getFront(4)) && state.pipe.getConnectionMode(EnumFacing.getFront(4)) != ConnectionMode.DISABLED) : false;
-        boolean extension5 = (state !=null && state.pipe !=null) ? (state.pipe.isConnectedTo(EnumFacing.getFront(5)) && state.pipe.getConnectionMode(EnumFacing.getFront(5)) != ConnectionMode.DISABLED) : false;
+        boolean extensionDown = (state !=null && state.pipe !=null) ? (state.pipe.isConnectedTo(EnumFacing.DOWN) && state.pipe.getConnectionMode(EnumFacing.DOWN) != ConnectionMode.DISABLED) : false;
+        boolean extensionUp = (state !=null && state.pipe !=null) ? (state.pipe.isConnectedTo(EnumFacing.UP) && state.pipe.getConnectionMode(EnumFacing.UP) != ConnectionMode.DISABLED) : false;
+        boolean extensionNorth = (state !=null && state.pipe !=null) ? (state.pipe.isConnectedTo(EnumFacing.NORTH) && state.pipe.getConnectionMode(EnumFacing.NORTH) != ConnectionMode.DISABLED) : false;
+        boolean extensionSouth = (state !=null && state.pipe !=null) ? (state.pipe.isConnectedTo(EnumFacing.SOUTH) && state.pipe.getConnectionMode(EnumFacing.SOUTH) != ConnectionMode.DISABLED) : false;
+        boolean extensionWest = (state !=null && state.pipe !=null) ? (state.pipe.isConnectedTo(EnumFacing.WEST) && state.pipe.getConnectionMode(EnumFacing.WEST) != ConnectionMode.DISABLED) : false;
+        boolean extensionEast = (state !=null && state.pipe !=null) ? (state.pipe.isConnectedTo(EnumFacing.EAST) && state.pipe.getConnectionMode(EnumFacing.EAST) != ConnectionMode.DISABLED) : false;
 
-        TextureAtlasSprite glass = RenderUtil.getSprite("crystalmod:blocks/pipe/power_plus");
-        TextureAtlasSprite glassSquare = getCoreTexture(state);
+        TextureAtlasSprite connector = getConnectorSprite();
+        TextureAtlasSprite core = getCoreTexture(state);
         
 		scale = false;
 		float max = 12.0f;
 		float min = 4.0f;
 		final BlockFaceUV uv2 = new BlockFaceUV(new float[] { 0.0f, 0.0f, 16.0f, 16.0f }, 180);
 		final BlockPartFace face2 = new BlockPartFace((EnumFacing)null, 0, "", uv2);
-		//if (!extension0) {
-            list.add(faceBakery.makeBakedQuad(new Vector3f(min, min, min), new Vector3f(max, min, max), face2, glass, EnumFacing.DOWN, ModelRotation.X0_Y0, (BlockPartRotation)null, scale, true));
-            list.add(faceBakery.makeBakedQuad(new Vector3f(min, min, min), new Vector3f(max, min, max), face2, glassSquare, EnumFacing.DOWN, ModelRotation.X0_Y0, (BlockPartRotation)null, scale, true));
-            list.add(faceBakery.makeBakedQuad(new Vector3f(min, min, min), new Vector3f(max, min, max), face2, glassSquare, EnumFacing.DOWN, ModelRotation.X0_Y0, (BlockPartRotation)null, scale, true));
-        //}
-        //if (!extension1) {
-            list.add(faceBakery.makeBakedQuad(new Vector3f(min, max, min), new Vector3f(max, max, max), face2, glass, EnumFacing.UP, ModelRotation.X0_Y0, (BlockPartRotation)null, scale, true));
-            list.add(faceBakery.makeBakedQuad(new Vector3f(min, max, min), new Vector3f(max, max, max), face2, glassSquare, EnumFacing.UP, ModelRotation.X0_Y0, (BlockPartRotation)null, scale, true));
-            list.add(faceBakery.makeBakedQuad(new Vector3f(min, max, min), new Vector3f(max, max, max), face2, glassSquare, EnumFacing.UP, ModelRotation.X0_Y0, (BlockPartRotation)null, scale, true));
-        //}
-        //if (!extension2) {
-            list.add(faceBakery.makeBakedQuad(new Vector3f(min, min, min), new Vector3f(max, max, min), face, glass, EnumFacing.NORTH, ModelRotation.X0_Y0, (BlockPartRotation)null, scale, true));
-            list.add(faceBakery.makeBakedQuad(new Vector3f(min, min, min), new Vector3f(max, max, min), face, glassSquare, EnumFacing.NORTH, ModelRotation.X0_Y0, (BlockPartRotation)null, scale, true));
-            list.add(faceBakery.makeBakedQuad(new Vector3f(min, min, min), new Vector3f(max, max, min), face, glassSquare, EnumFacing.NORTH, ModelRotation.X0_Y0, (BlockPartRotation)null, scale, true));
-        //}
-        //if (!extension3) {
-            list.add(faceBakery.makeBakedQuad(new Vector3f(min, min, max), new Vector3f(max, max, max), face, glass, EnumFacing.SOUTH, ModelRotation.X0_Y0, (BlockPartRotation)null, scale, true));
-            list.add(faceBakery.makeBakedQuad(new Vector3f(min, min, max), new Vector3f(max, max, max), face, glassSquare, EnumFacing.SOUTH, ModelRotation.X0_Y0, (BlockPartRotation)null, scale, true));
-            list.add(faceBakery.makeBakedQuad(new Vector3f(min, min, max), new Vector3f(max, max, max), face, glassSquare, EnumFacing.SOUTH, ModelRotation.X0_Y0, (BlockPartRotation)null, scale, true));
-        //}
-        //if (!extension4) {
-            list.add(faceBakery.makeBakedQuad(new Vector3f(min, min, min), new Vector3f(min, max, max), face, glass, EnumFacing.WEST, ModelRotation.X0_Y0, (BlockPartRotation)null, scale, true));
-            list.add(faceBakery.makeBakedQuad(new Vector3f(min, min, min), new Vector3f(min, max, max), face, glassSquare, EnumFacing.WEST, ModelRotation.X0_Y0, (BlockPartRotation)null, scale, true));
-            list.add(faceBakery.makeBakedQuad(new Vector3f(min, min, min), new Vector3f(min, max, max), face, glassSquare, EnumFacing.WEST, ModelRotation.X0_Y0, (BlockPartRotation)null, scale, true));
-        //}
-        //if (!extension5) {
-            list.add(faceBakery.makeBakedQuad(new Vector3f(max, min, min), new Vector3f(max, max, max), face, glass, EnumFacing.EAST, ModelRotation.X0_Y0, (BlockPartRotation)null, scale, true));
-            list.add(faceBakery.makeBakedQuad(new Vector3f(max, min, min), new Vector3f(max, max, max), face, glassSquare, EnumFacing.EAST, ModelRotation.X0_Y0, (BlockPartRotation)null, scale, true));
-            list.add(faceBakery.makeBakedQuad(new Vector3f(max, min, min), new Vector3f(max, max, max), face, glassSquare, EnumFacing.EAST, ModelRotation.X0_Y0, (BlockPartRotation)null, scale, true));
-        //}
+		
+		//DOWN
+		list.add(faceBakery.makeBakedQuad(new Vector3f(min, min, min), new Vector3f(max, min, max), face2, connector, EnumFacing.DOWN, ModelRotation.X0_Y0, (BlockPartRotation)null, scale, true));
+        list.add(faceBakery.makeBakedQuad(new Vector3f(min, min, min), new Vector3f(max, min, max), face2, core, EnumFacing.DOWN, ModelRotation.X0_Y0, (BlockPartRotation)null, scale, true));
+        list.add(faceBakery.makeBakedQuad(new Vector3f(min, min, min), new Vector3f(max, min, max), face2, core, EnumFacing.DOWN, ModelRotation.X0_Y0, (BlockPartRotation)null, scale, true));
+        
+        //UP
+        list.add(faceBakery.makeBakedQuad(new Vector3f(min, max, min), new Vector3f(max, max, max), face2, connector, EnumFacing.UP, ModelRotation.X0_Y0, (BlockPartRotation)null, scale, true));
+        list.add(faceBakery.makeBakedQuad(new Vector3f(min, max, min), new Vector3f(max, max, max), face2, core, EnumFacing.UP, ModelRotation.X0_Y0, (BlockPartRotation)null, scale, true));
+        list.add(faceBakery.makeBakedQuad(new Vector3f(min, max, min), new Vector3f(max, max, max), face2, core, EnumFacing.UP, ModelRotation.X0_Y0, (BlockPartRotation)null, scale, true));
+        
+        //NORTH
+        list.add(faceBakery.makeBakedQuad(new Vector3f(min, min, min), new Vector3f(max, max, min), face, connector, EnumFacing.NORTH, ModelRotation.X0_Y0, (BlockPartRotation)null, scale, true));
+        list.add(faceBakery.makeBakedQuad(new Vector3f(min, min, min), new Vector3f(max, max, min), face, core, EnumFacing.NORTH, ModelRotation.X0_Y0, (BlockPartRotation)null, scale, true));
+        list.add(faceBakery.makeBakedQuad(new Vector3f(min, min, min), new Vector3f(max, max, min), face, core, EnumFacing.NORTH, ModelRotation.X0_Y0, (BlockPartRotation)null, scale, true));
+        
+        //SOUTH
+        list.add(faceBakery.makeBakedQuad(new Vector3f(min, min, max), new Vector3f(max, max, max), face, connector, EnumFacing.SOUTH, ModelRotation.X0_Y0, (BlockPartRotation)null, scale, true));
+        list.add(faceBakery.makeBakedQuad(new Vector3f(min, min, max), new Vector3f(max, max, max), face, core, EnumFacing.SOUTH, ModelRotation.X0_Y0, (BlockPartRotation)null, scale, true));
+        list.add(faceBakery.makeBakedQuad(new Vector3f(min, min, max), new Vector3f(max, max, max), face, core, EnumFacing.SOUTH, ModelRotation.X0_Y0, (BlockPartRotation)null, scale, true));
+        
+        //WEST
+        list.add(faceBakery.makeBakedQuad(new Vector3f(min, min, min), new Vector3f(min, max, max), face, connector, EnumFacing.WEST, ModelRotation.X0_Y0, (BlockPartRotation)null, scale, true));
+        list.add(faceBakery.makeBakedQuad(new Vector3f(min, min, min), new Vector3f(min, max, max), face, core, EnumFacing.WEST, ModelRotation.X0_Y0, (BlockPartRotation)null, scale, true));
+        list.add(faceBakery.makeBakedQuad(new Vector3f(min, min, min), new Vector3f(min, max, max), face, core, EnumFacing.WEST, ModelRotation.X0_Y0, (BlockPartRotation)null, scale, true));
+        
+        //EAST
+        list.add(faceBakery.makeBakedQuad(new Vector3f(max, min, min), new Vector3f(max, max, max), face, connector, EnumFacing.EAST, ModelRotation.X0_Y0, (BlockPartRotation)null, scale, true));
+        list.add(faceBakery.makeBakedQuad(new Vector3f(max, min, min), new Vector3f(max, max, max), face, core, EnumFacing.EAST, ModelRotation.X0_Y0, (BlockPartRotation)null, scale, true));
+        list.add(faceBakery.makeBakedQuad(new Vector3f(max, min, min), new Vector3f(max, max, max), face, core, EnumFacing.EAST, ModelRotation.X0_Y0, (BlockPartRotation)null, scale, true));
+        
         scale = true;
         
-        if (extension0) {
-            this.drawGlassStump(ModelRotation.X270_Y0, list);
+        float minExt = 5;
+        float maxExt = 11;
+        boolean scaleExt = false;
+        final BlockPartFace faceExtTop = new BlockPartFace((EnumFacing)null, 0, "", new BlockFaceUV(new float[] { 5, 0, 11, 4 }, 0));
+        final BlockPartFace faceExtBottom = new BlockPartFace((EnumFacing)null, 0, "", new BlockFaceUV(new float[] { 5, 12, 11, 16 }, 0));
+        final BlockPartFace faceExtLeft = new BlockPartFace((EnumFacing)null, 0, "", new BlockFaceUV(new float[] { 0, 5, 4, 11 }, 0));
+        final BlockPartFace faceExtRight = new BlockPartFace((EnumFacing)null, 0, "", new BlockFaceUV(new float[] { 12, 5, 16, 11 }, 0));
+
+        if (extensionDown) {
+        	list.add(faceBakery.makeBakedQuad(new Vector3f(minExt, 0.0F, maxExt), new Vector3f(maxExt, minExt, maxExt), faceExtBottom, connector, EnumFacing.SOUTH, ModelRotation.X0_Y0, (BlockPartRotation)null, scaleExt, true));
+            list.add(faceBakery.makeBakedQuad(new Vector3f(minExt, 0.0F, minExt), new Vector3f(maxExt, minExt, minExt), faceExtBottom, connector, EnumFacing.NORTH, ModelRotation.X0_Y0, (BlockPartRotation)null, scaleExt, true));
+            list.add(faceBakery.makeBakedQuad(new Vector3f(minExt, 0.0F, minExt), new Vector3f(minExt, minExt, maxExt), faceExtBottom, connector, EnumFacing.WEST, ModelRotation.X0_Y0, (BlockPartRotation)null, scaleExt, true));
+            list.add(faceBakery.makeBakedQuad(new Vector3f(maxExt, 0.0F, minExt), new Vector3f(maxExt, minExt, maxExt), faceExtBottom, connector, EnumFacing.EAST, ModelRotation.X0_Y0, (BlockPartRotation)null, scaleExt, true));
         }
-        if (extension1) {
-            this.drawGlassStump(ModelRotation.X90_Y0, list);
+        if (extensionUp) {
+            list.add(faceBakery.makeBakedQuad(new Vector3f(minExt, maxExt, maxExt), new Vector3f(maxExt, 16.0F, maxExt), faceExtTop, connector, EnumFacing.SOUTH, ModelRotation.X0_Y0, (BlockPartRotation)null, scaleExt, true));
+            list.add(faceBakery.makeBakedQuad(new Vector3f(minExt, maxExt, minExt), new Vector3f(maxExt, 16.0F, minExt), faceExtTop, connector, EnumFacing.NORTH, ModelRotation.X0_Y0, (BlockPartRotation)null, scaleExt, true));
+            list.add(faceBakery.makeBakedQuad(new Vector3f(minExt, maxExt, minExt), new Vector3f(minExt, 16.0F, maxExt), faceExtTop, connector, EnumFacing.WEST, ModelRotation.X0_Y0, (BlockPartRotation)null, scaleExt, true));
+            list.add(faceBakery.makeBakedQuad(new Vector3f(maxExt, maxExt, minExt), new Vector3f(maxExt, 16.0F, maxExt), faceExtTop, connector, EnumFacing.EAST, ModelRotation.X0_Y0, (BlockPartRotation)null, scaleExt, true));
         }
-        if (extension2) {
-            this.drawGlassStump(ModelRotation.X180_Y0, list);
+        if (extensionNorth) {
+            list.add(faceBakery.makeBakedQuad(new Vector3f(minExt, maxExt, 0.0F), new Vector3f(maxExt, maxExt, minExt), faceExtTop, connector, EnumFacing.UP, ModelRotation.X0_Y0, (BlockPartRotation)null, scaleExt, true));
+            list.add(faceBakery.makeBakedQuad(new Vector3f(maxExt, minExt, minExt), new Vector3f(minExt, minExt, 0.0F), faceExtTop, connector, EnumFacing.DOWN, ModelRotation.X0_Y0, (BlockPartRotation)null, scaleExt, true));
+            list.add(faceBakery.makeBakedQuad(new Vector3f(minExt, minExt, 0.0F), new Vector3f(minExt, maxExt, minExt), faceExtLeft, connector, EnumFacing.WEST, ModelRotation.X0_Y0, (BlockPartRotation)null, scaleExt, true));
+            list.add(faceBakery.makeBakedQuad(new Vector3f(maxExt, minExt, 0.0F), new Vector3f(maxExt, maxExt, minExt), faceExtRight, connector, EnumFacing.EAST, ModelRotation.X0_Y0, (BlockPartRotation)null, scaleExt, true));
         }
-        if (extension3) {
-            this.drawGlassStump(ModelRotation.X0_Y0, list);
+        if (extensionSouth) {
+        	list.add(faceBakery.makeBakedQuad(new Vector3f(minExt, maxExt, maxExt), new Vector3f(maxExt, maxExt, 16.0f), faceExtBottom, connector, EnumFacing.UP, ModelRotation.X0_Y0, (BlockPartRotation)null, scaleExt, true));
+            list.add(faceBakery.makeBakedQuad(new Vector3f(maxExt, minExt, 16.0F), new Vector3f(minExt, minExt, maxExt), faceExtBottom, connector, EnumFacing.DOWN, ModelRotation.X0_Y0, (BlockPartRotation)null, scaleExt, true));
+            list.add(faceBakery.makeBakedQuad(new Vector3f(minExt, minExt, maxExt), new Vector3f(minExt, maxExt, 16.0f), faceExtRight, connector, EnumFacing.WEST, ModelRotation.X0_Y0, (BlockPartRotation)null, scaleExt, true));
+            list.add(faceBakery.makeBakedQuad(new Vector3f(maxExt, minExt, maxExt), new Vector3f(maxExt, maxExt, 16.0f), faceExtLeft, connector, EnumFacing.EAST, ModelRotation.X0_Y0, (BlockPartRotation)null, scaleExt, true));
         }
-        if (extension4) {
-            this.drawGlassStump(ModelRotation.X0_Y90, list);
+        if (extensionWest) {
+        	list.add(faceBakery.makeBakedQuad(new Vector3f(0.0F, maxExt, minExt), new Vector3f(minExt, maxExt, maxExt), faceExtLeft, connector, EnumFacing.UP, ModelRotation.X0_Y0, (BlockPartRotation)null, scaleExt, true));
+            list.add(faceBakery.makeBakedQuad(new Vector3f(minExt, minExt, maxExt), new Vector3f(0.0F, minExt, minExt), faceExtRight, connector, EnumFacing.DOWN, ModelRotation.X0_Y0, (BlockPartRotation)null, scaleExt, true));
+            list.add(faceBakery.makeBakedQuad(new Vector3f(0.0F, minExt, minExt), new Vector3f(minExt, maxExt, minExt), faceExtRight, connector, EnumFacing.NORTH, ModelRotation.X0_Y0, (BlockPartRotation)null, scaleExt, true));
+            list.add(faceBakery.makeBakedQuad(new Vector3f(0.0F, minExt, maxExt), new Vector3f(minExt, maxExt, maxExt), faceExtLeft, connector, EnumFacing.SOUTH, ModelRotation.X0_Y0, (BlockPartRotation)null, scaleExt, true));
         }
-        if (extension5) {
-            this.drawGlassStump(ModelRotation.X0_Y270, list);
+        if (extensionEast) {
+        	list.add(faceBakery.makeBakedQuad(new Vector3f(maxExt, maxExt, minExt), new Vector3f(16.0F, maxExt, maxExt), faceExtRight, connector, EnumFacing.UP, ModelRotation.X0_Y0, (BlockPartRotation)null, scaleExt, true));
+            list.add(faceBakery.makeBakedQuad(new Vector3f(16.0F, minExt, maxExt), new Vector3f(maxExt, minExt, minExt), faceExtLeft, connector, EnumFacing.DOWN, ModelRotation.X0_Y0, (BlockPartRotation)null, scaleExt, true));
+            list.add(faceBakery.makeBakedQuad(new Vector3f(maxExt, minExt, minExt), new Vector3f(16.0F, maxExt, minExt), faceExtLeft, connector, EnumFacing.NORTH, ModelRotation.X0_Y0, (BlockPartRotation)null, scaleExt, true));
+            list.add(faceBakery.makeBakedQuad(new Vector3f(maxExt, minExt, maxExt), new Vector3f(16.0F, maxExt, maxExt), faceExtRight, connector, EnumFacing.SOUTH, ModelRotation.X0_Y0, (BlockPartRotation)null, scaleExt, true));
         }
         
-        for (int n = 0; n < 6; ++n) {
+        for (EnumFacing dir : EnumFacing.VALUES) {
         	boolean safe = (state !=null && state.pipe !=null);
-        	EnumFacing dir = EnumFacing.getFront(n);
         	if (safe ? state.pipe.containsExternalConnection(dir) : false) {
-            	this.renderIronCap(state, n, list);
+            	renderIronCap(state, dir, list);
             }
             if (safe && state.pipe.getCoverData(dir) !=null) {
             	//CoverData data = state.pipe.getCoverData(dir);
@@ -263,7 +270,7 @@ public class ModelPipeBaked implements IPerspectiveAwareModel
     private TextureAtlasSprite getCoreTexture(FakeState state) {
     	TextureAtlasSprite glassSquare = null;        
         String texture = "";
-        if(!ItemStackTools.isNullStack(renderStack)){
+        if(ItemStackTools.isValid(renderStack)){
         	int type = renderStack.getMetadata();
 	        if(type == 0){
 	        	texture = ("crystalmod:blocks/pipe/item_square");
@@ -328,6 +335,11 @@ public class ModelPipeBaked implements IPerspectiveAwareModel
 	
 	public static TextureAtlasSprite getIronSprite(){
 		TextureAtlasSprite iron = RenderUtil.getSprite("crystalmod:blocks/pipe/iron_cap");
+		return iron !=null ? iron : RenderUtil.getMissingSprite();
+	}
+	
+	public static TextureAtlasSprite getConnectorSprite(){
+		TextureAtlasSprite iron = RenderUtil.getSprite("crystalmod:blocks/pipe/pipe_connector");
 		return iron !=null ? iron : RenderUtil.getMissingSprite();
 	}
 	
