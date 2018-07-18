@@ -117,7 +117,7 @@ public class NetworkCUPowerManager {
       IPowerInterface pp = r.powerInterface;
       if(pp != null) {
         int canOffer = Math.min(r.emmiter.getMaxEnergyExtracted(r.direction), available);
-        int used = pp.fillEnergy(r.direction.getOpposite(), canOffer);
+        int used = pp.fillEnergy(r.direction.getOpposite(), canOffer, false);
         used = Math.max(0, used);
         tracker.powerSent(used);
         available -= used;
@@ -137,6 +137,76 @@ public class NetworkCUPowerManager {
     tracker.tickEnd(energyStored);
   }
 
+  public int freeSend(final int power, boolean sim){
+	  if(sim){
+		  int appliedCount = 0;
+		  int numReceptors = receptors.size();
+		  int available = power;
+		  int wasAvailable = available;
+	
+		  if(available <= 0 || (receptors.isEmpty() && storageReceptors.isEmpty())) {
+			  return 0;
+		  }
+		  while (available > 0 && appliedCount < numReceptors) {
+	
+			  if(!receptors.isEmpty() && !receptorIterator.hasNext()) {
+				  receptorIterator = receptors.listIterator();
+			  }
+			  ReceptorEntry r = receptorIterator.next();
+			  IPowerInterface pp = r.powerInterface;
+			  if(pp != null) {
+				  int canOffer = Math.min(r.emmiter.getMaxEnergyExtracted(r.direction), available);
+				  int used = pp.fillEnergy(r.direction.getOpposite(), canOffer, true);
+				  used = Math.max(0, used);
+				  available -= used;
+				  if(available <= 0) {
+					  break;
+				  }
+			  }
+			  appliedCount++;
+		  }
+	
+		  int used = wasAvailable - available;
+		  return used;
+	  } else {
+		  checkReceptors();
+		  tracker.tickStart(power);
+	
+		  int appliedCount = 0;
+		  int numReceptors = receptors.size();
+		  int available = power;
+		  int wasAvailable = available;
+	
+		  if(available <= 0 || (receptors.isEmpty() && storageReceptors.isEmpty())) {
+			  tracker.tickEnd(power);
+			  return 0;
+		  }
+		  while (available > 0 && appliedCount < numReceptors) {
+	
+			  if(!receptors.isEmpty() && !receptorIterator.hasNext()) {
+				  receptorIterator = receptors.listIterator();
+			  }
+			  ReceptorEntry r = receptorIterator.next();
+			  IPowerInterface pp = r.powerInterface;
+			  if(pp != null) {
+				  int canOffer = Math.min(r.emmiter.getMaxEnergyExtracted(r.direction), available);
+				  int used = pp.fillEnergy(r.direction.getOpposite(), canOffer, false);
+				  used = Math.max(0, used);
+				  tracker.powerSent(used);
+				  available -= used;
+				  if(available <= 0) {
+					  break;
+				  }
+			  }
+			  appliedCount++;
+		  }
+	
+		  int used = wasAvailable - available;
+		  tracker.tickEnd(used);
+		  return used;
+	  }
+  }
+  
   private void distributeStorageToPipes() {
     if(maxEnergyStored <= 0 || energyStored <= 0) {
       for (TileEntityPipe pip : network.getPipes()) {
@@ -196,12 +266,7 @@ public class NetworkCUPowerManager {
     receptors.clear();
     storageReceptors.clear();
     for (ReceptorEntry rec : network.getPowerReceptors()) {
-      /*if(rec.powerInterface.getDelegate() != null &&
-          rec.powerInterface.getDelegate() instanceof alec_wam.CrystalMod.api.energy.ICEnergyConnection) {
-        storageReceptors.add(rec);
-      } else {*/
-        receptors.add(rec);
-      //}
+    	receptors.add(rec);
     }
     receptorIterator = receptors.listIterator();
 

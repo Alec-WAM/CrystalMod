@@ -100,6 +100,15 @@ public class PacketEntityMessage extends AbstractPacketThreadsafe {
 					}
 				}
 			}
+			if(type.equalsIgnoreCase("#RemoveXP#")){
+				if(entity instanceof EntityPlayer){
+					EntityPlayer ePlayer = (EntityPlayer)entity;
+					ePlayer.removeExperienceLevel(data.getInteger("Amount"));
+					/*if(client){
+						CrystalMod.proxy.getClientWorld().playSound(ePlayer.posX, ePlayer.posY, ePlayer.posZ, ModSounds.levelDown, SoundCategory.BLOCKS, 1.0F, 1.0F, false);
+					}*/
+				}
+			}
 			if(type.equalsIgnoreCase("#FusorFlash#")){
 				if(entity instanceof EntityPlayer){
 					EntityPlayer ePlayer = (EntityPlayer)entity;

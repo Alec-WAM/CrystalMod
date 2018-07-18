@@ -506,7 +506,8 @@ public class ModCrafting {
 		addShapedOreRecipe(new ItemStack(ModBlocks.crystalWorkbench, 1, CrystalColors.Basic.DARK.getMeta()), new Object[]{"###", "#W#", "###", '#', darkIngot, 'W', "workbench"});
 
 		addShapedOreRecipe(new ItemStack(ModBlocks.enhancementTable), new Object[]{"#I#", "IWI", "#I#", '#', Items.ENCHANTED_BOOK, 'I', purePlate, 'W', new ItemStack(ModBlocks.crystalWorkbench, 1, CrystalColors.Basic.DARK.getMeta())});
-		
+		addShapedOreRecipe(new ItemStack(ModBlocks.enhancedEnchantmentTable), new Object[]{"ETE", "###", '#', dIronPlate, 'E', "gemEmerald", 'T', Blocks.ENCHANTING_TABLE});
+
 		ItemStack pipeEStorage = new ItemStack(ModBlocks.crystalPipe, 1, PipeType.ESTORAGE.getMeta());
 		
 		addShapedOreRecipe(new ItemStack(ModBlocks.crystalPipe, 8, PipeType.ITEM.getMeta()), new Object[]{"###", "NHN", "###", '#', dIronPlate, 'N', dIronNugget, 'H', "chestWood" });

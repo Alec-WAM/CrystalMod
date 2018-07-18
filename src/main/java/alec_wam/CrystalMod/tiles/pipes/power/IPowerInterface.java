@@ -16,7 +16,7 @@ public interface IPowerInterface {
 
   int getMinEnergyReceived(EnumFacing dir);
 
-  int fillEnergy(EnumFacing opposite, int canOffer);
+  int fillEnergy(EnumFacing opposite, int canOffer, boolean sim);
 
   boolean isOutputOnly();
 

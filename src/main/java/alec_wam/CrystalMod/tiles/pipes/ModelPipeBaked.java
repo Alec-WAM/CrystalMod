@@ -97,22 +97,22 @@ public class ModelPipeBaked implements IPerspectiveAwareModel
         final BlockPartFace face180 = new BlockPartFace((EnumFacing)null, 0, "", uv180);
         
         TextureAtlasSprite iron = RenderUtil.getSprite("crystalmod:blocks/pipe/iron_cap");
-        TextureAtlasSprite spriteLapis = RenderUtil.getSprite("crystalmod:blocks/pipe/io_out");
-        TextureAtlasSprite spriteRedstone = RenderUtil.getSprite("crystalmod:blocks/pipe/io_in");
-        TextureAtlasSprite spriteQuartz = RenderUtil.getSprite("crystalmod:blocks/pipe/io_inout");
+        TextureAtlasSprite io_out = RenderUtil.getSprite("crystalmod:blocks/pipe/io_out");
+        TextureAtlasSprite io_in = RenderUtil.getSprite("crystalmod:blocks/pipe/io_in");
+        TextureAtlasSprite io_both = RenderUtil.getSprite("crystalmod:blocks/pipe/io_inout");
         
         boolean scale = false;
         if(state !=null && state.pipe !=null && state.pipe.getPipeType() !=null){
         	if(!state.pipe.getPipeType().useIOTextures()){
-        		spriteRedstone = iron;
-        		spriteLapis = iron;
-        		spriteQuartz = iron;
+        		io_in = iron;
+        		io_out = iron;
+        		io_both = iron;
         		scale = true;
         	}
         }
         
         ConnectionMode mode = (state !=null && state.pipe !=null) ? state.pipe.getConnectionMode(dir) : ConnectionMode.DISABLED;
-        TextureAtlasSprite modeSprite = mode == ConnectionMode.IN_OUT ? spriteQuartz : mode == ConnectionMode.OUTPUT ? spriteRedstone : mode == ConnectionMode.INPUT ? spriteLapis : iron;
+        TextureAtlasSprite modeSprite = mode == ConnectionMode.IN_OUT ? io_both : mode == ConnectionMode.OUTPUT ? io_in : mode == ConnectionMode.INPUT ? io_out : iron;
         
         
         

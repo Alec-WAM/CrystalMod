@@ -56,11 +56,11 @@ public class PowerInterfaceRF implements IPowerInterface {
   }
 
   @Override
-  public int fillEnergy(EnumFacing dir, int canOffer) {
+  public int fillEnergy(EnumFacing dir, int canOffer, boolean simulate) {
     if(storage == null) {
     	return 0;
     }
-    return storage.receiveEnergy(canOffer, false);
+    return storage.receiveEnergy(canOffer, simulate);
   }
 
   @Override

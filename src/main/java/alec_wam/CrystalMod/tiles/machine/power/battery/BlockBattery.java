@@ -12,6 +12,7 @@ import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.Lang;
+import alec_wam.CrystalMod.util.StringUtils;
 import alec_wam.CrystalMod.util.tool.ToolUtil;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -166,11 +167,11 @@ public class BlockBattery extends BlockContainer implements ICustomModel {
 
     	if(type == BatteryType.CREATIVE){
     		tooltip.add("Energy: Infinite "+Lang.localize("power.cu"));
-    		tooltip.add("Max Output: "+TileEntityBattery.MAX_SEND[type.getMeta()]+" "+Lang.localize("power.cu")+"/t");
+    		tooltip.add("Max Output: "+StringUtils.convertToCommas(TileEntityBattery.MAX_SEND[type.getMeta()])+" "+Lang.localize("power.cu")+"/t");
     	} else {
-	    	tooltip.add("Energy: "+energy+" / "+TileEntityBattery.MAX_ENERGY[type.getMeta()] + " "+Lang.localize("power.cu"));
-	    	tooltip.add("Max Input: "+TileEntityBattery.MAX_RECEIVE[type.getMeta()]+" "+Lang.localize("power.cu")+"/t");
-	    	tooltip.add("Max Output: "+TileEntityBattery.MAX_SEND[type.getMeta()]+" "+Lang.localize("power.cu")+"/t");
+	    	tooltip.add("Energy: "+StringUtils.convertToCommas(energy)+" / "+StringUtils.convertToCommas(TileEntityBattery.MAX_ENERGY[type.getMeta()]) + " "+Lang.localize("power.cu"));
+	    	tooltip.add("Max Input: "+StringUtils.convertToCommas(TileEntityBattery.MAX_RECEIVE[type.getMeta()])+" "+Lang.localize("power.cu")+"/t");
+	    	tooltip.add("Max Output: "+StringUtils.convertToCommas(TileEntityBattery.MAX_SEND[type.getMeta()])+" "+Lang.localize("power.cu")+"/t");
     	}
     }
     

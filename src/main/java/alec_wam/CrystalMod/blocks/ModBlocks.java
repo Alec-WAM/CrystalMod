@@ -98,6 +98,9 @@ import alec_wam.CrystalMod.tiles.darkinfection.BlockInfected;
 import alec_wam.CrystalMod.tiles.darkinfection.TileDarkInfection;
 import alec_wam.CrystalMod.tiles.endertorch.BlockEnderTorch;
 import alec_wam.CrystalMod.tiles.endertorch.TileEnderTorch;
+import alec_wam.CrystalMod.tiles.enhancedEnchantmentTable.BlockEnhancedEnchantmentTable;
+import alec_wam.CrystalMod.tiles.enhancedEnchantmentTable.RenderEnhancedEnchantmentTable;
+import alec_wam.CrystalMod.tiles.enhancedEnchantmentTable.TileEntityEnhancedEnchantmentTable;
 import alec_wam.CrystalMod.tiles.entityhopper.BlockEntityHopper;
 import alec_wam.CrystalMod.tiles.entityhopper.TileEntityEntityHopper;
 import alec_wam.CrystalMod.tiles.explosives.fuser.BlockOppositeFuser;
@@ -325,6 +328,7 @@ public class ModBlocks {
 	public static BlockBasicTile xpVacuum;
 	public static BlockXPFountain xpFountain;
 	public static BlockXPTank xpTank;
+	public static BlockEnhancedEnchantmentTable enhancedEnchantmentTable;
 	public static BlockBasicTile seismicScanner;
 	
 	public static BlockCrate crates;
@@ -854,6 +858,8 @@ public class ModBlocks {
 		registerTileEntity(TileEntityXPTank.class);
 		seismicScanner = (BlockBasicTile)registerBlock(new BlockBasicTile(TileEntitySeismicScanner.class, Material.IRON).setHardness(1.5F), "seismic_scanner");
 		registerTileEntity(TileEntitySeismicScanner.class);
+		enhancedEnchantmentTable = registerBlock(new BlockEnhancedEnchantmentTable(), "enhanced_etable");
+		registerTileEntity(TileEntityEnhancedEnchantmentTable.class);
 
 		crates = new BlockCrate();
 		registerEnumBlock(crates, "crate");
@@ -1019,6 +1025,7 @@ public class ModBlocks {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileCrate.class, new RenderTileCrate<TileCrate>());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCasePiston.class, new RenderTileEntityCasePiston());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityXPTank.class, new RenderTileEntityXPTank());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityEnhancedEnchantmentTable.class, new RenderEnhancedEnchantmentTable());
 	}
 
 	@SideOnly(Side.CLIENT)

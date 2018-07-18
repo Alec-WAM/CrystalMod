@@ -1,0 +1,60 @@
+{
+    "__comment": "Model generated using MrCrayfish's Model Creator (http://mrcrayfish.com/modelcreator/)",
+    "textures": {
+		"particle": "crystalmod:blocks/machine/enhanced_etable/top",
+        "side": "crystalmod:blocks/machine/enhanced_etable/side",
+        "top": "crystalmod:blocks/machine/enhanced_etable/top",
+        "bottom": "crystalmod:blocks/machine/enhanced_etable/bottom",
+        "slot": "crystalmod:blocks/machine/enhanced_etable/slot"
+    },
+    "elements": [
+        {
+            "name": "Base",
+            "from": [ 0.0, 0.0, 0.0 ], 
+            "to": [ 16.0, 12.0, 16.0 ], 
+            "faces": {
+                "north": { "texture": "#side", "uv": [ 0.0, 4.0, 16.0, 16.0 ] },
+                "east": { "texture": "#side", "uv": [ 0.0, 4.0, 16.0, 16.0 ] },
+                "south": { "texture": "#side", "uv": [ 0.0, 4.0, 16.0, 16.0 ] },
+                "west": { "texture": "#side", "uv": [ 0.0, 4.0, 16.0, 16.0 ] },
+                "up": { "texture": "#top", "uv": [ 0.0, 0.0, 16.0, 16.0 ] },
+                "down": { "texture": "#bottom", "uv": [ 0.0, 0.0, 16.0, 16.0 ] }
+            }
+        },
+        {
+            "name": "MainSlot",
+            "from": [ 4.0, 13.0, 9.0 ], 
+            "to": [ 12.0, 14.0, 17.0 ], 
+            "rotation": { "origin": [ 8.0, 8.0, 8.0 ], "axis": "x", "angle": -45.0 },
+            "faces": {
+                "north": { "texture": "#slot", "uv": [ 4.0, 0.0, 12.0, 1.0 ] },
+                "east": { "texture": "#slot", "uv": [ 15.0, 4.0, 16.0, 12.0 ] },
+                "south": { "texture": "#slot", "uv": [ 4.0, 15.0, 12.0, 16.0 ] },
+                "west": { "texture": "#slot", "uv": [ 0.0, 4.0, 1.0, 12.0 ] },
+                "up": { "texture": "#slot", "uv": [ 0.0, 0.0, 16.0, 16.0 ] },
+                "down": { "texture": "#slot", "uv": [ 0.0, 0.0, 16.0, 16.0 ] }
+            }
+        },
+        {
+            "name": "SlotPole",
+            "from": [ 7.0, 12.0, 7.0 ], 
+            "to": [ 9.0, 15.0, 9.0 ], 
+            "faces": {
+                "north": { "texture": "#slot", "uv": [ 1.0, 1.0, 3.0, 4.0 ] },
+                "east": { "texture": "#slot", "uv": [ 1.0, 1.0, 3.0, 4.0 ] },
+                "south": { "texture": "#slot", "uv": [ 1.0, 1.0, 3.0, 4.0 ] },
+                "west": { "texture": "#slot", "uv": [ 1.0, 1.0, 3.0, 4.0 ] }
+            }
+        },
+        {
+            "name": "PoleDetail",
+            "from": [ 7.0, 15.0, 8.0 ], 
+            "to": [ 9.0, 16.0, 9.0 ], 
+            "faces": {
+                "south": { "texture": "#slot", "uv": [ 1.0, 1.0, 3.0, 2.0 ] },
+                "east": { "texture": "#slot", "uv": [ 1.0, 1.0, 2.0, 2.0 ] },
+                "west": { "texture": "#slot", "uv": [ 1.0, 1.0, 2.0, 2.0 ] }
+            }
+        }
+    ]
+}

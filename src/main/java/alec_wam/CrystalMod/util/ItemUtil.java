@@ -12,7 +12,6 @@ import javax.annotation.Nonnull;
 
 import com.google.common.collect.Lists;
 
-import alec_wam.CrystalMod.util.IEnumMeta;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.tiles.machine.worksite.InventorySided;
 import alec_wam.CrystalMod.tiles.pipes.item.GhostItemHelper;
@@ -1470,6 +1469,23 @@ public class ItemUtil {
 			if(!player.getEntityWorld().isRemote)
 				player.getEntityWorld().spawnEntity(item);
 		}
+	}
+	
+	public static String getEnchantmentWithLevel(Enchantment ench, int lvl){
+		String s = Lang.translateToLocal(ench.getName());
+
+        if (ench.isCurse())
+        {
+            s = TextFormatting.RED + s;
+        }
+        
+        if(lvl == 1 && ench.getMaxLevel() == 1){
+        	return s;
+        }
+        
+        String level = Lang.canBeTranslated("enchantment.level." + lvl) ? Lang.translateToLocal("enchantment.level." + lvl) : ""+lvl;
+
+        return s + " " + level;
 	}
 
 }

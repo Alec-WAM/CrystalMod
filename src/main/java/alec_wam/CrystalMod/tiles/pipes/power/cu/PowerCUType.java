@@ -12,7 +12,7 @@ public class PowerCUType implements IPipeType {
 	public String getCoreTexture(TileEntityPipe pipe) {
 		int tier = 0;
 		if(Util.notNullAndInstanceOf(pipe, TileEntityPipePowerCU.class)){
-			tier = ((TileEntityPipePowerCU)pipe).getSubType();
+			tier = ((TileEntityPipePowerCU)pipe).getSubType().ordinal();
 		}
 		return "crystalmod:blocks/pipe/power_square_"+tier;
 	}

@@ -632,6 +632,7 @@ tile.crystalmod.crystalworkbench.green.name=Green Crystal Workbench
 tile.crystalmod.crystalworkbench.dark.name=Dark Crystal Workbench
 
 tile.crystalmod.enhancementtable.name=Enhancement Table
+tile.crystalmod.enhanced_etable.name=Enchantment Manipulator
 
 tile.crystalmod.crystalchest.BLUE.name=Blue Crystal Chest
 tile.crystalmod.crystalchest.RED.name=Red Crystal Chest

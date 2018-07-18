@@ -56,11 +56,11 @@ public class PowerInterfaceCU implements IPowerInterface {
   }
 
   @Override
-  public int fillEnergy(EnumFacing dir, int canOffer) {
+  public int fillEnergy(EnumFacing dir, int canOffer, boolean simulate) {
     if(storage == null) {
     	return 0;
     }
-    return storage.fillCEnergy(canOffer, false);
+    return storage.fillCEnergy(canOffer, simulate);
   }
 
   @Override

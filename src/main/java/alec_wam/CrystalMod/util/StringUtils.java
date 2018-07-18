@@ -1,5 +1,6 @@
 package alec_wam.CrystalMod.util;
 
+import java.text.NumberFormat;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -63,6 +64,10 @@ public class StringUtils {
 	
 	public static String chopAtLast(String str, String character) {
 		return str.substring(0, str.lastIndexOf(character));
+	}
+	
+	public static String convertToCommas(int number){
+		return NumberFormat.getIntegerInstance().format(number);
 	}
 	
 }

@@ -15,47 +15,69 @@ import alec_wam.CrystalMod.tiles.pipes.IPipeWrapper;
 import alec_wam.CrystalMod.tiles.pipes.TileEntityPipe;
 import alec_wam.CrystalMod.tiles.pipes.power.IPowerInterface;
 import alec_wam.CrystalMod.tiles.pipes.types.IPipeType;
+import alec_wam.CrystalMod.util.ChatUtil;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 public class TileEntityPipePowerCU extends TileEntityPipe {
 
+	public static enum Tier {
+		BLUE, RED, GREEN, DARK, PURE;
+	}
+	
 	protected CUPowerPipeNetwork network;
 
 	private int energyStoredCU;
 
-	private int subtype;
+	private Tier subtype;
 
 	protected EnumMap<EnumFacing, Long> recievedTicks;
 	
 	public TileEntityPipePowerCU(){}
 	
 	public void setSubType(int sub){
-		this.subtype = sub;
+		this.subtype = Tier.values()[sub];
 	}
 	
-	public int getSubType(){
+	public Tier getSubType(){
 		return subtype;
+	}
+	
+	public boolean onActivated(World world, EntityPlayer player, EnumHand hand, ItemStack stack, EnumFacing side, Vec3d hitVec) {
+		if(ItemStackTools.isValid(stack)){
+			if(stack.getItem() == Items.REDSTONE){
+				if(!world.isRemote){
+					ChatUtil.sendChat(player, "I/O: "+this.network.powerManager.tracker.getAveragePowerTickRecieved()+" / " + this.network.powerManager.tracker.getAveragePowerTickSent());
+				}
+				return true;
+			}
+		}
+		return super.onActivated(world, player, hand, stack, side, hitVec);
 	}
 	
 	@Override
 	public void writeCustomNBT(NBTTagCompound nbt){
 		super.writeCustomNBT(nbt);
-		nbt.setInteger("subtype", subtype);
+		nbt.setInteger("subtype", subtype.ordinal());
 		nbt.setInteger("energyStoredCU", energyStoredCU);
 	}
 	
 	@Override
 	public void readCustomNBT(NBTTagCompound nbt){
 		super.readCustomNBT(nbt);
-		this.subtype = nbt.getInteger("subtype");
+		setSubType(nbt.getInteger("subtype"));
 		
 		this.setCEnergyStored(nbt.getInteger("energyStoredCU"));
 	}
@@ -121,15 +143,17 @@ public class TileEntityPipePowerCU extends TileEntityPipe {
 	    return false;
 	}
 
-	static int getMaxEnergyIO(int subtype) {
+	public static int getMaxEnergyIO(Tier subtype) {
 	    switch (subtype) {
-	    case 1:
+	    case RED:
 	      return Config.powerConduitTierTwoCU;
-	    case 2:
+	    case GREEN:
 	      return Config.powerConduitTierThreeCU;
-	    case 3:
+	    case DARK:
 		      return Config.powerConduitTierThreeCU;
-	    default:
+	    case PURE:
+	    	return Integer.MAX_VALUE;
+	    case BLUE : default:
 	      return Config.powerConduitTierOneCU;
 	    }
 	}
@@ -142,6 +166,17 @@ public class TileEntityPipePowerCU extends TileEntityPipe {
 		if(getMaxEnergyRecieved(from) == 0 || maxExtract <= 0) {
 	      return 0;
 	    }
+		if(subtype == Tier.PURE){
+			if(network == null || network.powerManager == null)return 0;
+			int result = network.powerManager.freeSend(maxExtract, simulate);
+			if(!simulate && result > 0) {
+				if(recievedTicks == null) {
+					recievedTicks = new EnumMap<EnumFacing, Long>(EnumFacing.class);
+				}
+				recievedTicks.put(from, getWorld().getTotalWorldTime());
+			}
+			return result;
+		} 
 	    int freeSpace = getMaxCEnergyStored() - getCEnergyStored();
 	    int result = Math.min(maxExtract, freeSpace);
 	    if(!simulate && result > 0) {
@@ -151,7 +186,6 @@ public class TileEntityPipePowerCU extends TileEntityPipe {
 	          recievedTicks = new EnumMap<EnumFacing, Long>(EnumFacing.class);
 	        }
 	        recievedTicks.put(from, getWorld().getTotalWorldTime());
-
 	    }
 	    return result;
 	}
@@ -192,8 +226,6 @@ public class TileEntityPipePowerCU extends TileEntityPipe {
 	      return false;
 	    }
 	    return ((TileEntityPipePowerCU)conduit).getSubType() == getSubType();
-	    /*TileEntityPipePowerCU pc = (TileEntityPipePowerCU)conduit;    
-	    return pc.subtype == this.subtype;*/
 	  }
 	
 	@Override
@@ -234,7 +266,7 @@ public class TileEntityPipePowerCU extends TileEntityPipe {
     @Override
 	public ItemStack getPipeDropped(){
     	ItemStack stack = new ItemStack(ModBlocks.crystalPipe, 1, PipeType.POWERCU.getMeta());
-    	ItemNBTHelper.setInteger(stack, "Tier", getSubType());
+    	ItemNBTHelper.setInteger(stack, "Tier", getSubType().ordinal());
     	return stack;
     }
     

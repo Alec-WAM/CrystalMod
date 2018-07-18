@@ -74,7 +74,7 @@ public class BlockPipe extends EnumBlock<BlockPipe.PipeType> implements ICustomM
 
 	public static enum PipeType implements IStringSerializable, alec_wam.CrystalMod.util.IEnumMeta{
 		ITEM(TileEntityPipeItem.class), FLUID(TileEntityPipeLiquid.class), ESTORAGE(TileEntityPipeEStorage.class), 
-		POWERCU(TileEntityPipePowerCU.class, true), POWERRF(TileEntityPipePowerRF.class, true);
+		POWERCU(TileEntityPipePowerCU.class, 5), POWERRF(TileEntityPipePowerRF.class, true);
 
 		public final Class<? extends TileEntityPipe> clazz;
 		private final int meta;

@@ -51,6 +51,11 @@ public class Lang {
 	  }
   }
   
+  public static boolean canBeTranslated(String string){
+	  String translated = translateToLocal(string);
+	  return string != translated;
+  }
+  
   public static String[] localizeList(String string) {
     String s = localize(string);
     return s.split("\\|");

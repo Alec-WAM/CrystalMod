@@ -113,7 +113,7 @@ public class NetworkRFPowerManager {
       IPowerInterface pp = r.powerInterface;
       if(pp != null) {
         int canOffer = Math.min(r.emmiter.getMaxEnergyExtracted(r.direction), available);
-        int used = pp.fillEnergy(r.direction.getOpposite(), canOffer);
+        int used = pp.fillEnergy(r.direction.getOpposite(), canOffer, false);
         used = Math.max(0, used);
         available -= used;
         if(available <= 0) {

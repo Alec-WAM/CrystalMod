@@ -41,6 +41,9 @@ import alec_wam.CrystalMod.tiles.chest.wireless.TileWirelessChest;
 import alec_wam.CrystalMod.tiles.chest.wooden.ContainerWoodenCrystalChest;
 import alec_wam.CrystalMod.tiles.chest.wooden.GUIWoodenChest;
 import alec_wam.CrystalMod.tiles.chest.wooden.TileWoodenCrystalChest;
+import alec_wam.CrystalMod.tiles.enhancedEnchantmentTable.ContainerEnhancedEnchantmentTable;
+import alec_wam.CrystalMod.tiles.enhancedEnchantmentTable.GuiEnhancedEnchantmentTable;
+import alec_wam.CrystalMod.tiles.enhancedEnchantmentTable.TileEntityEnhancedEnchantmentTable;
 import alec_wam.CrystalMod.tiles.machine.ContainerNull;
 import alec_wam.CrystalMod.tiles.machine.TileEntityMachine;
 import alec_wam.CrystalMod.tiles.machine.advDispenser.ContainerAdvDispenser;
@@ -153,7 +156,6 @@ import alec_wam.CrystalMod.tiles.xp.GuiXPTank;
 import alec_wam.CrystalMod.tiles.xp.TileEntityXPTank;
 import alec_wam.CrystalMod.util.ChatUtil;
 import alec_wam.CrystalMod.util.ItemStackTools;
-import alec_wam.CrystalMod.util.ModLogger;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.AbstractHorse;
 import net.minecraft.entity.passive.EntityHorse;
@@ -352,7 +354,8 @@ public class GuiHandler implements IGuiHandler {
         	if(te instanceof TileObsidianDispenser) return new GuiObsidianDispener(player.inventory, (TileObsidianDispenser)te);
         	if(te instanceof TileEPST) return new GuiEPST(player.inventory, (TileEPST)te);
         	if(te instanceof TileEntitySeismicScanner)return new GuiSeismicScanner((TileEntitySeismicScanner)te);    
-        	if(te instanceof TileEntityXPTank)return new GuiXPTank((TileEntityXPTank)te);       	                                         
+        	if(te instanceof TileEntityXPTank)return new GuiXPTank((TileEntityXPTank)te);       	               
+        	if(te instanceof TileEntityEnhancedEnchantmentTable)return new GuiEnhancedEnchantmentTable(player, (TileEntityEnhancedEnchantmentTable)te);       	                                           
         } 
         return null;
     }
@@ -507,6 +510,7 @@ public class GuiHandler implements IGuiHandler {
         	if(te instanceof TileEPST) return new ContainerEPST(player.inventory, (TileEPST)te);
         	if(te instanceof TileEntitySeismicScanner) return new ContainerNull();
         	if(te instanceof TileEntityXPTank) return new ContainerNull();
+        	if(te instanceof TileEntityEnhancedEnchantmentTable)return new ContainerEnhancedEnchantmentTable(player.inventory, (TileEntityEnhancedEnchantmentTable)te); 
         }
         return null;
     }

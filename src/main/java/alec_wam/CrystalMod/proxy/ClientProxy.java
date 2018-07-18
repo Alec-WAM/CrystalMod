@@ -49,6 +49,7 @@ import alec_wam.CrystalMod.tiles.machine.power.battery.BlockBattery.BatteryType;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.GuiPanel;
 import alec_wam.CrystalMod.tiles.pipes.estorage.storage.hdd.GuiHDDInterface;
 import alec_wam.CrystalMod.tiles.pipes.item.GhostItemHelper;
+import alec_wam.CrystalMod.tiles.pipes.power.cu.TileEntityPipePowerCU;
 import alec_wam.CrystalMod.tiles.pipes.render.BakedModelLoader;
 import alec_wam.CrystalMod.util.CrystalColors;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
@@ -350,11 +351,11 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
     @SubscribeEvent
     public void onStitch(final TextureStitchEvent.Pre event) {
     	event.getMap().registerSprite(new ResourceLocation("crystalmod:blocks/blank"));
-        event.getMap().registerSprite(new ResourceLocation("crystalmod:blocks/pipe/power_plus"));
+        event.getMap().registerSprite(new ResourceLocation("crystalmod:blocks/pipe/pipe_connector"));
         event.getMap().registerSprite(new ResourceLocation("crystalmod:blocks/pipe/item_square"));
         event.getMap().registerSprite(new ResourceLocation("crystalmod:blocks/pipe/fluid_square"));
         event.getMap().registerSprite(new ResourceLocation("crystalmod:blocks/pipe/storage_square"));
-        for(int i = 0; i < 4; i++){
+        for(int i = 0; i < TileEntityPipePowerCU.Tier.values().length; i++){
         	event.getMap().registerSprite(new ResourceLocation("crystalmod:blocks/pipe/power_square_"+i));
         }
         for(int i = 0; i < 4; i++){

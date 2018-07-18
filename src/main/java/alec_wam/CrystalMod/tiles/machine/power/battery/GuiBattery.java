@@ -16,6 +16,7 @@ import alec_wam.CrystalMod.network.packets.PacketTileMessage;
 import alec_wam.CrystalMod.tiles.TileEntityIOSides.IOType;
 import alec_wam.CrystalMod.tiles.machine.power.battery.BlockBattery.BatteryType;
 import alec_wam.CrystalMod.util.Lang;
+import alec_wam.CrystalMod.util.StringUtils;
 import alec_wam.CrystalMod.util.client.RenderUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
@@ -49,11 +50,11 @@ public class GuiBattery extends GuiContainerTabbed {
 		
 		RenderUtil.renderPowerBar(80, 20, 0, 16, 45, cu, maxCU, Color.CYAN.getRGB(), Color.CYAN.darker().getRGB());
 		
-		String out = "Out: "+battery.getEnergySend();
+		String out = "Out: "+StringUtils.convertToCommas(battery.getEnergySend());
 		drawString(fontRendererObj, out, xSize-(xSize/4)-(fontRendererObj.getStringWidth(out)/2), 60, Color.GRAY.getRGB());
 		
 		if(type != BatteryType.CREATIVE){
-			String in = "In: "+battery.getEnergyReceive();
+			String in = "In: "+StringUtils.convertToCommas(battery.getEnergyReceive());
 			drawString(fontRendererObj, in, (xSize/4)-(fontRendererObj.getStringWidth(in)/2), 60, Color.GRAY.getRGB());
 		}
 		
@@ -64,7 +65,7 @@ public class GuiBattery extends GuiContainerTabbed {
 			List<String> lines = Lists.newArrayList();
 			if(type == BatteryType.CREATIVE){
 				lines.add("Infinite "+Lang.localize("power.cu"));
-			} else lines.add(cu > 0 ? cu +" / "+ maxCU + " "+Lang.localize("power.cu"): Lang.localize("gui.empty"));
+			} else lines.add(cu > 0 ? StringUtils.convertToCommas(cu) +" / "+ StringUtils.convertToCommas(maxCU) + " "+Lang.localize("power.cu"): Lang.localize("gui.empty"));
 			drawHoveringText(lines, xAxis, yAxis);
 			RenderHelper.enableGUIStandardItemLighting();
 		}
@@ -86,8 +87,9 @@ public class GuiBattery extends GuiContainerTabbed {
 	@Override
 	public void actionPerformed(GuiButton button){
 		int amount = 10;
-		if(GuiScreen.isCtrlKeyDown()) amount = 1;
-		else if(GuiScreen.isShiftKeyDown()) amount = 100;
+		if(GuiScreen.isCtrlKeyDown() && !GuiScreen.isShiftKeyDown()) amount = 1;
+		else if(GuiScreen.isShiftKeyDown() && !GuiScreen.isCtrlKeyDown()) amount = 100;
+		else if(GuiScreen.isCtrlKeyDown() && GuiScreen.isShiftKeyDown()) amount = 1000;
 		
 		if(button.id == 0){
 			battery.receiveAmount -=amount;

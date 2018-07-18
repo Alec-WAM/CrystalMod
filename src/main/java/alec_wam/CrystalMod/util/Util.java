@@ -3,6 +3,7 @@ package alec_wam.CrystalMod.util;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 import java.util.function.Function;
@@ -78,6 +79,14 @@ public class Util {
 			}
 		}
 		return counter;
+	}
+	
+	public static int[] convertToInt(List<Integer> list){
+		int[] newArray = new int[list.size()];
+		for(int i = 0; i < list.size(); i++){
+			newArray[i] = list.get(i);
+		}
+		return newArray;
 	}
 
 
