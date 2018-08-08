@@ -17,7 +17,6 @@ import alec_wam.CrystalMod.tiles.chest.wireless.WirelessChestManager.WirelessInv
 import alec_wam.CrystalMod.util.ChatUtil;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemStackTools;
-import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.PlayerUtil;
 import alec_wam.CrystalMod.util.ProfileUtil;
 import alec_wam.CrystalMod.util.UUIDUtils;
@@ -296,7 +295,7 @@ public class EntityWirelessChestMinecart extends EntityMinecartChest implements 
         if(net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.event.entity.minecart.MinecartInteractEvent(this, player, hand))) return true;
         ItemStack stack = player.getHeldItem(hand);
         if(isOwner(player.getUniqueID())){
-        	if(ItemStackTools.isValid(stack) && ItemUtil.itemStackMatchesOredict(stack, "gemDiamond")){
+        	if(ItemStackTools.isValid(stack) && stack.getItem() == ModItems.lock){
         		if(!isBoundToPlayer()){
 	        		if (!player.capabilities.isCreativeMode)
 	        			ItemStackTools.incStackSize(stack, -1);
