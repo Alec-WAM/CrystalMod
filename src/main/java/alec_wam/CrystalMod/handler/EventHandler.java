@@ -38,6 +38,7 @@ import alec_wam.CrystalMod.integration.baubles.BaublesIntegration;
 import alec_wam.CrystalMod.integration.baubles.ItemBaubleWings;
 import alec_wam.CrystalMod.items.ItemCursedBone.BoneType;
 import alec_wam.CrystalMod.items.ItemMiscFood.FoodType;
+import alec_wam.CrystalMod.items.ItemMiscItems.ItemType;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.items.enchancements.ModEnhancements;
 import alec_wam.CrystalMod.items.tools.ItemEnhancementKnowledge;
@@ -93,6 +94,7 @@ import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.monster.EntityWitherSkeleton;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.passive.AbstractHorse;
+import net.minecraft.entity.passive.EntityBat;
 import net.minecraft.entity.passive.EntityWolf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -791,6 +793,13 @@ public class EventHandler {
         
         if(Util.notNullAndInstanceOf(event.getEntityLiving(), EntityPolarBear.class) && EntityUtil.rand.nextInt(5) == 0){
         	ItemStack stack = new ItemStack(ModItems.miscFood, MathHelper.getInt(EntityUtil.rand, 1, 3), FoodType.WHITE_FISH_RAW.getMeta());
+        	EntityItem item = new EntityItem(event.getEntity().getEntityWorld(), event.getEntity().posX, event.getEntity().posY, event.getEntity().posZ, stack);
+        	event.getDrops().add(item);
+        }
+        
+        //TODO Make Configurable
+        if(Util.notNullAndInstanceOf(event.getEntityLiving(), EntityBat.class) && EntityUtil.rand.nextInt(5) == 0){
+        	ItemStack stack = new ItemStack(ModItems.miscItems, 1, ItemType.BAT_WING.getMeta());
         	EntityItem item = new EntityItem(event.getEntity().getEntityWorld(), event.getEntity().posX, event.getEntity().posY, event.getEntity().posZ, stack);
         	event.getDrops().add(item);
         }

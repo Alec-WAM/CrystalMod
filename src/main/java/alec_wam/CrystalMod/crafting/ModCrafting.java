@@ -59,6 +59,7 @@ import alec_wam.CrystalMod.items.ItemIngot.IngotType;
 import alec_wam.CrystalMod.items.ItemMachineFrame.FrameType;
 import alec_wam.CrystalMod.items.ItemMetalPlate.PlateType;
 import alec_wam.CrystalMod.items.ItemMiscFood.FoodType;
+import alec_wam.CrystalMod.items.ItemMiscItems.ItemType;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.items.crystex.ItemCrystex.CrystexItemType;
 import alec_wam.CrystalMod.items.guide.ItemCrystalGuide.GuideType;
@@ -129,6 +130,7 @@ import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.potion.PotionType;
 import net.minecraft.potion.PotionUtils;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.NonNullList;
@@ -232,6 +234,11 @@ public class ModCrafting {
 				GameRegistry.addSmelting(new ItemStack(ModBlocks.coral, 1, color.getMetadata()), new ItemStack(Items.DYE, 1, color.getDyeDamage()), 0.5F);
 			}
 		}
+		
+		//Potions
+		ItemStack awkwardPotion = PotionUtils.addPotionToItemStack(new ItemStack(Items.POTIONITEM), PotionTypes.AWKWARD);
+		ItemStack nightVision = PotionUtils.addPotionToItemStack(new ItemStack(Items.POTIONITEM), PotionTypes.NIGHT_VISION);
+		BrewingRecipeRegistry.addRecipe(awkwardPotion, new ItemStack(ModItems.miscItems, 1, ItemType.BAT_WING.getMeta()), nightVision);
 		
 		addShapedRecipe(new ItemStack(ModItems.crystals, 1, CrystalType.BLUE_SHARD.getMeta()), "RRR", 'R', ModItems.crystalReedsBlue);
 		addShapedRecipe(new ItemStack(ModItems.crystals, 1, CrystalType.RED_SHARD.getMeta()), "RRR", 'R', ModItems.crystalReedsRed);

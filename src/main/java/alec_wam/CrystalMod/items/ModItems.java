@@ -111,6 +111,7 @@ public class ModItems {
 	public static ItemCrystalBerry crystalBerry;
 	public static ItemGlowBerry glowBerry;
 	public static ItemCongealedRedstone congealedRedstone;
+	public static ItemMiscItems miscItems;
 	
 	public static ItemCrystex crystexItems;
 	public static ItemCryniter cryniter;
@@ -220,6 +221,7 @@ public class ModItems {
 		crystalBerry = new ItemCrystalBerry();
 		glowBerry = new ItemGlowBerry();
 		congealedRedstone = new ItemCongealedRedstone();
+		miscItems = new ItemMiscItems();
 		
 		crystexItems = new ItemCrystex();
 		cryniter = new ItemCryniter();

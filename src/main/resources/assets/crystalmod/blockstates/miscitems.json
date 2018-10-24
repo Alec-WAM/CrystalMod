@@ -1,0 +1,10 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "transform": "forge:default-item",
+        "model": "forge:item-layer"
+    },
+    "variants": {
+		"bat_wing": [{ "textures": { "layer0": "crystalmod:items/bat_wing" }}]
+    }
+}

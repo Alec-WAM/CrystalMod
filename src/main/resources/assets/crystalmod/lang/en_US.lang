@@ -73,6 +73,8 @@ item.crystalmod.glowberry.red.name=Glowing Red Crystal Berry
 item.crystalmod.glowberry.green.name=Glowing Green Crystal Berry
 item.crystalmod.glowberry.dark.name=Glowing Dark Crystal Berry
 
+item.crystalmod.miscitems.bat_wing.name=Bat Wing
+
 item.crystalmod.congealedredstone.name=Crystal Congealed Redstone
 item.crystalmod.reactorupgrade.basic.name=Basic Redstone Reactor Upgrade
 item.crystalmod.reactorupgrade.advanced.name=Advanced Redstone Reactor Upgrade
