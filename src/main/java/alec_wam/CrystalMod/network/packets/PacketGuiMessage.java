@@ -3,11 +3,13 @@ package alec_wam.CrystalMod.network.packets;
 import java.io.IOException;
 
 import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.entities.accessories.boats.EntityBoatChest;
 import alec_wam.CrystalMod.network.AbstractPacketThreadsafe;
 import alec_wam.CrystalMod.network.IMessageHandler;
 import alec_wam.CrystalMod.util.BlockUtil;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.network.NetHandlerPlayClient;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
@@ -73,6 +75,13 @@ public class PacketGuiMessage extends AbstractPacketThreadsafe {
 		if(data.hasKey("openGui"))
 		{
 			BlockUtil.openWorksiteGui(player, data.getInteger("id"), data.getInteger("x"), data.getInteger("y"), data.getInteger("z"));
+		}
+		if(type .equalsIgnoreCase("DisplayChest")){
+			Entity entity = netHandler.playerEntity.world.getEntityByID(data.getInteger("ID"));
+			if(entity !=null && entity instanceof EntityBoatChest){
+				((EntityBoatChest)entity).openChestGUI(netHandler.playerEntity);
+				return;
+			}
 		}
 		if(player.openContainer !=null){
 			if(player.openContainer instanceof IMessageHandler){

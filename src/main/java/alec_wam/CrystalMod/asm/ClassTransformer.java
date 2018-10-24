@@ -1,11 +1,15 @@
 package alec_wam.CrystalMod.asm;
 
 import static org.objectweb.asm.Opcodes.ALOAD;
+import static org.objectweb.asm.Opcodes.LLOAD;
 import static org.objectweb.asm.Opcodes.GETSTATIC;
 import static org.objectweb.asm.Opcodes.IFGT;
 import static org.objectweb.asm.Opcodes.INVOKEVIRTUAL;
 import static org.objectweb.asm.Opcodes.INVOKESTATIC;
 import static org.objectweb.asm.Opcodes.RETURN;
+
+import java.util.Iterator;
+
 import static org.objectweb.asm.Opcodes.IRETURN;
 
 import org.apache.logging.log4j.Level;
@@ -14,6 +18,7 @@ import org.apache.logging.log4j.Logger;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Label;
+import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.FieldInsnNode;
@@ -84,52 +89,15 @@ public class ClassTransformer implements IClassTransformer
 			LabelNode l = new LabelNode(new Label());
 			InsnList toInsert = new InsnList();
 
-			toInsert.add(new FieldInsnNode(GETSTATIC, "alec_wam/CrystalMod/client/model/dynamic/CustomItemRendererHandler", "instance", "Lalec_wam/CrystalMod/client/model/dynamic/CustomItemRendererHandler;"));
+			toInsert.add(new FieldInsnNode(GETSTATIC, "alec_wam/CrystalMod/asm/ASMMethods", "instance", "Lalec_wam/CrystalMod/asm/ASMMethods;"));
 			toInsert.add(new VarInsnNode(ALOAD, 1));
-			toInsert.add(new MethodInsnNode(INVOKEVIRTUAL, "alec_wam/CrystalMod/client/model/dynamic/CustomItemRendererHandler", "overrideRender", "(Lnet/minecraft/item/ItemStack;)Z", false));
+			toInsert.add(new MethodInsnNode(INVOKEVIRTUAL, "alec_wam/CrystalMod/asm/ASMMethods", "overrideRender", "(Lnet/minecraft/item/ItemStack;)Z", false));
 			toInsert.add(new JumpInsnNode(IFGT, l));
 			toInsert.add(new InsnNode(RETURN));
 			toInsert.add(l);
 			patched = true;
 
 			renderItem.instructions.insert(toInsert);
-			
-
-			
-			/*for (int i = 0; i < renderItem.instructions.size(); i++)
-			{
-				AbstractInsnNode ain = renderItem.instructions.get(i);
-				if (ain instanceof MethodInsnNode)
-				{
-					MethodInsnNode min = (MethodInsnNode) ain;
-
-					if (Sets.newHashSet(ObfuscatedNames.RenderItem_renderItem_renderByItem).contains(min.name))
-					{
-						LabelNode l1 = new LabelNode(new Label());
-						LabelNode l2 = new LabelNode(new Label());
-						logger.log(Level.INFO, "- Inserting Custom Item Renderer");
-						InsnList insertBefore = new InsnList();
-
-						insertBefore.add(new FieldInsnNode(GETSTATIC, "alec_wam/CrystalMod/client/model/dynamic/CustomItemRendererHandler", "instance", "Lalec_wam/CrystalMod/client/model/dynamic/CustomItemRendererHandler;"));
-						insertBefore.add(new VarInsnNode(ALOAD, 1));
-						insertBefore.add(new MethodInsnNode(INVOKEVIRTUAL, "alec_wam/CrystalMod/client/model/dynamic/CustomItemRendererHandler", "renderByItem", "(Lnet/minecraft/item/ItemStack;)Z", false));
-						insertBefore.add(new JumpInsnNode(IFEQ, l2));
-						insertBefore.add(new InsnNode(POP));
-						insertBefore.add(new InsnNode(POP));
-						insertBefore.add(new JumpInsnNode(GOTO, l1));
-						insertBefore.add(l2);
-
-						InsnList insertAfter = new InsnList();
-						insertAfter.add(l1);
-
-						renderItem.instructions.insertBefore(min, insertBefore);
-						renderItem.instructions.insert(min, insertAfter);
-
-						i += 8;
-						patched2 = true;
-					}
-				}
-			}*/
 			
 			if(!patched){
 				throw new RuntimeException("Unable to patch Render Item");
@@ -147,9 +115,9 @@ public class ClassTransformer implements IClassTransformer
 			LabelNode l = new LabelNode(new Label());
 			InsnList toInsert = new InsnList();
 
-			toInsert.add(new FieldInsnNode(GETSTATIC, "alec_wam/CrystalMod/client/model/dynamic/CustomItemRendererHandler", "instance", "Lalec_wam/CrystalMod/client/model/dynamic/CustomItemRendererHandler;"));
+			toInsert.add(new FieldInsnNode(GETSTATIC, "alec_wam/CrystalMod/asm/ASMMethods", "instance", "Lalec_wam/CrystalMod/asm/ASMMethods;"));
 			toInsert.add(new VarInsnNode(ALOAD, 3));
-			toInsert.add(new MethodInsnNode(INVOKEVIRTUAL, "alec_wam/CrystalMod/client/model/dynamic/CustomItemRendererHandler", "overrideRender", "(Lnet/minecraft/item/ItemStack;)Z", false));
+			toInsert.add(new MethodInsnNode(INVOKEVIRTUAL, "alec_wam/CrystalMod/asm/ASMMethods", "overrideRender", "(Lnet/minecraft/item/ItemStack;)Z", false));
 			toInsert.add(new JumpInsnNode(IFGT, l));
 			toInsert.add(new InsnNode(RETURN));
 			toInsert.add(l);
@@ -175,8 +143,6 @@ public class ClassTransformer implements IClassTransformer
 		ClassNode classNode = new ClassNode();
 		ClassReader classReader = new ClassReader(basicClass);
 		classReader.accept(classNode, 0);
-		ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_MAXS);
-		classNode.accept(writer);
 
 		MethodNode attackEntityFrom = null;
 
@@ -193,27 +159,17 @@ public class ClassTransformer implements IClassTransformer
 			logger.log(Level.INFO, "- Found attackEntityFrom (" + attackEntityFrom.desc + ")");
 			logger.log(Level.INFO, "- Inserting Damage Handler");
 			boolean patched = false;
-			//LabelNode l = new LabelNode(new Label());
-			//InsnList toInsert = new InsnList();
-	
-			/*toInsert.add(new VarInsnNode(ALOAD, 0));
+			InsnList toInsert = new InsnList();
+			LabelNode initLisitener = new LabelNode();
+			toInsert.add(new FieldInsnNode(GETSTATIC, "alec_wam/CrystalMod/asm/ASMMethods", "instance", "Lalec_wam/CrystalMod/asm/ASMMethods;"));
+			toInsert.add(new VarInsnNode(ALOAD, 0));
 			toInsert.add(new VarInsnNode(ALOAD, 1));
-			toInsert.add(new MethodInsnNode(INVOKESTATIC, "alec_wam/CrystalMod/items/enhancements/util/FireproofHandler", "onEntityItemAttacked", "(Lnet/minecraft/entity/item/EntityItem;Lnet/minecraft/util/DamageSource;)Z", false));
-			toInsert.add(new JumpInsnNode(IFGT, l));
+			toInsert.add(new MethodInsnNode(INVOKESTATIC, "alec_wam/CrystalMod/asm/ASMMethods", "onEntityItemAttacked", "(Lnet/minecraft/entity/item/EntityItem;Lnet/minecraft/util/DamageSource;)Z", false));
+			toInsert.add(new JumpInsnNode(IFGT, initLisitener));
+			toInsert.add(new InsnNode(Opcodes.ICONST_0));
 			toInsert.add(new InsnNode(IRETURN));
-			toInsert.add(l);*/
-
-			
-			//attackEntityFrom.instructions.insert(toInsert);
-			AbstractInsnNode before = attackEntityFrom.instructions.getFirst();
-			LabelNode l = new LabelNode(new Label());
-			attackEntityFrom.instructions.insertBefore(before, new VarInsnNode(ALOAD, 0));
-			attackEntityFrom.instructions.insertBefore(before, new VarInsnNode(ALOAD, 1));
-			attackEntityFrom.instructions.insertBefore(before, new MethodInsnNode(INVOKESTATIC, "alec_wam/CrystalMod/items/enhancements/util/FireproofHandler", "onEntityItemAttacked", "(Lnet/minecraft/entity/item/EntityItem;Lnet/minecraft/util/DamageSource;)Z", false));
-			attackEntityFrom.instructions.insertBefore(before, new JumpInsnNode(IFGT, l));
-			attackEntityFrom.instructions.insertBefore(before, new InsnNode(IRETURN));
-			
-			
+			toInsert.add(initLisitener);
+			attackEntityFrom.instructions.insert(toInsert);
 			patched = true;
 			if(!patched){
 				throw new RuntimeException("Unable to patch EntityItem attackEntityFrom");
@@ -221,7 +177,25 @@ public class ClassTransformer implements IClassTransformer
 		} else {
 			throw new RuntimeException("Unable to find EntityItem attackEntityFrom");
 		}
-		
+
+		ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_MAXS);
+		classNode.accept(writer);
 		return writer.toByteArray();
+	}
+
+	public static boolean applyOnNode(MethodNode method, AbstractInsnNode filter) {
+		Iterator<AbstractInsnNode> iterator = method.instructions.iterator();
+
+		boolean didAny = false;
+		while(iterator.hasNext()) {
+			AbstractInsnNode anode = iterator.next();
+			if(filter.equals(anode)) {
+				didAny = true;
+				if(method.equals(anode))
+					break;
+			}
+		}
+
+		return didAny;
 	}
 }

@@ -563,6 +563,35 @@ public class RenderUtil {
 		post();
 	}
 
+	public static void renderCuboid(TextureAtlasSprite sprite, BlockPos pos, double x, double y, double z, double x1, double y1, double z1,	double x2, double y2, double z2, int color) {
+		Tessellator tessellator = Tessellator.getInstance();
+		VertexBuffer renderer = tessellator.getBuffer();
+		renderer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
+		Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+		int brightness = pos == null ? 15 : CrystalMod.proxy.getClientWorld().getCombinedLight(
+				pos, 15);
+
+		pre(x, y, z);
+
+		// x/y/z2 - x/y/z1 is because we need the width/height/depth
+		putTexturedQuad(renderer, sprite, x1, y1, z1, x2 - x1, y2 - y1, z2 - z1,
+				EnumFacing.DOWN, color, brightness, false);
+		putTexturedQuad(renderer, sprite, x1, y1, z1, x2 - x1, y2 - y1, z2
+				- z1, EnumFacing.NORTH, color, brightness, true);
+		putTexturedQuad(renderer, sprite, x1, y1, z1, x2 - x1, y2 - y1, z2
+				- z1, EnumFacing.EAST, color, brightness, true);
+		putTexturedQuad(renderer, sprite, x1, y1, z1, x2 - x1, y2 - y1, z2
+				- z1, EnumFacing.SOUTH, color, brightness, true);
+		putTexturedQuad(renderer, sprite, x1, y1, z1, x2 - x1, y2 - y1, z2
+				- z1, EnumFacing.WEST, color, brightness, true);
+		putTexturedQuad(renderer, sprite, x1, y1, z1, x2 - x1, y2 - y1, z2 - z1,
+				EnumFacing.UP, color, brightness, false);
+
+		tessellator.draw();
+
+		post();
+	}
+	
 	public static void pre(double x, double y, double z) {
 		GlStateManager.pushMatrix();
 

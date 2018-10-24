@@ -20,6 +20,7 @@ import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.api.enhancements.EnhancementManager;
 import alec_wam.CrystalMod.api.enhancements.IEnhancement;
 import alec_wam.CrystalMod.blocks.ModBlocks;
+import alec_wam.CrystalMod.blocks.ModelScaffold;
 import alec_wam.CrystalMod.blocks.crops.bamboo.ItemWrappedFood.WrappedFoodType;
 import alec_wam.CrystalMod.blocks.crops.bamboo.ModelWrappedFood;
 import alec_wam.CrystalMod.blocks.crops.material.CropOverlays;
@@ -45,6 +46,7 @@ import alec_wam.CrystalMod.items.guide.GuiGuideChapter;
 import alec_wam.CrystalMod.items.guide.GuidePageLoader;
 import alec_wam.CrystalMod.items.guide.GuidePages;
 import alec_wam.CrystalMod.items.guide.GuidePages.LookupResult;
+import alec_wam.CrystalMod.tiles.WoodenBlockProperies.WoodType;
 import alec_wam.CrystalMod.tiles.machine.power.battery.BlockBattery.BatteryType;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.GuiPanel;
 import alec_wam.CrystalMod.tiles.pipes.estorage.storage.hdd.GuiHDDInterface;
@@ -200,14 +202,17 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
     private static final Map<ModelResourceLocation, CustomBakedModel> CUSTOM_MODELS = Maps.newHashMap();
     
     public static class CustomModModelLoader implements ICustomModelLoader {
-
+    	public static boolean ENABLE_TEST_SCAFFOLD_MODEL = false;
 		@Override
 		public void onResourceManagerReload(IResourceManager resourceManager) {
-			
+			if(ENABLE_TEST_SCAFFOLD_MODEL)ModelScaffold.reloadModels();
 		}
 
 		@Override
 		public boolean accepts(ResourceLocation modelLocation) {
+			if(ENABLE_TEST_SCAFFOLD_MODEL && modelLocation.toString().startsWith("crystalmod:scaffold")){
+				return true;
+			}
 			if(modelLocation.toString().endsWith("#inventory")){
 				String name = StringUtils.chopAtFirst(modelLocation.toString(), "#");
 				if(CUSTOM_RENDERS.containsKey(new ResourceLocation(name))){
@@ -219,6 +224,53 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 
 		@Override
 		public IModel loadModel(ResourceLocation modelLocation) throws Exception {
+			if(ENABLE_TEST_SCAFFOLD_MODEL && modelLocation.toString().startsWith("crystalmod:scaffold")){
+				WoodType type = WoodType.OAK;
+				String name = modelLocation.toString();
+				if(name.startsWith("crystalmod:scaffold_birch")){
+					type = WoodType.BIRCH;
+				}
+				if(name.startsWith("crystalmod:scaffold_spruce")){
+					type = WoodType.SPRUCE;
+				}
+				if(name.startsWith("crystalmod:scaffold_jungle")){
+					type = WoodType.JUNGLE;
+				}
+				if(name.startsWith("crystalmod:scaffold_acacia")){
+					type = WoodType.ACACIA;
+				}
+				if(name.startsWith("crystalmod:scaffold_darkoak")){
+					type = WoodType.DARK_OAK;
+				}
+				final WoodType endType = type;
+				return new IModel(){
+
+					@Override
+					public Collection<ResourceLocation> getDependencies()
+					{
+						return Collections.emptySet();
+					}
+
+					@Override
+					public Collection<ResourceLocation> getTextures()
+					{
+						return ImmutableSet.of();
+					}
+
+					@Override
+					public IBakedModel bake( IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter )
+					{
+						return ModelScaffold.getModelForType(endType);
+					}
+
+					@Override
+					public IModelState getDefaultState()
+					{
+						return TRSRTransformation.identity();
+					}
+					
+				};
+			}
 			boolean hasCustomItemRender = false;
 			if(modelLocation.toString().endsWith("#inventory")){
 				String name = StringUtils.chopAtFirst(modelLocation.toString(), "#");
@@ -370,6 +422,9 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
         
         event.getMap().registerSprite(new ResourceLocation("crystalmod:blocks/decorative/dense_darkness"));
     	
+        for(WoodType type : WoodType.values()){
+        	 event.getMap().registerSprite(new ResourceLocation("crystalmod:blocks/scaffold/"+type.getName()+"_scaffolding"));
+        }
         
         event.getMap().registerSprite(new ResourceLocation("crystalmod:blocks/pipe/attachment/import"));
         
@@ -537,5 +592,6 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 				destroyBlockIcons[i] = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite("minecraft:blocks/destroy_stage_" + i);
 			}
 		}
+		ModelScaffold.reloadModels();
 	}
 }

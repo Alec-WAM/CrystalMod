@@ -53,7 +53,7 @@ public class BlockTallCrystexGrass extends BlockBush implements ICustomModel, ne
 	@SideOnly(Side.CLIENT)
 	public void initModel() {
 		ModelLoader.setCustomStateMapper(this, new CustomBlockStateMapper());
-		for(CrystalColors.Special type : CrystalColors.Special.values()){
+		for(CrystalColors.SuperSpecial type : CrystalColors.SuperSpecial.values()){
 			String nameOverride = getRegistryName().getResourcePath() + "_" + type.getName();
 			ResourceLocation baseLocation = nameOverride == null ? getRegistryName() : new ResourceLocation("crystalmod", nameOverride);
 			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), type.getMeta(), new ModelResourceLocation(baseLocation, "inventory"));
@@ -69,11 +69,7 @@ public class BlockTallCrystexGrass extends BlockBush implements ICustomModel, ne
 	@Nonnull
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		if(meta < 0 || meta >= CrystalColors.Special.values().length) {
-			meta = 0;
-		}
-		CrystalColors.SuperSpecial color = CrystalColors.SuperSpecial.values()[meta];
-		return this.getDefaultState().withProperty(CrystalColors.COLOR_SUPER, color);
+		return this.getDefaultState().withProperty(CrystalColors.COLOR_SUPER, CrystalColors.SuperSpecial.byMetadata(meta));
 	}
 
 	@Override

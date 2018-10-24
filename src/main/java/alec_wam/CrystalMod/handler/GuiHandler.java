@@ -9,10 +9,10 @@ import alec_wam.CrystalMod.capability.GuiExtendedInventory;
 import alec_wam.CrystalMod.entities.accessories.ContainerHorseEnderChest;
 import alec_wam.CrystalMod.entities.accessories.GuiHorseEnderChest;
 import alec_wam.CrystalMod.entities.accessories.HorseAccessories;
+import alec_wam.CrystalMod.entities.accessories.boats.EntityBoatChest;
+import alec_wam.CrystalMod.entities.accessories.boats.EntityBoatChest.EnumBoatChestType;
 import alec_wam.CrystalMod.entities.minecarts.chests.EntityCrystalChestMinecartBase;
-import alec_wam.CrystalMod.entities.minecarts.chests.wireless.ContainerWirelessChestMinecart;
 import alec_wam.CrystalMod.entities.minecarts.chests.wireless.EntityWirelessChestMinecart;
-import alec_wam.CrystalMod.entities.minecarts.chests.wireless.GuiWirelessChestMinecart;
 import alec_wam.CrystalMod.entities.minions.warrior.ContainerMinionWarrior;
 import alec_wam.CrystalMod.entities.minions.warrior.EntityMinionWarrior;
 import alec_wam.CrystalMod.items.guide.GuiGuideBase;
@@ -156,6 +156,7 @@ import alec_wam.CrystalMod.tiles.xp.GuiXPTank;
 import alec_wam.CrystalMod.tiles.xp.TileEntityXPTank;
 import alec_wam.CrystalMod.util.ChatUtil;
 import alec_wam.CrystalMod.util.ItemStackTools;
+import alec_wam.CrystalMod.util.ModLogger;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.AbstractHorse;
 import net.minecraft.entity.passive.EntityHorse;
@@ -204,8 +205,16 @@ public class GuiHandler implements IGuiHandler {
     			}
     			if(entity instanceof EntityWirelessChestMinecart){
     				EntityWirelessChestMinecart minecart = (EntityWirelessChestMinecart)entity;
-    				return new GuiWirelessChestMinecart(player.inventory, minecart);
+    				return new GuiWirelessChest(player.inventory, minecart);
     			}
+    			
+    			if(entity instanceof EntityBoatChest){
+    				EntityBoatChest chest = (EntityBoatChest)entity;
+    				if(chest.getInventory() !=null){
+    					return new GuiWirelessChest(player.inventory, chest);
+    				}
+    			}
+    			
     			if(entity instanceof EntityHorse){
     				EntityHorse horse = (EntityHorse)entity;
     				if(HorseAccessories.hasEnderChest(horse)){
@@ -381,7 +390,13 @@ public class GuiHandler implements IGuiHandler {
     			}
     			if(entity instanceof EntityWirelessChestMinecart){
     				EntityWirelessChestMinecart minecart = (EntityWirelessChestMinecart)entity;
-    				return new ContainerWirelessChestMinecart(player.inventory, minecart);
+    				return new ContainerWirelessChest(player.inventory, minecart);
+    			}
+    			if(entity instanceof EntityBoatChest){
+    				EntityBoatChest chest = (EntityBoatChest)entity;
+    				if(chest.getInventory() !=null){
+    					return new ContainerWirelessChest(player.inventory, chest);
+    				}
     			}
     			if(entity instanceof AbstractHorse){
     				AbstractHorse horse = (AbstractHorse)entity;

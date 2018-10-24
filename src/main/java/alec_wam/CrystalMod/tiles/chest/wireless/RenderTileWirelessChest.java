@@ -14,6 +14,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
@@ -48,18 +49,6 @@ public class RenderTileWirelessChest extends TileEntitySpecialRenderer<TileWirel
 	    double y = -0.5;
 	    double z = -0.5;
 		int facing = 3;
-		/*if(type == TransformType.GUI){
-			facing = 3;
-			x-=0.5;
-			y-=0.5;
-			z-=0.5;
-		}
-		if(type == TransformType.GROUND){
-			facing = 3;
-			x-=0.5;
-			y-=0.5;
-			z-=0.5;
-		}*/
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         GlStateManager.enableRescaleNormal();
         renderChest(x, y, z, code, facing, owner !=null, 0.0f, -1);
@@ -118,6 +107,7 @@ public class RenderTileWirelessChest extends TileEntitySpecialRenderer<TileWirel
         model.chestLid.rotateAngleX = chestLidAngle;
         // Render the chest itself
         model.renderAll();
+        
         if (breakStage >= 0)
         {
             GlStateManager.matrixMode(5890);
@@ -125,6 +115,7 @@ public class RenderTileWirelessChest extends TileEntitySpecialRenderer<TileWirel
             GlStateManager.matrixMode(5888);
         }
         GlStateManager.popMatrix();
+        
         
         GlStateManager.pushMatrix();
         GlStateManager.translate(x, y, z);

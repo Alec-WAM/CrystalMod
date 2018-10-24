@@ -87,10 +87,11 @@ public class Vector3d {
     return this;
   }
 
-  public void scale(double s) {
+  public Vector3d scale(double s) {
     x *= s;
     y *= s;
     z *= s;
+    return this;
   }
 
   public void scale(double sx, double sy, double sz) {

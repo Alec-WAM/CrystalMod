@@ -7,12 +7,19 @@ import java.util.Map.Entry;
 import com.google.common.collect.Lists;
 
 import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.entities.accessories.boats.EntityBoatBanner;
+import alec_wam.CrystalMod.entities.accessories.boats.EntityBoatChest;
+import alec_wam.CrystalMod.entities.accessories.boats.RenderBoatBanner;
+import alec_wam.CrystalMod.entities.accessories.boats.RenderEntityBoatChest;
 import alec_wam.CrystalMod.entities.animals.EntityCrystalCow;
 import alec_wam.CrystalMod.entities.animals.EntityTamedPolarBear;
 import alec_wam.CrystalMod.entities.animals.RenderCrystalCow;
 import alec_wam.CrystalMod.entities.animals.RenderTamedPolarBear;
 import alec_wam.CrystalMod.entities.boatflume.EntityFlumeBoat;
 import alec_wam.CrystalMod.entities.boatflume.RenderFlumeBoat;
+import alec_wam.CrystalMod.entities.explosives.grenade.EntityGrenade;
+import alec_wam.CrystalMod.entities.explosives.grenade.EntityNormalGrenade;
+import alec_wam.CrystalMod.entities.explosives.grenade.RenderEntityGrenade;
 import alec_wam.CrystalMod.entities.minecarts.chests.EntityCrystalChestMinecartBase;
 import alec_wam.CrystalMod.entities.minecarts.chests.EntityCrystalChestMinecartBlue;
 import alec_wam.CrystalMod.entities.minecarts.chests.EntityCrystalChestMinecartDark;
@@ -30,13 +37,11 @@ import alec_wam.CrystalMod.entities.minions.RenderMinionBase;
 import alec_wam.CrystalMod.entities.minions.warrior.EntityMinionWarrior;
 import alec_wam.CrystalMod.entities.minions.worker.EntityMinionWorker;
 import alec_wam.CrystalMod.entities.misc.EntityBambooBoat;
-import alec_wam.CrystalMod.entities.misc.EntityBoatChest;
 import alec_wam.CrystalMod.entities.misc.EntityCrystalModPainting;
 import alec_wam.CrystalMod.entities.misc.EntityCustomFallingBlock;
 import alec_wam.CrystalMod.entities.misc.RenderCrystalModPainting;
 import alec_wam.CrystalMod.entities.misc.RenderCustomFallingBlock;
 import alec_wam.CrystalMod.entities.misc.RenderEntityBambooBoat;
-import alec_wam.CrystalMod.entities.misc.RenderEntityBoatChest;
 import alec_wam.CrystalMod.entities.mob.angel.EntityAngel;
 import alec_wam.CrystalMod.entities.mob.angel.RenderAngel;
 import alec_wam.CrystalMod.entities.mob.devil.EntityDevil;
@@ -137,7 +142,9 @@ public class ModEntites {
 		addEntity(EntityDart.class, "dart", 64, 24, false);
 		addEntity(EntityCrystalModPainting.class, "crystalmodpainting", 160, Integer.MAX_VALUE, false);
 		addEntity(EntityFlumeBoat.class, "flumeboat", 80, 3, true);
-		addEntity(EntityBoatChest.class, "chestboat", 80, 3, true);
+		addEntity(EntityBoatChest.class, "chestboat", 64, Integer.MAX_VALUE, false);
+		addEntity(EntityBoatBanner.class, "chestbanner", 64, Integer.MAX_VALUE, false);
+		addEntity(EntityNormalGrenade.class, "grenade_normal", 64, 10, true);
 	}
 	
 	public static void postInit(){
@@ -261,6 +268,20 @@ public class ModEntites {
 				return new RenderEntityBoatChest(manager);
 			}
 		});
+        
+        RenderingRegistry.registerEntityRenderingHandler(EntityBoatBanner.class, new IRenderFactory<EntityBoatBanner>() {
+			@Override
+			public RenderBoatBanner createRenderFor(RenderManager manager) {
+				return new RenderBoatBanner(manager);
+			}
+		});
+        
+        RenderingRegistry.registerEntityRenderingHandler(EntityGrenade.class, new IRenderFactory<EntityGrenade>() {
+			@Override
+			public RenderEntityGrenade createRenderFor(RenderManager manager) {
+				return new RenderEntityGrenade(manager);
+			}
+		});
 	}
 	
 	public static int nextEntityId = 1;
@@ -275,7 +296,7 @@ public class ModEntites {
 	
 	public static ResourceLocation addEntity(Class<? extends Entity> entclass, String name, int trackingRange, int updateFrequency, boolean sendsVelocityUpdates){
 		ResourceLocation res = CrystalMod.resourceL(name);
-		EntityRegistry.registerModEntity(res, entclass, name, getNextID(), CrystalMod.instance, trackingRange, updateFrequency, sendsVelocityUpdates);
+		EntityRegistry.registerModEntity(res, entclass, res.toString(), getNextID(), CrystalMod.instance, trackingRange, updateFrequency, sendsVelocityUpdates);
 		return res;
 	}
 

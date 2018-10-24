@@ -349,13 +349,6 @@ item.crystalmod.dart.green.name=Green Crystal Blow Dart
 item.crystalmod.dart.dark.name=Dark Crystal Blow Dart
 item.crystalmod.dart.pure.name=Pure Crystal Blow Dart
 
-item.crystalmod.chestboat.oak.name=Oak Chest Boat
-item.crystalmod.chestboat.spruce.name=Spruce Chest Boat
-item.crystalmod.chestboat.birch.name=Birch Chest Boat
-item.crystalmod.chestboat.jungle.name=Jungle Chest Boat
-item.crystalmod.chestboat.acacia.name=Acacia Chest Boat
-item.crystalmod.chestboat.dark_oak.name=Dark Oak Chest Boat
-
 item.crystalmod.enderfluidbottle.name=Bottle of Ender Fluid
 
 item.crystalmod.mobessence.name=Mob Essence
@@ -559,6 +552,7 @@ tile.crystalmod.greenglowberry.name=Green Glow Berry
 tile.crystalmod.darkglowberry.name=Dark Glow
 tile.crystalmod.flowerlilypad.name=Flower Lily-pad
 tile.crystalmod.corn.name=Corn
+tile.crystalmod.campfire.name=Campfire
 tile.crystalmod.bamboo.name=Bamboo
 tile.crystalmod.bambooleaves.name=Bamboo Leaves
 tile.crystalmod.sapling.bamboo.name=Bamboo Sapling
@@ -848,6 +842,18 @@ tile.crystalmod.bridge.birch.name=Birch Wood Bridge
 tile.crystalmod.bridge.jungle.name=Jungle Wood Bridge
 tile.crystalmod.bridge.acacia.name=Acacia Wood Bridge
 tile.crystalmod.bridge.darkoak.name=Dark Oak Wood Bridge
+tile.crystalmod.scaffold.oak.name=Oak Wood Scaffolding
+tile.crystalmod.scaffold.spruce.name=Spruce Wood Scaffolding
+tile.crystalmod.scaffold.birch.name=Birch Wood Scaffolding
+tile.crystalmod.scaffold.jungle.name=Jungle Wood Scaffolding
+tile.crystalmod.scaffold.acacia.name=Acacia Wood Scaffolding
+tile.crystalmod.scaffold.darkoak.name=Dark Oak Wood Scaffolding
+tile.crystalmod.scaffold_sturdy.oak.name=Oak Wood Scaffolding
+tile.crystalmod.scaffold_sturdy.spruce.name=Spruce Wood Sturdy Scaffolding
+tile.crystalmod.scaffold_sturdy.birch.name=Birch Wood Sturdy Scaffolding
+tile.crystalmod.scaffold_sturdy.jungle.name=Jungle Wood Sturdy Scaffolding
+tile.crystalmod.scaffold_sturdy.acacia.name=Acacia Wood Sturdy Scaffolding
+tile.crystalmod.scaffold_sturdy.darkoak.name=Dark Oak Wood Sturdy Scaffolding
 
 tile.crystalmod.fancyladder.wide.name=Wide Ladder
 tile.crystalmod.fancyladder.arrow.name=Arrow Ladder
@@ -916,6 +922,7 @@ tile.crystalmod.crystextallgrass.red.name=Tall Red Crystex Grass
 tile.crystalmod.crystextallgrass.green.name=Tall Green Crystex Grass
 tile.crystalmod.crystextallgrass.dark.name=Tall Dark Crystex Grass
 tile.crystalmod.crystextallgrass.pure.name=Tall Pure Crystex Grass
+tile.crystalmod.crystextallgrass.crystex.name=Tall Crystex Grass
 
 tile.doublePlant.rose.name=Red Rose Bush
 tile.crystalmod.rosebush.white.name=White Rose Bush
@@ -1054,27 +1061,29 @@ enhancement.crystalmod.lavawalking.name=Lava Walking
 crystalmod.jei.pipecover.category=Pipe Cover
 crystalmod.jei.dnasample.category=DNA Manipulation
 #--Entity
-entity.crystalpigzombie.name=Crystal Zombie Pigman
-entity.crystalcow.name=Crystal Cow
-entity.crystalenderman.name=Crystal Enderman
-entity.minionwarrior.name=Warrior Minion
-entity.minionworker.name=Minion Worker
-entity.bombomb.name=Bombomb
-entity.pureangel.name=Pure Angel
-entity.darkdevil.name=Dark Devil
+entity.crystalmod:crystalpigzombie.name=Crystal Zombie Pigman
+entity.crystalmod:crystalcow.name=Crystal Cow
+entity.crystalmod:crystalenderman.name=Crystal Enderman
+entity.crystalmod:minionwarrior.name=Warrior Minion
+entity.crystalmod:minionworker.name=Minion Worker
+entity.crystalmod:bombomb.name=Bombomb
+entity.crystalmod:pureangel.name=Pure Angel
+entity.crystalmod:darkdevil.name=Dark Devil
 
-entity.minecart_chest_blue.name=Minecart with Blue Crystal Chest
-entity.minecart_chest_red.name=Minecart with Red Crystal Chest
-entity.minecart_chest_green.name=Minecart with Green Crystal Chest
-entity.minecart_chest_dark.name=Minecart with Dark Crystal Chest
-entity.minecart_chest_pure.name=Minecart with Pure Crystal Chest
-entity.minecart_chest_darkiron.name=Minecart with Dark Iron Chest
+entity.crystalmod:minecart_chest_blue.name=Minecart with Blue Crystal Chest
+entity.crystalmod:minecart_chest_red.name=Minecart with Red Crystal Chest
+entity.crystalmod:minecart_chest_green.name=Minecart with Green Crystal Chest
+entity.crystalmod:minecart_chest_dark.name=Minecart with Dark Crystal Chest
+entity.crystalmod:minecart_chest_pure.name=Minecart with Pure Crystal Chest
+entity.crystalmod:minecart_chest_darkiron.name=Minecart with Dark Iron Chest
 
-entity.minecart_wirelesschest.name=Minecart with Super Chest
-entity.minecart_enderchest.name=Minecart with Ender Chest
+entity.crystalmod:minecart_wirelesschest.name=Minecart with Super Chest
+entity.crystalmod:minecart_enderchest.name=Minecart with Ender Chest
 
-entity.polarbear_tamed.name=Tamed Polar Bear
-entity.bambooboat.name=Bamboo Boat
+entity.crystalmod:polarbear_tamed.name=Tamed Polar Bear
+entity.crystalmod:bambooboat.name=Bamboo Boat
+entity.crystalmod:chestboat.name=Boat Chest
+entity.crystalmod:chestbanner.name=Boat Banner
 
 #--Misc
 crystalmod.power.cu=CU

@@ -13,13 +13,13 @@ import alec_wam.CrystalMod.blocks.crops.bamboo.ItemWrappedFood;
 import alec_wam.CrystalMod.blocks.crops.material.ItemMaterialSeed;
 import alec_wam.CrystalMod.entities.accessories.horseshoes.ItemHorseShoe;
 import alec_wam.CrystalMod.entities.disguise.ItemDisguise;
+import alec_wam.CrystalMod.entities.explosives.grenade.ItemGrenade;
 import alec_wam.CrystalMod.entities.minecarts.chests.ItemCrystalChestMinecart;
 import alec_wam.CrystalMod.entities.minecarts.chests.ItemEnderChestMinecart;
 import alec_wam.CrystalMod.entities.minecarts.chests.wireless.ItemWirelessChestMinecart;
 import alec_wam.CrystalMod.entities.minions.ItemMinion;
 import alec_wam.CrystalMod.entities.minions.ItemMinionStaff;
 import alec_wam.CrystalMod.entities.misc.ItemBambooBoat;
-import alec_wam.CrystalMod.entities.misc.ItemChestBoat;
 import alec_wam.CrystalMod.entities.misc.ItemCrystalModPainting;
 import alec_wam.CrystalMod.entities.pet.bombomb.ItemBombomb;
 import alec_wam.CrystalMod.integration.baubles.BaublesIntegration;
@@ -136,7 +136,6 @@ public class ModItems {
 	public static ItemArmor crystalHelmet, crystalChestplate, crystalLeggings, crystalBoots;
 	public static ItemWolfArmor wolfArmor;
 	public static ItemHorseShoe horseShoes;
-	public static ItemChestBoat chestBoat;
 	
 	public static ItemAxe darkIronAxe;
 	public static ItemHoe darkIronHoe;
@@ -201,6 +200,7 @@ public class ModItems {
 	public static ItemDagger dagger;
 	public static ItemBlowGun blowGun;
 	public static ItemDart dart;
+	public static ItemGrenade grenade;
 	
 	//Baubles
 	public static ItemBaubleWings dragonWingsBauble;
@@ -248,7 +248,6 @@ public class ModItems {
 		
 		wolfArmor = new ItemWolfArmor();
 		horseShoes = new ItemHorseShoe();
-		chestBoat = new ItemChestBoat();
 		
 		darkIronAxe = registerItem(new ItemCustomAxe(ToolMaterialDarkIron), "darkironaxe");
 		darkIronHoe = (ItemHoe) registerItem(new ItemHoe(ToolMaterialDarkIron), "darkironhoe").setCreativeTab(CrystalMod.tabTools);
@@ -313,6 +312,7 @@ public class ModItems {
 		enderbottle = new ItemDrinkableEnderFluid();
 		blowGun = new ItemBlowGun();
 		dart = new ItemDart();
+		grenade = new ItemGrenade();
 		
 		//Baubles
 		if(BaublesIntegration.instance().hasBaubles()){

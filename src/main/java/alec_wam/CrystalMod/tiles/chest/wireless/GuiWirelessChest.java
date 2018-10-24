@@ -10,10 +10,10 @@ import net.minecraft.util.ResourceLocation;
 
 public class GuiWirelessChest extends GuiContainer {
 
-	private TileWirelessChest chest;
+	private IWirelessChestSource chest;
 	private IInventory playerInventory;
 	
-    public GuiWirelessChest(IInventory player, TileWirelessChest chest)
+    public GuiWirelessChest(IInventory player, IWirelessChestSource chest)
     {
         super(new ContainerWirelessChest(player, chest));
         this.playerInventory = player;
@@ -30,8 +30,8 @@ public class GuiWirelessChest extends GuiContainer {
     	GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		String inventoryName = ModBlocks.wirelessChest.getLocalizedName();
 		if(chest !=null){
-			if(chest.isBoundToPlayer()){
-				inventoryName = ProfileUtil.getUsername(chest.getPlayerBound());
+			if(chest.isPrivate()){
+				inventoryName = ProfileUtil.getUsername(chest.getOwner());
 			}
 		}
 		fontRendererObj.drawString(inventoryName, 12, 6, 4210752);

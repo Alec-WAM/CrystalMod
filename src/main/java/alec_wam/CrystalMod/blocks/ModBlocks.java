@@ -24,6 +24,7 @@ import alec_wam.CrystalMod.blocks.crops.material.BlockMaterialCrop;
 import alec_wam.CrystalMod.blocks.crops.material.RenderTileMaterialCrop;
 import alec_wam.CrystalMod.blocks.crops.material.TileMaterialCrop;
 import alec_wam.CrystalMod.blocks.crystexium.BlockCrysidian;
+import alec_wam.CrystalMod.blocks.crystexium.BlockCrystexFire;
 import alec_wam.CrystalMod.blocks.crystexium.BlockCrystexGrass;
 import alec_wam.CrystalMod.blocks.crystexium.BlockCrystexPortal;
 import alec_wam.CrystalMod.blocks.crystexium.BlockCrystheriumPlant;
@@ -72,6 +73,9 @@ import alec_wam.CrystalMod.entities.boatflume.rails.BlockFlumeRailHoldingGround;
 import alec_wam.CrystalMod.handler.MissingItemHandler;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.tiles.BlockBasicTile;
+import alec_wam.CrystalMod.tiles.campfire.BlockCampfire;
+import alec_wam.CrystalMod.tiles.campfire.RenderTileEntityCampfire;
+import alec_wam.CrystalMod.tiles.campfire.TileEntityCampfire;
 import alec_wam.CrystalMod.tiles.cases.BlockCase;
 import alec_wam.CrystalMod.tiles.cases.RenderTileEntityCasePiston;
 import alec_wam.CrystalMod.tiles.cases.TileEntityCaseNoteblock;
@@ -302,6 +306,7 @@ public class ModBlocks {
 	public static BlockSpecialCrystalLeaves crystalSpecialLeaves;
 	public static BlockMaterialCrop materialCrop;
 	public static BlockCorn corn;
+	public static BlockCampfire campfire;
 	public static BlockBamboo bamboo;
 	public static BlockBambooLeaves bambooLeaves;
 	public static Block bambooPlanks;
@@ -388,6 +393,8 @@ public class ModBlocks {
 	public static BlockBridge bridge;
 	public static BlockJar jar;
 	public static BlockShieldRack shieldRack;
+	public static BlockScaffold scaffold;
+	public static BlockSturdyScaffold scaffoldSturdy;
 	public static BlockBasicTile muffler;
 	public static BlockCustomDoor bambooDoor;
 	
@@ -430,6 +437,7 @@ public class ModBlocks {
 	public static BlockCrysidian crysidian;
 	public static BlockCrystheriumPlant crystheriumPlant;
 	public static BlockCrystexPortal crystexPortal;
+	public static BlockCrystexFire crystexFire;
 	public static BlockCrystexGrass crystexGrass;
 	public static BlockTallCrystexGrass crystexTallGrass;
 	
@@ -567,6 +575,10 @@ public class ModBlocks {
 		registerTileEntity(TileMaterialCrop.class);
 		
 		corn = registerBlock(new BlockCorn(), "corn");
+		
+		campfire = new BlockCampfire();
+		registerBlock(campfire, "campfire");
+		registerTileEntity(TileEntityCampfire.class);
 		
 		bamboo = new BlockBamboo();
 		registerBlock(bamboo, "bamboo");
@@ -879,6 +891,12 @@ public class ModBlocks {
 		shieldRack = new BlockShieldRack();
 		registerEnumBlock(shieldRack, new ItemBlockShieldRack(shieldRack), "shieldrack");
 		registerTileEntity(TileShieldRack.class);
+		
+		scaffold = new BlockScaffold();
+		registerEnumBlock(scaffold, "scaffold");
+		
+		scaffoldSturdy = new BlockSturdyScaffold();
+		registerEnumBlock(scaffoldSturdy, "scaffold_sturdy");
 
 		muffler = (BlockBasicTile)new BlockBasicTile(TileSoundMuffler.class, Material.IRON).setHardness(2F);
 		registerBlock(muffler, "soundmuffler");
@@ -968,6 +986,7 @@ public class ModBlocks {
 		
 		crysidian = registerBlock(new BlockCrysidian(), "crysidian");
 		crystexPortal = registerBlock(new BlockCrystexPortal(), "crystexportal");
+		crystexFire = registerBlock(new BlockCrystexFire(), "crystexfire");
 		crystheriumPlant = new BlockCrystheriumPlant();
 		registerBlock(crystheriumPlant, new ItemBlockCrystheriumPlant(crystheriumPlant), "crystheriumplant");
 		ItemBlockMeta.setMappingProperty(crystheriumPlant, BlockCrystheriumPlant.TYPE);
@@ -1026,6 +1045,7 @@ public class ModBlocks {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCasePiston.class, new RenderTileEntityCasePiston());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityXPTank.class, new RenderTileEntityXPTank());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityEnhancedEnchantmentTable.class, new RenderEnhancedEnchantmentTable());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCampfire.class, new RenderTileEntityCampfire());
 	}
 
 	@SideOnly(Side.CLIENT)

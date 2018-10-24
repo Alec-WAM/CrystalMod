@@ -13,7 +13,6 @@ import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.api.block.ICustomRaytraceBlock;
 import alec_wam.CrystalMod.api.pedistals.IPedistal;
 import alec_wam.CrystalMod.blocks.ICustomModel;
-import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.packets.PacketTileMessage;
 import alec_wam.CrystalMod.tiles.BlockBasicTile;

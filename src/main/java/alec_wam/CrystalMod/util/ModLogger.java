@@ -3,11 +3,7 @@ package alec_wam.CrystalMod.util;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import alec_wam.CrystalMod.CrystalMod;
-
-
-
 public class ModLogger {
     
     private static Logger logger = LogManager.getLogger(CrystalMod.MODID);

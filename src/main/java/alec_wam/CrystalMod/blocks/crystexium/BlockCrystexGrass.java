@@ -53,7 +53,7 @@ public class BlockCrystexGrass extends EnumBlock<CrystalColors.SuperSpecial>{
 
                         if (iblockstate1.getBlock() == Blocks.DIRT && iblockstate1.getValue(BlockDirt.VARIANT) == BlockDirt.DirtType.DIRT && worldIn.getLightFromNeighbors(blockpos.up()) >= 4 && iblockstate.getLightOpacity(worldIn, pos.up()) <= 2)
                         {
-                            worldIn.setBlockState(blockpos, getDefaultState().withProperty(CrystalColors.COLOR_SPECIAL, state.getValue(CrystalColors.COLOR_SPECIAL)));
+                            worldIn.setBlockState(blockpos, getDefaultState().withProperty(CrystalColors.COLOR_SUPER, state.getValue(CrystalColors.COLOR_SUPER)));
                         }
                     }
                 }

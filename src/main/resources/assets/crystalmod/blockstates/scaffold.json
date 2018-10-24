@@ -1,0 +1,54 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "transform": "forge:default-block"
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{}],
+    "wood": {
+      "oak": { 
+		"model": "crystalmod:scaffold_basic", 
+		"textures": {
+			"particle": "crystalmod:blocks/scaffold/base_oak",
+			"planks": "crystalmod:blocks/scaffold/base_oak"
+		} 
+	  },
+	  "birch": { 
+		"model": "crystalmod:scaffold_basic", 
+		"textures": {
+			"particle": "crystalmod:blocks/scaffold/base_birch",
+			"planks": "crystalmod:blocks/scaffold/base_birch"
+		} 
+	  },
+	  "spruce": { 
+		"model": "crystalmod:scaffold_basic", 
+		"textures": {
+			"particle": "crystalmod:blocks/scaffold/base_spruce",
+			"planks": "crystalmod:blocks/scaffold/base_spruce"
+		} 
+	  },
+	  "jungle": { 
+		"model": "crystalmod:scaffold_basic", 
+		"textures": {
+			"particle": "crystalmod:blocks/scaffold/base_jungle",
+			"planks": "crystalmod:blocks/scaffold/base_jungle"
+		} 
+	  },
+	  "acacia": { 
+		"model": "crystalmod:scaffold_basic", 
+		"textures": {
+			"particle": "crystalmod:blocks/scaffold/base_acacia",
+			"planks": "crystalmod:blocks/scaffold/base_acacia"
+		} 
+	  },
+	  "darkoak": { 
+		"model": "crystalmod:scaffold_basic", 
+		"textures": {
+			"particle": "crystalmod:blocks/scaffold/base_darkoak",
+			"planks": "crystalmod:blocks/scaffold/base_darkoak"
+		} 
+	  }
+    }
+  }
+}

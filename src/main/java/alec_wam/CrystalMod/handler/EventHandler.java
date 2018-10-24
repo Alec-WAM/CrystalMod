@@ -26,6 +26,9 @@ import alec_wam.CrystalMod.capability.ExtendedPlayerProvider;
 import alec_wam.CrystalMod.capability.PacketExtendedPlayerInvSync;
 import alec_wam.CrystalMod.entities.accessories.HorseAccessories;
 import alec_wam.CrystalMod.entities.accessories.WolfAccessories;
+import alec_wam.CrystalMod.entities.accessories.boats.EntityBoatBanner;
+import alec_wam.CrystalMod.entities.accessories.boats.EntityBoatChest;
+import alec_wam.CrystalMod.entities.accessories.boats.EntityBoatChest.EnumBoatChestType;
 import alec_wam.CrystalMod.entities.animals.EntityTamedPolarBear;
 import alec_wam.CrystalMod.entities.boatflume.BlockFlumeRailBase;
 import alec_wam.CrystalMod.entities.boatflume.BlockFlumeRailBase.EnumRailDirection;
@@ -63,6 +66,7 @@ import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.Lang;
+import alec_wam.CrystalMod.util.ModLogger;
 import alec_wam.CrystalMod.util.PlayerUtil;
 import alec_wam.CrystalMod.util.TimeUtil;
 import alec_wam.CrystalMod.util.Util;
@@ -72,6 +76,8 @@ import baubles.api.BaubleType;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
@@ -99,9 +105,11 @@ import net.minecraft.init.PotionTypes;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArrow;
+import net.minecraft.item.ItemElytra;
 import net.minecraft.item.ItemFishFood.FishType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.play.client.CPacketEntityAction;
 import net.minecraft.potion.PotionUtils;
 import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntity;
@@ -149,8 +157,13 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickBloc
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.BlockEvent.CreateFluidSourceEvent;
 import net.minecraftforge.event.world.ExplosionEvent;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.Event.Result;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -227,10 +240,12 @@ public class EventHandler {
     
     @SubscribeEvent
     public void entityUpdate(LivingUpdateEvent event){
-    	if(event.getEntityLiving() !=null){
+    	if(event.getEntityLiving() !=null){ 
     		if(event.getEntityLiving() instanceof EntityPlayer){
     			EntityPlayer player = (EntityPlayer)event.getEntityLiving();
     			updateWings(player);
+    			//updateElytra(player);
+    			
     			ExtendedPlayer exPlayer = ExtendedPlayerProvider.getExtendedPlayer(player);
     			if(exPlayer !=null){
     				BlockPos playerPos = player.getPosition();
@@ -252,6 +267,16 @@ public class EventHandler {
     
     @SubscribeEvent
     public void cancelLeftClick(final PlayerInteractEvent.LeftClickBlock event) {
+    	BlockPos pos = event.getPos();
+    	BlockPos posOff = pos.offset(event.getFace());
+    	World world = event.getWorld();
+    	IBlockState state = world.getBlockState(pos);
+    	IBlockState stateOff = world.getBlockState(posOff);
+    	if(stateOff.getBlock() == ModBlocks.crystexFire){
+    		world.setBlockToAir(posOff);
+    		event.setCanceled(true);
+    		return;
+    	}
         if (EventHandler.blockClickEvent) {
         	EventHandler.blockClickEvent = false;
             event.setUseBlock(Event.Result.DENY);
@@ -333,21 +358,31 @@ public class EventHandler {
     }
     
     public static final List<String> WINGED_PLAYERS = new ArrayList<String>();
-    
     public static boolean isPlayerWinged(EntityPlayer player){
         return WINGED_PLAYERS.contains(player.getUniqueID()+(player.getEntityWorld().isRemote ? "-Remote" : ""));
     }
-    
     public static void removeWingsFromPlayer(EntityPlayer player){
         removeWingsFromPlayer(player, player.getEntityWorld().isRemote);
     }
-    
     public static void removeWingsFromPlayer(EntityPlayer player, boolean worldRemote){
         WINGED_PLAYERS.remove(player.getUniqueID()+(worldRemote ? "-Remote" : ""));
     }
-    
     public static void addWingsToPlayer(EntityPlayer player){
         WINGED_PLAYERS.add(player.getUniqueID()+(player.getEntityWorld().isRemote ? "-Remote" : ""));
+    }
+    
+    public static final List<String> ELYTRA_PLAYERS = new ArrayList<String>();
+    public static boolean hasSpecialElytra(EntityPlayer player){
+        return ELYTRA_PLAYERS.contains(player.getUniqueID()+(player.getEntityWorld().isRemote ? "-Remote" : ""));
+    }
+    public static void removeElytraFromPlayer(EntityPlayer player){
+        removeElytraFromPlayer(player, player.getEntityWorld().isRemote);
+    }
+    public static void removeElytraFromPlayer(EntityPlayer player, boolean worldRemote){
+    	ELYTRA_PLAYERS.remove(player.getUniqueID()+(worldRemote ? "-Remote" : ""));
+    }
+    public static void addElytraToPlayer(EntityPlayer player){
+    	ELYTRA_PLAYERS.add(player.getUniqueID()+(player.getEntityWorld().isRemote ? "-Remote" : ""));
     }
     
     @SubscribeEvent
@@ -405,6 +440,87 @@ public class EventHandler {
          }
     }
     
+    @SideOnly(Side.CLIENT)
+    @SubscribeEvent
+    public void onClientTick(TickEvent.ClientTickEvent event) {
+    	EntityPlayerSP cplayer = Minecraft.getMinecraft().player;
+    	if(cplayer == null || cplayer.isDead)return;
+    	if (cplayer.movementInput.jump && !cplayer.onGround && cplayer.motionY < 0.0D && !cplayer.isElytraFlying() && !cplayer.capabilities.isFlying)
+    	{
+			CrystalModNetwork.sendToServer(new PacketEntityMessage(cplayer, "ElytraFly"));
+			addElytraToPlayer(cplayer);
+    	}
+    }
+    
+    @SubscribeEvent
+    public void onServerTick(TickEvent.ServerTickEvent event) {
+    	for(EntityPlayerMP player : FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayers()){
+    		if(hasSpecialElytra(player)){
+    			if(!player.isElytraFlying()){
+    				//ModLogger.info("ERROR NOT FLAGGED");
+    				player.setElytraFlying();
+    			}
+    			/*ItemStack chest = player.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
+    	    	boolean elytraEquipped = ItemStackTools.isValid(chest) && ModEnhancements.ELYTRA.isApplied(chest);
+	    		if(elytraEquipped && !player.onGround){
+	    			player.setElytraFlying();
+	    		}
+	    		else{
+	    			removeElytraFromPlayer(player);
+	    			player.clearElytraFlying();
+	    		}*/
+    		}
+    	}
+    }
+    
+    @SubscribeEvent
+    public void onPostTick(TickEvent.PlayerTickEvent event) {
+    	if(event.side == Side.SERVER){
+    		EntityPlayerMP player = (EntityPlayerMP) event.player;
+    		if(hasSpecialElytra(player)){
+    			ItemStack chest = player.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
+    	    	boolean elytraEquipped = ItemStackTools.isValid(chest) && ModEnhancements.ELYTRA.isApplied(chest);
+	    		if(!elytraEquipped || player.onGround){
+	    			removeElytraFromPlayer(player);
+	    			player.clearElytraFlying();
+	    		}
+    		}
+    	}
+    }
+    
+    public void updateElytra(EntityPlayer player){
+    	ItemStack chest = player.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
+    	boolean elytraEquipped = ItemStackTools.isValid(chest) && ModEnhancements.ELYTRA.isApplied(chest);
+
+         if(!hasSpecialElytra(player)){
+        	if(elytraEquipped){
+        		if(player instanceof EntityPlayerSP){
+        			EntityPlayerSP cplayer = (EntityPlayerSP)player;
+                	if (cplayer.movementInput.jump && !cplayer.onGround && cplayer.motionY < 0.0D && !cplayer.isElytraFlying() && !cplayer.capabilities.isFlying)
+                	{
+            			ModLogger.info("Test Point 3");
+            			CrystalModNetwork.sendToServer(new PacketEntityMessage(player, "ElytraFly"));
+            			addElytraToPlayer(player);
+                	}
+            	 }
+             }
+         }
+         //If Player is (or should be) winged
+         else{
+             if(elytraEquipped && !player.onGround){
+            	 if(player instanceof EntityPlayerMP){
+                	 ((EntityPlayerMP)player).setElytraFlying();
+                 }
+             }
+             else{
+                 removeElytraFromPlayer(player);
+                 if(player instanceof EntityPlayerMP){
+                	 ((EntityPlayerMP)player).clearElytraFlying();
+                 }
+             }
+         }
+    }
+    
     @SubscribeEvent
     public void entityJoin(EntityJoinWorldEvent event){
     	Entity entity = event.getEntity();
@@ -439,6 +555,7 @@ public class EventHandler {
     	
     	EntityPlayer player = event.getEntityPlayer();
     	ItemStack held = event.getItemStack();
+    	EnumHand hand = event.getHand();
     	Entity entity = event.getTarget();
         if(entity instanceof AbstractHorse){
       	  AbstractHorse horse = (AbstractHorse)entity;
@@ -491,6 +608,61 @@ public class EventHandler {
         				entity.setDead();
         			}
         		}
+        	}
+        }
+        
+        if(entity instanceof EntityBoat){
+        	if(entity.getPassengers().isEmpty()){
+	        	if(ItemStackTools.isValid(held)){
+	        		EnumBoatChestType type = null;
+	        		if(held.getItem() == Item.getItemFromBlock(Blocks.CHEST)){
+	        			type = EnumBoatChestType.NORMAL;
+	        		}
+	        		if(held.getItem() == Item.getItemFromBlock(Blocks.ENDER_CHEST)){
+	        			type = EnumBoatChestType.ENDER;
+	        		}
+	        		if(held.getItem() == Item.getItemFromBlock(ModBlocks.wirelessChest)){
+	        			type = EnumBoatChestType.WIRELESS;
+	        		}
+	        		
+	        		if(type !=null){
+	        			ItemStack chestCopy = ItemUtil.copy(held, 1);
+	        			if (!player.capabilities.isCreativeMode)
+	    	            {
+	        				held.shrink(1);
+	    	            }
+	        			
+	        			player.swingArm(hand);
+	    				
+	        			if(!event.getWorld().isRemote){
+	        				EntityBoatChest boat = new EntityBoatChest(event.getWorld(), type, chestCopy);
+		        			boat.setPosition(entity.posX, entity.posY, entity.posZ);
+		        			boat.rotationYaw = entity.rotationYaw;
+	        				event.getWorld().spawnEntity(boat);
+		        			boat.startRiding(entity);
+		        			event.setCanceled(true);
+	        			}
+	        		}
+	        		
+	        		if(held.getItem() == Items.BANNER){
+	        			ItemStack chestCopy = ItemUtil.copy(held, 1);
+	        			if (!player.capabilities.isCreativeMode)
+	    	            {
+	        				held.shrink(1);
+	    	            }
+	        			
+	        			player.swingArm(hand);
+	    				
+	        			if(!event.getWorld().isRemote){
+	        				EntityBoatBanner banner = new EntityBoatBanner(event.getWorld(), chestCopy);
+	        				banner.setPosition(entity.posX, entity.posY, entity.posZ);
+	        				banner.rotationYaw = entity.rotationYaw;
+	        				event.getWorld().spawnEntity(banner);
+	        				banner.startRiding(entity);
+		        			event.setCanceled(true);
+	        			}
+	        		}
+	        	}
         	}
         }
     }

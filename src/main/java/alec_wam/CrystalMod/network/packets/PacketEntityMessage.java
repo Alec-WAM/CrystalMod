@@ -7,6 +7,8 @@ import alec_wam.CrystalMod.api.enhancements.KnowledgeManager;
 import alec_wam.CrystalMod.capability.ExtendedPlayer;
 import alec_wam.CrystalMod.capability.ExtendedPlayerProvider;
 import alec_wam.CrystalMod.client.sound.ModSounds;
+import alec_wam.CrystalMod.handler.EventHandler;
+import alec_wam.CrystalMod.items.enchancements.ModEnhancements;
 import alec_wam.CrystalMod.items.tools.grapple.EntityGrapplingHook;
 import alec_wam.CrystalMod.items.tools.grapple.GrappleControllerBase;
 import alec_wam.CrystalMod.items.tools.grapple.GrappleHandler;
@@ -22,6 +24,10 @@ import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.Items;
+import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.ItemElytra;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.network.NetHandlerPlayServer;
@@ -99,6 +105,9 @@ public class PacketEntityMessage extends AbstractPacketThreadsafe {
 						CrystalMod.proxy.getClientWorld().playSound(ePlayer.posX, ePlayer.posY, ePlayer.posZ, ModSounds.levelDown, SoundCategory.BLOCKS, 1.0F, 1.0F, false);
 					}
 				}
+			}
+			if(type.equalsIgnoreCase("#ZeroFall#")){
+				entity.fallDistance = 0.0F;
 			}
 			if(type.equalsIgnoreCase("#RemoveXP#")){
 				if(entity instanceof EntityPlayer){
@@ -244,6 +253,27 @@ public class PacketEntityMessage extends AbstractPacketThreadsafe {
 			if(type.equalsIgnoreCase("RotationChange")){
 				if(data.hasKey("Yaw")){
 					entity.rotationYaw = data.getFloat("Yaw");
+				}
+			}
+			if(type.equalsIgnoreCase("ElytraFly")){
+				if(entity instanceof EntityPlayerMP){
+					EntityPlayerMP player = (EntityPlayerMP)entity;
+					if (!player.onGround && player.motionY < 0.0D && !player.isElytraFlying() && !player.isInWater())
+	                {
+						ItemStack itemstack = player.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
+
+	                    if (ModEnhancements.ELYTRA.isApplied(itemstack))
+	                    {
+	                    	ModLogger.info("Fly Point 3");
+							player.setElytraFlying();
+	                    	EventHandler.addElytraToPlayer(player);
+	                    }
+	                }
+	                else
+	                {
+	                	player.clearElytraFlying();
+                    	EventHandler.removeElytraFromPlayer(player);
+	                }
 				}
 			}
 			if(entity instanceof IMessageHandler){

@@ -21,7 +21,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.common.capabilities.Capability;
 
-public class TileWirelessChest extends TileEntityMod implements IMessageHandler {
+public class TileWirelessChest extends TileEntityMod implements IMessageHandler, IWirelessChestSource {
 
 	public int code = WirelessChestHelper.getDefaultCode(EnumDyeColor.WHITE);
 	private UUID boundToPlayer;
@@ -299,4 +299,19 @@ public class TileWirelessChest extends TileEntityMod implements IMessageHandler 
             buttons[i] = new DyeButton(i);
         }
     }
+
+	@Override
+	public int getCode() {
+		return code;
+	}
+	
+	@Override
+	public boolean isPrivate() {
+		return isBoundToPlayer();
+	}
+
+	@Override
+	public UUID getOwner() {
+		return boundToPlayer;
+	}
 }

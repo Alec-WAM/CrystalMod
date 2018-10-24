@@ -23,6 +23,7 @@ import alec_wam.CrystalMod.capability.ExtendedPlayer;
 import alec_wam.CrystalMod.capability.ExtendedPlayerProvider;
 import alec_wam.CrystalMod.entities.accessories.GuiHorseEnderChest;
 import alec_wam.CrystalMod.entities.accessories.HorseAccessories;
+import alec_wam.CrystalMod.entities.accessories.boats.EntityBoatChest;
 import alec_wam.CrystalMod.fluids.ModFluids;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.items.enchancements.ModEnhancements;
@@ -77,6 +78,7 @@ import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.client.gui.inventory.GuiScreenHorseInventory;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.multiplayer.PlayerControllerMP;
@@ -110,6 +112,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ContainerHorseChest;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
@@ -246,7 +249,8 @@ public class ClientEventHandler {
     public void onGuiOpen(GuiOpenEvent event)
     {
     	GuiScreen gui = event.getGui();
-    	if(gui !=null && gui instanceof GuiScreenHorseInventory){
+    	EntityPlayer player = Minecraft.getMinecraft().player;
+		if(gui !=null && gui instanceof GuiScreenHorseInventory){
     		GuiScreenHorseInventory horseGui = (GuiScreenHorseInventory)gui;
     		AbstractHorse horse = (AbstractHorse)ReflectionUtils.getPrivateValue(horseGui, GuiScreenHorseInventory.class, ObfuscatedNames.GuiScreenHorseInventory_horseEntity);
     		if(horse !=null && HorseAccessories.hasEnderChest(horse)){
@@ -256,8 +260,26 @@ public class ClientEventHandler {
     			PacketGuiMessage pkt = new PacketGuiMessage("Gui");
     			pkt.setOpenGui(GuiHandler.GUI_ID_ENTITY, horse.getEntityId(), 0, 0);
     			CrystalModNetwork.sendToServer(pkt);
+				event.setCanceled(true);
+				return;
     		}
     	}
+    	if(player != null && gui !=null && gui instanceof GuiInventory && player.isRiding()) {
+			Entity riding = player.getRidingEntity();
+			if(riding instanceof EntityBoat) {
+				EntityBoat boat = (EntityBoat)riding;
+				for(Entity passenger : boat.getPassengers()){
+					if(passenger instanceof EntityBoatChest){
+						NBTTagCompound nbt = new NBTTagCompound();
+						nbt.setInteger("ID", passenger.getEntityId());
+						PacketGuiMessage pkt = new PacketGuiMessage("DisplayChest", nbt);
+						CrystalModNetwork.sendToServer(pkt);
+						event.setCanceled(true);
+						return;
+					}
+				}
+			}
+		}
     }
     
     private final Color DUAL_BAR_COLOR = new Color(0x9700B5);

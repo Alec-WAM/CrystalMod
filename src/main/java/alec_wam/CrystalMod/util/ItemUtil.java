@@ -1488,4 +1488,8 @@ public class ItemUtil {
         return s + " " + level;
 	}
 
+	public static String getLocalizedName(Item item) {
+		return Lang.translateToLocal(item.getUnlocalizedName()+".name");
+	}
+
 }

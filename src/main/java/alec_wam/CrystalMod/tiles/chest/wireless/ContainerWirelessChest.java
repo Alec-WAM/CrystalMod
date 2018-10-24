@@ -13,9 +13,9 @@ import net.minecraftforge.items.SlotItemHandler;
 
 public class ContainerWirelessChest extends Container {
     private EntityPlayer player;
-    private TileWirelessChest chest;
+    private IWirelessChestSource chest;
 
-    public ContainerWirelessChest(IInventory playerInventory, TileWirelessChest chest)
+    public ContainerWirelessChest(IInventory playerInventory, IWirelessChestSource chest)
     {
         this.chest = chest;
         player = ((InventoryPlayer) playerInventory).player;
@@ -28,7 +28,7 @@ public class ContainerWirelessChest extends Container {
     @Override
     public boolean canInteractWith(EntityPlayer player)
     {
-        return chest.isOwner(player.getUniqueID());
+        return chest.isPrivate() ? chest.isOwner(player.getUniqueID()) : true;
     }
 
     @Override

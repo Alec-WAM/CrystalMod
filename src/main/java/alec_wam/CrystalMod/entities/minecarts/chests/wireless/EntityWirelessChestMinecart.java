@@ -11,6 +11,7 @@ import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.handler.GuiHandler;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.tiles.chest.wireless.BlockWirelessChest;
+import alec_wam.CrystalMod.tiles.chest.wireless.IWirelessChestSource;
 import alec_wam.CrystalMod.tiles.chest.wireless.WirelessChestHelper;
 import alec_wam.CrystalMod.tiles.chest.wireless.WirelessChestManager;
 import alec_wam.CrystalMod.tiles.chest.wireless.WirelessChestManager.WirelessInventory;
@@ -41,7 +42,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 
-public class EntityWirelessChestMinecart extends EntityMinecartChest implements ISidedInventory {
+public class EntityWirelessChestMinecart extends EntityMinecartChest implements ISidedInventory, IWirelessChestSource {
 	
 	private static final DataParameter<Integer> CODE = EntityDataManager.<Integer>createKey(EntityWirelessChestMinecart.class, DataSerializers.VARINT);
 	private int code = 0;
@@ -101,7 +102,7 @@ public class EntityWirelessChestMinecart extends EntityMinecartChest implements 
     }
     
 	public boolean isOwner(UUID uuid) {
-		return !isBoundToPlayer() ? true : getOwner().equals(uuid);
+		return !isBoundToPlayer() ? true : UUIDUtils.areEqual(getOwner(), uuid);
 	}
 	
 	public void setCode(int code){
@@ -382,5 +383,10 @@ public class EntityWirelessChestMinecart extends EntityMinecartChest implements 
     	}
         return super.hasCapability(capability, facing);
     }
+
+	@Override
+	public boolean isPrivate() {
+		return getOwner() != null;
+	}
 
 }

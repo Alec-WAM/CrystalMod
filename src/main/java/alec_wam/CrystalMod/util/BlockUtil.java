@@ -35,7 +35,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec2f;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.ForgeHooks;
@@ -246,6 +245,26 @@ public class BlockUtil {
 						continue;
 					}
 					builder.add(pos);
+				}
+			}
+		}
+
+		return builder.build();
+	}
+	
+	public static ImmutableList<BlockPos> getBlocksInBBWithFilter(World world, BlockPos start, int width, int height, int depth, BlockFilter filter) {
+		ImmutableList.Builder<BlockPos> builder = ImmutableList.builder();
+		int x = -width/2, y = -height/2, z = -depth/2;
+		for(int xp = x; xp <= width/2; xp++) {
+			for(int yp = y; yp <= height/2; yp++) {
+				for(int zp = z; zp <= depth/2; zp++) {
+					BlockPos pos = start.add(xp, yp, zp);
+					if(pos.getX() == start.getX() && pos.getY() == start.getY() && pos.getZ() == start.getZ()) {
+						continue;
+					}
+					if(filter.isValid(world, pos, world.getBlockState(pos))){
+						builder.add(pos);
+					}
 				}
 			}
 		}

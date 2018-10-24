@@ -1,0 +1,50 @@
+{
+    "multipart": [
+        {   "when": {"north": false, "east": false, "south": false, "west": false, "up": false},
+            "apply": [
+                { "model": "crystalmod:crystexfire/floor0" },
+                { "model": "crystalmod:crystexfire/floor1" }
+            ]
+        },
+        {   "when": {"OR": [{"north": true}, {"north": false, "east": false, "south": false, "west": false, "up": false}]},
+            "apply": [
+                { "model": "crystalmod:crystexfire/side0" },
+                { "model": "crystalmod:crystexfire/side1" },
+                { "model": "crystalmod:crystexfire/side_alt0" },
+                { "model": "crystalmod:crystexfire/side_alt1" }
+            ]
+        },
+        {   "when": {"OR": [{"east": true}, {"north": false, "east": false, "south": false, "west": false, "up": false}]},
+            "apply": [
+                { "model": "crystalmod:crystexfire/side0", "y": 90 },
+                { "model": "crystalmod:crystexfire/side1", "y": 90 },
+                { "model": "crystalmod:crystexfire/side_alt0", "y": 90 },
+                { "model": "crystalmod:crystexfire/side_alt1", "y": 90 }
+            ]
+        },
+        {   "when": {"OR": [{"south": true}, {"north": false, "east": false, "south": false, "west": false, "up": false}]},
+            "apply": [
+                { "model": "crystalmod:crystexfire/side0", "y": 180 },
+                { "model": "crystalmod:crystexfire/side1", "y": 180 },
+                { "model": "crystalmod:crystexfire/side_alt0", "y": 180 },
+                { "model": "crystalmod:crystexfire/side_alt1", "y": 180 }
+            ]
+        },
+        {   "when": {"OR": [{"west": true}, {"north": false, "east": false, "south": false, "west": false, "up": false}]},
+            "apply": [
+                { "model": "crystalmod:crystexfire/side0", "y": 270 },
+                { "model": "crystalmod:crystexfire/side1", "y": 270 },
+                { "model": "crystalmod:crystexfire/side_alt0", "y": 270 },
+                { "model": "crystalmod:crystexfire/side_alt1", "y": 270 }
+            ]
+        },
+        {   "when": {"up": true},
+            "apply": [
+                { "model": "crystalmod:crystexfire/up0" },
+                { "model": "crystalmod:crystexfire/up1" },
+                { "model": "crystalmod:crystexfire/up_alt0" },
+                { "model": "crystalmod:crystexfire/up_alt1" }
+            ]
+        }
+    ]
+}

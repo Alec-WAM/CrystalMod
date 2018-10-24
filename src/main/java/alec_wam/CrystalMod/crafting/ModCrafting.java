@@ -113,6 +113,7 @@ import alec_wam.CrystalMod.util.TimeUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFlower.EnumFlowerType;
 import net.minecraft.block.BlockPlanks;
+import net.minecraft.block.BlockPlanks.EnumType;
 import net.minecraft.block.BlockSlab;
 import net.minecraft.block.BlockStone;
 import net.minecraft.enchantment.EnchantmentData;
@@ -437,13 +438,6 @@ public class ModCrafting {
 		addShapedOreRecipe(new ItemStack(ModItems.dart, 4, DartType.DARK.getMeta()), new Object[] {"  #", " S ", "F  ", '#', darkShard, 'F', Items.FEATHER, 'S', "stickWood"});
 		addShapedOreRecipe(new ItemStack(ModItems.dart, 4, DartType.PURE.getMeta()), new Object[] {"  #", " S ", "F  ", '#', pureShard, 'F', Items.FEATHER, 'S', "stickWood"});
 		
-		addShapedRecipe(new ItemStack(ModItems.chestBoat, 1, EntityCustomBoat.Type.OAK.getMetadata()), new Object[]{"X", "B", 'X', Blocks.CHEST, 'B', Items.BOAT});
-		addShapedRecipe(new ItemStack(ModItems.chestBoat, 1, EntityCustomBoat.Type.SPRUCE.getMetadata()), new Object[]{"X", "B", 'X', Blocks.CHEST, 'B', Items.SPRUCE_BOAT});
-		addShapedRecipe(new ItemStack(ModItems.chestBoat, 1, EntityCustomBoat.Type.BIRCH.getMetadata()), new Object[]{"X", "B", 'X', Blocks.CHEST, 'B', Items.BIRCH_BOAT});
-		addShapedRecipe(new ItemStack(ModItems.chestBoat, 1, EntityCustomBoat.Type.JUNGLE.getMetadata()), new Object[]{"X", "B", 'X', Blocks.CHEST, 'B', Items.JUNGLE_BOAT});
-		addShapedRecipe(new ItemStack(ModItems.chestBoat, 1, EntityCustomBoat.Type.ACACIA.getMetadata()), new Object[]{"X", "B", 'X', Blocks.CHEST, 'B', Items.ACACIA_BOAT});
-		addShapedRecipe(new ItemStack(ModItems.chestBoat, 1, EntityCustomBoat.Type.DARK_OAK.getMetadata()), new Object[]{"X", "B", 'X', Blocks.CHEST, 'B', Items.DARK_OAK_BOAT});
-
 		addShapedOreRecipe(new ItemStack(ModBlocks.crates, 1, CrystalColors.Basic.BLUE.getMeta()), new Object[] {"XXX", "# #", "XXX", 'X', new ItemStack(ModBlocks.crystalPlanks, 1, CrystalColors.Basic.BLUE.getMeta()), '#', "chestWood"});
 		addShapedOreRecipe(new ItemStack(ModBlocks.crates, 1, CrystalColors.Basic.RED.getMeta()), new Object[] {"XXX", "#C#", "XXX", 'X', new ItemStack(ModBlocks.crystalPlanks, 1, CrystalColors.Basic.RED.getMeta()), '#', "chestWood", 'C', new ItemStack(ModBlocks.crates, 1, CrystalColors.Basic.BLUE.getMeta())});
 		addShapedOreRecipe(new ItemStack(ModBlocks.crates, 1, CrystalColors.Basic.GREEN.getMeta()), new Object[] {"XXX", "#C#", "XXX", 'X', new ItemStack(ModBlocks.crystalPlanks, 1, CrystalColors.Basic.GREEN.getMeta()), '#', "chestWood", 'C', new ItemStack(ModBlocks.crates, 1, CrystalColors.Basic.RED.getMeta())});
@@ -552,10 +546,15 @@ public class ModCrafting {
 		addShapedOreRecipe(ModBlocks.xpTank, new Object[]{"###", "#G#", "###", '#', dIronPlate, 'G', "blockGlass"});
 		
 		for(BlockPlanks.EnumType woodType : BlockPlanks.EnumType.values()){
+			boolean special = (woodType == EnumType.ACACIA) || (woodType == EnumType.DARK_OAK);
 			ItemStack slab = new ItemStack(Blocks.WOODEN_SLAB, 1, woodType.getMetadata());
+			ItemStack planks = new ItemStack(Blocks.PLANKS, 1, woodType.getMetadata());
+			ItemStack log = new ItemStack(special ? Blocks.LOG2 : Blocks.LOG, 1, special ? woodType.getMetadata()-4 : woodType.getMetadata());
 			addShapedRecipe(new ItemStack(ModBlocks.shieldRack, 1, woodType.getMetadata()), new Object[]{"HSH", "SHS", " S ", 'S', slab, 'H', Blocks.TRIPWIRE_HOOK});
 			addShapedOreRecipe(new ItemStack(ModBlocks.jar, 4, woodType.getMetadata()), new Object[]{" S ", "P P", "PPP", 'S', slab, 'P', "paneGlassColorless"});
 			addShapedOreRecipe(new ItemStack(ModBlocks.bridge, 6, woodType.getMetadata()), new Object[]{"S S", "WWW", 'W', slab, 'S', "stickWood"});
+			addShapedOreRecipe(new ItemStack(ModBlocks.scaffold, 16, woodType.getMetadata()), new Object[]{"S S", " P ", "S S", 'S', "stickWood", 'P', planks});
+			addShapedOreRecipe(new ItemStack(ModBlocks.scaffoldSturdy, 32, woodType.getMetadata()), new Object[]{"SWS", "L#L", "SWS", 'W', slab, 'S', "stickWood", 'L', log, '#', Blocks.LADDER});
 		}		
 
 		for(PumpkinType type : PumpkinType.values()){
