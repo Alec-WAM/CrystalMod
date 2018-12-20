@@ -28,9 +28,11 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityShulkerBullet;
+import net.minecraft.init.Enchantments;
 import net.minecraft.init.Items;
 import net.minecraft.init.PotionTypes;
 import net.minecraft.item.Item;
@@ -174,6 +176,9 @@ public class BlockJar extends EnumBlock<WoodenBlockProperies.WoodType> implement
 		if(ItemStackTools.isValid(held)){
 			if(held.getItem() == Items.SHULKER_SHELL && !jar.isShulkerLamp()){
 				jar.setShulkerLamp(true);
+				if(!player.capabilities.isCreativeMode){
+					player.setHeldItem(hand, ItemUtil.consumeItem(held));
+				}
 				world.checkLightFor(EnumSkyBlock.BLOCK, pos);
 				BlockUtil.markBlockForUpdate(world, pos);
 				return true;
@@ -279,12 +284,21 @@ public class BlockJar extends EnumBlock<WoodenBlockProperies.WoodType> implement
 	
 	@Override
 	public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
-		TileEntity tile = world.getTileEntity(pos);
+		if (willHarvest) {
+	      return true;
+	    }
+	    return super.removedByPlayer(state, world, pos, player, willHarvest);
+	}
+
+	@Override
+	public void harvestBlock(World worldIn, EntityPlayer player, BlockPos pos, IBlockState state, @Nullable TileEntity te,
+	      @Nullable ItemStack stack) {
+	    TileEntity tile = worldIn.getTileEntity(pos);
 		if(tile !=null && tile instanceof TileJar){
 			TileJar jar = (TileJar)tile;
-			if(jar.isShulkerLamp() && !player.capabilities.isCreativeMode){
-				if(!world.isRemote){
-					EntityShulkerBullet bullet = new EntityShulkerBullet(world);
+			if(jar.isShulkerLamp() && !player.capabilities.isCreativeMode && EnchantmentHelper.getEnchantmentLevel(Enchantments.SILK_TOUCH, stack) == 0){
+				if(!worldIn.isRemote){
+					EntityShulkerBullet bullet = new EntityShulkerBullet(worldIn);
 					bullet.setLocationAndAngles(pos.getX() + 0.5, pos.getY() + 1 + 0.5, pos.getZ() + 0.5, bullet.rotationYaw, bullet.rotationPitch);
 					ReflectionHelper.setPrivateValue(EntityShulkerBullet.class, bullet, player, 1);
 					ReflectionHelper.setPrivateValue(EntityShulkerBullet.class, bullet, EnumFacing.UP, 2);
@@ -302,22 +316,12 @@ public class BlockJar extends EnumBlock<WoodenBlockProperies.WoodType> implement
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
-					world.spawnEntity(bullet);
+					worldIn.spawnEntity(bullet);
 				}
 				jar.setShulkerLamp(false);
 			}
 		}
-
-    	if (willHarvest) {
-	      return true;
-	    }
-	    return super.removedByPlayer(state, world, pos, player, willHarvest);
-	}
-
-	@Override
-	public void harvestBlock(World worldIn, EntityPlayer player, BlockPos pos, IBlockState state, @Nullable TileEntity te,
-	      @Nullable ItemStack stack) {
-	    super.harvestBlock(worldIn, player, pos, state, te, stack);
+		super.harvestBlock(worldIn, player, pos, state, te, stack);
 	    worldIn.setBlockToAir(pos);
 	}
 	

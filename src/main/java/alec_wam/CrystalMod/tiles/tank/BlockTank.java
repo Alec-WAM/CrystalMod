@@ -146,6 +146,13 @@ public class BlockTank extends EnumBlock<BlockTank.TankType> implements ITileEnt
     }
     
     @Override
+    public boolean isSideSolid(IBlockState base_state, IBlockAccess world, BlockPos pos, EnumFacing side)
+    {
+    	if(side.getAxis().isVertical())return true;
+    	return super.isSideSolid(base_state, world, pos, side);
+    }
+    
+    @Override
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer entityplayer, EnumHand hand, EnumFacing side, float par7, float par8,
             float par9) {
 
