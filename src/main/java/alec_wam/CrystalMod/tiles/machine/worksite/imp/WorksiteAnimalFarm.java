@@ -459,7 +459,7 @@ public class WorksiteAnimalFarm extends TileWorksiteBoundedInventory {
 	}
 
 	public boolean giveShears(EntityMinionWorker worker) {
-		if(worker.getHeldItemMainhand() == null){
+		if(worker.getHeldItemMainhand().isEmpty()){
 			int[] slots = this.inventory.getRawIndices(RelativeSide.BOTTOM);
 			for(int i = 0; i < slots.length; i++){
 				int slot = slots[i];
@@ -506,7 +506,7 @@ public class WorksiteAnimalFarm extends TileWorksiteBoundedInventory {
 	}
 	
 	public boolean giveSword(EntityMinionWorker worker) {
-		if(worker.getHeldItemMainhand() == null){
+		if(worker.getHeldItemMainhand().isEmpty()){
 			int[] slots = this.inventory.getRawIndices(RelativeSide.BOTTOM);
 			for(int i = 0; i < slots.length; i++){
 				int slot = slots[i];

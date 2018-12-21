@@ -303,18 +303,10 @@ item.crystalmod.dnaitem.cure.name=DNA Purifier
 
 item.crystalmod.worksiteupgrade.0.name=Medium Bounds Upgrade
 item.crystalmod.worksiteupgrade.1.name=Large Bounds Upgrade
-item.crystalmod.worksiteupgrade.2.name=Medium Quarry Upgrade
-item.crystalmod.worksiteupgrade.3.name=Large Quarry Upgrade
-item.crystalmod.worksiteupgrade.4.name=Fortune I Upgrade
-item.crystalmod.worksiteupgrade.5.name=Fortune II Upgrade
-item.crystalmod.worksiteupgrade.6.name=Fortune III Upgrade
-item.crystalmod.worksiteupgrade.7.name=Iron Tool Upgrade
-item.crystalmod.worksiteupgrade.8.name=Diamond Tool Upgrade
-item.crystalmod.worksiteupgrade.9.name=Crystal Tool Upgrade
-item.crystalmod.worksiteupgrade.10.name=Basic Chunk-loader Upgrade
-item.crystalmod.worksiteupgrade.11.name=Quarry Chunk-loader Upgrade
-item.crystalmod.worksiteupgrade.12.name=Quarry Silk-Touch Upgrade
-item.crystalmod.worksiteupgrade.13.name=Quarry Only Ore Upgrade
+item.crystalmod.worksiteupgrade.2.name=Fortune I Upgrade
+item.crystalmod.worksiteupgrade.3.name=Fortune II Upgrade
+item.crystalmod.worksiteupgrade.4.name=Fortune III Upgrade
+item.crystalmod.worksiteupgrade.5.name=Chunk-loader Upgrade
 
 item.crystalmod.telepearl.name=Teleporting Pearl
 item.crystalmod.backpack_normal.normal.name=Backpack
@@ -561,6 +553,9 @@ tile.crystalmod.sapling.bamboo.name=Bamboo Sapling
 tile.crystalmod.bambooplanks.name=Bamboo Planks
 tile.crystalmod.bamboodoor.name=Bamboo Door
 
+tile.crystalmod.lantern.name=Lantern
+tile.crystalmod.lantern_dyed.name=%s Lantern
+
 tile.crystalmod.crystallog.blue.name=Blue Crystal Wood
 tile.crystalmod.crystallog.red.name=Red Crystal Wood
 tile.crystalmod.crystallog.green.name=Green Crystal Wood
@@ -772,7 +767,8 @@ tile.crystalmod.worksite.crop_farm.name=Minion Crop Farm
 tile.crystalmod.mobgrinder.name=Mob Grinder
 tile.crystalmod.xpvacuum.name=XP Vacuum
 tile.crystalmod.xpfountain.name=XP Fountain
-tile.crystalmod.xptank.name=XP Tank
+tile.crystalmod.xptank.normal.name=XP Tank
+tile.crystalmod.xptank.ender.name=Ender XP Tank
 crystalmod.xptank.tooltip.level=XP Levels: %s
 
 tile.crystalmod.endertorch.name=Ender Torch

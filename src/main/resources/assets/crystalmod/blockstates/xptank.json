@@ -6,6 +6,15 @@
   },
   "variants": {
     "normal": [{}],
-    "inventory": [{}]
+    "inventory": [{}],
+	"ender": {
+		"false": {
+		},
+		"true": {
+			"textures": {
+				"tank": "crystalmod:blocks/tank/xp_tank_ender"
+			}
+		}
+	}
   }
 }

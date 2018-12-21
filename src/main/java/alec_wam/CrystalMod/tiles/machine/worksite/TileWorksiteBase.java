@@ -53,10 +53,7 @@ public abstract class TileWorksiteBase extends TileEntityMod implements IWorkSit
 	  return EnumSet.of(
 	      WorksiteUpgrade.ENCHANTED_TOOLS_1,
 	      WorksiteUpgrade.ENCHANTED_TOOLS_2,
-	      WorksiteUpgrade.ENCHANTED_TOOLS_3,
-	      WorksiteUpgrade.TOOL_QUALITY_1,
-	      WorksiteUpgrade.TOOL_QUALITY_2,
-	      WorksiteUpgrade.TOOL_QUALITY_3
+	      WorksiteUpgrade.ENCHANTED_TOOLS_3
 	      );
 	}
 
@@ -83,7 +80,7 @@ public abstract class TileWorksiteBase extends TileEntityMod implements IWorkSit
 		updateEfficiency();
 		BlockUtil.markBlockForUpdate(getWorld(), getPos());
 		markDirty();
-		if(upgrade==WorksiteUpgrade.BASIC_CHUNK_LOADER || upgrade==WorksiteUpgrade.QUARRY_CHUNK_LOADER)
+		if(upgrade==WorksiteUpgrade.BASIC_CHUNK_LOADER)
 	    {
 			setupInitialTicket();//setup chunkloading for the worksite
 	    }
@@ -96,7 +93,7 @@ public abstract class TileWorksiteBase extends TileEntityMod implements IWorkSit
 	  updateEfficiency();
 	  BlockUtil.markBlockForUpdate(getWorld(), getPos());
 	  markDirty();
-	  if(upgrade==WorksiteUpgrade.BASIC_CHUNK_LOADER || upgrade==WorksiteUpgrade.QUARRY_CHUNK_LOADER)
+	  if(upgrade==WorksiteUpgrade.BASIC_CHUNK_LOADER)
 	  {
 	    setTicket(null);//release any existing ticket
 	  }
@@ -126,7 +123,7 @@ public abstract class TileWorksiteBase extends TileEntityMod implements IWorkSit
 		for(WorkerFilter fil : filters){
 			worker = getRandomWorker(false, fil);
 			if(worker !=null){
-				break;
+				return worker;
 			}
 		}
 		return worker;
@@ -371,7 +368,7 @@ public abstract class TileWorksiteBase extends TileEntityMod implements IWorkSit
 	public final void setupInitialTicket()
 	{
 		if(chunkTicket!=null){ForgeChunkManager.releaseTicket(chunkTicket);}
-	  	if(getUpgrades().contains(WorksiteUpgrade.BASIC_CHUNK_LOADER) || getUpgrades().contains(WorksiteUpgrade.QUARRY_CHUNK_LOADER))
+	  	if(getUpgrades().contains(WorksiteUpgrade.BASIC_CHUNK_LOADER))
 	    {
 	  		setTicket(ForgeChunkManager.requestTicket(CrystalMod.instance, getWorld(), Type.NORMAL));    
 	    }

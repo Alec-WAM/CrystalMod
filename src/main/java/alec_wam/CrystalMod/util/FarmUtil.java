@@ -64,7 +64,7 @@ public class FarmUtil {
 	          break;
 	        }
 	      }
-		  if((stack.getItem() instanceof IPlantable) || found || (seeds.contains(stack.getItem().getRegistryName().toString() + "|" + stack.getItemDamage()))){
+		  if((stack.getItem() instanceof IPlantable) || (seeds.contains(stack.getItem().getRegistryName().toString() + "|" + stack.getItemDamage()))){
 			  return true;
 		  }
 		  return false;

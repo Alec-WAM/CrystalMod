@@ -42,10 +42,13 @@ import alec_wam.CrystalMod.blocks.decorative.BlockFancyLadder2;
 import alec_wam.CrystalMod.blocks.decorative.BlockFancyObsidian;
 import alec_wam.CrystalMod.blocks.decorative.BlockFancyPumpkin;
 import alec_wam.CrystalMod.blocks.decorative.BlockFancySeaLantern;
+import alec_wam.CrystalMod.blocks.decorative.BlockLantern;
+import alec_wam.CrystalMod.blocks.decorative.BlockLanternDyed;
 import alec_wam.CrystalMod.blocks.decorative.BlockOctagonalBricks;
 import alec_wam.CrystalMod.blocks.decorative.ItemBlockBetterRose;
 import alec_wam.CrystalMod.blocks.decorative.ItemBlockFancyLadders;
 import alec_wam.CrystalMod.blocks.decorative.ItemBlockFancyLadders2;
+import alec_wam.CrystalMod.blocks.decorative.ItemBlockLanternDyed;
 import alec_wam.CrystalMod.blocks.decorative.bridge.BlockBridge;
 import alec_wam.CrystalMod.blocks.decorative.bridge.TileBridge;
 import alec_wam.CrystalMod.blocks.decorative.tiles.BlockBasicTiles;
@@ -245,6 +248,7 @@ import alec_wam.CrystalMod.tiles.xp.TileEntityXPVacuum;
 import alec_wam.CrystalMod.util.CrystalColors;
 import alec_wam.CrystalMod.util.ModLogger;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockStainedGlass;
 import net.minecraft.block.BlockStairs;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
@@ -253,6 +257,7 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemCloth;
+import net.minecraft.item.ItemColored;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
@@ -397,6 +402,8 @@ public class ModBlocks {
 	public static BlockSturdyScaffold scaffoldSturdy;
 	public static BlockBasicTile muffler;
 	public static BlockCustomDoor bambooDoor;
+	public static BlockLantern lantern;
+	public static BlockLanternDyed lanternDyed;
 	
 	public static BlockFlumeRailBasic flumeRailBasic;
 	public static BlockFlumeRailHolding flumeRailHolding;
@@ -866,7 +873,8 @@ public class ModBlocks {
 		registerTileEntity(TileEntityXPVacuum.class);
 		xpFountain = registerBlock(new BlockXPFountain(), "xpfountain");
 		registerTileEntity(TileEntityXPFountain.class);
-		xpTank = registerBlock(new BlockXPTank(), "xptank");
+		xpTank = new BlockXPTank();
+		registerBlock(xpTank, new ItemColored(xpTank, true).setSubtypeNames(new String[]{"normal", "ender"}), "xptank");
 		registerTileEntity(TileEntityXPTank.class);
 		seismicScanner = (BlockBasicTile)registerBlock(new BlockBasicTile(TileEntitySeismicScanner.class, Material.IRON).setHardness(1.5F), "seismic_scanner");
 		registerTileEntity(TileEntitySeismicScanner.class);
@@ -904,6 +912,12 @@ public class ModBlocks {
 		
 		bambooDoor = (BlockCustomDoor)new BlockCustomDoor(Material.WOOD, SoundType.WOOD, ModItems.bambooDoor).setHardness(3.0F).setCreativeTab(null);
 		registerBlock(bambooDoor, "bamboodoor");
+		
+		lantern = new BlockLantern();
+		registerBlock(lantern, "lantern");
+		lanternDyed = new BlockLanternDyed();
+		registerBlock(lanternDyed, new ItemBlockLanternDyed(lanternDyed), "lantern_dyed");
+		ItemBlockMeta.setMappingProperty(lanternDyed, BlockStainedGlass.COLOR);
 		
 		flumeRailBasic = (BlockFlumeRailBasic) new BlockFlumeRailBasic().setHardness(0.7F);
 		registerBlock(flumeRailBasic, new ItemBlockWater(flumeRailBasic), "flumerailbasic");

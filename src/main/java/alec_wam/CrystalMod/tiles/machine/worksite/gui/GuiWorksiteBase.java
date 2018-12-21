@@ -9,8 +9,8 @@ import alec_wam.CrystalMod.util.Lang;
 
 public abstract class GuiWorksiteBase extends GuiContainerWorksiteBase {
 
-	TileWorksiteBoundedInventory worksite;
-	ContainerWorksite container;
+	public TileWorksiteBoundedInventory worksite;
+	public ContainerWorksite container;
 
 	public GuiWorksiteBase(ContainerWorksite par1Container) {
 		super(par1Container, 178, 240, defaultBackground);

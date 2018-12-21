@@ -70,9 +70,6 @@ public class ItemWorksiteUpgrade extends Item implements ICustomModel {
 	@Override
 	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
     {
-		if(world.isRemote){
-			return EnumActionResult.PASS;
-		}
 		if (pos != null) {
 			TileEntity te = player.getEntityWorld().getTileEntity(pos);
 			if (te instanceof IWorkSite) {
@@ -82,8 +79,7 @@ public class ItemWorksiteUpgrade extends Item implements ICustomModel {
 				if (!ws.getValidUpgrades().contains(upgrade)) {
 					return EnumActionResult.PASS;
 				}
-				HashSet<WorksiteUpgrade> wsug = new HashSet<WorksiteUpgrade>(
-						ws.getUpgrades());
+				HashSet<WorksiteUpgrade> wsug = new HashSet<WorksiteUpgrade>(ws.getUpgrades());
 				if (wsug.contains(upgrade)) {
 					return EnumActionResult.PASS;
 				}

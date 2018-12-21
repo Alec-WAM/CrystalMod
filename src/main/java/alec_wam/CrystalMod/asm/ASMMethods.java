@@ -36,7 +36,7 @@ public class ASMMethods {
 	public boolean overrideRender(ItemStack itemStackIn)
 	{
 		if(ItemStackTools.isValid(itemStackIn)){
-			String registryName = itemStackIn.getItem().getRegistryName().getResourcePath();
+			String registryName = itemStackIn.getItem().getRegistryName().toString();
 			Item item = itemStackIn.getItem();
 			ICustomItemRenderer render = ClientProxy.getRenderer(item);
 			if(render !=null){

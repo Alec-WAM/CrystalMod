@@ -28,12 +28,14 @@ public class CustomItemModelFactory implements IBakedModel {
 	
 	@Override
 	public List<BakedQuad> getQuads(IBlockState state, EnumFacing side,	long rand) {
-		throw new UnsupportedOperationException();
+		//throw new UnsupportedOperationException();
+		return model.getQuads(state, side, rand);
 	}
 
 	@Override
 	public boolean isAmbientOcclusion() {
-		throw new UnsupportedOperationException();
+		//throw new UnsupportedOperationException();
+		return model.isAmbientOcclusion();
 	}
 
 	@Override
@@ -43,17 +45,20 @@ public class CustomItemModelFactory implements IBakedModel {
 
 	@Override
 	public boolean isBuiltInRenderer() {
-		throw new UnsupportedOperationException();
+		//throw new UnsupportedOperationException();
+		return model.isBuiltInRenderer();
 	}
 
 	@Override
 	public TextureAtlasSprite getParticleTexture() {
-		throw new UnsupportedOperationException();
+		//throw new UnsupportedOperationException();
+		return model.getParticleTexture();
 	}
 
 	@Override
 	public ItemCameraTransforms getItemCameraTransforms() {
-		throw new UnsupportedOperationException();
+		//throw new UnsupportedOperationException();
+		return model.getItemCameraTransforms();
 	}
 
 	private ModelOverride override = new ModelOverride();

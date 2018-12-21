@@ -3,6 +3,7 @@ package alec_wam.CrystalMod.tiles.machine.worksite.imp;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -115,6 +116,16 @@ public class WorksiteTreeFarm extends TileWorksiteUserBlocks {
 	}
 
 	@Override
+	public EnumSet<WorksiteUpgrade> getValidUpgrades()
+	{
+		return EnumSet.of(
+				WorksiteUpgrade.SIZE_MEDIUM,
+				WorksiteUpgrade.SIZE_LARGE,
+				WorksiteUpgrade.BASIC_CHUNK_LOADER
+				);
+	}
+	
+	@Override
 	public void onTargetsAdjusted() {
 		validateCollection(blocksToFertilize);
 		validateCollection(blocksToChop);
@@ -151,7 +162,7 @@ public class WorksiteTreeFarm extends TileWorksiteUserBlocks {
 	}
 
 	public boolean giveAxe(EntityMinionWorker worker) {
-		if(worker.getHeldItemMainhand() == null){
+		if(worker.getHeldItemMainhand().isEmpty()){
 			int[] slots = this.inventory.getRawIndices(RelativeSide.BOTTOM);
 			for(int i = 0; i < slots.length; i++){
 				int slot = slots[i];
@@ -167,7 +178,7 @@ public class WorksiteTreeFarm extends TileWorksiteUserBlocks {
 	}
 	
 	public boolean takeAxe(EntityMinionWorker worker) {
-		if(worker.getHeldItemMainhand() != null){
+		if(ItemStackTools.isValid(worker.getHeldItemMainhand())){
 			ItemStack held = worker.getHeldItemMainhand();
 			if(ToolUtil.isBrokenTinkerTool(held) || ToolUtil.isEmptyRfTool(held)){
 				if(addStackToInventoryNoDrop(held, false, RelativeSide.BOTTOM, RelativeSide.TOP)){

@@ -550,8 +550,6 @@ public class ModCrafting {
 		ModCrafting.addNBTRecipe(new ItemStack(ModBlocks.crystalTank, 1, TankType.DARK.getMeta()), copyListTank, new Object[]{"###", "#T#", "###", '#', darkPlate, 'T', new ItemStack(ModBlocks.crystalTank, 1, TankType.GREEN.getMeta())});
 		ModCrafting.addNBTRecipe(new ItemStack(ModBlocks.crystalTank, 1, TankType.PURE.getMeta()), copyListTank, new Object[]{"###", "#T#", "###", '#', purePlate, 'T', new ItemStack(ModBlocks.crystalTank, 1, TankType.DARK.getMeta())});
 
-		addShapedOreRecipe(ModBlocks.xpTank, new Object[]{"###", "#G#", "###", '#', dIronPlate, 'G', "blockGlass"});
-		
 		for(BlockPlanks.EnumType woodType : BlockPlanks.EnumType.values()){
 			boolean special = (woodType == EnumType.ACACIA) || (woodType == EnumType.DARK_OAK);
 			ItemStack slab = new ItemStack(Blocks.WOODEN_SLAB, 1, woodType.getMetadata());
@@ -567,6 +565,12 @@ public class ModCrafting {
 		for(PumpkinType type : PumpkinType.values()){
 			addShapelessRecipe(new ItemStack(ModBlocks.fancyPumpkinLit, 1, type.getMeta()), new Object[]{Blocks.TORCH, new ItemStack(ModBlocks.fancyPumpkin, 1, type.getMeta())});
 			addShapedRecipe(new ItemStack(Items.PUMPKIN_SEEDS, 4), new Object[]{"P", 'P', new ItemStack(ModBlocks.fancyPumpkin, 1, type.getMeta())});
+		}
+		
+		addShapedOreRecipe(ModBlocks.lantern, new Object[]{"PPP", "GTG", "PPP", 'T', Blocks.TORCH, 'P', dIronPlate, 'G', "paneGlassColorless"});
+		for(EnumDyeColor dye : EnumDyeColor.values()){
+			int meta = dye.getMetadata();
+			addShapedRecipe(new ItemStack(ModBlocks.lanternDyed, 1, meta), new Object[]{"PPP", "GTG", "PPP", 'T', Blocks.TORCH, 'P', dIronPlate, 'G', new ItemStack(Blocks.STAINED_GLASS_PANE, 1, meta)});
 		}
 		
 		List<String> copyListBattery = Lists.newArrayList();
@@ -587,7 +591,9 @@ public class ModCrafting {
 		addShapedOreRecipe(ModBlocks.customSpawner, new Object[]{"BBB", "BRB", "BBB", 'B', new ItemStack(ModBlocks.metalBars, 1, EnumMetalBarType.DARK_IRON.getMeta()), 'R', "rodBlaze"});
 		addShapedRecipe(ModBlocks.xpVacuum, new Object[]{" P ", "PTP", " F ", 'T', ModBlocks.xpTank, 'P', dIronPlate, 'F', new ItemStack(ModItems.machineFrame, 1, FrameType.ENDER.getMeta())});
 		addShapedRecipe(ModBlocks.xpFountain, new Object[]{" B ", "XME", " P ", 'B', new ItemStack(ModBlocks.metalBars, 1, EnumMetalBarType.DARK_IRON.getMeta()), 'X', ModFluids.bucketList.get(ModFluids.fluidXpJuice), 'M', new ItemStack(ModItems.machineFrame, 1, FrameType.ENDER.getMeta()), 'E', ModFluids.bucketList.get(ModFluids.fluidEnder), 'P', fluidPipe});
-
+		addShapedOreRecipe(ModBlocks.xpTank, new Object[]{"###", "#G#", "###", '#', dIronPlate, 'G', "blockGlass"});
+		
+		
 		ItemStack pureSword = new ItemStack(ModItems.crystalSword);
 		ItemNBTHelper.getCompound(pureSword).setString("Color", "pure");
 		addShapedOreRecipeNBT(ModBlocks.mobGrinder, new Object[]{"PHP", "ISL", "PFP", 'P', dIronPlate, 'H', "skull", 'S', pureSword, 'I', itemPipe, 'L', ModBlocks.xpVacuum, 'F', machineFrame});
@@ -798,18 +804,11 @@ public class ModCrafting {
 		
 		addShapedRecipe(new ItemStack(ModItems.worksiteUpgrade, 1, WorksiteUpgrade.SIZE_MEDIUM.ordinal()), new Object[]{" F ", "FPF", " F ", 'P', dIronPlate, 'F', Blocks.OAK_FENCE});
 		addShapedRecipe(new ItemStack(ModItems.worksiteUpgrade, 1, WorksiteUpgrade.SIZE_LARGE.ordinal()), new Object[]{" F ", "FPF", " F ", 'P', new ItemStack(ModItems.worksiteUpgrade, 1, WorksiteUpgrade.SIZE_MEDIUM.ordinal()), 'F', Blocks.OAK_FENCE});
-		addShapelessRecipe(new ItemStack(ModItems.worksiteUpgrade, 1, WorksiteUpgrade.QUARRY_MEDIUM.ordinal()), new Object[]{Items.IRON_PICKAXE, new ItemStack(ModItems.worksiteUpgrade, 1, WorksiteUpgrade.SIZE_MEDIUM.ordinal())});
-		addShapelessRecipe(new ItemStack(ModItems.worksiteUpgrade, 1, WorksiteUpgrade.QUARRY_LARGE.ordinal()), new Object[]{Items.IRON_PICKAXE, new ItemStack(ModItems.worksiteUpgrade, 1, WorksiteUpgrade.SIZE_LARGE.ordinal())});
 		addShapedRecipe(new ItemStack(ModItems.worksiteUpgrade, 1, WorksiteUpgrade.ENCHANTED_TOOLS_1.ordinal()), new Object[]{" B ", "NPN", " N ", 'P', dIronPlate, 'B', Items.ENCHANTED_BOOK.getEnchantedItemStack(new EnchantmentData(Enchantments.FORTUNE, 1)), 'N', dIronNugget});
 		addShapedRecipe(new ItemStack(ModItems.worksiteUpgrade, 1, WorksiteUpgrade.ENCHANTED_TOOLS_2.ordinal()), new Object[]{" B ", "NPN", " N ", 'P', dIronPlate, 'B', Items.ENCHANTED_BOOK.getEnchantedItemStack(new EnchantmentData(Enchantments.FORTUNE, 2)), 'N', dIronNugget});
 		addShapedRecipe(new ItemStack(ModItems.worksiteUpgrade, 1, WorksiteUpgrade.ENCHANTED_TOOLS_3.ordinal()), new Object[]{" B ", "NPN", " N ", 'P', dIronPlate, 'B', Items.ENCHANTED_BOOK.getEnchantedItemStack(new EnchantmentData(Enchantments.FORTUNE, 3)), 'N', dIronNugget});
-		addShapedOreRecipe(new ItemStack(ModItems.worksiteUpgrade, 1, WorksiteUpgrade.TOOL_QUALITY_1.ordinal()), new Object[]{" P ", "SDA", " I ", 'P', Items.IRON_PICKAXE, 'S', Items.IRON_SHOVEL, 'D', dIronPlate, 'A', Items.IRON_AXE, 'I', "ingotIron"});
-		addShapedOreRecipe(new ItemStack(ModItems.worksiteUpgrade, 1, WorksiteUpgrade.TOOL_QUALITY_2.ordinal()), new Object[]{" P ", "SDA", " I ", 'P', Items.DIAMOND_PICKAXE, 'S', Items.DIAMOND_SHOVEL, 'D', dIronPlate, 'A', Items.DIAMOND_AXE, 'I', "gemDiamond"});
 		addShapedOreRecipe(new ItemStack(ModItems.worksiteUpgrade, 1, WorksiteUpgrade.BASIC_CHUNK_LOADER.ordinal()), new Object[]{" N ", "EPE", " N ", 'P', dIronPlate, 'E', ender, 'N', dIronNugget});
-		addShapedOreRecipe(new ItemStack(ModItems.worksiteUpgrade, 1, WorksiteUpgrade.QUARRY_CHUNK_LOADER.ordinal()), new Object[]{" N ", "EPE", " N ", 'P', new ItemStack(ModItems.worksiteUpgrade, 1, WorksiteUpgrade.BASIC_CHUNK_LOADER.ordinal()), 'E', "endereye", 'N', pureNugget});
-		addShapedRecipe(new ItemStack(ModItems.worksiteUpgrade, 1, WorksiteUpgrade.QUARRY_SILK_TOUCH.ordinal()), new Object[]{" B ", "NPN", " N ", 'P', dIronPlate, 'B', Items.ENCHANTED_BOOK.getEnchantedItemStack(new EnchantmentData(Enchantments.SILK_TOUCH, 1)), 'N', dIronNugget});
-		addShapedOreRecipe(new ItemStack(ModItems.worksiteUpgrade, 1, WorksiteUpgrade.QUARRY_ONLY_ORE.ordinal()), new Object[]{" O ", "NPN", " N ", 'P', dIronPlate, 'O', "oreIron", 'N', dIronNugget});
-
+		
 		addShapedOreRecipe(new ItemStack(ModItems.congealedRedstone, 2), new Object[]{"RSR", "SRS", "RSR", 'R', "dustRedstone", 'S', new ItemStack(ModItems.crystalSap, 1, CrystalColors.Basic.RED.getMeta())});
 		addShapedOreRecipe(new ItemStack(ModBlocks.redstoneCore), new Object[]{"RSR", "SBS", "RSR", 'R', Items.BLAZE_ROD, 'S', new ItemStack(ModItems.crystalSap, 1, CrystalColors.Basic.RED.getMeta()), 'B', "blockRedstone"});
 		addShapedOreRecipe(new ItemStack(ModBlocks.redstoneReactor), new Object[]{"DPD", "GCG", "DPD", 'C', ModBlocks.redstoneCore, 'D', new ItemStack(ModBlocks.crystalIngot, 1, CrystalIngotBlockType.DARKIRON.getMeta()), 'G', "gemDiamond", 'P', darkPlate});

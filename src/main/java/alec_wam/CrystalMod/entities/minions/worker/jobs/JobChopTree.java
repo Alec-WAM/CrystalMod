@@ -6,6 +6,7 @@ import alec_wam.CrystalMod.entities.minions.worker.WorkerJob;
 import alec_wam.CrystalMod.tiles.machine.worksite.TileWorksiteBase;
 import alec_wam.CrystalMod.tiles.machine.worksite.imp.WorksiteTreeFarm;
 import alec_wam.CrystalMod.util.ItemStackTools;
+import alec_wam.CrystalMod.util.ModLogger;
 import alec_wam.CrystalMod.util.fakeplayer.FakePlayerUtil;
 import alec_wam.CrystalMod.util.tool.ToolUtil;
 import alec_wam.CrystalMod.util.tool.TreeUtil;
@@ -51,7 +52,7 @@ public class JobChopTree extends WorkerJob {
 		tFarm.giveAxe(worker);
 		ItemStack held = worker.getHeldItemMainhand();
 		if(ItemStackTools.isNullStack(held)){
-			return true;
+			return false;
 		}
 		
 		worker.getLookHelper().setLookPosition(logPos.getX() + 0.5, logPos.getY() + 0.5, logPos.getZ() + 0.5, 10, 40);
@@ -61,7 +62,7 @@ public class JobChopTree extends WorkerJob {
         double d2 = worker.posZ - (logPos.getZ() + 0.5);
         d =MathHelper.sqrt(d0 * d0 + d2 * d2);
 		
-		if(d <= 2.5D){
+		if(d <= 2.5D && d > 0.5){
 			if (delay < 0)
 		    {
 				int str = 0;

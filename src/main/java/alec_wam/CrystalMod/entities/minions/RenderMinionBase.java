@@ -61,8 +61,129 @@ public class RenderMinionBase extends RenderBiped<EntityMinionBase> {
 
         this.setModelVisibilities(entity);
         super.doRender(entity, x, d0, z, entityYaw, partialTicks);
-        //float f = 0.9375F;
-        //GlStateManager.scale(f, f, f);
+        //TODO Make Workers render through blocks
+        /*if(entity instanceof EntityMinionWorker){
+        	EntityMinionWorker worker = (EntityMinionWorker)entity;
+	        boolean overlay = false;
+	        EntityPlayer player = CrystalMod.proxy.getClientPlayer();
+	        ItemStack staff = ItemStackTools.getEmptyStack();
+	        if(player.getHeldItemMainhand().getItem() == ModItems.minionStaff){
+	        	NBTTagCompound nbt = ItemNBTHelper.getCompound(staff).getCompoundTag("WorksitePos");
+	        	if(!nbt.hasNoTags()){
+	        		staff = player.getHeldItemMainhand();
+	        	}
+	        }
+	        if(player.getHeldItemOffhand().getItem() == ModItems.minionStaff){
+	        	NBTTagCompound nbt = ItemNBTHelper.getCompound(staff);
+	        	if(nbt.hasKey("WorksitePos")){
+	        		staff = player.getHeldItemOffhand();
+	        	}
+	        }
+	        if(ItemStackTools.isValid(staff)){
+	        	//NBTTagCompound nbt = ItemNBTHelper.getCompound(staff);
+	        	//if(nbt.hasKey("WorksitePos")){
+	        		overlay = /*worker.isWorkingAtWorksite(NBTUtil.getPosFromTag(nbt.getCompoundTag("WorksitePos"))) && !CrystalMod.proxy.getClientPlayer().canEntityBeSeen(entity);
+	        	//}
+	        }
+	        
+	        boolean depth = true;
+	        if(overlay){
+	        	GlStateManager.pushMatrix();
+	        	GlStateManager.pushAttrib();
+	        	
+	        	GlStateManager.enableAlpha();
+	        	GlStateManager.enableBlend();
+	
+	        	GlStateManager.color(0.0f, 1.0f, 0.0f, 1F);
+	            
+	        	if(depth){
+	        		GlStateManager.disableDepth();
+	        	}
+	        	
+	        	GlStateManager.depthMask(false);
+	            GlStateManager.depthFunc(514);
+	            GlStateManager.disableLighting();
+	            GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_COLOR, GlStateManager.DestFactor.ONE);
+	            
+	        	
+	        	GlStateManager.pushMatrix();
+		        float f = this.interpolateRotation(entity.prevRenderYawOffset, entity.renderYawOffset, partialTicks);
+		        float f1 = this.interpolateRotation(entity.prevRotationYawHead, entity.rotationYawHead, partialTicks);
+		        float f2 = f1 - f;
+		        boolean shouldSit = entity.isRiding() && (entity.getRidingEntity() != null && entity.getRidingEntity().shouldRiderSit());
+		        if (shouldSit && entity.getRidingEntity() instanceof EntityLivingBase)
+		        {
+		            EntityLivingBase entitylivingbase = (EntityLivingBase)entity.getRidingEntity();
+		            f = this.interpolateRotation(entitylivingbase.prevRenderYawOffset, entitylivingbase.renderYawOffset, partialTicks);
+		            f2 = f1 - f;
+		            float f3 = MathHelper.wrapDegrees(f2);
+		
+		            if (f3 < -85.0F)
+		            {
+		                f3 = -85.0F;
+		            }
+		
+		            if (f3 >= 85.0F)
+		            {
+		                f3 = 85.0F;
+		            }
+		
+		            f = f1 - f3;
+		
+		            if (f3 * f3 > 2500.0F)
+		            {
+		                f += f3 * 0.2F;
+		            }
+		        }
+		
+		        float f7 = entity.prevRotationPitch + (entity.rotationPitch - entity.prevRotationPitch) * partialTicks;
+		        this.renderLivingAt(entity, x, y, z);
+		        
+		        float f8 = this.handleRotationFloat(entity, partialTicks);
+		        this.applyRotations(entity, f8, f, partialTicks);
+		        float f4 = this.prepareScale(entity, partialTicks);
+		        float f5 = 0.0F;
+		        float f6 = 0.0F;
+		
+		        if (!entity.isRiding())
+		        {
+		            f5 = entity.prevLimbSwingAmount + (entity.limbSwingAmount - entity.prevLimbSwingAmount) * partialTicks;
+		            f6 = entity.limbSwing - entity.limbSwingAmount * (1.0F - partialTicks);
+		
+		            if (entity.isChild())
+		            {
+		                f6 *= 3.0F;
+		            }
+		
+		            if (f5 > 1.0F)
+		            {
+		                f5 = 1.0F;
+		            }
+		        }
+		        if (!this.renderMarker)
+		        {
+		        	if (this.bindEntityTexture(entity))
+		            {
+		        		this.mainModel.render(entity, f6, f5, f8, f2, f7, f4);
+		            }
+		        	
+		        }
+		        //this.renderLayers(entity, f6, f5, partialTicks, f8, f2, f7, f4);
+		        GlStateManager.popMatrix();     
+		        
+		        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+		        GlStateManager.enableLighting();
+		        GlStateManager.depthFunc(515);
+		        GlStateManager.depthMask(true);
+		        
+		        if(depth){
+	        		GlStateManager.enableDepth();
+	        	}
+	        	
+		        GlStateManager.popAttrib();
+		        GlStateManager.popMatrix();     	
+	        }
+        }*/
     }
     
     private void setModelVisibilities(EntityMinionBase clientPlayer)

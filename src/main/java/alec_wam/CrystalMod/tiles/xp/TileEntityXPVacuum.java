@@ -8,8 +8,10 @@ import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.IMessageHandler;
 import alec_wam.CrystalMod.network.packets.PacketTileMessage;
 import alec_wam.CrystalMod.tiles.TileEntityMod;
+import alec_wam.CrystalMod.util.FluidUtil;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -50,6 +52,19 @@ public class TileEntityXPVacuum extends TileEntityMod implements IMessageHandler
 			vacuumXP(getWorld(), getPos(), xpCon, 8, 4.5, 1.5);
 		}
 		if(!getWorld().isRemote){
+			for(EnumFacing dir : EnumFacing.VALUES){
+				TileEntity tile = world.getTileEntity(getPos().offset(dir));
+				if(tile !=null && tile instanceof TileEntityXPTank){
+					TileEntityXPTank tank = (TileEntityXPTank)tile;
+					
+					IFluidHandler handler = FluidUtil.getFluidHandler(tank, dir.getOpposite());
+					int fillCheck = handler.fill(xpCon.drain(20, false), false);
+					if(fillCheck > 0){
+						FluidStack stack = xpCon.drain(fillCheck, true);
+						handler.fill(stack, true);
+					}
+				}
+			}
 			if(shouldDoWorkThisTick(10)){
 				if(xpCon.isDirty()){
 					NBTTagCompound nbt = new NBTTagCompound();

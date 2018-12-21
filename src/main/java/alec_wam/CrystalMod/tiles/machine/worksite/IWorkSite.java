@@ -103,9 +103,6 @@ public interface IWorkSite
 			if(upgrades.contains(WorksiteUpgrade.ENCHANTED_TOOLS_1)){efficiencyBonusFactor+=1;}
 			if(upgrades.contains(WorksiteUpgrade.ENCHANTED_TOOLS_2)){efficiencyBonusFactor+=3;}
 			if(upgrades.contains(WorksiteUpgrade.ENCHANTED_TOOLS_3)){efficiencyBonusFactor+=5;}
-			if(upgrades.contains(WorksiteUpgrade.TOOL_QUALITY_1)){efficiencyBonusFactor+=5;}
-			if(upgrades.contains(WorksiteUpgrade.TOOL_QUALITY_2)){efficiencyBonusFactor+=15;}
-			if(upgrades.contains(WorksiteUpgrade.TOOL_QUALITY_3)){efficiencyBonusFactor+=25;}
 			return efficiencyBonusFactor;
 		}
 

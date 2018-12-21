@@ -8,11 +8,15 @@ import java.util.Map;
 import com.google.common.collect.Maps;
 
 import alec_wam.CrystalMod.entities.minions.EntityMinionBase;
+import alec_wam.CrystalMod.entities.minions.MinionConstants;
 import alec_wam.CrystalMod.tiles.machine.worksite.TileWorksiteBase;
+import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.ChatUtil;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.tool.ToolUtil;
+import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -35,6 +39,7 @@ public class EntityMinionWorker extends EntityMinionBase {
 	public List<WorkerJob> commandsToAdd;
 	
 	public Map<String, Object> storedObjects;
+	private int suffProtection;
 	
 	public EntityMinionWorker(World worldIn) {
 		super(worldIn);
@@ -66,8 +71,30 @@ public class EntityMinionWorker extends EntityMinionBase {
 	}
 	
 	@Override
+	public boolean isEntityInvulnerable(DamageSource source)
+    {
+		if(source == DamageSource.IN_WALL && (suffProtection > 0 || isInsideOfMaterial(Material.WOOD))){
+			return true;
+		}
+		return super.isEntityInvulnerable(source);
+	}
+	
+	@Override
 	public void onUpdate(){
 		super.onUpdate();
+		if(isInsideOfMaterial(Material.WOOD)){
+			suffProtection = 10;
+			for(BlockPos pos : BlockUtil.getBlocksInBB(getPosition(), 3, 1, 3)){
+				IBlockState state = world.getBlockState(pos);
+				if(state.getBlock().isPassable(world, pos)){
+					getNavigator().tryMoveToXYZ(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, MinionConstants.SPEED_WALK);
+					break;
+				}
+			}
+		}
+		if(suffProtection > 0){
+			suffProtection--;
+		}
 		if(!commands.isEmpty()){
 			Iterator<WorkerJob> jobs = commands.iterator();
 			

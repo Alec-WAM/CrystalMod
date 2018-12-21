@@ -1,5 +1,9 @@
 package alec_wam.CrystalMod.tiles.xp;
 
+import java.util.List;
+
+import com.google.common.collect.Lists;
+
 import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.client.model.dynamic.DynamicBaseModel;
 import alec_wam.CrystalMod.client.model.dynamic.ICustomItemRenderer;
@@ -7,6 +11,7 @@ import alec_wam.CrystalMod.fluids.ModFluids;
 import alec_wam.CrystalMod.util.client.RenderUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.item.ItemStack;
@@ -41,7 +46,7 @@ public class RenderTileEntityXPTank extends TileEntitySpecialRenderer<TileEntity
 		GlStateManager.enableBlend();
 		GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 		GlStateManager.translate(-0.5, -0.5, 0.5);
-        Minecraft.getMinecraft().getBlockRendererDispatcher().renderBlockBrightness(ModBlocks.xpTank.getDefaultState(), 1.0F);
+        Minecraft.getMinecraft().getBlockRendererDispatcher().renderBlockBrightness(ModBlocks.xpTank.getStateFromMeta(stack.getMetadata()), 1.0F);
         GlStateManager.disableBlend();
 		GlStateManager.popMatrix();
 	}
@@ -49,5 +54,12 @@ public class RenderTileEntityXPTank extends TileEntitySpecialRenderer<TileEntity
 	@Override
 	public TRSRTransformation getTransform(TransformType type) {
 		return DynamicBaseModel.DEFAULT_PERSPECTIVE_TRANSFORMS.get(type);
+	}
+	
+	@Override
+	public List<ModelResourceLocation> getModels(){
+		ModelResourceLocation normal = new ModelResourceLocation(ModBlocks.xpTank.getRegistryName(), "ender=false");
+		ModelResourceLocation ender = new ModelResourceLocation(ModBlocks.xpTank.getRegistryName(), "ender=true");
+		return Lists.newArrayList(normal, ender);
 	}
 }

@@ -22,9 +22,6 @@ public abstract class TileWorksiteBounded extends TileWorksiteBase {
 				WorksiteUpgrade.ENCHANTED_TOOLS_3,
 				WorksiteUpgrade.SIZE_MEDIUM,
 				WorksiteUpgrade.SIZE_LARGE,
-				WorksiteUpgrade.TOOL_QUALITY_1,
-				WorksiteUpgrade.TOOL_QUALITY_2,
-				WorksiteUpgrade.TOOL_QUALITY_3,
 				WorksiteUpgrade.BASIC_CHUNK_LOADER
 				);
 	}

@@ -1,5 +1,6 @@
 package alec_wam.CrystalMod.tiles.xp;
 
+import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.fluids.XpUtil;
 import alec_wam.CrystalMod.fluids.xp.ExperienceContainer;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
@@ -8,6 +9,7 @@ import alec_wam.CrystalMod.network.packets.PacketTileMessage;
 import alec_wam.CrystalMod.tiles.TileEntityMod;
 import alec_wam.CrystalMod.tiles.machine.INBTDrop;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -60,6 +62,13 @@ public class TileEntityXPTank extends TileEntityMod implements IMessageHandler, 
 	@Override
 	public void update(){
 		super.update();
+		IBlockState state = world.getBlockState(getPos());
+		if(state.getBlock() == ModBlocks.xpTank && state.getValue(BlockXPTank.ENDER)){
+			if(!getWorld().isBlockPowered(getPos())){
+				TileEntityXPVacuum.vacuumXP(getWorld(), getPos(), xpCon, 8, 4.5, 1.5);
+			}
+		}
+		
 		if (getWorld().isRemote) return;
 		if(shouldDoWorkThisTick(10)){
 			if(xpCon.isDirty()){

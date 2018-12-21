@@ -73,7 +73,7 @@ public class EnumBlock<E extends Enum<E> & IEnumMeta & IStringSerializable> exte
   }
   
   @Override
-@SideOnly(Side.CLIENT)
+  @SideOnly(Side.CLIENT)
   public void initModel() {
 	for(E type : values)
         ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), type.getMeta(), new ModelResourceLocation(this.getRegistryName(), prop.getName()+"="+type.getName()));

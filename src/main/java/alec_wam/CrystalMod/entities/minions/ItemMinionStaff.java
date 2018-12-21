@@ -1,14 +1,25 @@
 package alec_wam.CrystalMod.entities.minions;
 
 import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.entities.minions.warrior.EntityMinionWarrior;
 import alec_wam.CrystalMod.entities.minions.worker.EntityMinionWorker;
 import alec_wam.CrystalMod.entities.pet.bombomb.EntityBombomb;
 import alec_wam.CrystalMod.items.ModItems;
+import alec_wam.CrystalMod.util.ItemNBTHelper;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTUtil;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 public class ItemMinionStaff extends Item {
 
@@ -18,6 +29,37 @@ public class ItemMinionStaff extends Item {
 		setCreativeTab(CrystalMod.tabTools);
 		ModItems.registerItem(this, "minionstaff");
 	}
+	
+	@Override
+	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand)
+    {
+		ItemStack held = player.getHeldItem(hand);
+		if(player.isSneaking()){
+			NBTTagCompound nbt = ItemNBTHelper.getCompound(held);
+			nbt.removeTag("WorksitePos");
+			held.setTagCompound(nbt);
+			player.setHeldItem(hand, held);
+			return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, held);
+		}
+        return new ActionResult<ItemStack>(EnumActionResult.PASS, held);
+    }
+	
+	@Override
+	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
+    {
+		ItemStack held = player.getHeldItem(hand);
+		IBlockState state = world.getBlockState(pos);
+		if(state.getBlock() == ModBlocks.worksite){
+			if(player.isSneaking()){
+				NBTTagCompound nbt = ItemNBTHelper.getCompound(held);
+				nbt.setTag("WorksitePos", NBTUtil.createPosTag(pos));
+				held.setTagCompound(nbt);
+				player.setHeldItem(hand, held);
+				return EnumActionResult.SUCCESS;
+			}
+		}
+        return EnumActionResult.PASS;
+    }
 	
 	@Override
 	public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity entity)

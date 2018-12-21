@@ -1,0 +1,93 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "crystalmod:lantern",
+	"transform": "forge:default-block"
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{}],
+	"color": {
+		"white": {
+			"textures": {
+				"glass": "minecraft:blocks/glass_white"
+			}
+		},
+		"orange": {
+			"textures": {
+				"glass": "minecraft:blocks/glass_orange"
+			}
+		},
+		"magenta": {
+			"textures": {
+				"glass": "minecraft:blocks/glass_magenta"
+			}
+		},
+		"light_blue": {
+			"textures": {
+				"glass": "minecraft:blocks/glass_light_blue"
+			}
+		},
+		"yellow": {
+			"textures": {
+				"glass": "minecraft:blocks/glass_yellow"
+			}
+		},
+		"lime": {
+			"textures": {
+				"glass": "minecraft:blocks/glass_lime"
+			}
+		},
+		"pink": {
+			"textures": {
+				"glass": "minecraft:blocks/glass_pink"
+			}
+		},
+		"gray": {
+			"textures": {
+				"glass": "minecraft:blocks/glass_gray"
+			}
+		},
+		"silver": {
+			"textures": {
+				"glass": "minecraft:blocks/glass_silver"
+			}
+		},
+		"cyan": {
+			"textures": {
+				"glass": "minecraft:blocks/glass_cyan"
+			}
+		},
+		"purple": {
+			"textures": {
+				"glass": "minecraft:blocks/glass_purple"
+			}
+		},
+		"blue": {
+			"textures": {
+				"glass": "minecraft:blocks/glass_blue"
+			}
+		},
+		"brown": {
+			"textures": {
+				"glass": "minecraft:blocks/glass_brown"
+			}
+		},
+		"green": {
+			"textures": {
+				"glass": "minecraft:blocks/glass_green"
+			}
+		},
+		"red": {
+			"textures": {
+				"glass": "minecraft:blocks/glass_red"
+			}
+		},
+		"black": {
+			"textures": {
+				"glass": "minecraft:blocks/glass_black"
+			}
+		}
+	}
+  }
+}

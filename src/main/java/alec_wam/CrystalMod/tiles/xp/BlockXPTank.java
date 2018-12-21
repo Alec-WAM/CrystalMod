@@ -8,21 +8,28 @@ import com.google.common.collect.Lists;
 
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.ICustomModel;
-import alec_wam.CrystalMod.blocks.ModBlocks;
+import alec_wam.CrystalMod.fluids.ModFluids;
 import alec_wam.CrystalMod.proxy.ClientProxy;
 import alec_wam.CrystalMod.tiles.machine.INBTDrop;
 import alec_wam.CrystalMod.tiles.tank.TileEntityTank;
 import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemStackTools;
+import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.Lang;
 import alec_wam.CrystalMod.util.tool.ToolUtil;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyBool;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -30,10 +37,12 @@ import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fml.relauncher.Side;
@@ -41,21 +50,57 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockXPTank extends BlockContainer implements ICustomModel {
 
+	public static final PropertyBool ENDER = PropertyBool.create("ender");
+	
 	public BlockXPTank() {
 		super(Material.IRON);
 		setSoundType(SoundType.GLASS);
 		setHardness(2f).setResistance(10F);
 		setLightOpacity(0);
 		setCreativeTab(CrystalMod.tabBlocks);
+		this.setDefaultState(getDefaultState().withProperty(ENDER, false));
 	}
 	
 	@Override
 	@SideOnly(Side.CLIENT)
     public void initModel(){
-		ModBlocks.initBasicModel(this);
+		ModelResourceLocation normal = new ModelResourceLocation(getRegistryName(), "ender=false");
+		ModelResourceLocation ender = new ModelResourceLocation(getRegistryName(), "ender=true");
+		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, normal);
+		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 1, ender);
 		ClientProxy.registerItemRenderCustom(getRegistryName().toString(), new RenderTileEntityXPTank());
 	}
 
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void getSubBlocks(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> list)
+    {
+        list.add(new ItemStack(itemIn, 1, 0));
+        list.add(new ItemStack(itemIn, 1, 1));
+    }
+	
+	@Override
+	protected BlockStateContainer createBlockState()
+    {
+        return new BlockStateContainer(this, new IProperty[]{ENDER});
+    }
+	
+	@Override
+	public int getMetaFromState(IBlockState state){
+		return state.getValue(ENDER) ? 1 : 0;
+	}
+	
+	@Override
+	public IBlockState getStateFromMeta(int meta){
+		return getDefaultState().withProperty(ENDER, meta == 1);
+	}
+	
+	@Override
+	public int damageDropped(IBlockState state)
+    {
+        return getMetaFromState(state);
+    }
+	
 	@Override
 	@SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, EntityPlayer player, List<String> tooltip, boolean advanced)
@@ -93,10 +138,20 @@ public class BlockXPTank extends BlockContainer implements ICustomModel {
             	if(ToolUtil.isToolEquipped(entityplayer, hand)){
             		return ToolUtil.breakBlockWithTool(this, world, pos, entityplayer, hand);
             	}            
-
+            	if(ItemUtil.canCombine(current, ModFluids.bucketList.get(ModFluids.fluidEnder))){
+            		if(state.getValue(ENDER) == false){        			
+            			if(!entityplayer.capabilities.isCreativeMode)entityplayer.setHeldItem(hand, ItemUtil.consumeItem(current));
+        				NBTTagCompound nbt = new NBTTagCompound();
+        				((TileEntityXPTank) tile).writeCustomNBT(nbt);
+        				world.setBlockState(pos, state.withProperty(ENDER, true), 3);
+        				((TileEntityXPTank)world.getTileEntity(pos)).readCustomNBT(nbt);
+        				return true;
+        			}
+        		}
             	IFluidHandlerItem containerFluidHandler = FluidUtil.getFluidHandler(current);
             	if (containerFluidHandler != null)
             	{
+            		
             		if(FluidUtil.interactWithFluidHandler(entityplayer, hand, world, pos, side)){
             			return true;
             		}

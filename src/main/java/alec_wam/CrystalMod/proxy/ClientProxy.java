@@ -375,13 +375,24 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
     	
         for(Entry<ResourceLocation, ICustomItemRenderer> entry : CUSTOM_RENDERS.entrySet())
 		{
-			ModelResourceLocation model = new ModelResourceLocation(entry.getKey(), "inventory");
-	        Object obj = event.getModelRegistry().getObject(model);
-	        
-	        if(obj instanceof IBakedModel)
-	        {
-	        	event.getModelRegistry().putObject(model, new CustomItemModelFactory((IBakedModel)obj, entry.getValue()));
-	        }
+        	if(entry.getValue().getModels().isEmpty()){
+				ModelResourceLocation model = new ModelResourceLocation(entry.getKey(), "inventory");
+		        Object obj = event.getModelRegistry().getObject(model);
+		        
+		        if(obj instanceof IBakedModel)
+		        {
+		        	event.getModelRegistry().putObject(model, new CustomItemModelFactory((IBakedModel)obj, entry.getValue()));
+		        }
+        	} else {
+        		for(ModelResourceLocation model : entry.getValue().getModels()){
+        			Object obj = event.getModelRegistry().getObject(model);
+    		        
+    		        if(obj instanceof IBakedModel)
+    		        {
+    		        	event.getModelRegistry().putObject(model, new CustomItemModelFactory((IBakedModel)obj, entry.getValue()));
+    		        }
+        		}
+        	}
 		}
     }
     

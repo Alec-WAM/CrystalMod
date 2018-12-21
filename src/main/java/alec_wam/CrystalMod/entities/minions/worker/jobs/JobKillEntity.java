@@ -1,16 +1,23 @@
 package alec_wam.CrystalMod.entities.minions.worker.jobs;
 
+import java.util.Map;
+
 import alec_wam.CrystalMod.entities.minions.MinionConstants;
 import alec_wam.CrystalMod.entities.minions.worker.EntityMinionWorker;
 import alec_wam.CrystalMod.entities.minions.worker.WorkerJob;
 import alec_wam.CrystalMod.tiles.machine.worksite.InventorySided.RelativeSide;
 import alec_wam.CrystalMod.tiles.machine.worksite.TileWorksiteBase;
+import alec_wam.CrystalMod.tiles.machine.worksite.WorksiteUpgrade;
 import alec_wam.CrystalMod.tiles.machine.worksite.imp.WorksiteAnimalFarm;
 import alec_wam.CrystalMod.util.ItemStackTools;
+import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.fakeplayer.FakePlayerUtil;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Enchantments;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
@@ -43,6 +50,7 @@ public class JobKillEntity extends WorkerJob {
 		double d = worker.getDistanceToEntity(animalToKill);
 		if(d <= 2.5D){
 			if(!animalToKill.isDead && animalToKill.deathTime <= 0 && animalToKill.hurtResistantTime == 0){
+				int fortune = aFarm.getUpgrades().contains(WorksiteUpgrade.ENCHANTED_TOOLS_1)? 1 : aFarm.getUpgrades().contains(WorksiteUpgrade.ENCHANTED_TOOLS_2)? 2 : aFarm.getUpgrades().contains(WorksiteUpgrade.ENCHANTED_TOOLS_3) ? 3 : 0;
 				player.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, held);
 				if (held != null)
                 {
@@ -51,10 +59,16 @@ public class JobKillEntity extends WorkerJob {
 				animalToKill.captureDrops = true;
 				
 				worker.swingArm(EnumHand.MAIN_HAND);
+				final Map<Enchantment, Integer> oEnchants = EnchantmentHelper.getEnchantments(player.getHeldItemMainhand());
+				int oLooting = oEnchants == null || !oEnchants.containsKey(Enchantments.LOOTING) ? 0 : oEnchants.get(Enchantments.LOOTING);
+				int looting = oLooting + fortune;
+				
+				if(fortune > 0)ItemUtil.addEnchantment(player.getHeldItemMainhand(), Enchantments.LOOTING, looting);
 				player.attackTargetEntityWithCurrentItem(animalToKill);
+				if(fortune > 0)EnchantmentHelper.setEnchantments(oEnchants, player.getHeldItemMainhand());
 				
 				worker.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, player.getHeldItemMainhand());
-				player.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, null);
+				player.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, ItemStackTools.getEmptyStack());
 				if (held != null)
                 {
                     player.getAttributeMap().removeAttributeModifiers(held.getAttributeModifiers(EntityEquipmentSlot.MAINHAND));

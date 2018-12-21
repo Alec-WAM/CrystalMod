@@ -10,18 +10,10 @@ public enum WorksiteUpgrade
 	 */
 	SIZE_MEDIUM         (0  , new int[]{}   , new int[]{}),
 	SIZE_LARGE          (1  , new int[]{0}  , new int[]{0}),
-	QUARRY_MEDIUM       (2  , new int[]{}   , new int[]{}),
-	QUARRY_LARGE        (3  , new int[]{2}  , new int[]{2}),
-	ENCHANTED_TOOLS_1   (4  , new int[]{}   , new int[]{}),
-	ENCHANTED_TOOLS_2   (5  , new int[]{4, 5}  , new int[]{4, 5}),
-	ENCHANTED_TOOLS_3   (6  , new int[]{5, 6}  , new int[]{5, 6}),
-	TOOL_QUALITY_1      (7  , new int[]{}   , new int[]{}),
-	TOOL_QUALITY_2      (8  , new int[]{7, 8}  , new int[]{7, 8}),
-	TOOL_QUALITY_3      (9  , new int[]{8, 9}, new int[]{8, 9}),
-	BASIC_CHUNK_LOADER  (10  , new int[]{}   , new int[]{}),
-	QUARRY_CHUNK_LOADER(11  , new int[]{}   , new int[]{}),
-	QUARRY_SILK_TOUCH(12  , new int[]{}   , new int[]{}),
-	QUARRY_ONLY_ORE(13  , new int[]{}   , new int[]{});
+	ENCHANTED_TOOLS_1   (2  , new int[]{}   , new int[]{}),
+	ENCHANTED_TOOLS_2   (3  , new int[]{2, 3}  , new int[]{2, 3}),
+	ENCHANTED_TOOLS_3   (4  , new int[]{3, 4}  , new int[]{3, 4}),
+	BASIC_CHUNK_LOADER  (5  , new int[]{}   , new int[]{})	;
 
 	private int flag = 0;//because enumsets are fubar'd when called in its owning enum (classCastException -- enum is not an enum!)
 

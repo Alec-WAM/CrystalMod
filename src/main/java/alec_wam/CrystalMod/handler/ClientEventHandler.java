@@ -111,6 +111,7 @@ import net.minecraft.entity.passive.AbstractHorse;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ContainerHorseChest;
 import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -123,6 +124,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 import net.minecraftforge.client.event.GuiOpenEvent;
@@ -141,6 +143,7 @@ import net.minecraftforge.fluids.IFluidBlock;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.relauncher.Side;
 
 public class ClientEventHandler {
@@ -1255,6 +1258,56 @@ public class ClientEventHandler {
     	
     	if(!handledRider && entity.getControllingPassenger() !=null){
     		lines.add("Rider: "+entity.getControllingPassenger().getDisplayName().getFormattedText());
+    	}
+    }
+    
+    
+    private final List<BlockPos> ligth_override_pos = Lists.newArrayList();
+	private int lightOverrideRefreshRate = 5;
+	private int lightTick = 0;
+    @SubscribeEvent
+    public void renderEvent(TickEvent.RenderTickEvent event){
+    	if(event.phase == Phase.END){
+    		lightTick++;
+    		World clientWorld = CrystalMod.proxy.getClientWorld();
+    		Minecraft mc = Minecraft.getMinecraft();
+    		if(lightTick % lightOverrideRefreshRate == 0 && clientWorld !=null){
+    			lightOverrideRefreshRate = (mc.gameSettings.fancyGraphics ? 10 : 20);
+    			for (BlockPos pos : ligth_override_pos) {
+                    clientWorld.checkLightFor(EnumSkyBlock.BLOCK, pos);
+                }
+    			ligth_override_pos.clear();
+    			for(Entity entity : clientWorld.playerEntities){
+    				if(entity !=null){
+    					if(entity instanceof EntityPlayer){
+    						EntityPlayer player = (EntityPlayer)entity;
+    						boolean isHoldingLantern = false;
+    						//Main hand
+    						if(ItemStackTools.isValid(player.getHeldItemMainhand())){
+    							ItemStack stack = player.getHeldItemMainhand();
+    							if(stack.getItem() == Item.getItemFromBlock(ModBlocks.lantern)){
+    								isHoldingLantern = true;
+    							}
+    						}
+    						//Off hand
+    						if(ItemStackTools.isValid(player.getHeldItemOffhand())){
+    							ItemStack stack = player.getHeldItemOffhand();
+    							if(stack.getItem() == Item.getItemFromBlock(ModBlocks.lantern)){
+    								isHoldingLantern = true;
+    							}
+    						}
+    						if(isHoldingLantern){
+								BlockPos pos = player.getPosition();
+								ligth_override_pos.add(pos);
+								clientWorld.setLightFor(EnumSkyBlock.BLOCK, pos, 12);
+								for(EnumFacing dir : EnumFacing.VALUES){
+									clientWorld.checkLightFor(EnumSkyBlock.BLOCK, pos.offset(dir));
+								}
+							}
+    					}
+    				}
+    			}
+    		}
     	}
     }
 }
