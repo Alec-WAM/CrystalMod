@@ -11,10 +11,13 @@ import java.util.Set;
 
 import alec_wam.CrystalMod.entities.minions.worker.EntityMinionWorker;
 import alec_wam.CrystalMod.entities.minions.worker.jobs.JobChopTree;
+import alec_wam.CrystalMod.entities.minions.worker.jobs.JobDestoryBlock;
+import alec_wam.CrystalMod.entities.minions.worker.jobs.JobPlantCrop;
 import alec_wam.CrystalMod.tiles.machine.worksite.InventorySided;
 import alec_wam.CrystalMod.tiles.machine.worksite.InventorySided.RelativeSide;
 import alec_wam.CrystalMod.tiles.machine.worksite.InventorySided.RotationType;
 import alec_wam.CrystalMod.tiles.machine.worksite.ItemSlotFilter;
+import alec_wam.CrystalMod.tiles.machine.worksite.TileWorksiteBase;
 import alec_wam.CrystalMod.tiles.machine.worksite.TileWorksiteUserBlocks;
 import alec_wam.CrystalMod.tiles.machine.worksite.WorkerFilter;
 import alec_wam.CrystalMod.tiles.machine.worksite.WorksiteUpgrade;
@@ -28,7 +31,10 @@ import alec_wam.CrystalMod.util.tool.ToolUtil;
 import alec_wam.CrystalMod.util.tool.TreeHarvestUtil;
 import alec_wam.CrystalMod.util.tool.TreeUtil;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockDoublePlant;
+import net.minecraft.block.BlockFlower;
 import net.minecraft.block.BlockSapling;
+import net.minecraft.block.BlockTallGrass;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.item.EntityItem;
@@ -43,6 +49,7 @@ import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
@@ -61,11 +68,15 @@ public class WorksiteTreeFarm extends TileWorksiteUserBlocks {
 	Set<BlockPos> blocksToChop;
 	List<BlockPos> blocksToPlant;
 	List<BlockPos> blocksToFertilize;
+	List<BlockPos> busyBlocks;
+	List<BlockPos> junkBlocks;
 
 	public WorksiteTreeFarm() {
 		blocksToChop = new HashSet<BlockPos>();
 		blocksToPlant = new ArrayList<BlockPos>();
 		blocksToFertilize = new ArrayList<BlockPos>();
+		busyBlocks = new ArrayList<BlockPos>();
+		junkBlocks = new ArrayList<BlockPos>();
 
 		this.inventory = new InventorySided(this, RotationType.FOUR_WAY, 33) {
 			@Override
@@ -104,7 +115,7 @@ public class WorksiteTreeFarm extends TileWorksiteUserBlocks {
 					return true;
 				}
 				
-				if(ToolUtil.isAxe(stack))
+				if(isAxe(stack))
 				{
 					return true;
 				}
@@ -161,13 +172,17 @@ public class WorksiteTreeFarm extends TileWorksiteUserBlocks {
 		}
 	}
 
+	public static boolean isAxe(ItemStack axe){
+		return ItemStackTools.isValid(axe) && ToolUtil.isAxe(axe) && !ToolUtil.isBrokenTinkerTool(axe) && !ToolUtil.isEmptyRfTool(axe);
+	}
+	
 	public boolean giveAxe(EntityMinionWorker worker) {
 		if(worker.getHeldItemMainhand().isEmpty()){
 			int[] slots = this.inventory.getRawIndices(RelativeSide.BOTTOM);
 			for(int i = 0; i < slots.length; i++){
 				int slot = slots[i];
 				ItemStack axe = inventory.getStackInSlot(slot);
-				if(ItemStackTools.isValid(axe) && ToolUtil.isAxe(axe) && !ToolUtil.isBrokenTinkerTool(axe) && !ToolUtil.isEmptyRfTool(axe)){
+				if(isAxe(axe)){
 					worker.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, axe);
 					this.inventory.setInventorySlotContents(slot, ItemStackTools.getEmptyStack());
 					return true;
@@ -190,22 +205,85 @@ public class WorksiteTreeFarm extends TileWorksiteUserBlocks {
 		return false;
 	}
 	
+	public WorkerFilter axeFilter = new WorkerFilter(){
+		@Override
+		public boolean matches(EntityMinionWorker worker) {
+			ItemStack axe = worker.getHeldItemMainhand();
+			return isAxe(axe);
+		}
+	};
+	
+	public WorkerFilter axeFilterBack = new WorkerFilter(){
+		@Override
+		public boolean matches(EntityMinionWorker worker) {
+			ItemStack axe = worker.getBackItem();
+			return isAxe(axe);
+		}
+	};
+	
+	public boolean isFoliage(IBlockState state){
+		Block block = state.getBlock();
+		return block instanceof BlockTallGrass || block instanceof BlockFlower || block instanceof BlockDoublePlant;
+	}
+	
 	@SuppressWarnings("deprecation")
 	@Override
 	protected boolean processWork() {
+		//Cleanup foliage
+		if(bbMax != null && bbMin != null){
+			int w = bbMax.getX() - bbMin.getX() + 1;
+			int h = bbMax.getZ() - bbMin.getZ() + 1;
+			BlockPos p;
+			for (int x = 0; x < w; x++) {
+				for (int z = 0; z < h; z++) {
+					//not in bounds
+					if (!isTarget(bbMin.getX() + x, bbMin.getZ() + z)) {
+						p = bbMin.add(x, 0, z);
+						IBlockState state = world.getBlockState(p);
+						if(state.getBlock() instanceof BlockSapling || isFoliage(state)){
+							junkBlocks.add(p);
+						}
+					}
+				}
+			}
+		}
+		
+		
 		BlockPos position;
+		if(!junkBlocks.isEmpty()){
+			Iterator<BlockPos> it = junkBlocks.iterator();
+			while (it.hasNext() && (position = it.next()) != null) {
+				if(busyBlocks.contains(position))continue;
+				EntityMinionWorker worker = getClosestWorker(position, WorkerFilter.idleFilter);
+				if (worker != null) {
+					final BlockPos workPos = position;
+					if(worker.addCommand(new JobDestoryBlock(position, true){
+						@Override
+						public void onCompleted(EntityMinionWorker worker, TileWorksiteBase worksite){
+							busyBlocks.remove(workPos);
+						}
+					})){
+						busyBlocks.add(workPos);
+						it.remove();
+						return true;
+					}
+				}
+			}
+		}
 		if (!blocksToChop.isEmpty()) {
 			Iterator<BlockPos> it = blocksToChop.iterator();
 			while (it.hasNext() && (position = it.next()) != null) {
-				EntityMinionWorker worker = getRandomWorker(new WorkerFilter(){
-					@Override
-					public boolean matches(EntityMinionWorker worker) {
-						ItemStack axe = worker.getHeldItemMainhand();
-						return ItemStackTools.isValid(axe) && ToolUtil.isAxe(axe) && !ToolUtil.isBrokenTinkerTool(axe) && !ToolUtil.isEmptyRfTool(axe);
-					}
-				}, WorkerFilter.idleFilter);
+				if(busyBlocks.contains(position))continue;
+				EntityMinionWorker worker = getClosestWorker(position, axeFilter, axeFilterBack, WorkerFilter.idleFilter);
 				if (worker != null) {
-					if(worker.addCommand(new JobChopTree(position))){
+					final BlockPos workPos = position;
+					if(worker.addCommand(new JobChopTree(position){
+						@Override
+						public void onCompleted(EntityMinionWorker worker, TileWorksiteBase worksite){
+							busyBlocks.remove(workPos);
+						}
+					})){
+						busyBlocks.add(workPos);
 						it.remove();
 						return true;
 					}
@@ -229,14 +307,40 @@ public class WorksiteTreeFarm extends TileWorksiteUserBlocks {
 			{
 				Iterator<BlockPos> it = blocksToPlant.iterator();
 				while (it.hasNext() && (position = it.next()) != null) {
-					it.remove();
+					if(busyBlocks.contains(position))continue;
 					if (getWorld().isAirBlock(position)) {
-						Block block = ((ItemBlock) stack.getItem()).getBlock();
-						int i = ((ItemBlock) stack.getItem()).getMetadata(stack.getMetadata());
-						getWorld().setBlockState(position, block.getStateFromMeta(i), 3);
-						saplingCount--;
-						inventory.decrStackSize(slot, 1);
-						return true;
+						EntityMinionWorker worker = getClosestWorker(position, WorkerFilter.idleFilter);
+						if(worker == null){
+							//Look for workers with axes and use them
+							EntityMinionWorker worker2 = getClosestWorker(position, axeFilter);
+							if(worker2 !=null){
+								worker2.switchItems();
+								//Remove any odd items
+								ItemStack held = worker2.getHeldItemMainhand();
+								if(ItemStackTools.isValid(held)){
+									addStackToInventory(held, RelativeSide.BOTTOM, RelativeSide.FRONT, RelativeSide.TOP);
+									worker2.setHeldItem(EnumHand.MAIN_HAND, ItemStackTools.getEmptyStack());
+								}
+								worker = worker2;
+							}
+						}
+						if(worker !=null){
+							final BlockPos workPos = position;
+							if(worker.addCommand(new JobPlantCrop(position){
+								@Override
+								public void onCompleted(EntityMinionWorker worker, TileWorksiteBase worksite){
+									busyBlocks.remove(workPos);
+								}
+							})){
+								busyBlocks.add(workPos);
+								ItemStack copy = ItemUtil.copy(stack, 1);
+								saplingCount--;
+								inventory.decrStackSize(slot, 1);
+								worker.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, copy);
+								it.remove();
+								return true;
+							}
+						}
 					}
 				}
 			}
@@ -329,7 +433,7 @@ public class WorksiteTreeFarm extends TileWorksiteUserBlocks {
 		blocksToChop.add(base);
 		getWorld().theProfiler.endSection();
 	}
-
+	
 	@Override
 	public WorkType getWorkType() {
 		return WorkType.FORESTRY;
@@ -398,9 +502,13 @@ public class WorksiteTreeFarm extends TileWorksiteUserBlocks {
 			}
 		} else {
 			state = getWorld().getBlockState(pos);
-			if (state.getBlock() instanceof BlockSapling) {
+			if(isFoliage(state) && !junkBlocks.contains(pos)){
+				junkBlocks.add(pos);
+			}
+			else if (state.getBlock() instanceof BlockSapling) {
 				blocksToFertilize.add(pos);
-			} else if (TreeUtil.isLog(state)) {
+			} 
+			else if (TreeUtil.isLog(state)) {
 				if (!blocksToChop.contains(pos)) {
 					addTreeBlocks(pos);
 				}

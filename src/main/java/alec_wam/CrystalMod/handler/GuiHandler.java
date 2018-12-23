@@ -15,6 +15,7 @@ import alec_wam.CrystalMod.entities.minecarts.chests.EntityCrystalChestMinecartB
 import alec_wam.CrystalMod.entities.minecarts.chests.wireless.EntityWirelessChestMinecart;
 import alec_wam.CrystalMod.entities.minions.warrior.ContainerMinionWarrior;
 import alec_wam.CrystalMod.entities.minions.warrior.EntityMinionWarrior;
+import alec_wam.CrystalMod.entities.minions.warrior.GuiMinionWarrior;
 import alec_wam.CrystalMod.items.guide.GuiGuideBase;
 import alec_wam.CrystalMod.items.guide.GuiGuideMainPage;
 import alec_wam.CrystalMod.items.guide.ItemCrystalGuide;
@@ -195,8 +196,9 @@ public class GuiHandler implements IGuiHandler {
     		Entity entity = world == null ? null : world.getEntityByID(x);
     		if(entity !=null){
     			if(entity instanceof EntityMinionWarrior){
-    				//EntityMinionWarrior warrior = (EntityMinionWarrior)entity;
+    				EntityMinionWarrior warrior = (EntityMinionWarrior)entity;
     				if(y == 0){
+    					return new GuiMinionWarrior(player, warrior);
     				}
     			}
     			if(entity instanceof EntityCrystalChestMinecartBase){

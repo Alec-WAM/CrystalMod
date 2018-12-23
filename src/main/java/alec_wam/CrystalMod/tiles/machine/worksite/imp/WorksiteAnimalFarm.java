@@ -17,6 +17,7 @@ import alec_wam.CrystalMod.tiles.machine.worksite.WorkerFilter;
 import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
+import alec_wam.CrystalMod.util.ModLogger;
 import alec_wam.CrystalMod.util.tool.ToolUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -33,6 +34,7 @@ import net.minecraft.item.ItemShears;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -319,7 +321,7 @@ public class WorksiteAnimalFarm extends TileWorksiteBoundedInventory {
 		for (EntityAnimal animal : sheep) {
 			if (animal instanceof IShearable) {
 				IShearable sheep1 = (IShearable) animal;
-				if (sheep1.isShearable(null, getWorld(), new BlockPos(animal))) {
+				if (sheep1.isShearable(ItemStackTools.getEmptyStack(), getWorld(), new BlockPos(animal))) {
 					sheepToShear.add(animal.getEntityId());
 				}
 			}
@@ -350,6 +352,7 @@ public class WorksiteAnimalFarm extends TileWorksiteBoundedInventory {
 		return true;
 	}
 
+	
 	@Override
 	protected boolean processWork() {
 		// AWLog.logDebug("processing animal farm work!");
@@ -407,11 +410,8 @@ public class WorksiteAnimalFarm extends TileWorksiteBoundedInventory {
 		if (bucketCount > 0 && !cowsToMilk.isEmpty()) {
 			didWork = tryMilking(cowsToMilk);
 			if (didWork) {
-				ItemUtil.removeItems(inventory,
-						inventory.getAccessDirectionFor(RelativeSide.BOTTOM),
-						new ItemStack(Items.BUCKET), 1);
-				this.addStackToInventory(new ItemStack(Items.MILK_BUCKET),
-						RelativeSide.TOP);
+				ItemUtil.removeItems(inventory,	inventory.getAccessDirectionFor(RelativeSide.BOTTOM), new ItemStack(Items.BUCKET), 1);
+				this.addStackToInventory(new ItemStack(Items.MILK_BUCKET), RelativeSide.TOP);
 				return true;
 			}
 		}
@@ -458,13 +458,17 @@ public class WorksiteAnimalFarm extends TileWorksiteBoundedInventory {
 		return true;
 	}
 
+	public static boolean isShears(ItemStack shears){
+		return ItemStackTools.isValid(shears) && shears.getItem() instanceof ItemShears && !ToolUtil.isEmptyRfTool(shears);
+	}
+	
 	public boolean giveShears(EntityMinionWorker worker) {
 		if(worker.getHeldItemMainhand().isEmpty()){
 			int[] slots = this.inventory.getRawIndices(RelativeSide.BOTTOM);
 			for(int i = 0; i < slots.length; i++){
 				int slot = slots[i];
 				ItemStack shears = inventory.getStackInSlot(slot);
-				if(ItemStackTools.isValid(shears) && shears.getItem() instanceof ItemShears && !ToolUtil.isEmptyRfTool(shears)){
+				if(isShears(shears)){
 					worker.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, shears);
 					this.inventory.setInventorySlotContents(slot, ItemStackTools.getEmptyStack());
 					return true;
@@ -473,23 +477,43 @@ public class WorksiteAnimalFarm extends TileWorksiteBoundedInventory {
 		}
 		return false;
 	}
-	
+	WorkerFilter shearFilter = new WorkerFilter(){
+		@Override
+		public boolean matches(EntityMinionWorker worker){
+			ItemStack held = worker.getHeldItemMainhand();
+			return isShears(held);
+		}
+	};
+	WorkerFilter shearFilterBack = new WorkerFilter(){
+		@Override
+		public boolean matches(EntityMinionWorker worker){
+			ItemStack held = worker.getBackItem();
+			return isShears(held);
+		}
+	};
 	private boolean tryShearing(List<Integer> targets) {
 		if (targets.isEmpty()) {
 			return false;
 		}
 
-		EntityMinionWorker worker = getRandomWorker(new WorkerFilter(){
-			@Override
-			public boolean matches(EntityMinionWorker worker){
-				ItemStack held = worker.getHeldItemMainhand();
-				return !ItemStackTools.isNullStack(held) && held.getItem() instanceof ItemShears;
-			}
-		}, WorkerFilter.idleFilter);
+		EntityMinionWorker worker = getRandomWorker(shearFilter, shearFilterBack, WorkerFilter.idleFilter);
 		if(worker == null){
-			return false;
-		}
-		
+			//Look for workers with just swords and use them
+			EntityMinionWorker worker2 = getRandomWorker(swordFilter);
+			if(worker2 !=null){
+				worker2.switchItems();
+				//Remove any odd items
+				ItemStack held = worker2.getHeldItemMainhand();
+				if(ItemStackTools.isValid(held)){
+					addStackToInventory(held, RelativeSide.BOTTOM, RelativeSide.FRONT, RelativeSide.TOP);
+					worker2.setHeldItem(EnumHand.MAIN_HAND, ItemStackTools.getEmptyStack());
+				}
+				worker = worker2;
+			}
+			if(worker == null){
+				return false;
+			}
+		}		
 		
 		EntityLivingBase sheep = (EntityLivingBase) getWorld().getEntityByID(targets.remove(0));
 		if (sheep == null || !(sheep instanceof IShearable)) {
@@ -505,13 +529,32 @@ public class WorksiteAnimalFarm extends TileWorksiteBoundedInventory {
 		return false;
 	}
 	
+	WorkerFilter swordFilter = new WorkerFilter(){
+		@Override
+		public boolean matches(EntityMinionWorker worker){
+			ItemStack held = worker.getHeldItemMainhand();
+			return isSword(held);
+		}
+	};
+	WorkerFilter swordFilterBack = new WorkerFilter(){
+		@Override
+		public boolean matches(EntityMinionWorker worker){
+			ItemStack held = worker.getBackItem();
+			return isSword(held);
+		}
+	};
+	
+	public static boolean isSword(ItemStack sword){
+		return ItemStackTools.isValid(sword) && ToolUtil.isSword(sword) && !ToolUtil.isBrokenTinkerTool(sword) && !ToolUtil.isEmptyRfTool(sword);
+	}
+	
 	public boolean giveSword(EntityMinionWorker worker) {
 		if(worker.getHeldItemMainhand().isEmpty()){
 			int[] slots = this.inventory.getRawIndices(RelativeSide.BOTTOM);
 			for(int i = 0; i < slots.length; i++){
 				int slot = slots[i];
 				ItemStack sword = inventory.getStackInSlot(slot);
-				if(ItemStackTools.isValid(sword) && sword.getItem() instanceof ItemSword && !ToolUtil.isEmptyRfTool(sword)){
+				if(isSword(sword)){
 					worker.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, sword);
 					this.inventory.setInventorySlotContents(slot, ItemStackTools.getEmptyStack());
 					return true;
@@ -526,14 +569,23 @@ public class WorksiteAnimalFarm extends TileWorksiteBoundedInventory {
 		Entity entity;
 		EntityAnimal animal;
 
-		EntityMinionWorker worker = getRandomWorker(new WorkerFilter(){
-			@Override
-			public boolean matches(EntityMinionWorker worker){
-				ItemStack held = worker.getHeldItemMainhand();
-				return !ItemStackTools.isNullStack(held) && held.getItem() instanceof ItemSword;
-			}
-		}, WorkerFilter.idleFilter);
+		EntityMinionWorker worker = getRandomWorker(swordFilter, swordFilterBack, WorkerFilter.idleFilter);
 		if (worker == null) {
+			//Look for workers with just shears and use them
+			EntityMinionWorker worker2 = getRandomWorker(shearFilter);
+			if(worker2 !=null){
+				worker2.switchItems();
+				//Remove any odd items
+				ItemStack held = worker2.getHeldItemMainhand();
+				if(ItemStackTools.isValid(held)){
+					addStackToInventory(held, RelativeSide.BOTTOM, RelativeSide.FRONT, RelativeSide.TOP);
+					worker2.setHeldItem(EnumHand.MAIN_HAND, ItemStackTools.getEmptyStack());
+				}
+				worker = worker2;
+			}
+			if(worker == null){
+				return false;
+			}
 			return false;
 		}
 

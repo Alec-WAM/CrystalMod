@@ -11,7 +11,9 @@ import alec_wam.CrystalMod.tiles.machine.worksite.WorksiteUpgrade;
 import alec_wam.CrystalMod.tiles.machine.worksite.imp.WorksiteAnimalFarm;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
+import alec_wam.CrystalMod.util.ModLogger;
 import alec_wam.CrystalMod.util.fakeplayer.FakePlayerUtil;
+import alec_wam.CrystalMod.util.tool.ToolUtil;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
@@ -40,15 +42,33 @@ public class JobKillEntity extends WorkerJob {
 
 		
 		destroyTool(worker);
-		aFarm.giveSword(worker);
+		boolean foundSword = false;
+		if(!WorksiteAnimalFarm.isSword(worker.getHeldItemMainhand())){
+			if(WorksiteAnimalFarm.isSword(worker.getBackItem())){
+				ItemStack held = worker.getHeldItemMainhand();
+				if(ItemStackTools.isEmpty(held) || ToolUtil.isTool(held)){
+					worker.switchItems();
+				} else {
+					ModLogger.info("Kill Job: sending non tool into front/top ["+held.getDisplayName()+"]");
+					if(aFarm.addStackToInventoryNoDrop(held, false, RelativeSide.BOTTOM, RelativeSide.FRONT, RelativeSide.TOP)){
+						worker.setHeldItem(EnumHand.MAIN_HAND, ItemStackTools.getEmptyStack());
+						worker.switchItems();
+					}
+				}
+			}
+			foundSword = WorksiteAnimalFarm.isSword(worker.getHeldItemMainhand());
+		}
+		
+		if(!foundSword)aFarm.giveSword(worker);
 		ItemStack held = worker.getHeldItemMainhand();
-		if(held == null){
+		if(ItemStackTools.isEmpty(held) || !WorksiteAnimalFarm.isSword(held)){
+			//TODO Create Missing Sword warning
 			return true;
 		}
 		EntityPlayer player = FakePlayerUtil.getPlayer((WorldServer)worker.getEntityWorld());
 		worker.getLookHelper().setLookPositionWithEntity(animalToKill, 10, 40);
 		double d = worker.getDistanceToEntity(animalToKill);
-		if(d <= 2.5D){
+		if(d <= 1.5D){
 			if(!animalToKill.isDead && animalToKill.deathTime <= 0 && animalToKill.hurtResistantTime == 0){
 				int fortune = aFarm.getUpgrades().contains(WorksiteUpgrade.ENCHANTED_TOOLS_1)? 1 : aFarm.getUpgrades().contains(WorksiteUpgrade.ENCHANTED_TOOLS_2)? 2 : aFarm.getUpgrades().contains(WorksiteUpgrade.ENCHANTED_TOOLS_3) ? 3 : 0;
 				player.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, held);

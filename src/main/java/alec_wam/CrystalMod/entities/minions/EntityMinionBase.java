@@ -2,7 +2,9 @@ package alec_wam.CrystalMod.entities.minions;
 
 import alec_wam.CrystalMod.entities.EntityOwnable;
 import alec_wam.CrystalMod.entities.ai.AIManager;
+import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.IMessageHandler;
+import alec_wam.CrystalMod.network.packets.PacketEntityMessage;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import net.minecraft.entity.EntityLivingBase;
@@ -10,6 +12,7 @@ import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
@@ -20,6 +23,8 @@ import net.minecraft.world.World;
 public class EntityMinionBase extends EntityOwnable implements IMessageHandler {
 	
 	protected AIManager aiManager;
+	
+	protected ItemStack backStack = ItemStackTools.getEmptyStack();
 	
 	public EntityMinionBase(World worldIn) {
 		super(worldIn);
@@ -164,6 +169,11 @@ public class EntityMinionBase extends EntityOwnable implements IMessageHandler {
 	{
 		super.writeEntityToNBT(nbt);
 		aiManager.writeToNBT(nbt);
+		if(ItemStackTools.isValid(backStack)){
+			NBTTagCompound backNBT = new NBTTagCompound();
+			backStack.writeToNBT(backNBT);
+			nbt.setTag("BackStack", backNBT);
+		}
 	}
 	
 	@Override
@@ -173,6 +183,10 @@ public class EntityMinionBase extends EntityOwnable implements IMessageHandler {
 		aiManager.readFromNBT(nbt);
 		this.aiSit.setSitting(false);
 		this.setSitting(false);
+		backStack = ItemStackTools.getEmptyStack();
+		if(nbt.hasKey("BackStack")){
+			backStack = ItemStackTools.loadFromNBT(nbt.getCompoundTag("BackStack"));
+		}
 	}
 	
 	@Override
@@ -185,10 +199,47 @@ public class EntityMinionBase extends EntityOwnable implements IMessageHandler {
 			aiManager.disableAllToggleAIs();
 		}
 	}
-
+	
 	@Override
-	public void handleMessage(String messageId, NBTTagCompound messageData,	boolean client) {
-		//NO OP
+	public void handleMessage(String type, NBTTagCompound data, boolean client){
+		if(type.equalsIgnoreCase("SWITCHITEMS")){
+			switchItems();
+		}
+		if(type.equalsIgnoreCase("SET_BACK")){
+			this.backStack = ItemStackTools.loadFromNBT(data);
+		}
+		if(type.equalsIgnoreCase("CLEAR_BACK")){
+			this.backStack = ItemStackTools.getEmptyStack();
+		}
+	}
+	
+	public void switchItems(){
+		final ItemStack held = this.getHeldItemMainhand();
+		final ItemStack back = this.backStack;
+		this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, back);
+		setBackItem(held);
+	}
+	
+	public void swapHands() {
+		final ItemStack main = getHeldItemMainhand();
+		final ItemStack off = getHeldItemOffhand();
+		this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, off);
+		this.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, main);
+	}
+	
+	public ItemStack getBackItem() {
+		return backStack;
+	}
+	
+	public void setBackItem(ItemStack stack) {
+		backStack = stack;
+		if(!world.isRemote){
+			if(ItemStackTools.isValid(stack)){
+				CrystalModNetwork.sendToAllAround(new PacketEntityMessage(this, "SET_BACK", stack.writeToNBT(new NBTTagCompound())), this);
+			} else {
+				CrystalModNetwork.sendToAllAround(new PacketEntityMessage(this, "CLEAR_BACK"), this);
+			}
+		}
 	}
 	
 	public void saveToItem(EntityPlayer player, ItemStack stack){

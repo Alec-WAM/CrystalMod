@@ -2,6 +2,7 @@ package alec_wam.CrystalMod.tiles.machine.worksite;
 
 import java.util.List;
 
+import alec_wam.CrystalMod.entities.minions.worker.EntityMinionWorker;
 import alec_wam.CrystalMod.tiles.machine.worksite.InventorySided.RelativeSide;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
@@ -13,6 +14,7 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.event.ForgeEventFactory;
@@ -70,6 +72,28 @@ public abstract class TileWorksiteBoundedInventory extends TileWorksiteBounded i
 			}
 		}
 		return true;
+	}
+	
+	public EntityMinionWorker getClosetWorkerRemoveTool(BlockPos pos, WorkerFilter...filters){
+		EntityMinionWorker worker = getClosestWorker(pos, filters);
+		if(worker !=null){
+			if(addStackToInventoryNoDrop(worker.getHeldItemMainhand(), false, RelativeSide.BOTTOM)){
+				worker.setHeldItem(EnumHand.MAIN_HAND, ItemStackTools.getEmptyStack());
+				return worker;
+			}
+		}
+		return null;
+	}
+	
+	public EntityMinionWorker getRandomWorkerRemoveTool(WorkerFilter...filters){
+		EntityMinionWorker worker = getRandomWorker(filters);
+		if(worker !=null){
+			if(addStackToInventoryNoDrop(worker.getHeldItemMainhand(), false, RelativeSide.BOTTOM)){
+				worker.setHeldItem(EnumHand.MAIN_HAND, ItemStackTools.getEmptyStack());
+				return worker;
+			}
+		}
+		return null;
 	}
 	
 	@Override

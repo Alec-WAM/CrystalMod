@@ -78,7 +78,7 @@ public class FollowOwnerAI extends AIBase<EntityOwnable> {
 
 			else if (distanceToPlayer >= 4.5D && entity.getNavigator().noPath())
 			{
-				float speed = entityPlayer.isSprinting() ? MinionConstants.SPEED_SPRINT : MinionConstants.SPEED_WALK*2;
+				float speed = entityPlayer.isSprinting() ? MinionConstants.SPEED_WALK * 1.5f : MinionConstants.SPEED_WALK;
 				entityPathController.getNavigator().tryMoveToEntityLiving(entityPlayer, speed);
 			}
 

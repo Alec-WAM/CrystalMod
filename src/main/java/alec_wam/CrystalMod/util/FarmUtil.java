@@ -1,6 +1,5 @@
 package alec_wam.CrystalMod.util;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -8,7 +7,6 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import alec_wam.CrystalMod.blocks.ModBlocks;
-import alec_wam.CrystalMod.blocks.crops.BlockCorn;
 import alec_wam.CrystalMod.blocks.crops.ItemCorn.CornItemType;
 import alec_wam.CrystalMod.blocks.crops.material.TileMaterialCrop;
 import alec_wam.CrystalMod.items.ModItems;
@@ -31,43 +29,46 @@ import net.minecraftforge.oredict.OreDictionary;
 public class FarmUtil {
 
 	public static Map<CropType, List<String>> crops = Maps.newHashMap();
-	public static List<String> seeds = new ArrayList<String>();
+	public static Map<String, IPlantable> seeds = Maps.newHashMap();
 	
-	public static void addSeed(ItemStack stack){
+	public static void addSeed(ItemStack stack, IPlantable plant){
 		if(ItemStackTools.isNullStack(stack))return;
 		if (stack.getItemDamage() == OreDictionary.WILDCARD_VALUE) {
 			for (int a = 0; a < 16; a++) {
-				seeds.add(stack.getItem().getRegistryName().toString() + "|" + a);
+				seeds.put(stack.getItem().getRegistryName().toString() + "|" + a, plant);
 			}
 		} else {
-			seeds.add(stack.getItem().getRegistryName().toString() + "|" + stack.getItemDamage());
+			seeds.put(stack.getItem().getRegistryName().toString() + "|" + stack.getItemDamage(), plant);
 		}
 	}
 	
 	public static boolean isSeed(ItemStack stack, boolean ignoreCrops){
 		if(ItemStackTools.isNullStack(stack))return false;
 		if(!ignoreCrops){
-			  Block bi = Block.getBlockFromItem(stack.getItem());
-			  if(bi !=null){
-				  if ((getCrops(CropType.NORMAL).contains(bi.getUnlocalizedName() + stack.getItemDamage())) || (getCrops(CropType.CLICKABLE).contains(bi.getUnlocalizedName() + stack.getItemDamage())) || (getCrops(CropType.STACKED).contains(bi.getUnlocalizedName() + stack.getItemDamage())))
-				  {
-				    return true;
-				  }
-			  }
-		  }
-		  
-		  boolean found = false;
-	      for (int a = 0; a < 16; a++) {
-	        if ((seeds.contains(stack.getItem().getRegistryName().toString() + "|" + a)))
-	        {
-	          found = true;
-	          break;
-	        }
-	      }
-		  if((stack.getItem() instanceof IPlantable) || (seeds.contains(stack.getItem().getRegistryName().toString() + "|" + stack.getItemDamage()))){
-			  return true;
-		  }
-		  return false;
+			Block bi = Block.getBlockFromItem(stack.getItem());
+			if(bi !=null){
+				if ((getCrops(CropType.NORMAL).contains(bi.getUnlocalizedName() + stack.getItemDamage())) || (getCrops(CropType.CLICKABLE).contains(bi.getUnlocalizedName() + stack.getItemDamage())) || (getCrops(CropType.STACKED).contains(bi.getUnlocalizedName() + stack.getItemDamage())))
+				{
+					return true;
+				}
+			}
+		}
+
+		if((stack.getItem() instanceof IPlantable) || (seeds.containsKey(stack.getItem().getRegistryName().toString() + "|" + stack.getItemDamage()))){
+			return true;
+		}
+		return false;
+	}
+	
+	public static IPlantable getSeedPlantable(ItemStack stack){
+		if(stack.getItem() instanceof IPlantable){
+			return (IPlantable)stack.getItem();
+		}
+		String tag = stack.getItem().getRegistryName().toString() + "|" + stack.getItemDamage();
+		if(seeds.containsKey(tag)){
+			return seeds.get(tag);
+		}
+		return null;
 	}
 	
 	public static enum CropType {
@@ -189,7 +190,7 @@ public class FarmUtil {
 	        break;
 	      }
 	    }
-	    Block biB = world.getBlockState(pos.down()).getBlock();
+	    Block biB = world.getBlockState(pos).getBlock();
 	    int md = bi.getMetaFromState(state);
 	    if (found || (getCrops(CropType.STACKED).contains(bi.getUnlocalizedName() + md)) && (biB == bi)) {
 	      return true;
@@ -269,16 +270,16 @@ public class FarmUtil {
 	public static void addDefaultCrops() {
 		addClickableCrop(new ItemStack(ModBlocks.crystalPlant), 3);
 	    addClickableCrop(new ItemStack(ModBlocks.materialCrop), 1);
-	    addSeed(new ItemStack(ModItems.materialSeed));
-	    addSeed(new ItemStack(ModItems.corn, 1, CornItemType.KERNELS.getMeta()));
+	    //addSeed(new ItemStack(ModItems.materialSeed));
+	    addSeed(new ItemStack(ModItems.corn, 1, CornItemType.KERNELS.getMeta()), ModBlocks.corn);
 	    addStackedCrop(Blocks.REEDS, OreDictionary.WILDCARD_VALUE);
 	    addStackedCrop(Blocks.CACTUS, OreDictionary.WILDCARD_VALUE);
 	    addStackedCrop(ModBlocks.crystalReedsBlue, OreDictionary.WILDCARD_VALUE);
 	    addStackedCrop(ModBlocks.crystalReedsRed, OreDictionary.WILDCARD_VALUE);
 	    addStackedCrop(ModBlocks.crystalReedsGreen, OreDictionary.WILDCARD_VALUE);
 	    addStackedCrop(ModBlocks.crystalReedsDark, OreDictionary.WILDCARD_VALUE);
-	    int cornMeta = ModBlocks.corn.getMetaFromState(ModBlocks.corn.getDefaultState().withProperty(BlockCorn.AGE, 4));
-	    addStackedCrop(ModBlocks.corn, cornMeta);
+	    /*int cornMeta = ModBlocks.corn.getMetaFromState(ModBlocks.corn.getDefaultState().withProperty(BlockCorn.AGE, 4));
+	    addStackedCrop(ModBlocks.corn, cornMeta);*/
 	}
 	
 }

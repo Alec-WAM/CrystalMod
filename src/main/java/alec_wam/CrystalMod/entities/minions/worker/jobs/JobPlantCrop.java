@@ -5,8 +5,9 @@ import alec_wam.CrystalMod.entities.minions.worker.EntityMinionWorker;
 import alec_wam.CrystalMod.entities.minions.worker.WorkerJob;
 import alec_wam.CrystalMod.tiles.machine.worksite.InventorySided.RelativeSide;
 import alec_wam.CrystalMod.tiles.machine.worksite.TileWorksiteBase;
-import alec_wam.CrystalMod.tiles.machine.worksite.imp.WorksiteCropFarm;
+import alec_wam.CrystalMod.tiles.machine.worksite.TileWorksiteBoundedInventory;
 import alec_wam.CrystalMod.util.ItemStackTools;
+import alec_wam.CrystalMod.util.ModLogger;
 import alec_wam.CrystalMod.util.fakeplayer.FakePlayerUtil;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
@@ -28,12 +29,15 @@ public class JobPlantCrop extends WorkerJob {
 	public boolean run(EntityMinionWorker worker, TileWorksiteBase worksite) {
 		if(worker.getEntityWorld().isRemote) return false;
 		if(dirtPos == null || dirtPos == BlockPos.ORIGIN) return true;
-		if(worksite == null || !(worksite instanceof WorksiteCropFarm)) return true;
-		WorksiteCropFarm cFarm = (WorksiteCropFarm)worksite;
+		if(worksite == null || !(worksite instanceof TileWorksiteBoundedInventory)) return true;
+		TileWorksiteBoundedInventory farm = (TileWorksiteBoundedInventory)worksite;
+		ItemStack held = worker.getHeldItemMainhand();
 		if(!worker.getEntityWorld().isAirBlock(dirtPos)){ 
+			ModLogger.info("Plant Job: sending item into front/top ["+held.getDisplayName()+"]");
+			farm.addStackToInventory(worker.getHeldItemMainhand(), RelativeSide.FRONT, RelativeSide.TOP);
+			worker.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, ItemStackTools.getEmptyStack());
 			return true;
 		}
-		ItemStack held = worker.getHeldItemMainhand();
 		if(!ItemStackTools.isValid(held)){
 			return false;
 		}
@@ -48,8 +52,10 @@ public class JobPlantCrop extends WorkerJob {
 				worker.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, held);
 				worker.swingArm(EnumHand.MAIN_HAND);
 			}
-			if(ItemStackTools.isValid(worker.getHeldItemMainhand())){
-				cFarm.addStackToInventory(worker.getHeldItemMainhand(), RelativeSide.FRONT, RelativeSide.TOP);
+			held = worker.getHeldItemMainhand();
+			if(ItemStackTools.isValid(held)){
+				ModLogger.info("Plant Job: 2 sending item into front/top ["+held.getDisplayName()+"]");
+				farm.addStackToInventory(held, RelativeSide.FRONT, RelativeSide.TOP);
 				worker.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, ItemStackTools.getEmptyStack());
 			}
 			return true;

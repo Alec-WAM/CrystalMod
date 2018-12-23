@@ -14,6 +14,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemFishingRod;
 import net.minecraft.item.ItemFlintAndSteel;
@@ -307,7 +308,7 @@ public class ToolUtil {
 		  String name = item.getUnlocalizedName().toLowerCase();
 
 		  // Vanilla
-		  if (item instanceof ItemTool || item instanceof ItemHoe || item instanceof ItemShears || item instanceof ItemPickaxe || item instanceof ItemFishingRod || item instanceof ItemFlintAndSteel)
+		  if (item instanceof ItemTool || item instanceof ItemHoe || item instanceof ItemShears || item instanceof ItemPickaxe || item instanceof ItemFishingRod || item instanceof ItemFlintAndSteel || item instanceof ItemAxe)
 		  {
 			  return true;
 		  }

@@ -6,6 +6,10 @@ public abstract class WorkerJob {
 
 	public abstract boolean run(EntityMinionWorker worker, TileWorksiteBase worksite);
 	
+	public void onCompleted(EntityMinionWorker worker, TileWorksiteBase worksite){
+		
+	}
+	
 	public abstract boolean isSame(WorkerJob job);
 	
 }

@@ -17,6 +17,8 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAITarget;
 import net.minecraft.entity.monster.EntityCreeper;
+import net.minecraft.entity.monster.IMob;
+import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.SoundEvents;
@@ -431,12 +433,12 @@ public class BombombAICombat extends AIBase<EntityBombomb>
 	private void moveToAttackTarget(EntityBombomb bombomb)
 	{
 		final EntityLiving entityPathController = bombomb;
-		float speed = MinionConstants.SPEED_WALK*2;
+		float speed = MinionConstants.SPEED_WALK;
 		
 		double dis = EntityUtil.getDistanceToEntity(bombomb, attackTarget);
 		
 		if(dis >= 5){
-			speed = MinionConstants.SPEED_RUN*2;
+			speed = MinionConstants.SPEED_WALK * 1.5F;
 		}
 				
 		if(bombomb.getNavigator().noPath())
@@ -445,8 +447,16 @@ public class BombombAICombat extends AIBase<EntityBombomb>
 
 	public boolean isEntityValidToAttack(EntityBombomb bombomb, EntityLivingBase entity)
 	{
-		if(entity == bombomb || entity == bombomb.getRidingEntity() || !EntityAITarget.isSuitableTarget(bombomb, entity, false, false) || entity.getClass() == EntityCreeper.class) return false;
-		return true;
+		if(entity == bombomb || entity == bombomb.getRidingEntity() || !EntityAITarget.isSuitableTarget(bombomb, entity, false, false) || entity.getClass() == EntityCreeper.class) {
+			
+			return false;
+		}
+		
+		if(getTriggerBehavior() == EnumCombatBehaviors.TRIGGER_ALWAYS){
+			return entity instanceof IMob && !entity.isInvisible();
+		}
+		
+		return !(entity instanceof EntityAnimal);
 	}
 
 	public void setAttackTarget(EntityBombomb bombomb, EntityLivingBase entity)

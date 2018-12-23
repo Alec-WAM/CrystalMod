@@ -1,12 +1,8 @@
 package alec_wam.CrystalMod.entities.minions.warrior;
 
-import java.util.Random;
-
 import alec_wam.CrystalMod.entities.ai.AIBase;
 import alec_wam.CrystalMod.entities.minions.EnumMovementState;
-import alec_wam.CrystalMod.entities.minions.ai.MinionRandomPositionGenerator;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.math.Vec3d;
 
 public class MinionAIWander extends AIBase<EntityMinionWarrior>{
 
@@ -29,14 +25,14 @@ public class MinionAIWander extends AIBase<EntityMinionWarrior>{
     
     public boolean shouldExecute(EntityMinionWarrior minion)
     {
-        if (!this.mustUpdate)
+        /*if (!this.mustUpdate)
         {
             /*if (minion.getAge() >= 100)
             {
                 return false;
             }*/
 
-        	Random rand = minion.getEntityWorld() != null ? minion.getEntityWorld().rand : minion.getRNG();
+        	/*Random rand = minion.getEntityWorld() != null ? minion.getEntityWorld().rand : minion.getRNG();
         	
             if (rand == null || rand.nextInt(120) != 0)
             {
@@ -58,7 +54,8 @@ public class MinionAIWander extends AIBase<EntityMinionWarrior>{
             minion.getNavigator().setPath(null, 0.0D);
             this.mustUpdate = false;
             return true;
-        }
+        }*/
+    	return true;
     }
     
 	@Override
@@ -71,12 +68,12 @@ public class MinionAIWander extends AIBase<EntityMinionWarrior>{
 
 	@Override
 	public void onUpdateServer(EntityMinionWarrior minion) {
-		if(minion.getMovementState() != EnumMovementState.MOVE)return;
-		if(shouldExecute(minion)){
+		if(minion.getMovementState() != EnumMovementState.GUARD)return;
+		/*if(shouldExecute(minion)){
 			if(minion.getNavigator().noPath()){
 				minion.getNavigator().tryMoveToXYZ(xPosition, yPosition, zPosition, speed);
 			}
-		}
+		}*/
 	}
 
 	@Override

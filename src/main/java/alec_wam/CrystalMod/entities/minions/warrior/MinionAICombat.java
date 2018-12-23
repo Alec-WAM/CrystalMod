@@ -3,11 +3,11 @@ package alec_wam.CrystalMod.entities.minions.warrior;
 import java.util.List;
 
 import alec_wam.CrystalMod.entities.ai.AIBase;
+import alec_wam.CrystalMod.entities.minions.EnumMovementState;
 import alec_wam.CrystalMod.entities.minions.MinionConstants;
-import alec_wam.CrystalMod.network.CrystalModNetwork;
-import alec_wam.CrystalMod.network.packets.PacketEntityMessage;
 import alec_wam.CrystalMod.util.EntityUtil;
 import alec_wam.CrystalMod.util.ItemStackTools;
+import alec_wam.CrystalMod.util.tool.ToolUtil;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
@@ -18,14 +18,15 @@ import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.entity.projectile.EntityTippedArrow;
+import net.minecraft.init.Enchantments;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 
 public class MinionAICombat extends AIBase<EntityMinionWarrior>
@@ -58,7 +59,7 @@ public class MinionAICombat extends AIBase<EntityMinionWarrior>
 	public void onUpdateServer(EntityMinionWarrior minion) 
 	{
 		//Do nothing when we're sitting.
-		if (minion.isSitting())
+		if (minion.isSitting() || minion.isDead || minion.isEating() || minion.getMovementState() == EnumMovementState.STAY)
 		{
 			return;
 		}
@@ -67,6 +68,10 @@ public class MinionAICombat extends AIBase<EntityMinionWarrior>
 		if (attackTarget != null && (getMethodBehavior() == EnumCombatBehaviors.METHOD_DO_NOT_FIGHT || !isEntityValidToAttack(minion, attackTarget)))
 		{
 			attackTarget = null;
+			return;
+		}
+		
+		if(getMethodBehavior() == EnumCombatBehaviors.METHOD_DO_NOT_FIGHT){
 			return;
 		}
 
@@ -86,10 +91,15 @@ public class MinionAICombat extends AIBase<EntityMinionWarrior>
 		{
 			EntityLivingBase owner = minion.getOwner();
 			if(owner !=null){
-				
+				boolean boundsCheck = true;
+				if(minion.getMovementState() == EnumMovementState.GUARD){
+					if(!minion.isWithinGuardBounds(new BlockPos(owner))){
+						boundsCheck = false;
+					}
+				}	
 				EntityLivingBase target = owner.getLastAttacker();
 				
-				if (target !=null && isEntityValidToAttack(minion, target))
+				if (target !=null && isEntityValidToAttack(minion, target) && boundsCheck)
 				{
 					attackTarget = target;
 				}
@@ -100,23 +110,19 @@ public class MinionAICombat extends AIBase<EntityMinionWarrior>
 		{
 			EntityLivingBase owner = minion.getOwner();
 			if(owner !=null){
+				boolean boundsCheck = true;
+				if(minion.getMovementState() == EnumMovementState.GUARD){
+					if(!minion.isWithinGuardBounds(new BlockPos(owner))){
+						boundsCheck = false;
+					}
+				}				
 				
 				EntityLivingBase target = owner.getAITarget();
 				
-				if (target !=null && isEntityValidToAttack(minion, target))
+				if (target !=null && isEntityValidToAttack(minion, target) && boundsCheck)
 				{
 					attackTarget = target;
 				}
-			}
-		}
-		
-		if (attackTarget == null)
-		{
-			EntityLivingBase target = minion.getAITarget();
-				
-			if (target !=null && isEntityValidToAttack(minion, target))
-			{
-				attackTarget = target;
 			}
 		}
 		
@@ -128,28 +134,26 @@ public class MinionAICombat extends AIBase<EntityMinionWarrior>
 			//Melee attacks
 			if (getMethodBehavior() == EnumCombatBehaviors.METHOD_MELEE_ONLY || 
 				(getMethodBehavior() == EnumCombatBehaviors.METHOD_MELEE_AND_RANGED && 
-				distanceToTarget < 5.0F))
+				distanceToTarget < 2.0F))
 			{
 				moveToAttackTarget(minion);
-				ItemStack heldItem = minion.getHeldItemMainhand();
 				
-				if((ItemStackTools.isNullStack(heldItem) || !(heldItem.getItem() instanceof ItemSword)) && (!ItemStackTools.isNullStack(minion.getBackItem()) && minion.getBackItem().getItem() instanceof ItemSword)){
-					minion.switchItems();
-					CrystalModNetwork.sendToAllAround(new PacketEntityMessage(minion, "SWITCHITEMS"), minion);
+				ItemStack swordStack = minion.inventory.getStackInSlot(0);
+				if(ItemStackTools.isValid(swordStack) && minion.getSlotSelected() !=0){
+					minion.setSlotSelected(0);
 				}
 				
 				if (distanceToTarget < 1.5F || (minion.getRidingEntity() !=null && distanceToTarget < 2.5F))
 				{
 					minion.swingArm(EnumHand.MAIN_HAND);
 					
-					
 					Item.ToolMaterial swordMaterial = null;
 					
 					//ItemStack copy = null;
 					
-					if (!ItemStackTools.isNullStack(heldItem) && heldItem.getItem() instanceof ItemSword)
+					if (ToolUtil.isSword(swordStack))
 					{
-						ItemSword sword = (ItemSword)heldItem.getItem();
+						ItemSword sword = (ItemSword)swordStack.getItem();
 						swordMaterial = Item.ToolMaterial.valueOf(sword.getToolMaterialName());
 						//copy = heldItem.copy();
 					}
@@ -160,7 +164,7 @@ public class MinionAICombat extends AIBase<EntityMinionWarrior>
 			        {
 			            if (!attackTarget.hitByEntity(minion))
 			            {
-			            	damage+=EnchantmentHelper.getModifierForCreature(heldItem, attackTarget.getCreatureAttribute());
+			            	damage+=EnchantmentHelper.getModifierForCreature(swordStack, attackTarget.getCreatureAttribute());
 			            
 			            	int j = EnchantmentHelper.getFireAspectModifier(minion);
 
@@ -178,11 +182,11 @@ public class MinionAICombat extends AIBase<EntityMinionWarrior>
 		                    	EnchantmentHelper.applyThornEnchantments(attackTarget, minion);
 		                    	EnchantmentHelper.applyArthropodEnchantments(minion, attackTarget);
 		                    	
-		                    	if(ItemStackTools.isValid(heldItem)){
-		                    		heldItem.getItem().hitEntity(heldItem, attackTarget, minion);
-		                    		if (ItemStackTools.isEmpty(heldItem))
+		                    	if(ItemStackTools.isValid(swordStack)){
+		                    		swordStack.getItem().hitEntity(swordStack, attackTarget, minion);
+		                    		if (ItemStackTools.isEmpty(swordStack))
 		                            {
-		                                minion.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, null);
+		                                minion.inventory.setInventorySlotContents(0, ItemStackTools.getEmptyStack());
 		                            }
 		                    	}
 		                    	
@@ -201,19 +205,35 @@ public class MinionAICombat extends AIBase<EntityMinionWarrior>
 			//Ranged attacks
 			else if (getMethodBehavior() == EnumCombatBehaviors.METHOD_RANGED_ONLY ||
 					(getMethodBehavior() == EnumCombatBehaviors.METHOD_MELEE_AND_RANGED &&
-					distanceToTarget >= 5.0F))
+					distanceToTarget >= 3.0F))
 			{
 				minion.getLookHelper().setLookPosition(attackTarget.posX, attackTarget.posY + attackTarget.getEyeHeight(), attackTarget.posZ, 10.0F, minion.getVerticalFaceSpeed());
 				
+				if(getMethodBehavior() == EnumCombatBehaviors.METHOD_RANGED_ONLY){
+					if(distanceToTarget > 4.0F){
+						moveToAttackTarget(minion);
+					} else {
+						if(!minion.getNavigator().noPath()){
+							minion.getNavigator().clearPathEntity();
+						}
+					}
+				}
+				
+				if(getMethodBehavior() == EnumCombatBehaviors.METHOD_MELEE_AND_RANGED){
+					if(distanceToTarget > 4.0F){
+						moveToAttackTarget(minion);
+					} 
+				}
+				
 				if (rangedAttackTime <= 0)
 				{
-					ItemStack held = minion.getHeldItem(EnumHand.MAIN_HAND);
-					if((ItemStackTools.isNullStack(held) || !EntityMinionWarrior.isBow(held)) && (!ItemStackTools.isNullStack(minion.getBackItem()) && EntityMinionWarrior.isBow(minion.getBackItem()))){
-						minion.switchItems();
-						CrystalModNetwork.sendToAllAround(new PacketEntityMessage(minion, "SWITCHITEMS"), minion);
+					ItemStack bowStack = minion.inventory.getStackInSlot(1);
+					if(ItemStackTools.isValid(bowStack) && minion.getSlotSelected() !=1){
+						minion.setSlotSelected(1);
 					}
 					
-					if(!ItemStackTools.isNullStack(held) && EntityMinionWarrior.isBow(held)){
+					if(ItemStackTools.isValid(bowStack) && EntityMinionWarrior.isBow(bowStack)){
+						//TODO Damage Bow
 						EntityTippedArrow arrow = new EntityTippedArrow(minion.getEntityWorld(), minion);
 				        double dX = attackTarget.posX - minion.posX;
 				        double dY = attackTarget.getEntityBoundingBox().minY + attackTarget.height / 3.0F - arrow.posY;
@@ -221,16 +241,47 @@ public class MinionAICombat extends AIBase<EntityMinionWarrior>
 				        double d3 = MathHelper.sqrt(dX * dX + dZ * dZ);
 				        
 				        arrow.setThrowableHeading(dX, dY + d3 * 0.20000000298023224D, dZ, 1.6F, 14 - minion.getEntityWorld().getDifficulty().getDifficultyId() * 4);
-				        arrow.setDamage((5.0F) + minion.getRNG().nextGaussian() * 0.25D + minion.getEntityWorld().getDifficulty().getDifficultyId() * 0.11F);
-				        minion.playSound(SoundEvents.ENTITY_SKELETON_SHOOT, 1.0F, 1.0F / (minion.getRNG().nextFloat() * 0.4F + 0.8F));
+				        
+				        double damage = (5.0F) + minion.getRNG().nextGaussian() * 0.25D + minion.getEntityWorld().getDifficulty().getDifficultyId() * 0.11F;
+				        int power = EnchantmentHelper.getEnchantmentLevel(Enchantments.POWER, bowStack);
+                        if (power > 0)
+                        {
+                        	damage += (double)power * 0.5D + 0.5D;
+                        }
+				        arrow.setDamage(damage);
+                        
+				        int punch = EnchantmentHelper.getEnchantmentLevel(Enchantments.PUNCH, bowStack);
+				        if (punch > 0)
+                        {
+				        	arrow.setKnockbackStrength(punch);
+                        }
+
+                        if (EnchantmentHelper.getEnchantmentLevel(Enchantments.FLAME, bowStack) > 0)
+                        {
+                        	arrow.setFire(100);
+                        }
+				        
+				        minion.playSound(SoundEvents.ENTITY_ARROW_SHOOT, 1.0F, 1.0F / (minion.getRNG().nextFloat() * 0.4F + 0.8F));
 				        minion.getEntityWorld().spawnEntity(arrow);
-						rangedAttackTime = 60;
+				        bowStack.damageItem(1, minion);
+				        if (ItemStackTools.isEmpty(bowStack))
+                        {
+                            minion.inventory.setInventorySlotContents(1, ItemStackTools.getEmptyStack());
+                        }
+						rangedAttackTime = 50;
 					}
 				}
 
 				else
 				{
 					rangedAttackTime--;
+				}
+			}
+		} else {
+			if(minion.getMovementState() == EnumMovementState.GUARD){
+				BlockPos home = minion.getGuardPos();
+				if(home !=null && home !=BlockPos.ORIGIN){
+					minion.getNavigator().tryMoveToXYZ(home.getX() + 0.5, home.getY() + 0.5, home.getZ() + 0.5, MinionConstants.SPEED_WALK);
 				}
 			}
 		}
@@ -350,7 +401,7 @@ public class MinionAICombat extends AIBase<EntityMinionWarrior>
 	private void findAttackTarget(EntityMinionWarrior minion)
 	{
 		List<Entity> entitiesAroundMe = EntityUtil.getAllEntitiesWithinDistanceOfCoordinates(minion.getEntityWorld(), minion.posX, minion.posY, minion.posZ, 10);
-		double distance = 100.0D;
+		double distance = 20.0D;
 		EntityLivingBase target = null;
 
 		for (Entity entity : entitiesAroundMe)
@@ -359,8 +410,13 @@ public class MinionAICombat extends AIBase<EntityMinionWarrior>
 			{
 				EntityLivingBase livingBase = (EntityLivingBase)entity;
 				double distanceTo = EntityUtil.getDistanceToEntity(minion, livingBase);
-
-				if (isEntityValidToAttack(minion, livingBase) && distanceTo < distance && minion.getEntitySenses().canSee(livingBase))
+				boolean boundsCheck = true;
+				if(minion.getMovementState() == EnumMovementState.GUARD){
+					if(!minion.isWithinGuardBounds(new BlockPos(livingBase))){
+						boundsCheck = false;
+					}
+				}	
+				if (isEntityValidToAttack(minion, livingBase) && distanceTo < distance && minion.getEntitySenses().canSee(livingBase) && boundsCheck)
 				{
 					distance = EntityUtil.getDistanceToEntity(minion, livingBase);
 					target = livingBase;
@@ -374,7 +430,8 @@ public class MinionAICombat extends AIBase<EntityMinionWarrior>
 	private void moveToAttackTarget(EntityMinionWarrior minion)
 	{
 		final EntityLiving entityPathController = (EntityLiving) (minion.getRidingEntity() instanceof EntityHorse ? minion.getRidingEntity() : minion);
-		float speed = entityPathController instanceof EntityHorse ? MinionConstants.SPEED_HORSE_RUN :  MinionConstants.SPEED_WALK;
+		double distance = EntityUtil.getDistanceToEntity(minion, attackTarget);
+		float speed = entityPathController instanceof EntityHorse ? MinionConstants.SPEED_HORSE_RUN : distance > 5.0 ? MinionConstants.SPEED_WALK * 1.2f : MinionConstants.SPEED_WALK;
 		if (entityPathController instanceof EntityHorse)
 		{
 			final EntityHorse horse = (EntityHorse) entityPathController;
@@ -386,8 +443,9 @@ public class MinionAICombat extends AIBase<EntityMinionWarrior>
 			}
 		}
 		
-		if(minion.getNavigator().noPath())
-		entityPathController.getNavigator().tryMoveToEntityLiving(attackTarget, speed);
+		if(minion.getNavigator().noPath()){
+			entityPathController.getNavigator().tryMoveToEntityLiving(attackTarget, speed);
+		}
 	}
 
 	public boolean isEntityValidToAttack(EntityMinionWarrior minion, EntityLivingBase entity)

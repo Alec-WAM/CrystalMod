@@ -2,8 +2,8 @@ package alec_wam.CrystalMod.entities.minions;
 
 public enum EnumMovementState 
 {
-	MOVE(0),
-	STAY(1),
+	STAY(0),
+	GUARD(1),
 	FOLLOW(2);
 	
 	private int id;

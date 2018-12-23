@@ -3,6 +3,7 @@ package alec_wam.CrystalMod.entities.minions.worker.jobs;
 import alec_wam.CrystalMod.entities.minions.MinionConstants;
 import alec_wam.CrystalMod.entities.minions.worker.EntityMinionWorker;
 import alec_wam.CrystalMod.entities.minions.worker.WorkerJob;
+import alec_wam.CrystalMod.tiles.machine.worksite.InventorySided.RelativeSide;
 import alec_wam.CrystalMod.tiles.machine.worksite.TileWorksiteBase;
 import alec_wam.CrystalMod.tiles.machine.worksite.imp.WorksiteTreeFarm;
 import alec_wam.CrystalMod.util.ItemStackTools;
@@ -49,9 +50,30 @@ public class JobChopTree extends WorkerJob {
 
 		
 		destroyTool(worker);
-		tFarm.giveAxe(worker);
+		boolean foundAxe = false;
+		if(!WorksiteTreeFarm.isAxe(worker.getHeldItemMainhand())){
+			if(WorksiteTreeFarm.isAxe(worker.getBackItem())){
+				ItemStack held = worker.getHeldItemMainhand();
+				if(ItemStackTools.isEmpty(held) || ToolUtil.isTool(held)){
+					worker.switchItems();
+				} else {
+					//if(ItemStackTools.isValid(held)){
+						ModLogger.info("Chop Job: sending non tool into front/top ["+held.getDisplayName()+"]");
+						if(tFarm.addStackToInventoryNoDrop(held, false, RelativeSide.FRONT, RelativeSide.TOP)){
+							worker.setHeldItem(EnumHand.MAIN_HAND, ItemStackTools.getEmptyStack());
+							worker.switchItems();
+						}
+					//}
+				}
+			}
+			foundAxe = WorksiteTreeFarm.isAxe(worker.getHeldItemMainhand());
+		}
+		
+		if(!foundAxe)tFarm.giveAxe(worker);
+		
 		ItemStack held = worker.getHeldItemMainhand();
-		if(ItemStackTools.isNullStack(held)){
+		if(ItemStackTools.isEmpty(held)){
+			//TODO Create Missing Axe warning
 			return false;
 		}
 		
@@ -62,7 +84,7 @@ public class JobChopTree extends WorkerJob {
         double d2 = worker.posZ - (logPos.getZ() + 0.5);
         d =MathHelper.sqrt(d0 * d0 + d2 * d2);
 		
-		if(d <= 2.5D && d > 0.5){
+		if(d <= 1.5D && d > 0.5){
 			if (delay < 0)
 		    {
 				int str = 0;

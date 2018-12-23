@@ -9,6 +9,7 @@ import com.google.common.collect.Maps;
 
 import alec_wam.CrystalMod.entities.minions.EntityMinionBase;
 import alec_wam.CrystalMod.entities.minions.MinionConstants;
+import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.tiles.machine.worksite.TileWorksiteBase;
 import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.ChatUtil;
@@ -25,6 +26,7 @@ import net.minecraft.item.ItemSword;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -101,6 +103,7 @@ public class EntityMinionWorker extends EntityMinionBase {
 			while(jobs.hasNext()){
 				WorkerJob job = jobs.next();
 				if(job !=null && job.run(this, getWorksite())){
+					job.onCompleted(this, getWorksite());
 					jobs.remove();
 				}
 			}
@@ -234,7 +237,11 @@ public class EntityMinionWorker extends EntityMinionBase {
 	    		return true;
 			}
 			if(stack.getItem() == Items.STICK){
-				if(!ItemStackTools.isNullStack(getHeldItemMainhand())){
+				if(player.isSneaking()){
+					switchItems();
+					return true;
+				}
+				if(ItemStackTools.isValid(getHeldItemMainhand())){
 	    			if(ItemUtil.canCombine(stack, getHeldItemMainhand())){
 	    				return false;
 	    			}
@@ -243,29 +250,36 @@ public class EntityMinionWorker extends EntityMinionBase {
 	    				entityDropItem(getHeldItemMainhand(), 0.0F);
 	                }
 	    		}
-	    		setItemStackToSlot(EntityEquipmentSlot.MAINHAND, null);
+	    		setItemStackToSlot(EntityEquipmentSlot.MAINHAND, ItemStackTools.getEmptyStack());
 	    		return true;
 			}
     	}
+		if(stack.getItem() == ModItems.minionStaff){
+			if(!getEntityWorld().isRemote)ChatUtil.sendNoSpam(player, "I have " + commandsToAdd.size()+ " jobs running");
+			return true;
+		}
+		
 		if(ItemStackTools.isNullStack(stack) && isOwner(player)){
 			if(!this.isWorking()){
-    			BlockPos pos = new BlockPos(this).down();
-    			TileEntity tile = getEntityWorld().getTileEntity(pos);
-    			if(tile !=null && tile instanceof TileWorksiteBase){
-    				TileWorksiteBase tfarm = (TileWorksiteBase) tile;
-    				if(tfarm.isWorkerOkay(this)){
-    					BlockPos coord = tfarm.getPos();
-    					if(isWorkingAtWorksite(coord)){
-    						if(!getEntityWorld().isRemote)ChatUtil.sendNoSpam(player, "I already work here.");
-    						return true;
-    					}
-    					addToWorksite(coord);
-    					if(!getEntityWorld().isRemote)ChatUtil.sendNoSpam(player, (this.wStation !=null ? wStation.getX()+", "+wStation.getY()+", "+wStation.getZ() : "NULL"));
-    					return true;
-    				}
-    				if(!getEntityWorld().isRemote)ChatUtil.sendNoSpam(player, "I can not work here");
-    				return true;
-    			}
+				for(EnumFacing face : EnumFacing.VALUES){
+	    			BlockPos pos = new BlockPos(this).offset(face);
+	    			TileEntity tile = getEntityWorld().getTileEntity(pos);
+	    			if(tile !=null && tile instanceof TileWorksiteBase){
+	    				TileWorksiteBase tfarm = (TileWorksiteBase) tile;
+	    				if(tfarm.isWorkerOkay(this)){
+	    					BlockPos coord = tfarm.getPos();
+	    					if(isWorkingAtWorksite(coord)){
+	    						if(!getEntityWorld().isRemote)ChatUtil.sendNoSpam(player, "I already work here.");
+	    						return true;
+	    					}
+	    					addToWorksite(coord);
+	    					if(!getEntityWorld().isRemote)ChatUtil.sendNoSpam(player, (this.wStation !=null ? wStation.getX()+", "+wStation.getY()+", "+wStation.getZ() : "NULL"));
+	    					return true;
+	    				}
+	    				if(!getEntityWorld().isRemote)ChatUtil.sendNoSpam(player, "I can not work here");
+	    				return true;
+	    			}
+				}
     		}
     	}  
 		return super.processInteract(player, hand);
@@ -275,7 +289,7 @@ public class EntityMinionWorker extends EntityMinionBase {
 	public void onDeath(DamageSource damageSource) 
 	{
 		super.onDeath(damageSource);
-		fireFromWorksite();
+		//fireFromWorksite();
 	}
 
 }

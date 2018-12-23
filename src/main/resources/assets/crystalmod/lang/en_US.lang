@@ -1048,6 +1048,20 @@ crystalmod.guistrings.inventory.alt_controls=Settings
 
 crystalmod.message.toomanyplayercubes=You already have the maximum amount of Player Cubes created. (%s)
 
+crystalmod.gui.warrior.tooltip.move.stay=Movement: Stay
+crystalmod.gui.warrior.tooltip.move.guard=Movement: Guard Position
+crystalmod.gui.warrior.tooltip.move.follow=Movement: Follow You
+crystalmod.gui.warrior.tooltip.method_do_not_fight=Attack Style: Passive
+crystalmod.gui.warrior.tooltip.method_melee_only=Attack Style: Melee
+crystalmod.gui.warrior.tooltip.method_ranged_only=Attack Style: Ranged
+crystalmod.gui.warrior.tooltip.method_melee_and_ranged=Attack Style: Melee and Ranged
+crystalmod.gui.warrior.tooltip.trigger_always=Attack Trigger: Nearby Mobs
+crystalmod.gui.warrior.tooltip.trigger_player_take_damage=Attack Trigger: Owner's attacker
+crystalmod.gui.warrior.tooltip.trigger_player_deal_damage=Attack Trigger: Owner's target
+crystalmod.gui.warrior.tooltip.target_passive_or_hostile_mobs=Mob Filter: Any
+crystalmod.gui.warrior.tooltip.target_passive_mobs=Mob Filter: Passive
+crystalmod.gui.warrior.tooltip.target_hostile_mobs=Mob Filter: Hostile
+
 crystalmod.gui.enhancement.holdshift=<Hold Shift for Enhancement Data>
 crystalmod.enhancement.unlocked=Discovered %s enhancement!
 enhancement.crystalmod.dragonwings.name=Dragon Wings

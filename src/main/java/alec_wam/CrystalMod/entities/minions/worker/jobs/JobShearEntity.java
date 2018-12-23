@@ -10,11 +10,12 @@ import alec_wam.CrystalMod.tiles.machine.worksite.TileWorksiteBase;
 import alec_wam.CrystalMod.tiles.machine.worksite.WorksiteUpgrade;
 import alec_wam.CrystalMod.tiles.machine.worksite.imp.WorksiteAnimalFarm;
 import alec_wam.CrystalMod.util.ItemStackTools;
+import alec_wam.CrystalMod.util.ModLogger;
+import alec_wam.CrystalMod.util.tool.ToolUtil;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Enchantments;
 import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.ItemShears;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
@@ -34,17 +35,33 @@ public class JobShearEntity extends WorkerJob {
 		if(this.animalToShear == null || this.animalToShear.isDead || !(this.animalToShear instanceof IShearable)) return true;
 		if(worksite == null || !(worksite instanceof WorksiteAnimalFarm)) return true;
 		WorksiteAnimalFarm aFarm = (WorksiteAnimalFarm)worksite;
-
-		
 		destroyTool(worker);
-		aFarm.giveShears(worker);
+		boolean foundShears = false;
+		if(!WorksiteAnimalFarm.isShears(worker.getHeldItemMainhand())){
+			if(WorksiteAnimalFarm.isShears(worker.getBackItem())){
+				ItemStack held = worker.getHeldItemMainhand();
+				if(ItemStackTools.isEmpty(held) || WorksiteAnimalFarm.isSword(held)){
+					worker.switchItems();
+				} else {
+					ModLogger.info("Shear Job: sending non tool into front/top ["+held.getDisplayName()+"]");
+					if(aFarm.addStackToInventoryNoDrop(held, false, RelativeSide.BOTTOM, RelativeSide.FRONT, RelativeSide.TOP)){
+						worker.setHeldItem(EnumHand.MAIN_HAND, ItemStackTools.getEmptyStack());
+						worker.switchItems();
+					}
+				}
+			}
+			foundShears = WorksiteAnimalFarm.isShears(worker.getHeldItemMainhand());
+		}
+		
+		if(!foundShears)aFarm.giveShears(worker);
 		ItemStack held = worker.getHeldItemMainhand();
-		if(held == null || !(held.getItem() instanceof ItemShears)){
+		if(ItemStackTools.isEmpty(held) || !WorksiteAnimalFarm.isShears(held)){
+			//TODO Create Missing Shears warning
 			return true;
 		}
 		worker.getLookHelper().setLookPositionWithEntity(animalToShear, 10, 40);
 		double d = worker.getDistanceToEntity(animalToShear);
-		if(d <= 2.5D){
+		if(d <= 1.5D){
 			IShearable shearable = (IShearable)this.animalToShear;
 			BlockPos shearPos = new BlockPos(animalToShear);
 			if(shearable.isShearable(held, worker.getEntityWorld(), shearPos)){

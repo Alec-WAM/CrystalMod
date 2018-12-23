@@ -2,12 +2,8 @@ package alec_wam.CrystalMod.entities.pet.bombomb;
 
 import java.util.List;
 
-import javax.annotation.Nullable;
-
 import alec_wam.CrystalMod.entities.EntityOwnable;
 import alec_wam.CrystalMod.entities.ai.AIManager;
-import alec_wam.CrystalMod.entities.minions.warrior.MinionAICombat;
-import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.IMessageHandler;
 import alec_wam.CrystalMod.network.packets.PacketEntityMessage;
@@ -39,6 +35,8 @@ public class EntityBombomb extends EntityOwnable implements IMessageHandler {
 	private static final DataParameter<Integer> COLOR = EntityDataManager.<Integer>createKey(EntityBombomb.class, DataSerializers.VARINT);
 	protected AIManager aiManager;
 	
+	public int keyRotation;
+	
 	public EntityBombomb(World worldIn) {
 		super(worldIn);
 		this.setSize(0.6F, 0.8F);
@@ -46,17 +44,6 @@ public class EntityBombomb extends EntityOwnable implements IMessageHandler {
         this.getNavigator().getNodeProcessor().setCanSwim(true);
         this.tasks.addTask(1, new EntityAISwimming(this));
         this.tasks.addTask(2, this.aiSit);
-        /*this.tasks.addTask(4, new EntityAIAttackOnCollide(this, 1.0D, true));
-        this.tasks.addTask(5, new EntityAIFollowOwner(this, 1.0D, 10.0F, 2.0F));
-        this.tasks.addTask(6, new EntityAIBombSwell(this));
-        this.tasks.addTask(7, new EntityAIWander(this, 1.0D));
-        this.tasks.addTask(9, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
-        this.tasks.addTask(9, new EntityAILookIdle(this));
-        
-        this.targetTasks.addTask(1, new EntityAIOwnerHurtByTarget(this));
-        this.targetTasks.addTask(2, new EntityAIOwnerHurtTarget(this));
-        this.targetTasks.addTask(3, new EntityAIHurtByTarget(this, true));
-        this.setTamed(false);*/
         
         aiManager = new AIManager(this);
         
@@ -73,6 +60,12 @@ public class EntityBombomb extends EntityOwnable implements IMessageHandler {
     {
         super.entityInit();
         this.dataManager.register(COLOR, Integer.valueOf(EnumDyeColor.YELLOW.getDyeDamage()));
+    }
+	
+	@Override
+	public double getYOffset()
+    {
+       return 0.0D;
     }
 	
 	@Override
@@ -109,7 +102,13 @@ public class EntityBombomb extends EntityOwnable implements IMessageHandler {
 	public void onLivingUpdate()
     {
         super.onLivingUpdate();
-
+        if(world.isRemote){
+        	keyRotation++;
+        	keyRotation %=360;
+        }
+        /*if(this.isRiding()){
+        	this.rotationYaw = this.getRidingEntity().rotationYaw;
+        }*/
         /*if(getOwner() !=null && Strings.isNullOrEmpty(getCustomNameTag())){
         	if(getOwner() instanceof EntityPlayer){
         		EntityPlayer player = (EntityPlayer)getOwner();
@@ -187,8 +186,10 @@ public class EntityBombomb extends EntityOwnable implements IMessageHandler {
 		}
 	}
 	
-	protected boolean processInteract(EntityPlayer player, EnumHand hand, @Nullable ItemStack stack)
+	@Override
+	protected boolean processInteract(EntityPlayer player, EnumHand hand)
     {
+		ItemStack stack = player.getHeldItem(hand);
 		if(isOwner(player)){
 			if(ItemStackTools.isValid(stack)){
 				EnumDyeColor color = ItemUtil.getDyeColor(stack);
@@ -201,10 +202,14 @@ public class EntityBombomb extends EntityOwnable implements IMessageHandler {
 						return true;
 					}
 				}
-				if(stack.getItem() == ModItems.minionStaff){
-					startRiding(player);
+				/*if(stack.getItem() == ModItems.minionStaff){
+					if(!isRiding()){
+						startRiding(player);
+					} else {
+						dismountRidingEntity();
+					}
 					return true;
-				}
+				}*/
 			} else {
 				if(player.isSneaking()){
 					BombombAICombat ai = getAIManager().getAI(BombombAICombat.class);
@@ -258,7 +263,7 @@ public class EntityBombomb extends EntityOwnable implements IMessageHandler {
 	@Override
 	public void handleMessage(String messageId, NBTTagCompound messageData, boolean client) {
 		if(messageId.equalsIgnoreCase("ATTACK_TRIGGER_SET")){
-			MinionAICombat combatAI = getAIManager().getAI(MinionAICombat.class);
+			BombombAICombat combatAI = getAIManager().getAI(BombombAICombat.class);
 			combatAI.setTriggerBehavior(messageData.getInteger("ID"));
 		}
 		if(messageId.equalsIgnoreCase("Explosion")){

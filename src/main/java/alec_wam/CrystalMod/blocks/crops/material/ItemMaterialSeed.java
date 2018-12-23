@@ -31,12 +31,15 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.common.EnumPlantType;
+import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemMaterialSeed extends Item implements ICustomModel {
+public class ItemMaterialSeed extends Item implements ICustomModel, IPlantable {
 
 	public ItemMaterialSeed(){
 		super();
@@ -72,8 +75,8 @@ public class ItemMaterialSeed extends Item implements ICustomModel {
 			IBlockState state = worldIn.getBlockState(pos);
 			if(state.isSideSolid(worldIn, pos, facing) && worldIn.isAirBlock(up)){
 				worldIn.setBlockState(up, ModBlocks.materialCrop.getDefaultState(), 3);
-				SoundType soundtype = worldIn.getBlockState(pos).getBlock().getSoundType(worldIn.getBlockState(pos), worldIn, pos, playerIn);
-                worldIn.playSound(playerIn, pos, soundtype.getPlaceSound(), SoundCategory.BLOCKS, (soundtype.getVolume() + 1.0F) / 2.0F, soundtype.getPitch() * 0.8F);
+				SoundType soundtype = worldIn.getBlockState(up).getBlock().getSoundType(worldIn.getBlockState(up), worldIn, up, playerIn);
+                worldIn.playSound(playerIn, up, soundtype.getPlaceSound(), SoundCategory.BLOCKS, (soundtype.getVolume() + 1.0F) / 2.0F, soundtype.getPitch() * 0.8F);
                 
 				TileEntity tile = worldIn.getTileEntity(up);
 				if(tile !=null && tile instanceof TileMaterialCrop){
@@ -172,6 +175,21 @@ public class ItemMaterialSeed extends Item implements ICustomModel {
 			}
 		}
 		return null;
+	}
+
+	@Override
+	public EnumPlantType getPlantType(IBlockAccess world, BlockPos pos) {
+		return net.minecraftforge.common.EnumPlantType.Cave;
+	}
+
+	@Override
+	public IBlockState getPlant(IBlockAccess world, BlockPos pos) {
+		boolean grown = false;
+		TileEntity tile = world.getTileEntity(pos);
+		if(tile !=null && tile instanceof TileMaterialCrop){
+			grown = ((TileMaterialCrop)tile).isGrown();
+		}
+        return ModBlocks.materialCrop.getDefaultState().withProperty(BlockMaterialCrop.GROWN, grown);
 	}
 	
 }

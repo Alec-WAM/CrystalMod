@@ -65,9 +65,9 @@ public class MinionRandomPositionGenerator
         
         boolean homeLock = (entitycreatureIn instanceof EntityMinionWarrior) ? true : false;
         
-        if (homeLock && ((EntityMinionWarrior)entitycreatureIn).getWanderHome() !=null)
+        if (homeLock && ((EntityMinionWarrior)entitycreatureIn).getGuardPos() !=null)
         {
-        	BlockPos wanderHome = ((EntityMinionWarrior)entitycreatureIn).getWanderHome();
+        	BlockPos wanderHome = ((EntityMinionWarrior)entitycreatureIn).getGuardPos();
             double d0 = wanderHome.distanceSq(MathHelper.floor(entitycreatureIn.posX), MathHelper.floor(entitycreatureIn.posY), MathHelper.floor(entitycreatureIn.posZ)) + 4.0D;
             double d1 = ((EntityMinionWarrior)entitycreatureIn).getMaximumWanderDistance() + xz;
             flag = d0 < d1 * d1;
@@ -90,9 +90,9 @@ public class MinionRandomPositionGenerator
 
             if (targetVec3d == null || l * targetVec3d.xCoord + i1 * targetVec3d.zCoord >= 0.0D)
             {
-                if (homeLock && ((EntityMinionWarrior)entitycreatureIn).getWanderHome() !=null && xz > 1)
+                if (homeLock && ((EntityMinionWarrior)entitycreatureIn).getGuardPos() !=null && xz > 1)
                 {
-                    BlockPos blockpos = ((EntityMinionWarrior)entitycreatureIn).getWanderHome();
+                    BlockPos blockpos = ((EntityMinionWarrior)entitycreatureIn).getGuardPos();
 
                     if (entitycreatureIn.posX > blockpos.getX())
                     {
@@ -116,7 +116,7 @@ public class MinionRandomPositionGenerator
                 k1 = k1 + MathHelper.floor(entitycreatureIn.posY);
                 i1 = i1 + MathHelper.floor(entitycreatureIn.posZ);
                 BlockPos blockpos1 = new BlockPos(l, k1, i1);
-                boolean withinHome = homeLock && ((EntityMinionWarrior)entitycreatureIn).isWithinWanderBounds(blockpos1);
+                boolean withinHome = homeLock && ((EntityMinionWarrior)entitycreatureIn).isWithinGuardBounds(blockpos1);
                 if ((!flag1 || withinHome))
                 {
                     float f1 = entitycreatureIn instanceof IBlockWeighted ? ((IBlockWeighted)entitycreatureIn).getBlockPathWeight(blockpos1) : 0.0F;

@@ -2,6 +2,7 @@ package alec_wam.CrystalMod.entities.pet.bombomb;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
 
@@ -65,9 +66,14 @@ public class ModelBombomb extends ModelBase
 	    LeftFoot.render(f5);
 	    RightFoot.render(f5);
 	    Head.render(f5);
-	    Key.render(f5);
 	    FuseHolder.render(f5);
 	    Fuse.render(f5);
+	    GlStateManager.pushMatrix();
+	    //GlStateManager.translate(0.5, 0.5, 0.5);
+	    //GlStateManager.rotate(((EntityBombomb)entity).keyRotation, 0, 0, 1);
+	    //GlStateManager.translate(-0.5, -0.5, -0.5);
+	    Key.render(f5);
+	    GlStateManager.popMatrix();
     }
   
     private void setRotation(ModelRenderer model, float x, float y, float z)

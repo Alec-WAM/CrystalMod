@@ -3,12 +3,14 @@ package alec_wam.CrystalMod.entities.minions.warrior;
 import javax.annotation.Nonnull;
 
 import alec_wam.CrystalMod.util.ItemStackTools;
+import alec_wam.CrystalMod.util.tool.ToolUtil;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ItemStackHelper;
-import net.minecraft.item.ItemArmor;
+import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
@@ -16,11 +18,9 @@ import net.minecraft.util.text.TextComponentTranslation;
 
 public class InventoryWarrior implements IInventory
 {
-	public static final int MAIN_SIZE = 10;
-	public static final int ARMOR_SIZE = 4;
+	public static final int MAIN_SIZE = 3;
 	
 	public NonNullList<ItemStack> mainInventory = NonNullList.<ItemStack>withSize(MAIN_SIZE, ItemStack.EMPTY);
-	public NonNullList<ItemStack> armorInventory = NonNullList.<ItemStack>withSize(ARMOR_SIZE, ItemStack.EMPTY);
     
     public int currentItem;
     public EntityMinionWarrior minion;
@@ -30,28 +30,34 @@ public class InventoryWarrior implements IInventory
     {
         this.minion = minionIn;
     }
-
+    
+    public void updateDisplayItems(){
+    	if(minion.getSlotSelected() == -1){
+    		minion.setHeldItem(EnumHand.MAIN_HAND, ItemStackTools.getEmptyStack());
+    	} else {
+    		minion.setHeldItem(EnumHand.MAIN_HAND, getStackInSlot(minion.getSlotSelected()));
+    	}
+    	if(minion.getBackSelected() == -1){
+    		minion.setBackItem(ItemStackTools.getEmptyStack());
+    	} else {
+    		minion.setBackItem(getStackInSlot(minion.getBackSelected()));
+    	}
+    }
+    
     /**
      * Removes up to a specified number of items from an inventory slot and returns them in a new stack.
      */
     @Override
 	public ItemStack decrStackSize(int index, int count)
     {
-    	NonNullList<ItemStack> aitemstack = this.mainInventory;
-
-        if (index >= aitemstack.size())
-        {
-            index -= aitemstack.size();
-            aitemstack = this.armorInventory;
-        }
-
-        ItemStack stack = aitemstack.get(index);
+    	ItemStack stack = this.mainInventory.get(index);
         if (ItemStackTools.isValid(stack))
         {
             if (ItemStackTools.getStackSize(stack) <= count)
             {
                 ItemStack itemstack1 = stack;
-                aitemstack.set(index, ItemStackTools.getEmptyStack());
+                this.mainInventory.set(index, ItemStackTools.getEmptyStack());
+                updateDisplayItems();
                 return itemstack1;
             }
             else
@@ -60,9 +66,9 @@ public class InventoryWarrior implements IInventory
 
                 if (ItemStackTools.isEmpty(itemstack))
                 {
-                	aitemstack.set(index, ItemStackTools.getEmptyStack());
+                	this.mainInventory.set(index, ItemStackTools.getEmptyStack());
                 }
-
+                updateDisplayItems();
                 return itemstack;
             }
         }
@@ -78,18 +84,11 @@ public class InventoryWarrior implements IInventory
     @Override
 	public ItemStack removeStackFromSlot(int index)
     {
-    	NonNullList<ItemStack> aitemstack = this.mainInventory;
-
-        if (index >= aitemstack.size())
+    	if (ItemStackTools.isValid(this.mainInventory.get(index)))
         {
-            index -= aitemstack.size();
-            aitemstack = this.armorInventory;
-        }
-
-        if (ItemStackTools.isValid(aitemstack.get(index)))
-        {
-            ItemStack itemstack = aitemstack.get(index);
-            aitemstack.set(index, ItemStackTools.getEmptyStack());
+            ItemStack itemstack = this.mainInventory.get(index);
+            this.mainInventory.set(index, ItemStackTools.getEmptyStack());
+            updateDisplayItems();
             return itemstack;
         }
         else
@@ -104,28 +103,20 @@ public class InventoryWarrior implements IInventory
     @Override
 	public void setInventorySlotContents(int index, @Nonnull ItemStack stack)
     {
-    	NonNullList<ItemStack> aitemstack = this.mainInventory;
-
-        if (index >= aitemstack.size())
-        {
-            index -= aitemstack.size();
-            aitemstack = this.armorInventory;
-        }
-
-        aitemstack.set(index, stack);
+    	this.mainInventory.set(index, stack);
+        updateDisplayItems();
     }
 
     public NBTTagCompound writeToNBT(NBTTagCompound nbt)
     {
     	ItemStackHelper.saveAllItems(nbt, mainInventory);
-    	ItemStackHelper.saveAllItems(nbt, armorInventory);
-        return nbt;
+    	return nbt;
     }
 
     public void readFromNBT(NBTTagCompound nbt)
     {
+    	clear();
     	ItemStackHelper.loadAllItems(nbt, mainInventory);
-    	ItemStackHelper.loadAllItems(nbt, armorInventory);
     }
 
     /**
@@ -134,7 +125,7 @@ public class InventoryWarrior implements IInventory
     @Override
 	public int getSizeInventory()
     {
-        return this.mainInventory.size() + ARMOR_SIZE;
+        return this.mainInventory.size();
     }
 
     /**
@@ -143,15 +134,7 @@ public class InventoryWarrior implements IInventory
     @Override
 	public ItemStack getStackInSlot(int index)
     {
-    	NonNullList<ItemStack> aitemstack = this.mainInventory;
-
-        if (index >= aitemstack.size())
-        {
-            index -= aitemstack.size();
-            aitemstack = this.armorInventory;
-        }
-
-        return aitemstack.get(index);
+    	return this.mainInventory.get(index);
     }
 
     @Override
@@ -187,56 +170,6 @@ public class InventoryWarrior implements IInventory
         return 64;
     }
 
-    public ItemStack armorItemInSlot(int slotIn)
-    {
-        return this.armorInventory.get(slotIn);
-    }
-
-    /**
-     * Based on the damage values and maximum damage values of each armor item, returns the current armor value.
-     */
-    public int getTotalArmorValue()
-    {
-        int i = 0;
-
-        for (int j = 0; j < this.armorInventory.size(); ++j)
-        {
-            if (ItemStackTools.isValid(armorItemInSlot(j)) && armorItemInSlot(j).getItem() instanceof ItemArmor)
-            {
-                int k = ((ItemArmor)armorItemInSlot(j).getItem()).damageReduceAmount;
-                i += k;
-            }
-        }
-
-        return i;
-    }
-
-    /**
-     * Damages armor in each slot by the specified amount.
-     */
-    public void damageArmor(float damage)
-    {
-        damage = damage / 4.0F;
-
-        if (damage < 1.0F)
-        {
-            damage = 1.0F;
-        }
-
-        for (int j = 0; j < this.armorInventory.size(); ++j)
-        {
-            if (ItemStackTools.isValid(armorItemInSlot(j)) && armorItemInSlot(j).getItem() instanceof ItemArmor)
-            {
-            	armorItemInSlot(j).damageItem((int)damage, this.minion);
-
-                if (ItemStackTools.isEmpty(armorItemInSlot(j)))
-                {
-                    this.armorInventory.set(j, ItemStackTools.getEmptyStack());
-                }
-            }
-        }
-    }
-
     /**
      * For tile entities, ensures the chunk containing the tile entity is saved to disk later - the game won't think it
      * hasn't changed and skip it.
@@ -245,6 +178,7 @@ public class InventoryWarrior implements IInventory
 	public void markDirty()
     {
         this.inventoryChanged = true;
+        updateDisplayItems();
     }
 
     @Override
@@ -269,7 +203,16 @@ public class InventoryWarrior implements IInventory
     @Override
 	public boolean isItemValidForSlot(int index, ItemStack stack)
     {
-        return true;
+    	if(index == 0) {
+    		return ToolUtil.isSword(stack);
+    	}
+    	if(index == 1) {
+    		return EntityMinionWarrior.isBow(stack);
+    	}
+    	if(index == 2){
+    		return ItemStackTools.isValid(stack) && stack.getItem() instanceof ItemFood;
+    	}
+        return false;
     }
 
     @Override
@@ -293,7 +236,7 @@ public class InventoryWarrior implements IInventory
 	public void clear()
     {
         this.mainInventory.clear();
-        this.armorInventory.clear();
+        updateDisplayItems();
     }
 
 	@Override
@@ -301,14 +244,6 @@ public class InventoryWarrior implements IInventory
 		for (ItemStack itemstack : this.mainInventory)
         {
             if (ItemStackTools.isValid(itemstack))
-            {
-                return false;
-            }
-        }
-
-        for (ItemStack itemstack1 : this.armorInventory)
-        {
-            if (ItemStackTools.isValid(itemstack1))
             {
                 return false;
             }

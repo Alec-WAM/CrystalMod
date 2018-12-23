@@ -2,6 +2,8 @@ package alec_wam.CrystalMod.entities.minions.worker.jobs;
 
 import java.util.List;
 
+import com.google.common.collect.Lists;
+
 import alec_wam.CrystalMod.entities.minions.MinionConstants;
 import alec_wam.CrystalMod.entities.minions.worker.EntityMinionWorker;
 import alec_wam.CrystalMod.entities.minions.worker.WorkerJob;
@@ -49,17 +51,22 @@ public class JobHarvestCrop extends WorkerJob {
 		}
 		IBlockState cropState = worker.getEntityWorld().getBlockState(cropPos);
 		boolean isGoard = (cropState.getBlock() == Blocks.MELON_BLOCK || cropState.getBlock() == Blocks.PUMPKIN);
+		boolean isStacked = FarmUtil.isStackedCrop(worker.getEntityWorld(), cropPos);
 		if(!FarmUtil.isGrownCrop(worker.getEntityWorld(), cropPos) && !isGoard) return true;
+		if(isStacked && worker.getEntityWorld().isAirBlock(cropPos.up())) return true;
 		worker.getLookHelper().setLookPosition(cropPos.getX() + 0.5, cropPos.getY() + 0.5, cropPos.getZ() + 0.5, 10, 40);
 		double d = worker.getDistance(cropPos.getX() + 0.5, cropPos.down().getY() + 0.5, cropPos.getZ() + 0.5);
 		if(d <= 1.5D){
-			
-			if(FarmUtil.isClickableCrop(worker.getEntityWorld(), cropPos)){
-				final CaptureContext dropsCapturer = DropCapture.instance.start(cropPos);
+			BlockPos harvestPos = cropPos;
+			if(isStacked){
+				harvestPos = harvestPos.up();
+			}
+			if(FarmUtil.isClickableCrop(worker.getEntityWorld(), harvestPos)){
+				final CaptureContext dropsCapturer = DropCapture.instance.start(harvestPos);
 
 				final List<EntityItem> drops;
 				try {
-					if(FakePlayerUtil.rightClickBlock(worker.getEntityWorld(), cropPos, EnumFacing.UP, ItemStackTools.getEmptyStack())){
+					if(FakePlayerUtil.rightClickBlock(worker.getEntityWorld(), harvestPos, EnumFacing.UP, ItemStackTools.getEmptyStack())){
 						worker.swingArm(EnumHand.MAIN_HAND);
 					}
 				} finally {
@@ -79,30 +86,56 @@ public class JobHarvestCrop extends WorkerJob {
 				return true;
 			} else {
 				int fortune = cFarm.getUpgrades().contains(WorksiteUpgrade.ENCHANTED_TOOLS_1)? 1 : cFarm.getUpgrades().contains(WorksiteUpgrade.ENCHANTED_TOOLS_2)? 2 : cFarm.getUpgrades().contains(WorksiteUpgrade.ENCHANTED_TOOLS_3) ? 3 : 0;
-				worker.swingArm(EnumHand.MAIN_HAND);
 				EntityPlayer player = FakePlayerUtil.getPlayer((WorldServer)worker.getEntityWorld());
-				float chance = 1.0f;
-				List<ItemStack> drops = cropState.getBlock().getDrops(worker.getEntityWorld(), cropPos, cropState, fortune);
-				chance = ForgeEventFactory.fireBlockHarvesting(drops, worker.getEntityWorld(), cropPos, cropState, fortune, chance, false, player);
+				List<ItemStack> finalDrops = Lists.newArrayList();
+				List<BlockPos> breakList = Lists.newArrayList();
+				breakList.add(harvestPos);
 				
-				worker.getEntityWorld().playEvent(player, 2001, cropPos, Block.getStateId(cropState));
-				worker.getEntityWorld().setBlockToAir(cropPos);
-				drop : for(ItemStack stack : drops)
+				if(isStacked){
+					BlockPos abovePos = harvestPos.up();
+					IBlockState aboveState = worker.getEntityWorld().getBlockState(abovePos);
+					while(FarmUtil.isStackedCrop(worker.getEntityWorld(), abovePos) && aboveState.getBlock() == cropState.getBlock()){
+						breakList.add(abovePos);
+						abovePos = abovePos.up();
+						aboveState = worker.getEntityWorld().getBlockState(abovePos);
+					}
+				}
+				
+				worker.swingArm(EnumHand.MAIN_HAND);
+				for(int i = 0; i < breakList.size(); i++){
+					//Reverse to make sure stacked crops don't break "early"
+					BlockPos pos = breakList.get(breakList.size()-1-i);
+					float chance = 1.0f;
+					List<ItemStack> drops = cropState.getBlock().getDrops(worker.getEntityWorld(), pos, cropState, fortune);
+					chance = ForgeEventFactory.fireBlockHarvesting(drops, worker.getEntityWorld(), pos, cropState, fortune, chance, false, player);
+					
+					worker.getEntityWorld().playEvent(player, 2001, pos, Block.getStateId(cropState));
+					worker.getEntityWorld().setBlockToAir(pos);
+					for(ItemStack stack : drops)
+					{
+						if(worker.getEntityWorld().rand.nextFloat() <= chance){
+							finalDrops.add(stack);
+						}
+					}
+				}
+				
+				
+				boolean replacedSeed = false;
+				drop : for(ItemStack stack : finalDrops)
 				{
-					if(worker.getEntityWorld().rand.nextFloat() <= chance){
-						if(worker.getHeldItemMainhand() == null){
-							if (stack.getItem() instanceof IPlantable) {
-								IPlantable plantable = (IPlantable) stack.getItem();
-								if(FarmUtil.canPlant(worker.getEntityWorld(), cropPos, plantable)){
-									if(worker.addCommand(new JobPlantCrop(cropPos))){
-										worker.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, stack);
-										continue drop;
-									}
+					if(ItemStackTools.isEmpty(worker.getHeldItemMainhand()) && !isStacked && !replacedSeed){
+						if (stack.getItem() instanceof IPlantable) {
+							IPlantable plantable = (IPlantable) stack.getItem();
+							if(FarmUtil.canPlant(worker.getEntityWorld(), cropPos, plantable)){
+								if(worker.addCommand(new JobPlantCrop(cropPos))){
+									worker.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, stack);
+									replacedSeed = true;
+									continue drop;
 								}
 							}
 						}
-						cFarm.addStackToInventory(stack, RelativeSide.FRONT, RelativeSide.TOP);
 					}
+					cFarm.addStackToInventory(stack, RelativeSide.FRONT, RelativeSide.TOP);
 				}
 				
 				cropPos = BlockPos.ORIGIN;

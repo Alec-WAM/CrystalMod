@@ -20,7 +20,6 @@ import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.FarmUtil;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
-import alec_wam.CrystalMod.util.ModLogger;
 import alec_wam.CrystalMod.util.tool.ToolUtil;
 import net.minecraft.block.BlockStem;
 import net.minecraft.block.state.IBlockState;
@@ -126,7 +125,6 @@ public class WorksiteCropFarm extends TileWorksiteUserBlocks {
 			if (ItemStackTools.isEmpty(stack)) {
 				continue;
 			}
-			stack.getItem();
 			if (FarmUtil.isSeed(stack, true)) {
 				plantableCount += ItemStackTools.getStackSize(stack);
 			}
@@ -165,12 +163,28 @@ public class WorksiteCropFarm extends TileWorksiteUserBlocks {
 			state = getWorld().getBlockState(position.down());
 			if (state.getBlock() == Blocks.DIRT || state.getBlock() == Blocks.GRASS) {
 				blocksToTill.add(position.down());
-			} else if (state.getBlock() == Blocks.FARMLAND || !getWorld().isAirBlock(position.down())) {
+			} else if (state.getBlock() == Blocks.FARMLAND) {
 				blocksToPlant.add(position);
+			} else {
+				for (int i = 27; i < 30; i++) {
+					ItemStack stack = inventory.getStackInSlot(i);
+					if (ItemStackTools.isEmpty(stack)) {
+						continue;
+					}
+					IPlantable plantable = FarmUtil.getSeedPlantable(stack);
+					if(FarmUtil.canPlant(getWorld(), position, plantable)){
+						blocksToPlant.add(position);
+					}
+				}
 			}
 		} else if (FarmUtil.isCrop(getWorld(), position)) {
 			if (FarmUtil.isGrownCrop(getWorld(), position)) {
-				blocksToHarvest.add(position);
+				if(FarmUtil.isStackedCrop(getWorld(), position)){
+					if(!getWorld().isAirBlock(position.up())){
+						blocksToHarvest.add(position);
+					}
+				}
+				else blocksToHarvest.add(position);
 			} else {
 				blocksToFertilize.add(position);
 			}
@@ -207,7 +221,7 @@ public class WorksiteCropFarm extends TileWorksiteUserBlocks {
 	}
 
 	public boolean giveHoe(EntityMinionWorker worker) {
-		if(worker.getHeldItemMainhand() == null){
+		if(worker.getHeldItemMainhand().isEmpty()){
 			int[] slots = this.inventory.getRawIndices(RelativeSide.BOTTOM);
 			for(int i = 0; i < slots.length; i++){
 				int slot = slots[i];
@@ -222,6 +236,14 @@ public class WorksiteCropFarm extends TileWorksiteUserBlocks {
 		return false;
 	}
 	
+	public WorkerFilter hoeFilter = new WorkerFilter(){
+		@Override
+		public boolean matches(EntityMinionWorker worker){
+			ItemStack held = worker.getHeldItemMainhand();
+			return ItemStackTools.isValid(held) && held.getItem() instanceof ItemHoe && !ToolUtil.isBrokenTinkerTool(held) && !ToolUtil.isEmptyRfTool(held);
+		}
+	};
+	
 	@Override
 	protected boolean processWork() {
 		Iterator<BlockPos> it;
@@ -233,25 +255,16 @@ public class WorksiteCropFarm extends TileWorksiteUserBlocks {
 				it.remove();
 				state = getWorld().getBlockState(position);
 				if (getWorld().isAirBlock(position.up()) && (state.getBlock() == Blocks.GRASS || state.getBlock() == Blocks.DIRT)) {
-					EntityMinionWorker worker = getRandomWorker(new WorkerFilter(){
-						@Override
-						public boolean matches(EntityMinionWorker worker){
-							ItemStack held = worker.getHeldItemMainhand();
-							return ItemStackTools.isValid(held) && held.getItem() instanceof ItemHoe && !ToolUtil.isBrokenTinkerTool(held) && !ToolUtil.isEmptyRfTool(held);
-						}
-					}, WorkerFilter.idleFilter);
+					EntityMinionWorker worker = getRandomWorker(hoeFilter, WorkerFilter.idleFilter);
 					if (worker != null) {
-						if(worker.addCommand(new JobTillDirt(position))){
-							return true;
-						}
+						worker.addCommand(new JobTillDirt(position));
+						return true;
 					}
-					return false;
 				}
 			}
 		} else if (!blocksToHarvest.isEmpty()) {
 			it = blocksToHarvest.iterator();
 			while (it.hasNext() && (position = it.next()) != null) {
-				it.remove();
 				IBlockState cropState = getWorld().getBlockState(position);
 				boolean isGoard = (cropState.getBlock() == Blocks.MELON_BLOCK || cropState.getBlock() == Blocks.PUMPKIN);
 				if (FarmUtil.isCrop(getWorld(), position) || isGoard) {
@@ -260,6 +273,7 @@ public class WorksiteCropFarm extends TileWorksiteUserBlocks {
 						EntityMinionWorker worker = getClosestWorker(position, WorkerFilter.idleFilter, WorkerFilter.anyFilter);
 						if (worker != null) {
 							worker.addCommand(new JobHarvestCrop(position));
+							it.remove();
 							return true;
 						}
 					}
@@ -268,7 +282,6 @@ public class WorksiteCropFarm extends TileWorksiteUserBlocks {
 		} else if (!blocksToPlant.isEmpty() && plantableCount > 0) {
 			it = blocksToPlant.iterator();
 			while (it.hasNext() && (position = it.next()) != null) {
-				it.remove();
 				if (getWorld().isAirBlock(position)) {
 					ItemStack stack = ItemStackTools.getEmptyStack();
 					for (int i = 27; i < 30; i++) {
@@ -276,14 +289,17 @@ public class WorksiteCropFarm extends TileWorksiteUserBlocks {
 						if (ItemStackTools.isEmpty(stack)) {
 							continue;
 						}
-						if (FarmUtil.isSeed(stack, true)) {
-							boolean canPlant = true;
-							if (stack.getItem() instanceof IPlantable) {
-								IPlantable plantable = (IPlantable) stack.getItem();
-								canPlant = FarmUtil.canPlant(getWorld(), position, plantable);
-							}
-							if(canPlant) {
+						IPlantable plantable = FarmUtil.getSeedPlantable(stack);
+						if (plantable !=null) {
+							if(FarmUtil.canPlant(getWorld(), position, plantable)) {
 								EntityMinionWorker worker = getClosestWorker(position, WorkerFilter.idleFilter);
+								if(worker == null){
+									//Look for workers with hoes and use them
+									EntityMinionWorker worker2 = getClosetWorkerRemoveTool(position, hoeFilter);
+									if(worker2 !=null){
+										worker = worker2;
+									}
+								}
 								if(worker !=null){
 									if(worker.addCommand(new JobPlantCrop(position))){
 										ItemStack copy = ItemUtil.copy(stack, 1);
@@ -293,6 +309,7 @@ public class WorksiteCropFarm extends TileWorksiteUserBlocks {
 											inventory.setInventorySlotContents(i, ItemStackTools.getEmptyStack());
 										}
 										worker.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, copy);
+										it.remove();
 										return true;
 									}
 								}

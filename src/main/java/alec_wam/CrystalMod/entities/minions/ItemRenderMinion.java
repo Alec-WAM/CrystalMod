@@ -61,7 +61,6 @@ public class ItemRenderMinion implements ICustomItemRenderer {
 		}
 		
 		ItemStack handStack = ItemStackTools.getEmptyStack();
-		
 		if(mType == MinionType.WORKER){
 			ItemStack pick = new ItemStack(Items.IRON_PICKAXE);
 			handStack = pick;
@@ -86,6 +85,19 @@ public class ItemRenderMinion implements ICustomItemRenderer {
 		                handStack = ItemStackTools.loadFromNBT(nbttaglist1.getCompoundTagAt(0));
 		            }
 		        }
+				if (compound.hasKey("ArmorItems", 9))
+		        {
+					NBTTagList nbttaglist = compound.getTagList("ArmorItems", 10);
+					
+					minion.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(nbttaglist.getCompoundTagAt(3)));
+					minion.setItemStackToSlot(EntityEquipmentSlot.CHEST, new ItemStack(nbttaglist.getCompoundTagAt(2)));
+					minion.setItemStackToSlot(EntityEquipmentSlot.LEGS, new ItemStack(nbttaglist.getCompoundTagAt(1)));
+					minion.setItemStackToSlot(EntityEquipmentSlot.FEET, new ItemStack(nbttaglist.getCompoundTagAt(0)));
+		        }
+				if(compound.hasKey("BackStack")){
+					minion.backStack = ItemStackTools.loadFromNBT(compound.getCompoundTag("BackStack"));
+				}
+				
 				if(compound.hasKey("OwnerUUID")){
 					String id = compound.getString("OwnerUUID");
 					if(!id.isEmpty() && UUIDUtils.isUUID(id)){
