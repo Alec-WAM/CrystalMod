@@ -71,7 +71,7 @@ public class BlockWirelessChest extends BlockContainer implements ICustomModel, 
     @Override
 	@SideOnly(Side.CLIENT)
     public void initModel(){
-    	ModItems.initBasicModel(Item.getItemFromBlock(this));
+    	ModBlocks.initBasicModel(this);
     	RenderTileWirelessChest renderer = new RenderTileWirelessChest();
     	ClientRegistry.bindTileEntitySpecialRenderer(TileWirelessChest.class, renderer);
     	ClientProxy.registerItemRenderCustom(getRegistryName().toString(), renderer);

@@ -36,7 +36,7 @@ public class GuiSoundMuffler extends GuiContainer implements IGuiScreen{
 		super(new ContainerNull());
 		this.muffler = muffler;
 		xSize = this.width = 176;
-        ySize = this.height = 230;
+        ySize = this.height = 139;
 	}
 	
 	@Override
@@ -49,10 +49,10 @@ public class GuiSoundMuffler extends GuiContainer implements IGuiScreen{
 	public void initGui(){
 		super.initGui();
 		
-		scrollbarLeft = new VScrollbar(this, 6, 22, 91);
+		scrollbarLeft = new VScrollbar(this, 4, 22, 98);
 		scrollbarLeft.adjustPosition();
 		
-		scrollbarRight = new VScrollbar(this, 162, 22, 91);
+		scrollbarRight = new VScrollbar(this, 160, 22, 98);
 		scrollbarRight.adjustPosition();
 		
 		this.buttonList.clear();
@@ -210,7 +210,7 @@ public class GuiSoundMuffler extends GuiContainer implements IGuiScreen{
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
 		mc.renderEngine.bindTexture(new ResourceLocation("crystalmod:textures/gui/soundmuffler.png"));
-		this.drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);;
+		this.drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
 		List<String> currentSounds = muffler.getSoundList();
 		scrollbarLeft.setScrollMax(Math.max(0, currentSounds.size()-1));
 	    scrollbarLeft.drawScrollbar(mouseX, mouseY);
@@ -237,9 +237,11 @@ public class GuiSoundMuffler extends GuiContainer implements IGuiScreen{
 				if(soundLoc !=null){
 					
 					GlStateManager.pushMatrix();
-					GlStateManager.translate(20, 27+(16*renderCount), 0);
-					GlStateManager.scale(0.5, 0.5, 1);
-					this.drawString(fontRendererObj, soundLoc, 0, 0, 1);
+					GlStateManager.translate(20, 29+(16*renderCount), 0);
+					int width = fontRendererObj.getStringWidth(soundLoc);
+					double scale = Math.min(65F / (width), 0.5F);
+					GlStateManager.scale(scale, scale, 1);
+					fontRendererObj.drawString(soundLoc, 0, 0, 1);
 					GlStateManager.popMatrix();
 					
 					if(this.isPointInRegion(15, 23+(16*renderCount), 71, 16, mouseX, mouseY)){	
@@ -259,9 +261,11 @@ public class GuiSoundMuffler extends GuiContainer implements IGuiScreen{
 				if(soundLoc !=null){
 					
 					GlStateManager.pushMatrix();
-					GlStateManager.translate(90, 27+(16*renderCount), 0);
-					GlStateManager.scale(0.5, 0.5, 1);
-					this.drawString(fontRendererObj, soundLoc.toString(), 0, 0, 1);
+					GlStateManager.translate(90, 29+(16*renderCount), 0);
+					int width = fontRendererObj.getStringWidth(soundLoc.toString());
+					double scale = Math.min(68F / (width), 0.5F);
+					GlStateManager.scale(scale, scale, 1);
+					fontRendererObj.drawString(soundLoc.toString(), 0, 0, 1);
 					GlStateManager.popMatrix();
 					
 					if(this.isPointInRegion(88, 23+(16*renderCount), 71, 16, mouseX, mouseY)){	

@@ -490,6 +490,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
         }
         event.getMap().registerSprite(new ResourceLocation("crystalmod:items/icon_sword"));
         event.getMap().registerSprite(new ResourceLocation("crystalmod:items/icon_pickaxe"));
+        event.getMap().registerSprite(new ResourceLocation("crystalmod:items/icon_bow"));
         event.getMap().registerSprite(new ResourceLocation("crystalmod:items/pipe/icon_filter"));
         
         event.getMap().registerSprite(new ResourceLocation("crystalmod:items/bat/leather_handle"));

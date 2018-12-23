@@ -14,6 +14,7 @@ import alec_wam.CrystalMod.api.enhancements.KnowledgeManager;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
+import alec_wam.CrystalMod.util.Lang;
 import alec_wam.CrystalMod.util.Util;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
@@ -89,10 +90,6 @@ public class GuiEnhancementTable extends GuiContainer {
 		int hoverSlot = -1;
 		List<IEnhancement> displayList = getEnhancements();
 		ItemStack tool = table.getStackInSlot(0);
-		//drawRect(80, 20, 98, 38, Color.GRAY.getRGB());
-		
-		//drawRect(44, 60, 44+(18*5), 78, Color.GRAY.getRGB());
-		
 		if(!displayList.isEmpty()){
 			int x = 44;
 			int y = 61;
@@ -103,22 +100,13 @@ public class GuiEnhancementTable extends GuiContainer {
 				if(isPointInRegion(x, y, 16, 16, mouseX, mouseY)){
 					hoverSlot = i;
 					hoverEnhancement = enhancement;
-					/*GlStateManager.pushMatrix();
-					GlStateManager.disableLighting();
-	                GlStateManager.disableDepth();
-	                GlStateManager.colorMask(true, true, true, false);
-	                this.drawGradientRect(x, y, x + 16, y + 16, -2130706433, -2130706433);
-	                GlStateManager.colorMask(true, true, true, true);
-	                GlStateManager.enableLighting();
-	                GlStateManager.enableDepth();
-	                GlStateManager.popMatrix();*/
 				}
 				ItemStack stack = enhancement.getDisplayItem();
 				if(ItemStackTools.isValid(stack)){
 					GlStateManager.pushMatrix();
 					GlStateManager.translate(0.0F, 0.0F, 32.0F);
-			        this.zLevel = 200.0F;
-			        this.itemRender.zLevel = 200.0F;
+			        this.zLevel = 100.0F;
+			        this.itemRender.zLevel = 100.0F;
 			        net.minecraft.client.gui.FontRenderer font = stack.getItem().getFontRenderer(stack);
 			        if (font == null) font = fontRendererObj;
 			        this.itemRender.renderItemAndEffectIntoGUI(stack, x, y);
@@ -161,28 +149,41 @@ public class GuiEnhancementTable extends GuiContainer {
 		}
 		
 		if(hoverEnhancement !=null){
+			//TODO Mess with gettting the box to fit a ton of items
+			GlStateManager.pushMatrix();
+			List<String> tooltip = Lists.newArrayList();
+			String id = hoverEnhancement.getID().getResourceDomain()+"."+hoverEnhancement.getID().getResourcePath();
+			tooltip.add(Lang.translateToLocal("enhancement."+id+".name"));
+			tooltip.add(" ");
+			tooltip.add(" ");
+	        drawHoveringText(tooltip, mouseX-guiLeft, mouseY-guiTop);
+			GlStateManager.popMatrix();
+			
 			List<ItemStack> stacks = hoverEnhancement.getRequiredItems();
-			int x = 8;
-			int y = 0;
+			int x = 11;
+			int y = -2;
 			for(int i = 0; i < stacks.size(); i++){
 				ItemStack stack = stacks.get(i);
-				if(ItemStackTools.isValid(stack)){
+				if(ItemStackTools.isValid(stack)){			
 					
 					GlStateManager.pushMatrix();
-					GlStateManager.translate(mouseX-guiLeft, mouseY-guiTop, 32.0F);
-			        this.zLevel = 200.0F;
-			        this.itemRender.zLevel = 200.0F;
+					GlStateManager.translate(mouseX-guiLeft, mouseY-guiTop, 0.0F);
+			        this.zLevel = 400.0F;
+			        this.itemRender.zLevel = 400.0F;
 			        net.minecraft.client.gui.FontRenderer font = stack.getItem().getFontRenderer(stack);
 			        if (font == null) font = fontRendererObj;
-			        this.itemRender.renderItemAndEffectIntoGUI(stack, x, y);
+			        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+	        		this.itemRender.renderItemAndEffectIntoGUI(stack, x, y);
 			        
 			        if(ItemStackTools.isValid(tool)){
 			        	if(!hoverEnhancement.isApplied(tool)){
 			        		int needed = ItemStackTools.getStackSize(stack);
 							needed-=ItemUtil.countItems(new InvWrapper(mc.player.inventory), stack, false);
 			        		TextFormatting chat = needed <= 0 ? TextFormatting.GREEN : TextFormatting.RED;
+			        		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 			        		this.itemRender.renderItemOverlayIntoGUI(font, stack, x, y, chat+""+ItemStackTools.getStackSize(stack));
 			        	} else {
+			        		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 			        		this.itemRender.renderItemOverlayIntoGUI(font, stack, x, y, ""+ItemStackTools.getStackSize(stack));
 			        	}
 			        }

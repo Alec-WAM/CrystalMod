@@ -39,6 +39,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -58,7 +59,7 @@ public class BlockCrystalCluster extends EnumBlock<CrystalColors.Basic> implemen
 	@SideOnly(Side.CLIENT)
 	public void initModel(){
 		for(CrystalColors.Basic type : CrystalColors.Basic.values()){
-			ModBlocks.initBasicModel(this, type.getMeta());
+			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), type.ordinal(), new ModelResourceLocation(getRegistryName(), "color="+type.getName().toLowerCase()));
 		}
 		RenderTileCrystalCluster renderer = new RenderTileCrystalCluster();
 		ClientProxy.registerItemRenderCustom(getRegistryName().toString(), renderer);

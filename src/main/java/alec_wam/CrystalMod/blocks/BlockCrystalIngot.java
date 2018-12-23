@@ -3,8 +3,11 @@ package alec_wam.CrystalMod.blocks;
 import java.util.Locale;
 
 import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.blocks.crops.BlockCrystalPlant;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -25,6 +28,23 @@ public class BlockCrystalIngot extends EnumBlock<BlockCrystalIngot.CrystalIngotB
  		return true;
  	}
     
+	@Override
+	public boolean canSustainPlant(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing direction, net.minecraftforge.common.IPlantable plantable)
+    {
+        IBlockState plant = plantable.getPlant(world, pos.offset(direction));
+        net.minecraftforge.common.EnumPlantType plantType = plantable.getPlantType(world, pos.offset(direction));
+        if(plantType == ModBlocks.crystalPlantType){
+        	if(plant.getBlock() instanceof BlockCrystalPlant){
+        		BlockCrystalPlant.PlantType color = (BlockCrystalPlant.PlantType) plant.getValue(BlockCrystalPlant.TYPE);
+        		BlockCrystalPlant.PlantType type = BlockCrystalPlant.getTypeFromBlock(state);
+        		if(type !=null && type == color){
+        			return true;
+        		}
+        	}
+        }
+		return super.canSustainPlant(state, world, pos, direction, plantable);
+	}
+	
 	public static enum CrystalIngotBlockType implements IStringSerializable, alec_wam.CrystalMod.util.IEnumMeta{
 		BLUE, RED, GREEN, DARK, PURE, DARKIRON;
 

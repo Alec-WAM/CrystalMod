@@ -1,15 +1,15 @@
 package alec_wam.CrystalMod.blocks;
 
 import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.blocks.crops.BlockCrystalPlant;
 import alec_wam.CrystalMod.util.IEnumMeta;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.item.Item;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IStringSerializable;
-import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 
 public class BlockCrystal extends EnumBlock<BlockCrystal.CrystalBlockType> {
 
@@ -22,6 +22,23 @@ public class BlockCrystal extends EnumBlock<BlockCrystal.CrystalBlockType> {
 		this.setDefaultState(this.blockState.getBaseState().withProperty(TYPE, CrystalBlockType.BLUE));
 	}
     
+	@Override
+	public boolean canSustainPlant(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing direction, net.minecraftforge.common.IPlantable plantable)
+    {
+        IBlockState plant = plantable.getPlant(world, pos.offset(direction));
+        net.minecraftforge.common.EnumPlantType plantType = plantable.getPlantType(world, pos.offset(direction));
+        if(plantType == ModBlocks.crystalPlantType){
+        	if(plant.getBlock() instanceof BlockCrystalPlant){
+        		BlockCrystalPlant.PlantType color = (BlockCrystalPlant.PlantType) plant.getValue(BlockCrystalPlant.TYPE);
+        		BlockCrystalPlant.PlantType type = BlockCrystalPlant.getTypeFromBlock(state);
+        		if(type !=null && type == color){
+        			return true;
+        		}
+        	}
+        }
+		return super.canSustainPlant(state, world, pos, direction, plantable);
+	}
+	
     public static enum CrystalBlockType implements IStringSerializable, IEnumMeta {
 		BLUE("blue"),
 		RED("red"),

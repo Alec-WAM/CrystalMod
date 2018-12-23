@@ -42,7 +42,9 @@ public class BlockCorn extends Block implements net.minecraftforge.common.IPlant
 {
     public static final PropertyInteger AGE = PropertyInteger.create("age", 0, 4);
     public static final PropertyBool TOP = PropertyBool.create("top");
-    protected static final AxisAlignedBB REED_AABB = new AxisAlignedBB(0.125D, 0.0D, 0.125D, 0.875D, 1.0D, 0.875D);
+    protected final AxisAlignedBB NORMAL_AABB = new AxisAlignedBB(0.125D, 0.0D, 0.125D, 0.875D, 1.0D, 0.875D);
+    protected final AxisAlignedBB TOP_SMALL_AABB = new AxisAlignedBB(0.125D, 0.0D, 0.125D, 0.875D, 0.1D, 0.875D);
+    protected final AxisAlignedBB TOP_MEDIUM_AABB = new AxisAlignedBB(0.125D, 0.0D, 0.125D, 0.875D, 0.875D, 0.875D);
     public BlockCorn()
     {
         super(Material.PLANTS);
@@ -69,7 +71,13 @@ public class BlockCorn extends Block implements net.minecraftforge.common.IPlant
     @Override
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
     {
-        return REED_AABB;
+        if(state.getValue(TOP) && state.getValue(AGE) <= 1){
+            return TOP_SMALL_AABB;
+        }
+        if(state.getValue(TOP) && state.getValue(AGE) == 2){
+            return TOP_MEDIUM_AABB;
+        }
+    	return NORMAL_AABB;
     }
     
     @Override

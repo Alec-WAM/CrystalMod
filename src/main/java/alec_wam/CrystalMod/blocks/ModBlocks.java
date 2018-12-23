@@ -458,6 +458,9 @@ public class ModBlocks {
 	public static final EnumPlantType crystalPlantType = EnumPlantType.getPlantType("crystal");
 
 	public static void init() {
+		//TODO Fix tinted glass render
+		//TODO Cleanup Crystal Chest Guis
+		//TODO Fix Infusion Running Sound/Create Infusion Wand
 		crystal = registerEnumBlock(new BlockCrystal(), "crystalblock");
 		crystalOre = registerEnumBlock(new BlockCrystalOre(), "crystalore");
 		crystalIngot = registerEnumBlock(new BlockCrystalIngot(), "crystalingotblock");

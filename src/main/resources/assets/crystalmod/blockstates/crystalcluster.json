@@ -20,29 +20,29 @@
 				"particle": "crystalmod:blocks/blank"
 			}
 		},
-		"type":{
+		"color":{
 			"blue":{
 				"model": "crystalmod:null",
 				"textures": {
-					"particle": "crystalmod:blocks/blank"
+					"particle": "crystalmod:blocks/crystal_blue"
 				}
 			},
 			"red":{
 				"model": "crystalmod:null",
 				"textures": {
-					"particle": "crystalmod:blocks/blank"
+					"particle": "crystalmod:blocks/crystal_red"
 				}
 			},
 			"green":{
 				"model": "crystalmod:null",
 				"textures": {
-					"particle": "crystalmod:blocks/blank"
+					"particle": "crystalmod:blocks/crystal_green"
 				}
 			},
 			"dark":{
 				"model": "crystalmod:null",
 				"textures": {
-					"particle": "crystalmod:blocks/blank"
+					"particle": "crystalmod:blocks/crystal_dark"
 				}
 			}
 		}

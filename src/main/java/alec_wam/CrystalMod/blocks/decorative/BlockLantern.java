@@ -1,12 +1,12 @@
 package alec_wam.CrystalMod.blocks.decorative;
 
-import alec_wam.CrystalMod.CrystalMod;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFence;
 import net.minecraft.block.BlockWall;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -21,7 +21,7 @@ public class BlockLantern extends Block {
     protected static final AxisAlignedBB AABB = new AxisAlignedBB(3.0D * (1.0D / 16.0D), 0.0D, 3.0D * (1.0D / 16.0D), 13.0D * (1.0D / 16.0D), 13.0D * (1.0D / 16.0D), 13.0D * (1.0D / 16.0D));
 	public BlockLantern() {
 		super(Material.GLASS);
-		setCreativeTab(CrystalMod.tabItems);
+		setCreativeTab(CreativeTabs.DECORATIONS);
 		setLightLevel(1.0F);
 		setHardness(0.1F);
 		setSoundType(SoundType.GLASS);

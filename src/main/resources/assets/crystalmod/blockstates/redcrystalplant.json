@@ -1,7 +1,10 @@
 {
     "forge_marker": 1,
     "defaults": {
-        "model": "crystalmod:fixedCrop"
+        "model": "crystalmod:fixedCrop",
+		"textures": {
+			"particle": "crystalmod:blocks/plant/red_plant_stage_2"
+		}
     },
     "variants": {
 		"normal": [{}],

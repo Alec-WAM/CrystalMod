@@ -34,7 +34,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-public class BlockMaterialCrop extends BlockContainer {
+public class BlockMaterialCrop extends BlockContainer{
 
 	public static PropertyBool GROWN = PropertyBool.create("grown");
 	

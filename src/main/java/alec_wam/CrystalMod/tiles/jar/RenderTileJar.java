@@ -15,7 +15,6 @@ import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.client.model.dynamic.DynamicBaseModel;
 import alec_wam.CrystalMod.client.model.dynamic.ICustomItemRenderer;
-import alec_wam.CrystalMod.items.tools.bat.BatHelper;
 import alec_wam.CrystalMod.tiles.WoodenBlockProperies;
 import alec_wam.CrystalMod.tiles.WoodenBlockProperies.WoodType;
 import alec_wam.CrystalMod.util.ItemNBTHelper;

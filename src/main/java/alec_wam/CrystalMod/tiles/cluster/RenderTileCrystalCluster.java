@@ -4,8 +4,10 @@ package alec_wam.CrystalMod.tiles.cluster;
 import java.util.List;
 
 import com.google.common.base.Function;
+import com.google.common.collect.Lists;
 
 import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.client.model.dynamic.DynamicBaseModel;
 import alec_wam.CrystalMod.client.model.dynamic.ICustomItemRenderer;
 import alec_wam.CrystalMod.tiles.cluster.TileCrystalCluster.ClusterData;
@@ -22,6 +24,7 @@ import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -162,8 +165,9 @@ public class RenderTileCrystalCluster extends TileEntitySpecialRenderer<TileCrys
 				data.deserializeNBT(tileNBT.getCompoundTag("ClusterData"));
 				GlStateManager.pushMatrix();
 				if(lastTransform == TransformType.GUI){
-					GlStateManager.translate(0, -0.8, 0);
-					GlStateManager.scale(0.8, 0.8, 0.8);
+					GlStateManager.translate(0, -0.7, 0);
+					double scale = 0.8;
+					GlStateManager.scale(scale, scale, scale);
 				}
 				if(lastTransform == TransformType.HEAD){
 					GlStateManager.scale(1.2, 1.2, 1.2);
@@ -172,9 +176,26 @@ public class RenderTileCrystalCluster extends TileEntitySpecialRenderer<TileCrys
 				if(lastTransform == TransformType.FIXED){
 					GlStateManager.translate(0, -0.8, 0);
 				}
+				if(lastTransform == TransformType.THIRD_PERSON_LEFT_HAND){
+					GlStateManager.rotate(105, 0, 0, 1);
+					GlStateManager.rotate(120, 1, 0, 0);
+					double scale = 0.8;
+					GlStateManager.scale(scale, scale, scale);
+				}
+				if(lastTransform == TransformType.THIRD_PERSON_RIGHT_HAND){
+					GlStateManager.rotate(65, 1, 0, 1);
+					double scale = 0.8;
+					GlStateManager.scale(scale, scale, scale);
+				}
+				if(lastTransform == TransformType.FIRST_PERSON_LEFT_HAND || lastTransform == TransformType.FIRST_PERSON_RIGHT_HAND){
+					double scale = 0.8;
+					GlStateManager.scale(scale, scale, scale);
+					GlStateManager.translate(0, -0.5, 0);
+				}
 				CrystalColors.Basic type = CrystalColors.Basic.byMetadata(stack.getMetadata());
 				Vector3d color = getColor(type);
-				renderCluster(data, health, color, type !=CrystalColors.Basic.DARK);
+				//GlStateManager.scale(0.5, 0.5, 0.5);
+		    	renderCluster(data, health, color, type !=CrystalColors.Basic.DARK);
 				GlStateManager.popMatrix();
 			}
 		}
@@ -186,6 +207,15 @@ public class RenderTileCrystalCluster extends TileEntitySpecialRenderer<TileCrys
 	public TRSRTransformation getTransform(TransformType type) {
 		lastTransform = type;
 		return DynamicBaseModel.DEFAULT_PERSPECTIVE_TRANSFORMS.get(type);
+	}
+	
+	@Override
+	public List<ModelResourceLocation> getModels(){
+		List<ModelResourceLocation> models = Lists.newArrayList();
+		for(CrystalColors.Basic type : CrystalColors.Basic.values()){
+			models.add(new ModelResourceLocation(ModBlocks.crystalCluster.getRegistryName(), "color="+type.getName().toLowerCase()));
+		}
+		return models;
 	}
 	
 	public final Vector3d COLOR_BLUE = new Vector3d(0, 1, 1); 

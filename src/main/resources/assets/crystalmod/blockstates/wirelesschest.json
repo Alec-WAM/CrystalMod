@@ -1,16 +1,15 @@
 {
-	"variants": {
-		"inventory": { 
-			"model": "crystalmod:null",
-			"textures": {
-				"particle": "crystalmod:blocks/darkiron_ingot"
-			} 
-		},
-        "normal": { 
-			"model": "crystalmod:null",
-			"textures": {
-				"particle": "crystalmod:blocks/darkiron_ingot"
-			}
-		}
-    }
+  "forge_marker": 1,
+  "defaults": {
+    "model": "crystalmod:chest",
+	"textures": { 
+			"particle": "crystalmod:blocks/darkIron_ingot",
+			"texture": "crystalmod:model/chests/dironchest" 
+	},
+    "transform": "forge:default-block"
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{}]
+  }
 }
