@@ -5,15 +5,18 @@ import java.util.List;
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.api.tools.AttackData;
 import alec_wam.CrystalMod.api.tools.UpgradeData;
+import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.items.tools.bat.BatHelper;
 import alec_wam.CrystalMod.items.tools.bat.BatUpgrade;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.client.RenderUtil;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
@@ -62,9 +65,9 @@ public class CakeBatUpgrade extends BatUpgrade {
 	@Override
 	public void render(ItemStack bat, UpgradeData data) {
 		GlStateManager.pushMatrix();
-		GlStateManager.translate(0.5, 1.7, 0.5);
-		GlStateManager.scale(1.3, 1.3, 1.3);
-		RenderUtil.renderItem(CAKE, TransformType.GROUND);
+		GlStateManager.translate(0.2, 1, 0.8);
+		GlStateManager.scale(0.6, 0.6, 0.6);
+		Minecraft.getMinecraft().getBlockRendererDispatcher().renderBlockBrightness(Blocks.CAKE.getDefaultState(), 1.0F);
 		GlStateManager.popMatrix();
 	}
 

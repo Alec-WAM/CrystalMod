@@ -76,7 +76,11 @@ public class EntityCrystalEnderman extends EntityEnderman {
 	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, IEntityLivingData livingdata)
     {
         super.onInitialSpawn(difficulty, livingdata);
-        setColor(rand.nextInt(5));
+        setColor(rand.nextInt(4));
+        //TODO Add config for pure chance
+        if(rand.nextInt(15) == 0){
+        	setColor(4);
+        }
         return livingdata;
     }
     

@@ -48,47 +48,6 @@ public class TileEntityBlueCrystalChestRenderer<T extends TileEntityBlueCrystalC
         }
         float lidangle = tile.prevLidAngle + (tile.lidAngle - tile.prevLidAngle) * partialTick;
         renderChest(x, y, z, type, facing, lidangle, breakStage);
-        
-        /*if (type.isTransparent() && tile.getDistanceSq(this.rendererDispatcher.entityX, this.rendererDispatcher.entityY, this.rendererDispatcher.entityZ) < 128d) {
-            random.setSeed(254L);
-            float shiftX;
-            float shiftY;
-            float shiftZ;
-            int shift = 0;
-            float blockScale = 0.70F;
-            float timeD = (float) (360.0 * (double) (System.currentTimeMillis() & 0x3FFFL) / (double) 0x3FFFL);
-            if (tile.getTopItemStacks()[1] == null) {
-                shift = 8;
-                blockScale = 0.85F;
-            }
-            GlStateManager.pushMatrix();
-            GlStateManager.translate((float) x, (float) y, (float) z);
-            EntityItem customitem = new EntityItem(this.getWorld());
-            customitem.hoverStart = 0f;
-            for (ItemStack item : tile.getTopItemStacks()) {
-                if (shift > shifts.length) {
-                    break;
-                }
-                if (item == null) {
-                    shift++;
-                    continue;
-                }
-                shiftX = shifts[shift][0];
-                shiftY = shifts[shift][1];
-                shiftZ = shifts[shift][2];
-                shift++;
-                GlStateManager.pushMatrix();
-                GlStateManager.translate(shiftX, shiftY, shiftZ);
-                GlStateManager.rotate(timeD, 0.0F, 1.0F, 0.0F);
-                GlStateManager.scale(blockScale, blockScale, blockScale);
-                customitem.setEntityItemStack(item);
-                //Minecraft.getMinecraft().getRenderItem().renderItem(item, TransformType.GROUND);
-
-                itemRenderer.doRender(customitem, 0, 0, 0, 0, 0);
-                GlStateManager.popMatrix();
-            }
-            GlStateManager.popMatrix();
-        }*/
     }
 
     @Override

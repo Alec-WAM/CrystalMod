@@ -138,7 +138,7 @@ public class BlockElevatorCaller extends BlockContainer {
             if(mop != null && mop.subHit >= 0) {
             	if(!worldIn.isRemote){
                 	ModLogger.info(""+mop.subHit);
-                	for(EnumFacing face : EnumFacing.HORIZONTALS){
+                	for(EnumFacing face : EnumFacing.VALUES){
                 		TileEntity tile = worldIn.getTileEntity(pos.offset(face));
                 		if(tile instanceof TileEntityElevator){
                 			TileEntityElevator ele = (TileEntityElevator)tile;

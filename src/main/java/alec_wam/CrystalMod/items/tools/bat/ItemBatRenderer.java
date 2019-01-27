@@ -64,15 +64,9 @@ public class ItemBatRenderer implements ICustomItemRenderer {
 		if(type == TransformType.FIRST_PERSON_LEFT_HAND || type == TransformType.FIRST_PERSON_RIGHT_HAND){
 			y = -0.5;
 		}
-		//GlStateManager.disableLighting();
-		//GlStateManager.pushAttrib();
-        //RenderHelper.enableStandardItemLighting();
 		renderWholeBat(stack, x, y, z);
-		GlStateManager.enableBlend();
-        //GlStateManager.popAttrib();
-        //GlStateManager.enableLighting();
+		//GlStateManager.enableBlend();
 		if(type == TransformType.GUI){
-			//RenderHelper.enableGUIStandardItemLighting();
 		}
 		GlStateManager.popMatrix();
 	}

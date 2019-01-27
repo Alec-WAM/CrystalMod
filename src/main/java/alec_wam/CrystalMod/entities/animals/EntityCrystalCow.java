@@ -4,6 +4,7 @@ import java.util.List;
 
 import alec_wam.CrystalMod.items.ItemCrystal.CrystalType;
 import alec_wam.CrystalMod.items.ModItems;
+import alec_wam.CrystalMod.util.TimeUtil;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.passive.EntityCow;
@@ -124,7 +125,8 @@ public class EntityCrystalCow extends EntityCow implements net.minecraftforge.co
 	        	ret.add(new ItemStack(ModItems.crystals, 1, META));
 	        }
 	        
-	        this.setDelay(20 * 10);
+	        //TODO Make Config
+	        this.setDelay(TimeUtil.MINUTE * 2);
 		}
 		return ret;
 	}

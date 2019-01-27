@@ -12,7 +12,8 @@ public class TileEntityElevatorCallerRenderer extends TileEntitySpecialRenderer<
 
 	@Override
     public void renderTileEntityAt(TileEntityElevatorCaller te, double x, double y, double z, float partialTicks, int destroyStage) {
-    	GlStateManager.pushMatrix();
+    	if(te.getWorld() == null || te.getWorld().getBlockState(te.getPos()) == null || !(te.getWorld().getBlockState(te.getPos()).getBlock() instanceof BlockElevatorCaller))return;
+		GlStateManager.pushMatrix();
     	GlStateManager.translate(x+0.5, y+1.5, z+0.5);
     	GlStateManager.scale(1, -1, -1);
     	int angle = 180;

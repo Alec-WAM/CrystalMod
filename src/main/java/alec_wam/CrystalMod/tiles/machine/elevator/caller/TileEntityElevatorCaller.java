@@ -95,10 +95,9 @@ public class TileEntityElevatorCaller extends TileEntityMod {
         }
 	}
 
-	public void updateFloors() {
-		
+	public void updateFloors() {		
 		if(!getWorld().isRemote){
-			EnumFacing[] sides = EnumFacing.HORIZONTALS;
+			EnumFacing[] sides = EnumFacing.VALUES;
 			if(sides !=null){
 				for(EnumFacing side : sides){
 					TileEntity tile = getWorld().getTileEntity(getPos().offset(side));

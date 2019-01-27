@@ -87,7 +87,7 @@ public class ItemTeloportTool extends Item implements ICustomModel {
 		if(getLocation(itemStackIn) !=null){
 			if(playerIn.isSneaking()){
 				this.removeLocation(itemStackIn);
-				ChatUtil.sendChat(playerIn, "Removed Teleport Location");
+				if(!worldIn.isRemote)ChatUtil.sendChat(playerIn, "Removed Teleport Location");
 				return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStackIn);
 			}
 			getLocation(itemStackIn).sendEntityToCoords(playerIn);

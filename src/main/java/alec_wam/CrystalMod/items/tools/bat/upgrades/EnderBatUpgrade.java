@@ -153,28 +153,29 @@ public class EnderBatUpgrade extends BatUpgrade {
 	@Override
 	public void render(ItemStack bat, UpgradeData data) {
 		ItemStack enderpearl = ENDER_EYE;
+		double y = 2.2;
 		GlStateManager.pushMatrix();
-		GlStateManager.translate(0.51, 2.36, 0.35);
+		GlStateManager.translate(0.51, y, 0.35);
 		GlStateManager.scale(0.6, 0.6, 0.6);
 		RenderUtil.renderItem(enderpearl, TransformType.GROUND);
 		GlStateManager.popMatrix();
 		
 		GlStateManager.pushMatrix();
-		GlStateManager.translate(0.49, 2.36, 0.65);
+		GlStateManager.translate(0.49, y, 0.65);
 		GlStateManager.rotate(180, 0, 1, 0);
 		GlStateManager.scale(0.6, 0.6, 0.6);
 		RenderUtil.renderItem(enderpearl, TransformType.GROUND);
 		GlStateManager.popMatrix();
 		
 		GlStateManager.pushMatrix();
-		GlStateManager.translate(0.65, 2.36, 0.51);
+		GlStateManager.translate(0.65, y, 0.51);
 		GlStateManager.rotate(90*3, 0, 1, 0);
 		GlStateManager.scale(0.6, 0.6, 0.6);
 		RenderUtil.renderItem(enderpearl, TransformType.GROUND);
 		GlStateManager.popMatrix();
 		
 		GlStateManager.pushMatrix();
-		GlStateManager.translate(0.35, 2.36, 0.49);
+		GlStateManager.translate(0.35, y, 0.49);
 		GlStateManager.rotate(90, 0, 1, 0);
 		GlStateManager.scale(0.6, 0.6, 0.6);
 		RenderUtil.renderItem(enderpearl, TransformType.GROUND);

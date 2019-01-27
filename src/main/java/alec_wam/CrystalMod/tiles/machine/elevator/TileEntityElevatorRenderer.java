@@ -1,5 +1,7 @@
 package alec_wam.CrystalMod.tiles.machine.elevator;
 
+import java.util.List;
+
 import org.lwjgl.opengl.GL11;
 
 import alec_wam.CrystalMod.CrystalMod;
@@ -30,50 +32,47 @@ public class TileEntityElevatorRenderer extends TileEntitySpecialRenderer<TileEn
     public void renderTileEntityAt(TileEntityElevator te, double x, double y, double z, float partialTicks, int destroyStage) {
     	Profiler profiler = Minecraft.getMinecraft().mcProfiler;
         profiler.startSection("crystalmod-elevator");
-        if (te.isMoving()) {
-        	// Correction in the y translation to avoid jitter when both player and platform are moving
-        	AxisAlignedBB aabb = te.getAABBAboveElevator(0);
-        	boolean on = CrystalMod.proxy.getClientPlayer().getEntityBoundingBox().intersectsWith(aabb);
-        	double diff = on ? (te.getPos().getY() - (y+te.getMovingY()) - 1) : 0;
-        	 
-            GlStateManager.pushMatrix();
-            RenderHelper.disableStandardItemLighting();
-            GlStateManager.blendFunc(770, 771);
-            GlStateManager.enableBlend();
-            GlStateManager.disableCull();
-            this.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-            if (Minecraft.isAmbientOcclusionEnabled()) {
-                GlStateManager.shadeModel(GL11.GL_SMOOTH);
-            } else {
-                GlStateManager.shadeModel(GL11.GL_FLAT);
-            }
-
-            IBlockState movingState = te.getMovingState();
-            
-            GlStateManager.translate(0, te.getMovingY() - te.getPos().getY() + diff, 0);
-            Tessellator tessellator = Tessellator.getInstance();
-            BlockRendererDispatcher dispatcher = Minecraft.getMinecraft().getBlockRendererDispatcher();
-            tessellator.getBuffer().begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
-            //chunk.setWorld(te.getWorld());
-            for (BlockPos pos : te.getPositions()) {
-                int dx = te.getPos().getX() - pos.getX();
-                int dy = te.getPos().getY() - pos.getY();
-                int dz = te.getPos().getZ() - pos.getZ();
-                
-                tessellator.getBuffer().setTranslation(x - pos.getX() - dx, y - pos.getY() - dy, z - pos.getZ() - dz);
-                //chunk.setBlockState(pos, movingState);
-                renderBlock(dispatcher, movingState, pos, te.getWorld(), tessellator.getBuffer());
-                
-            }
-            tessellator.getBuffer().setTranslation(0, 0, 0);
-            tessellator.draw();
-            
-
-            
-            GlStateManager.disableBlend();
-            GlStateManager.enableCull();
-            GlStateManager.popMatrix();
-            RenderHelper.enableStandardItemLighting();
+        if(te.isMoving()){
+	        double movingY = te.getMovingY();
+	        IBlockState movingState = te.getMovingState();
+	        List<BlockPos> platformPos = te.getPositions();
+	        
+	    	AxisAlignedBB aabb = te.getAABBAboveElevator(0);
+	    	boolean on = CrystalMod.proxy.getClientPlayer().getEntityBoundingBox().intersectsWith(aabb);
+	    	double diff = on ? (te.getPos().getY() - (y+movingY) - 1) : 0;
+	    	 
+	        GlStateManager.pushMatrix();
+	        RenderHelper.disableStandardItemLighting();
+	        GlStateManager.blendFunc(770, 771);
+	        GlStateManager.enableBlend();
+	        GlStateManager.disableCull();
+	        this.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+	        if (Minecraft.isAmbientOcclusionEnabled()) {
+	            GlStateManager.shadeModel(GL11.GL_SMOOTH);
+	        } else {
+	            GlStateManager.shadeModel(GL11.GL_FLAT);
+	        }
+	        
+	        Tessellator tessellator = Tessellator.getInstance();
+	        BlockRendererDispatcher dispatcher = Minecraft.getMinecraft().getBlockRendererDispatcher();
+	        tessellator.getBuffer().begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
+	        for (BlockPos pos : platformPos) {
+	            int dx = te.getPos().getX();
+	            double dy = y - te.getPos().getY() + (movingY - te.getPos().getY()) + diff;
+	            int dz = te.getPos().getZ();
+	        	tessellator.getBuffer().setTranslation(x - dx, dy, z - dz);
+		        renderBlock(dispatcher, movingState, pos, te.getWorld(), tessellator.getBuffer());
+	            
+	        }
+	        tessellator.getBuffer().setTranslation(0, 0, 0);
+	        tessellator.draw();
+	        
+	
+	        
+	        GlStateManager.disableBlend();
+	        GlStateManager.enableCull();
+	        GlStateManager.popMatrix();
+	        RenderHelper.enableStandardItemLighting();
         }
         profiler.endSection();
     }

@@ -7,6 +7,9 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import alec_wam.CrystalMod.blocks.ModBlocks;
+import alec_wam.CrystalMod.blocks.crops.BlockCrystalBerryBush;
+import alec_wam.CrystalMod.blocks.crops.BlockCrystalPlant;
+import alec_wam.CrystalMod.blocks.crops.BlockCrystalPlant.PlantType;
 import alec_wam.CrystalMod.blocks.crops.ItemCorn.CornItemType;
 import alec_wam.CrystalMod.blocks.crops.material.TileMaterialCrop;
 import alec_wam.CrystalMod.items.ModItems;
@@ -104,7 +107,11 @@ public class FarmUtil {
 	    if (Block.getBlockFromItem(stack.getItem()) == null) {
 	      return;
 	    }
-	    Block itemBlock = Block.getBlockFromItem(stack.getItem());
+	    addClickableCrop(Block.getBlockFromItem(stack.getItem()), grownMeta);
+	}
+	
+	public static void addClickableCrop(Block itemBlock, int grownMeta)
+	{
 	    if (grownMeta == OreDictionary.WILDCARD_VALUE) {
 	      for (int a = 0; a < 16; a++) {
 	    	  getCrops(CropType.CLICKABLE).add(itemBlock.getUnlocalizedName() + a);
@@ -268,9 +275,14 @@ public class FarmUtil {
 	}
 
 	public static void addDefaultCrops() {
-		addClickableCrop(new ItemStack(ModBlocks.crystalPlant), 3);
-	    addClickableCrop(new ItemStack(ModBlocks.materialCrop), 1);
-	    //addSeed(new ItemStack(ModItems.materialSeed));
+		addClickableCrop(ModBlocks.materialCrop, 1);
+	    IBlockState plantState = ModBlocks.crystalPlant.getDefaultState().withProperty(BlockCrystalPlant.AGE, 3);
+		IBlockState bushState = ModBlocks.crystalBush.getDefaultState().withProperty(BlockCrystalBerryBush.AGE, 3);
+	    for(PlantType type : PlantType.values()){
+	    	addClickableCrop(ModBlocks.crystalPlant, ModBlocks.crystalPlant.getMetaFromState(plantState.withProperty(BlockCrystalPlant.TYPE, type)));
+	    	addClickableCrop(ModBlocks.crystalBush, ModBlocks.crystalBush.getMetaFromState(bushState.withProperty(BlockCrystalBerryBush.TYPE, type)));
+	    }
+	    
 	    addSeed(new ItemStack(ModItems.corn, 1, CornItemType.KERNELS.getMeta()), ModBlocks.corn);
 	    addStackedCrop(Blocks.REEDS, OreDictionary.WILDCARD_VALUE);
 	    addStackedCrop(Blocks.CACTUS, OreDictionary.WILDCARD_VALUE);
@@ -278,8 +290,6 @@ public class FarmUtil {
 	    addStackedCrop(ModBlocks.crystalReedsRed, OreDictionary.WILDCARD_VALUE);
 	    addStackedCrop(ModBlocks.crystalReedsGreen, OreDictionary.WILDCARD_VALUE);
 	    addStackedCrop(ModBlocks.crystalReedsDark, OreDictionary.WILDCARD_VALUE);
-	    /*int cornMeta = ModBlocks.corn.getMetaFromState(ModBlocks.corn.getDefaultState().withProperty(BlockCorn.AGE, 4));
-	    addStackedCrop(ModBlocks.corn, cornMeta);*/
 	}
 	
 }

@@ -60,7 +60,7 @@ public class PistonBatUpgrade extends BatUpgrade {
 		GlStateManager.pushMatrix();
 		GlStateManager.translate(0.5, 1.9, 0.5);
 		GlStateManager.scale(1.8, 1.8, 1.8);
-		GlStateManager.rotate(45, 0, 1, 0);
+		GlStateManager.rotate(-135, 0, 1, 0);
 		GlStateManager.rotate(-90, 0, 0, 1);
 		GlStateManager.translate(0, -0.2, 0.0);
 		RenderUtil.renderItem(PISTON, TransformType.GROUND);

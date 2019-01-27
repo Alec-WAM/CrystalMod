@@ -12,11 +12,16 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.asm.ObfuscatedNames;
 import alec_wam.CrystalMod.blocks.ModBlocks;
+import alec_wam.CrystalMod.network.CrystalModNetwork;
+import alec_wam.CrystalMod.network.IMessageHandler;
+import alec_wam.CrystalMod.network.packets.PacketTileMessage;
 import alec_wam.CrystalMod.tiles.TileEntityMod;
 import alec_wam.CrystalMod.tiles.machine.elevator.caller.TileEntityElevatorCaller;
 import alec_wam.CrystalMod.tiles.machine.elevator.floor.TileEntityElevatorFloor;
 import alec_wam.CrystalMod.util.BlockUtil;
+import alec_wam.CrystalMod.util.ModLogger;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -25,19 +30,20 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.NBTUtil;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ITickable;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class TileEntityElevator extends TileEntityMod implements ITickable {
+public class TileEntityElevator extends TileEntityMod implements IMessageHandler {
 
 	private boolean prevIn = false;
     private boolean powered = false;
@@ -64,6 +70,8 @@ public class TileEntityElevator extends TileEntityMod implements ITickable {
     private Set<Entity> entitiesOnPlatform = new HashSet<Entity>();
     private boolean entitiesOnPlatformComplete = false; // If true then we know entitiesOnPlatform is complete, otherwise it only contains players.
 	
+    private boolean initialFoorUpdate;
+    
     public void clearCaches() {
         EnumFacing side = getWorld().getBlockState(getPos()) != ModBlocks.elevator ? null : getWorld().getBlockState(getPos()).getValue(BlockElevator.FACING_HORIZ);
         for (int y = 0 ; y < getWorld().getHeight() ; y++) {
@@ -93,6 +101,10 @@ public class TileEntityElevator extends TileEntityMod implements ITickable {
 	
     @Override
     public void update() {
+    	if(!initialFoorUpdate){
+    		updateFloors(false);
+    		initialFoorUpdate = true;
+    	}
         if (!getWorld().isRemote) {
             if (isMoving()) {
             	markDirty();
@@ -103,8 +115,17 @@ public class TileEntityElevator extends TileEntityMod implements ITickable {
                     moveEntities(0, true);
                     updateFloors(true);
                     clearMovement();
+                	//TODO Make more efficient
+                    NBTTagCompound nbt = new NBTTagCompound();
+                	nbt.setDouble("MoveY", movingY);
+                	CrystalModNetwork.sendToAllAround(new PacketTileMessage(getPos(), "MoveSync", nbt), this);
                 } else {
                     moveEntities(d, false);
+                    //if(this.shouldDoWorkThisTick(2)){
+                    	NBTTagCompound nbt = new NBTTagCompound();
+                    	nbt.setDouble("MoveY", movingY);
+                    	CrystalModNetwork.sendToAllAround(new PacketTileMessage(getPos(), "MoveSync", nbt), this);
+                    //}
                 }
                 return;
             }
@@ -134,7 +155,7 @@ public class TileEntityElevator extends TileEntityMod implements ITickable {
 	        AxisAlignedBB aabb = getAABBAboveElevator(d);
 	        boolean on = player.getEntityBoundingBox().intersectsWith(aabb);
 	        if (on) {
-	            player.setPosition(player.posX, movingY + 1, player.posZ);
+	            player.setPositionAndUpdate(player.posX, movingY + 1, player.posZ);
 	        }
         }
     }
@@ -222,14 +243,18 @@ public class TileEntityElevator extends TileEntityMod implements ITickable {
     
     private void moveEntityOnPlatform(boolean stop, double offset, Entity entity) {
         if (entity instanceof EntityPlayer) {
+        	//TODO Fix Client moving
             double dy = 1;
             if (stop) {
-                //BuffProperties.disableElevatorMode(player);
                 entity.posY = movingY + dy;
                 entity.setPositionAndUpdate(entity.posX, movingY + dy, entity.posZ);
             } else {
-                //BuffProperties.enableElevatorMode(player);
-                entity.setPosition(entity.posX, movingY + dy, entity.posZ);
+                ObfuscationReflectionHelper.setPrivateValue(Entity.class, entity, true, ObfuscatedNames.Entity_isPositionDirty);
+            	entity.posY = movingY + dy;
+            	entity.prevPosY = entity.posY;
+            	entity.lastTickPosY = entity.posY;
+            	entity.setPosition(entity.posX, entity.posY, entity.posZ);
+                entity.world.updateEntityWithOptionalForce(entity, false);
             }
         } else {
             double dy = 1.2 + offset;
@@ -377,6 +402,21 @@ public class TileEntityElevator extends TileEntityMod implements ITickable {
         positions.clear();
 
         getBounds(start);
+        
+        if(!getWorld().isRemote){
+        	NBTTagCompound nbt = new NBTTagCompound();
+        	if(movingState !=null)nbt.setTag("MoveState", NBTUtil.writeBlockState(new NBTTagCompound(), movingState));
+        	NBTTagList listNBT = new NBTTagList();
+        	for(BlockPos pos : positions){
+        		listNBT.appendTag(NBTUtil.createPosTag(pos));
+        	}
+        	nbt.setTag("Positions", listNBT);
+        	nbt.setInteger("bMinX", bounds.minX);
+        	nbt.setInteger("bMinZ", bounds.minZ);
+        	nbt.setInteger("bMaxX", bounds.maxX);
+        	nbt.setInteger("bMaxZ", bounds.maxZ);
+        	CrystalModNetwork.sendToAllAround(new PacketTileMessage(getPos(), "CreatePlatform", nbt), this);
+        }
         
         markDirtyClient();
     }
@@ -696,14 +736,14 @@ public class TileEntityElevator extends TileEntityMod implements ITickable {
 			TileEntity tile = getWorld().getTileEntity(pos);
 			if(tile !=null && tile instanceof TileEntityElevator){
 				//TileEntityElevator ele = (TileEntityElevator)tile;
-				for(EnumFacing face : EnumFacing.HORIZONTALS){
+				for(EnumFacing face : EnumFacing.VALUES){
 					TileEntity tile2 = getWorld().getTileEntity(pos.offset(face));
 					if(!onlyButtons){
-					if(tile2 !=null && tile2 instanceof TileEntityElevatorFloor){
-						TileEntityElevatorFloor floor = (TileEntityElevatorFloor) tile2;
-						bottom.floors.put(floorIndex, floor.getPos());
-						floorIndex++;
-					}
+						if(tile2 !=null && tile2 instanceof TileEntityElevatorFloor && face.getAxis().isHorizontal()){
+							TileEntityElevatorFloor floor = (TileEntityElevatorFloor) tile2;
+							bottom.floors.put(floorIndex, floor.getPos());
+							floorIndex++;
+						}
 					}
 					if(tile2 !=null && tile2 instanceof TileEntityElevatorCaller){
 						callers.add((TileEntityElevatorCaller)tile2);
@@ -717,6 +757,7 @@ public class TileEntityElevator extends TileEntityMod implements ITickable {
 	}
 	
 	public void updateButtons(TileEntityElevatorCaller caller){
+		//TODO handle more than 11 Buttons (Work on rendering)
 		double buttonHeight = 0.06D;
         double buttonSpacing = 0.02D;
         TileEntityElevatorCaller.ElevatorButton[] elevatorButtons = new TileEntityElevatorCaller.ElevatorButton[floors.size()];
@@ -745,6 +786,30 @@ public class TileEntityElevator extends TileEntityMod implements ITickable {
         caller.buttons = elevatorButtons;
         if(caller.getWorld() !=null && caller.getPos() !=null)
         	BlockUtil.markBlockForUpdate(caller.getWorld(), caller.getPos());
+	}
+
+	@Override
+	public void handleMessage(String messageId, NBTTagCompound messageData, boolean client) {
+		if(messageId.equalsIgnoreCase("MoveSync")){
+			double moveY = messageData.getDouble("MoveY");
+			this.movingY = moveY;
+		}
+		if(messageId.equalsIgnoreCase("CreatePlatform")){
+			ModLogger.info("Platform Packet");
+			if(messageData.hasKey("MoveState")){
+				this.movingState = NBTUtil.readBlockState(messageData.getCompoundTag("MoveState"));
+			}
+			if(messageData.hasKey("Positions")){
+				this.positions.clear();
+				NBTTagList listNBT = messageData.getTagList("Positions", 10);
+				for(int i = 0; i < listNBT.tagCount(); i++){
+					positions.add(NBTUtil.getPosFromTag(listNBT.getCompoundTagAt(i)));
+				}
+			}
+			if(messageData.hasKey("bMinX")){
+				this.bounds = new Bounds(messageData.getInteger("bMinX"), messageData.getInteger("bMinZ"), messageData.getInteger("bMaxX"), messageData.getInteger("bMaxZ"));
+			}
+		}
 	}
 	
 }
