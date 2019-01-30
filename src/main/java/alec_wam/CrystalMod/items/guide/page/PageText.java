@@ -12,8 +12,19 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class PageText extends GuidePage {
 
+	public int scrollProgress;
 	public PageText(String id) {
 		super(id);
+	}
+	
+	@Override
+	public void handleMouseInput(GuiGuideChapter gui){
+		super.handleMouseInput(gui);
+	}
+	
+	@Override
+	public void keyTyped(GuiGuideChapter gui, char typedChar, int keyCode){
+		super.keyTyped(gui, typedChar, keyCode);
 	}
 	
 	 @Override

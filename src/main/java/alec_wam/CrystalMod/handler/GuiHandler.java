@@ -10,7 +10,6 @@ import alec_wam.CrystalMod.entities.accessories.ContainerHorseEnderChest;
 import alec_wam.CrystalMod.entities.accessories.GuiHorseEnderChest;
 import alec_wam.CrystalMod.entities.accessories.HorseAccessories;
 import alec_wam.CrystalMod.entities.accessories.boats.EntityBoatChest;
-import alec_wam.CrystalMod.entities.accessories.boats.EntityBoatChest.EnumBoatChestType;
 import alec_wam.CrystalMod.entities.minecarts.chests.EntityCrystalChestMinecartBase;
 import alec_wam.CrystalMod.entities.minecarts.chests.wireless.EntityWirelessChestMinecart;
 import alec_wam.CrystalMod.entities.minions.warrior.ContainerMinionWarrior;
@@ -18,12 +17,12 @@ import alec_wam.CrystalMod.entities.minions.warrior.EntityMinionWarrior;
 import alec_wam.CrystalMod.entities.minions.warrior.GuiMinionWarrior;
 import alec_wam.CrystalMod.items.guide.GuiGuideBase;
 import alec_wam.CrystalMod.items.guide.GuiGuideMainPage;
-import alec_wam.CrystalMod.items.guide.ItemCrystalGuide;
-import alec_wam.CrystalMod.items.guide.ItemCrystalGuide.GuideType;
-import alec_wam.CrystalMod.items.guide.old.GuiEStorageGuide;
+import alec_wam.CrystalMod.items.tools.backpack.BackpackOpenSourceItem;
 import alec_wam.CrystalMod.items.tools.backpack.BackpackUtil;
 import alec_wam.CrystalMod.items.tools.backpack.IBackpack;
 import alec_wam.CrystalMod.items.tools.backpack.ItemBackpackBase;
+import alec_wam.CrystalMod.items.tools.backpack.block.BackpackOpenSourceBlock;
+import alec_wam.CrystalMod.items.tools.backpack.block.TileEntityBackpack;
 import alec_wam.CrystalMod.items.tools.backpack.upgrade.ContainerBackpackUpgradeWindow;
 import alec_wam.CrystalMod.items.tools.backpack.upgrade.ContainerBackpackUpgrades;
 import alec_wam.CrystalMod.items.tools.backpack.upgrade.GuiBackpackUpgradeWindow;
@@ -157,7 +156,6 @@ import alec_wam.CrystalMod.tiles.xp.GuiXPTank;
 import alec_wam.CrystalMod.tiles.xp.TileEntityXPTank;
 import alec_wam.CrystalMod.util.ChatUtil;
 import alec_wam.CrystalMod.util.ItemStackTools;
-import alec_wam.CrystalMod.util.ModLogger;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.AbstractHorse;
 import net.minecraft.entity.passive.EntityHorse;
@@ -183,7 +181,8 @@ public class GuiHandler implements IGuiHandler {
 	public static final int GUI_ID_ENTITY = 5;
 	public static final int GUI_ID_GUIDE = 6;
 	public static final int GUI_ID_BACKPACK = 7;
-	public static final int GUI_ID_EXTENDED = 8;
+	public static final int GUI_ID_EXTENDED = 9;
+	public static final int GUI_ID_BACKPACK_BLOCK = 100;
 
     
     @Override
@@ -255,12 +254,34 @@ public class GuiHandler implements IGuiHandler {
     					int index = y-1;
     					BackpackUpgrade tab = tabs[index % tabs.length];
     					if(tab !=null){
-    						return new GuiBackpackUpgradeWindow(player.inventory, upgradeInv, tab);
+    						BackpackOpenSourceItem source = new BackpackOpenSourceItem(player, backpack);
+    						return new GuiBackpackUpgradeWindow(player.inventory, upgradeInv, tab, source);
     					}
     				}
     				return new GuiBackpackUpgrades(player.inventory, upgradeInv);
     			}
     			return type.getClientGuiElement(player, world);
+    		}
+    	}
+    	if(ID >= GUI_ID_BACKPACK_BLOCK){
+    		TileEntity te = world.getTileEntity(new BlockPos(x, y, z));
+    		if(te !=null && te instanceof TileEntityBackpack){
+    			TileEntityBackpack backpack = ((TileEntityBackpack)te);
+    			IBackpack type = BackpackUtil.getType(backpack.getBackpack());
+    			if(type !=null && ID > GUI_ID_BACKPACK_BLOCK){
+    				InventoryBackpackUpgrades upgradeInv = type.getUpgradeInventory(backpack.getBackpack());
+    				BackpackUpgrade[] tabs = upgradeInv.getTabs();
+    				int index = ID-GUI_ID_BACKPACK_BLOCK;
+					if(index > 1 && tabs.length > 0){
+    					BackpackUpgrade tab = tabs[(index - 2) % tabs.length];
+    					if(tab !=null){
+    						BackpackOpenSourceBlock source = new BackpackOpenSourceBlock(player, backpack);
+    						return new GuiBackpackUpgradeWindow(player.inventory, upgradeInv, tab, source);
+    					}
+    				}
+    				return new GuiBackpackUpgrades(player.inventory, upgradeInv);
+    			}
+    			return backpack.getClientGuiElement(player, world);
     		}
     	}
     	if(ID == GUI_ID_ITEM){
@@ -277,10 +298,6 @@ public class GuiHandler implements IGuiHandler {
     		        		return new GuiPanel(player.inventory, new PanelSourceWireless((TileEntityWirelessPanel)te, held));
     		        	}
     		        }
-    			}
-    			if(held.getItem() instanceof ItemCrystalGuide){
-    				GuideType type = GuideType.byMetadata(held.getMetadata());
-    				if(type == GuideType.ESTORAGE)return new GuiEStorageGuide(held);
     			}
     			if(held.getItem() instanceof ItemPipeFilter){
     				if(held.getMetadata() == FilterType.NORMAL.ordinal() || held.getMetadata() == FilterType.MOD.ordinal()){
@@ -366,7 +383,8 @@ public class GuiHandler implements IGuiHandler {
         	if(te instanceof TileEPST) return new GuiEPST(player.inventory, (TileEPST)te);
         	if(te instanceof TileEntitySeismicScanner)return new GuiSeismicScanner((TileEntitySeismicScanner)te);    
         	if(te instanceof TileEntityXPTank)return new GuiXPTank((TileEntityXPTank)te);       	               
-        	if(te instanceof TileEntityEnhancedEnchantmentTable)return new GuiEnhancedEnchantmentTable(player, (TileEntityEnhancedEnchantmentTable)te);       	                                           
+        	if(te instanceof TileEntityEnhancedEnchantmentTable)return new GuiEnhancedEnchantmentTable(player, (TileEntityEnhancedEnchantmentTable)te);    
+        	
         } 
         return null;
     }
@@ -429,6 +447,26 @@ public class GuiHandler implements IGuiHandler {
     				return new ContainerBackpackUpgrades(player.inventory, upgradeInv);
     			}
     			return type.getServerGuiElement(player, world);
+    		}
+    	}
+    	if(ID >= GUI_ID_BACKPACK_BLOCK){
+    		TileEntity te = world.getTileEntity(new BlockPos(x, y, z));
+    		if(te !=null && te instanceof TileEntityBackpack){
+    			TileEntityBackpack backpack = ((TileEntityBackpack)te);
+    			IBackpack type = BackpackUtil.getType(backpack.getBackpack());
+    			if(type !=null && ID > GUI_ID_BACKPACK_BLOCK){
+    				InventoryBackpackUpgrades upgradeInv = type.getUpgradeInventory(backpack.getBackpack());
+    				BackpackUpgrade[] tabs = upgradeInv.getTabs();
+    				int index = ID-GUI_ID_BACKPACK_BLOCK;
+					if(index > 1 && tabs.length > 0){
+    					BackpackUpgrade tab = tabs[(index - 2) % tabs.length];
+    					if(tab !=null){
+    						return new ContainerBackpackUpgradeWindow(player.inventory, upgradeInv, tab);
+    					}
+    				}
+    				return new ContainerBackpackUpgrades(player.inventory, upgradeInv);
+    			}
+    			return backpack.getServerGuiElement(player, world);
     		}
     	}
     	if(ID == GUI_ID_ITEM){
@@ -528,6 +566,7 @@ public class GuiHandler implements IGuiHandler {
         	if(te instanceof TileEntitySeismicScanner) return new ContainerNull();
         	if(te instanceof TileEntityXPTank) return new ContainerNull();
         	if(te instanceof TileEntityEnhancedEnchantmentTable)return new ContainerEnhancedEnchantmentTable(player.inventory, (TileEntityEnhancedEnchantmentTable)te); 
+        	if(te instanceof TileEntityBackpack)return ((TileEntityBackpack)te).getServerGuiElement(player, world);
         }
         return null;
     }

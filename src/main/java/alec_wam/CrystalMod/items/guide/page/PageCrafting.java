@@ -3,6 +3,8 @@ package alec_wam.CrystalMod.items.guide.page;
 import java.util.Iterator;
 import java.util.List;
 
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
@@ -53,6 +55,8 @@ public class PageCrafting extends GuidePage {
 	public NonNullList<ItemStack> items;
 	private ItemStack output = ItemStackTools.getEmptyStack();
 	private NonNullList<ItemStack> stacks;
+	private List<String> textLines;
+	public int scrollProgress;
 	
 	public PageCrafting(String id, ItemStack item){
 		this(id, NonNullList.withSize(1, item));
@@ -81,46 +85,13 @@ public class PageCrafting extends GuidePage {
 	@SideOnly(Side.CLIENT)
     public void initGui(GuiGuideChapter gui, int startX, int startY){
 		this.listIndex = 0;
+		float scale = 0.75f;
+		String text = GuidePages.getText(getChapter(), this);
+		textLines = gui.getFont().listFormattedStringToWidth(text, (int)(189/scale));
     }
 
 	@SuppressWarnings("unchecked")
 	public void updateItem(ItemStack out){
-		/*IRecipe recipe = getFirstRecipeForItem(out);
-		this.ingred = recipe !=null ? getRecipeInput(recipe) : new ItemStack[9];
-		this.items = new ItemStack[ingred.length];
-		this.currentRecipe = recipe;
-		
-		this.output = recipe !=null ? recipe.getRecipeOutput() : out;
-		
-		for(int i = 0; i < ingred.length; i++){
-			Object obj = ingred[i];
-			
-			if(obj instanceof ItemStack){
-				items[i] = ((ItemStack) obj).copy();
-				ModLogger.info("Updateing "+i+" to "+items[i]);
-				if(ItemStackTools.isValid(items[i]) && items[i].getItemDamage() == OreDictionary.WILDCARD_VALUE)items[i].setItemDamage(0);
-			} 
-			if(obj instanceof String){
-				String id = (String)obj;
-				
-				List<ItemStack> stacks = OreDictionary.getOres(id);
-				if(stacks.isEmpty()){
-					continue;
-				}
-				items[i] = stacks.get(0).copy();
-				if(ItemStackTools.isValid(items[i]) && items[i].getItemDamage() == OreDictionary.WILDCARD_VALUE)items[i].setItemDamage(0);
-			}
-			if(obj instanceof List<?>){
-				List<?> list = ((List<?>)obj);
-				if(!list.isEmpty()){
-					Object objL = list.get(0);
-					if(objL instanceof ItemStack){
-						items[i] = ((ItemStack) objL).copy();
-						if(ItemStackTools.isValid(items[i]) && items[i].getItemDamage() == OreDictionary.WILDCARD_VALUE)items[i].setItemDamage(0);
-					}
-				}
-			}
-		}*/
 		IRecipe recipe = getFirstRecipeForItem(out);
 		this.ingred = new Object[9];
 		this.items = NonNullList.withSize(9, ItemStackTools.getEmptyStack());
@@ -182,20 +153,6 @@ public class PageCrafting extends GuidePage {
 	            items.set(index, copy);
             }
         }
-       /* for(int x = 0; x < width; x++){
-            for(int y = 0; y < height; y++){
-            	int i = y*width+x;
-                ItemStack stack = stacks[i];
-                if(ItemStackTools.isValid(stack)){
-                    ItemStack copy = ItemUtil.copy(stack, 1);
-                    if(copy.getItemDamage() == OreDictionary.WILDCARD_VALUE){
-                        copy.setItemDamage(0);
-                    }
-                    int index = getCraftingIndex(i, width, height);
-                    items[index] = copy;
-                }
-            }
-        }*/
 	}
 	
 	/**Offsets index based on size of recipe to fix recipes that do not a specific column or row.**/
@@ -239,36 +196,6 @@ public class PageCrafting extends GuidePage {
 			listIndex++;
 			listIndex%=stacks.size();
 		}
-		/*if(!GuiScreen.isShiftKeyDown() && Util.isMultipleOf(timer, 20)){
-			for(int i = 0; i < ingred.length; i++){
-				Object obj = ingred[i];
-				
-				if(obj instanceof ItemStack){
-					items[i] = ((ItemStack)obj).copy();
-					if(items[i] !=null && items[i].getItemDamage() == OreDictionary.WILDCARD_VALUE)items[i].setItemDamage(0);
-				}
-				
-				if(obj instanceof String){
-					String id = (String)obj;
-					List<ItemStack> stacks = OreDictionary.getOres(id);
-					if(stacks.isEmpty())continue;
-					ItemStack newStack = getRandomIngredient(stacks);
-					if(!ItemStackTools.isNullStack(newStack) && newStack.getItemDamage() == OreDictionary.WILDCARD_VALUE){
-						items[i] = newStack.copy();
-						items[i].setItemDamage(0);
-					}else items[i] = newStack;
-				}
-				else if(obj instanceof List<?>){
-					@SuppressWarnings("unchecked")
-					List<ItemStack> list = ((List<ItemStack>)obj);
-					ItemStack newStack = getRandomIngredient(list);
-					if(ItemStackTools.isValid(newStack) && newStack.getItemDamage() == OreDictionary.WILDCARD_VALUE){
-						items[i] = newStack.copy();
-						items[i].setItemDamage(0);
-					}else items[i] = newStack;
-				}
-			}
-		}*/
 	}
 
 	
@@ -286,6 +213,37 @@ public class PageCrafting extends GuidePage {
 		GuiComponentSprite.renderSprite(gui.mc, x, y, startX, startY, mouseX, mouseY, GuiComponentStandardRecipePage.iconCraftingGrid, GuiComponentStandardRecipePage.texture, 1f, 1f, 1f);
 		GuiComponentSprite.renderSprite(gui.mc, 90, 40, startX, startY, mouseX, mouseY, GuiComponentStandardRecipePage.iconArrow, GuiComponentStandardRecipePage.texture, 1f, 1f, 1f);
 
+	}
+	
+	@Override
+	public void handleMouseInput(GuiGuideChapter gui){
+		super.handleMouseInput(gui);
+		int wheel = Mouse.getEventDWheel();
+		if(wheel !=0 && textLines.size() > 9){
+			if(wheel > 0 && this.scrollProgress > 0){
+				scrollProgress--;
+			}
+			if(wheel < 0){
+				if(this.scrollProgress < textLines.size()-1){
+					scrollProgress++;
+				}
+			}
+		}
+	}
+	
+	@Override
+	public void keyTyped(GuiGuideChapter gui, char typedChar, int keyCode){
+		super.keyTyped(gui, typedChar, keyCode);
+		if(textLines.size() > 9){
+			if(keyCode == Keyboard.KEY_UP && this.scrollProgress > 0){
+				scrollProgress--;
+			}
+			if(keyCode == Keyboard.KEY_DOWN){
+				if(this.scrollProgress < textLines.size()-1){
+					scrollProgress++;
+				}
+			}
+		}
 	}
 	
 	@Override
@@ -347,18 +305,25 @@ public class PageCrafting extends GuidePage {
 			GlStateManager.popMatrix();
 		}
 		if(text != null && !text.isEmpty()){
+			 boolean downArrow = textLines.size() - this.scrollProgress > 9;
 			 float scale = 0.75f;
-			 List<String> lines = gui.getFont().listFormattedStringToWidth(text, (int)(189/scale));
-			 for(int i = 0; i < lines.size(); i++){
-				 y = startY+80+(i*(int)(gui.getFont().FONT_HEIGHT*scale+3));
+			 for(int i = this.scrollProgress; i < textLines.size() && i-this.scrollProgress < 9; i++){
+				 y = startY+80+((i-scrollProgress)*(int)(gui.getFont().FONT_HEIGHT*scale+3));
 				 GlStateManager.pushMatrix();
 				 GlStateManager.scale(scale, scale, scale);
 				 boolean oldUnicode = gui.getFont().getUnicodeFlag();
 				 gui.getFont().setUnicodeFlag(false);
 	
-				 gui.getFont().drawString(lines.get(i), x/scale, y/scale, 0, false);
+				 gui.getFont().drawString(textLines.get(i), x/scale, y/scale, 0, false);
 	
 				 gui.getFont().setUnicodeFlag(oldUnicode);
+				 GlStateManager.popMatrix();
+			 }
+			 
+			 if(downArrow){
+				 GlStateManager.pushMatrix();
+				 gui.getFont().drawString("|", x + 172, startY + 152, 0, false);
+				 gui.getFont().drawString("v", x + 170, startY + 155, 0, false);
 				 GlStateManager.popMatrix();
 			 }
 		 }

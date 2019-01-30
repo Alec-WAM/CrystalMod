@@ -27,40 +27,13 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemCrystalGuide extends Item implements ICustomModel {
+public class ItemCrystalGuide extends Item {
 
 	public ItemCrystalGuide(){
 		setMaxStackSize(1);
-		setHasSubtypes(true);
-		setMaxDamage(0);
 		setCreativeTab(CrystalMod.tabItems);
 		ModItems.registerItem(this, "guide");
 	}
-	
-	@Override
-	@SideOnly(Side.CLIENT)
-    public void initModel() {
-        for(GuideType type : GuideType.values()){
-        	 ModelLoader.setCustomModelResourceLocation(this, type.getMeta(), new ModelResourceLocation(getRegistryName(), type.getUnlocalizedName()));
-        }
-    }
-	
-	@Override
-	public String getUnlocalizedName(ItemStack stack)
-    {
-        int i = stack.getMetadata();
-        return super.getUnlocalizedName() + "." + GuideType.byMetadata(i).getUnlocalizedName();
-    }
-	
-	@SideOnly(Side.CLIENT)
-	@Override
-    public void getSubItems(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> subItems)
-    {
-        for (int i = 0; i < GuideType.values().length; ++i)
-        {
-            subItems.add(new ItemStack(itemIn, 1, i));
-        }
-    }
 	
 	@Override
 	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
@@ -113,63 +86,6 @@ public class ItemCrystalGuide extends Item implements ICustomModel {
 	@SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced)
     {
-    }
-	
-	public static enum GuideType implements IStringSerializable, IEnumMeta
-    {
-        CRYSTAL(0, "crystal"),
-        ESTORAGE(1, "estorage");
-
-        private static final GuideType[] METADATA_LOOKUP = new GuideType[values().length];
-        private final int metadata;
-        private final String unlocalizedName;
-
-        private GuideType(int dmg, String name)
-        {
-            this.metadata = dmg;
-            this.unlocalizedName = name;
-        }
-
-        @Override
-		public int getMeta()
-        {
-            return this.metadata;
-        }
-
-        public String getUnlocalizedName()
-        {
-            return this.unlocalizedName;
-        }
-
-        @Override
-		public String toString()
-        {
-            return this.unlocalizedName;
-        }
-
-        public static GuideType byMetadata(int metadata)
-        {
-            if (metadata < 0 || metadata >= METADATA_LOOKUP.length)
-            {
-                metadata = 0;
-            }
-
-            return METADATA_LOOKUP[metadata];
-        }
-
-        @Override
-		public String getName()
-        {
-            return this.unlocalizedName;
-        }
-
-        static
-        {
-            for (GuideType type : values())
-            {
-                METADATA_LOOKUP[type.getMeta()] = type;
-            }
-        }
     }
 	
 }

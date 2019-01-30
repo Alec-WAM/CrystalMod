@@ -61,7 +61,6 @@ import alec_wam.CrystalMod.items.ItemMiscFood.FoodType;
 import alec_wam.CrystalMod.items.ItemMiscItems.ItemType;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.items.crystex.ItemCrystex.CrystexItemType;
-import alec_wam.CrystalMod.items.guide.ItemCrystalGuide.GuideType;
 import alec_wam.CrystalMod.items.tools.ItemToolParts.PartType;
 import alec_wam.CrystalMod.items.tools.backpack.BackpackUtil;
 import alec_wam.CrystalMod.items.tools.bat.BatHelper;
@@ -300,8 +299,7 @@ public class ModCrafting {
 		//addShapedOreRecipe(dIronIngot, " N ", "NIN", " N ", 'N', darkNugget, 'I', "ingotIron");
 		
 		addShapedRecipe(new ItemStack(ModItems.wrench), new Object[] { "N N", " I ", " I ", 'N', dIronNugget, 'I', dIronIngot });
-		addShapelessOreRecipe(new ItemStack(ModItems.guide, 1, GuideType.CRYSTAL.getMeta()), new Object[] {Items.BOOK, "gemCrystal"});
-		addShapelessRecipe(new ItemStack(ModItems.guide, 1, GuideType.ESTORAGE.getMeta()), new Object[] {new ItemStack(ModItems.guide, 1, GuideType.CRYSTAL.getMeta()), new ItemStack(ModBlocks.crystalPipe, 1, PipeType.ESTORAGE.getMeta())});
+		addShapelessOreRecipe(ModItems.guide, new Object[] {Items.BOOK, "gemCrystal"});
 		final ItemStack machineFrame = new ItemStack(ModItems.machineFrame, 1, FrameType.BASIC.getMeta());
 		final ItemStack machineFrameEnder = new ItemStack(ModItems.machineFrame, 1, FrameType.ENDER.getMeta());
 		addShapedRecipe(machineFrame, new Object[] { "NPN", "P P", "NPN", 'P', dIronPlate, 'N', dIronNugget});

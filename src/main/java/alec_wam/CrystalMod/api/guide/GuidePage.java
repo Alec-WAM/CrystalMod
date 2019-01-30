@@ -47,6 +47,16 @@ public abstract class GuidePage {
 	}
 	
 	@SideOnly(Side.CLIENT)
+    public void handleMouseInput(GuiGuideChapter gui){
+
+    }
+	
+	@SideOnly(Side.CLIENT)
+	public void keyTyped(GuiGuideChapter gui, char typedChar, int keyCode){
+		
+	}
+	
+	@SideOnly(Side.CLIENT)
     public void mouseClicked(GuiGuideChapter gui, int mouseX, int mouseY, int mouseButton){
 
     }

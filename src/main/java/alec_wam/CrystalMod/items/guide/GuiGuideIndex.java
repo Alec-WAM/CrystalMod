@@ -44,10 +44,10 @@ public class GuiGuideIndex extends GuiGuideBase implements IGuiScreen {
 	public void initGui(){
 		super.initGui();
 		this.buttonList.clear();
-		GuiButton buttonLeft = new GuiButton(0, this.guiLeft+7, this.guiTop+this.ySize-12, 10, 10, "<");
+		GuiButton buttonLeft = new GuiGuideChapter.NextPageButton(0, this.guiLeft+7, this.guiTop+this.ySize-12, false);
 		buttonLeft.visible = indexes[0] !=null && CrystalModAPI.GUIDE_INDEXES.indexOf(indexes[0]) > 0;
     	buttonList.add(buttonLeft);
-    	GuiButton buttonRight = new GuiButton(1, this.guiLeft+(xSize*2)-16, this.guiTop+this.ySize-12, 10, 10, ">");
+    	GuiButton buttonRight = new GuiGuideChapter.NextPageButton(1, this.guiLeft+(xSize*2)-25, this.guiTop+this.ySize-12, true);
     	buttonRight.visible = indexes[1] != null && CrystalModAPI.GUIDE_INDEXES.indexOf(indexes[1])+1 < CrystalModAPI.GUIDE_INDEXES.size();
 		this.buttonList.add(buttonRight);
 		

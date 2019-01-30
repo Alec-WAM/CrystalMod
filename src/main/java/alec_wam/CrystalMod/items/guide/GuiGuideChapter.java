@@ -2,15 +2,21 @@ package alec_wam.CrystalMod.items.guide;
 
 import java.io.IOException;
 
+import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
 import alec_wam.CrystalMod.api.guide.GuideChapter;
 import alec_wam.CrystalMod.api.guide.GuidePage;
 import alec_wam.CrystalMod.client.util.comp.GuiComponentBook;
 import alec_wam.CrystalMod.client.util.comp.GuiComponentSprite;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class GuiGuideChapter extends GuiGuideBase {
 	private GuideChapter chapter;
@@ -39,10 +45,10 @@ public class GuiGuideChapter extends GuiGuideBase {
 	public void initGui(){
 		super.initGui();
 		this.buttonList.clear();
-		buttonLeft = new GuiButton(0, this.guiLeft+7, this.guiTop+this.ySize-12, 10, 10, "<");
+		buttonLeft = new NextPageButton(0, this.guiLeft+7, this.guiTop+this.ySize-12, false);
 		buttonLeft.visible = currentPages[0] !=null && chapter.getIndex(currentPages[0]) > 0;
     	buttonList.add(buttonLeft);
-    	buttonRight = new GuiButton(1, this.guiLeft+(xSize*2)-16, this.guiTop+this.ySize-12, 10, 10, ">");
+    	buttonRight = new NextPageButton(1, this.guiLeft+(xSize*2)-25, this.guiTop+this.ySize-12, true);
     	buttonRight.visible = currentPages[1] != null && chapter.getIndex(currentPages[1])+1 < chapter.getPages().length;
 		this.buttonList.add(buttonRight);
 		for(int i = 0; i < this.currentPages.length; i++){
@@ -71,6 +77,19 @@ public class GuiGuideChapter extends GuiGuideBase {
 	public void handleMouseInput() throws IOException
     {
         super.handleMouseInput();
+        for(int i = 0; i < currentPages.length; i++){
+        	GuidePage page = currentPages[i];
+			if(page != null){
+				ScaledResolution sr = new ScaledResolution(mc);
+				int mX = (Mouse.getX() / sr.getScaleFactor()) - guiLeft;
+				if(i == 0 && mX > 0 && mX < 211){
+					page.handleMouseInput(this);
+				}
+				if(i == 1 && mX > 211 && mX < 422){
+					page.handleMouseInput(this);
+				}
+			}
+		}
     }
 	
 	public GuidePage[] getPages(GuidePage page){
@@ -88,6 +107,25 @@ public class GuiGuideChapter extends GuiGuideBase {
             page2 = page;
         }
         return new GuidePage[] {page1, page2};
+	}
+	
+	@Override
+	protected void keyTyped(char typedChar, int keyCode) throws IOException
+    {
+		super.keyTyped(typedChar, keyCode);
+		for(int i = 0; i < currentPages.length; i++){
+        	GuidePage page = currentPages[i];
+			if(page != null){
+				ScaledResolution sr = new ScaledResolution(mc);
+				int mX = (Mouse.getX() / sr.getScaleFactor()) - guiLeft;
+				if(i == 0 && mX > 0 && mX < 211){
+					page.keyTyped(this, typedChar, keyCode);
+				}
+				if(i == 1 && mX > 211 && mX < 422){
+					page.keyTyped(this, typedChar, keyCode);
+				}
+			}
+		}
 	}
 	
 	@Override
@@ -189,6 +227,40 @@ public class GuiGuideChapter extends GuiGuideBase {
             }
         }
 		
+	}
+	
+	@SideOnly(Side.CLIENT)
+	static class NextPageButton extends GuiButton {
+		private final boolean isForward;
+
+		public NextPageButton(int buttonId, int x, int y, boolean isForwardIn) {
+			super(buttonId, x, y, 18, 10, "");
+			this.isForward = isForwardIn;
+		}
+
+		/**
+		 * Draws this button to the screen.
+		 */
+		public void drawButton(Minecraft mc, int mouseX, int mouseY) {
+			if (this.visible) {
+				boolean flag = mouseX >= this.xPosition && mouseY >= this.yPosition
+						&& mouseX < this.xPosition + this.width && mouseY < this.yPosition + this.height;
+				GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+				mc.getTextureManager().bindTexture(GuiComponentBook.texture);
+				int i = 57;
+				int j = 213;
+
+				if (flag) {
+					i += 23;
+				}
+
+				if (!this.isForward) {
+					j += 13;
+				}
+
+				this.drawTexturedModalRect(this.xPosition, this.yPosition, i, j, 18, 10);
+			}
+		}
 	}
 
 }
