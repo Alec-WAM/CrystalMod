@@ -49,7 +49,7 @@ public class ItemRenderDragonWings implements ICustomItemRenderer {
     	float f = 0.5f;
     	for (int j = 0; j < 2; ++j)
         {
-    		GlStateManager.enableCull();
+    		//GlStateManager.enableCull();
             float f11 = f * (float)Math.PI * 2.0F;
             dragonModel.wing.rotateAngleX = 0.125F - (float)Math.cos(f11) * 0.2F;
             dragonModel.wing.rotateAngleY = 0.25F;
@@ -71,7 +71,7 @@ public class ItemRenderDragonWings implements ICustomItemRenderer {
     	
     	GlStateManager.popMatrix();
         GlStateManager.cullFace(GlStateManager.CullFace.BACK);
-        GlStateManager.disableCull();
+        //GlStateManager.disableCull();
         Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
     	GlStateManager.popMatrix();
 	}

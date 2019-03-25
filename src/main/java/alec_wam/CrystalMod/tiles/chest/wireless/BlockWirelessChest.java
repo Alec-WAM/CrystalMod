@@ -65,6 +65,7 @@ public class BlockWirelessChest extends BlockContainer implements ICustomModel, 
         super(Material.IRON);
 
         this.setHardness(3.0F);
+        this.setResistance(50.0F);
         this.setCreativeTab(CrystalMod.tabBlocks);
     }
     

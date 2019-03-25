@@ -4,6 +4,7 @@ import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.util.CrystalColors;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockHorizontal;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyDirection;
@@ -40,6 +41,9 @@ public class BlockCrystalLadder extends Block implements ICustomModel
     public BlockCrystalLadder()
     {
         super(Material.CIRCUITS);
+        this.setHardness(0.4F);
+		this.setHarvestLevel("axe", 0);
+        this.setSoundType(SoundType.LADDER);
         this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(CrystalColors.COLOR_BASIC, CrystalColors.Basic.BLUE));
         this.setCreativeTab(CrystalMod.tabBlocks);
     }

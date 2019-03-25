@@ -64,6 +64,11 @@ public class ExtendedPlayer {
 	public BlockPos lastCrystexPortalPos;
     public Vec3d lastCrystexPortalVec;
     public EnumFacing teleportCrystexDirection;
+    
+    /** Blue Shield **/
+    public static final float DEFAULT_MAX_BLUE_SHIELD = 20.0F;
+    private float blueShield;
+    private float maxBlueShield = DEFAULT_MAX_BLUE_SHIELD;
 	
 	public ExtendedPlayer() {
 	}
@@ -84,6 +89,8 @@ public class ExtendedPlayer {
 		if(playerDisguiseUUID !=null){
 			properties.setTag("DisguiseUUID", NBTUtil.createUUIDTag(playerDisguiseUUID));
 		}
+		properties.setFloat("BlueShield", blueShield);
+		properties.setFloat("MaxBlueShield", maxBlueShield);
 		return properties;
 	}
 
@@ -108,6 +115,8 @@ public class ExtendedPlayer {
 		} else {
 			playerDisguiseUUID = null;
 		}
+		this.blueShield = properties.getFloat("BlueShield");
+		this.maxBlueShield = properties.hasKey("MaxBlueShield") ? properties.getFloat("MaxBlueShield") : DEFAULT_MAX_BLUE_SHIELD;
 	}
 	
 	public NBTTagCompound buildSyncPacket(){
@@ -116,6 +125,7 @@ public class ExtendedPlayer {
 		if(playerDisguiseUUID !=null){
 			properties.setTag("DisguiseUUID", NBTUtil.createUUIDTag(playerDisguiseUUID));
 		}
+		properties.setFloat("BlueShield", blueShield);
 		return properties;
 	}
 	
@@ -126,6 +136,7 @@ public class ExtendedPlayer {
 		} else {
 			playerDisguiseUUID = null;
 		}
+		this.blueShield = properties.getFloat("BlueShield");
 	}
 
 	/**
@@ -272,5 +283,39 @@ public class ExtendedPlayer {
             this.lastCrystexPortalVec = new Vec3d(d1, d2, 0.0D);
             this.teleportCrystexDirection = blockpattern$patternhelper.getForwards();
         }
+	}
+
+	/**
+	 * Add blue shield to the player
+	 * @param amt Amount of shield to add
+	 */
+	public void addShield(float amt){
+		addShield(amt, 0.0F);
+	}
+	
+	/**
+	 * Add blue shield to the player
+	 * @param amt Amount of shield to add
+	 * @param allowance Cap for how much this item is allowed to add
+	 */
+	public void addShield(float amt, float allowance){
+		float max = allowance <= 0.0 ? maxBlueShield : Math.min(allowance, maxBlueShield);
+		this.blueShield = Math.min(blueShield + amt, max);
+	}
+	
+	public float getBlueShield() {
+		return blueShield;
+	}
+
+	public void setBlueShield(float blueShield) {
+		this.blueShield = blueShield;
+	}
+
+	public float getMaxBlueShield() {
+		return maxBlueShield;
+	}
+	
+	public void setMaxBlueShield(float blueShield) {
+		maxBlueShield = blueShield;
 	}
 }

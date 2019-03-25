@@ -475,4 +475,30 @@ public class BlockUtil {
 		return new Vec2f(rotationYawIn, rotationPitchIn);
 	}
 	
+	public static EnumFacing getLeft(EnumFacing facing){
+		if(facing == EnumFacing.SOUTH){
+			return EnumFacing.WEST;
+		}
+		if(facing == EnumFacing.EAST){
+			return EnumFacing.NORTH;
+		}
+		if(facing == EnumFacing.WEST){
+			return EnumFacing.SOUTH;
+		}
+		return EnumFacing.EAST;
+	}
+	
+	public static EnumFacing getRight(EnumFacing facing){
+		if(facing == EnumFacing.SOUTH){
+			return EnumFacing.EAST;
+		}
+		if(facing == EnumFacing.EAST){
+			return EnumFacing.SOUTH;
+		}
+		if(facing == EnumFacing.WEST){
+			return EnumFacing.NORTH;
+		}
+		return EnumFacing.WEST;
+	}
+	
 }

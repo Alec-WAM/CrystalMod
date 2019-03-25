@@ -13,7 +13,6 @@ import alec_wam.CrystalMod.tiles.WoodenBlockProperies;
 import alec_wam.CrystalMod.tiles.WoodenBlockProperies.WoodType;
 import alec_wam.CrystalMod.tiles.machine.FakeTileState;
 import alec_wam.CrystalMod.util.ItemStackTools;
-import alec_wam.CrystalMod.util.ModLogger;
 import alec_wam.CrystalMod.util.client.RenderUtil;
 import net.minecraft.block.BlockPlanks;
 import net.minecraft.block.state.IBlockState;
@@ -27,7 +26,6 @@ import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.block.model.ModelRotation;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
@@ -115,12 +113,6 @@ public class ModelBridge extends DelegatingDynamicItemAndBlockModel
         
         BlockFaceUV uvS = new BlockFaceUV(new float[] { min.x, min.z, max.x, max.z}, 0);
         BlockPartFace faceS = new BlockPartFace((EnumFacing)null, 0, "", uvS);
-        
-        boolean scale = true;
-        if(scale){
-        	faceS.blockFaceUV.uvs = new float[] { 0, 0, 16, 16};
-        }
-        
         list.add(faceBakery.makeBakedQuad(min, max, faceS, planks, EnumFacing.UP, modelRot, (BlockPartRotation)null, false, true));
         min.y = max.y = 0.0f;
         list.add(faceBakery.makeBakedQuad(min, max, faceS, planks, EnumFacing.DOWN, modelRot, (BlockPartRotation)null, false, true));
@@ -136,7 +128,7 @@ public class ModelBridge extends DelegatingDynamicItemAndBlockModel
             max = new Vector3f(0f, 16.0f*0.2f, 16f);
             min.z = !front ? 0 : sidewidth;
             max.z = 16.0f-(!back ? 0 : sidewidth);
-            BlockFaceUV uv2 = new BlockFaceUV(new float[] { sidewidth, 0.0f, 16.0f-sidewidth, 16.0f*0.2f}, 0);
+            BlockFaceUV uv2 = new BlockFaceUV(new float[] { min.z, 0.0f, max.z, 16.0f*0.2f}, 0);
             BlockPartFace face2 = new BlockPartFace((EnumFacing)null, 0, "", uv2);
         	list.add(faceBakery.makeBakedQuad(min, max, face2, planks, EnumFacing.WEST, modelRot, (BlockPartRotation)null, false, true));
         }
@@ -148,7 +140,7 @@ public class ModelBridge extends DelegatingDynamicItemAndBlockModel
             max = new Vector3f(16.0f, 16.0f*0.2f, 16f);
             min.z = !front ? 0 : sidewidth;
             max.z = 16.0f-(!back ? 0 : sidewidth);
-            BlockFaceUV uv2 = new BlockFaceUV(new float[] { sidewidth, 0.0f, 16.0f-sidewidth, 16.0f*0.2f}, 0);
+            BlockFaceUV uv2 = new BlockFaceUV(new float[] { max.z, 0.0f, min.z, 16.0f*0.2f}, 0);
             BlockPartFace face2 = new BlockPartFace((EnumFacing)null, 0, "", uv2);
         	list.add(faceBakery.makeBakedQuad(min, max, face2, planks, EnumFacing.EAST, modelRot, (BlockPartRotation)null, false, true));
         }
@@ -161,7 +153,7 @@ public class ModelBridge extends DelegatingDynamicItemAndBlockModel
             max = new Vector3f(16.0f, 16.0f*0.2f, 0f);
             min.x = !left ? 0 : sidewidth;
             max.x = 16.0f-(!right ? 0 : sidewidth);
-            BlockFaceUV uv2 = new BlockFaceUV(new float[] { sidewidth, 0.0f, 16.0f-sidewidth, 16.0f*0.2f}, 0);
+            BlockFaceUV uv2 = new BlockFaceUV(new float[] { max.x, 0.0f, min.x, 16.0f*0.2f}, 0);
             BlockPartFace face2 = new BlockPartFace((EnumFacing)null, 0, "", uv2);
         	list.add(faceBakery.makeBakedQuad(min, max, face2, planks, EnumFacing.NORTH, modelRot, (BlockPartRotation)null, false, true));
         }
@@ -174,7 +166,7 @@ public class ModelBridge extends DelegatingDynamicItemAndBlockModel
             max = new Vector3f(16.0f, 16.0f*0.2f, 16f);
             min.x = !left ? 0 : sidewidth;
             max.x = 16.0f-(!right ? 0 : sidewidth);
-            BlockFaceUV uv2 = new BlockFaceUV(new float[] { sidewidth, 0.0f, 16.0f-sidewidth, 16.0f*0.2f}, 0);
+            BlockFaceUV uv2 = new BlockFaceUV(new float[] { min.x, 0.0f, max.x, 16.0f*0.2f}, 0);
             BlockPartFace face2 = new BlockPartFace((EnumFacing)null, 0, "", uv2);
         	list.add(faceBakery.makeBakedQuad(min, max, face2, planks, EnumFacing.SOUTH, modelRot, (BlockPartRotation)null, false, true));
         }

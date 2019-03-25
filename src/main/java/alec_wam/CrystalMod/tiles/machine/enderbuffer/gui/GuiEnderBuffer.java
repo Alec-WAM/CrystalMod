@@ -71,7 +71,7 @@ public class GuiEnderBuffer extends GuiContainerTabbed {
 			
 			RenderUtil.renderPowerBar(cuX, 16, (int)zLevel, 10, barHeight, cu, maxCU, Color.CYAN.getRGB(), Color.CYAN.darker().getRGB());
 			RenderUtil.renderPowerBar(rfX, 16, (int)zLevel, 10, barHeight, rf, maxRF, Color.RED.getRGB(), Color.RED.darker().getRGB());
-			RenderUtil.renderGuiTank(ebuffer.tank, flX, 15, zLevel, 10, 58);
+			RenderUtil.renderGuiTank(ebuffer.tank, flX, 15, zLevel, 10, 58, true);
 
 			int xAxis = (par1 - (width - xSize) / 2);
 			int yAxis = (par2 - (height - ySize) / 2);

@@ -30,6 +30,7 @@ import alec_wam.CrystalMod.entities.accessories.boats.EntityBoatBanner;
 import alec_wam.CrystalMod.entities.accessories.boats.EntityBoatChest;
 import alec_wam.CrystalMod.entities.accessories.boats.EntityBoatChest.EnumBoatChestType;
 import alec_wam.CrystalMod.entities.animals.EntityTamedPolarBear;
+import alec_wam.CrystalMod.entities.balloon.EntityBalloon;
 import alec_wam.CrystalMod.entities.boatflume.BlockFlumeRailBase;
 import alec_wam.CrystalMod.entities.boatflume.BlockFlumeRailBase.EnumRailDirection;
 import alec_wam.CrystalMod.entities.boatflume.EntityFlumeBoat;
@@ -49,6 +50,9 @@ import alec_wam.CrystalMod.items.tools.backpack.upgrade.InventoryBackpackUpgrade
 import alec_wam.CrystalMod.items.tools.backpack.upgrade.ItemBackpackUpgrade.BackpackUpgrade;
 import alec_wam.CrystalMod.items.tools.bat.BatHelper;
 import alec_wam.CrystalMod.items.tools.bat.ModBats;
+import alec_wam.CrystalMod.items.tools.blockholder.ItemBlockHolder;
+import alec_wam.CrystalMod.items.tools.blockholder.advanced.ItemAdvancedBlockHolder;
+import alec_wam.CrystalMod.items.tools.blockholder.advanced.ItemAdvancedBlockHolder.BlockStackData;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.packets.PacketEntityMessage;
 import alec_wam.CrystalMod.tiles.endertorch.TileEnderTorch;
@@ -107,11 +111,9 @@ import net.minecraft.init.PotionTypes;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArrow;
-import net.minecraft.item.ItemElytra;
 import net.minecraft.item.ItemFishFood.FishType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.play.client.CPacketEntityAction;
 import net.minecraft.potion.PotionUtils;
 import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntity;
@@ -121,16 +123,15 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.storage.loot.LootContext;
-import net.minecraft.world.storage.loot.LootContext.EntityTarget;
 import net.minecraft.world.storage.loot.LootEntry;
 import net.minecraft.world.storage.loot.LootPool;
-import net.minecraft.world.storage.loot.conditions.LootCondition;
 import net.minecraft.world.storage.loot.functions.LootFunction;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
@@ -144,6 +145,7 @@ import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
+import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.LootingLevelEvent;
@@ -162,12 +164,11 @@ import net.minecraftforge.event.world.ExplosionEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.Event.Result;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class EventHandler {
 	
@@ -268,11 +269,24 @@ public class EventHandler {
     }
     
     @SubscribeEvent
+    public void handleJump(LivingJumpEvent event){
+    	Entity entity = event.getEntity();
+    	if(entity instanceof EntityPlayer){
+    		EntityPlayer player = (EntityPlayer)entity;
+	    	if(player.isBeingRidden()){
+				Entity ridder = player.getPassengers().get(0);
+				if(ridder instanceof EntityBalloon){
+					player.motionY += 0.25;
+				}
+			}
+    	}
+    }
+    
+    @SubscribeEvent
     public void cancelLeftClick(final PlayerInteractEvent.LeftClickBlock event) {
     	BlockPos pos = event.getPos();
     	BlockPos posOff = pos.offset(event.getFace());
     	World world = event.getWorld();
-    	IBlockState state = world.getBlockState(pos);
     	IBlockState stateOff = world.getBlockState(posOff);
     	if(stateOff.getBlock() == ModBlocks.crystexFire){
     		world.setBlockToAir(posOff);
@@ -699,6 +713,31 @@ public class EventHandler {
     			}
     		}
     	}
+    	if(entity instanceof EntityPlayer){
+    		EntityPlayer player = (EntityPlayer)entity;
+    		ExtendedPlayer ePlayer = ExtendedPlayerProvider.getExtendedPlayer(player);
+    		if(ePlayer !=null){
+    			if(ePlayer.getBlueShield() > 0){
+    				float damage = event.getAmount();
+    				DamageSource source = event.getSource();
+    				boolean canBeBlocked = !(source.isDamageAbsolute());
+    				if(canBeBlocked && !player.capabilities.isCreativeMode){
+    					float shield = ePlayer.getBlueShield();
+    					float protection = Math.min(damage, shield);
+    					damage-=protection;	
+    					ePlayer.setBlueShield(shield-protection);
+    					//TODO Play damage block sound
+    					if(!player.getEntityWorld().isRemote){
+    		            	ePlayer.needsSync = true;
+    		            }
+    					event.setAmount(damage);
+    					if(event.getAmount() <= 0.0){
+    						event.setCanceled(true);
+    					}
+    				}
+    			}
+    		}
+    	}
     }
     
 	@SubscribeEvent
@@ -773,19 +812,19 @@ public class EventHandler {
         if (event.getEntityLiving() == null || event.getEntityLiving().getEntityWorld().isRemote)
             return;
         
-        if(Util.notNullAndInstanceOf(event.getEntityLiving(), EntityDragon.class)){
+        if(Util.notNullAndInstanceOf(event.getEntityLiving(), EntityDragon.class) && Config.dragonWingsDrop){
         	ItemStack stack = new ItemStack(ModItems.wings);
         	EntityItem item = new EntityItem(event.getEntity().getEntityWorld(), event.getEntity().posX, event.getEntity().posY, event.getEntity().posZ, stack);
         	event.getDrops().add(item);
         }
         
-        if(Util.notNullAndInstanceOf(event.getEntityLiving(), EntityWither.class)){
+        if(Util.notNullAndInstanceOf(event.getEntityLiving(), EntityWither.class) && Config.darkBonesDrop){
         	ItemStack stack = new ItemStack(ModItems.cursedBone, MathHelper.getInt(EntityUtil.rand, 10, 20), BoneType.BONE.getMeta());
         	EntityItem item = new EntityItem(event.getEntity().getEntityWorld(), event.getEntity().posX, event.getEntity().posY, event.getEntity().posZ, stack);
         	event.getDrops().add(item);
         }
         
-        if(Util.notNullAndInstanceOf(event.getEntityLiving(), EntityWitherSkeleton.class)){
+        if(Util.notNullAndInstanceOf(event.getEntityLiving(), EntityWitherSkeleton.class) && Config.darkBonesDrop){
         	ItemStack stack = new ItemStack(ModItems.cursedBone, MathHelper.getInt(EntityUtil.rand, 1, 3), BoneType.BONE.getMeta());
         	EntityItem item = new EntityItem(event.getEntity().getEntityWorld(), event.getEntity().posX, event.getEntity().posY, event.getEntity().posZ, stack);
         	event.getDrops().add(item);
@@ -797,8 +836,7 @@ public class EventHandler {
         	event.getDrops().add(item);
         }
         
-        //TODO Make Configurable
-        if(Util.notNullAndInstanceOf(event.getEntityLiving(), EntityBat.class) && EntityUtil.rand.nextInt(5) == 0){
+        if(Util.notNullAndInstanceOf(event.getEntityLiving(), EntityBat.class) && Config.batWingDropChance > 0 && (Config.batWingDropChance == 1 || EntityUtil.rand.nextInt(Config.batWingDropChance) == 0)){
         	ItemStack stack = new ItemStack(ModItems.miscItems, 1, ItemType.BAT_WING.getMeta());
         	EntityItem item = new EntityItem(event.getEntity().getEntityWorld(), event.getEntity().posX, event.getEntity().posY, event.getEntity().posZ, stack);
         	event.getDrops().add(item);
@@ -1241,7 +1279,78 @@ public class EventHandler {
     				event.setCanceled(true);
     			}
     		}
+    		
+    		//Scan Hotbar
+    		//if(!player.capabilities.isCreativeMode){
+    			//Use Offhand first
+    			handleBlockHolderPickup(player, player.getHeldItemOffhand(), ent);
+    			
+				for(int i = 0; i < 9; i++){
+					ItemStack stack = player.inventory.getStackInSlot(i);
+					if(handleBlockHolderPickup(player, stack, ent)){
+						event.setResult(Result.ALLOW);
+						event.setCanceled(true);
+						break;
+					}
+				}
+    		//}
     	}
+	}
+	
+	public boolean handleBlockHolderPickup(EntityPlayer player, ItemStack stack, EntityItem item){
+		if(ItemStackTools.isValid(stack)){
+			if(stack.getItem() instanceof ItemBlockHolder){
+				if(ItemBlockHolder.isAutoPickupEnabled(stack)){
+					ItemStack holderStack = ItemBlockHolder.getBlockStack(stack);
+					if(ItemStackTools.isValid(holderStack)){
+						//Handle Autopickup
+						ItemStack entityStack = item.getEntityItem();
+						if(ItemUtil.canCombine(holderStack, entityStack)){	    							
+							int size = ItemStackTools.getStackSize(entityStack);
+							int added = ItemBlockHolder.addBlocks(stack, size);
+							if(added > 0){
+								item.setEntityItemStack(ItemStackTools.incStackSize(entityStack, -added));
+								if(!player.world.isRemote){
+									NBTTagCompound data = new NBTTagCompound();
+									data.setInteger("CollectedID", item.getEntityId());
+									data.setInteger("Amount", added);
+									CrystalModNetwork.sendToAllAround(new PacketEntityMessage(player, "#PickupEffects#", data), player);
+								}
+							}
+							return added > 0;
+						}
+					}
+				}
+			}
+			if(stack.getItem() instanceof ItemAdvancedBlockHolder){
+				if(ItemBlockHolder.isAutoPickupEnabled(stack)){
+					NonNullList<BlockStackData> dataList = ItemAdvancedBlockHolder.getBlockList(stack);
+					for(int i = 0; i < dataList.size(); i++){
+						BlockStackData blockData = dataList.get(i);
+						ItemStack holderStack = blockData.stack;
+						if(ItemStackTools.isValid(holderStack)){
+							//Handle Autopickup
+							ItemStack entityStack = item.getEntityItem();
+							if(ItemUtil.canCombine(holderStack, entityStack)){	    							
+								int size = ItemStackTools.getStackSize(entityStack);
+								int added = ItemAdvancedBlockHolder.addBlocks(stack, i, size);
+								if(added > 0){
+									item.setEntityItemStack(ItemStackTools.incStackSize(entityStack, -added));
+									if(!player.world.isRemote){
+										NBTTagCompound data = new NBTTagCompound();
+										data.setInteger("CollectedID", item.getEntityId());
+										data.setInteger("Amount", added);
+										CrystalModNetwork.sendToAllAround(new PacketEntityMessage(player, "#PickupEffects#", data), player);
+									}
+								}
+								return added > 0;
+							}
+						}
+					}
+				}
+			}
+		}
+		return false;
 	}
 	
 	@SubscribeEvent
@@ -1346,7 +1455,6 @@ public class EventHandler {
     }
     
     private static LootEntry customLootEnhancementBook;
-    private static LootEntry customLootWhiteFish;
     static{
     	customLootEnhancementBook = LootHelper.createLootEntryItem(ModItems.enhancementKnowledge, Config.enhancementBookRarity, 0, new LootFunction[]{
     			new LootFunction(null){
@@ -1356,7 +1464,7 @@ public class EventHandler {
 					}    				
     			}
     	});
-    	LootCondition conditionCold = new LootCondition(){
+    	/*LootCondition conditionCold = new LootCondition(){
 			@Override
 			public boolean testCondition(Random rand, LootContext context) {
 				Entity entity = context.getEntity(EntityTarget.THIS);
@@ -1376,7 +1484,7 @@ public class EventHandler {
 						return new ItemStack(ModItems.miscFood, 1, FoodType.WHITE_FISH_RAW.getMeta());
 					}    				
     			}
-    	});
+    	});*/
     }
     @SubscribeEvent
     public void onLootLoad(LootTableLoadEvent event) {

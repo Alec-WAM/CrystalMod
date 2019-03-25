@@ -9,7 +9,6 @@ import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.proxy.ClientProxy;
 import alec_wam.CrystalMod.util.BlockUtil;
-import alec_wam.CrystalMod.util.ChatUtil;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.tool.ToolUtil;
 import net.minecraft.block.ITileEntityProvider;
@@ -36,7 +35,6 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
@@ -50,7 +48,7 @@ public class BlockTank extends EnumBlock<BlockTank.TankType> implements ITileEnt
 	public BlockTank(){
 		super(Material.GLASS, TYPE, TankType.class);
 		setSoundType(SoundType.GLASS);
-		setHardness(2f).setResistance(10F);
+		setHardness(2f).setResistance(20F);
 		setLightOpacity(0);
 		setCreativeTab(CrystalMod.tabBlocks);
 		setDefaultState(this.blockState.getBaseState().withProperty(TYPE, TankType.BLUE));
@@ -174,7 +172,6 @@ public class BlockTank extends EnumBlock<BlockTank.TankType> implements ITileEnt
         TileEntity tile = world.getTileEntity(pos);
 
         if (tile instanceof TileEntityTank) {
-        	TileEntityTank tank = (TileEntityTank) tile;
         	if (ItemStackTools.isValid(current)) {
             	if(ToolUtil.isToolEquipped(entityplayer, hand)){
             		return ToolUtil.breakBlockWithTool(this, world, pos, entityplayer, hand);
@@ -189,7 +186,7 @@ public class BlockTank extends EnumBlock<BlockTank.TankType> implements ITileEnt
             	}
         	}
         	
-            if(!world.isRemote){
+            /*if(!world.isRemote){
         		if(tank.tank !=null){
         			FluidStack fluid = tank.tank.getFluid();
         			if(fluid == null){
@@ -198,7 +195,7 @@ public class BlockTank extends EnumBlock<BlockTank.TankType> implements ITileEnt
         			else ChatUtil.sendNoSpam(entityplayer, "Fluid: ("+fluid.getLocalizedName()+") "+fluid.amount+" mB / "+tank.tank.getCapacity()+" mB");
         		}
     		}
-    		return true;
+    		return true;*/
         } 
         return false;
     }

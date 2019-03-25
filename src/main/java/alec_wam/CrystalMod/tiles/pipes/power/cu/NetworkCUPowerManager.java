@@ -96,7 +96,7 @@ public class NetworkCUPowerManager {
     checkReceptors();
 
     // Update our energy stored based on what's in our conduits
-    updateNetorkStorage();
+    updateNetworkStorage();
     tracker.tickStart(energyStored);
 
     int appliedCount = 0;
@@ -243,7 +243,7 @@ public class NetworkCUPowerManager {
     return energyStored > 0;
   }
 
-  private void updateNetorkStorage() {
+  private void updateNetworkStorage() {
     maxEnergyStored = 0;
     energyStored = 0;
     for (TileEntityPipe pip : network.getPipes()) {

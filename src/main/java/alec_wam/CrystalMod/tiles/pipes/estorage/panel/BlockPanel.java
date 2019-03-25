@@ -44,6 +44,7 @@ public class BlockPanel extends BlockContainer implements ICustomModel {
 	public BlockPanel() {
 		super(Material.IRON);
 		this.setHardness(1f);
+        this.setResistance(10.0F);
 		this.setCreativeTab(CrystalMod.tabBlocks);
 		setDefaultState(this.blockState.getBaseState().withProperty(EnumRenderMode6.RENDER, EnumRenderMode6.AUTO));
 	}

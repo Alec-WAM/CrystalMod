@@ -12,9 +12,9 @@ public class ContainerSecurityEncoder extends Container {
 
 	public ContainerSecurityEncoder(EntityPlayer player, TileSecurityEncoder encoder){
 		this.encoder = encoder;
-		addPlayerInventory(player, 8, 90);
 		
 		addSlotToContainer(new Slot(encoder, 0, 152, 18));
+		addPlayerInventory(player, 8, 90);
 	}
 	
 	protected void addPlayerInventory(EntityPlayer player, int xInventory, int yInventory) {
@@ -50,6 +50,27 @@ public class ContainerSecurityEncoder extends Container {
 	
 	@Override
 	public ItemStack transferStackInSlot(EntityPlayer player, int slot){
-		return ItemStackTools.getEmptyStack();
+		ItemStack stack = ItemStackTools.getEmptyStack();
+
+        Slot s = getSlot(slot);
+
+        if (s != null && s.getHasStack()) {
+            stack = s.getStack().copy();
+
+            if (slot < 1) {
+                if (!mergeItemStack(stack, 1, inventorySlots.size(), false)) {
+                    return ItemStackTools.getEmptyStack();
+                }
+            } else if (!mergeItemStack(stack, 0, 1, false)) {
+                return ItemStackTools.getEmptyStack();
+            }
+
+            if (ItemStackTools.isEmpty(stack)) {
+                s.putStack(ItemStackTools.getEmptyStack());
+            } else {
+                s.onSlotChanged();
+            }
+        }
+        return stack;
 	}
 }

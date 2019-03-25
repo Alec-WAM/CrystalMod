@@ -27,6 +27,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -57,7 +58,8 @@ public class BlockFlowerLilyPad extends BlockBush implements IGrowable, ICustomM
         return net.minecraftforge.common.EnumPlantType.Water;
     }
     
-    @Override
+    @SuppressWarnings("deprecation")
+	@Override
 	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand)
     {
     	if (canBlockStay(worldIn, pos, state))
@@ -79,6 +81,7 @@ public class BlockFlowerLilyPad extends BlockBush implements IGrowable, ICustomM
                 	BlockPos lilyPos = validPos.get(0);
                     worldIn.setBlockState(lilyPos, Blocks.WATERLILY.getDefaultState());
                     worldIn.setBlockState(pos, state.withProperty(AGE, Integer.valueOf(0)), 2);
+                    worldIn.playSound(null, lilyPos, Blocks.WATERLILY.getSoundType().getPlaceSound(), SoundCategory.BLOCKS, 0.6f, 0.8f);
                 }
                 else
                 {
@@ -88,9 +91,10 @@ public class BlockFlowerLilyPad extends BlockBush implements IGrowable, ICustomM
         }
     }
 
-    public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn)
+    @Override
+    public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn, boolean p_185477_7_)
     {
-        if (!(entityIn instanceof EntityBoat))
+    	if (!(entityIn instanceof EntityBoat))
         {
             addCollisionBoxToList(pos, entityBox, collidingBoxes, LILY_PAD_AABB);
         }

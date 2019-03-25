@@ -200,7 +200,7 @@ public class GuiLiquidPipe extends GuiContainer {
 	
 	private void renderFluid(FluidStack f, int x, int y) {
 	    
-	    RenderUtil.renderGuiTank(f, 1000, 1000, x + 1, y + 1, 0, 16, 16);
+	    RenderUtil.renderGuiTank(f, 1000, 1000, x + 1, y + 1, 0, 16, 16, false);
 
 	}
 	

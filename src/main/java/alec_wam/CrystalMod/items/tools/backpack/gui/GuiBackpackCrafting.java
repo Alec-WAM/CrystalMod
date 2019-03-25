@@ -1,9 +1,12 @@
 package alec_wam.CrystalMod.items.tools.backpack.gui;
 
+import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.items.tools.backpack.types.InventoryBackpack;
 import alec_wam.CrystalMod.util.ItemStackTools;
+import alec_wam.CrystalMod.util.Lang;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -13,16 +16,16 @@ public class GuiBackpackCrafting extends GuiContainer {
 
     private static final ResourceLocation RES_LOC = new ResourceLocation("crystalmod:textures/gui/backpack/backpack_crafting.png");
     
-    public GuiBackpackCrafting(InventoryBackpack backpackInventory){
-        super(new ContainerBackpackCrafting(backpackInventory));
+    public GuiBackpackCrafting(InventoryBackpack backpackInventory, InventoryPlayer invPlayer){
+        super(new ContainerBackpackCrafting(backpackInventory, invPlayer));
         this.xSize = 176+34+34;
         this.ySize = 166;
     }
 
     @Override
     public void drawGuiContainerForegroundLayer(int x, int y){
-    	//this.fontRendererObj.drawString(text, x, y, color);
-        //AssetUtil.displayNameString(this.fontRendererObj, this.xSize, -10, StringUtil.localize("container."+ModUtil.MOD_ID+"."+(this.isVoid ? "voidBag" : "bag")+".name"));
+    	String name = Lang.translateToLocal(ModItems.craftingBackpack.getUnlocalizedName() + ".name");
+		this.fontRendererObj.drawString(name, 8+34, 6, 4210752);
     }
 
     public static final ResourceLocation baublesBackground = new ResourceLocation("baubles", "textures/gui/expanded_inventory.png");

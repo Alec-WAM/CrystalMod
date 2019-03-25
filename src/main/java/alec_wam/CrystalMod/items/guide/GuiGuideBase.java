@@ -5,6 +5,8 @@ import java.io.IOException;
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.capability.ExtendedPlayer;
 import alec_wam.CrystalMod.capability.ExtendedPlayerProvider;
+import alec_wam.CrystalMod.client.sound.ModSounds;
+import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.GuiScreen;
 
 public class GuiGuideBase extends GuiScreen {
@@ -40,6 +42,7 @@ public class GuiGuideBase extends GuiScreen {
 	
 	public void onBackButtonPressed(){
 		mc.displayGuiScreen(lastScreen);
+		if(lastScreen !=null)mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(ModSounds.book_pageturn, 1.0F));
 	}
 	
 	@Override
@@ -48,6 +51,7 @@ public class GuiGuideBase extends GuiScreen {
 		guiLeft = (width / 2) - xSize;
 		guiTop = (height - ySize) / 2;
 	}
+	
 	@Override
 	public boolean doesGuiPauseGame() {
 		return false;

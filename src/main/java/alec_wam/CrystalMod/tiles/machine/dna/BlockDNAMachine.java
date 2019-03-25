@@ -27,7 +27,7 @@ public class BlockDNAMachine extends BlockMachine implements ICustomModel  {
 	
 	public BlockDNAMachine() {
 		super(Material.IRON);
-		this.setHardness(1f).setResistance(10F);
+		this.setHardness(2f).setResistance(15F);
 		this.setCreativeTab(CrystalMod.tabBlocks);
 	}
 	

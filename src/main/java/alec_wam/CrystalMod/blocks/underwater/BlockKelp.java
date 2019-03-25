@@ -5,10 +5,12 @@ import java.util.List;
 import com.google.common.collect.Lists;
 
 import alec_wam.CrystalMod.blocks.ICustomModel;
+import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.items.ItemMiscFood.FoodType;
 import alec_wam.CrystalMod.items.ModItems;
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.BlockLiquid;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
@@ -17,6 +19,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -42,6 +45,7 @@ public class BlockKelp extends BlockBush implements ICustomModel, IShearable {
 
 	public BlockKelp() {
 		super(Material.WATER);
+		setSoundType(SoundType.PLANT);
 		setCreativeTab(CreativeTabs.DECORATIONS);
 		setDefaultState(blockState.getBaseState().withProperty(BlockLiquid.LEVEL, 0).withProperty(ISYELLOW, false));
 	}
@@ -81,6 +85,12 @@ public class BlockKelp extends BlockBush implements ICustomModel, IShearable {
 	}
 
 	@Override
+    public net.minecraftforge.common.EnumPlantType getPlantType(net.minecraft.world.IBlockAccess world, BlockPos pos)
+    {
+		return ModBlocks.waterPlantType;
+    }
+	
+	@Override
 	protected boolean canSustainBush(IBlockState state)
     {
         return state.getMaterial() == Material.SAND || (state.getBlock() == this);
@@ -101,14 +111,9 @@ public class BlockKelp extends BlockBush implements ICustomModel, IShearable {
 	
 	@Override
 	public boolean canBlockStay(final World worldIn, final BlockPos pos, final IBlockState state) {
-		if(worldIn.getBlockState(pos.up()).getBlock() == Blocks.WATER || worldIn.getBlockState(pos.up()).getBlock() == this){
+		if(worldIn.getBlockState(pos.up()).getBlock() == Blocks.WATER || worldIn.getBlockState(pos.up()).getBlock() == this || worldIn.getBlockState(pos.up()).getBlock() == Blocks.FLOWING_WATER){
 			IBlockState below = worldIn.getBlockState(pos.down());
-			if(below.getMaterial() == Material.SAND){
-				return true;
-			}
-			if(below.getBlock() == this){
-				return true;
-			}
+			return below.getBlock().canSustainPlant(below, worldIn, pos.down(), EnumFacing.UP, this);
 		}
 		return false;
 	}
@@ -123,6 +128,13 @@ public class BlockKelp extends BlockBush implements ICustomModel, IShearable {
 		worldIn.setBlockState(pos, Blocks.WATER.getDefaultState());
 	}
 
+	@Override
+	public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest)
+    {
+		this.onBlockHarvested(world, pos, state, player);
+        return world.setBlockState(pos, Blocks.WATER.getDefaultState(), world.isRemote ? 11 : 3);
+    }
+	
 	@Override
 	protected void checkAndDropBlock(final World worldIn, final BlockPos pos, final IBlockState state) {
 		if (!this.canBlockStay(worldIn, pos, state)) {

@@ -50,7 +50,7 @@ public class BlockCrystalCluster extends EnumBlock<CrystalColors.Basic> implemen
 		super(Material.GLASS, CrystalColors.COLOR_BASIC, CrystalColors.Basic.class);
 		setCreativeTab(CrystalMod.tabBlocks);
 		setHardness(3.0f);
-        setResistance(5.0f);
+        setResistance(15.0f);
         setHarvestLevel("pickaxe", 2);
         setSoundType(SoundType.GLASS);
 	}

@@ -20,10 +20,11 @@ public class BlockLantern extends Block {
 
     protected static final AxisAlignedBB AABB = new AxisAlignedBB(3.0D * (1.0D / 16.0D), 0.0D, 3.0D * (1.0D / 16.0D), 13.0D * (1.0D / 16.0D), 13.0D * (1.0D / 16.0D), 13.0D * (1.0D / 16.0D));
 	public BlockLantern() {
-		super(Material.GLASS);
+		super(Material.IRON);
 		setCreativeTab(CreativeTabs.DECORATIONS);
 		setLightLevel(1.0F);
-		setHardness(0.1F);
+		setHardness(1.0F);
+        setResistance(10.0F);
 		setSoundType(SoundType.GLASS);
 	}
 	
@@ -31,7 +32,7 @@ public class BlockLantern extends Block {
 	public boolean canPlaceBlockAt(World worldIn, BlockPos pos)
     {
 		IBlockState state = worldIn.getBlockState(pos.down());
-		return state.isSideSolid(worldIn, pos, EnumFacing.UP) || state.getBlock() instanceof BlockWall || state.getBlock() instanceof BlockFence;
+		return state.isSideSolid(worldIn, pos, EnumFacing.UP) || state.getBlock().canPlaceTorchOnTop(state, worldIn, pos) || state.getBlock() instanceof BlockWall || state.getBlock() instanceof BlockFence;
     }
 	
 	@Override

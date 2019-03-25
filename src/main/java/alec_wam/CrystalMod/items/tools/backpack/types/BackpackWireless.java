@@ -5,10 +5,14 @@ import alec_wam.CrystalMod.api.energy.CapabilityCrystalEnergy;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.items.tools.backpack.BackpackUtil;
 import alec_wam.CrystalMod.items.tools.backpack.IBackpack;
+import alec_wam.CrystalMod.items.tools.backpack.IBackpackBlockHandler;
+import alec_wam.CrystalMod.items.tools.backpack.block.TileEntityBackpack;
+import alec_wam.CrystalMod.items.tools.backpack.block.TileEntityBackpackNormal;
 import alec_wam.CrystalMod.items.tools.backpack.gui.ContainerBackpackEnderBuffer;
 import alec_wam.CrystalMod.items.tools.backpack.gui.ContainerBackpackWirelessChest;
 import alec_wam.CrystalMod.items.tools.backpack.gui.GuiBackpackEnderBuffer;
 import alec_wam.CrystalMod.items.tools.backpack.gui.GuiBackpackWirelessChest;
+import alec_wam.CrystalMod.items.tools.backpack.types.BackpackNormal.BlockHandlerNormal;
 import alec_wam.CrystalMod.tiles.chest.wireless.RenderTileWirelessChest;
 import alec_wam.CrystalMod.tiles.chest.wireless.TileWirelessChest;
 import alec_wam.CrystalMod.tiles.chest.wireless.WirelessChestHelper;
@@ -338,6 +342,10 @@ public class BackpackWireless implements IBackpack {
 
 	}
 
+	@Override
+	public IBackpackBlockHandler getBlockHandler() {
+		return null;
+	}
 	
 	
 }

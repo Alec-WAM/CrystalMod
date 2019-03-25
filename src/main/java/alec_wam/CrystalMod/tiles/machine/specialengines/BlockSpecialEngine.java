@@ -32,7 +32,7 @@ public class BlockSpecialEngine extends EnumBlock<BlockSpecialEngine.SpecialEngi
 	public BlockSpecialEngine() {
 		super(Material.IRON, ENGINE_TYPE, SpecialEngineType.class);
 		setHardness(5.0F);
-		setResistance(10.0F);
+		setResistance(15.0F);
 		setCreativeTab(CrystalMod.tabBlocks);
 	}
 	

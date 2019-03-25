@@ -1,19 +1,19 @@
 package alec_wam.CrystalMod.tiles.cauldron;
 
-import alec_wam.CrystalMod.tiles.cauldron.TileEntityCrystalCauldron.LiquidCrystalColor;
+import alec_wam.CrystalMod.util.CrystalColors;
 import net.minecraft.nbt.NBTTagCompound;
 
 public class LiquidCrystalStack {
 
-	private LiquidCrystalColor color;
+	private CrystalColors.Special color;
 	public int shardCount;
 	
-	public LiquidCrystalStack(LiquidCrystalColor color, int size){
+	public LiquidCrystalStack(CrystalColors.Special color, int size){
 		this.color = color;
 		this.shardCount = size;
 	}
 	
-	public LiquidCrystalColor getColor(){
+	public CrystalColors.Special getColor(){
 		return color;
 	}
 
@@ -26,8 +26,8 @@ public class LiquidCrystalStack {
 	public static LiquidCrystalStack loadFromNBT(NBTTagCompound nbtTagCompound){
 		if(nbtTagCompound == null || !nbtTagCompound.hasKey("Color"))return null;
 		String nbtColor = nbtTagCompound.getString("Color");
-		LiquidCrystalColor color = null;
-		for(LiquidCrystalColor c : LiquidCrystalColor.values()){
+		CrystalColors.Special color = null;
+		for(CrystalColors.Special c : CrystalColors.Special.values()){
 			if(c.name().equalsIgnoreCase(nbtColor)){
 				color = c;
 				break;

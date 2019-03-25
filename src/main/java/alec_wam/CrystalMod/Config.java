@@ -119,6 +119,9 @@ public class Config {
 	public static int mobHeadDropChance = 200;
 	public static ItemDropType playerHeadType = ItemDropType.ALL;
 	public static int playerHeadDropChance = 50;
+	public static boolean dragonWingsDrop = true;
+	public static boolean darkBonesDrop = true;
+	public static int batWingDropChance = 5;
 	
 	//ITEMS
 	public static boolean backpackDeathUpgradeConsume = false;
@@ -338,7 +341,11 @@ public class Config {
     	if(pheadtype > 2)pheadtype = 2;
     	playerHeadType = ItemDropType.values()[pheadtype];
     	playerHeadDropChance = cfg.get(CATEGORY_ENTITY, "playerHeadDropChance", playerHeadDropChance, "1 in this chance of dropping  (-1 = no heads)").getInt(playerHeadDropChance);
-        	    	
+        	 
+    	dragonWingsDrop = cfg.get(CATEGORY_ENTITY, "dragonWingsDrop", dragonWingsDrop, "Can dragon wings drop from an Ender Dragon?").getBoolean(true);
+    	darkBonesDrop = cfg.get(CATEGORY_ENTITY, "darkBonesDrop", darkBonesDrop, "Can dark bones drop from Wither Skeletons?").getBoolean(true);
+    	batWingDropChance = cfg.get(CATEGORY_ENTITY, "batWingDropChance", batWingDropChance, "1 in X chance of dropping  (0 = no drop)").getInt(5);
+
     	hoeStrings = cfg.get(CATEGORY_MINIONS, "Hoes", hoeStrings, "Use this to specify items that are hoes. Use the registry name (eg. modid:name).").getStringList();
     
     	//MACHINE

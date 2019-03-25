@@ -4,7 +4,9 @@ import alec_wam.CrystalMod.util.IEnumMeta;
 import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
+import net.minecraft.block.BlockChorusFlower;
 import net.minecraft.block.BlockNetherWart;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
@@ -17,6 +19,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
@@ -72,11 +75,44 @@ public class ItemCursedBone extends Item implements ICustomModel {
 		            world.setBlockState(pos, state, 2);
 		            net.minecraftforge.common.ForgeHooks.onCropsGrowPost(world, pos, state, world.getBlockState(pos));
 		            
+		            if (!world.isRemote)
+                    {
+		            	world.playEvent(2005, pos, 0);
+                    }
 		            if(!player.capabilities.isCreativeMode){
 		            	player.setHeldItem(hand, ItemUtil.consumeItem(stack));
 		            }		            
 		            return EnumActionResult.SUCCESS;
 		        }
+			}
+			if(state.getBlock() == Blocks.CHORUS_FLOWER){
+				int i = state.getValue(BlockChorusFlower.AGE).intValue();
+
+		        if (i < 5 && net.minecraftforge.common.ForgeHooks.onCropsGrowPre(world, pos, state, true))
+		        {
+		        	if(!world.isRemote){
+		        		state.getBlock().updateTick(world, pos, state, world.rand);
+		        		world.playEvent(2005, pos, 0);
+		        	}
+		            if(!player.capabilities.isCreativeMode){
+		            	player.setHeldItem(hand, ItemUtil.consumeItem(stack));
+		            }		            
+		            return EnumActionResult.SUCCESS;
+		        }
+			}
+			if(state.getBlock() == Blocks.SAPLING){
+				if(!world.isRemote){
+	        		world.playEvent(2005, pos, 0);
+	        	}
+				IBlockState newState = Blocks.DEADBUSH.getDefaultState();
+				world.setBlockState(pos, newState, 3);
+				@SuppressWarnings("deprecation")
+				SoundType type = newState.getBlock().getSoundType();
+				world.playSound(player, pos, type.getPlaceSound(), SoundCategory.BLOCKS, 1.0F, 1.0F);
+	            if(!player.capabilities.isCreativeMode){
+	            	player.setHeldItem(hand, ItemUtil.consumeItem(stack));
+	            }		            
+	            return EnumActionResult.SUCCESS;
 			}
 		}
 		return EnumActionResult.PASS;

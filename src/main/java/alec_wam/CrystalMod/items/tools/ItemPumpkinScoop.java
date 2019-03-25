@@ -8,6 +8,7 @@ import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.tool.ToolUtil;
 import net.minecraft.block.BlockHorizontal;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -16,6 +17,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -77,6 +79,9 @@ public class ItemPumpkinScoop extends Item {
 						otherHand.damageItem(1, player);
 						player.swingArm(hand == EnumHand.MAIN_HAND ? EnumHand.OFF_HAND : EnumHand.MAIN_HAND);
 					}
+					@SuppressWarnings("deprecation")
+					SoundType type = Blocks.PUMPKIN.getSoundType();
+					world.playSound(null, pos, type.getPlaceSound(), SoundCategory.BLOCKS, 0.6f, 0.8f);
 					return EnumActionResult.SUCCESS;
 				}
 			}

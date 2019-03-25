@@ -61,6 +61,7 @@ public class BlockCoral extends BlockColored implements ICustomModel, ICustomRay
         setSoundType(SoundType.STONE);
 		setCreativeTab(CreativeTabs.DECORATIONS);
 		setHardness(1.0F);
+		setHarvestLevel("pickaxe", 0);
 		setDefaultState(getDefaultState()
 				.withProperty(BlockLiquid.LEVEL, 0)
 				.withProperty(BlockConnectedTexture.CONNECTED_DOWN, Boolean.FALSE)
@@ -234,6 +235,13 @@ public class BlockCoral extends BlockColored implements ICustomModel, ICustomRay
 	public void onBlockDestroyedByPlayer(final World worldIn, final BlockPos pos, final IBlockState state) {
 		worldIn.setBlockState(pos, Blocks.WATER.getDefaultState());
 	}
+
+	@Override
+	public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest)
+    {
+		this.onBlockHarvested(world, pos, state, player);
+        return world.setBlockState(pos, Blocks.WATER.getDefaultState(), world.isRemote ? 11 : 3);
+    }
 
 	protected void checkAndDropBlock(final World worldIn, final BlockPos pos, final IBlockState state) {
 		if (!canBlockStay(worldIn, pos, state)) {

@@ -60,7 +60,7 @@ public class ModelGlass extends DynamicItemAndBlockModel {
 	}
 	
 	public boolean renderCenter(){
-		return false;
+		return true;
 	}
 	
 	@Override
@@ -106,15 +106,6 @@ public class ModelGlass extends DynamicItemAndBlockModel {
 			list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(0, 0, 16f), new Vector3f(16f, 16f, 16f), faceS, sprite, EnumFacing.SOUTH, rot, (BlockPartRotation)null, true));
 			list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(0, 0, 0), new Vector3f(0, 16f, 16f), faceW, sprite, EnumFacing.WEST, rot, (BlockPartRotation)null, true));
 			list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(16f, 0, 0), new Vector3f(16f, 16f, 16f), faceE, sprite, EnumFacing.EAST, rot, (BlockPartRotation)null, true));
-			
-			/*if(renderCenter()){
-				list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(min, max, min), new Vector3f(max, max, max), faceU, sprite, EnumFacing.UP, rot, (BlockPartRotation)null, true));
-				list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(min, min, min), new Vector3f(max, min, max), faceD, sprite, EnumFacing.DOWN, rot, (BlockPartRotation)null, true));
-				list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(min, min, min), new Vector3f(max, max, min), faceN, sprite, EnumFacing.NORTH, rot, (BlockPartRotation)null, true));
-				list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(min, min, max), new Vector3f(max, max, max), faceS, sprite, EnumFacing.SOUTH, rot, (BlockPartRotation)null, true));
-				list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(min, min, min), new Vector3f(min, max, max), faceW, sprite, EnumFacing.WEST, rot, (BlockPartRotation)null, true));
-				list.add(CustomModelUtil.INSTANCE.makeBakedQuad(new Vector3f(max, min, min), new Vector3f(max, max, max), faceE, sprite, EnumFacing.EAST, rot, (BlockPartRotation)null, true));
-			}*/
 			return list;
 		}
 		boolean renderCenterUVLock = true;
@@ -869,7 +860,7 @@ public class ModelGlass extends DynamicItemAndBlockModel {
 	}
 
 	public TextureAtlasSprite getCenterTexture(CrystalColors.Special type) {
-		return RenderUtil.getSprite("crystalmod:blocks/crystal_"+type.getName()+"_glass");
+		return getClear();//RenderUtil.getSprite("crystalmod:blocks/crystal_"+type.getName()+"_glass");
 	}
 	
 	@Override

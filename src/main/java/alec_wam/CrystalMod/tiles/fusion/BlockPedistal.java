@@ -155,7 +155,7 @@ public class BlockPedistal extends BlockContainer implements ICustomModel, ICust
 				int insert = ItemUtil.doInsertItem(handler, insertStack, EnumFacing.UP);
 				if(insert > 0){
 					ItemStackTools.incStackSize(heldItem, -insert);
-					worldIn.playSound(null, pos, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.BLOCKS, 0.5f, 0.95f);
+					worldIn.playSound(null, pos, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.BLOCKS, 0.2f, 0.95f);
 					return true;
 				}
 			} 
@@ -178,7 +178,7 @@ public class BlockPedistal extends BlockContainer implements ICustomModel, ICust
 								ItemUtil.spawnItemInWorldWithRandomMotion(worldIn, drop, pos);
 							}
 						}
-						worldIn.playSound(null, pos, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.BLOCKS, 0.5f, 0.85f);
+						worldIn.playSound(null, pos, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.BLOCKS, 0.2f, 0.85f);
 						return true;
 					}
 				}

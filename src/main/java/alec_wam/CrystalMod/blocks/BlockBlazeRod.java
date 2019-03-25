@@ -13,6 +13,7 @@ public class BlockBlazeRod extends BlockRotatedPillar
         super(Material.IRON, MapColor.SAND);
         this.setCreativeTab(CreativeTabs.BUILDING_BLOCKS);
         this.setHardness(5.0F);
+        this.setResistance(10.0F);
         this.setSoundType(SoundType.METAL);
     }
 }

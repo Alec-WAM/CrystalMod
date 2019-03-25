@@ -104,14 +104,7 @@ public class TileAdvDispenser extends TileEntityInventory implements IFacingTile
 			
 			final BlockPos facingPos = getPos().offset(facing);
 			int slotIndex = 0;
-			ItemStackTools.getEmptyStack();
-			boolean random = false;
-			if(random){
-				
-			} else {
-				slotIndex = 0;
-				getStackInSlot(0);
-			}
+			//TODO Loop slotIndex
 			if(this.fakePlayer == null){
 				this.fakePlayer = new FakePlayerCM(getWorld());
 			}
@@ -182,15 +175,6 @@ public class TileAdvDispenser extends TileEntityInventory implements IFacingTile
 	            playerInv.setInventorySlotContents(l, ItemStackTools.getEmptyStack());
 	            setInventorySlotContents(l, ItemStackTools.safeCopy(slot));
 	        }
-	        /*for (int l = 9; l < playerInv.getSizeInventory(); ++l) {
-	            ItemStack stackInSlot = playerInv.getStackInSlot(l);
-	            if (ItemStackTools.isValid(stackInSlot)) {
-	                ItemStackTools.incStackSize(stackInSlot, -ItemUtil.doInsertItem(this, stackInSlot, EnumFacing.UP));
-	                if (!ItemStackTools.isEmpty(stackInSlot)) {
-	                    this.pendingStacks.add(stackInSlot);
-	                }
-	            }
-	        }*/
 	        ItemStack slot = fakePlayer.getItemStackFromSlot(EntityEquipmentSlot.OFFHAND);
             if (ItemStackTools.isEmpty(slot)) {
                 slot = ItemStackTools.getEmptyStack();

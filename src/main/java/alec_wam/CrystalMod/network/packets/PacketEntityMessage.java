@@ -17,16 +17,22 @@ import alec_wam.CrystalMod.network.AbstractPacketThreadsafe;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.IMessageHandler;
 import alec_wam.CrystalMod.util.EntityUtil;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ModLogger;
 import alec_wam.CrystalMod.util.TimeUtil;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.network.NetHandlerPlayClient;
+import net.minecraft.client.particle.ParticleItemPickup;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.init.Items;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.ItemElytra;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
@@ -274,6 +280,48 @@ public class PacketEntityMessage extends AbstractPacketThreadsafe {
 	                	player.clearElytraFlying();
                     	EventHandler.removeElytraFromPlayer(player);
 	                }
+				}
+			}
+			if(type.equalsIgnoreCase("#SetMouseStack#")){
+				if(entity instanceof EntityPlayerMP){
+					EntityPlayerMP player = (EntityPlayerMP)entity;
+					if(data.hasKey("EmptyStack")){
+						player.inventory.setItemStack(ItemStackTools.getEmptyStack());
+					} else {
+						ItemStack loaded = ItemStackTools.loadFromNBT(data.getCompoundTag("Stack"));
+						player.inventory.setItemStack(loaded);
+					}
+					player.updateHeldItem();
+				}
+			}
+			if(type.equalsIgnoreCase("#PickupEffects#")){
+				if(client){
+			        EntityLivingBase entitylivingbase = (EntityLivingBase)entity;
+			        int collectedID = data.getInteger("CollectedID");
+					Entity collectedEntity = CrystalMod.proxy.getClientWorld().getEntityByID(collectedID);
+					if (collectedEntity != null)
+			        {
+			            if (collectedEntity instanceof EntityXPOrb)
+			            {
+			            	CrystalMod.proxy.getClientWorld().playSound(entity.posX, entity.posY, entity.posZ, SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 0.1F, (EntityUtil.rand.nextFloat() - EntityUtil.rand.nextFloat()) * 0.35F + 0.9F, false);
+			            }
+			            else
+			            {
+			            	CrystalMod.proxy.getClientWorld().playSound(entity.posX, entity.posY, entity.posZ, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 0.2F, (EntityUtil.rand.nextFloat() - EntityUtil.rand.nextFloat()) * 1.4F + 2.0F, false);
+			            }
+			            int oldAmount = 0;
+			            if (entity instanceof EntityItem)
+			            {
+			            	oldAmount = ((EntityItem)entity).getEntityItem().getCount();
+			            	((EntityItem)entity).getEntityItem().setCount(data.getInteger("Amount"));
+			            }
+			            Minecraft.getMinecraft().effectRenderer.addEffect(new ParticleItemPickup(CrystalMod.proxy.getClientWorld(), collectedEntity, entitylivingbase, 0.5F));
+			            if (entity instanceof EntityItem)
+			            {
+			            	((EntityItem)entity).getEntityItem().setCount(oldAmount);
+			            }
+			            ((WorldClient)CrystalMod.proxy.getClientWorld()).removeEntityFromWorld(collectedID);
+			        }
 				}
 			}
 			if(entity instanceof IMessageHandler){

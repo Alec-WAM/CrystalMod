@@ -9,6 +9,7 @@ import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.tiles.machine.BasicMachineRecipe;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ModLogger;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
@@ -55,6 +56,7 @@ public class PressRecipeManager {
 		addRecipe(new ItemStack(ModItems.ingots, 1, IngotType.PURE.getMeta()), new ItemStack(ModItems.plates, 1, PlateType.PURE.getMeta()), defaultPower);
 		addRecipe(new ItemStack(ModItems.ingots, 1, IngotType.DARK_IRON.getMeta()), new ItemStack(ModItems.plates, 1, PlateType.DARK_IRON.getMeta()), defaultPower);
 		addRecipe(new ItemStack(Items.BLAZE_POWDER, 2, 0), new ItemStack(Items.BLAZE_ROD), defaultPower);
+		addRecipe(new ItemStack(Blocks.ICE, 1), new ItemStack(Blocks.PACKED_ICE, 1), 400);
 	}
 
 	public static void oreSearch() {

@@ -29,10 +29,13 @@ import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.items.enchancements.ModEnhancements;
 import alec_wam.CrystalMod.items.tools.backpack.BackpackUtil;
 import alec_wam.CrystalMod.items.tools.backpack.network.PacketToolSwap;
+import alec_wam.CrystalMod.items.tools.blockholder.advanced.ItemAdvancedBlockHolder;
+import alec_wam.CrystalMod.items.tools.blockholder.advanced.PacketBlockHolderSelection;
 import alec_wam.CrystalMod.items.tools.grapple.GrappleControllerBase;
 import alec_wam.CrystalMod.items.tools.grapple.GrappleHandler;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.packets.PacketGuiMessage;
+import alec_wam.CrystalMod.tiles.cauldron.TileEntityCrystalCauldron;
 import alec_wam.CrystalMod.tiles.cluster.TileCrystalCluster;
 import alec_wam.CrystalMod.tiles.machine.inventory.charger.TileEntityInventoryChargerCU;
 import alec_wam.CrystalMod.tiles.machine.inventory.charger.TileEntityInventoryChargerRF;
@@ -51,6 +54,7 @@ import alec_wam.CrystalMod.tiles.soundmuffler.TileSoundMuffler;
 import alec_wam.CrystalMod.tiles.spawner.EntityEssenceInstance;
 import alec_wam.CrystalMod.tiles.spawner.ItemMobEssence;
 import alec_wam.CrystalMod.tiles.spawner.TileEntityCustomSpawner;
+import alec_wam.CrystalMod.tiles.tank.TileEntityTank;
 import alec_wam.CrystalMod.tiles.xp.TileEntityXPVacuum;
 import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.ItemStackTools;
@@ -75,6 +79,7 @@ import net.minecraft.client.audio.SoundEventAccessor;
 import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
@@ -289,13 +294,44 @@ public class ClientEventHandler {
 	@SubscribeEvent
     public void screenInfo(RenderGameOverlayEvent event){
     	Minecraft mc = Minecraft.getMinecraft();
-    	if(event.getType() == ElementType.ALL && mc.currentScreen == null){
-    		ScaledResolution sr = new ScaledResolution(mc);
+    	ScaledResolution sr = new ScaledResolution(mc);
+    	EntityPlayer player = CrystalMod.proxy.getClientPlayer();
+    	if(event.getType() == ElementType.ALL && !player.capabilities.isCreativeMode && mc.currentScreen == null){
+    		//Blue Shield
+    		ExtendedPlayer ePlayer = ExtendedPlayerProvider.getExtendedPlayer(player);
+    		if(ePlayer !=null && ePlayer.getBlueShield() > 0.0){
+    			float shieldAmount = ePlayer.getBlueShield();
+    			float barAmount = shieldAmount / ePlayer.getMaxBlueShield();
+    			
+    			GlStateManager.pushMatrix();
+    			GlStateManager.translate(sr.getScaledWidth() / 2 - 91, sr.getScaledHeight() - 50, 0);	
+    			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);	    			    		
+    			
+    			int border = Color.BLACK.getRGB();
+    			int background = Color.GRAY.getRGB();
+    			int blue = Color.CYAN.darker().getRGB();
+    			int width = 81;
+    			Gui.drawRect(0, 0, width, 10, border);
+    			Gui.drawRect(1, 1, width-1, 9, background);
+    			Gui.drawRect(1, 1, (int)((float)(width-1) * barAmount), 9, blue);
+    			
+    			String str = ((int)shieldAmount) + " | " + (int)ePlayer.getMaxBlueShield();
+    			GlStateManager.pushMatrix();
+    			GlStateManager.translate(2, 2, 0);
+    			GlStateManager.scale(0.8, 0.8, 1.0);
+    			mc.fontRendererObj.drawString(str, 2, 0, Color.WHITE.getRGB());
+	    		GlStateManager.popMatrix();	
+	    		
+	    		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);	    			    		
+    			GlStateManager.popMatrix();	
+    		}
+    	}
+    	
+		if(event.getType() == ElementType.ALL && mc.currentScreen == null){
     		if(mc.objectMouseOver == null)return;
     		BlockPos pos = mc.objectMouseOver.getBlockPos();
     		if(pos == null)return;
     		TileEntity tile = CrystalMod.proxy.getClientWorld().getTileEntity(pos);
-    		EntityPlayer player = CrystalMod.proxy.getClientPlayer();
     		if(tile !=null){
 	    		int rf = 0;
 	    		int maxRF = 0;
@@ -405,6 +441,22 @@ public class ClientEventHandler {
 						list.add(Lang.localize("msg.spawnerInfo9.txt"));
 					}
 	    		}
+	    		if(tile instanceof TileEntityTank){
+	    			TileEntityTank tank = (TileEntityTank)tile;
+	    			fluid = tank.tank.getFluid();
+	    			capacity = tank.tank.getCapacity();
+	    			renderFluid = true;
+	    		}	
+	    		if(tile instanceof TileEntityCrystalCauldron){
+	    			TileEntityCrystalCauldron cauldron = (TileEntityCrystalCauldron)tile;
+	    			if(cauldron.crystalStack == null){
+	    				list.add(Lang.localize("gui.empty"));
+	    			} else {
+	    				int amount = cauldron.crystalStack.amount;
+	    				list.add(cauldron.crystalStack.getLocalizedName());
+	    				list.add(amount + " / " + Fluid.BUCKET_VOLUME + " mB");
+	    			}
+	    		}
 	    		
 	    		//intelect
 	    		ExtendedPlayer ePlayer = ExtendedPlayerProvider.getExtendedPlayer(player);
@@ -493,7 +545,7 @@ public class ClientEventHandler {
 		    		RenderUtil.drawGradientRect(-1, -11, -11, 13, (barHeight - 9), colorBorder, colorBorder);
 		    		RenderUtil.drawGradientRect(0, -10, -10, 12, (barHeight - 10), colorInside, colorInside);
 		    		if(fluid !=null){
-		    			RenderUtil.renderGuiTank(fluid, capacity, fluid.amount, 0, -10, 0, 12, barHeight);
+		    			RenderUtil.renderGuiTank(fluid, capacity, fluid.amount, 0, -10, 0, 12, barHeight, false);
 		    		}
 		    		GlStateManager.popMatrix();
 	    		}
@@ -520,6 +572,7 @@ public class ClientEventHandler {
 	    		}
     		}
     	}
+    	
     }
     
     //Flag
@@ -788,19 +841,96 @@ public class ClientEventHandler {
     public void handleScroll(MouseEvent event){
     	int scroll = event.getDwheel();
     	EntityPlayer player = CrystalMod.proxy.getClientPlayer();
-    	if(player !=null && player.isSneaking()){
-    		if(scroll >=30){
-    			//Up (Weapons)
-    			if(BackpackUtil.canSwapWeapons(player)){
-	    			CrystalModNetwork.sendToServer(new PacketToolSwap(0));
-	    			event.setCanceled(true);
+    	if(player !=null){
+    		//ModLogger.info("Button: "+event.getButton());
+    		if(player.getHeldItemMainhand().getItem() instanceof ItemAdvancedBlockHolder){
+    			ItemStack stack = player.getHeldItemMainhand();
+    			int selection = ItemAdvancedBlockHolder.getSelection(stack);
+    			int selectionRange = ItemAdvancedBlockHolder.getValidBlockSize(stack);
+    			if(selectionRange > 1){    	
+    				 if(player.isSneaking()){    	
+    					//Sneaking and Scrolling
+	    				if(scroll < 0){
+	    					if(selection == 0){
+	    						selection = selectionRange-1;
+	    					} else {
+	        					selection--;    						
+	    					}
+	    					ItemAdvancedBlockHolder.setSelection(stack, selection);
+	    					CrystalModNetwork.sendToServer(new PacketBlockHolderSelection(selection));	
+			    			event.setCanceled(true);    					
+	    				}
+	    				else if(scroll > 0){
+	    					if(selection >= selectionRange){
+	    						selection = 0;
+	    					} else {	    					
+	    						selection++;
+	    						selection %=selectionRange;
+	    					}
+	    					ItemAdvancedBlockHolder.setSelection(stack, selection);
+	    					CrystalModNetwork.sendToServer(new PacketBlockHolderSelection(selection));	
+			    			event.setCanceled(true);     					
+	    				}
+    				} else {
+    					if ((event.getDwheel() == 0) && (event.isButtonstate())) {
+        					//Mouse Forward and Back buttons
+        					if (event.getButton() == 3) {    						  					
+    			    			if(selection == 0){
+    	    						selection = selectionRange-1;
+    	    					} else {
+    	        					selection--;    						
+    	    					}
+    	    					ItemAdvancedBlockHolder.setSelection(stack, selection);
+    	    					CrystalModNetwork.sendToServer(new PacketBlockHolderSelection(selection));	
+    			    			event.setCanceled(true);  
+        					}
+        					else if (event.getButton() == 4) {
+        						if(selection >= selectionRange){
+    	    						selection = 0;
+    	    					} else {	    					
+    	    						selection++;
+    	    						selection %=selectionRange;
+    	    					}
+    	    					ItemAdvancedBlockHolder.setSelection(stack, selection);
+    	    					CrystalModNetwork.sendToServer(new PacketBlockHolderSelection(selection));	
+    			    			event.setCanceled(true);    
+        					}
+        				}
+    				}
     			}
-    		} else if(scroll <=-30){
-    			//Down (Tools)
-    			if(BackpackUtil.canSwapTools(player)){
-	    			CrystalModNetwork.sendToServer(new PacketToolSwap(1));
-	    			event.setCanceled(true);
-    			}
+    			return;
+    		} 
+    		if(BackpackUtil.canSwapWeapons(player) || BackpackUtil.canSwapTools(player)){
+    			//Backpack
+    			if(player.isSneaking()){
+		    		if(scroll > 0){
+		    			//Up (Weapons)
+		    			if(BackpackUtil.canSwapWeapons(player)){
+			    			CrystalModNetwork.sendToServer(new PacketToolSwap(0));
+			    			event.setCanceled(true);
+		    			}
+		    		} else if(scroll < 0){
+		    			//Down (Tools)
+		    			if(BackpackUtil.canSwapTools(player)){
+			    			CrystalModNetwork.sendToServer(new PacketToolSwap(1));
+			    			event.setCanceled(true);
+		    			}
+		    		}
+    			} else if ((event.getDwheel() == 0) && (event.isButtonstate())) {
+					//Mouse Forward and Back buttons
+					if (event.getButton() == 3) {    						  					
+						if(BackpackUtil.canSwapTools(player)){
+			    			CrystalModNetwork.sendToServer(new PacketToolSwap(1));
+			    			event.setCanceled(true);
+		    			}
+					}
+					else if (event.getButton() == 4) {
+						if(BackpackUtil.canSwapWeapons(player)){
+			    			CrystalModNetwork.sendToServer(new PacketToolSwap(0));
+			    			event.setCanceled(true);
+		    			}  
+					}
+				} 
     		}
     	}
     }
@@ -815,6 +945,7 @@ public class ClientEventHandler {
     		lastRenderDistance = Minecraft.getMinecraft().gameSettings.renderDistanceChunks;
     		//Update Leaves
     		ModBlocks.crystalLeaves.setGraphicsLevel(Minecraft.getMinecraft().gameSettings.fancyGraphics);
+    		ModBlocks.crystalSpecialLeaves.setGraphicsLevel(Minecraft.getMinecraft().gameSettings.fancyGraphics);
     		ModBlocks.bambooLeaves.setGraphicsLevel(Minecraft.getMinecraft().gameSettings.fancyGraphics);
     	}
     	

@@ -37,7 +37,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockHDDInterface extends BlockContainer implements ICustomModel {
-
+	//TODO Look into facing rendering
 	public enum HDDType implements IStringSerializable{
 		EMPTY, BLUE, RED, GREEN, DARK, PURE;
 
@@ -115,7 +115,6 @@ public class BlockHDDInterface extends BlockContainer implements ICustomModel {
         						EnumFacing face = EnumFacing.getFront(inter.facing);
         						ItemUtil.spawnItemInWorldWithoutMotion(world, inter.getStackInSlot(0), pos.offset(face));
         						inter.setInventorySlotContents(0, ItemStackTools.getEmptyStack());
-        						return true;
         					}
         				}
         				return true;
@@ -128,11 +127,11 @@ public class BlockHDDInterface extends BlockContainer implements ICustomModel {
         			}
 
         			player.openGui(CrystalMod.instance, 0, world, pos.getX(), pos.getY(), pos.getZ());
-        			return true;
         		} else {
         			ChatUtil.sendNoSpam(player, Lang.localize("gui.networkability."+NetworkAbility.VIEW.getId()));
         		}
         	}
+			return true;
         }
     	return false;
     }

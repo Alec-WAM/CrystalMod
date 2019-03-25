@@ -54,7 +54,6 @@ public class PipeUtil {
 		World world = pipe.getWorld();
 		List<TileEntityPipe> connections = Lists.newArrayList();
 		PipeUtil.buildNetwork(connections, world, pipe.getPos(), null, pipe.getPipeType());
-		//Collection<TileEntityPipe> connections = PipeUtil.getConnectedPipes(world, pipe.getPos(), pipe.getPipeType());
 
 		if (reuseNetwork(pipe, connections, world)) {
 			return;
@@ -168,61 +167,41 @@ public class PipeUtil {
 		TileEntityPipe sourcePipe = null;
 		if(sourceTile !=null && sourceTile instanceof TileEntityPipe){
 			sourcePipe = (TileEntityPipe)sourceTile;
+			if(!containsPipe(pipes, sourcePipe)){
+				pipes.add(sourcePipe);
+			}
 		}
-		master : for(EnumFacing facing : EnumFacing.VALUES){
-			if(from !=null && facing == from)continue;
-			BlockPos offsetPos = pos.offset(facing);
-			TileEntity tile = world.getTileEntity(offsetPos);
-			if(tile !=null){
-				if(tile instanceof TileEntityPipe){
-					TileEntityPipe pipe = (TileEntityPipe)tile;
-					if(sourcePipe !=null){
-						if(!sourcePipe.containsPipeConnection(facing))continue master;
-						if(!sourcePipe.canConnectToPipe(facing, pipe)){
-							continue master;
-						}
-					}
-					if(type == null || pipe.getPipeType() !=null && pipe.getPipeType() == type){
-						if(!containsPipe(pipes, pipe)){
-							pipes.add(pipe);
-							//Continue Searching
-							if(pos != offsetPos && (from == null || from.getIndex() != facing.getOpposite().getIndex())){
-								buildNetwork(pipes, world, offsetPos, facing.getOpposite(), type);
+		for(EnumFacing face : EnumFacing.VALUES){
+			if(sourcePipe !=null && sourcePipe.getConnectionMode(face) == ConnectionMode.DISABLED)continue;
+			//Don't re-add pipes
+			if(from == null || face != from){
+				BlockPos offsetPos = pos.offset(face);
+				TileEntity tile = world.getTileEntity(offsetPos);
+				if(tile !=null){
+					if(tile instanceof TileEntityPipe){
+						TileEntityPipe otherPipe = (TileEntityPipe)tile;
+						if(sourcePipe == null || sourcePipe.containsPipeConnection(face) && sourcePipe.canConnectToPipe(face, otherPipe)){
+							if(type == null || otherPipe.getPipeType() !=null && otherPipe.getPipeType() == type){
+								if(otherPipe.getConnectionMode(face.getOpposite()) != ConnectionMode.DISABLED){
+									if(!containsPipe(pipes, otherPipe)){
+										pipes.add(otherPipe);
+										//Continue Searching
+										if(pos != offsetPos && (from == null || from.getIndex() != face.getOpposite().getIndex())){
+											buildNetwork(pipes, world, offsetPos, /*face.getOpposite()*/null, type);
+										}
+									}
+								}
 							}
 						}
 					}
-				}
-				
-				if(tile instanceof IPipeWrapper){
-					if(sourcePipe !=null){
-						if(sourcePipe.getConnectionMode(facing) == ConnectionMode.DISABLED){
-							continue master;
-						}
-					}
-					IPipeWrapper wrapper = (IPipeWrapper)tile;
-					World otherWorld = wrapper.getOtherWorld();
-					BlockPos otherPos = wrapper.getOtherPos();
-					if(otherWorld !=null && otherPos !=null && otherWorld.isBlockLoaded(otherPos)){
-						//Search around all of the wrapper's connection
-						otherSearch : for(EnumFacing otherFacing : EnumFacing.VALUES){
-							BlockPos offsetOtherPos = otherPos.offset(otherFacing);
-							TileEntity otherTile = otherWorld.getTileEntity(offsetOtherPos);
-							if(otherTile !=null && otherTile instanceof TileEntityPipe){
-								TileEntityPipe pipe = (TileEntityPipe)otherTile;
-								if(pipe.getConnectionMode(otherFacing.getOpposite()) == ConnectionMode.DISABLED){
-									continue otherSearch;
-								}
-								if(sourcePipe !=null){
-									if(!sourcePipe.canConnectToPipe(otherFacing, pipe)){
-										continue otherSearch;
-									}
-								}
-								if(type == null || pipe.getPipeType() !=null && pipe.getPipeType() == type){
-									if(!containsPipe(pipes, pipe)){
-										pipes.add(pipe);
-										//Continue Searching
-										buildNetwork(pipes, otherWorld, offsetOtherPos, otherFacing.getOpposite(), type);
-									}
+					if(tile instanceof IPipeWrapper){
+						IPipeWrapper wrapper = (IPipeWrapper)tile;
+						if(sourcePipe !=null){
+							if(sourcePipe.containsExternalConnection(face) && sourcePipe.canConnectToExternal(face, false)){
+								World otherWorld = wrapper.getOtherWorld();
+								BlockPos otherPos = wrapper.getOtherPos();
+								if(otherWorld !=null && otherPos !=null){
+									buildNetwork(pipes, otherWorld, otherPos, null, type);
 								}
 							}
 						}
@@ -233,6 +212,7 @@ public class PipeUtil {
 	}
 	
 	public static boolean containsPipe(List<TileEntityPipe> list, TileEntityPipe pipe){
+		if(list.contains(pipe)) return true;
 		for(TileEntityPipe oPipe : list){
 			if(oPipe.getPos() == pipe.getPos()){
 				World oWorld = oPipe.getWorld();

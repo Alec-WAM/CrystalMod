@@ -6,7 +6,6 @@ import alec_wam.CrystalMod.capability.ExtendedPlayerProvider;
 import alec_wam.CrystalMod.integration.baubles.BaublesIntegration;
 import alec_wam.CrystalMod.items.tools.backpack.BackpackUtil;
 import alec_wam.CrystalMod.items.tools.backpack.ItemBackpackBase;
-import alec_wam.CrystalMod.items.tools.backpack.ItemBackpackNormal.CrystalBackpackType;
 import alec_wam.CrystalMod.items.tools.backpack.types.NormalInventoryBackpack;
 import alec_wam.CrystalMod.items.tools.backpack.upgrade.InventoryBackpackUpgrades;
 import alec_wam.CrystalMod.items.tools.backpack.upgrade.ItemBackpackUpgrade.BackpackUpgrade;
@@ -21,6 +20,7 @@ import baubles.api.IBauble;
 import baubles.api.cap.IBaublesItemHandler;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ClickType;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -41,8 +41,8 @@ public class ContainerBackpackNormal extends Container {
 	
     protected IBaublesItemHandler baubles;
     
-	public ContainerBackpackNormal(NormalInventoryBackpack backpackInventory){
-		this.player = backpackInventory.getPlayer();
+	public ContainerBackpackNormal(NormalInventoryBackpack backpackInventory, InventoryPlayer invPlayer){
+		this.player = invPlayer.player;
         this.backpackInventory = backpackInventory;
         baubles = BaublesIntegration.instance().getBaubles(player);
         boolean hasTabs = false;
@@ -55,22 +55,28 @@ public class ContainerBackpackNormal extends Container {
         if (baubles != null && BaublesIntegration.WhoAmI.whoAmI(player.getEntityWorld()) == BaublesIntegration.WhoAmI.SPCLIENT) {
             baubles = new WrapperBaubleInventory(baubles);
         }
-        int gapLeft = hasPockets ? 34 : 0;
+        int slotRows = backpackInventory.getSize()/9;
+        int pocketOffset = 0;
+        if(hasPockets){
+        	if(slotRows < 6){
+        		pocketOffset = 34;
+        	}
+        }
+        int gapLeft = pocketOffset;
         int gapRight = hasPockets ? 34 : 0;
         
         int offsetArmor = 34;
-        int offsetLeft = offsetArmor + gapLeft;
+        int offsetLeft = 34 + gapLeft;
         int offsetTabs = hasTabs ? 32 : 0;
-        int rows = backpackInventory.getSize()/9;
-        int offsetY = 18*(rows-3);
-        for(int i = 0; i < rows; i++){
+        int offsetY = 18*(slotRows-3);
+        for(int i = 0; i < slotRows; i++){
             for(int j = 0; j < 9; j++){
             	this.addSlotToContainer(new SlotBackpack(backpackInventory, j+i*9, (8+offsetLeft)+j*18, offsetTabs+17+i*18));
             }
         }
         if(hasPockets){
 	        int invEnd = backpackInventory.getSize()-1;
-	        this.addSlotToContainer(new Slot(backpackInventory, invEnd+1, 16+offsetArmor, offsetTabs+17+((rows-1)*18)){
+	        this.addSlotToContainer(new Slot(backpackInventory, invEnd+1, 16+pocketOffset, offsetTabs+17+((slotRows-1)*18)){
 	        	@Override
 	        	public boolean isItemValid(ItemStack stack){
 	        		return ToolUtil.isWeapon(stack);
@@ -81,7 +87,7 @@ public class ContainerBackpackNormal extends Container {
 	        		return "crystalmod:items/icon_sword";
 	        	}
 	        });
-	        this.addSlotToContainer(new Slot(backpackInventory, invEnd+2, 8+offsetLeft+(9*18)+8, offsetTabs+17+((rows-1)*18)){
+	        this.addSlotToContainer(new Slot(backpackInventory, invEnd+2, 8+offsetLeft+(9*18)+8, offsetTabs+17+((slotRows-1)*18)){
 	        	@Override
 	        	public boolean isItemValid(ItemStack stack){
 	        		return ToolUtil.isTool(stack);
@@ -210,7 +216,7 @@ public class ContainerBackpackNormal extends Container {
             }
             else if (isArmor && isArmorFull)
             {
-                int i = armorEnd - entityequipmentslot.getIndex();
+            	int i = armorEnd - entityequipmentslot.getIndex();
 
                 if (!this.mergeItemStack(newStack, i, i + 1, false))
                 {
@@ -251,18 +257,21 @@ public class ContainerBackpackNormal extends Container {
 	            if(slot >= inventoryStart){
 	                //Shift from Inventory
 	            	
-	            	boolean skip = false;
-	            	
 	            	if(isArmor){
-	            		if(isArmorFull){
-	            			skip = true;
-	            		}
-	            		if(slot >= hotbarEnd+1 && slot < armorEnd+1){
-	            			skip = true;
-	            		}
-	            	}
+	            		//Send to hot-bar
+                    	if(!this.mergeItemStack(newStack, hotbarStart, hotbarEnd+1, false)){
+                    		//Send to inventory
+                        	if(!this.mergeItemStack(newStack, inventoryStart, inventoryEnd+1, false)){
+                        		//Send to backpack
+                            	if(!this.mergeItemStack(newStack, 0, inventoryStart, false)){
+                    				return ItemStackTools.getEmptyStack();
+                    			}
+                    		}
+                    	}
+                    }
 	            	
-	                if(skip || !this.mergeItemStack(newStack, 0, inventoryStart, false)){
+	            	//Send to backpack
+                	if(!this.mergeItemStack(newStack, 0, inventoryStart, false)){
 	                    if(slot >= inventoryStart && slot <= inventoryEnd){
 	                        if(!this.mergeItemStack(newStack, hotbarStart, hotbarEnd+1, false)){
 	                            return ItemStackTools.getEmptyStack();
@@ -275,11 +284,12 @@ public class ContainerBackpackNormal extends Container {
 	                        return ItemStackTools.getEmptyStack();
 	                    }
 	                }
-	                //
 	
 	            }
-	            else if(!this.mergeItemStack(newStack, inventoryStart, armorEnd+1, false)){
-	                return ItemStackTools.getEmptyStack();
+	            else if(!this.mergeItemStack(newStack, hotbarStart, hotbarEnd+1, false)){
+	            	if(!this.mergeItemStack(newStack, inventoryStart, inventoryEnd+1, false)){
+	            		return ItemStackTools.getEmptyStack();
+	            	}
 	            }
             }
 

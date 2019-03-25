@@ -80,7 +80,7 @@ public class CrystalWell {
 		IBlockState yLog = log.withProperty(BlockLog.LOG_AXIS, EnumAxis.Y);
 		IBlockState zLog = log.withProperty(BlockLog.LOG_AXIS, EnumAxis.Z);
 		
-		IBlockState planks = ModBlocks.crystalPlanks.getDefaultState().withProperty(CrystalColors.COLOR_BASIC, basicColor);
+		IBlockState planks = ModBlocks.crystalPlanks.getDefaultState().withProperty(CrystalColors.COLOR_SUPER, CrystalColors.SuperSpecial.convert(basicColor));
 		IBlockState chisled = ModBlocks.crystal.getDefaultState().withProperty(BlockCrystal.TYPE, chisledType);
 		IBlockState bricks = ModBlocks.crystal.getDefaultState().withProperty(BlockCrystal.TYPE, brickType);
 		IBlockState liquid = fluid.getBlock().getDefaultState();

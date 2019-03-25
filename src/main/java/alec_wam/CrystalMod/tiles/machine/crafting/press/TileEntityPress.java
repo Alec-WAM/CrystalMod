@@ -1,5 +1,6 @@
 package alec_wam.CrystalMod.tiles.machine.crafting.press;
 
+import alec_wam.CrystalMod.client.sound.ModSounds;
 import alec_wam.CrystalMod.tiles.machine.BasicMachineRecipe;
 import alec_wam.CrystalMod.tiles.machine.TileEntityMachine;
 import alec_wam.CrystalMod.util.ItemStackTools;
@@ -8,6 +9,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -15,6 +17,16 @@ public class TileEntityPress extends TileEntityMachine implements ISidedInventor
 
 	public TileEntityPress() {
 		super("Press", 2);
+	}
+	
+	@Override
+	public float getVolume(){
+		return 0.5F;
+	}
+	
+	@Override
+	public ResourceLocation getRunningSound(){
+		return ModSounds.metalpress.getSoundName();
 	}
 	
 	@Override

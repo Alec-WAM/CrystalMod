@@ -41,23 +41,22 @@ public class TreeUtil {
 	    Block block = bs.getBlock();
 	    bs = bs.getActualState(worldObj, bc);
 	    
-	    //ItemStack held = minion.getHeldItemMainhand();
 	    EntityPlayer player = FakePlayerUtil.getPlayer((WorldServer)worldObj);
 	    player.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, held);
+	    boolean hasSilk = EnchantmentHelper.getEnchantmentLevel(Enchantments.SILK_TOUCH, held) != 0;
+	    
 	    List<ItemStack> itemDrops = block.getDrops(worldObj, bc, bs, 0);
 	    float chance = ForgeEventFactory.fireBlockHarvesting(itemDrops, worldObj, bc, bs,
-	    		fortune, 1, EnchantmentHelper.getEnchantmentLevel(Enchantments.SILK_TOUCH, held) != 0, player);
+	    		fortune, 1, hasSilk, player);
 	    worldObj.setBlockToAir(bc);
 	    List<ItemStack> realDrops = Lists.newArrayList();
 	    if (itemDrops != null) {
 	        for (ItemStack stack : itemDrops) {
 	          if (worldObj.rand.nextFloat() <= chance) {
 	        	  realDrops.add(stack);
-	            //worldObj.spawnEntityInWorld(new EntityItem(worldObj, bc.getX() + 0.5, bc.getY() + 0.5, bc.getZ() + 0.5, stack.copy()));
 	        	  if (block == refBlock) { // other wise leaves
 	        		  held.getItem().onBlockDestroyed(held, worldObj, bs, bc, player);
-	        		  //applyDamage(held, 1, true);
-	        	  }
+	        	  } 
 	          }
 	        }
 	    }

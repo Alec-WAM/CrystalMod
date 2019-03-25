@@ -4,6 +4,7 @@ import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import net.minecraft.block.BlockContainer;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -20,8 +21,9 @@ public class BlockEnhancementTable extends BlockContainer {
 
 	public BlockEnhancementTable() {
 		super(Material.IRON);
+		this.setSoundType(SoundType.METAL);
 		this.setCreativeTab(CrystalMod.tabBlocks);
-		this.setHardness(2f).setResistance(10F);
+		this.setHardness(2f).setResistance(15F);
 		setHarvestLevel("pickaxe", 0);
 	}
 	

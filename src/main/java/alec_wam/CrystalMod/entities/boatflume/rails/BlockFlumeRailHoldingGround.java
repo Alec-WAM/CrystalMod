@@ -4,9 +4,7 @@ import alec_wam.CrystalMod.blocks.FakeBlockStateWithData;
 import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.entities.boatflume.BlockFlumeRailBase;
 import alec_wam.CrystalMod.entities.boatflume.EntityFlumeBoat;
-import alec_wam.CrystalMod.entities.boatflume.BlockFlumeRailBase.EnumRailDirection;
 import alec_wam.CrystalMod.proxy.ClientProxy;
-import alec_wam.CrystalMod.util.ModLogger;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.util.ResourceLocation;
@@ -46,8 +44,7 @@ public class BlockFlumeRailHoldingGround extends BlockFlumeRailPoweredGround {
 	@Override
 	public float getSpeed(World world, EntityFlumeBoat flume, BlockPos pos)
     {
-		IBlockState state = world.getBlockState(pos);
-        return super.getSpeed(world, flume, pos);
+		return super.getSpeed(world, flume, pos);
     }
 	
 	@Override

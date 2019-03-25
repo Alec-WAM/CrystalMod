@@ -6,7 +6,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
@@ -44,12 +43,10 @@ public interface IBackpack {
 		return null;
 	}
 
+	public IBackpackBlockHandler getBlockHandler();
+	
 	public default boolean canLock(ItemStack backpack, EntityPlayer playerIn) {
 		return BackpackUtil.getOwner(backpack) == null;
-	}
-
-	public default TileEntity createTileEntity(World worldIn, int meta) {
-		return null;
 	}
 
 	public default boolean handleItemPickup(EntityItemPickupEvent event, EntityPlayer player, ItemStack backpack) {
@@ -72,5 +69,9 @@ public interface IBackpack {
 
 	public default boolean playOpenSound(){
 		return true;
+	}
+
+	public default boolean createBackpackBlock(World world, BlockPos pos, EntityPlayer player, ItemStack stack){
+		return false;
 	}
 }

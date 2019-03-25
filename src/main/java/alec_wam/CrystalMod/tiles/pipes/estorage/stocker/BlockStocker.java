@@ -17,7 +17,8 @@ public class BlockStocker extends BlockMachine {
 
 	public BlockStocker() {
 		super(Material.IRON);
-		setHardness(0.5F);
+		setHardness(2.0F);
+        this.setResistance(10.0F);
 		setCreativeTab(CrystalMod.tabBlocks);
 	}
 

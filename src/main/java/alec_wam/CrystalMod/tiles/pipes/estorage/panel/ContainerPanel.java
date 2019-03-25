@@ -7,6 +7,7 @@ import com.google.common.collect.Lists;
 
 import alec_wam.CrystalMod.api.estorage.INetworkContainer;
 import alec_wam.CrystalMod.api.estorage.IPanelSource;
+import alec_wam.CrystalMod.api.estorage.security.SecurityData;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetwork;
 import alec_wam.CrystalMod.tiles.pipes.estorage.FluidStorage.FluidStackData;
@@ -65,6 +66,7 @@ public class ContainerPanel extends Container implements INetworkContainer {
 		}
 		if(crafter !=null && crafter instanceof EntityPlayerMP){
 			sendItemsTo((EntityPlayerMP)crafter);
+			sendSecurityTo((EntityPlayerMP)crafter);
 		}
 	}
 	
@@ -291,8 +293,6 @@ public class ContainerPanel extends Container implements INetworkContainer {
 		}
 	}
 
-
-
 	@Override
 	public void sendFluidsToAll() {}
 
@@ -301,6 +301,21 @@ public class ContainerPanel extends Container implements INetworkContainer {
 
 	@Override
 	public void sendFluidsTo(EntityPlayerMP player) {}
+
+	@Override
+	public void sendSecurityTo(EntityPlayerMP player) {
+		if(panel.getNetwork() !=null){
+			SecurityData data = panel.getNetwork().getSecurityData(player.getUniqueID());
+			if(data !=null){
+				try {
+					PacketEStorageItemList pil = new PacketEStorageItemList(panel.getPanelPos(), EnumListType.SECURITY, data.compress());
+					CrystalModNetwork.sendTo(pil, player);	
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
 	
 	@Override
 	public EStorageNetwork getNetwork() {

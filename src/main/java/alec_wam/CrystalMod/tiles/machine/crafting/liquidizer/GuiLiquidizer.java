@@ -38,7 +38,7 @@ public class GuiLiquidizer extends GuiElementContainer{
 	@Override
 	public void drawGuiContainerForegroundLayer(int par1, int par2){
 		super.drawGuiContainerForegroundLayer(par1, par2);
-		RenderUtil.renderGuiTank(tileMachine.tank, 112, 23, zLevel, 12, 40);
+		RenderUtil.renderGuiTank(tileMachine.tank, 112, 23, zLevel, 12, 40, true);
 		int xAxis = (par1 - (width - xSize) / 2);
 		int yAxis = (par2 - (height - ySize) / 2);
 		if(xAxis > 111 && xAxis < (111)+(14) && yAxis >= 22 && yAxis <= 22+(42))

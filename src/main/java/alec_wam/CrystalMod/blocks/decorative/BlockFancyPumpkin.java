@@ -56,6 +56,7 @@ public class BlockFancyPumpkin extends BlockPumpkin implements ICustomModel {
     	super();
     	setCreativeTab(CreativeTabs.BUILDING_BLOCKS);
     	setHardness(1.0F);
+		this.setHarvestLevel("axe", 0);
     	setSoundType(SoundType.WOOD);
     	setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(TYPE, PumpkinType.STEVE));
     }

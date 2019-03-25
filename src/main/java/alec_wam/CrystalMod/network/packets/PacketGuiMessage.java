@@ -8,6 +8,8 @@ import alec_wam.CrystalMod.network.AbstractPacketThreadsafe;
 import alec_wam.CrystalMod.network.IMessageHandler;
 import alec_wam.CrystalMod.util.BlockUtil;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -62,6 +64,10 @@ public class PacketGuiMessage extends AbstractPacketThreadsafe {
 	@Override
 	public void handleClientSafe(NetHandlerPlayClient netHandler) {
 		EntityPlayer player = CrystalMod.proxy.getClientPlayer();
+		GuiScreen screen = Minecraft.getMinecraft().currentScreen;
+		if(screen instanceof IMessageHandler){
+			((IMessageHandler)screen).handleMessage(type, data, true);
+		}
 		if(player !=null && player.openContainer !=null){
 			if(player.openContainer instanceof IMessageHandler){
 				((IMessageHandler)player.openContainer).handleMessage(type, data, true);

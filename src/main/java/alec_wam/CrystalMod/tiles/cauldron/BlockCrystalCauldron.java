@@ -5,8 +5,8 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import alec_wam.CrystalMod.CrystalMod;
-import alec_wam.CrystalMod.util.ChatUtil;
 import net.minecraft.block.BlockContainer;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -33,6 +33,8 @@ public class BlockCrystalCauldron extends BlockContainer
     {
         super(Material.IRON, MapColor.STONE);
         this.setHardness(1f);
+        this.setResistance(10.0F);
+        this.setSoundType(SoundType.METAL);
 		this.setCreativeTab(CrystalMod.tabBlocks);
     }
     
@@ -79,17 +81,7 @@ public class BlockCrystalCauldron extends BlockContainer
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ)
     {
-    	TileEntity tile = worldIn.getTileEntity(pos);
-        if(tile !=null && tile instanceof TileEntityCrystalCauldron){
-        	TileEntityCrystalCauldron caul = (TileEntityCrystalCauldron) tile;
-        	if(!worldIn.isRemote){
-        		if(caul.crystalStack == null){
-        			ChatUtil.sendNoSpam(playerIn, "Empty");
-        		}else ChatUtil.sendNoSpam(playerIn, (caul.crystalStack == null ? "null" : caul.crystalStack.getLocalizedName())+" "+caul.crystalStack.amount+"mB");
-        	}
-        	return true;
-        }
-		return false;
+    	return false;
     }
     
 	@Override

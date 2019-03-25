@@ -7,6 +7,7 @@ import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.proxy.ClientProxy;
+import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.ProfileUtil;
 import alec_wam.CrystalMod.util.UUIDUtils;
 import net.minecraft.entity.Entity;
@@ -53,6 +54,10 @@ public class ItemBackpackBase extends Item implements ICustomModel {
 	@Override
 	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
     {
+		if(player.isSneaking() && backpack.createBackpackBlock(world, pos.offset(facing), player, player.getHeldItem(hand))){
+			player.setHeldItem(hand, ItemUtil.consumeItem(player.getHeldItem(hand)));
+			return EnumActionResult.SUCCESS;
+		}
 		return backpack.itemUse(player.getHeldItem(hand), player, world, pos, hand, facing, hitX, hitY, hitZ);
     }
 	

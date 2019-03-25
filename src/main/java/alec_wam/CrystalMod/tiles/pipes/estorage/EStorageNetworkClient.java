@@ -6,12 +6,15 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.UUID;
 
 import javax.annotation.Nullable;
 
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 
+import alec_wam.CrystalMod.api.estorage.security.NetworkAbility;
+import alec_wam.CrystalMod.api.estorage.security.SecurityData;
 import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage.ItemStackData;
 import alec_wam.CrystalMod.tiles.pipes.estorage.client.CountComp;
 import alec_wam.CrystalMod.tiles.pipes.estorage.client.ItemFilter;
@@ -56,6 +59,7 @@ public class EStorageNetworkClient extends EStorageNetwork {
 	public List<ItemStackData> sortedItems = Lists.newArrayList();
 	public ViewType lastViewType = ViewType.BOTH;
 	public List<ItemStackData> craftingItems = Lists.newArrayList();
+	public SecurityData clientSecurityData = null;
 	
 	public List<ItemStackData> getItemsSorted(SortType sortType, ViewType viewType){
 		List<ItemStackData> copy = Lists.newArrayList();
@@ -132,6 +136,21 @@ public class EStorageNetworkClient extends EStorageNetwork {
 			needsListUpdate = false;
 		}
 		return displayItemsCache;
+	}
+	
+	@Override
+	public boolean hasAbility(UUID uuid, NetworkAbility... abilities){
+		if(this.clientSecurityData == null){
+			return true;
+		}
+		if(uuid !=null){
+			for(NetworkAbility ability : abilities){
+				if(!clientSecurityData.hasAbility(ability)){
+					return false;
+				}
+			}
+		}
+		return true;
 	}
 	
 }

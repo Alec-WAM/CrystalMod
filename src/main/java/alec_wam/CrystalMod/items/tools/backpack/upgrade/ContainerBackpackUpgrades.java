@@ -130,6 +130,7 @@ public class ContainerBackpackUpgrades extends Container
     {
         super.onContainerClosed(playerIn);
         upgradeInventory.guiSaveSafe(playerIn);
+        //TODO Make work for block
         BlockUtil.openWorksiteGui(CrystalMod.proxy.getClientPlayer(), GuiHandler.GUI_ID_BACKPACK, 0, 0, 0);
     }
 }

@@ -14,6 +14,7 @@ import com.google.common.collect.Lists;
 import alec_wam.CrystalMod.api.CrystalModAPI;
 import alec_wam.CrystalMod.api.guide.GuideChapter;
 import alec_wam.CrystalMod.api.guide.GuideIndex;
+import alec_wam.CrystalMod.client.sound.ModSounds;
 import alec_wam.CrystalMod.client.util.comp.GuiComponentBook;
 import alec_wam.CrystalMod.client.util.comp.GuiComponentSprite;
 import alec_wam.CrystalMod.tiles.pipes.estorage.client.IGuiScreen;
@@ -21,6 +22,7 @@ import alec_wam.CrystalMod.tiles.pipes.estorage.client.VScrollbar;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.Lang;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
@@ -225,6 +227,7 @@ public class GuiGuideIndex extends GuiGuideBase implements IGuiScreen {
 					if(mouseX >=x && mouseX <x+182 && mouseY >=y && mouseY <y+20){
 						GuideChapter chapter = chapters.get(s);
 						mc.displayGuiScreen(new GuiGuideChapter(this, chapter));
+						mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(ModSounds.book_pageturn, 1.0F));
 						return;
 					}
 				}
@@ -244,6 +247,7 @@ public class GuiGuideIndex extends GuiGuideBase implements IGuiScreen {
 					if(mouseX >=x && mouseX <x+182 && mouseY >=y && mouseY <y+20){
 						GuideChapter chapter = chapters.get(s);
 						mc.displayGuiScreen(new GuiGuideChapter(this, chapter));
+						mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(ModSounds.book_pageturn, 1.0F));
 						return;
 					}
 				}

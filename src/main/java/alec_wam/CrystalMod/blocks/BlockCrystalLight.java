@@ -19,6 +19,7 @@ public class BlockCrystalLight extends EnumBlock<BlockCrystalLight.LightBlockTyp
 		super(Material.IRON, TYPE, LightBlockType.class);
 		this.setCreativeTab(CrystalMod.tabBlocks);
 		this.setHardness(2f);
+        this.setResistance(15.0F);
 		this.setLightLevel(0.5F);
 		this.setDefaultState(this.blockState.getBaseState().withProperty(TYPE, LightBlockType.BLUE));
 	}

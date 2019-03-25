@@ -1,0 +1,11 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "transform": "forge:default-item",
+        "model": "forge:item-layer"
+    },
+    "variants": {
+        "mini": [{ "textures": { "layer0": "crystalmod:items/shield_potion_mini" }}],
+        "large": [{ "textures": { "layer0": "crystalmod:items/shield_potion_large" }}]
+    }
+}

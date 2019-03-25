@@ -1,7 +1,6 @@
 package alec_wam.CrystalMod.tiles.machine.worksite;
 
 import alec_wam.CrystalMod.CrystalMod;
-import alec_wam.CrystalMod.util.IEnumMeta;
 import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.tiles.BlockStateFacing;
@@ -10,6 +9,7 @@ import alec_wam.CrystalMod.tiles.machine.worksite.imp.WorksiteAnimalFarm;
 import alec_wam.CrystalMod.tiles.machine.worksite.imp.WorksiteCropFarm;
 import alec_wam.CrystalMod.tiles.machine.worksite.imp.WorksiteTreeFarm;
 import alec_wam.CrystalMod.util.ChatUtil;
+import alec_wam.CrystalMod.util.IEnumMeta;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import net.minecraft.block.BlockContainer;
@@ -21,7 +21,6 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -46,7 +45,8 @@ public class BlockWorksite extends BlockContainer implements ICustomModel {
 	public BlockWorksite() {
 		super(Material.IRON);
 		this.setCreativeTab(CrystalMod.tabBlocks);
-		setHardness(2.f);
+		setHardness(3.0f);
+        this.setResistance(20.0F);
 	}
 
 	@SideOnly(Side.CLIENT)

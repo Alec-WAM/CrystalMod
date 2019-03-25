@@ -163,8 +163,6 @@ public class WorksiteCropFarm extends TileWorksiteUserBlocks {
 			state = getWorld().getBlockState(position.down());
 			if (state.getBlock() == Blocks.DIRT || state.getBlock() == Blocks.GRASS) {
 				blocksToTill.add(position.down());
-			} else if (state.getBlock() == Blocks.FARMLAND) {
-				blocksToPlant.add(position);
 			} else {
 				for (int i = 27; i < 30; i++) {
 					ItemStack stack = inventory.getStackInSlot(i);
@@ -281,7 +279,7 @@ public class WorksiteCropFarm extends TileWorksiteUserBlocks {
 			}
 		} else if (!blocksToPlant.isEmpty() && plantableCount > 0) {
 			it = blocksToPlant.iterator();
-			while (it.hasNext() && (position = it.next()) != null) {
+			loop: while (it.hasNext() && (position = it.next()) != null) {
 				if (getWorld().isAirBlock(position)) {
 					ItemStack stack = ItemStackTools.getEmptyStack();
 					for (int i = 27; i < 30; i++) {
@@ -313,6 +311,8 @@ public class WorksiteCropFarm extends TileWorksiteUserBlocks {
 										return true;
 									}
 								}
+							} else {
+								continue loop;
 							}
 						}
 					}

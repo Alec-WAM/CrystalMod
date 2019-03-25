@@ -9,6 +9,7 @@ import com.google.common.collect.Lists;
 
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.ModBlocks;
+import alec_wam.CrystalMod.fluids.ModFluids;
 import alec_wam.CrystalMod.tiles.cauldron.CauldronRecipeManager;
 import alec_wam.CrystalMod.tiles.cauldron.CauldronRecipeManager.InfusionRecipe;
 import alec_wam.CrystalMod.util.ItemStackTools;
@@ -59,7 +60,16 @@ public class CauldronRecipeCategory extends BlankRecipeCategory<CauldronRecipeCa
 			ingredients.setInputLists(ItemStack.class, inputs);
 
 			List<List<FluidStack>> fluids = Lists.newArrayList();
-			fluids.add(Lists.newArrayList(recipe.getFluidInput()));
+			if(recipe.getFluidInput() !=null){
+				fluids.add(Lists.newArrayList(recipe.getFluidInput()));
+			} else {
+				List<FluidStack> stacks = Lists.newArrayList();
+				stacks.add(new FluidStack(ModFluids.fluidBlueCrystal, 1));
+				stacks.add(new FluidStack(ModFluids.fluidRedCrystal, 1));
+				stacks.add(new FluidStack(ModFluids.fluidGreenCrystal, 1));
+				stacks.add(new FluidStack(ModFluids.fluidDarkCrystal, 1));
+				fluids.add(stacks);
+			}
 			ingredients.setInputLists(FluidStack.class, fluids);
 			
 			List<ItemStack> outputStacks = Lists.newArrayList();

@@ -52,7 +52,7 @@ public class CrystalInfusionManager {
 	    
 	    public FluidStack getFluidInput()
 	    {
-	      return this.finput.copy();
+	      return finput == null ? null : this.finput.copy();
 	    }
 	    
 	    public int getEnergy(){
@@ -92,7 +92,7 @@ public class CrystalInfusionManager {
 				passInput = ItemUtil.canCombine(input, (ItemStack)recipe.getInput());
 			}
 			if(passInput){
-				if(recipe.getFluidInput().isFluidEqual(cinput) && recipe.getFluidInput().amount <=cinput.amount){
+				if((recipe.getFluidInput() == null && cinput !=null && cinput.amount >=1) || recipe.getFluidInput().isFluidEqual(cinput) && recipe.getFluidInput().amount <=cinput.amount){
 					return recipe;
 				}
 			}

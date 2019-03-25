@@ -1,5 +1,7 @@
 package alec_wam.CrystalMod.tiles.shieldrack;
 
+import java.util.Random;
+
 import alec_wam.CrystalMod.blocks.EnumBlock;
 import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.tiles.BlockStateFacing;
@@ -10,6 +12,7 @@ import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.tool.ToolUtil;
+import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -19,6 +22,7 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -100,6 +104,57 @@ public class BlockShieldRack extends EnumBlock<WoodenBlockProperies.WoodType> im
     }
 	
 	@Override
+	public boolean canPlaceBlockAt(World worldIn, BlockPos pos)
+    {
+		for (EnumFacing enumfacing : EnumFacing.HORIZONTALS)
+	    {
+	        if (canBlockStay(worldIn, pos.offset(enumfacing), enumfacing))
+	        {
+	            return true;
+	        }
+	    }
+		return false;
+    }
+	
+	@SuppressWarnings("deprecation")
+	@Override
+	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos)
+    {
+        super.neighborChanged(state, worldIn, pos, blockIn, fromPos);
+        this.checkAndDropBlock(worldIn, pos, state);
+    }
+
+	@Override
+	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand)
+    {
+        this.checkAndDropBlock(worldIn, pos, state);
+    }
+
+    protected void checkAndDropBlock(World world, BlockPos pos, IBlockState state)
+    {
+    	EnumFacing facing = state.getValue(BlockStateFacing.facingProperty);
+    	TileEntity te = world.getTileEntity(pos);
+        if (te !=null) {
+        	if(te instanceof IFacingTile){
+        		int face = ((IFacingTile)te).getFacing();
+        		facing = EnumFacing.getHorizontal(face);
+        	}
+        }    	
+    	BlockPos otherPos = pos.offset(facing.getOpposite());
+        if (!canBlockStay(world, otherPos, facing))
+        {
+            dropBlockAsItem(world, pos, state, 0);
+            world.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
+        }
+    }
+
+    public boolean canBlockStay(World worldIn, BlockPos pos, EnumFacing facing)
+    {
+    	//BlockPos otherPos = ;
+        return worldIn.getBlockState(pos).isSideSolid(worldIn, pos, facing);
+    }
+	
+	@Override
 	@SideOnly(Side.CLIENT)
     public BlockRenderLayer getBlockLayer() {
         return BlockRenderLayer.CUTOUT;
@@ -142,12 +197,12 @@ public class BlockShieldRack extends EnumBlock<WoodenBlockProperies.WoodType> im
 		TileShieldRack rack = (TileShieldRack)tile;
 		ItemStack held = player.getHeldItem(hand);
 		EnumFacing rot = EnumFacing.getHorizontal(rack.getFacing());
-		
 		if(rot.getAxis() == Axis.X){
 			if(hitZ > 0.3 && hitZ < 0.6 && (ItemStackTools.isEmpty(held) || held.getItem() == Items.SHIELD)){
 				//Shield
 				final ItemStack handStack = held;
 				final ItemStack shieldStack = rack.getShieldStack();
+				if(ItemStackTools.isEmpty(held) && ItemStackTools.isEmpty(shieldStack))return false;
 				rack.setShieldStack(handStack);
 				player.setHeldItem(hand, shieldStack);
 				world.playSound(pos.getX(), pos.getY(), pos.getZ(), getSoundType().getHitSound(), SoundCategory.BLOCKS, 0.5F, 1.0F, false);
@@ -159,10 +214,10 @@ public class BlockShieldRack extends EnumBlock<WoodenBlockProperies.WoodType> im
 					//Left
 					final ItemStack handStack = held;
 					final ItemStack shieldStack = rack.getLeftStack();
-					boolean exchange = !ItemUtil.canCombine(handStack, shieldStack);
+					if(ItemStackTools.isEmpty(held) && ItemStackTools.isEmpty(shieldStack))return false;
 					rack.setLeftStack(handStack);
 					player.setHeldItem(hand, shieldStack);
-					if(exchange)world.playSound(pos.getX(), pos.getY(), pos.getZ(), getSoundType().getHitSound(), SoundCategory.BLOCKS, 0.5F, 0.8F, false);
+					world.playSound(pos.getX(), pos.getY(), pos.getZ(), getSoundType().getHitSound(), SoundCategory.BLOCKS, 0.5F, 0.8F, false);
 					BlockUtil.markBlockForUpdate(world, pos);
 					return true;
 				}
@@ -170,10 +225,10 @@ public class BlockShieldRack extends EnumBlock<WoodenBlockProperies.WoodType> im
 					//Right
 					final ItemStack handStack = held;
 					final ItemStack shieldStack = rack.getRightStack();
-					boolean exchange = !ItemUtil.canCombine(handStack, shieldStack);
+					if(ItemStackTools.isEmpty(held) && ItemStackTools.isEmpty(shieldStack))return false;
 					rack.setRightStack(handStack);
 					player.setHeldItem(hand, shieldStack);
-					if(exchange)world.playSound(pos.getX(), pos.getY(), pos.getZ(), getSoundType().getHitSound(), SoundCategory.BLOCKS, 0.5F, 0.8F, false);
+					world.playSound(pos.getX(), pos.getY(), pos.getZ(), getSoundType().getHitSound(), SoundCategory.BLOCKS, 0.5F, 0.8F, false);
 					BlockUtil.markBlockForUpdate(world, pos);
 					return true;
 				}
@@ -183,10 +238,10 @@ public class BlockShieldRack extends EnumBlock<WoodenBlockProperies.WoodType> im
 					//Left
 					final ItemStack handStack = held;
 					final ItemStack shieldStack = rack.getLeftStack();
-					boolean exchange = !ItemUtil.canCombine(handStack, shieldStack);
+					if(ItemStackTools.isEmpty(held) && ItemStackTools.isEmpty(shieldStack))return false;
 					rack.setLeftStack(handStack);
 					player.setHeldItem(hand, shieldStack);
-					if(exchange)world.playSound(pos.getX(), pos.getY(), pos.getZ(), getSoundType().getHitSound(), SoundCategory.BLOCKS, 0.5F, 0.8F, false);
+					world.playSound(pos.getX(), pos.getY(), pos.getZ(), getSoundType().getHitSound(), SoundCategory.BLOCKS, 0.5F, 0.8F, false);
 					BlockUtil.markBlockForUpdate(world, pos);
 					return true;
 				}
@@ -194,10 +249,10 @@ public class BlockShieldRack extends EnumBlock<WoodenBlockProperies.WoodType> im
 					//Right
 					final ItemStack handStack = held;
 					final ItemStack shieldStack = rack.getRightStack();
-					boolean exchange = !ItemUtil.canCombine(handStack, shieldStack);
+					if(ItemStackTools.isEmpty(held) && ItemStackTools.isEmpty(shieldStack))return false;
 					rack.setRightStack(handStack);
 					player.setHeldItem(hand, shieldStack);
-					if(exchange)world.playSound(pos.getX(), pos.getY(), pos.getZ(), getSoundType().getHitSound(), SoundCategory.BLOCKS, 0.5F, 0.8F, false);
+					world.playSound(pos.getX(), pos.getY(), pos.getZ(), getSoundType().getHitSound(), SoundCategory.BLOCKS, 0.5F, 0.8F, false);
 					BlockUtil.markBlockForUpdate(world, pos);
 					return true;
 				}
@@ -208,10 +263,10 @@ public class BlockShieldRack extends EnumBlock<WoodenBlockProperies.WoodType> im
 				//Shield
 				final ItemStack handStack = held;
 				final ItemStack shieldStack = rack.getShieldStack();
-				boolean exchange = !ItemUtil.canCombine(handStack, shieldStack);
+				if(ItemStackTools.isEmpty(held) && ItemStackTools.isEmpty(shieldStack))return false;
 				rack.setShieldStack(handStack);
 				player.setHeldItem(hand, shieldStack);
-				if(exchange)world.playSound(pos.getX(), pos.getY(), pos.getZ(), getSoundType().getHitSound(), SoundCategory.BLOCKS, 0.5F, 1.0F, false);
+				world.playSound(pos.getX(), pos.getY(), pos.getZ(), getSoundType().getHitSound(), SoundCategory.BLOCKS, 0.5F, 1.0F, false);
 				BlockUtil.markBlockForUpdate(world, pos);
 				return true;
 			}
@@ -220,10 +275,10 @@ public class BlockShieldRack extends EnumBlock<WoodenBlockProperies.WoodType> im
 					//Left
 					final ItemStack handStack = held;
 					final ItemStack shieldStack = rack.getLeftStack();
-					boolean exchange = !ItemUtil.canCombine(handStack, shieldStack);
+					if(ItemStackTools.isEmpty(held) && ItemStackTools.isEmpty(shieldStack))return false;
 					rack.setLeftStack(handStack);
 					player.setHeldItem(hand, shieldStack);
-					if(exchange)world.playSound(pos.getX(), pos.getY(), pos.getZ(), getSoundType().getHitSound(), SoundCategory.BLOCKS, 0.5F, 0.8F, false);
+					world.playSound(pos.getX(), pos.getY(), pos.getZ(), getSoundType().getHitSound(), SoundCategory.BLOCKS, 0.5F, 0.8F, false);
 					BlockUtil.markBlockForUpdate(world, pos);
 					return true;
 				}
@@ -231,10 +286,10 @@ public class BlockShieldRack extends EnumBlock<WoodenBlockProperies.WoodType> im
 					//Right
 					final ItemStack handStack = held;
 					final ItemStack shieldStack = rack.getRightStack();
-					boolean exchange = !ItemUtil.canCombine(handStack, shieldStack);
+					if(ItemStackTools.isEmpty(held) && ItemStackTools.isEmpty(shieldStack))return false;
 					rack.setRightStack(handStack);
 					player.setHeldItem(hand, shieldStack);
-					if(exchange)world.playSound(pos.getX(), pos.getY(), pos.getZ(), getSoundType().getHitSound(), SoundCategory.BLOCKS, 0.5F, 0.8F, false);
+					world.playSound(pos.getX(), pos.getY(), pos.getZ(), getSoundType().getHitSound(), SoundCategory.BLOCKS, 0.5F, 0.8F, false);
 					BlockUtil.markBlockForUpdate(world, pos);
 					return true;
 				}
@@ -244,10 +299,10 @@ public class BlockShieldRack extends EnumBlock<WoodenBlockProperies.WoodType> im
 					//Left
 					final ItemStack handStack = held;
 					final ItemStack shieldStack = rack.getLeftStack();
-					boolean exchange = !ItemUtil.canCombine(handStack, shieldStack);
+					if(ItemStackTools.isEmpty(held) && ItemStackTools.isEmpty(shieldStack))return false;
 					rack.setLeftStack(handStack);
 					player.setHeldItem(hand, shieldStack);
-					if(exchange)world.playSound(pos.getX(), pos.getY(), pos.getZ(), getSoundType().getHitSound(), SoundCategory.BLOCKS, 0.5F, 0.8F, false);
+					world.playSound(pos.getX(), pos.getY(), pos.getZ(), getSoundType().getHitSound(), SoundCategory.BLOCKS, 0.5F, 0.8F, false);
 					BlockUtil.markBlockForUpdate(world, pos);
 					return true;
 				}
@@ -255,10 +310,10 @@ public class BlockShieldRack extends EnumBlock<WoodenBlockProperies.WoodType> im
 					//Right
 					final ItemStack handStack = held;
 					final ItemStack shieldStack = rack.getRightStack();
-					boolean exchange = !ItemUtil.canCombine(handStack, shieldStack);
+					if(ItemStackTools.isEmpty(held) && ItemStackTools.isEmpty(shieldStack))return false;
 					rack.setRightStack(handStack);
 					player.setHeldItem(hand, shieldStack);
-					if(exchange)world.playSound(pos.getX(), pos.getY(), pos.getZ(), getSoundType().getHitSound(), SoundCategory.BLOCKS, 0.5F, 0.8F, false);
+					world.playSound(pos.getX(), pos.getY(), pos.getZ(), getSoundType().getHitSound(), SoundCategory.BLOCKS, 0.5F, 0.8F, false);
 					BlockUtil.markBlockForUpdate(world, pos);
 					return true;
 				}
@@ -273,9 +328,9 @@ public class BlockShieldRack extends EnumBlock<WoodenBlockProperies.WoodType> im
         TileEntity tile = worldIn.getTileEntity(pos);
         if(tile !=null && tile instanceof TileShieldRack){
         	TileShieldRack rack = (TileShieldRack)tile;
-        	ItemUtil.spawnItemInWorldWithoutMotion(worldIn, rack.getLeftStack(), pos);
-        	ItemUtil.spawnItemInWorldWithoutMotion(worldIn, rack.getShieldStack(), pos);
-        	ItemUtil.spawnItemInWorldWithoutMotion(worldIn, rack.getRightStack(), pos);
+        	ItemUtil.spawnItemInWorldWithRandomMotion(worldIn, rack.getLeftStack(), pos);
+        	ItemUtil.spawnItemInWorldWithRandomMotion(worldIn, rack.getShieldStack(), pos);
+        	ItemUtil.spawnItemInWorldWithRandomMotion(worldIn, rack.getRightStack(), pos);
         }
         super.breakBlock(worldIn, pos, state);
     }

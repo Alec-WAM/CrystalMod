@@ -116,6 +116,42 @@
       }
     ], "subtitle": "crystalmod.subtitle.dark_infection_looping"
   },
+  "grinder": {
+    "category": "block",
+    "sounds": [
+      {
+        "name": "crystalmod:grinder",
+        "stream": false
+      }
+    ], "subtitle": "crystalmod.subtitle.grinder"
+  },
+  "metalpress": {
+    "category": "block",
+    "sounds": [
+      {
+        "name": "crystalmod:metalpress",
+        "stream": false
+      }
+    ], "subtitle": "crystalmod.subtitle.metalpress"
+  },
+  "engine": {
+    "category": "block",
+    "sounds": [
+      {
+        "name": "crystalmod:engine",
+        "stream": false
+      }
+    ], "subtitle": "crystalmod.subtitle.engine"
+  },
+  "machine_basic": {
+    "category": "block",
+    "sounds": [
+      {
+        "name": "crystalmod:machine_basic",
+        "stream": false
+      }
+    ], "subtitle": "crystalmod.subtitle.machine_basic"
+  },
   "devil_ambient": {
     "category": "hostile",
     "sounds": [
@@ -266,5 +302,23 @@
         "stream": false
       }
     ], "subtitle": "crystalmod.subtitle.backpack_zipper"
+  },
+  "book_open": {
+    "category": "player",
+    "sounds": [
+      {
+        "name": "crystalmod:book_open",
+        "stream": false
+      }
+    ], "subtitle": "crystalmod.subtitle.book_open"
+  },
+  "book_pageturn": {
+    "category": "player",
+    "sounds": [
+      {
+        "name": "crystalmod:book_pageturn",
+        "stream": false
+      }
+    ], "subtitle": "crystalmod.subtitle.book_pageturn"
   }
 }

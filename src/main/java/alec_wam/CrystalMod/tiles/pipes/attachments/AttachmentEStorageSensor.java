@@ -18,6 +18,7 @@ import alec_wam.CrystalMod.tiles.pipes.attachments.gui.GuiAttachmentSensor;
 import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetwork;
 import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage.ItemStackData;
 import alec_wam.CrystalMod.tiles.pipes.estorage.TileEntityPipeEStorage;
+import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.CompareType;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.client.RenderUtil;
@@ -167,6 +168,7 @@ public class AttachmentEStorageSensor extends AttachmentData {
 			if(this.lastOutRedstonePower !=this.outRedstonePower){
 				this.lastOutRedstonePower = this.outRedstonePower;
 				notifyBlocks(pipe.getWorld(), pipe.getPos(), face);
+				BlockUtil.markBlockForUpdate(pipe.getWorld(), pipe.getPos());
 				NBTTagCompound nbt = new NBTTagCompound();
 				nbt.setInteger("Dir", face.getIndex());
 				nbt.setInteger("RedstoneOutput", outRedstonePower);
@@ -177,7 +179,8 @@ public class AttachmentEStorageSensor extends AttachmentData {
 	
 	public void notifyBlocks(World world, BlockPos pos, EnumFacing dir){
 		BlockPos bc2 = pos.offset(dir);
-		world.scheduleUpdate(pos, ModBlocks.crystalPipe, ModBlocks.crystalPipe.tickRate(world));
+		IBlockState state = world.getBlockState(pos);
+		world.notifyBlockUpdate(pos, state, state, 3);
 		if (world.isBlockLoaded(bc2)) {
 			world.notifyNeighborsOfStateChange(bc2, ModBlocks.crystalPipe, true);
 			

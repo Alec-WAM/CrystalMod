@@ -13,9 +13,11 @@ import alec_wam.CrystalMod.util.tool.TreeHarvestUtil.BaseHarvestTarget;
 import alec_wam.CrystalMod.util.tool.TreeHarvestUtil.TreeData;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 
@@ -134,6 +136,7 @@ public class TileSapExtractor extends TileEntityMachine {
 			} else {
 				ItemStackTools.incStackSize(getStackInSlot(0), 1);
 			}
+			getWorld().playSound(null, getPos(), SoundEvents.BLOCK_SLIME_PLACE, SoundCategory.BLOCKS, 0.6f, 0.8f);
 		}
 	}
 

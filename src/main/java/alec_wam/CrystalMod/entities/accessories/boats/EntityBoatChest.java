@@ -18,6 +18,7 @@ import alec_wam.CrystalMod.util.UUIDUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.inventory.ItemStackHelper;
@@ -28,6 +29,7 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 
 public class EntityBoatChest extends Entity implements IInventory, IWirelessChestSource {
@@ -41,10 +43,16 @@ public class EntityBoatChest extends Entity implements IInventory, IWirelessChes
 		}
 	}
 
-	public EnumBoatChestType type = EnumBoatChestType.NORMAL;
 	private static final DataParameter<ItemStack> CHEST_STACK = EntityDataManager.<ItemStack>createKey(EntityBoatChest.class, DataSerializers.OPTIONAL_ITEM_STACK);
+	private static final DataParameter<Boolean> OPEN = EntityDataManager.<Boolean>createKey(EntityBoatChest.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<Byte> TYPE = EntityDataManager.<Byte>createKey(EntityBoatChest.class, DataSerializers.BYTE);
+	private EnumBoatChestType type;
 	private NonNullList<ItemStack> chestItems;
 	private WirelessInventory inventory;
+	
+	public float prevLidAngle;
+    public float lidAngle;
+    private boolean open;
 	
 	public EntityBoatChest(World world){
 		this(world, EnumBoatChestType.NORMAL);
@@ -52,7 +60,7 @@ public class EntityBoatChest extends Entity implements IInventory, IWirelessChes
 	
     public EntityBoatChest(World worldIn, EnumBoatChestType type) {
 		super(worldIn);
-		this.type = type;
+		setType(type);
 		if(type.hasInventory)chestItems = NonNullList.<ItemStack>withSize(27, ItemStack.EMPTY);
 		else chestItems = NonNullList.create();
 	}
@@ -64,12 +72,15 @@ public class EntityBoatChest extends Entity implements IInventory, IWirelessChes
 	}
     
     public boolean openChestGUI(EntityPlayer player){
-    	if(type == EnumBoatChestType.NORMAL){
+    	if(getType() == EnumBoatChestType.NORMAL){
     		player.displayGUIChest(this);
+    		setOpen(true);
+    		//TODO Possibly close when gui is closed
     		return true;
     	}
     	if(type == EnumBoatChestType.ENDER){
     		player.displayGUIChest(player.getInventoryEnderChest());
+    		setOpen(true);
     		return true;
     	}
     	if(type == EnumBoatChestType.WIRELESS){
@@ -90,12 +101,34 @@ public class EntityBoatChest extends Entity implements IInventory, IWirelessChes
 	protected void entityInit() {
 		noClip = true;
 		dataManager.register(CHEST_STACK, new ItemStack(Blocks.CHEST));
+        dataManager.register(TYPE, Byte.valueOf((byte)0));
+        dataManager.register(OPEN, Boolean.valueOf(false));
+	}
+	
+	public void setOpen(boolean open){
+		this.dataManager.set(OPEN, Boolean.valueOf(open));
+		this.open = open;
+	}
+	
+	public boolean getOpen()
+    {
+        return this.getEntityWorld().isRemote ? dataManager.get(OPEN) : this.open;
+    }
+	
+	public void setType(EnumBoatChestType type){
+		this.dataManager.set(TYPE, Byte.valueOf((byte)type.ordinal()));
+		this.type = type;
+	}
+	
+	public EnumBoatChestType getType(){
+		int t = this.getEntityWorld().isRemote ? dataManager.get(TYPE) : this.type.ordinal();
+		return EnumBoatChestType.values()[t];
 	}
     
     @Override
     protected void writeEntityToNBT(NBTTagCompound compound)
     {
-    	compound.setByte("Type", (byte)type.ordinal());
+    	compound.setByte("Type", (byte)getType().ordinal());
     	if(ItemStackTools.isValid(getChestStack())){
     		compound.setTag("ChestStack", getChestStack().writeToNBT(new NBTTagCompound()));
     	}
@@ -105,7 +138,7 @@ public class EntityBoatChest extends Entity implements IInventory, IWirelessChes
 	@Override
     protected void readEntityFromNBT(NBTTagCompound compound)
     {
-        this.type = EnumBoatChestType.values()[compound.getByte("Type")];
+        setType(EnumBoatChestType.values()[compound.getByte("Type")]);
         if(compound.hasKey("ChestStack")){
         	ItemStack stack = new ItemStack(compound.getCompoundTag("ChestStack"));
         	if(ItemStackTools.isValid(stack)){
@@ -149,6 +182,51 @@ public class EntityBoatChest extends Entity implements IInventory, IWirelessChes
 		Entity riding = getRidingEntity();
 		rotationYaw = riding.prevRotationYaw;
 		rotationPitch = 0F;
+		
+		if (world != null && !world.isRemote)
+        {
+        	boolean newOpen = getOpen();
+        	if(getType() == EnumBoatChestType.WIRELESS){
+	            WirelessInventory inventory = getInventory();
+	            if(inventory !=null){
+	            	newOpen = inventory.playerUsingCount > 0;
+	            }
+        	}
+            if(newOpen !=getOpen()){
+            	setOpen(newOpen);
+            }
+        }
+		
+		prevLidAngle = lidAngle;
+        float f = 0.1F;
+        if (getOpen() && lidAngle == 0.0F)
+        {
+            world.playSound(null, posX + 0.5D, posY + 0.5D, posZ + 0.5D, SoundEvents.BLOCK_CHEST_OPEN, SoundCategory.NEUTRAL, 0.5F, world.rand.nextFloat() * 0.1F + 0.9F);
+        }
+        if (!getOpen() && lidAngle > 0.0F || getOpen() && lidAngle < 1.0F)
+        {
+            float f1 = lidAngle;
+            if (getOpen())
+            {
+                lidAngle += f;
+            } else
+            {
+                lidAngle -= f;
+            }
+            if (lidAngle > 1.0F)
+            {
+                lidAngle = 1.0F;
+            }
+            float f2 = 0.5F;
+            if (lidAngle < f2 && f1 >= f2)
+            {
+                world.playSound(null, posX + 0.5D, posY + 0.5D, posZ + 0.5D, SoundEvents.BLOCK_CHEST_CLOSE, SoundCategory.NEUTRAL, 0.5F, world.rand.nextFloat() * 0.1F + 0.9F);
+            }
+            if (lidAngle < 0.0F)
+            {
+                lidAngle = 0.0F;
+            }
+        }
 	}
 	
 	public boolean isEmpty()

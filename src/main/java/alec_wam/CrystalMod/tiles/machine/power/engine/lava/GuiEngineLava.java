@@ -33,18 +33,16 @@ public class GuiEngineLava extends GuiElementContainer{
 		ElementEnergy energyElement = new ElementEnergy(this, 8+100, 24, this.tileEngine.energyStorage);
 		addElement(energyElement);
 		FluidStack fluid = tileEngine.renderFluid;
-		progressFluid = ((ElementFluidScaled)addElement(new ElementFluidScaled(this, 76, 34).setFluid(fluid).setSize(24, 16).setTexture("crystalmod:textures/gui/elements/progress_fluid_right.png", 34, 16)));;
-		//this.speed = ((ElementDualScaled)addElement(new ElementDualScaled(this, 56+24, 44).setSize(16, 16).setTexture("crystalmod:textures/gui/elements/Scale_Flame.png", 32, 16)));
-	    
+		progressFluid = ((ElementFluidScaled)addElement(new ElementFluidScaled(this, 77, 36).setFluid(fluid).setSize(24, 16).setTexture("crystalmod:textures/gui/elements/progress_fluid_right.png", 48, 16)));
 	}
 	
 	@Override
 	protected void updateElementInformation()
 	{
 		super.updateElementInformation();
-	    FluidStack fluid = tileEngine.renderFluid;
+		FluidStack fluid = tileEngine.tank.getFluid();
 	    if(fluid !=null){
-	    	progressFluid.setFluid(new FluidStack(fluid, 1));
+	    	progressFluid.setFluid(fluid);
 	    	progressFluid.setSize(tileEngine.getScaledFuel(24), 16);
 	    }else{
 	    	progressFluid.setFluid(null);
@@ -52,15 +50,15 @@ public class GuiEngineLava extends GuiElementContainer{
 	    }
 	}
 	
-	 @Override
+	@Override
 	public void drawGuiContainerForegroundLayer(int par1, int par2){
 			super.drawGuiContainerForegroundLayer(par1, par2);
 			
-			final int barWidth = 12;
-			final int barHeight = 58;
+			final int barWidth = 18;
+			final int barHeight = 48;
 			int xpX = 53;
 			int xpY = 21;
-			RenderUtil.renderGuiTank(tileEngine.tank, xpX, xpY, zLevel, barWidth, barHeight);
+			RenderUtil.renderGuiTank(tileEngine.tank, xpX, xpY, zLevel, barWidth, barHeight, true);
 			int xAxis = (par1 - (width - xSize) / 2);
 			int yAxis = (par2 - (height - ySize) / 2);
 			if(xAxis > xpX && xAxis < (xpX)+(barWidth+2) && yAxis >= xpY && yAxis <= xpY+(barHeight)+2)

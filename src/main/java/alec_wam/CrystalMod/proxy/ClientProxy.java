@@ -46,6 +46,8 @@ import alec_wam.CrystalMod.items.guide.GuiGuideChapter;
 import alec_wam.CrystalMod.items.guide.GuidePageLoader;
 import alec_wam.CrystalMod.items.guide.GuidePages;
 import alec_wam.CrystalMod.items.guide.GuidePages.LookupResult;
+import alec_wam.CrystalMod.items.tools.blockholder.ItemRenderBlockHolder;
+import alec_wam.CrystalMod.items.tools.blockholder.advanced.ItemRenderAdvancedBlockHolder;
 import alec_wam.CrystalMod.tiles.WoodenBlockProperies.WoodType;
 import alec_wam.CrystalMod.tiles.machine.power.battery.BlockBattery.BatteryType;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.GuiPanel;
@@ -605,5 +607,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 			}
 		}
 		ModelScaffold.reloadModels();
+		ItemRenderBlockHolder.INSTANCE.bakedModel = null;
+		ItemRenderAdvancedBlockHolder.INSTANCE.bakedModel = null;
 	}
 }

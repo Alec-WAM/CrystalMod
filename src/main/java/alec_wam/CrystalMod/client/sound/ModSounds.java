@@ -21,6 +21,10 @@ public class ModSounds {
 	public static final SoundEvent redstone_removed;
 	public static final SoundEvent explosion_ringing;
 	
+	public static final SoundEvent grinder;	
+	public static final SoundEvent metalpress;	
+	public static final SoundEvent engine;	
+	public static final SoundEvent machine_basic;	
 
 	public static final SoundEvent explosion_fusor_tier0;
 	public static final SoundEvent explosion_fusor_tier1;
@@ -37,6 +41,8 @@ public class ModSounds {
 	public static final SoundEvent angel_hurt;
 
 	public static final SoundEvent backpack_zipper;
+	public static final SoundEvent book_open;
+	public static final SoundEvent book_pageturn;
 	
 	static {
         if (!Bootstrap.isRegistered()) {
@@ -51,7 +57,11 @@ public class ModSounds {
         	redstone_removed = getRegisteredSoundEvent(CrystalMod.resource("redstone_removed"));
         	explosion_ringing = getRegisteredSoundEvent(CrystalMod.resource("explosion_ringing"));
         	
-
+        	grinder = getRegisteredSoundEvent(CrystalMod.resource("grinder"));
+        	metalpress = getRegisteredSoundEvent(CrystalMod.resource("metalpress"));
+        	engine = getRegisteredSoundEvent(CrystalMod.resource("engine"));
+        	machine_basic = getRegisteredSoundEvent(CrystalMod.resource("machine_basic"));
+        	
         	explosion_fusor_tier0 = getRegisteredSoundEvent(CrystalMod.resource("explosion_fusor_tier0"));
         	explosion_fusor_tier1 = getRegisteredSoundEvent(CrystalMod.resource("explosion_fusor_tier1"));
         	explosion_fusor_tier2 = getRegisteredSoundEvent(CrystalMod.resource("explosion_fusor_tier2"));
@@ -67,6 +77,8 @@ public class ModSounds {
         	angel_hurt = getRegisteredSoundEvent(CrystalMod.resource("angel_hurt"));
         	
         	backpack_zipper = getRegisteredSoundEvent(CrystalMod.resource("backpack_zipper"));
+        	book_open = getRegisteredSoundEvent(CrystalMod.resource("book_open"));
+        	book_pageturn = getRegisteredSoundEvent(CrystalMod.resource("book_pageturn"));
         }
     }
 

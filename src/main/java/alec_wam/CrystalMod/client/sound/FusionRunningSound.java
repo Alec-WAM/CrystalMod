@@ -38,10 +38,11 @@ public class FusionRunningSound extends PositionedSound implements ITickableSoun
 		this.yPosF = pedistal.getPos().getY() + 0.5f;
 		this.zPosF = pedistal.getPos().getZ() + 0.5f;
 		int time = 200;
-		if(pedistal.craftingProgress.getValue() > 30){
+		/*if(pedistal.craftingProgress.getValue() > 30){
 			float progressPitch = (1.0f * (pedistal.craftingProgress.getValue() / time));
-			this.volume = 5.0F / (progressPitch);
-		}else  this.volume = 0.0F;
+			this.volume = 2.0F / (progressPitch);
+		}else  this.volume = 0.0F;*/
+		this.volume = 1.0F;
 	}
 
 	@Override

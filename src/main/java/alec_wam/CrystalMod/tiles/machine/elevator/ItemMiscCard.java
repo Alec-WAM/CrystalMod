@@ -68,7 +68,8 @@ public class ItemMiscCard extends Item implements ICustomModel {
 			int z = ItemNBTHelper.getInteger(stack, BlockWirelessPipeWrapper.NBT_CON_Z, 0);
 			int dim = ItemNBTHelper.getInteger(stack, BlockWirelessPipeWrapper.NBT_CON_D, 0);
 			String displayName = new ItemStack(ModBlocks.wirelessPipe).getDisplayName();
-			tooltip.add("Bound to "+displayName+" at "+x+" "+y+" "+z+" Dimension:"+StringUtils.getDimensionName(playerIn.getUniqueID(), dim));
+			//TODO Look into Dim Name Crash
+			//tooltip.add("Bound to "+displayName+" at "+x+" "+y+" "+z+" Dimension:"+StringUtils.getDimensionName(playerIn.getUniqueID(), dim));
 		}
     }
 	

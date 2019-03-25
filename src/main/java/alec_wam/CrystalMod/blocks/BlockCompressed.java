@@ -27,6 +27,7 @@ public class BlockCompressed extends EnumBlock<BlockCompressed.CompressedBlockTy
 		super(Material.ROCK, TYPE, CompressedBlockType.class);
 		this.setCreativeTab(CreativeTabs.BUILDING_BLOCKS);
 		this.setHardness(2f);
+		this.setResistance(10.0F);
 		this.setDefaultState(this.blockState.getBaseState().withProperty(TYPE, CompressedBlockType.FLINT));
 	}
 	

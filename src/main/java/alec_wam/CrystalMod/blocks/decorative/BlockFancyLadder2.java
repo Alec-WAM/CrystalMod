@@ -4,6 +4,7 @@ import alec_wam.CrystalMod.util.IEnumMeta;
 import alec_wam.CrystalMod.blocks.ICustomModel;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockHorizontal;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyDirection;
@@ -44,6 +45,9 @@ public class BlockFancyLadder2 extends Block implements ICustomModel
     public BlockFancyLadder2()
     {
         super(Material.CIRCUITS);
+        this.setHardness(0.4F);
+		this.setHarvestLevel("axe", 0);
+        this.setSoundType(SoundType.LADDER);
         this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(TYPE, FancyLadderType2.CIRCLE));
         this.setCreativeTab(CreativeTabs.DECORATIONS);
     }

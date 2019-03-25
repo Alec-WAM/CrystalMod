@@ -1,6 +1,8 @@
 package alec_wam.CrystalMod.tiles.machine.power.engine;
 
 import alec_wam.CrystalMod.api.energy.CEnergyStorage;
+import alec_wam.CrystalMod.network.CrystalModNetwork;
+import alec_wam.CrystalMod.network.packets.PacketTileMessage;
 import alec_wam.CrystalMod.tiles.FluidTankWrapperInputOnly;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -14,6 +16,7 @@ public abstract class TileEntityEngineFluid extends TileEntityEngineBase {
 
 	public FluidTank tank;
 	public FluidStack renderFluid;
+	private int lastTankFluidAmount;
 	
 	private final int capacity;
 	
@@ -55,6 +58,15 @@ public abstract class TileEntityEngineFluid extends TileEntityEngineBase {
 	@Override
 	public void update(){
 		super.update();
+
+		if(!getWorld().isRemote){
+			boolean changed = lastTankFluidAmount != tank.getFluidAmount();
+			if(changed && shouldDoWorkThisTick(5)){
+				NBTTagCompound nbt = new NBTTagCompound();
+				this.tank.writeToNBT(nbt);
+				CrystalModNetwork.sendToAllAround(new PacketTileMessage(getPos(), "UpdateFluid", nbt), this);
+			}
+		}
 	}
 	
 	public abstract int getFuelEnergyValue(FluidStack stack);
@@ -67,11 +79,19 @@ public abstract class TileEntityEngineFluid extends TileEntityEngineBase {
 			fuel.setValue(fuel.getValue()+getFuelEnergyValue(tank.getFluid()));
 			renderFluid = tank.getFluid();
 			maxFuel.setValue(fuel.getValue());
-			tank.drain(getFuelUsage(), !getWorld().isRemote);
+			tank.drain(getFuelUsage(), true);
 		}
 	}
 	
 	public abstract int getFuelUsage();
+	
+	@Override
+	public void handleMessage(String messageId, NBTTagCompound messageData,	boolean client) {
+		super.handleMessage(messageId, messageData, client);
+		if(messageId.equalsIgnoreCase("UpdateFluid")){
+			this.tank.readFromNBT(messageData);
+		}
+	}
 	
 	@Override
     public boolean hasCapability(Capability<?> capability, EnumFacing facingIn) {

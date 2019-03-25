@@ -34,6 +34,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -181,7 +182,10 @@ public class BlockCrystalBerryBush extends BlockBush implements IGrowable, ICust
     	if((state.getValue(AGE)) < 3)return false;
     	
     	if(worldIn.isRemote){
-    		return true;
+    		@SuppressWarnings("deprecation")
+			SoundType type = getSoundType();
+        	worldIn.playSound(pos.getX(), pos.getY(), pos.getZ(), type.getPlaceSound(), SoundCategory.BLOCKS, (type.getVolume()) / 4.0F, type.getPitch() * 0.9F, true);
+        	return true;
     	}
     	
     	Random rand = worldIn instanceof World ? worldIn.rand : Util.rand;
@@ -189,6 +193,7 @@ public class BlockCrystalBerryBush extends BlockBush implements IGrowable, ICust
     	int count = 1 + rand.nextInt(2) + (fortune > 0 ? rand.nextInt(fortune + 1) : 0);
     	ItemStack crop = new ItemStack(ModItems.crystalBerry, 1, state.getValue(TYPE).getMeta());
     	worldIn.setBlockState(pos, state.withProperty(AGE, 0));
+    	
     	double x = pos.getX() + 0.5 + (side.getFrontOffsetX() * 0.6);
     	double y = pos.getY() + 0.25 + (side.getFrontOffsetY() * 0.6);
     	double z = pos.getZ() + 0.5 + (side.getFrontOffsetZ() * 0.6);

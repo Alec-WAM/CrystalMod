@@ -25,6 +25,7 @@ public class BlockReinforcedRail extends BlockRailBase implements ICustomModel {
 	public BlockReinforcedRail() {
 		super(false);
 		setHardness(0.7F);
+		setHarvestLevel("pickaxe", 0);
 		setSoundType(SoundType.METAL);
 		setCreativeTab(CreativeTabs.TRANSPORTATION);
 		setDefaultState(this.blockState.getBaseState().withProperty(SHAPE, BlockRailBase.EnumRailDirection.NORTH_SOUTH));

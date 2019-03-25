@@ -7,8 +7,12 @@ import org.lwjgl.opengl.GL11;
 import com.google.common.primitives.Ints;
 
 import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.api.estorage.security.NetworkAbility;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.packets.PacketTileMessage;
+import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetworkClient;
+import alec_wam.CrystalMod.util.ChatUtil;
+import alec_wam.CrystalMod.util.Lang;
 import alec_wam.CrystalMod.util.UUIDUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
@@ -69,6 +73,17 @@ public class GuiStocker extends GuiContainer {
 	
 	@Override
 	public void actionPerformed(GuiButton button){
+		boolean canChangeSettings = true;
+		boolean safe = stocker.getNetwork() !=null && stocker.getNetwork() instanceof EStorageNetworkClient;
+		if(safe){
+    		if(!stocker.getNetwork().hasAbility(mc.player, NetworkAbility.SETTINGS)){
+    			canChangeSettings = false;
+    		}
+		}
+		if(!canChangeSettings){
+			ChatUtil.sendNoSpam(mc.player, Lang.localize("gui.networkability."+NetworkAbility.SETTINGS.getId()));
+			return;
+		}
 		if(button.id >= 0 && button.id < 5){
 			int index = button.id;
 			boolean newOre = !stocker.useOre[index];

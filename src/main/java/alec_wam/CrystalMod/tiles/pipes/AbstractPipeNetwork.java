@@ -1,16 +1,18 @@
 package alec_wam.CrystalMod.tiles.pipes;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
+import java.util.Map;
+
+import com.google.common.collect.Maps;
 
 import alec_wam.CrystalMod.util.BlockUtil;
+import alec_wam.CrystalMod.util.ModLogger;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
 public abstract class AbstractPipeNetwork {
 
-  protected final List<TileEntityPipe> pipes = new ArrayList<TileEntityPipe>();
+  protected final Map<NetworkPos, TileEntityPipe> pipes = Maps.newHashMap();
 
   public void init(TileEntityPipe tile, Collection<TileEntityPipe> connections, World world) {
 
@@ -58,30 +60,47 @@ public abstract class AbstractPipeNetwork {
       }
     }
   }
-
-  public void addPipe(TileEntityPipe con) {
-    if(!pipes.contains(con)) {
-      if(pipes.isEmpty()) {
-        PipeNetworkTickHandler.instance.registerNetwork(this);
-      }
-      pipes.add(con);
-    }
+  
+  public static NetworkPos getNetworkPos(TileEntityPipe pipe){
+	  return new NetworkPos(pipe.getPos(), pipe.getWorld().provider.getDimension());
   }
 
+  public void addPipe(TileEntityPipe con) {
+	NetworkPos pos = getNetworkPos(con);
+	if (!pipes.containsKey(pos)) {
+		if (pipes.isEmpty()) {
+			PipeNetworkTickHandler.instance.registerNetwork(this);
+		}
+		pipes.put(pos, con);
+	}
+  }
+
+  public void removePipe(TileEntityPipe pipe){
+	  NetworkPos pos = getNetworkPos(pipe);
+	  ModLogger.debug("AbstractPipeNetwork: Removing pipe " + pipe.getPos());
+	  if(pipes.containsKey(pos)){
+		  pipes.remove(pos);
+		  pipe.setNetwork(null);
+	  }
+	  if(pipes.isEmpty()){
+		  destroyNetwork();
+	  }
+  }
+  
   public void destroyNetwork() {
-    for (TileEntityPipe con : pipes) {
+    for (TileEntityPipe con : pipes.values()) {
       con.setNetwork(null);
     }
     pipes.clear();
     PipeNetworkTickHandler.instance.unregisterNetwork(this);
   }
 
-  public List<TileEntityPipe> getPipes() {
-    return pipes;
+  public Collection<TileEntityPipe> getPipes() {
+    return pipes.values();
   }
 
   public void notifyNetworkOfUpdate() {
-    for (TileEntityPipe con : pipes) {
+    for (TileEntityPipe con : pipes.values()) {
     	if(con == null || con.getWorld() == null)continue;
       TileEntity te = con;
       BlockUtil.markBlockForUpdate(te.getWorld(), te.getPos());
@@ -91,13 +110,22 @@ public abstract class AbstractPipeNetwork {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    for (TileEntityPipe con : pipes) {
+    for (TileEntityPipe con : pipes.values()) {
       sb.append(con.getPos().getX()+" "+con.getPos().getY()+" "+con.getPos().getZ());
       sb.append(", ");
     }
     return "AbstractPipeNetwork [pipes=" + sb.toString() + "]";
   }
 
+  @Override
+  public boolean equals(Object obj){
+	  if(obj instanceof AbstractPipeNetwork){
+		  AbstractPipeNetwork other = (AbstractPipeNetwork)obj;
+		  return other.pipes == other.pipes;
+	  }
+	  return super.equals(obj);
+  }
+  
   public void doNetworkTick() {
   }
 }

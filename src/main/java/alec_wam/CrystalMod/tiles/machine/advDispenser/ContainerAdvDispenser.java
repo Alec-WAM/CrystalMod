@@ -3,6 +3,7 @@ package alec_wam.CrystalMod.tiles.machine.advDispenser;
 import javax.annotation.Nullable;
 
 import alec_wam.CrystalMod.util.ItemStackTools;
+import alec_wam.CrystalMod.util.inventory.SlotOffhand;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
@@ -22,7 +23,7 @@ public class ContainerAdvDispenser extends Container
         	this.addSlotToContainer(new Slot(dispenser, j, 8 + j * 18, 53));
         }
 
-        this.addSlotToContainer(new Slot(dispenser, 9, 8, 32));
+        this.addSlotToContainer(new SlotOffhand(dispenser, 9, 8, 32));
         
         for (int k = 0; k < 3; ++k)
         {

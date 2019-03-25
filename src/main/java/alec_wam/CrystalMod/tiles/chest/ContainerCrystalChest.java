@@ -41,12 +41,12 @@ public class ContainerCrystalChest extends Container {
             {
                 if (!mergeItemStack(itemstack1, type.size, inventorySlots.size(), true))
                 {
-                    return null;
+                    return ItemStackTools.getEmptyStack();
                 }
             }
             else if (!mergeItemStack(itemstack1, 0, type.size, false))
             {
-                return null;
+                return ItemStackTools.getEmptyStack();
             }
             if (ItemStackTools.isEmpty(itemstack1))
             {

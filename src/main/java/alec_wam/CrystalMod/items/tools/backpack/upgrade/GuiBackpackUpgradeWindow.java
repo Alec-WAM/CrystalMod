@@ -1,14 +1,12 @@
 package alec_wam.CrystalMod.items.tools.backpack.upgrade;
 
+import java.awt.Color;
 import java.io.IOException;
 
-import alec_wam.CrystalMod.CrystalMod;
-import alec_wam.CrystalMod.handler.GuiHandler;
 import alec_wam.CrystalMod.items.ModItems;
-import alec_wam.CrystalMod.items.tools.backpack.gui.OpenType;
+import alec_wam.CrystalMod.items.tools.backpack.IBackpackOpenSource;
 import alec_wam.CrystalMod.items.tools.backpack.upgrade.ContainerBackpackUpgradeWindow.UpgradeWindowType;
 import alec_wam.CrystalMod.items.tools.backpack.upgrade.ItemBackpackUpgrade.BackpackUpgrade;
-import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.Lang;
 import net.minecraft.client.gui.GuiButton;
@@ -30,9 +28,11 @@ public class GuiBackpackUpgradeWindow extends GuiContainer {
     private ItemStack backpack;
     private InventoryBackpackUpgrades upgrades;
     private BackpackUpgrade upgrade;
+    private IBackpackOpenSource source;
     private boolean hasPockets;
-    public GuiBackpackUpgradeWindow(InventoryPlayer player, InventoryBackpackUpgrades upgrades, BackpackUpgrade upgrade){
+    public GuiBackpackUpgradeWindow(InventoryPlayer player, InventoryBackpackUpgrades upgrades, BackpackUpgrade upgrade, IBackpackOpenSource source){
         super(new ContainerBackpackUpgradeWindow(player, upgrades, upgrade));
+        this.source = source;
         this.upgrades = upgrades;
         this.backpack = upgrades.getBackpack();
         this.upgrade = upgrade;
@@ -263,7 +263,7 @@ public class GuiBackpackUpgradeWindow extends GuiContainer {
             int j = mouseY - this.guiTop;
 
             if(this.isMouseOverTab(0, i, j)){
-            	BlockUtil.openWorksiteGui(CrystalMod.proxy.getClientPlayer(), GuiHandler.GUI_ID_BACKPACK, OpenType.BACK.ordinal(), 0, 0);
+            	source.openMainInventory();
                 return;
             }
             
@@ -272,7 +272,7 @@ public class GuiBackpackUpgradeWindow extends GuiContainer {
             {
                 if (upgrade[u] !=null && this.isMouseOverTab(u+1, i, j))
                 {
-                    BlockUtil.openWorksiteGui(CrystalMod.proxy.getClientPlayer(), GuiHandler.GUI_ID_BACKPACK, OpenType.BACK.ordinal(), u+1, 1);
+                	source.openUpgradesInventory(u+1);
                     return;
                 }
             }

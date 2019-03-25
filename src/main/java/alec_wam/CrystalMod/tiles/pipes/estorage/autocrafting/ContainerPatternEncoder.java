@@ -103,7 +103,6 @@ public class ContainerPatternEncoder extends Container {
 	@Override
     public ItemStack slotClick(int id, int clickedButton, ClickType clickType, EntityPlayer player) {
         Slot slot = id >= 0 ? getSlot(id) : null;
-
         if (slot instanceof SlotSpecimen) {
             if (((SlotSpecimen) slot).isWithSize()) {
                 if (!ItemStackTools.isNullStack(slot.getStack())) {
@@ -178,6 +177,7 @@ public class ContainerPatternEncoder extends Container {
 	
 	@Override
 	public ItemStack transferStackInSlot(EntityPlayer player, int slot){
-		return ItemStackTools.getEmptyStack();
+		ItemStack itemstack = ItemStackTools.getEmptyStack();
+        return itemstack;
 	}
 }

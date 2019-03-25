@@ -47,7 +47,6 @@ import alec_wam.CrystalMod.world.structures.MapGenFusionTemple;
 import alec_wam.CrystalMod.world.structures.VillageCornField;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.init.Biomes;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;

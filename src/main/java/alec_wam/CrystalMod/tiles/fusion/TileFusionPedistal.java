@@ -116,13 +116,13 @@ public class TileFusionPedistal extends TileEntityInventory implements IFusionPe
 				
 				if(craftingProgress.getValue() < 200){
 					if(craftingProgress.getValue() == 0){
-						getWorld().playSound(null, getPos(), ModSounds.fusionStartup, SoundCategory.BLOCKS, 0.75F, 1.0F);
+						//getWorld().playSound(null, getPos(), ModSounds.fusionStartup, SoundCategory.BLOCKS, 0.4F, 1.0F);
 					}
 					craftingProgress.add(1);
 					if(craftingCooldown.getValue() < 100)this.craftingCooldown.add(1);
 				} else if(craftingProgress.getValue() >= 200){
 					runningRecipe.finishCrafting(this, getWorld(), linkedPedistals);
-					getWorld().playSound(null, getPos(), ModSounds.fusionCooldown, SoundCategory.BLOCKS, 0.75F, 1.0F);
+					getWorld().playSound(null, getPos(), ModSounds.fusionCooldown, SoundCategory.BLOCKS, 0.1F, 1.0F);
 					isCrafting.setValue(false);
 				}
 				
@@ -133,7 +133,7 @@ public class TileFusionPedistal extends TileEntityInventory implements IFusionPe
 			if(craftingCooldown.getValue() > 0 && !isCrafting.getValue()){
 				craftingCooldown.sub(1);
 				if(craftingCooldown.getValue() <= 0 && runningRecipe != null){
-					getWorld().playSound(null, getPos(), ModSounds.fusionDing, SoundCategory.BLOCKS, 0.75F, 1.0F);
+					getWorld().playSound(null, getPos(), ModSounds.fusionDing, SoundCategory.BLOCKS, 0.5F, 1.0F);
 				}
 			}
 		} else {

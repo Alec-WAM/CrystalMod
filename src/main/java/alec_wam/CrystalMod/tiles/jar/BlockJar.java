@@ -2,6 +2,7 @@ package alec_wam.CrystalMod.tiles.jar;
 
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.Random;
 
 import javax.annotation.Nullable;
 
@@ -21,6 +22,7 @@ import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.Lang;
+import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -32,9 +34,11 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityShulkerBullet;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Enchantments;
 import net.minecraft.init.Items;
 import net.minecraft.init.PotionTypes;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -48,6 +52,7 @@ import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -70,6 +75,7 @@ public class BlockJar extends EnumBlock<WoodenBlockProperies.WoodType> implement
 		super(Material.GLASS, WoodenBlockProperies.WOOD, WoodType.class);
 		setHardness(0.8F);
 		setResistance(0.5F);
+		setHarvestLevel("pickaxe", 0);
 		setCreativeTab(CreativeTabs.BREWING);
 		setSoundType(SoundType.GLASS);
 	}
@@ -186,6 +192,7 @@ public class BlockJar extends EnumBlock<WoodenBlockProperies.WoodType> implement
 			else if(held.getItem() == Items.ITEM_FRAME && facing.getAxis().isHorizontal()){
 				if(!jar.hasLabel(facing)){
 					jar.setHasLabel(facing, true);
+					world.playSound(null, pos, SoundEvents.ENTITY_ITEMFRAME_PLACE, SoundCategory.BLOCKS, 1.0F, 1.0F);
 					if(!player.capabilities.isCreativeMode){
 						player.setHeldItem(hand, ItemUtil.consumeItem(held));
 					}
@@ -201,18 +208,20 @@ public class BlockJar extends EnumBlock<WoodenBlockProperies.WoodType> implement
 							jar.setPotionType(type);
 						}
 						jar.setPotionCount(jar.getPotionCount()+1);
-						player.setHeldItem(hand, new ItemStack(Items.GLASS_BOTTLE));
+						ItemUtil.setPlayerHandSilently(player, hand, new ItemStack(Items.GLASS_BOTTLE));
+						world.playSound(null, pos, SoundEvents.ITEM_BOTTLE_EMPTY, SoundCategory.BLOCKS, 1.0F, 1.0F);
 						BlockUtil.markBlockForUpdate(world, pos);
 						return true;
 					}
 				}
 			} else if(held.getItem() == Items.GLASS_BOTTLE){
 				if(jar.getPotion() !=PotionTypes.EMPTY && jar.getPotionCount() > 0){
-					player.setHeldItem(hand, PotionUtils.addPotionToItemStack(new ItemStack(Items.POTIONITEM), jar.getPotion()));
+					ItemUtil.setPlayerHandSilently(player, hand, PotionUtils.addPotionToItemStack(new ItemStack(Items.POTIONITEM), jar.getPotion()));
 					jar.setPotionCount(jar.getPotionCount()-1);
 					if(jar.getPotionCount() <= 0){
 						jar.setPotionType(PotionTypes.EMPTY);
 					}
+					world.playSound(null, pos, SoundEvents.ITEM_BOTTLE_FILL, SoundCategory.BLOCKS, 1.0F, 1.0F);
 					BlockUtil.markBlockForUpdate(world, pos);
 					return true;
 				}
@@ -262,7 +271,7 @@ public class BlockJar extends EnumBlock<WoodenBlockProperies.WoodType> implement
 	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player)
     {
 		if(world == null || pos == null)return super.getPickBlock(state, target, world, pos, player);
-		return getNBTDrop(world, pos, world.getTileEntity(pos));
+		return getNBTDrop(world, pos, state, world.getTileEntity(pos));
 	}
 	
 	@Override
@@ -270,7 +279,7 @@ public class BlockJar extends EnumBlock<WoodenBlockProperies.WoodType> implement
 	    if (world == null || pos == null) {
 	      return super.getDrops(world, pos, state, fortune);
 	    }
-    	return Lists.newArrayList(getNBTDrop(world, pos, world.getTileEntity(pos)));
+    	return Lists.newArrayList(getNBTDrop(world, pos, state, world.getTileEntity(pos)));
 	}
 	
 	@Override
@@ -300,6 +309,7 @@ public class BlockJar extends EnumBlock<WoodenBlockProperies.WoodType> implement
 				if(!worldIn.isRemote){
 					EntityShulkerBullet bullet = new EntityShulkerBullet(worldIn);
 					bullet.setLocationAndAngles(pos.getX() + 0.5, pos.getY() + 1 + 0.5, pos.getZ() + 0.5, bullet.rotationYaw, bullet.rotationPitch);
+					//TODO Add to Obfuscated names
 					ReflectionHelper.setPrivateValue(EntityShulkerBullet.class, bullet, player, 1);
 					ReflectionHelper.setPrivateValue(EntityShulkerBullet.class, bullet, EnumFacing.UP, 2);
 					try {
@@ -343,6 +353,7 @@ public class BlockJar extends EnumBlock<WoodenBlockProperies.WoodType> implement
 			if(ray.sideHit !=null){
 				if(jar.hasLabel(ray.sideHit)){
 					jar.setHasLabel(ray.sideHit, false);
+					worldIn.playSound(null, pos, SoundEvents.ENTITY_ITEMFRAME_BREAK, SoundCategory.BLOCKS, 1.0F, 1.0F);
 					if(!playerIn.capabilities.isCreativeMode){
 						ItemUtil.dropItemOnSide(worldIn, pos, new ItemStack(Items.ITEM_FRAME), ray.sideHit);
 					}
@@ -354,8 +365,8 @@ public class BlockJar extends EnumBlock<WoodenBlockProperies.WoodType> implement
 	
 	public static final String TILE_NBT_STACK = "TileData";
 	
-	protected ItemStack getNBTDrop(IBlockAccess world, BlockPos pos, TileEntity tileEntity) {
-		ItemStack stack = new ItemStack(this, 1, damageDropped(world.getBlockState(pos)));
+	protected ItemStack getNBTDrop(IBlockAccess world, BlockPos pos, IBlockState state, TileEntity tileEntity) {
+		ItemStack stack = new ItemStack(this, 1, damageDropped(state));
 		if(tileEntity !=null && tileEntity instanceof INBTDrop){
 			INBTDrop machine = (INBTDrop)tileEntity;
 			NBTTagCompound nbt = new NBTTagCompound();
@@ -383,6 +394,39 @@ public class BlockJar extends EnumBlock<WoodenBlockProperies.WoodType> implement
         	world.checkLightFor(EnumSkyBlock.BLOCK, pos);
         	BlockUtil.markBlockForUpdate(world, pos);
         }
+    }
+	
+	@Override
+	public boolean canPlaceBlockAt(World worldIn, BlockPos pos)
+    {
+		return canBlockStay(worldIn, pos);
+    }
+	
+	@Override
+	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos)
+    {
+        super.neighborChanged(state, worldIn, pos, blockIn, fromPos);
+        this.checkAndDropBlock(worldIn, pos, state);
+    }
+
+	@Override
+	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand)
+    {
+        this.checkAndDropBlock(worldIn, pos, state);
+    }
+
+    protected void checkAndDropBlock(World worldIn, BlockPos pos, IBlockState state)
+    {
+        if (!this.canBlockStay(worldIn, pos))
+        {
+            this.dropBlockAsItem(worldIn, pos, state, 0);
+            worldIn.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
+        }
+    }
+
+    public boolean canBlockStay(World worldIn, BlockPos pos)
+    {
+        return worldIn.getBlockState(pos.down()).isSideSolid(worldIn, pos.down(), EnumFacing.UP);
     }
 	
 	public static class CustomBlockStateMapper extends StateMapperBase

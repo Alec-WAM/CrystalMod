@@ -55,7 +55,7 @@ public class PageCrafting extends GuidePage {
 	public NonNullList<ItemStack> items;
 	private ItemStack output = ItemStackTools.getEmptyStack();
 	private NonNullList<ItemStack> stacks;
-	private List<String> textLines;
+	private List<String> textLines = Lists.newArrayList();
 	public int scrollProgress;
 	
 	public PageCrafting(String id, ItemStack item){
@@ -304,7 +304,7 @@ public class PageCrafting extends GuidePage {
 			gui.getFont().setUnicodeFlag(oldUnicode);
 			GlStateManager.popMatrix();
 		}
-		if(text != null && !text.isEmpty()){
+		if(text != null && !text.isEmpty() && !textLines.isEmpty()){
 			 boolean downArrow = textLines.size() - this.scrollProgress > 9;
 			 float scale = 0.75f;
 			 for(int i = this.scrollProgress; i < textLines.size() && i-this.scrollProgress < 9; i++){

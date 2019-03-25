@@ -39,7 +39,7 @@ item.crystalmod.redcrystalseeds.name=Red Crystal Seeds
 item.crystalmod.greencrystalseeds.name=Green Crystal Seeds
 item.crystalmod.darkcrystalseeds.name=Dark Crystal Seeds
 item.crystalmod.bluecrystaltreeseeds.name=Blue Tree-Plant Seed
-item.crystalmod.redcrystaltreeseeds.name=Red Tree-Plant Seed
+item.crystalmod.redcrystaltreeseeds.name=Red Tree-Plant Seed 
 item.crystalmod.greencrystaltreeseeds.name=Green Tree-Plant Seed
 item.crystalmod.darkcrystaltreeseeds.name=Dark Tree-Plant Seed
 
@@ -63,7 +63,7 @@ item.crystalmod.wrappedfood.name=Eucalyptus Leaf Wrapped %s
 item.crystalmod.crystalsap.blue.name=Blue Crystal Sap
 item.crystalmod.crystalsap.red.name=Red Crystal Sap
 item.crystalmod.crystalsap.green.name=Green Crystal Sap
-item.crystalmod.crystalsap.dark.name=Dark Crystal 
+item.crystalmod.crystalsap.dark.name=Dark Crystal Sap
 item.crystalmod.crystalberry.blue.name=Blue Crystal Berry
 item.crystalmod.crystalberry.red.name=Red Crystal Berry
 item.crystalmod.crystalberry.green.name=Green Crystal Berry
@@ -74,6 +74,10 @@ item.crystalmod.glowberry.green.name=Glowing Green Crystal Berry
 item.crystalmod.glowberry.dark.name=Glowing Dark Crystal Berry
 
 item.crystalmod.miscitems.bat_wing.name=Bat Wing
+item.crystalmod.balloon.name=%s Balloon
+
+item.crystalmod.blockholder.name=Block Holder
+item.crystalmod.advblockholder.name=Advanced Block Holder
 
 item.crystalmod.congealedredstone.name=Crystal Congealed Redstone
 item.crystalmod.reactorupgrade.basic.name=Basic Redstone Reactor Upgrade
@@ -200,6 +204,8 @@ item.crystalmod.wolfarmor.diron.name=Dark Iron Wolf Armor
 item.crystalmod.wolfarmor.diamond.name=Diamond Wolf Armor
 item.crystalmod.wolfarmor.gold.name=Gold Wolf Armor
 item.crystalmod.horseshoes.name=Horse Shoes
+item.crystalmod.shieldpotion.mini.name=Mini Shield Potion
+item.crystalmod.shieldpotion.large.name=Large Shield Potion
 
 item.crystalmod.supertorch.name=Super Torch
 
@@ -274,8 +280,7 @@ item.crystalmod.pipefilter.camera.name=Pipe Filter (Camera)
 item.crystalmod.pipefilter.fluid.name=Pipe Filter (Fluid)
 
 item.crystalmod.wrench.name=Crystal Wrench
-item.crystalmod.guide.crystal.name=Crystal Guide
-item.crystalmod.guide.estorage.name=Network Storage Guide
+item.crystalmod.guide.name=Crystal Guide
 item.crystalmod.enhancementknowledge.name=Knowledge Book
 
 item.crystalmod.harddriveblue.name=Item Hard-drive (Blue)
@@ -288,6 +293,9 @@ item.crystalmod.securitycard.name=Security Card
 item.crystalmod.wirelesspanelreceiver.name=Hand-held Network Panel
 
 item.crystalmod.craftingpattern.name=Crafting Recipe Pattern
+crystalmod.tooltip.pattern.inputs=Inputs
+crystalmod.tooltip.pattern.outputs=Outputs
+crystalmod.tooltip.pattern.ore=Ore Dictionary
 
 item.crystalmod.misccard.eportal.name=Network Pipe Portal Binder
 item.crystalmod.misccard.pcube.name=Player Cube Card
@@ -411,8 +419,8 @@ tile.crystalmod.fancyobsidian.gridded_lite.name=Lite Gridded Obsidian
 tile.crystalmod.fancyobsidian.insignia.name=Insignia Obsidian
 tile.crystalmod.fancyobsidian.insignia_cornered.name=Cornered Insignia Obsidian
 tile.crystalmod.fancyobsidian.patterned.name=Patterned Obsidian
-tile.crystalmod.fancyobsidian.seperated.name=Seperated Obsidian
-tile.crystalmod.fancyobsidian.seperated_sharply.name=Sharply Seperated Obsidian
+tile.crystalmod.fancyobsidian.separated.name=Seperated Obsidian
+tile.crystalmod.fancyobsidian.separated_sharply.name=Sharply Seperated Obsidian
 tile.crystalmod.fancyobsidian.smooth.name=Polished Obsidian
 tile.crystalmod.fancyobsidian.smooth_gridded.name=Gridded Polished Obsidian
 tile.crystalmod.fancyobsidian.smooth_sporadic.name=Sporadic Polished Obsidian
@@ -556,6 +564,9 @@ tile.crystalmod.bamboodoor.name=Bamboo Door
 tile.crystalmod.lantern.name=Lantern
 tile.crystalmod.lantern_dyed.name=%s Lantern
 
+tile.crystalmod.backpackblock_normal.name=Normal Backpack
+tile.crystalmod.backpackblock_crafting.name=Crafting Backpack
+
 tile.crystalmod.crystallog.blue.name=Blue Crystal Wood
 tile.crystalmod.crystallog.red.name=Red Crystal Wood
 tile.crystalmod.crystallog.green.name=Green Crystal Wood
@@ -596,6 +607,7 @@ tile.crystalmod.fancypumpkinlit.spider.name=Spider Jack o'Lantern
 
 tile.crystalmod.crysinemushroom.name=Crysine Mushroom
 tile.crystalmod.crysinemushroomblock.name=Crysine Mushroom
+tile.crystalmod.shieldmushroom.name=Shield Mushroom
 
 tile.crystalmod.crystalore.blue.name=Blue Crystal Ore
 tile.crystalmod.crystalore.red.name=Red Crystal Ore
@@ -757,6 +769,7 @@ tile.crystalmod.crystalmachine.press.name=Metal Press
 tile.crystalmod.crystalmachine.liquidizer.name=Liquidizer
 tile.crystalmod.crystalmachine.grinder.name=Grinder
 tile.crystalmod.crystalmachine.infuser.name=Liquid Infuser
+tile.crystalmod.crystalmachine.fluid_mixer.name=Fluid Mixer
 tile.crystalmod.dnamachine.name=DNA Manipulator
 tile.crystalmod.sapextractor.name=Sap Extractor
 
@@ -980,6 +993,7 @@ recipe.type.crystal=Crystal Workbench
 
 #--Gui
 crystalmod.gui.empty=Empty
+crystalmod.gui.free=Free
 crystalmod.gui.label.tab.main=Main Inventory
 crystalmod.gui.label.tab.crafting=Crafting Table
 crystalmod.gui.label.tab.enderchest=Ender Chest
@@ -1014,10 +1028,23 @@ crystalmod.gui.crafting_monitor.items_takeing=Taking Item
 crystalmod.gui.crafting_monitor.items_inserting=Inserting
 crystalmod.gui.crafting_monitor.fluids_takeing=Taking Fluid
 
+crystalmod.gui.networkability.insert=You do not have permission to insert items
+crystalmod.gui.networkability.extract=You do not have permission to extract items
+crystalmod.gui.networkability.craft=You do not have permission to auto-craft
+crystalmod.gui.networkability.view=You do not have permission to view this screen
+crystalmod.gui.networkability.settings=You do not have permission to change settings
+crystalmod.gui.networkability.build=You do not have permission to build on this network
+crystalmod.gui.networkability.security=You do not have permission to edit security
+
 crystalmod.gui.conduit.ioMode.input=Extract
 crystalmod.gui.conduit.ioMode.output=Insert
 crystalmod.gui.conduit.ioMode.disabled=Disabled
 crystalmod.gui.conduit.ioMode.inOut=Insert/Extract
+
+crystalmod.gui.redstone.none=None
+crystalmod.gui.redstone.ignore=Ignore
+crystalmod.gui.redstone.off=Off
+crystalmod.gui.redstone.on=On
 
 crystalmod.guistrings.inventory.player=Player Inventory
 crystalmod.guistrings.inventory.setsides=Sides
@@ -1062,6 +1089,28 @@ crystalmod.gui.warrior.tooltip.target_passive_or_hostile_mobs=Mob Filter: Any
 crystalmod.gui.warrior.tooltip.target_passive_mobs=Mob Filter: Passive
 crystalmod.gui.warrior.tooltip.target_hostile_mobs=Mob Filter: Hostile
 
+crystalmod.gui.advdispenser.tooltip.interact=Interact: %s
+crystalmod.gui.advdispenser.tooltip.interact.block=Block
+crystalmod.gui.advdispenser.tooltip.interact.block.desc=Normal Left or Right Click Item
+crystalmod.gui.advdispenser.tooltip.interact.place=Place
+crystalmod.gui.advdispenser.tooltip.interact.place.desc=Place Block
+crystalmod.gui.advdispenser.tooltip.interact.use=Use
+crystalmod.gui.advdispenser.tooltip.interact.use.desc=Use item on facing block
+crystalmod.gui.advdispenser.tooltip.interact.activate=Activate
+crystalmod.gui.advdispenser.tooltip.interact.activate.desc=Left or Right click facing block
+crystalmod.gui.advdispenser.tooltip.interact.useair=Use Air
+crystalmod.gui.advdispenser.tooltip.interact.useair.desc=Use item in the Air not on block
+crystalmod.gui.advdispenser.tooltip.interact.entity=Entity
+crystalmod.gui.advdispenser.tooltip.interact.entity.desc=Left or Right item on facing entity
+crystalmod.gui.advdispenser.tooltip.redstone=Redstone: %s
+crystalmod.gui.advdispenser.tooltip.click=Click Type
+crystalmod.gui.advdispenser.tooltip.hand=Hand: %s
+crystalmod.gui.advdispenser.tooltip.hand.main=Main
+crystalmod.gui.advdispenser.tooltip.hand.both=Both
+crystalmod.gui.advdispenser.tooltip.hand.off=Off
+crystalmod.gui.advdispenser.tooltip.stance.normal=Standing
+crystalmod.gui.advdispenser.tooltip.stance.sneak=Sneaking
+
 crystalmod.gui.enhancement.holdshift=<Hold Shift for Enhancement Data>
 crystalmod.enhancement.unlocked=Discovered %s enhancement!
 enhancement.crystalmod.dragonwings.name=Dragon Wings
@@ -1096,6 +1145,9 @@ entity.crystalmod:polarbear_tamed.name=Tamed Polar Bear
 entity.crystalmod:bambooboat.name=Bamboo Boat
 entity.crystalmod:chestboat.name=Boat Chest
 entity.crystalmod:chestbanner.name=Boat Banner
+
+#--Potion
+potion.effect.wither=Potion of Withering
 
 #--Misc
 crystalmod.power.cu=CU
@@ -1172,7 +1224,6 @@ crystalmod.guide.index.blocks=Blocks
 crystalmod.guide.index.items=Items
 crystalmod.guide.index.materialcrops=Material Crops
 crystalmod.guide.index.entities=Entities
-crystalmod.guide.index.workbench=Crystal Workbench
 crystalmod.guide.index.misc=Miscellaneous
 crystalmod.guide.text.defaultMaterialCrop=Info:<n>-Growth Time: <growthTime><n>-Drops: <cropItems>
 
@@ -1194,6 +1245,10 @@ crystalmod.fusion.message.invalid=%s is not usable in this recipe.
 crystalmod.subtitle.fusion_startup=Starting Fusion
 crystalmod.subtitle.fusion_running=Fusing Items
 crystalmod.subtitle.fusion_cooldown=Ending Fusion
+crystalmod.subtitle.grinder=Grinder Running
+crystalmod.subtitle.metalpress=Metal Press Running
+crystalmod.subtitle.engine=Running Engine
+crystalmod.subtitle.machine_basic=Machine Running
 #--Enchantments
 enchantment.doubleJump=Double Jump
 #--Keys

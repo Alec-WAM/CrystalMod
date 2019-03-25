@@ -13,9 +13,11 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.Explosion;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
@@ -41,6 +43,21 @@ public class BlockBasicTiles extends EnumBlock<BlockBasicTiles.BasicTileType> {
 					new ModelResourceLocation(this.getRegistryName(), TYPE.getName() + "=" + type.getName()));
 	}
 
+	@Override
+	public boolean canProvidePower(IBlockState state)
+    {
+		BasicTileType type = state.getValue(TYPE);
+		return type == BasicTileType.COMPRESSED_REDSTONE;
+    }
+
+	@SuppressWarnings("deprecation")
+	@Override
+	public int getWeakPower(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side)
+    {
+		BasicTileType type = blockState.getValue(TYPE);
+		return type == BasicTileType.COMPRESSED_REDSTONE ? 15 : super.getWeakPower(blockState, blockAccess, pos, side);
+    }
+	
 	@Override
 	public Material getMaterial(IBlockState state) {
 		BasicTileType type = state.getValue(TYPE);
@@ -86,12 +103,19 @@ public class BlockBasicTiles extends EnumBlock<BlockBasicTiles.BasicTileType> {
 	}
 
 	public static enum BasicTileType implements IStringSerializable, IEnumMeta {
-		STONE_STONE("stone_stone"), STONE_CARVED("stone_carved"), STONE_GRANITE("stone_granite"), STONE_DIORITE(
-				"stone_diorite"), STONE_ANDESITE("stone_andesite"), COMPRESSED_REDSTONE(
-						"compressed_redstone"), COMPRESSED_LAPIS("compressed_lapis"), COMPRESSED_QUARTZ(
-								"compressed_quartz"), COMPRESSED_FLINT("compressed_flint"), METAL_IRON(
-										"metal_iron"), METAL_GOLD("metal_gold"), METAL_DIAMOND(
-												"metal_diamond"), METAL_EMERALD("metal_emerald");
+		STONE_STONE("stone_stone"), 
+		STONE_CARVED("stone_carved"), 
+		STONE_GRANITE("stone_granite"), 
+		STONE_DIORITE("stone_diorite"), 
+		STONE_ANDESITE("stone_andesite"), 
+		COMPRESSED_REDSTONE("compressed_redstone"), 
+		COMPRESSED_LAPIS("compressed_lapis"), 
+		COMPRESSED_QUARTZ("compressed_quartz"), 
+		COMPRESSED_FLINT("compressed_flint"), 
+		METAL_IRON("metal_iron"), 
+		METAL_GOLD("metal_gold"), 
+		METAL_DIAMOND("metal_diamond"), 
+		METAL_EMERALD("metal_emerald");
 
 		private final String unlocalizedName;
 		public final int meta;

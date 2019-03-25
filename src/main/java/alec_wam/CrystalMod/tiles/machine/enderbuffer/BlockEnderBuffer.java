@@ -16,9 +16,9 @@ import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
-import alec_wam.CrystalMod.util.ProfileUtil;
 import alec_wam.CrystalMod.util.UUIDUtils;
 import alec_wam.CrystalMod.util.tool.ToolUtil;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -44,8 +44,9 @@ public class BlockEnderBuffer extends BlockMachine implements ICustomModel
     public BlockEnderBuffer()
     {
         super(Material.IRON);
+        this.setSoundType(SoundType.METAL);
         this.setHardness(2f);
-        this.setResistance(10F);
+        this.setResistance(20F);
 		this.setCreativeTab(CrystalMod.tabBlocks);
     }
     

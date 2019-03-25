@@ -6,6 +6,7 @@ import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.tiles.BlockStateFacing;
 import alec_wam.CrystalMod.tiles.machine.BlockMachine;
 import alec_wam.CrystalMod.tiles.machine.BlockStateMachine;
+import alec_wam.CrystalMod.tiles.machine.IFacingTile;
 import alec_wam.CrystalMod.tiles.machine.power.engine.furnace.TileEntityEngineFurnace;
 import alec_wam.CrystalMod.tiles.machine.power.engine.lava.TileEntityEngineLava;
 import alec_wam.CrystalMod.tiles.machine.power.engine.vampire.TileEntityEngineVampire;
@@ -30,10 +31,12 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -46,6 +49,7 @@ public class BlockEngine extends BlockMachine implements ICustomModel {
 	public BlockEngine() {
 		super(Material.IRON);
 		this.setHardness(2f);
+        this.setResistance(15.0F);
 		this.setCreativeTab(CrystalMod.tabBlocks);
 	}
 
@@ -110,6 +114,12 @@ public class BlockEngine extends BlockMachine implements ICustomModel {
         		String fuelInfo = engine.fuel.getValue()+" / "+engine.maxFuel.getValue();
         		ChatUtil.sendNoSpam(player, powerinfo, fuelInfo);
         	} else {
+        		if(engine instanceof TileEntityEngineFluid){
+        			if(FluidUtil.interactWithFluidHandler(player, hand, world, pos, side)){
+        				return true;
+        			}
+        		}
+        		
 	        	if(!world.isRemote){
 	        		player.openGui(CrystalMod.instance, 0, world, pos.getX(), pos.getY(), pos.getZ());
 	        	}
@@ -143,6 +153,24 @@ public class BlockEngine extends BlockMachine implements ICustomModel {
     @Override
     public BlockRenderLayer getBlockLayer() {
     	return super.getBlockLayer();
+    }
+    
+    public static final AxisAlignedBB AABB_NS = new AxisAlignedBB(0.06, 0.0, 0.03, 0.94, 0.75, 0.97);
+    public static final AxisAlignedBB AABB_EW = new AxisAlignedBB(0.03, 0.0, 0.06, 0.97, 0.75, 0.94);
+    @Override
+    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
+    {
+    	TileEntity tile = source.getTileEntity(pos);
+    	if(tile !=null && tile instanceof IFacingTile){
+    		EnumFacing facing = EnumFacing.getHorizontal(((IFacingTile)tile).getFacing());
+    		if(facing == EnumFacing.NORTH || facing == EnumFacing.SOUTH){
+    			return AABB_NS;
+    		}
+    		if(facing == EnumFacing.EAST || facing == EnumFacing.WEST){
+    			return AABB_EW;
+    		}
+    	}
+        return FULL_BLOCK_AABB;
     }
     
     @Override

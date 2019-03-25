@@ -3,8 +3,10 @@ package alec_wam.CrystalMod.blocks.crystexium;
 import java.util.Random;
 
 import alec_wam.CrystalMod.blocks.EnumBlock;
+import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.util.CrystalColors;
 import net.minecraft.block.BlockDirt;
+import net.minecraft.block.IGrowable;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -15,15 +17,16 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-public class BlockCrystexGrass extends EnumBlock<CrystalColors.SuperSpecial>{
+public class BlockCrystexGrass extends EnumBlock<CrystalColors.SuperSpecial> implements IGrowable {
 	
 
 	public BlockCrystexGrass() {
 		super(Material.GRASS, CrystalColors.COLOR_SUPER, CrystalColors.SuperSpecial.class);
 		this.setTickRandomly(true);
-		setHardness(0.6F);
-		setSoundType(SoundType.PLANT);
+		this.setHardness(0.6F);
+		this.setSoundType(SoundType.PLANT);
 		this.setDefaultState(this.blockState.getBaseState().withProperty(CrystalColors.COLOR_SUPER, CrystalColors.SuperSpecial.BLUE));
+		this.setHarvestLevel("shovel", 0);
 	}
 	
 	@Override
@@ -69,11 +72,76 @@ public class BlockCrystexGrass extends EnumBlock<CrystalColors.SuperSpecial>{
     {
         return Blocks.DIRT.getItemDropped(Blocks.DIRT.getDefaultState().withProperty(BlockDirt.VARIANT, BlockDirt.DirtType.DIRT), rand, fortune);
     }
+	
+	@Override
+	public int damageDropped(IBlockState state) {
+		return BlockDirt.DirtType.DIRT.getMetadata();
+	}
 
 	@Override
 	public boolean canSustainPlant(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing direction, net.minecraftforge.common.IPlantable plantable)
     {
 		return Blocks.GRASS.canSustainPlant(state, world, pos, direction, plantable);
+    }
+
+    /**
+     * Whether this IGrowable can grow
+     */
+    public boolean canGrow(World worldIn, BlockPos pos, IBlockState state, boolean isClient)
+    {
+        return true;
+    }
+
+    public boolean canUseBonemeal(World worldIn, Random rand, BlockPos pos, IBlockState state)
+    {
+        return true;
+    }
+
+    public void grow(World worldIn, Random rand, BlockPos pos, IBlockState state)
+    {
+    	//Copied from normal grass
+        BlockPos blockpos = pos.up();
+
+        for (int i = 0; i < 128; ++i)
+        {
+            BlockPos blockpos1 = blockpos;
+            int j = 0;
+
+            while (true)
+            {
+                if (j >= i / 16)
+                {
+                    if (worldIn.isAirBlock(blockpos1))
+                    {
+                        if (rand.nextInt(8) == 0)
+                        {
+                        	//TODO Think about this ability
+                            worldIn.getBiome(blockpos1).plantFlower(worldIn, rand, blockpos1);
+                        }
+                        else
+                        {
+                            IBlockState iblockstate1 = ModBlocks.crystexTallGrass.getDefaultState().withProperty(CrystalColors.COLOR_SUPER, state.getValue(CrystalColors.COLOR_SUPER));
+
+                            if (ModBlocks.crystexTallGrass.canBlockStay(worldIn, blockpos1, iblockstate1))
+                            {
+                                worldIn.setBlockState(blockpos1, iblockstate1, 3);
+                            }
+                        }
+                    }
+
+                    break;
+                }
+
+                blockpos1 = blockpos1.add(rand.nextInt(3) - 1, (rand.nextInt(3) - 1) * rand.nextInt(3) / 2, rand.nextInt(3) - 1);
+
+                if (worldIn.getBlockState(blockpos1.down()).getBlock() != this || worldIn.getBlockState(blockpos1).isNormalCube())
+                {
+                    break;
+                }
+
+                ++j;
+            }
+        }
     }
 	
 }

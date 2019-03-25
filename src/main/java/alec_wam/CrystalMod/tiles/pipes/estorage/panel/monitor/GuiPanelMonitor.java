@@ -5,9 +5,14 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
+import alec_wam.CrystalMod.api.estorage.security.NetworkAbility;
+import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
+import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetworkClient;
 import alec_wam.CrystalMod.tiles.pipes.estorage.PacketEStorageAddItem;
 import alec_wam.CrystalMod.tiles.pipes.estorage.client.IGuiScreen;
+import alec_wam.CrystalMod.tiles.pipes.estorage.panel.BlockPanel.PanelType;
+import alec_wam.CrystalMod.util.ChatUtil;
 import alec_wam.CrystalMod.util.Lang;
 import alec_wam.CrystalMod.util.client.GuiUtil;
 import alec_wam.CrystalMod.util.client.Scrollbar;
@@ -101,7 +106,8 @@ public class GuiPanelMonitor extends GuiContainer implements IGuiScreen {
     	GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         //drawString(7, 7, t("gui.refinedstorage:crafting_monitor"));
         GlStateManager.disableLighting();
-    	drawString(fontRendererObj, Lang.localize("container.inventory", false), 7, 137, 4210752);
+        fontRendererObj.drawString(Lang.translateToLocal(ModBlocks.storagePanel.getUnlocalizedName() + "." + PanelType.MONITOR.getName()+".name"), 7, 7, 4210752);
+    	fontRendererObj.drawString(Lang.localize("container.inventory", false), 7, 137, 4210752);
     	GlStateManager.enableLighting();
         int x = 8;
         int y = 20;
@@ -190,7 +196,17 @@ public class GuiPanelMonitor extends GuiContainer implements IGuiScreen {
     @Override
     protected void actionPerformed(GuiButton button) throws IOException {
         super.actionPerformed(button);
-
+        boolean canChangeSettings = true;
+		boolean safe = craftingMonitor.getNetwork() !=null && craftingMonitor.getNetwork() instanceof EStorageNetworkClient;
+		if(safe){
+    		if(!craftingMonitor.getNetwork().hasAbility(mc.player, NetworkAbility.SETTINGS)){
+    			canChangeSettings = false;
+    		}
+		}
+		if(!canChangeSettings){
+			ChatUtil.sendNoSpam(mc.player, Lang.localize("gui.networkability."+NetworkAbility.SETTINGS.getId()));
+			return;
+		}
         if (button == cancelButton && itemSelected != -1) {
         	CrystalModNetwork.sendToServer(new PacketEStorageAddItem(5, craftingMonitor.getTasks().get(itemSelected).id, 0, new byte[0]));
         } else if (button == cancelAllButton && craftingMonitor.getTasks().size() > 0) {

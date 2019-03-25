@@ -63,7 +63,7 @@ public class BlockBasicTiles2 extends EnumBlock<BlockBasicTiles2.BasicTileType2>
 			return Material.WOOD;
 		}
 		if(type.unlocalizedName.contains("lamp")){
-			return Material.GLASS;
+			return Material.REDSTONE_LIGHT;
 		}
 		return Material.ROCK;
 	}
@@ -77,7 +77,7 @@ public class BlockBasicTiles2 extends EnumBlock<BlockBasicTiles2.BasicTileType2>
 			return Blocks.LOG.getBlockHardness(blockState, worldIn, pos);
 		}
 		if(type.unlocalizedName.contains("lamp")){
-			return Blocks.SEA_LANTERN.getBlockHardness(blockState, worldIn, pos);
+			return Blocks.REDSTONE_LAMP.getBlockHardness(blockState, worldIn, pos);
 		}
 		return Blocks.FURNACE.getBlockHardness(blockState, worldIn, pos);
     }
@@ -91,7 +91,7 @@ public class BlockBasicTiles2 extends EnumBlock<BlockBasicTiles2.BasicTileType2>
 			return Blocks.LOG.getExplosionResistance(world, pos, exploder, explosion);
 		}
 		if(type.unlocalizedName.contains("lamp")){
-			return Blocks.SEA_LANTERN.getExplosionResistance(world, pos, exploder, explosion);
+			return Blocks.REDSTONE_LAMP.getExplosionResistance(world, pos, exploder, explosion);
 		}
 		return Blocks.FURNACE.getExplosionResistance(world, pos, exploder, explosion);
     }

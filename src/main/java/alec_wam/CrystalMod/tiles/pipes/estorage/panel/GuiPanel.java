@@ -13,6 +13,7 @@ import com.google.common.collect.Lists;
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.api.estorage.INetworkGui;
 import alec_wam.CrystalMod.api.estorage.IPanelSource;
+import alec_wam.CrystalMod.api.estorage.security.NetworkAbility;
 import alec_wam.CrystalMod.client.util.GuiButtonHoverText;
 import alec_wam.CrystalMod.integration.jei.JEIUtil;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
@@ -27,10 +28,12 @@ import alec_wam.CrystalMod.tiles.pipes.estorage.client.VScrollbar;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.crafting.GuiPanelCrafting;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.popup.CraftingAmountPopup;
 import alec_wam.CrystalMod.tiles.pipes.estorage.panel.popup.Popup;
+import alec_wam.CrystalMod.util.ChatUtil;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.Lang;
+import alec_wam.CrystalMod.util.ModLogger;
 import alec_wam.CrystalMod.util.client.RenderUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
@@ -110,7 +113,18 @@ public class GuiPanel extends GuiContainer implements IGuiScreen, INetworkGui  {
 
 	@Override
 	public void actionPerformed(GuiButton button){
+		boolean canChangeSettings = true;
+		boolean safe = panel.getNetwork() !=null && panel.getNetwork() instanceof EStorageNetworkClient;
+		if(safe){
+    		if(!panel.getNetwork().hasAbility(mc.player, NetworkAbility.SETTINGS)){
+    			canChangeSettings = false;
+    		}
+		}
 		if(button.id == 0){
+			if(!canChangeSettings){
+				ChatUtil.sendNoSpamClient(Lang.localize("gui.networkability."+NetworkAbility.SETTINGS.getId()));
+				return;
+			}
 			if(panel !=null){
 				int index = panel.getSortType().ordinal();
 				index++;
@@ -118,7 +132,6 @@ public class GuiPanel extends GuiContainer implements IGuiScreen, INetworkGui  {
 					index = 0;
 				}
 				panel.setSortType(SortType.values()[index]);
-				boolean safe = panel.getNetwork() !=null && panel.getNetwork() instanceof EStorageNetworkClient;
 				if(safe){
 					EStorageNetworkClient net = (EStorageNetworkClient) panel.getNetwork();
 					net.needsListUpdate = true;
@@ -134,7 +147,6 @@ public class GuiPanel extends GuiContainer implements IGuiScreen, INetworkGui  {
 					index = 0;
 				}
 				panel.setViewType(ViewType.values()[index]);
-				boolean safe = panel.getNetwork() !=null && panel.getNetwork() instanceof EStorageNetworkClient;
 				if(safe){
 					EStorageNetworkClient net = (EStorageNetworkClient) panel.getNetwork();
 					net.needsListUpdate = true;

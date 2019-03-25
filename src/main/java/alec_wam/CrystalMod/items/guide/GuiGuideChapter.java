@@ -7,9 +7,12 @@ import org.lwjgl.opengl.GL11;
 
 import alec_wam.CrystalMod.api.guide.GuideChapter;
 import alec_wam.CrystalMod.api.guide.GuidePage;
+import alec_wam.CrystalMod.client.sound.ModSounds;
 import alec_wam.CrystalMod.client.util.comp.GuiComponentBook;
 import alec_wam.CrystalMod.client.util.comp.GuiComponentSprite;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.PositionedSoundRecord;
+import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -241,6 +244,7 @@ public class GuiGuideChapter extends GuiGuideBase {
 		/**
 		 * Draws this button to the screen.
 		 */
+		@Override
 		public void drawButton(Minecraft mc, int mouseX, int mouseY) {
 			if (this.visible) {
 				boolean flag = mouseX >= this.xPosition && mouseY >= this.yPosition
@@ -261,6 +265,12 @@ public class GuiGuideChapter extends GuiGuideBase {
 				this.drawTexturedModalRect(this.xPosition, this.yPosition, i, j, 18, 10);
 			}
 		}
+		
+		@Override
+		public void playPressSound(SoundHandler soundHandlerIn)
+	    {
+	        soundHandlerIn.playSound(PositionedSoundRecord.getMasterRecord(ModSounds.book_pageturn, 1.0F));
+	    }
 	}
 
 }

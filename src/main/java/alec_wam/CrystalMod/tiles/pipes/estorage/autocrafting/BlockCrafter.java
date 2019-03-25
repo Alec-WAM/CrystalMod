@@ -29,7 +29,8 @@ public class BlockCrafter extends BlockContainer {
 	
 	public BlockCrafter() {
 		super(Material.IRON);
-		setHardness(0.5F);
+		setHardness(2.0F);
+        this.setResistance(10.0F);
 		setCreativeTab(CrystalMod.tabBlocks);
 	}
 	

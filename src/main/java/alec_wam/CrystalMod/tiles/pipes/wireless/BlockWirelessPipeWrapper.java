@@ -79,7 +79,7 @@ public class BlockWirelessPipeWrapper extends BlockContainer implements ICustomM
             				wrapper.connectionDim = dim;
             				BlockUtil.markBlockForUpdate(world, pos);
             			}
-            			ChatUtil.sendChat(player, "Linked to "+x+" "+y+" "+z+" Dimension:"+StringUtils.getDimensionName(player.getUniqueID(), dim));
+            			ChatUtil.sendChat(player, "Linked to "+x+" "+y+" "+z+" Dimension: "+ dim/*StringUtils.getDimensionName(player.getUniqueID(), dim)*/);
         			}
         			return true;
         		}else{
@@ -88,7 +88,9 @@ public class BlockWirelessPipeWrapper extends BlockContainer implements ICustomM
         			ItemNBTHelper.setInteger(held, BlockWirelessPipeWrapper.NBT_CON_Z, pos.getZ());
         			int dim = world.provider.getDimension();
         			ItemNBTHelper.setInteger(held, BlockWirelessPipeWrapper.NBT_CON_D, dim);
-    				if(!world.isRemote)ChatUtil.sendChat(player, "Card set to "+pos.getX()+" "+pos.getY()+" "+pos.getZ()+" Dimension:"+StringUtils.getDimensionName(player.getUniqueID(), dim));
+    				if(!world.isRemote){
+    					ChatUtil.sendChat(player, "Card set to "+pos.getX()+" "+pos.getY()+" "+pos.getZ()+" Dimension: "+ dim/*StringUtils.getDimensionName(player.getUniqueID(), dim)*/);
+    				}
     				return true;
         		}
         	}

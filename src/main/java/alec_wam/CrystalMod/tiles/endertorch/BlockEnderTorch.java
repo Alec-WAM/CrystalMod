@@ -10,9 +10,11 @@ import alec_wam.CrystalMod.util.ChatUtil;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
@@ -20,6 +22,7 @@ import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -33,6 +36,7 @@ public class BlockEnderTorch extends BlockContainer {
 
 	public BlockEnderTorch() {
 		super(Material.IRON);
+		this.setSoundType(SoundType.METAL);
         this.setTickRandomly(true);
 		this.setCreativeTab(CrystalMod.tabTools);
 	}
@@ -93,6 +97,7 @@ public class BlockEnderTorch extends BlockContainer {
         		torch.range+=incrs;
         		torch.range%=16.0D;
         		ChatUtil.sendNoSpam(playerIn, "Range: "+torch.range);
+        		worldIn.playSound(null, pos,SoundEvents.BLOCK_STONE_BUTTON_CLICK_ON, SoundCategory.BLOCKS, 0.2f, 1.0F);
         		torch.markDirty();
         	}
         	return true;

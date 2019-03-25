@@ -26,11 +26,14 @@ import alec_wam.CrystalMod.util.HarvestResult;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.fakeplayer.FakePlayerUtil;
+import alec_wam.CrystalMod.util.tool.ChorusPlantUtil;
+import alec_wam.CrystalMod.util.tool.ChorusPlantUtil.ChorusPlantData;
 import alec_wam.CrystalMod.util.tool.MultiHarvestComparator;
 import alec_wam.CrystalMod.util.tool.ToolUtil;
 import alec_wam.CrystalMod.util.tool.TreeHarvestUtil;
 import alec_wam.CrystalMod.util.tool.TreeUtil;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockChorusFlower;
 import net.minecraft.block.BlockDoublePlant;
 import net.minecraft.block.BlockFlower;
 import net.minecraft.block.BlockSapling;
@@ -46,6 +49,7 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemDye;
+import net.minecraft.item.ItemShears;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -53,6 +57,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
+import net.minecraftforge.common.IShearable;
 import net.minecraftforge.common.util.Constants;
 
 public class WorksiteTreeFarm extends TileWorksiteUserBlocks {
@@ -64,6 +69,7 @@ public class WorksiteTreeFarm extends TileWorksiteUserBlocks {
 	 */
 	private boolean shouldCountResources = true;
 	int saplingCount;
+	int chorusFlowerCount;
 	int bonemealCount;
 	Set<BlockPos> blocksToChop;
 	List<BlockPos> blocksToPlant;
@@ -102,7 +108,7 @@ public class WorksiteTreeFarm extends TileWorksiteUserBlocks {
 				}
 				if (stack.getItem() instanceof ItemBlock) {
 					ItemBlock item = (ItemBlock) stack.getItem();
-					return item.getBlock() instanceof BlockSapling;
+					return item.getBlock() instanceof BlockSapling || item.getBlock() instanceof BlockChorusFlower;
 				}
 				return false;
 			}
@@ -116,6 +122,10 @@ public class WorksiteTreeFarm extends TileWorksiteUserBlocks {
 				}
 				
 				if(isAxe(stack))
+				{
+					return true;
+				}
+				if(stack.getItem() instanceof ItemShears)
 				{
 					return true;
 				}
@@ -153,6 +163,7 @@ public class WorksiteTreeFarm extends TileWorksiteUserBlocks {
 	private void countResources() {
 		shouldCountResources = false;
 		saplingCount = 0;
+		chorusFlowerCount = 0;
 		bonemealCount = 0;
 		ItemStack stack = ItemStackTools.getEmptyStack();
 		for (int i = 27; i < 33; i++) {
@@ -164,6 +175,9 @@ public class WorksiteTreeFarm extends TileWorksiteUserBlocks {
 				ItemBlock item = (ItemBlock) stack.getItem();
 				if (item.getBlock() instanceof BlockSapling) {
 					saplingCount += ItemStackTools.getStackSize(stack);
+				}
+				if (item.getBlock() instanceof BlockChorusFlower) {
+					chorusFlowerCount += ItemStackTools.getStackSize(stack);
 				}
 			} else if (stack.getItem() == Items.DYE
 					&& stack.getItemDamage() == EnumDyeColor.WHITE.getDyeDamage()) {
@@ -291,24 +305,26 @@ public class WorksiteTreeFarm extends TileWorksiteUserBlocks {
 			}
 		} else if (saplingCount > 0 && !blocksToPlant.isEmpty()) {
 			ItemStack stack = ItemStackTools.getEmptyStack();
+			BlockSapling saplingBlock = null;
 			int slot = 27;
 			for (int i = 27; i < 30; i++) {
 				stack = inventory.getStackInSlot(i);
 				if (ItemStackTools.isValid(stack)
 						&& stack.getItem() instanceof ItemBlock
 						&& ((ItemBlock) stack.getItem()).getBlock() instanceof BlockSapling) {
+					saplingBlock = (BlockSapling)((ItemBlock) stack.getItem()).getBlock();
 					slot = i;
 					break;
 				} else {
 					stack = ItemStackTools.getEmptyStack();
 				}
 			}
-			if (stack != null)// e.g. a sapling stack is present
+			if (ItemStackTools.isValid(stack))// e.g. a sapling stack is present
 			{
 				Iterator<BlockPos> it = blocksToPlant.iterator();
 				while (it.hasNext() && (position = it.next()) != null) {
 					if(busyBlocks.contains(position))continue;
-					if (getWorld().isAirBlock(position)) {
+					if (getWorld().isAirBlock(position) && canPlantSapling(position, saplingBlock)) {
 						EntityMinionWorker worker = getClosestWorker(position, WorkerFilter.idleFilter);
 						if(worker == null){
 							//Look for workers with axes and use them
@@ -335,6 +351,61 @@ public class WorksiteTreeFarm extends TileWorksiteUserBlocks {
 								busyBlocks.add(workPos);
 								ItemStack copy = ItemUtil.copy(stack, 1);
 								saplingCount--;
+								inventory.decrStackSize(slot, 1);
+								worker.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, copy);
+								it.remove();
+								return true;
+							}
+						}
+					}
+				}
+			}
+		} else if (chorusFlowerCount > 0 && !blocksToPlant.isEmpty()) {
+			ItemStack stack = ItemStackTools.getEmptyStack();
+			int slot = 27;
+			for (int i = 27; i < 30; i++) {
+				stack = inventory.getStackInSlot(i);
+				if (ItemStackTools.isValid(stack)
+						&& stack.getItem() instanceof ItemBlock
+						&& ((ItemBlock) stack.getItem()).getBlock() instanceof BlockChorusFlower) {
+					slot = i;
+					break;
+				} else {
+					stack = ItemStackTools.getEmptyStack();
+				}
+			}
+			if (ItemStackTools.isValid(stack))
+			{
+				Iterator<BlockPos> it = blocksToPlant.iterator();
+				while (it.hasNext() && (position = it.next()) != null) {
+					if(busyBlocks.contains(position))continue;
+					if (getWorld().isAirBlock(position) && canPlantChorus(position)) {
+						EntityMinionWorker worker = getClosestWorker(position, WorkerFilter.idleFilter);
+						if(worker == null){
+							//Look for workers with axes and use them
+							EntityMinionWorker worker2 = getClosestWorker(position, axeFilter);
+							if(worker2 !=null){
+								worker2.switchItems();
+								//Remove any odd items
+								ItemStack held = worker2.getHeldItemMainhand();
+								if(ItemStackTools.isValid(held)){
+									addStackToInventory(held, RelativeSide.BOTTOM, RelativeSide.FRONT, RelativeSide.TOP);
+									worker2.setHeldItem(EnumHand.MAIN_HAND, ItemStackTools.getEmptyStack());
+								}
+								worker = worker2;
+							}
+						}
+						if(worker !=null){
+							final BlockPos workPos = position;
+							if(worker.addCommand(new JobPlantCrop(position){
+								@Override
+								public void onCompleted(EntityMinionWorker worker, TileWorksiteBase worksite){
+									busyBlocks.remove(workPos);
+								}
+							})){
+								busyBlocks.add(workPos);
+								ItemStack copy = ItemUtil.copy(stack, 1);
+								chorusFlowerCount--;
 								inventory.decrStackSize(slot, 1);
 								worker.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, copy);
 								it.remove();
@@ -376,6 +447,14 @@ public class WorksiteTreeFarm extends TileWorksiteUserBlocks {
 		return false;
 	}
 
+	private boolean canPlantSapling(BlockPos pos, BlockSapling sapling){
+		return sapling.canPlaceBlockAt(getWorld(), pos);
+	}
+	
+	private boolean canPlantChorus(BlockPos pos){
+		return Blocks.CHORUS_FLOWER.canPlaceBlockAt(getWorld(), pos);
+	}
+			
 	private void pickupSaplings() {
 		BlockPos p1 = getWorkBoundsMin();
 		BlockPos p2 = getWorkBoundsMax().add(1, 1, 1);
@@ -392,9 +471,24 @@ public class WorksiteTreeFarm extends TileWorksiteUserBlocks {
 				addStackToInventory(stack, RelativeSide.TOP);
 				continue;
 			}
+			if (stack.getItem() == Items.CHORUS_FRUIT) {
+				item.setDead();
+				addStackToInventory(stack, RelativeSide.TOP);
+				continue;
+			}
 			if (stack.getItem() instanceof ItemBlock) {
 				ItemBlock ib = (ItemBlock) stack.getItem();
 				if (ib.getBlock() instanceof BlockSapling) {
+					if (!ItemUtil.canInventoryHold(inventory, inventory
+							.getRawIndicesCombined(RelativeSide.FRONT,
+									RelativeSide.TOP), stack)) {
+						break;
+					}
+					item.setDead();
+					addStackToInventory(stack, RelativeSide.FRONT,
+							RelativeSide.TOP);
+				}
+				if (ib.getBlock() instanceof BlockChorusFlower) {
 					if (!ItemUtil.canInventoryHold(inventory, inventory
 							.getRawIndicesCombined(RelativeSide.FRONT,
 									RelativeSide.TOP), stack)) {
@@ -431,6 +525,13 @@ public class WorksiteTreeFarm extends TileWorksiteUserBlocks {
 		// TreeFinder.findAttachedTreeBlocks(getWorld().getBlock(base.x, base.y,
 		// base.z), getWorld(), base.x, base.y, base.z, blocksToChop);
 		blocksToChop.add(base);
+		getWorld().theProfiler.endSection();
+	}
+	
+	private void addChorusBlock(BlockPos base) {
+		getWorld().theProfiler.startSection("ChorusFinder");
+		//ModLogger.info("Found Chorus Plant");
+		if(ChorusPlantUtil.isFullyGrownPlant(getWorld(), base))blocksToChop.add(base);
 		getWorld().theProfiler.endSection();
 	}
 	
@@ -497,7 +598,8 @@ public class WorksiteTreeFarm extends TileWorksiteUserBlocks {
 		IBlockState state;
 		if (getWorld().isAirBlock(pos)) {
 			state = getWorld().getBlockState(pos.down());
-			if (state.getBlock() == Blocks.DIRT || state.getBlock() == Blocks.GRASS) {
+			//TODO handle canSustainPlant for saplings
+			if (state.getBlock() == Blocks.DIRT || state.getBlock() == Blocks.GRASS || state.getBlock() == Blocks.END_STONE) {
 				blocksToPlant.add(pos);
 			}
 		} else {
@@ -512,6 +614,10 @@ public class WorksiteTreeFarm extends TileWorksiteUserBlocks {
 				if (!blocksToChop.contains(pos)) {
 					addTreeBlocks(pos);
 				}
+			}else if (ChorusPlantUtil.isChorusPlant(state)) {
+				if (!blocksToChop.contains(pos)) {
+					addChorusBlock(pos);
+				}
 			}
 		}
 	}
@@ -519,7 +625,7 @@ public class WorksiteTreeFarm extends TileWorksiteUserBlocks {
 	@Override
 	protected boolean hasWorksiteWork() {
 		return (bonemealCount > 0 && !blocksToFertilize.isEmpty())
-				|| (saplingCount > 0 && !blocksToPlant.isEmpty())
+				|| ((saplingCount > 0 || chorusFlowerCount > 0) && !blocksToPlant.isEmpty())
 				|| !blocksToChop.isEmpty();
 	}
 
@@ -582,6 +688,73 @@ public class WorksiteTreeFarm extends TileWorksiteUserBlocks {
 		Collections.sort(sortedTargets, harvestComparator);
 	            
 		boolean hasAxe = (ItemStackTools.isValid(stack) && !ToolUtil.isBrokenTinkerTool(stack) && !ToolUtil.isEmptyRfTool(stack));
+		for(int i=0; hasAxe && i < sortedTargets.size();i++) {
+			BlockPos bc = sortedTargets.get(i);
+			IBlockState bs = getWorld().getBlockState(bc);
+			int fourtune = EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, stack);
+	  		if(fourtune < 2)fourtune += getUpgrades().contains(WorksiteUpgrade.ENCHANTED_TOOLS_1)? 1 : getUpgrades().contains(WorksiteUpgrade.ENCHANTED_TOOLS_2)? 2 : getUpgrades().contains(WorksiteUpgrade.ENCHANTED_TOOLS_3) ? 3 : 0;
+	  		
+	  		List<ItemStack> itemDrops = null;
+	  		boolean sheared = false;
+  			if(TreeHarvestUtil.isLeaves(bs, getWorld(), bc)){
+	  			ItemStack shears = ItemStackTools.getEmptyStack();
+	  			int[] slots = this.inventory.getRawIndices(RelativeSide.BOTTOM);
+	  			slots : for(int s = 0; s < slots.length; s++){
+					int slot = slots[s];
+					ItemStack item = inventory.getStackInSlot(slot);
+					if(item.getItem() instanceof ItemShears){
+						shears = item;
+						break slots;
+					}
+				}
+	  			if(ItemStackTools.isValid(shears)){
+	  				if(bs.getBlock() instanceof IShearable){
+	  					itemDrops = ((IShearable)bs.getBlock()).onSheared(shears, getWorld(), bc, fourtune);
+	  					getWorld().setBlockToAir(bc);
+	  					if (shears.attemptDamageItem(1, getWorld().rand))
+	  	                {
+	  						shears.shrink(1);
+	  	                }
+	  					sheared = true;
+	  				}
+	  			} 
+	  		} 
+  			if(!sheared){
+	  			itemDrops = TreeUtil.doMultiHarvest(stack, getWorld(), bc, block, fourtune);	  			
+	  		}
+	  		for(ItemStack drop : itemDrops){
+	  			addStackToInventory(drop, RelativeSide.FRONT, RelativeSide.TOP);
+	  		}
+	  		hasAxe = (ItemStackTools.isValid(stack) && !ToolUtil.isBrokenTinkerTool(stack) && !ToolUtil.isEmptyRfTool(stack));
+		}
+        return true;
+    }
+	
+	public boolean chopDownChorus(ItemStack stack, BlockPos pos)
+    {
+		if(getWorld().isRemote) return false;
+		IBlockState state = getWorld().getBlockState(pos);
+		Block block = state.getBlock();
+		if(!ChorusPlantUtil.isChorusPlant(state)) return false;
+		ChorusPlantData data = ChorusPlantUtil.buildPlantData(getWorld(), pos);
+		  
+		//Harvest Flowers First
+		List<BlockPos> sortedTargets = new ArrayList<BlockPos>(data.flowerList);	            
+		boolean hasAxe = (ItemStackTools.isValid(stack) && !ToolUtil.isBrokenTinkerTool(stack) && !ToolUtil.isEmptyRfTool(stack));
+		for(int i=0; hasAxe && i < sortedTargets.size(); i++) {
+			BlockPos bc = sortedTargets.get(i);
+			ItemStack flowerStack = new ItemStack(Blocks.CHORUS_FLOWER);
+			getWorld().playEvent(2001, bc, Block.getStateId(state));
+			getWorld().setBlockToAir(bc);
+		    addStackToInventory(flowerStack, RelativeSide.FRONT, RelativeSide.TOP);
+	  		hasAxe = (ItemStackTools.isValid(stack) && !ToolUtil.isBrokenTinkerTool(stack) && !ToolUtil.isEmptyRfTool(stack));
+		}
+		
+		//Now harvest plant		
+		hasAxe = (ItemStackTools.isValid(stack) && !ToolUtil.isBrokenTinkerTool(stack) && !ToolUtil.isEmptyRfTool(stack));
+		sortedTargets = new ArrayList<BlockPos>(data.plantList);
+		harvestComparator.refPoint = pos;
+		Collections.sort(sortedTargets, harvestComparator);
 		for(int i=0; hasAxe && i < sortedTargets.size();i++) {
 			BlockPos bc = sortedTargets.get(i);
 			int fourtune = EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, stack);

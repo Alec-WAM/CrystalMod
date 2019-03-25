@@ -1,8 +1,12 @@
 package alec_wam.CrystalMod.tiles.machine;
 
+import javax.annotation.Nullable;
+
 import alec_wam.CrystalMod.api.energy.CEnergyStorage;
 import alec_wam.CrystalMod.api.energy.CapabilityCrystalEnergy;
 import alec_wam.CrystalMod.api.energy.ICEnergyStorage;
+import alec_wam.CrystalMod.client.sound.MachineSound;
+import alec_wam.CrystalMod.client.sound.ModSounds;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.IMessageHandler;
 import alec_wam.CrystalMod.network.packets.PacketTileMessage;
@@ -13,7 +17,9 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -29,6 +35,9 @@ public abstract class TileEntityMachine extends TileEntityInventory implements I
     protected int processRem;
     
     protected float lastSyncPowerStored = -1;
+    
+    @SideOnly(Side.CLIENT)
+    private MachineSound runningSound;
     
     public TileEntityMachine(String name, int size){
     	super(name, size);
@@ -87,10 +96,44 @@ public abstract class TileEntityMachine extends TileEntityInventory implements I
 		}
 	}
     
+	public boolean hasRunningSound() {
+		return getRunningSound() != null;
+	}
+	
+	@Nullable
+	public ResourceLocation getRunningSound() {
+		return ModSounds.machine_basic.getSoundName();
+	}
+	
+	public float getVolume() {
+		return 0.8F;
+	}
+
+	public float getPitch() {
+		return 1.0f;
+	}
+	
+	public boolean shouldPlayRunningSound(){
+		return isActive() && !isInvalid() && world.isBlockIndirectlyGettingPowered(getPos()) == 0;
+	}
+	
     @Override
 	public void update(){
 		super.update();
+		boolean redstone = world.isBlockIndirectlyGettingPowered(getPos()) > 0;
+    	
 		if(getWorld().isRemote){
+			if(hasRunningSound()){
+				final ResourceLocation soundLocation = getRunningSound();
+				if (shouldPlayRunningSound() && soundLocation != null) {
+					if (runningSound == null) {
+						FMLClientHandler.instance().getClient().getSoundHandler().playSound(runningSound = new MachineSound(soundLocation, pos, getVolume(), getPitch()));
+					}
+				} else if (runningSound != null) {
+					runningSound.endPlaying();
+					runningSound = null;
+				}
+			}
 			return;
 		}
 		
@@ -103,9 +146,8 @@ public abstract class TileEntityMachine extends TileEntityInventory implements I
 	    }
 		
 		final boolean curActive = this.isActive;
-        if (this.isActive) {
-        	
-        	if(!canContinueRunning()){
+        if (this.isActive) {        	
+        	if(!canContinueRunning() || redstone){
         		this.isActive = false;
                 this.wasActive = true;
                 processRem = processMax = 0;
@@ -136,7 +178,7 @@ public abstract class TileEntityMachine extends TileEntityInventory implements I
             }
         }
         else {
-            if (shouldDoWorkThisTick(4) && canStart()) {
+            if (shouldDoWorkThisTick(4) && canStart() && !redstone) {
                 processStart();
                 final int energy = calcEnergy();
                 this.eStorage.modifyEnergyStored(-energy);
@@ -314,6 +356,14 @@ public abstract class TileEntityMachine extends TileEntityInventory implements I
         	return (T) eStorage;
         }
         return super.getCapability(capability, facing);
+    }
+    
+    public boolean canInsertFluidWithBucket() {
+    	return false;
+    }
+    
+    public boolean canExtractFluidWithBucket() {
+    	return false;
     }
 
     public abstract Object getContainer(EntityPlayer player, int id);

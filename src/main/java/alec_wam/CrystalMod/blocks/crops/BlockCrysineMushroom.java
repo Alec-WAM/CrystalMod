@@ -2,6 +2,7 @@ package alec_wam.CrystalMod.blocks.crops;
 
 import java.util.Random;
 
+import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.world.WorldGenCrysineMushroom;
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.BlockDirt;
@@ -15,6 +16,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
+import net.minecraftforge.common.EnumPlantType;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -25,6 +27,7 @@ public class BlockCrysineMushroom extends BlockBush implements IGrowable
     public BlockCrysineMushroom()
     {
         this.setTickRandomly(true);
+        this.setCreativeTab(CrystalMod.tabBlocks);
     }
 
     @Override
@@ -43,6 +46,12 @@ public class BlockCrysineMushroom extends BlockBush implements IGrowable
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
     {
         return MUSHROOM_AABB;
+    }
+
+    @Override
+    public net.minecraftforge.common.EnumPlantType getPlantType(net.minecraft.world.IBlockAccess world, BlockPos pos)
+    {
+    	return EnumPlantType.Cave;
     }
 
     @Override

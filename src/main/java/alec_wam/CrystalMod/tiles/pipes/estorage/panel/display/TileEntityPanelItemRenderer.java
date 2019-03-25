@@ -1,6 +1,7 @@
 package alec_wam.CrystalMod.tiles.pipes.estorage.panel.display;
 
 import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.client.RenderUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -24,7 +25,7 @@ public class TileEntityPanelItemRenderer<T extends TileEntityPanelItem> extends 
 	@Override
 	public void renderTileEntityAt(TileEntityPanelItem te, double x, double y, double z, float partialTicks, int destroyStage) {
 		if(te.network == null || !te.connected)return;
-		if(te.displayItem == null && te.displayFluid == null)return;
+		if(ItemStackTools.isEmpty(te.displayItem) && te.displayFluid == null)return;
 		GlStateManager.pushMatrix();
 		GlStateManager.translate(x, y, z);
 		
@@ -61,7 +62,7 @@ public class TileEntityPanelItemRenderer<T extends TileEntityPanelItem> extends 
 		if(te.displayFluid !=null){
 			float d = 0.005f;
 			RenderUtil.renderFluidCuboid(te.displayFluid, te.getPos(), -0.5, -0.5, -0.01, d+0.1d, d+0.1d, d, 0.9d - d, 0.9d - d, d, false);
-		} else if(te.displayItem !=null){
+		} else if(ItemStackTools.isValid(te.displayItem)){
 			itemBlock = renderItem(te.displayItem); 
 		}
 		
@@ -90,7 +91,7 @@ public class TileEntityPanelItemRenderer<T extends TileEntityPanelItem> extends 
         EnumRarity rarity = EnumRarity.COMMON;
         
         
-        if(te.displayItem !=null){
+        if(ItemStackTools.isValid(te.displayItem)){
         	string = te.displayItem.getDisplayName();
         	font = te.displayItem.getItem().getFontRenderer(te.displayItem);
         	rarity = te.displayItem.getRarity();
@@ -120,28 +121,24 @@ public class TileEntityPanelItemRenderer<T extends TileEntityPanelItem> extends 
 	}
 	
 	public boolean renderItem(ItemStack displayItem){
+		boolean itemBlock = false;
 		GlStateManager.pushMatrix();
-		boolean itemBlock = false;	
 		try
 		{
 			final ItemStack sis = displayItem;
 
 			GlStateManager.disableRescaleNormal();
 			IBakedModel model = Minecraft.getMinecraft().getRenderItem().getItemModelMesher().getItemModel(sis);
-			
+			TransformType transform = TransformType.GUI;
 			if(sis.getItem() instanceof ItemBanner){
+				transform = TransformType.FIXED;
 				GlStateManager.rotate(180.0F, 0.0F, 1.0F, 0.0F);
-				GlStateManager.scale(0.5, 0.5, 0.5);
+				GlStateManager.scale(0.3, 0.3, 0.3);
 				GlStateManager.translate( 0.0f, (-0.14f*2)+0.1, 0 );
 			}
 			else if(sis.getItem() instanceof ItemBlock && model.isGui3d()){
-				GlStateManager.scale(0.5, 0.5, 0.5);
-				
-				
+				GlStateManager.scale(0.3, 0.3, 0.3);
 				GlStateManager.scale(1, 1, 0.001F);
-				GlStateManager.rotate(180, 0, 0, 1);
-				GlStateManager.rotate(-210, 1, 0, 0);
-				GlStateManager.rotate(45, 0, 1, 0);
 				itemBlock = true;
 			}else{
 				GlStateManager.rotate(180.0F, 0.0F, 1.0F, 0.0F);
@@ -150,7 +147,7 @@ public class TileEntityPanelItemRenderer<T extends TileEntityPanelItem> extends 
 			
 			if (!Minecraft.getMinecraft().getRenderItem().shouldRenderItemIn3D(sis) || sis.getItem() instanceof ItemSkull)
             {
-                GlStateManager.rotate(180.0F, 0.0F, 1.0F, 0.0F);
+				transform = TransformType.FIXED;
             }
 			
 			GlStateManager.translate( 0.0f, 0.14f, 0 );
@@ -166,7 +163,9 @@ public class TileEntityPanelItemRenderer<T extends TileEntityPanelItem> extends 
 		        	GlStateManager.scale(0.015625F, 0.015625F, 0.015625F);
 		        	Minecraft.getMinecraft().entityRenderer.getMapItemRenderer().renderMap(mapdata, true);
 		        }
-			}else Minecraft.getMinecraft().getRenderItem().renderItem(sis, TransformType.GUI);
+			}else {
+				RenderUtil.renderItem(displayItem, transform);
+			}
 		}
 		catch( final Exception e )
 		{

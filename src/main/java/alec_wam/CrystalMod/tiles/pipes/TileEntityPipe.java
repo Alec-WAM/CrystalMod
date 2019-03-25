@@ -249,8 +249,7 @@ public abstract class TileEntityPipe extends TileEntityMod implements ITickable,
 		World world = getWorld();
 
 		for (EnumFacing dir : pipeConnections) {
-			TileEntityPipe neighbour = PipeUtil.getPipe(world, this, dir,
-					getPipeType());
+			TileEntityPipe neighbour = PipeUtil.getPipe(world, this, dir, getPipeType());
 			if (neighbour != null) {
 				neighbour.pipeConnectionRemoved(dir.getOpposite());
 				neighbour.connectionsChanged();
@@ -318,6 +317,7 @@ public abstract class TileEntityPipe extends TileEntityMod implements ITickable,
 	protected final Map<EnumFacing, CoverData> covers = Maps.newHashMap();
 	public CoverData lastBrokenCover;
 	public EnumFacing lastBrokenCoverSide;
+	public EnumFacing diggingCoverSide;
 	protected final Map<EnumFacing, AttachmentData> attachments = Maps.newHashMap();
 
 	protected final EnumMap<EnumFacing, ConnectionMode> conectionModes = new EnumMap<EnumFacing, ConnectionMode>(
@@ -471,6 +471,11 @@ public abstract class TileEntityPipe extends TileEntityMod implements ITickable,
 		return dir == null ? null : attachments.get(dir);
 	}
 
+	@Override
+	public boolean canRenderBreaking(){
+		return diggingCoverSide !=null;
+	}
+	
 	@Override
 	public void writeCustomNBT(NBTTagCompound nbtRoot) {
 		super.writeCustomNBT(nbtRoot);
@@ -732,6 +737,16 @@ public abstract class TileEntityPipe extends TileEntityMod implements ITickable,
 		ItemStack held = player.getHeldItem(hand);
 		if(ItemStackTools.isValid(held) && held.getItem() == Items.STICK){
 			BlockUtil.markBlockForUpdate(getWorld(), getPos());
+			return true;
+		}
+		
+		if(held.getItem() == Items.APPLE){
+			if(network !=null){
+				List<String> info = Lists.newArrayList();
+				info.add("Network Info:");
+				info.add("Size: " + network.pipes.size());
+				ChatUtil.sendChat(player, info);
+			}
 			return true;
 		}
 		

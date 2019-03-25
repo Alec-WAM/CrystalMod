@@ -233,7 +233,6 @@ public class MinionAICombat extends AIBase<EntityMinionWarrior>
 					}
 					
 					if(ItemStackTools.isValid(bowStack) && EntityMinionWarrior.isBow(bowStack)){
-						//TODO Damage Bow
 						EntityTippedArrow arrow = new EntityTippedArrow(minion.getEntityWorld(), minion);
 				        double dX = attackTarget.posX - minion.posX;
 				        double dY = attackTarget.getEntityBoundingBox().minY + attackTarget.height / 3.0F - arrow.posY;

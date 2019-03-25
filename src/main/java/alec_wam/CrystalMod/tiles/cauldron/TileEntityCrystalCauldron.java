@@ -9,22 +9,16 @@ import alec_wam.CrystalMod.tiles.cauldron.CauldronRecipeManager.InfusionRecipe;
 import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
 public class TileEntityCrystalCauldron extends TileEntityMod {
 
-	public static enum LiquidCrystalColor{
-		BLUE, RED, GREEN, DARK, PURE;
-	}
-	
 	public FluidStack crystalStack;
 	
 	@Override
@@ -42,7 +36,6 @@ public class TileEntityCrystalCauldron extends TileEntityMod {
 	@Override
 	public void update(){
 		super.update();
-		
 		List<EntityItem> items = getWorld().getEntitiesWithinAABB(EntityItem.class, new AxisAlignedBB(getPos().getX(), getPos().getY(), getPos().getZ(), getPos().getX()+1f, getPos().getY()+1f, getPos().getZ()+1f));
 		for(EntityItem item : items){
 			if(item !=null && ItemStackTools.isValid(item.getEntityItem())){
@@ -50,17 +43,13 @@ public class TileEntityCrystalCauldron extends TileEntityMod {
 				ItemStack spawn = ItemStackTools.getEmptyStack();
 				int decAmt = 0;
 				InfusionRecipe recipe = crystalStack == null ? null : CauldronRecipeManager.getRecipe(stack, crystalStack);
-				if(recipe == null){
-					//CONVERTING FREE RECIPES
-					if(stack.getItem() == Items.ROTTEN_FLESH){
-						spawn = new ItemStack(Items.LEATHER);
-					}
-					if(stack.getItem() == Item.getItemFromBlock(Blocks.SNOW)){
-						spawn = new ItemStack(Blocks.ICE);
-					}
-				}else{
+				if(recipe != null){
 					spawn = recipe.getOutput();
-					if(recipe.getFluidInput() !=null)decAmt = recipe.getFluidInput().amount;
+					if(recipe.getFluidInput() !=null){
+						decAmt = recipe.getFluidInput().amount;
+					} else {
+						decAmt = 1;
+					}
 				}
 				if(ItemStackTools.isValid(spawn)){
 					if(!getWorld().isRemote){
@@ -74,13 +63,16 @@ public class TileEntityCrystalCauldron extends TileEntityMod {
 						entItem.setDefaultPickupDelay();
 						getWorld().spawnEntity(entItem);
 						if(crystalStack !=null){
+							SoundEvent soundevent = crystalStack.getFluid().getEmptySound(crystalStack);
+							getWorld().playSound(null, getPos(), soundevent, SoundCategory.BLOCKS, 1f, 1f);
+							
 							this.crystalStack.amount-=decAmt;
 							if(this.crystalStack.amount <=0){
 								crystalStack = null;
 							}
 						}
 						BlockUtil.markBlockForUpdate(getWorld(), getPos());
-					}else getWorld().spawnParticle(EnumParticleTypes.REDSTONE, getPos().getX(), getPos().getY()+1.5d, getPos().getZ(), 0, 0, 0, new int[0]);
+					}
 					break;
 				}
 				
@@ -102,6 +94,9 @@ public class TileEntityCrystalCauldron extends TileEntityMod {
 						if(pass){
 							ItemStackTools.incStackSize(item.getEntityItem(), -1);
 							if(ItemStackTools.isEmpty(item.getEntityItem()))item.setDead();
+							SoundEvent soundevent = shardFluid.getFluid().getFillSound(shardFluid);
+							getWorld().playSound(null, getPos(), soundevent, SoundCategory.BLOCKS, 1f, 1f);
+							
 							BlockUtil.markBlockForUpdate(getWorld(), getPos());
 						}
 					}

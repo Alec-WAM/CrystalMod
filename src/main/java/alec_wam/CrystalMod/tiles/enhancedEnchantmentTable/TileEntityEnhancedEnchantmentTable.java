@@ -48,7 +48,7 @@ public class TileEntityEnhancedEnchantmentTable extends TileEntityInventory impl
 	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack stack) {
 		if(slot == 0){
-			return ItemStackTools.isValid(stack) && stack.getItem().isEnchantable(stack);
+			return ItemStackTools.isValid(stack) && (stack.getItem().isEnchantable(stack) || stack.getItem() == Items.ENCHANTED_BOOK);
 		}
 		if(slot == 1){
 			return ItemStackTools.isValid(stack) &&stack.getItem() == Items.BOOK;
@@ -62,7 +62,7 @@ public class TileEntityEnhancedEnchantmentTable extends TileEntityInventory impl
 	@Override
 	public boolean canInsertItem(int slot, ItemStack stack) {
 		if(slot == 0){
-			return stack.isItemEnchanted();
+			return (stack.isItemEnchanted()|| stack.getItem() == Items.ENCHANTED_BOOK);
 		}
 		if(slot == 1){
 			return stack.getItem() == Items.BOOK;
@@ -205,6 +205,7 @@ public class TileEntityEnhancedEnchantmentTable extends TileEntityInventory impl
 		}
 		if(messageId.equalsIgnoreCase("Transfer")){
 			if(ItemStackTools.isEmpty(getStackInSlot(2))){
+				ItemStack editStack = getStackInSlot(0);
 				int[] selections = messageData.getIntArray("Selections");
 				Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(getStackInSlot(0));
 				@SuppressWarnings("unchecked")
@@ -219,9 +220,19 @@ public class TileEntityEnhancedEnchantmentTable extends TileEntityInventory impl
 				}
 				ItemStack newBook = new ItemStack(Items.ENCHANTED_BOOK);
 				EnchantmentHelper.setEnchantments(bookEnchants, newBook);
-				decrStackSize(1, 1);
 				setInventorySlotContents(2, newBook);
-				EnchantmentHelper.setEnchantments(enchantments, getStackInSlot(0));
+				if(editStack.getItem() == Items.ENCHANTED_BOOK){
+					if(enchantments.isEmpty()){
+						decrStackSize(0, 1);						
+					} else {
+						ItemStack newEditBook = new ItemStack(Items.ENCHANTED_BOOK);
+						EnchantmentHelper.setEnchantments(enchantments, newEditBook);
+						setInventorySlotContents(0, newEditBook);						
+					}
+				} else {							
+					decrStackSize(1, 1);
+					EnchantmentHelper.setEnchantments(enchantments, editStack);
+				}
 			}
 		}
 	}

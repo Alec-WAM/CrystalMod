@@ -50,6 +50,7 @@ public class BlockCrystalChest extends BlockContainer implements ICustomModel
         this.setDefaultState(this.blockState.getBaseState().withProperty(VARIANT_PROP, CrystalChestType.BLUE));
 
         this.setHardness(3.0F);
+        this.setResistance(20.0F);
         this.setCreativeTab(CrystalMod.tabBlocks);
     }
 

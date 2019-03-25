@@ -19,6 +19,7 @@ public class BlockCrystal extends EnumBlock<BlockCrystal.CrystalBlockType> {
 		super(Material.ROCK, TYPE, CrystalBlockType.class);
 		this.setCreativeTab(CrystalMod.tabBlocks);
 		this.setHardness(2f);
+        this.setResistance(10.0F);
 		this.setDefaultState(this.blockState.getBaseState().withProperty(TYPE, CrystalBlockType.BLUE));
 	}
     

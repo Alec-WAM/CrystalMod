@@ -9,9 +9,6 @@ import java.util.UUID;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-import alec_wam.CrystalMod.api.tools.IBatUpgrade;
-import alec_wam.CrystalMod.api.tools.UpgradeData;
-import alec_wam.CrystalMod.items.tools.bat.BatHelper;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.packets.PacketDimensionNameRequest;
 import net.minecraft.command.CommandBase;

@@ -23,8 +23,11 @@ public class RenderTilePedistal<T extends TilePedistal> extends TileEntitySpecia
 			GlStateManager.pushMatrix();
 
 			EnumFacing facing = tile.getRotation();
-			GlStateManager.translate(0.5 + (facing.getFrontOffsetX() * 0.35), 0.5 + (facing.getFrontOffsetY() * 0.35), 0.5 + (facing.getFrontOffsetZ() * 0.35));
-			float scale = tile.getStack().getItem() instanceof ItemBlock ? 0.65f : 0.5f;
+			boolean itemBlock = tile.getStack().getItem() instanceof ItemBlock;
+			boolean flatItemBlock = itemBlock && !tile.getStack().getItem().isFull3D();
+			float offsetY = 0.0f;
+			GlStateManager.translate(0.5 + (facing.getFrontOffsetX() * 0.35), 0.5 + (facing.getFrontOffsetY() * 0.35) + offsetY, 0.5 + (facing.getFrontOffsetZ() * 0.35));
+			float scale = itemBlock ? 0.5f : 0.5f;
 			GlStateManager.scale(scale, scale, scale);
 
 			if (facing.getAxis() == EnumFacing.Axis.Y){

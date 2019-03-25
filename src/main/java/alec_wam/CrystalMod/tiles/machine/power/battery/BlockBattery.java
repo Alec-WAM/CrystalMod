@@ -15,6 +15,7 @@ import alec_wam.CrystalMod.util.Lang;
 import alec_wam.CrystalMod.util.StringUtils;
 import alec_wam.CrystalMod.util.tool.ToolUtil;
 import net.minecraft.block.BlockContainer;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
@@ -76,6 +77,7 @@ public class BlockBattery extends BlockContainer implements ICustomModel {
 
 	public BlockBattery() {
 		super(Material.IRON);
+		setSoundType(SoundType.METAL);
 		setHardness(20.0F);
 	    setResistance(120.0F);
 	    setCreativeTab(CrystalMod.tabBlocks);
@@ -188,7 +190,7 @@ public class BlockBattery extends BlockContainer implements ICustomModel {
     					NBTTagCompound nbt = new NBTTagCompound();
     					battery.writeCustomNBT(nbt);
     					ItemNBTHelper.getCompound(stack).setTag("BatteryData", nbt);
-    					ItemUtil.spawnItemInWorldWithoutMotion(world, stack, pos);
+    					ItemUtil.spawnItemInWorldWithRandomMotion(world, stack, pos);
     				}
     				world.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
 					return true;

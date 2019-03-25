@@ -16,7 +16,7 @@ import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.packets.PacketTileMessage;
 import alec_wam.CrystalMod.tiles.BlockBasicTile;
-import alec_wam.CrystalMod.tiles.BlockStateFacing;
+import alec_wam.CrystalMod.tiles.BlockStateFacingHorizontal;
 import alec_wam.CrystalMod.tiles.machine.IFacingTile;
 import alec_wam.CrystalMod.tiles.pipes.CollidableComponent;
 import alec_wam.CrystalMod.tiles.pipes.RaytraceResult;
@@ -58,9 +58,10 @@ public class BlockEnhancedEnchantmentTable extends BlockBasicTile implements ICu
 	public BlockEnhancedEnchantmentTable() {
 		super(TileEntityEnhancedEnchantmentTable.class, Material.IRON);
 		this.setLightOpacity(0);
-		this.setHardness(1.5F);
+		this.setHardness(5.0F);
+        this.setResistance(2000.0F);
 		this.setSoundType(SoundType.STONE);
-		this.setDefaultState(this.blockState.getBaseState().withProperty(BlockStateFacing.facingProperty, EnumFacing.NORTH));
+		this.setDefaultState(this.blockState.getBaseState().withProperty(BlockStateFacingHorizontal.facingProperty, EnumFacing.NORTH));
 	}
 	
 	@Override
@@ -97,12 +98,12 @@ public class BlockEnhancedEnchantmentTable extends BlockBasicTile implements ICu
         	IFacingTile tile = (IFacingTile)te;
         	facing = EnumFacing.getHorizontal(tile.getFacing());
         }
-        return state.withProperty(BlockStateFacing.facingProperty, facing);
+        return state.withProperty(BlockStateFacingHorizontal.facingProperty, facing);
     }
 	
 	@Override
     protected BlockStateContainer createBlockState() {
-        return new BlockStateFacing(this);
+        return new BlockStateFacingHorizontal(this);
     }
 	
 	@Override

@@ -27,8 +27,10 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
 
 public class GuiEnhancedEnchantmentTable extends GuiContainer {
 
@@ -104,6 +106,8 @@ public class GuiEnhancedEnchantmentTable extends GuiContainer {
 				nbt.setInteger("Amount", cost);
 				CrystalModNetwork.sendToServer(new PacketEntityMessage(mc.player, "#RemoveXP#", nbt));
 			}
+		    //playSound((EntityPlayer)null, this.posX, this.posY, this.posZ, SoundEvents.ENTITY_PLAYER_LEVELUP, this.getSoundCategory(), f * 0.75F, 1.0F);
+		    mc.world.playSound(table.getPos(), SoundEvents.BLOCK_ENCHANTMENT_TABLE_USE, SoundCategory.BLOCKS, 0.6f, 0.8f, false);
 			int[] currentSel = Util.convertToInt(selections);
 			selections.clear();
 			cost = 0;

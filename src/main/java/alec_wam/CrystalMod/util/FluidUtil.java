@@ -10,9 +10,11 @@ import alec_wam.CrystalMod.tiles.pipes.item.GhostItemHelper;
 import alec_wam.CrystalMod.tiles.pipes.item.filters.FilterInventory;
 import alec_wam.CrystalMod.tiles.pipes.item.filters.ItemPipeFilter.FilterType;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockDoor;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -237,6 +239,19 @@ public class FluidUtil {
         }
 
         return 1.0F - f / (float)i;
+    }
+	
+	public static boolean canWaterFlowInto(World worldIn, BlockPos pos, IBlockState state)
+    {
+        Material material = state.getMaterial();
+        return material != Material.WATER && material != Material.LAVA && !isFluidBlocker(worldIn, pos, state);
+    }
+	
+	@SuppressWarnings("deprecation")
+	public static boolean isFluidBlocker(World worldIn, BlockPos pos, IBlockState state)
+    {
+        Block block = worldIn.getBlockState(pos).getBlock();
+        return !(block instanceof BlockDoor) && block != Blocks.STANDING_SIGN && block != Blocks.LADDER && block != Blocks.REEDS ? (block.getMaterial(state) != Material.PORTAL && block.getMaterial(state) != Material.STRUCTURE_VOID ? block.getMaterial(state).blocksMovement() : true) : true;
     }
 	
 }

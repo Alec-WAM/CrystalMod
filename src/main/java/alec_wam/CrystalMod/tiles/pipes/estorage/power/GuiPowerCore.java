@@ -5,6 +5,7 @@ import alec_wam.CrystalMod.tiles.pipes.estorage.client.IGuiScreen;
 import alec_wam.CrystalMod.tiles.pipes.estorage.power.TileNetworkPowerCore.ClientPowerTileInfo;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.Lang;
+import alec_wam.CrystalMod.util.StringUtils;
 import alec_wam.CrystalMod.util.client.GuiUtil;
 import alec_wam.CrystalMod.util.client.Scrollbar;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -67,7 +68,7 @@ public class GuiPowerCore extends GuiContainer implements IGuiScreen {
     	this.fontRendererObj.drawString(ModBlocks.powerCore.getLocalizedName(), 8, 8, 4210752);
 		if(core !=null){
     		if(core.info !=null){
-    			this.fontRendererObj.drawString("Power: "+core.info.storedEnergy+"/"+core.info.maxEnergy+" "+Lang.localize("power.cu"), 10, 115, 0);
+    			this.fontRendererObj.drawString("Power: "+StringUtils.convertToCommas(core.info.storedEnergy)+" / "+StringUtils.convertToCommas(core.info.maxEnergy)+" "+Lang.localize("power.cu"), 10, 115, 0);
     			this.fontRendererObj.drawString("Usage: "+core.info.energyUsage+" "+Lang.localize("power.cu"), 10, 115+this.fontRendererObj.FONT_HEIGHT+5, 0);
     			
     			GlStateManager.enableLighting();

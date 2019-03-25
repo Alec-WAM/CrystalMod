@@ -13,6 +13,30 @@
         "powered=true,shape=east_west":  { 
 			"model": "crystalmod:flumerailbooster_flat_powered", 
 			"y": 90 
+		},
+        "powered=false,shape=ascending_north":  {
+			"model": "crystalmod:null"
+		},
+        "powered=false,shape=ascending_south":  {
+			"model": "crystalmod:null"
+		},
+        "powered=false,shape=ascending_east":  {
+			"model": "crystalmod:null"
+		},
+        "powered=false,shape=ascending_west":  {
+			"model": "crystalmod:null"
+		},
+        "powered=true,shape=ascending_north":  {
+			"model": "crystalmod:null"
+		},
+        "powered=true,shape=ascending_south":  {
+			"model": "crystalmod:null"
+		},
+        "powered=true,shape=ascending_east":  {
+			"model": "crystalmod:null"
+		},
+        "powered=true,shape=ascending_west":  {
+			"model": "crystalmod:null"
 		}
     }
 }

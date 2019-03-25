@@ -8,12 +8,19 @@ import alec_wam.CrystalMod.util.CrystalColors;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
+import net.minecraft.util.BlockRenderLayer;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockTintedCrystalGlass extends BlockCrystalGlass {
 
+	@Override
+	public boolean canRenderInLayer(IBlockState state, BlockRenderLayer layer)
+    {
+        return layer == BlockRenderLayer.CUTOUT || layer == BlockRenderLayer.TRANSLUCENT;
+    }
+	
 	@Override
 	public boolean canConnect(@Nonnull IBlockState original, @Nonnull IBlockState connected) {
     	if(connected.getBlock() == ModBlocks.crystalGlassTinted || connected.getBlock() == ModBlocks.crystalGlassPainted){
@@ -32,7 +39,7 @@ public class BlockTintedCrystalGlass extends BlockCrystalGlass {
     	ClientProxy.registerCustomModel(inv, ModelTintedGlass.INSTANCE);
 		for(CrystalColors.Special type : CrystalColors.Special.values()){
 	        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), type.getMeta(), inv);
-	        ClientProxy.registerCustomModel(new ModelResourceLocation(getRegistryName(), "type="+type.getName()), new ModelTintedGlass(type));
+	        ClientProxy.registerCustomModel(new ModelResourceLocation(getRegistryName(), "color="+type.getName()), new ModelTintedGlass(type));
 		}
     }
 	

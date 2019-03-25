@@ -23,8 +23,10 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.items.wrapper.InvWrapper;
@@ -67,9 +69,11 @@ public class GuiEnhancementTable extends GuiContainer {
 		ItemStack tool = table.getStackInSlot(0);
 		if(ItemStackTools.isValid(tool)){
 			if(mode == 0){
+				mc.world.playSound(table.getPos(), SoundEvents.BLOCK_ENCHANTMENT_TABLE_USE, SoundCategory.BLOCKS, 0.6f, 0.8f, false);
 				CrystalModNetwork.sendToServer(new PacketEnhancementTable(table.getPos(), enhancement, 0));
 			}
 			if(mode == 1){
+				mc.world.playSound(table.getPos(), SoundEvents.BLOCK_ENCHANTMENT_TABLE_USE, SoundCategory.BLOCKS, 0.6f, 0.6f, false);
 				CrystalModNetwork.sendToServer(new PacketEnhancementTable(table.getPos(), enhancement, 1));
 			}
 		}

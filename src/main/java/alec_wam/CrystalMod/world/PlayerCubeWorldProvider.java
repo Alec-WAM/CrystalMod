@@ -31,10 +31,11 @@ public class PlayerCubeWorldProvider extends WorldProvider
 	@Override
 	protected void generateLightBrightnessTable()
 	{
-		for (int i = 0; i <= 15; ++i)
+		super.generateLightBrightnessTable();
+		/*for (int i = 0; i <= 15; ++i)
 		{
 			this.lightBrightnessTable[i] = 1;
-		}
+		}*/
 	}
 
 	@Override

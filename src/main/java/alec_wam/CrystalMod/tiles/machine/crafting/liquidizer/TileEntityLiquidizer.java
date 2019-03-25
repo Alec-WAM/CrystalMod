@@ -29,7 +29,7 @@ public class TileEntityLiquidizer extends TileEntityMachine {
 	
 	public TileEntityLiquidizer() {
 		super("Liquidizer", 1);
-		tank = new Tank("Tank", CAPACITY, null);
+		tank = new Tank("Tank", CAPACITY, this);
 	}
 	
 	@Override
@@ -43,6 +43,11 @@ public class TileEntityLiquidizer extends TileEntityMachine {
 		super.readCustomNBT(nbt);
 		tank.readFromNBT(nbt);
 	}
+	
+	@Override
+	public boolean canExtractFluidWithBucket() {
+    	return true;
+    }
 	
 	@Override
 	public void update(){
@@ -142,38 +147,39 @@ public class TileEntityLiquidizer extends TileEntityMachine {
       return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || super.hasCapability(capability, facingIn);
     }
 
+	private IFluidHandler fluidHandler = new IFluidHandler() {
+    	
+    	public FluidTank getTank(){
+    		return tank;
+    	}
+    	
+    	@Override
+		public int fill(FluidStack resource, boolean doFill) {
+    		return 0;
+        }
+
+        @Override
+		public FluidStack drain(int maxEmpty, boolean doDrain) {
+        	return tank.drain(maxEmpty, doDrain);
+        }
+
+        @Override
+		public FluidStack drain(FluidStack resource, boolean doDrain) {
+        	return tank.drain(resource, doDrain);
+        }
+
+		@Override
+		public IFluidTankProperties[] getTankProperties() {
+			return getTank().getTankProperties();
+		}
+        
+    };
+	
     @SuppressWarnings("unchecked")
 	@Override
     public <T> T getCapability(Capability<T> capability, final EnumFacing facing) {
         if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
-            //noinspection unchecked
-            return (T) new IFluidHandler() {
-            	
-            	public FluidTank getTank(){
-            		return tank;
-            	}
-            	
-            	@Override
-				public int fill(FluidStack resource, boolean doFill) {
-            		return 0;
-                }
-
-                @Override
-				public FluidStack drain(int maxEmpty, boolean doDrain) {
-                	return tank.drain(maxEmpty, doDrain);
-                }
-
-                @Override
-				public FluidStack drain(FluidStack resource, boolean doDrain) {
-                	return tank.drain(resource, doDrain);
-                }
-
-				@Override
-				public IFluidTankProperties[] getTankProperties() {
-					return getTank().getTankProperties();
-				}
-                
-            };
+            return (T) fluidHandler;
         }
         return super.getCapability(capability, facing);
     }

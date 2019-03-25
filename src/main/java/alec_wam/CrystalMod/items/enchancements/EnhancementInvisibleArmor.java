@@ -47,7 +47,6 @@ public class EnhancementInvisibleArmor implements IEnhancement {
 	public boolean isApplied(ItemStack stack) {
 		if(ItemStackTools.isValid(stack)){
     		if(stack.getItem() instanceof ItemArmor){
-    			stack.getItem();
     			return ItemNBTHelper.verifyExistance(stack, getNBTID());
     		}
 		}

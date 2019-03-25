@@ -228,6 +228,7 @@ public class ModelGlassPane extends DynamicItemAndBlockModel {
 		return itemModels.get(stack.getMetadata());
 	}
 	
+	//TODO Render Center Clear texture to render digging progress
 	public static void addNSQuads(List<BakedQuad> list, GlassBlockState state, EnumFacing glassFace, CrystalColors.Special type){
 		BlockPos posU = state.pos.up();
 		BlockPos posD = state.pos.down();

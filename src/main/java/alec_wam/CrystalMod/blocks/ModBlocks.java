@@ -17,6 +17,8 @@ import alec_wam.CrystalMod.blocks.crops.BlockCrystalTreePlant;
 import alec_wam.CrystalMod.blocks.crops.BlockFlowerLilyPad;
 import alec_wam.CrystalMod.blocks.crops.BlockHugeCrysineMushroom;
 import alec_wam.CrystalMod.blocks.crops.BlockNormalSapling;
+import alec_wam.CrystalMod.blocks.crops.BlockShieldMushroom;
+import alec_wam.CrystalMod.blocks.crops.ItemBlockShieldMushroom;
 import alec_wam.CrystalMod.blocks.crops.ItemBlockWater;
 import alec_wam.CrystalMod.blocks.crops.bamboo.BlockBamboo;
 import alec_wam.CrystalMod.blocks.crops.bamboo.BlockBambooLeaves;
@@ -27,6 +29,7 @@ import alec_wam.CrystalMod.blocks.crystexium.BlockCrysidian;
 import alec_wam.CrystalMod.blocks.crystexium.BlockCrystexFire;
 import alec_wam.CrystalMod.blocks.crystexium.BlockCrystexGrass;
 import alec_wam.CrystalMod.blocks.crystexium.BlockCrystexPortal;
+import alec_wam.CrystalMod.blocks.crystexium.BlockCrystexStairs;
 import alec_wam.CrystalMod.blocks.crystexium.BlockCrystheriumPlant;
 import alec_wam.CrystalMod.blocks.crystexium.BlockTallCrystexGrass;
 import alec_wam.CrystalMod.blocks.crystexium.CrystexiumBlock;
@@ -75,6 +78,13 @@ import alec_wam.CrystalMod.entities.boatflume.rails.BlockFlumeRailHolding;
 import alec_wam.CrystalMod.entities.boatflume.rails.BlockFlumeRailHoldingGround;
 import alec_wam.CrystalMod.handler.MissingItemHandler;
 import alec_wam.CrystalMod.items.ModItems;
+import alec_wam.CrystalMod.items.tools.backpack.block.BlockBackpackBase;
+import alec_wam.CrystalMod.items.tools.backpack.block.RenderTileEntityBackpack;
+import alec_wam.CrystalMod.items.tools.backpack.block.TileEntityBackpack;
+import alec_wam.CrystalMod.items.tools.backpack.block.TileEntityBackpackCrafting;
+import alec_wam.CrystalMod.items.tools.backpack.block.TileEntityBackpackNormal;
+import alec_wam.CrystalMod.items.tools.backpack.types.BackpackCrafting;
+import alec_wam.CrystalMod.items.tools.backpack.types.BackpackNormal;
 import alec_wam.CrystalMod.tiles.BlockBasicTile;
 import alec_wam.CrystalMod.tiles.campfire.BlockCampfire;
 import alec_wam.CrystalMod.tiles.campfire.RenderTileEntityCampfire;
@@ -320,6 +330,7 @@ public class ModBlocks {
 	public static BlockFancyPumpkin fancyPumpkinLit;
 	public static BlockCrysineMushroom crysineMushroom;
 	public static BlockHugeCrysineMushroom crysineMushroomBlock;
+	public static BlockShieldMushroom shieldMushroom;
 	
 	public static BlockCrystalLadder ladder;
 	public static BlockFancyLadder fancyLadders;
@@ -405,6 +416,9 @@ public class ModBlocks {
 	public static BlockLantern lantern;
 	public static BlockLanternDyed lanternDyed;
 	
+	public static BlockBackpackBase backpackNormal;
+	public static BlockBackpackBase backpackCrafting;
+	
 	public static BlockFlumeRailBasic flumeRailBasic;
 	public static BlockFlumeRailHolding flumeRailHolding;
 	public static BlockFlumeRailBooster flumeRailBooster;
@@ -456,11 +470,13 @@ public class ModBlocks {
 	public static BlockStairs pureCrystexiumStairs;
 
 	public static final EnumPlantType crystalPlantType = EnumPlantType.getPlantType("crystal");
+	public static final EnumPlantType waterPlantType = EnumPlantType.getPlantType("waterplant");
 
 	public static void init() {
 		//TODO Fix tinted glass render
-		//TODO Cleanup Crystal Chest Guis
-		//TODO Fix Infusion Running Sound/Create Infusion Wand
+		//TODO Create Infusion Wand
+		//TODO Look into elevators
+		//TODO See if Entity Hopper can stop damage
 		crystal = registerEnumBlock(new BlockCrystal(), "crystalblock");
 		crystalOre = registerEnumBlock(new BlockCrystalOre(), "crystalore");
 		crystalIngot = registerEnumBlock(new BlockCrystalIngot(), "crystalingotblock");
@@ -623,6 +639,9 @@ public class ModBlocks {
 		crysineMushroom = registerBlock(new BlockCrysineMushroom(), "crysinemushroom");
 		crysineMushroomBlock = (BlockHugeCrysineMushroom) new BlockHugeCrysineMushroom(Material.WOOD, MapColor.PURPLE, crysineMushroom).setHardness(0.2f);
 		registerBlock(crysineMushroomBlock, "crysinemushroomblock");
+		
+		shieldMushroom = new BlockShieldMushroom();
+		registerBlock(shieldMushroom, new ItemBlockShieldMushroom(shieldMushroom), "shieldmushroom");
 		
 		ladder = new BlockCrystalLadder();
 		registerBlock(ladder, new ItemBlockCrystalLadder(ladder), "crystalladder");		
@@ -876,6 +895,7 @@ public class ModBlocks {
 		registerTileEntity(TileEntityXPVacuum.class);
 		xpFountain = registerBlock(new BlockXPFountain(), "xpfountain");
 		registerTileEntity(TileEntityXPFountain.class);
+		//TODO Create minecart version
 		xpTank = new BlockXPTank();
 		registerBlock(xpTank, new ItemColored(xpTank, true).setSubtypeNames(new String[]{"normal", "ender"}), "xptank");
 		registerTileEntity(TileEntityXPTank.class);
@@ -913,7 +933,12 @@ public class ModBlocks {
 		registerBlock(muffler, "soundmuffler");
 		registerTileEntity(TileSoundMuffler.class);
 		
-		bambooDoor = (BlockCustomDoor)new BlockCustomDoor(Material.WOOD, SoundType.WOOD, ModItems.bambooDoor).setHardness(3.0F).setCreativeTab(null);
+		BlockCustomDoor door = new BlockCustomDoor(Material.WOOD, SoundType.WOOD){
+			public Item getDoorItem(){
+				return ModItems.bambooDoor;
+			}
+		};
+		bambooDoor = (BlockCustomDoor) door.setHardness(3.0F).setCreativeTab(null);
 		registerBlock(bambooDoor, "bamboodoor");
 		
 		lantern = new BlockLantern();
@@ -921,6 +946,14 @@ public class ModBlocks {
 		lanternDyed = new BlockLanternDyed();
 		registerBlock(lanternDyed, new ItemBlockLanternDyed(lanternDyed), "lantern_dyed");
 		ItemBlockMeta.setMappingProperty(lanternDyed, BlockStainedGlass.COLOR);
+		
+		backpackNormal = new BlockBackpackBase(BackpackNormal.INSTANCE, Material.CLOTH);
+		registerBlock(backpackNormal, "backpackblock_normal");
+		registerTileEntity(TileEntityBackpackNormal.class);
+		
+		backpackCrafting = new BlockBackpackBase(BackpackCrafting.INSTANCE, Material.WOOD);
+		registerBlock(backpackCrafting, "backpackblock_crafting");
+		registerTileEntity(TileEntityBackpackCrafting.class);
 		
 		flumeRailBasic = (BlockFlumeRailBasic) new BlockFlumeRailBasic().setHardness(0.7F);
 		registerBlock(flumeRailBasic, new ItemBlockWater(flumeRailBasic), "flumerailbasic");
@@ -1013,17 +1046,17 @@ public class ModBlocks {
 		registerBlock(crystexTallGrass, new ItemBlockMeta(crystexTallGrass), "crystextallgrass");
 		ItemBlockMeta.setMappingProperty(crystexTallGrass, CrystalColors.COLOR_SUPER);
 		
-		crystexiumStairs = new BlockCustomStairs(crystexiumBlock.getDefaultState().withProperty(CrystexiumBlock.TYPE, CrystexiumBlockType.BRICK));
+		crystexiumStairs = new BlockCrystexStairs(crystexiumBlock.getDefaultState().withProperty(CrystexiumBlock.TYPE, CrystexiumBlockType.BRICK));
 		registerBlock(crystexiumStairs, "crystexiumstairs");
-		blueCrystexiumStairs = new BlockCustomStairs(blueCrystexiumBlock.getDefaultState().withProperty(CrystexiumBlock.TYPE, CrystexiumBlockType.BRICK));
+		blueCrystexiumStairs = new BlockCrystexStairs(blueCrystexiumBlock.getDefaultState().withProperty(CrystexiumBlock.TYPE, CrystexiumBlockType.BRICK));
 		registerBlock(blueCrystexiumStairs, "bluecrystexiumstairs");
-		redCrystexiumStairs = new BlockCustomStairs(redCrystexiumBlock.getDefaultState().withProperty(CrystexiumBlock.TYPE, CrystexiumBlockType.BRICK));
+		redCrystexiumStairs = new BlockCrystexStairs(redCrystexiumBlock.getDefaultState().withProperty(CrystexiumBlock.TYPE, CrystexiumBlockType.BRICK));
 		registerBlock(redCrystexiumStairs, "redcrystexiumstairs");
-		greenCrystexiumStairs = new BlockCustomStairs(greenCrystexiumBlock.getDefaultState().withProperty(CrystexiumBlock.TYPE, CrystexiumBlockType.BRICK));
+		greenCrystexiumStairs = new BlockCrystexStairs(greenCrystexiumBlock.getDefaultState().withProperty(CrystexiumBlock.TYPE, CrystexiumBlockType.BRICK));
 		registerBlock(greenCrystexiumStairs, "greencrystexiumstairs");
-		darkCrystexiumStairs = new BlockCustomStairs(darkCrystexiumBlock.getDefaultState().withProperty(CrystexiumBlock.TYPE, CrystexiumBlockType.BRICK));
+		darkCrystexiumStairs = new BlockCrystexStairs(darkCrystexiumBlock.getDefaultState().withProperty(CrystexiumBlock.TYPE, CrystexiumBlockType.BRICK));
 		registerBlock(darkCrystexiumStairs, "darkcrystexiumstairs");
-		pureCrystexiumStairs = new BlockCustomStairs(pureCrystexiumBlock.getDefaultState().withProperty(CrystexiumBlock.TYPE, CrystexiumBlockType.BRICK));
+		pureCrystexiumStairs = new BlockCrystexStairs(pureCrystexiumBlock.getDefaultState().withProperty(CrystexiumBlock.TYPE, CrystexiumBlockType.BRICK));
 		registerBlock(pureCrystexiumStairs, "purecrystexiumstairs");
 	}
 
@@ -1063,6 +1096,7 @@ public class ModBlocks {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityXPTank.class, new RenderTileEntityXPTank());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityEnhancedEnchantmentTable.class, new RenderEnhancedEnchantmentTable());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCampfire.class, new RenderTileEntityCampfire());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBackpack.class, new RenderTileEntityBackpack());
 	}
 
 	@SideOnly(Side.CLIENT)

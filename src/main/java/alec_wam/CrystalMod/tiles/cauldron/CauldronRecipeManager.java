@@ -61,7 +61,7 @@ public class CauldronRecipeManager {
 	    
 	    public FluidStack getFluidInput()
 	    {
-	      return this.finput.copy();
+	      return finput == null ? null : this.finput.copy();
 	    }
 		
 	}
@@ -109,7 +109,7 @@ public class CauldronRecipeManager {
 				passInput = ItemUtil.canCombine(input, (ItemStack)recipe.getInput());
 			}
 			if(passInput){
-				if(recipe.getFluidInput().isFluidEqual(cinput) && recipe.getFluidInput().amount <=cinput.amount){
+				if((recipe.getFluidInput() == null && cinput !=null && cinput.amount >=1) || recipe.getFluidInput().isFluidEqual(cinput) && recipe.getFluidInput().amount <=cinput.amount){
 					return recipe;
 				}
 			}
@@ -137,7 +137,8 @@ public class CauldronRecipeManager {
 		addRecipe(new ItemStack(ModBlocks.crystalGlass, 1, CrystalColors.Special.PURE.getMeta()), new FluidStack(ModFluids.fluidPureCrystal, 10), new ItemStack(ModBlocks.crystalGlassTinted, 1, CrystalColors.Special.PURE.getMeta()));
 
 		addRecipe(new ItemStack(ModBlocks.crystalGlassTinted, 1, CrystalColors.Special.PURE.getMeta()), new FluidStack(ModFluids.fluidPureCrystal, 10), new ItemStack(ModBlocks.crystalGlassPainted, 1, CrystalColors.Special.PURE.getMeta()));
-
+		addRecipe(new ItemStack(Blocks.BROWN_MUSHROOM), new FluidStack(ModFluids.fluidBlueCrystal, 100), new ItemStack(ModBlocks.shieldMushroom));
+		
 		addRecipe(new ItemStack(Blocks.STONEBRICK), new FluidStack(ModFluids.fluidBlueCrystal, 100), new ItemStack(ModBlocks.crystal, 1, CrystalBlockType.BLUE_BRICK.getMeta()));
 		addRecipe(new ItemStack(Blocks.STONEBRICK), new FluidStack(ModFluids.fluidRedCrystal, 100), new ItemStack(ModBlocks.crystal, 1, CrystalBlockType.RED_BRICK.getMeta()));
 		addRecipe(new ItemStack(Blocks.STONEBRICK), new FluidStack(ModFluids.fluidGreenCrystal, 100), new ItemStack(ModBlocks.crystal, 1, CrystalBlockType.GREEN_BRICK.getMeta()));
@@ -159,6 +160,8 @@ public class CauldronRecipeManager {
 		addRecipe(new ItemStack(Items.PAINTING), new FluidStack(ModFluids.fluidGreenCrystal, 100), new ItemStack(ModItems.crystalmodPainting));
 		addRecipe(new ItemStack(Items.PAINTING), new FluidStack(ModFluids.fluidDarkCrystal, 100), new ItemStack(ModItems.crystalmodPainting));
 		
+		addRecipe(new ItemStack(Items.ROTTEN_FLESH), null, new ItemStack(Items.LEATHER));
+		addRecipe(new ItemStack(Blocks.SNOW), null, new ItemStack(Blocks.ICE));
 	}
 
 	public static List<InfusionRecipe> getRecipes() {

@@ -40,9 +40,9 @@ public class GuiXPFountain extends GuiElementContainer{
 		super.drawGuiContainerForegroundLayer(par1, par2);
 
 		GlStateManager.pushMatrix();
-		RenderUtil.renderGuiTank(tileMachine.tankXP, 40, 23, zLevel, 12, 40);
+		RenderUtil.renderGuiTank(tileMachine.tankXP, 40, 23, zLevel, 12, 40, true);
 		
-		RenderUtil.renderGuiTank(tileMachine.tankEnder, 125, 23, zLevel, 12, 40);
+		RenderUtil.renderGuiTank(tileMachine.tankEnder, 125, 23, zLevel, 12, 40, true);
 		
 		
 		double progress = tileMachine.getScaledProgress(28);

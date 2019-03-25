@@ -166,7 +166,7 @@ public class ItemPipeCover extends Item implements ICustomModel {
     
     @SuppressWarnings("deprecation")
 	public static boolean isValidForCover(IBlockState state){
-    	if(state.getMaterial() == Material.AIR) return false;
+    	if(state.getMaterial() == Material.AIR || state.getBlock() == Blocks.AIR) return false;
     	if (state.getBlock().hasTileEntity() || state.getBlock().hasTileEntity(state)) return false;
         if(!state.isFullCube()) return false;        
     	return true;

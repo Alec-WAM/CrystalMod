@@ -2,6 +2,7 @@ package alec_wam.CrystalMod.network.commands;
 
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.Random;
 import java.util.UUID;
 
 import com.google.common.base.Strings;
@@ -11,14 +12,20 @@ import alec_wam.CrystalMod.blocks.underwater.BlockCoral;
 import alec_wam.CrystalMod.capability.ExtendedPlayer;
 import alec_wam.CrystalMod.capability.ExtendedPlayerProvider;
 import alec_wam.CrystalMod.handler.MissingItemHandler;
+import alec_wam.CrystalMod.items.ModItems;
+import alec_wam.CrystalMod.tiles.cluster.BlockCrystalCluster;
+import alec_wam.CrystalMod.tiles.cluster.TileCrystalCluster;
+import alec_wam.CrystalMod.tiles.cluster.TileCrystalCluster.ClusterData;
 import alec_wam.CrystalMod.tiles.spawner.ItemMobEssence;
 import alec_wam.CrystalMod.util.ChatUtil;
+import alec_wam.CrystalMod.util.CrystalColors;
 import alec_wam.CrystalMod.util.EntityUtil;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.ModLogger;
 import alec_wam.CrystalMod.util.ProfileUtil;
 import alec_wam.CrystalMod.util.StringUtils;
+import alec_wam.CrystalMod.util.TimeUtil;
 import alec_wam.CrystalMod.util.UUIDUtils;
 import alec_wam.CrystalMod.world.crystex.CrystexTeleporter;
 import alec_wam.CrystalMod.world.generation.FusionTempleFeature;
@@ -26,6 +33,7 @@ import alec_wam.CrystalMod.world.structures.CrystalWell;
 import mezz.jei.Internal;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Enchantments;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -84,7 +92,7 @@ public class CmdDebug extends AbstractCMCommand{
 				}
 				return;
 			}
-
+			
 			if(args.length > 1 && args[1].equalsIgnoreCase("math")){
 				/*boolean top = true;
 					int age = 4;
@@ -231,11 +239,43 @@ public class CmdDebug extends AbstractCMCommand{
 				}	
 				return;
 			}
+
+			if(args.length > 2 && args[1].equalsIgnoreCase("shield")){
+				try{
+					int value = Integer.parseInt(args[2]);
+					ExtendedPlayer ePlayer = ExtendedPlayerProvider.getExtendedPlayer(player);
+					ePlayer.setBlueShield(value);
+					ePlayer.needsSync = true;
+				} catch(Exception e){
+					e.printStackTrace();
+				}
+			}
+			
+			if(args.length > 2 && args[1].equalsIgnoreCase("shieldmax")){
+				try{
+					int value = Integer.parseInt(args[2]);
+					ExtendedPlayer ePlayer = ExtendedPlayerProvider.getExtendedPlayer(player);
+					ePlayer.setMaxBlueShield(value);
+					ePlayer.needsSync = true;
+				} catch(Exception e){
+					e.printStackTrace();
+				}
+			}
 			
 			if(args.length > 1 && args[1].equalsIgnoreCase("makeCrystexPortal")){
 				CrystexTeleporter tele = new CrystexTeleporter((WorldServer)sender.getEntityWorld());
 				tele.makePortal(player);
 				return;
+			}
+			if(args.length > 1 && args[1].equalsIgnoreCase("grassCover")){
+				ModItems.pipeCover.addCover(new ItemStack(Blocks.GRASS, 1, 0));
+				return;
+			}
+			if(args.length > 1 && args[1].equalsIgnoreCase("cluster")){
+				BlockPos pos = sender.getPosition();
+				Random random = sender.getEntityWorld().rand;
+				CrystalColors.Basic type = CrystalColors.Basic.getRandom(random);
+                TileCrystalCluster.createRandomCluster(sender.getEntityWorld(), random, pos, type, 24, 80, 1, 3, true);
 			}
 		}
 	}

@@ -16,6 +16,7 @@ import baubles.api.IBauble;
 import baubles.api.cap.IBaublesItemHandler;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ClickType;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -42,8 +43,8 @@ public class ContainerBackpackCrafting extends Container {
 	
     protected IBaublesItemHandler baubles;
 	
-	public ContainerBackpackCrafting(InventoryBackpack backpackInventory){
-		this.player = backpackInventory.getPlayer();
+	public ContainerBackpackCrafting(InventoryBackpack backpackInventory, InventoryPlayer invPlayer){
+		this.player = invPlayer.player;
         this.backpackInventory = backpackInventory;
         baubles = BaublesIntegration.instance().getBaubles(player);
         
@@ -65,17 +66,17 @@ public class ContainerBackpackCrafting extends Container {
         
         for(int i = 0; i < 3; i++){
             for(int j = 0; j < 9; j++){
-                this.addSlotToContainer(new Slot(player.inventory, j+i*9+9, (8+offset)+j*18, 84+i*18));
+                this.addSlotToContainer(new Slot(invPlayer, j+i*9+9, (8+offset)+j*18, 84+i*18));
             }
         }
         for(int i = 0; i < 9; i++){
-        	this.addSlotToContainer(new Slot(player.inventory, i, (8+offset)+i*18, 142));
+        	this.addSlotToContainer(new Slot(invPlayer, i, (8+offset)+i*18, 142));
         }
         
         for (int k = 0; k < 4; ++k)
         {
             final EntityEquipmentSlot entityequipmentslot = entityequipmentslots[k];
-            this.addSlotToContainer(new Slot(player.inventory, 36 + (3 - k), 8, 8 + k * 18)
+            this.addSlotToContainer(new Slot(invPlayer, 36 + (3 - k), 8, 8 + k * 18)
             {
                 /**
                  * Returns the maximum stack size for a given slot (usually the same as getInventoryStackLimit(), but 1
@@ -111,7 +112,7 @@ public class ContainerBackpackCrafting extends Container {
             });
         }
         
-        this.addSlotToContainer(new SlotOffhand(player.inventory, 40, 8, 142));
+        this.addSlotToContainer(new SlotOffhand(invPlayer, 40, 8, 142));
         
         if (hasBaublesSlots()) {
             for (int i = 0; i < baubles.getSlots(); i++) {
@@ -236,22 +237,26 @@ public class ContainerBackpackCrafting extends Container {
 		        }
 		        else if (index >= inventoryStart && index < hotbarStart)
 		        {
-		            if (!this.mergeItemStack(itemstack1, hotbarStart, hotbarEnd+1, false))
+		        	if (!this.mergeItemStack(itemstack1, hotbarStart, hotbarEnd+1, false))
 		            {
 		                return ItemStackTools.getEmptyStack();
 		            }
 		        }
-		        else if (index >= hotbarStart && index < hotbarEnd)
+		        else if (index >= hotbarStart && index <= hotbarEnd)
 		        {
-		            if (!this.mergeItemStack(itemstack1, inventoryStart, inventoryEnd+1, false))
+		        	if (!this.mergeItemStack(itemstack1, inventoryStart, inventoryEnd+1, false))
 		            {
 		                return ItemStackTools.getEmptyStack();
 		            }
 		        }
-		        else if (!this.mergeItemStack(itemstack1, inventoryStart, hotbarEnd+1, false))
+		        else if (!this.mergeItemStack(itemstack1, hotbarStart, hotbarEnd+1, false))
 		        {
-		            return ItemStackTools.getEmptyStack();
+		        	if (!this.mergeItemStack(itemstack1, inventoryStart, inventoryEnd+1, false))
+			        {
+			            return ItemStackTools.getEmptyStack();
+			        }
 		        }
+		        
 
         	}
             

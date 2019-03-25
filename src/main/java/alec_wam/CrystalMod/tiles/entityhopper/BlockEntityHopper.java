@@ -26,7 +26,7 @@ public class BlockEntityHopper extends BlockContainer {
 
 	public BlockEntityHopper() {
 		super(Material.IRON);
-		setHardness(20.0F);
+		setHardness(5.0F);
 	    setResistance(60.0F);
 	    setCreativeTab(CrystalMod.tabBlocks);
 	}

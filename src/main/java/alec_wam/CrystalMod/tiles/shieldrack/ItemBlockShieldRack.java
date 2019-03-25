@@ -21,7 +21,10 @@ public class ItemBlockShieldRack extends ItemBlockMeta {
 
   @Override
   public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, IBlockState newState) {
-    if(!super.placeBlockAt(stack, player, world, pos, side, hitX, hitY, hitZ, newState)) {
+    /*if(!((BlockShieldRack)block).canBlockStay(world, pos, side.getOpposite())){
+    	return false;
+    }*/
+	if(!super.placeBlockAt(stack, player, world, pos, side, hitX, hitY, hitZ, newState)) {
       return false;
     }
     if(side.getAxis() == Axis.Y)return false;

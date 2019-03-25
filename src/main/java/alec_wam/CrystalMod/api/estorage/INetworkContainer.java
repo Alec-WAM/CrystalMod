@@ -26,6 +26,8 @@ public interface INetworkContainer {
 	public void sendFluidsToAll(List<FluidStackData> dataList);
 	
 	public void sendFluidsTo(EntityPlayerMP player);
+	
+	public void sendSecurityTo(EntityPlayerMP player);
 
 	public EStorageNetwork getNetwork();
 	

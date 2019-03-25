@@ -4,7 +4,6 @@ import javax.annotation.Nonnull;
 
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.EnumBlock;
-import alec_wam.CrystalMod.util.IEnumMeta;
 import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.proxy.ClientProxy;
 import alec_wam.CrystalMod.util.CrystalColors;
@@ -12,7 +11,6 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
-import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -21,7 +19,6 @@ import net.minecraft.item.Item;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -96,6 +93,12 @@ public class BlockCrystalGlass extends EnumBlock<CrystalColors.Special> implemen
     public BlockRenderLayer getBlockLayer() {
       return BlockRenderLayer.TRANSLUCENT;
     }
+    
+    @Override
+	public boolean canRenderInLayer(IBlockState state, BlockRenderLayer layer)
+    {
+        return layer == BlockRenderLayer.CUTOUT || layer == BlockRenderLayer.TRANSLUCENT;
+    }
 
     @Override
     public boolean isFullCube(IBlockState state) {
@@ -165,7 +168,7 @@ public class BlockCrystalGlass extends EnumBlock<CrystalColors.Special> implemen
      * @return True if the block is valid to connect
      */
     public boolean canConnect(@Nonnull IBlockState original, @Nonnull IBlockState connected) {
-    	if(original.getBlock() == connected.getBlock()){
+    	if(connected.getBlock() == this){
     		CrystalColors.Special typeO = original.getValue(CrystalColors.COLOR_SPECIAL);
     		CrystalColors.Special typeC = connected.getValue(CrystalColors.COLOR_SPECIAL);
     		return typeO == typeC;

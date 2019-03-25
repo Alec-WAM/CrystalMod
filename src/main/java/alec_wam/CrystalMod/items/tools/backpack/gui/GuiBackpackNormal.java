@@ -1,25 +1,19 @@
 package alec_wam.CrystalMod.items.tools.backpack.gui;
 
-import java.awt.Color;
 import java.io.IOException;
 
-import alec_wam.CrystalMod.CrystalMod;
-import alec_wam.CrystalMod.handler.GuiHandler;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.items.tools.backpack.BackpackUtil;
+import alec_wam.CrystalMod.items.tools.backpack.IBackpackOpenSource;
 import alec_wam.CrystalMod.items.tools.backpack.types.NormalInventoryBackpack;
 import alec_wam.CrystalMod.items.tools.backpack.upgrade.InventoryBackpackUpgrades;
 import alec_wam.CrystalMod.items.tools.backpack.upgrade.ItemBackpackUpgrade.BackpackUpgrade;
-import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.ItemStackTools;
-import alec_wam.CrystalMod.util.client.RenderUtil;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
@@ -32,21 +26,30 @@ public class GuiBackpackNormal extends GuiContainer {
     
     private ItemStack backpack;
     private int slotRows;
+    private IBackpackOpenSource source;
     private InventoryBackpackUpgrades upgrades;
     private boolean hasPockets;
     private boolean hasTabs;
-    public GuiBackpackNormal(NormalInventoryBackpack backpackInventory){
-        super(new ContainerBackpackNormal(backpackInventory));
-        this.backpack = backpackInventory.getBackpack();
+    
+    public GuiBackpackNormal(NormalInventoryBackpack backpackInventory, InventoryPlayer invPlayer, IBackpackOpenSource source){
+        super(new ContainerBackpackNormal(backpackInventory, invPlayer));
+        this.backpack = source.getBackpack();
+        this.source = source;
         
         if(ItemStackTools.isValid(backpack)){
         	this.upgrades = BackpackUtil.getUpgradeInventory(backpack);
         	this.hasTabs = (upgrades !=null ? upgrades.getTabs() !=null ? upgrades.getTabs().length > 0 : false : false);
         	this.hasPockets = (upgrades !=null ? upgrades.hasUpgrade(BackpackUpgrade.POCKETS) : false);
         }
-        
-        this.xSize = 176+34+34+(hasPockets ? 34*2 : 0);
+
         slotRows = backpackInventory.getSize()/9;
+        int pocketOffset = 0;
+        if(hasPockets){
+        	if(slotRows < 6){
+        		pocketOffset = 34*2;
+        	}
+        }
+        this.xSize = 176+34+34+pocketOffset;
         int topSpace = 16+(hasTabs ? 32 : 0);
         int bottomSize = 101;
         this.ySize = topSpace+(18*slotRows)+bottomSize;
@@ -54,11 +57,20 @@ public class GuiBackpackNormal extends GuiContainer {
 
     private final ItemStack lockIconStack = new ItemStack(ModItems.lock);
     
+    public int getPocketOffset(){
+    	if(hasPockets){
+        	if(slotRows < 6){
+        		return 34;
+        	}
+        }
+    	return 0;
+    }
+    
     @Override
     public void initGui(){
     	super.initGui();
     	this.buttonList.clear();
-    	int offsetLeft = 34+(hasPockets ? 34 : 0);
+    	int offsetLeft = 34+getPocketOffset();
     	int offsetTop = hasTabs ? 32 : 0;
     	if(upgrades.getSize() > 0)this.buttonList.add(new GuiButton(0, guiLeft+offsetLeft+156, guiTop+offsetTop+5, 10, 10, "S"));
     }
@@ -66,14 +78,14 @@ public class GuiBackpackNormal extends GuiContainer {
     @Override
 	public void actionPerformed(GuiButton button){
     	if(button.id == 0){
-    		BlockUtil.openWorksiteGui(CrystalMod.proxy.getClientPlayer(), GuiHandler.GUI_ID_BACKPACK, 0, 0, 1);
+    		source.openUpgradesInventory(0);
     		return;
     	}
     }
     
     @Override
     public void drawGuiContainerForegroundLayer(int x, int y){
-    	int offsetLeft = 34+(hasPockets ? 34 : 0);
+    	int offsetLeft = 34+getPocketOffset();
     	int offsetTop = hasTabs ? 32 : 0;
     	if(!ItemStackTools.isNullStack(backpack)){
     		String name = backpack.getDisplayName();
@@ -120,7 +132,7 @@ public class GuiBackpackNormal extends GuiContainer {
         int bottomSize = 101;
         int slotBlock = 18*slotRows;
         
-        int gapLeft = hasPockets ? 34 : 0;
+        int gapLeft = getPocketOffset();
     	int offsetLeft = 34+(hasPockets ? gapLeft : 0);
     	
 
@@ -138,7 +150,10 @@ public class GuiBackpackNormal extends GuiContainer {
         }
         this.drawTexturedModalRect(this.guiLeft+offsetLeft, guiTop+topSpace+slotBlock+tabOffset, 0, topSpace+gap, 176, bottomSize);
         
+        //Offhand
         this.drawTexturedModalRect(this.guiLeft+gapLeft, this.guiTop+(ySize-32), 176, 139, 32, 36);
+        
+        //Armor
         this.drawTexturedModalRect(this.guiLeft, this.guiTop+tabOffset, 208, 85, 32, 86);
        
         //Baubles
@@ -168,6 +183,8 @@ public class GuiBackpackNormal extends GuiContainer {
 	        	this.renderTab(t, tabStart, tabOffset, stack, t == 0);
 	        }
         }
+        
+        //drawRect(guiLeft, guiTop, guiLeft+xSize, guiTop+ySize, Color.RED.getRGB());
     }
     
     
@@ -271,7 +288,8 @@ public class GuiBackpackNormal extends GuiContainer {
             {
                 if (upgrade[u] !=null && this.isMouseOverTab(u+1, i, j))
                 {
-                    BlockUtil.openWorksiteGui(CrystalMod.proxy.getClientPlayer(), GuiHandler.GUI_ID_BACKPACK, OpenType.BACK.ordinal(), u+1, 1);
+                    source.openUpgradesInventory(u+1);
+                	//BlockUtil.openWorksiteGui(CrystalMod.proxy.getClientPlayer(), GuiHandler.GUI_ID_BACKPACK, OpenType.BACK.ordinal(), u+1, 1);
                     return;
                 }
             }

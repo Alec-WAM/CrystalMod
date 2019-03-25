@@ -57,7 +57,8 @@ public class PipeCoverCategory extends BlankRecipeCategory<PipeCoverCategory.Cov
 	public static void register(IJeiHelpers jeiHelpers, IModRegistry registry, IGuiHelper guiHelper) {	    
 	    registry.addRecipeCategories(new PipeCoverCategory(guiHelper));
 	    registry.addRecipeHandlers(new RecipeHandler<CoverRecipeWrapper>(CoverRecipeWrapper.class, PipeCoverCategory.UID));
-	    registry.addRecipeCategoryCraftingItem(new ItemStack(Blocks.CRAFTING_TABLE), PipeCoverCategory.UID);
+	    ItemStack stoneCover = ItemPipeCover.getCoverForBlock(Blocks.STONE.getDefaultState());
+	    registry.addRecipeCategoryCraftingItem(stoneCover, PipeCoverCategory.UID);
 
 	    List<CoverRecipeWrapper> result = new ArrayList<CoverRecipeWrapper>();    
 	    for (ItemStack rec : ItemPipeCover.allCovers) {

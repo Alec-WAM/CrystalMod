@@ -1,5 +1,6 @@
 package alec_wam.CrystalMod.tiles.machine.crafting.grinder;
 
+import alec_wam.CrystalMod.client.sound.ModSounds;
 import alec_wam.CrystalMod.tiles.machine.TileEntityMachine;
 import alec_wam.CrystalMod.tiles.machine.crafting.grinder.GrinderManager.GrinderRecipe;
 import alec_wam.CrystalMod.util.ItemStackTools;
@@ -8,6 +9,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
@@ -16,6 +18,11 @@ public class TileEntityGrinder extends TileEntityMachine implements ISidedInvent
 
 	public TileEntityGrinder(){
 		super("Grinder", 3);
+	}
+	
+	@Override
+	public ResourceLocation getRunningSound(){
+		return ModSounds.grinder.getSoundName();
 	}
 	
 	@Override

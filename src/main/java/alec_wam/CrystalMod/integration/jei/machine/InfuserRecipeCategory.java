@@ -9,6 +9,7 @@ import com.google.common.collect.Lists;
 
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.ModBlocks;
+import alec_wam.CrystalMod.fluids.ModFluids;
 import alec_wam.CrystalMod.integration.jei.RecipeHandler;
 import alec_wam.CrystalMod.tiles.machine.crafting.BlockCrystalMachine.MachineType;
 import alec_wam.CrystalMod.tiles.machine.crafting.infuser.ContainerCrystalInfuser;
@@ -87,7 +88,16 @@ public class InfuserRecipeCategory extends BlankRecipeCategory<InfuserRecipeCate
 			ingredients.setInputLists(ItemStack.class, inputs);
 			
 			List<List<FluidStack>> fluids = Lists.newArrayList();
-			fluids.add(Lists.newArrayList(recipe.getFluidInput()));
+			if(recipe.getFluidInput() !=null){
+				fluids.add(Lists.newArrayList(recipe.getFluidInput()));
+			} else {
+				List<FluidStack> stacks = Lists.newArrayList();
+				stacks.add(new FluidStack(ModFluids.fluidBlueCrystal, 1));
+				stacks.add(new FluidStack(ModFluids.fluidRedCrystal, 1));
+				stacks.add(new FluidStack(ModFluids.fluidGreenCrystal, 1));
+				stacks.add(new FluidStack(ModFluids.fluidDarkCrystal, 1));
+				fluids.add(stacks);
+			}
 			ingredients.setInputLists(FluidStack.class, fluids);
 
 			ItemStack recipeOutput = recipe.getOutput();
@@ -158,7 +168,7 @@ public class InfuserRecipeCategory extends BlankRecipeCategory<InfuserRecipeCate
 	@Override
 	public void drawExtras(@Nonnull Minecraft minecraft) {
 		arrow.draw(minecraft, 49-xOff, 33-yOff);
-		arrow2.draw(minecraft, 103-xOff, 33-yOff);
+		arrow2.draw(minecraft, 103-xOff, 33-yOff);		
 	}
 	
 
@@ -171,7 +181,7 @@ public class InfuserRecipeCategory extends BlankRecipeCategory<InfuserRecipeCate
 		guiItemStacks.set(ingredients);
 		
 		IGuiFluidStackGroup guiFluidStacks = recipeLayout.getFluidStacks();
-		guiFluidStacks.init(0, true, 33 - xOff-1, 24 - yOff-1, 12, 40, Fluid.BUCKET_VOLUME * 4, true, null);
+		guiFluidStacks.init(0, true, 33 - xOff-1, 24 - yOff-1, 12, 40, Fluid.BUCKET_VOLUME * 8, true, null);
 		guiFluidStacks.set(ingredients);
 	}
 

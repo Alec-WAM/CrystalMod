@@ -1,5 +1,7 @@
 package alec_wam.CrystalMod.entities.accessories.boats;
 
+import alec_wam.CrystalMod.entities.accessories.boats.EntityBoatChest.EnumBoatChestType;
+import alec_wam.CrystalMod.tiles.chest.wireless.RenderTileWirelessChest;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
@@ -33,10 +35,16 @@ public class RenderEntityBoatChest extends Render<EntityBoatChest> {
 		GlStateManager.translate(0F, 0.7F, -0.15F);
 		if(boat.getPassengers().size() == 1)
 			GlStateManager.translate(0F, 0F, 0.6F);	
-		
-		GlStateManager.scale(1.75F, 1.75F, 1.75F);
-		
-		Minecraft.getMinecraft().getRenderItem().renderItem(stack, ItemCameraTransforms.TransformType.FIXED);		
+		boolean wireless = entity.getType() == EnumBoatChestType.WIRELESS;
+		if(wireless){
+			GlStateManager.scale(0.95F, 0.95F, 0.95F);	
+			float lidangle = entity.prevLidAngle + (entity.lidAngle - entity.prevLidAngle) * partialTicks;
+			//TODO Look into Lighting
+			RenderTileWirelessChest.renderChest(-0.5, -0.4f, -0.5, entity.getCode(), 2, entity.isPrivate(), lidangle, -1);
+		} else {
+			GlStateManager.scale(1.75F, 1.75F, 1.75F);		
+			Minecraft.getMinecraft().getRenderItem().renderItem(stack, ItemCameraTransforms.TransformType.FIXED);		
+		}
 		GlStateManager.popMatrix();
 	}
 	

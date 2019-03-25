@@ -28,6 +28,7 @@ import alec_wam.CrystalMod.network.CompressedDataInput;
 import alec_wam.CrystalMod.network.CompressedDataOutput;
 import alec_wam.CrystalMod.tiles.pipes.AbstractPipeNetwork;
 import alec_wam.CrystalMod.tiles.pipes.IPipeWrapper;
+import alec_wam.CrystalMod.tiles.pipes.NetworkPos;
 import alec_wam.CrystalMod.tiles.pipes.TileEntityPipe;
 import alec_wam.CrystalMod.tiles.pipes.estorage.FluidStorage.FluidStackData;
 import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage.ItemStackData;
@@ -46,32 +47,6 @@ import net.minecraft.util.math.BlockPos;
 public class EStorageNetwork extends AbstractPipeNetwork {
 	private final ItemStorage itemStorage = new ItemStorage(this);
 	private final FluidStorage fluidStorage = new FluidStorage(this);
-
-	public static class NetworkPos {
-		public BlockPos pos;
-		public int dim;
-		
-		public NetworkPos(BlockPos pos, int dim){
-			this.pos = pos;
-			this.dim = dim;
-		}
-		
-		@Override
-	    public boolean equals(Object other) {
-	        if (!(other instanceof NetworkPos)) {
-	            return false;
-	        }
-
-	        return pos.equals(((NetworkPos)other).pos) && dim == ((NetworkPos)other).dim;
-	    }
-		
-		@Override
-	    public int hashCode() {
-	        int result = pos.hashCode();
-	        result = 31 * result + dim;
-	        return result;
-	    } 
-	}
 	
 	//Contollers
 	public TileCraftingController craftingController;
@@ -84,8 +59,6 @@ public class EStorageNetwork extends AbstractPipeNetwork {
 	public final List<NetworkedItemProvider> masterInterfaces = Lists.newArrayList();
 	public final NavigableMap<Integer, List<NetworkedItemProvider>> interfaces = new TreeMap<Integer, List<NetworkedItemProvider>>(
 			PRIORITY_SORTER);
-
-	final Map<BlockPos, TileEntityPipeEStorage> pipMap = new HashMap<BlockPos, TileEntityPipeEStorage>();
 
 	public final List<INetworkContainer> watchers = new ArrayList<INetworkContainer>();
 	public final List<IInsertListener> listeners = new ArrayList<IInsertListener>();
@@ -229,11 +202,10 @@ public class EStorageNetwork extends AbstractPipeNetwork {
 
 	@Override
 	public void addPipe(TileEntityPipe dpip) {
-		super.addPipe(dpip);
 		if (!(dpip instanceof TileEntityPipeEStorage))
 			return;
+		super.addPipe(dpip);
 		TileEntityPipeEStorage pip = (TileEntityPipeEStorage) dpip;
-		pipMap.put(pip.getPos(), pip);
 
 		TileEntity te = pip;
 		if (te != null) {
@@ -590,6 +562,10 @@ public class EStorageNetwork extends AbstractPipeNetwork {
 	}
 	
 	private Map<UUID, SecurityData> securityData = Maps.newHashMap();
+	
+	public SecurityData getSecurityData(UUID uuid){
+		return securityData.get(uuid);
+	}
 	
 	public boolean hasAbility(EntityPlayer player, NetworkAbility... abilities){
 		UUID uuid = EntityPlayer.getUUID(player.getGameProfile());

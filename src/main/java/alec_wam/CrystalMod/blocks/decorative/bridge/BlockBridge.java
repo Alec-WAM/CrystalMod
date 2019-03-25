@@ -22,6 +22,7 @@ import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.EntityUtil;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
+import alec_wam.CrystalMod.util.ModLogger;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockPlanks;
 import net.minecraft.block.ITileEntityProvider;
@@ -44,6 +45,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumFacing.Axis;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -56,6 +58,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockBridge extends EnumBlock<WoodenBlockProperies.WoodType> implements ITileEntityProvider, ICustomModel, ICustomRaytraceBlock {
 
+	//TODO Handle Proper digging animation for pieces
 	public BlockBridge() {
 		super(Material.WOOD, WoodenBlockProperies.WOOD, WoodType.class);
 		this.setSoundType(SoundType.WOOD);
@@ -145,7 +148,8 @@ public class BlockBridge extends EnumBlock<WoodenBlockProperies.WoodType> implem
         return !below.isFullBlock() || below.isSideSolid(worldIn, pos, EnumFacing.UP);
     }
     
-    @Override
+    @SuppressWarnings("deprecation")
+	@Override
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hX, float hY, float hZ){
     	ItemStack held = player.getHeldItem(hand);
     	TileEntity tile = world.getTileEntity(pos);
@@ -171,6 +175,8 @@ public class BlockBridge extends EnumBlock<WoodenBlockProperies.WoodType> implem
     				if(!player.capabilities.isCreativeMode){
     					player.setHeldItem(hand, ItemUtil.consumeItem(held));
     				}
+    				SoundType event = Blocks.LOG.getSoundType();
+    				world.playSound(null, pos, event.getPlaceSound(), SoundCategory.BLOCKS, 0.6f, 0.8f);
     				BlockUtil.markBlockForUpdate(world, pos);
     				return true;
     			}
@@ -181,6 +187,8 @@ public class BlockBridge extends EnumBlock<WoodenBlockProperies.WoodType> implem
     				if(!player.capabilities.isCreativeMode){
     					player.setHeldItem(hand, ItemUtil.consumeItem(held));
     				}
+    				SoundType event = Blocks.LOG2.getSoundType();
+    				world.playSound(null, pos, event.getPlaceSound(), SoundCategory.BLOCKS, 0.6f, 0.8f);
     				BlockUtil.markBlockForUpdate(world, pos);
     				return true;
     			}
@@ -198,7 +206,9 @@ public class BlockBridge extends EnumBlock<WoodenBlockProperies.WoodType> implem
     		    							if(!player.capabilities.isCreativeMode){
     		    		    					player.setHeldItem(hand, ItemUtil.consumeItem(held));
     		    		    				}
-    		    							BlockUtil.markBlockForUpdate(world, pos);
+    		    							SoundType event = Blocks.LOG.getSoundType();
+    		    		    				world.playSound(null, pos, event.getPlaceSound(), SoundCategory.BLOCKS, 0.6f, 0.8f);
+    		    		    				BlockUtil.markBlockForUpdate(world, pos);
     		    		    				return true;
     		    						}
     								}
@@ -213,7 +223,9 @@ public class BlockBridge extends EnumBlock<WoodenBlockProperies.WoodType> implem
     							if(!player.capabilities.isCreativeMode){
     		    					player.setHeldItem(hand, ItemUtil.consumeItem(held));
     		    				}
-    							BlockUtil.markBlockForUpdate(world, pos);
+    							SoundType event = Blocks.LOG.getSoundType();
+    		    				world.playSound(null, pos, event.getPlaceSound(), SoundCategory.BLOCKS, 0.6f, 0.8f);
+    		    				BlockUtil.markBlockForUpdate(world, pos);
     		    				return true;
     						}
     			    	}
@@ -223,7 +235,9 @@ public class BlockBridge extends EnumBlock<WoodenBlockProperies.WoodType> implem
     							if(!player.capabilities.isCreativeMode){
     		    					player.setHeldItem(hand, ItemUtil.consumeItem(held));
     		    				}
-    							BlockUtil.markBlockForUpdate(world, pos);
+    							SoundType event = Blocks.LOG.getSoundType();
+    		    				world.playSound(null, pos, event.getPlaceSound(), SoundCategory.BLOCKS, 0.6f, 0.8f);
+    		    				BlockUtil.markBlockForUpdate(world, pos);
     		    				return true;
     						}
     			    	}
@@ -235,7 +249,9 @@ public class BlockBridge extends EnumBlock<WoodenBlockProperies.WoodType> implem
     							if(!player.capabilities.isCreativeMode){
     		    					player.setHeldItem(hand, ItemUtil.consumeItem(held));
     		    				}
-    							BlockUtil.markBlockForUpdate(world, pos);
+    							SoundType event = Blocks.LOG.getSoundType();
+    		    				world.playSound(null, pos, event.getPlaceSound(), SoundCategory.BLOCKS, 0.6f, 0.8f);
+    		    				BlockUtil.markBlockForUpdate(world, pos);
     		    				return true;
     						}
     			    	}
@@ -245,7 +261,9 @@ public class BlockBridge extends EnumBlock<WoodenBlockProperies.WoodType> implem
     							if(!player.capabilities.isCreativeMode){
     		    					player.setHeldItem(hand, ItemUtil.consumeItem(held));
     		    				}
-    							BlockUtil.markBlockForUpdate(world, pos);
+    							SoundType event = Blocks.LOG.getSoundType();
+    		    				world.playSound(null, pos, event.getPlaceSound(), SoundCategory.BLOCKS, 0.6f, 0.8f);
+    		    				BlockUtil.markBlockForUpdate(world, pos);
     		    				return true;
     						}
     			    	}
@@ -262,8 +280,7 @@ public class BlockBridge extends EnumBlock<WoodenBlockProperies.WoodType> implem
     	List<ItemStack> drop = new ArrayList<ItemStack>();
     	TileEntity tile = world.getTileEntity(pos);
     	if(tile == null || !(tile instanceof TileBridge)) {
-    		world.setBlockToAir(pos);
-    		return true;
+    		return super.removedByPlayer(state, world, pos, player, willHarvest);
     	}
     	TileBridge bridge = (TileBridge)tile;
     	RaytraceResult result = BlockUtil.doRayTrace(world, pos.getX(), pos.getY(), pos.getZ(), player, this);
@@ -285,41 +302,72 @@ public class BlockBridge extends EnumBlock<WoodenBlockProperies.WoodType> implem
 							drop.add(new ItemStack(Items.STICK));
 							breakBlock = false;
 						} else {
-							final int meta = bridge.getBase(side).getMetadata();
-							bridge.setBase(side, null);
-							for(int i = 0; i < 3; i++){
-								if(bridge.hasPost(side, i)){
-									bridge.setPost(side, i, false);
-									drop.add(new ItemStack(Items.STICK));
+							if(bridge.getBase(side) !=null){
+								final int meta = bridge.getBase(side).getMetadata();
+								bridge.setBase(side, null);
+								for(int i = 0; i < 3; i++){
+									if(bridge.hasPost(side, i)){
+										bridge.setPost(side, i, false);
+										drop.add(new ItemStack(Items.STICK));
+									}
 								}
+								if(meta < 4)drop.add(new ItemStack(Blocks.LOG, 1, meta));
+								else drop.add(new ItemStack(Blocks.LOG2, 1, meta-4));
+								breakBlock = false;
 							}
-							if(meta < 4)drop.add(new ItemStack(Blocks.LOG, 1, meta));
-							else drop.add(new ItemStack(Blocks.LOG2, 1, meta-4));
-							breakBlock = false;
 						}
 					}
 				}
 			}
 		}
     	
-		if (!breakBlock) {
-    		world.notifyBlockUpdate(pos, state, state, 3);
-    	}
-    	
-    	if (!world.isRemote && !player.capabilities.isCreativeMode) {
-    		for (ItemStack st : drop) {
-    			ItemUtil.spawnItemInWorldWithoutMotion(world, st, pos);
-    		}
-	    }
-		
-    	if(breakBlock){
-    		world.setBlockToAir(pos);
+		if(breakBlock){
+			if(!willHarvest)world.setBlockToAir(pos);
     		return true;
     	}
+
+    	world.notifyBlockUpdate(pos, state, state, 3);
+    	if (!world.isRemote && !player.capabilities.isCreativeMode) {
+    		for (ItemStack st : drop) {
+    			ItemUtil.spawnItemInWorldWithRandomMotion(world, st, pos);
+    		}
+	    }
     	return false;
     }
     
-  //RayTrace
+    @Override
+	public void harvestBlock(World worldIn, EntityPlayer player, BlockPos pos, IBlockState state, TileEntity te, ItemStack stack) {
+		super.harvestBlock(worldIn, player, pos, state, te, stack);
+		worldIn.setBlockToAir(pos);
+	}
+    
+    @Override
+	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+	    if (world == null || pos == null) {
+	      return super.getDrops(world, pos, state, fortune);
+	    }
+	    List<ItemStack> list = super.getDrops(world, pos, state, fortune);
+	    TileEntity tile = world.getTileEntity(pos);
+    	if(tile != null && tile instanceof TileBridge) {
+    		TileBridge bridge = (TileBridge)tile;
+    		for(EnumFacing side : EnumFacing.HORIZONTALS){
+    			if(bridge.getBase(side) !=null){
+    				final int meta = bridge.getBase(side).getMetadata();
+					for(int i = 0; i < 3; i++){
+						if(bridge.hasPost(side, i)){
+							bridge.setPost(side, i, false);
+							list.add(new ItemStack(Items.STICK));
+						}
+					}
+					if(meta < 4)list.add(new ItemStack(Blocks.LOG, 1, meta));
+					else list.add(new ItemStack(Blocks.LOG2, 1, meta-4));
+    			}
+    		}
+    	}
+    	return list;
+	}
+    
+    //RayTrace
     
     @SuppressWarnings("deprecation")
 	@Override

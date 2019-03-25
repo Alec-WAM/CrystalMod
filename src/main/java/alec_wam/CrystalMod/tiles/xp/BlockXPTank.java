@@ -55,7 +55,7 @@ public class BlockXPTank extends BlockContainer implements ICustomModel {
 	public BlockXPTank() {
 		super(Material.IRON);
 		setSoundType(SoundType.GLASS);
-		setHardness(2f).setResistance(10F);
+		setHardness(2f).setResistance(15F);
 		setLightOpacity(0);
 		setCreativeTab(CrystalMod.tabBlocks);
 		this.setDefaultState(getDefaultState().withProperty(ENDER, false));

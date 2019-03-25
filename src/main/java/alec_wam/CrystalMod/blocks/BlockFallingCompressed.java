@@ -36,6 +36,7 @@ public class BlockFallingCompressed extends BlockFalling implements ICustomModel
 		super(Material.SAND);
 		this.setCreativeTab(CreativeTabs.BUILDING_BLOCKS);
 		this.setHardness(0.5f);
+		this.setHarvestLevel("shovel", 0);
 		this.setDefaultState(this.blockState.getBaseState().withProperty(TYPE, FallingCompressedBlockType.GUNPOWDER));
 	}
 	

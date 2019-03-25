@@ -1,11 +1,16 @@
 package alec_wam.CrystalMod.tiles.pipes.estorage.panel.monitor;
 
+import java.io.IOException;
 import java.util.List;
 
 import alec_wam.CrystalMod.api.estorage.INetworkContainer;
+import alec_wam.CrystalMod.api.estorage.security.SecurityData;
+import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.tiles.pipes.estorage.EStorageNetwork;
+import alec_wam.CrystalMod.tiles.pipes.estorage.PacketEStorageItemList;
 import alec_wam.CrystalMod.tiles.pipes.estorage.FluidStorage.FluidStackData;
 import alec_wam.CrystalMod.tiles.pipes.estorage.ItemStorage.ItemStackData;
+import alec_wam.CrystalMod.tiles.pipes.estorage.PacketEStorageItemList.EnumListType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.Container;
@@ -85,6 +90,21 @@ public class ContainerPanelMonitor extends Container implements INetworkContaine
 	@Override
 	public void sendFluidsTo(EntityPlayerMP player) {
 		// NO-OP
+	}
+	
+	@Override
+	public void sendSecurityTo(EntityPlayerMP player) {
+		if(monitor.getNetwork() !=null){
+			SecurityData data = monitor.getNetwork().getSecurityData(player.getUniqueID());
+			if(data !=null){
+				try {
+					PacketEStorageItemList pil = new PacketEStorageItemList(monitor.getPos(), EnumListType.SECURITY, data.compress());
+					CrystalModNetwork.sendTo(pil, player);	
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 
 }

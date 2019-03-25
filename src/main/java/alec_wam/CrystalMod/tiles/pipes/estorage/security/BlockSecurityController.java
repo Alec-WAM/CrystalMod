@@ -33,6 +33,7 @@ public class BlockSecurityController extends BlockContainer {
 	public BlockSecurityController() {
 		super(Material.IRON);
 		setHardness(2F);
+        this.setResistance(10.0F);
 		setCreativeTab(CrystalMod.tabBlocks);
 	}
 	

@@ -29,6 +29,12 @@ import alec_wam.CrystalMod.items.tools.backpack.upgrade.GuiBackpackUpgradeWindow
 import alec_wam.CrystalMod.items.tools.backpack.upgrade.GuiBackpackUpgrades;
 import alec_wam.CrystalMod.items.tools.backpack.upgrade.InventoryBackpackUpgrades;
 import alec_wam.CrystalMod.items.tools.backpack.upgrade.ItemBackpackUpgrade.BackpackUpgrade;
+import alec_wam.CrystalMod.items.tools.blockholder.ContainerBlockHolder;
+import alec_wam.CrystalMod.items.tools.blockholder.GuiBlockHolder;
+import alec_wam.CrystalMod.items.tools.blockholder.ItemBlockHolder;
+import alec_wam.CrystalMod.items.tools.blockholder.advanced.ContainerAdvancedBlockHolder;
+import alec_wam.CrystalMod.items.tools.blockholder.advanced.GuiAdvancedBlockHolder;
+import alec_wam.CrystalMod.items.tools.blockholder.advanced.ItemAdvancedBlockHolder;
 import alec_wam.CrystalMod.tiles.cases.ContainerCase;
 import alec_wam.CrystalMod.tiles.cases.GuiCase;
 import alec_wam.CrystalMod.tiles.cases.TileEntityCaseBase;
@@ -156,6 +162,7 @@ import alec_wam.CrystalMod.tiles.xp.GuiXPTank;
 import alec_wam.CrystalMod.tiles.xp.TileEntityXPTank;
 import alec_wam.CrystalMod.util.ChatUtil;
 import alec_wam.CrystalMod.util.ItemStackTools;
+import alec_wam.CrystalMod.util.Lang;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.AbstractHorse;
 import net.minecraft.entity.passive.EntityHorse;
@@ -303,6 +310,13 @@ public class GuiHandler implements IGuiHandler {
     				if(held.getMetadata() == FilterType.NORMAL.ordinal() || held.getMetadata() == FilterType.MOD.ordinal()){
     					return new GuiItemFilterNormal(player, held, hand);
     				}
+    			}
+    			
+    			if(held.getItem() instanceof ItemBlockHolder){
+    				return new GuiBlockHolder(player, held);
+    			}
+    			if(held.getItem() instanceof ItemAdvancedBlockHolder){
+    				return new GuiAdvancedBlockHolder(player, held);
     			}
     		}
     		return null;
@@ -489,6 +503,13 @@ public class GuiHandler implements IGuiHandler {
     					return new ContainerItemFilterNormal(player, held, hand);
     				}
     			}
+    			
+    			if(held.getItem() instanceof ItemBlockHolder){
+    				return new ContainerBlockHolder(player.inventory, held);
+    			}
+    			if(held.getItem() instanceof ItemAdvancedBlockHolder){
+    				return new ContainerAdvancedBlockHolder(player.inventory, held);
+    			}
     		}
     		return null;
     	}
@@ -579,7 +600,7 @@ public class GuiHandler implements IGuiHandler {
 				if(network.hasAbility(player, abilities)){
 					player.openGui(CrystalMod.instance, 0, world, pos.getX(), pos.getY(), pos.getZ());
 				} else {
-					ChatUtil.sendNoSpam(player, "You cannot open this screen.");
+					ChatUtil.sendNoSpam(player, Lang.localize("gui.networkability."+NetworkAbility.VIEW.getId()));
 				}
 			} else {
 				player.openGui(CrystalMod.instance, 0, world, pos.getX(), pos.getY(), pos.getZ());

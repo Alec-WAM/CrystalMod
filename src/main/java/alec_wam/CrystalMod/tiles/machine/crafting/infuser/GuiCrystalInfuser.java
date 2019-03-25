@@ -40,7 +40,7 @@ public class GuiCrystalInfuser extends GuiElementContainer{
 	@Override
 	public void drawGuiContainerForegroundLayer(int par1, int par2){
 		super.drawGuiContainerForegroundLayer(par1, par2);
-		RenderUtil.renderGuiTank(tileMachine.tank, 32, 23, zLevel, 12, 40);
+		RenderUtil.renderGuiTank(tileMachine.tank, 32, 23, zLevel, 12, 40, true);
 		if(this.isPointInRegion(32, 23, 12, 40, par1, par2)){
 			List<String> list = Lists.newArrayList();
 			if(tileMachine.tank !=null){
@@ -59,14 +59,15 @@ public class GuiCrystalInfuser extends GuiElementContainer{
 	protected void updateElementInformation()
 	{
 		super.updateElementInformation();
-	    this.progress.setQuantity(this.tileMachine.getScaledProgress(24));
+		int progress = this.tileMachine.getScaledProgress(24);
+	    this.progress.setQuantity(progress);
 	    FluidStack fluid = tileMachine.tank.getFluid();
 	    if(fluid !=null){
 	    	progress2.setFluid(new FluidStack(fluid, 1));
-	    	progress2.setSize(tileMachine.getScaledProgress(24), 16);
+	    	progress2.setQuanitity(progress);
 	    }else{
 	    	progress2.setFluid(null);
-	    	progress2.setSize(0, 16);
+	    	progress2.setQuanitity(0);
 	    }
 	}
 }

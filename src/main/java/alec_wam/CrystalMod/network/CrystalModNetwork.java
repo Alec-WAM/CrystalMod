@@ -5,6 +5,7 @@ import alec_wam.CrystalMod.capability.PacketExtendedPlayerInvSync;
 import alec_wam.CrystalMod.capability.PacketOpenExtendedInventory;
 import alec_wam.CrystalMod.items.tools.backpack.PacketOpenBackpack;
 import alec_wam.CrystalMod.items.tools.backpack.network.PacketToolSwap;
+import alec_wam.CrystalMod.items.tools.blockholder.advanced.PacketBlockHolderSelection;
 import alec_wam.CrystalMod.network.packets.InventoryCraftingSyncPacket;
 import alec_wam.CrystalMod.network.packets.MessageTileContainerUpdate;
 import alec_wam.CrystalMod.network.packets.PacketDimensionNameRequest;
@@ -58,6 +59,7 @@ public class CrystalModNetwork extends NetworkWrapper {
 	    registerPacketServer(PacketOpenExtendedInventory.class);
 	    registerPacket(PacketOpenBackpack.class);
 	    registerPacketServer(PacketToolSwap.class);
+	    registerPacketServer(PacketBlockHolderSelection.class);
 	    
 	    registerPacketClient(PacketNoSpamChat.class);
 	    registerPacket(PacketExtendedPlayer.class);

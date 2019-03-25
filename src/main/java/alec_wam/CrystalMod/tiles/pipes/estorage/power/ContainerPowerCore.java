@@ -87,4 +87,9 @@ public class ContainerPowerCore extends Container implements INetworkContainer {
 		// NO-OP
 	}
 
+	@Override
+	public void sendSecurityTo(EntityPlayerMP player) {
+		//NO-OP
+	}
+
 }

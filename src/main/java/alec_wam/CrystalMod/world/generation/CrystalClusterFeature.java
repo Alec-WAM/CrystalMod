@@ -47,7 +47,7 @@ public class CrystalClusterFeature implements IGenerationFeature {
 	                            ModLogger.info("Spawned a Crystal Cluster at: " + x + "," + y + "," + z);
 	                        }
 	                        CrystalColors.Basic type = CrystalColors.Basic.getRandom(random);
-	                        TileCrystalCluster.createRandomCluster(world, random, new BlockPos(pos.setPos(x, y+1, z)), type, 10, 44, 1, 3, true);
+	                        TileCrystalCluster.createRandomCluster(world, random, new BlockPos(pos.setPos(x, y+1, z)), type, 24, 80, 1, 3, true);
 	                        return !newGen;
 	                    }
 	                }

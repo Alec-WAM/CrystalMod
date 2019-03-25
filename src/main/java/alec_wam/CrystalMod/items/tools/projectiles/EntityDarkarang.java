@@ -60,7 +60,7 @@ public class EntityDarkarang extends EntityArrow implements IEntityAdditionalSpa
 
 	@SuppressWarnings("deprecation")
 	protected void playHitBlockSound(float speed, IBlockState state) {
-		this.getEntityWorld().playSound(null, getPosition(), state.getBlock().getSoundType().getStepSound(), SoundCategory.BLOCKS, 5.0f, 1.0f);
+		this.getEntityWorld().playSound(null, getPosition(), state.getBlock().getSoundType().getStepSound(), SoundCategory.BLOCKS, 0.8f, 1.0f);
 		//this.playSound(state.getBlock().getSoundType().getStepSound(), 0.8f, 1.0f);
 	}
 

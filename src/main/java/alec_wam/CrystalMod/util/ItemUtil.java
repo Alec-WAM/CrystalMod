@@ -45,6 +45,7 @@ import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
@@ -1468,6 +1469,14 @@ public class ItemUtil {
 
 			if(!player.getEntityWorld().isRemote)
 				player.getEntityWorld().spawnEntity(item);
+		}
+	}
+	
+	public static void setPlayerHandSilently(EntityPlayer player, EnumHand hand, ItemStack stack){
+		if(hand == EnumHand.OFF_HAND){
+			player.inventory.offHandInventory.set(0, stack);
+		} else {
+			player.inventory.mainInventory.set(player.inventory.currentItem, stack);			
 		}
 	}
 	

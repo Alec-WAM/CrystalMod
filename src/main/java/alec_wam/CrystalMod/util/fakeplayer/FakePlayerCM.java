@@ -104,7 +104,7 @@ public class FakePlayerCM extends FakePlayer {
   }
   
   @Override
-public float getEyeHeight() {
+  public float getEyeHeight() {
       return 0.0f;
   }
   

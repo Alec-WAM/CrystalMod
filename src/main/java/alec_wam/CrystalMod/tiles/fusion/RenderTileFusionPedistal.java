@@ -50,7 +50,7 @@ public class RenderTileFusionPedistal<T extends TileFusionPedistal> extends Tile
         if(hasItem){
         	GlStateManager.pushMatrix();
         	GlStateManager.translate(x, y, z);
-	        GlStateManager.translate(0.5 + (facing.getFrontOffsetX() * 0.45), 0.5 + (facing.getFrontOffsetY() * 0.45), 0.5 + (facing.getFrontOffsetZ() * 0.45));
+	        GlStateManager.translate(0.5 + (facing.getFrontOffsetX() * 0.45), 0.4 + (facing.getFrontOffsetY() * 0.45), 0.5 + (facing.getFrontOffsetZ() * 0.45));
 	        float scale = tile.getStack().getItem() instanceof ItemBlock ? 0.65f : 0.5f;
 	        
 	        GlStateManager.scale(scale, scale, scale);
@@ -186,7 +186,7 @@ public class RenderTileFusionPedistal<T extends TileFusionPedistal> extends Tile
 				if(pedistal.getRotation() !=null)pedistalVec = pedistalVec.addVector(pedistal.getRotation().getFrontOffsetX() * 0.35, pedistal.getRotation().getFrontOffsetY() * 0.35, pedistal.getRotation().getFrontOffsetZ() * 0.35);
 				
 				if(ItemStackTools.isValid(pedistal.getStack())){
-					Vec3d vec1 = masterVec.addVector(0.5, 0.5+lazerLift, 0.5);
+					Vec3d vec1 = masterVec.addVector(0.5, 0.4+lazerLift, 0.5);
 			        Vec3d vec2 = pedistalVec.addVector(0.5, 0.5, 0.5);
 			        Vec3d combinedVec = vec2.subtract(vec1);
 			        GlStateManager.pushMatrix();
@@ -198,7 +198,7 @@ public class RenderTileFusionPedistal<T extends TileFusionPedistal> extends Tile
 			        double distance = combinedVec.lengthVector();
 			        
 			        GlStateManager.translate(-distance*(progress), 0, 0);
-			        float scale = pedistal.getStack().getItem() instanceof ItemBlock ? 0.65f : 0.5f;
+			        float scale = pedistal.getStack().getItem() instanceof ItemBlock ? 0.5f : 0.5f;
 			        GlStateManager.scale(scale, scale, scale);
 			        RenderUtil.renderItem(pedistal.getStack(), TransformType.FIXED);
 			        GlStateManager.popMatrix();

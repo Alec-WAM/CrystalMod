@@ -34,7 +34,7 @@ public class ItemPattern extends Item {
 
     public ItemPattern() {
         super();
-        setMaxStackSize(1);
+        setMaxStackSize(16);
     	this.setCreativeTab(CrystalMod.tabItems);
     	ModItems.registerItem(this, "craftingpattern");
     }
@@ -56,17 +56,14 @@ public class ItemPattern extends Item {
         CraftingPattern cpattern = getPatternFromCache(player.getEntityWorld(), pattern);
 
         if (cpattern.isValid()) {
-        	if (GuiScreen.isShiftKeyDown() || isProcessing(pattern)) {
-                list.add(TextFormatting.YELLOW + Lang.localize("pattern.inputs") + TextFormatting.RESET);
-
-                ItemUtil.combineMultipleItemsInTooltip(list, true, Iterables.toArray(cpattern.getInputs(), ItemStack.class));
-
-                list.add(TextFormatting.YELLOW + Lang.localize("pattern.outputs") + TextFormatting.RESET);
-            }
-
         	if(cpattern.isOredict()){
-        		list.add(TextFormatting.YELLOW+"Ore");
+        		list.add(TextFormatting.GREEN+Lang.localize("tooltip.pattern.ore"));
         	}
+        	if (GuiScreen.isShiftKeyDown() || isProcessing(pattern)) {
+                list.add(TextFormatting.YELLOW + Lang.localize("tooltip.pattern.inputs") + TextFormatting.RESET);
+                ItemUtil.combineMultipleItemsInTooltip(list, true, Iterables.toArray(cpattern.getInputs(), ItemStack.class));
+            }
+        	list.add(TextFormatting.YELLOW + Lang.localize("tooltip.pattern.outputs") + TextFormatting.RESET);
         	ItemUtil.combineMultipleItemsInTooltip(list, true, Iterables.toArray(cpattern.getOutputs(), ItemStack.class));
         } else {
         	list.add("Invalid "+cpattern.getInputs().size()+" | "+cpattern.getOutputs().size());

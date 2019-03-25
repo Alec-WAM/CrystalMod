@@ -1,5 +1,7 @@
 package alec_wam.CrystalMod.util;
 
+import java.util.List;
+
 import alec_wam.CrystalMod.network.AbstractPacketThreadsafe;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import io.netty.buffer.ByteBuf;
@@ -90,6 +92,12 @@ public class ChatUtil
         sendChat(player, wrap(lines));
     }
 
+    public static void sendChat(EntityPlayer player, List<String> list)
+    {
+    	for(int i = 0; i < list.size(); i++)
+        sendChat(player, wrap(list.get(i)));
+    }
+    
     /**
      * Sends all passed chat components to the player.
      * 

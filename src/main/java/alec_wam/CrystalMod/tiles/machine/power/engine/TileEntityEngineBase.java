@@ -1,18 +1,27 @@
 package alec_wam.CrystalMod.tiles.machine.power.engine;
 
+import javax.annotation.Nullable;
+
 import alec_wam.CrystalMod.api.energy.CEnergyStorage;
 import alec_wam.CrystalMod.api.energy.CapabilityCrystalEnergy;
 import alec_wam.CrystalMod.api.energy.ICEnergyStorage;
+import alec_wam.CrystalMod.client.sound.MachineSound;
+import alec_wam.CrystalMod.client.sound.ModSounds;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.IMessageHandler;
 import alec_wam.CrystalMod.network.packets.PacketTileMessage;
 import alec_wam.CrystalMod.tiles.TileEntityMod;
 import alec_wam.CrystalMod.tiles.machine.IMachineTile;
+import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.data.watchable.WatchableBoolean;
 import alec_wam.CrystalMod.util.data.watchable.WatchableInteger;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.client.FMLClientHandler;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public abstract class TileEntityEngineBase extends TileEntityMod implements IMessageHandler, IMachineTile {
 
@@ -22,6 +31,8 @@ public abstract class TileEntityEngineBase extends TileEntityMod implements IMes
 	public WatchableBoolean active = new WatchableBoolean();
 	public int multi;
 	public int facing;
+	@SideOnly(Side.CLIENT)
+    private MachineSound runningSound;
 	
 	public TileEntityEngineBase(){
 		multi = 1;
@@ -65,9 +76,43 @@ public abstract class TileEntityEngineBase extends TileEntityMod implements IMes
 	
 	protected float lastSyncPowerStored = -1;
 	
+	public boolean hasRunningSound() {
+		return getRunningSound() != null;
+	}
+	
+	@Nullable
+	public ResourceLocation getRunningSound() {
+		return ModSounds.engine.getSoundName();
+	}
+	
+	public float getVolume() {
+		return 0.8F;
+	}
+
+	public float getPitch() {
+		return 1.0f;
+	}
+	
+	public boolean shouldPlayRunningSound(){
+		return isActive() && !isInvalid();
+	}
+	
 	@Override
 	public void update(){
 		super.update();
+		if(getWorld().isRemote){
+			if(hasRunningSound()){
+				final ResourceLocation soundLocation = getRunningSound();
+				if (shouldPlayRunningSound() && soundLocation != null) {
+					if (runningSound == null) {
+						FMLClientHandler.instance().getClient().getSoundHandler().playSound(runningSound = new MachineSound(soundLocation, pos, getVolume(), getPitch()));
+					}
+				} else if (runningSound != null) {
+					runningSound.endPlaying();
+					runningSound = null;
+				}
+			}
+		}
 		if(!getWorld().isRemote){
 			boolean powered = getWorld().isBlockIndirectlyGettingPowered(getPos()) > 0;
 			if(!powered && this.energyStorage.getCEnergyStored() < this.energyStorage.getMaxCEnergyStored()){
@@ -175,6 +220,7 @@ public abstract class TileEntityEngineBase extends TileEntityMod implements IMes
 		
 		if(messageId.equalsIgnoreCase("UpdateActive")){
 			active.setValue(messageData.getBoolean("Active"));
+			BlockUtil.markBlockForUpdate(world, pos);
 		}
 		
 		if(messageId.equalsIgnoreCase("UpdateFuel")){

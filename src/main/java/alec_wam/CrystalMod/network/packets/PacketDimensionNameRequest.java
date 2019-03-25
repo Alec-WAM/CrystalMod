@@ -12,6 +12,7 @@ import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.NetHandlerPlayServer;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.fml.server.FMLServerHandler;
 
 public class PacketDimensionNameRequest extends AbstractPacketThreadsafe {
@@ -64,9 +65,14 @@ public class PacketDimensionNameRequest extends AbstractPacketThreadsafe {
 
 	@Override
 	public void handleServerSafe(NetHandlerPlayServer netHandler) {
-		EntityPlayerMP playerMP = FMLServerHandler.instance().getServer().getPlayerList().getPlayerByUUID(playerUUID);
-		if(playerMP !=null){
-			CrystalModNetwork.sendTo(new PacketDimensionNameRequest(dimension, StringUtils.getDimensionName(playerUUID, dimension)), playerMP);
+		MinecraftServer server = FMLServerHandler.instance().getServer();
+		if(server !=null){
+			if(server.getPlayerList() !=null){
+				EntityPlayerMP playerMP = server.getPlayerList().getPlayerByUUID(playerUUID);
+				if(playerMP !=null){
+					CrystalModNetwork.sendTo(new PacketDimensionNameRequest(dimension, StringUtils.getDimensionName(playerUUID, dimension)), playerMP);
+				}
+			}
 		}
 	}
 

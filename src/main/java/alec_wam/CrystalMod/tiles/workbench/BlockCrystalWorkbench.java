@@ -23,7 +23,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockCrystalWorkbench extends EnumBlock<CrystalColors.Basic> implements ITileEntityProvider, ICustomModel  {
 
-	//TODO Add Pure Variant
 	public BlockCrystalWorkbench() {
 		super(Material.IRON, CrystalColors.COLOR_BASIC, CrystalColors.Basic.class);
 		this.setCreativeTab(CrystalMod.tabBlocks);

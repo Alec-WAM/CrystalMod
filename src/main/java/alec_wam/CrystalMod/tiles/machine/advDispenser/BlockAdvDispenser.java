@@ -8,6 +8,7 @@ import alec_wam.CrystalMod.tiles.machine.BlockMachine;
 import alec_wam.CrystalMod.tiles.machine.BlockStateMachine;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -29,7 +30,8 @@ public class BlockAdvDispenser extends BlockMachine implements ICustomModel {
 
 	public BlockAdvDispenser() {
 		super(Material.IRON);
-		this.setHardness(1f).setResistance(10F);
+		this.setSoundType(SoundType.METAL);
+		this.setHardness(1f).setResistance(15F);
 		this.setCreativeTab(CreativeTabs.REDSTONE);
 	}
 	

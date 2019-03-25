@@ -142,6 +142,19 @@ public class CrystalColors {
 			}
 			return byMetadata(MathHelper.getInt(rand, 0, values().length-1));
 		}
+		
+		public static SuperSpecial convert(Basic color) {
+			if(color == Basic.RED){
+				return RED;
+			}
+			if(color == Basic.GREEN){
+				return GREEN;
+			}
+			if(color == Basic.DARK){
+				return DARK;
+			}
+			return BLUE;
+		}
 	}
 
 }
