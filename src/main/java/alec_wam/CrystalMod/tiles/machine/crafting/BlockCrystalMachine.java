@@ -2,16 +2,20 @@ package alec_wam.CrystalMod.tiles.machine.crafting;
 
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.util.IEnumMeta;
+import alec_wam.CrystalMod.util.ItemStackTools;
+import alec_wam.CrystalMod.util.tool.ToolUtil;
 import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.tiles.BlockStateFacing;
 import alec_wam.CrystalMod.tiles.machine.BlockMachine;
 import alec_wam.CrystalMod.tiles.machine.BlockStateMachine;
 import alec_wam.CrystalMod.tiles.machine.TileEntityMachine;
+import alec_wam.CrystalMod.tiles.machine.crafting.fluidmixer.TileEntityFluidMixer;
 import alec_wam.CrystalMod.tiles.machine.crafting.furnace.TileEntityCrystalFurnace;
 import alec_wam.CrystalMod.tiles.machine.crafting.grinder.TileEntityGrinder;
 import alec_wam.CrystalMod.tiles.machine.crafting.infuser.TileEntityCrystalInfuser;
 import alec_wam.CrystalMod.tiles.machine.crafting.liquidizer.TileEntityLiquidizer;
 import alec_wam.CrystalMod.tiles.machine.crafting.press.TileEntityPress;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
@@ -32,16 +36,23 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.fluids.FluidActionResult;
+import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.wrapper.InvWrapper;
 
 public class BlockCrystalMachine extends BlockMachine implements ICustomModel  {
-	
+	//TODO Add speed and power upgrades
 	public static final PropertyEnum<MachineType> MACHINE_TYPE = PropertyEnum.<MachineType>create("machine", MachineType.class);
 
 	public BlockCrystalMachine() {
 		super(Material.IRON);
-		this.setHardness(1f).setResistance(10F);
+		this.setSoundType(SoundType.METAL);
+		this.setHardness(1f).setResistance(15F);
 		this.setCreativeTab(CrystalMod.tabBlocks);
 	}
 
@@ -96,6 +107,36 @@ public class BlockCrystalMachine extends BlockMachine implements ICustomModel  {
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hX, float hY, float hZ){
 		TileEntity tile = world.getTileEntity(pos);
 		if(tile !=null && tile instanceof TileEntityMachine){
+			TileEntityMachine machine = (TileEntityMachine)tile;
+			ItemStack stack = player.getHeldItem(hand);
+			if (ItemStackTools.isValid(stack)) {
+            	if(ToolUtil.isToolEquipped(player, hand) && player.isSneaking()){
+            		return ToolUtil.breakBlockWithTool(this, world, pos, player, hand);
+            	}            
+
+            	IFluidHandlerItem containerFluidHandler = FluidUtil.getFluidHandler(stack);
+            	if (containerFluidHandler != null)
+            	{
+            		IItemHandler playerInventory = new InvWrapper(player.inventory);
+            		IFluidHandler handler = FluidUtil.getFluidHandler(world, pos, side);
+            		if(handler !=null){
+            			FluidActionResult result = null;            			
+            			if(machine.canInsertFluidWithBucket()){            				
+            				result = FluidUtil.tryEmptyContainerAndStow(stack, handler, playerInventory, Integer.MAX_VALUE, player);
+            			}
+            			if(machine.canExtractFluidWithBucket()){
+            				if(result == null){
+            					result = FluidUtil.tryFillContainerAndStow(stack, handler, playerInventory, Integer.MAX_VALUE, player);
+            				}
+            			}
+            			if(result !=null && result.isSuccess()){
+            				player.setHeldItem(hand, result.getResult());
+            				return true;
+            			}
+            		}
+            	}
+        	}
+			
 			if(!world.isRemote){
 				player.openGui(CrystalMod.instance, 0, world, pos.getX(), pos.getY(), pos.getZ());
 			}
@@ -119,7 +160,7 @@ public class BlockCrystalMachine extends BlockMachine implements ICustomModel  {
 	public int getLightValue(IBlockState state, IBlockAccess world, BlockPos pos)
     {
 		boolean bool = state.getValue(BlockStateMachine.activeProperty);
-        return bool ? 14 : super.getLightValue(state, world, pos);
+        return bool ? 14 : 0;
     }
 	
 	@Override
@@ -140,7 +181,8 @@ public class BlockCrystalMachine extends BlockMachine implements ICustomModel  {
 		PRESS("press", TileEntityPress.class),
 		LIQUIDIZER("liquidizer", TileEntityLiquidizer.class),
 		GRINDER("grinder", TileEntityGrinder.class),
-		INFUSER("infuser", TileEntityCrystalInfuser.class);
+		INFUSER("infuser", TileEntityCrystalInfuser.class),
+		FLUID_MIXER("fluid_mixer", TileEntityFluidMixer.class);
 
 		private final String unlocalizedName;
 		public final Class<? extends TileEntityMachine> clazz;

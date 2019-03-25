@@ -12,6 +12,7 @@ import alec_wam.CrystalMod.blocks.crops.ItemCorn;
 import alec_wam.CrystalMod.blocks.crops.bamboo.ItemWrappedFood;
 import alec_wam.CrystalMod.blocks.crops.material.ItemMaterialSeed;
 import alec_wam.CrystalMod.entities.accessories.horseshoes.ItemHorseShoe;
+import alec_wam.CrystalMod.entities.balloon.ItemBalloon;
 import alec_wam.CrystalMod.entities.disguise.ItemDisguise;
 import alec_wam.CrystalMod.entities.explosives.grenade.ItemGrenade;
 import alec_wam.CrystalMod.entities.minecarts.chests.ItemCrystalChestMinecart;
@@ -56,6 +57,8 @@ import alec_wam.CrystalMod.items.tools.backpack.types.BackpackNormal;
 import alec_wam.CrystalMod.items.tools.backpack.types.BackpackWireless;
 import alec_wam.CrystalMod.items.tools.backpack.upgrade.ItemBackpackUpgrade;
 import alec_wam.CrystalMod.items.tools.bat.ItemBat;
+import alec_wam.CrystalMod.items.tools.blockholder.ItemBlockHolder;
+import alec_wam.CrystalMod.items.tools.blockholder.advanced.ItemAdvancedBlockHolder;
 import alec_wam.CrystalMod.items.tools.blowdart.ItemBlowGun;
 import alec_wam.CrystalMod.items.tools.blowdart.ItemDart;
 import alec_wam.CrystalMod.items.tools.projectiles.ItemDagger;
@@ -137,6 +140,7 @@ public class ModItems {
 	public static ItemArmor crystalHelmet, crystalChestplate, crystalLeggings, crystalBoots;
 	public static ItemWolfArmor wolfArmor;
 	public static ItemHorseShoe horseShoes;
+	public static ItemShieldPotion shieldPotion;
 	
 	public static ItemAxe darkIronAxe;
 	public static ItemHoe darkIronHoe;
@@ -202,11 +206,15 @@ public class ModItems {
 	public static ItemBlowGun blowGun;
 	public static ItemDart dart;
 	public static ItemGrenade grenade;
+	public static ItemBalloon balloon;
+	public static ItemBlockHolder blockHolder;
+	public static ItemAdvancedBlockHolder advBlockHolder;
 	
 	//Baubles
 	public static ItemBaubleWings dragonWingsBauble;
 	
 	public static void init() {
+		//TODO Make Grappling hook item
 		crystals = new ItemCrystal();
 		ingots = new ItemIngot();
 		plates = new ItemMetalPlate();
@@ -250,6 +258,7 @@ public class ModItems {
 		
 		wolfArmor = new ItemWolfArmor();
 		horseShoes = new ItemHorseShoe();
+		shieldPotion = new ItemShieldPotion();
 		
 		darkIronAxe = registerItem(new ItemCustomAxe(ToolMaterialDarkIron), "darkironaxe");
 		darkIronHoe = (ItemHoe) registerItem(new ItemHoe(ToolMaterialDarkIron), "darkironhoe").setCreativeTab(CrystalMod.tabTools);
@@ -288,8 +297,8 @@ public class ModItems {
 		wirelessPanel = new ItemWirelessPanel();
 		pipeAttachmant = new ItemPipeAttachment();
 		miscCard = new ItemMiscCard();
-		normalBackpack = new ItemBackpackNormal(new BackpackNormal());
-		craftingBackpack = new ItemBackpackBase(new BackpackCrafting());
+		normalBackpack = new ItemBackpackNormal(BackpackNormal.INSTANCE);
+		craftingBackpack = new ItemBackpackBase(BackpackCrafting.INSTANCE);
 		wirelessBackpack = new ItemBackpackBase(new BackpackWireless());
 		backpackupgrade = new ItemBackpackUpgrade();
 		lock = new ItemLock();
@@ -315,6 +324,9 @@ public class ModItems {
 		blowGun = new ItemBlowGun();
 		dart = new ItemDart();
 		grenade = new ItemGrenade();
+		balloon = new ItemBalloon();
+		blockHolder = new ItemBlockHolder();
+		advBlockHolder = new ItemAdvancedBlockHolder();
 		
 		//Baubles
 		if(BaublesIntegration.instance().hasBaubles()){

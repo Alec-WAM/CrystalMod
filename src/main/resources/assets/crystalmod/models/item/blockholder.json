@@ -1,0 +1,149 @@
+{
+    "__comment": "Model generated using MrCrayfish's Model Creator (http://mrcrayfish.com/modelcreator/)",
+	"ambientocclusion": false,
+    "textures": {
+        "all": "crystalmod:items/blockholder"
+    },
+    "elements": [
+        {
+            "name": "PoleNW",
+            "from": [ 0.0, 0.0, 0.0 ], 
+            "to": [ 2.0, 16.0, 2.0 ], 
+            "faces": {
+                "north": { "texture": "#all", "uv": [ 0.0, 0.0, 2.0, 16.0 ] },
+                "east": { "texture": "#all", "uv": [ 0.0, 0.0, 2.0, 16.0 ] },
+                "south": { "texture": "#all", "uv": [ 0.0, 0.0, 2.0, 16.0 ] },
+                "west": { "texture": "#all", "uv": [ 0.0, 0.0, 2.0, 16.0 ] },
+                "up": { "texture": "#all", "uv": [ 0.0, 0.0, 2.0, 2.0 ] },
+                "down": { "texture": "#all", "uv": [ 0.0, 0.0, 2.0, 2.0 ] }
+            }
+        },
+        {
+            "name": "PoleNE",
+            "from": [ 14.0, 0.0, 0.0 ], 
+            "to": [ 16.0, 16.0, 2.0 ], 
+            "faces": {
+                "north": { "texture": "#all", "uv": [ 0.0, 0.0, 2.0, 16.0 ] },
+                "east": { "texture": "#all", "uv": [ 0.0, 0.0, 2.0, 16.0 ] },
+                "south": { "texture": "#all", "uv": [ 0.0, 0.0, 2.0, 16.0 ] },
+                "west": { "texture": "#all", "uv": [ 0.0, 0.0, 2.0, 16.0 ] },
+                "up": { "texture": "#all", "uv": [ 0.0, 0.0, 2.0, 2.0 ] },
+                "down": { "texture": "#all", "uv": [ 0.0, 0.0, 2.0, 2.0 ] }
+            }
+        },
+        {
+            "name": "PoleSW",
+            "from": [ 0.0, 0.0, 14.0 ], 
+            "to": [ 2.0, 16.0, 16.0 ], 
+            "faces": {
+                "north": { "texture": "#all", "uv": [ 0.0, 0.0, 2.0, 16.0 ] },
+                "east": { "texture": "#all", "uv": [ 0.0, 0.0, 2.0, 16.0 ] },
+                "south": { "texture": "#all", "uv": [ 0.0, 0.0, 2.0, 16.0 ] },
+                "west": { "texture": "#all", "uv": [ 0.0, 0.0, 2.0, 16.0 ] },
+                "up": { "texture": "#all", "uv": [ 0.0, 0.0, 2.0, 2.0 ] },
+                "down": { "texture": "#all", "uv": [ 0.0, 0.0, 2.0, 2.0 ] }
+            }
+        },
+        {
+            "name": "PoleSE",
+            "from": [ 14.0, 0.0, 14.0 ], 
+            "to": [ 16.0, 16.0, 16.0 ], 
+            "faces": {
+                "north": { "texture": "#all", "uv": [ 0.0, 0.0, 2.0, 16.0 ] },
+                "east": { "texture": "#all", "uv": [ 0.0, 0.0, 2.0, 16.0 ] },
+                "south": { "texture": "#all", "uv": [ 0.0, 0.0, 2.0, 16.0 ] },
+                "west": { "texture": "#all", "uv": [ 0.0, 0.0, 2.0, 16.0 ] },
+                "up": { "texture": "#all", "uv": [ 0.0, 0.0, 2.0, 2.0 ] },
+                "down": { "texture": "#all", "uv": [ 0.0, 0.0, 2.0, 2.0 ] }
+            }
+        },
+        {
+            "name": "BarTN",
+            "from": [ 2.0, 14.0, 0.0 ], 
+            "to": [ 14.0, 16.0, 2.0 ], 
+            "faces": {
+                "north": { "texture": "#all", "uv": [ 2.0, 0.0, 14.0, 2.0 ] },
+                "south": { "texture": "#all", "uv": [ 2.0, 0.0, 14.0, 2.0 ] },
+                "up": { "texture": "#all", "uv": [ 2.0, 0.0, 14.0, 2.0 ] },
+                "down": { "texture": "#all", "uv": [ 2.0, 0.0, 14.0, 2.0 ] }
+            }
+        },
+        {
+            "name": "BarTS",
+            "from": [ 2.0, 14.0, 14.0 ], 
+            "to": [ 14.0, 16.0, 16.0 ], 
+            "faces": {
+                "north": { "texture": "#all", "uv": [ 2.0, 0.0, 14.0, 2.0 ] },
+                "south": { "texture": "#all", "uv": [ 2.0, 0.0, 14.0, 2.0 ] },
+                "up": { "texture": "#all", "uv": [ 2.0, 0.0, 14.0, 2.0 ] },
+                "down": { "texture": "#all", "uv": [ 2.0, 0.0, 14.0, 2.0 ] }
+            }
+        },
+        {
+            "name": "BarBN",
+            "from": [ 2.0, 0.0, 0.0 ], 
+            "to": [ 14.0, 2.0, 2.0 ], 
+            "faces": {
+                "north": { "texture": "#all", "uv": [ 2.0, 0.0, 14.0, 2.0 ] },
+                "south": { "texture": "#all", "uv": [ 2.0, 0.0, 14.0, 2.0 ] },
+                "up": { "texture": "#all", "uv": [ 2.0, 0.0, 14.0, 2.0 ] },
+                "down": { "texture": "#all", "uv": [ 2.0, 0.0, 14.0, 2.0 ] }
+            }
+        },
+        {
+            "name": "BarBS",
+            "from": [ 2.0, 0.0, 14.0 ], 
+            "to": [ 14.0, 2.0, 16.0 ], 
+            "faces": {
+                "north": { "texture": "#all", "uv": [ 2.0, 0.0, 14.0, 2.0 ] },
+                "south": { "texture": "#all", "uv": [ 2.0, 0.0, 14.0, 2.0 ] },
+                "up": { "texture": "#all", "uv": [ 2.0, 0.0, 14.0, 2.0 ] },
+                "down": { "texture": "#all", "uv": [ 2.0, 0.0, 14.0, 2.0 ] }
+            }
+        },
+        {
+            "name": "BarTE",
+            "from": [ 14.0, 14.0, 2.0 ], 
+            "to": [ 16.0, 16.0, 14.0 ], 
+            "faces": {
+                "east": { "texture": "#all", "uv": [ 2.0, 0.0, 14.0, 2.0 ] },
+                "west": { "texture": "#all", "uv": [ 2.0, 0.0, 14.0, 2.0 ] },
+                "up": { "texture": "#all", "uv": [ 0.0, 2.0, 2.0, 14.0 ] },
+                "down": { "texture": "#all", "uv": [ 0.0, 2.0, 2.0, 14.0 ] }
+            }
+        },
+        {
+            "name": "BarBE",
+            "from": [ 14.0, 0.0, 2.0 ], 
+            "to": [ 16.0, 2.0, 14.0 ], 
+            "faces": {
+                "east": { "texture": "#all", "uv": [ 2.0, 0.0, 14.0, 2.0 ] },
+                "west": { "texture": "#all", "uv": [ 2.0, 0.0, 14.0, 2.0 ] },
+                "up": { "texture": "#all", "uv": [ 0.0, 2.0, 2.0, 14.0 ] },
+                "down": { "texture": "#all", "uv": [ 0.0, 2.0, 2.0, 14.0 ] }
+            }
+        },
+        {
+            "name": "BarBW",
+            "from": [ 0.0, 0.0, 2.0 ], 
+            "to": [ 2.0, 2.0, 14.0 ], 
+            "faces": {
+                "east": { "texture": "#all", "uv": [ 2.0, 0.0, 14.0, 2.0 ] },
+                "west": { "texture": "#all", "uv": [ 2.0, 0.0, 14.0, 2.0 ] },
+                "up": { "texture": "#all", "uv": [ 0.0, 2.0, 2.0, 14.0 ] },
+                "down": { "texture": "#all", "uv": [ 0.0, 2.0, 2.0, 14.0 ] }
+            }
+        },
+        {
+            "name": "BarTW",
+            "from": [ 0.0, 14.0, 2.0 ], 
+            "to": [ 2.0, 16.0, 14.0 ], 
+            "faces": {
+                "east": { "texture": "#all", "uv": [ 2.0, 0.0, 14.0, 2.0 ] },
+                "west": { "texture": "#all", "uv": [ 2.0, 0.0, 14.0, 2.0 ] },
+                "up": { "texture": "#all", "uv": [ 0.0, 2.0, 2.0, 14.0 ] },
+                "down": { "texture": "#all", "uv": [ 0.0, 2.0, 2.0, 14.0 ] }
+            }
+        }
+    ]
+}

@@ -11,6 +11,7 @@ import alec_wam.CrystalMod.integration.jei.crystalworkbench.ShapedNBTCrystalReci
 import alec_wam.CrystalMod.integration.jei.crystalworkbench.ShapelessCrystalRecipeHandler;
 import alec_wam.CrystalMod.integration.jei.customrecipe.DNASampleCategory;
 import alec_wam.CrystalMod.integration.jei.customrecipe.PipeCoverCategory;
+import alec_wam.CrystalMod.integration.jei.machine.FluidMixerRecipeCategory;
 import alec_wam.CrystalMod.integration.jei.machine.GrinderRecipeCategory;
 import alec_wam.CrystalMod.integration.jei.machine.InfuserRecipeCategory;
 import alec_wam.CrystalMod.integration.jei.machine.LiquidizerRecipeCategory;
@@ -62,6 +63,7 @@ public class JEIPlugin  extends BlankModPlugin {
 		GrinderRecipeCategory.register(jeiHelpers, registry, guiHelper);
 		InfuserRecipeCategory.register(jeiHelpers, registry, guiHelper);
 		FusionRecipeCategory.register(jeiHelpers, registry, guiHelper);
+		FluidMixerRecipeCategory.register(jeiHelpers, registry, guiHelper);
 		PipeCoverCategory.register(jeiHelpers, registry, guiHelper);
 		DNASampleCategory.register(jeiHelpers, registry, guiHelper);
 		
@@ -96,6 +98,8 @@ public class JEIPlugin  extends BlankModPlugin {
 		jeiHelpers.getIngredientBlacklist().addIngredientToBlacklist(new ItemStack(ModBlocks.fakeLight, 1, LightType.LIGHT.getMeta()));
 		jeiHelpers.getIngredientBlacklist().addIngredientToBlacklist(new ItemStack(ModBlocks.fakeLight, 1, LightType.DARK.getMeta()));
 		jeiHelpers.getIngredientBlacklist().addIngredientToBlacklist(new ItemStack(ModBlocks.crystexPortal));
+		jeiHelpers.getIngredientBlacklist().addIngredientToBlacklist(new ItemStack(ModBlocks.backpackNormal));
+		jeiHelpers.getIngredientBlacklist().addIngredientToBlacklist(new ItemStack(ModBlocks.backpackCrafting));
 
 		String desc = "Dropped upon killing an Ender Dragon.";
 		//Lang.localize("jei.desc.wings");

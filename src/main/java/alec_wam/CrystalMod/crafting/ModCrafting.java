@@ -79,6 +79,7 @@ import alec_wam.CrystalMod.tiles.fusion.ModFusionRecipes;
 import alec_wam.CrystalMod.tiles.lamps.BlockAdvancedLamp.LampType;
 import alec_wam.CrystalMod.tiles.machine.BlockMachine;
 import alec_wam.CrystalMod.tiles.machine.crafting.BlockCrystalMachine.MachineType;
+import alec_wam.CrystalMod.tiles.machine.crafting.fluidmixer.FluidMixerRecipeManager;
 import alec_wam.CrystalMod.tiles.machine.crafting.furnace.CrystalFurnaceManager;
 import alec_wam.CrystalMod.tiles.machine.crafting.grinder.GrinderManager;
 import alec_wam.CrystalMod.tiles.machine.crafting.infuser.CrystalInfusionManager;
@@ -119,6 +120,7 @@ import net.minecraft.enchantment.EnchantmentData;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Enchantments;
 import net.minecraft.init.Items;
+import net.minecraft.init.MobEffects;
 import net.minecraft.init.PotionTypes;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.EnumDyeColor;
@@ -128,6 +130,8 @@ import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.potion.PotionEffect;
+import net.minecraft.potion.PotionType;
 import net.minecraft.potion.PotionUtils;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.NonNullList;
@@ -141,8 +145,11 @@ import net.minecraftforge.oredict.ShapelessOreRecipe;
 
 public class ModCrafting {
 
+	public static PotionType TYPE_WITHER;
 	public static void preInit(){
 		initOreDic();
+		TYPE_WITHER = new PotionType(new PotionEffect[] {new PotionEffect(MobEffects.WITHER, 900)}).setRegistryName("wither");
+		GameRegistry.register(TYPE_WITHER); 
 	}
 	
 	public static void init() {
@@ -235,7 +242,10 @@ public class ModCrafting {
 		//Potions
 		ItemStack awkwardPotion = PotionUtils.addPotionToItemStack(new ItemStack(Items.POTIONITEM), PotionTypes.AWKWARD);
 		ItemStack nightVision = PotionUtils.addPotionToItemStack(new ItemStack(Items.POTIONITEM), PotionTypes.NIGHT_VISION);
-		BrewingRecipeRegistry.addRecipe(awkwardPotion, new ItemStack(ModItems.miscItems, 1, ItemType.BAT_WING.getMeta()), nightVision);
+		BrewingRecipeRegistry.addRecipe(new CustomBrewingRecipe(awkwardPotion, new ItemStack(ModItems.miscItems, 1, ItemType.BAT_WING.getMeta()), nightVision));
+		
+		ItemStack witherPotion = PotionUtils.addPotionToItemStack(new ItemStack(Items.POTIONITEM), TYPE_WITHER);
+		BrewingRecipeRegistry.addRecipe(new CustomBrewingRecipe(awkwardPotion, new ItemStack(ModItems.cursedBone, 1, BoneType.BONE.getMeta()), witherPotion));
 		
 		addShapedRecipe(new ItemStack(ModItems.crystals, 1, CrystalType.BLUE_SHARD.getMeta()), "RRR", 'R', ModItems.crystalReedsBlue);
 		addShapedRecipe(new ItemStack(ModItems.crystals, 1, CrystalType.RED_SHARD.getMeta()), "RRR", 'R', ModItems.crystalReedsRed);
@@ -708,6 +718,7 @@ public class ModCrafting {
 		addShapedRecipe(new ItemStack(ModBlocks.crystalMachine, 1, MachineType.LIQUIDIZER.getMeta()), new Object[]{"III", "PFB", "ICI", 'I', dIronPlate, 'P', Blocks.PISTON, 'B', Items.BUCKET, 'C', ItemUtil.copy(tier0CU, 1), 'F', machineFrame});
 		addShapedRecipe(new ItemStack(ModBlocks.crystalMachine, 1, MachineType.INFUSER.getMeta()), new Object[]{"ICI", "IFI", "IPI", 'I', dIronPlate, 'C', ModBlocks.cauldron, 'P', ItemUtil.copy(tier0CU, 1), 'F', machineFrame});
 		addShapedRecipe(new ItemStack(ModBlocks.crystalMachine, 1, MachineType.GRINDER.getMeta()), new Object[]{"III", "GFG", "IPI", 'I', dIronPlate, 'G', Items.FLINT, 'P', ItemUtil.copy(tier0CU, 1), 'F', machineFrame});
+		addShapedRecipe(new ItemStack(ModBlocks.crystalMachine, 1, MachineType.FLUID_MIXER.getMeta()), new Object[]{"III", "BFB", "ICI", 'I', dIronPlate, 'B', Items.BUCKET, 'C', ItemUtil.copy(tier0CU, 1), 'F', machineFrame});
 		addShapedRecipe(new ItemStack(ModBlocks.sapExtractor), new Object[]{"#M#", "DFD", "#P#", 'D', dIronPlate, '#', purePlate, 'M', new ItemStack(ModBlocks.crystalMachine, 1, MachineType.LIQUIDIZER.getMeta()), 'P', ItemUtil.copy(fluidPipe, 1), 'F', machineFrame});
 
 		addShapedRecipe(new ItemStack(ModBlocks.dnaMachine), new Object[]{"III", "GFS", "IPI", 'I', dIronPlate, 'G', new ItemStack(ModItems.dnaItems, 1, DNAItemType.EMPTY_SYRINGE.getMeta()), 'S', new ItemStack(ModItems.dnaItems, 1, DNAItemType.SAMPLE_EMPTY.getMeta()), 'P', ItemUtil.copy(tier0CU, 1), 'F', machineFrame});
@@ -918,6 +929,7 @@ public class ModCrafting {
 		GrinderManager.initRecipes();
 		LiquidizerRecipeManager.initRecipes();
 		CrystalInfusionManager.initRecipes();
+		FluidMixerRecipeManager.initRecipes();
 		ModFusionRecipes.initRecipes();
 		ModCrops.recipes();
 	}
