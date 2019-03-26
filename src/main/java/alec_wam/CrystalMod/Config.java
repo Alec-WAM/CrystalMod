@@ -37,6 +37,8 @@ public class Config {
 	public static boolean useRemoteManualFile = true;
 	
 	//WORLD
+	//Disabled by default until things get fixed
+	public static boolean enableBambooForest = false;
 	public static boolean generateOreOverworld = true;
 	public static int oreMinimumVeinSize = 5;
     public static int oreMaximumVeinSize = 8;
@@ -190,6 +192,7 @@ public class Config {
 	
     public static void init(Configuration cfg) {
     	//WORLD
+    	enableBambooForest = cfg.get(CATEGORY_WORLD, "enableBambooForest", enableBambooForest, "Enable or disable Bamboo Forest").getBoolean();
     	generateOreOverworld = cfg.get(CATEGORY_WORLD, "generateOreOverworld", generateOreOverworld, "Enable or disable Crystal Ore in the Overworld").getBoolean();
     	oreMinimumVeinSize = cfg.get(CATEGORY_WORLD, "oreMinimumVeinSize", oreMinimumVeinSize,
                                      "Minimum vein size of crystal ores").getInt();
