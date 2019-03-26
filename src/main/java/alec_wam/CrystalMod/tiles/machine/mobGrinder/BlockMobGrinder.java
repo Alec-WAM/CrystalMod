@@ -14,7 +14,7 @@ public class BlockMobGrinder extends BlockMachine {
 		this.setHardness(2f);
 		this.setCreativeTab(CrystalMod.tabBlocks);
 	}
-	
+	//TODO Add NBT item drop
 	@Override
 	public TileEntity createNewTileEntity(World worldIn, int meta) {
 		return new TileEntityMobGrinder();

@@ -1,0 +1,29 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "crystalmod:null",
+	"transform": "forge:default-item"
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{}],
+	"color": {
+		"white": {},
+		"orange": {},
+		"magenta": {},
+		"lightblue": {},
+		"yellow": {},
+		"lime": {},
+		"pink": {},
+		"gray": {},
+		"silver": {},
+		"cyan": {},
+		"purple": {},
+		"blue": {},
+		"brown": {},
+		"green": {},
+		"red": {},
+		"black": {}
+	}
+  }
+}

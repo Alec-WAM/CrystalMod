@@ -226,7 +226,7 @@ public class TileWoodenCrystalChest extends TileEntityInventory
             facing = (byte) EnumFacing.NORTH.ordinal();
         }
         setFacing(facing);
-        getWorld().addBlockEvent(pos, ModBlocks.crystalChest, 2, facing);
+        getWorld().addBlockEvent(pos, ModBlocks.crystalWoodenChest, 2, facing);
     }
 
     public void wasPlaced(EntityLivingBase entityliving, ItemStack itemStack)

@@ -1,7 +1,6 @@
 package alec_wam.CrystalMod.tiles.machine.power.engine;
 
 import alec_wam.CrystalMod.CrystalMod;
-import alec_wam.CrystalMod.util.IEnumMeta;
 import alec_wam.CrystalMod.blocks.ICustomModel;
 import alec_wam.CrystalMod.tiles.BlockStateFacing;
 import alec_wam.CrystalMod.tiles.machine.BlockMachine;
@@ -10,7 +9,7 @@ import alec_wam.CrystalMod.tiles.machine.IFacingTile;
 import alec_wam.CrystalMod.tiles.machine.power.engine.furnace.TileEntityEngineFurnace;
 import alec_wam.CrystalMod.tiles.machine.power.engine.lava.TileEntityEngineLava;
 import alec_wam.CrystalMod.tiles.machine.power.engine.vampire.TileEntityEngineVampire;
-import alec_wam.CrystalMod.util.ChatUtil;
+import alec_wam.CrystalMod.util.IEnumMeta;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemUtil;
 import net.minecraft.block.material.Material;
@@ -103,16 +102,17 @@ public class BlockEngine extends BlockMachine implements ICustomModel {
 
 	    return EngineType.values()[meta];
 	}
-	
+	//TODO Write data to NBT of drop
 	@Override
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
     	TileEntity tile = world.getTileEntity(pos);
         if ((tile instanceof TileEntityEngineBase)) {
         	TileEntityEngineBase engine = (TileEntityEngineBase)tile;
         	if(player.isSneaking()){
-        		String powerinfo = engine.energyStorage.getCEnergyStored()+" / "+engine.energyStorage.getMaxCEnergyStored()+" CU";
+        		/*String powerinfo = engine.energyStorage.getCEnergyStored()+" / "+engine.energyStorage.getMaxCEnergyStored()+" CU";
         		String fuelInfo = engine.fuel.getValue()+" / "+engine.maxFuel.getValue();
-        		ChatUtil.sendNoSpam(player, powerinfo, fuelInfo);
+        		ChatUtil.sendNoSpam(player, powerinfo, fuelInfo);*/
+        		return false;
         	} else {
         		if(engine instanceof TileEntityEngineFluid){
         			if(FluidUtil.interactWithFluidHandler(player, hand, world, pos, side)){
@@ -194,6 +194,8 @@ public class BlockEngine extends BlockMachine implements ICustomModel {
         }
         return 0;
     }
+    
+    //TODO Fix rotation updating model
     
 	@Override
 	public TileEntity createNewTileEntity(World worldIn, int meta) {

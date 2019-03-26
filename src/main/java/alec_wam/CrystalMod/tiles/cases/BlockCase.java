@@ -11,6 +11,8 @@ import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.EnumBlock;
 import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.ChatUtil;
+import alec_wam.CrystalMod.util.ItemStackTools;
+import alec_wam.CrystalMod.util.tool.ToolUtil;
 import net.minecraft.block.BlockDirectional;
 import net.minecraft.block.BlockPistonExtension;
 import net.minecraft.block.ITileEntityProvider;
@@ -100,14 +102,19 @@ public class BlockCase extends EnumBlock<BlockCase.EnumCaseType> implements ITil
 		TileEntity tile = world.getTileEntity(pos);
 		if(tile !=null && tile instanceof TileEntityCaseBase){
 			TileEntityCaseBase tileCase = (TileEntityCaseBase)tile;
-			
-			if(tileCase instanceof TileEntityCasePiston && player.isSneaking()){
+			ItemStack stack = player.getHeldItem(hand);
+	    	if (ItemStackTools.isValid(stack)) {
+	        	if(ToolUtil.isToolEquipped(player, hand) && player.isSneaking()){
+	        		return ToolUtil.breakBlockWithTool(this, world, pos, player, hand);
+	        	}  
+	        }
+			/*if(tileCase instanceof TileEntityCasePiston && player.isSneaking()){
 				TileEntityCasePiston piston = (TileEntityCasePiston)tileCase;
 				String extend = ""+piston.opening;
 				String progress = ""+piston.progress[facing.getIndex()]+" / "+piston.lastProgress[facing.getIndex()];
 				ChatUtil.sendChat(player, extend, progress);
 				return true;
-			}
+			}*/
 			
 			if(!world.isRemote){
 				player.openGui(CrystalMod.instance, 0, world, pos.getX(), pos.getY(), pos.getZ());

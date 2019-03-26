@@ -4,6 +4,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.EntitySpawnPlacementRegistry;
 import net.minecraft.entity.monster.EntityGuardian;
 import net.minecraft.entity.passive.EntityWaterMob;
 import net.minecraft.nbt.NBTTagCompound;
@@ -20,12 +21,12 @@ public abstract class CustomSpawnerBaseLogic {
 
 	public double renderRotation0;
 	public double renderRotation1;
-	private int minSpawnDelay = 400;
-	private int maxSpawnDelay = 600;
+	private int minSpawnDelay = 200;
+	private int maxSpawnDelay = 800;
 	
-	private int spawnCount = 6;
+	private int spawnCount = 4;
 	private Entity renderedEntity;
-	private int maxNearbyEntities = 20;
+	private int maxNearbyEntities = 6;
 	
 	public boolean powered = false;
 	/**
@@ -43,7 +44,7 @@ public abstract class CustomSpawnerBaseLogic {
 	/**
 	 * The distance from which a player activates the spawner.
 	 */
-	private int activatingRangeFromPlayer = 24;
+	private int activatingRangeFromPlayer = 16;
 	/**
 	 * The range coefficient for spawning entities around.
 	 */
@@ -121,10 +122,13 @@ public abstract class CustomSpawnerBaseLogic {
 					entity.setLocationAndAngles(x, y, z, world.rand.nextFloat() * 360.0F, 0.0F);
 
 					//Make Water Mobs require water
-					boolean specialCheck = ignoreSpawnRequirements && getSpawnerWorld().isAirBlock(new BlockPos(x, y, z));
-					if(!ignoreSpawnRequirements && (entity instanceof EntityWaterMob || entity instanceof EntityGuardian)){
-						specialCheck = world.isMaterialInBB(entity.getEntityBoundingBox(), Material.WATER);
+					BlockPos spawnPos = new BlockPos(x, y, z);
+					boolean specialCheck = ignoreSpawnRequirements && getSpawnerWorld().isAirBlock(spawnPos);
+					if(!ignoreSpawnRequirements && (entity instanceof EntityWaterMob || entity instanceof EntityGuardian || EntitySpawnPlacementRegistry.getPlacementForEntity(entity.getClass()) == EntityLiving.SpawnPlacementType.IN_WATER)){
+						specialCheck = world.getBlockState(spawnPos).getMaterial() == Material.WATER;
 					}
+					
+					//boolean canSpawn = !ignoreSpawnRequirements && WorldEntitySpawner.canCreatureTypeSpawnAtLocation(EntitySpawnPlacementRegistry.getPlacementForEntity(entity.getClass()), getSpawnerWorld(), spawnPos);
 					if (entityliving == null || (net.minecraftforge.event.ForgeEventFactory.canEntitySpawnSpawner(entityliving, getSpawnerWorld(), (float)entity.posX, (float)entity.posY, (float)entity.posZ) || specialCheck)) {
 						this.spawnEntity(entity);
 						this.getSpawnerWorld().playEvent(2004, this.getSpawnerPos(), 0);

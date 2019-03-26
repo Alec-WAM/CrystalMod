@@ -129,6 +129,8 @@ public class BlockTelePortal extends BlockContainer implements ICustomModel {
         }
     }
     
+    
+    //TODO Look into rotation update
     @Override
     public boolean rotateBlock(World world, BlockPos pos, EnumFacing axis)
     {

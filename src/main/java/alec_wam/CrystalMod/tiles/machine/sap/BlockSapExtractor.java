@@ -3,12 +3,15 @@ package alec_wam.CrystalMod.tiles.machine.sap;
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.tiles.machine.BlockMachine;
 import alec_wam.CrystalMod.tiles.machine.TileEntityMachine;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
+import alec_wam.CrystalMod.util.tool.ToolUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -27,6 +30,14 @@ public class BlockSapExtractor extends BlockMachine {
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hX, float hY, float hZ){
 		TileEntity tile = world.getTileEntity(pos);
 		if(tile !=null && tile instanceof TileEntityMachine){
+			if(player.isSneaking()){
+				ItemStack stack = player.getHeldItem(hand);
+				if (ItemStackTools.isValid(stack)) {
+	            	if(ToolUtil.isToolEquipped(player, hand)){
+	            		return ToolUtil.breakBlockWithTool(this, world, pos, player, hand);
+	            	}   
+				}
+			}
 			if(!world.isRemote){
 				player.openGui(CrystalMod.instance, 0, world, pos.getX(), pos.getY(), pos.getZ());
 			}

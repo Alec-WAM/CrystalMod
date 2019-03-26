@@ -98,6 +98,12 @@ public abstract class TileEntityEngineBase extends TileEntityMod implements IMes
 	}
 	
 	@Override
+	public void invalidate(){
+		super.invalidate();
+		this.runningSound.endPlaying();
+	}
+	
+	@Override
 	public void update(){
 		super.update();
 		if(getWorld().isRemote){

@@ -176,6 +176,12 @@ public class BlockCrystalGlass extends EnumBlock<CrystalColors.Special> implemen
     	return false;
     }
     
+    @Override
+    public boolean canPlaceTorchOnTop(IBlockState state, IBlockAccess world, BlockPos pos)
+    {
+    	return true;
+    }
+    
     public static class GlassBlockStateMapper extends StateMapperBase
 	{
 		@Override

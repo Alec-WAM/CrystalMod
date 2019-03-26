@@ -1,7 +1,7 @@
 package alec_wam.CrystalMod.tiles.spawner;
 
+import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.tiles.TileEntityMod;
-import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -14,7 +14,7 @@ public class TileEntityCustomSpawner extends TileEntityMod {
 		@Override
 		public void blockEvent(int par1)
 		{
-			getWorld().addBlockEvent(getPos(), Blocks.MOB_SPAWNER, par1, 0);
+			getWorld().addBlockEvent(getPos(), ModBlocks.customSpawner, par1, 0);
 		}
 		@Override
 		public World getSpawnerWorld()

@@ -268,6 +268,7 @@ public class BlockBattery extends BlockContainer implements ICustomModel {
 		return new TileEntityBattery(meta);
 	}
 	
+	//TODO Look into rotation issues
 	@Override
     public boolean rotateBlock(World world, BlockPos pos, EnumFacing axis)
     {

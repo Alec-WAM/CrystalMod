@@ -24,7 +24,7 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 
 public class TileEntityXPVacuum extends TileEntityMod implements IMessageHandler {
-
+	//TODO Add NBT item drop
 	public ExperienceContainer xpCon;
 	
 	public TileEntityXPVacuum(){

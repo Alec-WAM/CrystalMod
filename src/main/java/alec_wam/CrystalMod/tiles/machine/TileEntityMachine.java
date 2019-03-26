@@ -117,6 +117,12 @@ public abstract class TileEntityMachine extends TileEntityInventory implements I
 		return isActive() && !isInvalid() && world.isBlockIndirectlyGettingPowered(getPos()) == 0;
 	}
 	
+	@Override
+	public void invalidate(){
+		super.invalidate();
+		if(runningSound !=null)this.runningSound.endPlaying();
+	}
+	
     @Override
 	public void update(){
 		super.update();
