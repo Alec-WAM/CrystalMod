@@ -54,6 +54,11 @@ public class ModFusionRecipes {
 		for(int i = 0; i < 4; i++)ingredientsPearl.add(new ItemStack(ModItems.ingots, 1, IngotType.PURE.getMeta()));
 		addRecipe(new ItemStack(Items.ENDER_EYE), new ItemStack(ModItems.telePearl), ingredientsPearl.toArray());
 		
+		List<Object> ingredientsAdvBlockHolder = Lists.newArrayList();
+		for(int i = 0; i < 4; i++)ingredientsAdvBlockHolder.add(new ItemStack(ModItems.ingots, 1, IngotType.PURE.getMeta()));
+		addRecipe(new ItemStack(ModItems.blockHolder), new ItemStack(ModItems.advBlockHolder), ingredientsAdvBlockHolder.toArray());
+		
+		
 		CrystalModAPI.registerFusion(new FusionRecipeEnchantment());
 	}
 	

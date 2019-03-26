@@ -527,10 +527,12 @@ public class ModCrafting {
 		ItemStack tier1CU = powerPipeCU.copy();ItemNBTHelper.setInteger(tier1CU, "Tier", 1);
 		ItemStack tier2CU = powerPipeCU.copy();ItemNBTHelper.setInteger(tier2CU, "Tier", 2);
 		ItemStack tier3CU = powerPipeCU.copy();ItemNBTHelper.setInteger(tier3CU, "Tier", 3);
+		ItemStack tier4CU = powerPipeCU.copy();ItemNBTHelper.setInteger(tier4CU, "Tier", 4);
 		addShapedOreRecipe(tier0CU, new Object[]{"###", "NIN", "###", '#', dIronPlate, 'I', blueIngot, 'N', blueNugget });
 		addShapedOreRecipeNBT(tier1CU, new Object[]{" # ", "NPN", " # ", '#', redPlate, 'N', redNugget, 'P', ItemUtil.copy(tier0CU, 1)});
 		addShapedOreRecipeNBT(tier2CU, new Object[]{" # ", "NPN", " # ", '#', greenPlate, 'N', greenNugget, 'P', ItemUtil.copy(tier1CU, 1)});
 		addShapedOreRecipeNBT(tier3CU, new Object[]{" # ", "NPN", " # ", '#', darkPlate, 'N', darkNugget, 'P', ItemUtil.copy(tier2CU, 1)});
+		addShapedOreRecipeNBT(tier4CU, new Object[]{" # ", "#P#", " # ", '#', purePlate, 'P', ItemUtil.copy(tier3CU, 1)});
 		
 		ItemStack powerPipeRF = new ItemStack(ModBlocks.crystalPipe, 8, PipeType.POWERRF.getMeta());
 		ItemStack tier0RF = powerPipeRF.copy();ItemNBTHelper.setInteger(tier0RF, "Tier", 0);
@@ -546,6 +548,8 @@ public class ModCrafting {
 		addShapedOreRecipe(new ItemStack(ModItems.pipeFilter, 1, FilterType.NORMAL.ordinal()), new Object[]{"#P#", "PHP", "#P#", '#', "nuggetCrystal", 'P', "paper", 'H', Blocks.HOPPER});
 		addShapelessRecipe(new ItemStack(ModItems.pipeFilter, 1, FilterType.MOD.ordinal()), new Object[]{new ItemStack(ModItems.pipeFilter, 1, FilterType.NORMAL.ordinal()), Items.BOOK});
 		addShapelessOreRecipe(new ItemStack(ModItems.pipeFilter, 1, FilterType.CAMERA.ordinal()), new Object[]{new ItemStack(ModItems.pipeFilter, 1, FilterType.NORMAL.ordinal()), Blocks.REDSTONE_LAMP, "dustRedstone"});
+		
+		addShapedRecipe(new ItemStack(ModItems.blockHolder), new Object[]{"#P#", "PCP", "#H#", '#', darkNugget, 'P', dIronPlate, 'C', new ItemStack(ModBlocks.crates, 1, CrystalColors.Basic.BLUE.getMeta()), 'H', Blocks.HOPPER});
 		
 		List<String> copyListTank = Lists.newArrayList();
 		copyListTank.add(FluidHandlerItemStack.FLUID_NBT_KEY);
