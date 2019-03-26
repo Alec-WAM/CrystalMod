@@ -279,11 +279,11 @@ public class GuiBattery extends GuiContainerTabbed {
 		}
 
 		@Override
-		public String getTooltip() {
+		public List<String> getTooltip(int mouseX, int mouseY) {
 			if (isFullyOpened()) {
-			      return "";
+			      return Lists.newArrayList();
 			}
-			return String.format("Configure Sides");
+			return Lists.newArrayList("Configure Sides");
 		}
 	}
 

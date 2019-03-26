@@ -8,10 +8,10 @@ import com.google.common.collect.Maps;
 
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.tiles.chest.CrystalChestType;
-import alec_wam.CrystalMod.util.PlayerUtil;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.NBTUtil;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldSavedData;
 import net.minecraft.world.storage.MapStorage;
@@ -94,7 +94,7 @@ public class WirelessChestManager extends WorldSavedData implements IWirelessChe
             for (int i = 0; i < list.tagCount(); ++i)
             {
                 NBTTagCompound containerTag = list.getCompoundTagAt(i);
-                UUID uuid = PlayerUtil.uuidFromNBT(containerTag);
+                UUID uuid = NBTUtil.getUUIDFromTag(containerTag.getCompoundTag("OwnerUUID"));
 
                 Container container = new Container();
                 container.deserializeNBT(containerTag);
@@ -115,7 +115,7 @@ public class WirelessChestManager extends WorldSavedData implements IWirelessChe
         for (Map.Entry<UUID, Container> e : perPlayer.entrySet())
         {
             NBTTagCompound tag = e.getValue().serializeNBT();
-            PlayerUtil.uuidToNBT(tag, e.getKey());
+            tag.setTag("OwnerUUID", NBTUtil.createUUIDTag(e.getKey()));
             list.appendTag(tag);
         }
 

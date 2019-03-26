@@ -1,12 +1,11 @@
 package alec_wam.CrystalMod.tiles.machine.enderbuffer.gui;
 
-import alec_wam.CrystalMod.tiles.machine.enderbuffer.EnderBufferManager;
-import alec_wam.CrystalMod.tiles.machine.enderbuffer.IEnderBufferList;
+import alec_wam.CrystalMod.tiles.machine.enderbuffer.EnderBufferManager.EnderBuffer;
 import alec_wam.CrystalMod.tiles.machine.enderbuffer.TileEntityEnderBuffer;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.Container;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
@@ -14,11 +13,12 @@ import net.minecraftforge.items.SlotItemHandler;
 
 public class ContainerEnderBuffer extends Container {
 
+	private EnderBuffer eBuffer;
 	public ContainerEnderBuffer(EntityPlayer player, TileEntityEnderBuffer buffer)
     {
-        IEnderBufferList mgr = EnderBufferManager.get(buffer.getWorld());
-
-        IItemHandler inventory = mgr.getBuffer(buffer.code).sendInv;
+        eBuffer = buffer.getBuffer();
+        eBuffer.onPlayerOpenContainer(player);
+        IItemHandler inventory = eBuffer.sendInv;
 
         for (int j = 0; j < 2; ++j)
         {
@@ -43,30 +43,14 @@ public class ContainerEnderBuffer extends Container {
         }
     }
 
-    public static class SlotNoAccess extends Slot
-    {
-        public SlotNoAccess(IInventory inventoryIn, int index, int xPosition, int yPosition)
-        {
-            super(inventoryIn, index, xPosition, yPosition);
-        }
-
-        @Override
-        public boolean canTakeStack(EntityPlayer playerIn)
-        {
-            return false;
-        }
-
-        @Override
-        public boolean isItemValid(ItemStack stack)
-        {
-            return false;
-        }
-    }
-
     @Override
     public void onContainerClosed(EntityPlayer playerIn)
     {
         super.onContainerClosed(playerIn);
+
+        if(playerIn instanceof EntityPlayerMP){
+        	eBuffer.watchers.remove((EntityPlayerMP)playerIn);
+        }
     }
 
     @Override
@@ -86,14 +70,14 @@ public class ContainerEnderBuffer extends Container {
         ItemStack stack = slot.getStack();
         ItemStack stackCopy = stack.copy();
 
-        if (index < 2 * 5)
+        if (index < 10)
         {
-            if (!this.mergeItemStack(stack, 2 * 5, this.inventorySlots.size(), true))
+            if (!this.mergeItemStack(stack, 10, this.inventorySlots.size(), true))
             {
                 return ItemStackTools.getEmptyStack();
             }
         }
-        else if (!this.mergeItemStack(stack, 0, 2 * 5, false))
+        else if (!this.mergeItemStack(stack, 0, 10, false))
         {
             return ItemStackTools.getEmptyStack();
         }

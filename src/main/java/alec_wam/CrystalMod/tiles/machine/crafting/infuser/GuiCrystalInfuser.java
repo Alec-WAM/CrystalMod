@@ -2,12 +2,11 @@ package alec_wam.CrystalMod.tiles.machine.crafting.infuser;
 
 import java.util.List;
 
-import com.google.common.collect.Lists;
-
 import alec_wam.CrystalMod.client.util.ElementDualScaled;
 import alec_wam.CrystalMod.client.util.ElementEnergy;
 import alec_wam.CrystalMod.client.util.ElementFluidScaled;
 import alec_wam.CrystalMod.client.util.GuiElementContainer;
+import alec_wam.CrystalMod.util.Lang;
 import alec_wam.CrystalMod.util.client.RenderUtil;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
@@ -38,21 +37,21 @@ public class GuiCrystalInfuser extends GuiElementContainer{
 	}
 	
 	@Override
+	public void addTooltips(List<String> tooltip) {
+		super.addTooltips(tooltip);
+		if(this.isPointInRegion(32, 23, 12, 40, mouseX+guiLeft, mouseY+guiTop)){
+			if(tileMachine.tank.getFluid() == null){
+				tooltip.add(Lang.localize("gui.empty"));
+			}else{
+				tooltip.add(tileMachine.tank.getFluid().getLocalizedName()+" "+(tileMachine.tank.getFluid().amount+" / "+tileMachine.tank.getCapacity()+"MB"));
+			}
+		}
+	}
+	
+	@Override
 	public void drawGuiContainerForegroundLayer(int par1, int par2){
 		super.drawGuiContainerForegroundLayer(par1, par2);
 		RenderUtil.renderGuiTank(tileMachine.tank, 32, 23, zLevel, 12, 40, true);
-		if(this.isPointInRegion(32, 23, 12, 40, par1, par2)){
-			List<String> list = Lists.newArrayList();
-			if(tileMachine.tank !=null){
-				if(tileMachine.tank.getFluid() !=null){
-					FluidStack stack = tileMachine.tank.getFluid();
-					list.add(stack.getLocalizedName()+" ("+stack.amount+")");
-				}else {
-					list.add("Empty");
-				}
-			}
-			this.drawTooltipHoveringText(list, par1-guiLeft, par2-guiTop, mc.fontRendererObj);
-		}
 	}
 	
 	@Override

@@ -10,6 +10,7 @@ import alec_wam.CrystalMod.client.model.dynamic.DelegatingDynamicItemAndBlockMod
 import alec_wam.CrystalMod.tiles.machine.BlockMachine;
 import alec_wam.CrystalMod.tiles.machine.FakeTileState;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.client.CustomModelUtil;
 import alec_wam.CrystalMod.util.client.RenderUtil;
 import net.minecraft.block.state.IBlockState;
@@ -60,6 +61,22 @@ public class ModelEnderBuffer extends DelegatingDynamicItemAndBlockModel
         TextureAtlasSprite spriteActive = RenderUtil.getSprite(CrystalMod.resource("blocks/machine/enderbuffer/enderbuffer_active"));
 
         TileEntityEnderBuffer buffer = state !=null && state.tile !=null && state.tile instanceof TileEntityEnderBuffer ? state.tile : null;
+        boolean bound = false;
+        
+        if(buffer !=null){
+        	bound = buffer.isBoundToPlayer();
+        }
+        if(ItemStackTools.isValid(stack)){
+        	if(ItemNBTHelper.verifyExistance(stack, BlockMachine.TILE_NBT_STACK)){
+        		NBTTagCompound nbt = ItemNBTHelper.getCompound(stack).getCompoundTag(BlockMachine.TILE_NBT_STACK);
+        		bound = nbt.hasKey("Owner");
+        	}
+        }
+        
+        if(bound){
+        	spriteIdle = RenderUtil.getSprite(CrystalMod.resource("blocks/machine/enderbuffer/enderbuffer_private"));
+        	spriteActive = RenderUtil.getSprite(CrystalMod.resource("blocks/machine/enderbuffer/enderbuffer_private_active"));
+        }
         
         boolean isActive = (buffer !=null) ? buffer.isActive() : false;
         

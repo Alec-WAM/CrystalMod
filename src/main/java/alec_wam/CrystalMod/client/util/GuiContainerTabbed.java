@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.logging.log4j.core.helpers.Strings;
 import org.lwjgl.opengl.GL11;
 
 import com.google.common.collect.Lists;
@@ -139,16 +138,12 @@ public class GuiContainerTabbed extends GuiContainer {
 
 			Tab tab = getAtPosition(mouseX, mouseY);
 			if (tab != null) {
-				int startX = mouseX - ((gui.width - gui.xSize) / 2) + 12;
-				int startY = mouseY - ((gui.height - gui.ySize) / 2) - 12;
+				int startX = mouseX - ((gui.width - gui.xSize) / 2);
+				int startY = mouseY - ((gui.height - gui.ySize) / 2);
 
-				String tooltip = tab.getTooltip();
-				if(Strings.isNotEmpty(tooltip)){
-					int textWidth = fontRendererObj.getStringWidth(tooltip);
-					GL11.glDisable(GL11.GL_DEPTH_TEST);
-					drawGradientRect(startX - 3, startY - 3, startX + textWidth + 3, startY + 8 + 3, 0xc0000000, 0xc0000000);
-					fontRendererObj.drawStringWithShadow(tooltip, startX, startY, -1);
-					GL11.glEnable(GL11.GL_DEPTH_TEST);
+				List<String> tooltip = tab.getTooltip(mouseX, mouseY);
+				if(!tooltip.isEmpty()){
+					gui.drawHoveringText(tooltip, startX, startY);
 				}
 			}
 		}
@@ -218,7 +213,7 @@ public class GuiContainerTabbed extends GuiContainer {
 
 		public abstract void draw(int x, int y);
 
-		public abstract String getTooltip();
+		public abstract List<String> getTooltip(int mouseX, int mouseY);
 
 		public boolean handleMouseClicked(int x, int y, int mouseButton) {
 			return false;

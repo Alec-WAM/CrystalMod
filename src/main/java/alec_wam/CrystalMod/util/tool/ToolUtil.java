@@ -9,6 +9,7 @@ import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import net.minecraft.block.Block;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -27,6 +28,7 @@ import net.minecraft.item.ItemTool;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
@@ -82,11 +84,15 @@ public class ToolUtil {
   public static boolean breakBlockWithTool(Block block, World world, BlockPos pos, EntityPlayer entityPlayer, ItemStack heldItem) {
     ITool tool = ToolUtil.getInstance().getToolImpl(heldItem);
     if (entityPlayer.isSneaking() && (tool !=null && tool.canUse(heldItem, entityPlayer, pos) || (tool == null && isWrench(heldItem)))) {
-      IBlockState bs = world.getBlockState(pos);;
+      IBlockState bs = world.getBlockState(pos);
+      SoundType sound = bs.getBlock().getSoundType(bs, world, pos, entityPlayer);
       if(block.removedByPlayer(bs, world, pos, entityPlayer, true)) {
         block.harvestBlock(world, entityPlayer, pos, bs, world.getTileEntity(pos), heldItem);
+        world.playSound(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, sound.getBreakSound(), SoundCategory.BLOCKS, (sound.getVolume() + 1.0F) / 2.0F, sound.getPitch() * 0.8F, false);
       }
-      if(tool !=null)tool.used(heldItem, entityPlayer, pos);
+      if(tool !=null){
+    	  tool.used(heldItem, entityPlayer, pos);
+      }
       return true;
     }
     return false;

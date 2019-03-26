@@ -208,12 +208,12 @@ public class ModelTank extends DynamicItemAndBlockModel {
 		list.add(faceBakery.makeBakedQuad(new Vector3f(UpLeftOffsetHollow, minPole, 0), new Vector3f(UpLeftOffsetHollow, maxPole, 1.0f), faceCover, textureWest, EnumFacing.WEST, ModelRotation.X0_Y0, (BlockPartRotation)null, true, shade));
 		list.add(faceBakery.makeBakedQuad(new Vector3f(16.0f, minPole, 0), new Vector3f(16.0f, maxPole, 1.0f), faceCover, textureEast, EnumFacing.EAST, ModelRotation.X0_Y0, (BlockPartRotation)null, true, shade));
 	
-		list.add(faceBakery.makeBakedQuad(new Vector3f(0f, maxPole, 0), new Vector3f(1.0f, maxPole, 1.0f), faceCover, textureUp, EnumFacing.UP, ModelRotation.X0_Y0, (BlockPartRotation)null, true, shade));
-		list.add(faceBakery.makeBakedQuad(new Vector3f(0f, minPole, 0), new Vector3f(1.0f, minPole, 1.0f), faceCover, textureDown, EnumFacing.DOWN, ModelRotation.X0_Y0, (BlockPartRotation)null, true, shade));
+		
 		list.add(faceBakery.makeBakedQuad(new Vector3f(0f, minPole, 0), new Vector3f(1.0f, maxPole, 1.0f), faceCover, textureNorth, EnumFacing.NORTH, ModelRotation.X0_Y0, (BlockPartRotation)null, true, shade));
 		list.add(faceBakery.makeBakedQuad(new Vector3f(0f, minPole, 0), new Vector3f(1.0f, maxPole, 1.0f), faceCover, textureSouth, EnumFacing.SOUTH, ModelRotation.X0_Y0, (BlockPartRotation)null, true, shade));
 		list.add(faceBakery.makeBakedQuad(new Vector3f(0f, minPole, 0), new Vector3f(0f, maxPole, 1.0f), faceCover, textureWest, EnumFacing.WEST, ModelRotation.X0_Y0, (BlockPartRotation)null, true, shade));
 		list.add(faceBakery.makeBakedQuad(new Vector3f(1.0f, minPole, 0), new Vector3f(1.0f, maxPole, 1.0f), faceCover, textureEast, EnumFacing.EAST, ModelRotation.X0_Y0, (BlockPartRotation)null, true, shade));
+		
 		
 		FluidStack fluid = stack !=null ? stack : (state !=null && state.tank !=null && state.tank.tank !=null) ? state.tank.tank.getFluid() : null;
 		if(fluid !=null){

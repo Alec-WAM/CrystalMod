@@ -93,7 +93,6 @@ public class CEnergyStorage implements ICEnergyStorage {
 	public void setEnergyStored(int energy) {
 
 		this.energy = energy;
-
 		if (this.energy > capacity) {
 			this.energy = capacity;
 		} else if (this.energy < 0) {
@@ -114,7 +113,7 @@ public class CEnergyStorage implements ICEnergyStorage {
 	public void modifyEnergyStored(int energy) {
 
 		this.energy += energy;
-
+		onContentsChanged();
 		if (this.energy > capacity) {
 			this.energy = capacity;
 		} else if (this.energy < 0) {
@@ -140,6 +139,7 @@ public class CEnergyStorage implements ICEnergyStorage {
 
 		if (!simulate) {
 			energy += energyReceived;
+			onContentsChanged();
 		}
 		return energyReceived;
 	}
@@ -153,6 +153,7 @@ public class CEnergyStorage implements ICEnergyStorage {
 
 		if (!simulate) {
 			energy -= energyExtracted;
+			onContentsChanged();
 		}
 		return energyExtracted;
 	}
@@ -178,5 +179,10 @@ public class CEnergyStorage implements ICEnergyStorage {
 	public boolean canReceive() {
 		return true;
 	}
+
+    protected void onContentsChanged()
+    {
+
+    }
 
 }

@@ -16,6 +16,7 @@ import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
+import alec_wam.CrystalMod.util.ProfileUtil;
 import alec_wam.CrystalMod.util.UUIDUtils;
 import alec_wam.CrystalMod.util.tool.ToolUtil;
 import net.minecraft.block.SoundType;
@@ -36,8 +37,14 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.fluids.FluidActionResult;
+import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.wrapper.InvWrapper;
 
 public class BlockEnderBuffer extends BlockMachine implements ICustomModel
 {
@@ -71,6 +78,10 @@ public class BlockEnderBuffer extends BlockMachine implements ICustomModel
 			String color2 = ItemUtil.getDyeName(WirelessChestHelper.getDye2(code));
 			String color3 = ItemUtil.getDyeName(WirelessChestHelper.getDye3(code));
 			tooltip.add("Code: " + color1 + " / " + color2 + " / " + color3);
+			if(nbt.hasKey("Owner")){
+				UUID uuid = UUIDUtils.fromString(nbt.getString("Owner"));
+				tooltip.add("Owner: "+ProfileUtil.getUsername(uuid));
+			}
     	}
     }
 
@@ -197,6 +208,27 @@ public class BlockEnderBuffer extends BlockMachine implements ICustomModel
         	if(!buffer.hasBuffer() || !isOwner){
         		return false;
         	}
+        	
+        	if(ItemStackTools.isValid(stack)){
+        		IFluidHandlerItem containerFluidHandler = FluidUtil.getFluidHandler(stack);
+        		if (containerFluidHandler != null)
+        		{
+        			IFluidHandler handler = buffer.fluidHandler;
+        			if(handler !=null){
+        				IItemHandler playerInventory = new InvWrapper(playerIn.inventory);
+        				FluidActionResult result = null;            			
+        				result = FluidUtil.tryEmptyContainerAndStow(stack, handler, playerInventory, Integer.MAX_VALUE, playerIn);
+        				if(result == null || !result.isSuccess()){
+        					result = FluidUtil.tryFillContainerAndStow(stack, handler, playerInventory, Integer.MAX_VALUE, playerIn);
+        				}
+        				if(result !=null && result.isSuccess()){
+        					playerIn.setHeldItem(hand, result.getResult());
+        					return true;
+        				}
+        			}
+        		}
+        	}
+        	
         	if(!worldIn.isRemote){
         		playerIn.openGui(CrystalMod.instance, 0, worldIn, pos.getX(), pos.getY(), pos.getZ());
         	}

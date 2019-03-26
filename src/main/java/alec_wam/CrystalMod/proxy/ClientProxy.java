@@ -468,6 +468,10 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
         for(int i = 0; i < 9; i++){
             event.getMap().registerSprite(new ResourceLocation("crystalmod:blocks/machine/battery/meter/"+i));
         }
+
+        event.getMap().registerSprite(new ResourceLocation("crystalmod:blocks/machine/enderbuffer/enderbuffer_private"));
+        event.getMap().registerSprite(new ResourceLocation("crystalmod:blocks/machine/enderbuffer/enderbuffer_private_active"));
+        
         if (ModFluids.fluidXpJuice != null) {
             event.getMap().registerSprite(ModFluids.fluidXpJuice.getStill());
             event.getMap().registerSprite(ModFluids.fluidXpJuice.getFlowing());

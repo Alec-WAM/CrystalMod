@@ -1,19 +1,23 @@
 package alec_wam.CrystalMod.tiles.machine.enderbuffer;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.api.energy.CEnergyStorage;
+import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.tiles.machine.power.CustomEnergyStorage;
 import alec_wam.CrystalMod.tiles.tank.Tank;
-import alec_wam.CrystalMod.util.PlayerUtil;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.NBTUtil;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldSavedData;
 import net.minecraft.world.storage.MapStorage;
@@ -21,12 +25,14 @@ import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class EnderBufferManager extends WorldSavedData implements IEnderBufferList {
 	
 	private static final String StorageKey = CrystalMod.MODID + "_EnderBufferManager";
 
-    private Container global = new Container();
+    private Container global = new Container(null);
     private Map<UUID, Container> perPlayer = Maps.newHashMap();
 
     public EnderBufferManager()
@@ -75,7 +81,7 @@ public class EnderBufferManager extends WorldSavedData implements IEnderBufferLi
         Container container = perPlayer.get(uuid);
         if (container == null)
         {
-            container = new Container();
+            container = new Container(uuid);
             perPlayer.put(new UUID(uuid.getMostSignificantBits(), uuid.getLeastSignificantBits()), container);
             markDirty();
         }
@@ -97,9 +103,9 @@ public class EnderBufferManager extends WorldSavedData implements IEnderBufferLi
             for (int i = 0; i < list.tagCount(); ++i)
             {
                 NBTTagCompound containerTag = list.getCompoundTagAt(i);
-                UUID uuid = PlayerUtil.uuidFromNBT(containerTag);
+                UUID uuid = NBTUtil.getUUIDFromTag(containerTag.getCompoundTag("OwnerUUID"));
 
-                Container container = new Container();
+                Container container = new Container(uuid);
                 container.deserializeNBT(containerTag);
 
                 perPlayer.put(uuid, container);
@@ -118,7 +124,7 @@ public class EnderBufferManager extends WorldSavedData implements IEnderBufferLi
         for (Map.Entry<UUID, Container> e : perPlayer.entrySet())
         {
             NBTTagCompound tag = e.getValue().serializeNBT();
-            PlayerUtil.uuidToNBT(tag, e.getKey());
+            tag.setTag("OwnerUUID", NBTUtil.createUUIDTag(e.getKey()));
             list.appendTag(tag);
         }
 
@@ -135,7 +141,11 @@ public class EnderBufferManager extends WorldSavedData implements IEnderBufferLi
     private class Container implements INBTSerializable<NBTTagCompound>, IEnderBufferList
     {
         private Map<Integer, EnderBuffer> inventories = new HashMap<Integer, EnderBuffer>();
-
+        private UUID ownerUUID;
+        public Container(UUID uuid){
+        	this.ownerUUID = uuid;
+        }
+        
         @Override
 		public EnderBuffer getBuffer(int id)
         {
@@ -143,7 +153,7 @@ public class EnderBufferManager extends WorldSavedData implements IEnderBufferLi
 
             if (inventory == null)
             {
-                inventory = new EnderBuffer(this);
+                inventory = new EnderBuffer(this, id, ownerUUID);
                 inventories.put(id, inventory);
             }
 
@@ -171,7 +181,7 @@ public class EnderBufferManager extends WorldSavedData implements IEnderBufferLi
         @Override
         public void deserializeNBT(NBTTagCompound nbt)
         {
-            NBTTagList nbtTagList = nbt.getTagList("Buffers", Constants.NBT.TAG_COMPOUND);
+        	NBTTagList nbtTagList = nbt.getTagList("Buffers", Constants.NBT.TAG_COMPOUND);
 
             inventories.clear();
 
@@ -180,7 +190,7 @@ public class EnderBufferManager extends WorldSavedData implements IEnderBufferLi
                 NBTTagCompound inventoryTag = nbtTagList.getCompoundTagAt(i);
                 int j = inventoryTag.getInteger("BufferId");
 
-                EnderBuffer inventory = new EnderBuffer(this);
+                EnderBuffer inventory = new EnderBuffer(this, j, ownerUUID);
 
                 inventory.deserializeNBT(inventoryTag.getCompoundTag("BufferContents"));
 
@@ -190,7 +200,7 @@ public class EnderBufferManager extends WorldSavedData implements IEnderBufferLi
 
         void importNBT(NBTTagCompound nbt)
         {
-            NBTTagList nbtTagList = nbt.getTagList("Buffers", Constants.NBT.TAG_COMPOUND);
+        	NBTTagList nbtTagList = nbt.getTagList("Buffers", Constants.NBT.TAG_COMPOUND);
 
             for (int i = 0; i < nbtTagList.tagCount(); ++i)
             {
@@ -199,7 +209,7 @@ public class EnderBufferManager extends WorldSavedData implements IEnderBufferLi
 
                 if (!inventories.containsKey(j))
                 {
-                    EnderBuffer inventory = new EnderBuffer(this);
+                    EnderBuffer inventory = new EnderBuffer(this, j, ownerUUID);
 
 
                     inventory.deserializeNBT(inventoryTag.getCompoundTag("BufferContents"));
@@ -216,8 +226,15 @@ public class EnderBufferManager extends WorldSavedData implements IEnderBufferLi
         }
     }
 	
-	
+    public static class EnderBufferClientData {
+    	public int cu;
+    	public int rf;
+    	public FluidStack fluid;
+    }
+    
 	public static class EnderBuffer implements INBTSerializable<NBTTagCompound>{
+		private int code;
+		private UUID ownerUUID;
 		public CEnergyStorage cuStorage;
 		public int lastSyncedCU;
 		
@@ -230,11 +247,35 @@ public class EnderBufferManager extends WorldSavedData implements IEnderBufferLi
 		public GenericInventory sendInv;
 		
 		public boolean forceSync;
+		public List<EntityPlayerMP> watchers;
+		@SideOnly(Side.CLIENT)
+		public EnderBufferClientData clientData;
 		
-		public EnderBuffer(IEnderBufferList list){
-			this.rfStorage = new CustomEnergyStorage(500000, Integer.MAX_VALUE, Integer.MAX_VALUE);
-			this.cuStorage = new CEnergyStorage(500000, Integer.MAX_VALUE);
-			this.tank = new Tank("Tank", Fluid.BUCKET_VOLUME * 16, null);
+		public EnderBuffer(IEnderBufferList list, int code, UUID ownerUUID){
+			this.code = code;
+			this.ownerUUID = ownerUUID;
+			this.watchers = Lists.newArrayList();
+			this.rfStorage = new CustomEnergyStorage(500000, Integer.MAX_VALUE, Integer.MAX_VALUE){
+				@Override
+				public void onContentsChanged(){
+					list.setDirty();
+					updateWatchers();
+				}
+			};
+			this.cuStorage = new CEnergyStorage(500000, Integer.MAX_VALUE){
+				@Override
+				public void onContentsChanged(){
+					list.setDirty();
+					updateWatchers();
+				}
+			};
+			this.tank = new Tank("Tank", Fluid.BUCKET_VOLUME * 16, null) {
+				@Override
+				public void onContentsChanged(){
+					list.setDirty();
+					updateWatchers();
+				}
+			};
 			this.sendInv = new GenericInventory(10, list);
 		}
 
@@ -268,6 +309,21 @@ public class EnderBufferManager extends WorldSavedData implements IEnderBufferLi
 			sendInv.deserializeNBT(sendInvNBT);
 			
 			tank.readFromNBT(nbt);
+		}
+		
+		public void onPlayerOpenContainer(EntityPlayer player){
+			if(player instanceof EntityPlayerMP){
+				EntityPlayerMP playerMP = (EntityPlayerMP)player;
+	        	watchers.add(playerMP);
+				CrystalModNetwork.sendTo(new PacketEnderBufferClientSync(code, ownerUUID, cuStorage.getCEnergyStored(), rfStorage.getEnergyStored(), tank.getFluid()), playerMP);
+	        }
+		}
+		
+		public void updateWatchers(){
+			//if(FMLCommonHandler.instance().getEffectiveSide() !=Side.SERVER)return;
+			for(EntityPlayerMP player : watchers){
+				CrystalModNetwork.sendTo(new PacketEnderBufferClientSync(code, ownerUUID, cuStorage.getCEnergyStored(), rfStorage.getEnergyStored(), tank.getFluid()), player);
+			}
 		}
 	}
 }

@@ -27,6 +27,7 @@ import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.ProfileUtil;
 import alec_wam.CrystalMod.util.UUIDUtils;
+import alec_wam.CrystalMod.util.tool.ToolUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -119,7 +120,7 @@ public class BlockWirelessChest extends BlockContainer implements ICustomModel, 
 
         if (te == null || !(te instanceof TileWirelessChest))
         {
-            return true;
+            return false;
         }
         
         TileWirelessChest chest = (TileWirelessChest)te;
@@ -128,14 +129,19 @@ public class BlockWirelessChest extends BlockContainer implements ICustomModel, 
         
         if(!owner){
         	if(chest.isBoundToPlayer()){
-        		if(!world.isRemote)
-        		ChatUtil.sendChat(player, "You do not own this chest, "+ProfileUtil.getUsername(chest.getPlayerBound())+" does.");
+        		if(!world.isRemote)	ChatUtil.sendChat(player, ProfileUtil.getUsername(chest.getPlayerBound())+" owns this chest");
         	}
         	return true;
         }
         
+        ItemStack stack = player.getHeldItem(hand);
+    	if (ItemStackTools.isValid(stack)) {
+        	if(ToolUtil.isToolEquipped(player, hand) && player.isSneaking()){
+        		return ToolUtil.breakBlockWithTool(this, world, pos, player, hand);
+        	}  
+        }
+        
         if(!world.isRemote){
-        	ItemStack stack = player.getHeldItem(hand);
         	if(ItemStackTools.isValid(stack) && stack.getItem() == ModItems.lock){
         		if(!chest.isBoundToPlayer()){
 	        		if (!player.capabilities.isCreativeMode)
@@ -199,7 +205,7 @@ public class BlockWirelessChest extends BlockContainer implements ICustomModel, 
 
         if (world.isSideSolid(pos.add(0, 1, 0), EnumFacing.DOWN))
         {
-            return true;
+            return false;
         }
 
         if (world.isRemote)

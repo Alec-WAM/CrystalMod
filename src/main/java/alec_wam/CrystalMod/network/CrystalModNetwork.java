@@ -17,6 +17,7 @@ import alec_wam.CrystalMod.network.packets.PacketRecipeTransfer;
 import alec_wam.CrystalMod.network.packets.PacketSpawnParticle;
 import alec_wam.CrystalMod.network.packets.PacketTileMessage;
 import alec_wam.CrystalMod.tiles.machine.elevator.PacketPlayerMove;
+import alec_wam.CrystalMod.tiles.machine.enderbuffer.PacketEnderBufferClientSync;
 import alec_wam.CrystalMod.tiles.machine.enderbuffer.packets.PacketSyncBuffer;
 import alec_wam.CrystalMod.tiles.machine.enderbuffer.packets.PacketSyncBufferList;
 import alec_wam.CrystalMod.tiles.pipes.estorage.PacketEStorageAddItem;
@@ -67,8 +68,7 @@ public class CrystalModNetwork extends NetworkWrapper {
 	    registerPacket(PacketEntityMessage.class);
 	    registerPacket(PacketGuiMessage.class);
 	    
-	    registerPacket(PacketSyncBufferList.class);
-	    registerPacket(PacketSyncBuffer.class);
+	    registerPacketClient(PacketEnderBufferClientSync.class);
 	    
 	    // TILES
 	    registerPacket(PacketPipe.class);

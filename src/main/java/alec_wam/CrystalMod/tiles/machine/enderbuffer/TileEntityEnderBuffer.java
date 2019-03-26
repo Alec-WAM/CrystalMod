@@ -12,9 +12,11 @@ import alec_wam.CrystalMod.tiles.machine.IActiveTile;
 import alec_wam.CrystalMod.tiles.machine.enderbuffer.EnderBufferManager.EnderBuffer;
 import alec_wam.CrystalMod.tiles.pipes.TileEntityPipe.RedstoneMode;
 import alec_wam.CrystalMod.util.BlockUtil;
-import alec_wam.CrystalMod.util.PlayerUtil;
+import alec_wam.CrystalMod.util.ItemStackTools;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTUtil;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
@@ -25,6 +27,7 @@ import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
+import net.minecraftforge.items.IItemHandler;
 
 public class TileEntityEnderBuffer extends TileEntityMod implements IEnderBuffer, IMessageHandler, IActiveTile {
 
@@ -78,7 +81,9 @@ public class TileEntityEnderBuffer extends TileEntityMod implements IEnderBuffer
 		nbt.setInteger("RF", rfRSMode.ordinal());
 		nbt.setInteger("Fluid", fluidRSMode.ordinal());
 		nbt.setInteger("Inv", invRSMode.ordinal());
-		if(!getWorld().isRemote)CrystalModNetwork.sendToAllAround(new PacketTileMessage(getPos(), "UpdateRedstone", nbt), this);
+		PacketTileMessage packet = new PacketTileMessage(getPos(), "UpdateRedstone", nbt);
+		if(!getWorld().isRemote)CrystalModNetwork.sendToAllAround(packet, this);
+		else CrystalModNetwork.sendToServer(packet);
 	}
 	
 	public void decrsRedstone(String id){
@@ -92,7 +97,9 @@ public class TileEntityEnderBuffer extends TileEntityMod implements IEnderBuffer
 		nbt.setInteger("RF", rfRSMode.ordinal());
 		nbt.setInteger("Fluid", fluidRSMode.ordinal());
 		nbt.setInteger("Inv", invRSMode.ordinal());
-		if(!getWorld().isRemote)CrystalModNetwork.sendToAllAround(new PacketTileMessage(getPos(), "UpdateRedstone", nbt), this);
+		PacketTileMessage packet = new PacketTileMessage(getPos(), "UpdateRedstone", nbt);
+		if(!getWorld().isRemote)CrystalModNetwork.sendToAllAround(packet, this);
+		else CrystalModNetwork.sendToServer(packet);
 	}
 	
 	@Override
@@ -234,7 +241,9 @@ public class TileEntityEnderBuffer extends TileEntityMod implements IEnderBuffer
 	public void writeCustomNBT(NBTTagCompound nbt){
 		super.writeCustomNBT(nbt);
 		nbt.setInteger("Code", code);
-		if(boundToPlayer !=null)PlayerUtil.uuidToNBT(nbt, boundToPlayer);
+		if(boundToPlayer !=null){
+			nbt.setTag("OwnerUUID", NBTUtil.createUUIDTag(boundToPlayer));
+		}
 		nbt.setByte("Mode.CU", (byte)cuMode.ordinal());
 		nbt.setByte("Mode.RF", (byte)rfMode.ordinal());
 		nbt.setByte("Mode.Fluid", (byte)fluidMode.ordinal());
@@ -251,7 +260,11 @@ public class TileEntityEnderBuffer extends TileEntityMod implements IEnderBuffer
 	public void readCustomNBT(NBTTagCompound nbt){
     	super.readCustomNBT(nbt);
     	if(nbt.hasKey("Code"))this.code = nbt.getInteger("Code");
-    	boundToPlayer = PlayerUtil.uuidFromNBT(nbt);
+    	if(nbt.hasKey("OwnerUUID")){
+    		boundToPlayer = NBTUtil.getUUIDFromTag(nbt.getCompoundTag("OwnerUUID"));
+    	} else {
+    		boundToPlayer = null;
+    	}
         releasePreviousInventory();
     	this.cuMode = Mode.values()[nbt.getByte("Mode.CU")];
     	this.rfMode = Mode.values()[nbt.getByte("Mode.RF")];
@@ -366,7 +379,213 @@ public class TileEntityEnderBuffer extends TileEntityMod implements IEnderBuffer
 				this.invMode = Mode.values()[messageData.getInteger("Inv")];
 			}
 		}
+		if(messageId.equalsIgnoreCase("UpdateRedstone")){
+			cuRSMode = RedstoneMode.values()[messageData.getInteger("CU")];
+			rfRSMode = RedstoneMode.values()[messageData.getInteger("RF")];
+			fluidRSMode = RedstoneMode.values()[messageData.getInteger("Fluid")];
+			invRSMode = RedstoneMode.values()[messageData.getInteger("Inv")];
+		}
 	}
+	
+	protected IItemHandler invHandler = new IItemHandler(){
+
+		@Override
+		public int getSlots() {
+			return getBuffer().sendInv.getSlots();
+		}
+
+		@Override
+		public ItemStack getStackInSlot(int slot) {
+			return getBuffer().sendInv.getStackInSlot(slot);
+		}
+
+		@Override
+		public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
+			if(!canInsert())return ItemStackTools.getEmptyStack();
+			return getBuffer().sendInv.insertItem(slot, stack, simulate);
+		}
+
+		@Override
+		public ItemStack extractItem(int slot, int amount, boolean simulate) {
+			if(!canExtract())return ItemStackTools.getEmptyStack();
+			return getBuffer().sendInv.extractItem(slot, amount, simulate);
+		}
+
+		@Override
+		public int getSlotLimit(int slot) {
+			return getBuffer().sendInv.getSlotLimit(slot);
+		}
+		
+		public boolean canExtract() {
+			if(TileEntityEnderBuffer.this.invMode == Mode.BOTH || TileEntityEnderBuffer.this.invMode == Mode.RECIEVE){
+				return TileEntityEnderBuffer.this.getRedstone("Inv");
+			}
+			return false;
+		}
+		
+		public boolean canInsert() {
+			if(TileEntityEnderBuffer.this.invMode == Mode.BOTH || TileEntityEnderBuffer.this.invMode == Mode.SEND){
+				return TileEntityEnderBuffer.this.getRedstone("Inv");
+			}
+			return false;
+		}
+		
+	};
+	
+	protected IEnergyStorage rfEnergyHandler = new IEnergyStorage(){
+
+		@Override
+		public int receiveEnergy(int maxReceive, boolean simulate) {
+			if(!canReceive())return 0;
+			return getBuffer().rfStorage.receiveEnergy(maxReceive, simulate);
+		}
+
+		@Override
+		public int extractEnergy(int maxExtract, boolean simulate) {
+			if(!canExtract())return 0;
+			return getBuffer().rfStorage.extractEnergy(maxExtract, simulate);
+		}
+
+		@Override
+		public int getEnergyStored() {
+			return getBuffer().rfStorage.getEnergyStored();
+		}
+
+		@Override
+		public int getMaxEnergyStored() {
+			return getBuffer().rfStorage.getMaxEnergyStored();
+		}
+
+		@Override
+		public boolean canExtract() {
+			if(TileEntityEnderBuffer.this.rfMode == Mode.BOTH || TileEntityEnderBuffer.this.rfMode == Mode.RECIEVE){
+				return getBuffer().rfStorage.canExtract() && TileEntityEnderBuffer.this.getRedstone("RF");
+			}
+			return false;
+		}
+
+		@Override
+		public boolean canReceive() {
+			if(TileEntityEnderBuffer.this.rfMode == Mode.BOTH || TileEntityEnderBuffer.this.rfMode == Mode.SEND){
+				return getBuffer().rfStorage.canReceive() && TileEntityEnderBuffer.this.getRedstone("RF");
+			}
+			return false;
+		}
+		
+	};
+	
+	//TODO Handle Redstone for power and fluid types
+	protected ICEnergyStorage cuEnergyHandler = new ICEnergyStorage(){
+
+		@Override
+		public int fillCEnergy(int maxReceive, boolean simulate) {
+			if(!canReceive())return 0;
+			return getBuffer().cuStorage.fillCEnergy(maxReceive, simulate);
+		}
+
+		@Override
+		public int drainCEnergy(int maxExtract, boolean simulate) {
+			if(!canExtract())return 0;
+			return getBuffer().cuStorage.drainCEnergy(maxExtract, simulate);
+		}
+
+		@Override
+		public int getCEnergyStored() {
+			return getBuffer().cuStorage.getCEnergyStored();
+		}
+
+		@Override
+		public int getMaxCEnergyStored() {
+			return getBuffer().cuStorage.getMaxCEnergyStored();
+		}
+
+		@Override
+		public boolean canExtract() {
+			if(TileEntityEnderBuffer.this.cuMode == Mode.BOTH || TileEntityEnderBuffer.this.cuMode == Mode.RECIEVE){
+				return getBuffer().cuStorage.canExtract() && TileEntityEnderBuffer.this.getRedstone("CU");
+			}
+			return false;
+		}
+
+		@Override
+		public boolean canReceive() {
+			if(TileEntityEnderBuffer.this.cuMode == Mode.BOTH || TileEntityEnderBuffer.this.cuMode == Mode.SEND){
+				return getBuffer().cuStorage.canReceive() && TileEntityEnderBuffer.this.getRedstone("CU");
+			}
+			return false;
+		}
+		
+	};
+	
+	protected IFluidHandler fluidHandler = new IFluidHandler() {
+    	
+    	public FluidTank getTank(){
+    		return getBuffer().tank;
+    	}
+    	
+    	@Override
+		public int fill(FluidStack resource, boolean doFill) {
+            if (resource == null || getTank() == null || !canInsert()) {
+                return 0;
+            }
+            FluidStack resourceCopy = resource.copy();
+            int totalUsed = 0;
+
+            FluidStack liquid = getTank().getFluid();
+            if (liquid != null && liquid.amount > 0 && !liquid.isFluidEqual(resourceCopy)) {
+                return 0;
+            }
+
+            if(resourceCopy.amount > 0) {
+                int used = getTank().fill(resourceCopy, doFill);
+                resourceCopy.amount-=used;
+                if (used > 0) {
+                	//DIRTY
+                }
+                totalUsed += used;
+            }
+
+            return totalUsed;
+        }
+
+        @Override
+		public FluidStack drain(int maxEmpty, boolean doDrain) {
+        	if(!canExtract())return null;
+        	FluidStack output = getTank().drain(maxEmpty, doDrain);
+            return output;
+        }
+
+        @Override
+		public FluidStack drain(FluidStack resource, boolean doDrain) {
+            if (resource == null || !canExtract()) {
+                return null;
+            }
+            if (!resource.isFluidEqual(getTank().getFluid())) {
+                return null;
+            }
+            return drain(resource.amount, doDrain);
+        }
+
+		@Override
+		public IFluidTankProperties[] getTankProperties() {
+			return getTank().getTankProperties();
+		}
+		
+		public boolean canExtract() {
+			if(TileEntityEnderBuffer.this.fluidMode == Mode.BOTH || TileEntityEnderBuffer.this.fluidMode == Mode.RECIEVE){
+				return getBuffer().cuStorage.canExtract() && TileEntityEnderBuffer.this.getRedstone("Fluid");
+			}
+			return false;
+		}
+
+		public boolean canInsert() {
+			if(TileEntityEnderBuffer.this.fluidMode == Mode.BOTH || TileEntityEnderBuffer.this.fluidMode == Mode.SEND){
+				return getBuffer().cuStorage.canReceive() && TileEntityEnderBuffer.this.getRedstone("Fluid");
+			}
+			return false;
+		}
+        
+    };
 	
 	@Override
     public boolean hasCapability(Capability<?> capability, EnumFacing facingIn) {
@@ -391,153 +610,19 @@ public class TileEntityEnderBuffer extends TileEntityMod implements IEnderBuffer
     {
         if (capability == net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY){
         	if(!hasBuffer())return super.getCapability(capability, facing);
-        	return (T) getBuffer().sendInv;
+        	return (T) invHandler;
         }
         if (capability == CapabilityEnergy.ENERGY){
         	if(!hasBuffer())return super.getCapability(capability, facing);
-        	return (T) new IEnergyStorage(){
-
-				@Override
-				public int receiveEnergy(int maxReceive, boolean simulate) {
-					if(!canReceive())return 0;
-					return getBuffer().rfStorage.receiveEnergy(maxReceive, simulate);
-				}
-
-				@Override
-				public int extractEnergy(int maxExtract, boolean simulate) {
-					if(!canExtract())return 0;
-					return getBuffer().rfStorage.extractEnergy(maxExtract, simulate);
-				}
-
-				@Override
-				public int getEnergyStored() {
-					return getBuffer().rfStorage.getEnergyStored();
-				}
-
-				@Override
-				public int getMaxEnergyStored() {
-					return getBuffer().rfStorage.getMaxEnergyStored();
-				}
-
-				@Override
-				public boolean canExtract() {
-					if(TileEntityEnderBuffer.this.rfMode == Mode.BOTH || TileEntityEnderBuffer.this.rfMode == Mode.SEND){
-						return getBuffer().rfStorage.canExtract() && TileEntityEnderBuffer.this.getRedstone("RF");
-					}
-					return false;
-				}
-
-				@Override
-				public boolean canReceive() {
-					if(TileEntityEnderBuffer.this.rfMode == Mode.BOTH || TileEntityEnderBuffer.this.rfMode == Mode.RECIEVE){
-						return getBuffer().rfStorage.canReceive() && TileEntityEnderBuffer.this.getRedstone("RF");
-					}
-					return false;
-				}
-        		
-        	};
+        	return (T) rfEnergyHandler;
         }
         if (capability == CapabilityCrystalEnergy.CENERGY){
         	if(!hasBuffer())return super.getCapability(capability, facing);
-        	return (T) new ICEnergyStorage(){
-
-				@Override
-				public int fillCEnergy(int maxReceive, boolean simulate) {
-					if(!canReceive())return 0;
-					return getBuffer().cuStorage.fillCEnergy(maxReceive, simulate);
-				}
-
-				@Override
-				public int drainCEnergy(int maxExtract, boolean simulate) {
-					if(!canExtract())return 0;
-					return getBuffer().cuStorage.drainCEnergy(maxExtract, simulate);
-				}
-
-				@Override
-				public int getCEnergyStored() {
-					return getBuffer().cuStorage.getCEnergyStored();
-				}
-
-				@Override
-				public int getMaxCEnergyStored() {
-					return getBuffer().cuStorage.getMaxCEnergyStored();
-				}
-
-				@Override
-				public boolean canExtract() {
-					if(TileEntityEnderBuffer.this.cuMode == Mode.BOTH || TileEntityEnderBuffer.this.cuMode == Mode.SEND){
-						return getBuffer().cuStorage.canExtract() && TileEntityEnderBuffer.this.getRedstone("CU");
-					}
-					return false;
-				}
-
-				@Override
-				public boolean canReceive() {
-					if(TileEntityEnderBuffer.this.cuMode == Mode.BOTH || TileEntityEnderBuffer.this.cuMode == Mode.RECIEVE){
-						return getBuffer().cuStorage.canReceive() && TileEntityEnderBuffer.this.getRedstone("CU");
-					}
-					return false;
-				}
-        		
-        	};
+        	return (T) cuEnergyHandler;
         }
         if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
         	if(!hasBuffer())return super.getCapability(capability, facing);
-            //noinspection unchecked
-            return (T) new IFluidHandler() {
-            	
-            	public FluidTank getTank(){
-            		return getBuffer().tank;
-            	}
-            	
-            	@Override
-				public int fill(FluidStack resource, boolean doFill) {
-                    if (resource == null || getTank() == null) {
-                        return 0;
-                    }
-                    FluidStack resourceCopy = resource.copy();
-                    int totalUsed = 0;
-
-                    FluidStack liquid = getTank().getFluid();
-                    if (liquid != null && liquid.amount > 0 && !liquid.isFluidEqual(resourceCopy)) {
-                        return 0;
-                    }
-
-                    if(resourceCopy.amount > 0) {
-                        int used = getTank().fill(resourceCopy, doFill);
-                        resourceCopy.amount-=used;
-                        if (used > 0) {
-                        	//DIRTY
-                        }
-                        totalUsed += used;
-                    }
-
-                    return totalUsed;
-                }
-
-                @Override
-				public FluidStack drain(int maxEmpty, boolean doDrain) {
-                	FluidStack output = getTank().drain(maxEmpty, doDrain);
-                    return output;
-                }
-
-                @Override
-				public FluidStack drain(FluidStack resource, boolean doDrain) {
-                    if (resource == null) {
-                        return null;
-                    }
-                    if (!resource.isFluidEqual(getTank().getFluid())) {
-                        return null;
-                    }
-                    return drain(resource.amount, doDrain);
-                }
-
-				@Override
-				public IFluidTankProperties[] getTankProperties() {
-					return getTank().getTankProperties();
-				}
-                
-            };
+            return (T) fluidHandler;
         }
         return super.getCapability(capability, facing);
     }

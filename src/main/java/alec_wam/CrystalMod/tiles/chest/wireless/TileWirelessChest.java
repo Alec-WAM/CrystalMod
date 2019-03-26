@@ -10,12 +10,12 @@ import alec_wam.CrystalMod.tiles.TileEntityMod;
 import alec_wam.CrystalMod.tiles.chest.wireless.WirelessChestManager.WirelessInventory;
 import alec_wam.CrystalMod.tiles.pipes.CollidableComponent;
 import alec_wam.CrystalMod.util.BlockUtil;
-import alec_wam.CrystalMod.util.PlayerUtil;
 import alec_wam.CrystalMod.util.Vector3d;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -122,7 +122,9 @@ public class TileWirelessChest extends TileEntityMod implements IMessageHandler,
 		super.writeCustomNBT(nbt);
 		nbt.setInteger("Code", code);
 		nbt.setByte("Facing", facing);
-		if(boundToPlayer !=null)PlayerUtil.uuidToNBT(nbt, boundToPlayer);
+		if(boundToPlayer !=null){
+			nbt.setTag("OwnerUUID", NBTUtil.createUUIDTag(boundToPlayer));
+		}
 	}
 	
     @Override
@@ -130,7 +132,11 @@ public class TileWirelessChest extends TileEntityMod implements IMessageHandler,
     	super.readCustomNBT(nbt);
     	facing = nbt.getByte("Facing");
     	if(nbt.hasKey("Code"))this.code = nbt.getInteger("Code");
-    	boundToPlayer = PlayerUtil.uuidFromNBT(nbt);
+    	if(nbt.hasKey("OwnerUUID")){
+    		boundToPlayer = NBTUtil.getUUIDFromTag(nbt.getCompoundTag("OwnerUUID"));
+    	} else {
+    		boundToPlayer = null;
+    	}
         releasePreviousInventory();
 	}
 	

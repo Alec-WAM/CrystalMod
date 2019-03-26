@@ -2,8 +2,6 @@ package alec_wam.CrystalMod.tiles.machine.crafting.fluidmixer;
 
 import java.util.List;
 
-import com.google.common.collect.Lists;
-
 import alec_wam.CrystalMod.client.util.ElementEnergy;
 import alec_wam.CrystalMod.client.util.ElementFluidScaled;
 import alec_wam.CrystalMod.client.util.GuiElementContainer;
@@ -60,49 +58,48 @@ public class GuiFluidMixer extends GuiElementContainer{
 	}
 	
 	@Override
-	public void drawGuiContainerForegroundLayer(int par1, int par2){
-		super.drawGuiContainerForegroundLayer(par1, par2);
-		List<String> list = Lists.newArrayList();
-				
-		//TODO Add to drawScreen Layer to make text render
-		RenderUtil.renderGuiTank(tileMachine.tankLeft, 32, 23, zLevel, 12, 40, true);
-		if(this.isPointInRegion(32, 23, 12, 40, par1, par2)){
+	public void addTooltips(List<String> tooltip) {
+		super.addTooltips(tooltip);
+		if(this.isPointInRegion(32, 23, 12, 40, mouseX+guiLeft, mouseY+guiTop)){
 			if(tileMachine.tankLeft !=null){
 				if(tileMachine.tankLeft.getFluid() !=null){
 					FluidStack stack = tileMachine.tankLeft.getFluid();
-					list.add(stack.getLocalizedName()+" ("+stack.amount+")");
+					tooltip.add(stack.getLocalizedName()+" ("+stack.amount+")");
 				}else {
-					list.add("Empty");
+					tooltip.add("Empty");
 				}
 			}
 		}
-		RenderUtil.renderGuiTank(tileMachine.tankRight, 132, 23, zLevel, 12, 40, true);
-		if(this.isPointInRegion(132, 23, 12, 40, par1, par2)){
+		if(this.isPointInRegion(132, 23, 12, 40, mouseX+guiLeft, mouseY+guiTop)){
 			if(tileMachine.tankRight !=null){
 				if(tileMachine.tankRight.getFluid() !=null){
 					FluidStack stack = tileMachine.tankRight.getFluid();
-					list.add(stack.getLocalizedName()+" ("+stack.amount+")");
+					tooltip.add(stack.getLocalizedName()+" ("+stack.amount+")");
 				}else {
-					list.add("Empty");
+					tooltip.add("Empty");
 				}
 			}
+		}   
+		FluidMixRecipe recipe = FluidMixerRecipeManager.getRecipe(tileMachine.selectedRecipe);
+		if(recipe !=null){
+			if(this.isPointInRegion(80, 61, 16, 16, mouseX+guiLeft, mouseY+guiTop)){
+				tooltip.add(recipe.getOutput().getDisplayName());
+			}
 		}
-		
+	}
+	
+	@Override
+	public void drawGuiContainerForegroundLayer(int par1, int par2){
+		super.drawGuiContainerForegroundLayer(par1, par2);
+		RenderUtil.renderGuiTank(tileMachine.tankLeft, 32, 23, zLevel, 12, 40, true);
+		RenderUtil.renderGuiTank(tileMachine.tankRight, 132, 23, zLevel, 12, 40, true);
 		FluidMixRecipe recipe = FluidMixerRecipeManager.getRecipe(tileMachine.selectedRecipe);
 		if(recipe !=null){
 			GlStateManager.pushMatrix();
 	        RenderHelper.enableGUIStandardItemLighting();
 	        this.drawItemStack(recipe.getOutput(), 80, 61);
 			GlStateManager.popMatrix();
-	        
-			if(this.isPointInRegion(80, 61, 16, 16, par1, par2)){
-				list.add(recipe.getOutput().getDisplayName());
-			}
 		}		
-		
-		if(!list.isEmpty()){
-			this.drawTooltipHoveringText(list, par1-guiLeft, par2-guiTop, mc.fontRendererObj);
-		}
 	}
 	
 	public void drawItemStack(ItemStack stack, int x, int y)

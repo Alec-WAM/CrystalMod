@@ -18,7 +18,6 @@ import alec_wam.CrystalMod.tiles.chest.wireless.WirelessChestManager.WirelessInv
 import alec_wam.CrystalMod.util.ChatUtil;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemStackTools;
-import alec_wam.CrystalMod.util.PlayerUtil;
 import alec_wam.CrystalMod.util.ProfileUtil;
 import alec_wam.CrystalMod.util.UUIDUtils;
 import net.minecraft.block.Block;
@@ -31,6 +30,7 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTUtil;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -332,7 +332,9 @@ public class EntityWirelessChestMinecart extends EntityMinecartChest implements 
             compound.setInteger("DisplayOffset", this.getDisplayTileOffset());
         }
 		compound.setInteger("Code", getCode());
-		if(getOwner()  !=null)PlayerUtil.uuidToNBT(compound, getOwner());
+		if(getOwner()  !=null){
+			compound.setTag("OwnerUUID", NBTUtil.createUUIDTag(getOwner()));
+		}
     }
 
     /**
@@ -360,7 +362,11 @@ public class EntityWirelessChestMinecart extends EntityMinecartChest implements 
             this.setDisplayTileOffset(compound.getInteger("DisplayOffset"));
         }
     	setCode(compound.getInteger("Code"));
-    	setOwner(PlayerUtil.uuidFromNBT(compound));
+    	if(compound.hasKey("OwnerUUID")){
+    		setOwner(NBTUtil.getUUIDFromTag(compound.getCompoundTag("OwnerUUID")));
+    	} else {
+    		setOwner(null);
+    	}
     }
 
     @SuppressWarnings("unchecked")

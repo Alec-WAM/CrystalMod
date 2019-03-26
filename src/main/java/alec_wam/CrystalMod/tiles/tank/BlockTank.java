@@ -165,10 +165,8 @@ public class BlockTank extends EnumBlock<BlockTank.TankType> implements ITileEnt
     }
     
     @Override
-    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer entityplayer, EnumHand hand, EnumFacing side, float par7, float par8,
-            float par9) {
-
-        ItemStack current = entityplayer.getHeldItem(hand);
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer entityplayer, EnumHand hand, EnumFacing side, float par7, float par8, float par9) {
+    	ItemStack current = entityplayer.getHeldItem(hand);
         TileEntity tile = world.getTileEntity(pos);
 
         if (tile instanceof TileEntityTank) {
@@ -185,17 +183,6 @@ public class BlockTank extends EnumBlock<BlockTank.TankType> implements ITileEnt
             		}
             	}
         	}
-        	
-            /*if(!world.isRemote){
-        		if(tank.tank !=null){
-        			FluidStack fluid = tank.tank.getFluid();
-        			if(fluid == null){
-        				ChatUtil.sendNoSpam(entityplayer, "Fluid: (Empty) 0 mB / "+tank.tank.getCapacity()+" mB");
-        			}
-        			else ChatUtil.sendNoSpam(entityplayer, "Fluid: ("+fluid.getLocalizedName()+") "+fluid.amount+" mB / "+tank.tank.getCapacity()+" mB");
-        		}
-    		}
-    		return true;*/
         } 
         return false;
     }
