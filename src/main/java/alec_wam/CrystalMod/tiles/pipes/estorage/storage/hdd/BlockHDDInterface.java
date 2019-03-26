@@ -17,7 +17,7 @@ import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.client.renderer.block.statemap.StateMap;
+import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -28,6 +28,7 @@ import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
@@ -61,9 +62,8 @@ public class BlockHDDInterface extends BlockContainer implements ICustomModel {
 	@Override
 	@SideOnly(Side.CLIENT)
     public void initModel() {
-		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(getRegistryName(), "facing=north,hdd=empty"));
-        StateMap.Builder ignorePower = new StateMap.Builder();
-        ModelLoader.setCustomStateMapper(this, ignorePower.build());
+        ModelLoader.setCustomStateMapper(this, new CustomBlockStateMapper());
+		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(getRegistryName(), "inventory"));
     }
 	
 	@Override
@@ -204,4 +204,39 @@ public class BlockHDDInterface extends BlockContainer implements ICustomModel {
         return EnumFacing.values()[meta & 7];
     }
 
+    public static class CustomBlockStateMapper extends StateMapperBase
+	{
+		@Override
+		protected ModelResourceLocation getModelResourceLocation(IBlockState state)
+		{
+			BlockHDDInterface block = (BlockHDDInterface)state.getBlock();
+			StringBuilder builder = new StringBuilder();
+			String nameOverride = null;
+			
+
+			
+			builder.append(FACING.getName());
+			builder.append("=");
+			builder.append(state.getValue(FACING));
+			
+			builder.append(",");		
+
+			
+			builder.append(HDD.getName());
+			builder.append("=");
+			builder.append(state.getValue(HDD));
+			
+			nameOverride = block.getRegistryName().getResourcePath();
+
+			if(builder.length() == 0)
+			{
+				builder.append("normal");
+			}
+
+			ResourceLocation baseLocation = nameOverride == null ? state.getBlock().getRegistryName() : new ResourceLocation("crystalmod", nameOverride);
+			
+			return new ModelResourceLocation(baseLocation, builder.toString());
+		}
+	}
+    
 }

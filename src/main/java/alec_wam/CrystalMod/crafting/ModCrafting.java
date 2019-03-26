@@ -444,12 +444,12 @@ public class ModCrafting {
 		addShapedRecipe(ModItems.bambooBoat, new Object[]{"X X", "XXX", 'X', ModBlocks.bambooPlanks});
 		addShapedRecipe(new ItemStack(ModItems.bambooDoor, 3), new Object[]{"XX", "XX", "XX", 'X', ModBlocks.bambooPlanks});
 		addShapedRecipe(ModItems.blowGun, new Object[]{"X", "X", "X", 'X', ModBlocks.bamboo});
-		addShapedOreRecipe(new ItemStack(ModItems.dart, 4, DartType.BASIC.getMeta()), new Object[] {"  #", " S ", "F  ", '#', Items.FLINT, 'F', Items.FEATHER, 'S', "stickWood"});
-		addShapedOreRecipe(new ItemStack(ModItems.dart, 4, DartType.BLUE.getMeta()), new Object[] {"  #", " S ", "F  ", '#', blueShard, 'F', Items.FEATHER, 'S', "stickWood"});
-		addShapedOreRecipe(new ItemStack(ModItems.dart, 4, DartType.RED.getMeta()), new Object[] {"  #", " S ", "F  ", '#', redShard, 'F', Items.FEATHER, 'S', "stickWood"});
-		addShapedOreRecipe(new ItemStack(ModItems.dart, 4, DartType.GREEN.getMeta()), new Object[] {"  #", " S ", "F  ", '#', greenShard, 'F', Items.FEATHER, 'S', "stickWood"});
-		addShapedOreRecipe(new ItemStack(ModItems.dart, 4, DartType.DARK.getMeta()), new Object[] {"  #", " S ", "F  ", '#', darkShard, 'F', Items.FEATHER, 'S', "stickWood"});
-		addShapedOreRecipe(new ItemStack(ModItems.dart, 4, DartType.PURE.getMeta()), new Object[] {"  #", " S ", "F  ", '#', pureShard, 'F', Items.FEATHER, 'S', "stickWood"});
+		addShapelessRecipe(new ItemStack(ModItems.dart, 4, DartType.BASIC.getMeta()), new Object[] {Items.ARROW});
+		addShapelessRecipe(new ItemStack(ModItems.dart, 4, DartType.BLUE.getMeta()), new Object[] {Items.ARROW, blueShard});
+		addShapelessRecipe(new ItemStack(ModItems.dart, 4, DartType.RED.getMeta()), new Object[] {Items.ARROW, redShard});
+		addShapelessRecipe(new ItemStack(ModItems.dart, 4, DartType.GREEN.getMeta()), new Object[] {Items.ARROW, greenShard});
+		addShapelessRecipe(new ItemStack(ModItems.dart, 4, DartType.DARK.getMeta()), new Object[] {Items.ARROW, darkShard});
+		addShapelessRecipe(new ItemStack(ModItems.dart, 4, DartType.PURE.getMeta()), new Object[] {Items.ARROW, pureShard});
 		
 		addShapedOreRecipe(new ItemStack(ModBlocks.crates, 1, CrystalColors.Basic.BLUE.getMeta()), new Object[] {"XXX", "# #", "XXX", 'X', new ItemStack(ModBlocks.crystalPlanks, 1, CrystalColors.Basic.BLUE.getMeta()), '#', "chestWood"});
 		addShapedOreRecipe(new ItemStack(ModBlocks.crates, 1, CrystalColors.Basic.RED.getMeta()), new Object[] {"XXX", "#C#", "XXX", 'X', new ItemStack(ModBlocks.crystalPlanks, 1, CrystalColors.Basic.RED.getMeta()), '#', "chestWood", 'C', new ItemStack(ModBlocks.crates, 1, CrystalColors.Basic.BLUE.getMeta())});

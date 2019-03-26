@@ -14,6 +14,7 @@ import alec_wam.CrystalMod.items.ItemIngot.IngotType;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.util.CrystalColors;
 import alec_wam.CrystalMod.util.ItemUtil;
+import net.minecraft.block.BlockTallGrass;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -154,6 +155,18 @@ public class CauldronRecipeManager {
 		addRecipe(new ItemStack(Items.NETHER_WART), new FluidStack(ModFluids.fluidRedCrystal, 6 * bucket), new ItemStack(ModItems.crystalSeedsRed));
 		addRecipe(new ItemStack(Items.NETHER_WART), new FluidStack(ModFluids.fluidGreenCrystal, 6 * bucket), new ItemStack(ModItems.crystalSeedsGreen));
 		addRecipe(new ItemStack(Items.NETHER_WART), new FluidStack(ModFluids.fluidDarkCrystal, 6 * bucket), new ItemStack(ModItems.crystalSeedsDark));
+				
+		addRecipe(Blocks.GRASS, new FluidStack(ModFluids.fluidBlueCrystal, 10), new ItemStack(ModBlocks.crystexGrass, 1, CrystalColors.SuperSpecial.BLUE.getMeta()));
+		addRecipe(Blocks.GRASS, new FluidStack(ModFluids.fluidRedCrystal, 10), new ItemStack(ModBlocks.crystexGrass, 1, CrystalColors.SuperSpecial.RED.getMeta()));
+		addRecipe(Blocks.GRASS, new FluidStack(ModFluids.fluidGreenCrystal, 10), new ItemStack(ModBlocks.crystexGrass, 1, CrystalColors.SuperSpecial.GREEN.getMeta()));
+		addRecipe(Blocks.GRASS, new FluidStack(ModFluids.fluidDarkCrystal, 10), new ItemStack(ModBlocks.crystexGrass, 1, CrystalColors.SuperSpecial.DARK.getMeta()));
+		addRecipe(Blocks.GRASS, new FluidStack(ModFluids.fluidPureCrystal, 10), new ItemStack(ModBlocks.crystexGrass, 1, CrystalColors.SuperSpecial.PURE.getMeta()));
+
+		addRecipe(new ItemStack(Blocks.TALLGRASS, 1, BlockTallGrass.EnumType.GRASS.getMeta()), new FluidStack(ModFluids.fluidBlueCrystal, 5), new ItemStack(ModBlocks.crystexTallGrass, 1, CrystalColors.SuperSpecial.BLUE.getMeta()));
+		addRecipe(new ItemStack(Blocks.TALLGRASS, 1, BlockTallGrass.EnumType.GRASS.getMeta()), new FluidStack(ModFluids.fluidRedCrystal, 5), new ItemStack(ModBlocks.crystexTallGrass, 1, CrystalColors.SuperSpecial.RED.getMeta()));
+		addRecipe(new ItemStack(Blocks.TALLGRASS, 1, BlockTallGrass.EnumType.GRASS.getMeta()), new FluidStack(ModFluids.fluidGreenCrystal, 5), new ItemStack(ModBlocks.crystexTallGrass, 1, CrystalColors.SuperSpecial.GREEN.getMeta()));
+		addRecipe(new ItemStack(Blocks.TALLGRASS, 1, BlockTallGrass.EnumType.GRASS.getMeta()), new FluidStack(ModFluids.fluidDarkCrystal, 5), new ItemStack(ModBlocks.crystexTallGrass, 1, CrystalColors.SuperSpecial.DARK.getMeta()));
+		addRecipe(new ItemStack(Blocks.TALLGRASS, 1, BlockTallGrass.EnumType.GRASS.getMeta()), new FluidStack(ModFluids.fluidPureCrystal, 5), new ItemStack(ModBlocks.crystexTallGrass, 1, CrystalColors.SuperSpecial.PURE.getMeta()));
 		
 		addRecipe(new ItemStack(Items.PAINTING), new FluidStack(ModFluids.fluidBlueCrystal, 100), new ItemStack(ModItems.crystalmodPainting));
 		addRecipe(new ItemStack(Items.PAINTING), new FluidStack(ModFluids.fluidRedCrystal, 100), new ItemStack(ModItems.crystalmodPainting));

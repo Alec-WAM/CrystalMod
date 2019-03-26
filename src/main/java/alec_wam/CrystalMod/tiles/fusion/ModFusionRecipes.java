@@ -11,6 +11,7 @@ import alec_wam.CrystalMod.blocks.BlockCrystalIngot.CrystalIngotBlockType;
 import alec_wam.CrystalMod.blocks.ModBlocks;
 import alec_wam.CrystalMod.items.ItemCrystal.CrystalType;
 import alec_wam.CrystalMod.items.ItemIngot.IngotType;
+import alec_wam.CrystalMod.items.ItemMetalPlate.PlateType;
 import alec_wam.CrystalMod.items.ModItems;
 import alec_wam.CrystalMod.tiles.fusion.recipes.FusionRecipeEnchantment;
 import net.minecraft.init.Items;
@@ -55,7 +56,7 @@ public class ModFusionRecipes {
 		addRecipe(new ItemStack(Items.ENDER_EYE), new ItemStack(ModItems.telePearl), ingredientsPearl.toArray());
 		
 		List<Object> ingredientsAdvBlockHolder = Lists.newArrayList();
-		for(int i = 0; i < 4; i++)ingredientsAdvBlockHolder.add(new ItemStack(ModItems.ingots, 1, IngotType.PURE.getMeta()));
+		for(int i = 0; i < 4; i++)ingredientsAdvBlockHolder.add(new ItemStack(ModItems.plates, 1, PlateType.PURE.getMeta()));
 		addRecipe(new ItemStack(ModItems.blockHolder), new ItemStack(ModItems.advBlockHolder), ingredientsAdvBlockHolder.toArray());
 		
 		

@@ -234,6 +234,7 @@ public class ModItems {
 		crystexItems = new ItemCrystex();
 		cryniter = new ItemCryniter();
 
+		//TODO Give pure tools more buff 
 		crystalAxe = new ItemCrystalAxe(ToolMaterialCrystal);
 		megaCrystalAxe = new ItemMegaCrystalAxe(ToolMaterialCrystal);
 		crystalHoe = new ItemCrystalHoe(ToolMaterialCrystal);
