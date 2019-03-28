@@ -1,0 +1,12 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": [
+		{
+			"item": "crystalmod:crystal_pure"
+		}
+	],
+	"result": {
+		"item": "crystalmod:crystalshard_pure",
+		"count": 9
+	}
+}

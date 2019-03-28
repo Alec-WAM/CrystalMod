@@ -1,0 +1,16 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"pattern": [
+		"CCC",
+		"CCC",
+		"CCC"
+	],
+	"key": {
+		"C": {
+			"item": "crystalmod:crystalshard_blue"
+		}
+	},
+	"result": {
+		"item": "crystalmod:crystal_blue"
+	}
+}

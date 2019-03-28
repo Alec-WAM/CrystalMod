@@ -1,0 +1,10 @@
+{
+	"forge_marker": 1,
+	"defaults": {
+		"model": "crystalmod:crystalore_blue"
+	},
+	"variants": {
+		"": [ { } ],
+		"inventory": [ { } ]
+	}
+}

@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": {
+    "item": "crystalmod:crystal_blue"
+  },
+  "result": "crystalmod:crystalingot_blue",
+  "experience": 0.7,
+  "cookingtime": 200
+}

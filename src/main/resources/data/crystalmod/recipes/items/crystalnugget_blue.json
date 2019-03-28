@@ -1,0 +1,12 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": [
+		{
+			"item": "crystalmod:crystalingot_blue"
+		}
+	],
+	"result": {
+		"item": "crystalmod:crystalnugget_blue",
+		"count": 9
+	}
+}

@@ -1,0 +1,12 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": [
+		{
+			"item": "crystalmod:crystalingot_pure"
+		}
+	],
+	"result": {
+		"item": "crystalmod:crystalnugget_pure",
+		"count": 9
+	}
+}

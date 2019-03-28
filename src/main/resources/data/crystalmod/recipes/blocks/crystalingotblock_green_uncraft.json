@@ -1,0 +1,12 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": [
+		{
+			"item": "crystalmod:crystalingotblock_green"
+		}
+	],
+	"result": {
+		"item": "crystalmod:crystalingot_green",
+		"count": 9
+	}
+}

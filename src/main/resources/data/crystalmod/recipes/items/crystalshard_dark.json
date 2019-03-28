@@ -1,0 +1,12 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": [
+		{
+			"item": "crystalmod:crystal_dark"
+		}
+	],
+	"result": {
+		"item": "crystalmod:crystalshard_dark",
+		"count": 9
+	}
+}

@@ -1,0 +1,12 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": [
+		{
+			"item": "crystalmod:crystal_blue"
+		}
+	],
+	"result": {
+		"item": "crystalmod:crystalshard_blue",
+		"count": 9
+	}
+}
