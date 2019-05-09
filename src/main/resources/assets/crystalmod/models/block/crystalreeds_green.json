@@ -1,0 +1,7 @@
+{
+  "parent": "block/cross",
+  "textures": {
+    "particle": "crystalmod:block/plant/crystalreeds_green",
+    "cross": "crystalmod:block/plant/crystalreeds_green"
+  }
+}

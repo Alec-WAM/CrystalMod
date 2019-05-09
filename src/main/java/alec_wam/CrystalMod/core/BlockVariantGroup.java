@@ -1,20 +1,26 @@
 package alec_wam.CrystalMod.core;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
 
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.init.ModItemGroups;
+import alec_wam.CrystalMod.tiles.crate.BlockContainerVariant;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemGroup;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.IForgeRegistry;
-
-import java.util.*;
-import java.util.function.Function;
 
 /**
  * A group consisting of a collection of variants with a block registered for each one.
@@ -33,13 +39,16 @@ public class BlockVariantGroup<VARIANT extends Enum<VARIANT> & IStringSerializab
 	private final Function<VARIANT, Item.Properties> itemPropertiesFactory;
 	private final ItemFactory<VARIANT, BLOCK> itemFactory;
 
+	private final TileFactory<VARIANT> tileFactory;
+
 	private Map<VARIANT, BLOCK> blocks;
 	private boolean registeredItems = false;
 
 	private BlockVariantGroup(
 			final String groupName, final boolean isSuffix, final Iterable<VARIANT> variants,
 			final Function<VARIANT, Block.Properties> blockPropertiesFactory, final BlockFactory<VARIANT, BLOCK> blockFactory,
-			final Function<VARIANT, Item.Properties> itemPropertiesFactory, final ItemFactory<VARIANT, BLOCK> itemFactory
+			final Function<VARIANT, Item.Properties> itemPropertiesFactory, final ItemFactory<VARIANT, BLOCK> itemFactory, 
+			final TileFactory<VARIANT> tileFactory
 	) {
 		this.groupName = groupName;
 		this.isSuffix = isSuffix;
@@ -48,6 +57,7 @@ public class BlockVariantGroup<VARIANT extends Enum<VARIANT> & IStringSerializab
 		this.blockFactory = blockFactory;
 		this.itemPropertiesFactory = itemPropertiesFactory;
 		this.itemFactory = itemFactory;
+		this.tileFactory = tileFactory;
 	}
 
 	/**
@@ -105,6 +115,7 @@ public class BlockVariantGroup<VARIANT extends Enum<VARIANT> & IStringSerializab
 	 * @param registry The block registry
 	 * @throws IllegalStateException If the blocks have already been registered
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public void registerBlocks(final IForgeRegistry<Block> registry) {
 		Preconditions.checkState(blocks == null, "Attempt to re-register Blocks for Variant Group %s", groupName);
@@ -121,7 +132,11 @@ public class BlockVariantGroup<VARIANT extends Enum<VARIANT> & IStringSerializab
 
 			final Block.Properties properties = blockPropertiesFactory.apply(variant);
 
-			final BLOCK block = blockFactory.createBlock(variant, this, properties);
+			BLOCK block = blockFactory.createBlock(variant, this, properties);
+			
+			if(block instanceof BlockContainerVariant){
+				block = (BLOCK) ((BlockContainerVariant<VARIANT>)block).tileFactory(tileFactory);
+			}
 
 			block.setRegistryName(CrystalMod.resource(registryName));
 
@@ -187,6 +202,11 @@ public class BlockVariantGroup<VARIANT extends Enum<VARIANT> & IStringSerializab
 		ItemBlock createItem(BLOCK block, Item.Properties properties, VARIANT variant);
 	}
 
+	@FunctionalInterface
+	public interface TileFactory<VARIANT extends Enum<VARIANT>> {
+		TileEntity createTile(VARIANT variant);
+	}
+
 	public static class Builder<VARIANT extends Enum<VARIANT> & IStringSerializable, BLOCK extends Block> {
 		private String groupName;
 		private boolean isSuffix;
@@ -197,6 +217,8 @@ public class BlockVariantGroup<VARIANT extends Enum<VARIANT> & IStringSerializab
 
 		private Function<VARIANT, Item.Properties> itemPropertiesFactory = variant -> new Item.Properties().group(ModItemGroups.ITEM_GROUP_BLOCKS);
 		private ItemFactory<VARIANT, BLOCK> itemFactory = (block, properties, variant) -> new ItemBlock(block, properties);
+
+		private TileFactory<VARIANT> tileFactory;
 
 		/**
 		 * Creates a new variant group builder.
@@ -316,6 +338,12 @@ public class BlockVariantGroup<VARIANT extends Enum<VARIANT> & IStringSerializab
 			this.itemFactory = itemFactory;
 			return this;
 		}
+		
+		public Builder<VARIANT, BLOCK> tileFactory(final TileFactory<VARIANT> tileFactory) {
+			Preconditions.checkNotNull(tileFactory, "tileFactory");
+			this.tileFactory = tileFactory;
+			return this;
+		}
 
 		/**
 		 * Creates a block variant group based on the data in this builder.
@@ -332,7 +360,7 @@ public class BlockVariantGroup<VARIANT extends Enum<VARIANT> & IStringSerializab
 			Preconditions.checkState(blockPropertiesFactory != null, "Block Properties Factory not provided");
 			Preconditions.checkState(blockFactory != null, "Block Factory not provided");
 
-			return new BlockVariantGroup<>(groupName, isSuffix, variants, blockPropertiesFactory, blockFactory, itemPropertiesFactory, itemFactory);
+			return new BlockVariantGroup<>(groupName, isSuffix, variants, blockPropertiesFactory, blockFactory, itemPropertiesFactory, itemFactory, tileFactory);
 		}
 	}
 }

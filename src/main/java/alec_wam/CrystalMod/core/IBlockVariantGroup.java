@@ -3,6 +3,7 @@ package alec_wam.CrystalMod.core;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.IStringSerializable;
 import net.minecraftforge.registries.IForgeRegistry;
 

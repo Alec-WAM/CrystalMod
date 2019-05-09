@@ -1,0 +1,68 @@
+{
+  "parent": "crystalmod:mine_crystallog",
+  "display": {
+    "icon": {
+      "item": "crystalmod:crystalreeds_blue"
+    },
+    "title": {
+      "translate": "advancements.crystalmod.collect_crystalreeds.title"
+    },
+    "description": {
+      "translate": "advancements.crystalmod.collect_crystalreeds.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": false
+  },
+  "criteria": {
+    "collect_reeds_blue": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "crystalmod:crystalreeds_blue"
+          }
+        ]
+      }
+    },
+	"collect_reeds_red": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "crystalmod:crystalreeds_red"
+          }
+        ]
+      }
+    },
+	"collect_reeds_green": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "crystalmod:crystalreeds_green"
+          }
+        ]
+      }
+    },
+	"collect_reeds_dark": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "crystalmod:crystalreeds_dark"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "collect_reeds_blue",
+	  "collect_reeds_red",
+	  "collect_reeds_green",
+	  "collect_reeds_dark"
+    ]
+  ]
+}

@@ -10,6 +10,7 @@ import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemGroup;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.IStringSerializable;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -21,11 +22,13 @@ public class RegistrationHandler {
 
 	public static List<BlockItemPair> BLOCK_LIST;
 	public static List<Item> ITEM_LIST;
+	public static List<TileEntityType<?>> TILE_LIST;
 	public static List<BlockVariantGroup<? extends Enum<? extends IStringSerializable>, ? extends Block>> VARIANT_BLOCK_LIST;
 	public static List<ItemVariantGroup<? extends Enum<? extends IStringSerializable>, ? extends Item>> VARIANT_ITEM_LIST;
 	static{
 		BLOCK_LIST = new ArrayList<BlockItemPair>();
 		ITEM_LIST = new ArrayList<Item>();
+		TILE_LIST = new ArrayList<TileEntityType<?>>();
 		VARIANT_BLOCK_LIST = new ArrayList<BlockVariantGroup<? extends Enum<? extends IStringSerializable>, ? extends Block>>();
 		VARIANT_ITEM_LIST = new ArrayList<ItemVariantGroup<? extends Enum<? extends IStringSerializable>, ? extends Item>>();
 		ModBlocks.buildList();
@@ -65,6 +68,14 @@ public class RegistrationHandler {
 		}
 	}
 	
+	@SubscribeEvent
+	public static void registerTileEntityTypes(final RegistryEvent.Register<TileEntityType<?>> event) {
+		final IForgeRegistry<TileEntityType<?>> registry = event.getRegistry();
+		for(TileEntityType<?> tile : TILE_LIST){
+			registry.register(tile);
+		}
+	}
+	
 	public static void createBlock(Block block, ItemGroup group, String name){
 		createBlock(block, new ItemBlock(block, defaultItemProperties(group)), name);
 	}
@@ -81,11 +92,20 @@ public class RegistrationHandler {
 		VARIANT_BLOCK_LIST.add(group);
 	}
 	
+	public static void addItem(Item item, String name){
+		String regName = CrystalMod.resource(name);
+		ITEM_LIST.add(item.setRegistryName(regName));
+	}
+	
 	public static void addItemGroup(ItemVariantGroup<? extends Enum<? extends IStringSerializable>, ? extends Item> group){
 		VARIANT_ITEM_LIST.add(group);
 	}
 	
-	private static Item.Properties defaultItemProperties(ItemGroup group) {
+	public static void addTile(TileEntityType<?> tile){
+		TILE_LIST.add(tile);
+	}
+	
+	public static Item.Properties defaultItemProperties(ItemGroup group) {
 		return new Item.Properties().group(group);
 	}
 }

@@ -1,0 +1,20 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"group": "crystalmod.woodenchest",
+	"pattern": [
+		"WWW",
+		"WCW",
+		"WWW"
+	],
+	"key": {
+		"C": {
+			"item": "minecraft:chest"
+		},
+		"W": {
+			"item": "crystalmod:crystalplanks_blue"
+		}
+	},
+	"result": {
+		"item": "crystalmod:woodenchest_blue"
+	}
+}

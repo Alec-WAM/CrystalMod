@@ -1,0 +1,15 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": [
+		{
+			"item": "minecraft:lily_pad"
+		},
+		{
+			"item": "minecraft:blue_orchid"
+		}
+	],
+	"result": {
+		"item": "crystalmod:flowerlilypad",
+		"count": 1
+	}
+}

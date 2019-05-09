@@ -1,0 +1,13 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"group": "crystalmod.crystalingot",
+	"ingredients": [
+		{
+			"item": "crystalmod:crystalingotblock_dark"
+		}
+	],
+	"result": {
+		"item": "crystalmod:crystalingot_dark",
+		"count": 9
+	}
+}

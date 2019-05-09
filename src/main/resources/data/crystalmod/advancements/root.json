@@ -1,0 +1,68 @@
+{
+  "display": {
+    "icon": {
+      "item": "crystalmod:crystal_blue"
+    },
+    "title": {
+      "translate": "advancements.crystalmod.root.title"
+    },
+    "description": {
+      "translate": "advancements.crystalmod.root.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": false,
+    "background": "minecraft:textures/gui/advancements/backgrounds/stone.png"
+  },
+  "criteria": {
+    "has_at_least_1_crystal_blue": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "crystalmod:crystal_blue"
+          }
+        ]
+      }
+    },
+	"has_at_least_1_crystal_red": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "crystalmod:crystal_red"
+          }
+        ]
+      }
+    },
+	"has_at_least_1_crystal_green": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "crystalmod:crystal_green"
+          }
+        ]
+      }
+    },
+	"has_at_least_1_crystal_dark": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "crystalmod:crystal_dark"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_at_least_1_crystal_blue",
+	  "has_at_least_1_crystal_red",
+	  "has_at_least_1_crystal_green",
+	  "has_at_least_1_crystal_dark"
+    ]
+  ]
+}

@@ -30,6 +30,7 @@
   "block.crystalmod.crystalingotblock_green": "Block of Green Crystal Ingots",
   "block.crystalmod.crystalingotblock_dark": "Block of Dark Crystal Ingots",
   "block.crystalmod.crystalingotblock_pure": "Block of Pure Crystal Ingots",
+  "block.crystalmod.darkiron_block": "Block of Dark Iron",
   
   "block.crystalmod.crystalsapling_blue": "Blue Crystal Sapling",
   "block.crystalmod.crystalsapling_red": "Red Crystal Sapling",
@@ -50,7 +51,50 @@
   "block.crystalmod.crystalplanks_red": "Red Crystal Planks",
   "block.crystalmod.crystalplanks_green": "Green Crystal Planks",
   "block.crystalmod.crystalplanks_dark": "Dark Crystal Planks",
-  "block.crystalmod.crystalplanks_pure": "Pure Crystal Planks",
+  "block.crystalmod.crystalplanks_pure": "Pure Crystal Planks",  
+  "block.crystalmod.crystalreeds_blue": "Blue Crystal Reeds",
+  "block.crystalmod.crystalreeds_red": "Red Crystal Reeds",
+  "block.crystalmod.crystalreeds_green": "Green Crystal Reeds",
+  "block.crystalmod.crystalreeds_dark": "Dark Crystal Reeds",   
+
+  "block.crystalmod.flowerlilypad": "Flower Lilypad",
+  
+  "block.minecraft.rose_bush": "Red Rose Bush",
+  "block.crystalmod.rosebush_white": "White Rose Bush",
+  "block.crystalmod.rosebush_orange": "Orange Rose Bush",
+  "block.crystalmod.rosebush_magenta": "Magenta Rose Bush",
+  "block.crystalmod.rosebush_yellow": "Yellow Rose Bush",
+  "block.crystalmod.rosebush_pink": "Pink Rose Bush",
+  "block.crystalmod.rosebush_light_blue": "Light Blue Rose Bush",
+  "block.crystalmod.rosebush_purple": "Purple Rose Bush",
+  
+  "block.crystalmod.crate_blue": "Blue Crystal Crate",
+  "block.crystalmod.crate_red": "Red Crystal Crate",
+  "block.crystalmod.crate_green": "Green Crystal Crate",
+  "block.crystalmod.crate_dark": "Dark Crystal Crate",  
+  "block.crystalmod.woodenchest_blue": "Blue Crystal Chest",
+  "block.crystalmod.woodenchest_red": "Red Crystal Chest",
+  "block.crystalmod.woodenchest_green": "Green Crystal Chest",
+  "block.crystalmod.woodenchest_dark": "Dark Crystal Chest",  
+  "block.crystalmod.metalchest_blue": "Blue Crystal Chest (Reinforced)",
+  "block.crystalmod.metalchest_red": "Red Crystal Chest (Reinforced)",
+  "block.crystalmod.metalchest_green": "Green Crystal Chest (Reinforced)",
+  "block.crystalmod.metalchest_dark": "Dark Crystal Chest (Reinforced)",
+  "block.crystalmod.metalchest_pure": "Pure Crystal Chest (Reinforced)",
+  "block.crystalmod.metalchest_darkiron": "Dark Iron Chest",
+  "block.crystalmod.wirelesschest": "Wireless Chest",  
+  
+  "block.crystalmod.jar_oak": "Glass Jar (Oak)",  
+  "block.crystalmod.jar_birch": "Glass Jar (Birch)",  
+  "block.crystalmod.jar_spruce": "Glass Jar (Spruce)",  
+  "block.crystalmod.jar_jungle": "Glass Jar (Jungle)",  
+  "block.crystalmod.jar_acacia": "Glass Jar (Acacia)",   
+  "block.crystalmod.jar_darkoak": "Glass Jar (Dark Oak)", 
+  
+  "block.crystalmod.pedistal": "Item Pedistal",  
+  "block.crystalmod.fusion_pedistal": "Fusion Pedistal",  
+  
+  "block.crystalmod.engine_basic_furnace": "Furnace Engine (Basic)",   
   
   "_comment": "Items",
   "item.crystalmod.crystal_blue": "Blue Crystal",
@@ -70,10 +114,44 @@
   "item.crystalmod.crystalingot_green": "Green Crystal Ingot",
   "item.crystalmod.crystalingot_dark": "Dark Crystal Ingot",
   "item.crystalmod.crystalingot_pure": "Pure Crystal Ingot",
+  "item.crystalmod.darkiron_ingot": "Dark Iron Ingot",  
   
   "item.crystalmod.crystalnugget_blue": "Blue Crystal Nugget",
   "item.crystalmod.crystalnugget_red": "Red Crystal Nugget",
   "item.crystalmod.crystalnugget_green": "Green Crystal Nugget",
   "item.crystalmod.crystalnugget_dark": "Dark Crystal Nugget",
-  "item.crystalmod.crystalnugget_pure": "Pure Crystal Nugget"
+  "item.crystalmod.crystalnugget_pure": "Pure Crystal Nugget",
+  "item.crystalmod.darkiron_nugget": "Dark Iron Nugget",
+  
+  "item.crystalmod.wrench": "Wrench",  
+  
+  "_comment": "Creative Tabs",
+  "itemGroup.crystalmod.blocks": "Crystal Mod: Blocks",
+  "itemGroup.crystalmod.items": "Crystal Mod: Items",
+  
+  "_comment": "Gui Text",
+  "crystalmod.power.cu": "CU",
+  
+  "_comment": "Item Info",
+  "crystalmod.info.energy": "Energy: %s CU",
+  "crystalmod.info.owner": "Owner: %s",
+  "crystalmod.info.code": "Code: %s / %s / %s",
+  "crystalmod.info.jar.shulker": "Shulker Lamp",
+  "crystalmod.info.jar.contains": "Contains: %s/%s",
+  
+  "_comment": "Chat Messages",
+  "crystalmod.message.notowner": "You do not own this",
+  "crystalmod.message.ownerlocked": "%s has locked this",
+  
+  "_comment": "Advancements",
+  "advancements.crystalmod.root.title": "The Crystal Mod",
+  "advancements.crystalmod.root.description": "You have discovered the key ingrediant for the Crystal Mod!",
+  "advancements.crystalmod.mine_crystallog.title": "Wooden Crystal",
+  "advancements.crystalmod.mine_crystallog.description": "Collect a Crystal Log",
+  "advancements.crystalmod.collect_crystalreeds.title": "Learning to Reed",
+  "advancements.crystalmod.collect_crystalreeds.description": "Harvest some Crystal Reeds",
+  "advancements.crystalmod.craft_crystalblock.title": "Saving Space",
+  "advancements.crystalmod.craft_crystalblock.description": "Craft a Block of Crystal",
+  "advancements.crystalmod.craft_crystalingot.title": "Crystal Age",
+  "advancements.crystalmod.craft_crystalingot.description": "Smelt a Crystal Ingot"
 }

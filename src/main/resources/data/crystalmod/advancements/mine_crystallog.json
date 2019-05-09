@@ -1,0 +1,68 @@
+{
+  "parent": "crystalmod:root",
+  "display": {
+    "icon": {
+      "item": "crystalmod:crystallog_blue"
+    },
+    "title": {
+      "translate": "advancements.crystalmod.mine_crystallog.title"
+    },
+    "description": {
+      "translate": "advancements.crystalmod.mine_crystallog.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": false
+  },
+  "criteria": {
+    "get_log_blue": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "crystalmod:crystallog_blue"
+          }
+        ]
+      }
+    },
+	"get_log_red": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "crystalmod:crystallog_red"
+          }
+        ]
+      }
+    },
+	"get_log_green": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "crystalmod:crystallog_green"
+          }
+        ]
+      }
+    },
+	"get_log_dark": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "crystalmod:crystallog_dark"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "get_log_blue",
+	  "get_log_red",
+	  "get_log_green",
+	  "get_log_dark"
+    ]
+  ]
+}

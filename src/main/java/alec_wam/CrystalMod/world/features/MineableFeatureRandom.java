@@ -18,7 +18,7 @@ public class MineableFeatureRandom extends Feature<MinableRandomConfig> {
 	
 	public boolean generate(IWorld worldIn, Random rand, BlockPos position, MinableRandomConfig config)
     {
-		int numberOfBlocks = MathHelper.nextInt(rand, config.minSize, config.maxSize);
+		int numberOfBlocks = config.maxSize;
         float f = rand.nextFloat() * (float)Math.PI;
         double d0 = position.getX() + 8 + MathHelper.sin(f) * numberOfBlocks / 8.0F;
         double d1 = position.getX() + 8 - MathHelper.sin(f) * numberOfBlocks / 8.0F;

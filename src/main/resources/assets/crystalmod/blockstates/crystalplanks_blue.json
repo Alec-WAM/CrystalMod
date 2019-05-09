@@ -4,7 +4,6 @@
 		"model": "crystalmod:crystalplanks_blue"
 	},
 	"variants": {
-		"": [ { } ],
-		"inventory": [ { } ]
+		"": [ { } ]
 	}
 }

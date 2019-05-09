@@ -1,0 +1,15 @@
+{
+	"forge_marker": 1,
+	"defaults": {
+		"model": "crystalmod:flowerlilypad"
+	},
+	"variants": {
+		"": 
+		[ 
+			{ } ,
+            { "y": 90 },
+            { "y": 180 },
+            { "y": 270 }
+		]
+	}
+}

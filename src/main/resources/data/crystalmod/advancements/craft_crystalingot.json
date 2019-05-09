@@ -1,0 +1,68 @@
+{
+  "parent": "crystalmod:root",
+  "display": {
+    "icon": {
+      "item": "crystalmod:crystalingot_blue"
+    },
+    "title": {
+      "translate": "advancements.crystalmod.craft_crystalingot.title"
+    },
+    "description": {
+      "translate": "advancements.crystalmod.craft_crystalingot.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": false
+  },
+  "criteria": {
+    "craft_ingot_blue": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "crystalmod:crystalingot_blue"
+          }
+        ]
+      }
+    },
+	"craft_ingot_red": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "crystalmod:crystalingot_red"
+          }
+        ]
+      }
+    },
+	"craft_ingot_green": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "crystalmod:crystalingot_green"
+          }
+        ]
+      }
+    },
+	"craft_ingot_dark": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "crystalmod:crystalingot_dark"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "craft_ingot_blue",
+	  "craft_ingot_red",
+	  "craft_ingot_green",
+	  "craft_ingot_dark"
+    ]
+  ]
+}

@@ -1,5 +1,6 @@
 {
 	"type": "minecraft:crafting_shapeless",
+	"group": "crystalmod.crystalshard",
 	"ingredients": [
 		{
 			"item": "crystalmod:crystal_pure"

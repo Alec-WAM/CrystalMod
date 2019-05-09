@@ -1,0 +1,20 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"group": "crystalmod.metalchest",
+	"pattern": [
+		"WWW",
+		"WCW",
+		"WWW"
+	],
+	"key": {
+		"C": {
+			"item": "crystalmod:metalchest_blue"
+		},
+		"W": {
+			"item": "crystalmod:crystalingot_red"
+		}
+	},
+	"result": {
+		"item": "crystalmod:metalchest_red"
+	}
+}

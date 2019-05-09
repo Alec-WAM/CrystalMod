@@ -1,0 +1,20 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"pattern": [
+		"SSS",
+		" s ",
+		"SSS"
+	],
+	"key": {
+		"S": {
+			"item": "minecraft:stone_slab"
+		},
+		"s": {
+			"item": "minecraft:stone"
+		}
+	},
+	"result": {
+		"item": "crystalmod:pedistal",
+		"count": 4
+	}
+}

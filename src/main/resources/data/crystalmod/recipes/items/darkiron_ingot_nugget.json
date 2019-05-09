@@ -1,0 +1,17 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"group": "crystalmod.darkiron_ingot",
+	"pattern": [
+		"CCC",
+		"CCC",
+		"CCC"
+	],
+	"key": {
+		"C": {
+			"item": "crystalmod:darkiron_nugget"
+		}
+	},
+	"result": {
+		"item": "crystalmod:darkiron_ingot"
+	}
+}

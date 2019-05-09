@@ -9,22 +9,18 @@ public class ModItemGroups {
 	
 	public static final ItemGroup ITEM_GROUP_BLOCKS = new ItemGroup(CrystalMod.resourceDot("blocks")){
 		
-		public final ItemStack icon = new ItemStack(ModBlocks.crystalBlockGroup.getBlock(EnumCrystalColorSpecial.BLUE));
-		
 		@Override
 		public ItemStack createIcon() {
-			return icon;
+			return new ItemStack(ModBlocks.crystalBlockGroup.getBlock(EnumCrystalColorSpecial.BLUE));
 		}
 		
 	};
 	
 	public static final ItemGroup ITEM_GROUP_ITEMS = new ItemGroup(CrystalMod.resourceDot("items")){
 		
-		public final ItemStack icon = new ItemStack(ModItems.crystalGroup.getItem(EnumCrystalColorSpecial.BLUE));
-		
 		@Override
 		public ItemStack createIcon() {
-			return icon;
+			return new ItemStack(ModItems.crystalGroup.getItem(EnumCrystalColorSpecial.BLUE));
 		}
 		
 	};

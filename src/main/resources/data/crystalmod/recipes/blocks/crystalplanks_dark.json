@@ -1,5 +1,6 @@
 {
 	"type": "minecraft:crafting_shapeless",
+	"group": "crystalmod.crystalplanks",
 	"ingredients": [
 		{
 			"item": "crystalmod:crystallog_dark"
