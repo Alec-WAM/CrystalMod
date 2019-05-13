@@ -3,10 +3,10 @@ package alec_wam.CrystalMod.tiles.crate;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import alec_wam.CrystalMod.core.color.EnumCrystalColor;
 import alec_wam.CrystalMod.init.ModBlocks;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.IMessageHandler;
+import alec_wam.CrystalMod.tiles.EnumCrystalColorSpecialWithCreative;
 import alec_wam.CrystalMod.tiles.PacketTileMessage;
 import alec_wam.CrystalMod.tiles.TileEntityModVariant;
 import alec_wam.CrystalMod.util.ItemStackTools;
@@ -18,14 +18,15 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
 
-public class TileEntityCrate extends TileEntityModVariant<EnumCrystalColor> implements IMessageHandler {
-
+public class TileEntityCrate extends TileEntityModVariant<EnumCrystalColorSpecialWithCreative> implements IMessageHandler {
+	public static final int[] TIER_STORAGE_STACKS = {64, 128, 256, 512, 1024, 1};
 	public int rotation = 0;
 	/** a timer used to determine if the player double clicked */
 	private int doubleClickTimer, selectedSlot, mode;
 	private int lastClicked, lastClickedExpected = -1;
 	
 	public int tier;
+	public boolean hasVoidUpgrade;
 	private ItemStack storedStack = ItemStackTools.getEmptyStack();
 	private final ItemHandlerCrate storage = new ItemHandlerCrate(this);
 	private final LazyOptional<IItemHandler> holder = LazyOptional.of(() -> storage);
@@ -34,7 +35,7 @@ public class TileEntityCrate extends TileEntityModVariant<EnumCrystalColor> impl
 		super(ModBlocks.TILE_CRATE);
 	}
 	
-	public TileEntityCrate(EnumCrystalColor type) {
+	public TileEntityCrate(EnumCrystalColorSpecialWithCreative type) {
 		super(ModBlocks.TILE_CRATE, type);
 		this.tier = type.ordinal();
 	}
@@ -43,6 +44,7 @@ public class TileEntityCrate extends TileEntityModVariant<EnumCrystalColor> impl
 	public void writeCustomNBT(NBTTagCompound nbt){
 		super.writeCustomNBT(nbt);
 		nbt.setInt("Rotation", rotation);
+		nbt.setBoolean("hasVoid", hasVoidUpgrade);
 		if(ItemStackTools.isValid(storedStack)){
 			NBTTagCompound stackNBT = storedStack.serializeNBT();
 			stackNBT.setInt("StackSize", ItemStackTools.getStackSize(storedStack));
@@ -57,6 +59,7 @@ public class TileEntityCrate extends TileEntityModVariant<EnumCrystalColor> impl
 		else {
 			rotation = 0;
 		}
+		hasVoidUpgrade = nbt.getBoolean("hasVoid");
 		if(nbt.hasKey("StoredItem")){
 			NBTTagCompound stackNBT = nbt.getCompound("StoredItem");
 			storedStack = ItemStackTools.loadFromNBT(stackNBT);
@@ -147,15 +150,16 @@ public class TileEntityCrate extends TileEntityModVariant<EnumCrystalColor> impl
 	}
 	
 	public int getCrateSize(){
-		if(tier == 0)return 64;
-		return (64*(16*tier));
+		return TIER_STORAGE_STACKS[tier];
 	}
 	
 	public ItemStack addItem(ItemStack item) {
 		if (ItemStackTools.isValid(item)) {
 			ItemStack stored = getStack();
+			boolean isCreative = tier == EnumCrystalColorSpecialWithCreative.CREATIVE.ordinal();
+			
 			if (ItemStackTools.isEmpty(stored)) {
-				int allowedItems = item.getMaxStackSize() * getCrateSize();
+				int allowedItems = isCreative ? 1 : item.getMaxStackSize() * getCrateSize();
 				if (ItemStackTools.getStackSize(item) > allowedItems){
 					setStack(ItemUtil.copy(item, allowedItems));
 					ItemStackTools.incStackSize(item, -allowedItems);
@@ -164,8 +168,12 @@ public class TileEntityCrate extends TileEntityModVariant<EnumCrystalColor> impl
 					setStack(item.copy());
 					return ItemStackTools.getEmptyStack();
 				}
-			} else if (ItemUtil.canCombine(item, stored)) {
+			} else if (ItemUtil.canCombine(item, stored) && !isCreative) {
 				int allowedItems = stored.getMaxStackSize() * getCrateSize();
+				if(hasVoidUpgrade && ItemStackTools.getStackSize(stored) >= allowedItems){
+					//Void the items
+					return ItemStackTools.getEmptyStack();
+				}
 				if (ItemStackTools.getStackSize(stored) + ItemStackTools.getStackSize(item) > allowedItems){
 					ItemStackTools.incStackSize(item, -(allowedItems - ItemStackTools.getStackSize(stored)));
 					ItemStackTools.setStackSize(stored, allowedItems);
@@ -186,6 +194,9 @@ public class TileEntityCrate extends TileEntityModVariant<EnumCrystalColor> impl
 		if(messageId.equalsIgnoreCase("StackSync")){
 			storedStack = ItemStackTools.loadFromNBT(messageData);
 			ItemStackTools.setStackSize(storedStack, messageData.getInt("StackSize"));
+		}
+		if(messageId.equalsIgnoreCase("VoidUpgrade")){
+			hasVoidUpgrade = messageData.getBoolean("VoidUpgrade");
 		}
 	}
 	

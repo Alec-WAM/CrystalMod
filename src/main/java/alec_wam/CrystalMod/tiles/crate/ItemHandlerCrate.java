@@ -1,5 +1,6 @@
 package alec_wam.CrystalMod.tiles.crate;
 
+import alec_wam.CrystalMod.tiles.EnumCrystalColorSpecialWithCreative;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import net.minecraft.item.ItemStack;
@@ -11,12 +12,20 @@ public class ItemHandlerCrate implements IItemHandler
 	//TODO Add Config
 	public static final boolean LEAVE_ONE_ITEM = true;
     public final TileEntityCrate crate;
-
+    
     public ItemHandlerCrate(TileEntityCrate crate)
     {
         this.crate = crate;
     }
 
+    public boolean isCreative() {
+    	return crate.tier == EnumCrystalColorSpecialWithCreative.CREATIVE.ordinal();
+    }
+    
+    public boolean isVoid() {
+    	return crate.hasVoidUpgrade;
+    }
+    
     @Override
     public int getSlots()
     {
@@ -28,6 +37,9 @@ public class ItemHandlerCrate implements IItemHandler
     {
     	ItemStack fixed = ItemStackTools.getEmptyStack();
     	if(ItemStackTools.isValid(crate.getStack())){
+    		if(isCreative()){
+    			return ItemUtil.copy(crate.getStack(), 64);
+        	}            
     		if(LEAVE_ONE_ITEM){
     			if(ItemStackTools.getStackSize(crate.getStack()) == 1)return ItemStackTools.getEmptyStack();
     			fixed = ItemUtil.copy(crate.getStack(), ItemStackTools.getStackSize(crate.getStack())-1);
@@ -44,8 +56,12 @@ public class ItemHandlerCrate implements IItemHandler
     @Override
     public ItemStack insertItem(int slot, ItemStack stack, boolean simulate)
     {
-        if (ItemStackTools.isEmpty(stack))
+    	if (ItemStackTools.isEmpty(stack))
             return ItemStackTools.getEmptyStack();
+    	
+    	if(isCreative()){
+    		return stack;
+    	}
 
         ItemStack existing = crate.getStack();
 
@@ -59,8 +75,13 @@ public class ItemHandlerCrate implements IItemHandler
             limit -= ItemStackTools.getStackSize(existing);
         }
 
-        if (limit <= 0)
+        if (limit <= 0){
+        	if(isVoid()){
+        		//Void Items
+        		return ItemStackTools.getEmptyStack();
+        	}
             return stack;
+        }
 
         boolean reachedLimit = ItemStackTools.getStackSize(stack) > limit;
 
@@ -83,10 +104,17 @@ public class ItemHandlerCrate implements IItemHandler
     @Override
 	public ItemStack extractItem(int slot, int amount, boolean simulate)
     {
-        if (amount == 0)
+    	if (amount == 0)
             return ItemStackTools.getEmptyStack();
 
         ItemStack existing = crate.getStack();
+        
+        if(isCreative()){
+        	if(ItemStackTools.isValid(existing)){
+        		return ItemUtil.copy(existing, amount);
+        	}
+        	return ItemStackTools.getEmptyStack();
+    	}
         
         if (ItemStackTools.isEmpty(existing) || ItemStackTools.getStackSize(existing) == 1 && LEAVE_ONE_ITEM)
             return ItemStackTools.getEmptyStack();
@@ -128,6 +156,6 @@ public class ItemHandlerCrate implements IItemHandler
 
 	@Override
 	public boolean isItemValid(int slot, ItemStack stack) {
-		return slot == 0 && (ItemStackTools.isEmpty(getStackInSlot(0)) || ItemUtil.canCombine(stack, getStackInSlot(0)));
+		return slot == 0 && (ItemStackTools.isEmpty(getStackInSlot(0)) || (!isCreative() && ItemUtil.canCombine(stack, getStackInSlot(0))));
 	}
 }

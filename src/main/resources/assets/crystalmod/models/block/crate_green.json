@@ -1,12 +1,12 @@
 {
   "parent": "block/cube",
   "textures": {
-    "particle": "crystalmod:block/crate_green_front",
-    "down": "crystalmod:block/crate_green_sides",
-    "up": "crystalmod:block/crate_green_sides",
-    "north": "crystalmod:block/crate_green_front",
-    "east": "crystalmod:block/crate_green_sides",
-    "south": "crystalmod:block/crate_green_sides",
-    "west": "crystalmod:block/crate_green_sides"
+    "particle": "crystalmod:block/crate/green_front",
+    "down": "crystalmod:block/crate/green_sides",
+    "up": "crystalmod:block/crate/green_sides",
+    "north": "crystalmod:block/crate/green_front",
+    "east": "crystalmod:block/crate/green_sides",
+    "south": "crystalmod:block/crate/green_sides",
+    "west": "crystalmod:block/crate/green_sides"
   }
 }

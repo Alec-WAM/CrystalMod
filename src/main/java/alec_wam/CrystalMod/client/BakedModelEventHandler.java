@@ -45,6 +45,7 @@ public class BakedModelEventHandler {
 	@SubscribeEvent
     public static void onStitch(final TextureStitchEvent.Pre event) {
 		event.getMap().registerSprite(null, new ResourceLocation("crystalmod:block/crystalshardblock"));
+		event.getMap().registerSprite(null, new ResourceLocation("crystalmod:block/crate/void"));
 		
 		event.getMap().registerSprite(null, new ResourceLocation("crystalmod:block/pipe/item"));
 		event.getMap().registerSprite(null, new ResourceLocation("crystalmod:block/pipe/io_in"));

@@ -14,6 +14,8 @@ import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.model.ItemCameraTransforms.TransformType;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.item.ItemBlock;
@@ -100,6 +102,29 @@ public class TileEntityCrateRender extends TileEntityRenderer<TileEntityCrate>
 			if(gui)GlStateManager.enableDepthTest();
 			GlStateManager.popMatrix();
 			
+			boolean renderVoid = tile.hasVoidUpgrade;
+			if(renderVoid){
+				GlStateManager.pushMatrix();
+				GlStateManager.rotatef(180, 1, 0, 0);
+				GlStateManager.translated(0, 0, 0.025);
+				double qX = -1;
+                int w = 2;
+                double qY = -1;
+                int h = 2;
+                double qZ = 0;
+                Minecraft.getInstance().getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+                Tessellator tessellator = Tessellator.getInstance();
+                TextureAtlasSprite sprite = RenderUtil.getSprite("crystalmod:block/crate/void");
+                BufferBuilder worldrenderer = tessellator.getBuffer();
+                worldrenderer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+                worldrenderer.pos(qX + 0, qY + 0, qZ).tex(sprite.getMinU(), sprite.getMinV()).endVertex();
+                worldrenderer.pos(qX + 0, qY + h, qZ).tex(sprite.getMinU(), sprite.getMaxV()).endVertex();
+                worldrenderer.pos(qX + w, qY + h, qZ).tex(sprite.getMaxU(), sprite.getMaxV()).endVertex();
+                worldrenderer.pos(qX + w, qY + 0, qZ).tex(sprite.getMaxU(), sprite.getMinV()).endVertex();
+                tessellator.draw();
+                GlStateManager.popMatrix();
+			}
+			
 			
 			if (renderStack.getItem().showDurabilityBar(renderStack))
             {
@@ -159,6 +184,8 @@ public class TileEntityCrateRender extends TileEntityRenderer<TileEntityCrate>
 			GlStateManager.scalef( 1.0f / 62f, 1.0f / 62f, 1.0f );
 			GlStateManager.rotatef(180, 1, 0, 0);
 			GlStateManager.disableLighting();
+				
+			boolean textBackground = true;
 			
 			GlStateManager.pushMatrix();
 			int width = fontRender.getStringWidth(info);
@@ -166,19 +193,70 @@ public class TileEntityCrateRender extends TileEntityRenderer<TileEntityCrate>
 			float scale2 = Math.min(100F / (width+10), 1.2F);
 	        GlStateManager.scalef(scale2, scale2, 1);
 	        GlStateManager.translated(-width/2, fontRender.FONT_HEIGHT*(1.0f-scale), 0);
-			fontRender.drawString( info, 0, 0, 0 );
+	        if(textBackground){
+		        GlStateManager.disableTexture2D();
+	            Tessellator tessellator = Tessellator.getInstance();
+	            BufferBuilder worldrenderer = tessellator.getBuffer();
+	            double qX = -1;
+	            int w = width + 1;
+	            double qY = -1;
+	            int h = 10;
+	            double qZ = 0;
+	            int r = 105;
+	            int g = 84; 
+	            int b = 51;
+	            worldrenderer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
+	            worldrenderer.pos(qX + 0, qY + 0, qZ).color(r, g, b, 255).endVertex();
+	            worldrenderer.pos(qX + 0, qY + h, qZ).color(r, g, b, 255).endVertex();
+	            worldrenderer.pos(qX + w, qY + h, qZ).color(r, g, b, 255).endVertex();
+	            worldrenderer.pos(qX + w, qY + 0, qZ).color(r, g, b, 255).endVertex();
+	            tessellator.draw();
+	            GlStateManager.enableTexture2D();
+			}
+	        GlStateManager.translated(0, 0, -0.0001f);
+	        fontRender.drawString(info, 0, 0, 0 );
 			GlStateManager.popMatrix();
 			
 			
 			int stackSize = ItemStackTools.getStackSize(tile.getStack());
 			if(stackSize > 1){
 				GlStateManager.pushMatrix();
-				info = ""+stackSize;
+				int maxStack = tile.getStack().getMaxStackSize();
+				boolean basicSize = maxStack == 1 || stackSize < maxStack;
+				if(basicSize){
+					info = ""+stackSize;
+				} else {
+					int stacks = stackSize / maxStack;
+					int rem = stackSize % maxStack;
+					info = stacks + "x" + maxStack + " + " + rem;
+				}				
+				
 				width = fontRender.getStringWidth(info);
 				GlStateManager.translated(-0.20, 30f, 0f);
 				scale2 = Math.min(100F / (width+10), 1.2F);
 		        GlStateManager.scalef(scale2, scale2, 1);
 		        GlStateManager.translated(-width/2, fontRender.FONT_HEIGHT*(1.0f-scale), 0);
+		        if(textBackground){
+			        GlStateManager.disableTexture2D();
+		            Tessellator tessellator = Tessellator.getInstance();
+		            BufferBuilder worldrenderer = tessellator.getBuffer();
+		            double qX = -1;
+		            int w = width + 1;
+		            double qY = -1;
+		            int h = 10;
+		            double qZ = 0;
+		            int r = 105;
+		            int g = 84; 
+		            int b = 51;
+		            worldrenderer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
+		            worldrenderer.pos(qX + 0, qY + 0, qZ).color(r, g, b, 255).endVertex();
+		            worldrenderer.pos(qX + 0, qY + h, qZ).color(r, g, b, 255).endVertex();
+		            worldrenderer.pos(qX + w, qY + h, qZ).color(r, g, b, 255).endVertex();
+		            worldrenderer.pos(qX + w, qY + 0, qZ).color(r, g, b, 255).endVertex();
+		            tessellator.draw();
+		            GlStateManager.enableTexture2D();
+				}
+		        GlStateManager.translated(0, 0, -0.0001f);
 				fontRender.drawString( info, 0, 0, 0 );
 				GlStateManager.popMatrix();
 			}

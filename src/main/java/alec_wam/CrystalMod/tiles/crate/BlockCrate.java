@@ -1,20 +1,33 @@
 package alec_wam.CrystalMod.tiles.crate;
 
+import java.text.NumberFormat;
+import java.util.List;
+import java.util.Locale;
+
+import javax.annotation.Nullable;
+
 import alec_wam.CrystalMod.core.BlockVariantGroup;
-import alec_wam.CrystalMod.core.color.EnumCrystalColor;
+import alec_wam.CrystalMod.init.ModItems;
+import alec_wam.CrystalMod.items.EnumPlateItem;
+import alec_wam.CrystalMod.network.CrystalModNetwork;
+import alec_wam.CrystalMod.tiles.EnumCrystalColorSpecialWithCreative;
+import alec_wam.CrystalMod.tiles.EnumCrystalColorWithCreative;
+import alec_wam.CrystalMod.tiles.PacketTileMessage;
 import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
+import alec_wam.CrystalMod.util.ToolUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDirectional;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
@@ -28,16 +41,21 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceFluidMode;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-public class BlockCrate extends BlockContainerVariant<EnumCrystalColor> {
+public class BlockCrate extends BlockContainerVariant<EnumCrystalColorSpecialWithCreative> {
+	//TODO Add Void Upgrade
 	//All Directions
 	public static final DirectionProperty FACING = BlockDirectional.FACING;
 	/**Click Times**/
 	public static final int STARTING_TIME = 20,	CONTINOUS_TIME = 5,	DOUBLE_CLICK_TIME = 10,	FILL_TIME = 20,	DELAY_PICKUP_TIME = 20,	EMPLY_CRATE_TIME = 5;
 
-	public BlockCrate(EnumCrystalColor type, BlockVariantGroup<EnumCrystalColor, BlockCrate> variantGroup,Properties properties) {
+	public BlockCrate(EnumCrystalColorSpecialWithCreative type, BlockVariantGroup<EnumCrystalColorSpecialWithCreative, BlockCrate> variantGroup,Properties properties) {
 		super(type, variantGroup, properties);
 		this.setDefaultState(this.stateContainer.getBaseState().with(FACING, EnumFacing.NORTH));
 	}
@@ -46,6 +64,16 @@ public class BlockCrate extends BlockContainerVariant<EnumCrystalColor> {
 	protected void fillStateContainer(StateContainer.Builder<Block, IBlockState> builder) {
 		builder.add(FACING);
 	}	
+	
+	@Override
+	@OnlyIn(Dist.CLIENT)
+	public void addInformation(ItemStack stack, @Nullable IBlockReader worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {		
+		if(type != EnumCrystalColorSpecialWithCreative.CREATIVE){
+			int stacks = TileEntityCrate.TIER_STORAGE_STACKS[type.ordinal()];
+			int largeNumber = (64*TileEntityCrate.TIER_STORAGE_STACKS[type.ordinal()]);
+			tooltip.add(new TextComponentTranslation("crystalmod.info.crate.storage", ""+stacks, NumberFormat.getNumberInstance(Locale.US).format(largeNumber)));
+		}
+	}
 	
 	@SuppressWarnings("deprecation")
 	@Override
@@ -100,17 +128,57 @@ public class BlockCrate extends BlockContainerVariant<EnumCrystalColor> {
 		TileEntity tile = worldIn.getTileEntity(pos);
 		if (tile != null && tile instanceof TileEntityCrate){
 			TileEntityCrate crate = (TileEntityCrate)tile;
+			boolean isCreativeCrate = crate.tier == EnumCrystalColorWithCreative.CREATIVE.ordinal();
 			ItemStack playerItem = player.getHeldItem(hand);
 			ItemStack stored = crate.getStack();
 			boolean changed = false;
-			//TODO Look into config
-			boolean isFront = /*Config.crates_useAllSides || */side == state.get(FACING);
+			boolean isFront = side == state.get(FACING);
+			
+			if(isFront){
+				if(player.isSneaking()){
+					if(ToolUtil.isHoldingWrench(player, hand)){
+						crate.rotation++;
+						crate.rotation%=4;
+						BlockUtil.markBlockForUpdate(worldIn, pos);
+						return true;
+					}
+				}
+				else {
+					if(ItemStackTools.isValid(playerItem)){
+						if(playerItem.getItem() == ModItems.metalPlateGroup.getItem(EnumPlateItem.DARKIRON) && crate.hasVoidUpgrade){
+							if(worldIn.isRemote)return true;
+							crate.hasVoidUpgrade = false;
+							NBTTagCompound data = new NBTTagCompound();
+							data.setBoolean("VoidUpgrade", false);
+							CrystalModNetwork.sendToAllAround(new PacketTileMessage(pos, "VoidUpgrade", data), crate);
+							dropItemInWorld(state, crate, player, new ItemStack(ModItems.crateUpgrades.getItem(EnumCrateUpgrades.VOID)), crate.getWorld().rand.nextFloat());
+							return true;
+						}
+						if(playerItem.getItem() == ModItems.crateUpgrades.getItem(EnumCrateUpgrades.VOID) && !crate.hasVoidUpgrade){
+							if(worldIn.isRemote)return true;
+							crate.hasVoidUpgrade = true;
+							if(!player.abilities.isCreativeMode){
+								player.setHeldItem(hand, playerItem.split(1));
+							}
+							
+							SoundType soundtype = SoundType.STONE;
+		                    worldIn.playSound((EntityPlayer)null, pos, soundtype.getPlaceSound(), SoundCategory.BLOCKS, (soundtype.getVolume() + 1.0F) / 2.0F, soundtype.getPitch() * 0.8F);
+							
+							NBTTagCompound data = new NBTTagCompound();
+							data.setBoolean("VoidUpgrade", true);
+							CrystalModNetwork.sendToAllAround(new PacketTileMessage(pos, "VoidUpgrade", data), crate);
+							return true;
+						}
+					}
+				}
+			}
+			
 			if(crate.isTimerActive()){
 				crate.resetTimer();
 				if(ItemStackTools.isValid(stored)){
 					if (crate.getMode() == 0 && ItemStackTools.isValid(playerItem) && playerItem.getItem() instanceof ItemBlock && ((ItemBlock)playerItem.getItem()).getBlock() instanceof BlockCrate) {
 						BlockCrate crateBlock = (BlockCrate) ((ItemBlock)playerItem.getItem()).getBlock();
-						if(crateBlock.type.ordinal() > this.type.ordinal()){
+						if(crateBlock.type.ordinal() > this.type.ordinal() && crateBlock.type != EnumCrystalColorSpecialWithCreative.CREATIVE){
 							playerItem = playerItem.copy();
 							if(!player.abilities.isCreativeMode && ItemStackTools.isValid(spawnItem(player, new ItemStack(this, 1)))){
 								playerItem = player.getHeldItem(hand);
@@ -134,7 +202,7 @@ public class BlockCrate extends BlockContainerVariant<EnumCrystalColor> {
 								return true;
 							}
 						}
-					} else if(crate.getMode() == 1 && isFront && (ItemStackTools.isEmpty(playerItem) || ItemUtil.canCombine(playerItem, stored))){
+					} else if(crate.getMode() == 1 && isFront && (ItemStackTools.isEmpty(playerItem) || ItemUtil.canCombine(playerItem, stored)) && !isCreativeCrate){
 						for (int slot = 0; slot < player.inventory.mainInventory.size(); slot++) {
 							ItemStack original = player.inventory.getStackInSlot(slot);
 							ItemStack newItem = crate.addItem(original);
@@ -146,7 +214,7 @@ public class BlockCrate extends BlockContainerVariant<EnumCrystalColor> {
 					} else if(ItemStackTools.isValid(playerItem) && isFront){
 						if (playerItem.getItem() instanceof ItemBlock && ((ItemBlock)playerItem.getItem()).getBlock() instanceof BlockCrate) {
 							BlockCrate crateBlock = (BlockCrate) ((ItemBlock)playerItem.getItem()).getBlock();
-							if(crateBlock.type.ordinal() > this.type.ordinal()){
+							if(crateBlock.type.ordinal() > this.type.ordinal() && crateBlock.type != EnumCrystalColorSpecialWithCreative.CREATIVE){
 								crate.setClick(0, 0, DOUBLE_CLICK_TIME);
 								
 								playerItem = crate.addItem(playerItem);
@@ -242,7 +310,30 @@ public class BlockCrate extends BlockContainerVariant<EnumCrystalColor> {
 		if (!(newState.getBlock() instanceof BlockCrate)) {
 			TileEntity tileentity = worldIn.getTileEntity(pos);
 			if (tileentity instanceof TileEntityCrate) {
-				InventoryHelper.spawnItemStack(worldIn, (double)pos.getX(), (double)pos.getY(), (double)pos.getZ(), ((TileEntityCrate)tileentity).getStack());
+				TileEntityCrate crate = (TileEntityCrate)tileentity;
+				//Made a custom random drop to make sure stack sizes are not too big because of massive storage
+				float f2 = RANDOM.nextFloat() * 0.75F + 0.125F;
+				float f3 = RANDOM.nextFloat() * 0.75F;
+				float f4 = RANDOM.nextFloat() * 0.75F + 0.125F;
+				ItemStack stack = crate.getStack();
+				while(!stack.isEmpty()) {
+					@SuppressWarnings("deprecation")
+					int sizeSizeDropped = Math.min(RANDOM.nextInt(21) + 10, stack.getItem().getMaxStackSize());
+					EntityItem entityitem = new EntityItem(worldIn, pos.getX() + (double)f2, pos.getY() + (double)f3, pos.getZ() + (double)f4, stack.split(sizeSizeDropped));
+					entityitem.motionX = RANDOM.nextGaussian() * (double)0.05F;
+					entityitem.motionY = RANDOM.nextGaussian() * (double)0.05F + (double)0.2F;
+					entityitem.motionZ = RANDOM.nextGaussian() * (double)0.05F;
+					worldIn.spawnEntity(entityitem);
+				}
+				
+				if(crate.hasVoidUpgrade){
+					EntityItem entityitem = new EntityItem(worldIn, pos.getX() + (double)f2, pos.getY() + (double)f3, pos.getZ() + (double)f4, new ItemStack(ModItems.crateUpgrades.getItem(EnumCrateUpgrades.VOID)));
+					entityitem.motionX = RANDOM.nextGaussian() * (double)0.05F;
+					entityitem.motionY = RANDOM.nextGaussian() * (double)0.05F + (double)0.2F;
+					entityitem.motionZ = RANDOM.nextGaussian() * (double)0.05F;
+					worldIn.spawnEntity(entityitem);
+				}
+				
 				worldIn.updateComparatorOutputLevel(pos, this);
 			}
 
