@@ -149,7 +149,6 @@ public class TileEntityFusionPedistal extends TileEntityInventory implements IMe
 	
 	public void startCrafting(@Nullable EntityPlayer player){
 		pedistalSearch();
-		
 		runningRecipe = CrystalModAPI.findFusionRecipe(this, getWorld(), linkedPedistals);
 		if(runningRecipe !=null && runningRecipe.matches(this, getWorld(), linkedPedistals)){
 			String message = runningRecipe.canCraft(this, getWorld(), linkedPedistals);

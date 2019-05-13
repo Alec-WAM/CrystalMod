@@ -16,6 +16,7 @@ import alec_wam.CrystalMod.world.CrystalModWorldGenerator;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ExtensionPoint;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -28,6 +29,10 @@ public class CrystalMod {
 	public static final Logger LOGGER = LogManager.getLogger();
 	public static final String MODID = "crystalmod";
 	public static final String NAME = "Crystal Mod";	
+	
+	static {
+		FluidRegistry.enableUniversalBucket();
+	}
 	
 	public CrystalMod() {
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::preInit);

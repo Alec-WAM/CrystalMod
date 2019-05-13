@@ -1,0 +1,23 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"group": "crystalmod.filter",
+	"pattern": [
+		" P ",
+		"SDS",
+		" S "
+	],
+	"key": {
+		"P": {
+			"item": "minecraft:paper"
+		},
+		"D": {
+			"item": "crystalmod:plate_darkiron"
+		},
+		"S": {
+			"item": "minecraft:string"
+		}
+	},
+	"result": {
+		"item": "crystalmod:pipefilter"
+	}
+}

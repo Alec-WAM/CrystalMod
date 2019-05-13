@@ -64,6 +64,13 @@ public class GuiWoodenCrystalChest extends GuiContainer {
         this.ySize = type.ySize;
         this.allowUserInput = false;
     }
+	
+	@Override
+	public void render(int mouseX, int mouseY, float partialTicks) {
+		this.drawDefaultBackground();
+		super.render(mouseX, mouseY, partialTicks);
+		this.renderHoveredToolTip(mouseX, mouseY);
+	}
 
     @Override
     protected void drawGuiContainerBackgroundLayer(float f, int i, int j)

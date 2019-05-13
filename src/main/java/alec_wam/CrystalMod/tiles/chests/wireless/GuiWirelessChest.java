@@ -38,6 +38,13 @@ public class GuiWirelessChest extends GuiContainer {
 		fontRenderer.drawString(playerInventory.getDisplayName().getUnformattedComponentText(), 12, 110, 4210752);
 		super.drawGuiContainerForegroundLayer(par1, par2);
     }
+	
+	@Override
+	public void render(int mouseX, int mouseY, float partialTicks) {
+		this.drawDefaultBackground();
+		super.render(mouseX, mouseY, partialTicks);
+		this.renderHoveredToolTip(mouseX, mouseY);
+	}
     
     @Override
     protected void drawGuiContainerBackgroundLayer(float f, int i, int j)

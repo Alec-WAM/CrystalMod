@@ -72,6 +72,8 @@
   "block.crystalmod.crate_red": "Red Crystal Crate",
   "block.crystalmod.crate_green": "Green Crystal Crate",
   "block.crystalmod.crate_dark": "Dark Crystal Crate",  
+  "block.crystalmod.crate_pure": "Pure Crystal Crate",  
+  "block.crystalmod.crate_creative": "§6Creative Crate",  
   "block.crystalmod.woodenchest_blue": "Blue Crystal Chest",
   "block.crystalmod.woodenchest_red": "Red Crystal Chest",
   "block.crystalmod.woodenchest_green": "Green Crystal Chest",
@@ -83,6 +85,12 @@
   "block.crystalmod.metalchest_pure": "Pure Crystal Chest (Reinforced)",
   "block.crystalmod.metalchest_darkiron": "Dark Iron Chest",
   "block.crystalmod.wirelesschest": "Wireless Chest",  
+  "block.crystalmod.tank_blue": "Blue Crystal Tank",
+  "block.crystalmod.tank_red": "Red Crystal Tank",
+  "block.crystalmod.tank_green": "Green Crystal Tank",
+  "block.crystalmod.tank_dark": "Dark Crystal Tank",
+  "block.crystalmod.tank_pure": "Pure Crystal Tank",
+  "block.crystalmod.tank_creative": "§6Creative Tank",
   
   "block.crystalmod.jar_oak": "Glass Jar (Oak)",  
   "block.crystalmod.jar_birch": "Glass Jar (Birch)",  
@@ -94,7 +102,9 @@
   "block.crystalmod.pedistal": "Item Pedistal",  
   "block.crystalmod.fusion_pedistal": "Fusion Pedistal",  
   
-  "block.crystalmod.engine_basic_furnace": "Furnace Engine (Basic)",   
+  "block.crystalmod.engine_basic_furnace": "Furnace Engine (Basic)", 
+
+  "block.crystalmod.pipe_item": "Item Pipe",   
   
   "_comment": "Items",
   "item.crystalmod.crystal_blue": "Blue Crystal",
@@ -123,7 +133,23 @@
   "item.crystalmod.crystalnugget_pure": "Pure Crystal Nugget",
   "item.crystalmod.darkiron_nugget": "Dark Iron Nugget",
   
+  "item.crystalmod.plate_darkiron": "Dark Iron Plate",  
+  "item.crystalmod.plate_blue": "Blue Crystal Plate",
+  "item.crystalmod.plate_red": "Red Crystal Plate",
+  "item.crystalmod.plate_green": "Green Crystal Plate",
+  "item.crystalmod.plate_dark": "Dark Crystal Plate",
+  "item.crystalmod.plate_pure": "Pure Crystal Plate",
+  
   "item.crystalmod.wrench": "Wrench",  
+  
+  "item.crystalmod.pipefilter": "Pipe Item Filter",  
+  "item.crystalmod.pipe_upgrade_speed": "Pipe Upgrade (Speed)",  
+  "item.crystalmod.pipe_upgrade_stack": "Pipe Upgrade (Stack)",  
+  "item.crystalmod.pipe_upgrade_slow": "Pipe Upgrade (Slow)",  
+  "item.crystalmod.pipe_upgrade_cobble": "Pipe Upgrade (Cobble Gen)",  
+  
+  "item.crystalmod.crate_upgrade_void": "Crate Upgrade (Void)", 
+  
   
   "_comment": "Creative Tabs",
   "itemGroup.crystalmod.blocks": "Crystal Mod: Blocks",
@@ -131,6 +157,25 @@
   
   "_comment": "Gui Text",
   "crystalmod.power.cu": "CU",
+  "crystalmod.gui.pipe.io.in": "In",
+  "crystalmod.gui.pipe.io.out": "Out",
+  "crystalmod.gui.pipe.io.both": "In/Out",
+  "crystalmod.gui.pipe.io.disabled": "Disabled",
+  "crystalmod.gui.filter.whitelist": "Whitelist",
+  "crystalmod.gui.filter.blacklist": "Blacklist",
+  "crystalmod.gui.filter.damage": "Match Damage",
+  "crystalmod.gui.filter.nbt": "Match NBT",
+  "crystalmod.gui.redstone.none": "Disabled",
+  "crystalmod.gui.redstone.ignore": "Ignore",
+  "crystalmod.gui.redstone.off": "Off",
+  "crystalmod.gui.redstone.on": "On",
+  "crystalmod.gui.direction.up": "Up",
+  "crystalmod.gui.direction.down": "Down",
+  "crystalmod.gui.direction.north": "North",
+  "crystalmod.gui.direction.south": "South",
+  "crystalmod.gui.direction.east": "East",
+  "crystalmod.gui.direction.west": "West",
+  
   
   "_comment": "Item Info",
   "crystalmod.info.energy": "Energy: %s CU",
@@ -138,6 +183,13 @@
   "crystalmod.info.code": "Code: %s / %s / %s",
   "crystalmod.info.jar.shulker": "Shulker Lamp",
   "crystalmod.info.jar.contains": "Contains: %s/%s",
+  "crystalmod.info.tank.storage": "Holds %smB",
+  "crystalmod.info.crate.storage": "Holds %s stacks (%s)",
+  "crystalmod.info.filter.whitelist": "§nWhitelist",
+  "crystalmod.info.filter.blacklist": "§7§nBlacklist",
+  "crystalmod.info.filter.damage": "§2Damage Match",
+  "crystalmod.info.filter.nbt": "§2NBT Match",
+  "crystalmod.info.filter.shift": "<Hold Shift for Items>",
   
   "_comment": "Chat Messages",
   "crystalmod.message.notowner": "You do not own this",

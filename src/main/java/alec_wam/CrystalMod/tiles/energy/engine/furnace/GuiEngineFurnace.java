@@ -19,6 +19,13 @@ public class GuiEngineFurnace extends GuiElementContainer {
     }
 	
 	@Override
+	public void render(int mouseX, int mouseY, float partialTicks) {
+		this.drawDefaultBackground();
+		super.render(mouseX, mouseY, partialTicks);
+		this.renderHoveredToolTip(mouseX, mouseY);
+	}
+	
+	@Override
 	public void initGui(){
 		super.initGui();		
 		//System.out.println(""+this.tileFurnace.energyStorage);

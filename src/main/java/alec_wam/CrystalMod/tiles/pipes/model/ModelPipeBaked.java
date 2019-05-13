@@ -89,18 +89,22 @@ public class ModelPipeBaked implements IBakedModel
         final BlockFaceUV uvThinS = new BlockFaceUV(new float[] { 0.0f, 0.0f, 3.0f, 16.0f }, 0);
         final BlockPartFace faceThinS = new BlockPartFace((EnumFacing)null, 0, "", uvThinS);
         
-        list.add(faceBakery.makeBakedQuad(new Vector3f(3.0f, 13.0f, 14.0f), new Vector3f(13.0f, 13.0f, 15.0f), faceThin, modeSprite, EnumFacing.UP, modelRot, (BlockPartRotation)null, scale, true));
-        list.add(faceBakery.makeBakedQuad(new Vector3f(3.0f, 3.0f, 14.0f), new Vector3f(13.0f, 3.0f, 15.0f), faceThin, modeSprite, EnumFacing.DOWN, modelRot, (BlockPartRotation)null, scale, true));
-        list.add(faceBakery.makeBakedQuad(new Vector3f(3.0f, 3.0f, 14.0f), new Vector3f(13.0f, 13.0f, 15.0f), face, iron, EnumFacing.NORTH, modelRot, (BlockPartRotation)null, true, true));
-        list.add(faceBakery.makeBakedQuad(new Vector3f(3.0f, 3.0f, 14.0f), new Vector3f(3.0f, 13.0f, 15.0f), faceThinS, modeSprite, EnumFacing.WEST, modelRot, (BlockPartRotation)null, scale, true));
-        list.add(faceBakery.makeBakedQuad(new Vector3f(13.0f, 3.0f, 14.0f), new Vector3f(13.0f, 13.0f, 15.0f), faceThinS, modeSprite, EnumFacing.EAST, modelRot, (BlockPartRotation)null, scale, true));
+        float minSmall = 4.0F;
+        float maxSmall = 12.0F;
+        list.add(faceBakery.makeBakedQuad(new Vector3f(minSmall, maxSmall, 14.0f), new Vector3f(maxSmall, maxSmall, 15.0f), faceThin, modeSprite, EnumFacing.UP, modelRot, (BlockPartRotation)null, scale, true));
+        list.add(faceBakery.makeBakedQuad(new Vector3f(minSmall, minSmall, 14.0f), new Vector3f(maxSmall, minSmall, 15.0f), faceThin, modeSprite, EnumFacing.DOWN, modelRot, (BlockPartRotation)null, scale, true));
+        list.add(faceBakery.makeBakedQuad(new Vector3f(minSmall, minSmall, 14.0f), new Vector3f(maxSmall, maxSmall, 15.0f), face, iron, EnumFacing.NORTH, modelRot, (BlockPartRotation)null, true, true));
+        list.add(faceBakery.makeBakedQuad(new Vector3f(minSmall, minSmall, 14.0f), new Vector3f(minSmall, maxSmall, 15.0f), faceThinS, modeSprite, EnumFacing.WEST, modelRot, (BlockPartRotation)null, scale, true));
+        list.add(faceBakery.makeBakedQuad(new Vector3f(maxSmall, minSmall, 14.0f), new Vector3f(maxSmall, maxSmall, 15.0f), faceThinS, modeSprite, EnumFacing.EAST, modelRot, (BlockPartRotation)null, scale, true));
         
-        list.add(faceBakery.makeBakedQuad(new Vector3f(2.0f, 14.0f, 15.0f), new Vector3f(14.0f, 14.0f, 16.0f), faceThin, iron, EnumFacing.UP, modelRot, (BlockPartRotation)null, true, true));
-        list.add(faceBakery.makeBakedQuad(new Vector3f(2.0f, 2.0f, 15.0f), new Vector3f(14.0f, 2.0f, 16.0f), faceThin, iron, EnumFacing.DOWN, modelRot, (BlockPartRotation)null, true, true));
-        list.add(faceBakery.makeBakedQuad(new Vector3f(2.0f, 2.0f, 15.0f), new Vector3f(14.0f, 14.0f, 16.0f), face, iron, EnumFacing.NORTH, modelRot, (BlockPartRotation)null, true, true));
-        list.add(faceBakery.makeBakedQuad(new Vector3f(2.0f, 2.0f, 15.0f), new Vector3f(14.0f, 14.0f, 16.0f), face, iron, EnumFacing.SOUTH, modelRot, (BlockPartRotation)null, true, true));
-        list.add(faceBakery.makeBakedQuad(new Vector3f(2.0f, 2.0f, 15.0f), new Vector3f(2.0f, 14.0f, 16.0f), faceThinS, iron, EnumFacing.WEST, modelRot, (BlockPartRotation)null, true, true));
-        list.add(faceBakery.makeBakedQuad(new Vector3f(14.0f, 2.0f, 15.0f), new Vector3f(14.0f, 14.0f, 16.0f), faceThinS, iron, EnumFacing.EAST, modelRot, (BlockPartRotation)null, true, true));
+        float minLarge = 3.0F;
+        float maxLarge = 13.0F;
+        list.add(faceBakery.makeBakedQuad(new Vector3f(minLarge, maxLarge, 15.0f), new Vector3f(maxLarge, maxLarge, 16.0f), faceThin, iron, EnumFacing.UP, modelRot, (BlockPartRotation)null, true, true));
+        list.add(faceBakery.makeBakedQuad(new Vector3f(minLarge, minLarge, 15.0f), new Vector3f(maxLarge, minLarge, 16.0f), faceThin, iron, EnumFacing.DOWN, modelRot, (BlockPartRotation)null, true, true));
+        list.add(faceBakery.makeBakedQuad(new Vector3f(minLarge, minLarge, 15.0f), new Vector3f(maxLarge, maxLarge, 16.0f), face, iron, EnumFacing.NORTH, modelRot, (BlockPartRotation)null, true, true));
+        list.add(faceBakery.makeBakedQuad(new Vector3f(minLarge, minLarge, 15.0f), new Vector3f(maxLarge, maxLarge, 16.0f), face, iron, EnumFacing.SOUTH, modelRot, (BlockPartRotation)null, true, true));
+        list.add(faceBakery.makeBakedQuad(new Vector3f(minLarge, minLarge, 15.0f), new Vector3f(minLarge, maxLarge, 16.0f), faceThinS, iron, EnumFacing.WEST, modelRot, (BlockPartRotation)null, true, true));
+        list.add(faceBakery.makeBakedQuad(new Vector3f(maxLarge, minLarge, 15.0f), new Vector3f(maxLarge, maxLarge, 16.0f), faceThinS, iron, EnumFacing.EAST, modelRot, (BlockPartRotation)null, true, true));
         
     }
     
@@ -136,8 +140,8 @@ public class ModelPipeBaked implements IBakedModel
         TextureAtlasSprite core = getCoreTexture(state);
         
 		scale = false;
-		float max = 12.0f;
-		float min = 4.0f;
+		float max = 11.0f;
+		float min = 5.0f;
 		final BlockFaceUV uv2 = new BlockFaceUV(new float[] { 0.0f, 0.0f, 16.0f, 16.0f }, 180);
 		final BlockPartFace face2 = new BlockPartFace((EnumFacing)null, 0, "", uv2);
 		
@@ -173,8 +177,8 @@ public class ModelPipeBaked implements IBakedModel
         
         scale = true;
         
-        float minExt = 5;
-        float maxExt = 11;
+        float minExt = 5.6F;
+        float maxExt = 10.4F;
         boolean scaleExt = false;
         final BlockPartFace faceExtTop = new BlockPartFace((EnumFacing)null, 0, "", new BlockFaceUV(new float[] { 5, 0, 11, 4 }, 0));
         final BlockPartFace faceExtBottom = new BlockPartFace((EnumFacing)null, 0, "", new BlockFaceUV(new float[] { 5, 12, 11, 16 }, 0));

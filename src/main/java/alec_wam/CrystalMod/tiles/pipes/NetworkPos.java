@@ -38,4 +38,11 @@ public class NetworkPos {
 		return new NetworkPos(pos.offset(dir), dimension);
 	}
 	
+	@Override
+	public boolean equals(Object obj){
+		if(!(obj instanceof NetworkPos)) return false;
+		NetworkPos otherPos = (NetworkPos)obj;
+		return otherPos.pos.equals(pos) && otherPos.dimension.equals(dimension);
+	}
+	
 }

@@ -16,7 +16,7 @@ import net.minecraftforge.items.IItemHandler;
 public class PipeNetworkItem extends PipeNetworkBase<TileEntityPipeItem>{
 
 	private boolean requiresSort;
-	protected List<NetworkInventory> inventoryList; 
+	public List<NetworkInventory> inventoryList; 
 	private final Map<NetworkPos, List<NetworkInventory>> invMap;
 
 	public PipeNetworkItem(){
@@ -39,7 +39,7 @@ public class PipeNetworkItem extends PipeNetworkBase<TileEntityPipeItem>{
 			for (EnumFacing facing : pip.getExternalConnections()) {
 				IItemHandler extCon = pip.getExternalInventory(facing);
 				if(extCon != null) {
-					inventoryAdded(pip, facing, extCon);
+					inventoryAdded(pip, facing);
 				}
 			}
 		    return true;
@@ -47,12 +47,20 @@ public class PipeNetworkItem extends PipeNetworkBase<TileEntityPipeItem>{
 		return false;
 	}
 	
-	public void inventoryAdded(TileEntityPipeItem itemPipe, EnumFacing direction, IItemHandler externalInventory) {
-		NetworkPos pos = itemPipe.getNetworkPos().offset(direction);
-		NetworkInventory inv = new NetworkInventory(this, externalInventory, itemPipe, direction, pos);
-		inventoryList.add(inv);
-		getOrCreate(pos).add(inv);
+	public void updateSortOrder(){
 		requiresSort = true;
+	}
+	
+	public void inventoryAdded(TileEntityPipeItem itemPipe, EnumFacing direction) {
+		NetworkPos pos = itemPipe.getNetworkPos().offset(direction);
+		if(!invMap.containsKey(pos)){
+			boolean cobbleGen = itemPipe.canDoCobbleGen(direction);			
+			NetworkInventory inv = new NetworkInventory(this, itemPipe, direction, pos).setCobbleGen(cobbleGen);
+			inventoryList.add(inv);
+			getOrCreate(pos).add(inv);
+			
+			requiresSort = true;
+		}
 	}
 
 	public NetworkInventory getInventory(TileEntityPipeItem pipe, EnumFacing dir) {
@@ -65,7 +73,13 @@ public class PipeNetworkItem extends PipeNetworkBase<TileEntityPipeItem>{
 	}
 
 	private List<NetworkInventory> getOrCreate(NetworkPos bc) {
-		List<NetworkInventory> res = invMap.get(bc);
+		List<NetworkInventory> res = null;
+		search : for(NetworkPos pos : invMap.keySet()){
+			if(pos.equals(bc)){
+				res = invMap.get(pos);
+				break search;
+			}
+		}
 		if(res == null) {
 			res = new ArrayList<NetworkInventory>();
 			invMap.put(bc, res);
@@ -78,7 +92,7 @@ public class PipeNetworkItem extends PipeNetworkBase<TileEntityPipeItem>{
 		List<NetworkInventory> invs = getOrCreate(pos);
 		NetworkInventory remove = null;
 		for (NetworkInventory ni : invs) {
-			if(ni.pip.getPos().equals(itemPipe.getPos())) {
+			if(ni.pip.getNetworkPos().equals(itemPipe.getNetworkPos())) {
 				remove = ni;
 				break;
 			}
@@ -88,7 +102,6 @@ public class PipeNetworkItem extends PipeNetworkBase<TileEntityPipeItem>{
 			inventoryList.remove(remove);
 			requiresSort = true;
 		}
-
 	}
 
 	@Override

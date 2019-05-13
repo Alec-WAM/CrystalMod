@@ -8,11 +8,15 @@ import java.util.Map;
 
 import javax.annotation.Nullable;
 
+import alec_wam.CrystalMod.init.ModItems;
+import alec_wam.CrystalMod.tiles.pipes.EnumPipeUpgrades;
 import alec_wam.CrystalMod.tiles.pipes.NetworkPos;
 import alec_wam.CrystalMod.tiles.pipes.PipeConnectionMode;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.Lang;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -26,6 +30,7 @@ public class NetworkInventory {
 	EnumFacing pipDir;
 	NetworkPos location;
 	EnumFacing inventorySide;
+	public boolean isCobbleGen;
 
 	List<Target> sendPriority = new ArrayList<Target>();
 	RoundRobinIterator<Target> rrIter = new RoundRobinIterator<Target>(sendPriority);
@@ -37,7 +42,7 @@ public class NetworkInventory {
 	World world;
 	PipeNetworkItem network;
 
-	NetworkInventory(PipeNetworkItem network, IItemHandler inv, TileEntityPipeItem pip, EnumFacing pipDir, NetworkPos location) {
+	NetworkInventory(PipeNetworkItem network, TileEntityPipeItem pip, EnumFacing pipDir, NetworkPos location) {
 		this.network = network;
 		inventorySide = pipDir.getOpposite();
 
@@ -45,6 +50,12 @@ public class NetworkInventory {
 		this.pipDir = pipDir;
 		this.location = location;
 		world = pip.getWorld();
+		this.isCobbleGen = false;
+	}
+	
+	public NetworkInventory setCobbleGen(boolean value){
+		this.isCobbleGen = value;
+		return this;
 	}
 
 	public boolean hasTarget(TileEntityPipeItem pipe, EnumFacing dir) {
@@ -66,14 +77,12 @@ public class NetworkInventory {
 		return mode == PipeConnectionMode.OUT || mode == PipeConnectionMode.BOTH;
 	}
 
-	//TODO Add Priority
 	int getPriority() {
-		return 0;
-		//return pip.getOutputPriority(pipDir);
+		return pip.getPriority(pipDir);
 	}
 
 	public void onTick() {
-		if(tickDeficit > 0 || !canExtract() /*|| !pip.isRedstoneModeMet(pipDir)*/) {
+		if(tickDeficit > 0 || !canExtract() || !pip.getRedstoneSetting(pipDir).passes(world, pip.getPos())) {
 			//do nothing     
 		} else {
 			transferItems();
@@ -82,7 +91,7 @@ public class NetworkInventory {
 		tickDeficit--;
 		if(tickDeficit < -1) {
 			//Sleep for a second before checking again.
-			tickDeficit = 20;
+			tickDeficit = Math.round(getTickTimePerItem());
 		}
 	}
 
@@ -98,6 +107,39 @@ public class NetworkInventory {
 		extractFromSlot = slot;
 		extractFromSlot--;
 	}
+
+	public static final int MAX_SPEED_UPGRADES = 8;
+	private float getTickTimePerItem() {
+		float speed = 20.0F;
+		ItemStack upgrade = pip.getUpgrade(pipDir);
+		if(ItemStackTools.isValid(upgrade)){
+			if(upgrade.getItem() == ModItems.pipeUpgrades.getItem(EnumPipeUpgrades.SPEED)){
+				int size = upgrade.getCount();
+				float multi = 20.0F / (float)MAX_SPEED_UPGRADES;
+				speed -= (size * multi);
+			}
+		}
+		float maxExtract = speed / getMaximumExtracted();
+	    return maxExtract;
+	}
+
+	private int getMaximumExtracted() {
+		ItemStack upgrade = pip.getUpgrade(pipDir);
+		if(ItemStackTools.isValid(upgrade)){
+			/*if(upgrade.getItem() == ModItems.pipeUpgrades.getItem(EnumPipeUpgrades.SPEED)){
+				int size = upgrade.getCount();
+				return 4 + (size * 4);
+			}*/
+			if(upgrade.getItem() == ModItems.pipeUpgrades.getItem(EnumPipeUpgrades.STACK)){
+				return 64;
+			}
+			if(upgrade.getItem() == ModItems.pipeUpgrades.getItem(EnumPipeUpgrades.SLOW)){
+				return 1;
+			}
+		}
+		return 4;
+	}
+	
 	static int MAX_SLOT_CHECK_PER_TICK = 64;
 	private boolean transferItems() {
 
@@ -112,7 +154,7 @@ public class NetworkInventory {
 		}
 
 		ItemStack extractItem = ItemStackTools.getEmptyStack();
-		int maxExtracted = /*pip.getMaximumExtracted(pipDir);*/1;
+		int maxExtracted = getMaximumExtracted();
 
 		int slot = -1;
 		int slotChecksPerTick = Math.min(numSlots, MAX_SLOT_CHECK_PER_TICK);
@@ -136,8 +178,8 @@ public class NetworkInventory {
 		if(ItemStackTools.isNullStack(itemStack)) {
 			return false;
 		}
-		//return pip.passesFilter(itemStack, pipDir);
-		return true;
+		ItemStack filter = pip.getFilter(pipDir);
+		return TileEntityPipeItem.passesFilter(itemStack, filter);
 	}
 
 	private boolean doTransfer(ItemStack extractedItem, int slot, int maxExtract) {
@@ -168,7 +210,7 @@ public class NetworkInventory {
 			}
 		}
 		//pip.itemsExtracted(numInserted, slot);
-		tickDeficit = Math.round(numInserted * /*pip.getTickTimePerItem(pipDir)*/10.0F);
+		tickDeficit = Math.round(numInserted * getTickTimePerItem());
 	}
 
 	int insertIntoTargets(ItemStack toExtract) {
@@ -208,10 +250,10 @@ public class NetworkInventory {
 		if(!canInsert() || ItemStackTools.isNullStack(item)) {
 			return 0;
 		}
-
-		/*if(!pip.passesFilter(item, pipDir)){
+		ItemStack filter = pip.getFilter(pipDir);
+		if(!TileEntityPipeItem.passesFilter(item, filter)){
 			return 0;
-		}*/
+		}
 		int startSize = ItemStackTools.getStackSize(item);
 		ItemStack res = ItemHandlerHelper.insertItemStacked(getInventory(), item.copy(), false);
 		int val = ItemStackTools.isNullStack(res) ? startSize : startSize - ItemStackTools.getStackSize(res);
@@ -303,6 +345,10 @@ public class NetworkInventory {
 
 	public @Nullable IItemHandler getInventory() {
 		//TODO Handle World
+		//return pip.getExternalInventory(inventorySide);
+		if(this.isCobbleGen){
+			return COBBLE_GEN_INVENTORY;
+		}
 		return ItemUtil.getExternalItemHandler(world, location.getBlockPos(), inventorySide);
 	}
 
@@ -346,4 +392,39 @@ public class NetworkInventory {
 			return (x < y) ? -1 : ((x == y) ? 0 : 1);
 		}
 	}
+	
+	public static final IItemHandler COBBLE_GEN_INVENTORY = new IItemHandler(){
+
+		@Override
+		public int getSlots() {
+			return 1;
+		}
+
+		@Override
+		public ItemStack getStackInSlot(int slot) {
+			return new ItemStack(Blocks.COBBLESTONE, 64);
+		}
+
+		@Override
+		public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
+			return ItemStackTools.getEmptyStack();
+		}
+
+		@Override
+		public ItemStack extractItem(int slot, int amount, boolean simulate) {
+			return new ItemStack(Blocks.COBBLESTONE, amount);
+		}
+
+		@Override
+		public int getSlotLimit(int slot) {
+			return 64;
+		}
+
+		@SuppressWarnings("deprecation")
+		@Override
+		public boolean isItemValid(int slot, ItemStack stack) {
+			return stack.getItem() == Item.getItemFromBlock(Blocks.COBBLESTONE);
+		}
+		
+	};
 }

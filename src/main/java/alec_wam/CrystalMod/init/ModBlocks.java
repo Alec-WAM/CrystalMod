@@ -20,6 +20,7 @@ import alec_wam.CrystalMod.core.BlockVariantGroup.TileFactory;
 import alec_wam.CrystalMod.core.color.EnumCrystalColor;
 import alec_wam.CrystalMod.core.color.EnumCrystalColorSpecial;
 import alec_wam.CrystalMod.tiles.CustomItemRender;
+import alec_wam.CrystalMod.tiles.EnumCrystalColorSpecialWithCreative;
 import alec_wam.CrystalMod.tiles.chests.metal.BlockMetalCrystalChest;
 import alec_wam.CrystalMod.tiles.chests.metal.MetalCrystalChestType;
 import alec_wam.CrystalMod.tiles.chests.metal.TileEntityMetalCrystalChest;
@@ -43,6 +44,8 @@ import alec_wam.CrystalMod.tiles.jar.TileEntityJar;
 import alec_wam.CrystalMod.tiles.pipes.BlockPipe;
 import alec_wam.CrystalMod.tiles.pipes.NetworkType;
 import alec_wam.CrystalMod.tiles.pipes.item.TileEntityPipeItem;
+import alec_wam.CrystalMod.tiles.tank.BlockTank;
+import alec_wam.CrystalMod.tiles.tank.TileEntityTank;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -74,7 +77,7 @@ public class ModBlocks {
 	public static BlockVariantGroup<EnumBetterRoses, BlockTallFlowerVariant<EnumBetterRoses>> betterRosesGroup;	
 	public static BlockFlowerLilyPad flowerLilypad;
 
-	public static BlockVariantGroup<EnumCrystalColor, BlockCrate> crateGroup;
+	public static BlockVariantGroup<EnumCrystalColorSpecialWithCreative, BlockCrate> crateGroup;
 	public static final TileEntityType<TileEntityCrate> TILE_CRATE = TileEntityType.register(CrystalMod.resource("crate"), TileEntityType.Builder.create(TileEntityCrate::new));
 	public static BlockVariantGroup<WoodenCrystalChestType, BlockWoodenCrystalChest> woodenChestGroup;
 	public static final TileEntityType<TileEntityWoodenCrystalChest> TILE_WOODEN_CHEST = TileEntityType.register(CrystalMod.resource("wooden_chest"), TileEntityType.Builder.create(TileEntityWoodenCrystalChest::new));
@@ -82,6 +85,8 @@ public class ModBlocks {
 	public static final TileEntityType<TileEntityMetalCrystalChest> TILE_METAL_CHEST = TileEntityType.register(CrystalMod.resource("metal_chest"), TileEntityType.Builder.create(TileEntityMetalCrystalChest::new));
 	public static BlockWirelessChest wirelessChest;
 	public static final TileEntityType<TileEntityWirelessChest> TILE_WIRELESS_CHEST = TileEntityType.register(CrystalMod.resource("wireless_chest"), TileEntityType.Builder.create(TileEntityWirelessChest::new));
+	public static BlockVariantGroup<EnumCrystalColorSpecialWithCreative, BlockTank> tankGroup;
+	public static final TileEntityType<TileEntityTank> TILE_TANK = TileEntityType.register(CrystalMod.resource("tank"), TileEntityType.Builder.create(TileEntityTank::new));
 	
 	public static BlockVariantGroup<WoodType, BlockJar> jarGroup;
 	public static final TileEntityType<TileEntityJar> TILE_JAR = TileEntityType.register(CrystalMod.resource("jar"), TileEntityType.Builder.create(TileEntityJar::new));
@@ -215,15 +220,15 @@ public class ModBlocks {
 		RegistrationHandler.addBlockGroup(crystalShardBlock);
 		
 		//TILES
-		crateGroup = BlockVariantGroup.Builder.<EnumCrystalColor, BlockCrate>create()
+		crateGroup = BlockVariantGroup.Builder.<EnumCrystalColorSpecialWithCreative, BlockCrate>create()
 				.groupName("crate")
 				.suffix()
-				.variants(EnumCrystalColor.values())
+				.variants(EnumCrystalColorSpecialWithCreative.values())
 				.blockPropertiesFactory(type -> Block.Properties.create(Material.WOOD).hardnessAndResistance(3.0F, 5.0F).sound(SoundType.WOOD))
 				.blockFactory(BlockCrate::new)
-				.tileFactory(new TileFactory<EnumCrystalColor>(){
+				.tileFactory(new TileFactory<EnumCrystalColorSpecialWithCreative>(){
 					@Override
-					public TileEntityCrate createTile(EnumCrystalColor variant) {
+					public TileEntityCrate createTile(EnumCrystalColorSpecialWithCreative variant) {
 						return new TileEntityCrate(variant);
 					}
 				})
@@ -264,6 +269,23 @@ public class ModBlocks {
 		RegistrationHandler.addTile(TILE_METAL_CHEST);				
 		wirelessChest = new BlockWirelessChest(Block.Properties.create(Material.IRON).hardnessAndResistance(5.0F, 6.0F).sound(SoundType.METAL)); 
 		RegistrationHandler.createBlock(wirelessChest, new ItemBlock(wirelessChest, RegistrationHandler.defaultItemProperties(ModItemGroups.ITEM_GROUP_BLOCKS).setTEISR(() -> CustomItemRender::new)), "wirelesschest");	
+		RegistrationHandler.addTile(TILE_WIRELESS_CHEST);
+		tankGroup = BlockVariantGroup.Builder.<EnumCrystalColorSpecialWithCreative, BlockTank>create()
+				.groupName("tank")
+				.suffix()
+				.variants(EnumCrystalColorSpecialWithCreative.values())
+				.blockPropertiesFactory(type -> Block.Properties.create(Material.IRON).hardnessAndResistance(1.5F, 15.0F).sound(SoundType.GLASS))
+				.blockFactory(BlockTank::new)
+				.itemPropertiesFactory(variant -> new Item.Properties().group(ModItemGroups.ITEM_GROUP_BLOCKS).setTEISR(() -> CustomItemRender::new))
+				.tileFactory(new TileFactory<EnumCrystalColorSpecialWithCreative>(){
+					@Override
+					public TileEntityTank createTile(EnumCrystalColorSpecialWithCreative variant) {
+						return new TileEntityTank(variant);
+					}
+				})
+				.build();
+		RegistrationHandler.addBlockGroup(tankGroup);
+		RegistrationHandler.addTile(TILE_TANK);	
 		
 		jarGroup = BlockVariantGroup.Builder.<WoodType, BlockJar>create()
 				.groupName("jar")
@@ -314,6 +336,7 @@ public class ModBlocks {
 		
 		pipeItem = new BlockPipe(NetworkType.ITEM, Block.Properties.create(Material.IRON).hardnessAndResistance(1.0F, 10.0F).sound(SoundType.METAL)); 
 		RegistrationHandler.createBlock(pipeItem, ModItemGroups.ITEM_GROUP_BLOCKS, "pipe_item");
+		RegistrationHandler.addTile(TILE_PIPE_ITEM);
 	}
 
 

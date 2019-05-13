@@ -2,8 +2,6 @@ package alec_wam.CrystalMod.tiles.pipes;
 
 import java.util.List;
 
-import javax.annotation.Nullable;
-
 import com.google.common.collect.Lists;
 
 import net.minecraft.tileentity.TileEntity;
@@ -65,20 +63,53 @@ public class PipeNetworkBuilder {
 		if(tile instanceof TileEntityPipeBase){
 			TileEntityPipeBase pipe = (TileEntityPipeBase)tile;
 			if(pipe.getNetworkType() == type){
-				if(pipe.getConnectionSetting(from.getOpposite()) !=PipeConnectionMode.DISABLED){
+				if(pipe.getConnectionSetting(from) !=PipeConnectionMode.DISABLED){
 					if(network.addPipe((T) pipe)){
 						pipe.setNetwork(network);
+						
+						for(EnumFacing facing : pipe.pipeConnections){
+							if(from !=null && facing.getOpposite() == from)continue;
+							BlockPos offset = pos.offset(facing);
+							if(!visited.contains(offset)){
+								scanPipes(network, type, world, offset, facing, visited);
+							}
+						}						
 					}
 				}
 			}
-			//TODO Look into Having a pipe portal
-			for(EnumFacing facing : EnumFacing.values()){
-				if(from !=null && facing.getOpposite() == from)continue;
-				BlockPos offset = pos.offset(facing);
-				if(!visited.contains(offset)){
-					scanPipes(network, type, world, offset, facing, visited);
-				}
-			}
+		}
+	}
+	
+	public static void linkPipes(TileEntityPipeBase pipe, EnumFacing face){
+		//TODO Set Default for tile
+		pipe.setConnectionSetting(face, PipeConnectionMode.IN);
+		
+		TileEntity tile = pipe.getWorld().getTileEntity(pipe.getPos().offset(face));
+		if(tile instanceof TileEntityPipeBase){
+			TileEntityPipeBase otherPipe = (TileEntityPipeBase)tile;
+			otherPipe.setConnectionSetting(face.getOpposite(), PipeConnectionMode.IN);
+			otherPipe.rebuildConnections = true;
+			otherPipe.serverDirty = true;
+		}
+		
+		pipe.setNetwork(null);
+		pipe.rebuildConnections = true;
+		pipe.serverDirty = true;
+	}
+	
+	public static void unlinkPipes(TileEntityPipeBase pipe, EnumFacing face){
+		pipe.setConnectionSetting(face, PipeConnectionMode.DISABLED);
+		pipe.pipeConnections.remove(face);
+		pipe.getNetwork().resetNetwork();
+		pipe.rebuildConnections = true;
+		
+		TileEntity tile = pipe.getWorld().getTileEntity(pipe.getPos().offset(face));
+		if(tile instanceof TileEntityPipeBase){
+			TileEntityPipeBase otherPipe = (TileEntityPipeBase)tile;
+			otherPipe.setConnectionSetting(face.getOpposite(), PipeConnectionMode.DISABLED);
+			otherPipe.pipeConnections.remove(face.getOpposite());
+			if(otherPipe.getNetwork() !=null)otherPipe.getNetwork().resetNetwork();
+			otherPipe.rebuildConnections = true;
 		}
 	}
 	

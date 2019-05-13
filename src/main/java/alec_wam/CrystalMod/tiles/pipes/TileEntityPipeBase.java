@@ -3,17 +3,24 @@ package alec_wam.CrystalMod.tiles.pipes;
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
+
+import com.google.common.collect.Lists;
 
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.IMessageHandler;
 import alec_wam.CrystalMod.tiles.PacketTileMessage;
+import alec_wam.CrystalMod.tiles.RedstoneMode;
 import alec_wam.CrystalMod.tiles.TileEntityMod;
 import alec_wam.CrystalMod.util.BlockUtil;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 
 public abstract class TileEntityPipeBase extends TileEntityMod implements IMessageHandler {
@@ -23,7 +30,8 @@ public abstract class TileEntityPipeBase extends TileEntityMod implements IMessa
 
 	protected boolean serverDirty;
 	protected boolean rebuildConnections;
-	public PipeConnectionMode[] connectionSettings;
+	private PipeConnectionMode[] connectionSettings;
+	private RedstoneMode[] redstoneSettings;
 	
 	protected final Set<EnumFacing> pipeConnections;
 	protected final Set<EnumFacing> externalConnections;
@@ -34,6 +42,8 @@ public abstract class TileEntityPipeBase extends TileEntityMod implements IMessa
 		rebuildConnections = true;
 		connectionSettings = new PipeConnectionMode[6];
 		Arrays.fill(connectionSettings, PipeConnectionMode.OUT);
+		redstoneSettings = new RedstoneMode[6];
+		Arrays.fill(redstoneSettings, RedstoneMode.ON);
 		pipeConnections = EnumSet.noneOf(EnumFacing.class);
 		externalConnections = EnumSet.noneOf(EnumFacing.class);
 	}
@@ -47,6 +57,12 @@ public abstract class TileEntityPipeBase extends TileEntityMod implements IMessa
 			connectionSettingData.setByte(facing.getName(), (byte)connectionSettings[i].ordinal());
 		}
 		nbt.setTag("ConnectionSettings", connectionSettingData);
+		
+		int[] redstone = new int[6];
+		for (int i = 0; i < 6; i++) {
+			redstone[i] = redstoneSettings[i].ordinal();
+		}
+		nbt.setIntArray("RedstoneSettings", redstone);
 		
 		int[] dirs = new int[pipeConnections.size()];
 		Iterator<EnumFacing> cons = pipeConnections.iterator();
@@ -72,6 +88,13 @@ public abstract class TileEntityPipeBase extends TileEntityMod implements IMessa
 			int i = facing.getIndex();
 			connectionSettings[i] = PipeConnectionMode.values()[mode];
 		}		
+		
+		redstoneSettings = new RedstoneMode[6];
+		Arrays.fill(redstoneSettings, RedstoneMode.ON);
+		int[] redstone = nbt.getIntArray("RedstoneSettings");
+		for (int i = 0; i < 6; i++) {
+			redstoneSettings[i] = RedstoneMode.values()[redstone[i]];
+		}
 		
 		pipeConnections.clear();
 		int[] dirs = nbt.getIntArray("Connections");
@@ -101,6 +124,17 @@ public abstract class TileEntityPipeBase extends TileEntityMod implements IMessa
 				externalConnections.add(EnumFacing.byIndex(dirs[i]));
 			}
 			BlockUtil.markBlockForUpdate(getWorld(), getPos());
+		}
+		
+		if(messageId.equalsIgnoreCase("IO.Client")){
+			EnumFacing facing = EnumFacing.byIndex(messageData.getInt("Facing"));
+			PipeConnectionMode mode = PipeConnectionMode.values()[messageData.getInt("Mode")];
+			setConnectionSetting(facing, mode);
+		}
+		if(messageId.equalsIgnoreCase("Redstone.Client")){
+			EnumFacing facing = EnumFacing.byIndex(messageData.getInt("Facing"));
+			RedstoneMode mode = RedstoneMode.values()[messageData.getInt("Mode")];
+			setRedstoneSetting(facing, mode);
 		}
 	}
 	
@@ -142,10 +176,16 @@ public abstract class TileEntityPipeBase extends TileEntityMod implements IMessa
 		return connectionSettings[i];
 	}
 	
+	public void setConnectionSetting(EnumFacing facing, PipeConnectionMode mode){
+		int i = facing.getIndex();
+		connectionSettings[i] = mode;
+		rebuildConnections = true;
+	}
+	
 	public void incrsConnectionMode(EnumFacing facing){
 		int i = facing.getIndex();
 		final PipeConnectionMode mode = connectionSettings[i];
-		connectionSettings[i] = PipeConnectionMode.values()[(mode.ordinal() + 1) % (mode.values().length)];
+		connectionSettings[i] = PipeConnectionMode.values()[(mode.ordinal() + 1) % (PipeConnectionMode.values().length)];
 		rebuildConnections = true;
 	}
 	
@@ -184,7 +224,7 @@ public abstract class TileEntityPipeBase extends TileEntityMod implements IMessa
 				}
 			}
 		}
-		
+		//TODO Look into cobblegen sticking around
 		for(EnumFacing facing : externalConnections){
 			if(getConnectionSetting(facing) == PipeConnectionMode.DISABLED){
 				externalConnectionRemoved(facing);
@@ -227,6 +267,23 @@ public abstract class TileEntityPipeBase extends TileEntityMod implements IMessa
 		return externalConnections;
 	}
 	
+	//Redstone
+	public RedstoneMode getRedstoneSetting(EnumFacing facing){
+		int i = facing.getIndex();
+		return redstoneSettings[i];
+	}
+	
+	public void setRedstoneSetting(EnumFacing facing, RedstoneMode mode){
+		int i = facing.getIndex();
+		redstoneSettings[i] = mode;
+	}
+	
+	public void incrsRedstoneMode(EnumFacing facing){
+		int i = facing.getIndex();
+		final RedstoneMode mode = redstoneSettings[i];
+		redstoneSettings[i] = RedstoneMode.values()[(mode.ordinal() + 1) % (RedstoneMode.values().length)];
+	}	
+	
 	public void setNetwork(PipeNetworkBase<?> network){
 		this.network = network;
 	}
@@ -247,6 +304,14 @@ public abstract class TileEntityPipeBase extends TileEntityMod implements IMessa
 			networkPos = new NetworkPos(getPos(), getWorld().dimension.getType());
 		}
 		return networkPos;
+	}
+
+	public boolean openConnector(EntityPlayer player, EnumHand hand, EnumFacing side) {
+		return false;
+	}
+
+	public List<ItemStack> getDrops() {
+		return Lists.newArrayList();
 	}
 	
 }

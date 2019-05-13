@@ -98,7 +98,7 @@ public class BlockPedistal extends BlockContainer implements IBucketPickupHandle
 			boolean hasItem = ItemStackTools.isValid(pedistal.getStack());
 			if(hasItem){
 				EnumFacing facing = state.get(FACING);
-				AxisAlignedBB bb = new AxisAlignedBB(8.0D - 2, 8.0D - 2, 8.0D - 2, 8.0D + 2, 8.0D + 2, 8.0D + 2); //new AxisAlignedBB(0.3, 0.3, 0.3, 0.7, 0.7, 0.7);
+				AxisAlignedBB bb = new AxisAlignedBB(8.0D - 2, 8.0D - 2, 8.0D - 2, 8.0D + 2, 8.0D + 2, 8.0D + 2);
 				AxisAlignedBB realBB = bb.offset(facing.getXOffset() * 5, facing.getYOffset() * 5, facing.getZOffset() * 5);
 				VoxelShape itemShape = BlockUtil.makeVoxelShape(realBB);
 				RayTraceResult res = itemShape.func_212433_a(start, end, pos);

@@ -3,6 +3,7 @@ package alec_wam.CrystalMod.network;
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.network.packet.PacketRequestProfile;
 import alec_wam.CrystalMod.network.packet.PacketResponseProfile;
+import alec_wam.CrystalMod.network.packet.PacketUpdateItemNBT;
 import alec_wam.CrystalMod.tiles.PacketTileMessage;
 import alec_wam.CrystalMod.util.ChatUtil.PacketNoSpamChat;
 import net.minecraft.entity.Entity;
@@ -39,6 +40,12 @@ public class CrystalModNetwork {
 		.decoder(PacketTileMessage::decode)
 		.encoder(PacketTileMessage::encode)
 		.consumer(PacketTileMessage::handle)
+		.add();
+		
+		channel.messageBuilder(PacketUpdateItemNBT.class, getID())
+		.decoder(PacketUpdateItemNBT::decode)
+		.encoder(PacketUpdateItemNBT::encode)
+		.consumer(PacketUpdateItemNBT::handle)
 		.add();
 		
 		channel.messageBuilder(PacketNoSpamChat.class, getID())

@@ -3,6 +3,8 @@ package alec_wam.CrystalMod.tiles.pipes;
 import java.util.HashMap;
 import java.util.Map;
 
+import alec_wam.CrystalMod.tiles.pipes.item.PipeNetworkItem;
+
 public class PipeNetworkBase<P extends TileEntityPipeBase> {
 
 	public Map<NetworkPos, P> pipeMap;

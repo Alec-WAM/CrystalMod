@@ -1,0 +1,16 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"group": "crystalmod.upgrade",
+	"ingredients": [
+		{
+			"item": "crystalmod:plate_darkiron"
+		},
+		{
+			"item": "minecraft:soul_sand"
+		}
+	],
+	"result": {
+		"item": "crystalmod:pipe_upgrade_slow",
+		"count": 1
+	}
+}

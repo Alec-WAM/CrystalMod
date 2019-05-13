@@ -10,6 +10,7 @@ import alec_wam.CrystalMod.init.ModBlocks;
 import alec_wam.CrystalMod.init.ModItems;
 import alec_wam.CrystalMod.tiles.fusion.recipe.FusionRecipe;
 import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.Vec3d;
@@ -18,6 +19,7 @@ public class ModFusionRecipes {
 
 	public static void init() {
 		Vec3d colorPure = new Vec3d(255, 255, 255);
+		Vec3d colorBlue = new Vec3d(0, 0, 255);
 		List<Item> allCrystals = Lists.newArrayList();
 		allCrystals.add(ModItems.crystalGroup.getItem(EnumCrystalColorSpecial.BLUE));
 		allCrystals.add(ModItems.crystalGroup.getItem(EnumCrystalColorSpecial.RED));
@@ -31,6 +33,21 @@ public class ModFusionRecipes {
 		allCrystalBlocks.add(ModBlocks.crystalBlockGroup.getBlock(EnumCrystalColorSpecial.GREEN));
 		allCrystalBlocks.add(ModBlocks.crystalBlockGroup.getBlock(EnumCrystalColorSpecial.DARK));
 		CrystalModAPI.registerFusion(new FusionRecipe(allCrystalBlocks, allCrystalBlocks, new ItemStack(ModBlocks.crystalBlockGroup.getBlock(EnumCrystalColorSpecial.PURE), 1), colorPure));
+		
+		List<Block> allCrystalSaplings = Lists.newArrayList();
+		allCrystalSaplings.add(ModBlocks.crystalSaplingGroup.getBlock(EnumCrystalColorSpecial.BLUE));
+		allCrystalSaplings.add(ModBlocks.crystalSaplingGroup.getBlock(EnumCrystalColorSpecial.RED));
+		allCrystalSaplings.add(ModBlocks.crystalSaplingGroup.getBlock(EnumCrystalColorSpecial.GREEN));
+		allCrystalSaplings.add(ModBlocks.crystalSaplingGroup.getBlock(EnumCrystalColorSpecial.DARK));
+		CrystalModAPI.registerFusion(new FusionRecipe(allCrystalSaplings, allCrystalSaplings, new ItemStack(ModBlocks.crystalSaplingGroup.getBlock(EnumCrystalColorSpecial.PURE), 1), colorPure));
+		
+		for(EnumCrystalColorSpecial color : new EnumCrystalColorSpecial[]{EnumCrystalColorSpecial.BLUE, EnumCrystalColorSpecial.RED, EnumCrystalColorSpecial.GREEN, EnumCrystalColorSpecial.DARK}){
+			List<Item> sapling = Lists.newArrayList();
+			for(int i = 0; i < 4; i++){
+				sapling.add(ModItems.crystalShardGroup.getItem(color));
+			}
+			CrystalModAPI.registerFusion(new FusionRecipe(Blocks.OAK_SAPLING, sapling, new ItemStack(ModBlocks.crystalSaplingGroup.getBlock(color), 1), colorBlue));
+		}
 	}
 
 }

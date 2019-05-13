@@ -1,0 +1,23 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"group": "crystalmod.crate",
+	"pattern": [
+		"LPL",
+		"PCP",
+		"LPL"
+	],
+	"key": {
+		"C": {
+			"item": "crystalmod:crate_red"
+		},
+		"L": {
+			"item": "crystalmod:crystallog_green"
+		},
+		"P": {
+			"tag": "minecraft:planks"
+		}
+	},
+	"result": {
+		"item": "crystalmod:crate_green"
+	}
+}

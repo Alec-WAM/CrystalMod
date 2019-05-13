@@ -18,12 +18,14 @@ import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
 public class BlockCrystalShard extends Block {
 	public static final IntegerProperty SHARDS_1_3 = IntegerProperty.create("shards", 1, 3);
-	
+	private static final VoxelShape SHAPE_SINGLE = Block.makeCuboidShape(6.25D, 0.0D, 6.25D, 9.75D, 11.5D, 9.75D);
+	private static final VoxelShape SHAPE_MULTIPLE = Block.makeCuboidShape(4.25D, 0.0D, 4.25D, 11.75D, 11.5D, 11.75D);
 	protected final BlockVariantGroup<EnumCrystalColor, BlockCrystalShard> variantGroup;
 	protected final EnumCrystalColor type;
 	
@@ -32,6 +34,15 @@ public class BlockCrystalShard extends Block {
 		this.type = type;
 		this.variantGroup = variantGroup;
 		this.setDefaultState(this.stateContainer.getBaseState().with(SHARDS_1_3, Integer.valueOf(1)));
+	}
+	
+	@Override
+	public VoxelShape getShape(IBlockState state, IBlockReader worldIn, BlockPos pos) {
+		int shards = state.get(SHARDS_1_3);
+		if(shards > 1){
+			return SHAPE_MULTIPLE;
+		}
+		return SHAPE_SINGLE;
 	}
 	
 	@Override

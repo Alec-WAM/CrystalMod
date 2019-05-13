@@ -4,6 +4,9 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.fluid.IFluidState;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Fluids;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -102,6 +105,26 @@ public class BlockUtil {
 			realBB = new AxisAlignedBB(shiftSize - bb.minY, bb.minX, bb.minX, shiftSize - bb.maxY, bb.maxX, bb.maxZ);
 		}
 		return realBB;
+	}
+	
+	public static boolean isCobbleGen(World world, BlockPos pos, EnumFacing from){
+		IBlockState state = world.getBlockState(pos);
+		if(state.getBlock() == Blocks.COBBLESTONE){
+			int waterCount = 0;
+			int lavaCount = 0;
+			for(EnumFacing facing : EnumFacing.values()){
+				BlockPos offsetPos = pos.offset(facing);
+				IFluidState fluid = world.getFluidState(offsetPos);
+				if(fluid.getFluid() == Fluids.WATER && fluid.isSource()){
+					waterCount++;
+				}
+				if(fluid.getFluid() == Fluids.LAVA && fluid.isSource()){
+					lavaCount++;
+				}
+			}	
+			return waterCount >= 1 && lavaCount >=1;
+		}
+		return false;
 	}
 	
 }

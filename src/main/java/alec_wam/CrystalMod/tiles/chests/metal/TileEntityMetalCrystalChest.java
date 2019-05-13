@@ -29,7 +29,7 @@ public class TileEntityMetalCrystalChest extends TileEntityInventory implements 
 
     public TileEntityMetalCrystalChest(MetalCrystalChestType type)
     {
-        super(ModBlocks.TILE_WOODEN_CHEST, "", type.size);
+        super(ModBlocks.TILE_METAL_CHEST, "", type.size);
         this.type = type;
     }
 

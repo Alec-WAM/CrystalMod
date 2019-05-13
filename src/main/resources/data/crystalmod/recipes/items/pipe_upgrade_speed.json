@@ -1,0 +1,19 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"group": "crystalmod.upgrade",
+	"ingredients": [
+		{
+			"item": "crystalmod:plate_darkiron"
+		},
+		{
+			"item": "minecraft:piston"
+		},
+		{
+			"item": "minecraft:sugar"
+		}
+	],
+	"result": {
+		"item": "crystalmod:pipe_upgrade_speed",
+		"count": 1
+	}
+}
