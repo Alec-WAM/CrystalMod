@@ -1,7 +1,7 @@
 package alec_wam.CrystalMod.tiles.fusion;
 
-import alec_wam.CrystalMod.api.tile.IFusionPedistal;
-import alec_wam.CrystalMod.api.tile.IPedistal;
+import alec_wam.CrystalMod.api.tile.IFusionPedestal;
+import alec_wam.CrystalMod.api.tile.IPedestal;
 import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
@@ -45,9 +45,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 
-public class BlockPedistal extends BlockContainer implements IBucketPickupHandler, ILiquidContainer {
+public class BlockPedestal extends BlockContainer implements IBucketPickupHandler, ILiquidContainer {
 
-	//TODO Handle WaterLogged
 	public static final DirectionProperty FACING = BlockDirectional.FACING;
 	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 	public static final VoxelShape[] SHAPE_ARRAY = new VoxelShape[6];
@@ -56,7 +55,7 @@ public class BlockPedistal extends BlockContainer implements IBucketPickupHandle
 			SHAPE_ARRAY[i] = buildShape(EnumFacing.byIndex(i));
 		}
 	}
-	public BlockPedistal(Properties builder) {
+	public BlockPedestal(Properties builder) {
 		super(builder);
 		this.setDefaultState(this.stateContainer.getBaseState().with(FACING, EnumFacing.UP).with(WATERLOGGED, Boolean.valueOf(false)));
 	}
@@ -93,9 +92,9 @@ public class BlockPedistal extends BlockContainer implements IBucketPickupHandle
 	public RayTraceResult getRayTraceResult(IBlockState state, World world, BlockPos pos, Vec3d start, Vec3d end, RayTraceResult original)
     {
 		TileEntity tile = world.getTileEntity(pos);
-		if(tile instanceof IPedistal){
-			IPedistal pedistal = (IPedistal)tile;
-			boolean hasItem = ItemStackTools.isValid(pedistal.getStack());
+		if(tile instanceof IPedestal){
+			IPedestal pedestal = (IPedestal)tile;
+			boolean hasItem = ItemStackTools.isValid(pedestal.getStack());
 			if(hasItem){
 				EnumFacing facing = state.get(FACING);
 				AxisAlignedBB bb = new AxisAlignedBB(8.0D - 2, 8.0D - 2, 8.0D - 2, 8.0D + 2, 8.0D + 2, 8.0D + 2);
@@ -152,24 +151,24 @@ public class BlockPedistal extends BlockContainer implements IBucketPickupHandle
 	public boolean onBlockActivated(IBlockState state, World world, BlockPos pos, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) 
     {
 		TileEntity tile = world.getTileEntity(pos);
-		if(tile instanceof IPedistal){
-			IPedistal pedistal = (IPedistal)tile;
-			ItemStack pedistalStack = pedistal.getStack();
+		if(tile instanceof IPedestal){
+			IPedestal pedestal = (IPedestal)tile;
+			ItemStack pedestalStack = pedestal.getStack();
 			boolean locked = false;
-			if(tile instanceof IFusionPedistal){
-				locked = ((IFusionPedistal)tile).isLocked();
+			if(tile instanceof IFusionPedestal){
+				locked = ((IFusionPedestal)tile).isCrafting();
 			}
 			if(locked)return false;
 			ItemStack heldItem = player.getHeldItem(hand);
 			if(ItemStackTools.isValid(heldItem)){
-				if(ItemStackTools.isEmpty(pedistalStack) || ItemStackTools.isValid(pedistalStack) && ItemUtil.canCombine(heldItem, pedistalStack)){
+				if(ItemStackTools.isEmpty(pedestalStack) || ItemStackTools.isValid(pedestalStack) && ItemUtil.canCombine(heldItem, pedestalStack)){
 					if (world.isRemote) {
 			            return true;
 			        }
 					
 					final ItemStack original = heldItem;
 					ItemStack insertStack = heldItem;
-					if(ItemStackTools.isEmpty(pedistal.getStack())){
+					if(ItemStackTools.isEmpty(pedestal.getStack())){
 						insertStack = ItemUtil.copy(heldItem, 1);
 					}
 					IItemHandler handler = ItemUtil.getExternalItemHandler(world, pos, EnumFacing.UP);
@@ -187,15 +186,15 @@ public class BlockPedistal extends BlockContainer implements IBucketPickupHandle
 				}
 			} 
 			RayTraceResult result = BlockUtil.rayTrace(world, player, RayTraceFluidMode.NEVER);
-			if(ItemStackTools.isValid(pedistalStack) && result !=null){
+			if(ItemStackTools.isValid(pedestalStack) && result !=null){
 				if(result.hitInfo !=null && result.hitInfo instanceof String && ((String)result.hitInfo).equals("Item")){
 					if (world.isRemote) {
 			            return true;
 			        }
 					
 					//Are we looking at the item? If so then remove the item from the pedestal
-					ItemStack drop = ItemStackTools.safeCopy(pedistalStack);
-					pedistal.setStack(ItemStackTools.getEmptyStack());
+					ItemStack drop = ItemStackTools.safeCopy(pedestalStack);
+					pedestal.setStack(ItemStackTools.getEmptyStack());
 					ItemHandlerHelper.giveItemToPlayer(player, drop, player.inventory.currentItem);
 					return true;
 				}
@@ -207,15 +206,15 @@ public class BlockPedistal extends BlockContainer implements IBucketPickupHandle
 	
 	@Override
 	public TileEntity createNewTileEntity(IBlockReader worldIn) {
-		return new TileEntityPedistal();
+		return new TileEntityPedestal();
 	}
 	
 	@Override
 	public void onReplaced(IBlockState state, World worldIn, BlockPos pos, IBlockState newState, boolean isMoving) {
 		if (newState.getBlock() != this) {
 			TileEntity tileentity = worldIn.getTileEntity(pos);
-			if (tileentity instanceof IPedistal) {
-				InventoryHelper.spawnItemStack(worldIn, (double)pos.getX(), (double)pos.getY(), (double)pos.getZ(), ((IPedistal)tileentity).getStack());
+			if (tileentity instanceof IPedestal) {
+				InventoryHelper.spawnItemStack(worldIn, (double)pos.getX(), (double)pos.getY(), (double)pos.getZ(), ((IPedestal)tileentity).getStack());
 				worldIn.updateComparatorOutputLevel(pos, this);
 			}
 
@@ -287,8 +286,15 @@ public class BlockPedistal extends BlockContainer implements IBucketPickupHandle
 		
 		TileEntity tile = world.getTileEntity(pos);
 		
-		if (tile != null && tile instanceof IPedistal){
-			return ItemStackTools.isValid(((IPedistal)tile).getStack()) ? 15 : 0;
+		if (tile != null && tile instanceof IFusionPedestal){
+			IFusionPedestal fusion = (IFusionPedestal)tile;
+			if(fusion.isCrafting()){
+				return 15;
+			}
+		}
+		
+		if (tile != null && tile instanceof IPedestal){
+			return ItemStackTools.isValid(((IPedestal)tile).getStack()) ? 1 : 0;
 		}
 		
 		return powerInput;

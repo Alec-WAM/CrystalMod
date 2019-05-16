@@ -1,9 +1,8 @@
 package alec_wam.CrystalMod.tiles.pipes.item;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.annotation.Nullable;
 
@@ -13,6 +12,7 @@ import com.google.common.collect.Maps;
 import alec_wam.CrystalMod.client.GuiHandler;
 import alec_wam.CrystalMod.init.ModBlocks;
 import alec_wam.CrystalMod.init.ModItems;
+import alec_wam.CrystalMod.items.ItemVariant;
 import alec_wam.CrystalMod.tiles.pipes.EnumPipeUpgrades;
 import alec_wam.CrystalMod.tiles.pipes.NetworkPos;
 import alec_wam.CrystalMod.tiles.pipes.NetworkType;
@@ -24,7 +24,6 @@ import alec_wam.CrystalMod.util.ItemUtil;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.InventoryBasic;
 import net.minecraft.inventory.ItemStackHelper;
@@ -45,7 +44,7 @@ import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.items.IItemHandler;
 
 public class TileEntityPipeItem extends TileEntityPipeBase {
-
+	//TODO Update connections on insertion and extraction of cobble gen upgrade
 	private Map<EnumFacing, InventoryBasic> pipeItems;
 	private int[] priorities;
 	
@@ -53,7 +52,7 @@ public class TileEntityPipeItem extends TileEntityPipeBase {
 		super(ModBlocks.TILE_PIPE_ITEM);
 		pipeItems = Maps.newHashMap();
 		for(EnumFacing facing : EnumFacing.values()){
-			pipeItems.put(facing, new InventoryBasic(new TextComponentString("Items"), 2));
+			pipeItems.put(facing, new InventoryBasic(new TextComponentString("Items"), 4));
 		}
 		priorities = new int[6];
 	}
@@ -142,9 +141,9 @@ public class TileEntityPipeItem extends TileEntityPipeBase {
 	
 	public boolean canDoCobbleGen(EnumFacing direction){
 		NetworkPos pos = getNetworkPos().offset(direction);
-		ItemStack upgrade = getUpgrade(direction);
+		Map<EnumPipeUpgrades, Integer> upgrades = getUpgrades(direction);
 		if(BlockUtil.isCobbleGen(getWorld(), pos.getBlockPos(), direction)){
-			if(upgrade.getItem() == ModItems.pipeUpgrades.getItem(EnumPipeUpgrades.COBBLE)){
+			if(upgrades.containsKey(EnumPipeUpgrades.COBBLE)){
 				return true;
 			}
 		}
@@ -173,14 +172,41 @@ public class TileEntityPipeItem extends TileEntityPipeBase {
 		return pipeItems.get(facing);
 	}
 	
-	public ItemStack getFilter(EnumFacing facing){
+	public ItemStack getInFilter(EnumFacing facing){
 		InventoryBasic inv = getInternalInventory(facing);
 		return inv.getStackInSlot(0);
 	}
 	
-	public ItemStack getUpgrade(EnumFacing facing){
+	public ItemStack getOutFilter(EnumFacing facing){
 		InventoryBasic inv = getInternalInventory(facing);
 		return inv.getStackInSlot(1);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public Map<EnumPipeUpgrades, Integer> getUpgrades(EnumFacing facing){
+		Map<EnumPipeUpgrades, Integer> map = Maps.newHashMap();
+		InventoryBasic inv = getInternalInventory(facing);
+		ItemStack upgrade1 = inv.getStackInSlot(2);
+		ItemStack upgrade2 = inv.getStackInSlot(3);
+		if(ModItems.pipeUpgrades.getItems().contains(upgrade1.getItem())){
+			ItemVariant<EnumPipeUpgrades> upgrade = (ItemVariant<EnumPipeUpgrades>)upgrade1.getItem();
+			map.put(upgrade.type, upgrade1.getCount());
+		}
+		if(ModItems.pipeUpgrades.getItems().contains(upgrade2.getItem())){
+			ItemVariant<EnumPipeUpgrades> upgrade = (ItemVariant<EnumPipeUpgrades>)upgrade2.getItem();
+			map.put(upgrade.type, upgrade2.getCount());
+		}
+		return map;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public EnumPipeUpgrades getUpgradeType(EnumFacing facing, int upgradeSlot){
+		ItemStack upgrade = getInternalInventory(facing).getStackInSlot(2 + upgradeSlot);
+		if(ModItems.pipeUpgrades.getItems().contains(upgrade.getItem())){
+			ItemVariant<EnumPipeUpgrades> upgradeItem = (ItemVariant<EnumPipeUpgrades>)upgrade.getItem();
+			return upgradeItem.type;
+		}
+		return null;
 	}
 
 	public int getPriority(EnumFacing facing){
@@ -252,38 +278,51 @@ public class TileEntityPipeItem extends TileEntityPipeBase {
 	public static boolean passesFilter(ItemStack item, ItemStack filter){
 		if(ItemStackTools.isNullStack(item) || item.getItem() == null || (ItemStackTools.isValid(filter) && filter.getItem() !=ModItems.pipeFilter))return false;
 		if(ItemStackTools.isNullStack(filter))return true;	
-		List<ItemStack> filteredList = new ArrayList<ItemStack>();
+		Map<ItemStack, FilterSettings> filteredList = Maps.newHashMap();
 		buildFilterList(filter, filteredList);
-		boolean black = ItemNBTHelper.getBoolean(filter, "BlackList", false);
-		
-		
 		if(filteredList.isEmpty()){
-			return black ? false : true;
+			FilterSettings masterSettings = new FilterSettings(filter);
+			return masterSettings.isBlacklist() ? true : false;
 		}
-
-		boolean meta = ItemNBTHelper.getBoolean(filter, "MetaMatch", false);
-		boolean matchNBT = ItemNBTHelper.getBoolean(filter, "NBTMatch", false);
+		
 		boolean matched = false;
-		for(ItemStack filterStack : filteredList){
-			if(ItemStackTools.isValid(filterStack) && item.getItem() == filterStack.getItem()) {
-				matched = true;
-				if(meta && item.getDamage() != filterStack.getDamage()) {
-					matched = false;
-				} else if(matchNBT) {
-					if(filterStack.getTag() == null || item.getTag() == null || !filterStack.getTag().equals(item.getTag()))
+		for(Entry<ItemStack, FilterSettings> filterData : filteredList.entrySet()){
+			ItemStack filterStack = filterData.getKey();
+			FilterSettings settings = filterData.getValue();
+			if(ItemStackTools.isValid(filterStack)) {				
+				if(item.getItem() == filterStack.getItem()){
+					matched = true;
+					if(settings.isDamage() && item.getDamage() != filterStack.getDamage()){
 						matched = false;
-				}   
+					}
+					else if(settings.isNBT()) {
+						if(filterStack.getTag() == null || item.getTag() == null || !filterStack.getTag().equals(item.getTag())){
+							matched = false;
+						}
+					}  
+				}
+				
+				//Use tag data if the filter has that enabled
+				if(settings.useTag() && !matched){
+					if(ItemUtil.matchUsingTags(item, filterStack)){
+						matched = true;
+					}
+				}
 			}
-			if(matched) {
-				break;
+			if(settings.isBlacklist()) {				
+				if(matched)return false;
+			}
+			else {				
+				if(!matched)return false;
 			}
 		}
-		return black ? matched == false : matched;
+		return true;
 	}
 	
 	//TODO Look into capping depth of filters
-	private static void buildFilterList(ItemStack filter, List<ItemStack> filterList){
+	private static void buildFilterList(ItemStack filter, Map<ItemStack, FilterSettings> filterList){
 		if(ItemNBTHelper.verifyExistance(filter, "FilterItems")){
+			FilterSettings settings = new FilterSettings(filter);
 			NonNullList<ItemStack> stacks = loadFilterStacks(filter);
 			for(ItemStack stack : stacks){
 				if(ItemStackTools.isValid(stack)){
@@ -292,13 +331,77 @@ public class TileEntityPipeItem extends TileEntityPipeBase {
 						//Allows multi filter to filter more items
 						buildFilterList(stack, filterList);
 					} else {
-						filterList.add(ItemUtil.copy(stack, 1));
+						filterList.put(ItemUtil.copy(stack, 1), settings);
 					}
 				}
 			}
 		}
 	}
 
+	public static class FilterSettings {
+		public static final String NBT_BLACKLIST = "Blacklist";
+		public static final String NBT_DAMAGE_MATCH = "DamageMatch";
+		public static final String NBT_NBT_MATCH = "NBTMatch";
+		public static final String NBT_TAG_MATCH = "TagMatch";
+		private boolean blacklist;
+		private boolean damage;
+		private boolean nbt;
+		private boolean tag;
+		
+		public FilterSettings(ItemStack filter){
+			this.blacklist = ItemNBTHelper.getBoolean(filter, NBT_BLACKLIST, true);
+			this.damage = ItemNBTHelper.getBoolean(filter, NBT_DAMAGE_MATCH, false);
+			this.nbt = ItemNBTHelper.getBoolean(filter, NBT_NBT_MATCH, false);
+			this.tag = ItemNBTHelper.getBoolean(filter, NBT_TAG_MATCH, false);
+		}
+		
+		public FilterSettings(boolean blacklist, boolean damage, boolean nbt, boolean tag){
+			this.blacklist = blacklist;
+			this.damage = damage;
+			this.nbt = nbt;
+			this.tag = tag;
+		}
+		
+		public boolean isBlacklist() {
+			return blacklist;
+		}
+		
+		public void setBlackList(boolean value){
+			this.blacklist = value;
+		}
+		
+		public boolean isDamage() {
+			return damage;
+		}
+		
+		public void setIsDamage(boolean value){
+			this.damage = value;
+		}
+		
+		public boolean isNBT() {
+			return nbt;
+		}
+		
+		public void setIsNBT(boolean value){
+			this.nbt = value;
+		}
+		
+		public boolean useTag() {
+			return tag;
+		}
+		
+		public void setUseTag(boolean value){
+			this.tag = value;
+		}
+		
+		public void saveToItem(ItemStack stack){
+			ItemNBTHelper.setBoolean(stack, NBT_BLACKLIST, blacklist);
+			ItemNBTHelper.setBoolean(stack, NBT_DAMAGE_MATCH, damage);
+			ItemNBTHelper.setBoolean(stack, NBT_NBT_MATCH, nbt);
+			ItemNBTHelper.setBoolean(stack, NBT_TAG_MATCH, tag);
+		}
+	}
+	
 	public static NonNullList<ItemStack> loadFilterStacks(ItemStack filter) {
 		NonNullList<ItemStack> stacks = NonNullList.withSize(10, ItemStack.EMPTY);
 		ItemStackHelper.loadAllItems(ItemNBTHelper.getCompound(filter).getCompound("FilterItems"), stacks);

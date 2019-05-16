@@ -5,7 +5,7 @@ import javax.annotation.Nullable;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 
-public interface IPedistal {
+public interface IPedestal {
 
 	public @Nullable ItemStack getStack();
 	

@@ -1,11 +1,18 @@
 package alec_wam.CrystalMod.tiles.pipes.item;
 
+import java.util.List;
+
+import com.google.common.collect.Lists;
+
 import alec_wam.CrystalMod.client.gui.GuiButtonIcon;
 import alec_wam.CrystalMod.client.gui.GuiButtonIconTooltip;
+import alec_wam.CrystalMod.client.gui.GuiButtonTooltip;
 import alec_wam.CrystalMod.client.gui.GuiContainerBase;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
+import alec_wam.CrystalMod.network.packet.PacketGuiMessage;
 import alec_wam.CrystalMod.tiles.PacketTileMessage;
 import alec_wam.CrystalMod.tiles.RedstoneMode;
+import alec_wam.CrystalMod.tiles.pipes.PipeConnectionMode;
 import alec_wam.CrystalMod.util.Lang;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.renderer.GlStateManager;
@@ -22,6 +29,7 @@ public class GuiItemPipe extends GuiContainerBase {
 	private GuiButtonIcon buttonRedstone;
 	private GuiButton buttonPriorityUp;
 	private GuiButton buttonPriorityDown;
+	private boolean twoFilters;
 	
 	public static final ResourceLocation TEXTURE = new ResourceLocation("crystalmod:textures/gui/pipe/item.png");
 	public GuiItemPipe(EntityPlayer player, TileEntityPipeItem pipe, EnumFacing facing) {
@@ -38,12 +46,16 @@ public class GuiItemPipe extends GuiContainerBase {
 	
 	public void setupButtons(){
 		this.buttons.clear();
-		String io = Lang.localize("gui.pipe.io."+pipe.getConnectionSetting(facing).name().toLowerCase());
-		buttonIO = new GuiButton(0, guiLeft + 5, guiTop + 5, 40, 20, io) {
+		PipeConnectionMode connectionMode = pipe.getConnectionSetting(facing);
+		String io = Lang.localize("gui.pipe.io."+connectionMode.name().toLowerCase());
+		List<String> ioInfo = Lists.newArrayList();
+		if(connectionMode == PipeConnectionMode.IN || connectionMode == PipeConnectionMode.OUT){
+			ioInfo.add(Lang.localize("gui.pipe.io."+connectionMode.name().toLowerCase() + ".info"));
+		}
+		buttonIO = new GuiButtonTooltip(0, guiLeft + 5, guiTop + 5, 40, 20, io, ioInfo) {
 			@Override
 			public void onClick(double mouseX, double mouseY){
 				pipe.incrsConnectionMode(facing);
-				//TODO Send to Server
 				NBTTagCompound nbt = new NBTTagCompound();
 				nbt.setInt("Facing", facing.getIndex());
 				nbt.setInt("Mode", pipe.getConnectionSetting(facing).ordinal());
@@ -93,9 +105,26 @@ public class GuiItemPipe extends GuiContainerBase {
 		};
 		
 		this.addButton(buttonIO);
-		this.addButton(buttonRedstone);
+		if(connectionMode == PipeConnectionMode.BOTH || connectionMode == PipeConnectionMode.IN)this.addButton(buttonRedstone);
 		this.addButton(buttonPriorityDown);
 		this.addButton(buttonPriorityUp);
+		final boolean oldFilters = twoFilters;
+		twoFilters = connectionMode == PipeConnectionMode.BOTH;
+		if(oldFilters != twoFilters){
+			((ContainerItemPipe)this.inventorySlots).updateSlots();
+			CrystalModNetwork.sendToServer(new PacketGuiMessage("UpdateSlots"));
+		}
+	}
+	
+	@Override
+	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
+		super.drawGuiContainerBackgroundLayer(partialTicks, mouseX, mouseY);
+		//Render Filter Slot
+		if(twoFilters){
+			drawTexturedModalRect(guiLeft + 71, guiTop + 34, 133, 57, 36, 18);
+		} else {
+			drawTexturedModalRect(guiLeft + 79, guiTop + 34, 133, 57, 18, 18);
+		}
 	}
 	
 	@Override
@@ -107,6 +136,23 @@ public class GuiItemPipe extends GuiContainerBase {
 		this.fontRenderer.drawString(str, 22.0F - (this.fontRenderer.getStringWidth(str) / 2), 60.0F, 4210752);
 		String dir = Lang.localize("gui.direction."+facing.getName());
 		this.fontRenderer.drawString(dir, 88.0F - (this.fontRenderer.getStringWidth(dir) / 2), 10.0F, 4210752);
+		
+		if(twoFilters){
+			boolean emptyFilterIn = pipe.getInFilter(facing).isEmpty();
+			boolean emptyFilterOut = pipe.getOutFilter(facing).isEmpty();
+			
+			if(emptyFilterIn || emptyFilterOut){
+				GlStateManager.pushMatrix();
+				GlStateManager.translated(80.0, 40, 0.0F);
+				GlStateManager.scaled(0.8, 0.8, 1.0);
+				String inString = Lang.localize("gui.pipe.io.in");
+				if(emptyFilterIn)this.fontRenderer.drawString(inString, -(this.fontRenderer.getStringWidth(inString) / 2), 0.0F, 4210752);
+				String outString = Lang.localize("gui.pipe.io.out");
+				if(emptyFilterOut)this.fontRenderer.drawString(outString, 23.0F - (this.fontRenderer.getStringWidth(outString) / 2), 0.0F, 4210752);
+				GlStateManager.popMatrix();
+			}
+		}
+		
 		GlStateManager.enableLighting();
 	}
 

@@ -6,9 +6,11 @@ import alec_wam.CrystalMod.core.color.EnumCrystalColorSpecial;
 import alec_wam.CrystalMod.items.EnumDarkIronItemVariant;
 import alec_wam.CrystalMod.items.EnumPlateItem;
 import alec_wam.CrystalMod.items.ItemCrystalShard;
+import alec_wam.CrystalMod.items.ItemGrassSeeds;
+import alec_wam.CrystalMod.items.ItemGrassSeeds.EnumGrassSeedItem;
 import alec_wam.CrystalMod.items.ItemVariant;
 import alec_wam.CrystalMod.items.ItemWrench;
-import alec_wam.CrystalMod.tiles.crate.EnumCrateUpgrades;
+import alec_wam.CrystalMod.tiles.crate.EnumMiscUpgrades;
 import alec_wam.CrystalMod.tiles.pipes.EnumPipeUpgrades;
 import alec_wam.CrystalMod.tiles.pipes.item.ItemPipeFilter;
 import net.minecraft.item.Item;
@@ -25,10 +27,13 @@ public class ModItems {
 	public static ItemVariantGroup<EnumDarkIronItemVariant, ItemVariant<EnumDarkIronItemVariant>> darkIronGroup;
 	public static ItemVariantGroup<EnumPlateItem, ItemVariant<EnumPlateItem>> metalPlateGroup;
 	
+	public static ItemVariantGroup<EnumGrassSeedItem, ItemGrassSeeds> grassSeeds;
+	
 	public static Item wrench;
+	public static Item fusionWand;
 	public static Item pipeFilter;
 	public static ItemVariantGroup<EnumPipeUpgrades, ItemVariant<EnumPipeUpgrades>> pipeUpgrades;
-	public static ItemVariantGroup<EnumCrateUpgrades, ItemVariant<EnumCrateUpgrades>> crateUpgrades;
+	public static ItemVariantGroup<EnumMiscUpgrades, ItemVariant<EnumMiscUpgrades>> miscUpgrades;
 
 	public static void buildList(){
 		crystalGroup = ItemVariantGroup.Builder.<EnumCrystalColorSpecial, ItemVariant<EnumCrystalColorSpecial>>create()
@@ -74,8 +79,20 @@ public class ModItems {
 				.build();
 		RegistrationHandler.addItemGroup(metalPlateGroup);
 		
+		
+		grassSeeds = ItemVariantGroup.Builder.<EnumGrassSeedItem, ItemGrassSeeds>create()
+				.groupName("grass_seed")
+				.suffix()
+				.variants(EnumGrassSeedItem.values())
+				.itemFactory(ItemGrassSeeds::new)
+				.build();
+		RegistrationHandler.addItemGroup(grassSeeds);
+		
+		
 		wrench = new ItemWrench(new Item.Properties().group(ModItemGroups.ITEM_GROUP_ITEMS).maxStackSize(1));
 		RegistrationHandler.addItem(wrench, "wrench");
+		fusionWand = new Item(new Item.Properties().group(ModItemGroups.ITEM_GROUP_ITEMS).maxStackSize(1));
+		RegistrationHandler.addItem(fusionWand, "fusionwand");
 		pipeFilter = new ItemPipeFilter(new Item.Properties().group(ModItemGroups.ITEM_GROUP_ITEMS).maxStackSize(16));
 		RegistrationHandler.addItem(pipeFilter, "pipefilter");
 		pipeUpgrades = ItemVariantGroup.Builder.<EnumPipeUpgrades, ItemVariant<EnumPipeUpgrades>>create()
@@ -85,13 +102,13 @@ public class ModItems {
 				.itemFactory(ItemVariant<EnumPipeUpgrades>::new)
 				.build();
 		RegistrationHandler.addItemGroup(pipeUpgrades);
-		crateUpgrades = ItemVariantGroup.Builder.<EnumCrateUpgrades, ItemVariant<EnumCrateUpgrades>>create()
-				.groupName("crate_upgrade")
+		miscUpgrades = ItemVariantGroup.Builder.<EnumMiscUpgrades, ItemVariant<EnumMiscUpgrades>>create()
+				.groupName("misc_upgrade")
 				.suffix()
-				.variants(EnumCrateUpgrades.values())
-				.itemFactory(ItemVariant<EnumCrateUpgrades>::new)
+				.variants(EnumMiscUpgrades.values())
+				.itemFactory(ItemVariant<EnumMiscUpgrades>::new)
 				.build();
-		RegistrationHandler.addItemGroup(crateUpgrades);
+		RegistrationHandler.addItemGroup(miscUpgrades);
 		
 	}	
 	

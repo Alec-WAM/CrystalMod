@@ -5,7 +5,6 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.function.Function;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
@@ -15,13 +14,11 @@ import net.minecraft.client.renderer.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.obj.OBJModel;
 import net.minecraftforge.client.model.obj.OBJModel.Face;
 import net.minecraftforge.client.model.obj.OBJModel.Group;
 import net.minecraftforge.client.model.obj.OBJModel.Normal;
-import net.minecraftforge.client.model.obj.OBJModel.OBJState;
 import net.minecraftforge.client.model.obj.OBJModel.TextureCoordinate;
 import net.minecraftforge.client.model.obj.OBJModel.Vertex;
 import net.minecraftforge.client.model.pipeline.UnpackedBakedQuad;
@@ -39,59 +36,12 @@ public class BakedModelHelper {
         Optional<TRSRTransformation> transform = Optional.empty();
         for (Group g : model.getMatLib().getGroups().values())
         {
-//            g.minUVBounds = this.model.getMatLib().minUVBounds;
-//            g.maxUVBounds = this.model.getMatLib().maxUVBounds;
-//            FMLLog.info("Group: %s u: [%f, %f] v: [%f, %f]", g.name, g.minUVBounds[0], g.maxUVBounds[0], g.minUVBounds[1], g.maxUVBounds[1]);
-
-            if(modelState.apply(Optional.of(Models.getHiddenModelPart(ImmutableList.of(g.getName())))).isPresent())
+        	if(modelState.apply(Optional.of(Models.getHiddenModelPart(ImmutableList.of(g.getName())))).isPresent())
             {
                 continue;
             }
-            /*if (modelState instanceof OBJState)
-            {
-                OBJState state = (OBJState) modelState;
-                if (state.parent != null)
-                {
-                    transform = state.parent.apply(Optional.empty());
-                }
-                //TODO: can this be replaced by updateStateVisibilityMap(OBJState)?
-                if (state.getGroupNamesFromMap().contains(Group.ALL))
-                {
-                    state.visibilityMap.clear();
-                    for (String s : this.model.getMatLib().getGroups().keySet())
-                    {
-                        state.visibilityMap.put(s, state.operation.performOperation(true));
-                    }
-                }
-                else if (state.getGroupNamesFromMap().contains(Group.ALL_EXCEPT))
-                {
-                    List<String> exceptList = state.getGroupNamesFromMap().subList(1, state.getGroupNamesFromMap().size());
-                    state.visibilityMap.clear();
-                    for (String s : this.model.getMatLib().getGroups().keySet())
-                    {
-                        if (!exceptList.contains(s))
-                        {
-                            state.visibilityMap.put(s, state.operation.performOperation(true));
-                        }
-                    }
-                }
-                else
-                {
-                    for (String s : state.visibilityMap.keySet())
-                    {
-                        state.visibilityMap.put(s, state.operation.performOperation(state.visibilityMap.get(s)));
-                    }
-                }
-                if (state.getGroupsWithVisibility(true).contains(g.getName()))
-                {
-                    faces.addAll(g.applyTransform(transform));
-                }
-            }
-            else
-            {*/
-                transform = modelState.apply(Optional.empty());
-                faces.addAll(g.applyTransform(transform));
-            //}
+            transform = modelState.apply(Optional.empty());
+            faces.addAll(g.applyTransform(transform));
         }
         for (Face f : faces)
         {

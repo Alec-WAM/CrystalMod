@@ -2,6 +2,7 @@ package alec_wam.CrystalMod.tiles.crate;
 
 import org.lwjgl.opengl.GL11;
 
+import alec_wam.CrystalMod.ModConfig;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import alec_wam.CrystalMod.util.RenderUtil;
@@ -75,8 +76,7 @@ public class TileEntityCrateRender extends TileEntityRenderer<TileEntityCrate>
 			
 			GlStateManager.translated(0, 0, 1.03);
 
-			//TODO Config this
-			boolean gui = false;//!(block ? Config.crates_3dBlock : Config.crates_3dItem);
+			boolean gui = !ModConfig.BLOCKS.Crate_3D_Items.get();
 			GlStateManager.pushMatrix();
 			if(!gui){
 				GlStateManager.rotatef(180, 0, 1, 0);
@@ -90,16 +90,18 @@ public class TileEntityCrateRender extends TileEntityRenderer<TileEntityCrate>
 			}
 			else{
 				if(block){
-					GlStateManager.scaled(0.8, 0.8, 0.1);
+					GlStateManager.scaled(0.8, 0.8, 0.001f);
 				}
 				else{
-					GlStateManager.translated(0, 0.01, 0);
+					GlStateManager.translated(0, 0.01, 0.0f);
 				}
 			}
 			ItemStack renderStack = ItemUtil.copy(tile.getStack(), 1);
-			if(gui)GlStateManager.disableDepthTest();
-			RenderUtil.renderItem(renderStack, gui ? TransformType.GUI : TransformType.FIXED);
-			if(gui)GlStateManager.enableDepthTest();
+			if(gui){
+				RenderUtil.renderItem(renderStack, TransformType.GUI);
+			} else {
+				RenderUtil.renderItem(renderStack, TransformType.FIXED);
+			}
 			GlStateManager.popMatrix();
 			
 			boolean renderVoid = tile.hasVoidUpgrade;
@@ -228,7 +230,7 @@ public class TileEntityCrateRender extends TileEntityRenderer<TileEntityCrate>
 				} else {
 					int stacks = stackSize / maxStack;
 					int rem = stackSize % maxStack;
-					info = stacks + "x" + maxStack + " + " + rem;
+					info = stacks + "x" + maxStack + (rem > 0 ? " + " + rem : "");
 				}				
 				
 				width = fontRender.getStringWidth(info);

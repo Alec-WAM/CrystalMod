@@ -1,5 +1,6 @@
 package alec_wam.CrystalMod.tiles.crate;
 
+import alec_wam.CrystalMod.ModConfig;
 import alec_wam.CrystalMod.tiles.EnumCrystalColorSpecialWithCreative;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
@@ -9,8 +10,7 @@ import net.minecraftforge.items.ItemHandlerHelper;
 
 public class ItemHandlerCrate implements IItemHandler
 {
-	//TODO Add Config
-	public static final boolean LEAVE_ONE_ITEM = true;
+	public static final boolean LEAVE_ONE_ITEM = ModConfig.BLOCKS.Crate_LeaveItem.get();
     public final TileEntityCrate crate;
     
     public ItemHandlerCrate(TileEntityCrate crate)

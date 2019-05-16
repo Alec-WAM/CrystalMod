@@ -9,10 +9,10 @@ import alec_wam.CrystalMod.tiles.chests.wooden.TileEntityWoodenCrystalChest;
 import alec_wam.CrystalMod.tiles.chests.wooden.TileEntityWoodenCrystalChestRender;
 import alec_wam.CrystalMod.tiles.crate.TileEntityCrate;
 import alec_wam.CrystalMod.tiles.crate.TileEntityCrateRender;
-import alec_wam.CrystalMod.tiles.fusion.TileEntityFusionPedistal;
-import alec_wam.CrystalMod.tiles.fusion.TileEntityFusionPedistalRender;
-import alec_wam.CrystalMod.tiles.fusion.TileEntityPedistal;
-import alec_wam.CrystalMod.tiles.fusion.TileEntityPedistalRender;
+import alec_wam.CrystalMod.tiles.fusion.TileEntityFusionPedestal;
+import alec_wam.CrystalMod.tiles.fusion.TileEntityFusionPedestalRender;
+import alec_wam.CrystalMod.tiles.fusion.TileEntityPedestal;
+import alec_wam.CrystalMod.tiles.fusion.TileEntityPedestalRender;
 import alec_wam.CrystalMod.tiles.jar.TileEntityJar;
 import alec_wam.CrystalMod.tiles.jar.TileEntityJarRender;
 import net.minecraftforge.api.distmarker.Dist;
@@ -30,8 +30,8 @@ public class ModRenders {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityWoodenCrystalChest.class, new TileEntityWoodenCrystalChestRender());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMetalCrystalChest.class, new TileEntityMetalCrystalChestRender());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityWirelessChest.class, new TileEntityWirelessChestRender());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPedistal.class, new TileEntityPedistalRender());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityFusionPedistal.class, new TileEntityFusionPedistalRender());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPedestal.class, new TileEntityPedestalRender());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityFusionPedestal.class, new TileEntityFusionPedestalRender());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityJar.class, new TileEntityJarRender());
 	}
 }

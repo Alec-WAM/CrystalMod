@@ -80,6 +80,9 @@ dependencies {
     //compileOnly deobf("mezz.jei:jei-1.13.2:5.0.0.20:api")
     // at runtime, use the full JEI jar
     //runtimeOnly deobf("mezz.jei:jei-1.13.2:5.0.0.20")
+	compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api")
+	// at runtime, use the full JEI jar
+	runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}")
 }
 
 // Example for how to get properties into the manifest for reading by the runtime..

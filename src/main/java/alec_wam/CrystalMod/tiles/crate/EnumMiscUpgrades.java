@@ -2,10 +2,11 @@ package alec_wam.CrystalMod.tiles.crate;
 
 import net.minecraft.util.IStringSerializable;
 
-public enum EnumCrateUpgrades implements IStringSerializable {
-	VOID;
+public enum EnumMiscUpgrades implements IStringSerializable {
+	VOID,
+	FUSION_AUTO;
 	
-	EnumCrateUpgrades() {}
+	EnumMiscUpgrades() {}
 
     @Override
     public String getName() {

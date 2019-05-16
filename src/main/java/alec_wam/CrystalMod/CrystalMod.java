@@ -36,6 +36,7 @@ public class CrystalMod {
 	
 	public CrystalMod() {
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::preInit);
+		ModLoadingContext.get().registerConfig(net.minecraftforge.fml.config.ModConfig.Type.COMMON, ModConfig.spec);
 	}
 	
 	public void preInit(final FMLCommonSetupEvent event) {

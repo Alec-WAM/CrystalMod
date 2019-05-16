@@ -10,15 +10,15 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 
 @SuppressWarnings("deprecation")
-public class TileEntityPedistalRender extends TileEntityRenderer<TileEntityPedistal>
+public class TileEntityPedestalRender extends TileEntityRenderer<TileEntityPedestal>
 {
-    public TileEntityPedistalRender()
+    public TileEntityPedestalRender()
     {
         
     }
 
     @Override
-    public void render(TileEntityPedistal tile, double x, double y, double z, float partialTicks, int destroyStage)
+    public void render(TileEntityPedestal tile, double x, double y, double z, float partialTicks, int destroyStage)
     {
     	if(tile == null)return;
 		ItemStack renderStack = tile.getStack();

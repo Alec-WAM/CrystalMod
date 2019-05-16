@@ -1,6 +1,7 @@
 package alec_wam.CrystalMod.network;
 
 import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.network.packet.PacketGuiMessage;
 import alec_wam.CrystalMod.network.packet.PacketRequestProfile;
 import alec_wam.CrystalMod.network.packet.PacketResponseProfile;
 import alec_wam.CrystalMod.network.packet.PacketUpdateItemNBT;
@@ -40,6 +41,12 @@ public class CrystalModNetwork {
 		.decoder(PacketTileMessage::decode)
 		.encoder(PacketTileMessage::encode)
 		.consumer(PacketTileMessage::handle)
+		.add();
+		
+		channel.messageBuilder(PacketGuiMessage.class, getID())
+		.decoder(PacketGuiMessage::decode)
+		.encoder(PacketGuiMessage::encode)
+		.consumer(PacketGuiMessage::handle)
 		.add();
 		
 		channel.messageBuilder(PacketUpdateItemNBT.class, getID())

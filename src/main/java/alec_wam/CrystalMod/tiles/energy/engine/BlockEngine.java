@@ -1,6 +1,8 @@
 package alec_wam.CrystalMod.tiles.energy.engine;
 
+import java.text.NumberFormat;
 import java.util.List;
+import java.util.Locale;
 
 import javax.annotation.Nullable;
 
@@ -43,6 +45,7 @@ import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.network.NetworkHooks;
 
 public class BlockEngine extends BlockContainerVariant<EnumEngineType> implements IBucketPickupHandler, ILiquidContainer {
+	//TODO Add Comparator Handling
 	public static final DirectionProperty FACING = BlockHorizontal.HORIZONTAL_FACING;
 	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 	public static final BooleanProperty ACTIVE = BooleanProperty.create("active");
@@ -60,9 +63,8 @@ public class BlockEngine extends BlockContainerVariant<EnumEngineType> implement
     	if(stack.hasTag() && ItemNBTHelper.verifyExistance(stack, "EngineData")){
     		NBTTagCompound engineData = ItemNBTHelper.getCompound(stack).getCompound("EngineData");
     		int energy = engineData.getInt("Energy");
-    		//TODO Format to look nice
-
-			tooltip.add(new TextComponentTranslation("crystalmod.info.energy", ""+energy));
+    		String energyString = NumberFormat.getNumberInstance(Locale.US).format(energy);
+			tooltip.add(new TextComponentTranslation("crystalmod.info.energy", energyString));
     	}
     }
 	

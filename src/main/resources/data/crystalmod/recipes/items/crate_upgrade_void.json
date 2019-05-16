@@ -1,0 +1,23 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"group": "crystalmod.upgrade",
+	"pattern": [
+		" O ",
+		"ODO",
+		" P "
+	],
+	"key": {
+		"O": {
+			"item": "minecraft:obsidian"
+		},
+		"P": {
+			"tag": "minecraft:wooden_pressure_plates"
+		},
+		"D": {
+			"item": "crystalmod:plate_darkiron"
+		}
+	},
+	"result": {
+		"item": "crystalmod:crate_upgrade_void"
+	}
+}

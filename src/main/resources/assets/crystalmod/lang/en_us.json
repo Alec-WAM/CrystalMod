@@ -140,7 +140,12 @@
   "item.crystalmod.plate_dark": "Dark Crystal Plate",
   "item.crystalmod.plate_pure": "Pure Crystal Plate",
   
+  "item.crystalmod.grass_seed_grass": "Grass Seed",
+  "item.crystalmod.grass_seed_podzol": "Podzol Seed",
+  "item.crystalmod.grass_seed_mycelium": "Mycelium Seed",
+  
   "item.crystalmod.wrench": "Wrench",  
+  "item.crystalmod.fusionwand": "Fusion Wand",  
   
   "item.crystalmod.pipefilter": "Pipe Item Filter",  
   "item.crystalmod.pipe_upgrade_speed": "Pipe Upgrade (Speed)",  
@@ -148,7 +153,8 @@
   "item.crystalmod.pipe_upgrade_slow": "Pipe Upgrade (Slow)",  
   "item.crystalmod.pipe_upgrade_cobble": "Pipe Upgrade (Cobble Gen)",  
   
-  "item.crystalmod.crate_upgrade_void": "Crate Upgrade (Void)", 
+  "item.crystalmod.misc_upgrade_void": "Void Upgrade", 
+  "item.crystalmod.misc_upgrade_fusion_auto": "Fusion Automation Upgrade", 
   
   
   "_comment": "Creative Tabs",
@@ -158,13 +164,17 @@
   "_comment": "Gui Text",
   "crystalmod.power.cu": "CU",
   "crystalmod.gui.pipe.io.in": "In",
+  "crystalmod.gui.pipe.io.in.info": "Pull items into the network",
   "crystalmod.gui.pipe.io.out": "Out",
+  "crystalmod.gui.pipe.io.out.info": "Push items into inventory",
   "crystalmod.gui.pipe.io.both": "In/Out",
   "crystalmod.gui.pipe.io.disabled": "Disabled",
   "crystalmod.gui.filter.whitelist": "Whitelist",
   "crystalmod.gui.filter.blacklist": "Blacklist",
   "crystalmod.gui.filter.damage": "Match Damage",
   "crystalmod.gui.filter.nbt": "Match NBT",
+  "crystalmod.gui.filter.tag1": "Use Item Tag",
+  "crystalmod.gui.filter.tag2": "Matches like items (Wool, Planks, Leaves..)",
   "crystalmod.gui.redstone.none": "Disabled",
   "crystalmod.gui.redstone.ignore": "Ignore",
   "crystalmod.gui.redstone.off": "Off",
@@ -178,7 +188,7 @@
   
   
   "_comment": "Item Info",
-  "crystalmod.info.energy": "Energy: %s CU",
+  "crystalmod.info.energy": "Energy: %sCU",
   "crystalmod.info.owner": "Owner: %s",
   "crystalmod.info.code": "Code: %s / %s / %s",
   "crystalmod.info.jar.shulker": "Shulker Lamp",
@@ -189,7 +199,10 @@
   "crystalmod.info.filter.blacklist": "§7§nBlacklist",
   "crystalmod.info.filter.damage": "§2Damage Match",
   "crystalmod.info.filter.nbt": "§2NBT Match",
+  "crystalmod.info.filter.tag": "§2Tag Match",
   "crystalmod.info.filter.shift": "<Hold Shift for Items>",
+  "crystalmod.info.filter.listheader": "Items:",
+  "crystalmod.info.filter.otherfilter": "§7§oFilter",
   
   "_comment": "Chat Messages",
   "crystalmod.message.notowner": "You do not own this",

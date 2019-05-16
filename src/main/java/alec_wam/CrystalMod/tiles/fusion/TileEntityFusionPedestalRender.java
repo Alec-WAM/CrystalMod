@@ -8,7 +8,7 @@ import org.lwjgl.opengl.GL11;
 
 import com.google.common.collect.Lists;
 
-import alec_wam.CrystalMod.api.tile.IPedistal;
+import alec_wam.CrystalMod.api.tile.IPedestal;
 import alec_wam.CrystalMod.client.ClientEventHandler;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.RenderUtil;
@@ -28,14 +28,14 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.Vec3d;
 
 @SuppressWarnings("deprecation")
-public class TileEntityFusionPedistalRender extends TileEntityRenderer<TileEntityFusionPedistal> {
+public class TileEntityFusionPedestalRender extends TileEntityRenderer<TileEntityFusionPedestal> {
 
 	@Override
-	public void render(TileEntityFusionPedistal tile, double x, double y, double z, float partialTicks, int destroyState)
+	public void render(TileEntityFusionPedestal tile, double x, double y, double z, float partialTicks, int destroyState)
 	{
 		if(tile == null)return;
 		GlStateManager.pushMatrix();
-		tile.getWorld().profiler.startSection("crystalmod-fusionpedistal");
+		tile.getWorld().profiler.startSection("crystalmod-fusionpedestal");
 		EnumFacing facing = tile.getRotation();
 		float liftDistance = 0.6f;
 		float itemLift = 0.0f;
@@ -44,8 +44,7 @@ public class TileEntityFusionPedistalRender extends TileEntityRenderer<TileEntit
 		if(tile.craftingCooldown.getValue() > 0 && hasItem){
         	int remaining = (tile.craftingCooldown.getValue());
         	itemLift = (liftDistance) * (remaining / 100f);
-        	float scale = tile.getStack().getItem() instanceof ItemBlock ? 0.1f : 0.25f;
-        	lazerLift = (liftDistance-scale) * (remaining / 100f);
+        	lazerLift = itemLift;
 		}
 
         if(hasItem){
@@ -157,7 +156,7 @@ public class TileEntityFusionPedistalRender extends TileEntityRenderer<TileEntit
 	        GlStateManager.popMatrix();
         }
 		
-		if(!tile.linkedPedistals.isEmpty() && tile.isCrafting.getValue() && hasItem){
+		if(!tile.linkedPedestals.isEmpty() && tile.isCrafting.getValue() && hasItem){
 			Vec3d masterVec = new Vec3d(tile.getPos());
 			
 			masterVec = masterVec.add(facing.getXOffset() * 0.35, facing.getYOffset() * 0.35, facing.getZOffset() * 0.35);
@@ -166,7 +165,7 @@ public class TileEntityFusionPedistalRender extends TileEntityRenderer<TileEntit
 			int r = color.getRed();
 			int g = color.getGreen();
 			int b = color.getBlue();
-			boolean renderLaser = false;
+			boolean renderLaser = true;
 			if(tile.runningRecipe !=null){
 				Vec3d colorVec = tile.runningRecipe.getRecipeColor();
 				if(colorVec !=null){
@@ -179,16 +178,16 @@ public class TileEntityFusionPedistalRender extends TileEntityRenderer<TileEntit
 			//Default 200
 			int craftTime = 100;
 			double progress = (double)tile.craftingProgress.getValue() / (double)craftTime;
-			List<IPedistal> lazerList = Lists.newArrayList();
-			for(IPedistal pedistal : tile.linkedPedistals){
-				if(ItemStackTools.isEmpty(pedistal.getStack()))continue;
-				TileEntity pedistalTile = (TileEntity)pedistal;
-				Vec3d pedistalVec = new Vec3d(pedistalTile.getPos());
-				if(pedistal.getRotation() !=null)pedistalVec = pedistalVec.add(pedistal.getRotation().getXOffset() * 0.35, pedistal.getRotation().getYOffset() * 0.35, pedistal.getRotation().getZOffset() * 0.35);
+			List<IPedestal> lazerList = Lists.newArrayList();
+			for(IPedestal pedestal : tile.linkedPedestals){
+				if(ItemStackTools.isEmpty(pedestal.getStack()))continue;
+				TileEntity pedestalTile = (TileEntity)pedestal;
+				Vec3d pedestalVec = new Vec3d(pedestalTile.getPos());
+				if(pedestal.getRotation() !=null)pedestalVec = pedestalVec.add(pedestal.getRotation().getXOffset() * 0.35, pedestal.getRotation().getYOffset() * 0.35, pedestal.getRotation().getZOffset() * 0.35);
 				
-				if(ItemStackTools.isValid(pedistal.getStack())){
+				if(ItemStackTools.isValid(pedestal.getStack())){
 					Vec3d vec1 = masterVec.add(0.5, 0.4+lazerLift, 0.5);
-			        Vec3d vec2 = pedistalVec.add(0.5, 0.5, 0.5);
+			        Vec3d vec2 = pedestalVec.add(0.5, 0.5, 0.5);
 			        Vec3d combinedVec = vec2.subtract(vec1);
 			        GlStateManager.pushMatrix();
 			        GlStateManager.translated(vec2.x-TileEntityRendererDispatcher.staticPlayerX, vec2.y-TileEntityRendererDispatcher.staticPlayerY, vec2.z-TileEntityRendererDispatcher.staticPlayerZ);
@@ -199,18 +198,18 @@ public class TileEntityFusionPedistalRender extends TileEntityRenderer<TileEntit
 			        double distance = combinedVec.length();
 			        
 			        GlStateManager.translated(-distance*(progress), 0, 0);
-			        float scale = pedistal.getStack().getItem() instanceof ItemBlock ? 0.5f : 0.5f;
+			        float scale = pedestal.getStack().getItem() instanceof ItemBlock ? 0.5f : 0.5f;
 			        GlStateManager.scaled(scale, scale, scale);
-			        RenderUtil.renderItem(pedistal.getStack(), TransformType.FIXED);
+			        RenderUtil.renderItem(pedestal.getStack(), TransformType.FIXED);
 			        GlStateManager.popMatrix();
 				}
-				if(renderLaser)lazerList.add(pedistal);
+				if(renderLaser)lazerList.add(pedestal);
 			}
-			for(IPedistal pedistal : lazerList){
-				TileEntity pedistalTile = (TileEntity)pedistal;
-				Vec3d pedistalVec = new Vec3d(pedistalTile.getPos());
-				if(pedistal.getRotation() !=null)pedistalVec = pedistalVec.add(pedistal.getRotation().getXOffset() * 0.35, pedistal.getRotation().getYOffset() * 0.35, pedistal.getRotation().getZOffset() * 0.35);
-				renderBeam(masterVec.x+0.5, masterVec.y+0.5+lazerLift, masterVec.z+0.5, pedistalVec.x+0.5, pedistalVec.y+0.5, pedistalVec.z+0.5, (int)(50*progress), partialTicks, 0.1d, r, g, b, 1F);
+			for(IPedestal pedestal : lazerList){
+				TileEntity pedestalTile = (TileEntity)pedestal;
+				Vec3d pedestalVec = new Vec3d(pedestalTile.getPos());
+				if(pedestal.getRotation() !=null)pedestalVec = pedestalVec.add(pedestal.getRotation().getXOffset() * 0.35, pedestal.getRotation().getYOffset() * 0.35, pedestal.getRotation().getZOffset() * 0.35);
+				renderBeam(masterVec.x+0.5, masterVec.y+0.4+lazerLift, masterVec.z+0.5, pedestalVec.x+0.5, pedestalVec.y+0.5, pedestalVec.z+0.5, (int)(50*progress), partialTicks, 0.1d, r, g, b, 0.3F);
 			}
 		}
 		tile.getWorld().profiler.endSection();
@@ -286,7 +285,7 @@ public class TileEntityFusionPedistalRender extends TileEntityRenderer<TileEntit
     }
 
     @Override
-    public boolean isGlobalRenderer(TileEntityFusionPedistal tile){
+    public boolean isGlobalRenderer(TileEntityFusionPedestal tile){
         return true;
     }
 }

@@ -8,9 +8,11 @@ import alec_wam.CrystalMod.api.CrystalModAPI;
 import alec_wam.CrystalMod.core.color.EnumCrystalColorSpecial;
 import alec_wam.CrystalMod.init.ModBlocks;
 import alec_wam.CrystalMod.init.ModItems;
+import alec_wam.CrystalMod.items.ItemGrassSeeds.EnumGrassSeedItem;
 import alec_wam.CrystalMod.tiles.fusion.recipe.FusionRecipe;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.Vec3d;
@@ -20,6 +22,7 @@ public class ModFusionRecipes {
 	public static void init() {
 		Vec3d colorPure = new Vec3d(255, 255, 255);
 		Vec3d colorBlue = new Vec3d(0, 0, 255);
+		Vec3d colorGreen = new Vec3d(0, 255, 0);
 		List<Item> allCrystals = Lists.newArrayList();
 		allCrystals.add(ModItems.crystalGroup.getItem(EnumCrystalColorSpecial.BLUE));
 		allCrystals.add(ModItems.crystalGroup.getItem(EnumCrystalColorSpecial.RED));
@@ -48,6 +51,21 @@ public class ModFusionRecipes {
 			}
 			CrystalModAPI.registerFusion(new FusionRecipe(Blocks.OAK_SAPLING, sapling, new ItemStack(ModBlocks.crystalSaplingGroup.getBlock(color), 1), colorBlue));
 		}
+		
+		List<Block> grassSeeds = Lists.newArrayList();
+		grassSeeds.add(Blocks.DIRT);
+		grassSeeds.add(Blocks.GRASS);
+		CrystalModAPI.registerFusion(new FusionRecipe(Items.WHEAT_SEEDS, grassSeeds, new ItemStack(ModItems.grassSeeds.getItem(EnumGrassSeedItem.GRASS), 1), colorGreen));	
+		List<Block> podzolSeeds = Lists.newArrayList();
+		podzolSeeds.add(Blocks.DIRT);
+		podzolSeeds.add(Blocks.OAK_LEAVES);
+		podzolSeeds.add(Blocks.OAK_LEAVES);
+		CrystalModAPI.registerFusion(new FusionRecipe(Items.WHEAT_SEEDS, podzolSeeds, new ItemStack(ModItems.grassSeeds.getItem(EnumGrassSeedItem.PODZOL), 1), colorGreen));
+		List<Block> myceliumSeeds = Lists.newArrayList();
+		myceliumSeeds.add(Blocks.DIRT);
+		myceliumSeeds.add(Blocks.BROWN_MUSHROOM);
+		myceliumSeeds.add(Blocks.RED_MUSHROOM);
+		CrystalModAPI.registerFusion(new FusionRecipe(Items.WHEAT_SEEDS, myceliumSeeds, new ItemStack(ModItems.grassSeeds.getItem(EnumGrassSeedItem.MYCELIUM), 1), colorGreen));
 	}
 
 }

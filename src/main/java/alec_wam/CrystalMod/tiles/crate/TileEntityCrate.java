@@ -43,6 +43,7 @@ public class TileEntityCrate extends TileEntityModVariant<EnumCrystalColorSpecia
 	@Override
 	public void writeCustomNBT(NBTTagCompound nbt){
 		super.writeCustomNBT(nbt);
+		nbt.setInt("Tier", tier);
 		nbt.setInt("Rotation", rotation);
 		nbt.setBoolean("hasVoid", hasVoidUpgrade);
 		if(ItemStackTools.isValid(storedStack)){
@@ -55,6 +56,7 @@ public class TileEntityCrate extends TileEntityModVariant<EnumCrystalColorSpecia
 	@Override
 	public void readCustomNBT(NBTTagCompound nbt){
 		super.readCustomNBT(nbt);
+		tier = nbt.getInt("Tier");
 		if(nbt.hasKey("Rotation"))rotation = nbt.getInt("Rotation");
 		else {
 			rotation = 0;

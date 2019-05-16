@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import alec_wam.CrystalMod.api.recipes.IFusionRecipe;
-import alec_wam.CrystalMod.api.tile.IFusionPedistal;
-import alec_wam.CrystalMod.api.tile.IPedistal;
+import alec_wam.CrystalMod.api.tile.IFusionPedestal;
+import alec_wam.CrystalMod.api.tile.IPedestal;
 import net.minecraft.world.World;
 
 public class CrystalModAPI {
@@ -18,9 +18,9 @@ public class CrystalModAPI {
 		return recipe;
 	}
 
-	public static IFusionRecipe findFusionRecipe(IFusionPedistal pedistal, World world, List<IPedistal> linkedPedistals) {
+	public static IFusionRecipe findFusionRecipe(IFusionPedestal pedestal, World world, List<IPedestal> linkedPedestals) {
 		for(IFusionRecipe recipe : FUSION_RECIPES){
-			if(recipe.matches(pedistal, world, linkedPedistals)){
+			if(recipe.matches(pedestal, world, linkedPedestals)){
 				return recipe;
 			}
 		}

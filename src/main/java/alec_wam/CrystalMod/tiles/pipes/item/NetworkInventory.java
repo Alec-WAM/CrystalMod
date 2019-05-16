@@ -8,7 +8,7 @@ import java.util.Map;
 
 import javax.annotation.Nullable;
 
-import alec_wam.CrystalMod.init.ModItems;
+import alec_wam.CrystalMod.ModConfig;
 import alec_wam.CrystalMod.tiles.pipes.EnumPipeUpgrades;
 import alec_wam.CrystalMod.tiles.pipes.NetworkPos;
 import alec_wam.CrystalMod.tiles.pipes.PipeConnectionMode;
@@ -67,14 +67,16 @@ public class NetworkInventory {
 		return false;
 	}
 
+	PipeConnectionMode getConnectionMode(){
+		return pip.getConnectionSetting(pipDir);
+	}
+	
 	boolean canExtract() {
-		PipeConnectionMode mode = pip.getConnectionSetting(pipDir);
-		return mode == PipeConnectionMode.IN || mode == PipeConnectionMode.BOTH;
+		return getConnectionMode() == PipeConnectionMode.IN || getConnectionMode() == PipeConnectionMode.BOTH;
 	}
 
 	boolean canInsert() {
-		PipeConnectionMode mode = pip.getConnectionSetting(pipDir);
-		return mode == PipeConnectionMode.OUT || mode == PipeConnectionMode.BOTH;
+		return getConnectionMode() == PipeConnectionMode.OUT || getConnectionMode() == PipeConnectionMode.BOTH;
 	}
 
 	int getPriority() {
@@ -108,36 +110,31 @@ public class NetworkInventory {
 		extractFromSlot--;
 	}
 
-	public static final int MAX_SPEED_UPGRADES = 8;
+	public static int getMaxSpeedUpgrades(){
+		return ModConfig.BLOCKS.Pipe_Item_Speed_Count.get();
+	}
+	
 	private float getTickTimePerItem() {
 		float speed = 20.0F;
-		ItemStack upgrade = pip.getUpgrade(pipDir);
-		if(ItemStackTools.isValid(upgrade)){
-			if(upgrade.getItem() == ModItems.pipeUpgrades.getItem(EnumPipeUpgrades.SPEED)){
-				int size = upgrade.getCount();
-				float multi = 20.0F / (float)MAX_SPEED_UPGRADES;
-				speed -= (size * multi);
-			}
+		Map<EnumPipeUpgrades, Integer> upgrades = pip.getUpgrades(pipDir);
+		if(upgrades.containsKey(EnumPipeUpgrades.SPEED)){
+			int size = upgrades.get(EnumPipeUpgrades.SPEED);
+			float multi = 20.0F / (float)getMaxSpeedUpgrades();
+			speed -= (size * multi);
 		}
 		float maxExtract = speed / getMaximumExtracted();
 	    return maxExtract;
 	}
 
 	private int getMaximumExtracted() {
-		ItemStack upgrade = pip.getUpgrade(pipDir);
-		if(ItemStackTools.isValid(upgrade)){
-			/*if(upgrade.getItem() == ModItems.pipeUpgrades.getItem(EnumPipeUpgrades.SPEED)){
-				int size = upgrade.getCount();
-				return 4 + (size * 4);
-			}*/
-			if(upgrade.getItem() == ModItems.pipeUpgrades.getItem(EnumPipeUpgrades.STACK)){
-				return 64;
-			}
-			if(upgrade.getItem() == ModItems.pipeUpgrades.getItem(EnumPipeUpgrades.SLOW)){
-				return 1;
-			}
+		Map<EnumPipeUpgrades, Integer> upgrades = pip.getUpgrades(pipDir);
+		if(upgrades.containsKey(EnumPipeUpgrades.STACK)){
+			return 64;
 		}
-		return 4;
+		else if(upgrades.containsKey(EnumPipeUpgrades.SLOW)){
+			return 1;
+		}
+		return ModConfig.BLOCKS.Pipe_Item_Default_Transfer.get();
 	}
 	
 	static int MAX_SLOT_CHECK_PER_TICK = 64;
@@ -178,7 +175,10 @@ public class NetworkInventory {
 		if(ItemStackTools.isNullStack(itemStack)) {
 			return false;
 		}
-		ItemStack filter = pip.getFilter(pipDir);
+		ItemStack filter = pip.getInFilter(pipDir);
+		if(getConnectionMode() == PipeConnectionMode.BOTH){
+			filter = pip.getOutFilter(pipDir);
+		}
 		return TileEntityPipeItem.passesFilter(itemStack, filter);
 	}
 
@@ -250,7 +250,7 @@ public class NetworkInventory {
 		if(!canInsert() || ItemStackTools.isNullStack(item)) {
 			return 0;
 		}
-		ItemStack filter = pip.getFilter(pipDir);
+		ItemStack filter = pip.getInFilter(pipDir);
 		if(!TileEntityPipeItem.passesFilter(item, filter)){
 			return 0;
 		}

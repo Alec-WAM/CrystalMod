@@ -6,6 +6,7 @@ import java.util.Locale;
 
 import javax.annotation.Nullable;
 
+import alec_wam.CrystalMod.ModConfig;
 import alec_wam.CrystalMod.core.BlockVariantGroup;
 import alec_wam.CrystalMod.init.ModItems;
 import alec_wam.CrystalMod.items.EnumPlateItem;
@@ -151,14 +152,15 @@ public class BlockCrate extends BlockContainerVariant<EnumCrystalColorSpecialWit
 							NBTTagCompound data = new NBTTagCompound();
 							data.setBoolean("VoidUpgrade", false);
 							CrystalModNetwork.sendToAllAround(new PacketTileMessage(pos, "VoidUpgrade", data), crate);
-							dropItemInWorld(state, crate, player, new ItemStack(ModItems.crateUpgrades.getItem(EnumCrateUpgrades.VOID)), crate.getWorld().rand.nextFloat());
+							dropItemInWorld(state, crate, player, new ItemStack(ModItems.miscUpgrades.getItem(EnumMiscUpgrades.VOID)), crate.getWorld().rand.nextFloat());
 							return true;
 						}
-						if(playerItem.getItem() == ModItems.crateUpgrades.getItem(EnumCrateUpgrades.VOID) && !crate.hasVoidUpgrade){
+						if(playerItem.getItem() == ModItems.miscUpgrades.getItem(EnumMiscUpgrades.VOID) && !crate.hasVoidUpgrade){
 							if(worldIn.isRemote)return true;
 							crate.hasVoidUpgrade = true;
 							if(!player.abilities.isCreativeMode){
-								player.setHeldItem(hand, playerItem.split(1));
+								playerItem.shrink(1);
+								player.setHeldItem(hand, playerItem);
 							}
 							
 							SoundType soundtype = SoundType.STONE;
@@ -252,8 +254,7 @@ public class BlockCrate extends BlockContainerVariant<EnumCrystalColorSpecialWit
 				ItemStack stored = crate.getStack();
 				ItemStack held = player.getHeldItemMainhand();
 				RayTraceResult ray = BlockUtil.rayTrace(world, player, RayTraceFluidMode.NEVER);
-				//TODO Config
-				boolean inFront = /*Config.crates_useAllSides || */ray.sideHit == state.get(FACING);
+				boolean inFront = ray.sideHit == state.get(FACING);
 				if(ItemStackTools.isValid(stored) && inFront){
 					if (crate.isTimerActive() && crate.getSelectedSlot() != player.inventory.currentItem && ItemStackTools.isEmpty(held) && crate.getMode() == 2 && !player.isSneaking()){
 						crate.resetTimer();
@@ -277,8 +278,7 @@ public class BlockCrate extends BlockContainerVariant<EnumCrystalColorSpecialWit
 							}
 						}else{
 							int size = ItemStackTools.getStackSize(stored);
-							//TODO Config one item
-							if(/*Config.crates_leaveOneItem &&*/ size == 0 && !ItemStackTools.isEmpty(stored))size++;
+							if(ModConfig.BLOCKS.Crate_LeaveItem.get() && size == 0 && !ItemStackTools.isEmpty(stored))size++;
 							int maxStackSize = Math.min(size, stored.getMaxStackSize());
 							ItemStack item2 = stored.copy();
 							ItemStackTools.incStackSize(item2, -maxStackSize);
@@ -327,7 +327,7 @@ public class BlockCrate extends BlockContainerVariant<EnumCrystalColorSpecialWit
 				}
 				
 				if(crate.hasVoidUpgrade){
-					EntityItem entityitem = new EntityItem(worldIn, pos.getX() + (double)f2, pos.getY() + (double)f3, pos.getZ() + (double)f4, new ItemStack(ModItems.crateUpgrades.getItem(EnumCrateUpgrades.VOID)));
+					EntityItem entityitem = new EntityItem(worldIn, pos.getX() + (double)f2, pos.getY() + (double)f3, pos.getZ() + (double)f4, new ItemStack(ModItems.miscUpgrades.getItem(EnumMiscUpgrades.VOID)));
 					entityitem.motionX = RANDOM.nextGaussian() * (double)0.05F;
 					entityitem.motionY = RANDOM.nextGaussian() * (double)0.05F + (double)0.2F;
 					entityitem.motionZ = RANDOM.nextGaussian() * (double)0.05F;
@@ -351,37 +351,6 @@ public class BlockCrate extends BlockContainerVariant<EnumCrystalColorSpecialWit
 		EnumFacing enumfacing = BlockUtil.getFacingFromContext(context, true);
 		return this.getDefaultState().with(FACING, enumfacing);
 	}
-    
-	//TODO Look into rotation
-   /* @Override
-    public boolean rotateBlock(World world, BlockPos pos, EnumFacing axis)
-    {
-    	super.rotate(state, world, pos, direction)
-		TileEntity te = world.getTileEntity(pos);
-        if(te !=null && te instanceof TileEntityCrate){
-        	TileEntityCrate tile = (TileEntityCrate)te;
-        	if(axis == tile.facing && axis.getAxis() == Axis.Y){
-        		tile.rotation++;
-        		tile.rotation%=4;
-            	BlockUtil.markBlockForUpdate(world, pos);
-            	return true;
-        	}
-        	int next = tile.getFacing();
-        	next++;
-        	next%=6;
-        	tile.setFacing(next);
-        	tile.rotation = 0;
-        	BlockUtil.markBlockForUpdate(world, pos);
-        	return true;
-        }
-        return false;
-    }
-    
-    @Override
-    public EnumFacing[] getValidRotations(World world, BlockPos pos)
-    {
-    	return EnumFacing.VALUES;
-    }*/
 
 	@Override
 	public IBlockState rotate(IBlockState state, Rotation rot) {
@@ -413,10 +382,11 @@ public class BlockCrate extends BlockContainerVariant<EnumCrystalColorSpecialWit
 			TileEntityCrate crate = (TileEntityCrate)tile;
 			if(ItemStackTools.isValid(crate.getStack())){
 				ItemStack stored = crate.getStack();
-				int result = (int) Math.round((double) ItemStackTools.getStackSize(stored) / (double) crate.getCrateSize() * 15.0D);
+				int maxItems = (crate.getCrateSize() * stored.getMaxStackSize());
+				int result = (int) Math.round((double) ItemStackTools.getStackSize(stored) / (double) maxItems * 15.0D);
 				
 				if (result == 0) result = 1;
-				if (result == 15 && ItemStackTools.getStackSize(stored) != crate.getCrateSize()) result = 14;
+				if (result == 15 && ItemStackTools.getStackSize(stored) != maxItems) result = 14;
 				
 				return Math.max(powerInput, result);
 			}
@@ -496,7 +466,6 @@ public class BlockCrate extends BlockContainerVariant<EnumCrystalColorSpecialWit
 	
 	public static void dropItemInWorld(IBlockState sourceState, TileEntityCrate source, EntityPlayer player, ItemStack stack, double speedfactor)
 	{
-		//TODO Config
 		boolean anySide = false;
 		if(anySide){
 			int hitOrientation = MathHelper.floor(player.rotationYaw * 4.0F / 360.0F + 0.5D) & 0x3;

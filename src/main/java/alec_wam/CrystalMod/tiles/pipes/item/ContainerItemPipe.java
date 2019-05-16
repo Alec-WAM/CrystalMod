@@ -1,25 +1,33 @@
 package alec_wam.CrystalMod.tiles.pipes.item;
 
 import alec_wam.CrystalMod.init.ModItems;
+import alec_wam.CrystalMod.items.ItemVariant;
+import alec_wam.CrystalMod.network.IMessageHandler;
 import alec_wam.CrystalMod.tiles.pipes.EnumPipeUpgrades;
+import alec_wam.CrystalMod.tiles.pipes.PipeConnectionMode;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 
-public class ContainerItemPipe extends Container
+public class ContainerItemPipe extends Container implements IMessageHandler
 {
     private TileEntityPipeItem pipe;
     private EnumFacing face;
-
+    private boolean twoFilters;
+    private Slot slotInFilter;
+    private Slot slotOutFilter;
     public ContainerItemPipe(EntityPlayer player, TileEntityPipeItem tileEntity, EnumFacing face)
     {
     	this.pipe = tileEntity;
     	this.face = face;
-    	this.addSlot(new Slot(tileEntity.getInternalInventory(face), 0, 80, 35) {
+    	this.twoFilters = tileEntity.getConnectionSetting(face) == PipeConnectionMode.BOTH;
+    	this.addSlot(slotInFilter = new Slot(tileEntity.getInternalInventory(face), 0, 72, 35) {
     		@Override
     		public boolean isItemValid(ItemStack stack){
     			return stack.isEmpty() || stack.getItem() == ModItems.pipeFilter;
@@ -30,18 +38,10 @@ public class ContainerItemPipe extends Container
     			return 1;
     		}
     	});
-    	this.addSlot(new Slot(tileEntity.getInternalInventory(face), 1, 152, 58) {
+    	this.addSlot(slotOutFilter = new Slot(tileEntity.getInternalInventory(face), 1, 90, 35) {
     		@Override
     		public boolean isItemValid(ItemStack stack){
-    			return stack.isEmpty() || ModItems.pipeUpgrades.getItems().contains(stack.getItem());
-    		}
-    		
-    		@Override
-    		public int getItemStackLimit(ItemStack stack) {
-    			if(stack.getItem() == ModItems.pipeUpgrades.getItem(EnumPipeUpgrades.SPEED)){
-    				return NetworkInventory.MAX_SPEED_UPGRADES;
-    			}
-    			return 1;
+    			return stack.isEmpty() || stack.getItem() == ModItems.pipeFilter;
     		}
     		
     		@Override
@@ -49,9 +49,50 @@ public class ContainerItemPipe extends Container
     			return 1;
     		}
     	});
+    	
+    	this.addSlot(new SlotUpgrade(tileEntity.getInternalInventory(face), 2, 134, 58, pipe, face, 0));
+    	this.addSlot(new SlotUpgrade(tileEntity.getInternalInventory(face), 3, 152, 58, pipe, face, 1));
         this.addPlayerInventory(player.inventory);
+        updateSlots();
     }
 
+    public static class SlotUpgrade extends Slot {
+    	protected TileEntityPipeItem pipe;
+    	protected EnumFacing side;
+    	protected int upgradeSlot;
+    	public SlotUpgrade(IInventory inventory, int index, int xPosition, int yPosition, TileEntityPipeItem pipe, EnumFacing side, int upgradeSlot) {
+			super(inventory, index, xPosition, yPosition);
+			this.pipe = pipe;
+			this.side = side;
+			this.upgradeSlot = upgradeSlot;
+		}
+    	
+    	@SuppressWarnings("unchecked")
+		@Override
+		public boolean isItemValid(ItemStack stack){
+    		//Prevent double upgrades
+			if(ModItems.pipeUpgrades.getItems().contains(stack.getItem())){
+				ItemVariant<EnumPipeUpgrades> item = (ItemVariant<EnumPipeUpgrades>)stack.getItem();
+				int otherSlot = upgradeSlot == 0 ? 1 : 0;
+				return pipe.getUpgradeType(side, otherSlot) != item.type;
+			}
+			return stack.isEmpty();
+		}
+		
+		@Override
+		public int getItemStackLimit(ItemStack stack) {
+			if(stack.getItem() == ModItems.pipeUpgrades.getItem(EnumPipeUpgrades.SPEED)){
+				return NetworkInventory.getMaxSpeedUpgrades();
+			}
+			return 1;
+		}
+		
+		@Override
+		public int getSlotStackLimit() {
+			return 1;
+		}
+    }
+    
     @Override
     public boolean canInteractWith(EntityPlayer player)
     {
@@ -71,6 +112,20 @@ public class ContainerItemPipe extends Container
             this.addSlot(new Slot(paramInventoryPlayer, i, 8 + i * 18, 142));
     }
 
+    public void updateSlots(){
+    	this.twoFilters = pipe.getConnectionSetting(face) == PipeConnectionMode.BOTH;
+    	if(twoFilters){
+    		this.slotInFilter.xPos = 72;
+    		this.slotOutFilter.xPos = 90;
+    		this.slotOutFilter.yPos = 35;
+    	}
+    	else {
+    		this.slotInFilter.xPos = 80;
+    		this.slotOutFilter.xPos = -3000;
+    		this.slotOutFilter.yPos = -3000;
+    	}
+    }
+    
     @Override
     public ItemStack transferStackInSlot(EntityPlayer player, int i)
     {
@@ -83,14 +138,30 @@ public class ContainerItemPipe extends Container
 			ItemStack itemstack1 = slot.getStack();
 			itemstack = itemstack1.copy();
 
-			if (par2 > 1)
+			if (par2 > 4)
 			{
-				if (!this.mergeItemStack(itemstack1, 0, 2, false))
-				{
-					return ItemStackTools.getEmptyStack();
+				if(twoFilters){
+					if (!this.mergeItemStack(itemstack1, 0, 4, false))
+					{
+						return ItemStackTools.getEmptyStack();
+					}
+				} else {
+					if(itemstack1.getItem() == ModItems.pipeFilter){
+						if (!this.mergeItemStack(itemstack1, 0, 1, false))
+						{
+							return ItemStackTools.getEmptyStack();
+						}
+					} else {
+						if (!this.mergeItemStack(itemstack1, 2, 4, false))
+						{
+							return ItemStackTools.getEmptyStack();
+						}
+					}
 				}
+				
+				return ItemStackTools.getEmptyStack();
 			} 
-			else if (!this.mergeItemStack(itemstack1, 2, 38, true))
+			else if (!this.mergeItemStack(itemstack1, 2, 40, true))
 			{
 				return ItemStackTools.getEmptyStack();
 			}
@@ -115,7 +186,7 @@ public class ContainerItemPipe extends Container
 		return itemstack;
     }
     
-    //Make the slot limit smarter
+    //Made the slot limit smarter
     @Override
     protected boolean mergeItemStack(ItemStack stack, int startIndex, int endIndex, boolean reverseDirection) {
     	boolean flag = false;
@@ -202,4 +273,11 @@ public class ContainerItemPipe extends Container
 
     	return flag;
     }
+
+	@Override
+	public void handleMessage(String messageId, NBTTagCompound messageData, boolean client) {
+		if(messageId.equalsIgnoreCase("UpdateSlots")){
+			this.updateSlots();
+		}
+	}
 }

@@ -40,7 +40,6 @@ public class BlockTank extends BlockContainerVariant<EnumCrystalColorSpecialWith
     public void addInformation(ItemStack stack, @Nullable IBlockReader worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn)
     {
 		if(type != EnumCrystalColorSpecialWithCreative.CREATIVE){
-			int buckets = TileEntityTank.TIER_BUCKETS[type.ordinal()];
 			int largeNumber = (Fluid.BUCKET_VOLUME*TileEntityTank.TIER_BUCKETS[type.ordinal()]);
 			tooltip.add(new TextComponentTranslation("crystalmod.info.tank.storage", NumberFormat.getNumberInstance(Locale.US).format(largeNumber)));
 		}
@@ -56,8 +55,8 @@ public class BlockTank extends BlockContainerVariant<EnumCrystalColorSpecialWith
         TileEntity tile = world.getTileEntity(pos);
 
         if (tile instanceof TileEntityTank) {
-        	TileEntityTank tank = (TileEntityTank)tile;
-        	/*if(tank.tank.getFluid().){
+        	/*TileEntityTank tank = (TileEntityTank)tile;
+        	if(tank.tank.getFluid().){
         		return 15;
         	}*/
         }

@@ -33,6 +33,7 @@ import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.client.MinecraftForgeClient;
 
+@SuppressWarnings("deprecation")
 public class ModelPipeBaked implements IBakedModel 
 {
 	public static final ModelResourceLocation BAKED_MODEL = new ModelResourceLocation("crystalmod:crystalpipe");
@@ -222,15 +223,11 @@ public class ModelPipeBaked implements IBakedModel
             list.add(faceBakery.makeBakedQuad(new Vector3f(maxExt, minExt, maxExt), new Vector3f(16.0F, maxExt, maxExt), faceExtRight, connector, EnumFacing.SOUTH, ModelRotation.X0_Y0, (BlockPartRotation)null, scaleExt, true));
         }
         
-        //TODO Add external connections
         for (EnumFacing dir : EnumFacing.values()) {
         	if (state !=null && BlockPipe.getConnection(state, dir) == ConnectionType.EXTERNAL) {
             	renderIronCap(state, dir, list);
             }
         }
-        
-        
-        
         return list;
     }
     

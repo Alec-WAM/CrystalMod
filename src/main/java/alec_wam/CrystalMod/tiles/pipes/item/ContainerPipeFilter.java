@@ -38,7 +38,7 @@ public class ContainerPipeFilter extends Container
         {
             for (int j = 0; j < 5; j++)
             {
-                addSlot(new SlotGhostItem(filterInventory, j + i * 3, 44 + j * 18, 19 + i * 18));
+                addSlot(new SlotGhostItem(filterInventory, j + i * 3, 62 + j * 18, 19 + i * 18));
             }
         }
     	

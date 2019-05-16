@@ -15,6 +15,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
@@ -45,6 +46,17 @@ public class ItemUtil {
 		return stack1.getItem() == stack2.getItem() && stack1.getDamage() == stack2.getDamage() && ItemStack.areItemStackTagsEqual(stack1, stack2);
 	}
 
+	public static boolean matchUsingTags(ItemStack stack1, ItemStack stack2){
+		List<ResourceLocation> tags1 = ItemTagHelper.getTags(stack1.getItem());
+		List<ResourceLocation> tags2 = ItemTagHelper.getTags(stack2.getItem());
+		for(ResourceLocation res : tags2){
+			if(tags1.contains(res)){
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	public static ItemStack copy(ItemStack stack, int size) {
 		ItemStack copy = stack.copy();
 		ItemStackTools.setStackSize(copy, size);

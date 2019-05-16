@@ -8,8 +8,8 @@ import com.google.common.collect.Lists;
 
 import alec_wam.CrystalMod.api.CrystalModAPI;
 import alec_wam.CrystalMod.api.recipes.IFusionRecipe;
-import alec_wam.CrystalMod.api.tile.IFusionPedistal;
-import alec_wam.CrystalMod.api.tile.IPedistal;
+import alec_wam.CrystalMod.api.tile.IFusionPedestal;
+import alec_wam.CrystalMod.api.tile.IPedestal;
 import alec_wam.CrystalMod.init.ModBlocks;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.IMessageHandler;
@@ -28,16 +28,16 @@ import net.minecraft.util.EnumFacing.Axis;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 
-public class TileEntityFusionPedistal extends TileEntityInventory implements IMessageHandler, IFusionPedistal {
-
-	public List<IPedistal> linkedPedistals = Lists.newArrayList();
+public class TileEntityFusionPedestal extends TileEntityInventory implements IMessageHandler, IFusionPedestal {
+	
+	public List<IPedestal> linkedPedestals = Lists.newArrayList();
 	public final WatchableBoolean isCrafting = new WatchableBoolean();
 	public final WatchableInteger craftingProgress = new WatchableInteger();
 	public final WatchableInteger craftingCooldown = new WatchableInteger();
 	public IFusionRecipe runningRecipe;
 	
-	public TileEntityFusionPedistal() {
-		super(ModBlocks.TILE_FUSION_PEDISTAL, "FusionPedistal", 1);
+	public TileEntityFusionPedestal() {
+		super(ModBlocks.TILE_FUSION_PEDESTAL, "FusionPedestal", 1);
 	}
 	
 	/*@SideOnly(Side.CLIENT)
@@ -45,7 +45,7 @@ public class TileEntityFusionPedistal extends TileEntityInventory implements IMe
 
 	@Override
 	public EnumFacing getRotation() {
-		return this.getBlockState().get(BlockPedistal.FACING);
+		return this.getBlockState().get(BlockPedestal.FACING);
 	}
 	
 	@Override
@@ -85,14 +85,14 @@ public class TileEntityFusionPedistal extends TileEntityInventory implements IMe
 			}
 			
 			if(isCrafting.getValue()){
-				for(IPedistal pedistal : linkedPedistals){
-					if(((TileEntity)pedistal).isRemoved()){
+				for(IPedestal pedestal : linkedPedestals){
+					if(((TileEntity)pedestal).isRemoved()){
 						cancelCrafting();
 						return;
 					}
 				}
 				
-				if(runningRecipe == null || !runningRecipe.matches(this, getWorld(), linkedPedistals)){
+				if(runningRecipe == null || !runningRecipe.matches(this, getWorld(), linkedPedestals)){
 					cancelCrafting();
 					return;
 				}
@@ -105,7 +105,7 @@ public class TileEntityFusionPedistal extends TileEntityInventory implements IMe
 					craftingProgress.add(1);
 					if(craftingCooldown.getValue() < craftTime/2)this.craftingCooldown.add(1);
 				} else if(craftingProgress.getValue() >= craftTime){
-					runningRecipe.finishCrafting(this, getWorld(), linkedPedistals);
+					runningRecipe.finishCrafting(this, getWorld(), linkedPedestals);
 					//getWorld().playSound(null, getPos(), ModSounds.fusionCooldown, SoundCategory.BLOCKS, 0.1F, 1.0F);
 					isCrafting.setValue(false);
 				}
@@ -144,14 +144,14 @@ public class TileEntityFusionPedistal extends TileEntityInventory implements IMe
 	
 	@Override
 	public boolean canExtract(int slot, int amount){
-		return !isLocked();
+		return !isCrafting();
 	}
 	
 	public void startCrafting(@Nullable EntityPlayer player){
-		pedistalSearch();
-		runningRecipe = CrystalModAPI.findFusionRecipe(this, getWorld(), linkedPedistals);
-		if(runningRecipe !=null && runningRecipe.matches(this, getWorld(), linkedPedistals)){
-			String message = runningRecipe.canCraft(this, getWorld(), linkedPedistals);
+		pedestalSearch();
+		runningRecipe = CrystalModAPI.findFusionRecipe(this, getWorld(), linkedPedestals);
+		if(runningRecipe !=null && runningRecipe.matches(this, getWorld(), linkedPedestals)){
+			String message = runningRecipe.canCraft(this, getWorld(), linkedPedestals);
 			boolean passes = message.equalsIgnoreCase("true");
 			if(passes){
 				isCrafting.setValue(true);
@@ -169,16 +169,16 @@ public class TileEntityFusionPedistal extends TileEntityInventory implements IMe
 		isCrafting.setValue(false);
 		runningRecipe = null;
 		craftingProgress.setValue(0);
-		linkedPedistals.clear();
+		linkedPedestals.clear();
 		//getWorld().playSound(null, getPos(), ModSounds.fusionCooldown, SoundCategory.BLOCKS, 0.75F, 1.0F);
 	}
 	
-	public void pedistalSearch(){
+	public void pedestalSearch(){
 		if(isCrafting.getValue()){
 			return;
 		}
 		
-		linkedPedistals.clear();
+		linkedPedestals.clear();
 		int range = 8;
 		
 		List<BlockPos> searchList = Lists.newArrayList();
@@ -208,9 +208,9 @@ public class TileEntityFusionPedistal extends TileEntityInventory implements IMe
 		for(BlockPos searchPos : searchList){
 			if(getWorld().isBlockLoaded(searchPos)){
 				TileEntity tile = getWorld().getTileEntity(searchPos);
-				if(tile instanceof TileEntityPedistal){
-					TileEntityPedistal pedistal = (TileEntityPedistal)tile;
-					BlockPos tilePos = pedistal.getPos();
+				if(tile instanceof TileEntityPedestal){
+					TileEntityPedestal pedestal = (TileEntityPedestal)tile;
+					BlockPos tilePos = pedestal.getPos();
 					BlockPos facingPos = new BlockPos(tilePos.subtract(getPos()));
 					double distance = tilePos.distanceSq(getPos());
 					EnumFacing dir = EnumFacing.getFacingFromVector(facingPos.getX(), facingPos.getY(), facingPos.getZ());
@@ -224,8 +224,8 @@ public class TileEntityFusionPedistal extends TileEntityInventory implements IMe
 					if(facing.getAxis() == Axis.Z){
 						inLine = tile.getPos().getZ() == getPos().getZ();
 					}
-					if(distance >= 2.0D && (dir != pedistal.getRotation() && (inLine ? facing.getOpposite() !=pedistal.getRotation() : true))){
-						linkedPedistals.add(pedistal);
+					if(distance >= 2.0D && (dir != pedestal.getRotation() && (inLine ? facing.getOpposite() !=pedestal.getRotation() : true))){
+						linkedPedestals.add(pedestal);
 					}
 				}
 			}
@@ -286,7 +286,7 @@ public class TileEntityFusionPedistal extends TileEntityInventory implements IMe
 	}
 	
 	@Override
-	public boolean isLocked(){
+	public boolean isCrafting(){
 		return craftingCooldown.getValue() > 0 || isCrafting.getValue();
 	}
 	

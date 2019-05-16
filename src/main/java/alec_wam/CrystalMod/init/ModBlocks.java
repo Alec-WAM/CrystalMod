@@ -35,10 +35,10 @@ import alec_wam.CrystalMod.tiles.energy.engine.BlockEngine;
 import alec_wam.CrystalMod.tiles.energy.engine.EnumEngineType;
 import alec_wam.CrystalMod.tiles.energy.engine.TileEntityEngineBase;
 import alec_wam.CrystalMod.tiles.energy.engine.furnace.TileEntityEngineFurnace;
-import alec_wam.CrystalMod.tiles.fusion.BlockFusionPedistal;
-import alec_wam.CrystalMod.tiles.fusion.BlockPedistal;
-import alec_wam.CrystalMod.tiles.fusion.TileEntityFusionPedistal;
-import alec_wam.CrystalMod.tiles.fusion.TileEntityPedistal;
+import alec_wam.CrystalMod.tiles.fusion.BlockFusionPedestal;
+import alec_wam.CrystalMod.tiles.fusion.BlockPedestal;
+import alec_wam.CrystalMod.tiles.fusion.TileEntityFusionPedestal;
+import alec_wam.CrystalMod.tiles.fusion.TileEntityPedestal;
 import alec_wam.CrystalMod.tiles.jar.BlockJar;
 import alec_wam.CrystalMod.tiles.jar.TileEntityJar;
 import alec_wam.CrystalMod.tiles.pipes.BlockPipe;
@@ -91,10 +91,10 @@ public class ModBlocks {
 	public static BlockVariantGroup<WoodType, BlockJar> jarGroup;
 	public static final TileEntityType<TileEntityJar> TILE_JAR = TileEntityType.register(CrystalMod.resource("jar"), TileEntityType.Builder.create(TileEntityJar::new));
 
-	public static BlockPedistal pedistal;
-	public static final TileEntityType<TileEntityPedistal> TILE_PEDISTAL = TileEntityType.register(CrystalMod.resource("pedistal"), TileEntityType.Builder.create(TileEntityPedistal::new));
-	public static BlockFusionPedistal fusionPedistal;
-	public static final TileEntityType<TileEntityFusionPedistal> TILE_FUSION_PEDISTAL = TileEntityType.register(CrystalMod.resource("fusion_pedistal"), TileEntityType.Builder.create(TileEntityFusionPedistal::new));
+	public static BlockPedestal pedestal;
+	public static final TileEntityType<TileEntityPedestal> TILE_PEDESTAL = TileEntityType.register(CrystalMod.resource("pedestal"), TileEntityType.Builder.create(TileEntityPedestal::new));
+	public static BlockFusionPedestal fusionPedestal;
+	public static final TileEntityType<TileEntityFusionPedestal> TILE_FUSION_PEDESTAL = TileEntityType.register(CrystalMod.resource("fusion_pedestal"), TileEntityType.Builder.create(TileEntityFusionPedestal::new));
 	
 	public static BlockVariantGroup<EnumEngineType, BlockEngine> engineBasicGroup;
 	public static final TileEntityType<TileEntityEngineFurnace> TILE_ENGINE_FURNACE = TileEntityType.register(CrystalMod.resource("engine_furnace"), TileEntityType.Builder.create(TileEntityEngineFurnace::new));
@@ -304,10 +304,10 @@ public class ModBlocks {
 		RegistrationHandler.addBlockGroup(jarGroup);
 		RegistrationHandler.addTile(TILE_JAR);		
 		
-		pedistal = new BlockPedistal(Block.Properties.create(Material.ROCK).hardnessAndResistance(1.0F, 10.0F).sound(SoundType.STONE)); 
-		RegistrationHandler.createBlock(pedistal, ModItemGroups.ITEM_GROUP_BLOCKS, "pedistal");
-		fusionPedistal = new BlockFusionPedistal(Block.Properties.create(Material.ROCK).hardnessAndResistance(1.0F, 10.0F).sound(SoundType.STONE)); 
-		RegistrationHandler.createBlock(fusionPedistal, ModItemGroups.ITEM_GROUP_BLOCKS, "fusion_pedistal");
+		pedestal = new BlockPedestal(Block.Properties.create(Material.ROCK).hardnessAndResistance(1.0F, 10.0F).sound(SoundType.STONE)); 
+		RegistrationHandler.createBlock(pedestal, ModItemGroups.ITEM_GROUP_BLOCKS, "pedestal");
+		fusionPedestal = new BlockFusionPedestal(Block.Properties.create(Material.ROCK).hardnessAndResistance(1.0F, 10.0F).sound(SoundType.STONE)); 
+		RegistrationHandler.createBlock(fusionPedestal, ModItemGroups.ITEM_GROUP_BLOCKS, "fusion_pedestal");
 		
 		engineBasicGroup = BlockVariantGroup.Builder.<EnumEngineType, BlockEngine>create()
 				.groupName("engine_basic")
@@ -341,6 +341,11 @@ public class ModBlocks {
 
 
 	public static void addBlocksToTags() {
+		/*Collection<Block> ores = Blocks.ORES.getAllElements();
+		CrystalMod.LOGGER.info("Ores Size: " + ores.size());
+		ores.addAll(crystalOreGroup.getBlocks());
+		Collection<Block> ores2 = Blocks.ORES.getAllElements();
+		CrystalMod.LOGGER.info("New Ores Size: " + ores2.size());*/
 		//BlockTags.PLANKS.getAllElements().add(crystalPlanksGroup.getBlock(EnumCrystalColorSpecial.BLUE));
 	}	
 	

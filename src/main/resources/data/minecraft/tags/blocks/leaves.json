@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "crystalmod:crystalleaves_blue",
+    "crystalmod:crystalleaves_red",
+    "crystalmod:crystalleaves_green",
+    "crystalmod:crystalleaves_dark",
+    "crystalmod:crystalleaves_pure"
+  ]
+}
