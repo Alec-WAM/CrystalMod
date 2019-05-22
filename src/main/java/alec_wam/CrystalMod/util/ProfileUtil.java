@@ -10,6 +10,10 @@ import com.mojang.authlib.GameProfile;
 
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.packet.PacketRequestProfile;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTUtil;
 import net.minecraftforge.fml.server.ServerLifecycleHooks;
 
 public class ProfileUtil {
@@ -50,5 +54,11 @@ public class ProfileUtil {
 	
 	public static String getUsernameServer(UUID uuid){
 		return getProfileServer(uuid).getName();
+	}
+	
+	public static ItemStack createPlayerSkull(GameProfile profile){
+		ItemStack stack = new ItemStack(Items.PLAYER_HEAD);
+		ItemNBTHelper.getCompound(stack).setTag("SkullOwner", NBTUtil.writeGameProfile(new NBTTagCompound(), profile));
+		return stack;
 	}
 }

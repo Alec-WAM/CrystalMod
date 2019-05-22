@@ -9,6 +9,8 @@ import alec_wam.CrystalMod.tiles.chests.wooden.TileEntityWoodenCrystalChest;
 import alec_wam.CrystalMod.tiles.chests.wooden.TileEntityWoodenCrystalChestRender;
 import alec_wam.CrystalMod.tiles.crate.TileEntityCrate;
 import alec_wam.CrystalMod.tiles.crate.TileEntityCrateRender;
+import alec_wam.CrystalMod.tiles.energy.battery.TileEntityBattery;
+import alec_wam.CrystalMod.tiles.energy.battery.TileEntityBatteryRender;
 import alec_wam.CrystalMod.tiles.fusion.TileEntityFusionPedestal;
 import alec_wam.CrystalMod.tiles.fusion.TileEntityFusionPedestalRender;
 import alec_wam.CrystalMod.tiles.fusion.TileEntityPedestal;
@@ -33,5 +35,6 @@ public class ModRenders {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPedestal.class, new TileEntityPedestalRender());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityFusionPedestal.class, new TileEntityFusionPedestalRender());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityJar.class, new TileEntityJarRender());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBattery.class, new TileEntityBatteryRender());
 	}
 }

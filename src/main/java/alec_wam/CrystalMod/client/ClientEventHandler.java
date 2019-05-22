@@ -1,7 +1,19 @@
 package alec_wam.CrystalMod.client;
 
+import java.text.NumberFormat;
+import java.util.List;
+import java.util.Locale;
+
 import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.tiles.energy.engine.furnace.GuiEngineFurnace;
+import alec_wam.CrystalMod.tiles.energy.engine.furnace.TileEntityEngineFurnace;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.common.Mod;
@@ -16,6 +28,22 @@ public class ClientEventHandler {
 	public void onClientTick(TickEvent.ClientTickEvent event) {
     	if (event.phase == TickEvent.Phase.END && event.type == TickEvent.Type.CLIENT && event.side == LogicalSide.CLIENT) {
     		elapsedTicks++;
+    	}
+    }
+    
+    @SubscribeEvent
+    public void addTooltips(ItemTooltipEvent event){
+    	ItemStack stack = event.getItemStack();
+    	List<ITextComponent> lines = event.getToolTip();
+    	GuiScreen currentScreen = Minecraft.getInstance().currentScreen;
+    	if(currentScreen instanceof GuiEngineFurnace){
+    		TileEntityEngineFurnace engine = ((GuiEngineFurnace)currentScreen).tileFurnace;
+    		int fuel = TileEntityEngineFurnace.getItemEnergyValue(stack);
+    		if(fuel > 0) {
+    			fuel*=engine.getFuelValue();
+    			String energyString = NumberFormat.getNumberInstance(Locale.US).format(fuel);
+    			lines.add(new TextComponentTranslation("crystalmod.engine.furnace.fuel.item", energyString));
+    		}
     	}
     }
 }

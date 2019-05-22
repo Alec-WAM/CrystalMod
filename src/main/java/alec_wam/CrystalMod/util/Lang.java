@@ -11,8 +11,7 @@ public class Lang {
   }	
   
   public static String localizeFormat(String key, Object... format) {
-	  String s = localize(key);
-	  return String.format(s, format);
+	  return translateToLocalFormatted(CrystalMod.resourceDot(key), format);
   }
 
   public static String localize(String s, boolean appendCM) {

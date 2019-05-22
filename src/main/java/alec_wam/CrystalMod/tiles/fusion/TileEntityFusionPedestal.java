@@ -54,7 +54,7 @@ public class TileEntityFusionPedestal extends TileEntityInventory implements IMe
 		/*BlockPos under = getPos().offset(getRotation().getOpposite());
 		IBlockState below = getWorld().getBlockState(under);
 		if(below.getBlock() == Blocks.REDSTONE_LAMP){*/
-			if(isCrafting.getValue() == false){
+			if(isCrafting.getValue() == false && getBlockState().get(BlockFusionPedestal.AUTO)){
 				if(getWorld().getRedstonePowerFromNeighbors(getPos()) > 0){
 					this.startCrafting(null);
 				}

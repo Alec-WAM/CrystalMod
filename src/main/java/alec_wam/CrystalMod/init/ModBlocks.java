@@ -31,6 +31,8 @@ import alec_wam.CrystalMod.tiles.chests.wooden.TileEntityWoodenCrystalChest;
 import alec_wam.CrystalMod.tiles.chests.wooden.WoodenCrystalChestType;
 import alec_wam.CrystalMod.tiles.crate.BlockCrate;
 import alec_wam.CrystalMod.tiles.crate.TileEntityCrate;
+import alec_wam.CrystalMod.tiles.energy.battery.BlockBattery;
+import alec_wam.CrystalMod.tiles.energy.battery.TileEntityBattery;
 import alec_wam.CrystalMod.tiles.energy.engine.BlockEngine;
 import alec_wam.CrystalMod.tiles.energy.engine.EnumEngineType;
 import alec_wam.CrystalMod.tiles.energy.engine.TileEntityEngineBase;
@@ -96,6 +98,8 @@ public class ModBlocks {
 	public static BlockFusionPedestal fusionPedestal;
 	public static final TileEntityType<TileEntityFusionPedestal> TILE_FUSION_PEDESTAL = TileEntityType.register(CrystalMod.resource("fusion_pedestal"), TileEntityType.Builder.create(TileEntityFusionPedestal::new));
 	
+	public static BlockVariantGroup<EnumCrystalColorSpecialWithCreative, BlockBattery> batteryGroup;
+	public static final TileEntityType<TileEntityBattery> TILE_BATTERY = TileEntityType.register(CrystalMod.resource("battery"), TileEntityType.Builder.create(TileEntityBattery::new));
 	public static BlockVariantGroup<EnumEngineType, BlockEngine> engineBasicGroup;
 	public static final TileEntityType<TileEntityEngineFurnace> TILE_ENGINE_FURNACE = TileEntityType.register(CrystalMod.resource("engine_furnace"), TileEntityType.Builder.create(TileEntityEngineFurnace::new));
 
@@ -309,6 +313,22 @@ public class ModBlocks {
 		fusionPedestal = new BlockFusionPedestal(Block.Properties.create(Material.ROCK).hardnessAndResistance(1.0F, 10.0F).sound(SoundType.STONE)); 
 		RegistrationHandler.createBlock(fusionPedestal, ModItemGroups.ITEM_GROUP_BLOCKS, "fusion_pedestal");
 		
+		batteryGroup = BlockVariantGroup.Builder.<EnumCrystalColorSpecialWithCreative, BlockBattery>create()
+				.groupName("battery")
+				.suffix()
+				.variants(EnumCrystalColorSpecialWithCreative.values())
+				.blockPropertiesFactory(type -> Block.Properties.create(Material.IRON).hardnessAndResistance(20.0F, 50.0F).sound(SoundType.METAL))
+				.blockFactory(BlockBattery::new)
+				.itemPropertiesFactory(variant -> new Item.Properties().group(ModItemGroups.ITEM_GROUP_BLOCKS).setTEISR(() -> CustomItemRender::new))
+				.tileFactory(new TileFactory<EnumCrystalColorSpecialWithCreative>(){
+					@Override
+					public TileEntityBattery createTile(EnumCrystalColorSpecialWithCreative variant) {
+						return new TileEntityBattery(variant);
+					}
+				})
+				.build();
+		RegistrationHandler.addBlockGroup(batteryGroup);
+		RegistrationHandler.addTile(TILE_BATTERY);	
 		engineBasicGroup = BlockVariantGroup.Builder.<EnumEngineType, BlockEngine>create()
 				.groupName("engine_basic")
 				.suffix()

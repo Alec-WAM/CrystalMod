@@ -1,0 +1,19 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"group": "crystalmod.upgrade",
+	"ingredients": [
+		{
+			"item": "crystalmod:plate_darkiron"
+		},
+		{
+			"item": "crystalmod:fusionwand"
+		},
+		{
+			"item": "minecraft:redstone"
+		}
+	],
+	"result": {
+		"item": "crystalmod:misc_upgrade_fusion_auto",
+		"count": 1
+	}
+}

@@ -13,7 +13,10 @@ import alec_wam.CrystalMod.client.GuiHandler;
 import alec_wam.CrystalMod.init.ModBlocks;
 import alec_wam.CrystalMod.init.ModItems;
 import alec_wam.CrystalMod.items.ItemVariant;
+import alec_wam.CrystalMod.tiles.pipes.BlockPipe.PipeHitData;
+import alec_wam.CrystalMod.tiles.pipes.BlockPipe.PipePart;
 import alec_wam.CrystalMod.tiles.pipes.EnumPipeUpgrades;
+import alec_wam.CrystalMod.tiles.pipes.InternalPipeInventory;
 import alec_wam.CrystalMod.tiles.pipes.NetworkPos;
 import alec_wam.CrystalMod.tiles.pipes.NetworkType;
 import alec_wam.CrystalMod.tiles.pipes.TileEntityPipeBase;
@@ -25,7 +28,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
-import net.minecraft.inventory.InventoryBasic;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -45,14 +47,23 @@ import net.minecraftforge.items.IItemHandler;
 
 public class TileEntityPipeItem extends TileEntityPipeBase {
 	//TODO Update connections on insertion and extraction of cobble gen upgrade
-	private Map<EnumFacing, InventoryBasic> pipeItems;
+	//TODO Add Hopper Upgrade
+	//TODO Add Force upgrade with Hopper and Cobble Upgrade
+	private Map<EnumFacing, InternalPipeInventory> pipeItems;
 	private int[] priorities;
 	
 	public TileEntityPipeItem() {
 		super(ModBlocks.TILE_PIPE_ITEM);
 		pipeItems = Maps.newHashMap();
-		for(EnumFacing facing : EnumFacing.values()){
-			pipeItems.put(facing, new InventoryBasic(new TextComponentString("Items"), 4));
+		for(final EnumFacing facing : EnumFacing.values()){
+			InternalPipeInventory inv = new InternalPipeInventory(facing, new TextComponentString("Items"), 4) {
+				@Override
+				public void markDirty(int slot, ItemStack lastStack) {
+					super.markDirty(slot, lastStack);
+					internalInventoryChanged(facing, slot, lastStack);
+				}
+			};
+			pipeItems.put(facing, inv);
 		}
 		priorities = new int[6];
 	}
@@ -63,7 +74,7 @@ public class TileEntityPipeItem extends TileEntityPipeBase {
 		NBTTagCompound itemData = new NBTTagCompound();
 		for(EnumFacing facing : EnumFacing.values()){
 			NBTTagList nbttaglist = new NBTTagList();
-			InventoryBasic internalInventory = getInternalInventory(facing);
+			InternalPipeInventory internalInventory = getInternalInventory(facing);
 			for(int s = 0; s < internalInventory.getSizeInventory(); s++) {
 				ItemStack itemstack = internalInventory.getStackInSlot(s);
 				if (!itemstack.isEmpty()) {
@@ -86,7 +97,7 @@ public class TileEntityPipeItem extends TileEntityPipeBase {
 		super.readCustomNBT(nbt);
 		NBTTagCompound connectionSettingData = nbt.getCompound("Inventory");
 		for(EnumFacing facing : EnumFacing.values()){
-			InventoryBasic internalInventory = getInternalInventory(facing);
+			InternalPipeInventory internalInventory = getInternalInventory(facing);
 			NBTTagList nbttaglist = connectionSettingData.getList(facing.getName().toLowerCase(), 10);
 			for(int s = 0; s < nbttaglist.size(); s++) {
 				NBTTagCompound data = nbttaglist.getCompound(s);
@@ -138,6 +149,73 @@ public class TileEntityPipeItem extends TileEntityPipeBase {
 			((PipeNetworkItem)network).inventoryRemoved(this, direction);
 		}
 	}
+
+	public void internalInventoryChanged(EnumFacing facing, int slot, ItemStack lastStack) {
+		//Upgrades
+		if(slot == 2 || slot == 3){
+			boolean isExternal = false;
+			ItemStack currentStack = getInternalInventory(facing).getStackInSlot(slot);
+			/*if(ModItems.pipeUpgrades.getItems().contains(currentStack.getItem())){
+				@SuppressWarnings("unchecked")
+				ItemVariant<EnumPipeUpgrades> upgrade = (ItemVariant<EnumPipeUpgrades>)currentStack.getItem();
+				if(upgrade.type.isExternal()){
+					isExternal = true;
+				}
+			}*/
+			if(ModItems.pipeUpgrades.getItems().contains(lastStack.getItem())){
+				@SuppressWarnings("unchecked")
+				ItemVariant<EnumPipeUpgrades> upgrade = (ItemVariant<EnumPipeUpgrades>)lastStack.getItem();
+				if(upgrade.type.isExternal()){
+					isExternal = true;
+				}
+			}
+			if(isExternal){
+				this.rebuildConnections = true;
+			}
+		}
+	}
+	
+	@Override
+	public boolean onActivated(World world, EntityPlayer player, EnumHand hand, PipeHitData hitData) {
+		ItemStack held = player.getHeldItem(hand);
+		if(hitData !=null){
+			if(hitData.part == null || hitData.part == PipePart.CENTER){
+				EnumFacing side = hitData.face;
+				if(externalUpgradeInsert(held, side, !world.isRemote)){
+					if(!player.abilities.isCreativeMode){
+						held.shrink(1);
+						player.setHeldItem(hand, held);
+					}
+					return true;
+				}
+			}
+		} 
+		return false;
+	}
+	
+	public boolean externalUpgradeInsert(ItemStack stack, EnumFacing side, boolean server){
+		if(ModItems.pipeUpgrades.getItems().contains(stack.getItem())){
+			@SuppressWarnings("unchecked")
+			ItemVariant<EnumPipeUpgrades> upgrade = (ItemVariant<EnumPipeUpgrades>)stack.getItem();
+			if(!getUpgrades(side).containsKey(upgrade) && upgrade.type.isExternal()){
+				if(getUpgradeType(side, 0) == null){
+					this.getInternalInventory(side).setInventorySlotContents(2, ItemUtil.copy(stack, 1));
+					if(server){
+						this.rebuildConnections = true;
+					}
+					return true;
+				}
+				else if(getUpgradeType(side, 1) == null){
+					this.getInternalInventory(side).setInventorySlotContents(3, ItemUtil.copy(stack, 1));
+					if(server){
+						this.rebuildConnections = true;
+					}
+					return true;
+				}
+			}
+		}
+		return false;
+	}
 	
 	public boolean canDoCobbleGen(EnumFacing direction){
 		NetworkPos pos = getNetworkPos().offset(direction);
@@ -168,24 +246,24 @@ public class TileEntityPipeItem extends TileEntityPipeBase {
 	    return null;
 	}
 	
-	public InventoryBasic getInternalInventory(EnumFacing facing){
+	public InternalPipeInventory getInternalInventory(EnumFacing facing){
 		return pipeItems.get(facing);
 	}
 	
 	public ItemStack getInFilter(EnumFacing facing){
-		InventoryBasic inv = getInternalInventory(facing);
+		InternalPipeInventory inv = getInternalInventory(facing);
 		return inv.getStackInSlot(0);
 	}
 	
 	public ItemStack getOutFilter(EnumFacing facing){
-		InventoryBasic inv = getInternalInventory(facing);
+		InternalPipeInventory inv = getInternalInventory(facing);
 		return inv.getStackInSlot(1);
 	}
 	
 	@SuppressWarnings("unchecked")
 	public Map<EnumPipeUpgrades, Integer> getUpgrades(EnumFacing facing){
 		Map<EnumPipeUpgrades, Integer> map = Maps.newHashMap();
-		InventoryBasic inv = getInternalInventory(facing);
+		InternalPipeInventory inv = getInternalInventory(facing);
 		ItemStack upgrade1 = inv.getStackInSlot(2);
 		ItemStack upgrade2 = inv.getStackInSlot(3);
 		if(ModItems.pipeUpgrades.getItems().contains(upgrade1.getItem())){
@@ -233,7 +311,7 @@ public class TileEntityPipeItem extends TileEntityPipeBase {
 	public List<ItemStack> getDrops(){
 		List<ItemStack> stacks = Lists.newArrayList();
 		for(EnumFacing facing : EnumFacing.values()){
-			InventoryBasic inv = getInternalInventory(facing);
+			InternalPipeInventory inv = getInternalInventory(facing);
 			for(int i = 0; i < inv.getSizeInventory(); i++){
 				ItemStack stack = inv.getStackInSlot(i);
 				if(ItemStackTools.isValid(stack)){

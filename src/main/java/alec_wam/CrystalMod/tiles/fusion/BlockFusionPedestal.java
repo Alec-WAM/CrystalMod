@@ -34,7 +34,7 @@ public class BlockFusionPedestal extends BlockPedestal {
 	}	
 	
 	public static final String NBT_PEDESTAL_POS = "Pedestal";
-	
+	//TODO Render Linked pedestals when holding a linked wand
 	@Override
 	public boolean onBlockActivated(IBlockState state, World world, BlockPos pos, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ)
     {
@@ -42,6 +42,14 @@ public class BlockFusionPedestal extends BlockPedestal {
 		if(tile !=null && tile instanceof TileEntityFusionPedestal){
 			TileEntityFusionPedestal pedestal = (TileEntityFusionPedestal)tile;
 			ItemStack stack = player.getHeldItem(hand);
+			if(stack.getItem() == ModItems.miscUpgrades.getItem(EnumMiscUpgrades.FUSION_AUTO)){
+				world.setBlockState(pos, state.with(AUTO, true), 2);
+				if(!player.abilities.isCreativeMode){
+					stack.shrink(1);
+					player.setHeldItem(hand, stack);
+				}
+				return true;
+			}
 			if(stack.getItem() == ModItems.fusionWand){
 				if(player.isSneaking()){
 					NBTTagCompound nbt = ItemNBTHelper.getCompound(stack);

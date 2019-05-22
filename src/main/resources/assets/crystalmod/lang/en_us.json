@@ -99,10 +99,16 @@
   "block.crystalmod.jar_acacia": "Glass Jar (Acacia)",   
   "block.crystalmod.jar_darkoak": "Glass Jar (Dark Oak)", 
   
-  "block.crystalmod.pedistal": "Item Pedistal",  
-  "block.crystalmod.fusion_pedistal": "Fusion Pedistal",  
+  "block.crystalmod.pedestal": "Item Pedestal",  
+  "block.crystalmod.fusion_pedestal": "Fusion Pedestal",  
   
   "block.crystalmod.engine_basic_furnace": "Furnace Engine (Basic)", 
+  "block.crystalmod.battery_blue": "Blue Crystal Battery", 
+  "block.crystalmod.battery_red": "Red Crystal Battery", 
+  "block.crystalmod.battery_green": "Green Crystal Battery", 
+  "block.crystalmod.battery_dark": "Dark Crystal Battery", 
+  "block.crystalmod.battery_pure": "Pure Crystal Battery", 
+  "block.crystalmod.battery_creative": "§6Creative Battery", 
 
   "block.crystalmod.pipe_item": "Item Pipe",   
   
@@ -163,6 +169,8 @@
   
   "_comment": "Gui Text",
   "crystalmod.power.cu": "CU",
+  "crystalmod.power.infinite": "Infinite CU",
+  "crystalmod.power.cu.tick": "%s CU/t",
   "crystalmod.gui.pipe.io.in": "In",
   "crystalmod.gui.pipe.io.in.info": "Pull items into the network",
   "crystalmod.gui.pipe.io.out": "Out",
@@ -185,6 +193,10 @@
   "crystalmod.gui.direction.south": "South",
   "crystalmod.gui.direction.east": "East",
   "crystalmod.gui.direction.west": "West",
+  "crystalmod.engine.furnace.fuel": "Fuel: %ss",
+  "crystalmod.engine.furnace.fuel.item": "Fuel Value: %sCU",
+  "crystalmod.battery.send": "Send",
+  "crystalmod.battery.receive": "Receive",
   
   
   "_comment": "Item Info",
@@ -195,6 +207,8 @@
   "crystalmod.info.jar.contains": "Contains: %s/%s",
   "crystalmod.info.tank.storage": "Holds %smB",
   "crystalmod.info.crate.storage": "Holds %s stacks (%s)",
+  "crystalmod.info.battery.energy": "Energy: %s / %sCU",
+  "crystalmod.info.battery.energy.io": "Send/Receive: %s / %s",
   "crystalmod.info.filter.whitelist": "§nWhitelist",
   "crystalmod.info.filter.blacklist": "§7§nBlacklist",
   "crystalmod.info.filter.damage": "§2Damage Match",

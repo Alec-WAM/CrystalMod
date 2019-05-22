@@ -12,11 +12,11 @@ import net.minecraft.util.text.TextFormatting;
 
 public class ElementEnergy extends ElementBase {
 
-	public static final ResourceLocation DEFAULT_TEXTURE = new ResourceLocation("crystalmod:textures/gui/elements/" + "energy.png");
+	public static final ResourceLocation DEFAULT_TEXTURE = new ResourceLocation("crystalmod:textures/gui/elements/energy.png");
 	public static final int DEFAULT_SCALE = 42;
 
 	protected ICEnergyStorage storage;
-
+	protected boolean isCreative;
 	// If this is enabled, 1 pixel of energy will always show in the bar as long as it is non-zero.
 	protected boolean alwaysShowMinimum = false;
 
@@ -38,6 +38,12 @@ public class ElementEnergy extends ElementBase {
 		alwaysShowMinimum = show;
 		return this;
 	}
+	
+	public ElementEnergy setCreative(boolean creative) {
+
+		isCreative = creative;
+		return this;
+	}
 
 	@Override
 	public void drawBackground(int mouseX, int mouseY, float gameTicks) {
@@ -57,8 +63,8 @@ public class ElementEnergy extends ElementBase {
 	@Override
 	public void addTooltip(List<String> list) {
 		if(storage == null)return;
-		if (storage.getMaxCEnergyStored() < 0) {
-			list.add("Infinite " + Lang.localize("power.cu"));
+		if (storage.getMaxCEnergyStored() < 0 || isCreative) {
+			list.add(Lang.localize("power.infinite"));
 		} else {
 			String charge = String.format("%s%s%s / %s%s%s ", "", fmt.format(storage.getCEnergyStored()),
 		              TextFormatting.RESET,
@@ -69,17 +75,17 @@ public class ElementEnergy extends ElementBase {
 
 	protected int getScaled() {
 		if(storage == null)return sizeY;
-		if (storage.getMaxCEnergyStored() <= 0) {
+		if (storage.getMaxCEnergyStored() <= 0 || isCreative) {
 			return sizeY;
 		}
 		long fraction = (long) storage.getCEnergyStored() * sizeY / storage.getMaxCEnergyStored();
 
 		return alwaysShowMinimum && storage.getCEnergyStored() > 0 ? Math.max(1, round(fraction)) : round(fraction);
 	}
-	
+
 	public static int round(double d)
-	  {
-	    return (int)(d + 0.5D);
-	  }
+	{
+		return (int)(d + 0.5D);
+	}
 
 }

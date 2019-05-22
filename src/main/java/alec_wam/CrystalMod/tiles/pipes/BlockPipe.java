@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.google.common.collect.Maps;
 
+import alec_wam.CrystalMod.init.ModItems;
 import alec_wam.CrystalMod.tiles.pipes.item.PipeNetworkItem;
 import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.ChatUtil;
@@ -112,7 +113,7 @@ public class BlockPipe extends BlockContainer {
 		return SHAPE_MIDDLE;
 	}
 	
-	private class PipeHitData {
+	public static class PipeHitData {
 		public EnumFacing face;
 		public PipePart part;
 		public PipeHitData(EnumFacing facing, PipePart part){
@@ -255,8 +256,9 @@ public class BlockPipe extends BlockContainer {
 			RayTraceResult result = BlockUtil.rayTrace(worldIn, player, RayTraceFluidMode.NEVER);
 			
 			if(result !=null){
+				PipeHitData hitData = null;
 				if(result.hitInfo instanceof PipeHitData){
-					PipeHitData hitData = (PipeHitData)result.hitInfo;
+					hitData = (PipeHitData)result.hitInfo;
 					if(hitData.part == PipePart.CONNECTOR){
 						if(ToolUtil.isHoldingWrench(player, hand)){
 							pipe.incrsConnectionMode(hitData.face);
@@ -273,6 +275,7 @@ public class BlockPipe extends BlockContainer {
 						}
 					}
 				} else {
+					hitData = new PipeHitData(side, null);
 					if(ToolUtil.isHoldingWrench(player, hand)){
 						if(player.isSneaking()){
 							return ToolUtil.breakBlockWithWrench(worldIn, pos, player, hand);
@@ -283,6 +286,7 @@ public class BlockPipe extends BlockContainer {
 						}
 					}
 				}
+				return pipe.onActivated(worldIn, player, hand, hitData);
 			} 
 			
 			if(pipe.getNetwork() !=null){

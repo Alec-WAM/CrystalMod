@@ -13,6 +13,7 @@ import alec_wam.CrystalMod.network.IMessageHandler;
 import alec_wam.CrystalMod.tiles.PacketTileMessage;
 import alec_wam.CrystalMod.tiles.RedstoneMode;
 import alec_wam.CrystalMod.tiles.TileEntityMod;
+import alec_wam.CrystalMod.tiles.pipes.BlockPipe.PipeHitData;
 import alec_wam.CrystalMod.util.BlockUtil;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -22,6 +23,7 @@ import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 public abstract class TileEntityPipeBase extends TileEntityMod implements IMessageHandler {
 
@@ -312,6 +314,10 @@ public abstract class TileEntityPipeBase extends TileEntityMod implements IMessa
 
 	public List<ItemStack> getDrops() {
 		return Lists.newArrayList();
+	}
+
+	public boolean onActivated(World world, EntityPlayer player, EnumHand hand, PipeHitData hitData) {
+		return false;
 	}
 	
 }

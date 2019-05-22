@@ -1,6 +1,6 @@
 {
 	"parent": "item/generated",
 	"textures": {
-		"layer0": "crystalmod:item/crate_upgrade_void"
+		"layer0": "crystalmod:item/misc_upgrade_void"
 	}
 }

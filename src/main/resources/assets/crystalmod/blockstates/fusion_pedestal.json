@@ -1,7 +1,7 @@
 {
 	"forge_marker": 1,
 	"defaults": {
-		"model": "crystalmod:fusion_pedistal"
+		"model": "crystalmod:fusion_pedestal"
 	},
 	"variants": {
 		"facing": {
@@ -17,6 +17,10 @@
 			},
 			"up": {},
 			"down": {"x": 180 }
+		},
+		"auto": {
+			"true": {"model": "crystalmod:fusion_pedestal_auto"},
+			"false": {}
 		}
 	}
 }

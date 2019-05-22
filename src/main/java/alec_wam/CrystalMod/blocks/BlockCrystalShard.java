@@ -2,6 +2,7 @@ package alec_wam.CrystalMod.blocks;
 
 import java.util.Random;
 
+import alec_wam.CrystalMod.ModConfig;
 import alec_wam.CrystalMod.core.BlockVariantGroup;
 import alec_wam.CrystalMod.core.color.EnumCrystalColor;
 import alec_wam.CrystalMod.core.color.EnumCrystalColorSpecial;
@@ -53,7 +54,8 @@ public class BlockCrystalShard extends Block {
 	@Override
 	public void tick(IBlockState state, World worldIn, BlockPos pos, Random random) {
 		int shards = state.get(SHARDS_1_3);
-		if (shards < 3 && net.minecraftforge.common.ForgeHooks.onCropsGrowPre(worldIn, pos, state, worldIn.rand.nextInt(5) == 0)) {
+		int growthChance = ModConfig.BLOCKS.Shard_Block_Growth.get();
+		if (shards < 3 && net.minecraftforge.common.ForgeHooks.onCropsGrowPre(worldIn, pos, state, worldIn.rand.nextInt(growthChance) == 0)) {
 			worldIn.setBlockState(pos, state.with(SHARDS_1_3, Integer.valueOf(shards + 1)), 2);
 			net.minecraftforge.common.ForgeHooks.onCropsGrowPost(worldIn, pos, state);
 		}

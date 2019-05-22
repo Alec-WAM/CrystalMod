@@ -8,6 +8,8 @@ import alec_wam.CrystalMod.tiles.chests.wireless.GuiWirelessChest;
 import alec_wam.CrystalMod.tiles.chests.wireless.TileEntityWirelessChest;
 import alec_wam.CrystalMod.tiles.chests.wooden.GuiWoodenCrystalChest;
 import alec_wam.CrystalMod.tiles.chests.wooden.TileEntityWoodenCrystalChest;
+import alec_wam.CrystalMod.tiles.energy.battery.GuiBattery;
+import alec_wam.CrystalMod.tiles.energy.battery.TileEntityBattery;
 import alec_wam.CrystalMod.tiles.energy.engine.furnace.GuiEngineFurnace;
 import alec_wam.CrystalMod.tiles.energy.engine.furnace.TileEntityEngineFurnace;
 import alec_wam.CrystalMod.tiles.pipes.item.GuiItemPipe;
@@ -54,6 +56,10 @@ public class GuiHandler{
 		        	if(tile instanceof TileEntityEngineFurnace){
 		        		TileEntityEngineFurnace engine = (TileEntityEngineFurnace) tile;
 		        		return new GuiEngineFurnace(player, engine);
+		            }
+		        	if(tile instanceof TileEntityBattery){
+		        		TileEntityBattery battery = (TileEntityBattery) tile;
+		        		return new GuiBattery(player, battery);
 		            }
 	    		}
 	    		if(openContainer.getId().equals(TILE_PIPE_CONNECTOR)){

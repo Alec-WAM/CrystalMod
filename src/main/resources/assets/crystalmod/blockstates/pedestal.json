@@ -1,7 +1,7 @@
 {
 	"forge_marker": 1,
 	"defaults": {
-		"model": "crystalmod:pedistal"
+		"model": "crystalmod:pedestal"
 	},
 	"variants": {
 		"facing": {

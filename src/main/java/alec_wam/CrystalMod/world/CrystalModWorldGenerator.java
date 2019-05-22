@@ -1,5 +1,6 @@
 package alec_wam.CrystalMod.world;
 
+import alec_wam.CrystalMod.ModConfig;
 import alec_wam.CrystalMod.core.color.EnumCrystalColor;
 import alec_wam.CrystalMod.init.ModBlocks;
 import alec_wam.CrystalMod.world.features.BetterRoseFeature;
@@ -26,15 +27,17 @@ public class CrystalModWorldGenerator{
 	public void setupFeatures() {
 		int minVeinSize = 5;
 		int maxVeinSize = 8;
-		int maxVeinCount = 2;
+		int maxVeinCount = Math.min(ModConfig.WORLDGEN.CrystalOre_Per_Chunk.get(), 32);
 		int maxHeight = 40;
-		IBlockState[] ores = new IBlockState[EnumCrystalColor.values().length];
-        for(int o = 0; o < EnumCrystalColor.values().length; o++){
-        	ores[o] = ModBlocks.crystalOreGroup.getBlock(EnumCrystalColor.values()[o]).getDefaultState();
-        }
-        MinableRandomConfig config = new MinableRandomConfig(MinableConfig.IS_ROCK, ores, minVeinSize, maxVeinSize);
-		for(BiomeManager.BiomeType type : BiomeManager.BiomeType.values()){
-			BiomeManager.getBiomes(type).forEach((BiomeManager.BiomeEntry biomeEntry) -> biomeEntry.biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Biome.createCompositeFeature(MINABLE_RANDOM, config, Biome.COUNT_RANGE, new CountRangeConfig(maxVeinCount, 0, 0, maxHeight))));
+		if(maxVeinCount > 0){
+			IBlockState[] ores = new IBlockState[EnumCrystalColor.values().length];
+	        for(int o = 0; o < EnumCrystalColor.values().length; o++){
+	        	ores[o] = ModBlocks.crystalOreGroup.getBlock(EnumCrystalColor.values()[o]).getDefaultState();
+	        }
+	        MinableRandomConfig config = new MinableRandomConfig(MinableConfig.IS_ROCK, ores, minVeinSize, maxVeinSize);
+			for(BiomeManager.BiomeType type : BiomeManager.BiomeType.values()){
+				BiomeManager.getBiomes(type).forEach((BiomeManager.BiomeEntry biomeEntry) -> biomeEntry.biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Biome.createCompositeFeature(MINABLE_RANDOM, config, Biome.COUNT_RANGE, new CountRangeConfig(maxVeinCount, 0, 0, maxHeight))));
+			}
 		}
 		//TODO Add Tree and Reed Gen
 		BiomeDictionary.getBiomes(BiomeDictionary.Type.FOREST).forEach((Biome biome) -> biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Biome.createCompositeFeature(BETTER_ROSES, IFeatureConfig.NO_FEATURE_CONFIG, Biome.SURFACE_PLUS_32, new FrequencyConfig(5))));

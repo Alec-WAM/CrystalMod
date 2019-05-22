@@ -31,7 +31,7 @@ import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 
 public class BlockTank extends BlockContainerVariant<EnumCrystalColorSpecialWithCreative> {
-	//TODO Handle rendering when fluids are back in forge
+	//TODO Handle rendering when fluids are back in forge and add Void Upgrade support
 	public BlockTank(EnumCrystalColorSpecialWithCreative type, BlockVariantGroup<EnumCrystalColorSpecialWithCreative, BlockTank> variantGroup, Properties properties) {
 		super(type, variantGroup, properties);
 	}
@@ -88,7 +88,7 @@ public class BlockTank extends BlockContainerVariant<EnumCrystalColorSpecialWith
 		if(tile == null || !(tile instanceof TileEntityTank)) return false;
 		ItemStack held = player.getHeldItem(hand);
 		if(ItemStackTools.isValid(held)){
-			if(ToolUtil.isHoldingWrench(player, hand)){
+			if(player.isSneaking() && ToolUtil.isHoldingWrench(player, hand)){
         		return ToolUtil.breakBlockWithWrench(world, pos, player, hand);
         	}            
 

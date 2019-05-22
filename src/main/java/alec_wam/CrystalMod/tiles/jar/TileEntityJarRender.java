@@ -73,41 +73,41 @@ public class TileEntityJarRender extends TileEntityRenderer<TileEntityJar> {
 					GlStateManager.disableLighting();
 					GlStateManager.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
 					float red = color.x / 255f, green = color.y / 255f, blue = color.z / 255f;
-						float alpha = 0.65f;
-						GlStateManager.color4f(red, green, blue, alpha);
-						render.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-						float height = (0.8f/3.0f)*potionCount;
+					float alpha = 0.65f;
+					GlStateManager.color4f(red, green, blue, alpha);
+					render.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+					float height = (0.8f/(float)BlockJar.MAX_POTIONS_STORED)*potionCount;
 
-						render.pos(0.2, height, 0.2).tex(0, 0)/*.lightmap(MAX_LIGHT_X, MAX_LIGHT_Y)*/.endVertex();
-						render.pos(0.2, height, 0.8).tex(0, 0).endVertex();
-						render.pos(0.8, height, 0.8).tex(0, 0).endVertex();
-						render.pos(0.8, height, 0.2).tex(0, 0).endVertex();
+					render.pos(0.2, height, 0.2).tex(0, 0).endVertex();
+					render.pos(0.2, height, 0.8).tex(0, 0).endVertex();
+					render.pos(0.8, height, 0.8).tex(0, 0).endVertex();
+					render.pos(0.8, height, 0.2).tex(0, 0).endVertex();
 
-						render.pos(0.8, 0.01, 0.2).tex(0, 0).endVertex();
-						render.pos(0.8, 0.01, 0.8).tex(0, 0).endVertex();
-						render.pos(0.2, 0.01, 0.8).tex(0, 0).endVertex();
-						render.pos(0.2, 0.01, 0.2).tex(0, 0).endVertex();
+					render.pos(0.8, 0.01, 0.2).tex(0, 0).endVertex();
+					render.pos(0.8, 0.01, 0.8).tex(0, 0).endVertex();
+					render.pos(0.2, 0.01, 0.8).tex(0, 0).endVertex();
+					render.pos(0.2, 0.01, 0.2).tex(0, 0).endVertex();
 
-						render.pos(0.2, 0.01, 0.8).tex(0, 0).endVertex();
-						render.pos(0.8, 0.01, 0.8).tex(0, 0).endVertex();
-						render.pos(0.8, height, 0.8).tex(0, 0).endVertex();
-						render.pos(0.2, height, 0.8).tex(0, 0).endVertex();
+					render.pos(0.2, 0.01, 0.8).tex(0, 0).endVertex();
+					render.pos(0.8, 0.01, 0.8).tex(0, 0).endVertex();
+					render.pos(0.8, height, 0.8).tex(0, 0).endVertex();
+					render.pos(0.2, height, 0.8).tex(0, 0).endVertex();
 
-						render.pos(0.2, 0.01, 0.2).tex(0, 0).endVertex();
-						render.pos(0.2, height, 0.2).tex(0, 0).endVertex();
-						render.pos(0.8, height, 0.2).tex(0, 0).endVertex();
-						render.pos(0.8, 0.01, 0.2).tex(0, 0).endVertex();
+					render.pos(0.2, 0.01, 0.2).tex(0, 0).endVertex();
+					render.pos(0.2, height, 0.2).tex(0, 0).endVertex();
+					render.pos(0.8, height, 0.2).tex(0, 0).endVertex();
+					render.pos(0.8, 0.01, 0.2).tex(0, 0).endVertex();
 
-						render.pos(0.8, 0.01, 0.2).tex(0, 0).endVertex();
-						render.pos(0.8, height, 0.2).tex(0, 0).endVertex();
-						render.pos(0.8, height, 0.8).tex(0, 0).endVertex();
-						render.pos(0.8, 0.01, 0.8).tex(0, 0).endVertex();
+					render.pos(0.8, 0.01, 0.2).tex(0, 0).endVertex();
+					render.pos(0.8, height, 0.2).tex(0, 0).endVertex();
+					render.pos(0.8, height, 0.8).tex(0, 0).endVertex();
+					render.pos(0.8, 0.01, 0.8).tex(0, 0).endVertex();
 
-						render.pos(0.2, 0.01, 0.2).tex(0, 0).endVertex();
-						render.pos(0.2, 0.01, 0.8).tex(0, 0).endVertex();
-						render.pos(0.2, height, 0.8).tex(0, 0).endVertex();
-						render.pos(0.2, height, 0.2).tex(0, 0).endVertex();
-						tessy.draw();
+					render.pos(0.2, 0.01, 0.2).tex(0, 0).endVertex();
+					render.pos(0.2, 0.01, 0.8).tex(0, 0).endVertex();
+					render.pos(0.2, height, 0.8).tex(0, 0).endVertex();
+					render.pos(0.2, height, 0.2).tex(0, 0).endVertex();
+					tessy.draw();
 					GlStateManager.enableLighting();
 					GlStateManager.enableTexture2D();
 					GlStateManager.popMatrix();

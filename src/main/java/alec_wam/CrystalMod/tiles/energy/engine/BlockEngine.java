@@ -9,6 +9,7 @@ import javax.annotation.Nullable;
 import alec_wam.CrystalMod.core.BlockVariantGroup;
 import alec_wam.CrystalMod.tiles.crate.BlockContainerVariant;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
+import alec_wam.CrystalMod.util.ToolUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.IBucketPickupHandler;
@@ -126,6 +127,9 @@ public class BlockEngine extends BlockContainerVariant<EnumEngineType> implement
 	public boolean onBlockActivated(IBlockState state, World worldIn, BlockPos pos, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ)
     {
 		TileEntity tile = worldIn.getTileEntity(pos);
+		if(player.isSneaking() && ToolUtil.isHoldingWrench(player, hand)){
+    		return ToolUtil.breakBlockWithWrench(worldIn, pos, player, hand);
+    	} 
 		if(tile instanceof TileEntityEngineBase){
 			TileEntityEngineBase engine = (TileEntityEngineBase)tile;
 			if(worldIn.isRemote)return true;

@@ -60,6 +60,7 @@ public class BlockJar extends BlockContainerVariant<WoodType> implements IBucket
 	protected static final VoxelShape SHAPE_MAIN = Block.makeCuboidShape(3.0D, 0.0D, 3.0D, 13.0D, 13.0D, 13.0D);
 	public static final VoxelShape SHAPE_ALL = VoxelShapes.or(SHAPE_MAIN, SHAPE_CORK);
 	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
+	public static final int MAX_POTIONS_STORED = 3;
 
 	public BlockJar(WoodType type, BlockVariantGroup<WoodType, BlockJar> variantGroup, Properties properties) {
 		super(type, variantGroup, properties);
@@ -193,7 +194,7 @@ public class BlockJar extends BlockContainerVariant<WoodType> implements IBucket
 			else if(held.getItem() == Items.POTION){
 				PotionType type = PotionUtils.getPotionFromItem(held);
 				if(type.getEffects().size() > 0 && (jar.getPotion() == type || jar.getPotion() == PotionTypes.EMPTY)){
-					if(jar.getPotionCount() < 3){
+					if(jar.getPotionCount() < MAX_POTIONS_STORED){
 						if(jar.getPotion() == PotionTypes.EMPTY){
 							jar.setPotionType(type);
 						}

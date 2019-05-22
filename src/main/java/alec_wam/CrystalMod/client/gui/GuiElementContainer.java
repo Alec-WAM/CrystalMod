@@ -63,10 +63,10 @@ public abstract class GuiElementContainer extends GuiContainer {
 		super.initGui();
 		elements.clear();
 	}
-
+	
 	@Override
 	public void render(int x, int y, float partialTick) {
-
+		this.drawDefaultBackground();
 		updateElementInformation();
 
 		super.render(x, y, partialTick);
@@ -79,6 +79,7 @@ public abstract class GuiElementContainer extends GuiContainer {
 		mouseY = y - guiTop;
 
 		updateElements();
+		this.renderHoveredToolTip(x, y);
 	}
 
 	@Override
@@ -95,12 +96,7 @@ public abstract class GuiElementContainer extends GuiContainer {
 
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float partialTick, int x, int y) {
-
-		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-		if(texture !=null){
-		bindTexture(texture);
-		drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
-		}
+		drawBackgroundTexture();
 		mouseX = x - guiLeft;
 		mouseY = y - guiTop;
 
@@ -108,6 +104,14 @@ public abstract class GuiElementContainer extends GuiContainer {
 		GlStateManager.translatef(guiLeft, guiTop, 0.0F);
 		drawElements(partialTick, false);
 		GlStateManager.popMatrix();
+	}
+	
+	protected void drawBackgroundTexture(){
+		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+		if(texture !=null){
+			bindTexture(texture);
+			drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
+		}
 	}
 
 	@Override

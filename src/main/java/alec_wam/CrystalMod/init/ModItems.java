@@ -11,6 +11,7 @@ import alec_wam.CrystalMod.items.ItemGrassSeeds.EnumGrassSeedItem;
 import alec_wam.CrystalMod.items.ItemVariant;
 import alec_wam.CrystalMod.items.ItemWrench;
 import alec_wam.CrystalMod.tiles.crate.EnumMiscUpgrades;
+import alec_wam.CrystalMod.tiles.fusion.ItemFusionWand;
 import alec_wam.CrystalMod.tiles.pipes.EnumPipeUpgrades;
 import alec_wam.CrystalMod.tiles.pipes.item.ItemPipeFilter;
 import net.minecraft.item.Item;
@@ -91,7 +92,7 @@ public class ModItems {
 		
 		wrench = new ItemWrench(new Item.Properties().group(ModItemGroups.ITEM_GROUP_ITEMS).maxStackSize(1));
 		RegistrationHandler.addItem(wrench, "wrench");
-		fusionWand = new Item(new Item.Properties().group(ModItemGroups.ITEM_GROUP_ITEMS).maxStackSize(1));
+		fusionWand = new ItemFusionWand(new Item.Properties().group(ModItemGroups.ITEM_GROUP_ITEMS).maxStackSize(1));
 		RegistrationHandler.addItem(fusionWand, "fusionwand");
 		pipeFilter = new ItemPipeFilter(new Item.Properties().group(ModItemGroups.ITEM_GROUP_ITEMS).maxStackSize(16));
 		RegistrationHandler.addItem(pipeFilter, "pipefilter");

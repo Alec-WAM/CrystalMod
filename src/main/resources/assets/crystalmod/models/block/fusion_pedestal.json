@@ -2,10 +2,10 @@
     "__createdwith": "opl's Model Creator",
     "ambientocclusion": false,
     "textures": {
-		"particle": "crystalmod:block/pedistal_fusion_top",
-        "side": "crystalmod:block/pedistal_fusion_side",
-        "bottom": "crystalmod:block/pedistal_fusion_bottom",
-        "top": "crystalmod:block/pedistal_fusion_top"
+		"particle": "crystalmod:block/pedestal_fusion_top",
+        "side": "crystalmod:block/pedestal_fusion_side",
+        "bottom": "crystalmod:block/pedestal_fusion_bottom",
+        "top": "crystalmod:block/pedestal_fusion_top"
     },
     "elements": [
         {

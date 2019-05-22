@@ -6,6 +6,7 @@ import com.google.common.collect.Lists;
 
 import alec_wam.CrystalMod.client.gui.GuiButtonIcon;
 import alec_wam.CrystalMod.client.gui.GuiButtonIconTooltip;
+import alec_wam.CrystalMod.client.gui.GuiButtonTiny;
 import alec_wam.CrystalMod.client.gui.GuiButtonTooltip;
 import alec_wam.CrystalMod.client.gui.GuiContainerBase;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
@@ -81,7 +82,7 @@ public class GuiItemPipe extends GuiContainerBase {
 			}
 		};
 		
-		buttonPriorityDown = new GuiButton(2, guiLeft + 11, guiTop + 70, 10, 10, "-") {
+		buttonPriorityDown = new GuiButtonTiny(2, guiLeft + 11, guiTop + 70, 10, 10, "-") {
 			@Override
 			public void onClick(double mouseX, double mouseY){
 				final int current = pipe.getPriority(facing);
@@ -92,7 +93,7 @@ public class GuiItemPipe extends GuiContainerBase {
 				CrystalModNetwork.sendToServer(new PacketTileMessage(pipe.getPos(), "Priority", nbt));
 			}
 		};
-		buttonPriorityUp = new GuiButton(2, guiLeft + 22, guiTop + 70, 10, 10, "+") {
+		buttonPriorityUp = new GuiButtonTiny(3, guiLeft + 22, guiTop + 70, 10, 10, "+") {
 			@Override
 			public void onClick(double mouseX, double mouseY){
 				final int current = pipe.getPriority(facing);
