@@ -15,11 +15,11 @@ import alec_wam.CrystalMod.blocks.plants.BlockReedVariant;
 import alec_wam.CrystalMod.blocks.plants.BlockTallFlowerVariant;
 import alec_wam.CrystalMod.blocks.plants.EnumBetterRoses;
 import alec_wam.CrystalMod.blocks.plants.ItemBlockWaterPlant;
+import alec_wam.CrystalMod.client.CustomItemRender;
 import alec_wam.CrystalMod.core.BlockVariantGroup;
 import alec_wam.CrystalMod.core.BlockVariantGroup.TileFactory;
 import alec_wam.CrystalMod.core.color.EnumCrystalColor;
 import alec_wam.CrystalMod.core.color.EnumCrystalColorSpecial;
-import alec_wam.CrystalMod.tiles.CustomItemRender;
 import alec_wam.CrystalMod.tiles.EnumCrystalColorSpecialWithCreative;
 import alec_wam.CrystalMod.tiles.chests.metal.BlockMetalCrystalChest;
 import alec_wam.CrystalMod.tiles.chests.metal.MetalCrystalChestType;
@@ -43,8 +43,18 @@ import alec_wam.CrystalMod.tiles.fusion.TileEntityFusionPedestal;
 import alec_wam.CrystalMod.tiles.fusion.TileEntityPedestal;
 import alec_wam.CrystalMod.tiles.jar.BlockJar;
 import alec_wam.CrystalMod.tiles.jar.TileEntityJar;
+import alec_wam.CrystalMod.tiles.machine.TileEntityMachine;
+import alec_wam.CrystalMod.tiles.machine.crafting.BlockCraftingMachine;
+import alec_wam.CrystalMod.tiles.machine.crafting.EnumCraftingMachine;
+import alec_wam.CrystalMod.tiles.machine.crafting.furnace.TileEntityPoweredFurnace;
+import alec_wam.CrystalMod.tiles.machine.crafting.grinder.TileEntityGrinder;
+import alec_wam.CrystalMod.tiles.machine.crafting.press.TileEntityPress;
 import alec_wam.CrystalMod.tiles.pipes.BlockPipe;
 import alec_wam.CrystalMod.tiles.pipes.NetworkType;
+import alec_wam.CrystalMod.tiles.pipes.energy.cu.BlockPipeEnergyCU;
+import alec_wam.CrystalMod.tiles.pipes.energy.cu.TileEntityPipeEnergyCU;
+import alec_wam.CrystalMod.tiles.pipes.energy.rf.BlockPipeEnergyRF;
+import alec_wam.CrystalMod.tiles.pipes.energy.rf.TileEntityPipeEnergyRF;
 import alec_wam.CrystalMod.tiles.pipes.item.TileEntityPipeItem;
 import alec_wam.CrystalMod.tiles.tank.BlockTank;
 import alec_wam.CrystalMod.tiles.tank.TileEntityTank;
@@ -102,9 +112,17 @@ public class ModBlocks {
 	public static final TileEntityType<TileEntityBattery> TILE_BATTERY = TileEntityType.register(CrystalMod.resource("battery"), TileEntityType.Builder.create(TileEntityBattery::new));
 	public static BlockVariantGroup<EnumEngineType, BlockEngine> engineBasicGroup;
 	public static final TileEntityType<TileEntityEngineFurnace> TILE_ENGINE_FURNACE = TileEntityType.register(CrystalMod.resource("engine_furnace"), TileEntityType.Builder.create(TileEntityEngineFurnace::new));
+	public static BlockVariantGroup<EnumCraftingMachine, BlockCraftingMachine> craftingMachine;
+	public static final TileEntityType<TileEntityPoweredFurnace> TILE_MACHINE_FURNACE = TileEntityType.register(CrystalMod.resource("machine_furnace"), TileEntityType.Builder.create(TileEntityPoweredFurnace::new));
+	public static final TileEntityType<TileEntityGrinder> TILE_MACHINE_GRINDER = TileEntityType.register(CrystalMod.resource("machine_grinder"), TileEntityType.Builder.create(TileEntityGrinder::new));
+	public static final TileEntityType<TileEntityPress> TILE_MACHINE_PRESS = TileEntityType.register(CrystalMod.resource("machine_press"), TileEntityType.Builder.create(TileEntityPress::new));
 
 	public static BlockPipe pipeItem;
 	public static final TileEntityType<TileEntityPipeItem> TILE_PIPE_ITEM = TileEntityType.register(CrystalMod.resource("pipe_item"), TileEntityType.Builder.create(TileEntityPipeItem::new));
+	public static BlockVariantGroup<EnumCrystalColorSpecial, BlockPipeEnergyCU> pipeEnergyCUGroup;
+	public static final TileEntityType<TileEntityPipeEnergyCU> TILE_PIPE_ENERGY_CU = TileEntityType.register(CrystalMod.resource("pipe_energy_cu"), TileEntityType.Builder.create(TileEntityPipeEnergyCU::new));
+	public static BlockVariantGroup<EnumCrystalColorSpecial, BlockPipeEnergyRF> pipeEnergyRFGroup;
+	public static final TileEntityType<TileEntityPipeEnergyRF> TILE_PIPE_ENERGY_RF = TileEntityType.register(CrystalMod.resource("pipe_energy_rf"), TileEntityType.Builder.create(TileEntityPipeEnergyRF::new));
 
 	public static void buildList(){
 		//Crystal Stuff
@@ -352,11 +370,48 @@ public class ModBlocks {
 				})
 				.build();
 		RegistrationHandler.addBlockGroup(engineBasicGroup);
-		RegistrationHandler.addTile(TILE_ENGINE_FURNACE);			
+		RegistrationHandler.addTile(TILE_ENGINE_FURNACE);	
+		craftingMachine = BlockVariantGroup.Builder.<EnumCraftingMachine, BlockCraftingMachine>create()
+				.groupName("machine")
+				.suffix()
+				.variants(EnumCraftingMachine.values())
+				.blockPropertiesFactory(type -> Block.Properties.create(Material.IRON).hardnessAndResistance(1.0F, 5.0F).sound(SoundType.METAL))
+				.blockFactory(BlockCraftingMachine::new)
+				.tileFactory(new TileFactory<EnumCraftingMachine>(){
+					@Override
+					public TileEntityMachine createTile(EnumCraftingMachine variant) {
+						try {
+							return variant.clazz.newInstance();
+						} catch (Exception e1) {
+							return null;
+						}
+					}
+				})
+				.build();
+		RegistrationHandler.addBlockGroup(craftingMachine);
+		RegistrationHandler.addTile(TILE_MACHINE_FURNACE);	
 		
 		pipeItem = new BlockPipe(NetworkType.ITEM, Block.Properties.create(Material.IRON).hardnessAndResistance(1.0F, 10.0F).sound(SoundType.METAL)); 
 		RegistrationHandler.createBlock(pipeItem, ModItemGroups.ITEM_GROUP_BLOCKS, "pipe_item");
-		RegistrationHandler.addTile(TILE_PIPE_ITEM);
+		RegistrationHandler.addTile(TILE_PIPE_ITEM);		
+		pipeEnergyCUGroup = BlockVariantGroup.Builder.<EnumCrystalColorSpecial, BlockPipeEnergyCU>create()
+				.groupName("pipe_energy_cu")
+				.suffix()
+				.variants(EnumCrystalColorSpecial.values())
+				.blockPropertiesFactory(type -> Block.Properties.create(Material.IRON).hardnessAndResistance(1.0F, 10.0F).sound(SoundType.METAL))
+				.blockFactory(BlockPipeEnergyCU::new)
+				.build();
+		RegistrationHandler.addBlockGroup(pipeEnergyCUGroup);
+		RegistrationHandler.addTile(TILE_PIPE_ENERGY_CU);	
+		pipeEnergyRFGroup = BlockVariantGroup.Builder.<EnumCrystalColorSpecial, BlockPipeEnergyRF>create()
+				.groupName("pipe_energy_rf")
+				.suffix()
+				.variants(EnumCrystalColorSpecial.values())
+				.blockPropertiesFactory(type -> Block.Properties.create(Material.IRON).hardnessAndResistance(1.0F, 10.0F).sound(SoundType.METAL))
+				.blockFactory(BlockPipeEnergyRF::new)
+				.build();
+		RegistrationHandler.addBlockGroup(pipeEnergyRFGroup);
+		RegistrationHandler.addTile(TILE_PIPE_ENERGY_RF);	
 	}
 
 

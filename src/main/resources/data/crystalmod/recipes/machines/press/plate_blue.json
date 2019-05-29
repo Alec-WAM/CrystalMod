@@ -1,0 +1,10 @@
+{
+  "type": "crystalmod:press",
+  "ingredient": {
+    "item": "crystalmod:crystalingot_blue"
+  },
+  "result": {
+	"item": "crystalmod:plate_blue"
+  },  
+  "energy": 1600
+}

@@ -6,11 +6,14 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import javax.vecmath.Vector3f;
+
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 
 import net.minecraft.client.renderer.model.BakedQuad;
+import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.util.EnumFacing;
@@ -114,5 +117,56 @@ public class BakedModelHelper {
             }
         }
     }
+    
+    public static final TRSRTransformation THIRD_PERSON_RIGHT_HAND = TRSRTransformation.blockCenterToCorner(new TRSRTransformation(
+            new Vector3f(0, 0, 0),
+            TRSRTransformation.quatFromXYZDegrees(new Vector3f(0, 0, 0)),
+            new Vector3f(0.375f, 0.375f, 0.375f),
+            null));
+    public static final TRSRTransformation THIRD_PERSON_LEFT_HAND = TRSRTransformation.blockCenterToCorner(new TRSRTransformation(
+            new Vector3f(0, 0, 0),
+            TRSRTransformation.quatFromXYZDegrees(new Vector3f(0, 0, 0)),
+            new Vector3f(0.375f, 0.375f, 0.375f),
+            null));
+    public static final TRSRTransformation FIRST_PERSON_RIGHT_HAND = TRSRTransformation.blockCenterToCorner(new TRSRTransformation(
+            new Vector3f(0, 0, 0),
+            TRSRTransformation.quatFromXYZDegrees(new Vector3f(0, 0, 0)),
+            new Vector3f(0.4F, 0.4F, 0.4F),
+            null));
+    public static final TRSRTransformation FIRST_PERSON_LEFT_HAND = TRSRTransformation.blockCenterToCorner(new TRSRTransformation(
+            new Vector3f(0, 0, 0),
+            TRSRTransformation.quatFromXYZDegrees(new Vector3f(0, 0, 0)),
+            new Vector3f(0.4F, 0.4F, 0.4F),
+            null));
+    public static final TRSRTransformation GROUND = TRSRTransformation.blockCenterToCorner(new TRSRTransformation(
+            new Vector3f(0, 0, 0),
+            TRSRTransformation.quatFromXYZDegrees(new Vector3f(0, 0, 0)),
+            new Vector3f(0.25f, 0.25f, 0.25f),
+            null));
+    public static final TRSRTransformation FIXED = TRSRTransformation.blockCenterToCorner(new TRSRTransformation(
+            new Vector3f(0, 0, 0),
+            TRSRTransformation.quatFromXYZDegrees(new Vector3f(0, 0, 0)),
+            new Vector3f(0.5f, 0.5f, 0.5f),
+            null));
+    public static final TRSRTransformation GUI = TRSRTransformation.blockCenterToCorner(new TRSRTransformation(
+            new Vector3f(0, 0, 0),
+            TRSRTransformation.quatFromXYZDegrees(new Vector3f(30, 225, 0)),
+            new Vector3f(0.625f, 0.625f, 0.625f),
+            null));
+    
+    @SuppressWarnings("deprecation")
+	public static final ImmutableMap<ItemCameraTransforms.TransformType, TRSRTransformation>
+    DEFAULT_PERSPECTIVE_TRANSFORMS = new ImmutableMap.Builder<ItemCameraTransforms.TransformType, TRSRTransformation>()
+    .put(ItemCameraTransforms.TransformType.THIRD_PERSON_RIGHT_HAND, THIRD_PERSON_RIGHT_HAND)
+    .put(ItemCameraTransforms.TransformType.THIRD_PERSON_LEFT_HAND, THIRD_PERSON_LEFT_HAND)
+    .put(ItemCameraTransforms.TransformType.FIRST_PERSON_RIGHT_HAND, FIRST_PERSON_RIGHT_HAND)
+    .put(ItemCameraTransforms.TransformType.FIRST_PERSON_LEFT_HAND, FIRST_PERSON_LEFT_HAND)
+    .put(ItemCameraTransforms.TransformType.GROUND, GROUND)
+    .put(ItemCameraTransforms.TransformType.FIXED, FIXED)
+    .put(ItemCameraTransforms.TransformType.GUI, GUI)
+    .build();
+    
+    @SuppressWarnings("deprecation")
+	public static final ItemCameraTransforms DEFAULT_BLOCK_TRANSFORM = new ItemCameraTransforms(THIRD_PERSON_LEFT_HAND.toItemTransform(), THIRD_PERSON_RIGHT_HAND.toItemTransform(), FIRST_PERSON_LEFT_HAND.toItemTransform(), FIRST_PERSON_RIGHT_HAND.toItemTransform(), ItemCameraTransforms.DEFAULT.head, GUI.toItemTransform(), GROUND.toItemTransform(), FIXED.toItemTransform());
 	
 }

@@ -22,12 +22,12 @@ import net.minecraftforge.items.IItemHandler;
 public class TileEntityInventory extends TileEntityMod implements IInventory {
 
 	private String name;
-	protected NonNullList<ItemStack> inventory;
+	public NonNullList<ItemStack> inventory;
 	
 	public TileEntityInventory(TileEntityType<?> tileEntityTypeIn, String name, int size){
 		super(tileEntityTypeIn);
 		this.name = name;
-		inventory = NonNullList.<ItemStack>withSize(size, ItemStack.EMPTY);
+		this.inventory = NonNullList.<ItemStack>withSize(size, ItemStack.EMPTY);
 	}
 	
 	@Override
@@ -55,7 +55,9 @@ public class TileEntityInventory extends TileEntityMod implements IInventory {
 			return ItemStackTools.getEmptyStack();
 		}
 
-		return inventory.get(slot);
+		//System.out.println("" + inventory);
+		
+	    return this.inventory.get(slot);
 	}
 
 	@Override
@@ -98,9 +100,9 @@ public class TileEntityInventory extends TileEntityMod implements IInventory {
 		if(slot < 0 || slot >= inventory.size()) {
 	      return;
 	    }
-
-	    inventory.set(slot, itemstack);
-	    if(ItemStackTools.getStackSize(itemstack) > getInventoryStackLimit()) {
+		
+		this.inventory.set(slot, itemstack);
+		if(ItemStackTools.getStackSize(itemstack) > getInventoryStackLimit()) {
 	    	ItemStackTools.setStackSize(itemstack, getInventoryStackLimit());
 	    }
 	    onItemChanged(slot);
@@ -121,9 +123,7 @@ public class TileEntityInventory extends TileEntityMod implements IInventory {
 	      return false;
 	    }
 
-	    return
-	    	player.getDistanceSq(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D)
-	        <= 64D;
+	    return player.getDistanceSq(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D) <= 64D;
 	}
 
 	@Override

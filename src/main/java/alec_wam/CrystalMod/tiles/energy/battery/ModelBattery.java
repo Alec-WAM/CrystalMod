@@ -9,6 +9,7 @@ import javax.annotation.Nullable;
 
 import alec_wam.CrystalMod.tiles.EnumCrystalColorSpecialWithCreative;
 import alec_wam.CrystalMod.tiles.TileEntityIOSides.IOType;
+import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.RenderUtil;
 import net.minecraft.block.state.IBlockState;
@@ -25,9 +26,8 @@ import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.client.renderer.model.ModelRotation;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
-import net.minecraftforge.client.MinecraftForgeClient;
 
 @SuppressWarnings("deprecation")
 public class ModelBattery implements IBakedModel 
@@ -57,7 +57,6 @@ public class ModelBattery implements IBakedModel
 			return Collections.emptyList();
 		}
 		
-		BlockRenderLayer layer = MinecraftForgeClient.getRenderLayer();
 		List<BakedQuad> quads = new ArrayList<BakedQuad>();
 		
 		
@@ -90,6 +89,24 @@ public class ModelBattery implements IBakedModel
     		ioLeft = RenderUtil.getSprite(ioL == IOType.BLOCKED ? io_blocked : ioL == IOType.OUT ? io_out : io_in);
     		IOType ioR = BlockBattery.getIOFromState(state, EnumFacing.WEST);
     		ioRight = RenderUtil.getSprite(ioR == IOType.BLOCKED ? io_blocked : ioR == IOType.OUT ? io_out : io_in);
+        }
+        if(ItemStackTools.isValid(renderStack)){
+        	facing = EnumFacing.SOUTH;
+        	if(ItemNBTHelper.verifyExistance(renderStack, TileEntityBattery.NBT_DATA)){
+        		NBTTagCompound nbt = ItemNBTHelper.getCompound(renderStack).getCompound(TileEntityBattery.NBT_DATA);
+        		IOType ioU = IOType.values()[nbt.getByte("io.up")];
+        		ioUp = RenderUtil.getSprite(ioU == IOType.BLOCKED ? io_blocked : ioU == IOType.OUT ? io_out : io_in);
+        		IOType ioD = IOType.values()[nbt.getByte("io.down")];
+        		ioDown = RenderUtil.getSprite(ioD == IOType.BLOCKED ? io_blocked : ioD == IOType.OUT ? io_out : io_in);
+        		IOType ioF = IOType.values()[nbt.getByte("io.north")];
+        		ioFront = RenderUtil.getSprite(ioF == IOType.BLOCKED ? io_blocked : ioF == IOType.OUT ? io_out : io_in);
+        		IOType ioB = IOType.values()[nbt.getByte("io.south")];
+        		ioBack = RenderUtil.getSprite(ioB == IOType.BLOCKED ? io_blocked : ioB == IOType.OUT ? io_out : io_in);
+        		IOType ioL = IOType.values()[nbt.getByte("io.east")];
+        		ioLeft = RenderUtil.getSprite(ioL == IOType.BLOCKED ? io_blocked : ioL == IOType.OUT ? io_out : io_in);
+        		IOType ioR = IOType.values()[nbt.getByte("io.west")];
+        		ioRight = RenderUtil.getSprite(ioR == IOType.BLOCKED ? io_blocked : ioR == IOType.OUT ? io_out : io_in);
+        	}
         }
         ModelRotation modelRot = ModelRotation.X0_Y0;
         if(facing == EnumFacing.SOUTH){

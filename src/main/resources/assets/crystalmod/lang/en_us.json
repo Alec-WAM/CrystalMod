@@ -109,8 +109,22 @@
   "block.crystalmod.battery_dark": "Dark Crystal Battery", 
   "block.crystalmod.battery_pure": "Pure Crystal Battery", 
   "block.crystalmod.battery_creative": "§6Creative Battery", 
+  
+  "block.crystalmod.machine_furnace": "Powered Furnace",
+  "block.crystalmod.machine_grinder": "Grinder",  
+  "block.crystalmod.machine_press": "Hydraulic Press",  
 
   "block.crystalmod.pipe_item": "Item Pipe",   
+  "block.crystalmod.pipe_energy_cu_blue": "Blue Crystal Energy Pipe (CU)", 
+  "block.crystalmod.pipe_energy_cu_red": "Red Crystal Energy Pipe (CU)",
+  "block.crystalmod.pipe_energy_cu_green": "Green Crystal Energy Pipe (CU)",  
+  "block.crystalmod.pipe_energy_cu_dark": "Dark Crystal Energy Pipe (CU)",
+  "block.crystalmod.pipe_energy_cu_pure": "Pure Crystal Energy Pipe (CU)",  
+  "block.crystalmod.pipe_energy_rf_blue": "Blue Crystal Energy Pipe (RF)", 
+  "block.crystalmod.pipe_energy_rf_red": "Red Crystal Energy Pipe (RF)",
+  "block.crystalmod.pipe_energy_rf_green": "Green Crystal Energy Pipe (RF)",  
+  "block.crystalmod.pipe_energy_rf_dark": "Dark Crystal Energy Pipe (RF)",
+  "block.crystalmod.pipe_energy_rf_pure": "Pure Crystal Energy Pipe (RF)",  
   
   "_comment": "Items",
   "item.crystalmod.crystal_blue": "Blue Crystal",
@@ -168,6 +182,7 @@
   "itemGroup.crystalmod.items": "Crystal Mod: Items",
   
   "_comment": "Gui Text",
+  "crystalmod.infinite": "Infinite",  
   "crystalmod.power.cu": "CU",
   "crystalmod.power.infinite": "Infinite CU",
   "crystalmod.power.cu.tick": "%s CU/t",

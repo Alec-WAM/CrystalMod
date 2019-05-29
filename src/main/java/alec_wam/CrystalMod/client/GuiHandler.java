@@ -12,6 +12,12 @@ import alec_wam.CrystalMod.tiles.energy.battery.GuiBattery;
 import alec_wam.CrystalMod.tiles.energy.battery.TileEntityBattery;
 import alec_wam.CrystalMod.tiles.energy.engine.furnace.GuiEngineFurnace;
 import alec_wam.CrystalMod.tiles.energy.engine.furnace.TileEntityEngineFurnace;
+import alec_wam.CrystalMod.tiles.machine.crafting.furnace.GuiPoweredFurnace;
+import alec_wam.CrystalMod.tiles.machine.crafting.furnace.TileEntityPoweredFurnace;
+import alec_wam.CrystalMod.tiles.machine.crafting.grinder.GuiGrinder;
+import alec_wam.CrystalMod.tiles.machine.crafting.grinder.TileEntityGrinder;
+import alec_wam.CrystalMod.tiles.machine.crafting.press.GuiPress;
+import alec_wam.CrystalMod.tiles.machine.crafting.press.TileEntityPress;
 import alec_wam.CrystalMod.tiles.pipes.item.GuiItemPipe;
 import alec_wam.CrystalMod.tiles.pipes.item.GuiPipeFilter;
 import alec_wam.CrystalMod.tiles.pipes.item.TileEntityPipeItem;
@@ -35,12 +41,13 @@ public class GuiHandler{
 	public static GuiScreen openGui(FMLPlayMessages.OpenContainer openContainer)
     {
     	EntityPlayer player = Minecraft.getInstance().player;
-        if(openContainer.getId().equals(TILE_NORMAL) || openContainer.getId().equals(TILE_PIPE_CONNECTOR)){
+    	ResourceLocation id = openContainer.getId();
+        if(id.equals(TILE_NORMAL) || id.equals(TILE_PIPE_CONNECTOR)){
 			BlockPos pos = openContainer.getAdditionalData().readBlockPos();        
 	    	TileEntity tile = Minecraft.getInstance().world.getTileEntity(pos);
 	    	if (tile != null)
 	        {
-	    		if(openContainer.getId().equals(TILE_NORMAL)){
+	    		if(id.equals(TILE_NORMAL)){
 		        	if(tile instanceof TileEntityWoodenCrystalChest){
 		        		TileEntityWoodenCrystalChest chest = (TileEntityWoodenCrystalChest) tile;
 		        		return GuiWoodenCrystalChest.GUI.buildGUI(chest.type, player.inventory, chest);
@@ -61,8 +68,20 @@ public class GuiHandler{
 		        		TileEntityBattery battery = (TileEntityBattery) tile;
 		        		return new GuiBattery(player, battery);
 		            }
+		        	if(tile instanceof TileEntityPoweredFurnace){
+		        		TileEntityPoweredFurnace machine = (TileEntityPoweredFurnace) tile;
+		        		return new GuiPoweredFurnace(player, machine);
+		            }
+		        	if(tile instanceof TileEntityGrinder){
+		        		TileEntityGrinder machine = (TileEntityGrinder) tile;
+		        		return new GuiGrinder(player, machine);
+		            }
+		        	if(tile instanceof TileEntityPress){
+		        		TileEntityPress machine = (TileEntityPress) tile;
+		        		return new GuiPress(player, machine);
+		            }
 	    		}
-	    		if(openContainer.getId().equals(TILE_PIPE_CONNECTOR)){
+	    		if(id.equals(TILE_PIPE_CONNECTOR)){
 	    			if(tile instanceof TileEntityPipeItem){
 	    				TileEntityPipeItem pipe = (TileEntityPipeItem) tile;
 	    				EnumFacing facing = openContainer.getAdditionalData().readEnumValue(EnumFacing.class);
@@ -71,7 +90,7 @@ public class GuiHandler{
 	    		}
 	        }
         }
-        if(openContainer.getId().equals(ITEM_NORMAL)){
+        if(id.equals(ITEM_NORMAL)){
         	EnumHand hand = openContainer.getAdditionalData().readEnumValue(EnumHand.class);
         	ItemStack stack = Minecraft.getInstance().player.getHeldItem(hand);
         	if(stack.getItem() == ModItems.pipeFilter){

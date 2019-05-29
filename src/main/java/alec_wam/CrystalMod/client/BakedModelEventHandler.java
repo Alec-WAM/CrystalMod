@@ -12,12 +12,16 @@ import com.google.common.collect.ImmutableMap;
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.BlockCrystalShard;
 import alec_wam.CrystalMod.core.color.EnumCrystalColor;
+import alec_wam.CrystalMod.core.color.EnumCrystalColorSpecial;
 import alec_wam.CrystalMod.init.ModBlocks;
 import alec_wam.CrystalMod.tiles.EnumCrystalColorSpecialWithCreative;
 import alec_wam.CrystalMod.tiles.TileEntityIOSides.IOType;
 import alec_wam.CrystalMod.tiles.energy.battery.BlockBattery;
 import alec_wam.CrystalMod.tiles.energy.battery.ModelBattery;
+import alec_wam.CrystalMod.tiles.pipes.energy.cu.BlockPipeEnergyCU;
+import alec_wam.CrystalMod.tiles.pipes.energy.rf.BlockPipeEnergyRF;
 import alec_wam.CrystalMod.tiles.pipes.model.ModelPipeBaked;
+import alec_wam.CrystalMod.util.RenderUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -52,9 +56,11 @@ public class BakedModelEventHandler {
 		event.getMap().registerSprite(null, new ResourceLocation("crystalmod:block/crate/void"));
 		
 		event.getMap().registerSprite(null, new ResourceLocation("crystalmod:block/pipe/item"));
-		event.getMap().registerSprite(null, new ResourceLocation("crystalmod:block/pipe/io_in"));
-		event.getMap().registerSprite(null, new ResourceLocation("crystalmod:block/pipe/io_out"));
-		event.getMap().registerSprite(null, new ResourceLocation("crystalmod:block/pipe/io_inout"));
+		for(EnumCrystalColorSpecial color : EnumCrystalColorSpecial.values()){
+			event.getMap().registerSprite(null, new ResourceLocation("crystalmod:block/pipe/energy_cu_"+color.getName().toLowerCase()));
+			event.getMap().registerSprite(null, new ResourceLocation("crystalmod:block/pipe/energy_rf_"+color.getName().toLowerCase()));
+		}
+		
 		event.getMap().registerSprite(null, new ResourceLocation("crystalmod:block/pipe/iron_cap"));
 		event.getMap().registerSprite(null, new ResourceLocation("crystalmod:block/pipe/connector"));
 		
@@ -80,8 +86,30 @@ public class BakedModelEventHandler {
 		ResourceLocation registryNamePipe = ModBlocks.pipeItem.getRegistryName();
 		for(IBlockState state : ModBlocks.pipeItem.getStateContainer().getValidStates()){
 			ModelResourceLocation model = new ModelResourceLocation(registryNamePipe, BlockModelShapes.getPropertyMapString(state.getValues()));
-			ModelPipeBaked pipeModel = new ModelPipeBaked();
+			ModelPipeBaked pipeModel = new ModelPipeBaked(RenderUtil.getSprite("crystalmod:block/pipe/item"));
 			event.getModelRegistry().put(model, pipeModel);
+		}
+		
+		for(EnumCrystalColorSpecial color : EnumCrystalColorSpecial.values()){
+			if(ModBlocks.pipeEnergyCUGroup.getBlocksMap() !=null){
+				BlockPipeEnergyCU pipeBlockCU = ModBlocks.pipeEnergyCUGroup.getBlock(color);
+				ResourceLocation registryNamePipeEnergy = pipeBlockCU.getRegistryName();
+				for(IBlockState state : pipeBlockCU.getStateContainer().getValidStates()){
+					ModelResourceLocation model = new ModelResourceLocation(registryNamePipeEnergy, BlockModelShapes.getPropertyMapString(state.getValues()));
+					ModelPipeBaked pipeModel = new ModelPipeBaked(RenderUtil.getSprite("crystalmod:block/pipe/energy_cu_"+color.getName().toLowerCase()));
+					event.getModelRegistry().put(model, pipeModel);
+				}
+			}
+			
+			if(ModBlocks.pipeEnergyRFGroup.getBlocksMap() !=null){
+				BlockPipeEnergyRF pipeBlockRF = ModBlocks.pipeEnergyRFGroup.getBlock(color);
+				ResourceLocation registryNamePipeEnergy = pipeBlockRF.getRegistryName();
+				for(IBlockState state : pipeBlockRF.getStateContainer().getValidStates()){
+					ModelResourceLocation model = new ModelResourceLocation(registryNamePipeEnergy, BlockModelShapes.getPropertyMapString(state.getValues()));
+					ModelPipeBaked pipeModel = new ModelPipeBaked(RenderUtil.getSprite("crystalmod:block/pipe/energy_rf_"+color.getName().toLowerCase()));
+					event.getModelRegistry().put(model, pipeModel);
+				}
+			}
 		}
 		
 		for(EnumCrystalColorSpecialWithCreative color : EnumCrystalColorSpecialWithCreative.values()){

@@ -50,6 +50,14 @@ public class BlockBattery extends BlockContainerVariant<EnumCrystalColorSpecialW
 	
 	public BlockBattery(EnumCrystalColorSpecialWithCreative type, BlockVariantGroup<EnumCrystalColorSpecialWithCreative, BlockBattery> variantGroup, Properties properties) {
 		super(type, variantGroup, properties);
+		this.setDefaultState(
+				getDefaultState().with(FACING, EnumFacing.NORTH)
+				.with(UP, IOType.IN)
+				.with(DOWN, IOType.IN)
+				.with(NORTH, IOType.IN)
+				.with(SOUTH, IOType.IN)
+				.with(EAST, IOType.IN)
+				.with(WEST, IOType.IN));
 	}
 	
 	@Override
@@ -131,6 +139,23 @@ public class BlockBattery extends BlockContainerVariant<EnumCrystalColorSpecialW
 				return state.get(EAST);
 			case WEST :
 				return state.get(WEST);
+		}
+	}
+	
+	public static EnumProperty<IOType> getPropertyFromFace(EnumFacing facing){
+		switch(facing){
+			default : case UP :
+				return UP;
+			case DOWN :
+				return DOWN;
+			case NORTH :
+				return NORTH;
+			case SOUTH : 
+				return SOUTH;
+			case EAST : 
+				return EAST;
+			case WEST :
+				return WEST;
 		}
 	}
 	

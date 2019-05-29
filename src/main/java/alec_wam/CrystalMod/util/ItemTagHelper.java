@@ -1,19 +1,22 @@
 package alec_wam.CrystalMod.util;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.collect.Lists;
 
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.Tag;
 import net.minecraft.tags.TagCollection;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 
 public class ItemTagHelper {
+	
+	public static boolean tagExists(ResourceLocation tag){
+		return ItemTags.getCollection().getRegisteredTags().contains(tag);
+	}
 
 	public static List<ResourceLocation> getTags(ItemStack stack){
 		return getTags(stack.getItem());
@@ -38,22 +41,17 @@ public class ItemTagHelper {
 		return list;
 	}
 	
-	private static final NonNullList<Item> EMPTY_LIST = NonNullList.withSize(1, Items.AIR);
 	/***
 	 * Get all the items in a tag
 	 * @param ResourceLocation tagID Tag registry name
 	 * @return NonNullList of items in tag
 	 */
-	public static NonNullList<Item> getItemsInTag(ResourceLocation tagID){
+	public static List<Item> getItemsInTag(ResourceLocation tagID){
 		Tag<Item> tag = ItemTags.getCollection().get(tagID);
 		if(tag !=null){
-			NonNullList<Item> items = NonNullList.withSize(tag.getAllElements().size(), Items.AIR);
-			for(Item item : tag.getAllElements()){
-				items.add(item);
-			}
-			return items;
+			return new ArrayList<Item>(tag.getAllElements());
 		}
-		return EMPTY_LIST;
+		return Lists.newArrayList();
 	}
 	
 	public static boolean isItemInTag(ItemStack stack, ResourceLocation tagID){
@@ -64,6 +62,48 @@ public class ItemTagHelper {
 		Tag<Item> tag = ItemTags.getCollection().get(tagID);
 		if(tag !=null){
 			return tag.contains(item);
+		}
+		return false;
+	}
+	
+	public static boolean isOre(ItemStack stack){
+		return isOre(stack.getItem());
+	}
+	
+	public static boolean isOre(Item item){
+		List<ResourceLocation> tags = getTags(item);
+		for(ResourceLocation tag : tags){
+			if(tag.toString().startsWith("ore")){
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public static boolean isIngot(ItemStack stack){
+		return isIngot(stack.getItem());
+	}
+	
+	public static boolean isIngot(Item item){
+		List<ResourceLocation> tags = getTags(item);
+		for(ResourceLocation tag : tags){
+			if(tag.toString().startsWith("ingot")){
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public static boolean isDust(ItemStack stack){
+		return isDust(stack.getItem());
+	}
+	
+	public static boolean isDust(Item item){
+		List<ResourceLocation> tags = getTags(item);
+		for(ResourceLocation tag : tags){
+			if(tag.toString().startsWith("dust")){
+				return true;
+			}
 		}
 		return false;
 	}

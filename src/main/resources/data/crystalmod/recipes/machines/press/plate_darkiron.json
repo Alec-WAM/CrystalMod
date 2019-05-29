@@ -1,0 +1,10 @@
+{
+  "type": "crystalmod:press",
+  "ingredient": {
+    "item": "crystalmod:darkiron_ingot"
+  },
+  "result": {
+	"item": "crystalmod:plate_darkiron"
+  },  
+  "energy": 1600
+}

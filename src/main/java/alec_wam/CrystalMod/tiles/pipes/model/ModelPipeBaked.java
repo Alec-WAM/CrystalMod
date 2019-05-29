@@ -7,14 +7,9 @@ import java.util.Random;
 
 import javax.annotation.Nullable;
 
-import com.google.common.base.Strings;
-
 import alec_wam.CrystalMod.tiles.pipes.BlockPipe;
 import alec_wam.CrystalMod.tiles.pipes.BlockPipe.ConnectionType;
-import alec_wam.CrystalMod.tiles.pipes.NetworkType;
-import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.RenderUtil;
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.client.renderer.model.BakedQuad;
@@ -28,26 +23,17 @@ import net.minecraft.client.renderer.model.ItemOverrideList;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.client.renderer.model.ModelRotation;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
-import net.minecraftforge.client.MinecraftForgeClient;
 
 @SuppressWarnings("deprecation")
 public class ModelPipeBaked implements IBakedModel 
 {
 	public static final ModelResourceLocation BAKED_MODEL = new ModelResourceLocation("crystalmod:crystalpipe");
 	public static FaceBakery faceBakery;
-    private final ItemStack renderStack;
-    
-	public ModelPipeBaked()
+    private final TextureAtlasSprite core;
+	public ModelPipeBaked(TextureAtlasSprite core)
 	{
-		this.renderStack = ItemStackTools.getEmptyStack();
-	}
-	
-	public ModelPipeBaked( ItemStack stack )
-	{
-		this.renderStack = stack;
+		this.core = core;
 	}
     
     private void renderIronCap(final IBlockState state, final EnumFacing dir, final List<BakedQuad> list) {
@@ -117,10 +103,8 @@ public class ModelPipeBaked implements IBakedModel
 			return Collections.emptyList();
 		}
 		
-		BlockRenderLayer layer = MinecraftForgeClient.getRenderLayer();
 		List<BakedQuad> quads = new ArrayList<BakedQuad>();
-		
-		if(layer == BlockRenderLayer.CUTOUT || layer == BlockRenderLayer.TRANSLUCENT || renderStack !=null)addPipeQuads( state, quads );
+		addPipeQuads( state, quads );
 		return quads;
 	}
     
@@ -138,7 +122,7 @@ public class ModelPipeBaked implements IBakedModel
         boolean extensionWest = state !=null && BlockPipe.getConnection(state, EnumFacing.WEST) != ConnectionType.NONE;
         
         TextureAtlasSprite connector = getConnectorSprite();
-        TextureAtlasSprite core = getCoreTexture(state);
+        TextureAtlasSprite core = getCoreTexture();
         
 		scale = false;
 		float max = 11.0f;
@@ -231,34 +215,13 @@ public class ModelPipeBaked implements IBakedModel
         return list;
     }
     
-    private TextureAtlasSprite getCoreTexture(IBlockState state) {
-    	TextureAtlasSprite glassSquare = null;        
-        String texture = "";
-        NetworkType type = null;
-        if(ItemStackTools.isValid(renderStack)){
-        	Block block = Block.getBlockFromItem(renderStack.getItem());
-        	if(block instanceof BlockPipe){
-	        	type = ((BlockPipe)block).type;
-        	}
-        }else{
-        	if(state !=null && state.getBlock() instanceof BlockPipe){
-        		type = ((BlockPipe)state.getBlock()).type;
-	        }
-        }
-        
-        if(type == NetworkType.ITEM){
-        	texture = ("crystalmod:block/pipe/item");
-        }
-        
-        if(!Strings.isNullOrEmpty(texture))glassSquare = RenderUtil.getSprite(texture);
-        
-        if(glassSquare == null){
-        	glassSquare = RenderUtil.getMissingSprite();
-        }
-        
-        return glassSquare;
-	}
-
+    private TextureAtlasSprite getCoreTexture() {
+    	if(core == null){
+    		return RenderUtil.getMissingSprite();
+    	}
+    	return core;
+    }
+    
 	@Override
 	public boolean isAmbientOcclusion() {
         return true;
@@ -276,14 +239,13 @@ public class ModelPipeBaked implements IBakedModel
     
     @Override
 	public TextureAtlasSprite getParticleTexture() {
-        return getCoreTexture(null);
+        return getCoreTexture();
     }
     
     @Override
 	public ItemCameraTransforms getItemCameraTransforms() {
-        return ItemCameraTransforms.DEFAULT;
-    }
-    
+    	return ItemCameraTransforms.DEFAULT;
+    }    
     
     static {
         faceBakery = new FaceBakery();
@@ -303,17 +265,6 @@ public class ModelPipeBaked implements IBakedModel
 	@Override
 	public ItemOverrideList getOverrides()
 	{
-		/*return new ItemOverrideList(null, null, null, new ArrayList<ItemOverride>()){
-			@Override
-			public IBakedModel handleItemState( IBakedModel originalModel, ItemStack stack, World world, EntityLivingBase entity )
-			{
-				if( !( stack.getItem() == Item.getItemFromBlock(ModBlocks.crystalPipe)) )
-				{
-					return originalModel;
-				}
-				return new ModelPipeBaked( stack );
-			}
-		};*/
 		return ItemOverrideList.EMPTY;
 	}
 	

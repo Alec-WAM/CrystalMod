@@ -12,9 +12,14 @@ public class ModConfig {
     public static final ForgeConfigSpec spec = BUILDER.build();
 
     public static class General {
-
+    	public final ForgeConfigSpec.ConfigValue<Boolean> Debug_Grinder_Recipes;
+        
         public General(ForgeConfigSpec.Builder builder) {
             builder.push("General");
+            Debug_Grinder_Recipes = builder
+                    .comment("Print Grinder auto generated recipes in log [default:false]")
+                    .translation("crystalmod.config.general.debug_grinder_recipes")
+                    .define("debug_grinder_recipes", false);
             builder.pop();
         }
     }

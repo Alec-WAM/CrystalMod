@@ -84,7 +84,7 @@ public abstract class GuiElementContainer extends GuiContainer {
 
 	@Override
 	protected void drawGuiContainerForegroundLayer(int x, int y) {
-
+		super.drawGuiContainerForegroundLayer(x, y);
 		if (drawTitle) {
 			fontRenderer.drawString(Lang.translateToLocal(name), getCenteredOffset(Lang.translateToLocal(name)), 6, 0x404040);
 		}

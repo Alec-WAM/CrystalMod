@@ -5,10 +5,7 @@ import java.util.Map;
 
 import com.google.common.collect.Maps;
 
-import alec_wam.CrystalMod.init.ModItems;
-import alec_wam.CrystalMod.tiles.pipes.item.PipeNetworkItem;
 import alec_wam.CrystalMod.util.BlockUtil;
-import alec_wam.CrystalMod.util.ChatUtil;
 import alec_wam.CrystalMod.util.ToolUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
@@ -248,7 +245,6 @@ public class BlockPipe extends BlockContainer {
 	@Override
 	public boolean onBlockActivated(IBlockState state, World worldIn, BlockPos pos, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ)
     {
-		if(worldIn.isRemote)return true;
 		TileEntity tile = worldIn.getTileEntity(pos);
 		if (tile != null && tile instanceof TileEntityPipeBase){
 			TileEntityPipeBase pipe = (TileEntityPipeBase)tile;
@@ -261,8 +257,8 @@ public class BlockPipe extends BlockContainer {
 					hitData = (PipeHitData)result.hitInfo;
 					if(hitData.part == PipePart.CONNECTOR){
 						if(ToolUtil.isHoldingWrench(player, hand)){
+							if(worldIn.isRemote)return true;
 							pipe.incrsConnectionMode(hitData.face);
-							ChatUtil.sendChat(player, "" + pipe.getConnectionSetting(hitData.face));
 							return true;
 						} else {
 							return pipe.openConnector(player, hand, hitData.face);
@@ -270,6 +266,7 @@ public class BlockPipe extends BlockContainer {
 					}
 					if(hitData.part == PipePart.PIPE){
 						if(ToolUtil.isHoldingWrench(player, hand)){
+							if(worldIn.isRemote)return true;
 							PipeNetworkBuilder.unlinkPipes(pipe, hitData.face);
 							return true;
 						}
@@ -278,26 +275,17 @@ public class BlockPipe extends BlockContainer {
 					hitData = new PipeHitData(side, null);
 					if(ToolUtil.isHoldingWrench(player, hand)){
 						if(player.isSneaking()){
+							if(worldIn.isRemote)return true;
 							return ToolUtil.breakBlockWithWrench(worldIn, pos, player, hand);
 						}
 						if(pipe.getConnectionSetting(side) == PipeConnectionMode.DISABLED){
+							if(worldIn.isRemote)return true;
 							PipeNetworkBuilder.linkPipes(pipe, side);
 							return true;
 						}
 					}
 				}
 				return pipe.onActivated(worldIn, player, hand, hitData);
-			} 
-			
-			if(pipe.getNetwork() !=null){
-				if(player.isSneaking()){
-					if(pipe.getNetwork() instanceof PipeNetworkItem){
-						PipeNetworkItem network = (PipeNetworkItem)pipe.getNetwork();
-						ChatUtil.sendChat(player, "" + network.inventoryList.size());
-						return true;
-					}
-					//ChatUtil.sendChat(player, "" + pipe.getNetwork().getSize());
-				} 
 			} 
 		}
 		return false;

@@ -9,6 +9,7 @@ import alec_wam.CrystalMod.api.energy.CapabilityCrystalEnergy;
 import alec_wam.CrystalMod.client.BakedModelEventHandler;
 import alec_wam.CrystalMod.client.ClientEventHandler;
 import alec_wam.CrystalMod.client.GuiHandler;
+import alec_wam.CrystalMod.events.ServerEventHandler;
 import alec_wam.CrystalMod.init.ModBlocks;
 import alec_wam.CrystalMod.init.ModRecipes;
 import alec_wam.CrystalMod.tiles.pipes.PipeNetworkTickHandler;
@@ -48,6 +49,7 @@ public class CrystalMod {
         ModLoadingContext.get().registerExtensionPoint(ExtensionPoint.GUIFACTORY, () -> GuiHandler::openGui);
         MinecraftForge.EVENT_BUS.register(new ClientEventHandler());
         MinecraftForge.EVENT_BUS.register(PipeNetworkTickHandler.INSTANCE);
+        MinecraftForge.EVENT_BUS.register(ServerEventHandler.INSTANCE);
         ModRecipes.registerModRecipes();
         CapabilityCrystalEnergy.register();
 	}

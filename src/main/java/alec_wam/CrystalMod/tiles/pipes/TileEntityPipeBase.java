@@ -14,6 +14,7 @@ import alec_wam.CrystalMod.tiles.PacketTileMessage;
 import alec_wam.CrystalMod.tiles.RedstoneMode;
 import alec_wam.CrystalMod.tiles.TileEntityMod;
 import alec_wam.CrystalMod.tiles.pipes.BlockPipe.PipeHitData;
+import alec_wam.CrystalMod.tiles.pipes.PipeNetworkBuilder.PipeChecker;
 import alec_wam.CrystalMod.util.BlockUtil;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -157,7 +158,7 @@ public abstract class TileEntityPipeBase extends TileEntityMod implements IMessa
 		super.tick();
 		if (!getWorld().isRemote) {
 			if (getNetwork() == null && getWorld().isBlockLoaded(getPos())) {
-				PipeNetworkBuilder.buildNetwork(this);
+				PipeNetworkBuilder.buildNetwork(this, getPipeChecker());
 			}
 			
 			if(rebuildConnections){
@@ -173,6 +174,14 @@ public abstract class TileEntityPipeBase extends TileEntityMod implements IMessa
 		}
 	}
 	
+	public PipeChecker getPipeChecker(){
+		return PipeNetworkBuilder.NORMAL;
+	}
+	
+	public boolean isRebuildingConnections(){
+		return rebuildConnections;
+	}
+	
 	public PipeConnectionMode getConnectionSetting(EnumFacing facing){
 		int i = facing.getIndex();
 		return connectionSettings[i];
@@ -182,13 +191,24 @@ public abstract class TileEntityPipeBase extends TileEntityMod implements IMessa
 		int i = facing.getIndex();
 		connectionSettings[i] = mode;
 		rebuildConnections = true;
+		serverDirty = true;
 	}
 	
 	public void incrsConnectionMode(EnumFacing facing){
 		int i = facing.getIndex();
 		final PipeConnectionMode mode = connectionSettings[i];
-		connectionSettings[i] = PipeConnectionMode.values()[(mode.ordinal() + 1) % (PipeConnectionMode.values().length)];
+		if(mode == PipeConnectionMode.IN){
+			connectionSettings[i] = PipeConnectionMode.OUT;
+		}
+		if(mode == PipeConnectionMode.OUT){
+			connectionSettings[i] = PipeConnectionMode.BOTH;
+		}
+		if(mode == PipeConnectionMode.BOTH){
+			connectionSettings[i] = PipeConnectionMode.IN;
+		}
+		//connectionSettings[i] = PipeConnectionMode.values()[(mode.ordinal() + 1) % (PipeConnectionMode.values().length)];*/
 		rebuildConnections = true;
+		serverDirty = true;
 	}
 	
 	public boolean isConnectedTo(EnumFacing facing) {
@@ -219,7 +239,7 @@ public abstract class TileEntityPipeBase extends TileEntityMod implements IMessa
 			TileEntity tile = getWorld().getTileEntity(otherPos);
 			if(tile instanceof TileEntityPipeBase){
 				TileEntityPipeBase pipe = (TileEntityPipeBase)tile;
-				if(pipe.getNetworkType() == getNetworkType()){
+				if(pipe.getNetworkType() == getNetworkType() && getPipeChecker().canConnect(pipe)){
 					if(pipe.getConnectionSetting(facing.getOpposite()) != PipeConnectionMode.DISABLED){
 						pipeConnections.add(facing);
 					}
@@ -318,6 +338,10 @@ public abstract class TileEntityPipeBase extends TileEntityMod implements IMessa
 
 	public boolean onActivated(World world, EntityPlayer player, EnumHand hand, PipeHitData hitData) {
 		return false;
+	}
+
+	public boolean canConnectToPipe(TileEntityPipeBase otherPipe) {
+		return true;
 	}
 	
 }

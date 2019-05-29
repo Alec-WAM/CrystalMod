@@ -17,6 +17,8 @@ import alec_wam.CrystalMod.tiles.fusion.TileEntityPedestal;
 import alec_wam.CrystalMod.tiles.fusion.TileEntityPedestalRender;
 import alec_wam.CrystalMod.tiles.jar.TileEntityJar;
 import alec_wam.CrystalMod.tiles.jar.TileEntityJarRender;
+import alec_wam.CrystalMod.tiles.pipes.TileEntityPipeBase;
+import alec_wam.CrystalMod.tiles.pipes.TileEntityPipeBaseRender;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
@@ -36,5 +38,6 @@ public class ModRenders {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityFusionPedestal.class, new TileEntityFusionPedestalRender());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityJar.class, new TileEntityJarRender());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBattery.class, new TileEntityBatteryRender());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPipeBase.class, new TileEntityPipeBaseRender());
 	}
 }

@@ -1,0 +1,7 @@
+{
+    "parent": "crystalmod:item/pipe",
+	"textures": {
+        "particle": "crystalmod:block/pipe/energy_rf_red",
+        "all": "crystalmod:block/pipe/energy_rf_red"
+    }
+}

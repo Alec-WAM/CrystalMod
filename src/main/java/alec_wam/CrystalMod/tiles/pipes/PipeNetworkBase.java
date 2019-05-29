@@ -1,9 +1,8 @@
 package alec_wam.CrystalMod.tiles.pipes;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-
-import alec_wam.CrystalMod.tiles.pipes.item.PipeNetworkItem;
 
 public class PipeNetworkBase<P extends TileEntityPipeBase> {
 
@@ -29,6 +28,10 @@ public class PipeNetworkBase<P extends TileEntityPipeBase> {
 			return pipeMap.remove(pos) !=null;
 		}	
 		return false;
+	}
+	
+	public Collection<P> getPipes(){
+		return pipeMap.values();
 	}
 	
 	public void resetNetwork(){

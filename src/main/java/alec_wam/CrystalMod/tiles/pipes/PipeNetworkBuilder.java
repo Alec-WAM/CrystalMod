@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
+import alec_wam.CrystalMod.util.BlockUtil;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -11,7 +12,20 @@ import net.minecraft.world.World;
 
 public class PipeNetworkBuilder {
 
-	public static void buildNetwork(TileEntityPipeBase pipe){
+	public static abstract class PipeChecker {
+		public abstract boolean canConnect(TileEntityPipeBase otherPipe);
+	}
+
+	public static PipeChecker NORMAL = new PipeChecker(){
+
+		@Override
+		public boolean canConnect(TileEntityPipeBase otherPipe) {
+			return true;
+		}
+		
+	};
+	
+	public static void buildNetwork(TileEntityPipeBase pipe, PipeChecker checker){
 		World world = pipe.getWorld();
 		BlockPos pos = pipe.getPos();
 		List<PipeNetworkBase<?>> otherNetworks = Lists.newArrayList();
@@ -19,7 +33,7 @@ public class PipeNetworkBuilder {
 			TileEntity tile = world.getTileEntity(pos.offset(facing));
 			if(tile instanceof TileEntityPipeBase){
 				TileEntityPipeBase otherPipe = (TileEntityPipeBase)tile;
-				if(otherPipe.getNetworkType() == pipe.getNetworkType()){
+				if(otherPipe.getNetworkType() == pipe.getNetworkType() && checker.canConnect(otherPipe)){
 					if(otherPipe.getNetwork() !=null){
 						if(otherPipe.getConnectionSetting(facing.getOpposite()) !=PipeConnectionMode.DISABLED){
 							otherNetworks.add(otherPipe.getNetwork());
@@ -47,7 +61,7 @@ public class PipeNetworkBuilder {
 			visited.add(pos);
 			for(EnumFacing facing : EnumFacing.values()){
 				if(pipe.getConnectionSetting(facing) !=PipeConnectionMode.DISABLED){
-					scanPipes(network, pipe.getNetworkType(), world, pos.offset(facing), facing, visited);
+					scanPipes(network, pipe.getNetworkType(), checker, world, pos.offset(facing), facing, visited);
 				}
 			}
 			PipeNetworkTickHandler.INSTANCE.NETWORKS.add(network);
@@ -56,13 +70,13 @@ public class PipeNetworkBuilder {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public static <T extends TileEntityPipeBase> void scanPipes(PipeNetworkBase<T> network, NetworkType type, World world, BlockPos pos, EnumFacing from, List<BlockPos> visited){
+	public static <T extends TileEntityPipeBase> void scanPipes(PipeNetworkBase<T> network, NetworkType type, PipeChecker checker, World world, BlockPos pos, EnumFacing from, List<BlockPos> visited){
 		if(!world.isBlockLoaded(pos)) return;
 		visited.add(pos);
 		TileEntity tile = world.getTileEntity(pos);
 		if(tile instanceof TileEntityPipeBase){
 			TileEntityPipeBase pipe = (TileEntityPipeBase)tile;
-			if(pipe.getNetworkType() == type){
+			if(pipe.getNetworkType() == type && checker.canConnect(pipe)){
 				if(pipe.getConnectionSetting(from) !=PipeConnectionMode.DISABLED){
 					if(network.addPipe((T) pipe)){
 						pipe.setNetwork(network);
@@ -71,7 +85,7 @@ public class PipeNetworkBuilder {
 							if(from !=null && facing.getOpposite() == from)continue;
 							BlockPos offset = pos.offset(facing);
 							if(!visited.contains(offset)){
-								scanPipes(network, type, world, offset, facing, visited);
+								scanPipes(network, type, checker, world, offset, facing, visited);
 							}
 						}						
 					}
@@ -94,13 +108,13 @@ public class PipeNetworkBuilder {
 		
 		pipe.setNetwork(null);
 		pipe.rebuildConnections = true;
-		pipe.serverDirty = true;
+		BlockUtil.markBlockForUpdate(pipe.getWorld(), pipe.getPos());
 	}
 	
 	public static void unlinkPipes(TileEntityPipeBase pipe, EnumFacing face){
 		pipe.setConnectionSetting(face, PipeConnectionMode.DISABLED);
 		pipe.pipeConnections.remove(face);
-		pipe.getNetwork().resetNetwork();
+		if(pipe.getNetwork() !=null)pipe.getNetwork().resetNetwork();
 		pipe.rebuildConnections = true;
 		
 		TileEntity tile = pipe.getWorld().getTileEntity(pipe.getPos().offset(face));

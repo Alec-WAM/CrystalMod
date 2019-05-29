@@ -36,7 +36,9 @@ public class TileEntityBattery extends TileEntityIOSides implements INBTDrop, II
 	public int sendAmount;
 	public int receiveAmount; 
 	private int tier;
-	
+	@SuppressWarnings("unchecked")
+	private final LazyOptional<ICEnergyStorage>[] holders = new LazyOptional[6];
+    
 	public TileEntityBattery() {
 		super(ModBlocks.TILE_BATTERY);
 		this.energyStorage = new CEnergyStorage(MAX_ENERGY[tier], MAX_IO[tier]);
@@ -45,9 +47,7 @@ public class TileEntityBattery extends TileEntityIOSides implements INBTDrop, II
     	}
 	}
 	
-	@SuppressWarnings("unchecked")
-	private final LazyOptional<ICEnergyStorage>[] holders = new LazyOptional[6];
-    public TileEntityBattery(EnumCrystalColorSpecialWithCreative type) {
+	public TileEntityBattery(EnumCrystalColorSpecialWithCreative type) {
 		super(ModBlocks.TILE_BATTERY);
 		this.tier = type.ordinal();
 		this.energyStorage = new CEnergyStorage(MAX_ENERGY[tier], MAX_IO[tier]);

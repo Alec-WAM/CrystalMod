@@ -1,0 +1,14 @@
+{
+  "type": "crystalmod:grinder",
+  "ingredient": {
+    "item": "minecraft:gravel"
+  },
+  "result": {
+	"item": "minecraft:sand"
+  },
+  "bonus": {
+	"item": "minecraft:flint",
+	"chance": 0.4
+  },  
+  "energy": 1600
+}

@@ -1,6 +1,8 @@
 package alec_wam.CrystalMod.tiles.energy.battery;
 
 
+import alec_wam.CrystalMod.CrystalMod;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
@@ -11,14 +13,31 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 
 public class TileEntityBatteryRender extends TileEntityRenderer<TileEntityBattery> {
+	private static final ResourceLocation TEXTURE_METER_UNCHARGED = CrystalMod.resourceL("textures/block/battery/meter/uncharged.png");
+	private static final ResourceLocation TEXTURE_METER_CHARGED = CrystalMod.resourceL("textures/block/battery/meter/charged.png");
+	private static final ResourceLocation TEXTURE_METER_CREATIVE = CrystalMod.resourceL("textures/block/battery/meter/creative.png");
+	private static final ResourceLocation[] TEXTURE_METER = new ResourceLocation[9];
+	static {
+		for(int i = 0; i < 9; i++){
+			TEXTURE_METER[i] = CrystalMod.resourceL("textures/block/battery/meter/"+i+".png");
+		}
+	}
 
 	@Override
     public void render(TileEntityBattery te, double x, double y, double z, float partialTicks, int destroyStage) {
 		GlStateManager.pushMatrix();
-    	GlStateManager.translated(x+1, y+1, z);
-    	GlStateManager.rotatef(180, 0, 0, 1);
+    	GlStateManager.translated(x, y, z);
+    	renderMeter(te.getFacing(), te.energyStorage.getCEnergyStored(), te.energyStorage.getMaxCEnergyStored(), te.isCreative());
+        GlStateManager.popMatrix();
+    }
+	
+	public static void renderMeter(EnumFacing rotation, int energy, int maxEnergy, boolean creative){
+		GlStateManager.pushMatrix();
+		GlStateManager.translated(0.5, 0.5, 0.5);
+		GlStateManager.rotatef(180, 0, 0, 1);
+		GlStateManager.translated(-0.5, -0.5, -0.5);
     	int angle = 0;
-    	EnumFacing face = te.getFacing();
+    	EnumFacing face = rotation;
     	if(face == EnumFacing.UP){
     		angle = 90;
     		GlStateManager.translated(0, 1, 0);
@@ -42,13 +61,9 @@ public class TileEntityBatteryRender extends TileEntityRenderer<TileEntityBatter
         float minV = 0+(0.249f);
         float maxV = 1-(0.249f);
         
-        boolean creative = te.isCreative();
-        String meter = ""+te.getScaledEnergyStored(8);
-        if(creative){
-        	meter = "creative";
-        }
+        int meter = (energy * 8 / maxEnergy);
         GlStateManager.disableLighting();
-        bindTexture(new ResourceLocation("crystalmod:textures/block/battery/meter/"+meter+".png"));
+        Minecraft.getInstance().getTextureManager().bindTexture(creative ? TEXTURE_METER_CREATIVE : TEXTURE_METER[meter]);
         worldrenderer.begin(7, DefaultVertexFormats.POSITION_TEX);
         worldrenderer.pos(min.getX(), min.getY(), min.getZ()).tex(minU, minV).endVertex();
         worldrenderer.pos(min.getX(), max.getY(), min.getZ()).tex(minU, maxV).endVertex();
@@ -78,8 +93,8 @@ public class TileEntityBatteryRender extends TileEntityRenderer<TileEntityBatter
         tessellator.draw();
         
         
-        String meterTex = (te.energyStorage.getCEnergyStored() > 0 || creative) ? "charged" : "uncharged";
-        bindTexture(new ResourceLocation("crystalmod:textures/block/battery/meter/"+meterTex+".png"));
+        ResourceLocation meterTex = (energy > 0 || creative) ? TEXTURE_METER_CHARGED : TEXTURE_METER_UNCHARGED;
+        Minecraft.getInstance().getTextureManager().bindTexture(meterTex);
         worldrenderer.begin(7, DefaultVertexFormats.POSITION_TEX);
         min = new Vector3f(0.67f-offset, -0.34f+0.67f, 0.67f);
         max = new Vector3f(0.67f*2-offset, -0.34f+0.67f, 0.67f*2);
@@ -89,8 +104,8 @@ public class TileEntityBatteryRender extends TileEntityRenderer<TileEntityBatter
         worldrenderer.pos(max.getX(), min.getY(), min.getZ()).tex(maxU, minV).endVertex();
         tessellator.draw();
         
-        meterTex = (te.energyStorage.getCEnergyStored() >= te.energyStorage.getMaxCEnergyStored() || creative) ? "charged" : "uncharged";
-        bindTexture(new ResourceLocation("crystalmod:textures/block/battery/meter/"+meterTex+".png"));
+        meterTex = (energy >= maxEnergy || creative) ? TEXTURE_METER_CHARGED : TEXTURE_METER_UNCHARGED;
+        Minecraft.getInstance().getTextureManager().bindTexture(meterTex);
         worldrenderer.begin(7, DefaultVertexFormats.POSITION_TEX);
         min = new Vector3f(0.67f-offset, -0.34f, 0.67f*2);
         max = new Vector3f(0.67f*2-offset, -0.34f, 0.67f);
@@ -102,6 +117,6 @@ public class TileEntityBatteryRender extends TileEntityRenderer<TileEntityBatter
         
         GlStateManager.enableLighting();
         GlStateManager.popMatrix();
-    }
+	}
 	
 }

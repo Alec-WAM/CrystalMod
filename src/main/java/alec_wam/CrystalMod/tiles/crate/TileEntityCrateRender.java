@@ -3,8 +3,10 @@ package alec_wam.CrystalMod.tiles.crate;
 import org.lwjgl.opengl.GL11;
 
 import alec_wam.CrystalMod.ModConfig;
+import alec_wam.CrystalMod.tiles.EnumCrystalColorSpecialWithCreative;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
+import alec_wam.CrystalMod.util.Lang;
 import alec_wam.CrystalMod.util.RenderUtil;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -221,7 +223,8 @@ public class TileEntityCrateRender extends TileEntityRenderer<TileEntityCrate>
 			
 			
 			int stackSize = ItemStackTools.getStackSize(tile.getStack());
-			if(stackSize > 1){
+			boolean isCreative = tile.tier == EnumCrystalColorSpecialWithCreative.CREATIVE.ordinal();
+			if(stackSize > 1 || isCreative){
 				GlStateManager.pushMatrix();
 				int maxStack = tile.getStack().getMaxStackSize();
 				boolean basicSize = maxStack == 1 || stackSize < maxStack;
@@ -232,6 +235,9 @@ public class TileEntityCrateRender extends TileEntityRenderer<TileEntityCrate>
 					int rem = stackSize % maxStack;
 					info = stacks + "x" + maxStack + (rem > 0 ? " + " + rem : "");
 				}				
+				if(isCreative){
+					info = Lang.localize("infinite");
+				}
 				
 				width = fontRender.getStringWidth(info);
 				GlStateManager.translated(-0.20, 30f, 0f);

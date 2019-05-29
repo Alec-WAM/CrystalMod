@@ -27,7 +27,7 @@ public abstract class BlockContainerCustom extends BlockContainer {
 	public void onReplaced(IBlockState state, World worldIn, BlockPos pos, IBlockState newState, boolean isMoving) {
 		if (state.getBlock() != newState.getBlock()) {
 			TileEntity tileentity = worldIn.getTileEntity(pos);
-			if (tileentity instanceof IInventory) {
+			if (tileentity instanceof IInventory && !(tileentity instanceof INBTDrop)) {
 				InventoryHelper.dropInventoryItems(worldIn, pos, ((IInventory)tileentity));
 				worldIn.updateComparatorOutputLevel(pos, this);
 			}

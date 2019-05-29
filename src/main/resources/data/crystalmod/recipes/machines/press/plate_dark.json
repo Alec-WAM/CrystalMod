@@ -1,0 +1,10 @@
+{
+  "type": "crystalmod:press",
+  "ingredient": {
+    "item": "crystalmod:crystalingot_dark"
+  },
+  "result": {
+	"item": "crystalmod:plate_dark"
+  },  
+  "energy": 1600
+}

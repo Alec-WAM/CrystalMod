@@ -1,0 +1,14 @@
+{
+  "type": "crystalmod:grinder",
+  "ingredient": {
+    "item": "minecraft:cobblestone"
+  },
+  "result": {
+	"item": "minecraft:gravel"
+  },
+  "bonus": {
+	"item": "minecraft:sand",
+	"chance": 0.2
+  },  
+  "energy": 1600
+}
