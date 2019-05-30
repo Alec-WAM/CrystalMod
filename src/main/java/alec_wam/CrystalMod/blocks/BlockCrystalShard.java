@@ -36,7 +36,7 @@ public class BlockCrystalShard extends Block {
 		this.variantGroup = variantGroup;
 		this.setDefaultState(this.stateContainer.getBaseState().with(SHARDS_1_3, Integer.valueOf(1)));
 	}
-	
+	//TODO Make Drop when not on valid block
 	@Override
 	public VoxelShape getShape(IBlockState state, IBlockReader worldIn, BlockPos pos) {
 		int shards = state.get(SHARDS_1_3);

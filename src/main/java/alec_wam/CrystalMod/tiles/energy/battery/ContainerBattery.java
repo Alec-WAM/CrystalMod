@@ -1,6 +1,6 @@
 package alec_wam.CrystalMod.tiles.energy.battery;
 
-import alec_wam.CrystalMod.util.ItemStackTools;
+import alec_wam.CrystalMod.tiles.machine.crafting.SlotLockedOutput;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -14,7 +14,13 @@ public class ContainerBattery extends Container
     public ContainerBattery(EntityPlayer player, TileEntityBattery battery)
     {
     	this.battery = (battery);
-
+    	this.addSlot(new Slot(battery, 0, 56, 35) {
+    		@Override
+    		public boolean isItemValid(ItemStack stack){
+    			return battery.canCharge(stack);
+    		}
+    	});
+    	this.addSlot(new SlotLockedOutput(player, battery, 1, 103, 35));
         this.addPlayerInventory(player.inventory);
     }
 
@@ -40,44 +46,46 @@ public class ContainerBattery extends Container
     @Override
     public ItemStack transferStackInSlot(EntityPlayer player, int i)
     {
-    	ItemStack itemstack = ItemStackTools.getEmptyStack();
-    	int par2 = i;
-		Slot slot = this.inventorySlots.get(par2);
+    	ItemStack itemstack = ItemStack.EMPTY;
+        Slot slot = this.inventorySlots.get(i);
+        if (slot != null && slot.getHasStack()) {
+           ItemStack itemstack1 = slot.getStack();
+           itemstack = itemstack1.copy();
+           if (i == 1) {
+              if (!this.mergeItemStack(itemstack1, 2, 38, true)) {
+                 return ItemStack.EMPTY;
+              }
 
-		if (slot != null && slot.getHasStack())
-		{
-			ItemStack itemstack1 = slot.getStack();
-			itemstack = itemstack1.copy();
+              slot.onSlotChange(itemstack1, itemstack);
+           } else if (i != 0) {
+              if (battery.canCharge(itemstack1)) {
+                 if (!this.mergeItemStack(itemstack1, 0, 1, false)) {
+                    return ItemStack.EMPTY;
+                 }
+              }
+              else if (i >= 1 && i < 29) {
+                 if (!this.mergeItemStack(itemstack1, 29, 38, false)) {
+                    return ItemStack.EMPTY;
+                 }
+              } else if (i >= 29 && i < 38 && !this.mergeItemStack(itemstack1, 2, 29, false)) {
+                 return ItemStack.EMPTY;
+              }
+           } else if (!this.mergeItemStack(itemstack1, 2, 38, false)) {
+              return ItemStack.EMPTY;
+           }
 
-			if (par2 < 29)
-			{
-				if (!this.mergeItemStack(itemstack1, 29, 37, false))
-				{
-					return ItemStackTools.getEmptyStack();
-				}
-			}
-			else if (par2 >= 29 && !this.mergeItemStack(itemstack1, 0, 29, false))
-			{
-				return ItemStackTools.getEmptyStack();
-			}
+           if (itemstack1.isEmpty()) {
+              slot.putStack(ItemStack.EMPTY);
+           } else {
+              slot.onSlotChanged();
+           }
 
-			if (ItemStackTools.isEmpty(itemstack1))
-			{
-				slot.putStack(ItemStackTools.getEmptyStack());
-			}
-			else
-			{
-				slot.onSlotChanged();
-			}
+           if (itemstack1.getCount() == itemstack.getCount()) {
+              return ItemStack.EMPTY;
+           }
 
-			if (ItemStackTools.getStackSize(itemstack1) == ItemStackTools.getStackSize(itemstack))
-			{
-				return ItemStackTools.getEmptyStack();
-			}
-
-			slot.onTake(player, itemstack1);
-		}
-
+           slot.onTake(player, itemstack1);
+        }
 		return itemstack;
     }
 }

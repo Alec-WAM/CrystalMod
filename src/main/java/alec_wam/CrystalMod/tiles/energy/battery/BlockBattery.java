@@ -14,6 +14,7 @@ import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ToolUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDirectional;
+import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
@@ -88,6 +89,21 @@ public class BlockBattery extends BlockContainerVariant<EnumCrystalColorSpecialW
 			tooltip.add(new TextComponentTranslation("crystalmod.power.infinite"));
 		}
     }
+
+	public static NBTTagCompound getDefaultItemNBT(EnumCrystalColorSpecialWithCreative type){
+		NBTTagCompound nbt = new NBTTagCompound();
+		for(EnumFacing face : EnumFacing.values()){
+			nbt.setByte("io."+face.name().toLowerCase(), (byte)IOType.IN.ordinal());
+		}
+		nbt.setInt("Send", TileEntityBattery.MAX_IO[type.ordinal()]);
+		nbt.setInt("Receive", TileEntityBattery.MAX_IO[type.ordinal()]);
+		return nbt;
+	}
+	
+	@Override
+	public BlockFaceShape getBlockFaceShape(IBlockReader worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
+		return BlockFaceShape.UNDEFINED;
+	}
 	
 	@Override
     public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> list)
@@ -97,6 +113,12 @@ public class BlockBattery extends BlockContainerVariant<EnumCrystalColorSpecialW
 			NBTTagCompound nbt = new NBTTagCompound();
 			for(EnumFacing face : EnumFacing.values()){
 				nbt.setByte("io."+face.name().toLowerCase(), (byte)IOType.OUT.ordinal());
+			}
+			ItemNBTHelper.getCompound(stack).setTag(TileEntityBattery.NBT_DATA, nbt);
+		} else {
+			NBTTagCompound nbt = getDefaultItemNBT(type);
+			for(EnumFacing face : EnumFacing.values()){
+				nbt.setByte("io."+face.name().toLowerCase(), (byte)IOType.IN.ordinal());
 			}
 			ItemNBTHelper.getCompound(stack).setTag(TileEntityBattery.NBT_DATA, nbt);
 		}

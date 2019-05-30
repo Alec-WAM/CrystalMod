@@ -1,0 +1,16 @@
+{
+	"forge_marker": 1,
+	"defaults": {
+		"model": "crystalmod:crystalbush_red"
+	},
+	"variants": {
+		"age": {
+			"0": {},
+			"1": {},
+			"2": {},
+			"3": {
+				"model": "crystalmod:crystalbush_red_grown"
+			}
+		}
+	}
+}

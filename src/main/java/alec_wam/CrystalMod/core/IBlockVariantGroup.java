@@ -1,15 +1,14 @@
 package alec_wam.CrystalMod.core;
 
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.IStringSerializable;
-import net.minecraftforge.registries.IForgeRegistry;
-
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.util.IStringSerializable;
+import net.minecraftforge.registries.IForgeRegistry;
 
 public interface IBlockVariantGroup<V extends Enum<V> & IStringSerializable, B extends Block> {
 

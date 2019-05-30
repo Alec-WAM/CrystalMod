@@ -50,8 +50,7 @@ public class RenderUtil {
 		BufferBuilder bufferbuilder = tessellator.getBuffer();
 		bufferbuilder.begin(7, DefaultVertexFormats.ITEM);
 		Random random = new Random();
-		long i = 42L;
-
+		
 		for(EnumFacing enumfacing : EnumFacing.values()) {
 			random.setSeed(42L);
 			renderQuads(bufferbuilder, model.getQuads((IBlockState)null, enumfacing, random), color, stack);
@@ -63,7 +62,7 @@ public class RenderUtil {
 	}
 	
 	public static void renderQuads(BufferBuilder renderer, List<BakedQuad> quads, int color, ItemStack stack) {
-		boolean flag = color == -1 && !stack.isEmpty();
+		//boolean flag = color == -1 && !stack.isEmpty();
 		int i = 0;
 
 		for(int j = quads.size(); i < j; ++i) {

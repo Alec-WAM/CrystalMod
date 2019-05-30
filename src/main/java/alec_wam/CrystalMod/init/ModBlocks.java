@@ -10,6 +10,7 @@ import alec_wam.CrystalMod.blocks.BlockCrystalShard;
 import alec_wam.CrystalMod.blocks.BlockIngot;
 import alec_wam.CrystalMod.blocks.BlockVariant;
 import alec_wam.CrystalMod.blocks.WoodenBlockProperies.WoodType;
+import alec_wam.CrystalMod.blocks.plants.BlockCrystalBerryBush;
 import alec_wam.CrystalMod.blocks.plants.BlockFlowerLilyPad;
 import alec_wam.CrystalMod.blocks.plants.BlockReedVariant;
 import alec_wam.CrystalMod.blocks.plants.BlockTallFlowerVariant;
@@ -32,6 +33,7 @@ import alec_wam.CrystalMod.tiles.chests.wooden.WoodenCrystalChestType;
 import alec_wam.CrystalMod.tiles.crate.BlockCrate;
 import alec_wam.CrystalMod.tiles.crate.TileEntityCrate;
 import alec_wam.CrystalMod.tiles.energy.battery.BlockBattery;
+import alec_wam.CrystalMod.tiles.energy.battery.ItemBlockBattery;
 import alec_wam.CrystalMod.tiles.energy.battery.TileEntityBattery;
 import alec_wam.CrystalMod.tiles.energy.engine.BlockEngine;
 import alec_wam.CrystalMod.tiles.energy.engine.EnumEngineType;
@@ -85,6 +87,7 @@ public class ModBlocks {
 	public static BlockVariantGroup<EnumCrystalColorSpecial, BlockVariant<EnumCrystalColorSpecial>> crystalPlanksGroup;	
 	public static BlockVariantGroup<EnumCrystalColor, BlockReedVariant<EnumCrystalColor>> crystalReedGroup;	
 	public static BlockVariantGroup<EnumCrystalColor, BlockCrystalShard> crystalShardBlock;	
+	public static BlockVariantGroup<EnumCrystalColor, BlockCrystalBerryBush> crystalBerryBushGroup;	
 	
 	public static BlockVariantGroup<EnumBetterRoses, BlockTallFlowerVariant<EnumBetterRoses>> betterRosesGroup;	
 	public static BlockFlowerLilyPad flowerLilypad;
@@ -240,6 +243,14 @@ public class ModBlocks {
 				.blockFactory(BlockCrystalShard::new)
 				.build();
 		RegistrationHandler.addBlockGroup(crystalShardBlock);
+		crystalBerryBushGroup = BlockVariantGroup.Builder.<EnumCrystalColor, BlockCrystalBerryBush>create()
+				.groupName("crystalbush")
+				.suffix()
+				.variants(EnumCrystalColor.values())
+				.blockPropertiesFactory(type -> Block.Properties.create(Material.LEAVES).needsRandomTick().hardnessAndResistance(0.3F).sound(SoundType.PLANT))
+				.blockFactory(BlockCrystalBerryBush::new)
+				.build();
+		RegistrationHandler.addBlockGroup(crystalBerryBushGroup);
 		
 		//TILES
 		crateGroup = BlockVariantGroup.Builder.<EnumCrystalColorSpecialWithCreative, BlockCrate>create()
@@ -337,6 +348,7 @@ public class ModBlocks {
 				.variants(EnumCrystalColorSpecialWithCreative.values())
 				.blockPropertiesFactory(type -> Block.Properties.create(Material.IRON).hardnessAndResistance(20.0F, 50.0F).sound(SoundType.METAL))
 				.blockFactory(BlockBattery::new)
+				.itemFactory(ItemBlockBattery::new)
 				.itemPropertiesFactory(variant -> new Item.Properties().group(ModItemGroups.ITEM_GROUP_BLOCKS).setTEISR(() -> CustomItemRender::new))
 				.tileFactory(new TileFactory<EnumCrystalColorSpecialWithCreative>(){
 					@Override

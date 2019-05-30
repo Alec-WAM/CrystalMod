@@ -37,7 +37,6 @@ public class TileEntityTank extends TileEntityModVariant<EnumCrystalColorSpecial
 		this.holder = LazyOptional.of(() -> tank);
 	}
 	
-	//TODO Create Creative tier
 	public TileEntityTank(EnumCrystalColorSpecialWithCreative type) {
 		super(ModBlocks.TILE_TANK, type);
 		this.tier = type.ordinal();

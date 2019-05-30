@@ -188,7 +188,7 @@ public class EntityUtil {
         boolean flag = false;
         BlockPos blockpos = new BlockPos(entity);
         World world = entity.getEntityWorld();
-        Random random = entity instanceof EntityLivingBase ? ((EntityLivingBase)entity).getRNG() : rand;
+        //Random random = entity instanceof EntityLivingBase ? ((EntityLivingBase)entity).getRNG() : rand;
 
         if (world.isBlockLoaded(blockpos))
         {
@@ -230,13 +230,13 @@ public class EntityUtil {
         {
             for (int j = 0; j < 128; ++j)
             {
-                double d6 = j / 127.0D;
+                /*double d6 = j / 127.0D;
                 float f = (random.nextFloat() - 0.5F) * 0.2F;
                 float f1 = (random.nextFloat() - 0.5F) * 0.2F;
                 float f2 = (random.nextFloat() - 0.5F) * 0.2F;
                 double d3 = d0 + (entity.posX - d0) * d6 + (random.nextDouble() - 0.5D) * entity.width * 2.0D;
                 double d4 = d1 + (entity.posY - d1) * d6 + random.nextDouble() * entity.height;
-                double d5 = d2 + (entity.posZ - d2) * d6 + (random.nextDouble() - 0.5D) * entity.width * 2.0D;
+                double d5 = d2 + (entity.posZ - d2) * d6 + (random.nextDouble() - 0.5D) * entity.width * 2.0D;*/
                 //world.spawnParticle(EnumParticleTypes.PORTAL, d3, d4, d5, f, f1, f2, new int[0]);
             }
 

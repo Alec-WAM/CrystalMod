@@ -3,6 +3,7 @@ package alec_wam.CrystalMod.util;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
@@ -196,6 +197,14 @@ public class ItemUtil {
 		}
 
 		InventoryHelper.spawnItemStack(worldIn, x, y, z, itemStack);
+	}
+
+	public static void spawnItemInWorldWithoutMotion(EntityItem entityItem) {
+		entityItem.motionX = entityItem.motionY = entityItem.motionZ = 0.0D;
+		entityItem.setDefaultPickupDelay();
+
+		if(!entityItem.getEntityWorld().isRemote)
+			entityItem.getEntityWorld().spawnEntity(entityItem);
 	}
 	
 }

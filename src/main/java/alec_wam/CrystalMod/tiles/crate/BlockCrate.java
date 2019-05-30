@@ -50,7 +50,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class BlockCrate extends BlockContainerVariant<EnumCrystalColorSpecialWithCreative> {
-	//TODO Add Void Upgrade
 	//All Directions
 	public static final DirectionProperty FACING = BlockDirectional.FACING;
 	/**Click Times**/

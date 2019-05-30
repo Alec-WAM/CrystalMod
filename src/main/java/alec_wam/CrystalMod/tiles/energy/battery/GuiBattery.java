@@ -28,11 +28,12 @@ public class GuiBattery extends GuiContainerTabbed {
 	@Override
 	public void initGui(){
 		super.initGui();
+		this.elements.clear();
+		tabManager.getTabs().clear();
 		tabManager.add(new IOTab(battery));
 		addElement(new ElementEnergy(this, 80, 22, this.battery.energyStorage).setCreative(battery.isCreative()));
-
 		
-		GuiButton buttonReceiveDown = new GuiButtonTiny(0, guiLeft + 32, guiTop + 44, 10, 10, "-") {
+		GuiButton buttonReceiveDown = new GuiButtonTiny(0, guiLeft + 10, guiTop + 44, 10, 10, "-") {
 			@Override
 			public void onClick(double mouseX, double mouseY){
 				int amount = getPowerSettingsAmount();
@@ -43,7 +44,7 @@ public class GuiBattery extends GuiContainerTabbed {
 				CrystalModNetwork.sendToServer(new PacketTileMessage(battery.getPos(), "UpdateReceive", nbt));
 			}
 		};
-		GuiButton buttonReceiveUp = new GuiButtonTiny(1, guiLeft + 62, guiTop + 44, 10, 10, "+") {
+		GuiButton buttonReceiveUp = new GuiButtonTiny(1, guiLeft + 40, guiTop + 44, 10, 10, "+") {
 			@Override
 			public void onClick(double mouseX, double mouseY){
 				int amount = getPowerSettingsAmount();
@@ -54,7 +55,7 @@ public class GuiBattery extends GuiContainerTabbed {
 				CrystalModNetwork.sendToServer(new PacketTileMessage(battery.getPos(), "UpdateReceive", nbt));
 			}
 		};
-		GuiButton buttonSendDown = new GuiButtonTiny(2, guiLeft + 104, guiTop + 44, 10, 10, "-") {
+		GuiButton buttonSendDown = new GuiButtonTiny(2, guiLeft + 126, guiTop + 44, 10, 10, "-") {
 			@Override
 			public void onClick(double mouseX, double mouseY){
 				int amount = getPowerSettingsAmount();
@@ -65,7 +66,7 @@ public class GuiBattery extends GuiContainerTabbed {
 				CrystalModNetwork.sendToServer(new PacketTileMessage(battery.getPos(), "UpdateSend", nbt));
 			}
 		};
-		GuiButton buttonSendUp = new GuiButtonTiny(3, guiLeft + 134, guiTop + 44, 10, 10, "+") {
+		GuiButton buttonSendUp = new GuiButtonTiny(3, guiLeft + 156, guiTop + 44, 10, 10, "+") {
 			@Override
 			public void onClick(double mouseX, double mouseY){
 				int amount = getPowerSettingsAmount();
@@ -91,10 +92,10 @@ public class GuiBattery extends GuiContainerTabbed {
 		
 		NumberFormat format = NumberFormat.getNumberInstance();
 		String sendFull = Lang.localize("battery.send");
-		fontRenderer.drawString(sendFull, 123 - (fontRenderer.getStringWidth(sendFull)/2), 32, 4210752);
+		fontRenderer.drawString(sendFull, 145 - (fontRenderer.getStringWidth(sendFull)/2), 32, 4210752);
 		
 		GlStateManager.pushMatrix();
-		GlStateManager.translated(124, 45, this.zLevel);
+		GlStateManager.translated(146, 45, this.zLevel);
 		String sendString = format.format(battery.getEnergySend());
 		int width = fontRenderer.getStringWidth(sendString);
 		double scale = Math.min(20F / (width + 2), 1.0F);
@@ -105,10 +106,10 @@ public class GuiBattery extends GuiContainerTabbed {
 		if(!battery.isCreative()){
 			String receiveString = format.format(battery.getEnergyReceive());
 			String receiveFull = Lang.localize("battery.receive");
-			fontRenderer.drawString(receiveFull, 52 - (fontRenderer.getStringWidth(receiveFull)/2), 32, 4210752);
+			fontRenderer.drawString(receiveFull, 30 - (fontRenderer.getStringWidth(receiveFull)/2), 32, 4210752);
 			
 			GlStateManager.pushMatrix();
-			GlStateManager.translated(52, 45, this.zLevel);
+			GlStateManager.translated(30, 45, this.zLevel);
 			width = fontRenderer.getStringWidth(receiveString);
 			scale = Math.min(20F / (width + 2), 1.0F);
 			GlStateManager.scaled(scale, scale, 1.0D);

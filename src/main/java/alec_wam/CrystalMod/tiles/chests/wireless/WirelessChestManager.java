@@ -39,8 +39,7 @@ public class WirelessChestManager extends WorldSavedData implements IWirelessChe
 
     public static WirelessChestManager get(World world)
     {
-    	//TODO Look into dimension type storage
-        WorldSavedDataStorage storage = world.getMapStorage();
+    	WorldSavedDataStorage storage = world.getMapStorage();
         WirelessChestManager instance = (WirelessChestManager) storage.func_212426_a(DimensionType.OVERWORLD, WirelessChestManager::new, StorageKey);
         if (instance == null)
         {

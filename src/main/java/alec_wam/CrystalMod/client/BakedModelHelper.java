@@ -29,6 +29,7 @@ import net.minecraftforge.common.model.IModelState;
 import net.minecraftforge.common.model.Models;
 import net.minecraftforge.common.model.TRSRTransformation;
 
+@SuppressWarnings("deprecation")
 public class BakedModelHelper {
 
     public static ImmutableList<BakedQuad> buildQuads(OBJModel model, VertexFormat format, IModelState modelState, ImmutableMap<String, TextureAtlasSprite> textures)
@@ -154,8 +155,7 @@ public class BakedModelHelper {
             new Vector3f(0.625f, 0.625f, 0.625f),
             null));
     
-    @SuppressWarnings("deprecation")
-	public static final ImmutableMap<ItemCameraTransforms.TransformType, TRSRTransformation>
+    public static final ImmutableMap<ItemCameraTransforms.TransformType, TRSRTransformation>
     DEFAULT_PERSPECTIVE_TRANSFORMS = new ImmutableMap.Builder<ItemCameraTransforms.TransformType, TRSRTransformation>()
     .put(ItemCameraTransforms.TransformType.THIRD_PERSON_RIGHT_HAND, THIRD_PERSON_RIGHT_HAND)
     .put(ItemCameraTransforms.TransformType.THIRD_PERSON_LEFT_HAND, THIRD_PERSON_LEFT_HAND)
@@ -166,7 +166,6 @@ public class BakedModelHelper {
     .put(ItemCameraTransforms.TransformType.GUI, GUI)
     .build();
     
-    @SuppressWarnings("deprecation")
-	public static final ItemCameraTransforms DEFAULT_BLOCK_TRANSFORM = new ItemCameraTransforms(THIRD_PERSON_LEFT_HAND.toItemTransform(), THIRD_PERSON_RIGHT_HAND.toItemTransform(), FIRST_PERSON_LEFT_HAND.toItemTransform(), FIRST_PERSON_RIGHT_HAND.toItemTransform(), ItemCameraTransforms.DEFAULT.head, GUI.toItemTransform(), GROUND.toItemTransform(), FIXED.toItemTransform());
+    public static final ItemCameraTransforms DEFAULT_BLOCK_TRANSFORM = new ItemCameraTransforms(THIRD_PERSON_LEFT_HAND.toItemTransform(), THIRD_PERSON_RIGHT_HAND.toItemTransform(), FIRST_PERSON_LEFT_HAND.toItemTransform(), FIRST_PERSON_RIGHT_HAND.toItemTransform(), ItemCameraTransforms.DEFAULT.head, GUI.toItemTransform(), GROUND.toItemTransform(), FIXED.toItemTransform());
 	
 }

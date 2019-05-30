@@ -18,7 +18,6 @@ import net.minecraftforge.fml.server.ServerLifecycleHooks;
 
 public class ProfileUtil {
 	public static final ConcurrentMap<UUID, GameProfile> profileCache = buildCache(3 * 60 * 60, 1024 * 5);
-	private static final ConcurrentMap<String, UUID> uuidCache = buildCache(3 * 60 * 60, 1024 * 5);
 	public static <K, V> ConcurrentMap<K, V> buildCache(int seconds, int maxSize) {
         CacheBuilder<Object, Object> builder = CacheBuilder.newBuilder();
 

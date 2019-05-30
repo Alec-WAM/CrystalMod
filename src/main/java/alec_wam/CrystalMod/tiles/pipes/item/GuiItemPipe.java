@@ -30,6 +30,7 @@ public class GuiItemPipe extends GuiContainerBase {
 	private GuiButtonIcon buttonRedstone;
 	private GuiButton buttonPriorityUp;
 	private GuiButton buttonPriorityDown;
+	private GuiButton buttonRR;
 	private boolean twoFilters;
 	
 	public static final ResourceLocation TEXTURE = new ResourceLocation("crystalmod:textures/gui/pipe/item.png");
@@ -104,11 +105,33 @@ public class GuiItemPipe extends GuiContainerBase {
 				CrystalModNetwork.sendToServer(new PacketTileMessage(pipe.getPos(), "Priority", nbt));
 			}
 		};
+		boolean rr = pipe.isRoundRobinEnabled(facing);
+		String rrString = rr ? "R" : "D";
+		List<String> rrInfo = Lists.newArrayList();
+		rrInfo.add(Lang.localize("gui.pipe.io."+ (rr ? "round" : "dist")));
+		rrInfo.add(Lang.localize("gui.pipe.io."+ (rr ? "round" : "dist") +".info"));
+		buttonRR = new GuiButtonTooltip(4, guiLeft + 12, guiTop + 35, 20, 20, rrString, rrInfo) {
+			@Override
+			public void onClick(double mouseX, double mouseY){
+				final boolean rr = pipe.isRoundRobinEnabled(facing);
+				pipe.setRoundRobin(facing, !rr);;
+				NBTTagCompound nbt = new NBTTagCompound();
+				nbt.setInt("Facing", facing.getIndex());
+				nbt.setBoolean("Value", !rr);
+				CrystalModNetwork.sendToServer(new PacketTileMessage(pipe.getPos(), "RoundRobin", nbt));
+				setupButtons();
+			}
+		};
 		
 		this.addButton(buttonIO);
-		if(connectionMode == PipeConnectionMode.BOTH || connectionMode == PipeConnectionMode.IN)this.addButton(buttonRedstone);
-		this.addButton(buttonPriorityDown);
-		this.addButton(buttonPriorityUp);
+		if(connectionMode == PipeConnectionMode.BOTH || connectionMode == PipeConnectionMode.IN){
+			this.addButton(buttonRedstone);
+			this.addButton(buttonRR);
+		}
+		if(connectionMode == PipeConnectionMode.BOTH || connectionMode == PipeConnectionMode.OUT){
+			this.addButton(buttonPriorityDown);
+			this.addButton(buttonPriorityUp);
+		}
 		final boolean oldFilters = twoFilters;
 		twoFilters = connectionMode == PipeConnectionMode.BOTH;
 		if(oldFilters != twoFilters){
@@ -131,10 +154,13 @@ public class GuiItemPipe extends GuiContainerBase {
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
 		super.drawGuiContainerForegroundLayer(mouseX, mouseY);
+		PipeConnectionMode connectionMode = pipe.getConnectionSetting(facing);
 		GlStateManager.disableLighting();
 		GlStateManager.disableBlend();
-		String str = "" + pipe.getPriority(facing);
-		this.fontRenderer.drawString(str, 22.0F - (this.fontRenderer.getStringWidth(str) / 2), 60.0F, 4210752);
+		if(connectionMode == PipeConnectionMode.BOTH || connectionMode == PipeConnectionMode.OUT){
+			String str = "" + pipe.getPriority(facing);
+			this.fontRenderer.drawString(str, 22.0F - (this.fontRenderer.getStringWidth(str) / 2), 60.0F, 4210752);
+		}
 		String dir = Lang.localize("gui.direction."+facing.getName());
 		this.fontRenderer.drawString(dir, 88.0F - (this.fontRenderer.getStringWidth(dir) / 2), 10.0F, 4210752);
 		

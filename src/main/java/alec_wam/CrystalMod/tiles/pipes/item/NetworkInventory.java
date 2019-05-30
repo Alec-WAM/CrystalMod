@@ -240,9 +240,9 @@ public class NetworkInventory {
 	}
 
 	private Iterable<Target> getTargetIterator() {
-		/*if(pip.isRoundRobinEnabled(pipDir)) {
+		if(pip.isRoundRobinEnabled(pipDir)) {
 			return rrIter;
-		}*/
+		}
 		return sendPriority;
 	}
 

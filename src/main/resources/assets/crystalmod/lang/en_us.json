@@ -66,7 +66,12 @@
   "block.crystalmod.rosebush_yellow": "Yellow Rose Bush",
   "block.crystalmod.rosebush_pink": "Pink Rose Bush",
   "block.crystalmod.rosebush_light_blue": "Light Blue Rose Bush",
-  "block.crystalmod.rosebush_purple": "Purple Rose Bush",
+  "block.crystalmod.rosebush_purple": "Purple Rose Bush", 
+  
+  "block.crystalmod.crystalbush_blue": "Blue Crystal Berry Bush",
+  "block.crystalmod.crystalbush_red": "Red Crystal Berry Bush",
+  "block.crystalmod.crystalbush_green": "Green Crystal Berry Bush",
+  "block.crystalmod.crystalbush_dark": "Dark Crystal Berry Bush",
   
   "block.crystalmod.crate_blue": "Blue Crystal Crate",
   "block.crystalmod.crate_red": "Red Crystal Crate",
@@ -164,6 +169,11 @@
   "item.crystalmod.grass_seed_podzol": "Podzol Seed",
   "item.crystalmod.grass_seed_mycelium": "Mycelium Seed",
   
+  "item.crystalmod.crystalberry_blue": "Blue Crystal Berry",
+  "item.crystalmod.crystalberry_red": "Red Crystal Berry",
+  "item.crystalmod.crystalberry_green": "Green Crystal Berry",
+  "item.crystalmod.crystalberry_dark": "Dark Crystal Berry",
+  
   "item.crystalmod.wrench": "Wrench",  
   "item.crystalmod.fusionwand": "Fusion Wand",  
   
@@ -174,7 +184,9 @@
   "item.crystalmod.pipe_upgrade_cobble": "Pipe Upgrade (Cobble Gen)",  
   
   "item.crystalmod.misc_upgrade_void": "Void Upgrade", 
-  "item.crystalmod.misc_upgrade_fusion_auto": "Fusion Automation Upgrade", 
+  "item.crystalmod.misc_upgrade_fusion_auto": "Fusion Automation Upgrade",
+  
+  "item.crystalmod.electric_bread": "Electric Bread",  
   
   
   "_comment": "Creative Tabs",
@@ -192,6 +204,10 @@
   "crystalmod.gui.pipe.io.out.info": "Push items into inventory",
   "crystalmod.gui.pipe.io.both": "In/Out",
   "crystalmod.gui.pipe.io.disabled": "Disabled",
+  "crystalmod.gui.pipe.io.round": "Round Robin",
+  "crystalmod.gui.pipe.io.round.info": "Even distribution",
+  "crystalmod.gui.pipe.io.dist": "Distance",
+  "crystalmod.gui.pipe.io.dist.info": "Closest Inventory first",
   "crystalmod.gui.filter.whitelist": "Whitelist",
   "crystalmod.gui.filter.blacklist": "Blacklist",
   "crystalmod.gui.filter.damage": "Match Damage",

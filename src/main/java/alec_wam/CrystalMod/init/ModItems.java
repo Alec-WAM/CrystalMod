@@ -2,10 +2,13 @@ package alec_wam.CrystalMod.init;
 
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.core.ItemVariantGroup;
+import alec_wam.CrystalMod.core.color.EnumCrystalColor;
 import alec_wam.CrystalMod.core.color.EnumCrystalColorSpecial;
 import alec_wam.CrystalMod.items.EnumDarkIronItemVariant;
 import alec_wam.CrystalMod.items.EnumPlateItem;
+import alec_wam.CrystalMod.items.ItemCrystalBerry;
 import alec_wam.CrystalMod.items.ItemCrystalShard;
+import alec_wam.CrystalMod.items.ItemElectricBread;
 import alec_wam.CrystalMod.items.ItemGrassSeeds;
 import alec_wam.CrystalMod.items.ItemGrassSeeds.EnumGrassSeedItem;
 import alec_wam.CrystalMod.items.ItemVariant;
@@ -15,6 +18,7 @@ import alec_wam.CrystalMod.tiles.fusion.ItemFusionWand;
 import alec_wam.CrystalMod.tiles.pipes.EnumPipeUpgrades;
 import alec_wam.CrystalMod.tiles.pipes.item.ItemPipeFilter;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import net.minecraftforge.registries.ObjectHolder;
 
 @ObjectHolder(CrystalMod.MODID)
@@ -29,13 +33,17 @@ public class ModItems {
 	public static ItemVariantGroup<EnumPlateItem, ItemVariant<EnumPlateItem>> metalPlateGroup;
 	
 	public static ItemVariantGroup<EnumGrassSeedItem, ItemGrassSeeds> grassSeeds;
-	
+	public static ItemVariantGroup<EnumCrystalColor, ItemCrystalBerry> crystalBerryGroup;
+
 	public static Item wrench;
 	public static Item fusionWand;
 	public static Item pipeFilter;
 	public static ItemVariantGroup<EnumPipeUpgrades, ItemVariant<EnumPipeUpgrades>> pipeUpgrades;
 	public static ItemVariantGroup<EnumMiscUpgrades, ItemVariant<EnumMiscUpgrades>> miscUpgrades;
 
+	public static Item electricBread;
+	
+	
 	public static void buildList(){
 		crystalGroup = ItemVariantGroup.Builder.<EnumCrystalColorSpecial, ItemVariant<EnumCrystalColorSpecial>>create()
 				.groupName("crystal")
@@ -88,6 +96,13 @@ public class ModItems {
 				.itemFactory(ItemGrassSeeds::new)
 				.build();
 		RegistrationHandler.addItemGroup(grassSeeds);
+		crystalBerryGroup = ItemVariantGroup.Builder.<EnumCrystalColor, ItemCrystalBerry>create()
+				.groupName("crystalberry")
+				.suffix()
+				.variants(EnumCrystalColor.values())
+				.itemFactory(ItemCrystalBerry::new)
+				.build();
+		RegistrationHandler.addItemGroup(crystalBerryGroup);
 		
 		
 		wrench = new ItemWrench(new Item.Properties().group(ModItemGroups.ITEM_GROUP_ITEMS).maxStackSize(1));
@@ -111,6 +126,8 @@ public class ModItems {
 				.build();
 		RegistrationHandler.addItemGroup(miscUpgrades);
 		
+		electricBread = new ItemElectricBread(new Item.Properties().group(ItemGroup.FOOD).maxStackSize(1));
+		RegistrationHandler.addItem(electricBread, "electric_bread");		
 	}	
 	
 }

@@ -46,11 +46,10 @@ import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.items.IItemHandler;
 
 public class TileEntityPipeItem extends TileEntityPipeBase {
-	//TODO Update connections on insertion and extraction of cobble gen upgrade
 	//TODO Add Hopper Upgrade
-	//TODO Add Force upgrade with Hopper and Cobble Upgrade
 	private Map<EnumFacing, InternalPipeInventory> pipeItems;
 	private int[] priorities;
+	private boolean[] roundRobin;
 	
 	public TileEntityPipeItem() {
 		super(ModBlocks.TILE_PIPE_ITEM);
@@ -66,6 +65,7 @@ public class TileEntityPipeItem extends TileEntityPipeBase {
 			pipeItems.put(facing, inv);
 		}
 		priorities = new int[6];
+		roundRobin = new boolean[6];
 	}
 
 	@Override
@@ -90,6 +90,11 @@ public class TileEntityPipeItem extends TileEntityPipeBase {
 
 		nbt.setTag("Inventory", itemData);
 		nbt.setIntArray("Priorities", priorities);
+		byte[] rr = new byte[6];
+		for(int i = 0; i < 6; i++){
+			rr[i] = (byte)(roundRobin[i] ? 1 : 0);
+		}
+		nbt.setByteArray("RoundRobin", rr);
 	}
 	
 	@Override
@@ -113,6 +118,14 @@ public class TileEntityPipeItem extends TileEntityPipeBase {
 			this.priorities = nbt.getIntArray("Priorities");
 		} else {
 			this.priorities = new int[6];
+		}
+		if(nbt.hasKey("RoundRobin")){
+			byte[] rr = nbt.getByteArray("RoundRobin");
+			for(int i = 0; i < 6; i++){
+				roundRobin[i] = rr[i] == 1 ? true : false;
+			}
+		} else {
+			roundRobin = new boolean[6];
 		}
 	}
 	
@@ -154,14 +167,6 @@ public class TileEntityPipeItem extends TileEntityPipeBase {
 		//Upgrades
 		if(slot == 2 || slot == 3){
 			boolean isExternal = false;
-			ItemStack currentStack = getInternalInventory(facing).getStackInSlot(slot);
-			/*if(ModItems.pipeUpgrades.getItems().contains(currentStack.getItem())){
-				@SuppressWarnings("unchecked")
-				ItemVariant<EnumPipeUpgrades> upgrade = (ItemVariant<EnumPipeUpgrades>)currentStack.getItem();
-				if(upgrade.type.isExternal()){
-					isExternal = true;
-				}
-			}*/
 			if(ModItems.pipeUpgrades.getItems().contains(lastStack.getItem())){
 				@SuppressWarnings("unchecked")
 				ItemVariant<EnumPipeUpgrades> upgrade = (ItemVariant<EnumPipeUpgrades>)lastStack.getItem();
@@ -293,6 +298,14 @@ public class TileEntityPipeItem extends TileEntityPipeBase {
 	
 	public void setPriority(EnumFacing facing, int value){
 		priorities[facing.getIndex()] = value;
+	}
+
+	public boolean isRoundRobinEnabled(EnumFacing facing) {
+		return roundRobin[facing.getIndex()];
+	}
+	
+	public void setRoundRobin(EnumFacing facing, boolean value){
+		roundRobin[facing.getIndex()] = value;
 	}
 	
 	@Override
@@ -493,6 +506,11 @@ public class TileEntityPipeItem extends TileEntityPipeBase {
 			EnumFacing facing = EnumFacing.byIndex(messageData.getInt("Facing"));
 			setPriority(facing, messageData.getInt("Value"));
 			if(getNetwork() !=null)((PipeNetworkItem)getNetwork()).updateSortOrder();
+			serverDirty = true;
+		}
+		if(messageId.equalsIgnoreCase("RoundRobin")){
+			EnumFacing facing = EnumFacing.byIndex(messageData.getInt("Facing"));
+			setRoundRobin(facing, messageData.getBoolean("Value"));
 			serverDirty = true;
 		}
 	}

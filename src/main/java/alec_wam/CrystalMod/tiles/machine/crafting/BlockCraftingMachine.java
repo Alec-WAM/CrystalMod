@@ -23,7 +23,7 @@ import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.network.NetworkHooks;
 
 public class BlockCraftingMachine extends BlockContainerVariant<EnumCraftingMachine> {
-
+	//TODO Add Auto-Eject for output
 	public static final BooleanProperty RUNNING = BooleanProperty.create("running");
 	public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 	

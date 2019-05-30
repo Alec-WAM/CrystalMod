@@ -138,10 +138,14 @@ public class TileEntityCrateRender extends TileEntityRenderer<TileEntityCrate>
 				GlStateManager.scalef( 3, 3, 1.0f );
 				GlStateManager.translated(-9, -3.4f, 0.01f );
                 double health = renderStack.getItem().getDurabilityForDisplay(renderStack);
+                int color = renderStack.getItem().getRGBDurabilityForDisplay(renderStack);
+                
+                int red = (color >> 16) & 0x000000FF;
+                int green = (color >> 8) & 0x000000FF;
+                int blue = (color) & 0x000000FF;
+                
                 int j1 = (int)Math.round(13.0D - health * 13.0D);
-                int k = (int)Math.round(255.0D - health * 255.0D);
                 GlStateManager.disableLighting();
-                //GlStateManager.disableDepth();
                 GlStateManager.disableTexture2D();
                 GlStateManager.disableAlphaTest();
                 Tessellator tessellator = Tessellator.getInstance();
@@ -161,23 +165,22 @@ public class TileEntityCrateRender extends TileEntityRenderer<TileEntityCrate>
                 h = 1;
                 qZ = -0.0001;
                 worldrenderer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
-                worldrenderer.pos(qX + 0, qY + 0, qZ).color((255 - k) / 4, 64, 0, 255).endVertex();
-                worldrenderer.pos(qX + 0, qY + h, qZ).color((255 - k) / 4, 64, 0, 255).endVertex();
-                worldrenderer.pos(qX + w, qY + h, qZ).color((255 - k) / 4, 64, 0, 255).endVertex();
-                worldrenderer.pos(qX + w, qY + 0, qZ).color((255 - k) / 4, 64, 0, 255).endVertex();
+                worldrenderer.pos(qX + 0, qY + 0, qZ).color(red / 4, green, blue, 255).endVertex();
+                worldrenderer.pos(qX + 0, qY + h, qZ).color(red / 4, green, blue, 255).endVertex();
+                worldrenderer.pos(qX + w, qY + h, qZ).color(red / 4, green, blue, 255).endVertex();
+                worldrenderer.pos(qX + w, qY + 0, qZ).color(red / 4, green, blue, 255).endVertex();
                 tessellator.draw();
                 w = j1;
                 qZ = -0.0002;
                 worldrenderer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
-                worldrenderer.pos(qX + 0, qY + 0, qZ).color(255 - k, k, 0, 255).endVertex();
-                worldrenderer.pos(qX + 0, qY + h, qZ).color(255 - k, k, 0, 255).endVertex();
-                worldrenderer.pos(qX + w, qY + h, qZ).color(255 - k, k, 0, 255).endVertex();
-                worldrenderer.pos(qX + w, qY + 0, qZ).color(255 - k, k, 0, 255).endVertex();
+                worldrenderer.pos(qX + 0, qY + 0, qZ).color(red, green, blue, 255).endVertex();
+                worldrenderer.pos(qX + 0, qY + h, qZ).color(red, green, blue, 255).endVertex();
+                worldrenderer.pos(qX + w, qY + h, qZ).color(red, green, blue, 255).endVertex();
+                worldrenderer.pos(qX + w, qY + 0, qZ).color(red, green, blue, 255).endVertex();
                 tessellator.draw();
                 GlStateManager.enableAlphaTest();
                 GlStateManager.enableTexture2D();
                 GlStateManager.enableLighting();
-                //GlStateManager.enableDepth();
                 GlStateManager.popMatrix();
             }
 			

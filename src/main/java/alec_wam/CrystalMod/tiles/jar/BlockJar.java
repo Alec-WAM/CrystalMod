@@ -16,6 +16,7 @@ import alec_wam.CrystalMod.util.Lang;
 import net.minecraft.block.Block;
 import net.minecraft.block.IBucketPickupHandler;
 import net.minecraft.block.ILiquidContainer;
+import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
@@ -122,6 +123,11 @@ public class BlockJar extends BlockContainerVariant<WoodType> implements IBucket
 	@Override
     public VoxelShape getShape(IBlockState state, IBlockReader worldIn, BlockPos pos) {
 		return SHAPE_ALL;
+	}
+	
+	@Override
+	public BlockFaceShape getBlockFaceShape(IBlockReader worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
+		return BlockFaceShape.UNDEFINED;
 	}
 	
 	@Override
