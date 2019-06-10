@@ -1,0 +1,22 @@
+{
+	"forge_marker": 1,
+	"defaults": {
+		"model": "crystalmod:pedestal"
+	},
+	"variants": {
+		"facing": {
+			"north": {"x": 90},
+			"south": {"x": -90},
+			"east": {
+				"x": 90,
+				"y": 90
+			},
+			"west": {
+				"x": 90,
+				"y": -90
+			},
+			"up": {},
+			"down": {"x": 180 }
+		}
+	}
+}

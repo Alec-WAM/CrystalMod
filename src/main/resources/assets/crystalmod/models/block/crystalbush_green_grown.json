@@ -1,0 +1,7 @@
+{
+  "parent": "crystalmod:block/bush",
+  "textures": {
+    "particle": "crystalmod:block/plant/bush_green",
+    "all": "crystalmod:block/plant/bush_green_grown"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "type": "crystalmod:grinder",
+  "group": "minecraft:concrete",
+  "ingredient": {
+    "item": "minecraft:white_concrete"
+  },
+  "result": {
+	"item": "minecraft:white_concrete_powder"
+  },  
+  "energy": 800
+}

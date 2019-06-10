@@ -1,0 +1,45 @@
+{
+    "type": "minecraft:block",
+	"pools": [
+        {	
+			"name": "berries",
+            "rolls": 1,
+            "entries": [
+                {
+                    "type": "minecraft:item",
+                    "weight": 1,
+					"conditions": [
+						{
+						  "condition": "minecraft:block_state_property",
+						  "block": "crystalmod:crystalbush_dark",
+						  "properties": {
+							"age": "3"
+						  }
+						}
+					],
+                    "name": "crystalmod:crystalberry_dark",
+                    "functions": [
+                        {
+                            "function": "minecraft:set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 3
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "bush",
+            "rolls": 1,
+            "entries": [
+                {
+                    "type": "minecraft:item",
+                    "weight": 1,
+                    "name": "crystalmod:crystalbush_dark"
+                }
+            ]
+        }
+    ]
+}

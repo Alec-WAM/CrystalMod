@@ -1,0 +1,19 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"pattern": [
+		" N ",
+		" IN",
+		"I  "
+	],
+	"key": {
+		"N": {
+			"item": "crystalmod:darkiron_nugget"
+		},
+		"I": {
+			"item": "crystalmod:darkiron_ingot"
+		}
+	},
+	"result": {
+		"item": "crystalmod:wrench"
+	}
+}

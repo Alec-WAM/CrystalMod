@@ -1,0 +1,24 @@
+# eclipse
+bin
+*.launch
+.settings
+.metadata
+.classpath
+.project
+
+# gradle
+build
+.gradle
+
+# other
+eclipse
+run
+!/lib/
+!/LICENSE.txt
+!/README.md
+/CREDITS.txt
+/LICENSE.txt
+/README.txt
+/buildProject.cmd
+/changelog.txt
+/gradlew

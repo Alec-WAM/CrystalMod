@@ -1,0 +1,19 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"pattern": [
+		" P ",
+		"PBP",
+		" P "
+	],
+	"key": {
+		"P": {
+			"item": "crystalmod:plate_darkiron"
+		},
+		"B": {
+			"item": "minecraft:bread"
+		}
+	},
+	"result": {
+		"item": "crystalmod:electric_bread"
+	}
+}

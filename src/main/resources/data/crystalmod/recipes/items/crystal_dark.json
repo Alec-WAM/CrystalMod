@@ -1,0 +1,17 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"group": "crystalmod.crystal",
+	"pattern": [
+		"CCC",
+		"CCC",
+		"CCC"
+	],
+	"key": {
+		"C": {
+			"item": "crystalmod:crystalshard_dark"
+		}
+	},
+	"result": {
+		"item": "crystalmod:crystal_dark"
+	}
+}

@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:smelting",
+  "group": "crystalmod.crystalingot",
+  "ingredient": {
+    "item": "crystalmod:crystal_pure"
+  },
+  "result": "crystalmod:crystalingot_pure",
+  "experience": 0.7,
+  "cookingtime": 200
+}

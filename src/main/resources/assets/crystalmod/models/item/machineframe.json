@@ -1,0 +1,7 @@
+{
+  "parent": "block/cube_all",
+  "textures": {
+    "particle": "crystalmod:item/machineframe",
+    "all": "crystalmod:item/machineframe"
+  }
+}

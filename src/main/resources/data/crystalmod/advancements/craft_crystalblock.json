@@ -1,0 +1,68 @@
+{
+  "parent": "crystalmod:root",
+  "display": {
+    "icon": {
+      "item": "crystalmod:crystalblock_blue"
+    },
+    "title": {
+      "translate": "advancements.crystalmod.craft_crystalblock.title"
+    },
+    "description": {
+      "translate": "advancements.crystalmod.craft_crystalblock.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": false
+  },
+  "criteria": {
+    "craft_block_blue": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "crystalmod:crystalblock_blue"
+          }
+        ]
+      }
+    },
+	"craft_block_red": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "crystalmod:crystalblock_red"
+          }
+        ]
+      }
+    },
+	"craft_block_green": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "crystalmod:crystalblock_green"
+          }
+        ]
+      }
+    },
+	"craft_block_dark": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "crystalmod:crystalblock_dark"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "craft_block_blue",
+	  "craft_block_red",
+	  "craft_block_green",
+	  "craft_block_dark"
+    ]
+  ]
+}

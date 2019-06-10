@@ -1,0 +1,17 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"group": "crystalmod.crystalblock",
+	"pattern": [
+		"CCC",
+		"CCC",
+		"CCC"
+	],
+	"key": {
+		"C": {
+			"item": "crystalmod:crystal_pure"
+		}
+	},
+	"result": {
+		"item": "crystalmod:crystalblock_pure"
+	}
+}

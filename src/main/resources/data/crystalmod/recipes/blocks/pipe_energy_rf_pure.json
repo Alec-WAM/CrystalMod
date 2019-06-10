@@ -1,0 +1,21 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"group": "crystalmod.pipe.energy",
+	"pattern": [
+		" P ",
+		"P#P",
+		" P "
+	],
+	"key": {
+		"#": {
+			"item": "crystalmod:pipe_energy_rf_dark"
+		},
+		"P": {
+			"item": "crystalmod:plate_pure"
+		}
+	},
+	"result": {
+		"item": "crystalmod:pipe_energy_rf_pure",
+		"count": 8
+	}
+}

@@ -1,0 +1,23 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"group": "crystalmod.machine",
+	"pattern": [
+		"IPI",
+		"IHI",
+		"III"
+	],
+	"key": {
+		"I": {
+			"item": "crystalmod:darkiron_ingot"
+		},
+		"P": {
+			"item": "minecraft:piston"
+		},
+		"H": {
+			"item": "minecraft:heavy_weighted_pressure_plate"
+		}
+	},
+	"result": {
+		"item": "crystalmod:machine_press"
+	}
+}

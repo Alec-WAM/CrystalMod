@@ -1,0 +1,62 @@
+package alec_wam.CrystalMod.tiles.fusion;
+
+import alec_wam.CrystalMod.api.tile.IPedestal;
+import alec_wam.CrystalMod.init.ModBlocks;
+import alec_wam.CrystalMod.network.CrystalModNetwork;
+import alec_wam.CrystalMod.network.IMessageHandler;
+import alec_wam.CrystalMod.tiles.PacketTileMessage;
+import alec_wam.CrystalMod.tiles.TileEntityInventory;
+import alec_wam.CrystalMod.util.ItemStackTools;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
+import net.minecraft.util.math.AxisAlignedBB;
+
+public class TileEntityPedestal extends TileEntityInventory implements IPedestal, IMessageHandler {
+
+	public TileEntityPedestal() {
+		super(ModBlocks.TILE_PEDESTAL, "Pedestal", 1);
+	}
+
+	@Override
+	public ItemStack getStack() {
+		return getStackInSlot(0);
+	}
+	
+	@Override
+	public void setStack(ItemStack stack){
+		setInventorySlotContents(0, stack);
+	}
+
+	@Override
+	public Direction getRotation() {
+		return this.getBlockState().get(BlockPedestal.FACING);
+	}
+	
+	@Override
+	public void onItemChanged(int slot){
+		if(slot == 0){
+			syncStack();
+		}
+	}
+	
+	@Override
+    public AxisAlignedBB getRenderBoundingBox() {
+		return new net.minecraft.util.math.AxisAlignedBB(getPos().add(-1, 0, -1), getPos().add(1, 1, 1));
+    }
+	
+	public void syncStack(){
+		if(getWorld() !=null && !getWorld().isRemote && getPos() !=null){
+			ItemStack stack = getStack();
+			CrystalModNetwork.sendToAllAround(new PacketTileMessage(getPos(), "StackSync", ItemStackTools.isEmpty(stack) ? new CompoundNBT() : stack.serializeNBT()), this);
+		}
+	}
+
+	@Override
+	public void handleMessage(String messageId, CompoundNBT messageData, boolean client) {
+		if(messageId.equalsIgnoreCase("StackSync")){
+			this.setStack(ItemStackTools.loadFromNBT(messageData));
+		}
+	}
+
+}

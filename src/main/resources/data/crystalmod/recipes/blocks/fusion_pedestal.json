@@ -1,0 +1,19 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"pattern": [
+		"SSS",
+		" s ",
+		"SSS"
+	],
+	"key": {
+		"S": {
+			"item": "crystalmod:crystalingot_blue"
+		},
+		"s": {
+			"item": "crystalmod:crystalingotblock_blue"
+		}
+	},
+	"result": {
+		"item": "crystalmod:fusion_pedestal"
+	}
+}

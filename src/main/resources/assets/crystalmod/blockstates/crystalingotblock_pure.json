@@ -1,0 +1,10 @@
+{
+	"forge_marker": 1,
+	"defaults": {
+		"model": "crystalmod:crystalingotblock_pure"
+	},
+	"variants": {
+		"": [ { } ],
+		"inventory": [ { } ]
+	}
+}

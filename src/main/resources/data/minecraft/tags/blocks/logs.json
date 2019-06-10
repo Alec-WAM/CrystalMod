@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "crystalmod:crystallog_blue",
+    "crystalmod:crystallog_red",
+    "crystalmod:crystallog_green",
+    "crystalmod:crystallog_dark",
+    "crystalmod:crystallog_pure"
+  ]
+}

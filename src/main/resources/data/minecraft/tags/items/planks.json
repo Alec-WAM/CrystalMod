@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "crystalmod:crystalplanks_blue",
+    "crystalmod:crystalplanks_red",
+    "crystalmod:crystalplanks_green",
+    "crystalmod:crystalplanks_dark",
+    "crystalmod:crystalplanks_pure"
+  ]
+}

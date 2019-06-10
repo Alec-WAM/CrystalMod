@@ -1,0 +1,13 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"group": "crystalmod.crystalplanks",
+	"ingredients": [
+		{
+			"item": "crystalmod:crystallog_blue"
+		}
+	],
+	"result": {
+		"item": "crystalmod:crystalplanks_blue",
+		"count": 4
+	}
+}

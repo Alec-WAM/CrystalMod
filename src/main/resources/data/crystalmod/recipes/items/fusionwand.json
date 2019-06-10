@@ -1,0 +1,19 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"pattern": [
+		"  N",
+		" S ",
+		"N  "
+	],
+	"key": {
+		"N": {
+			"item": "crystalmod:crystalnugget_pure"
+		},
+		"S": {
+			"item": "minecraft:stick"
+		}
+	},
+	"result": {
+		"item": "crystalmod:fusionwand"
+	}
+}

@@ -1,0 +1,11 @@
+{
+  "type": "crystalmod:grinder",
+  "group": "minecraft:concrete",
+  "ingredient": {
+    "item": "minecraft:orange_concrete"
+  },
+  "result": {
+	"item": "minecraft:orange_concrete_powder"
+  },  
+  "energy": 800
+}

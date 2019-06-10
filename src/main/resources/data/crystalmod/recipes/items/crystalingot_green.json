@@ -1,0 +1,17 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"group": "crystalmod.crystalingot",
+	"pattern": [
+		"CCC",
+		"CCC",
+		"CCC"
+	],
+	"key": {
+		"C": {
+			"item": "crystalmod:crystalnugget_green"
+		}
+	},
+	"result": {
+		"item": "crystalmod:crystalingot_green"
+	}
+}

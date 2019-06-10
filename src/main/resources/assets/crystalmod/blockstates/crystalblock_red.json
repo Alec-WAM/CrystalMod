@@ -1,0 +1,9 @@
+{
+	"forge_marker": 1,
+	"defaults": {
+		"model": "crystalmod:crystal_red"
+	},
+	"variants": {
+		"": [ { } ]
+	}
+}

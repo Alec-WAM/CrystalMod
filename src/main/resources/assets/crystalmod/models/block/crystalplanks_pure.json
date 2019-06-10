@@ -1,0 +1,7 @@
+{
+  "parent": "block/cube_all",
+  "textures": {
+    "particle": "crystalmod:block/crystalplanks_pure",
+    "all": "crystalmod:block/crystalplanks_pure"
+  }
+}

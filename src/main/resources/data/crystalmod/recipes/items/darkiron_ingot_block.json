@@ -1,0 +1,13 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"group": "crystalmod.darkiron_ingot",
+	"ingredients": [
+		{
+			"item": "crystalmod:darkiron_block"
+		}
+	],
+	"result": {
+		"item": "crystalmod:darkiron_ingot",
+		"count": 9
+	}
+}

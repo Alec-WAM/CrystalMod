@@ -1,0 +1,16 @@
+{
+  "type": "crafting_shaped",
+  "group": "crystalmod.crystalshard",
+  "pattern": [
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "crystalmod:crystalreeds_red"
+    }
+  },
+  "result": {
+    "item": "crystalmod:crystalshard_red",
+    "count": 1
+  }
+}

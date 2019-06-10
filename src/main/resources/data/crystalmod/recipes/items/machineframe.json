@@ -1,0 +1,19 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"pattern": [
+		"NPN",
+		"P P",
+		"NPN"
+	],
+	"key": {
+		"N": {
+			"item": "crystalmod:darkiron_nugget"
+		},
+		"P": {
+			"item": "crystalmod:plate_darkiron"
+		}
+	},
+	"result": {
+		"item": "crystalmod:machineframe"
+	}
+}

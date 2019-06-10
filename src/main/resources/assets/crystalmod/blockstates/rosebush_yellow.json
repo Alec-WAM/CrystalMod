@@ -1,0 +1,14 @@
+{
+	"forge_marker": 1,
+	"defaults": {
+		"model": "crystalmod:rosebush_yellow_top"
+	},
+	"variants": {		
+		"half": {
+		  "upper": {},
+		  "lower": {
+			"model": "crystalmod:rosebush_yellow_bottom"
+		  }
+		}
+	}
+}

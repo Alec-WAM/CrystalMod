@@ -1,0 +1,13 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"group": "crystalmod.crystalshard",
+	"ingredients": [
+		{
+			"item": "crystalmod:crystal_green"
+		}
+	],
+	"result": {
+		"item": "crystalmod:crystalshard_green",
+		"count": 9
+	}
+}

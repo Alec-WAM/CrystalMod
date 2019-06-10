@@ -1,0 +1,12 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "particle": "crystalmod:block/crate/red_front",
+    "down": "crystalmod:block/crate/red_sides",
+    "up": "crystalmod:block/crate/red_sides",
+    "north": "crystalmod:block/crate/red_front",
+    "east": "crystalmod:block/crate/red_sides",
+    "south": "crystalmod:block/crate/red_sides",
+    "west": "crystalmod:block/crate/red_sides"
+  }
+}

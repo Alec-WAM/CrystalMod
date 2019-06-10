@@ -1,0 +1,13 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"group": "crystalmod.crystalnugget",
+	"ingredients": [
+		{
+			"item": "crystalmod:crystalingot_green"
+		}
+	],
+	"result": {
+		"item": "crystalmod:crystalnugget_green",
+		"count": 9
+	}
+}

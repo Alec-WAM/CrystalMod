@@ -1,0 +1,23 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"group": "crystalmod.machine",
+	"pattern": [
+		" F ",
+		"FMF",
+		" P "
+	],
+	"key": {
+		"F": {
+			"item": "minecraft:flint"
+		},
+		"M": {
+			"item": "crystalmod:machineframe"
+		},
+		"P": {
+			"item": "crystalmod:pipe_energy_cu_blue"
+		}
+	},
+	"result": {
+		"item": "crystalmod:machine_grinder"
+	}
+}

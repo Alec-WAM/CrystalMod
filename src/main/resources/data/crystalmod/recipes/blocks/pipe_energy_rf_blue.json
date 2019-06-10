@@ -1,0 +1,24 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"group": "crystalmod.pipe.energy",
+	"pattern": [
+		"NDN",
+		"DID",
+		"NDN"
+	],
+	"key": {
+		"D": {
+			"item": "crystalmod:plate_darkiron"
+		},
+		"N": {
+			"item": "crystalmod:crystalnugget_blue"
+		},
+		"I": {
+			"item": "minecraft:redstone"
+		}
+	},
+	"result": {
+		"item": "crystalmod:pipe_energy_rf_blue",
+		"count": 8
+	}
+}

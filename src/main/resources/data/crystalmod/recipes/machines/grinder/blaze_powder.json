@@ -1,0 +1,11 @@
+{
+  "type": "crystalmod:grinder",
+  "ingredient": {
+    "item": "minecraft:blaze_rod"
+  },
+  "result": {
+	"item": "minecraft:blaze_powder",
+	"count": 2
+  },  
+  "energy": 1600
+}
