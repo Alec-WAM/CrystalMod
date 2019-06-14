@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Locale;
 
 import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.tiles.chests.wireless.WirelessChestManager;
 import alec_wam.CrystalMod.tiles.energy.engine.furnace.GuiEngineFurnace;
 import alec_wam.CrystalMod.tiles.energy.engine.furnace.TileEntityEngineFurnace;
 import net.minecraft.client.Minecraft;
@@ -14,6 +15,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
+import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.common.Mod;
@@ -45,5 +47,10 @@ public class ClientEventHandler {
     			lines.add(new TranslationTextComponent("crystalmod.engine.furnace.fuel.item", energyString));
     		}
     	}
+    }
+    
+    @SubscribeEvent
+    public void loadWorld(WorldEvent.Load event){
+    	WirelessChestManager.resetClientManager();
     }
 }

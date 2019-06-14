@@ -24,7 +24,6 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.world.ServerWorld;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
@@ -187,14 +186,13 @@ public class TileEntityWirelessChest extends TileEntityMod implements IMessageHa
     	if(!hasValidCode()){
     		return null;
     	}
-    	if(!(getWorld() instanceof ServerWorld))return null;
     	
     	if (inventory == null)
         {
             if (isBoundToPlayer())
-            	inventory = WirelessChestManager.get((ServerWorld)getWorld()).getPrivate(boundToPlayer).getInventory(code);
+            	inventory = WirelessChestManager.get(getWorld()).getPrivate(boundToPlayer).getInventory(code);
             else
-            	inventory = WirelessChestManager.get((ServerWorld)getWorld()).getInventory(code);
+            	inventory = WirelessChestManager.get(getWorld()).getInventory(code);
         }
     	return inventory;
     }

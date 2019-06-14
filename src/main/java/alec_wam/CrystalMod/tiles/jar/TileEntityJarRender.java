@@ -14,7 +14,6 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import alec_wam.CrystalMod.util.Lang;
 import alec_wam.CrystalMod.util.RenderUtil;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.model.IBakedModel;
@@ -211,14 +210,13 @@ public class TileEntityJarRender extends TileEntityRenderer<TileEntityJar> {
 		if(effect !=null){
 			Effect potion = effect.getPotion();
 			
-	        Minecraft.getInstance().getTextureManager().bindTexture(ContainerScreen.INVENTORY_BACKGROUND);
 	        if (effect.isShowIcon())
 	        {
 	            PotionSpriteUploader potionspriteuploader = Minecraft.getInstance().func_213248_ap();
 	        	TextureAtlasSprite textureatlassprite = potionspriteuploader.func_215288_a(potion);
 	            double shrink = 0.05;
 				double ofsetY = 0.045;
-				Minecraft.getInstance().getTextureManager().bindTexture(ContainerScreen.INVENTORY_BACKGROUND);
+				Minecraft.getInstance().getTextureManager().bindTexture(AtlasTexture.field_215264_i);
 				render.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
 				render.pos(0.32 + shrink, 0.22 + shrink + ofsetY, potionZ+0.001).tex(textureatlassprite.getMinU(), textureatlassprite.getMaxV()).endVertex();
 				render.pos(0.68 - shrink, 0.22 + shrink + ofsetY, potionZ+0.001).tex(textureatlassprite.getMaxU(), textureatlassprite.getMaxV()).endVertex();

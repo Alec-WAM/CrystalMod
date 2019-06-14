@@ -13,6 +13,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.world.ServerWorld;
+import net.minecraft.world.World;
 import net.minecraft.world.storage.DimensionSavedDataManager;
 import net.minecraft.world.storage.WorldSavedData;
 import net.minecraftforge.common.util.Constants;
@@ -36,16 +37,29 @@ public class WirelessChestManager extends WorldSavedData implements IWirelessChe
         super(s);
     }
 
-    public static WirelessChestManager get(ServerWorld world)
+    private static WirelessChestManager CLIENT_MANAGER;
+    
+    public static void resetClientManager(){
+    	CLIENT_MANAGER = null;
+    }
+    
+    public static WirelessChestManager get(World world)
     {
-    	DimensionSavedDataManager storage = world.func_217481_x();
-        WirelessChestManager instance = (WirelessChestManager) storage.func_215753_b(WirelessChestManager::new, StorageKey);
-        if (instance == null)
-        {
-            instance = new WirelessChestManager();
-            storage.func_215757_a(instance);
-        }
-        return instance;
+    	if(world instanceof ServerWorld){
+    		ServerWorld serverWorld = (ServerWorld)world;
+	    	DimensionSavedDataManager storage = serverWorld.func_217481_x();
+	        WirelessChestManager instance = (WirelessChestManager) storage.func_215753_b(WirelessChestManager::new, StorageKey);
+	        if (instance == null)
+	        {
+	            instance = new WirelessChestManager();
+	            storage.func_215757_a(instance);
+	        }
+	        return instance;
+    	} 
+    	if(CLIENT_MANAGER == null){
+    		CLIENT_MANAGER = new WirelessChestManager();
+    	}
+    	return CLIENT_MANAGER;
     }
 
     @Override
