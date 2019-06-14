@@ -2,20 +2,21 @@ package alec_wam.CrystalMod.tiles.machine.crafting.press;
 
 import alec_wam.CrystalMod.client.gui.ElementDualScaled;
 import alec_wam.CrystalMod.client.gui.ElementEnergy;
-import alec_wam.CrystalMod.client.gui.GuiElementContainer;
+import alec_wam.CrystalMod.client.gui.tabs.GuiContainerTabbed;
 import alec_wam.CrystalMod.tiles.machine.crafting.ContainerBasicCraftingMachine;
+import alec_wam.CrystalMod.tiles.machine.crafting.CraftingMachineIOTab;
 import alec_wam.CrystalMod.util.Lang;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TranslationTextComponent;
 
-public class GuiPress extends GuiElementContainer<ContainerBasicCraftingMachine<TileEntityPress>> {
+public class GuiPress extends GuiContainerTabbed<ContainerBasicCraftingMachine<TileEntityPress>> {
 	public static final ResourceLocation TEXTURE = new ResourceLocation("crystalmod:textures/gui/machine/press.png");
 	public TileEntityPress tileMachine;
 	ElementDualScaled progress;
 	public GuiPress(int windowId, PlayerEntity player, TileEntityPress tilePart)
     {
-        super(new ContainerBasicCraftingMachine<TileEntityPress>(windowId, player, tilePart, TileEntityPress.CHECKER), player.inventory, new TranslationTextComponent("block.crystalmod.machine_press"), TEXTURE);
+        super(new ContainerBasicCraftingMachine<TileEntityPress>(windowId, player, tilePart), player.inventory, new TranslationTextComponent("block.crystalmod.machine_press"), TEXTURE);
 
         this.tileMachine = tilePart;
         this.name = Lang.translateToLocal("block.crystalmod.machine_press");
@@ -24,6 +25,8 @@ public class GuiPress extends GuiElementContainer<ContainerBasicCraftingMachine<
 	@Override
 	public void init(){
 		super.init();
+		tabManager.getTabs().clear();
+		tabManager.add(new CraftingMachineIOTab(tileMachine));
 		
 		ElementEnergy energyElement = new ElementEnergy(this, 8, 22, this.tileMachine.getEnergyStorage());
 		addElement(energyElement);

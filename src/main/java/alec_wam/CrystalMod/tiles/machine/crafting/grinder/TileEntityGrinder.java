@@ -2,9 +2,9 @@ package alec_wam.CrystalMod.tiles.machine.crafting.grinder;
 
 import alec_wam.CrystalMod.init.ModBlocks;
 import alec_wam.CrystalMod.init.ModRecipes;
-import alec_wam.CrystalMod.tiles.machine.TileEntityMachine;
 import alec_wam.CrystalMod.tiles.machine.crafting.BlockCraftingMachine;
 import alec_wam.CrystalMod.tiles.machine.crafting.EnumCraftingMachine;
+import alec_wam.CrystalMod.tiles.machine.crafting.TileEntityCraftingMachine;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import net.minecraft.entity.player.PlayerEntity;
@@ -19,7 +19,7 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 
-public class TileEntityGrinder extends TileEntityMachine implements INamedContainerProvider {
+public class TileEntityGrinder extends TileEntityCraftingMachine implements INamedContainerProvider {
 
 	public TileEntityGrinder(){
 		super(ModBlocks.craftingMachine.getTileType(EnumCraftingMachine.GRINDER), "Grinder", 3);
@@ -125,23 +125,24 @@ public class TileEntityGrinder extends TileEntityMachine implements INamedContai
         }
     }
 
-    public static boolean canGrind(ItemStack stack, TileEntityGrinder grinder) {    	
-    	for(IRecipe<IInventory> irecipe : ModRecipes.getRecipes(grinder.getWorld().getRecipeManager(), ModRecipes.GRINDER_TYPE)) {
+    @Override
+    public boolean isItemValidInput(ItemStack stack) {    	
+    	for(IRecipe<IInventory> irecipe : ModRecipes.getRecipes(getWorld().getRecipeManager(), ModRecipes.GRINDER_TYPE)) {
     		if (irecipe.getIngredients().get(0).test(stack)) {
     			return true;
     		}
     	}
     	return false;
     }
+	
+    @Override
+	public int[] getOutputSlots() {
+		return new int[] {1, 2};
+	}
 
     public GrinderRecipe getRecipe(){
     	return getWorld().getRecipeManager().func_215371_a((IRecipeType<GrinderRecipe>)ModRecipes.GRINDER_TYPE, this, getWorld()).orElse(null);
     }
-    
-	@Override
-	public boolean canInsertItem(int index, ItemStack itemStackIn) {
-		return index == 0 && canGrind(itemStackIn, this);
-	}
 	
 	@Override
 	public boolean canExtract(int index, int amt){

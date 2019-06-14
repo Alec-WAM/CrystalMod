@@ -3,11 +3,10 @@ package alec_wam.CrystalMod.tiles.machine.crafting.press;
 import alec_wam.CrystalMod.client.GuiHandler;
 import alec_wam.CrystalMod.init.ModBlocks;
 import alec_wam.CrystalMod.init.ModRecipes;
-import alec_wam.CrystalMod.tiles.machine.TileEntityMachine;
 import alec_wam.CrystalMod.tiles.machine.crafting.BlockCraftingMachine;
 import alec_wam.CrystalMod.tiles.machine.crafting.ContainerBasicCraftingMachine;
 import alec_wam.CrystalMod.tiles.machine.crafting.EnumCraftingMachine;
-import alec_wam.CrystalMod.tiles.machine.crafting.ContainerBasicCraftingMachine.SlotItemChecker;
+import alec_wam.CrystalMod.tiles.machine.crafting.TileEntityCraftingMachine;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
 import net.minecraft.entity.player.PlayerEntity;
@@ -21,7 +20,7 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 
-public class TileEntityPress extends TileEntityMachine {
+public class TileEntityPress extends TileEntityCraftingMachine {
 
 	public TileEntityPress(){
 		super(ModBlocks.craftingMachine.getTileType(EnumCraftingMachine.PRESS), "Press", 2);
@@ -99,8 +98,9 @@ public class TileEntityPress extends TileEntityMachine {
         }
     }
 
-    public static boolean canPress(ItemStack stack, TileEntityPress press) {
-    	for(IRecipe<IInventory> irecipe : ModRecipes.getRecipes(press.getWorld().getRecipeManager(), ModRecipes.PRESS_TYPE)) {
+    @Override
+    public boolean isItemValidInput(ItemStack stack) {
+    	for(IRecipe<IInventory> irecipe : ModRecipes.getRecipes(getWorld().getRecipeManager(), ModRecipes.PRESS_TYPE)) {
     		if (irecipe.getIngredients().get(0).test(stack)) {
     			return true;
     		}
@@ -111,25 +111,6 @@ public class TileEntityPress extends TileEntityMachine {
     public PressRecipe getRecipe(){
     	return getWorld().getRecipeManager().func_215371_a((IRecipeType<PressRecipe>)ModRecipes.PRESS_TYPE, this, getWorld()).orElse(null);
     }
-    
-	@Override
-	public boolean canInsertItem(int index, ItemStack itemStackIn) {
-		return index == 0 && canPress(itemStackIn, this);
-	}
-	
-	@Override
-	public boolean canExtract(int index, int amt){
-		return index > 0;
-	}
-
-	public static final SlotItemChecker<TileEntityPress> CHECKER = new SlotItemChecker<TileEntityPress>() {
-
-		@Override
-		public boolean canProcessItem(TileEntityPress machine, ItemStack stack) {
-			return TileEntityPress.canPress(stack, machine);
-		}
-		
-	};
 
 	@Override
 	public ITextComponent getDisplayName() {
@@ -138,7 +119,7 @@ public class TileEntityPress extends TileEntityMachine {
 	
 	@Override
 	public Container createMenu(int i, PlayerInventory playerInventory, PlayerEntity playerIn) {
-		return new ContainerBasicCraftingMachine<TileEntityPress>(i, playerIn, this, CHECKER);
+		return new ContainerBasicCraftingMachine<TileEntityPress>(i, playerIn, this);
 	}
 
 	public String getGuiID() {

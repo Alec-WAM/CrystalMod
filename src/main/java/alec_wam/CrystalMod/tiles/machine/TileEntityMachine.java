@@ -11,8 +11,10 @@ import alec_wam.CrystalMod.network.IMessageHandler;
 import alec_wam.CrystalMod.tiles.INBTDrop;
 import alec_wam.CrystalMod.tiles.PacketTileMessage;
 import alec_wam.CrystalMod.tiles.TileEntityInventory;
+import alec_wam.CrystalMod.tiles.machine.crafting.BlockCraftingMachine;
 import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
+import net.minecraft.block.BlockState;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
@@ -148,12 +150,19 @@ public abstract class TileEntityMachine extends TileEntityInventory implements I
 	                this.markDirty();
 	            }
 	        }
+	        boolean updateState = false;
 	        if (curActive != this.isRunning && this.isRunning) {
-	        	BlockUtil.markBlockForUpdate(getWorld(), getPos());
+	        	updateState = true;
 	        }
 	        else if (this.wasRunning) {
 	            this.wasRunning = false;
-	            BlockUtil.markBlockForUpdate(getWorld(), getPos());
+	        	updateState = true;
+	        }
+	        
+	        if(updateState){
+	        	BlockState state = getBlockState().with(BlockCraftingMachine.RUNNING, Boolean.valueOf(isRunning));
+	        	this.getWorld().setBlockState(getPos(), state, 3);
+	        	BlockUtil.markBlockForUpdate(getWorld(), getPos());
 	        }
 		}
 	}
@@ -229,6 +238,7 @@ public abstract class TileEntityMachine extends TileEntityInventory implements I
         return super.getCapability(cap, side);
     }
 	
+	//TODO Override with IOTypes
 	@Override
 	public int[] getSlotsForFace(Direction side) {
 		return new int[] { 0 };

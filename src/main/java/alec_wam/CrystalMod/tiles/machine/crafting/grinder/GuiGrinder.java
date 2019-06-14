@@ -2,13 +2,14 @@ package alec_wam.CrystalMod.tiles.machine.crafting.grinder;
 
 import alec_wam.CrystalMod.client.gui.ElementDualScaled;
 import alec_wam.CrystalMod.client.gui.ElementEnergy;
-import alec_wam.CrystalMod.client.gui.GuiElementContainer;
+import alec_wam.CrystalMod.client.gui.tabs.GuiContainerTabbed;
+import alec_wam.CrystalMod.tiles.machine.crafting.CraftingMachineIOTab;
 import alec_wam.CrystalMod.util.Lang;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TranslationTextComponent;
 
-public class GuiGrinder extends GuiElementContainer<ContainerGrinder> {
+public class GuiGrinder extends GuiContainerTabbed<ContainerGrinder> {
 	public static final ResourceLocation TEXTURE = new ResourceLocation("crystalmod:textures/gui/machine/grinder.png");
 	public TileEntityGrinder tileMachine;
 	ElementDualScaled progress;
@@ -23,6 +24,8 @@ public class GuiGrinder extends GuiElementContainer<ContainerGrinder> {
 	@Override
 	public void init(){
 		super.init();
+		tabManager.getTabs().clear();
+		tabManager.add(new CraftingMachineIOTab(tileMachine));
 		
 		ElementEnergy energyElement = new ElementEnergy(this, 8, 22, this.tileMachine.getEnergyStorage());
 		addElement(energyElement);

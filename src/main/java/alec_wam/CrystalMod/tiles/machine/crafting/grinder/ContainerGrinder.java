@@ -18,7 +18,7 @@ public class ContainerGrinder extends Container
     	this.addSlot(new Slot(grinder, 0, 56, 35) {
     		@Override
     		public boolean isItemValid(ItemStack stack){
-    			return TileEntityGrinder.canGrind(stack, grinder);
+    			return grinder.isItemValidInput(stack);
     		}
     	});
     	this.addSlot(new SlotLockedOutput(player, grinder, 1, 116, 35));
@@ -60,7 +60,7 @@ public class ContainerGrinder extends Container
 
               slot.onSlotChange(itemstack1, itemstack);
            } else if (i != 0) {
-              if (TileEntityGrinder.canGrind(itemstack1, grinder)) {
+              if(grinder.isItemValidInput(itemstack1)) {
                  if (!this.mergeItemStack(itemstack1, 0, 1, false)) {
                     return ItemStack.EMPTY;
                  }

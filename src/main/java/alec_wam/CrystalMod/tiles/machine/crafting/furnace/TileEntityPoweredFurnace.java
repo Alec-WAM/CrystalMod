@@ -12,9 +12,9 @@ import com.google.common.collect.Maps;
 import alec_wam.CrystalMod.client.GuiHandler;
 import alec_wam.CrystalMod.init.ModBlocks;
 import alec_wam.CrystalMod.init.ModRecipes;
-import alec_wam.CrystalMod.tiles.machine.TileEntityMachine;
 import alec_wam.CrystalMod.tiles.machine.crafting.BlockCraftingMachine;
 import alec_wam.CrystalMod.tiles.machine.crafting.EnumCraftingMachine;
+import alec_wam.CrystalMod.tiles.machine.crafting.TileEntityCraftingMachine;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemTagHelper;
 import alec_wam.CrystalMod.util.ItemUtil;
@@ -38,7 +38,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
 
-public class TileEntityPoweredFurnace extends TileEntityMachine implements IRecipeHolder, IRecipeHelperPopulator {
+public class TileEntityPoweredFurnace extends TileEntityCraftingMachine implements IRecipeHolder, IRecipeHelperPopulator {
 	private final Map<ResourceLocation, Integer> recipeUseCounts = Maps.newHashMap();
 	
 	public TileEntityPoweredFurnace() {
@@ -127,19 +127,10 @@ public class TileEntityPoweredFurnace extends TileEntityMachine implements IReci
         stack.shrink(1);
         this.setInventorySlotContents(0, stack);
     }
-
-	@Override
-	public boolean canInsertItem(int index, ItemStack itemStackIn) {
-		return index == 0 && canSmelt(itemStackIn, this);
-	}
-	
-	@Override
-	public boolean canExtract(int index, int amt) {
-		return index == 1;
-	}
     
-	public static boolean canSmelt(ItemStack stack, TileEntityPoweredFurnace furnace) {
-		for(IRecipe<IInventory> irecipe : ModRecipes.getRecipes(furnace.getWorld().getRecipeManager(), IRecipeType.field_222150_b)) {
+	@Override
+	public boolean isItemValidInput(ItemStack stack) {
+		for(IRecipe<IInventory> irecipe : ModRecipes.getRecipes(getWorld().getRecipeManager(), IRecipeType.field_222150_b)) {
     		if (irecipe.getIngredients().get(0).test(stack)) {
     			return true;
     		}

@@ -25,7 +25,7 @@ public class ContainerPoweredFurnace extends AbstractFurnaceContainer
     	this.addSlot(new Slot(furnace, 0, 56, 26) {
     		@Override
     		public boolean isItemValid(ItemStack stack){
-    			return TileEntityPoweredFurnace.canSmelt(stack, furnace);
+    			return tileEntity.isItemValidInput(stack);
     		}
     	});
     	this.addSlot(new SlotPoweredFurnaceOutput(player, furnace, 1, 116, 35));
@@ -66,7 +66,7 @@ public class ContainerPoweredFurnace extends AbstractFurnaceContainer
 
               slot.onSlotChange(itemstack1, itemstack);
            } else if (i != 0) {
-              if (TileEntityPoweredFurnace.canSmelt(itemstack1, furnace)) {
+              if (furnace.isItemValidInput(itemstack1)) {
                  if (!this.mergeItemStack(itemstack1, 0, 1, false)) {
                     return ItemStack.EMPTY;
                  }

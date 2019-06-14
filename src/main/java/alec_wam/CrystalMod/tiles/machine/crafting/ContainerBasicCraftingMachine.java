@@ -1,28 +1,22 @@
 package alec_wam.CrystalMod.tiles.machine.crafting;
 
-import alec_wam.CrystalMod.tiles.machine.TileEntityMachine;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 
-public class ContainerBasicCraftingMachine<T extends TileEntityMachine> extends Container
+public class ContainerBasicCraftingMachine<T extends TileEntityCraftingMachine> extends Container
 {
-	public static abstract class SlotItemChecker<T> {
-		public abstract boolean canProcessItem(T machine, ItemStack stack);
-	}
-    public T machine;
-    private final SlotItemChecker<T> checker;
-    public ContainerBasicCraftingMachine(int windowId, PlayerEntity player, T machine, SlotItemChecker<T> checker)
+	public T machine;
+    public ContainerBasicCraftingMachine(int windowId, PlayerEntity player, T machine)
     {
     	super(null, windowId);
     	this.machine = (machine);
-    	this.checker = checker;
     	this.addSlot(new Slot(machine, 0, 56, 35) {
     		@Override
     		public boolean isItemValid(ItemStack stack){
-    			return checker.canProcessItem(machine, stack);
+    			return machine.isItemValidInput(stack);
     		}
     	});
     	this.addSlot(new SlotLockedOutput(player, machine, 1, 116, 35));
@@ -63,7 +57,7 @@ public class ContainerBasicCraftingMachine<T extends TileEntityMachine> extends 
 
               slot.onSlotChange(itemstack1, itemstack);
            } else if (i != 0) {
-              if (checker.canProcessItem(machine, itemstack1)) {
+              if (machine.isItemValidInput(itemstack1)) {
                  if (!this.mergeItemStack(itemstack1, 0, 1, false)) {
                     return ItemStack.EMPTY;
                  }

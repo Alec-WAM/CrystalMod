@@ -2,7 +2,8 @@ package alec_wam.CrystalMod.tiles.machine.crafting.furnace;
 
 import alec_wam.CrystalMod.client.gui.ElementDualScaled;
 import alec_wam.CrystalMod.client.gui.ElementEnergy;
-import alec_wam.CrystalMod.client.gui.GuiElementContainer;
+import alec_wam.CrystalMod.client.gui.tabs.GuiContainerTabbed;
+import alec_wam.CrystalMod.tiles.machine.crafting.CraftingMachineIOTab;
 import alec_wam.CrystalMod.util.Lang;
 import net.minecraft.client.gui.recipebook.IRecipeShownListener;
 import net.minecraft.client.gui.recipebook.RecipeBookGui;
@@ -13,7 +14,7 @@ import net.minecraft.inventory.container.Slot;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TranslationTextComponent;
 
-public class GuiPoweredFurnace extends GuiElementContainer<ContainerPoweredFurnace> implements IRecipeShownListener {
+public class GuiPoweredFurnace extends GuiContainerTabbed<ContainerPoweredFurnace> implements IRecipeShownListener {
 	public static final ResourceLocation TEXTURE = new ResourceLocation("crystalmod:textures/gui/machine/powered_furnace.png");
 	private static final ResourceLocation RECIPE_BUTTON_TEXTURE = new ResourceLocation("textures/gui/recipe_button.png");
 	public TileEntityPoweredFurnace tileFurnace;
@@ -32,6 +33,8 @@ public class GuiPoweredFurnace extends GuiElementContainer<ContainerPoweredFurna
 	@Override
 	public void init(){
 		super.init();
+		tabManager.getTabs().clear();
+		tabManager.add(new CraftingMachineIOTab(tileFurnace));
 		
 		ElementEnergy energyElement = new ElementEnergy(this, 8, 22, this.tileFurnace.getEnergyStorage());
 		addElement(energyElement);
