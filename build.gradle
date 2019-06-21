@@ -14,8 +14,8 @@ apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
 version = '1.0'
-group = 'com.yourname.modid' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = 'modid'
+group = 'alec_wam.CrystalMod' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+archivesBaseName = 'crystalmod'
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 
@@ -90,7 +90,7 @@ jar {
             "Specification-Vendor": "Alec_WAM",
             "Specification-Version": "${mod_version}", // We are version 1 of ourselves
             "Implementation-Title": project.name,
-            "Implementation-Version": "${version}",
+            "Implementation-Version": "${mod_version}",
             "Implementation-Vendor" :"Alec_WAM",
             "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])

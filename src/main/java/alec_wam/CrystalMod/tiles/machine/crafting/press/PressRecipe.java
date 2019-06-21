@@ -102,7 +102,7 @@ public class PressRecipe implements IRecipe<IInventory> {
 	   return ModRecipes.PRESS_TYPE;
    }
 
-   public static class Serializer implements IRecipeSerializer<PressRecipe> {
+   public static class Serializer extends net.minecraftforge.registries.ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<PressRecipe> {
       @Override
 	  public PressRecipe read(ResourceLocation recipeId, JsonObject json) {
          String s = JSONUtils.getString(json, "group", "");

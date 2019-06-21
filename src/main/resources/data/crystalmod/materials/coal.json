@@ -1,0 +1,14 @@
+{
+  "dust": true,
+  "dust_recipes": [
+	{
+	  "name": "normal",
+	  "ingredient": {
+		"item": "minecraft:coal"
+	  },
+	  "count": 1
+	}
+  ],  
+  "dust_smelt": "minecraft:coal",
+  "color": 2434341
+}

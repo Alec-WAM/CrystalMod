@@ -8,6 +8,7 @@ import alec_wam.CrystalMod.util.ItemNBTHelper;
 import net.minecraft.item.Item;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Rarity;
 import net.minecraft.nbt.CompoundNBT;
 
 public class BlockItemBattery extends BlockItem {
@@ -19,6 +20,14 @@ public class BlockItemBattery extends BlockItem {
 		this.type = type; 
 	}
 
+	@Override
+	public Rarity getRarity(ItemStack stack) {
+		if(type == EnumCrystalColorSpecialWithCreative.CREATIVE){
+			return Rarity.UNCOMMON;
+		}
+		return super.getRarity(stack);
+	}
+	
 	@Override
 	public net.minecraftforge.common.capabilities.ICapabilityProvider initCapabilities(ItemStack stack, @Nullable net.minecraft.nbt.CompoundNBT nbt) {
 		final CompoundNBT itemNBT = ItemNBTHelper.getCompound(stack).getCompound(TileEntityBattery.NBT_DATA);

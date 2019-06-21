@@ -1,0 +1,6 @@
+{
+    "parent": "block/fence_inventory",
+    "textures": {
+        "texture": "crystalmod:block/crystalplanks_red"
+    }
+}

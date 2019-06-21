@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "crystalmod:crystalsapling_blue",
+    "crystalmod:crystalsapling_red",
+    "crystalmod:crystalsapling_green",
+    "crystalmod:crystalsapling_dark",
+    "crystalmod:crystalsapling_pure"
+  ]
+}

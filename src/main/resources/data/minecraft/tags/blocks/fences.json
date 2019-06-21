@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "crystalmod:crystalfence_blue",
+    "crystalmod:crystalfence_red",
+    "crystalmod:crystalfence_green",
+    "crystalmod:crystalfence_dark",
+    "crystalmod:crystalfence_pure"
+  ]
+}

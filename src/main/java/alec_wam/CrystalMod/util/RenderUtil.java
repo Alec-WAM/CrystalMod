@@ -1,5 +1,6 @@
 package alec_wam.CrystalMod.util;
 
+import java.awt.Color;
 import java.util.List;
 import java.util.Random;
 
@@ -7,6 +8,7 @@ import org.lwjgl.opengl.GL11;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 
+import alec_wam.CrystalMod.client.gui.overlay.InfoBoxBuilder;
 import alec_wam.CrystalMod.util.math.Vector3d;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
@@ -24,8 +26,11 @@ import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.event.RenderTooltipEvent;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.client.config.GuiUtils;
 
 @SuppressWarnings("deprecation")
 public class RenderUtil {
@@ -371,5 +376,178 @@ public class RenderUtil {
 					.lightmap(light1, light2).endVertex();
 			break;
 		}
+	}
+	
+	public static void drawHoveringTextBox(InfoBoxBuilder builder)
+    {
+		List<String> textLines = builder.textLines;
+        if (!textLines.isEmpty())
+        {
+            GlStateManager.disableRescaleNormal();
+            RenderHelper.disableStandardItemLighting();
+            GlStateManager.disableLighting();
+            GlStateManager.disableDepthTest();
+
+            final int zLevel = 300;
+            int backgroundColor = 0xF0100010;
+            int borderColorStart = 0x505000FF;
+            int borderColorEnd = (borderColorStart & 0xFEFEFE) >> 1 | borderColorStart & 0xFF000000;
+            RenderTooltipEvent.Color colorEvent = new RenderTooltipEvent.Color(ItemStackTools.getEmptyStack(), textLines, 0, 0, builder.font, backgroundColor, borderColorStart, borderColorEnd);
+            MinecraftForge.EVENT_BUS.post(colorEvent);
+            backgroundColor = colorEvent.getBackground();
+            borderColorStart = colorEvent.getBorderStart();
+            borderColorEnd = colorEvent.getBorderEnd();
+            int renderX = builder.boxX;
+            int renderY = builder.boxY;
+            int boxWidth = builder.boxTextWidth;
+            int boxHeight = builder.boxHeight;
+            GuiUtils.drawGradientRect(zLevel, renderX - 3, renderY - 4, renderX + boxWidth + 3, renderY - 3, backgroundColor, backgroundColor);
+            GuiUtils.drawGradientRect(zLevel, renderX - 3, renderY + boxHeight + 3, renderX + boxWidth + 3, renderY + boxHeight + 4, backgroundColor, backgroundColor);
+            GuiUtils.drawGradientRect(zLevel, renderX - 3, renderY - 3, renderX + boxWidth + 3, renderY + boxHeight + 3, backgroundColor, backgroundColor);
+            GuiUtils.drawGradientRect(zLevel, renderX - 4, renderY - 3, renderX - 3, renderY + boxHeight + 3, backgroundColor, backgroundColor);
+            GuiUtils.drawGradientRect(zLevel, renderX + boxWidth + 3, renderY - 3, renderX + boxWidth + 4, renderY + boxHeight + 3, backgroundColor, backgroundColor);
+            GuiUtils.drawGradientRect(zLevel, renderX - 3, renderY - 3 + 1, renderX - 3 + 1, renderY + boxHeight + 3 - 1, borderColorStart, borderColorEnd);
+            GuiUtils.drawGradientRect(zLevel, renderX + boxWidth + 2, renderY - 3 + 1, renderX + boxWidth + 3, renderY + boxHeight + 3 - 1, borderColorStart, borderColorEnd);
+            GuiUtils.drawGradientRect(zLevel, renderX - 3, renderY - 3, renderX + boxWidth + 3, renderY - 3 + 1, borderColorStart, borderColorStart);
+            GuiUtils.drawGradientRect(zLevel, renderX - 3, renderY + boxHeight + 2, renderX + boxWidth + 3, renderY + boxHeight + 3, borderColorEnd, borderColorEnd);
+
+            int textY = builder.boxY;
+            for (int lineNumber = 0; lineNumber < textLines.size(); ++lineNumber)
+            {
+                String line = textLines.get(lineNumber);
+                builder.font.drawStringWithShadow(line, (float)builder.boxX, (float)textY, -1);
+
+                if (lineNumber + 1 == builder.finalLineCount)
+                {
+                	textY += 2;
+                }
+
+                textY += 10;
+            }
+
+            GlStateManager.enableLighting();
+            GlStateManager.enableDepthTest();
+            RenderHelper.enableStandardItemLighting();
+            GlStateManager.enableRescaleNormal();
+        }
+    }
+	
+	public static void renderGuiTank(FluidStack fluid, int capacity, int amount, double x, double y, double zLevel, double width, double height, boolean renderBars) {
+	    
+	    if (fluid != null && fluid.getFluid() != null && amount > 0) {
+		    TextureAtlasSprite icon = getStillTexture(fluid);
+		    if (icon != null) {	
+			    int renderAmount = (int) Math.max(Math.min(height, amount * height / capacity), 1);
+			    int posY = (int) (y + height - renderAmount);
+		
+			    Minecraft.getInstance().getTextureManager().bindTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE);
+			    int color = fluid.getFluid().getColor(fluid);
+			    GL11.glColor3ub((byte) (color >> 16 & 0xFF), (byte) (color >> 8 & 0xFF), (byte) (color & 0xFF));
+			    
+			    GlStateManager.enableBlend();    
+			    for (int i = 0; i < width; i += 16) {
+			      for (int j = 0; j < renderAmount; j += 16) {
+			        int drawWidth = (int) Math.min(width - i, 16);
+			        int drawHeight = Math.min(renderAmount - j, 16);
+		
+			        int drawX = (int) (x + i);
+			        int drawY = posY + j;
+		
+			        double minU = icon.getMinU();
+			        double maxU = icon.getMaxU();
+			        double minV = icon.getMinV();
+			        double maxV = icon.getMaxV();
+		
+			        Tessellator tessellator = Tessellator.getInstance();
+			        BufferBuilder tes = tessellator.getBuffer();
+			        tes.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+			        tes.pos(drawX, drawY + drawHeight, 0).tex(minU, minV + (maxV - minV) * drawHeight / 16F).endVertex();
+			        tes.pos(drawX + drawWidth, drawY + drawHeight, 0).tex(minU + (maxU - minU) * drawWidth / 16F, minV + (maxV - minV) * drawHeight / 16F).endVertex();
+			        tes.pos(drawX + drawWidth, drawY, 0).tex(minU + (maxU - minU) * drawWidth / 16F, minV).endVertex();
+			        tes.pos(drawX, drawY, 0).tex(minU, minV).endVertex();
+			        tessellator.draw();
+			      }
+			    }
+			    GlStateManager.disableBlend();
+		    }
+		}
+	    if(renderBars){
+		    int barSize = capacity / Fluid.BUCKET_VOLUME;
+		    int barIndent = 2;
+		    if(barSize > 1){
+			    for(int i = 1; i < barSize; i++){
+			    	int lineX = (int)x;
+			    	int lineY = (int)((y+height) - (i * (height/barSize)));
+			    	double left = lineX + barIndent;
+			    	double top = lineY;
+			    	double right = (int) (lineX + width) - barIndent;
+			    	double bottom = lineY + 1;
+			    	int color = Color.BLACK.getRGB();
+			    	float f3 = (float)(color >> 24 & 255) / 255.0F;
+			        float f = (float)(color >> 16 & 255) / 255.0F;
+			        float f1 = (float)(color >> 8 & 255) / 255.0F;
+			        float f2 = (float)(color & 255) / 255.0F;
+			        Tessellator tessellator = Tessellator.getInstance();
+			        BufferBuilder vertexbuffer = tessellator.getBuffer();
+			        GlStateManager.enableBlend();
+			        GlStateManager.disableTexture();
+			        GlStateManager.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+			        GlStateManager.color4f(f, f1, f2, f3);
+			        vertexbuffer.begin(7, DefaultVertexFormats.POSITION);
+			        vertexbuffer.pos((double)left, (double)bottom, 0.0D).endVertex();
+			        vertexbuffer.pos((double)right, (double)bottom, 0.0D).endVertex();
+			        vertexbuffer.pos((double)right, (double)top, 0.0D).endVertex();
+			        vertexbuffer.pos((double)left, (double)top, 0.0D).endVertex();
+			        tessellator.draw();
+			        GlStateManager.enableTexture();
+			        GlStateManager.disableBlend();
+			    	
+			    }		
+		    }
+	    }
+	}
+	
+	public static void renderGuiTank(Fluid fluid, int amount, int capacity, double x, double y, double zLevel, double width, double height) {
+	    if (fluid == null) {
+	      return;
+	    }
+
+	    TextureAtlasSprite icon = getStillTexture(fluid);
+	    if (icon == null) {
+	      return;
+	    }
+
+	    int renderAmount = (int) Math.max(Math.min(height, amount * height / capacity), 1);
+	    int posY = (int) (y + height - renderAmount);
+
+	    Minecraft.getInstance().getTextureManager().bindTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE);
+	    int color = fluid.getColor();
+	    GL11.glColor3ub((byte) (color >> 16 & 0xFF), (byte) (color >> 8 & 0xFF), (byte) (color & 0xFF));
+	    
+	    GlStateManager.enableBlend();    
+	    for (int i = 0; i < width; i += 16) {
+	      for (int j = 0; j < renderAmount; j += 16) {
+	        int drawWidth = (int) Math.min(width - i, 16);
+	        int drawHeight = Math.min(renderAmount - j, 16);
+
+	        int drawX = (int) (x + i);
+	        int drawY = posY + j;
+
+	        double minU = icon.getMinU();
+	        double maxU = icon.getMaxU();
+	        double minV = icon.getMinV();
+	        double maxV = icon.getMaxV();
+
+	        Tessellator tessellator = Tessellator.getInstance();
+	        BufferBuilder tes = tessellator.getBuffer();
+	        tes.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+	        tes.pos(drawX, drawY + drawHeight, 0).tex(minU, minV + (maxV - minV) * drawHeight / 16F).endVertex();
+	        tes.pos(drawX + drawWidth, drawY + drawHeight, 0).tex(minU + (maxU - minU) * drawWidth / 16F, minV + (maxV - minV) * drawHeight / 16F).endVertex();
+	        tes.pos(drawX + drawWidth, drawY, 0).tex(minU + (maxU - minU) * drawWidth / 16F, minV).endVertex();
+	        tes.pos(drawX, drawY, 0).tex(minU, minV).endVertex();
+	        tessellator.draw();
+	      }
+	    }
+	    GlStateManager.disableBlend();
 	}
 }

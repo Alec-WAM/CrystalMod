@@ -1,0 +1,7 @@
+{
+  "parent": "block/cube_all",
+  "textures": {
+    "particle": "crystalmod:block/xpvacuum",
+    "all": "crystalmod:block/xpvacuum"
+  }
+}

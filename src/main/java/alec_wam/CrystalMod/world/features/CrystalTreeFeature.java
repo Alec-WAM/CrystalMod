@@ -29,7 +29,76 @@ public class CrystalTreeFeature extends AbstractTreeFeature<NoFeatureConfig> {
 
 	@Override
 	public boolean place(Set<BlockPos> changedBlocks, IWorldGenerationReader worldIn, Random rand, BlockPos position, MutableBoundingBox p_208519_5_) {
-		int i = 4 + rand.nextInt(3);
+		int i = rand.nextInt(3) + 5;
+		if (this.useExtraRandomHeight) {
+			i += rand.nextInt(7);
+		}
+
+		boolean flag = true;
+		if (position.getY() >= 1 && position.getY() + i + 1 <= worldIn.getMaxHeight()) {
+			for(int j = position.getY(); j <= position.getY() + 1 + i; ++j) {
+				int k = 1;
+				if (j == position.getY()) {
+					k = 0;
+				}
+
+				if (j >= position.getY() + 1 + i - 2) {
+					k = 2;
+				}
+
+				BlockPos.MutableBlockPos blockpos$mutableblockpos = new BlockPos.MutableBlockPos();
+
+				for(int l = position.getX() - k; l <= position.getX() + k && flag; ++l) {
+					for(int i1 = position.getZ() - k; i1 <= position.getZ() + k && flag; ++i1) {
+						if (j >= 0 && j < worldIn.getMaxHeight()) {
+							if (!func_214587_a(worldIn, blockpos$mutableblockpos.setPos(l, j, i1))) {
+								flag = false;
+							}
+						} else {
+							flag = false;
+						}
+					}
+				}
+			}
+
+			if (!flag) {
+				return false;
+			} else if ((isSoil(worldIn, position.down(), getSapling())) && position.getY() < worldIn.getMaxHeight() - i - 1) {
+				this.setDirtAt(worldIn, position.down(), position);
+
+				for(int l1 = position.getY() - 3 + i; l1 <= position.getY() + i; ++l1) {
+					int j2 = l1 - (position.getY() + i);
+					int k2 = 1 - j2 / 2;
+
+					for(int l2 = position.getX() - k2; l2 <= position.getX() + k2; ++l2) {
+						int i3 = l2 - position.getX();
+
+						for(int j1 = position.getZ() - k2; j1 <= position.getZ() + k2; ++j1) {
+							int k1 = j1 - position.getZ();
+							if (Math.abs(i3) != k2 || Math.abs(k1) != k2 || rand.nextInt(2) != 0 && j2 != 0) {
+								BlockPos blockpos = new BlockPos(l2, l1, j1);
+								if (func_214572_g(worldIn, blockpos)) {
+									this.setLogState(changedBlocks, worldIn, blockpos, leaf, p_208519_5_);
+								}
+							}
+						}
+					}
+				}
+
+				for(int i2 = 0; i2 < i; ++i2) {
+					if (func_214572_g(worldIn, position.up(i2))) {
+						this.setLogState(changedBlocks, worldIn, position.up(i2), log, p_208519_5_);
+					}
+				}
+
+				return true;
+			} else {
+				return false;
+			}
+		} else {
+			return false;
+		}
+		/*int i = 4 + rand.nextInt(3);
 		if (this.useExtraRandomHeight) {
 			i += rand.nextInt(7);
 		}
@@ -50,7 +119,7 @@ public class CrystalTreeFeature extends AbstractTreeFeature<NoFeatureConfig> {
 				for(int l = position.getX() - k; l <= position.getX() + k && flag; ++l) {
 					for(int i1 = position.getZ() - k; i1 <= position.getZ() + k && flag; ++i1) {
 						if (j >= 0 && j < worldIn.getMaxHeight()) {
-							if (!canBeReplacedByLog(worldIn, blockpos$mutableblockpos.setPos(l, j, i1))) {
+							if (!func_214587_a(worldIn, blockpos$mutableblockpos.setPos(l, j, i1))) {
 								flag = false;
 							}
 						} else {
@@ -63,8 +132,9 @@ public class CrystalTreeFeature extends AbstractTreeFeature<NoFeatureConfig> {
 			if (!flag) {
 				return false;
 			} else {
-				if (isSoil(worldIn, position.down()) && position.getY() < worldIn.getMaxHeight() - i - 1) {
+				if (isSoil(worldIn, position.down(), sapling) && position.getY() < worldIn.getMaxHeight() - i - 1) {
 					this.setDirtAt(worldIn, position.down(), position);
+					
 					for(int i3 = position.getY() - 3 + i; i3 <= position.getY() + i; ++i3) {
 						int i4 = i3 - (position.getY() + i);
 						int j1 = 1 - i4 / 2;
@@ -76,7 +146,7 @@ public class CrystalTreeFeature extends AbstractTreeFeature<NoFeatureConfig> {
 								int j2 = i2 - position.getZ();
 								if (Math.abs(l1) != j1 || Math.abs(j2) != j1 || rand.nextInt(2) != 0 && i4 != 0) {
 									BlockPos blockpos = new BlockPos(k1, i3, i2);
-									if (canBeReplacedByLeaves(worldIn, blockpos)) {
+									if (func_214572_g(worldIn, blockpos)) {
 										this.setBlockState(worldIn, blockpos, leaf);
 									}
 								}
@@ -85,7 +155,7 @@ public class CrystalTreeFeature extends AbstractTreeFeature<NoFeatureConfig> {
 					}
 
 					for(int j3 = 0; j3 < i; ++j3) {
-						if (canBeReplacedByLeaves(worldIn, position.up(j3))) {
+						if (func_214572_g(worldIn, position.up(j3))) {
 							BlockPos pos = position.up(j3);
 							if (this.doBlockNotify) {
 								worldIn.setBlockState(pos, log, 19);
@@ -95,7 +165,6 @@ public class CrystalTreeFeature extends AbstractTreeFeature<NoFeatureConfig> {
 							changedBlocks.add(pos.toImmutable());
 						}
 					}
-
 					return true;
 				} else {
 					return false;
@@ -103,6 +172,6 @@ public class CrystalTreeFeature extends AbstractTreeFeature<NoFeatureConfig> {
 			}
 		} else {
 			return false;
-		}
+		}*/
 	}
 }

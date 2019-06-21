@@ -6,7 +6,7 @@ import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 
 public class GuiMetalCrystalChest extends ContainerScreen<ContainerMetalCrystalChest> {
     public enum ResourceList {
@@ -64,7 +64,7 @@ public class GuiMetalCrystalChest extends ContainerScreen<ContainerMetalCrystalC
 
     private GuiMetalCrystalChest(int windowId, GUI type, PlayerInventory player, IInventory chest)
     {
-        super(type.makeContainer(windowId, player, chest), player, new StringTextComponent("MetalChest"));
+        super(type.makeContainer(windowId, player, chest), player, new TranslationTextComponent("block.crystalmod.metalchest_"+type.mainType.getName()));
         this.type = type;
         this.xSize = type.xSize;
         this.ySize = type.ySize;

@@ -5,19 +5,18 @@ import java.util.List;
 
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.ModConfig;
+import alec_wam.CrystalMod.compatibility.materials.MaterialLoader;
+import alec_wam.CrystalMod.init.ModRecipes;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemTagHelper;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.resources.IResourceManager;
 import net.minecraft.resources.IResourceManagerReloadListener;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.fml.loading.FMLEnvironment;
-import net.minecraftforge.fml.server.ServerLifecycleHooks;
 /**
  * Generates Grinder recipes using the new Tag system in Forge and scans for ingot -> dust conversions etc.
  * @author Alec_WAM
@@ -99,20 +98,14 @@ public class InterModGrinderRecipes implements IResourceManagerReloadListener {
 				}
 			}
 		}		
-		CrystalMod.LOGGER.info("Generated " + size + " ore recipes " + FMLEnvironment.dist);		
-	}
-	
-	private RecipeManager getRecipeManager() {
-		if(FMLEnvironment.dist == Dist.DEDICATED_SERVER){
-			return ServerLifecycleHooks.getCurrentServer().getRecipeManager();
-		} else {
-			return ServerLifecycleHooks.getCurrentServer().getRecipeManager();
-		}
+		CrystalMod.LOGGER.info("Generated " + size + " ore recipes " + FMLEnvironment.dist);	
+		
+		MaterialLoader.generateMaterialRecipes();
 	}
 	
 	//TODO Re-add
 	public boolean hasUserCreatedRecipe(Item item){
-		if(getRecipeManager() == null) {
+		if(ModRecipes.getRecipeManager() == null) {
 			return false;
 		}
 		/*List<GrinderRecipe> recipes = getRecipeManager().func_215366_a(ModRecipes.GRINDER_TYPE);
@@ -153,16 +146,16 @@ public class InterModGrinderRecipes implements IResourceManagerReloadListener {
 	
 	private boolean addRecipeForItem(String category, Item item, ItemStack output, int energy){
 		if(!hasUserCreatedRecipe(item)){
-			if(getRecipeManager() == null){
+			if(ModRecipes.getRecipeManager() == null){
 				return false;
 			}
 			ResourceLocation id = new ResourceLocation("crystalmod_grinder_generated", category + "/" + output.getItem().getRegistryName().getPath().toLowerCase());
-			if(getRecipeManager().func_215367_a(id).isPresent()){
+			if(ModRecipes.getRecipeManager().func_215367_a(id).isPresent()){
 				return false;
 			}
 			Ingredient input = Ingredient.fromItems(item);
 			GrinderRecipe recipe = new GrinderRecipe(id, "", input, output, ItemStackTools.getEmptyStack(), 0.0f, energy);
-			getRecipeManager().addRecipe(recipe);
+			ModRecipes.getRecipeManager().addRecipe(recipe);
 			return true;
 		}
 		return false;

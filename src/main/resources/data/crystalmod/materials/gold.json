@@ -1,0 +1,26 @@
+{
+  "dust": true,
+  "plate": true,
+  "dust_recipes": [
+	{
+	  "name": "ingot",
+	  "ingredient": {
+		"item": "minecraft:gold_ingot"
+	  },
+	  "count": 1
+	},
+	{
+	  "name": "ore",
+	  "ingredient": {
+		"item": "minecraft:gold_ore"
+	  },
+	  "count": 2,
+	  "energy": 1600
+	}
+  ],  
+  "plate_ingredient": {
+	"item": "minecraft:gold_ingot"
+  }, 
+  "dust_smelt": "minecraft:gold_ingot",
+  "color": 16643423
+}

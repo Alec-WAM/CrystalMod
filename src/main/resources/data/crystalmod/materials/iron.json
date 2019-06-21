@@ -1,0 +1,26 @@
+{
+  "dust": true,
+  "plate": true,
+  "dust_recipes": [
+	{
+	  "name": "ingot",
+	  "ingredient": {
+		"item": "minecraft:iron_ingot"
+	  },
+	  "count": 1
+	},
+	{
+	  "name": "ore",
+	  "ingredient": {
+		"item": "minecraft:iron_ore"
+	  },
+	  "count": 2,
+	  "energy": 1600
+	}
+  ],  
+  "plate_ingredient": {
+	"item": "minecraft:iron_ingot"
+  },	  
+  "dust_smelt": "minecraft:iron_ingot",
+  "color": 14211288
+}

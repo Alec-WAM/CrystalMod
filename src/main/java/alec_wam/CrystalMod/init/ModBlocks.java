@@ -12,6 +12,8 @@ import alec_wam.CrystalMod.blocks.BlockCrystalShard;
 import alec_wam.CrystalMod.blocks.BlockIngot;
 import alec_wam.CrystalMod.blocks.BlockVariant;
 import alec_wam.CrystalMod.blocks.WoodenBlockProperies.WoodType;
+import alec_wam.CrystalMod.blocks.decoration.FenceBlockVariant;
+import alec_wam.CrystalMod.blocks.decoration.FenceGateBlockVariant;
 import alec_wam.CrystalMod.blocks.plants.BlockCrystalBerryBush;
 import alec_wam.CrystalMod.blocks.plants.BlockFlowerLilyPad;
 import alec_wam.CrystalMod.blocks.plants.BlockItemWaterPlant;
@@ -24,6 +26,7 @@ import alec_wam.CrystalMod.core.BlockVariantGroup.TileFactory;
 import alec_wam.CrystalMod.core.BlockVariantGroup.TileTypeFactory;
 import alec_wam.CrystalMod.core.color.EnumCrystalColor;
 import alec_wam.CrystalMod.core.color.EnumCrystalColorSpecial;
+import alec_wam.CrystalMod.tiles.ContainerBlockCustom;
 import alec_wam.CrystalMod.tiles.EnumCrystalColorSpecialWithCreative;
 import alec_wam.CrystalMod.tiles.chests.metal.BlockMetalCrystalChest;
 import alec_wam.CrystalMod.tiles.chests.metal.MetalCrystalChestType;
@@ -63,6 +66,9 @@ import alec_wam.CrystalMod.tiles.pipes.energy.rf.TileEntityPipeEnergyRF;
 import alec_wam.CrystalMod.tiles.pipes.item.TileEntityPipeItem;
 import alec_wam.CrystalMod.tiles.tank.BlockTank;
 import alec_wam.CrystalMod.tiles.tank.TileEntityTank;
+import alec_wam.CrystalMod.tiles.xp.BlockXPTank;
+import alec_wam.CrystalMod.tiles.xp.TileEntityXPTank;
+import alec_wam.CrystalMod.tiles.xp.TileEntityXPVacuum;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -73,6 +79,7 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.tileentity.TileEntityType.Builder;
+import net.minecraft.world.IBlockReader;
 import net.minecraftforge.registries.ObjectHolder;
 
 @ObjectHolder(CrystalMod.MODID)
@@ -90,6 +97,9 @@ public class ModBlocks {
 	public static BlockVariantGroup<EnumCrystalColorSpecial, BlockCrystalLog> crystalLogGroup;
 	public static BlockVariantGroup<EnumCrystalColorSpecial, BlockCrystalLeaves> crystalLeavesGroup;
 	public static BlockVariantGroup<EnumCrystalColorSpecial, BlockVariant<EnumCrystalColorSpecial>> crystalPlanksGroup;	
+	public static BlockVariantGroup<EnumCrystalColorSpecial, FenceBlockVariant<EnumCrystalColorSpecial>> crystalFencesGroup;	
+	public static BlockVariantGroup<EnumCrystalColorSpecial, FenceGateBlockVariant<EnumCrystalColorSpecial>> crystalFenceGateGroup;		
+	
 	public static BlockVariantGroup<EnumCrystalColor, BlockReedVariant<EnumCrystalColor>> crystalReedGroup;	
 	public static BlockVariantGroup<EnumCrystalColor, BlockCrystalShard> crystalShardBlock;	
 	public static BlockVariantGroup<EnumCrystalColor, BlockCrystalBerryBush> crystalBerryBushGroup;	
@@ -103,6 +113,11 @@ public class ModBlocks {
 	public static BlockWirelessChest wirelessChest;
 	public static TileEntityType<TileEntityWirelessChest> TILE_WIRELESS_CHEST;
 	public static BlockVariantGroup<EnumCrystalColorSpecialWithCreative, BlockTank> tankGroup;
+	
+	public static BlockXPTank xpTank;
+	public static TileEntityType<TileEntityXPTank> TILE_XP_TANK;
+	public static ContainerBlockCustom xpVacuum;
+	public static TileEntityType<TileEntityXPVacuum> TILE_XP_VACUUM;
 	
 	public static BlockVariantGroup<WoodType, BlockJar> jarGroup;
 
@@ -206,6 +221,22 @@ public class ModBlocks {
 				.blockFactory(BlockVariant<EnumCrystalColorSpecial>::new)
 				.build();
 		RegistrationHandler.addBlockGroup(crystalPlanksGroup);
+		crystalFencesGroup = BlockVariantGroup.Builder.<EnumCrystalColorSpecial, FenceBlockVariant<EnumCrystalColorSpecial>>create()
+				.groupName("crystalfence")
+				.suffix()
+				.variants(EnumCrystalColorSpecial.values())
+				.blockPropertiesFactory(type -> Block.Properties.create(Material.WOOD, MaterialColor.WOOD).hardnessAndResistance(2.0F, 3.0F).sound(SoundType.WOOD))
+				.blockFactory(FenceBlockVariant<EnumCrystalColorSpecial>::new)
+				.build();
+		RegistrationHandler.addBlockGroup(crystalFencesGroup);
+		crystalFenceGateGroup = BlockVariantGroup.Builder.<EnumCrystalColorSpecial, FenceGateBlockVariant<EnumCrystalColorSpecial>>create()
+				.groupName("crystalfence_gate")
+				.suffix()
+				.variants(EnumCrystalColorSpecial.values())
+				.blockPropertiesFactory(type -> Block.Properties.create(Material.WOOD, MaterialColor.WOOD).hardnessAndResistance(2.0F, 3.0F).sound(SoundType.WOOD))
+				.blockFactory(FenceGateBlockVariant<EnumCrystalColorSpecial>::new)
+				.build();
+		RegistrationHandler.addBlockGroup(crystalFenceGateGroup);
 		
 		//Plants
 		crystalReedGroup = BlockVariantGroup.Builder.<EnumCrystalColor, BlockReedVariant<EnumCrystalColor>>create()
@@ -251,6 +282,7 @@ public class ModBlocks {
 				.suffix()
 				.variants(EnumCrystalColorSpecialWithCreative.values())
 				.blockPropertiesFactory(type -> Block.Properties.create(Material.WOOD).hardnessAndResistance(3.0F, 5.0F).sound(SoundType.WOOD))
+				.itemPropertiesFactory(variant -> new Item.Properties().group(ModItemGroups.ITEM_GROUP_MACHINES))
 				.blockFactory(BlockCrate::new)
 				.tileFactory(new TileFactory<EnumCrystalColorSpecialWithCreative>(){
 					@Override
@@ -272,7 +304,7 @@ public class ModBlocks {
 				.variants(WoodenCrystalChestType.values())
 				.blockPropertiesFactory(type -> Block.Properties.create(Material.WOOD).hardnessAndResistance(2.5F).sound(SoundType.WOOD))
 				.blockFactory(BlockWoodenCrystalChest::new)
-				.itemPropertiesFactory(variant -> new Item.Properties().group(ModItemGroups.ITEM_GROUP_BLOCKS).setTEISR(() -> CustomItemRender::new))
+				.itemPropertiesFactory(variant -> new Item.Properties().group(ModItemGroups.ITEM_GROUP_MACHINES).setTEISR(() -> CustomItemRender::new))
 				.tileFactory(new TileFactory<WoodenCrystalChestType>(){
 					@Override
 					public TileEntityWoodenCrystalChest createTile(WoodenCrystalChestType variant) {
@@ -293,7 +325,7 @@ public class ModBlocks {
 				.variants(MetalCrystalChestType.values())
 				.blockPropertiesFactory(type -> Block.Properties.create(Material.IRON).hardnessAndResistance(5.0F, 6.0F).sound(SoundType.METAL))
 				.blockFactory(BlockMetalCrystalChest::new)
-				.itemPropertiesFactory(variant -> new Item.Properties().group(ModItemGroups.ITEM_GROUP_BLOCKS).setTEISR(() -> CustomItemRender::new))
+				.itemPropertiesFactory(variant -> new Item.Properties().group(ModItemGroups.ITEM_GROUP_MACHINES).setTEISR(() -> CustomItemRender::new))
 				.tileFactory(new TileFactory<MetalCrystalChestType>(){
 					@Override
 					public TileEntityMetalCrystalChest createTile(MetalCrystalChestType variant) {
@@ -309,7 +341,7 @@ public class ModBlocks {
 				.build();
 		RegistrationHandler.addBlockGroup(metalChestGroup);			
 		wirelessChest = new BlockWirelessChest(Block.Properties.create(Material.IRON).hardnessAndResistance(5.0F, 6.0F).sound(SoundType.METAL)); 
-		RegistrationHandler.createBlock(wirelessChest, new BlockItem(wirelessChest, RegistrationHandler.defaultItemProperties(ModItemGroups.ITEM_GROUP_BLOCKS).setTEISR(() -> CustomItemRender::new)), "wirelesschest");	
+		RegistrationHandler.createBlock(wirelessChest, new BlockItem(wirelessChest, RegistrationHandler.defaultItemProperties(ModItemGroups.ITEM_GROUP_MACHINES).setTEISR(() -> CustomItemRender::new)), "wirelesschest");	
 		TILE_WIRELESS_CHEST = registerTileEntity(CrystalMod.resource("wireless_chest"), TileEntityType.Builder.func_223042_a(TileEntityWirelessChest::new, wirelessChest));
 		
 		tankGroup = BlockVariantGroup.Builder.<EnumCrystalColorSpecialWithCreative, BlockTank>create()
@@ -318,7 +350,7 @@ public class ModBlocks {
 				.variants(EnumCrystalColorSpecialWithCreative.values())
 				.blockPropertiesFactory(type -> Block.Properties.create(Material.IRON).hardnessAndResistance(1.5F, 15.0F).sound(SoundType.GLASS))
 				.blockFactory(BlockTank::new)
-				.itemPropertiesFactory(variant -> new Item.Properties().group(ModItemGroups.ITEM_GROUP_BLOCKS).setTEISR(() -> CustomItemRender::new))
+				.itemPropertiesFactory(variant -> new Item.Properties().group(ModItemGroups.ITEM_GROUP_MACHINES).setTEISR(() -> CustomItemRender::new))
 				.tileFactory(new TileFactory<EnumCrystalColorSpecialWithCreative>(){
 					@Override
 					public TileEntityTank createTile(EnumCrystalColorSpecialWithCreative variant) {
@@ -333,6 +365,24 @@ public class ModBlocks {
 				})
 				.build();
 		RegistrationHandler.addBlockGroup(tankGroup);
+		
+		xpTank = new BlockXPTank(Block.Properties.create(Material.IRON).hardnessAndResistance(2.0F, 15.0F).sound(SoundType.GLASS)); 
+		RegistrationHandler.createBlock(xpTank, new BlockItem(xpTank, RegistrationHandler.defaultItemProperties(ModItemGroups.ITEM_GROUP_MACHINES).setTEISR(() -> CustomItemRender::new)), "xptank");	
+		TILE_XP_TANK = registerTileEntity(CrystalMod.resource("xp_tank"), TileEntityType.Builder.func_223042_a(TileEntityXPTank::new, xpTank));
+		
+		
+		//TODO Add Gui Tank Overlay
+		xpVacuum = new ContainerBlockCustom(Block.Properties.create(Material.IRON).hardnessAndResistance(2.0F, 15.0F).sound(SoundType.METAL)){
+
+			@Override
+			public TileEntity createNewTileEntity(IBlockReader worldIn) {
+				return new TileEntityXPVacuum();
+			}
+			
+		}; 
+		RegistrationHandler.createBlock(xpVacuum, ModItemGroups.ITEM_GROUP_MACHINES, "xpvacuum");	
+		TILE_XP_VACUUM = registerTileEntity(CrystalMod.resource("xp_vacuum"), TileEntityType.Builder.func_223042_a(TileEntityXPVacuum::new, xpVacuum));
+
 		
 		jarGroup = BlockVariantGroup.Builder.<WoodType, BlockJar>create()
 				.groupName("jar")
@@ -357,11 +407,11 @@ public class ModBlocks {
 		RegistrationHandler.addBlockGroup(jarGroup);	
 		
 		pedestal = new BlockPedestal(Block.Properties.create(Material.ROCK).hardnessAndResistance(1.0F, 10.0F).sound(SoundType.STONE)); 
-		RegistrationHandler.createBlock(pedestal, ModItemGroups.ITEM_GROUP_BLOCKS, "pedestal");
+		RegistrationHandler.createBlock(pedestal, ModItemGroups.ITEM_GROUP_MACHINES, "pedestal");
 		TILE_PEDESTAL = registerTileEntity(CrystalMod.resource("pedestal"), TileEntityType.Builder.func_223042_a(TileEntityPedestal::new, pedestal));
 		
 		fusionPedestal = new BlockFusionPedestal(Block.Properties.create(Material.ROCK).hardnessAndResistance(1.0F, 10.0F).sound(SoundType.STONE)); 
-		RegistrationHandler.createBlock(fusionPedestal, ModItemGroups.ITEM_GROUP_BLOCKS, "fusion_pedestal");
+		RegistrationHandler.createBlock(fusionPedestal, ModItemGroups.ITEM_GROUP_MACHINES, "fusion_pedestal");
 		TILE_FUSION_PEDESTAL = registerTileEntity(CrystalMod.resource("fusion_pedestal"), TileEntityType.Builder.func_223042_a(TileEntityFusionPedestal::new, fusionPedestal));
 		
 		batteryGroup = BlockVariantGroup.Builder.<EnumCrystalColorSpecialWithCreative, BlockBattery>create()
@@ -371,7 +421,7 @@ public class ModBlocks {
 				.blockPropertiesFactory(type -> Block.Properties.create(Material.IRON).hardnessAndResistance(20.0F, 50.0F).sound(SoundType.METAL))
 				.blockFactory(BlockBattery::new)
 				.itemFactory(BlockItemBattery::new)
-				.itemPropertiesFactory(variant -> new Item.Properties().group(ModItemGroups.ITEM_GROUP_BLOCKS).setTEISR(() -> CustomItemRender::new))
+				.itemPropertiesFactory(variant -> new Item.Properties().group(ModItemGroups.ITEM_GROUP_MACHINES).setTEISR(() -> CustomItemRender::new))
 				.tileFactory(new TileFactory<EnumCrystalColorSpecialWithCreative>(){
 					@Override
 					public TileEntityBattery createTile(EnumCrystalColorSpecialWithCreative variant) {
@@ -391,6 +441,7 @@ public class ModBlocks {
 				.suffix()
 				.variants(EnumEngineType.values())
 				.blockPropertiesFactory(type -> Block.Properties.create(Material.ROCK).hardnessAndResistance(2.0F, 15.0F).sound(SoundType.STONE))
+				.itemPropertiesFactory(variant -> new Item.Properties().group(ModItemGroups.ITEM_GROUP_MACHINES))
 				.blockFactory(BlockEngine::new)
 				.tileFactory(new TileFactory<EnumEngineType>(){
 					@Override
@@ -412,6 +463,7 @@ public class ModBlocks {
 				.suffix()
 				.variants(EnumCraftingMachine.values())
 				.blockPropertiesFactory(type -> Block.Properties.create(Material.IRON).hardnessAndResistance(1.0F, 5.0F).sound(SoundType.METAL))
+				.itemPropertiesFactory(variant -> new Item.Properties().group(ModItemGroups.ITEM_GROUP_MACHINES))
 				.blockFactory(BlockCraftingMachine::new)
 				.tileFactory(new TileFactory<EnumCraftingMachine>(){
 					@Override
@@ -442,7 +494,7 @@ public class ModBlocks {
 		RegistrationHandler.addBlockGroup(craftingMachine);
 		
 		pipeItem = new BlockPipe(NetworkType.ITEM, Block.Properties.create(Material.IRON).hardnessAndResistance(1.0F, 10.0F).sound(SoundType.METAL)); 
-		RegistrationHandler.createBlock(pipeItem, ModItemGroups.ITEM_GROUP_BLOCKS, "pipe_item");
+		RegistrationHandler.createBlock(pipeItem, ModItemGroups.ITEM_GROUP_MACHINES, "pipe_item");
 		TILE_PIPE_ITEM = registerTileEntity(CrystalMod.resource("pipe_item"), TileEntityType.Builder.func_223042_a(TileEntityPipeItem::new, pipeItem));
 		
 		pipeEnergyCUGroup = BlockVariantGroup.Builder.<EnumCrystalColorSpecial, BlockPipeEnergyCU>create()
@@ -451,6 +503,7 @@ public class ModBlocks {
 				.variants(EnumCrystalColorSpecial.values())
 				.blockPropertiesFactory(type -> Block.Properties.create(Material.IRON).hardnessAndResistance(1.0F, 10.0F).sound(SoundType.METAL))
 				.blockFactory(BlockPipeEnergyCU::new)
+				.itemPropertiesFactory(variant -> new Item.Properties().group(ModItemGroups.ITEM_GROUP_MACHINES))
 				.tileTypeFactory(new TileTypeFactory<EnumCrystalColorSpecial, BlockPipeEnergyCU>(){
 					@Override
 					public Builder<?> createTileType(EnumCrystalColorSpecial variant, BlockPipeEnergyCU block) {
@@ -465,6 +518,7 @@ public class ModBlocks {
 				.variants(EnumCrystalColorSpecial.values())
 				.blockPropertiesFactory(type -> Block.Properties.create(Material.IRON).hardnessAndResistance(1.0F, 10.0F).sound(SoundType.METAL))
 				.blockFactory(BlockPipeEnergyRF::new)
+				.itemPropertiesFactory(variant -> new Item.Properties().group(ModItemGroups.ITEM_GROUP_MACHINES))
 				.tileTypeFactory(new TileTypeFactory<EnumCrystalColorSpecial, BlockPipeEnergyRF>(){
 					@Override
 					public Builder<?> createTileType(EnumCrystalColorSpecial variant, BlockPipeEnergyRF block) {

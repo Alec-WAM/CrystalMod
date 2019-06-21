@@ -120,7 +120,7 @@ public class GrinderRecipe implements IRecipe<IInventory> {
 	   return ModRecipes.GRINDER_TYPE;
    }
 
-   public static class Serializer implements IRecipeSerializer<GrinderRecipe> {
+   public static class Serializer extends net.minecraftforge.registries.ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<GrinderRecipe> {
       
 	  @SuppressWarnings("deprecation")
 	  @Override

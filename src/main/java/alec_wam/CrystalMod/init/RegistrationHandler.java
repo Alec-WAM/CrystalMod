@@ -4,15 +4,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.compatibility.materials.ItemMaterial;
+import alec_wam.CrystalMod.compatibility.materials.MaterialLoader;
 import alec_wam.CrystalMod.core.BlockVariantGroup;
 import alec_wam.CrystalMod.core.ItemVariantGroup;
 import net.minecraft.block.Block;
-import net.minecraft.item.Item;
 import net.minecraft.item.BlockItem;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
+import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.IStringSerializable;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.event.RegistryEvent.MissingMappings.Mapping;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.IForgeRegistry;
@@ -60,12 +64,17 @@ public class RegistrationHandler {
 		for(BlockVariantGroup<? extends Enum<? extends IStringSerializable>, ? extends Block> group : VARIANT_BLOCK_LIST){
 			group.registerItems(registry);
 		}
+		
+		CrystalMod.LOGGER.info("Adding Items");
 		for(Item item : ITEM_LIST){
 			registry.register(item);
 		}
 		for(ItemVariantGroup<? extends Enum<? extends IStringSerializable>, ? extends Item> group : VARIANT_ITEM_LIST){
 			group.registerItems(registry);
 		}
+		
+		CrystalMod.LOGGER.info("Adding Material Items");
+		MaterialLoader.registerMaterialItems(registry);
 	}
 	
 	@SubscribeEvent
@@ -74,6 +83,20 @@ public class RegistrationHandler {
 		final IForgeRegistry<TileEntityType<?>> registry = event.getRegistry();
 		for(BlockVariantGroup<? extends Enum<? extends IStringSerializable>, ? extends Block> group : VARIANT_BLOCK_LIST){
 			group.registerTiles(registry);
+		}
+	}
+	
+	@SubscribeEvent
+	public static void registerRecipeSerlizers(final RegistryEvent.Register<IRecipeSerializer<?>> event) {
+		final IForgeRegistry<IRecipeSerializer<?>> registry = event.getRegistry();
+		registry.register(ModRecipes.GRINDER_SERIALIZER);
+		registry.register(ModRecipes.PRESS_SERIALIZER);
+	}
+	
+	@SubscribeEvent
+	public static void fixDusts(RegistryEvent.MissingMappings<ItemMaterial> event) {
+		for(Mapping<ItemMaterial> obj : event.getMappings()){
+			obj.ignore();
 		}
 	}
 	

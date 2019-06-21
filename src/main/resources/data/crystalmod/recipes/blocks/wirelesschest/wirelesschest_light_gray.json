@@ -8,7 +8,7 @@
 	],
 	"key": {
 		"W": {
-			"item": "minecraft:white_wool"
+			"item": "minecraft:light_gray_wool"
 		},
 		"P": {
 			"item": "crystalmod:plate_darkiron"
@@ -19,6 +19,6 @@
 	},
 	"result": {
 		"item": "crystalmod:wirelesschest",
-		"nbt": {"Code":"000"}
+		"nbt": "{Code:2184}"
 	}
 }

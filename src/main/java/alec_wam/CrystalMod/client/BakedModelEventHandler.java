@@ -11,6 +11,9 @@ import com.google.common.collect.ImmutableMap;
 
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.BlockCrystalShard;
+import alec_wam.CrystalMod.compatibility.materials.ItemMaterial;
+import alec_wam.CrystalMod.compatibility.materials.DustModelLoader;
+import alec_wam.CrystalMod.compatibility.materials.MaterialLoader;
 import alec_wam.CrystalMod.core.color.EnumCrystalColor;
 import alec_wam.CrystalMod.core.color.EnumCrystalColorSpecial;
 import alec_wam.CrystalMod.init.ModBlocks;
@@ -29,9 +32,11 @@ import net.minecraft.client.renderer.model.BakedQuad;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.item.Item;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.client.model.ModelLoader;
@@ -47,6 +52,7 @@ public class BakedModelEventHandler {
 	public static void registerOBJ(){
 		OBJLoader.INSTANCE.addDomain(CrystalMod.MODID);
 		ModelLoaderRegistry.registerLoader(BakedModelLoader.INSTANCE);
+        ModelLoaderRegistry.registerLoader(DustModelLoader.INSTANCE);
 	}
 	
 	@SubscribeEvent
@@ -86,8 +92,34 @@ public class BakedModelEventHandler {
 	}
 	
 	@SubscribeEvent
+	public static void itemColors(ColorHandlerEvent.Item event){
+		for(ItemMaterial mat : MaterialLoader.ITEM_MATERIALS){
+			if(mat.hasDust()){
+				Item item = MaterialLoader.getDustItem(mat);
+				event.getItemColors().register((stack, layer) -> {
+			         return layer == 0 ? mat.getMaterialColor() : -1;
+			      }, item);
+			}
+			if(mat.hasPlate()){
+				Item item = MaterialLoader.getPlateItem(mat);
+				event.getItemColors().register((stack, layer) -> {
+			         return layer == 0 ? mat.getMaterialColor() : -1;
+			      }, item);
+			}
+		}
+	}
+	
+	@SubscribeEvent
     public static void onBakeModel(final ModelBakeEvent event) {
 		createShardModels(event);
+		
+		/*for(Entry<String, Item> item : MaterialLoader.DUST_ITEMS.entrySet()){
+			ModelResourceLocation model = new ModelResourceLocation(item.getValue().getRegistryName(), "");
+			DustMaterial mat = MaterialLoader.getDust(item.getKey());
+			if(mat !=null){
+				event.getModelRegistry().put(model, ModelDust.MODEL);
+			}
+		}*/
 		
 		ResourceLocation registryNamePipe = ModBlocks.pipeItem.getRegistryName();
 		for(BlockState state : ModBlocks.pipeItem.getStateContainer().getValidStates()){

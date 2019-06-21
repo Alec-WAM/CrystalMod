@@ -25,8 +25,11 @@ import alec_wam.CrystalMod.tiles.jar.TileEntityJarRender;
 import alec_wam.CrystalMod.tiles.tank.BlockTank;
 import alec_wam.CrystalMod.tiles.tank.TileEntityTank;
 import alec_wam.CrystalMod.tiles.tank.TileEntityTankRender;
+import alec_wam.CrystalMod.tiles.xp.BlockXPTank;
+import alec_wam.CrystalMod.tiles.xp.TileEntityXPTankRender;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.RenderUtil;
+import alec_wam.CrystalMod.util.XPUtil;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.model.IBakedModel;
@@ -129,6 +132,24 @@ public class CustomItemRender extends ItemStackTileEntityRenderer
 		        	GlStateManager.pushMatrix();	
 		        	GlStateManager.disableLighting();
 		        	TileEntityTankRender.renderTankFluid(stack, capacity, 0, 0, 0, stack.getFluid().getLuminosity());
+		        	GlStateManager.enableLighting();
+		        	GlStateManager.enableBlend();
+		        	GlStateManager.popMatrix();		    		
+        		}
+        	}
+        }
+        else if (block instanceof BlockXPTank)
+        {
+        	boolean isEnder = ItemNBTHelper.getBoolean(itemStackIn, "IsEnder", false);
+        	IBakedModel ibakedmodel = Minecraft.getInstance().getBlockRendererDispatcher().getModelForState(block.getDefaultState().with(BlockXPTank.ENDER, Boolean.valueOf(isEnder)));
+        	RenderUtil.renderModel(ibakedmodel, itemStackIn);
+        	if(ItemNBTHelper.getCompound(itemStackIn).contains("XPStorage")){
+        		CompoundNBT tankNBT = ItemNBTHelper.getCompound(itemStackIn).getCompound("XPStorage");
+        		if(!tankNBT.contains("Empty")){
+		        	int xp = tankNBT.getInt("experienceTotal");
+		        	GlStateManager.pushMatrix();	
+		        	GlStateManager.disableLighting();
+		        	TileEntityXPTankRender.renderTankXP(XPUtil.experienceToLiquid(xp), 0, 0, 0, 8);
 		        	GlStateManager.enableLighting();
 		        	GlStateManager.enableBlend();
 		        	GlStateManager.popMatrix();		    		

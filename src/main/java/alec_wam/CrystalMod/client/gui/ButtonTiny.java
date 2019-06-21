@@ -24,10 +24,8 @@ public class ButtonTiny extends Button {
 			GlStateManager.enableBlend();
 			GlStateManager.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
 			GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-			
-			blit(this.x, this.y, 0, 46 + i * 20, 10, 20, this.width / 2, this.height, 256, 256);
-			blit(this.x + width / 2, this.y, 190, 46 + i * 20, 10, 20, this.width / 2, this.height, 256, 256);
-			
+			blit(this.x, this.y, this.width / 2, this.height, 0, 46 + i * 20, 10, 20, 256, 256);
+			blit(this.x + this.width / 2, this.y, this.width / 2, this.height, 190, 46 + i * 20, 10, 20, 256, 256);
 			this.renderBg(minecraft, mouseX, mouseY);
 			int j = 14737632;
 			if (packedFGColor != 0)

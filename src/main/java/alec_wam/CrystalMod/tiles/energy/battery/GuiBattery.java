@@ -17,12 +17,13 @@ import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TranslationTextComponent;
 
 public class GuiBattery extends GuiContainerTabbed<ContainerBattery> {
 	public static final ResourceLocation TEXTURE = new ResourceLocation("crystalmod:textures/gui/machine/battery.png");
 	public TileEntityBattery battery;
 	public GuiBattery(int windowId, PlayerEntity player, TileEntityBattery battery) {
-		super(new ContainerBattery(windowId, player, battery), player.inventory, null, TEXTURE);
+		super(new ContainerBattery(windowId, player, battery), player.inventory, new TranslationTextComponent("block.crystalmod.battery_"+EnumCrystalColorSpecialWithCreative.values()[battery.getTier()].getName()), TEXTURE);
 		this.battery = battery;
 	}
 	

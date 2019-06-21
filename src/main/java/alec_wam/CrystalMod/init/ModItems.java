@@ -111,19 +111,20 @@ public class ModItems {
 		RegistrationHandler.addItemGroup(crystalBerryGroup);
 		
 		
-		wrench = new ItemWrench(new Item.Properties().group(ModItemGroups.ITEM_GROUP_ITEMS).maxStackSize(1));
+		wrench = new ItemWrench(new Item.Properties().group(ModItemGroups.ITEM_GROUP_MACHINES).maxStackSize(1));
 		RegistrationHandler.addItem(wrench, "wrench");
-		machineFrame = new Item(new Item.Properties().group(ModItemGroups.ITEM_GROUP_ITEMS));
+		machineFrame = new Item(new Item.Properties().group(ModItemGroups.ITEM_GROUP_MACHINES));
 		RegistrationHandler.addItem(machineFrame, "machineframe");
-		fusionWand = new ItemFusionWand(new Item.Properties().group(ModItemGroups.ITEM_GROUP_ITEMS).maxStackSize(1));
+		fusionWand = new ItemFusionWand(new Item.Properties().group(ModItemGroups.ITEM_GROUP_MACHINES).maxStackSize(1));
 		RegistrationHandler.addItem(fusionWand, "fusionwand");
-		pipeFilter = new ItemPipeFilter(new Item.Properties().group(ModItemGroups.ITEM_GROUP_ITEMS).maxStackSize(16));
+		pipeFilter = new ItemPipeFilter(new Item.Properties().group(ModItemGroups.ITEM_GROUP_MACHINES).maxStackSize(16));
 		RegistrationHandler.addItem(pipeFilter, "pipefilter");
 		pipeUpgrades = ItemVariantGroup.Builder.<EnumPipeUpgrades, ItemVariant<EnumPipeUpgrades>>create()
 				.groupName("pipe_upgrade")
 				.suffix()
 				.variants(EnumPipeUpgrades.values())
 				.itemFactory(ItemVariant<EnumPipeUpgrades>::new)
+				.itemPropertiesFactory(variant -> new Item.Properties().group(ModItemGroups.ITEM_GROUP_MACHINES))
 				.build();
 		RegistrationHandler.addItemGroup(pipeUpgrades);
 		miscUpgrades = ItemVariantGroup.Builder.<EnumMiscUpgrades, ItemVariant<EnumMiscUpgrades>>create()
@@ -131,6 +132,7 @@ public class ModItems {
 				.suffix()
 				.variants(EnumMiscUpgrades.values())
 				.itemFactory(ItemVariant<EnumMiscUpgrades>::new)
+				.itemPropertiesFactory(variant -> new Item.Properties().group(ModItemGroups.ITEM_GROUP_MACHINES))
 				.build();
 		RegistrationHandler.addItemGroup(miscUpgrades);
 		

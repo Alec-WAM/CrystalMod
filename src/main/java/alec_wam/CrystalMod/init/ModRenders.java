@@ -21,6 +21,8 @@ import alec_wam.CrystalMod.tiles.pipes.TileEntityPipeBase;
 import alec_wam.CrystalMod.tiles.pipes.TileEntityPipeBaseRender;
 import alec_wam.CrystalMod.tiles.tank.TileEntityTank;
 import alec_wam.CrystalMod.tiles.tank.TileEntityTankRender;
+import alec_wam.CrystalMod.tiles.xp.TileEntityXPTank;
+import alec_wam.CrystalMod.tiles.xp.TileEntityXPTankRender;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
@@ -37,6 +39,7 @@ public class ModRenders {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMetalCrystalChest.class, new TileEntityMetalCrystalChestRender());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityWirelessChest.class, new TileEntityWirelessChestRender());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTank.class, new TileEntityTankRender());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityXPTank.class, new TileEntityXPTankRender());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPedestal.class, new TileEntityPedestalRender());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityFusionPedestal.class, new TileEntityFusionPedestalRender());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityJar.class, new TileEntityJarRender());
