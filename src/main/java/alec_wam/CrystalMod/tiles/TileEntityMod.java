@@ -1,6 +1,7 @@
 package alec_wam.CrystalMod.tiles;
 
 import alec_wam.CrystalMod.util.BlockUtil;
+import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
@@ -75,6 +76,20 @@ public class TileEntityMod extends TileEntity implements ITickableTileEntity {
 				BlockUtil.markBlockForUpdate(getWorld(), getPos());
 				dirtyClient = false;
 			}
+		}
+	}
+	
+	boolean warned = false;
+	@Override
+	public void warnInvalidBlock() {
+		super.warnInvalidBlock();
+		if(!warned) {
+			TileEntityType<?> type = this.getType();
+			BlockState state = world.getBlockState(getPos());
+			if(!type.isValidBlock(state.getBlock())){
+				System.out.println("Not valid" + state + " for " + type.getRegistryName());
+			}
+			warned = true;
 		}
 	}
 	

@@ -1,6 +1,7 @@
 package alec_wam.CrystalMod.init;
 
 import java.lang.reflect.Method;
+import java.util.function.Supplier;
 
 import alec_wam.CrystalMod.CrystalMod;
 import alec_wam.CrystalMod.blocks.BlockCrystalIngot;
@@ -295,9 +296,10 @@ public class ModBlocks {
 					}
 				})
 				.tileTypeFactory(new TileTypeFactory<EnumCrystalColorSpecialWithCreative, BlockCrate>(){
+					Supplier<TileEntityCrate> makeTileFromVariant(EnumCrystalColorSpecialWithCreative variant) { return () -> new TileEntityCrate(variant); }
 					@Override
 					public Builder<?> createTileType(EnumCrystalColorSpecialWithCreative variant, BlockCrate block) {
-						return TileEntityType.Builder.func_223042_a(TileEntityCrate::new, block);
+						return TileEntityType.Builder.func_223042_a(makeTileFromVariant(variant), block);
 					}
 				})
 				.build();
@@ -316,9 +318,10 @@ public class ModBlocks {
 					}
 				})
 				.tileTypeFactory(new TileTypeFactory<WoodenCrystalChestType, BlockWoodenCrystalChest>(){
+					Supplier<TileEntityWoodenCrystalChest> makeTileFromVariant(WoodenCrystalChestType variant) { return () -> new TileEntityWoodenCrystalChest(variant); }
 					@Override
 					public Builder<?> createTileType(WoodenCrystalChestType variant, BlockWoodenCrystalChest block) {
-						return TileEntityType.Builder.func_223042_a(TileEntityWoodenCrystalChest::new, block);
+						return TileEntityType.Builder.func_223042_a(makeTileFromVariant(variant), block);
 					}
 				})
 				.build();
@@ -337,9 +340,10 @@ public class ModBlocks {
 					}
 				})
 				.tileTypeFactory(new TileTypeFactory<MetalCrystalChestType, BlockMetalCrystalChest>(){
+					Supplier<TileEntityMetalCrystalChest> makeTileFromVariant(MetalCrystalChestType variant) { return () -> new TileEntityMetalCrystalChest(variant); }
 					@Override
 					public Builder<?> createTileType(MetalCrystalChestType variant, BlockMetalCrystalChest block) {
-						return TileEntityType.Builder.func_223042_a(TileEntityMetalCrystalChest::new, block);
+						return TileEntityType.Builder.func_223042_a(makeTileFromVariant(variant), block);
 					}
 				})
 				.build();
@@ -362,9 +366,10 @@ public class ModBlocks {
 					}
 				})
 				.tileTypeFactory(new TileTypeFactory<EnumCrystalColorSpecialWithCreative, BlockTank>(){
+					Supplier<TileEntityTank> makeTileFromVariant(EnumCrystalColorSpecialWithCreative variant) { return () -> new TileEntityTank(variant); }
 					@Override
 					public Builder<?> createTileType(EnumCrystalColorSpecialWithCreative variant, BlockTank block) {
-						return TileEntityType.Builder.func_223042_a(TileEntityTank::new, block);
+						return TileEntityType.Builder.func_223042_a(makeTileFromVariant(variant), block);
 					}
 				})
 				.build();
@@ -402,9 +407,10 @@ public class ModBlocks {
 					}
 				})
 				.tileTypeFactory(new TileTypeFactory<WoodType, BlockJar>(){
+					Supplier<TileEntityJar> makeJarFromVariant(WoodType variant) { return () -> new TileEntityJar(variant); }
 					@Override
 					public Builder<?> createTileType(WoodType variant, BlockJar block) {
-						return TileEntityType.Builder.func_223042_a(TileEntityJar::new, block);
+						return TileEntityType.Builder.func_223042_a(makeJarFromVariant(variant), block);
 					}
 				})
 				.build();
@@ -433,9 +439,11 @@ public class ModBlocks {
 					}
 				})
 				.tileTypeFactory(new TileTypeFactory<EnumCrystalColorSpecialWithCreative, BlockBattery>(){
+					Supplier<TileEntityBattery> makeBatteryFromVariant(EnumCrystalColorSpecialWithCreative variant) { return () -> new TileEntityBattery(variant); }
+					
 					@Override
 					public Builder<?> createTileType(EnumCrystalColorSpecialWithCreative variant, BlockBattery block) {
-						return TileEntityType.Builder.func_223042_a(TileEntityBattery::new, block);
+						return TileEntityType.Builder.func_223042_a(makeBatteryFromVariant(variant), block);
 					}
 				})
 				.build();
@@ -454,9 +462,10 @@ public class ModBlocks {
 					}
 				})
 				.tileTypeFactory(new TileTypeFactory<EnumEngineType, BlockEngine>(){
+					Supplier<TileEntityEngineFurnace> makeEngine() { return () -> new TileEntityEngineFurnace(1); }
 					@Override
 					public Builder<?> createTileType(EnumEngineType variant, BlockEngine block) {
-						return TileEntityType.Builder.func_223042_a(TileEntityEngineFurnace::new, block);
+						return TileEntityType.Builder.func_223042_a(makeEngine(), block);
 					}
 				})
 				.build();

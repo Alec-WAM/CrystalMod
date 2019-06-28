@@ -166,8 +166,8 @@ public class BlockVariantGroup<VARIANT extends Enum<VARIANT> & IStringSerializab
 			} else {
 				registryName = variant.getName() + "_" + groupName;
 			}
-			
-			TileEntityType.Builder<?> b = tileTypeFactory.createTileType(variant, blocks.get(variant));
+			BLOCK blockSet = blocks.get(variant);
+			TileEntityType.Builder<?> b = tileTypeFactory.createTileType(variant, blockSet);
 			if(b !=null){
 				String registryID = CrystalMod.resource("tile_"+registryName);
 				TileEntityType<?> type = b.build(null);
@@ -186,7 +186,8 @@ public class BlockVariantGroup<VARIANT extends Enum<VARIANT> & IStringSerializab
 	}
 	
 	public TileEntityType<?> getTileType(final VARIANT variant) {
-		return tiles.get(variant);
+		TileEntityType<?> type = tiles.get(variant);
+		return type;
 	}
 
 	/**

@@ -15,6 +15,7 @@ import alec_wam.CrystalMod.tiles.TileEntityIOSides;
 import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemStackTools;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.ISidedInventory;
@@ -24,6 +25,7 @@ import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
@@ -164,6 +166,7 @@ public class TileEntityBattery extends TileEntityIOSides implements INBTDrop, IN
 	@Override
 	public void tick(){
 		super.tick();
+		
 		if(!getWorld().isRemote){
 			boolean powerChanged = energyStorage.getCEnergyStored() != lastEnergyAmount && shouldDoWorkThisTick(10);
 			if(powerChanged){
