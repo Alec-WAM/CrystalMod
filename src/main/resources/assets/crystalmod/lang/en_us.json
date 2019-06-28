@@ -70,6 +70,7 @@
   "block.crystalmod.crystalreeds_dark": "Dark Crystal Reeds",   
 
   "block.crystalmod.flowerlilypad": "Flower Lilypad",
+  "block.crystalmod.cattail": "Cattails",   
   
   "block.minecraft.rose_bush": "Red Rose Bush",
   "block.crystalmod.rosebush_white": "White Rose Bush",
@@ -192,9 +193,14 @@
   "item.crystalmod.crystalberry_green": "Green Crystal Berry",
   "item.crystalmod.crystalberry_dark": "Dark Crystal Berry",
   
+  "item.crystalmod.cattail_fluff": "Cattail Fluff",  
+  "item.crystalmod.cattail_roots_raw": "Cattail Roots",   
+  "item.crystalmod.cattail_roots_cooked": "Cooked Cattail Roots", 
+  
   "item.crystalmod.wrench": "Wrench",  
-  "item.crystalmod.machineframe": "Machine Frame", 
+  "item.crystalmod.machineframe": "Machine Frame",
   "item.crystalmod.fusionwand": "Fusion Wand",  
+  "item.crystalmod.powered_shield": "Powered Shield",  
   
   "item.crystalmod.pipefilter": "Pipe Item Filter",  
   "item.crystalmod.pipe_upgrade_speed": "Pipe Upgrade (Speed)",  

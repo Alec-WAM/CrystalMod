@@ -6,6 +6,7 @@ import java.util.List;
 import com.google.common.collect.Lists;
 
 import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.init.recipes.PoweredShieldRecipes;
 import alec_wam.CrystalMod.tiles.fusion.ModFusionRecipes;
 import alec_wam.CrystalMod.tiles.machine.crafting.grinder.GrinderRecipe;
 import alec_wam.CrystalMod.tiles.machine.crafting.press.PressRecipe;
@@ -14,6 +15,7 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.RecipeManager;
+import net.minecraft.item.crafting.SpecialRecipeSerializer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.crafting.RecipeType;
@@ -31,6 +33,12 @@ public class ModRecipes {
 	public static final RecipeType<PressRecipe> PRESS = RecipeType.get(CATEGORY_PRESS, PressRecipe.class);
 	public static final IRecipeType<PressRecipe> PRESS_TYPE = IRecipeType.<PressRecipe>func_222147_a(CATEGORY_PRESS.toString());
 	public static final IRecipeSerializer<PressRecipe> PRESS_SERIALIZER = createRecipeSerializer(CATEGORY_PRESS, new PressRecipe.Serializer());
+	
+	public static final ResourceLocation CATEGORY_SHIELD = CrystalMod.resourceL("shield_decoration");
+	public static final RecipeType<PoweredShieldRecipes> SHIELD = RecipeType.get(CATEGORY_SHIELD, PoweredShieldRecipes.class);
+	public static final IRecipeType<PoweredShieldRecipes> SHIELD_TYPE = IRecipeType.<PoweredShieldRecipes>func_222147_a(CATEGORY_SHIELD.toString());
+	public static final IRecipeSerializer<PoweredShieldRecipes> SHIELD_SERIALIZER = createRecipeSerializer(CATEGORY_SHIELD, new SpecialRecipeSerializer<>(PoweredShieldRecipes::new));
+	
 	
 	public static void registerModRecipes(){
 		ModFusionRecipes.init();	

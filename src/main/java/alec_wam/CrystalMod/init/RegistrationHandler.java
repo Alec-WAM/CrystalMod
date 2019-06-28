@@ -91,6 +91,7 @@ public class RegistrationHandler {
 		final IForgeRegistry<IRecipeSerializer<?>> registry = event.getRegistry();
 		registry.register(ModRecipes.GRINDER_SERIALIZER);
 		registry.register(ModRecipes.PRESS_SERIALIZER);
+		registry.register(ModRecipes.SHIELD_SERIALIZER);
 	}
 	
 	@SubscribeEvent

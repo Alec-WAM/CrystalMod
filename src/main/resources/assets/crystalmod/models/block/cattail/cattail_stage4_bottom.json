@@ -1,0 +1,7 @@
+{
+  "parent": "block/cross",
+  "textures": {
+    "particle": "crystalmod:block/plant/cattail/cattail_stage4_bottom",
+    "cross": "crystalmod:block/plant/cattail/cattail_stage4_bottom"
+  }
+}

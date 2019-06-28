@@ -1,6 +1,8 @@
 package alec_wam.CrystalMod.init;
 
 import alec_wam.CrystalMod.CrystalMod;
+import alec_wam.CrystalMod.blocks.plants.ItemCattail;
+import alec_wam.CrystalMod.client.CustomItemRender;
 import alec_wam.CrystalMod.core.ItemVariantGroup;
 import alec_wam.CrystalMod.core.color.EnumCrystalColor;
 import alec_wam.CrystalMod.core.color.EnumCrystalColorSpecial;
@@ -13,6 +15,7 @@ import alec_wam.CrystalMod.items.ItemGrassSeeds;
 import alec_wam.CrystalMod.items.ItemGrassSeeds.EnumGrassSeedItem;
 import alec_wam.CrystalMod.items.ItemVariant;
 import alec_wam.CrystalMod.items.ItemWrench;
+import alec_wam.CrystalMod.items.tools.ItemPoweredShield;
 import alec_wam.CrystalMod.tiles.crate.EnumMiscUpgrades;
 import alec_wam.CrystalMod.tiles.fusion.ItemFusionWand;
 import alec_wam.CrystalMod.tiles.pipes.EnumPipeUpgrades;
@@ -35,6 +38,9 @@ public class ModItems {
 	
 	public static ItemVariantGroup<EnumGrassSeedItem, ItemGrassSeeds> grassSeeds;
 	public static ItemVariantGroup<EnumCrystalColor, ItemVariant<EnumCrystalColor>> crystalBerryGroup;
+	public static Item cattailFluff;
+	public static Item cattailRootsRaw;
+	public static Item cattailRootsCooked;
 
 	public static Item wrench;
 	public static Item machineFrame;
@@ -44,6 +50,7 @@ public class ModItems {
 	public static ItemVariantGroup<EnumMiscUpgrades, ItemVariant<EnumMiscUpgrades>> miscUpgrades;
 
 	public static Item electricBread;
+	public static Item poweredShield;
 	
 	public static Item xpBucket;
 	
@@ -109,7 +116,14 @@ public class ModItems {
 				.itemPropertiesFactory(variant -> new Item.Properties().group(ModItemGroups.ITEM_GROUP_ITEMS).func_221540_a(Foods.field_221425_a))
 				.build();
 		RegistrationHandler.addItemGroup(crystalBerryGroup);
-		
+		cattailFluff = new ItemCattail(new Item.Properties().group(ItemGroup.MATERIALS));
+		RegistrationHandler.addItem(cattailFluff, "cattail_fluff");
+		//Raw Fish food value (1)
+		cattailRootsRaw = new Item(new Item.Properties().group(ItemGroup.DECORATIONS).func_221540_a(Foods.field_221424_L));
+		RegistrationHandler.addItem(cattailRootsRaw, "cattail_roots_raw");
+		//Carrot food value (3)
+		cattailRootsCooked = new Item(new Item.Properties().group(ItemGroup.FOOD).func_221540_a(Foods.field_221431_g));
+		RegistrationHandler.addItem(cattailRootsCooked, "cattail_roots_cooked");
 		
 		wrench = new ItemWrench(new Item.Properties().group(ModItemGroups.ITEM_GROUP_MACHINES).maxStackSize(1));
 		RegistrationHandler.addItem(wrench, "wrench");
@@ -138,7 +152,10 @@ public class ModItems {
 		
 		//Bread Food Property
 		electricBread = new ItemElectricBread(new Item.Properties().group(ItemGroup.FOOD).maxStackSize(1).func_221540_a(Foods.field_221430_f));
-		RegistrationHandler.addItem(electricBread, "electric_bread");		
+		RegistrationHandler.addItem(electricBread, "electric_bread");	
+		
+		poweredShield = new ItemPoweredShield(new Item.Properties().group(ItemGroup.COMBAT).maxStackSize(1).setTEISR(() -> CustomItemRender::new));
+		RegistrationHandler.addItem(poweredShield, "powered_shield");	
 		
 		xpBucket = new ItemBucketXP(new Item.Properties().group(ItemGroup.MISC).maxStackSize(1));
 		RegistrationHandler.addItem(xpBucket, "bucket_xp");

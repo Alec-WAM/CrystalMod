@@ -12,6 +12,7 @@ import alec_wam.CrystalMod.tiles.EnumCrystalColorSpecialWithCreative;
 import alec_wam.CrystalMod.tiles.INBTDrop;
 import alec_wam.CrystalMod.tiles.PacketTileMessage;
 import alec_wam.CrystalMod.tiles.TileEntityIOSides;
+import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import net.minecraft.entity.player.PlayerEntity;
@@ -142,6 +143,7 @@ public class TileEntityBattery extends TileEntityIOSides implements INBTDrop, IN
 		super.handleMessage(messageId, messageData, client);
 		if(messageId.equalsIgnoreCase("UpdateEnergy")){
 			energyStorage.setEnergyStored(messageData.getInt("Energy"));
+			BlockUtil.markBlockForUpdate(getWorld(), getPos());
 		}
 		if(messageId.equalsIgnoreCase("UpdateSend")){
 			this.sendAmount = messageData.getInt("Amount");
@@ -199,9 +201,9 @@ public class TileEntityBattery extends TileEntityIOSides implements INBTDrop, IN
 				LazyOptional<ICEnergyStorage> handler = stackToCharge.getCapability(CapabilityCrystalEnergy.CENERGY, null);
 				if(handler.isPresent()){
 					ICEnergyStorage rec = handler.orElse(null);
-					
 					boolean creative = isCreative();
 					int drain = !rec.canReceive() ? 0 : rec.fillCEnergy(creative ? getEnergySend() : Math.min(getEnergySend(), energyStorage.getCEnergyStored()), false);
+					
 					if(!creative){
 						this.energyStorage.modifyEnergyStored(-drain);
 						if(drain > 0){
@@ -213,7 +215,7 @@ public class TileEntityBattery extends TileEntityIOSides implements INBTDrop, IN
 						this.setInventorySlotContents(1, stackToCharge);
 						this.setInventorySlotContents(0, ItemStackTools.getEmptyStack());
 					}
-				}
+				} 
 			}
 		}
 	}
@@ -239,7 +241,7 @@ public class TileEntityBattery extends TileEntityIOSides implements INBTDrop, IN
 				return 0;
 			}
 			
-			int fill = energyStorage.fillCEnergy(Math.min(getEnergyReceive(), maxReceive), simulate);
+			int fill = battery.energyStorage.fillCEnergy(Math.min(getEnergyReceive(), maxReceive), simulate);
 			return fill;
 		}
 
@@ -276,7 +278,7 @@ public class TileEntityBattery extends TileEntityIOSides implements INBTDrop, IN
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side)
     {
         if (side !=null && cap == CapabilityCrystalEnergy.CENERGY){
-            return holders[side.getIndex()].cast();
+        	return holders[side.getIndex()].cast();
         }
         return super.getCapability(cap, side);
     }

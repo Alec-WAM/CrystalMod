@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:campfire_cooking",
+  "ingredient": {
+    "item": "crystalmod:cattail_roots_raw"
+  },
+  "result": "crystalmod:cattail_roots_cooked",
+  "experience": 0.35,
+  "cookingtime": 600
+}

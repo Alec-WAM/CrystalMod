@@ -52,17 +52,27 @@ public abstract class TileEntityEngineBase extends TileEntityMod implements IMes
 	
 	public abstract CEnergyStorage createStorage(int multi);
 	
+	@Override
 	public void writeToItemNBT(ItemStack stack){
 		CompoundNBT nbt = new CompoundNBT();
-	    this.energyStorage.writeToNBT(nbt);
-	    nbt.putInt("Fuel", fuel.getValue());
-	    nbt.putInt("MaxFuel", maxFuel.getValue());
+		writeEngineData(nbt);
 	    ItemNBTHelper.getCompound(stack).put("EngineData", nbt);
 	}
 	
+	public void writeEngineData(CompoundNBT nbt){
+		this.energyStorage.writeToNBT(nbt);
+	    nbt.putInt("Fuel", fuel.getValue());
+	    nbt.putInt("MaxFuel", maxFuel.getValue());
+	}
+	
+	@Override
 	public void readFromItemNBT(ItemStack stack){
 		CompoundNBT nbt = ItemNBTHelper.getCompound(stack).getCompound("EngineData");
-	    this.fuel.setValue(nbt.getInt("Fuel"));
+		readEngineData(nbt);
+	}
+	
+	public void readEngineData(CompoundNBT nbt){
+		this.fuel.setValue(nbt.getInt("Fuel"));
 	    this.maxFuel.setValue(nbt.getInt("MaxFuel"));
 		this.energyStorage.readFromNBT(nbt);
 	}
@@ -147,9 +157,27 @@ public abstract class TileEntityEngineBase extends TileEntityMod implements IMes
 					}
 				}
 			}
+			boolean powerChanged = (lastSyncPowerStored != energyStorage.getCEnergyStored());
+		    
+		    if(!powered){
+				for(Direction face : Direction.values()){
+					TileEntity tile = this.getWorld().getTileEntity(getPos().offset(face));
+					if(tile !=null && tile.getCapability(CapabilityCrystalEnergy.CENERGY, face.getOpposite()).isPresent()){
+						ICEnergyStorage rec = tile.getCapability(CapabilityCrystalEnergy.CENERGY, face.getOpposite()).orElse(null);
+						if(rec !=null){
+							if(!rec.canReceive())continue;
+							int fill = rec.fillCEnergy(Math.min(energyStorage.getMaxExtract(), energyStorage.getCEnergyStored()), false);
+							if(fill > 0){
+								this.energyStorage.modifyEnergyStored(-fill);
+								powerChanged = true;
+							}
+						}
+					}
+				}
+		    }
 			
-			boolean powerChanged = (lastSyncPowerStored != energyStorage.getCEnergyStored() && shouldDoWorkThisTick(5));
-		    if(powerChanged) {
+			
+			if(powerChanged && shouldDoWorkThisTick(5)) {
 		      lastSyncPowerStored = energyStorage.getCEnergyStored();
 		      CompoundNBT nbt = new CompoundNBT();
 		      nbt.putInt("Power", energyStorage.getCEnergyStored());
@@ -175,22 +203,6 @@ public abstract class TileEntityEngineBase extends TileEntityMod implements IMes
 		    boolean newActive = fuel.getValue() > 0 && !powered;
 		    if(isActive() !=newActive){
 		    	setActive(newActive);
-		    }
-			
-		    if(!powered){
-				for(Direction face : Direction.values()){
-					TileEntity tile = this.getWorld().getTileEntity(getPos().offset(face));
-					if(tile !=null && tile.getCapability(CapabilityCrystalEnergy.CENERGY, face.getOpposite()).isPresent()){
-						ICEnergyStorage rec = tile.getCapability(CapabilityCrystalEnergy.CENERGY, face.getOpposite()).orElse(null);
-						if(rec !=null){
-							if(!rec.canReceive())continue;
-							int fill = rec.fillCEnergy(Math.min(energyStorage.getMaxExtract(), energyStorage.getCEnergyStored()), false);
-							if(fill > 0){
-								this.energyStorage.modifyEnergyStored(-fill);
-							}
-						}
-					}
-				}
 		    }
 		}
 		

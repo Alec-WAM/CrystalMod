@@ -1,0 +1,88 @@
+{
+    "multipart": [
+        {   "when": { "layer": "roots", "stage": 0 },
+            "apply": { "model": "crystalmod:block/cattail/cattail_stage0" }
+        },
+		{   "when": { "layer": "roots", "stage": 1 },
+            "apply": { "model": "crystalmod:block/cattail/cattail_stage1" }
+        },
+		{   "when": { "layer": "roots", "stage": 2 },
+            "apply": { "model": "crystalmod:block/cattail/cattail_stage2" }
+        },
+		{   "when": { "layer": "roots", "stage": 3 },
+            "apply": { "model": "crystalmod:block/cattail/cattail_stage3" }
+        },
+		{   "when": { "layer": "roots", "stage": 4 },
+            "apply": { "model": "crystalmod:block/cattail/cattail_stage4_bottom" }
+        },
+		{   "when": { "layer": "middle", "stage": 4 },
+            "apply": { "model": "crystalmod:block/cattail/cattail_stage4_middle" }
+        },
+		{   "when": { "layer": "roots", "stage": 5 },
+            "apply": { "model": "crystalmod:block/cattail/cattail_stage5_bottom" }
+        },
+		{   "when": { "layer": "middle", "stage": 5 },
+            "apply": { "model": "crystalmod:block/cattail/cattail_stage5_middle" }
+        },
+		{   "when": { "layer": "roots", "stage": 6 },
+            "apply": { "model": "crystalmod:block/cattail/cattail_stage6_bottom" }
+        },
+		{   "when": { "layer": "middle", "stage": 6 },
+            "apply": { "model": "crystalmod:block/cattail/cattail_stage6_middle" }
+        },
+		{   "when": { "layer": "roots", "stage": 7 },
+            "apply": { "model": "crystalmod:block/cattail/cattail_stage7_bottom" }
+        },
+		{   "when": { "layer": "middle", "stage": 7 },
+            "apply": { "model": "crystalmod:block/cattail/cattail_stage7_middle" }
+        },
+		{   "when": { "layer": "top", "stage": 7 },
+            "apply": { "model": "crystalmod:block/cattail/cattail_stage7_top" }
+        },
+		{   "when": { "layer": "roots", "stage": 8 },
+            "apply": { "model": "crystalmod:block/cattail/cattail_stage8_bottom" }
+        },
+		{   "when": { "layer": "middle", "stage": 8 },
+            "apply": { "model": "crystalmod:block/cattail/cattail_stage8_middle" }
+        },
+		{   "when": { "layer": "top", "stage": 8 },
+            "apply": { "model": "crystalmod:block/cattail/cattail_stage8_top" }
+        },
+		{   "when": { "layer": "roots", "stage": 9 },
+            "apply": { "model": "crystalmod:block/cattail/cattail_stage9_bottom" }
+        },
+		{   "when": { "layer": "middle", "stage": 9 },
+            "apply": { "model": "crystalmod:block/cattail/cattail_stage9_middle" }
+        },
+		{   "when": { "layer": "top", "stage": 9 },
+            "apply": { "model": "crystalmod:block/cattail/cattail_stage9_top" }
+        },
+		{   "when": { "layer": "roots", "stage": 10 },
+            "apply": { "model": "crystalmod:block/cattail/cattail_stage10_bottom" }
+        },
+		{   "when": { "layer": "middle", "stage": 10 },
+            "apply": { "model": "crystalmod:block/cattail/cattail_stage10_middle" }
+        },
+		{   "when": { "layer": "top", "stage": 10 },
+            "apply": { "model": "crystalmod:block/cattail/cattail_stage10_top" }
+        },
+		{   "when": { "layer": "roots", "stage": 11 },
+            "apply": { "model": "crystalmod:block/cattail/cattail_stage11_bottom" }
+        },
+		{   "when": { "layer": "middle", "stage": 11 },
+            "apply": { "model": "crystalmod:block/cattail/cattail_stage11_middle" }
+        },
+		{   "when": { "layer": "top", "stage": 11 },
+            "apply": { "model": "crystalmod:block/cattail/cattail_stage11_top" }
+        },
+		{   "when": { "layer": "roots", "stage": 12 },
+            "apply": { "model": "crystalmod:block/cattail/cattail_stage12_bottom" }
+        },
+		{   "when": { "layer": "middle", "stage": 12 },
+            "apply": { "model": "crystalmod:block/cattail/cattail_stage12_middle" }
+        },
+		{   "when": { "layer": "top", "stage": 12 },
+            "apply": { "model": "crystalmod:block/cattail/cattail_stage12_top" }
+        }
+    ]
+}

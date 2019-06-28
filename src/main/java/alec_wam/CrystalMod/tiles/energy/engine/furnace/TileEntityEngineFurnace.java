@@ -52,7 +52,7 @@ public class TileEntityEngineFurnace extends TileEntityEngineBase implements ISi
 	
 	@Override
 	public CEnergyStorage createStorage(int multi) {
-		return new CEnergyStorage(60000*multi, 30*multi);
+		return new CEnergyStorage(60000*multi, 80*multi);
 	}
 	
 	@Override
@@ -64,6 +64,18 @@ public class TileEntityEngineFurnace extends TileEntityEngineBase implements ISi
 	@Override
 	public void readCustomNBT(CompoundNBT nbt){
 		super.readCustomNBT(nbt);
+	    ItemStackHelper.loadAllItems(nbt, this.inventory);
+	}
+	
+	@Override
+	public void writeEngineData(CompoundNBT nbt){
+		super.writeEngineData(nbt);
+	    ItemStackHelper.saveAllItems(nbt, this.inventory);
+	}
+	
+	@Override
+	public void readEngineData(CompoundNBT nbt){
+		super.readEngineData(nbt);
 	    ItemStackHelper.loadAllItems(nbt, this.inventory);
 	}
 

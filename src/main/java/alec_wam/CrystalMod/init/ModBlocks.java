@@ -14,6 +14,7 @@ import alec_wam.CrystalMod.blocks.BlockVariant;
 import alec_wam.CrystalMod.blocks.WoodenBlockProperies.WoodType;
 import alec_wam.CrystalMod.blocks.decoration.FenceBlockVariant;
 import alec_wam.CrystalMod.blocks.decoration.FenceGateBlockVariant;
+import alec_wam.CrystalMod.blocks.plants.BlockCattail;
 import alec_wam.CrystalMod.blocks.plants.BlockCrystalBerryBush;
 import alec_wam.CrystalMod.blocks.plants.BlockFlowerLilyPad;
 import alec_wam.CrystalMod.blocks.plants.BlockItemWaterPlant;
@@ -103,6 +104,7 @@ public class ModBlocks {
 	public static BlockVariantGroup<EnumCrystalColor, BlockReedVariant<EnumCrystalColor>> crystalReedGroup;	
 	public static BlockVariantGroup<EnumCrystalColor, BlockCrystalShard> crystalShardBlock;	
 	public static BlockVariantGroup<EnumCrystalColor, BlockCrystalBerryBush> crystalBerryBushGroup;	
+	public static BlockCattail cattail;
 	
 	public static BlockVariantGroup<EnumBetterRoses, BlockTallFlowerVariant<EnumBetterRoses>> betterRosesGroup;	
 	public static BlockFlowerLilyPad flowerLilypad;
@@ -274,7 +276,9 @@ public class ModBlocks {
 				.blockPropertiesFactory(type -> Block.Properties.create(Material.LEAVES).tickRandomly().hardnessAndResistance(0.3F).sound(SoundType.PLANT))
 				.blockFactory(BlockCrystalBerryBush::new)
 				.build();
-		RegistrationHandler.addBlockGroup(crystalBerryBushGroup);
+		RegistrationHandler.addBlockGroup(crystalBerryBushGroup);		
+		cattail = new BlockCattail(Block.Properties.create(Material.PLANTS).doesNotBlockMovement().tickRandomly().hardnessAndResistance(0.0F).sound(SoundType.PLANT)); 
+		RegistrationHandler.createBlock(cattail, ItemGroup.DECORATIONS, "cattail");
 		
 		//TILES
 		crateGroup = BlockVariantGroup.Builder.<EnumCrystalColorSpecialWithCreative, BlockCrate>create()
