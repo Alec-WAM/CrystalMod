@@ -134,6 +134,8 @@
   "block.crystalmod.machine_furnace": "Powered Furnace",
   "block.crystalmod.machine_grinder": "Grinder",  
   "block.crystalmod.machine_press": "Hydraulic Press",  
+  
+  "block.crystalmod.miner": "Smart Miner",  
 
   "block.crystalmod.pipe_item": "Item Pipe",   
   "block.crystalmod.pipe_energy_cu_blue": "Blue Crystal Energy Pipe (CU)", 
@@ -200,9 +202,9 @@
   "item.crystalmod.wrench": "Wrench",  
   "item.crystalmod.machineframe": "Machine Frame",
   "item.crystalmod.fusionwand": "Fusion Wand",  
-  "item.crystalmod.powered_shield": "Powered Shield",  
+  "item.crystalmod.pencil": "Pencil",  
   
-  "item.crystalmod.pipefilter": "Pipe Item Filter",  
+  "item.crystalmod.itemfilter": "Item Filter",  
   "item.crystalmod.pipe_upgrade_speed": "Pipe Upgrade (Speed)",  
   "item.crystalmod.pipe_upgrade_stack": "Pipe Upgrade (Stack)",  
   "item.crystalmod.pipe_upgrade_slow": "Pipe Upgrade (Slow)",  
@@ -211,8 +213,18 @@
   "item.crystalmod.misc_upgrade_void": "Void Upgrade", 
   "item.crystalmod.misc_upgrade_fusion_auto": "Fusion Automation Upgrade",
   
-  "item.crystalmod.electric_bread": "Electric Bread",  
-  "item.crystalmod.bucket_xp": "XP Bucket",  
+  "item.crystalmod.electric_bread": "Electric Bread", 
+  "item.crystalmod.powered_shield": "Powered Shield",   
+  "item.crystalmod.bucket_xp": "XP Bucket",     
+  
+  "item.crystalmod.skull_enderman": "Enderman Head",  
+  "item.crystalmod.skull_phantom": "Phantom Skull",   
+  "item.crystalmod.skull_guardian": "Guardian Head", 
+  "item.crystalmod.skull_horse": "Horse Head",     
+  "item.crystalmod.skull_horse.zombie": "Zombie Horse Head",  
+  "item.crystalmod.skull_horse.skeleton": "Skeleton Horse Skull", 
+  "item.crystalmod.skull_horse.donkey": "Donkey Head",   
+  "item.crystalmod.skull_horse.mule": "Mule Head",  
   
   "_comment": "Fluid",
   "fluid.milk": "Milk",
@@ -264,6 +276,9 @@
   "crystalmod.engine.furnace.fuel.item": "Fuel Value: %sCU",
   "crystalmod.battery.send": "Send",
   "crystalmod.battery.receive": "Receive",
+  "crystalmod.miner.energycost": "%s CU per block",
+  "crystalmod.miner.upgradecost": "Energy Cost: %s CU",
+  "crystalmod.miner.upgradecost.lvl": "Energy Cost: %s CU/level",
   
   
   "_comment": "Item Info",

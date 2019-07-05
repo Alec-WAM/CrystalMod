@@ -29,7 +29,7 @@ public class ContainerPipeFilter extends Container
     	this.filter = stack;
     	this.hand = hand;
     	this.filterInventory = new Inventory(10);
-    	NonNullList<ItemStack> stacks = TileEntityPipeItem.loadFilterStacks(filter);
+    	NonNullList<ItemStack> stacks = ItemPipeFilter.loadFilterStacks(filter);
     	for(int i = 0; i < 10; i++){
     		filterInventory.setInventorySlotContents(i, stacks.get(i));
     	}
@@ -101,7 +101,7 @@ public class ContainerPipeFilter extends Container
 					{
 						if (ItemStackTools.isNullStack(heldStack) && ItemStackTools.isValid(slotStack))
 						{
-							if(slotStack.getItem() == ModItems.pipeFilter){
+							if(slotStack.getItem() == ModItems.itemFilter){
 								inventoryPlayer.setItemStack(slotStack);
 							}
 							slot.putStack(ItemStackTools.getEmptyStack());
@@ -109,12 +109,12 @@ public class ContainerPipeFilter extends Container
 						else if (ItemStackTools.isValid(heldStack))
 						{
 							if(ItemStackTools.isValid(slotStack)){
-								if(slotStack.getItem() != ModItems.pipeFilter){
+								if(slotStack.getItem() != ModItems.itemFilter){
 									slot.putStack(ItemUtil.copy(heldStack, 1));
 								} 
 							} else {
 								slot.putStack(ItemUtil.copy(heldStack, 1));
-								if(heldStack.getItem() == ModItems.pipeFilter){
+								if(heldStack.getItem() == ModItems.itemFilter){
 									inventoryPlayer.setItemStack(ItemStackTools.incStackSize(heldStack, -1));
 								}
 							}							

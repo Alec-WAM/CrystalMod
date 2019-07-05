@@ -44,7 +44,7 @@ public class BlockFusionPedestal extends BlockPedestal {
 			ItemStack stack = player.getHeldItem(hand);
 			if(stack.getItem() == ModItems.miscUpgrades.getItem(EnumMiscUpgrades.FUSION_AUTO)){
 				world.setBlockState(pos, state.with(AUTO, true), 2);
-				if(!player.playerAbilities.isCreativeMode){
+				if(!player.abilities.isCreativeMode){
 					stack.shrink(1);
 					player.setHeldItem(hand, stack);
 				}

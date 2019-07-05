@@ -16,6 +16,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.ServerWorld;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.chunk.IChunk;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.PacketDistributor;
@@ -109,8 +110,10 @@ public class CrystalModNetwork {
 	}
 
 	public static void sendToChunk(ServerWorld world, BlockPos pos, AbstractPacket packet) {
-		Chunk chunk = world.getChunk(pos);
-		getNetworkChannel().send(PacketDistributor.TRACKING_CHUNK.with(() -> chunk), packet);
+		IChunk chunk = world.getChunk(pos);
+		if (chunk instanceof Chunk) {
+			getNetworkChannel().send(PacketDistributor.TRACKING_CHUNK.with(() -> (Chunk)chunk), packet);
+		}
 	}
 	
 	public static void sendToAllAround(AbstractPacket packet, TileEntity tile)

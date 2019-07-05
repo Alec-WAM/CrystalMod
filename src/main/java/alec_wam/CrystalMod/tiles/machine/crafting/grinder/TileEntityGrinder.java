@@ -141,7 +141,7 @@ public class TileEntityGrinder extends TileEntityCraftingMachine implements INam
 	}
 
     public GrinderRecipe getRecipe(){
-    	return getWorld().getRecipeManager().func_215371_a((IRecipeType<GrinderRecipe>)ModRecipes.GRINDER_TYPE, this, getWorld()).orElse(null);
+    	return getWorld().getRecipeManager().getRecipe((IRecipeType<GrinderRecipe>)ModRecipes.GRINDER_TYPE, this, getWorld()).orElse(null);
     }
 	
 	@Override

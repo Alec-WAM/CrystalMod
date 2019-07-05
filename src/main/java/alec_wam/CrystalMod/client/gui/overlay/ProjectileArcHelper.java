@@ -118,11 +118,11 @@ public class ProjectileArcHelper {
 				Vec3d vec3d2 = vec3d1.add(motion);
 				RayTraceContext context = new RayTraceContext(vec3d1, vec3d2, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, shooter){
 					   @Override
-					   public VoxelShape func_222251_a(BlockState p_222251_1_, IBlockReader p_222251_2_, BlockPos p_222251_3_) {
+					   public VoxelShape getBlockShape(BlockState p_222251_1_, IBlockReader p_222251_2_, BlockPos p_222251_3_) {
 					      return RayTraceContext.BlockMode.COLLIDER.get(p_222251_1_, p_222251_2_, p_222251_3_, ISelectionContext.dummy());
 					   }
 				};
-				RayTraceResult raytraceresult = world.func_217299_a(context);
+				RayTraceResult raytraceresult = world.rayTraceBlocks(context);
 				if (raytraceresult.getType() != RayTraceResult.Type.MISS) {
 					vec3d2 = raytraceresult.getHitVec();
 				}
@@ -187,8 +187,8 @@ public class ProjectileArcHelper {
 					this.prevRotationYaw += 360.0F;
 				}
 
-				this.rotationPitch = MathHelper.func_219799_g(0.2F, this.prevRotationPitch, this.rotationPitch);
-				this.rotationYaw = MathHelper.func_219799_g(0.2F, this.prevRotationYaw, this.rotationYaw);
+				this.rotationPitch = MathHelper.lerp(0.2F, this.prevRotationPitch, this.rotationPitch);
+				this.rotationYaw = MathHelper.lerp(0.2F, this.prevRotationYaw, this.rotationYaw);
 				float f1 = 0.99F;
 				
 				if (inWater) {
@@ -222,7 +222,7 @@ public class ProjectileArcHelper {
 		}
 		
 		protected EntityRayTraceResult createEntityRay(World world, PlayerEntity shoter, Vec3d p_213866_1_, Vec3d p_213866_2_) {
-			return calcEntityHit(world, p_213866_1_, p_213866_2_, boundingBox.func_216361_a(motion).grow(1.0D), (p_213871_1_) -> {
+			return calcEntityHit(world, p_213866_1_, p_213866_2_, boundingBox.expand(motion).grow(1.0D), (p_213871_1_) -> {
 				return !p_213871_1_.isSpectator() && p_213871_1_.isAlive() && p_213871_1_.canBeCollidedWith() && (p_213871_1_ != shoter || age > 5);
 			}, Double.MAX_VALUE);
 		}
@@ -233,7 +233,7 @@ public class ProjectileArcHelper {
 
 			for(Entity entity1 : world.getEntitiesInAABBexcluding(null, p_221269_4_, p_221269_5_)) {
 				AxisAlignedBB axisalignedbb = entity1.getBoundingBox().grow((double)0.3F);
-				Optional<Vec3d> optional = axisalignedbb.func_216365_b(p_221269_2_, p_221269_3_);
+				Optional<Vec3d> optional = axisalignedbb.rayTrace(p_221269_2_, p_221269_3_);
 				if (optional.isPresent()) {
 					double d1 = p_221269_2_.squareDistanceTo(optional.get());
 					if (d1 < d0) {

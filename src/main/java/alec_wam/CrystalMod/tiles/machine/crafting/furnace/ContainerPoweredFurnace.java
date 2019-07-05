@@ -19,7 +19,7 @@ public class ContainerPoweredFurnace extends AbstractFurnaceContainer
 
     public ContainerPoweredFurnace(int windowId, PlayerEntity player, TileEntityPoweredFurnace tileEntity)
     {
-    	super(null, IRecipeType.field_222150_b, windowId, player.inventory, tileEntity, new IntArray(4));
+    	super(null, IRecipeType.SMELTING, windowId, player.inventory, tileEntity, new IntArray(4));
     	this.furnace = (tileEntity);
     	this.inventorySlots.clear();
     	this.addSlot(new Slot(furnace, 0, 56, 26) {

@@ -44,7 +44,7 @@ public class BlockItemWaterPlant extends BlockItem {
    @Override
    public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
       ItemStack itemstack = playerIn.getHeldItem(handIn);
-      RayTraceResult raytraceresult = func_219968_a(worldIn, playerIn, RayTraceContext.FluidMode.SOURCE_ONLY);
+      RayTraceResult raytraceresult = rayTrace(worldIn, playerIn, RayTraceContext.FluidMode.SOURCE_ONLY);
       if (raytraceresult == null) {
          return new ActionResult<>(ActionResultType.PASS, itemstack);
       } else {
@@ -73,7 +73,7 @@ public class BlockItemWaterPlant extends BlockItem {
                   CriteriaTriggers.PLACED_BLOCK.trigger((ServerPlayerEntity)playerIn, blockpos1, itemstack);
                }
 
-               if (!playerIn.playerAbilities.isCreativeMode) {
+               if (!playerIn.abilities.isCreativeMode) {
                   itemstack.shrink(1);
                }
 

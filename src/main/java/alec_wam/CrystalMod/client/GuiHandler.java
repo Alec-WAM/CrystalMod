@@ -22,6 +22,8 @@ import alec_wam.CrystalMod.tiles.machine.crafting.grinder.GuiGrinder;
 import alec_wam.CrystalMod.tiles.machine.crafting.grinder.TileEntityGrinder;
 import alec_wam.CrystalMod.tiles.machine.crafting.press.GuiPress;
 import alec_wam.CrystalMod.tiles.machine.crafting.press.TileEntityPress;
+import alec_wam.CrystalMod.tiles.machine.miner.GuiMiner;
+import alec_wam.CrystalMod.tiles.machine.miner.TileEntityMiner;
 import alec_wam.CrystalMod.tiles.pipes.item.GuiItemPipe;
 import alec_wam.CrystalMod.tiles.pipes.item.GuiPipeFilter;
 import alec_wam.CrystalMod.tiles.pipes.item.TileEntityPipeItem;
@@ -93,6 +95,10 @@ public class GuiHandler{
 		        		TileEntityPress machine = (TileEntityPress) tile;
 		        		return new GuiPress(windowId, player, machine);
 		            }
+		        	if(tile instanceof TileEntityMiner){
+		        		TileEntityMiner machine = (TileEntityMiner) tile;
+		        		return new GuiMiner(windowId, player, machine);
+		            }
 	    		}
 	    		if(id.equals(TILE_PIPE_CONNECTOR)){
 	    			if(tile instanceof TileEntityPipeItem){
@@ -106,7 +112,7 @@ public class GuiHandler{
         if(id.equals(ITEM_NORMAL)){
         	Hand hand = additionalData.readEnumValue(Hand.class);
         	ItemStack stack = Minecraft.getInstance().player.getHeldItem(hand);
-        	if(stack.getItem() == ModItems.pipeFilter){
+        	if(stack.getItem() == ModItems.itemFilter){
         		return new GuiPipeFilter(windowId, player, stack, hand);
         	}
         }

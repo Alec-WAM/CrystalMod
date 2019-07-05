@@ -77,7 +77,7 @@ public class CrystalTreeFeature extends AbstractTreeFeature<NoFeatureConfig> {
 							int k1 = j1 - position.getZ();
 							if (Math.abs(i3) != k2 || Math.abs(k1) != k2 || rand.nextInt(2) != 0 && j2 != 0) {
 								BlockPos blockpos = new BlockPos(l2, l1, j1);
-								if (func_214572_g(worldIn, blockpos)) {
+								if (isAirOrLeaves(worldIn, blockpos)) {
 									this.setLogState(changedBlocks, worldIn, blockpos, leaf, p_208519_5_);
 								}
 							}
@@ -86,7 +86,7 @@ public class CrystalTreeFeature extends AbstractTreeFeature<NoFeatureConfig> {
 				}
 
 				for(int i2 = 0; i2 < i; ++i2) {
-					if (func_214572_g(worldIn, position.up(i2))) {
+					if (isAirOrLeaves(worldIn, position.up(i2))) {
 						this.setLogState(changedBlocks, worldIn, position.up(i2), log, p_208519_5_);
 					}
 				}
@@ -146,7 +146,7 @@ public class CrystalTreeFeature extends AbstractTreeFeature<NoFeatureConfig> {
 								int j2 = i2 - position.getZ();
 								if (Math.abs(l1) != j1 || Math.abs(j2) != j1 || rand.nextInt(2) != 0 && i4 != 0) {
 									BlockPos blockpos = new BlockPos(k1, i3, i2);
-									if (func_214572_g(worldIn, blockpos)) {
+									if (isAirOrLeaves(worldIn, blockpos)) {
 										this.setBlockState(worldIn, blockpos, leaf);
 									}
 								}
@@ -155,7 +155,7 @@ public class CrystalTreeFeature extends AbstractTreeFeature<NoFeatureConfig> {
 					}
 
 					for(int j3 = 0; j3 < i; ++j3) {
-						if (func_214572_g(worldIn, position.up(j3))) {
+						if (isAirOrLeaves(worldIn, position.up(j3))) {
 							BlockPos pos = position.up(j3);
 							if (this.doBlockNotify) {
 								worldIn.setBlockState(pos, log, 19);

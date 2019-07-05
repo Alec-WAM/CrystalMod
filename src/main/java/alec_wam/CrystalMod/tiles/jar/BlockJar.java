@@ -77,7 +77,7 @@ public class BlockJar extends ContainerBlockVariant<WoodType> implements IBucket
 			}
 			if(tileNBT.contains("Potion")){
 				Potion type = PotionUtils.getPotionTypeFromNBT(tileNBT);
-				if(type !=Potions.field_185229_a){
+				if(type !=Potions.EMPTY){
 					for (EffectInstance potioneffect : type.getEffects())
 		            {
 		                String s1 = Lang.translateToLocal(potioneffect.getEffectName()).trim();
@@ -168,7 +168,7 @@ public class BlockJar extends ContainerBlockVariant<WoodType> implements IBucket
 					}
 				}
 				jar.setShulkerLamp(true);
-				if(!player.playerAbilities.isCreativeMode){
+				if(!player.abilities.isCreativeMode){
 					player.setHeldItem(hand, ItemUtil.consumeItem(held));
 				}
 				//TODO Do Light Update
@@ -180,7 +180,7 @@ public class BlockJar extends ContainerBlockVariant<WoodType> implements IBucket
 				if(!jar.hasLabel(facing)){
 					jar.setHasLabel(facing, true);
 					world.playSound(null, pos, SoundEvents.ENTITY_ITEM_FRAME_PLACE, SoundCategory.BLOCKS, 1.0F, 1.0F);
-					if(!player.playerAbilities.isCreativeMode){
+					if(!player.abilities.isCreativeMode){
 						player.setHeldItem(hand, ItemUtil.consumeItem(held));
 					}
 					BlockUtil.markBlockForUpdate(world, pos);
@@ -189,13 +189,13 @@ public class BlockJar extends ContainerBlockVariant<WoodType> implements IBucket
 			}
 			else if(held.getItem() == Items.POTION){
 				Potion type = PotionUtils.getPotionFromItem(held);
-				if(type.getEffects().size() > 0 && (jar.getPotion() == type || jar.getPotion() == Potions.field_185229_a)){
+				if(type.getEffects().size() > 0 && (jar.getPotion() == type || jar.getPotion() == Potions.EMPTY)){
 					if(jar.getPotionCount() < MAX_POTIONS_STORED){
-						if(jar.getPotion() == Potions.field_185229_a){
+						if(jar.getPotion() == Potions.EMPTY){
 							jar.setPotionType(type);
 						}
 						jar.setPotionCount(jar.getPotionCount()+1);
-						if(!player.playerAbilities.isCreativeMode){
+						if(!player.abilities.isCreativeMode){
 							ItemUtil.setPlayerHandSilently(player, hand, new ItemStack(Items.GLASS_BOTTLE));
 						}
 						world.playSound(null, pos, SoundEvents.ITEM_BOTTLE_EMPTY, SoundCategory.BLOCKS, 1.0F, 1.0F);
@@ -204,11 +204,11 @@ public class BlockJar extends ContainerBlockVariant<WoodType> implements IBucket
 					}
 				}
 			} else if(held.getItem() == Items.GLASS_BOTTLE){
-				if(jar.getPotion() !=Potions.field_185229_a && jar.getPotionCount() > 0){
+				if(jar.getPotion() !=Potions.EMPTY && jar.getPotionCount() > 0){
 					ItemUtil.setPlayerHandSilently(player, hand, PotionUtils.addPotionToItemStack(new ItemStack(Items.POTION), jar.getPotion()));
 					jar.setPotionCount(jar.getPotionCount()-1);
 					if(jar.getPotionCount() <= 0){
-						jar.setPotionType(Potions.field_185229_a);
+						jar.setPotionType(Potions.EMPTY);
 					}
 					world.playSound(null, pos, SoundEvents.ITEM_BOTTLE_FILL, SoundCategory.BLOCKS, 1.0F, 1.0F);
 					BlockUtil.markBlockForUpdate(world, pos);
@@ -233,7 +233,7 @@ public class BlockJar extends ContainerBlockVariant<WoodType> implements IBucket
 				if(jar.hasLabel(ray.getFace())){
 					jar.setHasLabel(ray.getFace(), false);
 					worldIn.playSound(null, pos, SoundEvents.ENTITY_ITEM_FRAME_BREAK, SoundCategory.BLOCKS, 1.0F, 1.0F);
-					if(!player.playerAbilities.isCreativeMode){
+					if(!player.abilities.isCreativeMode){
 						if(!worldIn.isRemote)ItemUtil.dropItemOnSide(worldIn, pos, new ItemStack(Items.ITEM_FRAME), ray.getFace());
 					}
 					BlockUtil.markBlockForUpdate(worldIn, pos);

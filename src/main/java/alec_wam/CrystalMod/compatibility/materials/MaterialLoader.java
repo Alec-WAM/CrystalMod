@@ -192,19 +192,19 @@ public class MaterialLoader {
 					Item dustItem = MaterialLoader.getDustItem(material);
 					for(DustRecipe recipe : material.getDustRecipes()){
 						ResourceLocation id = new ResourceLocation("crystalmod_grinder_dust", "dust/" + dustItem.getRegistryName().getPath().toLowerCase()+"_"+recipe.getName());
-						if(recipeManager.func_215367_a(id).isPresent()){
+						if(recipeManager.getRecipe(id).isPresent()){
 							continue;
 						}
 						Ingredient input = recipe.getIngredient();
 						GrinderRecipe grinderRecipe = new GrinderRecipe(id, "", input, new ItemStack(dustItem, recipe.getCount()), ItemStackTools.getEmptyStack(), 0.0f, recipe.getEnergy());
-						recipeManager.addRecipe(grinderRecipe);
+						ModRecipes.addRecipeToManager(grinderRecipe);
 						dustRecipes++;
 					}
 					ResourceLocation furnaceID = new ResourceLocation("crystalmod", "dust/" + "smelt_"+dustItem.getRegistryName().getPath().toLowerCase());
 					if(/*!recipeManager.func_215367_a(furnaceID).isPresent() && */ItemStackTools.isValid(material.getDustSmeltOutput())){
 						Ingredient input = Ingredient.fromItems(dustItem);
 						FurnaceRecipe furnaceRecipe = new FurnaceRecipe(furnaceID, "crystalmod:dust_smelt", input, material.getDustSmeltOutput(), 0.0f, 200);
-						recipeManager.addRecipe(furnaceRecipe);
+						ModRecipes.addRecipeToManager(furnaceRecipe);
 						dustSmeltRecipes++;
 					}
 				}
@@ -212,12 +212,12 @@ public class MaterialLoader {
 					Item plateItem = MaterialLoader.getPlateItem(material);
 					if(material.getPlateIngredient() !=null){
 						ResourceLocation id = new ResourceLocation("crystalmod_press_plate", "plate/" + plateItem.getRegistryName().getPath().toLowerCase());
-						if(recipeManager.func_215367_a(id).isPresent()){
+						if(recipeManager.getRecipe(id).isPresent()){
 							continue;
 						}
 						Ingredient input = material.getPlateIngredient();
 						PressRecipe pressRecipe = new PressRecipe(id, "", input, new ItemStack(plateItem), 1600);
-						recipeManager.addRecipe(pressRecipe);
+						ModRecipes.addRecipeToManager(pressRecipe);
 						plateRecipes++;
 					}
 				}

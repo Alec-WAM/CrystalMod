@@ -36,6 +36,7 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 
 public class TileEntityPoweredFurnace extends TileEntityCraftingMachine implements IRecipeHolder, IRecipeHelperPopulator {
@@ -130,7 +131,7 @@ public class TileEntityPoweredFurnace extends TileEntityCraftingMachine implemen
     
 	@Override
 	public boolean isItemValidInput(ItemStack stack) {
-		for(IRecipe<IInventory> irecipe : ModRecipes.getRecipes(getWorld().getRecipeManager(), IRecipeType.field_222150_b)) {
+		for(IRecipe<IInventory> irecipe : ModRecipes.getRecipes(getWorld().getRecipeManager(), IRecipeType.SMELTING)) {
     		if (irecipe.getIngredients().get(0).test(stack)) {
     			return true;
     		}
@@ -139,13 +140,13 @@ public class TileEntityPoweredFurnace extends TileEntityCraftingMachine implemen
 	}
 
 	public PoweredFurnaceRecipe getRecipe(){
-		FurnaceRecipe recipe = getWorld().getRecipeManager().func_215371_a(IRecipeType.field_222150_b, this, getWorld()).orElse(null);
+		FurnaceRecipe recipe = getWorld().getRecipeManager().getRecipe(IRecipeType.SMELTING, this, getWorld()).orElse(null);
 		if(recipe !=null){
 
 			ItemStack output = recipe.getRecipeOutput().copy();
 			int energy = 1600;
 			//Is it food?
-			if ((output.getItem().func_219971_r())) {
+			if ((output.getItem().isFood())) {
 				energy /= 2;
 			}
 			if (ItemTagHelper.isIngot(output)) {
@@ -252,11 +253,11 @@ public class TileEntityPoweredFurnace extends TileEntityCraftingMachine implemen
 
 	@Override
 	public void onCrafting(PlayerEntity player) {
-		if (!this.world.getGameRules().getBoolean("doLimitedCrafting")) {
+		if (!this.world.getGameRules().getBoolean(GameRules.DO_LIMITED_CRAFTING)) {
 			List<IRecipe<?>> list = Lists.newArrayList();
 
 			for(ResourceLocation resourcelocation : this.recipeUseCounts.keySet()) {
-				IRecipe<?> irecipe = player.world.getRecipeManager().func_215367_a(resourcelocation).orElse(null);
+				IRecipe<?> irecipe = player.world.getRecipeManager().getRecipe(resourcelocation).orElse(null);
 				if (irecipe != null) {
 					list.add(irecipe);
 				}

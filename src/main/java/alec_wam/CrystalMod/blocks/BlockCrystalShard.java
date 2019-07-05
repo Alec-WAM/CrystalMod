@@ -95,7 +95,7 @@ public class BlockCrystalShard extends Block {
 	public boolean onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult ray) {
 		ItemStack stack = player.getHeldItem(hand);
 		int shards = state.get(SHARDS_1_3).intValue();
-		if(shards < 3 && player.playerAbilities.isCreativeMode){
+		if(shards < 3 && player.abilities.isCreativeMode){
 			if(ItemStackTools.isValid(stack)){
 				if(stack.getItem() == ModItems.crystalShardGroup.getItem(EnumCrystalColorSpecial.convert(type))){
 					BlockState newState = state.with(SHARDS_1_3, shards + 1);

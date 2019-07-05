@@ -39,7 +39,7 @@ public class PacketGuiMessage extends AbstractPacket {
 	
 	@Override
 	public void handleClient(PlayerEntity player) {
-		Screen currentScreen = Minecraft.getInstance().field_71462_r;
+		Screen currentScreen = Minecraft.getInstance().currentScreen;
 		if(currentScreen !=null){
 			if(currentScreen instanceof IMessageHandler)((IMessageHandler)currentScreen).handleMessage(type, data, true);
 		}

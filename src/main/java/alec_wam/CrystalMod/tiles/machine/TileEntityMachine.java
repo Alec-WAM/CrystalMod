@@ -1,16 +1,9 @@
 package alec_wam.CrystalMod.tiles.machine;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import alec_wam.CrystalMod.api.energy.CEnergyStorage;
-import alec_wam.CrystalMod.api.energy.CapabilityCrystalEnergy;
-import alec_wam.CrystalMod.api.energy.ICEnergyStorage;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
-import alec_wam.CrystalMod.network.IMessageHandler;
 import alec_wam.CrystalMod.tiles.INBTDrop;
 import alec_wam.CrystalMod.tiles.PacketTileMessage;
-import alec_wam.CrystalMod.tiles.TileEntityInventory;
 import alec_wam.CrystalMod.tiles.machine.crafting.BlockCraftingMachine;
 import alec_wam.CrystalMod.util.BlockUtil;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
@@ -21,24 +14,22 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
-import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 
-public abstract class TileEntityMachine extends TileEntityInventory implements IMessageHandler, ISidedInventory, INBTDrop, INamedContainerProvider {
-	protected CEnergyStorage eStorage;
-	private final LazyOptional<ICEnergyStorage> holder; 
+public abstract class TileEntityMachine extends TileEntityPoweredInventory implements ISidedInventory, INBTDrop, INamedContainerProvider {
 	private EnergyConfig energyConfig;
 	
 	boolean isRunning;
 	boolean wasRunning;
 	protected int processMax;
     protected int processRem;
-    
-    protected float lastSyncPowerStored = -1;
 	
 	public TileEntityMachine(TileEntityType<?> tileEntityTypeIn, String name, int size) {
-		super(tileEntityTypeIn, name, size);
-		
+		super(tileEntityTypeIn, name, size);		
+	}
+	
+	@Override
+	public void setupEnergy(){
 		energyConfig = new EnergyConfig().setEnergyParams(20);
 		eStorage = new CEnergyStorage(this.energyConfig.maxEnergy, this.energyConfig.maxPower * 4) {
 			@Override
@@ -52,7 +43,6 @@ public abstract class TileEntityMachine extends TileEntityInventory implements I
 	@Override
 	public void writeCustomNBT(CompoundNBT nbt){
         super.writeCustomNBT(nbt);		
-		eStorage.writeToNBT(nbt);
 		nbt.putBoolean("Running", this.isRunning);
 		nbt.putInt("ProcMax", this.processMax);
         nbt.putInt("ProcRem", this.processRem);
@@ -61,7 +51,6 @@ public abstract class TileEntityMachine extends TileEntityInventory implements I
 	@Override
 	public void readCustomNBT(CompoundNBT nbt){
 		super.readCustomNBT(nbt);
-		eStorage.readFromNBT(nbt);
 		this.isRunning = nbt.getBoolean("Running");
 		this.processMax = nbt.getInt("ProcMax");
         this.processRem = nbt.getInt("ProcRem");
@@ -100,14 +89,6 @@ public abstract class TileEntityMachine extends TileEntityInventory implements I
 		boolean redstone = getWorld().isBlockPowered(getPos());
     	
 		if(!getWorld().isRemote){			
-			boolean powerChanged = (lastSyncPowerStored != eStorage.getCEnergyStored() && shouldDoWorkThisTick(5));
-		    if(powerChanged) {
-		      lastSyncPowerStored = eStorage.getCEnergyStored();
-		      CompoundNBT nbt = new CompoundNBT();
-		      nbt.putInt("Power", eStorage.getCEnergyStored());
-		      CrystalModNetwork.sendToAllAround(new PacketTileMessage(getPos(), "UpdatePower", nbt), this);
-		    }
-			
 			final boolean curActive = this.isRunning;
 	        if (this.isRunning) {        	
 	        	if(!canContinueRunning() || redstone){
@@ -224,19 +205,6 @@ public abstract class TileEntityMachine extends TileEntityInventory implements I
 		}
 		return value;
 	}
-
-	public ICEnergyStorage getEnergyStorage() {
-		return eStorage;
-	}
-	
-	@Override
-    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side)
-    {
-		if (side != getFacing() && cap == CapabilityCrystalEnergy.CENERGY){
-            return holder.cast();
-        }
-        return super.getCapability(cap, side);
-    }
 	
 	//TODO Override with IOTypes
 	@Override
@@ -256,10 +224,7 @@ public abstract class TileEntityMachine extends TileEntityInventory implements I
 
 	@Override
 	public void handleMessage(String messageId, CompoundNBT messageData, boolean client) {
-		if(messageId.equalsIgnoreCase("UpdatePower")){
-			int newPower = messageData.getInt("Power");
-			this.eStorage.setEnergyStored(newPower);
-		}
+		super.handleMessage(messageId, messageData, client);
 		if(messageId.equalsIgnoreCase("UpdateRunning")){
 			boolean newRunning = messageData.getBoolean("Running");
 			this.isRunning = newRunning;

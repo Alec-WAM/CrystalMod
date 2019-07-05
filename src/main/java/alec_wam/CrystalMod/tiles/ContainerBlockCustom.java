@@ -65,8 +65,8 @@ public abstract class ContainerBlockCustom extends ContainerBlock {
 	
 	@Override
 	public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
-		BlockPos pos = builder.get(LootParameters.field_216286_f);
-		ServerWorld world = builder.func_216018_a();
+		BlockPos pos = builder.get(LootParameters.POSITION);
+		ServerWorld world = builder.getWorld();
 		TileEntity tile = world.getTileEntity(pos);
 	    return Lists.newArrayList(tile !=null ? getNBTDrop(world, pos, tile) : new ItemStack(this));
 	}

@@ -31,7 +31,7 @@ public class ContainerItemPipe extends Container implements IMessageHandler
     	this.addSlot(slotInFilter = new Slot(tileEntity.getInternalInventory(face), 0, 72, 35) {
     		@Override
     		public boolean isItemValid(ItemStack stack){
-    			return stack.isEmpty() || stack.getItem() == ModItems.pipeFilter;
+    			return stack.isEmpty() || stack.getItem() == ModItems.itemFilter;
     		}
     		
     		@Override
@@ -42,7 +42,7 @@ public class ContainerItemPipe extends Container implements IMessageHandler
     	this.addSlot(slotOutFilter = new Slot(tileEntity.getInternalInventory(face), 1, 90, 35) {
     		@Override
     		public boolean isItemValid(ItemStack stack){
-    			return stack.isEmpty() || stack.getItem() == ModItems.pipeFilter;
+    			return stack.isEmpty() || stack.getItem() == ModItems.itemFilter;
     		}
     		
     		@Override
@@ -147,7 +147,7 @@ public class ContainerItemPipe extends Container implements IMessageHandler
 						return ItemStackTools.getEmptyStack();
 					}
 				} else {
-					if(itemstack1.getItem() == ModItems.pipeFilter){
+					if(itemstack1.getItem() == ModItems.itemFilter){
 						if (!this.mergeItemStack(itemstack1, 0, 1, false))
 						{
 							return ItemStackTools.getEmptyStack();

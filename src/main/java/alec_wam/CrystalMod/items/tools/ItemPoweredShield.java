@@ -39,7 +39,7 @@ public class ItemPoweredShield extends Item {
       this.addPropertyOverride(new ResourceLocation("blocking"), (p_210314_0_, p_210314_1_, p_210314_2_) -> {
          return p_210314_2_ != null && p_210314_2_.isHandActive() && p_210314_2_.getActiveItemStack() == p_210314_0_ ? 1.0F : 0.0F;
       });
-      DispenserBlock.registerDispenseBehavior(this, ArmorItem.field_96605_cw);
+      DispenserBlock.registerDispenseBehavior(this, ArmorItem.DISPENSER_BEHAVIOR);
    }
 
    @Override

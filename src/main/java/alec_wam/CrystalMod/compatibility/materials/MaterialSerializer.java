@@ -57,7 +57,7 @@ public class MaterialSerializer {
 			if(json.has("dust_smelt")){
 				String s1 = JSONUtils.getString(json, "dust_smelt");
 				ResourceLocation resourcelocation = new ResourceLocation(s1);
-				dustSmeltOutput = new ItemStack(Registry.field_212630_s.func_218349_b(resourcelocation).orElseThrow(() -> {
+				dustSmeltOutput = new ItemStack(Registry.ITEM.getValue(resourcelocation).orElseThrow(() -> {
 					return new IllegalStateException("Item: " + s1 + " does not exist");
 				}));
 			}

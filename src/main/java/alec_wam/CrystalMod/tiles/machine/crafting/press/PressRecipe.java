@@ -98,7 +98,7 @@ public class PressRecipe implements IRecipe<IInventory> {
    }
 
    @Override
-   public IRecipeType<PressRecipe> func_222127_g() {
+   public IRecipeType<PressRecipe> getType() {
 	   return ModRecipes.PRESS_TYPE;
    }
 

@@ -5,7 +5,9 @@ import java.util.EnumMap;
 import com.google.common.collect.Maps;
 import com.mojang.blaze3d.platform.GlStateManager;
 
+import alec_wam.CrystalMod.client.render.MobSkullRenderHelper;
 import alec_wam.CrystalMod.compatibility.FluidConversion;
+import alec_wam.CrystalMod.items.ItemMobSkull;
 import alec_wam.CrystalMod.items.tools.ItemPoweredShield;
 import alec_wam.CrystalMod.tiles.EnumCrystalColorSpecialWithCreative;
 import alec_wam.CrystalMod.tiles.chests.metal.BlockMetalCrystalChest;
@@ -98,7 +100,7 @@ public class CustomItemRender extends ItemStackTileEntityRenderer
         {
         	IBakedModel ibakedmodel = Minecraft.getInstance().getBlockRendererDispatcher().getModelForState(block.getDefaultState());
         	RenderUtil.renderModel(ibakedmodel, itemStackIn);
-        	Potion type = Potions.field_185229_a;
+        	Potion type = Potions.EMPTY;
     		int count = 0;
     		boolean lamp = false;
     		EnumMap<Direction, Boolean> labels = Maps.newEnumMap(Direction.class); 
@@ -184,6 +186,9 @@ public class CustomItemRender extends ItemStackTileEntityRenderer
              }
 
              GlStateManager.popMatrix();
+        }
+        else if(item instanceof ItemMobSkull){
+        	MobSkullRenderHelper.renderSkull(itemStackIn);
         }
         else
         {

@@ -67,10 +67,10 @@ public class SlotPoweredFurnaceOutput extends Slot {
       stack.onCrafting(this.player.world, this.player, this.removeCount);
       if (!this.player.world.isRemote) {
          for(Entry<ResourceLocation, Integer> entry : ((TileEntityPoweredFurnace)this.inventory).getRecipeUseCounts().entrySet()) {
-            FurnaceRecipe furnacerecipe = (FurnaceRecipe)this.player.world.getRecipeManager().func_215367_a(entry.getKey()).orElse(null);
+            FurnaceRecipe furnacerecipe = (FurnaceRecipe)this.player.world.getRecipeManager().getRecipe(entry.getKey()).orElse(null);
             float f;
             if (furnacerecipe != null) {
-               f = furnacerecipe.func_222138_b();
+               f = furnacerecipe.getExperience();
             } else {
                f = 0.0F;
             }
@@ -90,7 +90,7 @@ public class SlotPoweredFurnaceOutput extends Slot {
             while(i > 0) {
                int k = ExperienceOrbEntity.getXPSplit(i);
                i -= k;
-               this.player.world.func_217376_c(new ExperienceOrbEntity(this.player.world, this.player.posX, this.player.posY + 0.5D, this.player.posZ + 0.5D, k));
+               this.player.world.addEntity(new ExperienceOrbEntity(this.player.world, this.player.posX, this.player.posY + 0.5D, this.player.posZ + 0.5D, k));
             }
          }
 

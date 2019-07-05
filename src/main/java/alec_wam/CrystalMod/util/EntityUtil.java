@@ -51,7 +51,7 @@ public class EntityUtil {
 
     public static BlockRayTraceResult getEntityLookedObject(LivingEntity entity, float maxDistance){
         Pair<Vec3d, Vec3d> vecs = getStartAndEndLookVec(entity, maxDistance);
-        return entity.getEntityWorld().func_217299_a(new RayTraceContext(vecs.getLeft(), vecs.getRight(), RayTraceContext.BlockMode.OUTLINE, RayTraceContext.FluidMode.NONE, entity));
+        return entity.getEntityWorld().rayTraceBlocks(new RayTraceContext(vecs.getLeft(), vecs.getRight(), RayTraceContext.BlockMode.OUTLINE, RayTraceContext.FluidMode.NONE, entity));
     }
 
     public static Pair<Vec3d, Vec3d> getStartAndEndLookVec(LivingEntity entity){
@@ -288,7 +288,7 @@ public class EntityUtil {
 				// does our vector go through the entity?
 				double colBorder = candidate.getCollisionBorderSize();
 				AxisAlignedBB entityBB = candidate.getBoundingBox().expand(colBorder, colBorder, colBorder);
-				Optional<Vec3d> movingobjectposition = entityBB.func_216365_b(start, direction);
+				Optional<Vec3d> movingobjectposition = entityBB.rayTrace(start, direction);
 
 				// needs special casing: vector starts inside the entity
 				if(entityBB.contains(start)) {

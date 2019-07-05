@@ -17,6 +17,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.Hand;
+import net.minecraft.world.GameRules;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -73,7 +74,7 @@ public class EntityEventHandler {
         	}
         }
         int rand = mob.getEntityWorld().rand.nextInt(Math.max(chance, 1));
-        if(!mob.getEntityWorld().getGameRules().getBoolean("doMobLoot") || rand != 0)
+        if(!mob.getEntityWorld().getGameRules().getBoolean(GameRules.DO_MOB_LOOT) || rand != 0)
             return;
         
         Item skullItem = null;
@@ -113,7 +114,7 @@ public class EntityEventHandler {
         if(configChance <= 0)return;
         
         int rand = mob.getEntityWorld().rand.nextInt(Math.max(configChance, 1));
-        if(!mob.getEntityWorld().getGameRules().getBoolean("doMobLoot") || rand != 0)
+        if(!mob.getEntityWorld().getGameRules().getBoolean(GameRules.DO_MOB_LOOT) || rand != 0)
             return;
         
         Item skullItem = Items.WITHER_SKELETON_SKULL;
@@ -153,7 +154,7 @@ public class EntityEventHandler {
 	        ItemEntity entityitemSkull = new ItemEntity(player.getEntityWorld(), player.posX, player.posY, player.posZ, ProfileUtil.createPlayerSkull(player.getGameProfile()));
 	        entityitemSkull.setDefaultPickupDelay();
 	        if(!player.getEntityWorld().isRemote){
-	        	player.getEntityWorld().func_217376_c(entityitemSkull);
+	        	player.getEntityWorld().addEntity(entityitemSkull);
 	        }
 	        //event.getDrops().add(entityitemSkull);
         }

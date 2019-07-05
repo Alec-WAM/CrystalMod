@@ -61,7 +61,7 @@ public class TileEntityJarRender extends TileEntityRenderer<TileEntityJar> {
 			GlStateManager.popMatrix();
 		}
 		else {
-			if(potion != Potions.field_185229_a && potionCount > 0){
+			if(potion != Potions.EMPTY && potionCount > 0){
 				Vector3f color = getColorFromPotion(potion);
 				if(color !=null){
 					Tessellator tessy = Tessellator.getInstance();
@@ -212,11 +212,11 @@ public class TileEntityJarRender extends TileEntityRenderer<TileEntityJar> {
 			
 	        if (effect.isShowIcon())
 	        {
-	            PotionSpriteUploader potionspriteuploader = Minecraft.getInstance().func_213248_ap();
-	        	TextureAtlasSprite textureatlassprite = potionspriteuploader.func_215288_a(potion);
+	            PotionSpriteUploader potionspriteuploader = Minecraft.getInstance().getPotionSpriteUploader();
+	        	TextureAtlasSprite textureatlassprite = potionspriteuploader.getSprite(potion);
 	            double shrink = 0.05;
 				double ofsetY = 0.045;
-				Minecraft.getInstance().getTextureManager().bindTexture(AtlasTexture.field_215264_i);
+				Minecraft.getInstance().getTextureManager().bindTexture(AtlasTexture.LOCATION_EFFECTS_TEXTURE);
 				render.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
 				render.pos(0.32 + shrink, 0.22 + shrink + ofsetY, potionZ+0.001).tex(textureatlassprite.getMinU(), textureatlassprite.getMaxV()).endVertex();
 				render.pos(0.68 - shrink, 0.22 + shrink + ofsetY, potionZ+0.001).tex(textureatlassprite.getMaxU(), textureatlassprite.getMaxV()).endVertex();

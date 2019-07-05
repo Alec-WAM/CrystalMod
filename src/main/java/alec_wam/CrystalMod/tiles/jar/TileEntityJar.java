@@ -18,7 +18,7 @@ import net.minecraft.util.Direction;
 
 public class TileEntityJar extends TileEntityModStatic implements INBTDrop {
 	//Empty Potion Type
-	private Potion potion = Potions.field_185229_a;
+	private Potion potion = Potions.EMPTY;
 	private int potionCount;
 	private EnumMap<Direction, Boolean> labelMap = Maps.newEnumMap(Direction.class);
 	
@@ -35,7 +35,7 @@ public class TileEntityJar extends TileEntityModStatic implements INBTDrop {
 	@Override
 	public void writeCustomNBT(CompoundNBT nbt){
 		super.writeCustomNBT(nbt);
-		if(potion != Potions.field_185229_a){
+		if(potion != Potions.EMPTY){
 			nbt.putString("Potion", potion.getRegistryName().toString());
 		}
 		nbt.putInt("Count", potionCount);
@@ -48,7 +48,7 @@ public class TileEntityJar extends TileEntityModStatic implements INBTDrop {
 	@Override
 	public void writeToItemNBT(ItemStack stack){
 		CompoundNBT nbt = new CompoundNBT();
-		if(potion != Potions.field_185229_a){
+		if(potion != Potions.EMPTY){
 			nbt.putString("Potion", potion.getRegistryName().toString());
 		}
 		if(potionCount > 0)nbt.putInt("Count", potionCount);

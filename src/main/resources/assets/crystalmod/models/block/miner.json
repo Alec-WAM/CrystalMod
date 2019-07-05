@@ -1,0 +1,12 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "particle": "crystalmod:block/machine/bottom",
+    "down": "crystalmod:block/machine/bottom",
+    "up": "crystalmod:block/machine/miner_top",
+    "north": "crystalmod:block/machine/miner_side",
+    "east": "crystalmod:block/machine/miner_side",
+    "south": "crystalmod:block/machine/miner_side",
+    "west": "crystalmod:block/machine/miner_side"
+  }
+}

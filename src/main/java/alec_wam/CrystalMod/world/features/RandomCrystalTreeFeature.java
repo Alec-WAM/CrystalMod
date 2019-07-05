@@ -15,10 +15,10 @@ import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
 
 public class RandomCrystalTreeFeature extends Feature<NoFeatureConfig> {
-	public static final CrystalTreeFeature CRYSTAL_TREE_BLUE = new CrystalTreeFeature(NoFeatureConfig::func_214639_a, false, EnumCrystalColorSpecial.BLUE, false);
-    public static final CrystalTreeFeature CRYSTAL_TREE_RED = new CrystalTreeFeature(NoFeatureConfig::func_214639_a, false, EnumCrystalColorSpecial.RED, false);
-    public static final CrystalTreeFeature CRYSTAL_TREE_GREEN = new CrystalTreeFeature(NoFeatureConfig::func_214639_a, false, EnumCrystalColorSpecial.GREEN, false);
-    public static final CrystalTreeFeature CRYSTAL_TREE_DARK = new CrystalTreeFeature(NoFeatureConfig::func_214639_a, false, EnumCrystalColorSpecial.DARK, false);
+	public static final CrystalTreeFeature CRYSTAL_TREE_BLUE = new CrystalTreeFeature(NoFeatureConfig::deserialize, false, EnumCrystalColorSpecial.BLUE, false);
+    public static final CrystalTreeFeature CRYSTAL_TREE_RED = new CrystalTreeFeature(NoFeatureConfig::deserialize, false, EnumCrystalColorSpecial.RED, false);
+    public static final CrystalTreeFeature CRYSTAL_TREE_GREEN = new CrystalTreeFeature(NoFeatureConfig::deserialize, false, EnumCrystalColorSpecial.GREEN, false);
+    public static final CrystalTreeFeature CRYSTAL_TREE_DARK = new CrystalTreeFeature(NoFeatureConfig::deserialize, false, EnumCrystalColorSpecial.DARK, false);
 	
     public RandomCrystalTreeFeature(Function<Dynamic<?>, ? extends NoFeatureConfig> p_i49878_1_) {
 		super(p_i49878_1_);

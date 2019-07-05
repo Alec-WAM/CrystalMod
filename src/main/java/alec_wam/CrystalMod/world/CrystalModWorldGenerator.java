@@ -27,9 +27,9 @@ public class CrystalModWorldGenerator{
     public static CrystalModWorldGenerator instance = new CrystalModWorldGenerator();
     
     public static final Feature<MinableRandomConfig> MINABLE_RANDOM = new MineableFeatureRandom(MinableRandomConfig::load);
-    public static final Feature<NoFeatureConfig> BETTER_ROSES = new BetterRoseFeature(NoFeatureConfig::func_214639_a);
-    public static final Feature<NoFeatureConfig> CRYSTAL_BUSH = new CrystalBushFeature(NoFeatureConfig::func_214639_a);
-    public static final Feature<NoFeatureConfig> CRYSTAL_TREE = new RandomCrystalTreeFeature(NoFeatureConfig::func_214639_a);
+    public static final Feature<NoFeatureConfig> BETTER_ROSES = new BetterRoseFeature(NoFeatureConfig::deserialize);
+    public static final Feature<NoFeatureConfig> CRYSTAL_BUSH = new CrystalBushFeature(NoFeatureConfig::deserialize);
+    public static final Feature<NoFeatureConfig> CRYSTAL_TREE = new RandomCrystalTreeFeature(NoFeatureConfig::deserialize);
 	public void setupFeatures() {
 		int minVeinSize = 5;
 		int maxVeinSize = 8;
@@ -42,7 +42,7 @@ public class CrystalModWorldGenerator{
 	        }
 	        MinableRandomConfig config = new MinableRandomConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE, ores, minVeinSize, maxVeinSize);
 			for(BiomeManager.BiomeType type : BiomeManager.BiomeType.values()){
-				BiomeManager.getBiomes(type).forEach((BiomeManager.BiomeEntry biomeEntry) -> biomeEntry.biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Biome.func_222280_a(MINABLE_RANDOM, config, Placement.field_215028_n, new CountRangeConfig(maxVeinCount, 0, 0, maxHeight))));
+				BiomeManager.getBiomes(type).forEach((BiomeManager.BiomeEntry biomeEntry) -> biomeEntry.biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Biome.createDecoratedFeature(MINABLE_RANDOM, config, Placement.COUNT_RANGE, new CountRangeConfig(maxVeinCount, 0, 0, maxHeight))));
 			}
 		}
 		//TODO Reed Gen
@@ -51,10 +51,10 @@ public class CrystalModWorldGenerator{
 	
 	public void addForestDecorations(Biome biome){
 		//TODO Make Config Options for each decoration
-		biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Biome.func_222280_a(BETTER_ROSES, IFeatureConfig.NO_FEATURE_CONFIG, Placement.field_215017_c, new FrequencyConfig(5)));
-		biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Biome.func_222280_a(CRYSTAL_BUSH, IFeatureConfig.NO_FEATURE_CONFIG, Placement.field_215018_d, new FrequencyConfig(5)));
+		biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Biome.createDecoratedFeature(BETTER_ROSES, IFeatureConfig.NO_FEATURE_CONFIG, Placement.COUNT_HEIGHTMAP_32, new FrequencyConfig(5)));
+		biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Biome.createDecoratedFeature(CRYSTAL_BUSH, IFeatureConfig.NO_FEATURE_CONFIG, Placement.COUNT_HEIGHTMAP_DOUBLE, new FrequencyConfig(5)));
 		
-		biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Biome.func_222280_a(CRYSTAL_TREE, IFeatureConfig.NO_FEATURE_CONFIG, Placement.field_215024_j, new ChanceConfig(60)));
+		biome.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Biome.createDecoratedFeature(CRYSTAL_TREE, IFeatureConfig.NO_FEATURE_CONFIG, Placement.CHANCE_HEIGHTMAP_DOUBLE, new ChanceConfig(60)));
 	}
 
 }

@@ -15,7 +15,7 @@ public class ServerEventHandler {
 	
 	@SubscribeEvent
 	public void addResourcesToServer(final FMLServerAboutToStartEvent event){
-		event.getServer().getResourceManager().func_219534_a(InterModGrinderRecipes.INSTANCE);
+		event.getServer().getResourceManager().addReloadListener(InterModGrinderRecipes.INSTANCE);
 	}
 	
 }

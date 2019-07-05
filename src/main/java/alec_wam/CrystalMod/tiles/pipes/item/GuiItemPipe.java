@@ -136,7 +136,7 @@ public class GuiItemPipe extends GuiContainerBase<ContainerItemPipe> {
 		final boolean oldFilters = twoFilters;
 		twoFilters = connectionMode == PipeConnectionMode.BOTH;
 		if(oldFilters != twoFilters){
-			((ContainerItemPipe)this.field_147002_h).updateSlots();
+			((ContainerItemPipe)this.container).updateSlots();
 			CrystalModNetwork.sendToServer(new PacketGuiMessage("UpdateSlots"));
 		}
 	}

@@ -12,7 +12,7 @@ import alec_wam.CrystalMod.client.gui.ButtonTooltip;
 import alec_wam.CrystalMod.client.gui.GuiContainerBase;
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.packet.PacketUpdateItemNBT;
-import alec_wam.CrystalMod.tiles.pipes.item.TileEntityPipeItem.FilterSettings;
+import alec_wam.CrystalMod.tiles.pipes.item.ItemPipeFilter.FilterSettings;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.Lang;
 import net.minecraft.client.Minecraft;

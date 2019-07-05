@@ -142,7 +142,7 @@ public class BlockXPTank extends ContainerBlockCustom {
 			
 			if(held.getItem() == Items.ENDER_EYE && !state.get(ENDER)){
 				world.setBlockState(pos, state.with(ENDER, true), 3);
-				if(!player.playerAbilities.isCreativeMode){
+				if(!player.abilities.isCreativeMode){
 					held.shrink(1);
 				}
 				world.playSound(null, pos, SoundEvents.ENTITY_ENDER_EYE_DEATH, SoundCategory.BLOCKS, 0.5F, 1.0F/*world.rand.nextFloat() * 0.1F + 0.9F*/);

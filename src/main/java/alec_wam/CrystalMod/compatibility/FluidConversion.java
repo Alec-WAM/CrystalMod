@@ -83,7 +83,7 @@ public class FluidConversion {
     	if(stack.getItem() == Items.POTION){
     		String potion = ItemNBTHelper.getString(stack, "Potion", "");
     		@SuppressWarnings("deprecation")
-			ResourceLocation resourcelocation = Registry.field_212621_j.getKey(Potions.field_185230_b);
+			ResourceLocation resourcelocation = Registry.POTION.getKey(Potions.WATER);
     		if(potion.equalsIgnoreCase(resourcelocation.toString())){
     			return LazyOptional.of(() -> new WaterBottleFluidHandler(stack));
     		}
@@ -154,7 +154,7 @@ public class FluidConversion {
             return FluidActionResult.FAILURE;
         }
 
-        if (player != null && player.playerAbilities.isCreativeMode)
+        if (player != null && player.abilities.isCreativeMode)
         {
             FluidActionResult filledReal = tryFillContainer(container, fluidSource, maxAmount, player, doFill);
             if (filledReal.isSuccess())
@@ -222,7 +222,7 @@ public class FluidConversion {
             return FluidActionResult.FAILURE;
         }
 
-        if (player != null && player.playerAbilities.isCreativeMode)
+        if (player != null && player.abilities.isCreativeMode)
         {
             FluidActionResult emptiedReal = tryEmptyContainer(container, fluidDestination, maxAmount, player, doDrain);
             if (emptiedReal.isSuccess())

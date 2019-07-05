@@ -109,7 +109,7 @@ public class TileEntityPress extends TileEntityCraftingMachine {
     }
 
     public PressRecipe getRecipe(){
-    	return getWorld().getRecipeManager().func_215371_a((IRecipeType<PressRecipe>)ModRecipes.PRESS_TYPE, this, getWorld()).orElse(null);
+    	return getWorld().getRecipeManager().getRecipe((IRecipeType<PressRecipe>)ModRecipes.PRESS_TYPE, this, getWorld()).orElse(null);
     }
 
 	@Override

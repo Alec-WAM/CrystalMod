@@ -41,7 +41,7 @@ public class BlockUtil {
 		float f7 = f2 * f4;
 		double d0 = playerIn.getAttribute(PlayerEntity.REACH_DISTANCE).getValue();;
 		Vec3d vec3d1 = vec3d.add((double)f6 * d0, (double)f5 * d0, (double)f7 * d0);
-		return worldIn.func_217299_a(new RayTraceContext(vec3d, vec3d1, RayTraceContext.BlockMode.OUTLINE, mode, playerIn));
+		return worldIn.rayTraceBlocks(new RayTraceContext(vec3d, vec3d1, RayTraceContext.BlockMode.OUTLINE, mode, playerIn));
 	}
 
 	public static Direction getFacingFromEntity(BlockPos clickedBlock, LivingEntity entityIn, boolean vert) {

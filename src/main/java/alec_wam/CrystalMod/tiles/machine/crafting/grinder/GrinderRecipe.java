@@ -116,7 +116,7 @@ public class GrinderRecipe implements IRecipe<IInventory> {
    }
 
    @Override
-   public IRecipeType<?> func_222127_g() {
+   public IRecipeType<?> getType() {
 	   return ModRecipes.GRINDER_TYPE;
    }
 
@@ -140,7 +140,7 @@ public class GrinderRecipe implements IRecipe<IInventory> {
             if(json.has("bonus")){
             	JsonObject bonusJson = JSONUtils.getJsonObject(json, "bonus");
             	String s2 = JSONUtils.getString(bonusJson, "item");
-            	Optional<Item> bonusItem = Registry.field_212630_s.func_218349_b(new ResourceLocation(s2));
+            	Optional<Item> bonusItem = Registry.ITEM.getValue(new ResourceLocation(s2));
             	//Don't throw exception if item is null because we want to be able to support other mods items
             	if(bonusItem.isPresent()){
             		int count = JSONUtils.getInt(bonusJson, "count", 1);

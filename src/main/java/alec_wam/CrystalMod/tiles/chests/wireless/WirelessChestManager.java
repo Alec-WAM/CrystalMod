@@ -47,12 +47,12 @@ public class WirelessChestManager extends WorldSavedData implements IWirelessChe
     {
     	if(world instanceof ServerWorld){
     		ServerWorld serverWorld = (ServerWorld)world;
-	    	DimensionSavedDataManager storage = serverWorld.func_217481_x();
-	        WirelessChestManager instance = (WirelessChestManager) storage.func_215753_b(WirelessChestManager::new, StorageKey);
+	    	DimensionSavedDataManager storage = serverWorld.getSavedData();
+	        WirelessChestManager instance = (WirelessChestManager) storage.get(WirelessChestManager::new, StorageKey);
 	        if (instance == null)
 	        {
 	            instance = new WirelessChestManager();
-	            storage.func_215757_a(instance);
+	            storage.set(instance);
 	        }
 	        return instance;
     	} 

@@ -19,19 +19,19 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public class GuiPoweredFurnaceRecipeBook extends RecipeBookGui {
 	@Override	
 	protected boolean toggleCraftableFilter() {
-		boolean flag = !this.field_193964_s.isFurnaceFilteringCraftable();
-		this.field_193964_s.setFurnaceFilteringCraftable(flag);
+		boolean flag = !this.recipeBook.isFurnaceFilteringCraftable();
+		this.recipeBook.setFurnaceFilteringCraftable(flag);
 		return flag;
 	}
 
 	@Override
 	public boolean isVisible() {
-		return this.field_193964_s.isGuiOpen();
+		return this.recipeBook.isGuiOpen();
 	}
 
 	@Override
 	protected void setVisible(boolean p_193006_1_) {
-		this.field_193964_s.setFurnaceGuiOpen(p_193006_1_);
+		this.recipeBook.setFurnaceGuiOpen(p_193006_1_);
 		if (!p_193006_1_) {
 			this.recipeBookPage.setInvisible();
 		}
@@ -41,12 +41,12 @@ public class GuiPoweredFurnaceRecipeBook extends RecipeBookGui {
 
 	@Override
 	protected void func_205702_a() {
-		this.field_193960_m.initTextureValues(152, 182, 28, 18, RECIPE_BOOK);
+		this.toggleRecipesBtn.initTextureValues(152, 182, 28, 18, RECIPE_BOOK);
 	}
 
 	@Override
 	protected String func_205703_f() {
-		return I18n.format(this.field_193960_m.isStateTriggered() ? "gui.recipebook.toggleRecipes.smeltable" : "gui.recipebook.toggleRecipes.all");
+		return I18n.format(this.toggleRecipesBtn.isStateTriggered() ? "gui.recipebook.toggleRecipes.smeltable" : "gui.recipebook.toggleRecipes.all");
 	}
 
 	@Override

@@ -40,7 +40,7 @@ public class ItemCrystalShard extends ItemVariant<EnumCrystalColorSpecial> imple
 			ItemStack stack = context.getItem();
 			BlockPos pos = context.getPos();
 			BlockState state = world.getBlockState(pos);
-			if(Block.func_220056_d(state, world, pos, Direction.UP) && state.getMaterial() == Material.ROCK){
+			if(Block.hasSolidSide(state, world, pos, Direction.UP) && state.getMaterial() == Material.ROCK){
 				if(world.setBlockState(pos.up(), ModBlocks.crystalShardBlock.getBlock(EnumCrystalColor.convert(type)).getDefaultState(), 2)){
 					PlayerEntity entityplayer = blockitemusecontext.getPlayer();
 		            if (entityplayer instanceof ServerPlayerEntity) {

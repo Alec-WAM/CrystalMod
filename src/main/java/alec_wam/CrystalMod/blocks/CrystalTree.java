@@ -17,7 +17,7 @@ public class CrystalTree extends Tree {
 	
 	@Override
 	protected AbstractTreeFeature<NoFeatureConfig> getTreeFeature(Random random) {
-		return (AbstractTreeFeature<NoFeatureConfig>)(new CrystalTreeFeature(NoFeatureConfig::func_214639_a, true, type, false));
+		return (AbstractTreeFeature<NoFeatureConfig>)(new CrystalTreeFeature(NoFeatureConfig::deserialize, true, type, false));
 	}
 
 }

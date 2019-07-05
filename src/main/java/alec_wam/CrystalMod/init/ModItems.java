@@ -13,6 +13,8 @@ import alec_wam.CrystalMod.items.ItemCrystalShard;
 import alec_wam.CrystalMod.items.ItemElectricBread;
 import alec_wam.CrystalMod.items.ItemGrassSeeds;
 import alec_wam.CrystalMod.items.ItemGrassSeeds.EnumGrassSeedItem;
+import alec_wam.CrystalMod.items.ItemMobSkull;
+import alec_wam.CrystalMod.items.ItemPencil;
 import alec_wam.CrystalMod.items.ItemVariant;
 import alec_wam.CrystalMod.items.ItemWrench;
 import alec_wam.CrystalMod.items.tools.ItemPoweredShield;
@@ -45,7 +47,8 @@ public class ModItems {
 	public static Item wrench;
 	public static Item machineFrame;
 	public static Item fusionWand;
-	public static Item pipeFilter;
+	public static Item pencil;
+	public static Item itemFilter;
 	public static ItemVariantGroup<EnumPipeUpgrades, ItemVariant<EnumPipeUpgrades>> pipeUpgrades;
 	public static ItemVariantGroup<EnumMiscUpgrades, ItemVariant<EnumMiscUpgrades>> miscUpgrades;
 
@@ -53,6 +56,8 @@ public class ModItems {
 	public static Item poweredShield;
 	
 	public static Item xpBucket;
+	
+	public static ItemVariantGroup<ItemMobSkull.EnumSkullType, ItemMobSkull> mobHeads;	
 	
 	
 	public static void buildList(){
@@ -113,16 +118,16 @@ public class ModItems {
 				.suffix()
 				.variants(EnumCrystalColor.values())
 				.itemFactory(ItemVariant<EnumCrystalColor>::new)
-				.itemPropertiesFactory(variant -> new Item.Properties().group(ModItemGroups.ITEM_GROUP_ITEMS).func_221540_a(Foods.field_221425_a))
+				.itemPropertiesFactory(variant -> new Item.Properties().group(ModItemGroups.ITEM_GROUP_ITEMS).food(Foods.APPLE))
 				.build();
 		RegistrationHandler.addItemGroup(crystalBerryGroup);
 		cattailFluff = new ItemCattail(new Item.Properties().group(ItemGroup.MATERIALS));
 		RegistrationHandler.addItem(cattailFluff, "cattail_fluff");
 		//Raw Fish food value (1)
-		cattailRootsRaw = new Item(new Item.Properties().group(ItemGroup.DECORATIONS).func_221540_a(Foods.field_221424_L));
+		cattailRootsRaw = new Item(new Item.Properties().group(ItemGroup.DECORATIONS).food(Foods.COD));
 		RegistrationHandler.addItem(cattailRootsRaw, "cattail_roots_raw");
 		//Carrot food value (3)
-		cattailRootsCooked = new Item(new Item.Properties().group(ItemGroup.FOOD).func_221540_a(Foods.field_221431_g));
+		cattailRootsCooked = new Item(new Item.Properties().group(ItemGroup.FOOD).food(Foods.CARROT));
 		RegistrationHandler.addItem(cattailRootsCooked, "cattail_roots_cooked");
 		
 		wrench = new ItemWrench(new Item.Properties().group(ModItemGroups.ITEM_GROUP_MACHINES).maxStackSize(1));
@@ -131,8 +136,10 @@ public class ModItems {
 		RegistrationHandler.addItem(machineFrame, "machineframe");
 		fusionWand = new ItemFusionWand(new Item.Properties().group(ModItemGroups.ITEM_GROUP_MACHINES).maxStackSize(1));
 		RegistrationHandler.addItem(fusionWand, "fusionwand");
-		pipeFilter = new ItemPipeFilter(new Item.Properties().group(ModItemGroups.ITEM_GROUP_MACHINES).maxStackSize(16));
-		RegistrationHandler.addItem(pipeFilter, "pipefilter");
+		pencil = new ItemPencil(new Item.Properties().group(ModItemGroups.ITEM_GROUP_ITEMS).maxStackSize(1).maxDamage(16));
+		RegistrationHandler.addItem(pencil, "pencil");
+		itemFilter = new ItemPipeFilter(new Item.Properties().group(ModItemGroups.ITEM_GROUP_MACHINES).maxStackSize(16));
+		RegistrationHandler.addItem(itemFilter, "itemfilter");
 		pipeUpgrades = ItemVariantGroup.Builder.<EnumPipeUpgrades, ItemVariant<EnumPipeUpgrades>>create()
 				.groupName("pipe_upgrade")
 				.suffix()
@@ -151,7 +158,7 @@ public class ModItems {
 		RegistrationHandler.addItemGroup(miscUpgrades);
 		
 		//Bread Food Property
-		electricBread = new ItemElectricBread(new Item.Properties().group(ItemGroup.FOOD).maxStackSize(1).func_221540_a(Foods.field_221430_f));
+		electricBread = new ItemElectricBread(new Item.Properties().group(ItemGroup.FOOD).maxStackSize(1).food(Foods.BREAD));
 		RegistrationHandler.addItem(electricBread, "electric_bread");	
 		
 		poweredShield = new ItemPoweredShield(new Item.Properties().group(ItemGroup.COMBAT).maxStackSize(1).setTEISR(() -> CustomItemRender::new));
@@ -159,6 +166,15 @@ public class ModItems {
 		
 		xpBucket = new ItemBucketXP(new Item.Properties().group(ItemGroup.MISC).maxStackSize(1));
 		RegistrationHandler.addItem(xpBucket, "bucket_xp");
+		
+		mobHeads = ItemVariantGroup.Builder.<ItemMobSkull.EnumSkullType, ItemMobSkull>create()
+				.groupName("skull")
+				.suffix()
+				.variants(ItemMobSkull.EnumSkullType.values())
+				.itemFactory(ItemMobSkull::new)
+				.itemPropertiesFactory(variant -> new Item.Properties().group(ItemGroup.COMBAT).setTEISR(() -> CustomItemRender::new))
+				.build();
+		RegistrationHandler.addItemGroup(mobHeads);
 	}	
 	
 }

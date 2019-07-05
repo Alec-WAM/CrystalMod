@@ -50,7 +50,7 @@ public class HUDOverlayHandler {
 		MainWindow window = mc.mainWindow;
 		ClientWorld world = mc.world;
     	ClientPlayerEntity player = mc.player;
-    	if(event.getType() == ElementType.ALL && mc.field_71462_r == null){
+    	if(event.getType() == ElementType.ALL && mc.currentScreen == null){
     		if(mc.objectMouseOver != null){
     			RayTraceResult ray = mc.objectMouseOver;
     			if(ray.getType() == RayTraceResult.Type.BLOCK){
@@ -119,7 +119,7 @@ public class HUDOverlayHandler {
 			currentBowArc = TridentProjectileArc.shoot(player, player.rotationPitch, player.rotationYaw, 2.5F + (float)rip * 0.5F, 0.0f, bowArcRand);
 		}
 		else if(heldMain.getItem() instanceof CrossbowItem){
-			boolean charged = CrossbowItem.func_220012_d(heldMain);
+			boolean charged = CrossbowItem.isCharged(heldMain);
 			if(charged){
 				arcType = 2;
 				float power = ProjectileArcHelper.isCrossbowLoadedWith(heldMain, Items.FIREWORK_ROCKET) ? 1.6F : 3.15F;
@@ -130,7 +130,7 @@ public class HUDOverlayHandler {
 			}
 		}
 		else if(heldOff.getItem() instanceof CrossbowItem){
-			boolean charged = CrossbowItem.func_220012_d(heldOff);
+			boolean charged = CrossbowItem.isCharged(heldOff);
 			if(charged){
 				arcType = 2;
 				itemHand = Hand.OFF_HAND;
@@ -186,8 +186,8 @@ public class HUDOverlayHandler {
 				
 				if(startVec !=null){
 					Vec3d vec3d = startVec;
-					vec3d = vec3d.rotatePitch(-MathHelper.func_219799_g(partialTicks, player.prevRotationPitch, player.rotationPitch) * ((float)Math.PI / 180F));
-					vec3d = vec3d.rotateYaw(-MathHelper.func_219799_g(partialTicks, player.prevRotationYaw, player.rotationYaw) * ((float)Math.PI / 180F));
+					vec3d = vec3d.rotatePitch(-MathHelper.lerp(partialTicks, player.prevRotationPitch, player.rotationPitch) * ((float)Math.PI / 180F));
+					vec3d = vec3d.rotateYaw(-MathHelper.lerp(partialTicks, player.prevRotationYaw, player.rotationYaw) * ((float)Math.PI / 180F));
 					vec3d = vec3d.rotateYaw(f4 * 0.5F);
 					vec3d = vec3d.rotatePitch(-f4 * 0.7F);
 					d4 = vec3d.x;

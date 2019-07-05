@@ -155,7 +155,7 @@ public class BlockCattail extends Block implements net.minecraftforge.common.IPl
 			   ItemEntity entityitem = new ItemEntity(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, fluff);
 			   Vec3d motion = new Vec3d(RANDOM.nextGaussian() * (double)0.05F, RANDOM.nextGaussian() * (double)0.05F + (double)0.2F, RANDOM.nextGaussian() * (double)0.05F);
 			   entityitem.setMotion(motion);
-			   if(!world.isRemote)world.func_217376_c(entityitem);			   
+			   if(!world.isRemote)world.addEntity(entityitem);			   
 			   return true;
 		   }
 	   }
@@ -172,8 +172,8 @@ public class BlockCattail extends Block implements net.minecraftforge.common.IPl
 			   ItemEntity entityitem = new ItemEntity(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, roots);
 			   Vec3d motion = new Vec3d(RANDOM.nextGaussian() * (double)0.05F, RANDOM.nextGaussian() * (double)0.05F + (double)0.2F, RANDOM.nextGaussian() * (double)0.05F);
 			   entityitem.setMotion(motion);
-			   if(!world.isRemote)world.func_217376_c(entityitem);	
-			   held.func_222118_a(1, player, e -> e.func_213334_d(hand));
+			   if(!world.isRemote)world.addEntity(entityitem);	
+			   held.damageItem(1, player, e -> e.sendBreakAnimation(hand));
 			   return true;
 		   }
 	   }

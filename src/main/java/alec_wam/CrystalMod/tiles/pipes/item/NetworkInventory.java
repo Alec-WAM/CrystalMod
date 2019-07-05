@@ -179,7 +179,7 @@ public class NetworkInventory {
 		if(getConnectionMode() == PipeConnectionMode.BOTH){
 			filter = pip.getOutFilter(pipDir);
 		}
-		return TileEntityPipeItem.passesFilter(itemStack, filter);
+		return ItemPipeFilter.passesFilter(itemStack, filter);
 	}
 
 	private boolean doTransfer(ItemStack extractedItem, int slot, int maxExtract) {
@@ -251,7 +251,7 @@ public class NetworkInventory {
 			return 0;
 		}
 		ItemStack filter = pip.getInFilter(pipDir);
-		if(!TileEntityPipeItem.passesFilter(item, filter)){
+		if(!ItemPipeFilter.passesFilter(item, filter)){
 			return 0;
 		}
 		int startSize = ItemStackTools.getStackSize(item);

@@ -28,6 +28,7 @@ import alec_wam.CrystalMod.core.BlockVariantGroup.TileFactory;
 import alec_wam.CrystalMod.core.BlockVariantGroup.TileTypeFactory;
 import alec_wam.CrystalMod.core.color.EnumCrystalColor;
 import alec_wam.CrystalMod.core.color.EnumCrystalColorSpecial;
+import alec_wam.CrystalMod.tiles.BasicInterfaceBlock;
 import alec_wam.CrystalMod.tiles.ContainerBlockCustom;
 import alec_wam.CrystalMod.tiles.EnumCrystalColorSpecialWithCreative;
 import alec_wam.CrystalMod.tiles.chests.metal.BlockMetalCrystalChest;
@@ -59,6 +60,7 @@ import alec_wam.CrystalMod.tiles.machine.crafting.EnumCraftingMachine;
 import alec_wam.CrystalMod.tiles.machine.crafting.furnace.TileEntityPoweredFurnace;
 import alec_wam.CrystalMod.tiles.machine.crafting.grinder.TileEntityGrinder;
 import alec_wam.CrystalMod.tiles.machine.crafting.press.TileEntityPress;
+import alec_wam.CrystalMod.tiles.machine.miner.TileEntityMiner;
 import alec_wam.CrystalMod.tiles.pipes.BlockPipe;
 import alec_wam.CrystalMod.tiles.pipes.NetworkType;
 import alec_wam.CrystalMod.tiles.pipes.energy.cu.BlockPipeEnergyCU;
@@ -132,7 +134,9 @@ public class ModBlocks {
 	public static BlockVariantGroup<EnumCrystalColorSpecialWithCreative, BlockBattery> batteryGroup;
 	public static BlockVariantGroup<EnumEngineType, BlockEngine> engineBasicGroup;
 	public static BlockVariantGroup<EnumCraftingMachine, BlockCraftingMachine> craftingMachine;
-
+	public static BasicInterfaceBlock miner;
+	public static TileEntityType<TileEntityMiner> TILE_MINER;
+	
 	public static BlockPipe pipeItem;
 	public static TileEntityType<TileEntityPipeItem> TILE_PIPE_ITEM;
 	public static BlockVariantGroup<EnumCrystalColorSpecial, BlockPipeEnergyCU> pipeEnergyCUGroup;
@@ -299,7 +303,7 @@ public class ModBlocks {
 					Supplier<TileEntityCrate> makeTileFromVariant(EnumCrystalColorSpecialWithCreative variant) { return () -> new TileEntityCrate(variant); }
 					@Override
 					public Builder<?> createTileType(EnumCrystalColorSpecialWithCreative variant, BlockCrate block) {
-						return TileEntityType.Builder.func_223042_a(makeTileFromVariant(variant), block);
+						return TileEntityType.Builder.create(makeTileFromVariant(variant), block);
 					}
 				})
 				.build();
@@ -321,7 +325,7 @@ public class ModBlocks {
 					Supplier<TileEntityWoodenCrystalChest> makeTileFromVariant(WoodenCrystalChestType variant) { return () -> new TileEntityWoodenCrystalChest(variant); }
 					@Override
 					public Builder<?> createTileType(WoodenCrystalChestType variant, BlockWoodenCrystalChest block) {
-						return TileEntityType.Builder.func_223042_a(makeTileFromVariant(variant), block);
+						return TileEntityType.Builder.create(makeTileFromVariant(variant), block);
 					}
 				})
 				.build();
@@ -343,14 +347,14 @@ public class ModBlocks {
 					Supplier<TileEntityMetalCrystalChest> makeTileFromVariant(MetalCrystalChestType variant) { return () -> new TileEntityMetalCrystalChest(variant); }
 					@Override
 					public Builder<?> createTileType(MetalCrystalChestType variant, BlockMetalCrystalChest block) {
-						return TileEntityType.Builder.func_223042_a(makeTileFromVariant(variant), block);
+						return TileEntityType.Builder.create(makeTileFromVariant(variant), block);
 					}
 				})
 				.build();
 		RegistrationHandler.addBlockGroup(metalChestGroup);			
 		wirelessChest = new BlockWirelessChest(Block.Properties.create(Material.IRON).hardnessAndResistance(5.0F, 6.0F).sound(SoundType.METAL)); 
 		RegistrationHandler.createBlock(wirelessChest, new BlockItem(wirelessChest, RegistrationHandler.defaultItemProperties(ModItemGroups.ITEM_GROUP_MACHINES).setTEISR(() -> CustomItemRender::new)), "wirelesschest");	
-		TILE_WIRELESS_CHEST = registerTileEntity(CrystalMod.resource("wireless_chest"), TileEntityType.Builder.func_223042_a(TileEntityWirelessChest::new, wirelessChest));
+		TILE_WIRELESS_CHEST = registerTileEntity(CrystalMod.resource("wireless_chest"), TileEntityType.Builder.create(TileEntityWirelessChest::new, wirelessChest));
 		
 		tankGroup = BlockVariantGroup.Builder.<EnumCrystalColorSpecialWithCreative, BlockTank>create()
 				.groupName("tank")
@@ -369,7 +373,7 @@ public class ModBlocks {
 					Supplier<TileEntityTank> makeTileFromVariant(EnumCrystalColorSpecialWithCreative variant) { return () -> new TileEntityTank(variant); }
 					@Override
 					public Builder<?> createTileType(EnumCrystalColorSpecialWithCreative variant, BlockTank block) {
-						return TileEntityType.Builder.func_223042_a(makeTileFromVariant(variant), block);
+						return TileEntityType.Builder.create(makeTileFromVariant(variant), block);
 					}
 				})
 				.build();
@@ -377,7 +381,7 @@ public class ModBlocks {
 		
 		xpTank = new BlockXPTank(Block.Properties.create(Material.IRON).hardnessAndResistance(2.0F, 15.0F).sound(SoundType.GLASS)); 
 		RegistrationHandler.createBlock(xpTank, new BlockItem(xpTank, RegistrationHandler.defaultItemProperties(ModItemGroups.ITEM_GROUP_MACHINES).setTEISR(() -> CustomItemRender::new)), "xptank");	
-		TILE_XP_TANK = registerTileEntity(CrystalMod.resource("xp_tank"), TileEntityType.Builder.func_223042_a(TileEntityXPTank::new, xpTank));
+		TILE_XP_TANK = registerTileEntity(CrystalMod.resource("xp_tank"), TileEntityType.Builder.create(TileEntityXPTank::new, xpTank));
 		
 		
 		//TODO Add Gui Tank Overlay
@@ -390,7 +394,7 @@ public class ModBlocks {
 			
 		}; 
 		RegistrationHandler.createBlock(xpVacuum, ModItemGroups.ITEM_GROUP_MACHINES, "xpvacuum");	
-		TILE_XP_VACUUM = registerTileEntity(CrystalMod.resource("xp_vacuum"), TileEntityType.Builder.func_223042_a(TileEntityXPVacuum::new, xpVacuum));
+		TILE_XP_VACUUM = registerTileEntity(CrystalMod.resource("xp_vacuum"), TileEntityType.Builder.create(TileEntityXPVacuum::new, xpVacuum));
 
 		
 		jarGroup = BlockVariantGroup.Builder.<WoodType, BlockJar>create()
@@ -410,7 +414,7 @@ public class ModBlocks {
 					Supplier<TileEntityJar> makeJarFromVariant(WoodType variant) { return () -> new TileEntityJar(variant); }
 					@Override
 					public Builder<?> createTileType(WoodType variant, BlockJar block) {
-						return TileEntityType.Builder.func_223042_a(makeJarFromVariant(variant), block);
+						return TileEntityType.Builder.create(makeJarFromVariant(variant), block);
 					}
 				})
 				.build();
@@ -418,11 +422,11 @@ public class ModBlocks {
 		
 		pedestal = new BlockPedestal(Block.Properties.create(Material.ROCK).hardnessAndResistance(1.0F, 10.0F).sound(SoundType.STONE)); 
 		RegistrationHandler.createBlock(pedestal, ModItemGroups.ITEM_GROUP_MACHINES, "pedestal");
-		TILE_PEDESTAL = registerTileEntity(CrystalMod.resource("pedestal"), TileEntityType.Builder.func_223042_a(TileEntityPedestal::new, pedestal));
+		TILE_PEDESTAL = registerTileEntity(CrystalMod.resource("pedestal"), TileEntityType.Builder.create(TileEntityPedestal::new, pedestal));
 		
 		fusionPedestal = new BlockFusionPedestal(Block.Properties.create(Material.ROCK).hardnessAndResistance(1.0F, 10.0F).sound(SoundType.STONE)); 
 		RegistrationHandler.createBlock(fusionPedestal, ModItemGroups.ITEM_GROUP_MACHINES, "fusion_pedestal");
-		TILE_FUSION_PEDESTAL = registerTileEntity(CrystalMod.resource("fusion_pedestal"), TileEntityType.Builder.func_223042_a(TileEntityFusionPedestal::new, fusionPedestal));
+		TILE_FUSION_PEDESTAL = registerTileEntity(CrystalMod.resource("fusion_pedestal"), TileEntityType.Builder.create(TileEntityFusionPedestal::new, fusionPedestal));
 		
 		batteryGroup = BlockVariantGroup.Builder.<EnumCrystalColorSpecialWithCreative, BlockBattery>create()
 				.groupName("battery")
@@ -443,7 +447,7 @@ public class ModBlocks {
 					
 					@Override
 					public Builder<?> createTileType(EnumCrystalColorSpecialWithCreative variant, BlockBattery block) {
-						return TileEntityType.Builder.func_223042_a(makeBatteryFromVariant(variant), block);
+						return TileEntityType.Builder.create(makeBatteryFromVariant(variant), block);
 					}
 				})
 				.build();
@@ -465,7 +469,7 @@ public class ModBlocks {
 					Supplier<TileEntityEngineFurnace> makeEngine() { return () -> new TileEntityEngineFurnace(1); }
 					@Override
 					public Builder<?> createTileType(EnumEngineType variant, BlockEngine block) {
-						return TileEntityType.Builder.func_223042_a(makeEngine(), block);
+						return TileEntityType.Builder.create(makeEngine(), block);
 					}
 				})
 				.build();
@@ -492,13 +496,13 @@ public class ModBlocks {
 					@Override
 					public Builder<?> createTileType(EnumCraftingMachine variant, BlockCraftingMachine block) {
 						if(variant == EnumCraftingMachine.FURNACE){
-							return TileEntityType.Builder.func_223042_a(TileEntityPoweredFurnace::new, block);
+							return TileEntityType.Builder.create(TileEntityPoweredFurnace::new, block);
 						}
 						if(variant == EnumCraftingMachine.GRINDER){
-							return TileEntityType.Builder.func_223042_a(TileEntityGrinder::new, block);
+							return TileEntityType.Builder.create(TileEntityGrinder::new, block);
 						}
 						if(variant == EnumCraftingMachine.PRESS){
-							return TileEntityType.Builder.func_223042_a(TileEntityPress::new, block);
+							return TileEntityType.Builder.create(TileEntityPress::new, block);
 						}
 						return null;
 					}
@@ -506,9 +510,21 @@ public class ModBlocks {
 				.build();
 		RegistrationHandler.addBlockGroup(craftingMachine);
 		
+		miner = new BasicInterfaceBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(5.0F, 6.0F).sound(SoundType.METAL)) {
+
+			@Override
+			public TileEntity createNewTileEntity(IBlockReader worldIn) {
+				return new TileEntityMiner();
+			}
+			
+		}; 
+		RegistrationHandler.createBlock(miner, ModItemGroups.ITEM_GROUP_MACHINES, "miner");	
+		TILE_MINER = registerTileEntity(CrystalMod.resource("miner"), TileEntityType.Builder.create(TileEntityMiner::new, miner));
+		
+		
 		pipeItem = new BlockPipe(NetworkType.ITEM, Block.Properties.create(Material.IRON).hardnessAndResistance(1.0F, 10.0F).sound(SoundType.METAL)); 
 		RegistrationHandler.createBlock(pipeItem, ModItemGroups.ITEM_GROUP_MACHINES, "pipe_item");
-		TILE_PIPE_ITEM = registerTileEntity(CrystalMod.resource("pipe_item"), TileEntityType.Builder.func_223042_a(TileEntityPipeItem::new, pipeItem));
+		TILE_PIPE_ITEM = registerTileEntity(CrystalMod.resource("pipe_item"), TileEntityType.Builder.create(TileEntityPipeItem::new, pipeItem));
 		
 		pipeEnergyCUGroup = BlockVariantGroup.Builder.<EnumCrystalColorSpecial, BlockPipeEnergyCU>create()
 				.groupName("pipe_energy_cu")
@@ -520,7 +536,7 @@ public class ModBlocks {
 				.tileTypeFactory(new TileTypeFactory<EnumCrystalColorSpecial, BlockPipeEnergyCU>(){
 					@Override
 					public Builder<?> createTileType(EnumCrystalColorSpecial variant, BlockPipeEnergyCU block) {
-						return TileEntityType.Builder.func_223042_a(TileEntityPipeEnergyCU::new, block);
+						return TileEntityType.Builder.create(TileEntityPipeEnergyCU::new, block);
 					}
 				})
 				.build();
@@ -535,7 +551,7 @@ public class ModBlocks {
 				.tileTypeFactory(new TileTypeFactory<EnumCrystalColorSpecial, BlockPipeEnergyRF>(){
 					@Override
 					public Builder<?> createTileType(EnumCrystalColorSpecial variant, BlockPipeEnergyRF block) {
-						return TileEntityType.Builder.func_223042_a(TileEntityPipeEnergyRF::new, block);
+						return TileEntityType.Builder.create(TileEntityPipeEnergyRF::new, block);
 					}
 				})
 				.build();
@@ -563,7 +579,7 @@ public class ModBlocks {
 	public static <T extends TileEntity> TileEntityType<T> registerTileEntityGroup(String id, Supplier<? extends T> p_223042_0_, BlockVariantGroup<?, ?> group) {
 		try {
 			System.out.println("Blocks:" + group.getBlocks().size());
-			TileEntityType.Builder<T> builder = TileEntityType.Builder.func_223042_a(p_223042_0_, new ArrayList<Block>(group.getBlocksMap().values()).get(0));
+			TileEntityType.Builder<T> builder = TileEntityType.Builder.create(p_223042_0_, new ArrayList<Block>(group.getBlocksMap().values()).get(0));
 			Method method = null;
 			try{	
 				method = TileEntityType.class.getMethods()[1];

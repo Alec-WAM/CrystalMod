@@ -270,7 +270,7 @@ public class BlockWirelessChest extends ContainerBlockCustom implements IBucketP
                 {
         			if(worldIn.isRemote)return true;
         			worldIn.playSound(null, pos, SoundEvents.BLOCK_ANVIL_LAND, SoundCategory.BLOCKS, 0.4F, 0.8f);
-                	if (!player.playerAbilities.isCreativeMode)
+                	if (!player.abilities.isCreativeMode)
                 		ItemStackTools.incStackSize(stack, -1);
 					UUID uuid = PlayerEntity.getUUID(player.getGameProfile());
                     chest.bindToPlayer(uuid);
@@ -308,7 +308,7 @@ public class BlockWirelessChest extends ContainerBlockCustom implements IBucketP
     	                {
     						if(worldIn.isRemote) return true;
     						worldIn.playSound(null, pos, SoundEvents.BLOCK_WOOL_PLACE, SoundCategory.BLOCKS, 1.0F, 0.8f);
-    	                	if (!player.playerAbilities.isCreativeMode)
+    	                	if (!player.abilities.isCreativeMode)
     	                		ItemStackTools.incStackSize(stack, -1);
     	                    chest.setCode(code);
     	                    chest.markDirty();

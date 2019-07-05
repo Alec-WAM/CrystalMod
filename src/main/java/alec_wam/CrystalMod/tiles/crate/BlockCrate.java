@@ -157,7 +157,7 @@ public class BlockCrate extends ContainerBlockVariant<EnumCrystalColorSpecialWit
 						if(playerItem.getItem() == ModItems.miscUpgrades.getItem(EnumMiscUpgrades.VOID) && !crate.hasVoidUpgrade){
 							if(worldIn.isRemote)return true;
 							crate.hasVoidUpgrade = true;
-							if(!player.playerAbilities.isCreativeMode){
+							if(!player.abilities.isCreativeMode){
 								playerItem.shrink(1);
 								player.setHeldItem(hand, playerItem);
 							}
@@ -181,7 +181,7 @@ public class BlockCrate extends ContainerBlockVariant<EnumCrystalColorSpecialWit
 						BlockCrate crateBlock = (BlockCrate) ((BlockItem)playerItem.getItem()).getBlock();
 						if(crateBlock.type.ordinal() > this.type.ordinal() && crateBlock.type != EnumCrystalColorSpecialWithCreative.CREATIVE){
 							playerItem = playerItem.copy();
-							if(!player.playerAbilities.isCreativeMode && ItemStackTools.isValid(spawnItem(player, new ItemStack(this, 1)))){
+							if(!player.abilities.isCreativeMode && ItemStackTools.isValid(spawnItem(player, new ItemStack(this, 1)))){
 								playerItem = player.getHeldItem(hand);
 							} else {
 								final ItemStack oldStored = crate.getStack();
@@ -196,7 +196,7 @@ public class BlockCrate extends ContainerBlockVariant<EnumCrystalColorSpecialWit
 									((TileEntityCrate)newTile).tier = crateBlock.type.ordinal();
 								}
 								BlockUtil.markBlockForUpdate(worldIn, pos);
-								if(!player.playerAbilities.isCreativeMode){
+								if(!player.abilities.isCreativeMode){
 									playerItem = ItemUtil.consumeItem(playerItem);
 									player.setHeldItem(hand, playerItem);
 								}
@@ -321,14 +321,14 @@ public class BlockCrate extends ContainerBlockVariant<EnumCrystalColorSpecialWit
 					ItemEntity entityitem = new ItemEntity(worldIn, pos.getX() + (double)f2, pos.getY() + (double)f3, pos.getZ() + (double)f4, stack.split(sizeSizeDropped));
 					Vec3d motion = new Vec3d(RANDOM.nextGaussian() * (double)0.05F, RANDOM.nextGaussian() * (double)0.05F + (double)0.2F, RANDOM.nextGaussian() * (double)0.05F);
 					entityitem.setMotion(motion);
-					worldIn.func_217376_c(entityitem);
+					worldIn.addEntity(entityitem);
 				}
 				
 				if(crate.hasVoidUpgrade){
 					ItemEntity entityitem = new ItemEntity(worldIn, pos.getX() + (double)f2, pos.getY() + (double)f3, pos.getZ() + (double)f4, new ItemStack(ModItems.miscUpgrades.getItem(EnumMiscUpgrades.VOID)));
 					Vec3d motion = new Vec3d(RANDOM.nextGaussian() * (double)0.05F, RANDOM.nextGaussian() * (double)0.05F + (double)0.2F, RANDOM.nextGaussian() * (double)0.05F);
 					entityitem.setMotion(motion);
-					worldIn.func_217376_c(entityitem);
+					worldIn.addEntity(entityitem);
 				}
 				
 				worldIn.updateComparatorOutputLevel(pos, this);
@@ -501,7 +501,7 @@ public class BlockCrate extends ContainerBlockVariant<EnumCrystalColorSpecialWit
 			Vec3d newMotion = droppedEntity.getMotion().mul(speedfactor, speedfactor, speedfactor);
 			droppedEntity.setMotion(newMotion);
 
-			if(!source.getWorld().isRemote)source.getWorld().func_217376_c(droppedEntity);
+			if(!source.getWorld().isRemote)source.getWorld().addEntity(droppedEntity);
 		}
 		else {
 			Direction facing = sourceState.get(FACING);
@@ -516,7 +516,7 @@ public class BlockCrate extends ContainerBlockVariant<EnumCrystalColorSpecialWit
 			double offset = 0.25D;
 			droppedEntity.setVelocity(motion.x * offset, motion.y * offset, motion.z * offset);
 
-			if(!source.getWorld().isRemote)source.getWorld().func_217376_c(droppedEntity);
+			if(!source.getWorld().isRemote)source.getWorld().addEntity(droppedEntity);
 		}
 	}
 }

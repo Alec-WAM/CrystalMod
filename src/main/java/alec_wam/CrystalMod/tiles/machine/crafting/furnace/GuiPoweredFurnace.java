@@ -42,7 +42,7 @@ public class GuiPoweredFurnace extends GuiContainerTabbed<ContainerPoweredFurnac
 	    this.speed = ((ElementDualScaled)addElement(new ElementDualScaled(this, 56, 44).setSize(16, 16).setTexture("crystalmod:textures/gui/elements/scale_flame_cu.png", 32, 16)));
 	    
 	    this.canRenderRecipeBook = this.width < 379;
-	    this.recipeBook.func_201520_a(this.width, this.height, this.minecraft, this.canRenderRecipeBook, this.field_147002_h);
+	    this.recipeBook.func_201520_a(this.width, this.height, this.minecraft, this.canRenderRecipeBook, this.container);
 	    this.guiLeft = this.recipeBook.updateScreenPosition(this.canRenderRecipeBook, this.width, this.xSize);
 	    this.addButton(new ImageButton(this.guiLeft + 28, this.height / 2 - 49, 20, 18, 0, 0, 19, RECIPE_BUTTON_TEXTURE, (p_214087_1_) -> {
 	         this.recipeBook.func_201518_a(this.canRenderRecipeBook);

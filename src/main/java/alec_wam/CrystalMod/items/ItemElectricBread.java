@@ -50,7 +50,7 @@ public class ItemElectricBread extends Item {
 	public ItemStack onItemUseFinish(ItemStack stack, World worldIn, LivingEntity entityLiving) {
 		if (entityLiving instanceof PlayerEntity) {
 			PlayerEntity entityplayer = (PlayerEntity)entityLiving;
-			entityplayer.getFoodStats().func_221410_a(stack.getItem(), stack);
+			entityplayer.getFoodStats().consume(stack.getItem(), stack);
 			worldIn.playSound((PlayerEntity)null, entityplayer.posX, entityplayer.posY, entityplayer.posZ, SoundEvents.ENTITY_PLAYER_BURP, SoundCategory.PLAYERS, 0.5F, worldIn.rand.nextFloat() * 0.1F + 0.9F);
 			if (entityplayer instanceof ServerPlayerEntity) {
 				CriteriaTriggers.CONSUME_ITEM.trigger((ServerPlayerEntity)entityplayer, stack);

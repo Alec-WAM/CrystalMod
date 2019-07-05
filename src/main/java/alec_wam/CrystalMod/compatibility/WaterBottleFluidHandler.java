@@ -47,7 +47,7 @@ public class WaterBottleFluidHandler implements IFluidHandlerItem
     	if(container.getItem() == Items.POTION){
     		String potion = ItemNBTHelper.getString(container, "Potion", "");
     		@SuppressWarnings("deprecation")
-			ResourceLocation resourcelocation = Registry.field_212621_j.getKey(Potions.field_185230_b);
+			ResourceLocation resourcelocation = Registry.POTION.getKey(Potions.WATER);
     		if(potion.equalsIgnoreCase(resourcelocation.toString())){
     			return new FluidStackFixed(FixedFluidRegistry.WATER, BOTTLE_CAPACITY);
     		}
@@ -63,7 +63,7 @@ public class WaterBottleFluidHandler implements IFluidHandlerItem
         else 
         {
         	ItemStack stack = new ItemStack(Items.POTION);
-        	PotionUtils.addPotionToItemStack(stack, Potions.field_185230_b);
+        	PotionUtils.addPotionToItemStack(stack, Potions.WATER);
             container = stack;
         }
     }

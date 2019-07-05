@@ -151,7 +151,7 @@ public class ItemUtil {
 		} else {
 			Item item = stack.getItem();
 			int ret = stack.getBurnTime();
-			return net.minecraftforge.event.ForgeEventFactory.getItemBurnTime(stack, ret == -1 ? AbstractFurnaceTileEntity.func_214001_f().getOrDefault(item, 0) : ret);
+			return net.minecraftforge.event.ForgeEventFactory.getItemBurnTime(stack, ret == -1 ? AbstractFurnaceTileEntity.getBurnTimes().getOrDefault(item, 0) : ret);
 		}
 	}
 
@@ -205,7 +205,7 @@ public class ItemUtil {
 		entityItem.setDefaultPickupDelay();
 
 		if(!entityItem.getEntityWorld().isRemote)
-			entityItem.getEntityWorld().func_217376_c(entityItem);
+			entityItem.getEntityWorld().addEntity(entityItem);
 	}
 	
 }

@@ -150,12 +150,12 @@ public class InterModGrinderRecipes implements IResourceManagerReloadListener {
 				return false;
 			}
 			ResourceLocation id = new ResourceLocation("crystalmod_grinder_generated", category + "/" + output.getItem().getRegistryName().getPath().toLowerCase());
-			if(ModRecipes.getRecipeManager().func_215367_a(id).isPresent()){
+			if(ModRecipes.getRecipeManager().getRecipe(id).isPresent()){
 				return false;
 			}
 			Ingredient input = Ingredient.fromItems(item);
 			GrinderRecipe recipe = new GrinderRecipe(id, "", input, output, ItemStackTools.getEmptyStack(), 0.0f, energy);
-			ModRecipes.getRecipeManager().addRecipe(recipe);
+			ModRecipes.addRecipeToManager(recipe);
 			return true;
 		}
 		return false;

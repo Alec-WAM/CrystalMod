@@ -41,7 +41,7 @@ public class ItemBucketXP extends Item {
          entityplayermp.addStat(Stats.ITEM_USED.get(this));
       }
 
-      if (entityLiving instanceof PlayerEntity && !((PlayerEntity)entityLiving).playerAbilities.isCreativeMode) {
+      if (entityLiving instanceof PlayerEntity && !((PlayerEntity)entityLiving).abilities.isCreativeMode) {
          stack.shrink(1);
       }
 
