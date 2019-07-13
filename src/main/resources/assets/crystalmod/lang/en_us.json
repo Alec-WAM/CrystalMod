@@ -136,6 +136,7 @@
   "block.crystalmod.machine_press": "Hydraulic Press",  
   
   "block.crystalmod.miner": "Smart Miner",  
+  "block.crystalmod.fluidpump": "Fluid Pump", 
 
   "block.crystalmod.pipe_item": "Item Pipe",   
   "block.crystalmod.pipe_energy_cu_blue": "Blue Crystal Energy Pipe (CU)", 

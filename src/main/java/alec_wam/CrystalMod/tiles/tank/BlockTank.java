@@ -10,24 +10,28 @@ import alec_wam.CrystalMod.compatibility.FluidConversion;
 import alec_wam.CrystalMod.core.BlockVariantGroup;
 import alec_wam.CrystalMod.tiles.EnumCrystalColorSpecialWithCreative;
 import alec_wam.CrystalMod.tiles.crate.ContainerBlockVariant;
+import alec_wam.CrystalMod.util.ItemNBTHelper;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ToolUtil;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IEnviromentBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 
 public class BlockTank extends ContainerBlockVariant<EnumCrystalColorSpecialWithCreative> {
@@ -39,10 +43,25 @@ public class BlockTank extends ContainerBlockVariant<EnumCrystalColorSpecialWith
 	@Override
     public void addInformation(ItemStack stack, @Nullable IBlockReader worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn)
     {
-		//TODO Add Fluid Content Info
 		if(type != EnumCrystalColorSpecialWithCreative.CREATIVE){
-			int largeNumber = (Fluid.BUCKET_VOLUME*TileEntityTank.TIER_BUCKETS[type.ordinal()]);
-			tooltip.add(new TranslationTextComponent("crystalmod.info.tank.storage", NumberFormat.getNumberInstance(Locale.US).format(largeNumber)));
+			NumberFormat format = NumberFormat.getNumberInstance(Locale.US);
+			int capacity = (Fluid.BUCKET_VOLUME*TileEntityTank.TIER_BUCKETS[type.ordinal()]);
+			if(stack.hasTag()){
+				CompoundNBT nbt = ItemNBTHelper.getCompound(stack);
+				if(nbt.contains("Tank")){
+					CompoundNBT tankNBT = nbt.getCompound("Tank");
+					if (!tankNBT.contains("Empty"))
+			        {
+			            FluidStack fluid = FluidConversion.loadFluidStackFromNBT(tankNBT);
+			            String info = fluid.getLocalizedName() + " " + (format.format(fluid.amount)+" / " + format.format(capacity) + "mB");
+			            tooltip.add(new StringTextComponent(info));
+			        } else {
+						tooltip.add(new TranslationTextComponent("crystalmod.empty"));
+			        }
+				}
+			} else {
+				tooltip.add(new TranslationTextComponent("crystalmod.info.tank.storage", format.format(capacity)));
+			}
 		}
     }
 	

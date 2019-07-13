@@ -16,6 +16,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
@@ -29,6 +30,7 @@ import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IEnviromentBlockReader;
 import net.minecraft.world.World;
@@ -60,11 +62,14 @@ public class BlockXPTank extends ContainerBlockCustom {
 	@Override
     public void addInformation(ItemStack stack, @Nullable IBlockReader worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn)
     {
-		//TODO Add Fluid Content Info
-		/*if(type != EnumCrystalColorSpecialWithCreative.CREATIVE){
-			int largeNumber = (Fluid.BUCKET_VOLUME*TileEntityTank.TIER_BUCKETS[type.ordinal()]);
-			tooltip.add(new TranslationTextComponent("crystalmod.info.tank.storage", NumberFormat.getNumberInstance(Locale.US).format(largeNumber)));
-		}*/
+		if(stack.hasTag()){
+			CompoundNBT nbt = ItemNBTHelper.getCompound(stack);
+			if(nbt.contains("XPStorage")){
+				CompoundNBT tankNBT = nbt.getCompound("XPStorage");
+				String info = tankNBT.getInt("experienceLevel") +" / " + TileEntityXPTank.maxLevels + "L";
+	            tooltip.add(new StringTextComponent(info));
+			}
+		}
     }
 
 	@Override
@@ -78,7 +83,6 @@ public class BlockXPTank extends ContainerBlockCustom {
 	
 	@Override
 	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
-		//TODO Maybe add waterlogged
 		builder.add(ENDER);
 	}
 	

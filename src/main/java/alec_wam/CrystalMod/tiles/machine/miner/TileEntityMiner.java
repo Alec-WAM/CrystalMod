@@ -12,6 +12,7 @@ import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.tiles.PacketTileMessage;
 import alec_wam.CrystalMod.tiles.machine.TileEntityPoweredInventory;
 import alec_wam.CrystalMod.tiles.pipes.item.ItemPipeFilter;
+import alec_wam.CrystalMod.tiles.pipes.item.ItemPipeFilter.FilterSettings;
 import alec_wam.CrystalMod.util.FakePlayerUtil;
 import alec_wam.CrystalMod.util.ItemStackTools;
 import alec_wam.CrystalMod.util.ItemUtil;
@@ -62,7 +63,6 @@ public class TileEntityMiner extends TileEntityPoweredInventory implements IName
 			EnchantmentHelper.setEnchantments(map, FORTUNE_PICK[i]);
 		}
 	}
-	//TODO Create slot for filter
 	public int yLevel;
 	public BlockPos cornerBlock;
 	public BlockPos currentBlock;
@@ -75,6 +75,7 @@ public class TileEntityMiner extends TileEntityPoweredInventory implements IName
 	public float digProgess;
 	
 	public boolean onlyOre;
+	private Map<ItemStack, FilterSettings> cachedFilteredList = Maps.newHashMap();
 	
 	private int lastEnergyCost = -1;
 	public int clientEnergyCost = -1;
@@ -301,12 +302,23 @@ public class TileEntityMiner extends TileEntityPoweredInventory implements IName
 	
 	public boolean passesFilter(BlockState state, BlockPos pos){
 		ItemStack stack = getStackInSlot(11);
-		if(ItemStackTools.isValid(stack)){
+		if(ItemStackTools.isValid(stack) && !cachedFilteredList.isEmpty()){
 			BlockRayTraceResult ray = new BlockRayTraceResult(Vec3d.ZERO, Direction.UP, pos, true);
 			ItemStack blockStack = state.getPickBlock(ray, getWorld(), pos, FakePlayerUtil.getPlayer((ServerWorld)getWorld()));
-			return ItemPipeFilter.passesFilter(blockStack, stack);
+			return ItemPipeFilter.passesFilter(blockStack, cachedFilteredList);
 		}
 		return true;
+	}
+	
+	@Override
+	public void onItemChanged(int slot){
+		if(slot == 11){
+			ItemStack stack = getStackInSlot(11);
+			cachedFilteredList = Maps.newHashMap();
+			if(ItemStackTools.isValid(stack)){
+				ItemPipeFilter.buildFilterList(stack, cachedFilteredList);
+			}
+		}
 	}
 	
 	public static final int BASE_POWER_PER_BLOCK = 10;

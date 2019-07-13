@@ -27,8 +27,14 @@ public class InfoProviderTank implements InfoProvider {
 		FluidStack fluid = tank.getFluid();
 		int capacity = tank.getCapacity();
 		//TODO Add Fluid Name Box on bottom
-		//String fluidname = fluid !=null ? fluid.getLocalizedName() + ": " + fluid.amount + " / "+ capacity +"MB": Lang.localize("empty");
-		//list.add(fluidname);
+		/*if(fluid !=null){
+			NumberFormat format = NumberFormat.getNumberInstance(Locale.US);
+			String info = fluid.getLocalizedName() + " " + (format.format(fluid.amount)+" / " + format.format(capacity) + "mB");
+			list.add(info);
+		} else {
+			list.add(Lang.localize("empty"));
+		}*/
+		
 		int offsetX = 0;
 		GlStateManager.pushMatrix();
 		GlStateManager.translated(HUDOverlayHandler.getOverlayX() + offsetX, HUDOverlayHandler.getOverlayY() - 5 - 58, 0);	    		

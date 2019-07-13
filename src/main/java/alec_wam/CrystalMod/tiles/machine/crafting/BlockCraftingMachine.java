@@ -24,7 +24,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.FakePlayer;
 
 public class BlockCraftingMachine extends ContainerBlockVariant<EnumCraftingMachine> {
-	//TODO Add Auto-Eject for output
 	public static final BooleanProperty RUNNING = BooleanProperty.create("running");
 	public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 	

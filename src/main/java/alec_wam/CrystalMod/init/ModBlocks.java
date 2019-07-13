@@ -61,6 +61,7 @@ import alec_wam.CrystalMod.tiles.machine.crafting.furnace.TileEntityPoweredFurna
 import alec_wam.CrystalMod.tiles.machine.crafting.grinder.TileEntityGrinder;
 import alec_wam.CrystalMod.tiles.machine.crafting.press.TileEntityPress;
 import alec_wam.CrystalMod.tiles.machine.miner.TileEntityMiner;
+import alec_wam.CrystalMod.tiles.machine.pump.TileEntityFluidPump;
 import alec_wam.CrystalMod.tiles.pipes.BlockPipe;
 import alec_wam.CrystalMod.tiles.pipes.NetworkType;
 import alec_wam.CrystalMod.tiles.pipes.energy.cu.BlockPipeEnergyCU;
@@ -136,6 +137,8 @@ public class ModBlocks {
 	public static BlockVariantGroup<EnumCraftingMachine, BlockCraftingMachine> craftingMachine;
 	public static BasicInterfaceBlock miner;
 	public static TileEntityType<TileEntityMiner> TILE_MINER;
+	public static BasicInterfaceBlock fluidPump;
+	public static TileEntityType<TileEntityFluidPump> TILE_PUMP;
 	
 	public static BlockPipe pipeItem;
 	public static TileEntityType<TileEntityPipeItem> TILE_PIPE_ITEM;
@@ -384,7 +387,6 @@ public class ModBlocks {
 		TILE_XP_TANK = registerTileEntity(CrystalMod.resource("xp_tank"), TileEntityType.Builder.create(TileEntityXPTank::new, xpTank));
 		
 		
-		//TODO Add Gui Tank Overlay
 		xpVacuum = new ContainerBlockCustom(Block.Properties.create(Material.IRON).hardnessAndResistance(2.0F, 15.0F).sound(SoundType.METAL)){
 
 			@Override
@@ -520,6 +522,16 @@ public class ModBlocks {
 		}; 
 		RegistrationHandler.createBlock(miner, ModItemGroups.ITEM_GROUP_MACHINES, "miner");	
 		TILE_MINER = registerTileEntity(CrystalMod.resource("miner"), TileEntityType.Builder.create(TileEntityMiner::new, miner));
+		fluidPump = new BasicInterfaceBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(5.0F, 6.0F).sound(SoundType.METAL)) {
+
+			@Override
+			public TileEntity createNewTileEntity(IBlockReader worldIn) {
+				return new TileEntityFluidPump();
+			}
+			
+		}; 
+		RegistrationHandler.createBlock(fluidPump, ModItemGroups.ITEM_GROUP_MACHINES, "fluidpump");	
+		TILE_PUMP = registerTileEntity(CrystalMod.resource("fluidpump"), TileEntityType.Builder.create(TileEntityFluidPump::new, fluidPump));
 		
 		
 		pipeItem = new BlockPipe(NetworkType.ITEM, Block.Properties.create(Material.IRON).hardnessAndResistance(1.0F, 10.0F).sound(SoundType.METAL)); 

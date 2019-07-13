@@ -14,14 +14,14 @@ public class FixedFluidRegistry {
 	public static final Fluid WATER = new Fluid("water", new ResourceLocation("block/water_still"), new ResourceLocation("block/water_flow")) {
         @Override
         public String getLocalizedName(FluidStack fs) {
-            return Lang.translateToLocal("block.water");
+            return Lang.translateToLocal("block.minecraft.water");
         }
     }.setBlock(Blocks.WATER).setUnlocalizedName(Blocks.WATER.getTranslationKey()).setColor(4020182);
 
     public static final Fluid LAVA = new Fluid("lava", new ResourceLocation("block/lava_still"), new ResourceLocation("block/lava_flow")) {
         @Override
         public String getLocalizedName(FluidStack fs) {
-            return Lang.translateToLocal("block.lava");
+            return Lang.translateToLocal("block.minecraft.lava");
         }
     }.setBlock(Blocks.LAVA).setLuminosity(15).setDensity(3000).setViscosity(6000).setTemperature(1300).setUnlocalizedName(Blocks.LAVA.getTranslationKey());
     

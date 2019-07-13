@@ -9,6 +9,7 @@ import org.lwjgl.opengl.GL11;
 import com.mojang.blaze3d.platform.GlStateManager;
 
 import alec_wam.CrystalMod.client.gui.overlay.InfoBoxBuilder;
+import alec_wam.CrystalMod.compatibility.FluidTankFixed;
 import alec_wam.CrystalMod.util.math.Vector3d;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
@@ -432,6 +433,10 @@ public class RenderUtil {
         }
     }
 	
+	public static void renderGuiTank(FluidTankFixed tank, double x, double y, double zLevel, double width, double height, boolean renderBars) {
+		renderGuiTank(tank.getFluid(), tank.getCapacity(), tank.getFluidAmount(), x, y, zLevel, width, height, renderBars);
+	}
+
 	public static void renderGuiTank(FluidStack fluid, int capacity, int amount, double x, double y, double zLevel, double width, double height, boolean renderBars) {
 	    
 	    if (fluid != null && fluid.getFluid() != null && amount > 0) {

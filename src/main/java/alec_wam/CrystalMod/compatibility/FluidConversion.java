@@ -8,6 +8,8 @@ import com.google.common.base.Preconditions;
 import alec_wam.CrystalMod.init.FixedFluidRegistry;
 import alec_wam.CrystalMod.util.ItemNBTHelper;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.fluid.Fluids;
+import net.minecraft.fluid.IFluidState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
@@ -31,6 +33,18 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 
 public class FluidConversion {
+	
+	public static net.minecraftforge.fluids.Fluid getFluidFromState(IFluidState state){
+		net.minecraft.fluid.Fluid fluid = state.getFluid();
+		if(fluid == Fluids.LAVA || fluid == Fluids.FLOWING_LAVA){
+			return FixedFluidRegistry.LAVA;
+		}
+		if(fluid == Fluids.WATER || fluid == Fluids.FLOWING_WATER){
+			return FixedFluidRegistry.WATER;
+		}
+		return null;
+	}
+	
 	@Nullable
     public static FluidStack loadFluidStackFromNBT(CompoundNBT nbt)
     {

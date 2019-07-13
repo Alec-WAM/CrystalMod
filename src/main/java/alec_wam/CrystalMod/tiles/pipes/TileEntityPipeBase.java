@@ -4,18 +4,22 @@ import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 import alec_wam.CrystalMod.network.CrystalModNetwork;
 import alec_wam.CrystalMod.network.IMessageHandler;
 import alec_wam.CrystalMod.tiles.PacketTileMessage;
 import alec_wam.CrystalMod.tiles.RedstoneMode;
 import alec_wam.CrystalMod.tiles.TileEntityMod;
+import alec_wam.CrystalMod.tiles.pipes.BlockPipe.ConnectionType;
 import alec_wam.CrystalMod.tiles.pipes.BlockPipe.PipeHitData;
 import alec_wam.CrystalMod.tiles.pipes.PipeNetworkBuilder.PipeChecker;
 import alec_wam.CrystalMod.util.BlockUtil;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -153,6 +157,7 @@ public abstract class TileEntityPipeBase extends TileEntityMod implements IMessa
 		}
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Override
 	public void tick(){
 		super.tick();
@@ -277,6 +282,24 @@ public abstract class TileEntityPipeBase extends TileEntityMod implements IMessa
 			dirs[i] = cons.next().getIndex();
 		}
 		connectionData.putIntArray("ExternalConnections", dirs);
+		
+		Map<Direction, ConnectionType> map = Maps.newHashMap();
+		for(Direction facing : Direction.values()){
+			if(isConnectedTo(facing) && getConnectionSetting(facing) != PipeConnectionMode.DISABLED){
+				map.put(facing, ConnectionType.PIPE);
+			} else if(hasExternalConnection(facing) && getConnectionSetting(facing) != PipeConnectionMode.DISABLED){
+				map.put(facing, ConnectionType.EXTERNAL);
+			} else {
+				map.put(facing, ConnectionType.NONE);
+			}
+		}
+		BlockState newState = getBlockState().with(BlockPipe.UP, map.get(Direction.UP))
+				.with(BlockPipe.DOWN, map.get(Direction.DOWN))
+				.with(BlockPipe.NORTH, map.get(Direction.NORTH))
+				.with(BlockPipe.SOUTH, map.get(Direction.SOUTH))
+				.with(BlockPipe.EAST, map.get(Direction.EAST))
+				.with(BlockPipe.WEST, map.get(Direction.WEST));
+		getWorld().setBlockState(getPos(), newState, 3);
 		
 		CrystalModNetwork.sendToAllAround(new PacketTileMessage(pos, "Connections", connectionData), this);
 	}

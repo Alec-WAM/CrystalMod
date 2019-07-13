@@ -145,7 +145,10 @@ public class ItemPipeFilter extends Item {
 			FilterSettings masterSettings = new FilterSettings(filter);
 			return masterSettings.isBlacklist() ? true : false;
 		}
-		
+		return passesFilter(item, filteredList);
+	}
+	
+	public static boolean passesFilter(ItemStack item, Map<ItemStack, FilterSettings> filteredList){
 		boolean matched = false;
 		for(Entry<ItemStack, FilterSettings> filterData : filteredList.entrySet()){
 			ItemStack filterStack = filterData.getKey();
@@ -181,7 +184,7 @@ public class ItemPipeFilter extends Item {
 	}
 	
 	//TODO Look into capping depth of filters
-	private static void buildFilterList(ItemStack filter, Map<ItemStack, FilterSettings> filterList){
+	public static void buildFilterList(ItemStack filter, Map<ItemStack, FilterSettings> filterList){
 		if(ItemNBTHelper.verifyExistance(filter, "FilterItems")){
 			FilterSettings settings = new FilterSettings(filter);
 			NonNullList<ItemStack> stacks = loadFilterStacks(filter);

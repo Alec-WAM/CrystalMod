@@ -24,6 +24,8 @@ import alec_wam.CrystalMod.tiles.machine.crafting.press.GuiPress;
 import alec_wam.CrystalMod.tiles.machine.crafting.press.TileEntityPress;
 import alec_wam.CrystalMod.tiles.machine.miner.GuiMiner;
 import alec_wam.CrystalMod.tiles.machine.miner.TileEntityMiner;
+import alec_wam.CrystalMod.tiles.machine.pump.GuiFluidPump;
+import alec_wam.CrystalMod.tiles.machine.pump.TileEntityFluidPump;
 import alec_wam.CrystalMod.tiles.pipes.item.GuiItemPipe;
 import alec_wam.CrystalMod.tiles.pipes.item.GuiPipeFilter;
 import alec_wam.CrystalMod.tiles.pipes.item.TileEntityPipeItem;
@@ -98,6 +100,10 @@ public class GuiHandler{
 		        	if(tile instanceof TileEntityMiner){
 		        		TileEntityMiner machine = (TileEntityMiner) tile;
 		        		return new GuiMiner(windowId, player, machine);
+		            }
+		        	if(tile instanceof TileEntityFluidPump){
+		        		TileEntityFluidPump machine = (TileEntityFluidPump) tile;
+		        		return new GuiFluidPump(windowId, player, machine);
 		            }
 	    		}
 	    		if(id.equals(TILE_PIPE_CONNECTOR)){

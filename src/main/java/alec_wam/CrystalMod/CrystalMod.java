@@ -46,10 +46,10 @@ public class CrystalMod {
 	public void preInit(final FMLCommonSetupEvent event) {
 		LOGGER.info("CrystalMod init");
 		DistExecutor.runWhenOn(Dist.CLIENT, () -> BakedModelEventHandler::registerOBJ);
-		
 		CrystalModWorldGenerator.instance.setupFeatures();
 		ModBlocks.addBlocksToTags();
         //ModLoadingContext.get().registerExtensionPoint(ExtensionPoint.GUIFACTORY, () -> GuiHandler::openGui);
+		FMLJavaModLoadingContext.get().getModEventBus().register(new BakedModelEventHandler());
         MinecraftForge.EVENT_BUS.register(new ClientEventHandler());
         MinecraftForge.EVENT_BUS.register(new HUDOverlayHandler());
         MinecraftForge.EVENT_BUS.register(PipeNetworkTickHandler.INSTANCE);

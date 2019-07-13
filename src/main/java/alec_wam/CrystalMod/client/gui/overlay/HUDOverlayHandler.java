@@ -45,11 +45,8 @@ public class HUDOverlayHandler {
 
 	@SubscribeEvent
     public void hudOverlay(RenderGameOverlayEvent.Post event){
-		//System.out.println("ALL");
 		Minecraft mc = Minecraft.getInstance();
-		MainWindow window = mc.mainWindow;
 		ClientWorld world = mc.world;
-    	ClientPlayerEntity player = mc.player;
     	if(event.getType() == ElementType.ALL && mc.currentScreen == null){
     		if(mc.objectMouseOver != null){
     			RayTraceResult ray = mc.objectMouseOver;

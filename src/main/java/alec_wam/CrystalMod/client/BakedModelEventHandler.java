@@ -1,10 +1,13 @@
 package alec_wam.CrystalMod.client;
 
+import java.io.FileNotFoundException;
 import java.util.List;
 import java.util.Random;
 import java.util.function.Function;
 
 import javax.vecmath.Vector3f;
+
+import org.apache.commons.io.IOUtils;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
@@ -30,9 +33,12 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockModelShapes;
 import net.minecraft.client.renderer.model.BakedQuad;
 import net.minecraft.client.renderer.model.IBakedModel;
+import net.minecraft.client.renderer.model.IUnbakedModel;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.Item;
+import net.minecraft.resources.IResource;
+import net.minecraft.resources.IResourceManager;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
@@ -46,8 +52,9 @@ import net.minecraftforge.client.model.obj.OBJModel;
 import net.minecraftforge.common.model.TRSRTransformation;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 
-@Mod.EventBusSubscriber(modid = CrystalMod.MODID, value = Dist.CLIENT)
+@Mod.EventBusSubscriber(modid = CrystalMod.MODID, value = Dist.CLIENT, bus = Bus.MOD)
 public class BakedModelEventHandler {
 	public static void registerOBJ(){
 		OBJLoader.INSTANCE.addDomain(CrystalMod.MODID);
@@ -56,7 +63,7 @@ public class BakedModelEventHandler {
 	}
 	
 	@SubscribeEvent
-    public static void onStitch(final TextureStitchEvent.Pre event) {
+    public void onStitch(final TextureStitchEvent.Pre event) {
 		/*event.getMap().registerSprite(null, new ResourceLocation("crystalmod:block/crystalshardblock"));
 		event.getMap().registerSprite(null, new ResourceLocation("crystalmod:block/crate/void"));
 		
@@ -92,7 +99,7 @@ public class BakedModelEventHandler {
 	}
 	
 	@SubscribeEvent
-	public static void itemColors(ColorHandlerEvent.Item event){
+	public void itemColors(ColorHandlerEvent.Item event){
 		for(ItemMaterial mat : MaterialLoader.ITEM_MATERIALS){
 			if(mat.hasDust()){
 				Item item = MaterialLoader.getDustItem(mat);
@@ -110,7 +117,7 @@ public class BakedModelEventHandler {
 	}
 	
 	@SubscribeEvent
-    public static void onBakeModel(final ModelBakeEvent event) {
+    public void onBakeModel(final ModelBakeEvent event) {
 		createShardModels(event);
 		
 		/*for(Entry<String, Item> item : MaterialLoader.DUST_ITEMS.entrySet()){
@@ -120,7 +127,6 @@ public class BakedModelEventHandler {
 				event.getModelRegistry().put(model, ModelDust.MODEL);
 			}
 		}*/
-		
 		ResourceLocation registryNamePipe = ModBlocks.pipeItem.getRegistryName();
 		for(BlockState state : ModBlocks.pipeItem.getStateContainer().getValidStates()){
 			ModelResourceLocation model = new ModelResourceLocation(registryNamePipe, BlockModelShapes.getPropertyMapString(state.getValues()));
@@ -174,7 +180,7 @@ public class BakedModelEventHandler {
 	        for(int i = 1; i < 4; i++){
 				ModelResourceLocation model = new ModelResourceLocation(registryName, BlockModelShapes.getPropertyMapString(block.getDefaultState().with(BlockCrystalShard.SHARDS_1_3, Integer.valueOf(i)).getValues()));
 				try {
-					OBJModel modelUb = (OBJModel) OBJLoader.INSTANCE.loadModel(new ResourceLocation(CrystalMod.MODID, "models/block/obj/crystalshard_"+i+".obj"));
+					OBJModel modelUb = (OBJModel) loadModelSpecial(new ResourceLocation(CrystalMod.MODID, "models/block/obj/crystalshard_"+i+".obj"), Minecraft.getInstance().getResourceManager());
 					Function<ResourceLocation, TextureAtlasSprite> textureGetter;
 			        textureGetter = location -> Minecraft.getInstance().getTextureMap().getAtlasSprite("crystalmod:block/"+registryName.getPath());
 			        ImmutableMap.Builder<String, TextureAtlasSprite> builder = ImmutableMap.builder();
@@ -220,4 +226,42 @@ public class BakedModelEventHandler {
 			}
 		}   
 	}
+	
+	public static IUnbakedModel loadModelSpecial(ResourceLocation modelLocation, IResourceManager manager) throws Exception
+    {
+        ResourceLocation file = new ResourceLocation(modelLocation.getNamespace(), modelLocation.getPath());
+        IResource resource = null;
+        OBJModel model = null;
+        try
+        {
+        	try
+        	{
+        		resource = manager.getResource(file);
+        	}
+        	catch (FileNotFoundException e)
+        	{
+        		if (modelLocation.getPath().startsWith("models/block/"))
+        			resource = manager.getResource(new ResourceLocation(file.getNamespace(), "models/item/" + file.getPath().substring("models/block/".length())));
+        		else if (modelLocation.getPath().startsWith("models/item/"))
+        			resource = manager.getResource(new ResourceLocation(file.getNamespace(), "models/block/" + file.getPath().substring("models/item/".length())));
+        		else throw e;
+        	}
+        	OBJModel.Parser parser = new OBJModel.Parser(resource, manager);
+        	
+        	try
+        	{
+        		model = parser.parse();
+        	}
+        	catch (Exception e)
+        	{
+        		e.printStackTrace();;
+        	}
+        }
+        finally
+        {
+        	IOUtils.closeQuietly(resource);
+        }
+        if (model == null) throw new ModelLoaderRegistry.LoaderException("Error loading model previously: " + file);
+        return model;
+    }
 }

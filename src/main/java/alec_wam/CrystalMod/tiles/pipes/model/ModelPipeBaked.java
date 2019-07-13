@@ -104,7 +104,7 @@ public class ModelPipeBaked implements IBakedModel
 		}
 		
 		List<BakedQuad> quads = new ArrayList<BakedQuad>();
-		addPipeQuads( state, quads );
+		addPipeQuads( state, quads);
 		return quads;
 	}
     

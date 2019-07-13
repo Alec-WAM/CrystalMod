@@ -1,5 +1,9 @@
 package alec_wam.CrystalMod.util;
 
+import java.util.List;
+
+import com.google.common.collect.Lists;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -124,6 +128,38 @@ public class BlockUtil {
 
 	public static void playPlaceSound(World world, BlockPos pos, SoundType soundtype) {
 		world.playSound(null, pos, soundtype.getPlaceSound(), SoundCategory.BLOCKS, (soundtype.getVolume() + 1.0F) / 2.0F, soundtype.getPitch() * 0.8F);
+	}
+	
+	public static List<BlockPos> createCircleList(BlockPos center, int size){
+		List<BlockPos> list = Lists.newArrayList();
+		double circleSize = size-0.5;
+		for(int x = -size; x <= size; x++){
+			for(int z = -size; z <= size; z++){
+				BlockPos pos2 = center.add(x, 0, z);
+				double dis = pos2.distanceSq(center.getX(), center.getY(), center.getZ(), false);
+				if(dis >= circleSize && dis < circleSize+1){
+					list.add(pos2);
+				}
+			}
+		}
+		return list;
+	}
+	
+	public static List<BlockPos> createOrbList(BlockPos center, int size){
+		List<BlockPos> list = Lists.newArrayList();
+		double circleSize = size-0.5;
+		for(int x = -size; x <= size; x++){
+			for(int y = -size; y <= size; y++){
+				for(int z = -size; z <= size; z++){
+					BlockPos pos2 = center.add(x, y, z);
+					double dis = pos2.distanceSq(center.getX(), center.getY(), center.getZ(), false);
+					if(dis >= circleSize && dis < circleSize+1){
+						list.add(pos2);
+					}
+				}
+			}
+		}
+		return list;
 	}
 	
 }

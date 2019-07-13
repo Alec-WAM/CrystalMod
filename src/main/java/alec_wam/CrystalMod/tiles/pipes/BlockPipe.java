@@ -23,7 +23,7 @@ import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.RayTraceContext;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.shapes.ISelectionContext;
@@ -248,8 +248,18 @@ public class BlockPipe extends ContainerBlock {
 		if (tile != null && tile instanceof TileEntityPipeBase){
 			TileEntityPipeBase pipe = (TileEntityPipeBase)tile;
 			//TODO Handle custom raytrace
-			RayTraceResult result = BlockUtil.rayTrace(worldIn, player, RayTraceContext.FluidMode.NONE);
-			
+			float f = player.rotationPitch;
+			float f1 = player.rotationYaw;
+			Vec3d vec3d = player.getEyePosition(1.0F);
+			float f2 = MathHelper.cos(-f1 * ((float)Math.PI / 180F) - (float)Math.PI);
+			float f3 = MathHelper.sin(-f1 * ((float)Math.PI / 180F) - (float)Math.PI);
+			float f4 = -MathHelper.cos(-f * ((float)Math.PI / 180F));
+			float f5 = MathHelper.sin(-f * ((float)Math.PI / 180F));
+			float f6 = f3 * f4;
+			float f7 = f2 * f4;
+			double d0 = player.getAttribute(PlayerEntity.REACH_DISTANCE).getValue();;
+			Vec3d vec3d1 = vec3d.add((double)f6 * d0, (double)f5 * d0, (double)f7 * d0);			
+			RayTraceResult result = getRayTraceResult(state, worldIn, pos, vec3d, vec3d1, ray);			
 			if(result !=null){
 				PipeHitData hitData = null;
 				if(result.hitInfo instanceof PipeHitData){
