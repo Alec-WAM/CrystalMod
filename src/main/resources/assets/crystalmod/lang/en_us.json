@@ -109,6 +109,7 @@
   "block.crystalmod.tank_dark": "Dark Crystal Tank",
   "block.crystalmod.tank_pure": "Pure Crystal Tank",
   "block.crystalmod.tank_creative": "§6Creative Tank",
+  "block.crystalmod.trashcan": "Trash can",
   
   "block.crystalmod.xptank": "Experience Tank",
   "block.crystalmod.xpvacuum": "Experience Vacuum",
@@ -304,6 +305,7 @@
   "_comment": "Chat Messages",
   "crystalmod.message.notowner": "You do not own this",
   "crystalmod.message.ownerlocked": "%s has locked this",
+  "death.attack.crystalmod.laser": "%1$s was lasered by %2$s",
   
   "_comment": "Advancements",
   "advancements.crystalmod.root.title": "The Crystal Mod",

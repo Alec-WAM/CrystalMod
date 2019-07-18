@@ -71,6 +71,8 @@ import alec_wam.CrystalMod.tiles.pipes.energy.rf.TileEntityPipeEnergyRF;
 import alec_wam.CrystalMod.tiles.pipes.item.TileEntityPipeItem;
 import alec_wam.CrystalMod.tiles.tank.BlockTank;
 import alec_wam.CrystalMod.tiles.tank.TileEntityTank;
+import alec_wam.CrystalMod.tiles.trashcan.TileEntityTrashCan;
+import alec_wam.CrystalMod.tiles.trashcan.TrashCanBlock;
 import alec_wam.CrystalMod.tiles.xp.BlockXPTank;
 import alec_wam.CrystalMod.tiles.xp.TileEntityXPTank;
 import alec_wam.CrystalMod.tiles.xp.TileEntityXPVacuum;
@@ -119,6 +121,8 @@ public class ModBlocks {
 	public static BlockWirelessChest wirelessChest;
 	public static TileEntityType<TileEntityWirelessChest> TILE_WIRELESS_CHEST;
 	public static BlockVariantGroup<EnumCrystalColorSpecialWithCreative, BlockTank> tankGroup;
+	public static TrashCanBlock trashCan;
+	public static TileEntityType<TileEntityTrashCan> TILE_TRASH;
 	
 	public static BlockXPTank xpTank;
 	public static TileEntityType<TileEntityXPTank> TILE_XP_TANK;
@@ -381,6 +385,10 @@ public class ModBlocks {
 				})
 				.build();
 		RegistrationHandler.addBlockGroup(tankGroup);
+		trashCan = new TrashCanBlock(Block.Properties.create(Material.IRON).hardnessAndResistance(2.0F, 15.0F).sound(SoundType.METAL)); 
+		RegistrationHandler.createBlock(trashCan, ModItemGroups.ITEM_GROUP_MACHINES, "trashcan");	
+		TILE_TRASH = registerTileEntity(CrystalMod.resource("trashcan"), TileEntityType.Builder.create(TileEntityTrashCan::new, trashCan));
+		
 		
 		xpTank = new BlockXPTank(Block.Properties.create(Material.IRON).hardnessAndResistance(2.0F, 15.0F).sound(SoundType.GLASS)); 
 		RegistrationHandler.createBlock(xpTank, new BlockItem(xpTank, RegistrationHandler.defaultItemProperties(ModItemGroups.ITEM_GROUP_MACHINES).setTEISR(() -> CustomItemRender::new)), "xptank");	
